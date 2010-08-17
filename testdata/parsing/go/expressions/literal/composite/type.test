@@ -1,0 +1,54 @@
+var e = Line{origin, Point{y: -4, z: 12.3}}
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CompositeLiteral
+        Literal
+          PsiElement(IDENTIFIER)('Line')
+        CompositeLiteralElementList
+          PsiElement({)('{')
+          CompositeLiteralElement
+            CompositeLiteralElementValue
+              Literal
+                PsiElement(IDENTIFIER)('origin')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          CompositeLiteralElement
+            CompositeLiteralElementValue
+              CompositeLiteral
+                Literal
+                  PsiElement(IDENTIFIER)('Point')
+                CompositeLiteralElementList
+                  PsiElement({)('{')
+                  CompositeLiteralElement
+                    CompositeLiteralElementKey
+                      Literal
+                        PsiElement(IDENTIFIER)('y')
+                    PsiElement(:)(':')
+                    PsiWhiteSpace(' ')
+                    CompositeLiteralElementValue
+                      UnaryExpression
+                        PsiElement(-)('-')
+                        Literal
+                          PsiElement(LITERAL_INT)('4')
+                  PsiElement(,)(',')
+                  PsiWhiteSpace(' ')
+                  CompositeLiteralElement
+                    CompositeLiteralElementKey
+                      Literal
+                        PsiElement(IDENTIFIER)('z')
+                    PsiElement(:)(':')
+                    PsiWhiteSpace(' ')
+                    CompositeLiteralElementValue
+                      Literal
+                        PsiElement(LITERAL_FLOAT)('12.3')
+                  PsiElement(})('}')
+          PsiElement(})('}')

@@ -1,0 +1,14 @@
+type f func()
+-----
+Go file
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      TypeName
+        PsiElement(IDENTIFIER)('f')
+      PsiWhiteSpace(' ')
+      TypeFunction
+        PsiElement(KEYWORD_FUNC)('func')
+        PsiElement(()('(')
+        PsiElement())(')')

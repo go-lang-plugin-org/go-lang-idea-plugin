@@ -1,0 +1,14 @@
+var t = a
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('t')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      Literal
+        PsiElement(IDENTIFIER)('a')

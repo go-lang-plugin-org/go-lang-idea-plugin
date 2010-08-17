@@ -1,0 +1,21 @@
+func main() {
+    break 
+}
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      BreakStmt
+        PsiElement(KEYWORD_BREAK)('break')
+      PsiWhiteSpace(' ')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(})('}')

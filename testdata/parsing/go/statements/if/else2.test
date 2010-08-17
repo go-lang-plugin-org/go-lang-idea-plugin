@@ -1,0 +1,44 @@
+func main() {
+    if e; e { } else a = 10
+}
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      IfStmt
+        PsiElement(KEYWORD_IF)('if')
+        PsiWhiteSpace(' ')
+        ExpressionStmt
+          Literal
+            PsiElement(IDENTIFIER)('e')
+        PsiElement(;)(';')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(IDENTIFIER)('e')
+        PsiWhiteSpace(' ')
+        BlockStmt
+          PsiElement({)('{')
+          PsiWhiteSpace(' ')
+          PsiElement(})('}')
+        PsiWhiteSpace(' ')
+        PsiElement(KEYWORD_ELSE)('else')
+        PsiWhiteSpace(' ')
+        AssignStmt
+          Literal
+            PsiElement(IDENTIFIER)('a')
+          PsiWhiteSpace(' ')
+          PsiElement(=)('=')
+          PsiWhiteSpace(' ')
+          Literal
+            PsiElement(LITERAL_INT)('10')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(})('}')

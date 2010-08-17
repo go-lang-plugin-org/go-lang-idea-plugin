@@ -1,0 +1,14 @@
+var e = make
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      Literal
+        PsiElement(IDENTIFIER)('make')

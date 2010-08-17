@@ -1,0 +1,24 @@
+var e = (s + ".txt")
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ParenthesisedExpression
+        PsiElement(()('(')
+        AdditiveExpression
+          Literal
+            PsiElement(IDENTIFIER)('s')
+          PsiWhiteSpace(' ')
+          PsiElement(+)('+')
+          PsiWhiteSpace(' ')
+          Literal
+            PsiElement(LITERAL_STRING)('".txt"')
+        PsiElement())(')')
+

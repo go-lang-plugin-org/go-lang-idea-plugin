@@ -1,0 +1,33 @@
+func f(n int) func(p *T)
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('f')
+    PsiElement(()('(')
+    FunctionParameterList
+      FunctionParameter
+        Identifiers
+          PsiElement(IDENTIFIER)('n')
+        PsiWhiteSpace(' ')
+        TypeName
+          PsiElement(IDENTIFIER)('int')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    FunctionResult
+      FunctionParameterList
+        FunctionParameter
+          TypeFunction
+            PsiElement(KEYWORD_FUNC)('func')
+            PsiElement(()('(')
+            FunctionParameterList
+              FunctionParameter
+                Identifiers
+                  PsiElement(IDENTIFIER)('p')
+                PsiWhiteSpace(' ')
+                TypePointer
+                  PsiElement(*)('*')
+                  TypeName
+                    PsiElement(IDENTIFIER)('T')
+            PsiElement())(')')

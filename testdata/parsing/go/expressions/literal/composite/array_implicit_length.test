@@ -1,0 +1,32 @@
+var e = [...]string{"str1", "str2"}
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CompositeLiteral
+        TypeArray
+          PsiElement([)('[')
+          PsiElement(...)('...')
+          PsiElement(])(']')
+          TypeName
+            PsiElement(IDENTIFIER)('string')
+        CompositeLiteralElementList
+          PsiElement({)('{')
+          CompositeLiteralElement
+            CompositeLiteralElementValue
+              Literal
+                PsiElement(LITERAL_STRING)('"str1"')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          CompositeLiteralElement
+            CompositeLiteralElementValue
+              Literal
+                PsiElement(LITERAL_STRING)('"str2"')
+          PsiElement(})('}')

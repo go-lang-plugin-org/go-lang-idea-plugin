@@ -1,0 +1,42 @@
+var e = map[string]int{"key1":1, "key2":2}
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CompositeLiteral
+        TypeMap
+          PsiElement(KEYWORD_MAP)('map')
+          PsiElement([)('[')
+          TypeName
+            PsiElement(IDENTIFIER)('string')
+          PsiElement(])(']')
+          TypeName
+            PsiElement(IDENTIFIER)('int')
+        CompositeLiteralElementList
+          PsiElement({)('{')
+          CompositeLiteralElement
+            CompositeLiteralElementKey
+              Literal
+                PsiElement(LITERAL_STRING)('"key1"')
+            PsiElement(:)(':')
+            CompositeLiteralElementValue
+              Literal
+                PsiElement(LITERAL_INT)('1')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          CompositeLiteralElement
+            CompositeLiteralElementKey
+              Literal
+                PsiElement(LITERAL_STRING)('"key2"')
+            PsiElement(:)(':')
+            CompositeLiteralElementValue
+              Literal
+                PsiElement(LITERAL_INT)('2')
+          PsiElement(})('}')

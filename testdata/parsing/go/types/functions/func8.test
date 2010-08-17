@@ -1,0 +1,47 @@
+type f func(int, int, float) (float, *[]int)
+-----
+Go file
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      TypeName
+        PsiElement(IDENTIFIER)('f')
+      PsiWhiteSpace(' ')
+      TypeFunction
+        PsiElement(KEYWORD_FUNC)('func')
+        PsiElement(()('(')
+        FunctionParameterList
+          FunctionParameter
+            TypeName
+              PsiElement(IDENTIFIER)('int')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          FunctionParameter
+            TypeName
+              PsiElement(IDENTIFIER)('int')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          FunctionParameter
+            TypeName
+              PsiElement(IDENTIFIER)('float')
+        PsiElement())(')')
+        PsiWhiteSpace(' ')
+        FunctionResult
+          PsiElement(()('(')
+          FunctionParameterList
+            FunctionParameter
+              TypeName
+                PsiElement(IDENTIFIER)('float')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            FunctionParameter
+              TypePointer
+                PsiElement(*)('*')
+                TypeSlice
+                  PsiElement([)('[')
+                  PsiElement(])(']')
+                  TypeName
+                    PsiElement(IDENTIFIER)('int')
+          PsiElement())(')')
+

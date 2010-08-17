@@ -1,0 +1,14 @@
+var t = 6.67428e-11
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('t')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      Literal
+        PsiElement(LITERAL_FLOAT)('6.67428e-11')

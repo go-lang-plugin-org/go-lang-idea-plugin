@@ -1,0 +1,52 @@
+var e = struct{a int; b int}{a:10, b:10}
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CompositeLiteral
+        TypeStruct
+          PsiElement(KEYWORD_STRUCT)('struct')
+          PsiElement({)('{')
+          TypeStruct field
+            Identifiers
+              PsiElement(IDENTIFIER)('a')
+            PsiWhiteSpace(' ')
+            TypeName
+              PsiElement(IDENTIFIER)('int')
+          PsiElement(;)(';')
+          PsiWhiteSpace(' ')
+          TypeStruct field
+            Identifiers
+              PsiElement(IDENTIFIER)('b')
+            PsiWhiteSpace(' ')
+            TypeName
+              PsiElement(IDENTIFIER)('int')
+          PsiElement(})('}')
+        CompositeLiteralElementList
+          PsiElement({)('{')
+          CompositeLiteralElement
+            CompositeLiteralElementKey
+              Literal
+                PsiElement(IDENTIFIER)('a')
+            PsiElement(:)(':')
+            CompositeLiteralElementValue
+              Literal
+                PsiElement(LITERAL_INT)('10')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          CompositeLiteralElement
+            CompositeLiteralElementKey
+              Literal
+                PsiElement(IDENTIFIER)('b')
+            PsiElement(:)(':')
+            CompositeLiteralElementValue
+              Literal
+                PsiElement(LITERAL_INT)('10')
+          PsiElement(})('}')

@@ -1,0 +1,36 @@
+<idea-plugin version="2">
+    <id>ro.redeul.google.go</id>
+    <name>Google Go</name>    
+    <name>Google Go Language plugin</name>
+    <description>Plugin for Google Go language support</description>
+    <version>0.1.0</version>
+    <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
+    <idea-version since-build="95.000" until-build="97.000"/>
+    <category>Custom Languages</category>
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
+        <syntaxHighlighter key="Google.Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighter"/>
+
+        <lang.parserDefinition language="Google Go"
+                               implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
+
+        <lang.braceMatcher language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoBraceMatcher"/>
+
+        <lang.foldingBuilder language="Google Go"
+                             implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
+        <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
+    </extensions>
+</idea-plugin>

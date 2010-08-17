@@ -1,0 +1,17 @@
+var e = Math.sin
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      SelectorExpression
+        Literal
+          PsiElement(IDENTIFIER)('Math')
+        PsiElement(.)('.')
+        PsiElement(IDENTIFIER)('sin')

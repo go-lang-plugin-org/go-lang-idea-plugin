@@ -1,0 +1,20 @@
+var e = 1 == 2
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      RelationalExpression
+        Literal
+          PsiElement(LITERAL_INT)('1')
+        PsiWhiteSpace(' ')
+        PsiElement(==)('==')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_INT)('2')

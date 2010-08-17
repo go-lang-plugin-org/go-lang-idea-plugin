@@ -1,0 +1,22 @@
+var t1, t2 = 6.67428e-11i, 3i
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('t1')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        PsiElement(IDENTIFIER)('t2')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        Literal
+          PsiElement(LITERAL_IMAGINARY_FLOAT)('6.67428e-11i')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_IMAGINARY_INTEGER)('3i')

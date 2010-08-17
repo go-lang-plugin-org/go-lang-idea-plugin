@@ -1,0 +1,39 @@
+var e = &ast.ArrayType{lbrack, len, elt}
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      UnaryExpression
+        PsiElement(&)('&')
+        CompositeLiteral
+          SelectorExpression
+            Literal
+              PsiElement(IDENTIFIER)('ast')
+            PsiElement(.)('.')
+            PsiElement(IDENTIFIER)('ArrayType')
+          CompositeLiteralElementList
+            PsiElement({)('{')
+            CompositeLiteralElement
+              CompositeLiteralElementValue
+                Literal
+                  PsiElement(IDENTIFIER)('lbrack')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            CompositeLiteralElement
+              CompositeLiteralElementValue
+                Literal
+                  PsiElement(IDENTIFIER)('len')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            CompositeLiteralElement
+              CompositeLiteralElementValue
+                Literal
+                  PsiElement(IDENTIFIER)('elt')
+            PsiElement(})('}')

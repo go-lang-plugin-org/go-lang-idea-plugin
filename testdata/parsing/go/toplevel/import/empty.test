@@ -1,0 +1,12 @@
+import ( )
+-----
+Go file
+  ImportDeclarations
+    PsiElement(KEYWORD_IMPORT)('import')
+    PsiWhiteSpace(' ')
+    PsiElement(()('(')
+    PsiWhiteSpace(' ')
+    ImportSpec
+      PsiErrorElement:import.path.expected
+        <empty list>
+    PsiElement())(')')

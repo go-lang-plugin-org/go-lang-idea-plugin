@@ -1,0 +1,24 @@
+var e = (*v)('a')
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CallOrConversionExpression
+        ParenthesisedExpression
+          PsiElement(()('(')
+          UnaryExpression
+            PsiElement(*)('*')
+            Literal
+              PsiElement(IDENTIFIER)('v')
+          PsiElement())(')')
+        PsiElement(()('(')
+        Literal
+          PsiElement(LITERAL_CHAR)(''a'')
+        PsiElement())(')')

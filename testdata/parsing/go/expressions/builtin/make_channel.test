@@ -1,0 +1,22 @@
+var e = make(chan int)
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      BuiltInCallExpression
+        Literal
+          PsiElement(IDENTIFIER)('make')
+        PsiElement(()('(')
+        TypeChanBidi
+          PsiElement(KEYWORD_CHAN)('chan')
+          PsiWhiteSpace(' ')
+          TypeName
+            PsiElement(IDENTIFIER)('int')
+        PsiElement())(')')

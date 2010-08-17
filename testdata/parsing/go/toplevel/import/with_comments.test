@@ -1,0 +1,19 @@
+import (
+    "fmt"
+    // I "included"
+)
+-----
+Go file
+  ImportDeclarations
+    PsiElement(KEYWORD_IMPORT)('import')
+    PsiWhiteSpace(' ')
+    PsiElement(()('(')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('    ')
+    ImportSpec
+      PsiElement(LITERAL_STRING)('"fmt"')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('    ')
+    PsiComment(SL_COMMENT)('// I "included"')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiElement())(')')

@@ -1,0 +1,30 @@
+func main() {
+    var a = b 
+}
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      VarDeclarations
+        PsiElement(KEYWORD_VAR)('var')
+        PsiWhiteSpace(' ')
+        VarSpec
+          Identifiers
+            PsiElement(IDENTIFIER)('a')
+          PsiWhiteSpace(' ')
+          PsiElement(=)('=')
+          PsiWhiteSpace(' ')
+          Literal
+            PsiElement(IDENTIFIER)('b')
+      PsiWhiteSpace(' ')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(})('}')

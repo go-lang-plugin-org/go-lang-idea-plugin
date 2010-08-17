@@ -1,0 +1,17 @@
+var e = a.b
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      SelectorExpression
+        Literal
+          PsiElement(IDENTIFIER)('a')
+        PsiElement(.)('.')
+        PsiElement(IDENTIFIER)('b')

@@ -1,0 +1,11 @@
+import name "package"
+-----
+Go file
+  ImportDeclarations
+    PsiElement(KEYWORD_IMPORT)('import')
+    PsiWhiteSpace(' ')
+    ImportSpec
+      PackageReference
+        PsiElement(IDENTIFIER)('name')
+      PsiWhiteSpace(' ')
+      PsiElement(LITERAL_STRING)('"package"')

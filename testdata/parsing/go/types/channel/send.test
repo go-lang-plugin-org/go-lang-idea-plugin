@@ -1,0 +1,16 @@
+type f chan<- int
+-----
+Go file
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      TypeName
+        PsiElement(IDENTIFIER)('f')
+      PsiWhiteSpace(' ')
+      TypeChanSend
+        PsiElement(KEYWORD_CHAN)('chan')
+        PsiElement(<-)('<-')
+        PsiWhiteSpace(' ')
+        TypeName
+          PsiElement(IDENTIFIER)('int')        

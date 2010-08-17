@@ -1,0 +1,20 @@
+func main() {
+    return
+}
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      ReturnStmt
+        PsiElement(KEYWORD_RETURN)('return')
+        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(})('}')

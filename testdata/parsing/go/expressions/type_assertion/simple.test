@@ -1,0 +1,21 @@
+var e = x.(T)
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      TypeAssertionExpression
+        Literal
+          PsiElement(IDENTIFIER)('x')
+        PsiElement(.)('.')
+        PsiElement(()('(')
+        TypeName
+          PsiElement(IDENTIFIER)('T')
+        PsiElement())(')')
+       

@@ -1,0 +1,22 @@
+func main() { select {} }
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiWhiteSpace(' ')
+      SelectStmt
+        PsiElement(KEYWORD_SELECT)('select')
+        PsiWhiteSpace(' ')
+        PsiElement({)('{')
+        PsiElement(})('}')
+        PsiWhiteSpace(' ')
+        PsiElement(})('}')
+      PsiErrorElement:right.curly.expected
+        <empty list>

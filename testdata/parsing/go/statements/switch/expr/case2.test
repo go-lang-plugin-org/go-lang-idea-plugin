@@ -1,0 +1,48 @@
+func main() {
+    switch ; e {
+        case a:
+             return 1
+    }
+}
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      SwitchExprStmt
+        PsiElement(KEYWORD_SWITCH)('switch')
+        PsiWhiteSpace(' ')
+        PsiElement(;)(';')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(IDENTIFIER)('e')
+        PsiWhiteSpace(' ')
+        PsiElement({)('{')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('        ')
+        SwitchExprCase
+          PsiElement(KEYWORD_CASE)('case')
+          PsiWhiteSpace(' ')
+          Literal
+            PsiElement(IDENTIFIER)('a')
+          PsiElement(:)(':')
+          PsiElement(WS_NEW_LINES)('\n')
+          PsiWhiteSpace('             ')
+          ReturnStmt
+            PsiElement(KEYWORD_RETURN)('return')
+            PsiWhiteSpace(' ')
+            Literal
+              PsiElement(LITERAL_INT)('1')
+          PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('    ')
+        PsiElement(})('}')
+        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(})('}')

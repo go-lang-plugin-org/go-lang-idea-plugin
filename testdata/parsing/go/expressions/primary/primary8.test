@@ -1,0 +1,28 @@
+var e = f.p[i].x()
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CallOrConversionExpression
+        SelectorExpression
+          IndexExpression
+            SelectorExpression
+              Literal
+                PsiElement(IDENTIFIER)('f')
+              PsiElement(.)('.')
+              PsiElement(IDENTIFIER)('p')
+            PsiElement([)('[')
+            Literal
+              PsiElement(IDENTIFIER)('i')
+            PsiElement(])(']')
+          PsiElement(.)('.')
+          PsiElement(IDENTIFIER)('x')
+        PsiElement(()('(')
+        PsiElement())(')')

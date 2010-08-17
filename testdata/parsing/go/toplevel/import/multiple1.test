@@ -1,0 +1,37 @@
+import ( "container/vector"; . "fmt"; _ "go/ast"; P "go/scanner"; "go/token" )
+-----
+Go file
+  ImportDeclarations
+    PsiElement(KEYWORD_IMPORT)('import')
+    PsiWhiteSpace(' ')
+    PsiElement(()('(')
+    PsiWhiteSpace(' ')
+    ImportSpec
+      PsiElement(LITERAL_STRING)('"container/vector"')
+      PsiElement(;)(';')
+    PsiWhiteSpace(' ')
+    ImportSpec
+      PackageReference
+        PsiElement(.)('.')
+      PsiWhiteSpace(' ')
+      PsiElement(LITERAL_STRING)('"fmt"')
+      PsiElement(;)(';')
+    PsiWhiteSpace(' ')
+    ImportSpec
+      PackageReference
+        PsiElement(IDENTIFIER)('_')
+      PsiWhiteSpace(' ')
+      PsiElement(LITERAL_STRING)('"go/ast"')
+      PsiElement(;)(';')
+    PsiWhiteSpace(' ')
+    ImportSpec
+      PackageReference
+        PsiElement(IDENTIFIER)('P')
+      PsiWhiteSpace(' ')
+      PsiElement(LITERAL_STRING)('"go/scanner"')
+      PsiElement(;)(';')
+    PsiWhiteSpace(' ')
+    ImportSpec
+      PsiElement(LITERAL_STRING)('"go/token"')
+    PsiWhiteSpace(' ')
+    PsiElement())(')')

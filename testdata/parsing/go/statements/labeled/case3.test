@@ -1,0 +1,36 @@
+func main() { 
+L:
+    if e {
+    }
+}
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiWhiteSpace(' ')
+      PsiElement(WS_NEW_LINES)('\n')
+      LabeledStmt
+        PsiElement(IDENTIFIER)('L')
+        PsiElement(:)(':')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('    ')
+        IfStmt
+          PsiElement(KEYWORD_IF)('if')
+          PsiWhiteSpace(' ')
+          Literal
+            PsiElement(IDENTIFIER)('e')
+          PsiWhiteSpace(' ')
+          BlockStmt
+            PsiElement({)('{')
+            PsiElement(WS_NEW_LINES)('\n')
+            PsiWhiteSpace('    ')
+            PsiElement(})('}')
+          PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(})('}')

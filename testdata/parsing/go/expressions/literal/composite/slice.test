@@ -1,0 +1,31 @@
+var e = []string{"Sat", "Sun"}
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CompositeLiteral
+        TypeSlice
+          PsiElement([)('[')
+          PsiElement(])(']')
+          TypeName
+            PsiElement(IDENTIFIER)('string')
+        CompositeLiteralElementList
+          PsiElement({)('{')
+          CompositeLiteralElement
+            CompositeLiteralElementValue
+              Literal
+                PsiElement(LITERAL_STRING)('"Sat"')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          CompositeLiteralElement
+            CompositeLiteralElementValue
+              Literal
+                PsiElement(LITERAL_STRING)('"Sun"')
+          PsiElement(})('}')

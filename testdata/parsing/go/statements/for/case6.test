@@ -1,0 +1,30 @@
+func f() { for ;; { } }
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('f')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiWhiteSpace(' ')
+      ForStmt
+        PsiElement(KEYWORD_FOR)('for')
+        PsiWhiteSpace(' ')
+        ForForClause
+          EmptyStmt
+            <empty list>
+          PsiElement(;)(';')
+          PsiElement(;)(';')
+          PsiWhiteSpace(' ')
+          EmptyStmt
+            <empty list>
+        BlockStmt
+          PsiElement({)('{')
+          PsiWhiteSpace(' ')
+          PsiElement(})('}')
+      PsiWhiteSpace(' ')
+      PsiElement(})('}')

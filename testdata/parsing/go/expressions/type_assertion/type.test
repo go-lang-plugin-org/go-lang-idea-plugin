@@ -1,0 +1,21 @@
+var e = x.(type)
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      Literal
+        PsiElement(IDENTIFIER)('x')
+      PsiElement(.)('.')
+      PsiElement(()('(')
+      PsiElement(KEYWORD_TYPE)('type')
+      PsiErrorElement:semicolon.or.newline.right.parenthesis.expected
+        <empty list>
+  PsiElement())(')')
+       

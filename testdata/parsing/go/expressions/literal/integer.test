@@ -1,0 +1,36 @@
+var t1, t2, t3, t4 = 1, 0600, 0xBadFace, 170141183460469231731687303715884105727
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('t1')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        PsiElement(IDENTIFIER)('t2')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        PsiElement(IDENTIFIER)('t3')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        PsiElement(IDENTIFIER)('t4')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        Literal
+          PsiElement(LITERAL_INT)('1')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_OCT)('0600')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_HEX)('0xBadFace')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_INT)('170141183460469231731687303715884105727')

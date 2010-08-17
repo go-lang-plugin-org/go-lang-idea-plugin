@@ -1,0 +1,19 @@
+var c = "asdfasdf", "adfad\"adfadsf"
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('c')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        Literal
+          PsiElement(LITERAL_STRING)('"asdfasdf"')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_STRING)('"adfad\"adfadsf"')

@@ -1,0 +1,58 @@
+func main() {
+    if ; e {
+        return 1
+    } else if a; a { }
+}
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      IfStmt
+        PsiElement(KEYWORD_IF)('if')
+        PsiWhiteSpace(' ')
+        PsiElement(;)(';')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(IDENTIFIER)('e')
+        PsiWhiteSpace(' ')
+        BlockStmt
+          PsiElement({)('{')
+          PsiElement(WS_NEW_LINES)('\n')
+          PsiWhiteSpace('        ')
+          ReturnStmt
+            PsiElement(KEYWORD_RETURN)('return')
+            PsiWhiteSpace(' ')
+            Literal
+              PsiElement(LITERAL_INT)('1')
+          PsiElement(WS_NEW_LINES)('\n')
+          PsiWhiteSpace('    ')
+          PsiElement(})('}')
+        PsiWhiteSpace(' ')
+        PsiElement(KEYWORD_ELSE)('else')
+        PsiWhiteSpace(' ')
+        IfStmt
+          PsiElement(KEYWORD_IF)('if')
+          PsiWhiteSpace(' ')
+          ExpressionStmt
+            Literal
+              PsiElement(IDENTIFIER)('a')
+          PsiElement(;)(';')
+          PsiWhiteSpace(' ')
+          Literal
+            PsiElement(IDENTIFIER)('a')
+          PsiWhiteSpace(' ')
+          BlockStmt
+            PsiElement({)('{')
+            PsiWhiteSpace(' ')
+            PsiElement(})('}')
+          PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(})('}')

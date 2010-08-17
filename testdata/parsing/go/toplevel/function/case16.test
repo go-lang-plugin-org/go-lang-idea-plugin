@@ -1,0 +1,53 @@
+func f(a, b int, z float, opt ...interface{}) (success bool) {}
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('f')
+    PsiElement(()('(')
+    FunctionParameterList
+      FunctionParameter
+        Identifiers
+          PsiElement(IDENTIFIER)('a')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          PsiElement(IDENTIFIER)('b')
+        PsiWhiteSpace(' ')
+        TypeName
+          PsiElement(IDENTIFIER)('int')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      FunctionParameter
+        Identifiers
+          PsiElement(IDENTIFIER)('z')
+        PsiWhiteSpace(' ')
+        TypeName
+          PsiElement(IDENTIFIER)('float')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      FunctionParameterVariadic
+        Identifiers
+          PsiElement(IDENTIFIER)('opt')
+        PsiWhiteSpace(' ')
+        PsiElement(...)('...')
+        TypeInterface
+          PsiElement(KEYWORD_INTERFACE)('interface')
+          PsiElement({)('{')
+          PsiElement(})('}')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    FunctionResult
+      PsiElement(()('(')
+      FunctionParameterList
+        FunctionParameter
+          Identifiers
+            PsiElement(IDENTIFIER)('success')
+          PsiWhiteSpace(' ')
+          TypeName
+            PsiElement(IDENTIFIER)('bool')
+      PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(})('}')

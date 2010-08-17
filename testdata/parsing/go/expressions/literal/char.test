@@ -1,0 +1,55 @@
+var c = 'a', 'ä', '本', '\t', '\000', '\007', '\377', '\x07', '\xff', '\u12e4', '\U00101234'
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('c')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        Literal
+          PsiElement(LITERAL_CHAR)(''a'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_CHAR)(''ä'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_CHAR)(''本'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_CHAR)(''\t'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_CHAR)(''\000'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_CHAR)(''\007'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_CHAR)(''\377'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_CHAR)(''\x07'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_CHAR)(''\xff'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_CHAR)(''\u12e4'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Literal
+          PsiElement(LITERAL_CHAR)(''\U00101234'')

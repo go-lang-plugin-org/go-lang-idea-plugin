@@ -1,0 +1,20 @@
+func main() {
+    continue
+}
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      ContinueStmt
+        PsiElement(KEYWORD_CONTINUE)('continue')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(})('}')

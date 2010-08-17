@@ -1,0 +1,108 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0" is_locked="false">
+    <option name="myName" value="Project Default" />
+    <option name="myLocal" value="false" />
+    <inspection_tool class="AccessToNonThreadSafeStaticFieldFromInstance" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="nonThreadSafeTypes" value="java.text.DateFormat,java.util.Calendar" />
+    </inspection_tool>
+    <inspection_tool class="AccessToStaticFieldLockedOnInstance" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AntDuplicateImportedTargetsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="AntDuplicateTargetsInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AntMissingPropertiesFileInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="ArgNamesErrorsInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="ArgNamesWarningsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ArithmeticOnVolatileField" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AroundAdviceStyleInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="AssignmentToCatchBlockParameter" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AssignmentToCollectionFieldFromParameter" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignorePrivateMethods" value="true" />
+    </inspection_tool>
+    <inspection_tool class="AssignmentToDateFieldFromParameter" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignorePrivateMethods" value="true" />
+    </inspection_tool>
+    <inspection_tool class="AssignmentToForLoopParameter" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="m_checkForeachParameters" value="false" />
+    </inspection_tool>
+    <inspection_tool class="AssignmentToMethodParameter" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoreTransformationOfOriginalParameter" value="false" />
+    </inspection_tool>
+    <inspection_tool class="AssignmentToNull" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AssignmentToStaticFieldFromInstanceMethod" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AssignmentUsedAsCondition" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AwaitNotInLoop" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AwaitWithoutCorrespondingSignal" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="BusyWait" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="CallToNativeMethodWhileLocked" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="CollectionsFieldAccessReplaceableByMethodCall" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ConditionSignal" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="CyclicClassDependency" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="CyclicPackageDependency" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="DeclareParentsInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="DoubleCheckedLocking" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoreOnVolatileVariables" value="false" />
+    </inspection_tool>
+    <inspection_tool class="EmptySynchronizedStatement" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ExtendsThread" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="FieldAccessedSynchronizedAndUnsynchronized" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="countGettersAndSetters" value="false" />
+    </inspection_tool>
+    <inspection_tool class="GroovySillyAssignment" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="IncrementDecrementUsedAsExpression" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="MethodMayBeSynchronized" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NakedNotify" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NestedAssignment" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NestedSynchronizedStatement" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NonSynchronizedMethodOverridesSynchronizedMethod" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NotifyCalledOnCondition" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NotifyNotInSynchronizedContext" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NotifyWithoutCorrespondingWait" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ObjectNotify" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PageflowModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="PagesModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="PointcutMethodStyleInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PublicFieldAccessedInSynchronizedContext" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ReplaceAssignmentWithOperatorAssignment" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoreLazyOperators" value="true" />
+      <option name="ignoreObscureOperators" value="false" />
+    </inspection_tool>
+    <inspection_tool class="SafeLock" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SeamAnnotationIncorrectSignatureInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="SeamAnnotationsInconsistencyInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="SeamBijectionIllegalScopeParameterInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="SeamBijectionTypeMismatchInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="SeamBijectionUndefinedContextVariableInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="SeamDomModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="SeamDuplicateComponentsInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="SeamIllegalComponentScopeInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="SeamJamComponentInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="SignalWithoutCorrespondingAwait" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SillyAssignmentJS" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="SleepWhileHoldingLock" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SynchronizeOnLock" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SynchronizeOnThis" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SynchronizedMethod" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="m_includeNativeMethods" value="true" />
+    </inspection_tool>
+    <inspection_tool class="SynchronizedOnLiteralObject" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SystemRunFinalizersOnExit" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ThreadPriority" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ThreadRun" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ThreadStartInConstruction" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ThreadStopSuspendResume" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ThreadWithDefaultRunMethod" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ThreadYield" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="UnconditionalWait" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="VolatileArrayField" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="VolatileLongOrDoubleField" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="WaitCalledOnCondition" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="WaitNotInLoop" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="WaitNotInSynchronizedContext" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="WaitOrAwaitWithoutTimeout" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="WaitWhileHoldingTwoLocks" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="WaitWithoutCorrespondingNotify" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="WebflowModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="WhileLoopSpinsOnField" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoreNonEmtpyLoops" value="false" />
+    </inspection_tool>
+  </profile>
+</component>

@@ -1,0 +1,32 @@
+func f() { for a < b { } }
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('f')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiWhiteSpace(' ')
+      ForStmt
+        PsiElement(KEYWORD_FOR)('for')
+        PsiWhiteSpace(' ')
+        ForConditionClause
+          RelationalExpression
+            Literal
+              PsiElement(IDENTIFIER)('a')
+            PsiWhiteSpace(' ')
+            PsiElement(<)('<')
+            PsiWhiteSpace(' ')
+            Literal
+              PsiElement(IDENTIFIER)('b')
+        PsiWhiteSpace(' ')
+        BlockStmt
+          PsiElement({)('{')
+          PsiWhiteSpace(' ')
+          PsiElement(})('}')
+      PsiWhiteSpace(' ')
+      PsiElement(})('}')

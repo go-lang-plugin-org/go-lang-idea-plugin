@@ -1,0 +1,15 @@
+func f() int
+-----
+Go file
+  FunctionDeclaration
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('f')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    FunctionResult
+      FunctionParameterList
+        FunctionParameter
+          TypeName
+            PsiElement(IDENTIFIER)('int')

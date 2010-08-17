@@ -1,0 +1,19 @@
+var e = a[1]
+-----
+Go file
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      IndexExpression
+        Literal
+          PsiElement(IDENTIFIER)('a')
+        PsiElement([)('[')
+        Literal
+          PsiElement(LITERAL_INT)('1')
+        PsiElement(])(']')

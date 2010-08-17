@@ -1,0 +1,30 @@
+type f func(prefix string, values ...int)
+-----
+Go file
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      TypeName
+        PsiElement(IDENTIFIER)('f')
+      PsiWhiteSpace(' ')
+      TypeFunction
+        PsiElement(KEYWORD_FUNC)('func')
+        PsiElement(()('(')
+        FunctionParameterList
+          FunctionParameter
+            Identifiers
+              PsiElement(IDENTIFIER)('prefix')
+            PsiWhiteSpace(' ')
+            TypeName
+              PsiElement(IDENTIFIER)('string')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          FunctionParameterVariadic
+            Identifiers
+              PsiElement(IDENTIFIER)('values')
+            PsiWhiteSpace(' ')
+            PsiElement(...)('...')
+            TypeName
+              PsiElement(IDENTIFIER)('int')
+        PsiElement())(')')
