@@ -51,8 +51,7 @@ public class GoFileType extends LanguageFileType {
      }
 
      public Icon getIcon() {
-       // return GoIcons.GROOVY_ICON_16x16;
-         return null;
+         return GoIcons.GO_ICON_16x16;
      }
 
      public boolean isJVMDebuggingSupported() {
