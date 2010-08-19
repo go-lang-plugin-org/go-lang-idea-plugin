@@ -48,14 +48,13 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
         <syntaxHighlighter key="Google.Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighter"/>
-
-        <lang.parserDefinition language="Google Go"
-                               implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
-
+        <lang.parserDefinition language="Google Go" implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
         <lang.braceMatcher language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoBraceMatcher"/>
-
-        <lang.foldingBuilder language="Google Go"
-                             implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
+        <lang.foldingBuilder language="Google Go" implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
         <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
+
+        <frameworkSupport implementation="ro.redeul.google.go.config.framework.GoFrameworkSupportProvider"/>
+        <facetType implementation="ro.redeul.google.go.config.facet.GoFacetType" />
+        <sdkType implementation="ro.redeul.google.go.config.sdk.GoSdkType" />
     </extensions>
 </idea-plugin>

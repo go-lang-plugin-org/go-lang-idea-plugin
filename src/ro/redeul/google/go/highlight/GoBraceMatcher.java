@@ -34,16 +34,14 @@ public class GoBraceMatcher implements PairedBraceMatcher {
     }
 
     public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType tokenType, @Nullable IElementType contextType) {
-        return tokenType == null
-            || GoTokenTypes.wsWS == tokenType
-            || GoTokenTypes.wsNLS == tokenType
-            || GoTokenTypeSets.COMMENTS.contains(tokenType)
-            || tokenType == GoTokenTypes.oSEMI
-            || tokenType == GoTokenTypes.oCOMMA
-            || tokenType == GoTokenTypes.pRPAREN
-            || tokenType == GoTokenTypes.pRBRACK
-            || tokenType == GoTokenTypes.pRCURLY;
-
+        return tokenType == null ||
+//            || GoTokenTypes.wsWS == tokenType
+//            || GoTokenTypes.wsNLS == tokenType
+//            || GoTokenTypeSets.COMMENTS.contains(tokenType)
+//            || tokenType == GoTokenTypes.oSEMI
+//            || tokenType == GoTokenTypes.oCOMMA
+                ( tokenType != GoTokenTypes.pRPAREN   && tokenType != GoTokenTypes.pRBRACK && tokenType != GoTokenTypes.pRCURLY)
+                ;
     }
 
     public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {
