@@ -1,6 +1,8 @@
 <idea-plugin version="2" url="http://bitbucket.org/mtoader/google-go-for-idea-docs/wiki/Home">
     <id>ro.redeul.google.go</id>
-    <name>Google Go Language plugin</name>
+    <name>Google Go Language plugin</name>    
+    <version>0.1.1</version>
+    <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
     <![CDATA[
         <p>Language support for Google Go language.</p>
@@ -11,15 +13,22 @@
             <li>Code folding</li>
             <li>Brace matching</li>
             <li>Comment/Uncomment (Single/Multiple line) support</li>
+            <li>Go SDK type</li>
+            <li>File type icon</li>
         </ul>
         
        <p>More are planned for the future.</p>
     ]]>        
     </description>
-    <version>0.1.0</version>
-    <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <change-notes>
         <![CDATA[
+        <h3>0.1.1 features:</h3>
+                <ul>
+                    <li>[feature] Go Sdk type (with auto configuration)</li>
+                    <li>[feature] Icons</li>
+                </ul>
+        </h3>
+
         <h3>0.1.0 features:</h3>
                 <ul>
                     <li>[feature] basic language parsing and highlighting</li>
@@ -29,6 +38,7 @@
                 </ul>
         ]]>
     </change-notes>
+    
     <idea-version since-build="95.000" until-build="97.000"/>
 
     <category>Custom Languages</category>

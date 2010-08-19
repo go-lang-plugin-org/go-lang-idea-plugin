@@ -5,34 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="56d30604-b05b-4754-b856-6785adac8d3b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/framework/GoFrameworkSupportConfigurable.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/mtoader.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/mtoader.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetTab.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/META-INF/plugin.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetConfiguration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/highlight/GoBraceMatcher.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/highlight/GoBraceMatcher.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkData.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetEditor.form" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/framework/GoFrameworkSupportProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoSdkConfigurable.form" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetTab.form" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoUtil.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetEditor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoSdkConfigurable.java" />
     </list>
-    <ignored path="$USER_HOME_GRAILS$/" />
-    <ignored path="$USER_HOME_GRIFFON$/" />
     <ignored path="GoogleGoPlugin.jar" />
+    <ignored path="$USER_HOME_GRIFFON$/" />
     <ignored path="coverage-error.log" />
+    <ignored path="$USER_HOME_GRAILS$/" />
     <ignored path="google-go-language.jar" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -145,8 +124,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="field_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -156,99 +135,19 @@
   <component name="FileColors" enabled="true" enabledForTabs="true" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="GoSdkData.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkData.java">
+      <file leaf-file-name="parser.go" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/parser.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="0" selection-start="1006" selection-end="1006" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GoSdkType.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="0" selection-start="954" selection-end="954" vertical-scroll-proportion="0.33171913">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GoFacetType.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="17" selection-start="517" selection-end="517" vertical-scroll-proportion="0.0">
+            <state line="87" column="26" selection-start="2481" selection-end="2481" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GoSdkConfigurable.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoSdkConfigurable.java">
+      <file leaf-file-name="plugin.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="27" selection-start="1627" selection-end="1627" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GoSdkUtil.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="127" column="0" selection-start="4376" selection-end="4376" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TextFieldWithBrowseButton.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/ui/TextFieldWithBrowseButton.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="39" selection-start="2117" selection-end="2117" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SSLCredentialsDialog.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/svn4idea/src/org/jetbrains/idea/svn/dialogs/SSLCredentialsDialog.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="32" selection-start="2389" selection-end="2389" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ComponentWithBrowseButton.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/ui/ComponentWithBrowseButton.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="13" selection-start="1734" selection-end="1734" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EditorComboWithBrowseButton.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/lang-impl/src/com/intellij/ui/EditorComboWithBrowseButton.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="13" selection-start="959" selection-end="959" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GroovyFacetEditor.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/groovy/src/org/jetbrains/plugins/groovy/config/ui/GroovyFacetEditor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="179" column="49" selection-start="6835" selection-end="6835" vertical-scroll-proportion="0.0">
+            <state line="45" column="58" selection-start="1606" selection-end="1606" vertical-scroll-proportion="0.4379391">
               <folding />
             </state>
           </provider>
@@ -268,7 +167,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoogleGoFacetConfiguration.java" />
         <option value="$PROJECT_DIR$/test/ro/redeul/google/go/util/GoogleGoUtil.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoogleGoUtil.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoogleGoSdk.java" />
@@ -284,6 +182,7 @@
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java" />
+        <option value="$PROJECT_DIR$/META-INF/plugin.xml" />
       </list>
     </option>
   </component>
@@ -349,123 +248,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Favorites" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ro" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="redeul" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="go" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ro" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="redeul" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="go" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="META-INF" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -784,6 +566,59 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="META-INF" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Favorites" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -794,7 +629,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="com.ansorgit.plugins.bash.settings.BashProjectSettingsConfigurable" />
+    <property name="options.lastSelected" value="preferences.pluginManager" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="last_opened_file_path" value="$USER_HOME$/Work/IntellijIdea/ideaIC-95.429/plugins/groovy/src/org/jetbrains/plugins/groovy/lang/lexer" />
     <property name="project.structure.side.proportion" value="0.27052024" />
@@ -804,9 +639,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="PsiViewer.ProjectComponent">
     <option name="HIGHLIGHT" value="false" />
@@ -1314,28 +1149,28 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="24" width="1682" height="1031" extended-state="6" />
+    <frame x="0" y="24" width="1680" height="1026" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28186274" sideWeight="0.5589569" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36208853" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12622549" sideWeight="0.5589569" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.63378686" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20710784" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45351472" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41836736" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.57369614" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43310657" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32993197" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24019608" sideWeight="0.7403628" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32965687" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39950982" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32536766" sideWeight="0.53854877" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25735295" sideWeight="0.57369614" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3425245" sideWeight="0.41156462" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4376417" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="PsiViewer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24632353" sideWeight="0.63038546" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28186274" sideWeight="0.5589569" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.63378686" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43310657" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3425245" sideWeight="0.41156462" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1352,7 +1187,7 @@
     <option name="ENABLE_BACKGROUND_PROCESSES" value="false" />
     <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added file icon.&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Internationalization bundle.&#10;Go Sdk implementation and auto configuration.&#10;Go Facet type.&#10;Go Framework type." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1369,6 +1204,7 @@
     <MESSAGE value="test update" />
     <MESSAGE value="Updated plugin description." />
     <MESSAGE value="Added file icon.&#10;" />
+    <MESSAGE value="Internationalization bundle.&#10;Go Sdk implementation and auto configuration.&#10;Go Facet type.&#10;Go Framework type." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1378,67 +1214,19 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/util/src/com/intellij/openapi/util/JDOMUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="162" column="0" selection-start="5155" selection-end="5155" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/util/src/com/intellij/util/xmlb/BeanBinding.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="0" selection-start="3734" selection-end="3734" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/ui/GuiUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="49" selection-start="2518" selection-end="2518" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="63" column="49" selection-start="2518" selection-end="2518" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/properties/src/com/intellij/lang/properties/references/I18nizeQuickFixDialog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="128" column="39" selection-start="5013" selection-end="5013" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="128" column="39" selection-start="5013" selection-end="5013" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/ui/ComboboxWithBrowseButton.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="54" selection-start="944" selection-end="944" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/ui/ComponentWithBrowseButton.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="13" selection-start="1734" selection-end="1734" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/lang-impl/src/com/intellij/ui/EditorComboWithBrowseButton.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="13" selection-start="959" selection-end="959" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/svn4idea/src/org/jetbrains/idea/svn/dialogs/SSLCredentialsDialog.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="32" selection-start="2389" selection-end="2389" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/ui/TextFieldWithBrowseButton.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="39" selection-start="2117" selection-end="2117" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="25" column="54" selection-start="944" selection-end="944" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoSdkConfigurable.form">
@@ -1446,53 +1234,65 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/groovy/src/org/jetbrains/plugins/groovy/config/ui/GroovyFacetEditor.java">
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="179" column="49" selection-start="6835" selection-end="6835" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="29" column="40" selection-start="821" selection-end="821" vertical-scroll-proportion="0.36283186" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="0" selection-start="1006" selection-end="1006" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoSdkConfigurable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="27" selection-start="1627" selection-end="1627" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="34" column="0" selection-start="1006" selection-end="1006" vertical-scroll-proportion="4.121212" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="17" selection-start="517" selection-end="517" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="15" column="17" selection-start="517" selection-end="517" vertical-scroll-proportion="1.0909091" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoSdkConfigurable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="27" selection-start="1627" selection-end="1627" vertical-scroll-proportion="5.973451" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="0" selection-start="4376" selection-end="4376" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="127" column="0" selection-start="4376" selection-end="4376" vertical-scroll-proportion="0.9403973" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java">
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/ui/TextFieldWithBrowseButton.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="0" selection-start="954" selection-end="954" vertical-scroll-proportion="0.33171913">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="55" column="39" selection-start="2117" selection-end="2117" vertical-scroll-proportion="0.67424244" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/svn4idea/src/org/jetbrains/idea/svn/dialogs/SSLCredentialsDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="32" selection-start="2389" selection-end="2389" vertical-scroll-proportion="0.7117647" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/ui/ComponentWithBrowseButton.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="13" selection-start="1734" selection-end="1734" vertical-scroll-proportion="0.47058824" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/lang-impl/src/com/intellij/ui/EditorComboWithBrowseButton.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="13" selection-start="959" selection-end="959" vertical-scroll-proportion="0.67724866" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/groovy/src/org/jetbrains/plugins/groovy/config/ui/GroovyFacetEditor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="179" column="49" selection-start="6835" selection-end="6835" vertical-scroll-proportion="0.53968257" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/parser.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="26" selection-start="2481" selection-end="2481" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="58" selection-start="1606" selection-end="1606" vertical-scroll-proportion="0.4379391">
+          <folding />
         </state>
       </provider>
     </entry>
