@@ -8,10 +8,7 @@ import com.intellij.util.CommonProcessors;
 
 import java.io.*;
 import java.nio.CharBuffer;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class GoSdkUtil {
 
@@ -22,58 +19,82 @@ public class GoSdkUtil {
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static String[] testGoogleGoSdk(String path) {
 
-        try {
-            File f = FileUtil.createTempFile("google-go-sdk-detector", "");
+        File rootFile = new File(path);
 
-            FileUtil.writeToFile(f, getSdkTesterScriptContents(path), false);
-            f.setExecutable(true);
-            f.deleteOnExit();
-
-            Pair<String[], String> executionResult =
-                    ProcessUtil.executeAndProcessOutput(
-                            Arrays.asList("bash", "-c", f.getAbsolutePath()),
-                            new File(path, "src"),
-                            new ProcessUtil.StreamParser<String[]>() {
-                                public String[] parseStream(String data) {
-                                    return data.replaceAll("\n+$", "").split("\\|");
-                                }
-                            },
-                            ProcessUtil.NULL_PARSER);
-
-//            f.delete();
-               
-            return executionResult.getFirst();
-
-        } catch (IOException e) {
-            return null;
+        // check that the selection was a folder
+        if ( ! rootFile.exists() || ! rootFile.isDirectory() ) {
+            return new String[0];
         }
-    }
 
-    private static byte[] getSdkTesterScriptContents(String path) {
-        String script = "\n" +
-                ". env.bash\n" +
-                "echo \"$GOROOT|$GOBIN|$GOOS|$GOARCH|`$GOBIN/6g -V`\"\n";
+        // check to see if we have a %GOROOT/src folder
+        File srcFolder = new File(rootFile, "src");
+        if ( ! srcFolder.exists() || ! srcFolder.isDirectory() ) {
+            return new String[0];
+        }
 
-        return script.getBytes();
-    }
+        // check to see if we have a %GOROOT/pkg folder
+        File pkgFolder = new File(rootFile, "pkg");
+        if ( ! pkgFolder.exists() || ! pkgFolder.isDirectory() ) {
+            return new String[0];
+        }
 
-    public static Collection<File> findGoogleSdkPackages(String homePath) {
+        // check to see if we have a %GOROOT/pkg/~place-holder~ file        
+        File placeHolder = new File(pkgFolder, "~place-holder~");
+        if ( ! placeHolder.exists() || ! placeHolder.isFile() ) {
+            return new String[0];
+        }
 
-        CommonProcessors.CollectUniquesProcessor<File> processor = new CommonProcessors.CollectUniquesProcessor<File>() {
-            @Override
-            public boolean process(File file) {
-                File compiledPackage = new File(file, "_go_.6");
-                if (compiledPackage.exists() && compiledPackage.isFile()) {
-                    super.process(file);
-                }
-
-                return true;
+        File targets[] = pkgFolder.listFiles(new FileFilter() {
+            public boolean accept(File pathName) {
+                return pathName.isDirectory() && ! pathName.getName().matches("\\.{1,2}");
             }
-        };
-        FileUtil.processFilesRecursively(new File(homePath + "/" + PACKAGES), processor);
+        });
 
-        return processor.getResults();
+        if ( targets.length != 1 || ! targets[0].getName().matches("(windows|linux|darwin|freebsd)_(386|amd64|arm)")) {
+            return new String[0];
+        }
+
+        String []target = targets[0].getName().split("_");
+
+        String compilerName = getCompilerName(target[0], target[1]);
+
+        String binariesPath = System.getenv("GOBIN");
+        if ( binariesPath == null ) {
+            if ( target[0].equals("windows") ) {
+                binariesPath = path + "/bin";
+            } else {
+                binariesPath = System.getenv("HOME") + "/bin";
+            }
+        }
+
+        Pair<String, String> executionResult =
+                ProcessUtil.executeAndProcessOutput(
+                        Arrays.asList(binariesPath + "/" + compilerName, "-V"),
+                        new File(path),
+                        ProcessUtil.NULL_PARSER,
+                        ProcessUtil.NULL_PARSER);
+
+        return new String[]{path, binariesPath, target[0], target[1], executionResult.getFirst()};
     }
+//
+//    public static Collection<File> findGoogleSdkPackages(String homePath) {
+//
+//        CommonProcessors.CollectUniquesProcessor<File> processor = new CommonProcessors.CollectUniquesProcessor<File>() {
+//            @Override
+//            public boolean process(File file) {
+//                File compiledPackage = new File(file, "_go_.6");
+//                if (compiledPackage.exists() && compiledPackage.isFile()) {
+//                    super.process(file);
+//                }
+//
+//                return true;
+//            }
+//        };
+//
+//        FileUtil.processFilesRecursively(new File(homePath + "/" + PACKAGES), processor);
+//
+//        return processor.getResults();
+//    }
 
     public static String getCompilerName(String os, String arch) {
         if (arch.equalsIgnoreCase("amd64")) {

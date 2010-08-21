@@ -3,7 +3,7 @@ package ro.redeul.google.go.config.sdk;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import ro.redeul.google.go.GoIcons;
@@ -12,9 +12,6 @@ import ro.redeul.google.go.util.GoSdkUtil;
 import ro.redeul.google.go.util.GoUtil;
 
 import javax.swing.*;
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
 
 public class GoSdkType extends SdkType {
 
@@ -92,26 +89,31 @@ public class GoSdkType extends SdkType {
     }
 
     @Override
-    public boolean setupSdkPaths(Sdk sdk, SdkModel sdkModel) {
+    public boolean setupSdkPaths(final Sdk sdk, SdkModel sdkModel) {
 
-        if (sdk.getSdkType() != this) {
+        VirtualFile homeDirectory = sdk.getHomeDirectory();
+
+        if (sdk.getSdkType() != this || homeDirectory == null ) {
             return false;
         }
 
-        Collection<File> googleGoPackages = GoSdkUtil.findGoogleSdkPackages(sdk.getHomePath());
+        final VirtualFile librariesRoot = homeDirectory.findFileByRelativePath(String.format("pkg/%s_%s/", sdkData.TARGET_OS, sdkData.TARGET_ARCH));
+        final VirtualFile sourcesRoot = homeDirectory.findFileByRelativePath("src/pkg/");
+
+        if ( librariesRoot != null ) {
+            librariesRoot.refresh(false, false);
+        }
+        if ( sourcesRoot != null ) {
+            sourcesRoot.refresh(false, false);
+        }
 
         final SdkModificator sdkModificator = sdk.getSdkModificator();
-        for (final File packageRoot : googleGoPackages) {
-
-            if (packageRoot.exists() && packageRoot.isDirectory()) {
-                ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                    public void run() {
-                        sdkModificator.addRoot(LocalFileSystem.getInstance().refreshAndFindFileByIoFile(packageRoot), OrderRootType.CLASSES);
-                        sdkModificator.addRoot(LocalFileSystem.getInstance().refreshAndFindFileByIoFile(packageRoot), OrderRootType.SOURCES);
-                    }
-                });
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            public void run() {
+                sdkModificator.addRoot(librariesRoot, OrderRootType.CLASSES);
+                sdkModificator.addRoot(sourcesRoot, OrderRootType.SOURCES);
             }
-        }
+        });
 
         sdkModificator.setVersionString(sdkData.VERSION);
         sdkModificator.setSdkAdditionalData(sdkData);
