@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="56d30604-b05b-4754-b856-6785adac8d3b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/google-go-language.iml" afterPath="$PROJECT_DIR$/google-go-language.iml" />
     </list>
     <ignored path="$USER_HOME_GRIFFON$/" />
     <ignored path="google-go-language.jar" />
@@ -153,7 +151,7 @@
       <file leaf-file-name="GoSdkType.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="150" column="0" selection-start="4821" selection-end="4821" vertical-scroll-proportion="0.88758785">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1196,7 +1194,7 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36208853" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.34353742" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20710784" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5124717" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.67573696" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.57369614" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37755102" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32993197" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1228,7 +1226,7 @@
     <option name="ENABLE_BACKGROUND_PROCESSES" value="false" />
     <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Some file generator work.&#10;Go runner implementation.&#10;Some completion work&#10;Updated test cases.&#10;Updated compiler to sort out the local packages when compiling.&#10;Updated lexer to fix an issue with java style comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="Make the Go SDK work properly on windows too." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1248,6 +1246,7 @@
     <MESSAGE value="Internationalization bundle.&#10;Go Sdk implementation and auto configuration.&#10;Go Facet type.&#10;Go Framework type." />
     <MESSAGE value="update plugin.xml" />
     <MESSAGE value="Some file generator work.&#10;Go runner implementation.&#10;Some completion work&#10;Updated test cases.&#10;Updated compiler to sort out the local packages when compiling.&#10;Updated lexer to fix an issue with java style comments" />
+    <MESSAGE value="Make the Go SDK work properly on windows too." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1342,7 +1341,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="150" column="0" selection-start="4821" selection-end="4821" vertical-scroll-proportion="0.88758785">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -51,6 +51,16 @@ public class GoSdkType extends SdkType {
     }
 
     @Override
+    public Icon getIconForAddAction() {
+        return GoIcons.GO_ICON_16x16;
+    }
+
+    @Override
+    public Icon getIconForExpandedTreeNode() {
+        return GoIcons.GO_ICON_16x16;
+    }
+
+    @Override
     public String suggestSdkName(String currentSdkName, String sdkHome) {
         return "Go" + (sdkData.VERSION != null && sdkData.VERSION.trim().length() > 0 ? " (" + sdkData.VERSION + ")" : "");
     }
