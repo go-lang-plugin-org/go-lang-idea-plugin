@@ -22,7 +22,6 @@ public class GoFrameworkSupportConfigurable extends FrameworkSupportConfigurable
     private GoFacetEditor editor;
 
     public GoFrameworkSupportConfigurable(GoFacetEditor editor) {
-
         this.editor = editor;
     }
     

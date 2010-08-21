@@ -3,7 +3,12 @@ package ro.redeul.google.go.config.facet;
 import com.intellij.facet.Facet;
 import com.intellij.facet.FacetType;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.projectRoots.ProjectJdkTable;
+import com.intellij.openapi.projectRoots.Sdk;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.config.sdk.GoSdkType;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,5 +20,17 @@ import org.jetbrains.annotations.NotNull;
 public class GoFacet extends Facet<GoFacetConfiguration> {
     public GoFacet(@NotNull FacetType facetType, @NotNull Module module, @NotNull String name, @NotNull GoFacetConfiguration configuration, Facet underlyingFacet) {
         super(facetType, module, name, configuration, underlyingFacet);
+    }
+
+    public Sdk getGoSdk() {
+        List<Sdk> sdks = ProjectJdkTable.getInstance().getSdksOfType(GoSdkType.getInstance());
+
+        for (Sdk sdk : sdks) {
+            if ( sdk.getName().equals(getConfiguration().SDK_NAME) ) {
+                return sdk;
+            }
+        }
+
+        return null;
     }
 }

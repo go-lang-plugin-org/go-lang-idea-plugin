@@ -21,6 +21,10 @@ public class GoSdkType extends SdkType {
         super("Google Go SDK");
     }
 
+    public static GoSdkType getInstance() {
+      return SdkType.findInstance(GoSdkType.class);
+    }
+
     @Override
     public String suggestHomePath() {
         return GoUtil.resolveGoogleGoHomePath();
@@ -126,7 +130,7 @@ public class GoSdkType extends SdkType {
         });
 
         sdkModificator.setVersionString(sdkData.VERSION);
-        sdkModificator.setSdkAdditionalData(sdkData);
+        sdkModificator.setSdkAdditionalData(sdkData);        
         sdkModificator.commitChanges();
         return true;
     }

@@ -7,6 +7,9 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.GoIcons;
+
+import javax.swing.*;
 
 public class GoFacetType extends FacetType<GoFacet, GoFacetConfiguration> {
 
@@ -19,6 +22,11 @@ public class GoFacetType extends FacetType<GoFacet, GoFacetConfiguration> {
     @Override
     public GoFacetConfiguration createDefaultConfiguration() {
         return new GoFacetConfiguration();
+    }
+
+    @Override
+    public Icon getIcon() {
+        return GoIcons.GO_ICON_16x16;
     }
 
     @Override

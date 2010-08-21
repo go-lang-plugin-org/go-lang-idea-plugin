@@ -1,14 +1,22 @@
 package ro.redeul.google.go.compilation;
 
 import com.intellij.compiler.impl.CompilerUtil;
+import com.intellij.facet.FacetManager;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.compiler.TranslatingCompiler;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.roots.ui.configuration.ClasspathEditor;
+import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -18,14 +26,18 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.Chunk;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.config.facet.GoFacet;
+import ro.redeul.google.go.config.facet.GoFacetType;
+import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
+import ro.redeul.google.go.util.GoSdkUtil;
 import ro.redeul.google.go.util.ProcessUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,13 +51,47 @@ import java.util.regex.Pattern;
  */
 public class GoCompiler implements TranslatingCompiler {
 
+    Project project;
+
+    public GoCompiler(Project project) {
+        this.project = project;
+    }
+
     @NotNull
     public String getDescription() {
         return "Go Compiler";
     }
 
     public boolean validateConfiguration(CompileScope scope) {
-        // every module or facet of go nature should have a proper go sdk attached.
+
+        final VirtualFile files[] = scope.getFiles(GoFileType.GO_FILE_TYPE, true);
+
+        final Set<Module> affectedModules = new HashSet<Module>();
+
+        ApplicationManager.getApplication().runReadAction(new Runnable() {
+            public void run() {
+                ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+
+                for (VirtualFile file : files) {
+                    affectedModules.add(projectFileIndex.getModuleForFile(file));
+                }
+            }
+        });
+
+        for (Module affectedModule : affectedModules) {
+            if (findGoSdkForModule(affectedModule) == null) {
+
+                Messages.showErrorDialog(
+                        affectedModule.getProject(),
+                        GoBundle.message("cannot.compile.go.files.no.facet", affectedModule.getName()),
+                        GoBundle.message("cannot.compile"));
+
+                ModulesConfigurator.showDialog(affectedModule.getProject(), affectedModule.getName(), ClasspathEditor.NAME, false);
+
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -53,8 +99,7 @@ public class GoCompiler implements TranslatingCompiler {
         return file.getFileType() == GoFileType.GO_FILE_TYPE;
     }
 
-    public void compile(CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
-
+    public void compile(final CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
 
         Map<Module, List<VirtualFile>> mapToFiles = CompilerUtil.buildModuleToFilesMap(context, files);
 
@@ -64,13 +109,13 @@ public class GoCompiler implements TranslatingCompiler {
 
             final Sdk sdk = findGoSdkForModule(module);
             final VirtualFile moduleOutputDirectory = context.getModuleOutputDirectory(module);
-            String outputPath = moduleOutputDirectory.getPath();
+            final String outputPath = moduleOutputDirectory.getPath();
 
             final Map<String, List<VirtualFile>> packagesToFileList = new HashMap<String, List<VirtualFile>>();
 
             final List<Pair<String, String>> importDependencies = new ArrayList<Pair<String, String>>();
             final Set<String> ourPackages = new HashSet<String>();
-            
+
             for (final VirtualFile virtualFile : moduleFiles.getValue()) {
                 ApplicationManager.getApplication().runReadAction(new Runnable() {
                     public void run() {
@@ -85,8 +130,8 @@ public class GoCompiler implements TranslatingCompiler {
                             virtualFiles.add(virtualFile);
                             ourPackages.add(packageName);
 
-                            for ( GoImportDeclaration importDeclaration : goFile.getImportDeclarations() ) {
-                                for (GoImportSpec importSpec : importDeclaration.getImports() ) {
+                            for (GoImportDeclaration importDeclaration : goFile.getImportDeclarations()) {
+                                for (GoImportSpec importSpec : importDeclaration.getImports()) {
                                     importDependencies.add(Pair.create(cleanUpImportName(importSpec.getImportPath()), packageName));
                                 }
                             }
@@ -97,22 +142,27 @@ public class GoCompiler implements TranslatingCompiler {
 
             List<String> packagesCompilationOrder = findPackagesCompilationOrder(importDependencies, ourPackages);
 
-            for (final String packageName : packagesCompilationOrder) {                
+            for (final String packageName : packagesCompilationOrder) {
                 final String destination = outputPath + "/go-binaries/packages/";
 
-                try {
-                    VfsUtil.createDirectoryIfMissing(moduleOutputDirectory, "/go-binaries/packages/");
-                } catch (IOException e) {
-                    context.addMessage(CompilerMessageCategory.ERROR, e.getMessage(), null, -1, -1);
+                new WriteCommandAction<Boolean>(module.getProject()) {
+                    @Override
+                    protected void run(Result<Boolean> boolResult) throws Throwable {
+                        boolResult.setResult(false);
+                        VfsUtil.createDirectoryIfMissing(moduleOutputDirectory, "/go-binaries/packages");
+                        boolResult.setResult(true);
+                    }
+                }.execute();
+
+                doCompileFile(context, sdk, outputPath, packagesToFileList.get(packageName), destination + packageName + ".6");
+                if (LocalFileSystem.getInstance().refreshAndFindFileByPath(destination + packageName + ".6") == null) {
                     continue;
                 }
 
-                doCompileFile(context, sdk, outputPath, packagesToFileList.get(packageName), destination + packageName + ".6");
-                LocalFileSystem.getInstance().refreshAndFindFileByPath(destination + packageName + ".6");
-
                 doPackLibrary(context, sdk, outputPath, destination + packageName + ".6", destination + packageName + ".a");
-                LocalFileSystem.getInstance().refreshAndFindFileByPath(destination + packageName + ".a");
-
+                if (LocalFileSystem.getInstance().refreshAndFindFileByPath(destination + packageName + ".a") == null) {
+                    continue;
+                }
 
                 Collection<OutputItem> outputItems = new ArrayList<OutputItem>();
 
@@ -161,18 +211,18 @@ public class GoCompiler implements TranslatingCompiler {
         for (String ourPackage : ourPackages) {
             incomingCounts.put(ourPackage, 0);
         }
-        
+
         for (Pair<String, String> importDependency : importDependencies) {
-            if ( ! ourPackages.contains(importDependency.getFirst()) ) {
+            if (!ourPackages.contains(importDependency.getFirst())) {
                 continue;
             }
 
             Set<String> adiacentNodes = outGoingList.get(importDependency.getFirst());
-            if ( adiacentNodes == null ) {
+            if (adiacentNodes == null) {
                 adiacentNodes = new HashSet<String>();
                 outGoingList.put(importDependency.getFirst(), adiacentNodes);
             }
-            
+
             adiacentNodes.add(importDependency.getSecond());
 
             incomingCounts.put(importDependency.second, incomingCounts.get(importDependency.second) + 1);
@@ -181,18 +231,18 @@ public class GoCompiler implements TranslatingCompiler {
         boolean canGoFurther = true;
 
         List<String> unsortedItems = new ArrayList<String>(ourPackages);
-        while ( canGoFurther ) {
+        while (canGoFurther) {
 
             canGoFurther = false;
             List<String> removed = new ArrayList<String>();
-            
-            for (String key: incomingCounts.keySet()) {
-                if ( incomingCounts.get(key) == 0 ) {
+
+            for (String key : incomingCounts.keySet()) {
+                if (incomingCounts.get(key) == 0) {
                     removed.add(key);
 
-                    if ( outGoingList.containsKey(key)) {
+                    if (outGoingList.containsKey(key)) {
                         for (String outgoing : outGoingList.get(key)) {
-                            if ( incomingCounts.get(outgoing) != null ) {
+                            if (incomingCounts.get(outgoing) != null) {
                                 incomingCounts.put(outgoing, incomingCounts.get(outgoing) - 1);
                             }
                         }
@@ -207,7 +257,7 @@ public class GoCompiler implements TranslatingCompiler {
                 sortedPackages.add(s);
             }
         }
-        
+
         return sortedPackages;
     }
 
@@ -263,7 +313,7 @@ public class GoCompiler implements TranslatingCompiler {
         compileCommand.add(executionFolder + "/go-binaries/packages/");
         compileCommand.add("-o");
         compileCommand.add(destinationFile);
-        
+
         for (VirtualFile file : files) {
             compileCommand.add(file.getPath());
         }
@@ -289,7 +339,8 @@ public class GoCompiler implements TranslatingCompiler {
     }
 
     private String getCompilerBinary(Sdk sdk) {
-        return "6g";
+        GoSdkData goSdkData = (GoSdkData) sdk.getSdkAdditionalData();
+        return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getCompilerName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH);
     }
 
     private String getPackerBinary(Sdk sdk) {
@@ -297,8 +348,19 @@ public class GoCompiler implements TranslatingCompiler {
     }
 
     private Sdk findGoSdkForModule(Module module) {
-        // FacetManager.getInstance(module).getAllFacets();        
-        return ModuleRootManager.getInstance(module).getSdk();
+
+        GoFacet goFacet = FacetManager.getInstance(module).getFacetByType(GoFacetType.GO_FACET_TYPE_ID);
+
+        if (goFacet == null)
+            return null;
+
+        Sdk sdk = goFacet.getGoSdk();
+        if (sdk != null) {
+            return sdk;
+        }
+
+        // other checks (module of type .. etc)
+        return null;
     }
 
     static class CompilerMessage {

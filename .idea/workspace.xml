@@ -6,13 +6,23 @@
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="56d30604-b05b-4754-b856-6785adac8d3b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetConfiguration.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetConfiguration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/framework/GoFrameworkSupportConfigurable.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/framework/GoFrameworkSupportConfigurable.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacet.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacet.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetTab.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetTab.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompilerFactory.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompilerFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetTab.form" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetTab.form" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.properties" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.properties" />
     </list>
-    <ignored path="$USER_HOME_GRIFFON$/" />
-    <ignored path="google-go-language.jar" />
     <ignored path="GoogleGoPlugin.jar" />
-    <ignored path="$USER_HOME_GRAILS$/" />
     <ignored path="coverage-error.log" />
+    <ignored path="$USER_HOME_GRIFFON$/" />
+    <ignored path="$USER_HOME_GRAILS$/" />
+    <ignored path="google-go-language.jar" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,8 +147,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="exception_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -148,10 +158,10 @@
   <component name="FileColors" enabled="true" enabledForTabs="true" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="GoSdkType.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java">
+      <file leaf-file-name="GoCompiler.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="150" column="0" selection-start="4821" selection-end="4821" vertical-scroll-proportion="0.88758785">
+            <state line="342" column="92" selection-start="14011" selection-end="14011" vertical-scroll-proportion="0.3520958">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -159,37 +169,82 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FocusManagerImpl.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-impl/src/com/intellij/openapi/wm/impl/FocusManagerImpl.java">
+      <file leaf-file-name="CompositeScope.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/impl/src/com/intellij/compiler/impl/CompositeScope.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="410" column="0" selection-start="12614" selection-end="12614" vertical-scroll-proportion="0.0">
+            <state line="89" column="82" selection-start="2701" selection-end="2701" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VirtualFile.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/vfs/VirtualFile.java">
+      <file leaf-file-name="GoCompilerFactory.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompilerFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="282" column="21" selection-start="9914" selection-end="9914" vertical-scroll-proportion="0.0">
+            <state line="8" column="68" selection-start="224" selection-end="224" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GoSdkData.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkData.java">
+      <file leaf-file-name="CompilerFactory.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/openapi/src/com/intellij/openapi/compiler/CompilerFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="13" selection-start="501" selection-end="501" vertical-scroll-proportion="0.0">
+            <state line="22" column="17" selection-start="742" selection-end="742" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GoSdkUtil.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java">
+      <file leaf-file-name="CompileScope.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/openapi/src/com/intellij/openapi/compiler/CompileScope.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="85" column="34" selection-start="3153" selection-end="3153" vertical-scroll-proportion="0.0">
+            <state line="30" column="17" selection-start="1132" selection-end="1132" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ProjectCompileScope.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/impl/src/com/intellij/compiler/impl/ProjectCompileScope.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="33" column="56" selection-start="1196" selection-end="1196" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FileIndexCompileScope.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/impl/src/com/intellij/compiler/impl/FileIndexCompileScope.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="32" column="60" selection-start="1142" selection-end="1142" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserDataHolderBase.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/util/src/com/intellij/openapi/util/UserDataHolderBase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="26" column="13" selection-start="912" selection-end="912" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GroovyCompiler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/groovy/src/org/jetbrains/plugins/groovy/compiler/GroovyCompiler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="67" column="9" selection-start="2975" selection-end="2975" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GroovyCompilerBase.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/groovy/src/org/jetbrains/plugins/groovy/compiler/GroovyCompilerBase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="84" column="0" selection-start="3669" selection-end="3669" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -209,22 +264,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case6.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case7.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/nested/additive.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/nested/precedence1.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/expressions/type_assertion/type.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case2.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case8.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case9.test" />
-        <option value="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTopLevelTestCase.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/go.flex" />
         <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case1.test" />
         <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case4.test" />
         <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case7.test" />
         <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case10.test" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/framework/GoFrameworkSupportConfigurable.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java" />
+        <option value="$USER_HOME$/Work/IntellijIdea/idea/platform/lang-api/src/com/intellij/openapi/roots/ProjectRootManager.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacet.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetConfiguration.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetTab.form" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetTab.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.properties" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompilerFactory.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" />
       </list>
     </option>
   </component>
@@ -290,128 +345,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ro" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="redeul" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="go" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ro" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="redeul" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="go" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ro" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="redeul" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="go" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sdk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -576,16 +509,374 @@
       </pane>
       <pane id="Scope" />
       <pane id="Favorites" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoSdkConfigurable" />
+              <option name="myItemType" value="com.intellij.uiDesigner.projectView.FormNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoFacetTab" />
+              <option name="myItemType" value="com.intellij.uiDesigner.projectView.FormNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoFacetEditor" />
+              <option name="myItemType" value="com.intellij.uiDesigner.projectView.FormNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sdk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="framework" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="facet" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="compilation" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="actions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="SDKs" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="project.propCompiler" />
+    <property name="options.lastSelected" value="com.ansorgit.plugins.bash.settings.BashProjectSettingsConfigurable" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="last_opened_file_path" value="$USER_HOME$/Work/IntellijIdea/ideaIC-95.429/plugins/groovy/src/org/jetbrains/plugins/groovy/lang/lexer" />
     <property name="project.structure.side.proportion" value="0.27052024" />
@@ -595,9 +886,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PsiViewer.ProjectComponent">
     <option name="HIGHLIGHT" value="true" />
@@ -881,7 +1172,7 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <envs />
-      <module name="google-go-language" />
+      <module name="" />
       <option name="testToRun" value="" />
       <option name="keywords" value="" />
       <method>
@@ -1191,25 +1482,25 @@
     <frame x="-1" y="24" width="1682" height="1031" extended-state="6" />
     <editor active="true" />
     <layout>
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28186274" sideWeight="0.61451244" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36208853" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.34353742" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.61451244" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4501134" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20710784" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.67573696" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5782313" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.57369614" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37755102" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32993197" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24509804" sideWeight="0.49433106" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34681374" sideWeight="0.49433106" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32965687" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39950982" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25612745" sideWeight="0.80045354" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18137255" sideWeight="0.5181406" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28308824" sideWeight="0.5181406" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39455783" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="PsiViewer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24632353" sideWeight="0.63038546" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28186274" sideWeight="0.34353742" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37528345" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.5793651" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1226,7 +1517,7 @@
     <option name="ENABLE_BACKGROUND_PROCESSES" value="false" />
     <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Make the Go SDK work properly on windows too." />
+    <option name="LAST_COMMIT_MESSAGE" value="More icons." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1247,6 +1538,7 @@
     <MESSAGE value="update plugin.xml" />
     <MESSAGE value="Some file generator work.&#10;Go runner implementation.&#10;Some completion work&#10;Updated test cases.&#10;Updated compiler to sort out the local packages when compiling.&#10;Updated lexer to fix an issue with java style comments" />
     <MESSAGE value="Make the Go SDK work properly on windows too." />
+    <MESSAGE value="More icons." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1256,92 +1548,114 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case9.test">
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoFacetTab.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="50" selection-start="145" selection-end="145" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case10.test">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="54" selection-start="162" selection-end="162" vertical-scroll-proportion="0.15366146" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case6.test">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="54" selection-start="126" selection-end="126" vertical-scroll-proportion="0.115246095" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/_GoLexer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1785" column="0" selection-start="62322" selection-end="62322" vertical-scroll-proportion="0.73739743" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case7.test">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="18" selection-start="301" selection-end="301" vertical-scroll-proportion="0.22508793" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case4.test">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="18" selection-start="294" selection-end="294" vertical-scroll-proportion="0.2063306" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case3.test">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="4" selection-start="75" selection-end="75" vertical-scroll-proportion="0.093786635" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case2.test">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="213" selection-end="213" vertical-scroll-proportion="0.16881594" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case1.test">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="12" selection-start="22" selection-end="22" vertical-scroll-proportion="0.018757327" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/go.flex">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="200" column="79" selection-start="9109" selection-end="9109" vertical-scroll-proportion="0.3627685" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTopLevelTestCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="22" selection-start="1789" selection-end="1789" vertical-scroll-proportion="0.38173303" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="13" selection-start="501" selection-end="501" vertical-scroll-proportion="0.0">
+        <state line="55" column="48" selection-start="2105" selection-end="2105" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java">
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/impl/src/com/intellij/compiler/impl/ProjectCompileScope.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="85" column="34" selection-start="3153" selection-end="3153" vertical-scroll-proportion="0.0">
+        <state line="33" column="56" selection-start="1196" selection-end="1196" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/vfs/VirtualFile.java">
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/impl/src/com/intellij/compiler/impl/FileIndexCompileScope.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="282" column="21" selection-start="9914" selection-end="9914" vertical-scroll-proportion="0.0">
+        <state line="32" column="60" selection-start="1142" selection-end="1142" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-impl/src/com/intellij/openapi/wm/impl/FocusManagerImpl.java">
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/util/src/com/intellij/openapi/util/UserDataHolderBase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="410" column="0" selection-start="12614" selection-end="12614" vertical-scroll-proportion="0.0">
+        <state line="26" column="13" selection-start="912" selection-end="912" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java">
+    <entry file="jar:///usr/lib/jvm/java-6-sun/src.zip!/java/text/Format.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="150" column="0" selection-start="4821" selection-end="4821" vertical-scroll-proportion="0.88758785">
+        <state line="138" column="24" selection-start="5510" selection-end="5510" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/util/src/com/intellij/util/ui/UIUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="216" column="23" selection-start="7243" selection-end="7243" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="56" selection-start="994" selection-end="994" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/groovy/src/org/jetbrains/plugins/groovy/compiler/GroovyCompilerBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="84" column="0" selection-start="3669" selection-end="3669" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/groovy/src/org/jetbrains/plugins/groovy/compiler/GroovyCompiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="9" selection-start="2975" selection-end="2975" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/actions/NewGoApplicationAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="78" selection-start="2257" selection-end="2303" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/openapi/src/com/intellij/openapi/compiler/CompileScope.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="17" selection-start="1132" selection-end="1132" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/openapi/src/com/intellij/openapi/compiler/CompilerFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="17" selection-start="742" selection-end="742" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/openapi/src/com/intellij/openapi/compiler/CompilerManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="92" selection-start="2342" selection-end="2342" vertical-scroll-proportion="0.30778444">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/impl/src/com/intellij/compiler/impl/CompositeScope.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="89" column="82" selection-start="2701" selection-end="2701" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompilerFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="68" selection-start="224" selection-end="224" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="342" column="92" selection-start="14011" selection-end="14011" vertical-scroll-proportion="0.3520958">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1378,12 +1692,12 @@
             <SplitterProportionsDataImpl>
               <option name="proportions">
                 <list>
-                  <option value="0.2" />
+                  <option value="0.2975" />
                 </list>
               </option>
             </SplitterProportionsDataImpl>
           </splitter-proportions>
-          <last-edited>1.6</last-edited>
+          <last-edited>Python 3.1.2 (/usr/bin/python3.1)</last-edited>
         </UIState>
       </state>
       <state key="ScopeChooserConfigurable.UI">

@@ -2,6 +2,7 @@ package ro.redeul.google.go.compilation;
 
 import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.compiler.Compiler;
+import com.intellij.openapi.project.Project;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,8 +13,14 @@ import com.intellij.openapi.compiler.Compiler;
  */
 public class GoCompilerFactory implements CompilerFactory {
 
+    private Project project;
+
+    public GoCompilerFactory(Project project) {
+        this.project = project;
+    }
+
     public Compiler[] createCompilers(CompilerManager compilerManager) {
-        return new Compiler[] { new GoCompiler() };
+        return new Compiler[] { new GoCompiler(project) };
     }
 
 }
