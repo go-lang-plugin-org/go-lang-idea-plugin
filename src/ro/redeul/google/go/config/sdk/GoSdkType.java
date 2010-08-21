@@ -31,18 +31,18 @@ public class GoSdkType extends SdkType {
 
     @Override
     public boolean isValidSdkHome(String path) {
-        List<String> stringList = GoSdkUtil.testGoogleGoSdk(path);
+        String[] stringList = GoSdkUtil.testGoogleGoSdk(path);
 
         boolean isValid =
-                stringList != null && stringList.size() == 5 &&
-                        (stringList.get(0).equalsIgnoreCase(path) || stringList.get(0).equalsIgnoreCase(path + "/"));
+                stringList != null && stringList.length == 5 &&
+                        (stringList[0].equalsIgnoreCase(path) || stringList[0].equalsIgnoreCase(path + "/"));
 
         if (isValid) {
             sdkData = new GoSdkData();
-            sdkData.BINARY_PATH = stringList.get(1);
-            sdkData.TARGET_OS = stringList.get(2);
-            sdkData.TARGET_ARCH = stringList.get(3);
-            sdkData.VERSION = stringList.get(4);
+            sdkData.BINARY_PATH = stringList[1];
+            sdkData.TARGET_OS = stringList[2];
+            sdkData.TARGET_ARCH = stringList[3];
+            sdkData.VERSION = stringList[4];
         }
 
         return isValid;

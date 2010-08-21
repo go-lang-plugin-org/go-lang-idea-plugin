@@ -3,16 +3,39 @@ package ro.redeul.google.go.lang.parser;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import ro.redeul.google.go.util.TestUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public abstract class GoParsingTestCase extends LightCodeInsightFixtureTestCase {
 
+    String name = null;
+
+    @BeforeMethod
+    public void before(Method m) throws Exception {
+        name = m.getName();
+        setUp();
+    }
+
+    @AfterMethod
+    public void after(Method m) throws Exception {
+        name = null;
+        tearDown();
+    }
+
+
     @Override
     protected String getBasePath() {
         return TestUtils.getTestDataPath() + "parsing/go/";
+    }
+
+    @Override
+    public String getName() {
+        return super.getName() == null ? name : super.getName(); 
     }
 
     public void doTest() throws IOException {
@@ -54,6 +77,6 @@ public abstract class GoParsingTestCase extends LightCodeInsightFixtureTestCase 
     protected void checkParsing(String input, String output) {
         final PsiFile psiFile = TestUtils.createPseudoPhysicalGoFile(getProject(), input);
         String psiTree = DebugUtil.psiToString(psiFile, false);
-        assertEquals(output.trim(), psiTree.trim());
+        org.testng.Assert.assertEquals(psiTree.trim(), output.trim());        
     }
 }

@@ -1,6 +1,12 @@
+package main
 func f() { for i := 0; i < 10; i++ {} }
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   FunctionDeclaration
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')

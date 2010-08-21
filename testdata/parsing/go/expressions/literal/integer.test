@@ -1,6 +1,12 @@
+package main
 var t1, t2, t3, t4 = 1, 0600, 0xBadFace, 170141183460469231731687303715884105727
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   VarDeclarations
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')

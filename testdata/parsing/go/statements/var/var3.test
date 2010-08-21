@@ -1,9 +1,15 @@
+package main
 func main() {
     var a int = b
     a
 }
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   FunctionDeclaration
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')

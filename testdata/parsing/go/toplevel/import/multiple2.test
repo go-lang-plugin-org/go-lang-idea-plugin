@@ -1,3 +1,4 @@
+package main
 import (
 	"container/vector"
 	. "fmt"
@@ -7,6 +8,11 @@ import (
 )
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   ImportDeclarations
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')

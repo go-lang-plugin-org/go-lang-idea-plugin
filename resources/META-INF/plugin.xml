@@ -1,10 +1,10 @@
 <idea-plugin version="2" url="http://bitbucket.org/mtoader/google-go-for-idea-docs/wiki/Home">
     <id>ro.redeul.google.go</id>
-    <name>Google Go Language plugin</name>    
+    <name>Google Go Language plugin</name>
     <version>0.1.1</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
-    <![CDATA[
+        <![CDATA[
         <p>Language support for Google Go language.</p>
         <p>The plugin provides the following features:</p>
         
@@ -18,7 +18,7 @@
         </ul>
         
        <p>More are planned for the future.</p>
-    ]]>        
+    ]]>
     </description>
     <change-notes>
         <![CDATA[
@@ -38,7 +38,7 @@
                 </ul>
         ]]>
     </change-notes>
-    
+
     <idea-version since-build="95.000" until-build="97.000"/>
 
     <category>Custom Languages</category>
@@ -50,21 +50,51 @@
     <project-components>
         <!-- Add your project components here -->
     </project-components>
-
+    
     <actions>
-        <!-- Add your actions here -->
+        <group id="Go.ActionGroup" popup="true" text="Go" description="ads" icon="/icons/go_16x16.png">
+            
+            <action id="Go.NewApplication" text="Go application"
+                    description="Create new application in the GO language"
+                    class="ro.redeul.google.go.actions.NewGoApplicationAction">
+            </action>
+
+            <action id="Go.NewLibrary" text="Go library"
+                    description="Create new library in the GO language"
+                    class="ro.redeul.google.go.actions.NewGoLibraryAction">                
+            </action>
+
+            
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+        </group>
+
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
         <syntaxHighlighter key="Google.Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighter"/>
-        <lang.parserDefinition language="Google Go" implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
+        <lang.parserDefinition language="Google Go"
+                               implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
         <lang.braceMatcher language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoBraceMatcher"/>
-        <lang.foldingBuilder language="Google Go" implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
+        <lang.foldingBuilder language="Google Go"
+                             implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
         <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
 
+        <completion.contributor language="Google Go"
+                                implementationClass="ro.redeul.google.go.lang.completion.GoCompletionContributor"/>
+
         <frameworkSupport implementation="ro.redeul.google.go.config.framework.GoFrameworkSupportProvider"/>
-        <facetType implementation="ro.redeul.google.go.config.facet.GoFacetType" />
-        <sdkType implementation="ro.redeul.google.go.config.sdk.GoSdkType" />
+        <facetType implementation="ro.redeul.google.go.config.facet.GoFacetType"/>
+        <sdkType implementation="ro.redeul.google.go.config.sdk.GoSdkType"/>
+
+        <compiler.makeDependencyProcessor implementation="ro.redeul.google.go.compilation.GoDependencyProvider"/>
+        <compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>
+
+        <configurationType implementation="ro.redeul.google.go.runner.GoRunConfigurationType"/>
+        <!--<configurationProducer implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>-->
+
+        <customLiveTemplate implementation="ro.redeul.google.go.editor.GoCustomLiveTemplate"/>
+
+        <fileTemplateGroup implementation="ro.redeul.google.go.actions.GoTemplatesFactory"/>
     </extensions>
 </idea-plugin>

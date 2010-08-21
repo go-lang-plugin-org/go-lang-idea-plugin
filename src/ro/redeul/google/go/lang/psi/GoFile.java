@@ -1,6 +1,8 @@
 package ro.redeul.google.go.lang.psi;
 
 import com.intellij.psi.PsiFile;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoPackageDefinition;
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,4 +12,8 @@ import com.intellij.psi.PsiFile;
  * To change this template use File | Settings | File Templates.
  */
 public interface GoFile extends PsiFile {
+
+    GoPackageDefinition getPackage();
+
+    GoImportDeclaration[] getImportDeclarations();
 }

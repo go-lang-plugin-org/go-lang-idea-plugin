@@ -1,0 +1,14 @@
+/**
+
+-----
+Go file
+  PackageDeclaration()
+    PsiErrorElement:"package" keyword expected
+      <empty list>
+  PsiErrorElement:unknown.token
+    PsiElement(/)('/')
+  PsiErrorElement:unknown.token
+    PsiElement(*)('*')
+  PsiErrorElement:unknown.token
+    PsiElement(*)('*')
+  PsiElement(WS_NEW_LINES)('\n')

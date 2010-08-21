@@ -1,3 +1,4 @@
+package main
 func main() {
     switch e = 2; i := x[i].(type) {
         case nil:        
@@ -7,6 +8,11 @@ func main() {
 }
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   FunctionDeclaration
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')

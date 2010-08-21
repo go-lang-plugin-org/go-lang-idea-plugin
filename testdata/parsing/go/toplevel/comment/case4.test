@@ -1,0 +1,12 @@
+/**/
+package main
+-----
+Go file
+  PsiComment(ML_COMMENT)('/**/')
+  PsiElement(WS_NEW_LINES)('\n')
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiErrorElement:semicolon.or.newline.expected
+      <empty list>

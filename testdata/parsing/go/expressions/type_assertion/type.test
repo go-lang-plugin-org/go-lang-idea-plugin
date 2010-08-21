@@ -1,6 +1,12 @@
+package main
 var e = x.(type)
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   VarDeclarations
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
@@ -17,5 +23,6 @@ Go file
       PsiElement(KEYWORD_TYPE)('type')
       PsiErrorElement:semicolon.or.newline.right.parenthesis.expected
         <empty list>
-  PsiElement())(')')
+  PsiErrorElement:unknown.token
+    PsiElement())(')')
        

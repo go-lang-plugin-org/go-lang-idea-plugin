@@ -10,8 +10,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class GoFacetType extends FacetType<GoFacet, GoFacetConfiguration> {
 
+    public static final FacetTypeId<GoFacet> GO_FACET_TYPE_ID = new FacetTypeId<GoFacet>("Google Go Facet");
+
     public GoFacetType() {
-        super(new FacetTypeId<GoFacet>("Google Go Facet"), "id", "google go");
+        super(GO_FACET_TYPE_ID, "id", "google go");
     }
 
     @Override

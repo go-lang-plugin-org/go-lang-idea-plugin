@@ -1,0 +1,7 @@
+/***/
+-----
+Go file
+  PsiComment(ML_COMMENT)('/***/')
+  PackageDeclaration()
+    PsiErrorElement:"package" keyword expected
+      <empty list>

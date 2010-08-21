@@ -1,6 +1,12 @@
+package main
 type f func(n int) func(p *T)
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   TypeDeclarations
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')

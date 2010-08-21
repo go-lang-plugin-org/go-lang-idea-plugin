@@ -1,6 +1,6 @@
 package ro.redeul.google.go.lang.parser;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 /**
  * Created by IntelliJ IDEA.

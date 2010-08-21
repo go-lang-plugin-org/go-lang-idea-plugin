@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.toplevel.packaging;
 
 import com.intellij.lang.PsiBuilder;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -17,28 +18,28 @@ public class PackageDeclaration implements GoElementTypes {
     public static boolean parse(PsiBuilder builder, GoParser parser) {
 
         PsiBuilder.Marker packageDeclaration = builder.mark();
-        if ( ! ParserUtils.getToken(builder, kPACKAGE) ) {
-            packageDeclaration.rollbackTo();
-            return false;
+
+
+        if (ParserUtils.getToken(builder, kPACKAGE, GoBundle.message("package.keyword.expected"))) {
+            PsiBuilder.Marker marker = builder.mark();
+
+            ParserUtils.skipNLS(builder);
+
+            if (!ParserUtils.getToken(builder, mIDENT, GoBundle.message("identifier.expected"))) {
+                marker.rollbackTo();
+                builder.error(GoBundle.message("identifier.expected"));
+            } else {
+                marker.drop();
+            }
         }
-
-        ParserUtils.skipNLS(builder);
-
-        PsiBuilder.Marker mark = builder.mark();
-        if ( ! ParserUtils.getToken(builder, mIDENT) ) {
-            mark.rollbackTo();
-            builder.error("package.name.expected");
-        } else {
-            mark.done(IDENTIFIER);
-        }
-
-        if ( builder.getTokenType() != oSEMI && builder.getTokenType() != wsNLS ) {
+        
+        if (builder.getTokenType() != oSEMI && builder.getTokenType() != wsNLS) {
             builder.error("semicolon.or.newline.expected");
         }
 
-        ParserUtils.getToken(builder, oSEMI);        
+        ParserUtils.getToken(builder, oSEMI);
         packageDeclaration.done(PACKAGE_DECLARATION);
-        
+
         return true;
     }
 }

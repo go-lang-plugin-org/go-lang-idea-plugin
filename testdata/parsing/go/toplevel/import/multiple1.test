@@ -1,6 +1,12 @@
+package main
 import ( "container/vector"; . "fmt"; _ "go/ast"; P "go/scanner"; "go/token" )
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   ImportDeclarations
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')

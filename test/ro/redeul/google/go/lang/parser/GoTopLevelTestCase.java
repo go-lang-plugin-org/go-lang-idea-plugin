@@ -1,6 +1,6 @@
 package ro.redeul.google.go.lang.parser;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,6 +32,22 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
 
     @Test public void testImportWith_comments() throws Throwable { doTest(); }
 
+    @Test public void testPackageEmpty() throws Throwable { doTest(); }
+    @Test public void testPackageEmpty_nl() throws Throwable { doTest(); }
+    @Test public void testPackageMain() throws Throwable { doTest(); }
+    @Test public void testPackageSemi() throws Throwable { doTest(); }
+
+    @Test public void testCommentCase1() throws Throwable { doTest(); }
+    @Test public void testCommentCase2() throws Throwable { doTest(); }
+    @Test public void testCommentCase3() throws Throwable { doTest(); }
+    @Test public void testCommentCase4() throws Throwable { doTest(); }
+    @Test public void testCommentCase5() throws Throwable { doTest(); }
+    @Test public void testCommentCase6() throws Throwable { doTest(); }
+    @Test public void testCommentCase7() throws Throwable { doTest(); }
+    @Test public void testCommentCase8() throws Throwable { doTest(); }
+    @Test public void testCommentCase9() throws Throwable { doTest(); }
+    @Test public void testCommentCase10() throws Throwable { doTest(); }
+
     @Test public void testFunctionCase1() throws Throwable { doTest(); }
     @Test public void testFunctionCase2() throws Throwable { doTest(); }
     @Test public void testFunctionCase3() throws Throwable { doTest(); }
@@ -50,4 +66,5 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     @Test public void testFunctionCase16() throws Throwable { doTest(); }
     @Test public void testFunctionCase17() throws Throwable { doTest(); }
     @Test public void testFunctionCase18() throws Throwable { doTest(); }
+
 }

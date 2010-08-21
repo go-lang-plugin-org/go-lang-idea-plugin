@@ -1,7 +1,9 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
@@ -23,7 +25,9 @@ public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
     }
 
     public String getImportPath() {
-        return "";
+        PsiElement stringLiteral = findChildByType(GoTokenTypes.litSTRING);
+        
+        return stringLiteral != null ? stringLiteral.getText() : "";
     }
 
 //    @Override

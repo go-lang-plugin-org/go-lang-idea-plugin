@@ -1,9 +1,15 @@
+package main
 func main() {
     if e1, e2 *= 2, 3; e1 {
     }
 }
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   FunctionDeclaration
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')

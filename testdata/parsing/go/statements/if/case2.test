@@ -1,3 +1,4 @@
+package main
 func main() {
     if ; e {
         return 1
@@ -5,6 +6,11 @@ func main() {
 }
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   FunctionDeclaration
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')

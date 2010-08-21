@@ -17,6 +17,7 @@
       <entry name="?*.dtd" />
       <entry name="?*.tld" />
       <entry name="?*.ftl" />
+      <entry name="?*.ft" />
       <entry name="/**/?*.test" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />

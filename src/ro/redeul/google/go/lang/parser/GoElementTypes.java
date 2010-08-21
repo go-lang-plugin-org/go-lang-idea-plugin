@@ -24,7 +24,7 @@ public interface GoElementTypes extends GoTokenTypes {
 
     //Packaging
     GoElementType PACKAGE_NAME = new GoElementTypeImpl("Package name");
-    GoElementType PACKAGE_DECLARATION = new GoElementTypeImpl("Package definition");
+    GoElementType PACKAGE_DECLARATION = new GoElementTypeImpl("PackageDeclaration");
 
     GoElementType IMPORT_DECLARATION = new GoElementTypeImpl("ImportDeclarations");
     GoElementType IMPORT_SPEC = new GoElementTypeImpl("ImportSpec");

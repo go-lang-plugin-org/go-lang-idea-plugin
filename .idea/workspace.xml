@@ -1,17 +1,237 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/groovy/src/org/jetbrains/plugins/groovy/lang/parser/parsing/statements/expressions/BinaryExpression.java" line="82" mnemonic="1" />
+    <bookmark url="file://$USER_HOME$/Work/IntellijIdea/idea/platform/testFramework/src/com/intellij/testFramework/fixtures/impl/CodeInsightTestFixtureImpl.java" line="1351" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="56d30604-b05b-4754-b856-6785adac8d3b" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case9.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case9.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/empty2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/empty2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/array.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/array.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case4.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/additive.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/additive.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoStatementsTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoStatementsTestCase.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/package/semi.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/imaginary.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/imaginary.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case4.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompilerFactory.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/KeywordCompletionTestCase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary8.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary8.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/actions/NewGoLibraryAction.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/simple_named.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/simple_named.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case4.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case10.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty_semi.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty_semi.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoRunConfiguration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case4.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/slice.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/slice.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case13.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case13.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func9.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func9.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoImportSpecImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoImportSpecImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case6.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/P_after.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/type_assertion/type.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/type_assertion/type.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case5.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case17.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case17.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/elseif1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/elseif1.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/package/empty_nl.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/empty.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/empty.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary3.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionContributor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/multiple2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/multiple2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/empty2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/empty2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/call_or_conversion/parameters.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/call_or_conversion/parameters.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/call_or_conversion/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/call_or_conversion/simple.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case13.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case13.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoElementTypes.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoElementTypes.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/stubs/elements/GoStubFileElementType.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/stubs/elements/GoStubFileElementType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case11.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case11.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case6.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/util/ProcessUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case4.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/break/empty2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/break/empty2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func6.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case7.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/GoFile.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/GoFile.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case5.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case9.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case9.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty_enter.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty_enter.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/error1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/error1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/relational.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/relational.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/ui/GoRunConfigurationEditorForm.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/multiple1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/multiple1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/channel/recv.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/channel/recv.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func4.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/P.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case3.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/char.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/char.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/go.flex" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/go.flex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/simple.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/function.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/function.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func8.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func8.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/string.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/string.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case7.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case2.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/fileTemplates/GoAppMain.go.ft" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case7.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/struct.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/struct.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/simple.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/editor/GoCustomLiveTemplate.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTypesTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTypesTestCase.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/package/empty.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case9.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/config/GoRunConfigurationEditor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoPackageDeclarationImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoPackageDeclarationImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case8.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case8.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/else1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/else1.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/fileTemplates/GoFile.go.ft" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/simple_default.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/simple_default.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/index/expression.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/index/expression.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/logical_or.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/logical_or.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case3.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case5.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/call_or_conversion/parenthesised.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/call_or_conversion/parenthesised.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case8.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case8.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/channel/bidi.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/channel/bidi.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/log4j.properties" afterPath="$PROJECT_DIR$/test/log4j.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoExpressionsTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoExpressionsTestCase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/_GoLexer.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/_GoLexer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/META-INF/plugin.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case12.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case12.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case6.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/slice/expressions.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/slice/expressions.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/ui/GoApplicationBrowser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var3.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/toplevel/GoPackageDefinition.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/toplevel/GoPackageDefinition.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case5.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/select/empty.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/select/empty.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/ui/GoRunConfigurationEditorForm.form" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary6.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case10.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case10.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/communication.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/communication.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/simple_nil.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/simple_nil.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case7.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/actions/GoTemplatesFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/google-go-language.iml" afterPath="$PROJECT_DIR$/google-go-language.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case18.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case18.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case14.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case14.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/integer.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/integer.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/parsing/toplevel/packaging/PackageDeclaration.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/parsing/toplevel/packaging/PackageDeclaration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/type.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/type.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case9.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case9.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case12.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case12.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/parenthesised/basic.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/parenthesised/basic.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/nested/additive.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/nested/additive.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/break/empty.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/break/empty.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/empty_open_para2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/empty_open_para2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTopLevelTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTopLevelTestCase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case9.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case9.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case6.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/multiplicative.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/multiplicative.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/call_or_conversion/make_channel.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/call_or_conversion/make_channel.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/empty_open_para.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/empty_open_para.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/empty.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/empty.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case15.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case15.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/simple_current.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/simple_current.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/selector/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/selector/simple.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case8.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/identifier.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/identifier.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/selector/double.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/selector/double.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func3.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/struct_nested.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/struct_nested.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary7.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/with_comments.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/import/with_comments.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/nested/precedence1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/nested/precedence1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/simple.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func5.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/builtin/literals.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/builtin/literals.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/logical_and.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/logical_and.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case16.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case16.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary4.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case11.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case11.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case11.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case11.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case3.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/util/TestUtils.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/util/TestUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case3.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case7.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/map.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/map.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/call_or_conversion/parameter.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/call_or_conversion/parameter.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case10.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case10.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case3.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case3.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case1.test" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/icons/go_16x16.png" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/slice/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/slice/simple.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case10.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case10.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoFileImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoFileImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case5.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case8.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case8.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case6.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case7.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.properties" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case2.test" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case6.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/builtin/make_channel.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/builtin/make_channel.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/actions/NewGoApplicationAction.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/float.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/float.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case4.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/else2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/else2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/channel/send.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/channel/send.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case3.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/GoCompletionTestBase.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case2.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/array_implicit_length.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/array_implicit_length.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoRunConfigurationType.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoRunConfigurationProducer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func7.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoDependencyProvider.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/index/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/index/simple.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case1.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/package/main.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/break/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/break/simple.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/type_assertion/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/type_assertion/simple.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case8.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case8.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/builtins.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/literal/composite/builtins.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoParsingTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoParsingTestCase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/primary/primary5.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case3.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/types/functions/func1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/parser.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/parser.test" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationProcessHandler.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/a.groovy" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case5.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/expressions/parenthesised/pointer_type.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/expressions/parenthesised/pointer_type.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case4.test" />
     </list>
-    <ignored path="GoogleGoPlugin.jar" />
-    <ignored path="$USER_HOME_GRIFFON$/" />
     <ignored path="coverage-error.log" />
     <ignored path="$USER_HOME_GRAILS$/" />
+    <ignored path="GoogleGoPlugin.jar" />
+    <ignored path="$USER_HOME_GRIFFON$/" />
     <ignored path="google-go-language.jar" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -63,7 +283,20 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoParsingTestCase.java" line="50" class="ro.redeul.google.go.lang.parser.GoParsingTestCase" package="ro.redeul.google.go.lang.parser">
+      <breakpoint url="file://$USER_HOME$/Work/IntellijIdea/idea/java/compiler/impl/src/com/intellij/compiler/impl/CompileDriver.java" line="437" class="com.intellij.compiler.impl.CompileDriver$7" package="com.intellij.compiler.impl">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/actionSystem/DefaultActionGroup.java" line="119" class="com.intellij.openapi.actionSystem.DefaultActionGroup" package="com.intellij.openapi.actionSystem">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -124,8 +357,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="exception_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -135,19 +368,195 @@
   <component name="FileColors" enabled="true" enabledForTabs="true" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="parser.go" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/parser.go">
+      <file leaf-file-name="go.flex" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/go.flex">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="87" column="26" selection-start="2481" selection-end="2481" vertical-scroll-proportion="0.0">
+            <state line="200" column="79" selection-start="9109" selection-end="9109" vertical-scroll-proportion="0.0">
+              <folding>
+                <marker date="1282359389000" expanded="true" signature="0:597" placeholder="/.../" />
+                <marker date="1282359389000" expanded="false" signature="647:813" placeholder="..." />
+                <marker date="1282359389000" expanded="true" signature="1380:1394" placeholder="&lt;~&gt;" />
+                <marker date="1282359389000" expanded="true" signature="1451:1465" placeholder="&lt;~&gt;" />
+                <marker date="1282359389000" expanded="true" signature="1613:1668" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="1723:1737" placeholder="&lt;~&gt;" />
+                <marker date="1282359389000" expanded="false" signature="9092:15674" placeholder="{...}" />
+                <marker date="1282359389000" expanded="false" signature="9209:9253" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="9302:9346" placeholder="{...}" />
+                <marker date="1282359389000" expanded="false" signature="9410:9427" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="9473:9487" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="9532:9547" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="9593:9614" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="9659:9673" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="9733:9750" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="9809:9826" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="9885:9902" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="9961:9978" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10037:10054" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10176:10193" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10367:10384" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10430:10449" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10494:10513" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10558:10576" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10621:10638" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10684:10701" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10746:10763" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10809:10826" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10871:10888" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10934:10950" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="10995:11010" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11055:11071" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11117:11130" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11175:11192" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11238:11255" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11300:11314" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11360:11380" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11425:11447" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11492:11507" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11553:11575" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11620:11643" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11688:11704" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11750:11768" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11813:11837" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11884:11911" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="11956:11976" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12021:12040" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12086:12111" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12156:12174" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12220:12248" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12293:12314" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12359:12382" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12427:12451" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12496:12511" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12557:12582" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12627:12645" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12691:12712" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12757:12771" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12817:12843" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12888:12907" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="12953:12980" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13025:13045" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13091:13120" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13165:13187" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13232:13259" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13304:13322" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13368:13389" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13436:13460" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13505:15673" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13505:13529" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13575:13595" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13640:13662" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13707:13729" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13774:13793" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13838:13862" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13907:13928" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="13974:13993" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14038:14058" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14103:14120" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14165:14183" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14229:14249" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14295:14317" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14362:14382" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14427:14447" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14492:14514" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14559:14579" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14624:14650" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14696:14712" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14757:14774" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14819:14839" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14884:14904" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="14949:14971" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15017:15035" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15080:15097" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15142:15158" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15204:15221" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15267:15288" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15333:15352" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15397:15420" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15465:15482" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15527:15544" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15589:15606" placeholder="{...}" />
+                <marker date="1282359389000" expanded="true" signature="15654:15671" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="case1.test" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case1.test">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1" column="12" selection-start="22" selection-end="22" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plugin.xml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
+      <file leaf-file-name="case2.test" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case2.test">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="58" selection-start="1606" selection-end="1606" vertical-scroll-proportion="0.4379391">
+            <state line="9" column="0" selection-start="213" selection-end="213" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="case3.test" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case3.test">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="4" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="case4.test" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case4.test">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="18" selection-start="294" selection-end="294" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="case7.test" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case7.test">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="12" column="18" selection-start="301" selection-end="301" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_GoLexer.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/_GoLexer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1785" column="0" selection-start="62322" selection-end="62322" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="case6.test" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case6.test">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="6" column="54" selection-start="126" selection-end="126" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="case10.test" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case10.test">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="3" column="7" selection-start="18" selection-end="18" vertical-scroll-proportion="0.057623047">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GoTopLevelTestCase.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTopLevelTestCase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="42" column="22" selection-start="1789" selection-end="1789" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -167,22 +576,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/test/ro/redeul/google/go/util/GoogleGoUtil.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoogleGoUtil.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoogleGoSdk.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoogleGoSdkConfigurable.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/GoogleGoBundle.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.properties" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoogleGoSdkData.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoogleGoSdkConfigurable.form" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoogleGoSdkConfigurable.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoogleGoSdkUtil.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoogleGoSdkType.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java" />
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java" />
-        <option value="$PROJECT_DIR$/META-INF/plugin.xml" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case4.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case5.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case6.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case7.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/nested/additive.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/expressions/binary/nested/precedence1.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/expressions/type_assertion/type.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case2.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case8.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case9.test" />
+        <option value="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTopLevelTestCase.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/go.flex" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case1.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case4.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case7.test" />
+        <option value="$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case10.test" />
       </list>
     </option>
   </component>
@@ -248,6 +657,292 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testdata" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testdata" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="parsing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testdata" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="parsing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="toplevel" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testdata" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="parsing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="toplevel" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="comment" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testdata" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="parsing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="expressions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="type_assertion" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testdata" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="parsing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="expressions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lang" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="parser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lang" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Favorites" />
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -329,136 +1024,6 @@
               <option name="myItemId" value="jetbrains" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugins.groovy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google-go-language" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="org" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jetbrains" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugins.groovy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google-go-language" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="org" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jetbrains" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google-go-language" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com.intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google-go-language" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com.intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="facet" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google-go-language" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com.intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="facet" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -498,7 +1063,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
+              <option name="myItemId" value="lang" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -516,7 +1081,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
+              <option name="myItemId" value="lang" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="completion" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -530,106 +1099,22 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ro.redeul.google.go" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sdk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="google-go-language" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ro.redeul.google.go" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="facet" />
+              <option name="myItemId" value="parsing.go" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleGoPlugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="META-INF" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Favorites" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="preferences.pluginManager" />
+    <property name="options.lastSelected" value="project.propCompiler" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="last_opened_file_path" value="$USER_HOME$/Work/IntellijIdea/ideaIC-95.429/plugins/groovy/src/org/jetbrains/plugins/groovy/lang/lexer" />
     <property name="project.structure.side.proportion" value="0.27052024" />
@@ -639,12 +1124,12 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PsiViewer.ProjectComponent">
-    <option name="HIGHLIGHT" value="false" />
+    <option name="HIGHLIGHT" value="true" />
     <option name="FILTER_WHITESPACE" value="false" />
     <option name="SHOW_PROPERTIES" value="true" />
     <option name="SPLIT_DIVIDER_POSITION" value="384" />
@@ -663,8 +1148,16 @@
       <recent name="$PROJECT_DIR$/testdata/parsing/go/expressions/slice" />
     </key>
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="ro.redeul.google.go.compilation" />
       <recent name="ro.redeul.google.go.util" />
       <recent name="ro.redeul.google.go.config.facet" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/fileTemplates" />
+      <recent name="$PROJECT_DIR$/resources/fileTemplates/j2ee" />
+      <recent name="$PROJECT_DIR$/resources/fileTemplates/go" />
+      <recent name="../" />
+      <recent name="$PROJECT_DIR$/resources" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="ro.redeul.google.go.lang.parser.parsing.declarations" />
@@ -673,8 +1166,8 @@
       <recent name="ro.redeul.google.go.lang.parser" />
     </key>
   </component>
-  <component name="RunManager" selected="Plugin.Unnamed">
-    <configuration default="false" name="GoExpressionsTestCase.testType_assertionType" type="JUnit" factoryName="JUnit" temporary="true">
+  <component name="RunManager" selected="TestNG.All Test cases">
+    <configuration default="false" name="GoTopLevelTestCase" type="TestNG" factoryName="TestNG" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="ro.redeul.google.go.lang.parser.*" />
@@ -682,116 +1175,74 @@
         </pattern>
       </extension>
       <extension name="snapshooter" />
-      <module name="GoogleGoPlugin" />
+      <module name="google-go-language" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="SUITE_NAME" value="" />
       <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang.parser" />
-      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.lang.parser.GoExpressionsTestCase" />
-      <option name="METHOD_NAME" value="testType_assertionType" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.lang.parser.GoTopLevelTestCase" />
+      <option name="METHOD_NAME" value="" />
+      <option name="GROUP_NAME" value="" />
+      <option name="TEST_OBJECT" value="CLASS" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" value="" />
+      <option name="ANNOTATION_TYPE" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="moduleWithDependencies" />
       </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" value="" />
       <envs />
+      <properties />
+      <listeners />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="50081" />
+        <option name="DEBUG_PORT" value="38531" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="GoStatementsTestCase" type="JUnit" factoryName="JUnit" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" runner="emma">
+    <configuration default="false" name="GoStatementsTestCase" type="TestNG" factoryName="TestNG" temporary="true">
+      <extension name="coverage" enabled="false" merge="false">
         <pattern>
           <option name="PATTERN" value="ro.redeul.google.go.lang.parser.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <extension name="snapshooter" />
-      <module name="GoogleGoPlugin" />
+      <module name="google-go-language" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
       <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang.parser" />
       <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.lang.parser.GoStatementsTestCase" />
       <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
       <option name="VM_PARAMETERS" />
       <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="moduleWithDependencies" />
       </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
       <envs />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="GoStatementsTestCase.testForCase1" type="JUnit" factoryName="JUnit" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" runner="emma">
-        <pattern>
-          <option name="PATTERN" value="ro.redeul.google.go.lang.parser.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <extension name="snapshooter" />
-      <module name="GoogleGoPlugin" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang.parser" />
-      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.lang.parser.GoStatementsTestCase" />
-      <option name="METHOD_NAME" value="testForCase1" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
+      <properties />
+      <listeners />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="49951" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <ConfigurationWrapper RunnerId="Debug" />
-      <method />
-    </configuration>
-    <configuration default="false" name="GoStatementsTestCase.testForCase6" type="JUnit" factoryName="JUnit" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" runner="emma">
-        <pattern>
-          <option name="PATTERN" value="ro.redeul.google.go.lang.parser.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <extension name="snapshooter" />
-      <module name="GoogleGoPlugin" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang.parser" />
-      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.lang.parser.GoStatementsTestCase" />
-      <option name="METHOD_NAME" value="testForCase6" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="33682" />
+        <option name="DEBUG_PORT" value="60174" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
@@ -800,15 +1251,124 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="a" type="GroovyScriptRunConfiguration" factoryName="Groovy Script" temporary="true">
-      <module name="GoogleGoPlugin" />
-      <setting name="path" value="$PROJECT_DIR$/src/a.groovy" />
-      <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workDir" value="$PROJECT_DIR$/src" />
-      <setting name="debug" value="false" />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
+    <configuration default="false" name="GoExpressionsTestCase.testType_assertionType" type="TestNG" factoryName="TestNG" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="ro.redeul.google.go.lang.parser.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="snapshooter" />
+      <module name="google-go-language" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="SUITE_NAME" value="" />
+      <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang.parser" />
+      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.lang.parser.GoExpressionsTestCase" />
+      <option name="METHOD_NAME" value="testType_assertionType" />
+      <option name="GROUP_NAME" value="" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" value="" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" value="" />
+      <envs />
+      <properties />
+      <listeners />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="48332" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <ConfigurationWrapper RunnerId="Debug" />
+      <method />
+    </configuration>
+    <configuration default="false" name="GoTopLevelTestCase.testCommentCase4" type="TestNG" factoryName="TestNG" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="ro.redeul.google.go.lang.parser.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="snapshooter" />
+      <module name="google-go-language" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="SUITE_NAME" value="" />
+      <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang.parser" />
+      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.lang.parser.GoTopLevelTestCase" />
+      <option name="METHOD_NAME" value="testCommentCase4" />
+      <option name="GROUP_NAME" value="" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" value="" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" value="" />
+      <envs />
+      <properties />
+      <listeners />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="45577" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <ConfigurationWrapper RunnerId="Debug" />
+      <method />
+    </configuration>
+    <configuration default="false" name="GoTopLevelTestCase.testCommentCase10" type="TestNG" factoryName="TestNG" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="ro.redeul.google.go.lang.parser.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="snapshooter" />
+      <module name="google-go-language" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="SUITE_NAME" value="" />
+      <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang.parser" />
+      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.lang.parser.GoTopLevelTestCase" />
+      <option name="METHOD_NAME" value="testCommentCase10" />
+      <option name="GROUP_NAME" value="" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" value="" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" value="" />
+      <envs />
+      <properties />
+      <listeners />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="57272" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <ConfigurationWrapper RunnerId="Debug" />
       <method />
     </configuration>
     <configuration default="true" type="PhpRunConfigurationType" factoryName="PHP">
@@ -1043,38 +1603,9 @@
         <option name="Make" enabled="false" />
       </method>
     </configuration>
-    <configuration default="false" name="All test cases" type="JUnit" factoryName="JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <extension name="snapshooter" />
-      <module name="GoogleGoPlugin" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang" />
-      <option name="MAIN_CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="41279" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
     <configuration default="false" name="Unnamed" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="google-go-language" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -XX:MaxPermSize=180m" />
+      <option name="VM_PARAMETERS" value="-Xmx1024m -XX:MaxPermSize=256m" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <log_file path="$USER_HOME$/.IntelliJIdea90/system/plugins-sandbox/system/log/idea.log" checked="true" skipped="true" show_all="false" alias="IDEA LOG" />
       <RunnerSettings RunnerId="Debug">
@@ -1087,15 +1618,52 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
+    <configuration default="false" name="All Test cases" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <extension name="snapshooter" />
+      <module name="google-go-language" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="SUITE_NAME" value="" />
+      <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="GROUP_NAME" value="" />
+      <option name="TEST_OBJECT" value="PACKAGE" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" value="" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" value="" />
+      <envs />
+      <properties />
+      <listeners />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="42852" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
     <list size="8">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.GoExpressionsTestCase.testType_assertionType" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.GoStatementsTestCase" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.GoStatementsTestCase.testForCase1" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.GoStatementsTestCase.testForCase6" />
-      <item index="4" class="java.lang.String" itemvalue="Groovy Script.a" />
-      <item index="5" class="java.lang.String" itemvalue="Bash.compileGoLexer.sh" />
-      <item index="6" class="java.lang.String" itemvalue="JUnit.All test cases" />
-      <item index="7" class="java.lang.String" itemvalue="Plugin.Unnamed" />
+      <item index="0" class="java.lang.String" itemvalue="Bash.compileGoLexer.sh" />
+      <item index="1" class="java.lang.String" itemvalue="Plugin.Unnamed" />
+      <item index="2" class="java.lang.String" itemvalue="TestNG.All Test cases" />
+      <item index="3" class="java.lang.String" itemvalue="TestNG.GoTopLevelTestCase" />
+      <item index="4" class="java.lang.String" itemvalue="TestNG.GoStatementsTestCase" />
+      <item index="5" class="java.lang.String" itemvalue="TestNG.GoExpressionsTestCase.testType_assertionType" />
+      <item index="6" class="java.lang.String" itemvalue="TestNG.GoTopLevelTestCase.testCommentCase4" />
+      <item index="7" class="java.lang.String" itemvalue="TestNG.GoTopLevelTestCase.testCommentCase10" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1149,28 +1717,28 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="24" width="1680" height="1026" extended-state="0" />
-    <editor active="true" />
+    <frame x="-1" y="24" width="1682" height="1031" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36208853" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12622549" sideWeight="0.5589569" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.34353742" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37528345" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20710784" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41836736" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.76390463" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.57369614" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37797958" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32993197" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24019608" sideWeight="0.7403628" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24509804" sideWeight="0.49433106" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32965687" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39950982" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25735295" sideWeight="0.57369614" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37132353" sideWeight="0.22902495" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4376417" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39455783" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="PsiViewer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24632353" sideWeight="0.63038546" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28186274" sideWeight="0.34353742" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28186274" sideWeight="0.5589569" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.63378686" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43310657" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3425245" sideWeight="0.41156462" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.5793651" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1187,7 +1755,7 @@
     <option name="ENABLE_BACKGROUND_PROCESSES" value="false" />
     <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Internationalization bundle.&#10;Go Sdk implementation and auto configuration.&#10;Go Facet type.&#10;Go Framework type." />
+    <option name="LAST_COMMIT_MESSAGE" value="update plugin.xml" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1205,6 +1773,7 @@
     <MESSAGE value="Updated plugin description." />
     <MESSAGE value="Added file icon.&#10;" />
     <MESSAGE value="Internationalization bundle.&#10;Go Sdk implementation and auto configuration.&#10;Go Facet type.&#10;Go Framework type." />
+    <MESSAGE value="update plugin.xml" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1214,84 +1783,218 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/ui/GuiUtils.java">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/expressions/binary/nested/precedence1.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="49" selection-start="2518" selection-end="2518" vertical-scroll-proportion="0.0" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/properties/src/com/intellij/lang/properties/references/I18nizeQuickFixDialog.java">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/expressions/binary/simple/additive.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="128" column="39" selection-start="5013" selection-end="5013" vertical-scroll-proportion="0.0" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/ui/ComboboxWithBrowseButton.java">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/expressions/type_assertion/type.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="54" selection-start="944" selection-end="944" vertical-scroll-proportion="0.0" />
+        <state line="26" column="4" selection-start="688" selection-end="688" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoSdkConfigurable.form">
-      <provider selected="true" editor-type-id="ui-designer">
-        <state />
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case5.test">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="28" selection-start="48" selection-end="48" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkType.java">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case8.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="40" selection-start="821" selection-end="821" vertical-scroll-proportion="0.36283186" />
+        <state line="3" column="29" selection-start="49" selection-end="49" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/sdk/GoSdkData.java">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case9.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="0" selection-start="1006" selection-end="1006" vertical-scroll-proportion="4.121212" />
+        <state line="7" column="50" selection-start="145" selection-end="145" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetType.java">
+    <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTopLevelTestCase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="17" selection-start="517" selection-end="517" vertical-scroll-proportion="1.0909091" />
+        <state line="42" column="22" selection-start="1789" selection-end="1789" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/config/ui/GoSdkConfigurable.java">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case6.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="27" selection-start="1627" selection-end="1627" vertical-scroll-proportion="5.973451" />
+        <state line="6" column="54" selection-start="126" selection-end="126" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java">
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/_GoLexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="0" selection-start="4376" selection-end="4376" vertical-scroll-proportion="0.9403973" />
+        <state line="1785" column="0" selection-start="62322" selection-end="62322" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/ui/TextFieldWithBrowseButton.java">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case2.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="39" selection-start="2117" selection-end="2117" vertical-scroll-proportion="0.67424244" />
+        <state line="9" column="0" selection-start="213" selection-end="213" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/svn4idea/src/org/jetbrains/idea/svn/dialogs/SSLCredentialsDialog.java">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case3.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="32" selection-start="2389" selection-end="2389" vertical-scroll-proportion="0.7117647" />
+        <state line="5" column="4" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/ui/ComponentWithBrowseButton.java">
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/lexer/go.flex">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="13" selection-start="1734" selection-end="1734" vertical-scroll-proportion="0.47058824" />
+        <state line="200" column="79" selection-start="9109" selection-end="9109" vertical-scroll-proportion="0.0">
+          <folding>
+            <marker date="1282359389000" expanded="true" signature="0:597" placeholder="/.../" />
+            <marker date="1282359389000" expanded="false" signature="647:813" placeholder="..." />
+            <marker date="1282359389000" expanded="true" signature="1380:1394" placeholder="&lt;~&gt;" />
+            <marker date="1282359389000" expanded="true" signature="1451:1465" placeholder="&lt;~&gt;" />
+            <marker date="1282359389000" expanded="true" signature="1613:1668" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="1723:1737" placeholder="&lt;~&gt;" />
+            <marker date="1282359389000" expanded="false" signature="9092:15674" placeholder="{...}" />
+            <marker date="1282359389000" expanded="false" signature="9209:9253" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="9302:9346" placeholder="{...}" />
+            <marker date="1282359389000" expanded="false" signature="9410:9427" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="9473:9487" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="9532:9547" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="9593:9614" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="9659:9673" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="9733:9750" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="9809:9826" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="9885:9902" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="9961:9978" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10037:10054" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10176:10193" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10367:10384" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10430:10449" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10494:10513" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10558:10576" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10621:10638" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10684:10701" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10746:10763" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10809:10826" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10871:10888" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10934:10950" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="10995:11010" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11055:11071" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11117:11130" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11175:11192" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11238:11255" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11300:11314" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11360:11380" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11425:11447" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11492:11507" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11553:11575" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11620:11643" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11688:11704" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11750:11768" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11813:11837" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11884:11911" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="11956:11976" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12021:12040" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12086:12111" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12156:12174" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12220:12248" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12293:12314" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12359:12382" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12427:12451" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12496:12511" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12557:12582" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12627:12645" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12691:12712" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12757:12771" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12817:12843" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12888:12907" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="12953:12980" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13025:13045" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13091:13120" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13165:13187" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13232:13259" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13304:13322" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13368:13389" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13436:13460" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13505:15673" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13505:13529" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13575:13595" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13640:13662" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13707:13729" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13774:13793" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13838:13862" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13907:13928" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="13974:13993" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14038:14058" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14103:14120" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14165:14183" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14229:14249" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14295:14317" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14362:14382" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14427:14447" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14492:14514" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14559:14579" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14624:14650" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14696:14712" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14757:14774" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14819:14839" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14884:14904" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="14949:14971" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15017:15035" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15080:15097" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15142:15158" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15204:15221" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15267:15288" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15333:15352" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15397:15420" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15465:15482" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15527:15544" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15589:15606" placeholder="{...}" />
+            <marker date="1282359389000" expanded="true" signature="15654:15671" placeholder="{...}" />
+          </folding>
+        </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/lang-impl/src/com/intellij/ui/EditorComboWithBrowseButton.java">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case1.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="13" selection-start="959" selection-end="959" vertical-scroll-proportion="0.67724866" />
+        <state line="1" column="12" selection-start="22" selection-end="22" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/plugins/groovy/src/org/jetbrains/plugins/groovy/config/ui/GroovyFacetEditor.java">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case4.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="179" column="49" selection-start="6835" selection-end="6835" vertical-scroll-proportion="0.53968257" />
+        <state line="11" column="18" selection-start="294" selection-end="294" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/parser.go">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case7.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="26" selection-start="2481" selection-end="2481" vertical-scroll-proportion="0.0" />
+        <state line="12" column="18" selection-start="301" selection-end="301" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
+    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/toplevel/comment/case10.test">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="58" selection-start="1606" selection-end="1606" vertical-scroll-proportion="0.4379391">
+        <state line="3" column="7" selection-start="18" selection-end="18" vertical-scroll-proportion="0.057623047">
           <folding />
         </state>
       </provider>

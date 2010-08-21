@@ -1,9 +1,15 @@
-import 
+package main
+ import
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace(' ')
   ImportDeclarations
     PsiElement(KEYWORD_IMPORT)('import')
-    PsiWhiteSpace(' ')
     ImportSpec
       PsiErrorElement:import.path.expected
         <empty list>

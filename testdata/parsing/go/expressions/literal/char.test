@@ -1,6 +1,12 @@
+package main
 var c = 'a', 'ä', '本', '\t', '\000', '\007', '\377', '\x07', '\xff', '\u12e4', '\U00101234'
 -----
 Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
   VarDeclarations
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')

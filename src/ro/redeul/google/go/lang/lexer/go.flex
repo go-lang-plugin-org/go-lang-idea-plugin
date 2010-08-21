@@ -68,8 +68,8 @@ mWS = [ \t\f]    // Whitespaces
 ////////// Comments ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-C_STYLE_COMMENT=("/*" [^"*"] {COMMENT_TAIL} ) | "/*"
-COMMENT_TAIL=( [^"*"]* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
+C_STYLE_COMMENT="/*" ~"*/" 
+// COMMENT_TAIL=( [^"*"]* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
 mSL_COMMENT = "//" [^\r\n]*
 mML_COMMENT = {C_STYLE_COMMENT}
@@ -142,6 +142,8 @@ mIDENT = {mLETTER} ({mLETTER} | {mDIGIT} )*
 %state IN_CHAR_LITERAL
 %state IN_STRING_LITERAL
 
+// %state IN_COMMENT
+
 %%
 
 //<X> {
@@ -196,6 +198,12 @@ mIDENT = {mLETTER} ({mLETTER} | {mDIGIT} )*
 ///////////////////////// Reserved shorthands //////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//<IN_COMMENT> {
+//!"*/"+                                      {}
+//
+//"*/"                                        { yybegin(YYINITIAL); return( mML_COMMENT ); }
+//<<EOF>>                                     { yybegin(YYINITIAL); return( mML_COMMENT ); }
+//}
 
 <YYINITIAL> {
 "|"                                       { return oBIT_OR; }
@@ -285,17 +293,17 @@ mIDENT = {mLETTER} ({mLETTER} | {mDIGIT} )*
 {mSL_COMMENT}                             { return( mSL_COMMENT ); }
 {mML_COMMENT}                             { return( mML_COMMENT ); }
 
-"break"                                   {  return( kBREAK );  }
-"default"                                 {  return( kDEFAULT );  }
-"package"                                 {  return( kPACKAGE );  }
-"func"                                    {  return( kFUNC );  }
-"interface"                               {  return( kINTERFACE );  }
-"select"                                  {  return( kSELECT );  }
+"break"                                   { return( kBREAK );  }
+"default"                                 { return( kDEFAULT );  }
+"package"                                 { return( kPACKAGE );  }
+"func"                                    { return( kFUNC );  }
+"interface"                               { return( kINTERFACE );  }
+"select"                                  { return( kSELECT );  }
 
-"case"                                    {  return( kCASE );  }
-"defer"                                   {  return( kDEFER );  }
-"go"                                      {  return( kGO );  }
-"map"                                     {  return( kMAP );  }
+"case"                                    { return( kCASE );  }
+"defer"                                   { return( kDEFER );  }
+"go"                                      { return( kGO );  }
+"map"                                     { return( kMAP );  }
 
 "chan"                                    {  return( kCHAN );  }
 

@@ -1,0 +1,9 @@
+#parse("File Header.java")
+package ${PACKAGE_NAME}
+
+import "fmt"
+
+package main
+func main() {
+
+}

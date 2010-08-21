@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.toplevel;
 
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 
@@ -12,5 +13,8 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
  */
 public interface GoPackageDefinition extends GoPsiElement {
 
-    GoIdentifier getPackage();
+    @NotNull
+    String getPackageName();
+
+    boolean isMainPackage();
 }
