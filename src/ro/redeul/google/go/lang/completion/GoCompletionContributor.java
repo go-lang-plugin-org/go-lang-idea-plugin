@@ -1,15 +1,22 @@
 package ro.redeul.google.go.lang.completion;
 
 import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.editor.Document;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.impl.DebugUtil;
 import com.intellij.util.ProcessingContext;
+import com.sun.xml.internal.ws.api.server.Module;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrParenthesizedExpression;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrTypeCastExpression;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoPackageDeclarationImpl;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDefinition;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -23,28 +30,68 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
  */
 public class GoCompletionContributor extends CompletionContributor {
 
-    public GoCompletionContributor() {
-        extend(
-                CompletionType.BASIC,
-                // psiElement().withParent(psiElement(PsiErrorElement.class).withParent(GoPackageDefinition.class)),
-                psiElement().withParent(psiElement(PsiErrorElement.class).withParent(GoFile.class)),
-                new CompletionProvider<CompletionParameters>() {
-                    @Override
-                    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+    CompletionProvider<CompletionParameters> packageCompletionProvider = new CompletionProvider<CompletionParameters>() {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+            result.addElement(LookupElementBuilder.create("package "));
+        }
+    };
 
-//                        final PsiElement position = parameters.getPosition();
-//                        final PsiElement reference = position.getParent();
-//
-//                        if (reference == null || ! (reference instanceof GoFile) )
-//                            return;
-//
-//                        GoFile file = (GoFile) reference;
-//
-//                        if ( file.getPackage() == null || !file.getPackage().getText().contains("package") ) {
-                        result.addElement(LookupElementBuilder.create("package"));
-//                        }
-                    }
-                });
+    CompletionProvider<CompletionParameters> importCompletionProvider = new CompletionProvider<CompletionParameters>() {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+            result.addElement(LookupElementBuilder.create("import "));
+        }
+    };
+
+    CompletionProvider<CompletionParameters> importPathCompletionProvider = new CompletionProvider<CompletionParameters>() {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+
+            PsiElement element = parameters.getOriginalPosition();
+            String currentPath = element.getText();
+
+            LookupElement elements[];
+            if (currentPath.startsWith("\"./")) {
+                elements = GoCompletionUtil.resolveLocalPackagesForPath(element.getProject(), element.getContainingFile(), currentPath);
+            } else {
+                elements = GoCompletionUtil.resolveSdkPackagesForPath(element.getProject(), element.getContainingFile(), currentPath);
+            }
+
+            for (LookupElement lookupElement : elements) {
+                result.addElement(lookupElement);
+            }
+        }
+    };
+
+    CompletionProvider<CompletionParameters> debuggingCompletionProvider = new CompletionProvider<CompletionParameters>() {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+            String originalFile = DebugUtil.psiToString(parameters.getOriginalFile(), false);
+            String currentFile = DebugUtil.psiToString(parameters.getPosition().getContainingFile(), false);
+
+            int a = 10;
+        }
+    };
+
+    public GoCompletionContributor() {
+
+        extend(CompletionType.BASIC,
+                psiElement(),
+                debuggingCompletionProvider);
+
+        extend(CompletionType.BASIC,
+                psiElement(PsiElement.class).withParent(psiElement(GoPackageDefinition.class).withFirstNonWhitespaceChild(psiElement(PsiErrorElement.class))),
+                packageCompletionProvider);
+
+        extend(CompletionType.BASIC,
+                psiElement().withParent(psiElement(PsiErrorElement.class).withParent(psiElement(GoFile.class).withFirstNonWhitespaceChild(psiElement(GoPackageDefinition.class)))),
+                importCompletionProvider);
+
+        extend(CompletionType.BASIC,
+                psiElement().withElementType(GoTokenTypes.litSTRING).withParent(psiElement(GoImportSpec.class)),
+                importPathCompletionProvider);
+
 
 //        extend(
 //                CompletionType.BASIC,
@@ -77,7 +124,12 @@ public class GoCompletionContributor extends CompletionContributor {
 //    if (lastElement != null && lastElement.getText().equals("(")) {
 //      final PsiElement parent = lastElement.getParent();
 //      if (parent instanceof GrTypeCastExpression) {
-        // context.setFileCopyPatcher(new DummyIdentifierPatcher(""));
+//        context.setFileCopyPatcher(new FileCopyPatcher() {
+//            @Override
+//            public void patchFileCopy(@NotNull PsiFile fileCopy, @NotNull Document document, @NotNull OffsetMap map) {
+//
+//            }
+//        });
 //      }
 //      else if (parent instanceof GrParenthesizedExpression) {
 //        context.setFileCopyPatcher(new DummyIdentifierPatcher("xxx)yyy ")); // to handle type cast

@@ -12,15 +12,18 @@ import java.io.File;
  * Time: 5:29:50 PM
  * To change this template use File | Settings | File Templates.
  */
-@TestDataPath("$PROJECT_ROOT/testdata")
 public class KeywordCompletionTestCase extends GoCompletionTestBase {
-
     @Override
-    protected String getTestsRelativePath() {
-        return "keywords" + File.separator;
+    protected String getRelativeDataPath() {
+        return super.getRelativeDataPath() + File.separator + "keywords";
     }
     
-    @Test
-    public void testP() throws Throwable { doBasicTest(); }
+    @Test public void testPackageCase1() throws Throwable { doBasicTest(); }
+//    @Test public void testPackageCase2() throws Throwable { doBasicTest(); }
+    @Test public void testPackageCase3() throws Throwable { doBasicTest(); }
+
+    @Test public void testImportCase1() throws Throwable { doBasicTest(); }
+    @Test public void testImportCase2() throws Throwable { doBasicTest(); }
+
 
 }

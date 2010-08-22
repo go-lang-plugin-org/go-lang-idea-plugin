@@ -2,6 +2,8 @@ package ro.redeul.google.go.lang.parser;
 
 import org.testng.annotations.Test;
 
+import java.io.File;
+
 /**
  * Created by IntelliJ IDEA.
  * User: mtoader
@@ -12,8 +14,8 @@ import org.testng.annotations.Test;
 public class GoStatementsTestCase extends GoParsingTestCase {
 
     @Override
-    protected String getBasePath() {
-        return super.getBasePath() + "statements";
+    protected String getRelativeDataPath() {
+        return super.getRelativeDataPath() + File.separator + "statements";
     }
 
     @Test public void testReturnEmpty() throws Throwable { doTest(); }

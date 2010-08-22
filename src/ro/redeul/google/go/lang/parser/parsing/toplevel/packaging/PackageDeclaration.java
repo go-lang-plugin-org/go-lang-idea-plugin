@@ -31,6 +31,8 @@ public class PackageDeclaration implements GoElementTypes {
             } else {
                 marker.drop();
             }
+        } else {
+            ParserUtils.getToken(builder, mIDENT);
         }
         
         if (builder.getTokenType() != oSEMI && builder.getTokenType() != wsNLS) {

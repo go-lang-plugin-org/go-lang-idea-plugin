@@ -2,6 +2,8 @@ package ro.redeul.google.go.lang.parser;
 
 import org.testng.annotations.Test;
 
+import java.io.File;
+
 /**
  * Created by IntelliJ IDEA.
  * User: mtoader
@@ -12,8 +14,8 @@ import org.testng.annotations.Test;
 public class GoTopLevelTestCase extends GoParsingTestCase {
 
     @Override
-    protected String getBasePath() {
-        return super.getBasePath() + "toplevel";
+    protected String getRelativeDataPath() {
+        return super.getRelativeDataPath() + File.separator + "toplevel";
     }
 
     @Test public void testImportSimple_nil() throws Throwable { doTest(); }
@@ -38,6 +40,7 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     @Test public void testPackageSemi() throws Throwable { doTest(); }
 
     @Test public void testPackageError1() throws Throwable { doTest(); }
+    @Test public void testPackageError2() throws Throwable { doTest(); }
 
     @Test public void testCommentCase1() throws Throwable { doTest(); }
     @Test public void testCommentCase2() throws Throwable { doTest(); }
