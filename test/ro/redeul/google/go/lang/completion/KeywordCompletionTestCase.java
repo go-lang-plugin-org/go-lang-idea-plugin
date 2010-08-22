@@ -1,6 +1,9 @@
 package ro.redeul.google.go.lang.completion;
 
-import org.junit.Test;
+import com.intellij.testFramework.TestDataPath;
+import org.testng.annotations.Test;
+
+import java.io.File;
 
 /**
  * Created by IntelliJ IDEA.
@@ -9,13 +12,15 @@ import org.junit.Test;
  * Time: 5:29:50 PM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class KeywordCompletionTestCase extends GoCompletionTestBase {
+@TestDataPath("$PROJECT_ROOT/testdata")
+public class KeywordCompletionTestCase extends GoCompletionTestBase {
 
     @Override
-    protected String getBasePath() {
-        return super.getBasePath() + "keywords/";
+    protected String getTestsRelativePath() {
+        return "keywords" + File.separator;
     }
-
+    
     @Test
     public void testP() throws Throwable { doBasicTest(); }
+
 }

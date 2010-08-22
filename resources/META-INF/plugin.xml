@@ -83,7 +83,7 @@
         <completion.contributor language="Google Go"
                                 implementationClass="ro.redeul.google.go.lang.completion.GoCompletionContributor"/>
 
-        <frameworkSupport implementation="ro.redeul.google.go.config.framework.GoFrameworkSupportProvider"/>
+        <!--<frameworkSupport implementation="ro.redeul.google.go.config.framework.GoFrameworkSupportProvider"/>-->
         <facetType implementation="ro.redeul.google.go.config.facet.GoFacetType"/>
         <sdkType implementation="ro.redeul.google.go.config.sdk.GoSdkType"/>
 

@@ -6,7 +6,7 @@ import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.libraries.Library;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.config.ui.GoFacetEditor;
+import ro.redeul.google.go.config.ui.GoFrameworkSuportEditor;
 
 import javax.swing.*;
 
@@ -19,9 +19,9 @@ import javax.swing.*;
  */
 public class GoFrameworkSupportConfigurable extends FrameworkSupportConfigurable {
     
-    private GoFacetEditor editor;
+    private GoFrameworkSuportEditor editor;
 
-    public GoFrameworkSupportConfigurable(GoFacetEditor editor) {
+    public GoFrameworkSupportConfigurable(GoFrameworkSuportEditor editor) {
         this.editor = editor;
     }
     

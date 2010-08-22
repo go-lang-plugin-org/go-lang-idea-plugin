@@ -86,8 +86,8 @@ public abstract class TestUtils {
     }
 
     public static String getTestDataPath() {
-//        return FileUtil.toSystemIndependentName(PluginPathManager.getPluginHomePathRelative("go")) + "/testdata/";
-        return "testdata/";
+        return FileUtil.toSystemIndependentName(PluginPathManager.getPluginHomePathRelative("go")) + "/testdata/";
+//        return "/testdata/";
     }
 
 //  public static String removeBeginMarker(String text) {

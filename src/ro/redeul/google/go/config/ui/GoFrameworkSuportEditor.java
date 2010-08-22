@@ -11,14 +11,13 @@ import javax.swing.*;
  * Time: 2:56:55 AM
  * To change this template use File | Settings | File Templates.
  */
-public class GoFacetEditor {
+public class GoFrameworkSuportEditor {
 
     private Project project;
 
     private JComponent component;
-    private JComboBox googleGoSdkTypes;
 
-    public GoFacetEditor(Project project) {
+    public GoFrameworkSuportEditor(Project project) {
         this.project = project;
     }
 

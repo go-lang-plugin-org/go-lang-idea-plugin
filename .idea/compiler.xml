@@ -19,6 +19,7 @@
       <entry name="?*.ftl" />
       <entry name="?*.ft" />
       <entry name="/**/?*.test" />
+      <entry name="/**/?*.go" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>

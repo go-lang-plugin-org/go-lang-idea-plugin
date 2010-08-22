@@ -26,30 +26,23 @@ public class GoCompletionContributor extends CompletionContributor {
     public GoCompletionContributor() {
         extend(
                 CompletionType.BASIC,
-                psiElement().withParent(GoFile.class),
+                // psiElement().withParent(psiElement(PsiErrorElement.class).withParent(GoPackageDefinition.class)),
+                psiElement().withParent(psiElement(PsiErrorElement.class).withParent(GoFile.class)),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
-                        final PsiElement position = parameters.getPosition();
-                        final PsiElement reference = position.getParent();
-
-                        if (reference == null || ! (reference instanceof GoFile) )
-                            return;
-
-                        GoFile file = (GoFile) reference;
-
-                        if ( file.getPackage() == null || !file.getPackage().getText().contains("package") ) {
-                            result.addElement(LookupElementBuilder.create("package"));
-                        }
-
-//                        if ( file.getImports().length == 0 ) {
-//                            result.addElement(LookupElementBuilder.create("import"));
+//                        final PsiElement position = parameters.getPosition();
+//                        final PsiElement reference = position.getParent();
+//
+//                        if (reference == null || ! (reference instanceof GoFile) )
+//                            return;
+//
+//                        GoFile file = (GoFile) reference;
+//
+//                        if ( file.getPackage() == null || !file.getPackage().getText().contains("package") ) {
+                        result.addElement(LookupElementBuilder.create("package"));
 //                        }
-
-                        result.addElement(LookupElementBuilder.create("const"));
-                        result.addElement(LookupElementBuilder.create("func"));
-                        result.addElement(LookupElementBuilder.create("type"));
                     }
                 });
 

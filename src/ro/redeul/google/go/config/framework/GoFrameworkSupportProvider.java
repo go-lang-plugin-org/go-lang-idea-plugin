@@ -6,7 +6,7 @@ import com.intellij.ide.util.frameworkSupport.FrameworkSupportProvider;
 import com.intellij.openapi.module.ModuleType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.config.ui.GoFacetEditor;
+import ro.redeul.google.go.config.ui.GoFrameworkSuportEditor;
 
 import javax.swing.*;
 
@@ -31,7 +31,7 @@ public class GoFrameworkSupportProvider extends FrameworkSupportProvider {
     @NotNull
     @Override
     public FrameworkSupportConfigurable createConfigurable(@NotNull FrameworkSupportModel model) {
-        return new GoFrameworkSupportConfigurable(new GoFacetEditor(model.getProject()));
+        return new GoFrameworkSupportConfigurable(new GoFrameworkSuportEditor(model.getProject()));
     }
 
     @Override

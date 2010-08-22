@@ -37,6 +37,8 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     @Test public void testPackageMain() throws Throwable { doTest(); }
     @Test public void testPackageSemi() throws Throwable { doTest(); }
 
+    @Test public void testPackageError1() throws Throwable { doTest(); }
+
     @Test public void testCommentCase1() throws Throwable { doTest(); }
     @Test public void testCommentCase2() throws Throwable { doTest(); }
     @Test public void testCommentCase3() throws Throwable { doTest(); }
