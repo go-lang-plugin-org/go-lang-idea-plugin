@@ -21,7 +21,6 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.config.facet.GoFacet;
 import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.toplevel.GoPackageDefinition;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,8 +36,8 @@ import java.util.Set;
  */
 public class GoCompletionUtil {
 
-    public static LookupElement[] resolveSdkPackagesForPath(Project project, PsiFile containingFile, String currentPath) {
-        currentPath = cleanupImportPath(currentPath);
+    public static LookupElement[] resolveSdkPackagesForPath(Project project, PsiFile containingFile, String path) {
+        String currentPath = cleanupImportPath(path);
 
         VirtualFile virtualFile = containingFile.getVirtualFile();
         if (virtualFile == null) {

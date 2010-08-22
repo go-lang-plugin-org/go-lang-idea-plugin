@@ -4,31 +4,9 @@
     <bookmark url="file://$USER_HOME$/Work/IntellijIdea/idea/platform/testFramework/src/com/intellij/testFramework/fixtures/impl/CodeInsightTestFixtureImpl.java" line="1351" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="56d30604-b05b-4754-b856-6785adac8d3b" name="Default" comment="package copletion">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/testdata/completion/go/keywords/P.go" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/package/case1.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/import/case1.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/import/case2.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/parsing/toplevel/packaging/PackageDeclaration.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/parsing/toplevel/packaging/PackageDeclaration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoStatementsTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoStatementsTestCase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionContributor.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionContributor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/import/case1_after.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/KeywordCompletionTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/KeywordCompletionTestCase.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/package/error2.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTopLevelTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTopLevelTestCase.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/import/case2_after.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/package/case2.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoExpressionsTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoExpressionsTestCase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoParsingTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoParsingTestCase.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/package/case1_after.go" />
+    <list default="true" readonly="true" id="56d30604-b05b-4754-b856-6785adac8d3b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/GoTestCase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/GoCompletionTestBase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/GoCompletionTestBase.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/testdata/completion/go/keywords/P_after.go" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/package/case3_after.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/package/case3.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionUtil.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/completion/go/keywords/package/case2_after.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/google-go-language.iml" afterPath="$PROJECT_DIR$/google-go-language.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTypesTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoTypesTestCase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionUtil.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionUtil.java" />
     </list>
     <ignored path="$USER_HOME_GRIFFON$/" />
     <ignored path="google-go-language.jar" />
@@ -181,13 +159,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GoCompletionUtil.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="GoCompletionUtil.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="137" column="34" selection-start="5289" selection-end="5289" vertical-scroll-proportion="1.9843373">
+            <state line="0" column="44" selection-start="44" selection-end="44" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GoCompiler.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="276" column="39" selection-start="11205" selection-end="11205" vertical-scroll-proportion="0.21595092">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1203,6 +1190,40 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleGoPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="compilation" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -1835,7 +1856,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34681374" sideWeight="0.49433106" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32965687" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39950982" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20858896" sideWeight="0.55302167" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21411043" sideWeight="0.55302167" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17300613" sideWeight="0.43329534" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.65108323" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1859,7 +1880,7 @@
     <option name="ENABLE_BACKGROUND_PROCESSES" value="false" />
     <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="finally fixed completion test case.&#10;The other test cases are broken :). Will fix them next." />
+    <option name="LAST_COMMIT_MESSAGE" value="package keyword completion&#10;import path completion from SDK and local paths for paths starting with ./" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1883,6 +1904,7 @@
     <MESSAGE value="More icons." />
     <MESSAGE value="More work on SDK detection on windows/linux.&#10;More friendly go facet configuration and SDK setup.&#10;Changes to the compiler (to detect when there is no proper facet on module with compilable go files)." />
     <MESSAGE value="finally fixed completion test case.&#10;The other test cases are broken :). Will fix them next." />
+    <MESSAGE value="package keyword completion&#10;import path completion from SDK and local paths for paths starting with ./" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1914,13 +1936,6 @@
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Work/IntellijIdea/idea/platform/lang-api/src/com/intellij/codeInsight/completion/CompletionService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
@@ -2008,10 +2023,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="137" column="34" selection-start="5289" selection-end="5289" vertical-scroll-proportion="1.9843373">
+        <state line="0" column="44" selection-start="44" selection-end="44" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="276" column="39" selection-start="11205" selection-end="11205" vertical-scroll-proportion="0.21595092">
+          <folding />
         </state>
       </provider>
     </entry>
