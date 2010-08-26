@@ -3,7 +3,9 @@ package ro.redeul.google.go.runner;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
@@ -47,6 +49,10 @@ public class GoRunConfigurationType implements ConfigurationType {
         return new ConfigurationFactory[]{myConfigurationFactory};
     }
 
+    public static GoRunConfigurationType getInstance() {
+        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GoRunConfigurationType.class);
+    }
+
     public static class GoFactory extends ConfigurationFactory {
 
         public GoFactory(ConfigurationType type) {
@@ -54,7 +60,7 @@ public class GoRunConfigurationType implements ConfigurationType {
         }
 
         public RunConfiguration createTemplateConfiguration(Project project) {
-            return new GoRunConfiguration("Go application", project, this);
+            return new GoRunConfiguration("Go application", project, getInstance());
         }        
     }
 }

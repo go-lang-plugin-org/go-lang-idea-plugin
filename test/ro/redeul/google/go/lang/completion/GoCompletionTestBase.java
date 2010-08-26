@@ -2,29 +2,17 @@ package ro.redeul.google.go.lang.completion;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.testFramework.UsefulTestCase;
-import com.intellij.testFramework.fixtures.*;
-import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
 import org.testng.Assert;
-import ro.redeul.google.go.GoFileType;
-import ro.redeul.google.go.GoTestCase;
-import ro.redeul.google.go.util.TestUtils;
+import ro.redeul.google.go.lang.GoCodeInsightTestCase;
 
 import java.io.File;
 import java.util.List;
 
-public abstract class GoCompletionTestBase extends GoTestCase<JavaCodeInsightTestFixture> {
+public abstract class GoCompletionTestBase extends GoCodeInsightTestCase {
 
     @Override
     protected String getRelativeDataPath() {
         return "completion" + File.separator + "go";
-    }
-
-    @Override
-    protected JavaCodeInsightTestFixture createFixture(IdeaProjectTestFixture fixture) {
-        JavaCodeInsightTestFixture codeInsightFixture = JavaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(fixture, new LightTempDirTestFixtureImpl(true));
-
-        codeInsightFixture.setTestDataPath(getTestRootPath());
-        return codeInsightFixture;
     }
 
     protected void doBasicTest(String ... otherFiles) {

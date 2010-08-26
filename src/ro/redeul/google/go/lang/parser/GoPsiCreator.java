@@ -6,9 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoIdentifierImpl;
-import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationImpl;
-import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportSpecImpl;
-import ro.redeul.google.go.lang.psi.impl.toplevel.GoPackageDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,6 +29,12 @@ public class GoPsiCreator implements GoElementTypes {
 
         if ( elementType.equals(IMPORT_DECLARATION) )
             return new GoImportDeclarationImpl(node);
+
+        if ( elementType.equals(FUNCTION_DECLARATION) )
+            return new GoFunctionDeclarationImpl(node);
+
+        if ( elementType.equals(METHOD_DECLARATION) )
+            return new GoMethodDeclarationImpl(node);
 
         if ( elementType.equals(IMPORT_SPEC) )
             return new GoImportSpecImpl(node);

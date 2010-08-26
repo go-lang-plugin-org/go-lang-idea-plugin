@@ -1,6 +1,5 @@
 package ro.redeul.google.go.lang.completion;
 
-import com.intellij.testFramework.TestDataPath;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -18,12 +17,15 @@ public class KeywordCompletionTestCase extends GoCompletionTestBase {
         return super.getRelativeDataPath() + File.separator + "keywords";
     }
     
-    @Test public void testPackageCase1() throws Throwable { doBasicTest(); }
-//    @Test public void testPackageCase2() throws Throwable { doBasicTest(); }
-    @Test public void testPackageCase3() throws Throwable { doBasicTest(); }
+    @Test(enabled = false)
+    public void testPackageCase1() throws Throwable { doBasicTest(); }
 
-    @Test public void testImportCase1() throws Throwable { doBasicTest(); }
-    @Test public void testImportCase2() throws Throwable { doBasicTest(); }
+    @Test(enabled = false)
+    public void testPackageCase3() throws Throwable { doBasicTest(); }
 
+    @Test(enabled = false)
+    public void testImportCase1() throws Throwable { doBasicTest(); }
 
+    @Test(enabled = false)
+    public void testImportCase2() throws Throwable { doBasicTest(); }
 }

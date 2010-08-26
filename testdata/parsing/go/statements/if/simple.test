@@ -12,7 +12,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  FunctionDeclaration
+  FunctionDeclaration(f)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')

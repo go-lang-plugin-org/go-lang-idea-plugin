@@ -49,6 +49,9 @@
 
     <project-components>
         <!-- Add your project components here -->
+        <component>
+            <implementation-class>ro.redeul.google.go.components.GoCompilerLoader</implementation-class>
+        </component>
     </project-components>
     
     <actions>
@@ -88,7 +91,7 @@
         <sdkType implementation="ro.redeul.google.go.config.sdk.GoSdkType"/>
 
         <compiler.makeDependencyProcessor implementation="ro.redeul.google.go.compilation.GoDependencyProvider"/>
-        <compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>
+        <!--<compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>-->
 
         <configurationType implementation="ro.redeul.google.go.runner.GoRunConfigurationType"/>
         <!--<configurationProducer implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>-->

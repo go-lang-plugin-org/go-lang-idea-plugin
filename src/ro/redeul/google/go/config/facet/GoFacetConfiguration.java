@@ -18,7 +18,6 @@ import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
-import org.jetbrains.idea.devkit.projectRoots.IdeaJdk;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.config.ui.GoFacetTab;
 

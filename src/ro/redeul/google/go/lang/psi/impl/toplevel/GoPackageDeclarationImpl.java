@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.psi.impl.toplevel;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.groovy.lang.lexer.GroovyTokenTypes;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDefinition;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;

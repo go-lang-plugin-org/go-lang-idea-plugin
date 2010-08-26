@@ -1,20 +1,20 @@
 package ro.redeul.google.go.util;
 
+import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.util.CommonProcessors;
 
-import java.io.*;
-import java.nio.CharBuffer;
-import java.util.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.util.Arrays;
 
 public class GoSdkUtil {
 
     public static final String PACKAGES = "src/pkg";
 
     private static final Logger LOG = Logger.getInstance("ro.redeul.google.go.util.GoSdkUtil");
+
+    private static final String DEFAULT_MOCK_PATH = "go/default";
 
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static String[] testGoogleGoSdk(String path) {
@@ -60,11 +60,7 @@ public class GoSdkUtil {
 
         String binariesPath = System.getenv("GOBIN");
         if ( binariesPath == null ) {
-            if ( target[0].equals("windows") ) {
-                binariesPath = path + "/bin";
-            } else {
-                binariesPath = System.getenv("HOME") + "/bin";
-            }
+            binariesPath = path + "/bin";
         }
 
         Pair<String, String> executionResult =
@@ -96,33 +92,45 @@ public class GoSdkUtil {
 //        return processor.getResults();
 //    }
 
+    public static String[] getMockGoogleSdk() {
+        return getMockGoogleSdk(PathManager.getHomePath() + "/" + DEFAULT_MOCK_PATH);
+    }
+
+    public static String[] getMockGoogleSdk(String path) {
+        String[] strings = testGoogleGoSdk(path);
+        if ( strings.length > 0 ) {
+            new File(strings[1], getCompilerName(strings[2], strings[3])).setExecutable(true);
+            new File(strings[1], getLinkerName(strings[2], strings[3])).setExecutable(true);
+            new File(strings[1], getArchivePackerName(strings[2], strings[3])).setExecutable(true);
+        }
+
+        return strings;
+    }
+
+    private static String getArchivePackerName(String os, String arch) {
+        return "gopack";
+    }
+
     public static String getCompilerName(String os, String arch) {
-        if (arch.equalsIgnoreCase("amd64")) {
-            return "6g";
-        }
-
-        if (arch.equalsIgnoreCase("386")) {
-            return "8g";
-        }
-
-        if (arch.equalsIgnoreCase("arm")) {
-            return "5g";
-        }
-
-        return "unknown";
+        return getBinariesDesignation(os, arch) + "g";
     }
 
     public static String getLinkerName(String os, String arch) {
+        return getBinariesDesignation(os, arch) + "l";
+    }
+
+    public static String getBinariesDesignation(String os, String arch) {
+
         if (arch.equalsIgnoreCase("amd64")) {
-            return "6l";
+            return "6";
         }
 
         if (arch.equalsIgnoreCase("386")) {
-            return "8l";
+            return "8";
         }
 
         if (arch.equalsIgnoreCase("arm")) {
-            return "5l";
+            return "5";
         }
 
         return "unknown";

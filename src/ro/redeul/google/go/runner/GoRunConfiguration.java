@@ -44,8 +44,8 @@ public class GoRunConfiguration extends ModuleBasedConfiguration<RunConfiguratio
     public String scriptArguments;
     public String workDir;
 
-    public GoRunConfiguration(String name, Project project, ConfigurationFactory factory) {
-        super(name, new RunConfigurationModule(project), factory);
+    public GoRunConfiguration(String name, Project project, GoRunConfigurationType configurationType) {
+        super(name, new RunConfigurationModule(project), configurationType.getConfigurationFactories()[0]);
         workDir = PathUtil.getLocalPath(project.getBaseDir());
     }
 
@@ -57,7 +57,7 @@ public class GoRunConfiguration extends ModuleBasedConfiguration<RunConfiguratio
 
     @Override
     protected ModuleBasedConfiguration createInstance() {
-        return new GoRunConfiguration(getName(), getProject(), getFactory());
+        return new GoRunConfiguration(getName(), getProject(), GoRunConfigurationType.getInstance());
     }
 
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
@@ -90,7 +90,9 @@ public class GoRunConfiguration extends ModuleBasedConfiguration<RunConfiguratio
                 GeneralCommandLine commandLine = new GeneralCommandLine();
 
                 commandLine.setExePath(getCompiledFileName(getModule(), scriptName));
-                commandLine.addParameter(scriptArguments);
+                if ( scriptArguments != null && scriptArguments.trim().length() > 0 ) {
+                    commandLine.addParameter(scriptArguments);
+                }
                 commandLine.setWorkDirectory(workDir);
 
                 return GoApplicationProcessHandler.runCommandLine(commandLine);

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file:///workspace/mtoader/Work/GoogleGoPlugin/google-go-language.iml" filepath="/workspace/mtoader/Work/GoogleGoPlugin/google-go-language.iml" />
+      <module fileurl="file://$PROJECT_DIR$/google-go-language.iml" filepath="$PROJECT_DIR$/google-go-language.iml" />
     </modules>
   </component>
 </project>

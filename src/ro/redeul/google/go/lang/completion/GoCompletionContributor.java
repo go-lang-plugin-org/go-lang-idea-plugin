@@ -11,8 +11,6 @@ import com.intellij.psi.impl.DebugUtil;
 import com.intellij.util.ProcessingContext;
 import com.sun.xml.internal.ws.api.server.Module;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrParenthesizedExpression;
-import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrTypeCastExpression;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoPackageDeclarationImpl;

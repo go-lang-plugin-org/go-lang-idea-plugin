@@ -1,33 +1,38 @@
 package ro.redeul.google.go;
 
+import com.intellij.facet.FacetManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.openapi.projectRoots.ProjectJdkTable;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkModificator;
+import com.intellij.openapi.projectRoots.impl.JavaSdkImpl;
+import com.intellij.openapi.roots.ContentEntry;
+import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.testFramework.IdeaTestCase;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.UsefulTestCase;
-import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
-import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
-import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
-import com.intellij.testFramework.fixtures.TestFixtureBuilder;
+import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
+import com.intellij.testFramework.builders.ModuleFixtureBuilder;
+import com.intellij.testFramework.fixtures.*;
+import com.intellij.testFramework.fixtures.impl.IdeaTestFixtureFactoryImpl;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import ro.redeul.google.go.config.facet.GoFacet;
+import ro.redeul.google.go.config.facet.GoFacetConfiguration;
+import ro.redeul.google.go.config.facet.GoFacetType;
+import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.config.sdk.GoSdkType;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
 
-/**
- * Created by IntelliJ IDEA.
- * User: mtoader
- * Date: Aug 22, 2010
- * Time: 8:18:45 AM
- * To change this template use File | Settings | File Templates.
- */
 public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> extends UsefulTestCase {
 
     protected FixtureType fixture;
-
     protected Method currentRunningTestMethod;
 
     protected GoTestCase() {
@@ -35,16 +40,33 @@ public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> ext
     }
 
     @BeforeMethod
-    public void before(Method method) throws Exception {
+    public void before(Method method) throws Throwable {
         this.currentRunningTestMethod = method;
 
-        IdeaTestFixtureFactory fixtureFactory = IdeaTestFixtureFactory.getFixtureFactory();
-        TestFixtureBuilder<IdeaProjectTestFixture> fixtureBuilder = fixtureFactory.createLightFixtureBuilder(getProjectDescriptor());
+        TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder =
+                getProjectBuilder();
 
-        final IdeaProjectTestFixture fixture = fixtureBuilder.getFixture();
-
-        this.fixture = createFixture(fixture);
+//        final JavaModuleFixtureBuilder moduleFixtureBuilder = projectBuilder.addModule(JavaModuleFixtureBuilder.class);
+//        moduleFixtureBuilder.addSourceContentRoot(myFixture.getTempDirPath());
+//        customizeProject(projectBuilder);
+        
+        this.fixture = createTestFixture(projectBuilder.getFixture());
         this.fixture.setUp();
+    }
+
+    protected TestFixtureBuilder<IdeaProjectTestFixture> getProjectBuilder() {
+
+        IdeaTestFixtureFactory testFixtureFactory = IdeaTestFixtureFactory.getFixtureFactory();
+
+        return testFixtureFactory.createLightFixtureBuilder(getProjectDescriptor());
+    }
+
+    protected void customizeProject(TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder) {
+        
+    }
+
+    private <ModuleBuilder extends ModuleFixtureBuilder> Class<ModuleFixtureBuilder> getModuleBuilderClass() {
+        return ModuleFixtureBuilder.class;
     }
 
     @AfterMethod
@@ -59,7 +81,7 @@ public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> ext
 
     protected abstract String getRelativeDataPath();
 
-    protected abstract FixtureType createFixture(IdeaProjectTestFixture fixture);
+    protected abstract FixtureType createTestFixture(IdeaProjectTestFixture projectTestFixture) throws Exception;
 
     protected Module getModule() {
         return fixture != null ? fixture.getModule() : null;
@@ -75,15 +97,14 @@ public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> ext
 
         name = StringUtil.trimStart(name, "test");
         if (StringUtil.isEmpty(name)) {
-          return getRelativeDataPath();
+            return getRelativeDataPath();
         }
 
-        String processedName = getRelativeDataPath() + File.separator; 
+        String processedName = getRelativeDataPath() + File.separator;
         boolean isFirst = true;
 
-        for ( String s : name.split("(?<=\\p{Lower})(?=\\p{Upper})") )
-        {
-            if ( isFirst ) {
+        for (String s : name.split("(?<=\\p{Lower})(?=\\p{Upper})")) {
+            if (isFirst) {
                 processedName += s.toLowerCase();
                 isFirst = false;
             } else {
@@ -97,12 +118,53 @@ public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> ext
     @Override
     protected String getTestName(boolean lowercaseFirstLetter) {
         return getTestName();
-    }        
-
-    public static final LightProjectDescriptor JAVA_1_5 = new DefaultLightProjectDescriptor();
+    }
 
     protected LightProjectDescriptor getProjectDescriptor() {
-        return JAVA_1_5;
+
+        return new DefaultLightProjectDescriptor() {
+
+            Sdk sdk;
+
+            @Override
+            public Sdk getSdk() {
+                if ( sdk == null ) {
+                    sdk = JavaSdkImpl.getMockJdk17("java 1.5");
+                }
+
+                return sdk;
+            }
+
+            @Override            
+            public void configureModule(Module module, ModifiableRootModel model, ContentEntry contentEntry) {
+                                
+                model.setSdk(getSdk());
+
+                // add go sdk to project root
+                Sdk sdk = ProjectJdkTable.getInstance().createSdk("go Sdk", GoSdkType.getInstance());
+
+                SdkModificator modificator = sdk.getSdkModificator();
+
+                GoSdkData goSdkData = new GoSdkData();
+
+                modificator.setHomePath("bau");
+                modificator.setVersionString("1");
+                modificator.setSdkAdditionalData(goSdkData);
+                modificator.commitChanges();
+
+                // add go module facet
+                FacetManager facetManager = FacetManager.getInstance(module);
+
+                GoFacet goFacet = facetManager.addFacet(new GoFacetType(), "go facet", null);
+                goFacet.getConfiguration().SDK_NAME = "go Sdk";
+
+                ContentEntry contentEntries[] = model.getContentEntries();
+                for (ContentEntry entry : contentEntries) {
+                    int a = 10;
+                }
+            }
+        };
+
     }
 
 }
