@@ -1,6 +1,5 @@
 package ro.redeul.google.go.runner;
 
-import com.intellij.compiler.make.MakeUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.RunConfigurationExtension;
@@ -15,7 +14,7 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -27,7 +26,6 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.runner.ui.GoRunConfigurationEditorForm;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -38,14 +36,14 @@ import java.util.Collection;
  * Time: 2:53:03 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GoRunConfiguration extends ModuleBasedConfiguration<RunConfigurationModule> {
+public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration> {
 
     public String scriptName;
     public String scriptArguments;
     public String workDir;
 
-    public GoRunConfiguration(String name, Project project, GoRunConfigurationType configurationType) {
-        super(name, new RunConfigurationModule(project), configurationType.getConfigurationFactories()[0]);
+    public GoApplicationConfiguration(String name, Project project, GoRunConfigurationType configurationType) {
+        super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
         workDir = PathUtil.getLocalPath(project.getBaseDir());
     }
 
@@ -57,7 +55,7 @@ public class GoRunConfiguration extends ModuleBasedConfiguration<RunConfiguratio
 
     @Override
     protected ModuleBasedConfiguration createInstance() {
-        return new GoRunConfiguration(getName(), getProject(), GoRunConfigurationType.getInstance());
+        return new GoApplicationConfiguration(getName(), getProject(), GoRunConfigurationType.getInstance());
     }
 
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
@@ -68,7 +66,7 @@ public class GoRunConfiguration extends ModuleBasedConfiguration<RunConfiguratio
         PathMacroManager.getInstance(getProject()).expandPaths(element);
         super.readExternal(element);
         RunConfigurationExtension.readSettings(this, element);
-        XmlSerializer.deserializeInto(this, element);
+        DefaultJDOMExternalizer.readExternal(this, element);
         readModule(element);
 //        EnvironmentVariablesComponent.readExternal(element, getEnvs());
     }
@@ -76,7 +74,7 @@ public class GoRunConfiguration extends ModuleBasedConfiguration<RunConfiguratio
     public void writeExternal(final Element element) throws WriteExternalException {
         super.writeExternal(element);
         RunConfigurationExtension.writeSettings(this, element);
-        XmlSerializer.serializeInto(this, element);
+        DefaultJDOMExternalizer.writeExternal(this, element);
         writeModule(element);
 //        EnvironmentVariablesComponent.writeExternal(element, getEnvs());
         PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
@@ -106,8 +104,13 @@ public class GoRunConfiguration extends ModuleBasedConfiguration<RunConfiguratio
     private String getCompiledFileName(Module module, String scriptName) {
         VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
 
-        VirtualFile scriptFile = VirtualFileManager.getInstance().findFileByUrl("file:///" + scriptName);
-
+        VirtualFile scriptFile = null;
+        for (VirtualFile sourceRoot : sourceRoots) {
+            scriptFile = sourceRoot.findChild(scriptName);
+            if ( scriptFile != null) {
+                break;
+            }
+        }
 
         if (scriptFile != null) {
             for (VirtualFile sourceRoot : sourceRoots) {
@@ -115,7 +118,7 @@ public class GoRunConfiguration extends ModuleBasedConfiguration<RunConfiguratio
                 if (VfsUtil.isAncestor(sourceRoot, scriptFile, true)) {
                     String relativePath = VfsUtil.getRelativePath(scriptFile.getParent(), sourceRoot, '/');
 
-                    return CompilerPaths.getModuleOutputPath(module, false) + "/" + relativePath + "/" + scriptFile.getNameWithoutExtension() + ".out";
+                    return CompilerPaths.getModuleOutputPath(module, false) + "/go-bins/" + relativePath + scriptFile.getNameWithoutExtension();
                 }
             }
         }

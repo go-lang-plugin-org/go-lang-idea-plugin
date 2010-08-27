@@ -6,9 +6,7 @@ import com.intellij.psi.FileViewProvider;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
-import ro.redeul.google.go.lang.psi.toplevel.GoPackageDefinition;
+import ro.redeul.google.go.lang.psi.toplevel.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -39,5 +37,24 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
     public GoImportDeclaration[] getImportDeclarations() {
         return findChildrenByClass(GoImportDeclaration.class);
+    }
+
+    public GoFunctionDeclaration[] getFunctions() {
+        return findChildrenByClass(GoFunctionDeclaration.class);
+    }
+
+    public GoMethodDeclaration[] getMethods() {
+        return findChildrenByClass(GoMethodDeclaration.class);
+    }
+
+    public GoFunctionDeclaration getMainFunction() {
+        GoFunctionDeclaration functionDeclarations[] = getFunctions();
+        for (GoFunctionDeclaration functionDeclaration : functionDeclarations) {
+            if ( functionDeclaration.isMain() ) {
+                return functionDeclaration;
+            }
+        }
+
+        return null;
     }
 }

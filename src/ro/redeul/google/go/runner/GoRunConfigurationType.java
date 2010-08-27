@@ -60,7 +60,7 @@ public class GoRunConfigurationType implements ConfigurationType {
         }
 
         public RunConfiguration createTemplateConfiguration(Project project) {
-            return new GoRunConfiguration("Go application", project, getInstance());
+            return new GoApplicationConfiguration("Go application", project, getInstance());
         }        
     }
 }

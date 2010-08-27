@@ -3,7 +3,7 @@ package ro.redeul.google.go.runner.config;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.runner.GoRunConfiguration;
+import ro.redeul.google.go.runner.GoApplicationConfiguration;
 
 import javax.swing.*;
 
@@ -14,15 +14,15 @@ import javax.swing.*;
  * Time: 2:59:34 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GoRunConfigurationEditor extends SettingsEditor<GoRunConfiguration> {
+public class GoRunConfigurationEditor extends SettingsEditor<GoApplicationConfiguration> {
 
     @Override
-    protected void resetEditorFrom(GoRunConfiguration s) {
+    protected void resetEditorFrom(GoApplicationConfiguration s) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    protected void applyEditorTo(GoRunConfiguration s) throws ConfigurationException {
+    protected void applyEditorTo(GoApplicationConfiguration s) throws ConfigurationException {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

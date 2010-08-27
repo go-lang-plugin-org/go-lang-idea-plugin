@@ -10,6 +10,7 @@ import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.process.ProcessOutputTypes;
+import com.intellij.execution.runners.DefaultProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
@@ -25,11 +26,9 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.JavaSdkImpl;
 import com.intellij.openapi.roots.CompilerProjectExtension;
-import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
@@ -37,16 +36,14 @@ import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture;
 import com.intellij.testFramework.fixtures.TempDirTestFixture;
 import com.intellij.testFramework.fixtures.impl.TempDirTestFixtureImpl;
 import com.intellij.util.concurrency.Semaphore;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import ro.redeul.google.go.components.GoCompilerLoader;
 import ro.redeul.google.go.config.facet.GoFacet;
 import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
-import ro.redeul.google.go.runner.GoRunConfiguration;
+import ro.redeul.google.go.runner.GoApplicationConfiguration;
 import ro.redeul.google.go.runner.GoRunConfigurationType;
 import ro.redeul.google.go.util.GoSdkUtil;
 
@@ -241,7 +238,7 @@ public abstract class GoCompilerTestBase extends JavaCodeInsightFixtureTestCase 
 
     protected void assertOutput(String applicationName, String output, final Module module) throws ExecutionException {
 
-        final GoRunConfiguration configuration = new GoRunConfiguration("app", getProject(), GoRunConfigurationType.getInstance());
+        final GoApplicationConfiguration configuration = new GoApplicationConfiguration("app", getProject(), GoRunConfigurationType.getInstance());
 
         configuration.scriptName = applicationName + ".go";
         configuration.setModule(module);
@@ -253,7 +250,7 @@ public abstract class GoCompilerTestBase extends JavaCodeInsightFixtureTestCase 
                 getProject(),
                 new RunnerSettings<JDOMExternalizable>(null, null), null, null);
 
-        final DefaultJavaProgramRunner runner = ProgramRunner.PROGRAM_RUNNER_EP.findExtension(DefaultJavaProgramRunner.class);
+        final DefaultProgramRunner runner = ProgramRunner.PROGRAM_RUNNER_EP.findExtension(DefaultProgramRunner.class);
         final StringBuffer sb = new StringBuffer();
         final Semaphore semaphore = new Semaphore();
 

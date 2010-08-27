@@ -15,6 +15,7 @@ import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.compiler.TranslatingCompiler;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.fileChooser.ex.FileTextFieldImpl;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -48,6 +49,7 @@ import ro.redeul.google.go.util.GoSdkUtil;
 import ro.redeul.google.go.util.ProcessUtil;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -136,79 +138,22 @@ public class GoCompiler implements TranslatingCompiler {
 
         String baseOutputPath = findOrCreateGoOutputPath(module, goOutputRelativePath, baseOutputFile);
 
-        final Map<String, List<VirtualFile>> packagesToFileList = new HashMap<String, List<VirtualFile>>();
-        final List<Pair<String, String>> importDependencies = new ArrayList<Pair<String, String>>();
-        final Set<String> ourPackages = new HashSet<String>();
+        final Map<VirtualFile, Map<String, List<Trinity<VirtualFile, String, List<String>>>>> sourceRootsMap;
 
-
-        final Map<VirtualFile, Map<String, List<Trinity<VirtualFile, String, List<String>>>>> map =
-                sortFiles(context, module, files);
+        sourceRootsMap = sortFilesBySourceRoots(context, module, files);
 
         final Sdk sdk = findGoSdkForModule(module);
 
-        for (VirtualFile file : map.keySet()) {
-            compileForSourceRoot(file, map.get(file), baseOutputPath, sdk, context, sink);
-        }
-
-        List<String> packagesCompilationOrder = findPackagesCompilationOrder(importDependencies, ourPackages);
-
-
-        for (final String packageName : packagesCompilationOrder) {
-            final String destination = baseOutputPath + "/go-binaries/packages/";
-
-            new WriteCommandAction<Boolean>(module.getProject()) {
-                @Override
-                protected void run(Result<Boolean> boolResult) throws Throwable {
-                    boolResult.setResult(false);
-                    VfsUtil.createDirectoryIfMissing(baseOutputFile, "/go-binaries/packages");
-                    boolResult.setResult(true);
-                }
-            }.execute();
-
-            doCompileFile(context, sdk, baseOutputPath, packagesToFileList.get(packageName), destination + packageName + ".6");
-            if (LocalFileSystem.getInstance().refreshAndFindFileByPath(destination + packageName + ".6") == null) {
-                continue;
-            }
-
-            doPackLibrary(context, sdk, baseOutputPath, destination + packageName + ".6", destination + packageName + ".a");
-            if (LocalFileSystem.getInstance().refreshAndFindFileByPath(destination + packageName + ".a") == null) {
-                continue;
-            }
-
-            Collection<OutputItem> outputItems = new ArrayList<OutputItem>();
-
-            for (final VirtualFile sourceFile : packagesToFileList.get(packageName)) {
-                outputItems.add(
-                        new OutputItem() {
-                            public String getOutputPath() {
-                                return destination + packageName + ".6";
-                            }
-
-                            public VirtualFile getSourceFile() {
-                                return sourceFile;
-                            }
-                        });
-
-            }
-
-            outputItems.add(
-                    new OutputItem() {
-                        public String getOutputPath() {
-                            return destination + packageName + ".a";
-                        }
-
-                        public VirtualFile getSourceFile() {
-                            return baseOutputFile.findFileByRelativePath("/go-binaries/packages/" + packageName + ".6");
-                        }
-                    }
-            );
-
-            sink.add(destination, outputItems, new VirtualFile[]{});
+        for (VirtualFile sourceRoot : sourceRootsMap.keySet()) {
+            compileForSourceRoot(sourceRoot, sourceRootsMap.get(sourceRoot), baseOutputPath, sdk, context, sink);
         }
     }
 
-    private void compileForSourceRoot(VirtualFile sourceRoot, Map<String, List<Trinity<VirtualFile, String, List<String>>>> filesToCompile, String baseOutputFile, Sdk sdk, CompileContext context, OutputSink sink) {
-        
+    private void compileForSourceRoot(VirtualFile sourceRoot,
+                                      Map<String, List<Trinity<VirtualFile, String, List<String>>>> filesToCompile,
+                                      String baseOutputFile,
+                                      Sdk sdk, CompileContext context, OutputSink sink) {
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("[compiling] Compiling source root: " + sourceRoot.getPath());
         }
@@ -243,11 +188,12 @@ public class GoCompiler implements TranslatingCompiler {
             }
 
             List<VirtualFile> mainFiles = new ArrayList<VirtualFile>();
+
             String currentPackage = "";
             List<VirtualFile> files = new ArrayList<VirtualFile>();
             for (Trinity<VirtualFile, String, List<String>> compilableFileData : list) {
-                if ( ! currentPackage.equals(compilableFileData.getSecond()) ) {
-                    if (files.size() != 0 && !currentPackage.equals("main")) {
+                if (!currentPackage.equals(compilableFileData.getSecond())) {
+                    if (files.size() != 0 && !currentPackage.startsWith("main")) {
                         if (compilePackage(sourceRoot, baseOutputFile, sdk, context, sink, relativePath, currentPackage, files))
                             return;
                     }
@@ -256,26 +202,29 @@ public class GoCompiler implements TranslatingCompiler {
                     files.clear();
                 }
 
-                if ( currentPackage.equals("main") ) {
+                if (currentPackage.startsWith("main")) {
                     mainFiles.add(compilableFileData.getFirst());
                 } else {
                     files.add(compilableFileData.getFirst());
                 }
             }
 
-            if (files.size() != 0 ) {
+            if (files.size() != 0) {
                 if (compilePackage(sourceRoot, baseOutputFile, sdk, context, sink, relativePath, currentPackage, files))
                     return;
             }
 
-            if ( ! compileApplication(sourceRoot, baseOutputFile, sdk, context, sink, relativePath, mainFiles) ) {
+            if (!compileApplication(sourceRoot, baseOutputFile, sdk, context, sink, relativePath, "main", mainFiles)) {
                 return;
             }
         }
     }
 
-    private boolean compilePackage(VirtualFile file, String baseOutputFile, Sdk sdk, CompileContext context, OutputSink sink, String relativePath, String currentPackage, List<VirtualFile> files) {
-        if (!doCompilePackage(file, currentPackage, relativePath, files, baseOutputFile, sdk, context, sink)) {
+    private boolean compilePackage(VirtualFile sourceRoot, String baseOutputFile, Sdk sdk, CompileContext context, OutputSink sink, String relativePath, String currentPackage, List<VirtualFile> files) {
+
+        Collection<VirtualFile> updatedFileList = updateFileListForPackage(sourceRoot, relativePath, currentPackage, files);
+
+        if (!doCompilePackage(sourceRoot, currentPackage, relativePath, updatedFileList, baseOutputFile, sdk, context, sink)) {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("[compiling] Failed compilation for package: " + (relativePath + "/" + currentPackage) + " " + files);
@@ -286,7 +235,49 @@ public class GoCompiler implements TranslatingCompiler {
         return false;
     }
 
-    private boolean doCompilePackage(VirtualFile sourceRoot, String packageName, String relativePath, List<VirtualFile> files, String baseOutputPath, Sdk sdk, CompileContext context, OutputSink sink) {
+    private boolean compileApplication(VirtualFile sourceRoot, String baseOutputPath, Sdk sdk, CompileContext context, OutputSink sink, String relativePath, String currentPackage, List<VirtualFile> files) {
+
+        Collection<VirtualFile> updateFileList = updateFileListForPackage(sourceRoot, relativePath, "main", files);
+
+        return doCompileApplication(sourceRoot, baseOutputPath, sdk, context, sink, relativePath, currentPackage, updateFileList);
+    }
+
+    private Collection<VirtualFile> updateFileListForPackage(VirtualFile sourceRoot, String relativePath, final String desiredPackageName, Collection<VirtualFile> files) {
+        final Set<VirtualFile> newFiles = new HashSet<VirtualFile>(files);
+
+        final VirtualFile folder = sourceRoot.findFileByRelativePath(relativePath);
+        if (folder == null) {
+            return files;
+        }
+
+        ApplicationManager.getApplication().runReadAction(new Runnable() {
+            public void run() {
+                VirtualFile children[] = folder.getChildren();
+                for (final VirtualFile child : children) {
+
+                    PsiFile psiFile = PsiManager.getInstance(project).findFile(child);
+
+                    GoFile file = (GoFile) psiFile;
+                    if (file == null) {
+                        continue;
+                    }
+
+                    String packageName = file.getPackage().getPackageName();
+                    if ( packageName.equals(desiredPackageName) ) {
+                        if ( desiredPackageName.equals("main") && file.getMainFunction() == null ) {
+                            newFiles.add(child);
+                        } else {
+                            newFiles.add(child);
+                        }
+                    }
+                }
+            }
+        });
+
+        return files;
+    }
+
+    private boolean doCompilePackage(VirtualFile sourceRoot, String packageName, String relativePath, Collection<VirtualFile> files, String baseOutputPath, Sdk sdk, CompileContext context, OutputSink sink) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("[compiling] Compiling package \"" + packageName + "\" from path [" + relativePath + "] - " + files);
@@ -294,9 +285,9 @@ public class GoCompiler implements TranslatingCompiler {
 
         File outputFolder = new File(baseOutputPath + "/" + relativePath);
 
-        if ( files.size() != 1
+        if (files.size() != 1
                 && outputFolder.getName().equals(packageName)
-                && VfsUtil.isAncestor(new File(baseOutputPath), outputFolder, true) ) {
+                && VfsUtil.isAncestor(new File(baseOutputPath), outputFolder, true)) {
             outputFolder = outputFolder.getParentFile();
         }
 
@@ -317,12 +308,12 @@ public class GoCompiler implements TranslatingCompiler {
 
         ProcessOutput output = executeCommandInFolder(command, sourceRoot.getPath(), context);
 
-        if ( output == null || output.getExitCode() != 0 ) {
+        if (output == null || output.getExitCode() != 0) {
             return false;
         }
 
         VirtualFile intermediateFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(outputBinary);
-        if (intermediateFile == null ) {
+        if (intermediateFile == null) {
             return false;
         }
 
@@ -335,7 +326,7 @@ public class GoCompiler implements TranslatingCompiler {
 
         // begin library packing command
         String outputLibrary = outputFolder.getAbsolutePath() + File.separator + packageName + ".a";
-        
+
         GeneralCommandLine libraryPackCommand = new GeneralCommandLine();
         libraryPackCommand.setExePath(getPackerBinary(sdk));
         libraryPackCommand.addParameter("grc");
@@ -345,7 +336,7 @@ public class GoCompiler implements TranslatingCompiler {
         output = executeCommandInFolder(libraryPackCommand, sourceRoot.getPath(), context);
 
         VirtualFile libraryFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(outputLibrary);
-        if (libraryFile == null ) {
+        if (libraryFile == null) {
             return false;
         }
 
@@ -356,8 +347,8 @@ public class GoCompiler implements TranslatingCompiler {
         return output != null && output.getExitCode() == 0;
     }
 
-    private boolean compileApplication(VirtualFile sourceRoot, String baseOutputPath, Sdk sdk, CompileContext context, OutputSink sink, String relativePath, List<VirtualFile> files) {
 
+    private boolean doCompileApplication(VirtualFile sourceRoot, String baseOutputPath, Sdk sdk, CompileContext context, OutputSink sink, String relativePath, String currentPackage, Collection<VirtualFile> files) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("[compiling] Compiling application in folder [" + relativePath + "] - " + files);
         }
@@ -366,28 +357,39 @@ public class GoCompiler implements TranslatingCompiler {
 
         outputFolder.mkdirs();
 
-        String targetApplication = "application";
+        String targetApplication = currentPackage.replaceFirst("^main\\.", "");
+
+        if (targetApplication.trim().length() == 0 ) {
+            context.addMessage(CompilerMessageCategory.INFORMATION, "No main function provided", null, -1, -1);
+            return false;
+        }
+
         String outputBinary = outputFolder.getAbsolutePath() + File.separator + targetApplication + "." + getTargetExtension(sdk);
+        String executionPath = outputFolder.getAbsolutePath();
+
 
         GeneralCommandLine command = new GeneralCommandLine();
 
         command.setExePath(getCompilerBinary(sdk));
+//        command.addParameter("-I");
+//        command.addParameter(".");
         command.addParameter("-o");
         command.addParameter(outputBinary);
-        command.setWorkDirectory(sourceRoot.getPath());
+
+        VirtualFile outputVirtualFile = VfsUtil.findFileByURL(VfsUtil.convertToURL("file://" + executionPath + "/"));
 
         for (VirtualFile file : files) {
-            command.addParameter(VfsUtil.getRelativePath(file, sourceRoot, '/'));
+            command.addParameter("../" + VfsUtil.getPath(outputVirtualFile, file, '/'));
         }
 
-        ProcessOutput output = executeCommandInFolder(command, sourceRoot.getPath(), context);
+        ProcessOutput output = executeCommandInFolder(command, executionPath, context);
 
-        if ( output == null || output.getExitCode() != 0 ) {
+        if (output == null || output.getExitCode() != 0) {
             return false;
         }
 
         VirtualFile intermediateFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(outputBinary);
-        if (intermediateFile == null ) {
+        if (intermediateFile == null) {
             return false;
         }
 
@@ -410,7 +412,7 @@ public class GoCompiler implements TranslatingCompiler {
         output = executeCommandInFolder(libraryPackCommand, sourceRoot.getPath(), context);
 
         VirtualFile libraryFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(outputApplication);
-        if (libraryFile == null ) {
+        if (libraryFile == null) {
             return false;
         }
 
@@ -444,8 +446,7 @@ public class GoCompiler implements TranslatingCompiler {
                 buf.append("\t").append(command.getCommandLineString()).append("\n");
                 buf.append("=============================================================================\n");
                 LOG.debug(buf.toString());
-            }
-            finally {
+            } finally {
                 StringBuilderSpinAllocator.dispose(buf);
             }
         }
@@ -458,17 +459,17 @@ public class GoCompiler implements TranslatingCompiler {
                     Charset.defaultCharset(),
                     command.getCommandLineString()).runProcess();
 
-            if ( output.getExitCode() != 0 ) {
+            if (output.getExitCode() != 0) {
                 List<String> lines = output.getStderrLines();
 
-                if ( lines.size() > 0 ) {
+                if (lines.size() > 0) {
                     for (String errorLine : lines) {
                         context.addMessage(CompilerMessageCategory.ERROR, errorLine, null, -1, -1);
                     }
                 }
 
                 lines = output.getStdoutLines();
-                if ( lines.size() > 0 ) {
+                if (lines.size() > 0) {
                     for (String errorLine : lines) {
                         context.addMessage(CompilerMessageCategory.ERROR, errorLine, null, -1, -1);
                     }
@@ -477,17 +478,18 @@ public class GoCompiler implements TranslatingCompiler {
                 context.addMessage(CompilerMessageCategory.WARNING, "process exited with code: " + output.getExitCode(), null, -1, -1);
             }
 
-            return output;            
+            return output;
         } catch (ExecutionException ex) {
             context.addMessage(CompilerMessageCategory.WARNING, ex.getMessage(), null, -1, -1);
             return null;
         }
     }
 
-    private Map<VirtualFile, Map<String, List<Trinity<VirtualFile, String, List<String>>>>> sortFiles(CompileContext context, final Module module, List<VirtualFile> files) {
+    private Map<VirtualFile, Map<String, List<Trinity<VirtualFile, String, List<String>>>>> sortFilesBySourceRoots(CompileContext context, final Module module, List<VirtualFile> files) {
+
         // relative path to source
-        final Map<VirtualFile, Map<String, List<Trinity<VirtualFile, String, List<String>>>>> map
-                = new HashMap<VirtualFile, Map<String, List<Trinity<VirtualFile, String, List<String>>>>>();
+        final Map<VirtualFile, Map<String, List<Trinity<VirtualFile, String, List<String>>>>>
+                sourceRootsMap = new HashMap<VirtualFile, Map<String, List<Trinity<VirtualFile, String, List<String>>>>>();
 
         // we need to find and sort the files as packages in order to compile them properly
         for (final VirtualFile virtualFile : files) {
@@ -498,12 +500,13 @@ public class GoCompiler implements TranslatingCompiler {
 
             VirtualFile sourceRoot = MakeUtil.getSourceRoot(context, module, virtualFile);
 
-            Map<String, List<Trinity<VirtualFile, String, List<String>>>> relativePathsMap =
-                    map.get(sourceRoot);
+            Map<String, List<Trinity<VirtualFile, String, List<String>>>> relativePathsMap;
+
+            relativePathsMap = sourceRootsMap.get(sourceRoot);
 
             if (relativePathsMap == null) {
                 relativePathsMap = new HashMap<String, List<Trinity<VirtualFile, String, List<String>>>>();
-                map.put(sourceRoot, relativePathsMap);
+                sourceRootsMap.put(sourceRoot, relativePathsMap);
             }
 
             String relativePath = VfsUtil.getRelativePath(virtualFile.getParent(), sourceRoot, '/');
@@ -543,16 +546,21 @@ public class GoCompiler implements TranslatingCompiler {
                         LOG.debug(String.format("[compiling] " + virtualFile + " pkg: " + packageName));
                     }
 
-                    list.add(Trinity.create(virtualFile, packageName, imports));
+
+                    if (packageName.equals("main") && file.getMainFunction() != null) {
+                        list.add(Trinity.create(virtualFile, packageName + "." + virtualFile.getNameWithoutExtension(), imports));
+                    } else {
+                        list.add(Trinity.create(virtualFile, packageName, imports));
+                    }
                 }
             });
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug(String.format("[compiling] " + map));
+            LOG.debug(String.format("[compiling] " + sourceRootsMap));
         }
 
-        return map;
+        return sourceRootsMap;
     }
 
     private String findOrCreateGoOutputPath(final Module module, final String goOutputRelativePath, final VirtualFile baseOutputFile) {
@@ -754,57 +762,57 @@ public class GoCompiler implements TranslatingCompiler {
         return null;
     }
 
-    static class CompilerMessage {
-        public CompilerMessageCategory category;
-        public String message;
-        public String fileName;
-        public int row;
-        public int column = -1;
+static class CompilerMessage {
+    public CompilerMessageCategory category;
+    public String message;
+    public String fileName;
+    public int row;
+    public int column = -1;
 
-        CompilerMessage(CompilerMessageCategory category, String message, String fileName, int row, int column) {
-            this.category = category;
-            this.message = message;
-            this.fileName = fileName;
-            this.row = row;
-            this.column = column;
+    CompilerMessage(CompilerMessageCategory category, String message, String fileName, int row, int column) {
+        this.category = category;
+        this.message = message;
+        this.fileName = fileName;
+        this.row = row;
+        this.column = column;
+    }
+}
+
+private static class GoCompilerOutputStreamParser implements ProcessUtil.StreamParser<List<CompilerMessage>> {
+
+    Pattern pattern = Pattern.compile("((?:/[^/:]+)+):(\\d+): ((?:(?:.)|(?:\\n(?!/)))+)", Pattern.UNIX_LINES);
+
+    public List<CompilerMessage> parseStream(String data) {
+
+        List<CompilerMessage> messages = new ArrayList<CompilerMessage>();
+
+        Matcher matcher = pattern.matcher(data);
+
+        while (matcher.find()) {
+            messages.add(
+                    new CompilerMessage(
+                            CompilerMessageCategory.ERROR, matcher.group(3), matcher.group(1), Integer.parseInt(matcher.group(2)), -1));
         }
+
+        return messages;
+    }
+}
+
+private static class MyOutputItem implements OutputItem {
+    private final String outputBinary;
+    private final VirtualFile file;
+
+    public MyOutputItem(String outputBinary, VirtualFile file) {
+        this.outputBinary = outputBinary;
+        this.file = file;
     }
 
-    private static class GoCompilerOutputStreamParser implements ProcessUtil.StreamParser<List<CompilerMessage>> {
-
-        Pattern pattern = Pattern.compile("((?:/[^/:]+)+):(\\d+): ((?:(?:.)|(?:\\n(?!/)))+)", Pattern.UNIX_LINES);
-
-        public List<CompilerMessage> parseStream(String data) {
-
-            List<CompilerMessage> messages = new ArrayList<CompilerMessage>();
-
-            Matcher matcher = pattern.matcher(data);
-
-            while (matcher.find()) {
-                messages.add(
-                        new CompilerMessage(
-                                CompilerMessageCategory.ERROR, matcher.group(3), matcher.group(1), Integer.parseInt(matcher.group(2)), -1));
-            }
-
-            return messages;
-        }
+    public String getOutputPath() {
+        return outputBinary;
     }
 
-    private static class MyOutputItem implements OutputItem {
-        private final String outputBinary;
-        private final VirtualFile file;
-
-        public MyOutputItem(String outputBinary, VirtualFile file) {
-            this.outputBinary = outputBinary;
-            this.file = file;
-        }
-
-        public String getOutputPath() {
-            return outputBinary;
-        }
-
-        public VirtualFile getSourceFile() {
-            return file;
-        }
+    public VirtualFile getSourceFile() {
+        return file;
     }
+}
 }

@@ -1,155 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/testFramework/src/com/intellij/testFramework/fixtures/impl/CodeInsightTestFixtureImpl.java" line="1351" mnemonic="1" />
+    <bookmark url="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" line="244" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56d30604-b05b-4754-b856-6785adac8d3b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoRunConfiguration.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoRunConfiguration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/simple.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/src/pkg/fmt/format.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case9.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case9.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/google-go-language.iml" afterPath="$PROJECT_DIR$/google-go-language.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/GoCodeInsightTestCase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case3.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/fileTemplates/GoAppMain.go.ft" afterPath="$PROJECT_DIR$/resources/fileTemplates/GoAppMain.go.ft" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoPackageDeclarationImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoPackageDeclarationImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/src/pkg/fmt/scan_test.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.properties" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/GoBundle.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case18.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case18.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionContributor.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionContributor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case15.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case15.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case5.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case2.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/empty2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/empty2.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/components/GoCompilerLoader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case8.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case8.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case1.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetConfiguration.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/config/facet/GoFacetConfiguration.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoMethodDeclarationImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/pkg/~place-holder~" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case2.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/select/empty.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/select/empty.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/toplevel/GoFunctionDeclaration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case6.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case4.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case3.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case17.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case17.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case11.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case11.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/compiler/DependencyCompilerTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/pkg/linux_amd64/fmt.a" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/GoCompletionTestBase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/GoCompletionTestBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case1.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts/idea_home.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case12.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case12.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case11.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case11.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case6.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/GoTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/GoTestCase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case8.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case8.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/break/empty.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/break/empty.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case7.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case16.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case16.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/GoFile.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/GoFile.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationModuleBasedConfiguration.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationRunner.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/log4j.properties" afterPath="$PROJECT_DIR$/test/log4j.properties" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/b.groovy" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty_enter.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty_enter.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case9.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case9.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case12.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case12.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case3.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/break/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/break/simple.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case13.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case13.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case10.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case10.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case4.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/folding/GoFoldingBuilder.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/folding/GoFoldingBuilder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case7.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case6.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoFunctionDeclarationImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case4.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case1.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var3.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case11.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case11.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case3.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case8.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case8.test" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoRunConfigurationType.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoRunConfigurationType.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case1.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case10.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case10.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/KeywordCompletionTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/KeywordCompletionTestCase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/else1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/else1.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case1.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case9.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case9.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case9.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case9.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case6.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case2.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case8.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case8.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty_semi.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty_semi.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/compiler/GoCompilerTestBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case5.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case7.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case5.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/select/case3.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case4.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/toplevel/GoMethodDeclaration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case14.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case14.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case2.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case5.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/break/empty2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/break/empty2.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var1.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/simple.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case10.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case10.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case7.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case1.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case7.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case7.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case2.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/java/mockJDK-1.4/src.zip" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/elseif1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/elseif1.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/src/pkg/fmt/fmt_test.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/bin/gopack" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/log4j.properties" afterPath="$PROJECT_DIR$/src/log4j.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/return/empty.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case3.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/src/pkg/fmt/doc.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/simple.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/simple.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/src/pkg/fmt/scan.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case4.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/var/var2.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/java/mockJDK-1.7/jre/lib/annotations.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoParsingTestCase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoParsingTestCase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoPsiCreator.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoPsiCreator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case2.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/src/pkg/fmt/Makefile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/empty.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/continue/empty.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/src/pkg/fmt/print.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case4.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/case4.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/java/mockJDK-1.7/jre/lib/rt.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/bin/6l" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case5.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case5.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/package/error1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/package/error1.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case3.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case3.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/util/GoSdkUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/if/else2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/if/else2.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/bin/6g" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/go/default/src/pkg/fmt/stringer_test.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/java/mockJDK-1.7/src.zip" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case13.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/for/case13.test" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/handlers/GoCompilerProcessHandler.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mock-sdks/java/mockJDK-1.4/jre/lib/rt.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case2.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/statements/labeled/case2.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoElementTypes.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoElementTypes.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case6.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case6.test" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case1.test" afterPath="$PROJECT_DIR$/testdata/parsing/go/toplevel/function/case1.test" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/ui/GoRunConfigurationEditorForm.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/ui/GoRunConfigurationEditorForm.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/config/GoRunConfigurationEditor.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/config/GoRunConfigurationEditor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/compiler/DependencyCompilerTest.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/compiler/DependencyCompilerTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoRunConfiguration.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationConfiguration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoFileImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoFileImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ro/redeul/google/go/compiler/GoCompilerTestBase.java" afterPath="$PROJECT_DIR$/test/ro/redeul/google/go/compiler/GoCompilerTestBase.java" />
     </list>
     <ignored path="$USER_HOME$/.grails/" />
-    <ignored path="$USER_HOME$/.griffon/" />
     <ignored path="idea-home/" />
-    <ignored path="GoogleGoPlugin.jar" />
     <ignored path="resources/icons/PsiViewer_1047.jar" />
     <ignored path="testdata.tar.gz" />
-    <ignored path="google-go-language.jar" />
+    <ignored path="GoogleGoPlugin.jar" />
     <ignored path="coverage-error.log" />
+    <ignored path="$USER_HOME$/.griffon/" />
+    <ignored path="google-go-language.jar" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -213,19 +90,6 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/test/ro/redeul/google/go/compiler/GoCompilerTestBase.java" line="118" class="ro.redeul.google.go.compiler.GoCompilerTestBase" package="ro.redeul.google.go.compiler">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
     </line_breakpoints>
     <breakpoint_any>
       <breakpoint>
@@ -274,8 +138,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="field_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -285,48 +149,19 @@
   <component name="FileColors" enabled="true" enabledForTabs="true" highlightNonProjectFiles="true" nonProjectFilesColor="ffffe4" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="var2.test" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testdata/parsing/go/statements/var/var2.test">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="26" selection-start="248" selection-end="248" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="var3.test" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testdata/parsing/go/statements/var/var3.test">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="26" selection-start="254" selection-end="254" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="KeywordCompletionTestCase.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/KeywordCompletionTestCase.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="0" selection-start="579" selection-end="579" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GoExpressionsTestCase.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoExpressionsTestCase.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="108" column="22" selection-start="4023" selection-end="4023" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="GoCompilerTestBase.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/compiler/GoCompilerTestBase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="118" column="0" selection-start="4515" selection-end="4515" vertical-scroll-proportion="0.22345133">
+            <state line="228" column="25" selection-start="9269" selection-end="9269" vertical-scroll-proportion="0.21728691">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VirtualFileSystemEntry.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/platform-impl/src/com/intellij/openapi/vfs/newvfs/impl/VirtualFileSystemEntry.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="133" column="0" selection-start="3824" selection-end="3824" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -335,43 +170,54 @@
       <file leaf-file-name="DependencyCompilerTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/compiler/DependencyCompilerTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="52" selection-start="568" selection-end="568" vertical-scroll-proportion="0.0">
+            <state line="44" column="5" selection-start="1230" selection-end="1230" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GoParsingTestCase.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoParsingTestCase.java">
+      <file leaf-file-name="ExecutionEnvironment.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/lang-api/src/com/intellij/execution/runners/ExecutionEnvironment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="68" selection-start="355" selection-end="355" vertical-scroll-proportion="0.0">
+            <state line="132" column="0" selection-start="5361" selection-end="5361" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GoCodeInsightTestCase.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/GoCodeInsightTestCase.java">
+      <file leaf-file-name="GoApplicationConfiguration.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationConfiguration.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="53" selection-start="412" selection-end="412" vertical-scroll-proportion="0.0">
+            <state line="87" column="0" selection-start="3710" selection-end="3710" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GoTestCase.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/GoTestCase.java">
+      <file leaf-file-name="GenericProgramRunner.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/lang-api/src/com/intellij/execution/runners/GenericProgramRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="22" selection-start="1473" selection-end="1473" vertical-scroll-proportion="0.0">
+            <state line="72" column="0" selection-start="2659" selection-end="2659" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Test.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Tools/testng-5.13.1/src/main/java/org/testng/annotations/Test.java">
+      <file leaf-file-name="GoApplicationRunner.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="18" selection-start="488" selection-end="488" vertical-scroll-proportion="0.0">
+            <state line="23" column="53" selection-start="947" selection-end="947" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DefaultProgramRunner.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/lang-impl/src/com/intellij/execution/runners/DefaultProgramRunner.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="29" column="22" selection-start="1053" selection-end="1073" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -411,22 +257,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case7.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case8.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/case9.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/expr/simple.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/var/var1.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/var/var2.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/var/var3.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case1.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case2.test" />
-        <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case3.test" />
         <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case4.test" />
         <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case5.test" />
         <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case6.test" />
         <option value="$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case7.test" />
         <option value="$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/KeywordCompletionTestCase.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/GoFile.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoFileImpl.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoRunConfiguration.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationModuleBasedConfiguration.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/runner/ui/GoRunConfigurationEditorForm.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationRunner.java" />
+        <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/test/ro/redeul/google/go/compiler/GoCompilerTestBase.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationConfiguration.java" />
+        <option value="$PROJECT_DIR$/test/ro/redeul/google/go/compiler/DependencyCompilerTest.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" />
       </list>
     </option>
   </component>
@@ -502,7 +348,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Favorites" />
       <pane id="Scope">
         <subPane subId="Problems" />
       </pane>
@@ -517,12 +362,36 @@
               <option name="myItemId" value="External Libraries" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testng" />
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="&lt; IDEA IC-96.SNAPSHOT &gt;" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="&lt; IDEA IC-96.SNAPSHOT &gt;" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testng-5.13.1.jar" />
+              <option name="myItemId" value="openapi.jar" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -536,19 +405,19 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testng" />
+              <option name="myItemId" value="&lt; IDEA IC-96.SNAPSHOT &gt;" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testng-5.13.1.jar" />
+              <option name="myItemId" value="openapi.jar" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="org" />
+              <option name="myItemId" value="com" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testng" />
+              <option name="myItemId" value="intellij" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -562,23 +431,23 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testng" />
+              <option name="myItemId" value="&lt; IDEA IC-96.SNAPSHOT &gt;" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testng-5.13.1.jar" />
+              <option name="myItemId" value="openapi.jar" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="org" />
+              <option name="myItemId" value="com" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testng" />
+              <option name="myItemId" value="intellij" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="annotations" />
+              <option name="myItemId" value="execution" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -591,6 +460,30 @@
               <option name="myItemId" value="External Libraries" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="&lt; IDEA IC-96.SNAPSHOT &gt;" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="openapi.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="intellij" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="execution" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="configurations" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -599,11 +492,168 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="compiler" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google-go-language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ro" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="redeul" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="google" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="go" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="runner" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Favorites" />
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -771,14 +821,14 @@
   <component name="PropertiesComponent">
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="332" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="OverrideImplement.combined" value="true" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="202" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="192" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="recentsLimit" value="5" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="192" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="last_opened_file_path" value="$USER_HOME$/Tools/idea-IC-96.SNAPSHOT/bin" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="184" />
@@ -794,16 +844,16 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
     <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
     <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="project.structure.side.proportion" value="0.13468635" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PsiViewer.ProjectComponent">
     <option name="HIGHLIGHT" value="true" />
@@ -843,83 +893,7 @@
       <recent name="ro.redeul.google.go.lang.parser" />
     </key>
   </component>
-  <component name="RunManager" selected="TestNG.All Test cases">
-    <configuration default="false" name="GoTopLevelTestCase" type="TestNG" factoryName="TestNG" temporary="true">
-      <extension name="coverage" enabled="false" merge="false">
-        <pattern>
-          <option name="PATTERN" value="ro.redeul.google.go.lang.parser.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <extension name="snapshooter" />
-      <module name="google-go-language" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="SUITE_NAME" />
-      <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang.parser" />
-      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.lang.parser.GoTopLevelTestCase" />
-      <option name="METHOD_NAME" />
-      <option name="GROUP_NAME" />
-      <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="OUTPUT_DIRECTORY" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <option name="USE_DEFAULT_REPORTERS" value="false" />
-      <option name="PROPERTIES_FILE" />
-      <envs />
-      <properties />
-      <listeners />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="KeywordCompletionTestCase.testPackageCase1" type="TestNG" factoryName="TestNG" temporary="true">
-      <extension name="coverage" enabled="false" sample_coverage="true" runner="idea" merge="false">
-        <pattern>
-          <option name="PATTERN" value="ro.redeul.google.go.lang.completion.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <extension name="snapshooter" />
-      <module name="google-go-language" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="SUITE_NAME" value="" />
-      <option name="PACKAGE_NAME" value="ro.redeul.google.go.lang.completion" />
-      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.lang.completion.KeywordCompletionTestCase" />
-      <option name="METHOD_NAME" value="testPackageCase1" />
-      <option name="GROUP_NAME" value="" />
-      <option name="TEST_OBJECT" value="METHOD" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="OUTPUT_DIRECTORY" value="" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <option name="USE_DEFAULT_REPORTERS" value="false" />
-      <option name="PROPERTIES_FILE" value="" />
-      <envs />
-      <properties />
-      <listeners />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="52434" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <ConfigurationWrapper RunnerId="Debug" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Plugin.Execute Slave IDEA with plugin">
     <configuration default="false" name="KeywordCompletionTestCase.testPackageCase2" type="TestNG" factoryName="TestNG" temporary="true">
       <extension name="coverage" enabled="false" sample_coverage="true" runner="idea" merge="false">
         <pattern>
@@ -1036,6 +1010,82 @@
       <listeners />
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="46476" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <ConfigurationWrapper RunnerId="Debug" />
+      <method />
+    </configuration>
+    <configuration default="false" name="DependencyCompilerTest.testMultipleSourceFiles" type="TestNG" factoryName="TestNG" temporary="true">
+      <extension name="coverage" enabled="false" sample_coverage="true" runner="idea" merge="false">
+        <pattern>
+          <option name="PATTERN" value="ro.redeul.google.go.compiler.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="snapshooter" />
+      <module name="google-go-language" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="SUITE_NAME" value="" />
+      <option name="PACKAGE_NAME" value="ro.redeul.google.go.compiler" />
+      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.compiler.DependencyCompilerTest" />
+      <option name="METHOD_NAME" value="testMultipleSourceFiles" />
+      <option name="GROUP_NAME" value="" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <option name="VM_PARAMETERS" value="-Didea.home.path=idea-home" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="OUTPUT_DIRECTORY" value="" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" value="" />
+      <envs />
+      <properties />
+      <listeners />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="DependencyCompilerTest" type="TestNG" factoryName="TestNG" temporary="true">
+      <extension name="coverage" enabled="false" sample_coverage="true" runner="idea" merge="false">
+        <pattern>
+          <option name="PATTERN" value="ro.redeul.google.go.compiler.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="snapshooter" />
+      <module name="google-go-language" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="SUITE_NAME" value="" />
+      <option name="PACKAGE_NAME" value="ro.redeul.google.go.compiler" />
+      <option name="MAIN_CLASS_NAME" value="ro.redeul.google.go.compiler.DependencyCompilerTest" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" value="" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-Didea.home.path=idea-home" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="OUTPUT_DIRECTORY" value="" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" value="" />
+      <envs />
+      <properties />
+      <listeners />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="38022" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
@@ -1313,12 +1363,12 @@
     <list size="8">
       <item index="0" class="java.lang.String" itemvalue="Bash.compileGoLexer.sh" />
       <item index="1" class="java.lang.String" itemvalue="Plugin.Execute Slave IDEA with plugin" />
-      <item index="2" class="java.lang.String" itemvalue="TestNG.GoTopLevelTestCase" />
-      <item index="3" class="java.lang.String" itemvalue="TestNG.KeywordCompletionTestCase.testPackageCase1" />
-      <item index="4" class="java.lang.String" itemvalue="TestNG.KeywordCompletionTestCase.testPackageCase2" />
-      <item index="5" class="java.lang.String" itemvalue="TestNG.DependencyCompilerTest.testHannibal" />
-      <item index="6" class="java.lang.String" itemvalue="TestNG.All Test cases" />
-      <item index="7" class="java.lang.String" itemvalue="TestNG.GoStatementsTestCase" />
+      <item index="2" class="java.lang.String" itemvalue="TestNG.KeywordCompletionTestCase.testPackageCase2" />
+      <item index="3" class="java.lang.String" itemvalue="TestNG.DependencyCompilerTest.testHannibal" />
+      <item index="4" class="java.lang.String" itemvalue="TestNG.All Test cases" />
+      <item index="5" class="java.lang.String" itemvalue="TestNG.GoStatementsTestCase" />
+      <item index="6" class="java.lang.String" itemvalue="TestNG.DependencyCompilerTest.testMultipleSourceFiles" />
+      <item index="7" class="java.lang.String" itemvalue="TestNG.DependencyCompilerTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1373,28 +1423,28 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="24" width="1682" height="1031" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28186274" sideWeight="0.62045455" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.56136364" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.414966" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20710784" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.62045455" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48295453" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5875" sideWeight="0.0" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20710784" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4840909" sideWeight="0.0" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4181818" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32993197" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4181818" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31985295" sideWeight="0.65340906" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32965687" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39950982" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42769608" sideWeight="0.58181816" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28308824" sideWeight="0.5159091" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36818182" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3125" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2990196" sideWeight="0.43863636" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28186274" sideWeight="0.414966" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="IntelliTail" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295325" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33333334" sideWeight="0.65909094" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="PsiViewer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24601227" sideWeight="0.63038546" order="4" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1413,7 +1463,7 @@
     <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
     <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added icon" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finally added test case for compiler.&#10;Added Psi for Function or Method declaration &#10;" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1440,6 +1490,7 @@
     <MESSAGE value="package keyword completion&#10;import path completion from SDK and local paths for paths starting with ./" />
     <MESSAGE value="Small cleanups" />
     <MESSAGE value="Added icon" />
+    <MESSAGE value="Finally added test case for compiler.&#10;Added Psi for Function or Method declaration &#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1449,116 +1500,116 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case4.test">
+    <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/java/execution/impl/src/com/intellij/execution/impl/DefaultJavaProgramRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="26" selection-start="299" selection-end="299" vertical-scroll-proportion="0.6686567">
+        <state line="48" column="48" selection-start="1981" selection-end="1981" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case5.test">
+    <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/java/execution/openapi/src/com/intellij/execution/runners/JavaPatchableProgramRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="26" selection-start="309" selection-end="309" vertical-scroll-proportion="0.6686567">
+        <state line="28" column="113" selection-start="1149" selection-end="1149" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case7.test">
+    <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/lang-api/src/com/intellij/execution/runners/ProgramRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="56" selection-start="251" selection-end="251" vertical-scroll-proportion="0.6075949">
+        <state line="39" column="17" selection-start="1501" selection-end="1501" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case6.test">
+    <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/lang-api/src/com/intellij/execution/executors/DefaultRunExecutor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="26" selection-start="349" selection-end="349" vertical-scroll-proportion="0.7164179">
+        <state line="32" column="13" selection-start="1051" selection-end="1069" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case3.test">
+    <entry file="jar://$USER_HOME$/Tools/idea-IC-96.SNAPSHOT/lib/resources.jar!/META-INF/LangExtensionPoints.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="75" selection-start="110" selection-end="110" vertical-scroll-proportion="0.38208956">
+        <state line="229" column="24" selection-start="14603" selection-end="14603" vertical-scroll-proportion="0.33292684">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case2.test">
+    <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="26" selection-start="301" selection-end="301" vertical-scroll-proportion="0.6686567">
+        <state line="102" column="10" selection-start="4551" selection-end="4551" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/statements/switch/type/case1.test">
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="26" selection-start="296" selection-end="296" vertical-scroll-proportion="0.6686567">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testdata/parsing/go/statements/var/var3.test">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="26" selection-start="254" selection-end="254" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Tools/testng-5.13.1/src/main/java/org/testng/annotations/Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="18" selection-start="488" selection-end="488" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/GoTestCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="22" selection-start="1473" selection-end="1473" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/GoCodeInsightTestCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="53" selection-start="412" selection-end="412" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoParsingTestCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="68" selection-start="355" selection-end="355" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/completion/KeywordCompletionTestCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="579" selection-end="579" vertical-scroll-proportion="0.0">
+        <state line="23" column="53" selection-start="947" selection-end="947" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/lang/parser/GoExpressionsTestCase.java">
+    <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/lang-impl/src/com/intellij/execution/runners/DefaultProgramRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="108" column="22" selection-start="4023" selection-end="4023" vertical-scroll-proportion="0.0">
+        <state line="29" column="22" selection-start="1053" selection-end="1073" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/lang-api/src/com/intellij/execution/runners/ExecutionEnvironment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="132" column="0" selection-start="5361" selection-end="5361" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/compiler/DependencyCompilerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="52" selection-start="568" selection-end="568" vertical-scroll-proportion="0.0">
+        <state line="44" column="5" selection-start="1230" selection-end="1230" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/lang-api/src/com/intellij/execution/runners/GenericProgramRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="72" column="0" selection-start="2659" selection-end="2659" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="0" selection-start="3710" selection-end="3710" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/platform-impl/src/com/intellij/openapi/vfs/newvfs/impl/VirtualFileSystemEntry.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="133" column="0" selection-start="3824" selection-end="3824" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../IntellijIdea/idea/platform/platform-api/src/com/intellij/openapi/vfs/VfsUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="211" column="48" selection-start="8221" selection-end="8221" vertical-scroll-proportion="-6.790244">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="381" column="54" selection-start="15769" selection-end="15769" vertical-scroll-proportion="0.17926829">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/ro/redeul/google/go/compiler/GoCompilerTestBase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="118" column="0" selection-start="4515" selection-end="4515" vertical-scroll-proportion="0.22345133">
+        <state line="228" column="25" selection-start="9269" selection-end="9269" vertical-scroll-proportion="0.21728691">
           <folding />
         </state>
       </provider>

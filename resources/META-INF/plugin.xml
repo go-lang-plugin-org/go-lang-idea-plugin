@@ -99,5 +99,7 @@
         <customLiveTemplate implementation="ro.redeul.google.go.editor.GoCustomLiveTemplate"/>
 
         <fileTemplateGroup implementation="ro.redeul.google.go.actions.GoTemplatesFactory"/>
+
+        <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
     </extensions>
 </idea-plugin>

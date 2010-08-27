@@ -1,11 +1,5 @@
 package ro.redeul.google.go.compiler;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.PathUtil;
 import org.testng.annotations.Test;
 
 /**
@@ -17,18 +11,8 @@ import org.testng.annotations.Test;
  */
 public class DependencyCompilerTest extends GoCompilerTestBase {
 
-//    @Override
-//    protected String getRelativeDataPath() {
-//        return super.getRelativeDataPath() + File.separator + "dependency";
-//    }
-
     @Test
-    public void testHannibal() throws Exception {
-//        List<VirtualFile> roots = Arrays.asList(ModuleRootManager.getInstance(myModule).getSourceRoots());
-//        for (VirtualFile root : roots) {
-//            root.refresh(false, true);
-//        }
-
+    public void testSimpleApplication() throws Exception {
         myFixture.addFileToProject("main.go",
                 "package main\n" +
                 "import \"fmt\"\n" +
@@ -40,41 +24,42 @@ public class DependencyCompilerTest extends GoCompilerTestBase {
         assertOutput("main", "239");
     }
 
-    private void addSourceFileToProject(final String fileName, final String fileContent) {
-        VirtualFile virtualFile[] = ModuleRootManager.getInstance(myModule).getSourceRoots();
+    @Test
+    public void testMultipleSourceFiles() throws Exception {
+        myFixture.addFileToProject("main.go",
+                "package main\n" +
+                "import \"fmt\"\n" +
+                "func main() {\n" +
+                "   fmt.Printf(method())\n" +
+                "}\n");
 
+        myFixture.addFileToProject("main1.go",
+                "package main\n" +
+                "func method() string {\n" +
+                "   return \"239\" \n" +
+                "}\n");
 
-        final VirtualFile sourceRoot = virtualFile[0];
+        assertEmpty(make());
+        assertOutput("main", "239");
+    }
 
-        final String parentPathParts[] = PathUtil.getParentPath(fileName).split("/");
+    @Test
+    public void testSimpleMainWithLocalLibrary() throws Exception {
+        myFixture.addFileToProject("tools.go",
+                "package tools\n" +
+                "func F() int {\n" +
+                "   return 10\n" +
+                "}\n");
 
-        VirtualFile file = ApplicationManager.getApplication().runWriteAction(new Computable<VirtualFile>() {
-            public VirtualFile compute() {
-                VirtualFile root = sourceRoot;
-                try {
-                    for (String parentPathPart : parentPathParts) {
-                        if ( parentPathPart.length() != 0 ) {
-                            VirtualFile child = root.findChild(parentPathPart);
-                            if (child != null) {
-                                root = child;
-                            } else {
-                                root = root.createChildDirectory(this, parentPathPart);
-                            }
-                        }
-                    }
+        myFixture.addFileToProject("main.go",
+                "package main\n" +
+                "import \"./tools\"\n" +
+                "import \"fmt\"\n" +
+                "func main() {\n" +
+                "   fmt.Printf(tools.F())\n" +
+                "}\n");
 
-                    VirtualFile file = root.findChild(PathUtil.getFileName(fileName));
-                    if (file == null) {
-                        file = root.createChildData(null, PathUtil.getFileName(fileName));
-                    }
-
-                    VfsUtil.saveText(file, fileContent);
-                    return file;
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+        assertEmpty(make());
+        assertOutput("main", "10");
     }
 }
