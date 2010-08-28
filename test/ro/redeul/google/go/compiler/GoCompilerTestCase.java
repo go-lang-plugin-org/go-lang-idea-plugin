@@ -5,7 +5,6 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.impl.DefaultJavaProgramRunner;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
@@ -30,6 +29,7 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture;
@@ -48,10 +48,11 @@ import ro.redeul.google.go.runner.GoRunConfigurationType;
 import ro.redeul.google.go.util.GoSdkUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GoCompilerTestBase extends JavaCodeInsightFixtureTestCase {
+public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase {
 
     private TempDirTestFixture myMainOutput;
 
@@ -140,17 +141,18 @@ public abstract class GoCompilerTestBase extends JavaCodeInsightFixtureTestCase 
         moduleBuilder.addJdk(JavaSdkImpl.getMockJdk14Path().getPath());
         super.tuneFixture(moduleBuilder);
     }
-//    protected void customizeProjectFixture(TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder) {
-//
-//        JavaModuleFixtureBuilder moduleBuilder = projectBuilder.addModule(JavaTestFixtureFactoryImpl.MyJavaModuleFixtureBuilderImpl.class);
-//        final JavaModuleFixtureBuilder moduleBuilder = projectBuilder.addModule(JavaModuleFixtureBuilder.class);
 
-//        moduleBuilder.addSourceContentRoot(myFixture.getTempDirPath());
-//        moduleBuilder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
-//        moduleBuilder.addJdk(JavaSdkImpl.getMockJdk14Path().getPath());
-//    }
+    protected void touch(VirtualFile file) throws IOException {
+        touch(file, file.contentsToByteArray());
+    }
 
-    //    @Override
+    protected void touch(VirtualFile file, String data) throws IOException {
+        touch(file, data.getBytes());
+    }
+
+    protected void touch(VirtualFile file, byte[] content) throws IOException {
+        file.setBinaryContent(content, file.getModificationStamp() + 1, file.getTimeStamp() + 1);
+    }
 
     protected void tuneModuleFixture(JavaModuleFixtureBuilder moduleFixtureBuilder, JavaCodeInsightTestFixture fixture) {
         moduleFixtureBuilder.addSourceContentRoot(fixture.getTempDirPath());

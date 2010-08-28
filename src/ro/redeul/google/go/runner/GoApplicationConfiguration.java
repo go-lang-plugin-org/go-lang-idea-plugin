@@ -17,6 +17,7 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -26,6 +27,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.runner.ui.GoRunConfigurationEditorForm;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -102,23 +104,26 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     }
 
     private String getCompiledFileName(Module module, String scriptName) {
-        VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
 
-        VirtualFile scriptFile = null;
-        for (VirtualFile sourceRoot : sourceRoots) {
-            scriptFile = sourceRoot.findChild(scriptName);
-            if ( scriptFile != null) {
-                break;
+        VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
+        VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(new File(scriptName));
+
+        if ( file == null ) {
+            for (VirtualFile sourceRoot : sourceRoots) {
+                file = sourceRoot.findChild(scriptName);
+                if ( file != null) {
+                    break;
+                }
             }
         }
 
-        if (scriptFile != null) {
+        if (file != null) {
             for (VirtualFile sourceRoot : sourceRoots) {
 
-                if (VfsUtil.isAncestor(sourceRoot, scriptFile, true)) {
-                    String relativePath = VfsUtil.getRelativePath(scriptFile.getParent(), sourceRoot, '/');
+                if (VfsUtil.isAncestor(sourceRoot, file, true)) {
+                    String relativePath = VfsUtil.getRelativePath(file.getParent(), sourceRoot, '/');
 
-                    return CompilerPaths.getModuleOutputPath(module, false) + "/go-bins/" + relativePath + scriptFile.getNameWithoutExtension();
+                    return CompilerPaths.getModuleOutputPath(module, false) + "/go-bins/" + relativePath + file.getNameWithoutExtension();
                 }
             }
         }

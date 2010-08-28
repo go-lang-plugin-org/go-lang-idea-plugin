@@ -7,7 +7,12 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ModuleRootModel;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.RawCommandLineEditor;
 import org.jetbrains.annotations.NotNull;
@@ -80,9 +85,13 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
 
                 fileChooser.showDialog();
 
-                applicationName.setText(fileChooser.getSelectedFile().getVirtualFile().getPath());
+                setChosenFile(fileChooser.getSelectedFile().getVirtualFile());
             }
         });
+    }
+
+    private void setChosenFile(VirtualFile virtualFile) {
+        applicationName.setText(virtualFile.getPath());
     }
 
     @NotNull
