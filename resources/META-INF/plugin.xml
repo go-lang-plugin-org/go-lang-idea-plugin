@@ -15,6 +15,8 @@
             <li>Comment/Uncomment (Single/Multiple line) support</li>
             <li>Go SDK (work with the latest release and on windows)</li>
             <li>File type icon</li>
+            <li>Go application file and library generation.</li>
+            <li>Auto completion of sdk package names and/or local application packages.</li>
             <li>Compilation of the go applications (supported semantics are similar to those of gobuild)</li>
         </ul>
         
@@ -27,6 +29,8 @@
                 <ul>
                     <li>[feature] Update Go SDK (to work with the latest release and on windows)</li>
                     <li>[feature] Compilation of the go applications (supported semantics are similar to those of gobuild)</li>
+                    <li>[feature] Go application file and library generation.</li>
+                    <li>[feature] Auto completion of sdk package names and/or local application packages.</li>
                     <li>[bugfixes] Some parsing issues with comments.</li>
                 </ul>
         </h3>

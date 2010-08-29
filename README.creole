@@ -14,6 +14,7 @@ Google Go language page:
 Intellij IDEA homepage:
 
 * http://www.jetbrains.com/idea/
+* http://plugins.intellij.net/plugin/?idea&id=5047 (plugin page at the intellij plugin repository).
 
 == What it does
 
