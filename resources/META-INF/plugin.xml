@@ -1,7 +1,7 @@
-<idea-plugin version="2" url="http://bitbucket.org/mtoader/google-go-for-idea-docs/wiki/Home">
+<idea-plugin version="2" url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Google Go Language plugin</name>
-    <version>0.1.1</version>
+    <version>0.2.0</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[
@@ -9,19 +9,28 @@
         <p>The plugin provides the following features:</p>
         
         <ul>
-            <li>basic language parsing and highlighting</li>
+            <li>Basic language parsing and highlighting</li>
             <li>Code folding</li>
             <li>Brace matching</li>
             <li>Comment/Uncomment (Single/Multiple line) support</li>
-            <li>Go SDK type</li>
+            <li>Go SDK (work with the latest release and on windows)</li>
             <li>File type icon</li>
+            <li>Compilation of the go applications (supported semantics are similar to those of gobuild)</li>
         </ul>
         
-       <p>More are planned for the future.</p>
+       <p>Type information for expression is the next goal.</p>
     ]]>
     </description>
     <change-notes>
         <![CDATA[
+        <h3>0.2.0 features:</h3>
+                <ul>
+                    <li>[feature] Update Go SDK (to work with the latest release and on windows)</li>
+                    <li>[feature] Compilation of the go applications (supported semantics are similar to those of gobuild)</li>
+                    <li>[bugfixes] Some parsing issues with comments.</li>
+                </ul>
+        </h3>
+
         <h3>0.1.1 features:</h3>
                 <ul>
                     <li>[feature] Go Sdk type (with auto configuration)</li>

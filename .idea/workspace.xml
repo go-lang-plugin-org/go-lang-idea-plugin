@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56d30604-b05b-4754-b856-6785adac8d3b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.creole" afterPath="$PROJECT_DIR$/README.creole" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$USER_HOME$/.grails/" />
@@ -144,19 +144,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.creole" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="README.creole" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.creole">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="59" selection-start="749" selection-end="749" vertical-scroll-proportion="0.5633803">
+            <state line="16" column="47" selection-start="407" selection-end="407" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plugin.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="plugin.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="0" selection-start="461" selection-end="731" vertical-scroll-proportion="0.0">
+            <state line="81" column="58" selection-start="3228" selection-end="3228" vertical-scroll-proportion="0.28638497">
               <folding />
             </state>
           </provider>
@@ -224,7 +224,6 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationRunner.java" />
-        <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/test/ro/redeul/google/go/compiler/GoCompilerTestBase.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/runner/ui/GoRunConfigurationEditorForm.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/runner/GoApplicationConfiguration.java" />
@@ -239,6 +238,7 @@
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/actions/NewGoLibraryAction.java" />
         <option value="$PROJECT_DIR$/README" />
         <option value="$PROJECT_DIR$/README.creole" />
+        <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
       </list>
     </option>
   </component>
@@ -1167,7 +1167,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2689951" sideWeight="0.41590908" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32965687" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39950982" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26960784" sideWeight="0.45454547" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26960784" sideWeight="0.43863636" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5738636" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28186274" sideWeight="0.62045455" order="2" side_tool="false" content_ui="tabs" />
@@ -1331,16 +1331,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
+    <entry file="file://$PROJECT_DIR$/README.creole">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="461" selection-end="731" vertical-scroll-proportion="0.0">
+        <state line="16" column="47" selection-start="407" selection-end="407" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.creole">
+    <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="59" selection-start="749" selection-end="749" vertical-scroll-proportion="0.5633803">
+        <state line="81" column="58" selection-start="3228" selection-end="3228" vertical-scroll-proportion="0.28638497">
           <folding />
         </state>
       </provider>
