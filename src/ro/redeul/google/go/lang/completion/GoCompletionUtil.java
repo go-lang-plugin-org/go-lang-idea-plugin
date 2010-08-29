@@ -131,7 +131,7 @@ public class GoCompletionUtil {
 
                 String importName = VfsUtil.getRelativePath(virtualFile.getParent(), targetFile.getParent(), '/');
                 if ( ! virtualFile.getParent().getName().equals(packageName) ) {
-                    importName += "/" + packageName;    
+                    importName += "/" + packageName;
                 }
 
                 return importName;

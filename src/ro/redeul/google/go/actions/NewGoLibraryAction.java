@@ -11,6 +11,7 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ModuleRootModel;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -21,6 +22,9 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.lang.psi.GoFile;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,52 +60,82 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
     }
 
     @Override
-    protected void doCheckCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException {
+    protected void doCheckCreate(PsiDirectory dir, String parameterName, String typeName) throws IncorrectOperationException {
         // check to see if a file with the same name already exists
-        PsiFile files[] = dir.getFiles();
-        for (PsiFile file : files) {
-            if ( file.getFileType() == GoFileType.GO_FILE_TYPE && file.getVirtualFile().getNameWithoutExtension().equals(className) ) {
-                throw new IncorrectOperationException();
-            }
+
+        String fileName = fileNameFromTypeName(typeName, parameterName);
+
+        VirtualFile targetFile = dir.getVirtualFile().findFileByRelativePath(fileName);
+        if  ( targetFile != null ) {
+            throw new IncorrectOperationException(GoBundle.message("target.file.exists", targetFile.getPath()));
         }
     }
 
     @Override
-    protected GoFile doCreate(PsiDirectory dir, String fileName, String templateName) throws IncorrectOperationException {
+    protected GoFile doCreate(PsiDirectory dir, String parameterName, String typeName) throws IncorrectOperationException {
         GoTemplatesFactory.Template template = GoTemplatesFactory.Template.GoFile;
 
-        if ( templateName.equals("multiple") ) {
-            dir = dir.createSubdirectory(fileName);
-        }
-        
-        return GoTemplatesFactory.createFromTemplate(dir, fileName, fileName + ".go", template);
+        String fileName = fileNameFromTypeName(typeName, parameterName);
+        String packageName = packageNameFromTypeName(typeName, parameterName);
 
+        if ( typeName.equals("multiple") ) {
+            if ( dir.findSubdirectory(parameterName) == null ) {
+                dir = dir.createSubdirectory(parameterName);
+            } else {
+                dir = dir.findSubdirectory(parameterName);
+            }
+
+            fileName = fileName.replaceFirst(parameterName + "/", "");
+        }
+
+        return GoTemplatesFactory.createFromTemplate(dir, packageName, fileName, template);
+    }
+
+    String fileNameFromTypeName(String typeName, String parameterName) {
+        if ( typeName.startsWith("lib.") ) {
+            return parameterName + ".go";
+        }
+
+        if ( typeName.equals("multiple") ) {
+            return parameterName + "/" + parameterName + ".go";
+        }
+
+        return parameterName + ".go";
+    }
+
+    String packageNameFromTypeName(String typeName, String parameterName) {
+
+        if ( typeName.startsWith("lib.") ) {
+            return typeName.replaceFirst("^lib\\.", "");
+        }
+
+        return parameterName;
     }
 
     @Override
     protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
         builder.setTitle("New Go file creation");
 
-        boolean isLibraryFolder = isLibraryFolder(directory);
-        
-//        if ( && ! isLibraryFolder ) {
-//            builder.addKind("Go library file", GoIcons.GO_ICON_16x16, "GoMainApplicationFile");
-//            builder.addKind("Go library", GoIcons.GO_ICON_16x16, "GoMainApplicationFile");
-//
-//            builder.addKind("Go Application main file ", GoIcons.GO_ICON_16x16, "GoMainApplicationFile");
-//            builder.addKind("Go Application file ", GoIcons.GO_ICON_16x16, "GoMainApplicationFile");
-//        }
+        PsiFile childs[] = directory.getFiles();
 
-        builder.addKind("Multiple file library", GoIcons.GO_ICON_16x16, "multiple");
-        builder.addKind("Single file library", GoIcons.GO_ICON_16x16, "single");
-//        builder
-//                .setTitle(IdeBundle.message("action.create.new.class"))
-//                .addKind("Class", Icons.CLASS_ICON, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME)
-//                .addKind("Interface", Icons.INTERFACE_ICON, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
-//        if (LanguageLevelProjectExtension.getInstance(project).getLanguageLevel().compareTo(LanguageLevel.JDK_1_5) >= 0) {
-//            builder.addKind("Enum", Icons.ENUM_ICON, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
-//            builder.addKind("Annotation", Icons.ANNOTATION_TYPE_ICON, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);
-//        }
+        Set<String> packages = new HashSet<String>();
+
+        for (PsiFile child : childs) {
+            if (child instanceof GoFile) {
+                GoFile goFile = (GoFile) child;
+
+                if ( ! goFile.getPackage().isMainPackage() ) {
+                    packages.add(goFile.getPackage().getPackageName());
+                }
+            }
+        }
+
+        for (String packageName : packages) {
+            builder.addKind("New: " + packageName + " library file", GoIcons.GO_ICON_16x16, "lib." + packageName);
+        }
+
+        builder.addKind("New library (child folder)", GoIcons.GO_ICON_16x16, "multiple");
+        builder.addKind("New library (this folder)", GoIcons.GO_ICON_16x16, "single");
     }
 
     private boolean isLibraryFolder(PsiDirectory directory) {

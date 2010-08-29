@@ -13,7 +13,7 @@ import java.util.Properties;
 public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
 
     enum Template {
-        GoAppMain("GoAppMain"), GoFile("GoFile");
+        GoAppMain("Go Application"), GoFile("Go File");
 
         String file;
         Template(String file) {
@@ -27,19 +27,20 @@ public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
 
     public FileTemplateGroupDescriptor getFileTemplatesDescriptor() {
 
-        final FileTemplateGroupDescriptor group =
-                new FileTemplateGroupDescriptor(GoBundle.message("file.template.group.title.go"), GoIcons.GO_ICON_16x16);
-
-        for (Template template : Template.values()) {
-            group.addTemplate(new FileTemplateDescriptor(template.getFile(), GoIcons.GO_ICON_16x16));
-        }
-
-        return group;
+//        final FileTemplateGroupDescriptor group =
+//                new FileTemplateGroupDescriptor(GoBundle.message("file.template.group.title.go"), GoIcons.GO_ICON_16x16);
+//
+//        for (Template template : Template.values()) {
+//            group.addTemplate(new FileTemplateDescriptor(template.getFile(), GoIcons.GO_ICON_16x16));
+//        }
+//
+//        return group;
+        return null;
     }
 
     public static GoFile createFromTemplate(PsiDirectory directory, String packageName, String fileName, Template template) {
 
-        final FileTemplate fileTemplate = FileTemplateManager.getInstance().getTemplate(template.getFile());
+        final FileTemplate fileTemplate = FileTemplateManager.getInstance().getInternalTemplate(template.getFile());
 
         Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties());
 

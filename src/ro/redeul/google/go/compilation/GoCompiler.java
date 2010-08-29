@@ -316,8 +316,7 @@ public class GoCompiler implements TranslatingCompiler {
 
         File outputFolder = new File(baseOutputPath + "/" + relativePath);
 
-        if (files.size() != 1
-                && outputFolder.getName().equals(packageName)
+        if ( outputFolder.getName().equals(packageName)
                 && VfsUtil.isAncestor(new File(baseOutputPath), outputFolder, true)) {
             outputFolder = outputFolder.getParentFile();
         }
