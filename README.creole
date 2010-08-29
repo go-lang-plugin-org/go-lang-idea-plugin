@@ -1,0 +1,61 @@
+= Google Go language plugin for IDEA
+
+Google go language plugin is an attempt to build an outstanding IDE for Google Go language using Intellij IDEA.
+
+Project pages on github:
+
+* http://github.com/mtoader/google-go-lang-idea-plugin
+* http://wiki.github.com/mtoader/google-go-lang-idea-plugin/ (wiki)
+
+Google Go language page:
+
+* http://golang.org/
+
+Intellij IDEA homepage:
+
+* http://www.jetbrains.com/idea/
+
+== What it does
+
+* Basic language parsing and highlighting
+* Code folding
+* Brace matching
+* Comment/Uncomment (Single/Multiple line) support
+* Go SDK type
+* File type icon
+* Sdk package name and local package names completion
+* Compilation and Run configuration
+
+== How to use it
+
+* Download and install Intellij IDEA (Ultimate or Community edition).
+* Open the Plugins installation page: File -> Settings -> Plugins -> Available Plugins
+* Search for google go
+* Right click on the proper plugin and install
+* Download latest release of the Google Go language (http://golang.org/doc/install.html).
+* Build and install it.
+* Open IDEA and create an empty Java project.
+* Go to File -> Project Structure and select SDKs entry in the left column of the new window
+* Add a new Google Go SDK by clicking the plus sign an choosing the appropriate SDK type.
+* After the SDK is defined go to the Modules entry and add a new google facet to your default module.
+Select the proper sdk for the module.
+
+Now you are ready to write and compile google go programs.
+
+== BUGS
+
+If you found a bug, please report it at the Google Go plugin project's tracker
+on GitHub:
+
+http://github.com/mtoader/google-go-lang-idea-plugin/issues
+
+== AUTHORS
+
+* Toader Mihai Claudiu (mtoader@gmail.com)
+
+  I'm an entrepreneur and I also build software applications. I'm currently open to
+consulting work in interesting projects.
+
+== About Me
+
+
