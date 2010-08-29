@@ -55,7 +55,3 @@ http://github.com/mtoader/google-go-lang-idea-plugin/issues
 
   I'm an entrepreneur and I also build software applications. I'm currently open to
 consulting work in interesting projects.
-
-== About Me
-
-
