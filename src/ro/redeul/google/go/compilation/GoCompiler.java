@@ -286,6 +286,9 @@ public class GoCompiler implements TranslatingCompiler {
                 VirtualFile children[] = folder.getChildren();
                 for (final VirtualFile child : children) {
 
+                    if ( child.getFileType() != GoFileType.GO_FILE_TYPE )
+                        continue;
+
                     PsiFile psiFile = PsiManager.getInstance(project).findFile(child);
 
                     GoFile file = (GoFile) psiFile;

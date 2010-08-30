@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
@@ -23,7 +24,7 @@ public class GoImportDeclarationImpl extends GoPsiElementImpl implements GoImpor
         return findChildrenByClass(GoImportSpec.class); 
     }
 
-//    public String toString() {
-//      return "import Declaration";
-//    }
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitImportDeclaration(this);
+    }
 }

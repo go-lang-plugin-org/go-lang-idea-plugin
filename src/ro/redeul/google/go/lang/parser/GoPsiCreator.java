@@ -7,6 +7,8 @@ import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.*;
+import ro.redeul.google.go.lang.psi.impl.types.GoArrayTypeImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypeNameImpl;
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,14 +32,26 @@ public class GoPsiCreator implements GoElementTypes {
         if ( elementType.equals(IMPORT_DECLARATION) )
             return new GoImportDeclarationImpl(node);
 
+        if ( elementType.equals(IMPORT_SPEC) )
+            return new GoImportSpecImpl(node);
+
+        if ( elementType.equals(TYPE_DECLARATIONS) )
+            return new GoTypeDeclarationImpl(node);
+
+        if ( elementType.equals(TYPE_SPEC) )
+            return new GoTypeSpecImpl(node);
+
         if ( elementType.equals(FUNCTION_DECLARATION) )
             return new GoFunctionDeclarationImpl(node);
 
         if ( elementType.equals(METHOD_DECLARATION) )
             return new GoMethodDeclarationImpl(node);
 
-        if ( elementType.equals(IMPORT_SPEC) )
-            return new GoImportSpecImpl(node);
+        if ( elementType.equals(TYPE_NAME) )
+            return new GoTypeNameImpl(node);
+
+        if ( elementType.equals(TYPE_ARRAY) )
+            return new GoArrayTypeImpl(node);
 
         if ( elementType.equals(wsNLS) )
             return (PsiElement) ASTFactory.whitespace(node.getText());

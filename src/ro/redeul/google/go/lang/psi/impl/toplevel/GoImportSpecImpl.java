@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
@@ -30,8 +31,7 @@ public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
         return stringLiteral != null ? stringLiteral.getText() : "";
     }
 
-//    @Override
-//    public String toString() {
-//        return String.format("import as %s form %s", "XXX", "XXX");
-//    }
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitImportSpec(this);
+    }
 }

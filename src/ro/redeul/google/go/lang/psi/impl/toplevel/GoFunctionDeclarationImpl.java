@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
@@ -31,7 +32,10 @@ public class GoFunctionDeclarationImpl extends GoPsiElementImpl implements GoFun
     }
 
     public String toString() {
-      return "FunctionDeclaration(" + getFunctionName() + ")";
+        return "FunctionDeclaration(" + getFunctionName() + ")";
     }
 
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitFunctionDeclaration(this);
+    }
 }

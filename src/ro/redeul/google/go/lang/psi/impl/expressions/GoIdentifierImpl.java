@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.expressions;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 
@@ -30,4 +31,7 @@ public class GoIdentifierImpl extends GoPsiElementImpl implements GoIdentifier {
         return getString();
     }
 
+    public void accept(GoElementVisitor visitor) {
+//        visitor.visitIdentifier(this);
+    }
 }

@@ -96,6 +96,10 @@
                              implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
         <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
 
+        <lang.findUsagesProvider language="Google Go" implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
+
+        <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
+
         <completion.contributor language="Google Go"
                                 implementationClass="ro.redeul.google.go.lang.completion.GoCompletionContributor"/>
 

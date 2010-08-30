@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,5 +14,9 @@ import com.intellij.psi.tree.IElementType;
 public interface GoPsiElement extends PsiElement {
 
     IElementType getTokenType();
-    
+
+    void accept(GoElementVisitor visitor);
+
+    void acceptChildren(GoElementVisitor visitor);
+
 }

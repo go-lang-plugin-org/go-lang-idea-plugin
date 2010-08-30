@@ -3,19 +3,15 @@ package ro.redeul.google.go.lang.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.openapi.editor.Document;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.util.ProcessingContext;
-import com.sun.xml.internal.ws.api.server.Module;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.impl.toplevel.GoPackageDeclarationImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
-import ro.redeul.google.go.lang.psi.toplevel.GoPackageDefinition;
+import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -79,11 +75,11 @@ public class GoCompletionContributor extends CompletionContributor {
                 debuggingCompletionProvider);
 
         extend(CompletionType.BASIC,
-                psiElement(PsiElement.class).withParent(psiElement(GoPackageDefinition.class).withFirstNonWhitespaceChild(psiElement(PsiErrorElement.class))),
+                psiElement(PsiElement.class).withParent(psiElement(GoPackageDeclaration.class).withFirstNonWhitespaceChild(psiElement(PsiErrorElement.class))),
                 packageCompletionProvider);
 
         extend(CompletionType.BASIC,
-                psiElement().withParent(psiElement(PsiErrorElement.class).withParent(psiElement(GoFile.class).withFirstNonWhitespaceChild(psiElement(GoPackageDefinition.class)))),
+                psiElement().withParent(psiElement(PsiErrorElement.class).withParent(psiElement(GoFile.class).withFirstNonWhitespaceChild(psiElement(GoPackageDeclaration.class)))),
                 importCompletionProvider);
 
         extend(CompletionType.BASIC,

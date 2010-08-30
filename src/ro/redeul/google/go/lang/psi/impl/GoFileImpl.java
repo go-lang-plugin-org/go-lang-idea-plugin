@@ -3,9 +3,13 @@ package ro.redeul.google.go.lang.psi.impl;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 
 /**
@@ -31,8 +35,8 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         return "Go file";
     }
 
-    public GoPackageDefinition getPackage() {
-        return findChildByClass(GoPackageDefinition.class);
+    public GoPackageDeclaration getPackage() {
+        return findChildByClass(GoPackageDeclaration.class);
     }
 
     public GoImportDeclaration[] getImportDeclarations() {
@@ -50,11 +54,30 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     public GoFunctionDeclaration getMainFunction() {
         GoFunctionDeclaration functionDeclarations[] = getFunctions();
         for (GoFunctionDeclaration functionDeclaration : functionDeclarations) {
-            if ( functionDeclaration.isMain() ) {
+            if (functionDeclaration.isMain()) {
                 return functionDeclaration;
             }
         }
 
         return null;
+    }
+
+    public IElementType getTokenType() {
+        return null;
+    }
+
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitFile(this);
+    }
+
+    public void acceptChildren(GoElementVisitor visitor) {
+        PsiElement child = getFirstChild();
+        while (child != null) {
+            if (child instanceof GoPsiElement) {
+                ((GoPsiElement) child).accept(visitor);
+            }
+
+            child = child.getNextSibling();
+        }
     }
 }

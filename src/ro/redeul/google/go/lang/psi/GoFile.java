@@ -4,7 +4,7 @@ import com.intellij.psi.PsiFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoPackageDefinition;
+import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,9 +13,9 @@ import ro.redeul.google.go.lang.psi.toplevel.GoPackageDefinition;
  * Time: 7:57:28 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface GoFile extends PsiFile {
+public interface GoFile extends PsiFile, GoPsiElement {
 
-    GoPackageDefinition getPackage();
+    GoPackageDeclaration getPackage();
 
     GoImportDeclaration[] getImportDeclarations();
 
