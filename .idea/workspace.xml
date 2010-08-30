@@ -1,38 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="56d30604-b05b-4754-b856-6785adac8d3b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/visitors/GoElementVisitor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/google-go-language.iml" afterPath="$PROJECT_DIR$/google-go-language.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoTypeSpecImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/visitors/GoRecursiveElementVisitor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/types/GoType.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/annotator/GoAnnotator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoPackageDeclarationImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoPackageDeclarationImpl.java" />
+    <list default="true" id="56d30604-b05b-4754-b856-6785adac8d3b" name="Default" comment="More PSI definition work. &#10;Started to implement the Annotator (to provide semantic error analysis)">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/types/GoTypeName.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/expressions/GoIdentifierImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/expressions/GoIdentifierImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/GoFile.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/GoFile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoFunctionDeclarationImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoFunctionDeclarationImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionContributor.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/completion/GoCompletionContributor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/types/GoArrayTypeImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/toplevel/GoTypeDeclaration.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoTypeDeclarationImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoPsiElementImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoPsiElementImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoImportSpecImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoImportSpecImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoMethodDeclarationImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoMethodDeclarationImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/toplevel/GoPackageDefinition.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/toplevel/GoPackageDeclaration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoImportDeclarationImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoImportDeclarationImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/types/GoTypeNameImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/findUsages/GoFindUsagesProvider.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/GoPsiElement.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/GoPsiElement.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoFileImpl.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoFileImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/toplevel/GoTypeSpec.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/types/GoArrayType.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoPsiCreator.java" afterPath="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoPsiCreator.java" />
     </list>
     <ignored path="testdata.tar.gz" />
     <ignored path="idea-home/" />
@@ -215,10 +188,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GoPsiCreator.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="GoPsiCreator.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoPsiCreator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="38" selection-start="1941" selection-end="1941" vertical-scroll-proportion="0.8647343">
+            <state line="39" column="72" selection-start="1364" selection-end="1364" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="plugin.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="126" selection-start="725" selection-end="725" vertical-scroll-proportion="0.28985506">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GoCompiler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="547" column="97" selection-start="22764" selection-end="22764" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -278,10 +269,8 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/GoRecursiveElementVisitor.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/visitors/GoRecursiveElementVisitor.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoPsiElementImpl.java" />
-        <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/annotator/GoAnnotator.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/types/GoTypeSpec.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/types/GoTypeDeclaration.java" />
@@ -294,6 +283,8 @@
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/types/GoArrayTypeImpl.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/visitors/GoElementVisitor.java" />
         <option value="$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoPsiCreator.java" />
+        <option value="$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java" />
+        <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
       </list>
     </option>
   </component>
@@ -756,7 +747,7 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
-    <property name="options.lastSelected" value="com.ansorgit.plugins.bash.settings.BashProjectSettingsConfigurable" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="project.structure.side.proportion" value="0.31213874" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="dynamic.classpath" value="false" />
@@ -800,7 +791,7 @@
       <recent name="../" />
     </key>
   </component>
-  <component name="RunManager" selected="Plugin.Execute Slave IDEA with plugin">
+  <component name="RunManager" selected="TestNG.All Test cases">
     <configuration default="false" name="IncrementalCompilationTest.testHannibal" type="TestNG" factoryName="TestNG" temporary="true">
       <extension name="coverage" enabled="false" sample_coverage="true" runner="idea" merge="false">
         <pattern>
@@ -1332,23 +1323,23 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1680" height="1026" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.56136364" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.56114286" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.62045455" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48685715" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20710784" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42857143" sideWeight="0.0" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5451428" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.71428573" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41714287" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2689951" sideWeight="0.41590908" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32965687" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39950982" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4208589" sideWeight="0.5714286" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4208589" sideWeight="0.2857143" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29877302" sideWeight="0.58285713" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5738636" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.57257146" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28186274" sideWeight="0.62045455" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1372,7 +1363,7 @@
     <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
     <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Documentation update" />
+    <option name="LAST_COMMIT_MESSAGE" value="More PSI definition work. &#10;Started to implement the Annotator (to provide semantic error analysis)" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1407,6 +1398,7 @@
     <MESSAGE value="Updated readme file." />
     <MESSAGE value="Release notes" />
     <MESSAGE value="Documentation update" />
+    <MESSAGE value="More PSI definition work. &#10;Started to implement the Annotator (to provide semantic error analysis)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1416,20 +1408,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/toplevel/GoTypeDeclaration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="28" selection-start="347" selection-end="347" vertical-scroll-proportion="0.25120774">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/toplevel/GoImportDeclarationImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="52" selection-start="591" selection-end="591" vertical-scroll-proportion="0.20779221">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/impl/GoPsiElementImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="17" column="13" selection-start="541" selection-end="541" vertical-scroll-proportion="0.3211334">
@@ -1533,7 +1511,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/parser/GoPsiCreator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="38" selection-start="1941" selection-end="1941" vertical-scroll-proportion="0.8647343">
+        <state line="39" column="72" selection-start="1364" selection-end="1364" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ro/redeul/google/go/compilation/GoCompiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="547" column="97" selection-start="22764" selection-end="22764" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="126" selection-start="725" selection-end="725" vertical-scroll-proportion="0.28985506">
           <folding />
         </state>
       </provider>

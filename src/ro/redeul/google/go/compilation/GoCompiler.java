@@ -291,10 +291,11 @@ public class GoCompiler implements TranslatingCompiler {
 
                     PsiFile psiFile = PsiManager.getInstance(project).findFile(child);
 
-                    GoFile file = (GoFile) psiFile;
-                    if (file == null) {
+                    if ( ! (psiFile instanceof GoFile)) {
                         continue;
                     }
+
+                    GoFile file = (GoFile) psiFile;
 
                     String packageName = file.getPackage().getPackageName();
                     if (packageName.equals(desiredPackageName)) {
