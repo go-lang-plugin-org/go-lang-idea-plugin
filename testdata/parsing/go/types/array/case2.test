@@ -1,0 +1,42 @@
+package main
+type t [2*N] struct { x, y int32 }
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      TypeName
+        PsiElement(IDENTIFIER)('t')
+      PsiWhiteSpace(' ')
+      TypeArray
+        PsiElement([)('[')
+        MultiplicativeExpression
+          Literal
+            PsiElement(LITERAL_INT)('2')
+          PsiElement(*)('*')
+          Literal
+            PsiElement(IDENTIFIER)('N')
+        PsiElement(])(']')
+        PsiWhiteSpace(' ')
+        TypeStruct
+          PsiElement(KEYWORD_STRUCT)('struct')
+          PsiWhiteSpace(' ')
+          PsiElement({)('{')
+          PsiWhiteSpace(' ')
+          TypeStruct field
+            Identifiers
+              PsiElement(IDENTIFIER)('x')
+              PsiElement(,)(',')
+              PsiWhiteSpace(' ')
+              PsiElement(IDENTIFIER)('y')
+            PsiWhiteSpace(' ')
+            TypeName
+              PsiElement(IDENTIFIER)('int32')
+          PsiWhiteSpace(' ')
+          PsiElement(})('}')

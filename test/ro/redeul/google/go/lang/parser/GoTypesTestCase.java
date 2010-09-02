@@ -70,4 +70,13 @@ public class GoTypesTestCase extends GoParsingTestCase {
 
 //    @Test public void testLiteralsCompositeStruct_nested() throws Throwable { doTest(); }
 
+    @Test public void testMapCase1() throws Throwable { doTest(); }
+    @Test public void testMapCase2() throws Throwable { doTest(); }
+    @Test public void testMapCase3() throws Throwable { doTest(); }
+
+    @Test public void testArrayCase1() throws Throwable { doTest(); }
+    @Test public void testArrayCase2() throws Throwable { doTest(); }
+    @Test public void testArrayCase3() throws Throwable { doTest(); }
+    @Test public void testArrayCase4() throws Throwable { doTest(); }
+    @Test public void testArrayCase5() throws Throwable { doTest(); }
 }

@@ -8,6 +8,8 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.*;
 import ro.redeul.google.go.lang.psi.impl.types.GoArrayTypeImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoMapTypeImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoSliceTypeImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeNameImpl;
 
 /**
@@ -52,6 +54,12 @@ public class GoPsiCreator implements GoElementTypes {
 
         if ( elementType.equals(TYPE_ARRAY) )
             return new GoArrayTypeImpl(node);
+
+        if ( elementType.equals(TYPE_SLICE) )
+            return new GoSliceTypeImpl(node);
+
+        if ( elementType.equals(TYPE_MAP) )
+            return new GoMapTypeImpl(node);
 
         if ( elementType.equals(wsNLS) )
             return (PsiElement) ASTFactory.whitespace(node.getText());

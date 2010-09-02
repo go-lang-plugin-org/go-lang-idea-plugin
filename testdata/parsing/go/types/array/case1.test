@@ -1,0 +1,23 @@
+package main
+type t [32]byte
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      TypeName
+        PsiElement(IDENTIFIER)('t')
+      PsiWhiteSpace(' ')
+      TypeArray
+        PsiElement([)('[')
+        Literal
+          PsiElement(LITERAL_INT)('32')
+        PsiElement(])(']')
+        TypeName
+          PsiElement(IDENTIFIER)('byte')

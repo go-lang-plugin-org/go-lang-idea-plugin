@@ -1,0 +1,25 @@
+package main
+type t [1000]*float64
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      TypeName
+        PsiElement(IDENTIFIER)('t')
+      PsiWhiteSpace(' ')
+      TypeArray
+        PsiElement([)('[')
+        Literal
+          PsiElement(LITERAL_INT)('1000')
+        PsiElement(])(']')
+        TypePointer
+          PsiElement(*)('*')
+          TypeName
+            PsiElement(IDENTIFIER)('float64')

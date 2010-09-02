@@ -1,0 +1,42 @@
+package main
+type T map [*T] struct { x, y float }
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      TypeName
+        PsiElement(IDENTIFIER)('T')
+      PsiWhiteSpace(' ')
+      TypeMap
+        PsiElement(KEYWORD_MAP)('map')
+        PsiWhiteSpace(' ')
+        PsiElement([)('[')
+        TypePointer
+          PsiElement(*)('*')
+          TypeName
+            PsiElement(IDENTIFIER)('T')
+        PsiElement(])(']')
+        PsiWhiteSpace(' ')
+        TypeStruct
+          PsiElement(KEYWORD_STRUCT)('struct')
+          PsiWhiteSpace(' ')
+          PsiElement({)('{')
+          PsiWhiteSpace(' ')
+          TypeStruct field
+            Identifiers
+              PsiElement(IDENTIFIER)('x')
+              PsiElement(,)(',')
+              PsiWhiteSpace(' ')
+              PsiElement(IDENTIFIER)('y')
+            PsiWhiteSpace(' ')
+            TypeName
+              PsiElement(IDENTIFIER)('float')
+          PsiWhiteSpace(' ')
+          PsiElement(})('}')

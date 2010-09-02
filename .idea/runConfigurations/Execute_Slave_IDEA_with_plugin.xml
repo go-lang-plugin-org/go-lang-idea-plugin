@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Execute Slave IDEA with plugin" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+    <module name="google-go-language" />
+    <option name="VM_PARAMETERS" value="-Xmx1024m -XX:MaxPermSize=256m" />
+    <option name="PROGRAM_PARAMETERS" value="" />
+    <log_file path="/workspace/mtoader/Work/google-go-language/idea-home/system/log/idea.log" checked="true" skipped="true" show_all="false" alias="IDEA LOG" />
+    <RunnerSettings RunnerId="Debug">
+      <option name="DEBUG_PORT" value="60790" />
+      <option name="TRANSPORT" value="0" />
+      <option name="LOCAL" value="true" />
+    </RunnerSettings>
+    <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Debug" />
+    <ConfigurationWrapper RunnerId="Run" />
+    <method />
+  </configuration>
+</component>

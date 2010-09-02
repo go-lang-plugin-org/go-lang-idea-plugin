@@ -5,8 +5,12 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeSpecImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoArrayTypeImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoMapTypeImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoSliceTypeImpl;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoArrayType;
+import ro.redeul.google.go.lang.psi.types.GoMapType;
+import ro.redeul.google.go.lang.psi.types.GoSliceType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 
 /**
@@ -58,5 +62,13 @@ public class GoElementVisitor {
 
     public void visitArrayType(GoArrayType arrayType) {
         visitElement(arrayType);
+    }
+
+    public void visitSliceType(GoSliceType sliceType) {
+        visitElement(sliceType);
+    }
+
+    public void visitMapType(GoMapType mapType) {
+        visitElement(mapType);
     }
 }

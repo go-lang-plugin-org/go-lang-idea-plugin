@@ -1,0 +1,26 @@
+package main
+type T map [string] int
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      TypeName
+        PsiElement(IDENTIFIER)('T')
+      PsiWhiteSpace(' ')
+      TypeMap
+        PsiElement(KEYWORD_MAP)('map')
+        PsiWhiteSpace(' ')
+        PsiElement([)('[')
+        TypeName
+          PsiElement(IDENTIFIER)('string')
+        PsiElement(])(']')
+        PsiWhiteSpace(' ')
+        TypeName
+          PsiElement(IDENTIFIER)('int')

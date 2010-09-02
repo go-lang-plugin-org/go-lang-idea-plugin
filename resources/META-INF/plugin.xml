@@ -98,7 +98,7 @@
 
         <lang.findUsagesProvider language="Google Go" implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
 
-        <!--<annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>-->
+        <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
 
         <completion.contributor language="Google Go"
                                 implementationClass="ro.redeul.google.go.lang.completion.GoCompletionContributor"/>
