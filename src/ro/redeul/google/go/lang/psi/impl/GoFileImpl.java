@@ -4,6 +4,8 @@ import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
@@ -79,5 +81,24 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
             child = child.getNextSibling();
         }
+    }
+
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+        PsiElement[] childs = getChildren();
+        for (PsiElement child : childs) {
+            if ( child instanceof GoTypeDeclaration || child instanceof GoMethodDeclaration ) {
+                child.processDeclarations(processor, state, null, place);
+            } else if ( child instanceof GoFunctionDeclaration ) {
+                GoFunctionDeclaration functionDeclaration = (GoFunctionDeclaration) child;
+                child.processDeclarations(processor, state, null, place);
+
+                if ( lastParent == functionDeclaration ) {
+                    break;
+                }
+            }
+        }
+
+        return super.processDeclarations(processor, state, lastParent, place);    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

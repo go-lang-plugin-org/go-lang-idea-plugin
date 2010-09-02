@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.impl.toplevel;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
@@ -21,8 +22,8 @@ public class GoTypeSpecImpl extends GoPsiElementImpl implements GoTypeSpec {
         super(node);
     }
 
-    public GoTypeName getTypeName() {
-        return findChildByClass(GoTypeName.class);
+    public GoTypeNameDeclaration getTypeNameDeclaration() {
+        return findChildByClass(GoTypeNameDeclaration.class);
     }
 
     public GoType getType() {

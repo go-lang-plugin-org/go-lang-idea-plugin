@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.toplevel;
 
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
@@ -13,7 +14,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
  */
 public interface GoTypeSpec extends GoPsiElement {
 
-    GoTypeName getTypeName();
+    @Nullable GoTypeNameDeclaration getTypeNameDeclaration();
 
     GoType getType();
 }

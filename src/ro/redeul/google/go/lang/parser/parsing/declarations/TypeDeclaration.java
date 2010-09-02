@@ -65,7 +65,7 @@ public class TypeDeclaration implements GoElementTypes {
 //        ParserUtils.getToken(builder, mIDENT, "identifier.expected");
 
         if ( ParserUtils.lookAhead(builder, mIDENT) ) {
-            ParserUtils.eatElement(builder, TYPE_NAME);
+            ParserUtils.eatElement(builder, TYPE_NAME_DECLARATION);
         } else {
             ParserUtils.wrapError(builder, "identifier.expected");
         }

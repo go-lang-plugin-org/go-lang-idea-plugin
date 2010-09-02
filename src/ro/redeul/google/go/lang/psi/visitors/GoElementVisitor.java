@@ -3,15 +3,14 @@ package ro.redeul.google.go.lang.psi.visitors;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeNameDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeSpecImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoArrayTypeImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoChannelTypeImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoMapTypeImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoSliceTypeImpl;
 import ro.redeul.google.go.lang.psi.toplevel.*;
-import ro.redeul.google.go.lang.psi.types.GoArrayType;
-import ro.redeul.google.go.lang.psi.types.GoMapType;
-import ro.redeul.google.go.lang.psi.types.GoSliceType;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -70,5 +69,13 @@ public class GoElementVisitor {
 
     public void visitMapType(GoMapType mapType) {
         visitElement(mapType);
+    }
+
+    public void visitChannelType(GoChannelType channelType) {
+        visitElement(channelType);
+    }
+
+    public void acceptTypeNameDeclaration(GoTypeNameDeclaration nameDeclaration) {
+        visitElement(nameDeclaration);
     }
 }

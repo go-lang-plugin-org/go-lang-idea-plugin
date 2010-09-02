@@ -3,10 +3,18 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.BaseScopeProcessor;
+import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
@@ -47,7 +55,12 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
     }
 
     public PsiElement resolve() {
-        return this;
+
+        NamedTypesScopeProcessor namedTypesProcessor = new NamedTypesScopeProcessor();
+
+        PsiScopesUtil.treeWalkUp(namedTypesProcessor, this, this.getContainingFile());
+
+        return namedTypesProcessor.getFoundType();
     }
 
     @NotNull
@@ -66,6 +79,11 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
         throw new IncorrectOperationException("Cannot bind to:" + element + " of class " + element.getClass());
     }
 
+    @Override
+    public PsiReference getReference() {
+        return this;
+    }
+
     public boolean isReferenceTo(PsiElement element) {
         return true;
     }
@@ -81,5 +99,33 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeName(this);
+    }
+
+    private class NamedTypesScopeProcessor extends BaseScopeProcessor {
+        private PsiElement foundType;
+
+        public boolean execute(PsiElement element, ResolveState state) {
+            if (element instanceof GoTypeDeclaration) {
+                GoTypeDeclaration typeDeclaration = (GoTypeDeclaration) element;
+
+                for (GoTypeSpec typeSpec : typeDeclaration.getTypeSpecs()) {
+
+                    GoTypeNameDeclaration typeNameDeclaration = typeSpec.getTypeNameDeclaration();
+                    if (typeNameDeclaration != null) {
+                        String typeName = typeNameDeclaration.getName();
+                        if (typeName != null && typeName.equals(getName())) {
+                            foundType = typeNameDeclaration;
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public PsiElement getFoundType() {
+            return foundType;
+        }
     }
 }

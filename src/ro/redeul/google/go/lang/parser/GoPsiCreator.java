@@ -6,19 +6,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoIdentifierImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.*;
-import ro.redeul.google.go.lang.psi.impl.types.GoArrayTypeImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoMapTypeImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoSliceTypeImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeNameImpl;
+import ro.redeul.google.go.lang.psi.impl.types.*;
+import ro.redeul.google.go.lang.psi.types.GoChannelType;
 
-/**
- * Created by IntelliJ IDEA.
- * User: mtoader
- * Date: Jul 24, 2010
- * Time: 7:53:44 PM
- * To change this template use File | Settings | File Templates.
- */
 public class GoPsiCreator implements GoElementTypes {
     
     public static PsiElement createElement(ASTNode node) {
@@ -43,6 +35,9 @@ public class GoPsiCreator implements GoElementTypes {
         if ( elementType.equals(TYPE_SPEC) )
             return new GoTypeSpecImpl(node);
 
+        if ( elementType.equals(TYPE_NAME_DECLARATION) )
+            return new GoTypeNameDeclarationImpl(node);
+
         if ( elementType.equals(FUNCTION_DECLARATION) )
             return new GoFunctionDeclarationImpl(node);
 
@@ -60,6 +55,18 @@ public class GoPsiCreator implements GoElementTypes {
 
         if ( elementType.equals(TYPE_MAP) )
             return new GoMapTypeImpl(node);
+
+        if ( elementType.equals(TYPE_CHAN_BIDIRECTIONAL) )
+            return new GoChannelTypeImpl(node, GoChannelType.ChannelType.Bidirectional);
+
+        if ( elementType.equals(TYPE_CHAN_SENDING) )
+            return new GoChannelTypeImpl(node, GoChannelType.ChannelType.Sending);
+
+        if ( elementType.equals(TYPE_CHAN_RECEIVING) )
+            return new GoChannelTypeImpl(node, GoChannelType.ChannelType.Receiving);
+
+        if ( elementType.equals(BLOCK_STATEMENT))
+            return new GoBlockStatementImpl(node);
 
         if ( elementType.equals(wsNLS) )
             return (PsiElement) ASTFactory.whitespace(node.getText());

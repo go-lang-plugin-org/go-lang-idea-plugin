@@ -2,8 +2,12 @@ package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -37,5 +41,21 @@ public class GoFunctionDeclarationImpl extends GoPsiElementImpl implements GoFun
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitFunctionDeclaration(this);
+    }
+
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+        PsiElement[] childs = getChildren();
+        for (PsiElement child : childs) {
+            if (child instanceof GoTypeDeclaration) {
+                child.processDeclarations(processor, state, null, place);
+            }
+
+            if (lastParent == child) {
+                break;
+            }
+        }
+
+        return super.processDeclarations(processor, state, lastParent, place);    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

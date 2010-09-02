@@ -11,7 +11,7 @@ Go file
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
     TypeSpec
-      TypeName
+      NamedType(f)
         PsiElement(IDENTIFIER)('f')
       PsiWhiteSpace(' ')
       TypeChanSend
