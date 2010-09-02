@@ -10,13 +10,6 @@ import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 
-/**
- * Created by IntelliJ IDEA.
- * User: mtoader
- * Date: Sep 2, 2010
- * Time: 3:15:54 PM
- * To change this template use File | Settings | File Templates.
- */
 public class GoBlockStatementImpl extends GoPsiElementImpl implements GoBlockStatement {
     public GoBlockStatementImpl(@NotNull ASTNode node) {
         super(node);
