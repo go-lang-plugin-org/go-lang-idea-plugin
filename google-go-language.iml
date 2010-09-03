@@ -15,7 +15,7 @@
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/resources" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="IDEA IC-96.SNAPSHOT" jdkType="IDEA JDK" />
+    <orderEntry type="jdk" jdkName="IDEA IC-95.429" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="testng" level="application" />
   </component>

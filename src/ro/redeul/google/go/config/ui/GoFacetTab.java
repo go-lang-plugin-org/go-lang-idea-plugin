@@ -109,10 +109,7 @@ public class GoFacetTab extends FacetEditorTab {
         //To change body of implemented methods use File | Settings | File Templates.
     }
     
-    @Override
     public void apply() throws ConfigurationException {
-        super.apply();
-
         facetConfiguration.SDK_NAME = ((Sdk)goSdks.getComboBox().getSelectedItem()).getName();
         
         modified = false;

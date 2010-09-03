@@ -6,11 +6,8 @@ import com.intellij.ide.actions.CreateTemplateInPackageAction;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ModuleRootModel;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -18,7 +15,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
-import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -44,7 +40,22 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
         return file;
     }
 
+    @NotNull
     @Override
+    protected CreateFileFromTemplateDialog.Builder buildDialog(Project project, PsiDirectory directory) {
+        CreateFileFromTemplateDialog.Builder builder = CreateFileFromTemplateDialog.createDialog(project, "New Go file creation");
+
+        buildDialog(project, directory, builder);
+
+        return builder;
+    }
+
+    @Override
+    protected String getErrorTitle() {
+        return "New Go file creation";
+    }
+
+//    @Override
     protected boolean checkPackageExists(PsiDirectory directory) {
         return true;
     }
@@ -112,9 +123,9 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
         return parameterName;
     }
 
-    @Override
+//    @Override
     protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
-        builder.setTitle("New Go file creation");
+//        builder.setTitle("New Go file creation");
 
         PsiFile childs[] = directory.getFiles();
 

@@ -1,7 +1,7 @@
 package ro.redeul.google.go.ui;
 
 import com.intellij.execution.ExecutionBundle;
-import com.intellij.execution.ui.ClassBrowser;
+import com.intellij.execution.junit2.configuration.ClassBrowser;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;

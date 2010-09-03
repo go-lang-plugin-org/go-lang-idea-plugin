@@ -138,7 +138,7 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
     @Override
     protected void tuneFixture(JavaModuleFixtureBuilder moduleBuilder) throws Exception {
         moduleBuilder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
-        moduleBuilder.addJdk(JavaSdkImpl.getMockJdk14Path().getPath());
+        moduleBuilder.addJdk(JavaSdkImpl.getMockJdkCE().getHomePath());
         super.tuneFixture(moduleBuilder);
     }
 
@@ -157,7 +157,7 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
     protected void tuneModuleFixture(JavaModuleFixtureBuilder moduleFixtureBuilder, JavaCodeInsightTestFixture fixture) {
         moduleFixtureBuilder.addSourceContentRoot(fixture.getTempDirPath());
         moduleFixtureBuilder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
-        moduleFixtureBuilder.addJdk(JavaSdkImpl.getMockJdk14Path().getPath());
+        moduleFixtureBuilder.addJdk(JavaSdkImpl.getMockJdkCE().getHomePath());
 
 //        super.tuneModuleFixture(moduleFixtureBuilder, fixture);
     }
@@ -247,10 +247,7 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
 
         final DefaultRunExecutor extension = Executor.EXECUTOR_EXTENSION_NAME.findExtension(DefaultRunExecutor.class);
 
-        final ExecutionEnvironment environment = new ExecutionEnvironment(
-                configuration,
-                getProject(),
-                new RunnerSettings<JDOMExternalizable>(null, null), null, null);
+        final ExecutionEnvironment environment = new ExecutionEnvironment(configuration, new RunnerSettings<JDOMExternalizable>(null, null), null, null);
 
         final DefaultProgramRunner runner = ProgramRunner.PROGRAM_RUNNER_EP.findExtension(DefaultProgramRunner.class);
         final StringBuffer sb = new StringBuffer();

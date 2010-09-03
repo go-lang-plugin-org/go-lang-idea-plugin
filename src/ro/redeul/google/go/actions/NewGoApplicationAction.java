@@ -45,9 +45,24 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
         return file;
     }
 
-    @Override
     protected boolean checkPackageExists(PsiDirectory directory) {
         return true;
+    }
+
+    @NotNull
+    @Override
+    protected CreateFileFromTemplateDialog.Builder buildDialog(Project project, PsiDirectory directory) {
+
+        CreateFileFromTemplateDialog.Builder builder = CreateFileFromTemplateDialog.createDialog(project, getErrorTitle());
+
+        buildDialog(project, directory, builder);
+
+        return builder;
+    }
+
+    @Override
+    protected String getErrorTitle() {
+        return "Go application creation";
     }
 
     @Override
@@ -107,9 +122,9 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
         return GoTemplatesFactory.createFromTemplate(dir, "main", fileName + ".go", template);
     }
 
-    @Override
+//    @Override
     protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
-        builder.setTitle("Go application creation");
+//        builder.setTitle("Go application creation");
 
 //        boolean isApplicationFolder = isApplicationFolder(directory);
 

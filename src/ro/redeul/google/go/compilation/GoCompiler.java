@@ -15,7 +15,6 @@ import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.compiler.TranslatingCompiler;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileChooser.ex.FileTextFieldImpl;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -25,8 +24,6 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.ui.configuration.ClasspathEditor;
 import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Trinity;
 import com.intellij.openapi.util.io.FileUtil;
@@ -50,7 +47,6 @@ import ro.redeul.google.go.util.GoSdkUtil;
 import ro.redeul.google.go.util.ProcessUtil;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -245,7 +241,7 @@ public class GoCompiler implements TranslatingCompiler {
                     return;
             }
 
-            if (mainFiles.size() > 0 && !compileApplication(sourceRoot, baseOutputFile, sdk, context, sink, relativePath, "main", mainFiles)) {
+            if (mainFiles.size() > 0 && !compileApplication(sourceRoot, baseOutputFile, sdk, context, sink, relativePath, currentPackage, mainFiles)) {
                 return;
             }
         }
@@ -602,7 +598,7 @@ public class GoCompiler implements TranslatingCompiler {
             @Override
             protected void run(Result<Boolean> boolResult) throws Throwable {
                 boolResult.setResult(false);
-                VfsUtil.createDirectoryIfMissing(baseOutputFile, goOutputRelativePath);
+                VfsUtil.createDirectoryIfMissing(new File(baseOutputFile.getPath() + goOutputRelativePath).getAbsolutePath());
                 boolResult.setResult(true);
             }
         }.execute().getResultObject();

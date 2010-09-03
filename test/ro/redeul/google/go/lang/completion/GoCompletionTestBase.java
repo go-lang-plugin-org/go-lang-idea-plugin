@@ -15,7 +15,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightTestCase {
         return "completion" + File.separator + "go";
     }
 
-    protected void doBasicTest(String ... otherFiles) {
+    protected void doBasicTest(String ... otherFiles) throws Exception {
         String testName = getTestName();
 
 
@@ -30,7 +30,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightTestCase {
         fixture.testCompletion(sourceFiles, testName + "_after.go");
     }
 
-    protected void doSmartTest() {
+    protected void doSmartTest() throws Exception {
         fixture.configureByFile(getTestName() + ".go");
         fixture.complete(CompletionType.SMART);
         fixture.checkResultByFile(getTestName() + "_after.go", true);

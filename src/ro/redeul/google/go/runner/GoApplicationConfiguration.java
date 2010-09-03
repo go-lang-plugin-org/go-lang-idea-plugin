@@ -5,7 +5,7 @@ import com.intellij.execution.Executor;
 import com.intellij.execution.RunConfigurationExtension;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
-import com.intellij.execution.process.ProcessHandler;
+import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.compiler.CompilerPaths;
 import com.intellij.openapi.components.PathMacroManager;
@@ -20,9 +20,7 @@ import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.PathUtil;
-import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.runner.ui.GoRunConfigurationEditorForm;
@@ -84,8 +82,9 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
         CommandLineState state = new CommandLineState(env) {
+
             @Override
-            protected ProcessHandler startProcess() throws ExecutionException {
+            protected OSProcessHandler startProcess() throws ExecutionException {
 
                 GeneralCommandLine commandLine = new GeneralCommandLine();
 
