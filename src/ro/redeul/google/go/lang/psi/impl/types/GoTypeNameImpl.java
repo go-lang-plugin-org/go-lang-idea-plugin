@@ -1,30 +1,27 @@
 package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
-import ro.redeul.google.go.lang.psi.toplevel.*;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.util.GoSdkUtil;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Created by IntelliJ IDEA.
@@ -46,7 +43,10 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
 
     @Override
     public String getName() {
-        return getText();
+
+        GoIdentifier identifier = findChildByClass(GoIdentifier.class);
+
+        return identifier != null ? identifier.getText() : getText();
     }
 
     public PsiElement setName(@NonNls String name) throws IncorrectOperationException {
@@ -61,63 +61,16 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
         return new TextRange(0, getTextLength());
     }
 
+    public GoPackageReference getPackageReference() {
+        return findChildByClass(GoPackageReference.class);
+    }
+
     public PsiElement resolve() {
 
         NamedTypesScopeProcessor namedTypesProcessor = new NamedTypesScopeProcessor();
 
         if ( ! PsiScopesUtil.treeWalkUp(namedTypesProcessor, this, this.getContainingFile()) ) {
             return namedTypesProcessor.getFoundType();
-        }
-
-        PsiFile psiFile = this.getContainingFile();
-        if ( ! (psiFile instanceof GoFile) ) {
-            return null;
-        }
-
-        GoFile goFile = (GoFile) psiFile;
-
-        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(getProject()).getFileIndex();
-        Module module = projectFileIndex.getModuleForFile(goFile.getVirtualFile());
-
-        Sdk sdk = GoSdkUtil.getGoogleGoSdkForModule(module);
-
-        if ( sdk == null ) {
-            return null;
-        }
-
-        GoImportDeclaration[] importDeclarations = goFile.getImportDeclarations();
-        for (GoImportDeclaration importDeclaration : importDeclarations) {
-            GoImportSpec[] importSpecs = importDeclaration.getImports();
-
-            for (GoImportSpec importSpec : importSpecs) {
-                GoIdentifier identifier = importSpec.getPackageName();
-                if ( identifier != null && identifier.getString().equals(".") ) {
-                    VirtualFile files[] = sdk.getRootProvider().getFiles(OrderRootType.SOURCES);
-
-                    for (VirtualFile file : files) {
-                        VirtualFile packageFile = VfsUtil.findRelativeFile(importSpec.getImportPath().replaceAll("\"",""), file);
-                        if ( packageFile != null ) {
-                            VirtualFile []children = packageFile.getChildren();
-                            for (VirtualFile child : children) {
-                                if ( child.getFileType() != GoFileType.GO_FILE_TYPE || child.getNameWithoutExtension().endsWith("_test") ) {
-                                    continue;
-                                }
-
-                                GoFile packageGoFile = (GoFile) PsiManager.getInstance(getProject()).findFile(child);
-                                assert packageGoFile != null;
-
-                                GoTypeDeclaration[] typeDeclarations =  packageGoFile.getTypeDeclarations();
-
-                                for (GoTypeDeclaration typeDeclaration : typeDeclarations) {
-                                    if ( ! namedTypesProcessor.execute(typeDeclaration, ResolveState.initial()) ) {
-                                        return namedTypesProcessor.getFoundType();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         return null;
@@ -154,7 +107,7 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
     }
 
     public boolean isSoft() {
-        return true;
+        return false;
     }
 
     public void accept(GoElementVisitor visitor) {
@@ -162,21 +115,56 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
     }
 
     private class NamedTypesScopeProcessor extends BaseScopeProcessor {
+
         private PsiElement foundType;
 
         public boolean execute(PsiElement element, ResolveState state) {
-            if (element instanceof GoTypeDeclaration) {
-                GoTypeDeclaration typeDeclaration = (GoTypeDeclaration) element;
+            if ( ! tryTypeDeclaration(element, state) ) {
+                return false;
+            }
 
-                for (GoTypeSpec typeSpec : typeDeclaration.getTypeSpecs()) {
+            if ( ! tryImportSpec(element, state) ) {
+                return false;
+            }
 
-                    GoTypeNameDeclaration typeNameDeclaration = typeSpec.getTypeNameDeclaration();
-                    if (typeNameDeclaration != null) {
-                        String typeName = typeNameDeclaration.getName();
-                        if (typeName != null && typeName.equals(getName())) {
-                            foundType = typeNameDeclaration;
-                            return false;
-                        }
+            return true;
+        }
+
+        private boolean tryImportSpec(PsiElement element, ResolveState state) {
+            if ( ! (element instanceof GoImportSpec) ) {
+                return true;
+            }
+
+            GoImportSpec importSpec = (GoImportSpec) element;
+
+            String importPath = GoPsiUtils.cleanupImportPath(importSpec.getImportPath());
+
+            GoFile[] importedFiles = GoPsiUtils.findFilesForPackage(importPath, (GoFile) element.getContainingFile());
+
+            for (GoFile importedFile : importedFiles) {
+                if ( ! importedFile.processDeclarations(this, state, null, GoTypeNameImpl.this) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private boolean tryTypeDeclaration(PsiElement element, ResolveState state) {
+            if ( ! (element instanceof GoTypeDeclaration) ) {
+                return true;
+            }
+
+            GoTypeDeclaration typeDeclaration = (GoTypeDeclaration) element;
+
+            for (GoTypeSpec typeSpec : typeDeclaration.getTypeSpecs()) {
+
+                GoTypeNameDeclaration typeNameDeclaration = typeSpec.getTypeNameDeclaration();
+                if (typeNameDeclaration != null) {
+                    String typeName = typeNameDeclaration.getName();
+                    if (typeName != null && typeName.equals(getName())) {
+                        foundType = typeNameDeclaration;
+                        return false;
                     }
                 }
             }

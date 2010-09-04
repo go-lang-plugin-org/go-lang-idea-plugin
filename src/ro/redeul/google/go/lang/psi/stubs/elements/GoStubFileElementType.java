@@ -42,8 +42,8 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
 
     @Override
     public void serialize(final GoFileStub stub, final StubOutputStream dataStream) throws IOException {
-//        dataStream.writeName(stub.getPackageName().toString());
-//        dataStream.writeName(stub.getPackageName().toString());
+//        dataStream.writeName(stub.getPackageReference().toString());
+//        dataStream.writeName(stub.getPackageReference().toString());
 //        dataStream.writeBoolean(stub.isScript());
 //        GrStubUtils.writeStringArray(dataStream, stub.getAnnotations());
     }
@@ -57,10 +57,10 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
     }
 
     public void indexStub(GoFileStub stub, IndexSink sink) {
-//        String name = stub.getPackageName().toString();
+//        String name = stub.getPackageReference().toString();
 //        if (stub.isScript() && name != null) {
 //            sink.occurrence(GrScriptClassNameIndex.KEY, name);
-//            final String pName = stub.getPackageName().toString();
+//            final String pName = stub.getPackageReference().toString();
 //            final String fqn = pName == null || pName.length() == 0 ? name : pName + "." + name;
 //            sink.occurrence(GrFullScriptNameIndex.KEY, fqn.hashCode());
 //        }

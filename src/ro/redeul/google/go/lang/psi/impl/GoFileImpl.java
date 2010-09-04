@@ -89,20 +89,35 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-        PsiElement[] childs = getChildren();
-        for (PsiElement child : childs) {
-            if ( child instanceof GoTypeDeclaration || child instanceof GoMethodDeclaration ) {
-                child.processDeclarations(processor, state, null, place);
-            } else if ( child instanceof GoFunctionDeclaration ) {
-                GoFunctionDeclaration functionDeclaration = (GoFunctionDeclaration) child;
-                child.processDeclarations(processor, state, null, place);
 
-                if ( lastParent == functionDeclaration ) {
-                    break;
-                }
+        GoTypeDeclaration declarations[] = getTypeDeclarations();
+        for (GoTypeDeclaration declaration : declarations) {
+            if ( ! declaration.processDeclarations(processor, state, null, place) ) {
+                return false;
             }
         }
 
-        return super.processDeclarations(processor, state, lastParent, place);    //To change body of overridden methods use File | Settings | File Templates.
+        GoMethodDeclaration methods[] = getMethods();
+        for (GoMethodDeclaration method : methods) {
+            if  ( ! method.processDeclarations(processor, state, null, place) ) {
+                return false;
+            }
+        }
+
+        GoFunctionDeclaration functions[] = getFunctions();
+        for (GoFunctionDeclaration function : functions) {
+            if  ( ! function.processDeclarations(processor, state, null, place) ) {
+                return false;
+            }
+        }
+
+        GoImportDeclaration importDeclarations[] = getImportDeclarations();
+        for (GoImportDeclaration importDeclaration : importDeclarations) {
+            if ( ! importDeclaration.processDeclarations(processor, state, null, place) ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

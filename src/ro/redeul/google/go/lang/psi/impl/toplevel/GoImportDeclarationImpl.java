@@ -1,6 +1,9 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
@@ -26,5 +29,19 @@ public class GoImportDeclarationImpl extends GoPsiElementImpl implements GoImpor
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitImportDeclaration(this);
+    }
+
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+
+        GoImportSpec[] importSpecifications = getImports();
+
+        for (GoImportSpec importSpecification : importSpecifications) {
+            if ( ! importSpecification.processDeclarations(processor, state, lastParent, place) ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

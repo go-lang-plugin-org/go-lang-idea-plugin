@@ -12,6 +12,8 @@ import ro.redeul.google.go.lang.psi.toplevel.*;
  */
 public interface GoFile extends PsiFile, GoPsiElement {
 
+    GoFile[] EMPTY_ARRAY = new GoFile[0];
+
     GoPackageDeclaration getPackage();
 
     GoImportDeclaration[] getImportDeclarations();

@@ -1,7 +1,7 @@
 package ro.redeul.google.go.lang.psi.toplevel;
 
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
+import ro.redeul.google.go.lang.psi.GoPackageReference;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,7 +12,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
  */
 public interface GoImportSpec extends GoPsiElement {
 
-    GoIdentifier getPackageName();
+    GoPackageReference getPackageReference();
 
     String getImportPath();
 }

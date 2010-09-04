@@ -2,8 +2,8 @@ package ro.redeul.google.go.lang.psi.impl.expressions;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 
 /**
@@ -21,10 +21,6 @@ public class GoIdentifierImpl extends GoPsiElementImpl implements GoIdentifier {
 
     public String getString() {
         return getText();
-    }
-
-    public boolean isBlank() {
-        return getString().equals("_");
     }
 
     public String toString() {

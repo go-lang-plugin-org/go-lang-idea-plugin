@@ -5,7 +5,12 @@ import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.roots.FileIndex;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 import ro.redeul.google.go.config.facet.GoFacet;
 import ro.redeul.google.go.config.facet.GoFacetType;
 
@@ -155,5 +160,12 @@ public class GoSdkUtil {
 
         // other checks (module of type .. etc)
         return null;
+    }
+
+    public static Sdk getGoogleGoSdkForFile(PsiFile file) {
+        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(file.getProject()).getFileIndex();
+        Module module = projectFileIndex.getModuleForFile(file.getVirtualFile());
+
+        return getGoogleGoSdkForModule(module);
     }
 }

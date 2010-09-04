@@ -4,6 +4,7 @@ import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
+import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
@@ -30,7 +31,7 @@ public class GoPsiCreator implements GoElementTypes {
             return new GoImportSpecImpl(node);
 
         if ( elementType.equals(PACKAGE_REFERENCE) )
-            return new GoIdentifierImpl(node);
+            return new GoPackageReferenceImpl(node);
 
         if ( elementType.equals(TYPE_DECLARATIONS) )
             return new GoTypeDeclarationImpl(node);
