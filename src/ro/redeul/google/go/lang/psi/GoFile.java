@@ -1,10 +1,7 @@
 package ro.redeul.google.go.lang.psi;
 
 import com.intellij.psi.PsiFile;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,4 +21,6 @@ public interface GoFile extends PsiFile, GoPsiElement {
     GoMethodDeclaration[] getMethods();
 
     GoFunctionDeclaration getMainFunction();
+
+    GoTypeDeclaration[] getTypeDeclarations();
 }

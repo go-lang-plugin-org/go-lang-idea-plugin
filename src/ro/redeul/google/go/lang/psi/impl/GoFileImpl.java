@@ -64,6 +64,10 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         return null;
     }
 
+    public GoTypeDeclaration[] getTypeDeclarations() {
+        return findChildrenByClass(GoTypeDeclaration.class);
+    }
+
     public IElementType getTokenType() {
         return null;
     }

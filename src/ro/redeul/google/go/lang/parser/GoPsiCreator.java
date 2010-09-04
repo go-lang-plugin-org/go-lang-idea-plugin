@@ -29,6 +29,9 @@ public class GoPsiCreator implements GoElementTypes {
         if ( elementType.equals(IMPORT_SPEC) )
             return new GoImportSpecImpl(node);
 
+        if ( elementType.equals(PACKAGE_REFERENCE) )
+            return new GoIdentifierImpl(node);
+
         if ( elementType.equals(TYPE_DECLARATIONS) )
             return new GoTypeDeclarationImpl(node);
 

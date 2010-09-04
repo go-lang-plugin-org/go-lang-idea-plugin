@@ -151,4 +151,14 @@ public class GoSdkType extends SdkType {
     public String getPresentableName() {
         return "Go SDK";
     }
+
+    @Override
+    public boolean isRootTypeApplicable(OrderRootType type) {
+
+        if ( type == OrderRootType.CLASSES || type == OrderRootType.SOURCES ) {
+            return true;
+        }
+
+        return false;
+    }
 }

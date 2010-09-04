@@ -73,7 +73,6 @@ public class GoCompiler implements TranslatingCompiler {
 
         final Set<Module> affectedModules = new HashSet<Module>();
 
-
         ApplicationManager.getApplication().runReadAction(new Runnable() {
             public void run() {
                 ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
@@ -777,19 +776,7 @@ public class GoCompiler implements TranslatingCompiler {
     }
 
     private Sdk findGoSdkForModule(Module module) {
-
-        GoFacet goFacet = FacetManager.getInstance(module).getFacetByType(GoFacetType.GO_FACET_TYPE_ID);
-
-        if (goFacet == null)
-            return null;
-
-        Sdk sdk = goFacet.getGoSdk();
-        if (sdk != null) {
-            return sdk;
-        }
-
-        // other checks (module of type .. etc)
-        return null;
+        return GoSdkUtil.getGoogleGoSdkForModule(module);
     }
 
     static class CompilerMessage {

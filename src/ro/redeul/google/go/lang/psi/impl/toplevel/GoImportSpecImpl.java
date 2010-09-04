@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
@@ -22,7 +23,7 @@ public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
     }
 
     public GoIdentifier getPackageName() {
-        return null;
+        return findChildByClass(GoIdentifier.class);
     }
 
     public String getImportPath() {

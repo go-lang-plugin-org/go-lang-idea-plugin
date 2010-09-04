@@ -1,8 +1,13 @@
 package ro.redeul.google.go.util;
 
+import com.intellij.facet.FacetManager;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.Pair;
+import ro.redeul.google.go.config.facet.GoFacet;
+import ro.redeul.google.go.config.facet.GoFacetType;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -134,5 +139,21 @@ public class GoSdkUtil {
         }
 
         return "unknown";
+    }
+
+    public static Sdk getGoogleGoSdkForModule(Module module) {
+
+        GoFacet goFacet = FacetManager.getInstance(module).getFacetByType(GoFacetType.GO_FACET_TYPE_ID);
+
+        if (goFacet == null)
+            return null;
+
+        Sdk sdk = goFacet.getGoSdk();
+        if (sdk != null) {
+            return sdk;
+        }
+
+        // other checks (module of type .. etc)
+        return null;
     }
 }
