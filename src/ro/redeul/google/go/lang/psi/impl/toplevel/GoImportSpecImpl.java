@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
@@ -79,6 +80,6 @@ public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
     }
 
     private String defaultPackageNameFromImport(String importPath) {
-        return importPath.replaceAll("\"", "").replaceAll("(?:[a-zA-Z]+/)+", "");
+        return GoPsiUtils.findDefaultPackageName(GoPsiUtils.cleanupImportPath(importPath));
     }
 }

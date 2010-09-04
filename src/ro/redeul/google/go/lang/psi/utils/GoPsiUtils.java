@@ -34,7 +34,7 @@ public class GoPsiUtils {
 
         Project project = importingFile.getProject();
 
-        String defaultPackageName = importPath.replaceAll("(?:[a-zA-Z\\.]+/)+", "");
+        String defaultPackageName = findDefaultPackageName(importPath);
 
         VirtualFile packageFilesLocation = null;
         if ( importPath.startsWith("./") ) { // local import path
@@ -76,5 +76,9 @@ public class GoPsiUtils {
         }
 
         return files.toArray(new GoFile[files.size()]);
+    }
+
+    public static String findDefaultPackageName(String importPath) {
+        return importPath.replaceAll("(?:[a-zA-Z\\.]+/)+", "");
     }
 }
