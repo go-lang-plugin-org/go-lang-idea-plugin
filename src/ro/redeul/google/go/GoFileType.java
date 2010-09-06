@@ -35,7 +35,7 @@ public class GoFileType extends LanguageFileType {
      @NotNull
      @NonNls
      public String getName() {
-       return "Google go";
+       return "Google Go";
      }
 
      @NonNls

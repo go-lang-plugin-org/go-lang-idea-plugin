@@ -94,14 +94,13 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
-        <syntaxHighlighter key="Google.Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighter"/>
-        <lang.parserDefinition language="Google Go"
-                               implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
-        <lang.braceMatcher language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoBraceMatcher"/>
-        <lang.foldingBuilder language="Google Go"
-                             implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
-        <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
 
+        <syntaxHighlighter key="Google Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighter"/>
+
+        <lang.parserDefinition language="Google Go" implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
+        <lang.braceMatcher language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoBraceMatcher"/>
+        <lang.foldingBuilder language="Google Go" implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
+        <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
         <lang.findUsagesProvider language="Google Go" implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
 
         <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
@@ -122,6 +121,8 @@
         <customLiveTemplate implementation="ro.redeul.google.go.editor.GoCustomLiveTemplate"/>
 
         <fileTemplateGroup implementation="ro.redeul.google.go.actions.GoTemplatesFactory"/>
+
+        <colorSettingsPage implementation="ro.redeul.google.go.editor.highlighting.GoColorsAndFontsPage"/>
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
     </extensions>

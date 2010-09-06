@@ -13,4 +13,5 @@ public class GoLanguage extends Language {
     public GoLanguage() {
         super("Google Go");
     }
+
 }
