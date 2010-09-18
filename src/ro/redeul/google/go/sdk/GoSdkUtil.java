@@ -1,7 +1,13 @@
-package ro.redeul.google.go.util;
+package ro.redeul.google.go.sdk;
 
+import com.intellij.execution.ExecutionException;
+import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.process.CapturingProcessHandler;
+import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.ProcessOutput;
 import com.intellij.facet.FacetManager;
 import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -13,16 +19,19 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import ro.redeul.google.go.config.facet.GoFacet;
 import ro.redeul.google.go.config.facet.GoFacetType;
+import ro.redeul.google.go.sdk.GoSdkTool;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
 
 public class GoSdkUtil {
 
     public static final String PACKAGES = "src/pkg";
 
-    private static final Logger LOG = Logger.getInstance("ro.redeul.google.go.util.GoSdkUtil");
+    private static final Logger LOG = Logger.getInstance("ro.redeul.google.go.sdk.GoSdkUtil");
 
     private static final String DEFAULT_MOCK_PATH = "go/default";
 
@@ -32,75 +41,61 @@ public class GoSdkUtil {
         File rootFile = new File(path);
 
         // check that the selection was a folder
-        if ( ! rootFile.exists() || ! rootFile.isDirectory() ) {
+        if (!rootFile.exists() || !rootFile.isDirectory()) {
             return new String[0];
         }
 
         // check to see if we have a %GOROOT/src folder
         File srcFolder = new File(rootFile, "src");
-        if ( ! srcFolder.exists() || ! srcFolder.isDirectory() ) {
+        if (!srcFolder.exists() || !srcFolder.isDirectory()) {
             return new String[0];
         }
 
         // check to see if we have a %GOROOT/pkg folder
         File pkgFolder = new File(rootFile, "pkg");
-        if ( ! pkgFolder.exists() || ! pkgFolder.isDirectory() ) {
-            return new String[0];
-        }
-
-        // check to see if we have a %GOROOT/pkg/~place-holder~ file        
-        File placeHolder = new File(pkgFolder, "~place-holder~");
-        if ( ! placeHolder.exists() || ! placeHolder.isFile() ) {
+        if (!pkgFolder.exists() || !pkgFolder.isDirectory()) {
             return new String[0];
         }
 
         File targets[] = pkgFolder.listFiles(new FileFilter() {
             public boolean accept(File pathName) {
-                return pathName.isDirectory() && ! pathName.getName().matches("\\.{1,2}");
+                return pathName.isDirectory() && !pathName.getName().matches("\\.{1,2}");
             }
         });
 
-        if ( targets.length != 1 || ! targets[0].getName().matches("(windows|linux|darwin|freebsd)_(386|amd64|arm)")) {
+        if (targets.length != 1 || !targets[0].getName().matches("(windows|linux|darwin|freebsd)_(386|amd64|arm)")) {
             return new String[0];
         }
 
-        String []target = targets[0].getName().split("_");
+        String[] target = targets[0].getName().split("_");
 
         String compilerName = getCompilerName(target[0], target[1]);
 
         String binariesPath = System.getenv("GOBIN");
-        if ( binariesPath == null ) {
+        if (binariesPath == null) {
             binariesPath = path + "/bin";
         }
 
-        Pair<String, String> executionResult =
-                ProcessUtil.executeAndProcessOutput(
-                        Arrays.asList(binariesPath + "/" + compilerName, "-V"),
-                        new File(path),
-                        ProcessUtil.NULL_PARSER,
-                        ProcessUtil.NULL_PARSER);
+        GeneralCommandLine command = new GeneralCommandLine();
+        command.setExePath(binariesPath + "/" + compilerName);
+        command.addParameter("-V");
+        command.setWorkDirectory(binariesPath);
 
-        return new String[]{path, binariesPath, target[0], target[1], executionResult.getFirst()};
+        try {
+            ProcessOutput output = new CapturingProcessHandler(
+                    command.createProcess(),
+                    Charset.defaultCharset(),
+                    command.getCommandLineString()).runProcess();
+
+            if (output.getExitCode() != 0) {
+                return new String[5];
+            }
+
+            return new String[]{path, binariesPath, target[0], target[1], output.getStdout().replaceAll("[\r\n]+", "")};
+        } catch (ExecutionException e) {
+            return new String[5];
+        }
     }
-//
-//    public static Collection<File> findGoogleSdkPackages(String homePath) {
-//
-//        CommonProcessors.CollectUniquesProcessor<File> processor = new CommonProcessors.CollectUniquesProcessor<File>() {
-//            @Override
-//            public boolean process(File file) {
-//                File compiledPackage = new File(file, "_go_.6");
-//                if (compiledPackage.exists() && compiledPackage.isFile()) {
-//                    super.process(file);
-//                }
-//
-//                return true;
-//            }
-//        };
-//
-//        FileUtil.processFilesRecursively(new File(homePath + "/" + PACKAGES), processor);
-//
-//        return processor.getResults();
-//    }
 
     public static String[] getMockGoogleSdk() {
         return getMockGoogleSdk(PathManager.getHomePath() + "/" + DEFAULT_MOCK_PATH);
@@ -108,7 +103,7 @@ public class GoSdkUtil {
 
     public static String[] getMockGoogleSdk(String path) {
         String[] strings = testGoogleGoSdk(path);
-        if ( strings.length > 0 ) {
+        if (strings.length > 0) {
             new File(strings[1], getCompilerName(strings[2], strings[3])).setExecutable(true);
             new File(strings[1], getLinkerName(strings[2], strings[3])).setExecutable(true);
             new File(strings[1], getArchivePackerName(strings[2], strings[3])).setExecutable(true);
@@ -167,5 +162,21 @@ public class GoSdkUtil {
         Module module = projectFileIndex.getModuleForFile(file.getVirtualFile());
 
         return getGoogleGoSdkForModule(module);
+    }
+
+    public static String getToolName(String os, String arch, GoSdkTool tool) {
+
+        String binariesDesignation = getBinariesDesignation(os, arch);
+
+        switch (tool) {
+            case GoCompiler:
+                return binariesDesignation + "g";
+            case GoLinker:
+                return binariesDesignation + "l";
+            case GoArchivePacker:
+                return "gopack";
+        }
+
+        return "";
     }
 }

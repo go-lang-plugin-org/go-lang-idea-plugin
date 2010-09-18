@@ -57,6 +57,26 @@ public class FullCompilationTest extends GoCompilerTestCase {
     }
 
     @Test
+    public void testSimpleMainWithDifferentTargetAndLocalLibrary() throws Exception {
+        myFixture.addFileToProject("tools.go",
+                "package tools\n" +
+                "func F() int {\n" +
+                "   return 10\n" +
+                "}\n");
+
+        myFixture.addFileToProject("app.go",
+                "package main\n" +
+                "import \"./tools\"\n" +
+                "import \"fmt\"\n" +
+                "func main() {\n" +
+                "   fmt.Printf(\"%d\", tools.F())\n" +
+                "}\n");
+
+        assertEmpty(make());
+        assertOutput("app", "10");
+    }
+
+    @Test
     public void testSimpleMainWithMultipleLocalLibrary() throws Exception {
         myFixture.addFileToProject("tools/a.go",
                 "package tools\n" +

@@ -18,9 +18,8 @@ import com.intellij.util.CommonProcessors;
 import com.intellij.util.Function;
 import com.intellij.util.Processor;
 import ro.redeul.google.go.GoFileType;
-import ro.redeul.google.go.config.facet.GoFacet;
-import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,12 +49,7 @@ public class GoCompletionUtil {
             return LookupElement.EMPTY_ARRAY;
         }
 
-        GoFacet goFacet = FacetManager.getInstance(module).getFacetByType(GoFacetType.GO_FACET_TYPE_ID);
-        if (goFacet == null) {
-            return LookupElement.EMPTY_ARRAY;
-        }
-
-        Sdk sdk = goFacet.getGoSdk();
+        Sdk sdk = GoSdkUtil.getGoogleGoSdkForModule(module);
         if (sdk == null) {
             return LookupElement.EMPTY_ARRAY;
         }

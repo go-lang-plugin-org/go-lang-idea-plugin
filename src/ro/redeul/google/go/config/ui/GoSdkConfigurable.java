@@ -5,7 +5,7 @@ import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 
 import ro.redeul.google.go.config.sdk.GoSdkData;
-import ro.redeul.google.go.util.GoSdkUtil;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.*;
 

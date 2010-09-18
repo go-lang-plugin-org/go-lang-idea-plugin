@@ -3,7 +3,6 @@ package ro.redeul.google.go.compiler;
 import com.intellij.compiler.CompilerManagerImpl;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
@@ -15,6 +14,7 @@ import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.facet.FacetManager;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.compiler.*;
@@ -26,7 +26,6 @@ import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.JavaSdkImpl;
 import com.intellij.openapi.roots.CompilerProjectExtension;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -45,7 +44,7 @@ import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.runner.GoApplicationConfiguration;
 import ro.redeul.google.go.runner.GoRunConfigurationType;
-import ro.redeul.google.go.util.GoSdkUtil;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -138,7 +137,7 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
     @Override
     protected void tuneFixture(JavaModuleFixtureBuilder moduleBuilder) throws Exception {
         moduleBuilder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
-        moduleBuilder.addJdk(JavaSdkImpl.getMockJdkCE().getHomePath());
+//        moduleBuilder.addJdk(JavaSdkImpl.getMockJdkCE().getHomePath());
         super.tuneFixture(moduleBuilder);
     }
 
@@ -247,7 +246,8 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
 
         final DefaultRunExecutor extension = Executor.EXECUTOR_EXTENSION_NAME.findExtension(DefaultRunExecutor.class);
 
-        final ExecutionEnvironment environment = new ExecutionEnvironment(configuration, new RunnerSettings<JDOMExternalizable>(null, null), null, null);
+
+        final ExecutionEnvironment environment = new ExecutionEnvironment(configuration, SimpleDataContext.getProjectContext(myFixture.getProject()));
 
         final DefaultProgramRunner runner = ProgramRunner.PROGRAM_RUNNER_EP.findExtension(DefaultProgramRunner.class);
         final StringBuffer sb = new StringBuffer();

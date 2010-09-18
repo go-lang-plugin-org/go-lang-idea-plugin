@@ -6,7 +6,6 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.CapturingProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
-import com.intellij.facet.FacetManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -24,26 +23,27 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.ui.configuration.ClasspathEditor;
 import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Trinity;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.util.*;
+import com.intellij.util.Chunk;
+import com.intellij.util.CommonProcessors;
+import com.intellij.util.EnvironmentUtil;
+import com.intellij.util.StringBuilderSpinAllocator;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
-import ro.redeul.google.go.config.facet.GoFacet;
-import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
-import ro.redeul.google.go.util.GoSdkUtil;
+import ro.redeul.google.go.sdk.GoSdkTool;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.ProcessUtil;
 
 import java.io.File;
@@ -281,12 +281,12 @@ public class GoCompiler implements TranslatingCompiler {
                 VirtualFile children[] = folder.getChildren();
                 for (final VirtualFile child : children) {
 
-                    if ( child.getFileType() != GoFileType.GO_FILE_TYPE )
+                    if (child.getFileType() != GoFileType.GO_FILE_TYPE)
                         continue;
 
                     PsiFile psiFile = PsiManager.getInstance(project).findFile(child);
 
-                    if ( ! (psiFile instanceof GoFile)) {
+                    if (!(psiFile instanceof GoFile)) {
                         continue;
                     }
 
@@ -315,7 +315,7 @@ public class GoCompiler implements TranslatingCompiler {
 
         File outputFolder = new File(baseOutputPath + "/" + relativePath);
 
-        if ( outputFolder.getName().equals(packageName)
+        if (outputFolder.getName().equals(packageName)
                 && VfsUtil.isAncestor(new File(baseOutputPath), outputFolder, true)) {
             outputFolder = outputFolder.getParentFile();
         }
@@ -386,10 +386,9 @@ public class GoCompiler implements TranslatingCompiler {
 
         outputFolder.mkdirs();
 
-        String targetApplication = currentPackage.replaceFirst("^main\\.", "");
+        String targetApplication = findTargetApplicationName(files, context);
 
-        if (targetApplication.trim().length() == 0) {
-            context.addMessage(CompilerMessageCategory.INFORMATION, "No main function provided", null, -1, -1);
+        if (targetApplication == null) {
             return false;
         }
 
@@ -450,6 +449,46 @@ public class GoCompiler implements TranslatingCompiler {
         sink.add(outputFolder.getAbsolutePath(), items, VirtualFile.EMPTY_ARRAY);
 
         return output != null && output.getExitCode() == 0;
+    }
+
+    private String findTargetApplicationName(final Collection<VirtualFile> files, final CompileContext context) {
+
+        return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
+            public String compute() {
+                String applicationName = null;
+                VirtualFile applicationFile = null;
+
+                for (final VirtualFile child : files) {
+
+                    if (child.getFileType() != GoFileType.GO_FILE_TYPE)
+                        continue;
+
+                    PsiFile psiFile = PsiManager.getInstance(project).findFile(child);
+
+                    if (!(psiFile instanceof GoFile)) {
+                        continue;
+                    }
+
+                    GoFile file = (GoFile) psiFile;
+
+                    if (file.getMainFunction() != null) {
+                        if (applicationName != null) {
+                            context.addMessage(CompilerMessageCategory.ERROR, GoBundle.message("compiler.multiple.files.with.main.method", applicationFile.getPath(), child.getPath()), null, -1, -1);
+                            return null;
+                        }
+
+                        applicationName = child.getNameWithoutExtension();
+                        applicationFile = child;
+                    }
+                }
+
+                if (applicationName == null) {
+                    context.addMessage(CompilerMessageCategory.ERROR, GoBundle.message("compiler.no.main.method.found"), null, -1, -1);
+                }
+
+                return applicationName;
+            }
+        });
     }
 
     private ProcessOutput executeCommandInFolder(GeneralCommandLine command, String path, CompileContext context) {
@@ -575,12 +614,7 @@ public class GoCompiler implements TranslatingCompiler {
                         LOG.debug(String.format("[compiling] " + virtualFile + " pkg: " + packageName));
                     }
 
-
-                    if (packageName.equals("main") && file.getMainFunction() != null) {
-                        list.add(Trinity.create(virtualFile, packageName + "." + virtualFile.getNameWithoutExtension(), imports));
-                    } else {
-                        list.add(Trinity.create(virtualFile, packageName, imports));
-                    }
+                    list.add(Trinity.create(virtualFile, packageName, imports));
                 }
             });
         }
@@ -614,165 +648,29 @@ public class GoCompiler implements TranslatingCompiler {
         return baseOutputPath;
     }
 
-    private String cleanUpImportName(String importPath) {
-        return importPath.replaceAll("(^\"|\"$)", "").replaceAll("^[^/]*/", "");
-    }
-
-    private List<String> findPackagesCompilationOrder(List<Pair<String, String>> importDependencies, Set<String> ourPackages) {
-
-        List<String> sortedPackages = new ArrayList<String>();
-
-        Map<String, Set<String>> outGoingList = new HashMap<String, Set<String>>();
-        Map<String, Integer> incomingCounts = new HashMap<String, Integer>();
-
-        for (String ourPackage : ourPackages) {
-            incomingCounts.put(ourPackage, 0);
-        }
-
-        for (Pair<String, String> importDependency : importDependencies) {
-            if (!ourPackages.contains(importDependency.getFirst())) {
-                continue;
-            }
-
-            Set<String> adiacentNodes = outGoingList.get(importDependency.getFirst());
-            if (adiacentNodes == null) {
-                adiacentNodes = new HashSet<String>();
-                outGoingList.put(importDependency.getFirst(), adiacentNodes);
-            }
-
-            adiacentNodes.add(importDependency.getSecond());
-
-            incomingCounts.put(importDependency.second, incomingCounts.get(importDependency.second) + 1);
-        }
-
-        boolean canGoFurther = true;
-
-        List<String> unsortedItems = new ArrayList<String>(ourPackages);
-        while (canGoFurther) {
-
-            canGoFurther = false;
-            List<String> removed = new ArrayList<String>();
-
-            for (String key : incomingCounts.keySet()) {
-                if (incomingCounts.get(key) == 0) {
-                    removed.add(key);
-
-                    if (outGoingList.containsKey(key)) {
-                        for (String outgoing : outGoingList.get(key)) {
-                            if (incomingCounts.get(outgoing) != null) {
-                                incomingCounts.put(outgoing, incomingCounts.get(outgoing) - 1);
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (String s : removed) {
-                canGoFurther = true;
-                incomingCounts.remove(s);
-                outGoingList.remove(s);
-                sortedPackages.add(s);
-            }
-        }
-
-        return sortedPackages;
-    }
-
-
-    private List<VirtualFile> getFilesForPackage(String packageName, Map<String, List<VirtualFile>> packagesToFileList) {
-        List<VirtualFile> files = packagesToFileList.get(packageName);
-
-        if (files == null) {
-            files = new ArrayList<VirtualFile>();
-            packagesToFileList.put(packageName, files);
-        }
-
-        return files;
-    }
-
-    private void doPackLibrary(CompileContext context, Sdk sdk, String outputPath, String compileOutput, String libraryOutput) {
-        context.getProgressIndicator().setText("Packing library .. " + libraryOutput);
-
-        List<String> compileCommand = new ArrayList<String>();
-
-        compileCommand.add(getPackerBinary(sdk));
-        compileCommand.add("grc");
-        compileCommand.add(libraryOutput);
-        compileCommand.add(compileOutput);
-
-        Pair<String, String> compilationResult =
-                ProcessUtil.executeAndProcessOutput(
-                        compileCommand,
-                        new File(outputPath),
-                        ProcessUtil.NULL_PARSER,
-                        ProcessUtil.NULL_PARSER);
-
-        if (compilationResult.getSecond() != null) {
-            if (compilationResult.getSecond().length() > 0) {
-                context.addMessage(CompilerMessageCategory.INFORMATION, compilationResult.getSecond(), "", -1, -1);
-            }
-        }
-
-        if (compilationResult.getFirst() != null) {
-            if (compilationResult.getFirst().length() > 0) {
-                context.addMessage(CompilerMessageCategory.INFORMATION, compilationResult.getFirst(), "", -1, -1);
-            }
-        }
-    }
-
-    private void doCompileFile(CompileContext context, Sdk sdk, String executionFolder, List<VirtualFile> files, String destinationFile) {
-        context.getProgressIndicator().setText("Compiling .. " + files);
-
-        List<String> compileCommand = new ArrayList<String>();
-
-        compileCommand.add(getCompilerBinary(sdk));
-        compileCommand.add("-I");
-        compileCommand.add(executionFolder + "/go-binaries/packages/");
-        compileCommand.add("-o");
-        compileCommand.add(destinationFile);
-
-        for (VirtualFile file : files) {
-            compileCommand.add(file.getPath());
-        }
-
-        Pair<List<CompilerMessage>, String> compilationResult =
-                ProcessUtil.executeAndProcessOutput(
-                        compileCommand,
-                        new File(executionFolder),
-                        new GoCompilerOutputStreamParser(),
-                        ProcessUtil.NULL_PARSER);
-
-        if (compilationResult.getFirst() != null) {
-            for (CompilerMessage message : compilationResult.getFirst()) {
-                context.addMessage(message.category, message.message, VfsUtil.pathToUrl(FileUtil.toSystemIndependentName(message.fileName)), message.row, -1);
-            }
-        }
-
-        if (compilationResult.getSecond() != null) {
-            if (compilationResult.getSecond().length() > 0) {
-                context.addMessage(CompilerMessageCategory.INFORMATION, compilationResult.getSecond(), "", -1, -1);
-            }
-        }
-    }
 
     private String getCompilerBinary(Sdk sdk) {
-        GoSdkData goSdkData = (GoSdkData) sdk.getSdkAdditionalData();
-        return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getCompilerName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH);
+        GoSdkData goSdkData = goSdkData(sdk);
+        return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoCompiler);
     }
 
     private String getPackerBinary(Sdk sdk) {
-        GoSdkData goSdkData = (GoSdkData) sdk.getSdkAdditionalData();
-        return goSdkData.BINARY_PATH + "/" + "gopack";
+        GoSdkData goSdkData = goSdkData(sdk);
+        return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoArchivePacker);
     }
 
     private String getLinkerBinary(Sdk sdk) {
-        GoSdkData goSdkData = (GoSdkData) sdk.getSdkAdditionalData();
-        return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getLinkerName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH);
+        GoSdkData goSdkData = goSdkData(sdk);
+        return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoLinker);
     }
 
     private String getTargetExtension(Sdk sdk) {
-        GoSdkData goSdkData = (GoSdkData) sdk.getSdkAdditionalData();
+        GoSdkData goSdkData = goSdkData(sdk);
         return GoSdkUtil.getBinariesDesignation(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH);
+    }
+
+    private GoSdkData goSdkData(Sdk sdk) {
+        return (GoSdkData) sdk.getSdkAdditionalData();
     }
 
     private Sdk findGoSdkForModule(Module module) {
