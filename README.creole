@@ -22,10 +22,15 @@ Intellij IDEA homepage:
 * Code folding
 * Brace matching
 * Comment/Uncomment (Single/Multiple line) support
-* Go SDK type
+* Go SDK (work with the latest release and on windows)
 * File type icon
-* Sdk package name and local package names completion
+* Go application file and library generation.
+* Auto completion of sdk package names and/or local application packages.
 * Compilation and Run configuration
+* Go To definition (for types) works across files and Go SDK
+* ColorsAndSettings page with a new color scheme
+* Automatically add new line at end of file
+* Force UTF-8 encoding for go files
 
 == How to use it
 
@@ -42,6 +47,10 @@ Intellij IDEA homepage:
 Select the proper sdk for the module.
 
 Now you are ready to write and compile google go programs.
+
+== Tutorials by other people ==
+
+* http://www.philipandrew.com/?p=46
 
 == BUGS
 
