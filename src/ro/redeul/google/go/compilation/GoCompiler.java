@@ -307,7 +307,7 @@ public class GoCompiler implements TranslatingCompiler {
         return newFiles;
     }
 
-    private boolean doCompilePackage(VirtualFile sourceRoot, String packageName, String relativePath, Collection<VirtualFile> files, String baseOutputPath, Sdk sdk, CompileContext context, OutputSink sink) {
+    private boolean doCompilePackage(VirtualFile sourceRoot, String packageName, String relativePath, Collection<VirtualFile> files, String baseOutputPath, final Sdk sdk, CompileContext context, OutputSink sink) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("[compiling] Compiling package \"" + packageName + "\" from path [" + relativePath + "] - " + files);
@@ -330,6 +330,9 @@ public class GoCompiler implements TranslatingCompiler {
         command.addParameter("-o");
         command.addParameter(outputBinary);
         command.setWorkDirectory(sourceRoot.getPath());
+        command.setEnvParams(new HashMap<String, String>() {{
+            put("GOROOT", sdk.getHomePath());
+        }});
 
         for (VirtualFile file : files) {
             command.addParameter(VfsUtil.getRelativePath(file, sourceRoot, '/'));
@@ -361,6 +364,10 @@ public class GoCompiler implements TranslatingCompiler {
         libraryPackCommand.addParameter("grc");
         libraryPackCommand.addParameter(outputLibrary);
         libraryPackCommand.addParameter(outputBinary);
+        libraryPackCommand.setEnvParams(new HashMap<String, String>() {{
+            put("GOROOT", sdk.getHomePath());
+        }});
+
 
         output = executeCommandInFolder(libraryPackCommand, sourceRoot.getPath(), context);
 
@@ -377,7 +384,7 @@ public class GoCompiler implements TranslatingCompiler {
     }
 
 
-    private boolean doCompileApplication(VirtualFile sourceRoot, String baseOutputPath, Sdk sdk, CompileContext context, OutputSink sink, String relativePath, String currentPackage, Collection<VirtualFile> files) {
+    private boolean doCompileApplication(VirtualFile sourceRoot, String baseOutputPath, final Sdk sdk, CompileContext context, OutputSink sink, String relativePath, String currentPackage, Collection<VirtualFile> files) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("[compiling] Compiling application in folder [" + relativePath + "] - " + files);
         }
@@ -403,6 +410,9 @@ public class GoCompiler implements TranslatingCompiler {
 //        command.addParameter(".");
         command.addParameter("-o");
         command.addParameter(outputBinary);
+        command.setEnvParams(new HashMap<String, String>() {{
+            put("GOROOT", sdk.getHomePath());
+        }});
 
         VirtualFile outputVirtualFile = VfsUtil.findFileByURL(VfsUtil.convertToURL("file://" + executionPath + "/"));
 
@@ -431,13 +441,16 @@ public class GoCompiler implements TranslatingCompiler {
         // begin application linker command
         String outputApplication = outputFolder.getAbsolutePath() + File.separator + targetApplication;
 
-        GeneralCommandLine libraryPackCommand = new GeneralCommandLine();
-        libraryPackCommand.setExePath(getLinkerBinary(sdk));
-        libraryPackCommand.addParameter("-o");
-        libraryPackCommand.addParameter(outputApplication);
-        libraryPackCommand.addParameter(outputBinary);
+        GeneralCommandLine applicationLinkCommand = new GeneralCommandLine();
+        applicationLinkCommand.setExePath(getLinkerBinary(sdk));
+        applicationLinkCommand.addParameter("-o");
+        applicationLinkCommand.addParameter(fixApplicationExtension(outputApplication, sdk));
+        applicationLinkCommand.addParameter(outputBinary);
+        applicationLinkCommand.setEnvParams(new HashMap<String, String>() {{
+            put("GOROOT", sdk.getHomePath());
+        }});
 
-        output = executeCommandInFolder(libraryPackCommand, sourceRoot.getPath(), context);
+        output = executeCommandInFolder(applicationLinkCommand, sourceRoot.getPath(), context);
 
         VirtualFile libraryFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(outputApplication);
         if (libraryFile == null) {
@@ -449,6 +462,17 @@ public class GoCompiler implements TranslatingCompiler {
         sink.add(outputFolder.getAbsolutePath(), items, VirtualFile.EMPTY_ARRAY);
 
         return output != null && output.getExitCode() == 0;
+    }
+
+    private String fixApplicationExtension(String outputApplication, Sdk sdk) {
+
+        GoSdkData goSdkData = goSdkData(sdk);
+
+        if ( goSdkData.TARGET_OS.equals("windows") ){
+            return outputApplication + ".exe";
+        }
+
+        return outputApplication;
     }
 
     private String findTargetApplicationName(final Collection<VirtualFile> files, final CompileContext context) {

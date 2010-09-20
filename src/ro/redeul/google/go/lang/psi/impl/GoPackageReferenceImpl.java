@@ -28,4 +28,6 @@ public class GoPackageReferenceImpl extends GoPsiElementImpl implements GoPackag
     public String getString() {
         return getText();
     }
+
+
 }

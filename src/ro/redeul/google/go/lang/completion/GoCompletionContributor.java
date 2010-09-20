@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.impl.DebugUtil;
@@ -10,10 +11,13 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
+import ro.redeul.google.go.lang.psi.types.GoTypeName;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.or;
 
 /**
  * Created by IntelliJ IDEA.
@@ -58,6 +62,28 @@ public class GoCompletionContributor extends CompletionContributor {
         }
     };
 
+    CompletionProvider<CompletionParameters> typeNameCompletionProvider = new CompletionProvider<CompletionParameters>() {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+
+            PsiElement element = parameters.getOriginalPosition();
+            String currentPath = element.getText();
+
+            LookupElement elements[];
+//            if (currentPath.startsWith("\"./")) {
+//                elements = GoCompletionUtil.resolveLocalPackagesForPath(element.getProject(), element.getContainingFile(), currentPath);
+//            } else {
+//                elements = GoCompletionUtil.resolveSdkPackagesForPath(element.getProject(), element.getContainingFile(), currentPath);
+//            }
+
+            elements = GoCompletionUtil.getImportedPackagesNames(element.getContainingFile());
+            for (LookupElement lookupElement : elements) {
+                result.addElement(lookupElement);
+            }
+
+        }
+    };
+
     CompletionProvider<CompletionParameters> debuggingCompletionProvider = new CompletionProvider<CompletionParameters>() {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
@@ -86,6 +112,9 @@ public class GoCompletionContributor extends CompletionContributor {
                 psiElement().withElementType(GoTokenTypes.litSTRING).withParent(psiElement(GoImportSpec.class)),
                 importPathCompletionProvider);
 
+//        extend(CompletionType.BASIC,
+//                psiElement().withParent(or(psiElement(GoTypeName.class), psiElement().withParent(GoTypeName.class))),
+//                typeNameCompletionProvider);
 
 //        extend(
 //                CompletionType.BASIC,

@@ -159,4 +159,15 @@ public class GoCompletionUtil {
 
         return elements.toArray(new LookupElement[elements.size()]);
     }
+
+    public static LookupElement[] getImportedPackagesNames(PsiFile file) {
+
+        if ( ! (file instanceof GoFile) ) {
+            return LookupElement.EMPTY_ARRAY;
+        }
+
+        GoFile goFile = (GoFile) file;
+
+        return new LookupElement[0];  //To change body of created methods use File | Settings | File Templates.
+    }
 }

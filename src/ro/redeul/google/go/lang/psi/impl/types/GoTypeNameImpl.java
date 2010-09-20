@@ -23,6 +23,9 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: mtoader
@@ -103,7 +106,12 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
 
     @NotNull
     public Object[] getVariants() {
-        return ArrayUtil.EMPTY_OBJECT_ARRAY;
+//        NamedTypesScopeProcessor2 namedTypesProcessor = new NamedTypesScopeProcessor2();
+//
+//        PsiScopesUtil.treeWalkUp(namedTypesProcessor, this, this.getContainingFile());
+//
+//        return namedTypesProcessor.references();
+        return new Object[0];
     }
 
     public boolean isSoft() {
@@ -112,6 +120,54 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeName(this);
+    }
+
+    private class NamedTypesScopeProcessor2 extends BaseScopeProcessor {
+        List<PsiElement> references = new ArrayList<PsiElement>();
+
+        public boolean execute(PsiElement element, ResolveState state) {
+
+            collectTypeDeclarations(element, state);
+
+            collectImports(element, state);
+
+            return true;
+        }
+
+        private void collectImports(PsiElement element, ResolveState state) {
+            if ( ! (element instanceof GoImportSpec) ) {
+                return;
+            }
+
+            GoImportSpec importSpec = (GoImportSpec) element;
+
+            if ( ! importSpec.getPackageReference().isLocal() ) {
+                if ( ! importSpec.getPackageReference().isBlank() ) {
+                    references.add(importSpec.getPackageReference());
+                }
+            }
+        }
+
+        private void collectTypeDeclarations(PsiElement element, ResolveState state) {
+            if ( ! (element instanceof GoTypeDeclaration) ) {
+                return;
+            }
+
+            GoTypeDeclaration typeDeclaration = (GoTypeDeclaration) element;
+
+            for (GoTypeSpec typeSpec : typeDeclaration.getTypeSpecs()) {
+
+                GoTypeNameDeclaration typeNameDeclaration = typeSpec.getTypeNameDeclaration();
+
+                if (typeNameDeclaration != null) {
+                    references.add(typeNameDeclaration);
+                }
+            }
+        }
+
+        public PsiElement[] references() {
+            return  references.toArray(new PsiElement[references.size()]);
+        }
     }
 
     private class NamedTypesScopeProcessor extends BaseScopeProcessor {
