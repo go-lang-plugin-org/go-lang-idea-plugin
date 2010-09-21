@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi;
 
-import ro.redeul.google.go.lang.psi.GoPsiElement;
+import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.PsiReference;
 
 /**
  * Created by IntelliJ IDEA.
@@ -9,7 +10,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
  * Time: 10:43:12 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface GoPackageReference extends GoPsiElement {
+public interface GoPackageReference extends GoPsiElement, PsiReference, PsiNamedElement {
 
     String getString();
 

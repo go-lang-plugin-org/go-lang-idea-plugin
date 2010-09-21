@@ -47,39 +47,38 @@ public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
             return true;
         }
 
-        if ( place instanceof GoQualifiedNameElement) {
-
-            GoQualifiedNameElement qualifiedNameElement = (GoQualifiedNameElement) place;
-
-            GoPackageReference importedPackageReference = getPackageReference();
-            GoPackageReference elementReference = qualifiedNameElement.getPackageReference();
-
-            // import "a"; var x a.T;
-            if ( importedPackageReference == null && elementReference != null && elementReference.getString().equals(defaultPackageNameFromImport(getImportPath())) ) {
-                if ( ! processor.execute(this, state) ) {
-                    return false;
-                }
-            }
-
-            // import . "a"; var x T; // T is defined inside package a
-            if ( importedPackageReference != null && importedPackageReference.isLocal() && elementReference == null ) {
-                if ( ! processor.execute(this, state) ) {
-                    return false;
-                }
-            }
-
-            // import x "a"; var x.T;
-            if ( importedPackageReference != null && elementReference != null && elementReference.getString().equals(importedPackageReference.getString())) {
-                if ( ! processor.execute(this, state) ) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return processor.execute(this, state);
+//
+//        if ( place instanceof GoQualifiedNameElement) {
+//
+//            GoQualifiedNameElement qualifiedNameElement = (GoQualifiedNameElement) place;
+//
+//            GoPackageReference importedPackageReference = getPackageReference();
+//            GoPackageReference elementReference = qualifiedNameElement.getPackageReference();
+//
+//            // import "a"; var x a.T;
+//            if ( importedPackageReference == null && elementReference != null && elementReference.getString().equals(defaultPackageNameFromImport(getImportPath())) ) {
+//                if ( ! processor.execute(this, state) ) {
+//                    return false;
+//                }
+//            }
+//
+//            // import . "a"; var x T; // T is defined inside package a
+//            if ( importedPackageReference != null && importedPackageReference.isLocal() && elementReference == null ) {
+//                if ( ! processor.execute(this, state) ) {
+//                    return false;
+//                }
+//            }
+//
+//            // import x "a"; var x.T;
+//            if ( importedPackageReference != null && elementReference != null && elementReference.getString().equals(importedPackageReference.getString())) {
+//                if ( ! processor.execute(this, state) ) {
+//                    return false;
+//                }
+//            }
+//        }
+//
+//        return true;
     }
 
-    private String defaultPackageNameFromImport(String importPath) {
-        return GoPsiUtils.findDefaultPackageName(GoPsiUtils.cleanupImportPath(importPath));
-    }
 }
