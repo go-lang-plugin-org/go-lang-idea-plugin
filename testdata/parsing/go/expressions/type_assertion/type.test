@@ -18,11 +18,10 @@ Go file
       PsiWhiteSpace(' ')
       Literal
         PsiElement(IDENTIFIER)('x')
-      PsiElement(.)('.')
-      PsiElement(()('(')
-      PsiElement(KEYWORD_TYPE)('type')
       PsiErrorElement:semicolon.or.newline.right.parenthesis.expected
-        <empty list>
+        PsiElement(.)('.')
+        PsiElement(()('(')
+        PsiElement(KEYWORD_TYPE)('type')
   PsiErrorElement:unknown.token
     PsiElement())(')')
        

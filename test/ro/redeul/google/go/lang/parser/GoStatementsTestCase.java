@@ -25,10 +25,9 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     @Test public void testReturnEmpty_enter() throws Throwable { doTest(); }
 
     @Test public void testVarVar1() throws Throwable { doTest(); }
-    
     @Test public void testVarVar2() throws Throwable { doTest(); }
-
     @Test public void testVarVar3() throws Throwable { doTest(); }
+    @Test public void testVarVar4() throws Throwable { doTest(); }
 
     @Test public void testBreakEmpty() throws Throwable { doTest(); }
     @Test public void testBreakEmpty2() throws Throwable { doTest(); }

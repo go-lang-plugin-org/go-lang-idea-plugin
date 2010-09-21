@@ -116,7 +116,8 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
 
     @NotNull
     public Object[] getVariants() {
-        if (getPackageReference() != null) {
+
+        if (getPackageReference() != null && !getPackageReference().getString().endsWith("IntellijIdeaRulezzz") ) {
             LibraryContentsProcessor processor = new LibraryContentsProcessor(this);
 
             GoFile goFile = (GoFile) getContainingFile();

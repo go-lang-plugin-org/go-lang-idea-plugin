@@ -253,12 +253,16 @@ public abstract class ParserUtils {
     public static void waitNext(PsiBuilder builder, TokenSet tokenSet, String errorMessage) {
         int i = 0;
 
+        PsiBuilder.Marker marker = builder.mark();
         while (!builder.eof() && !tokenSet.contains(builder.getTokenType())) {
             builder.advanceLexer();
             i++;
         }
+
         if (i > 0) {
-            builder.error(errorMessage);
+            marker.error(errorMessage);
+        } else {
+            marker.drop();
         }
     }
 

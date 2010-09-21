@@ -31,6 +31,7 @@
         <h3>0.2.7 features:</h3>
                 <ul>
                     <li>[feature] Type name completion.</li>
+                    <li>[bugfix] Some parsing errors.</li>
                 </ul>
         </h3>
 

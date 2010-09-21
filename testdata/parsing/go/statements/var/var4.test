@@ -1,0 +1,40 @@
+package main
+func main() {
+    var a int var x int
+}
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  FunctionDeclaration(main)
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      VarDeclarations
+        PsiElement(KEYWORD_VAR)('var')
+        PsiWhiteSpace(' ')
+        VarSpec
+          Identifiers
+            PsiElement(IDENTIFIER)('a')
+          PsiWhiteSpace(' ')
+          TypeName
+            PsiElement(IDENTIFIER)('int')
+          PsiWhiteSpace(' ')
+          PsiErrorElement:semicolon.or.newline.right.parenthesis.expected
+            PsiElement(KEYWORD_VAR)('var')
+            PsiWhiteSpace(' ')
+            PsiElement(IDENTIFIER)('x')
+            PsiWhiteSpace(' ')
+            PsiElement(IDENTIFIER)('int')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(})('}')
