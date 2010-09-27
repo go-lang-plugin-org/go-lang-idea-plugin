@@ -82,7 +82,7 @@ public class GoBlock implements Block, GoElementTypes {
 
     @NotNull
     public ChildAttributes getChildAttributes(int newChildIndex) {
-        return new ChildAttributes(Indent.getContinuationIndent(), null);
+        return new ChildAttributes(Indent.getNormalIndent(), null);
     }
 
     public boolean isIncomplete() {

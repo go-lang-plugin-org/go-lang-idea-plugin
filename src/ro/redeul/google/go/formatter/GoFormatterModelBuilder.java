@@ -10,9 +10,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.groovy.GroovyFileType;
-import org.jetbrains.plugins.groovy.formatter.GroovyBlock;
 import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 /**
  * Created by IntelliJ IDEA.
@@ -38,6 +37,17 @@ public class GoFormatterModelBuilder implements FormattingModelBuilder {
     }
 
     public TextRange getRangeAffectingIndent(PsiFile file, int offset, ASTNode elementAtOffset) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        ASTNode current = elementAtOffset;
+
+        while (current != null && current.getElementType() != GoElementTypes.BLOCK_STATEMENT) {
+            current = current.getTreeParent();
+        }
+
+        // current = findNearestExpressionParent(current);
+        if (current == null) {
+            return elementAtOffset.getTextRange();
+        } else {
+            return current.getTreeParent().getTextRange();
+        }
     }
 }

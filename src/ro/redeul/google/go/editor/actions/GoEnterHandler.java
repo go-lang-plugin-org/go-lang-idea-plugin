@@ -10,6 +10,7 @@ import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
@@ -46,8 +47,9 @@ public class GoEnterHandler implements EnterHandlerDelegate {
             }
 
             if (iterator.getTokenType() == GoTokenTypes.pLCURCLY ) {
+                PsiDocumentManager.getInstance(file.getProject()).commitDocument(editor.getDocument());
                 CodeStyleManager.getInstance(file.getProject()).adjustLineIndent(file, editor.getCaretModel().getOffset());
-                return Result.Continue;
+                return Result.DefaultForceIndent;
             }
         }
 

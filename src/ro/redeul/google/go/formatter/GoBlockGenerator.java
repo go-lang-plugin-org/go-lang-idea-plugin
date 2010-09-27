@@ -106,12 +106,14 @@ public class GoBlockGenerator {
 
             final ArrayList<Block> subBlocks = new ArrayList<Block>();
             ASTNode[] children = node.getChildren(null);
-            for (ASTNode childNode : children) {
+            Alignment defaultAlignment = Alignment.createAlignment();
+            Alignment indentedAlignment = Alignment.createAlignment();
 
+            for (ASTNode childNode : children) {
                 if ( canBeCorrectBlock(childNode) ) {
                     Indent myIndent = Indent.getNoneIndent();
-                    Wrap myWrap = wrap;
-                    Alignment myAlignment = alignment;
+                    Alignment myAlignment = null;
+                    Wrap myWrap = null;
 
                     if ( isStatement(childNode) || isComment(childNode) ) {
                         myIndent = Indent.getNormalIndent();
@@ -131,11 +133,16 @@ public class GoBlockGenerator {
         for (ASTNode childNode : children) {
             if (canBeCorrectBlock(childNode)) {
                 final Indent indent = Indent.getNoneIndent();
-                subBlocks.add(new GoBlock(childNode, null, indent, wrap, settings));
+                subBlocks.add(new GoBlock(childNode, node.getPsi() instanceof GoBlockStatement ? null : alignment, indent, wrap, settings));
             }
         }
 
         return subBlocks;
+    }
+
+    private static boolean isNewLine(ASTNode childNode) {
+//        return false;
+        return childNode.getElementType() == GoTokenTypes.wsNLS;
     }
 
     private static boolean isComment(ASTNode childNode) {
@@ -147,7 +154,7 @@ public class GoBlockGenerator {
     }
 
     private static boolean canBeCorrectBlock(final ASTNode node) {
-        return (node.getText().trim().length() > 0);
+        return (node.getText().trim().length() > 0) && node.getElementType() != GoElementTypes.wsNLS;
     }
 
 
