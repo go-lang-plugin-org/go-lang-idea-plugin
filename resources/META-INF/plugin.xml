@@ -19,10 +19,12 @@
             <li>Auto completion of sdk package names and/or local application packages.</li>
             <li>Compilation of the go applications (supported semantics are similar to those of gobuild)</li>
             <li>Go To definition (for types) works across files and Go SDK</li>
+            <li>Code formatting</li>
             <li>Type name completion</li>
             <li>ColorsAndSettings page with a new color scheme</li>
             <li>Automatically add new line at end of file</li>
             <li>Force UTF-8 encoding for go files</li>
+
         </ul>
     ]]>
     </description>
@@ -31,6 +33,7 @@
         <h3>0.2.7 features:</h3>
                 <ul>
                     <li>[feature] Type name completion.</li>
+                    <li>[feature] Code formatting.</li>
                     <li>[bugfix] Some parsing errors.</li>
                 </ul>
         </h3>
@@ -142,6 +145,7 @@
         <lang.foldingBuilder language="Google Go" implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
         <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
         <lang.findUsagesProvider language="Google Go" implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
+        <lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFormatterModelBuilder" />
 
         <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
 
@@ -165,5 +169,7 @@
         <colorSettingsPage implementation="ro.redeul.google.go.editor.highlighting.GoColorsAndFontsPage"/>
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
+
+        <!--<enterHandlerDelegate implementation="ro.redeul.google.go.editor.actions.GoEnterHandler" order="after EnterBetweenBracesHandler"/>-->
     </extensions>
 </idea-plugin>

@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.toplevel;
 
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,4 +15,6 @@ public interface GoFunctionDeclaration extends GoPsiElement {
     String getFunctionName();
 
     boolean isMain();
+
+    GoBlockStatement getBlock();
 }

@@ -6,6 +6,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -33,6 +34,10 @@ public class GoFunctionDeclarationImpl extends GoPsiElementImpl implements GoFun
 
     public boolean isMain() {
         return getFunctionName().equals("main");
+    }
+
+    public GoBlockStatement getBlock() {
+        return findChildByClass(GoBlockStatement.class);
     }
 
     public String toString() {

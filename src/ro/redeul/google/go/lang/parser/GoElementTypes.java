@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.parser;
 
+import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.lexer.GoElementType;
 import ro.redeul.google.go.lang.lexer.GoElementTypeImpl;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
@@ -147,4 +148,22 @@ public interface GoElementTypes extends GoTokenTypes {
     // Expressions statements
     GoElementType LABELED_STATEMENT = new GoElementTypeImpl("LabeledStmt");
 
+
+    public final TokenSet STATEMENTS = TokenSet.create(
+            LABELED_STATEMENT,
+            EXPRESSION_STATEMENT,
+            ASSIGN_STATEMENT,
+            FALLTHROUGH_STATEMENT,
+            GO_STATEMENT,
+            GOTO_STATEMENT,
+            BREAK_STATEMENT,
+            CONTINUE_STATEMENT,
+            SELECT_STATEMENT,
+            FOR_STATEMENT,
+            INC_DEC_STATEMENT,
+            RETURN_STATEMENT,
+            IF_STATEMENT,
+            SHORT_VAR_STATEMENT,
+            VAR_DECLARATIONS
+    );
 }
