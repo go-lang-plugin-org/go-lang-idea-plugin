@@ -1,0 +1,33 @@
+package main
+var e = interface{}(nil)
+----
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CallOrConversionExpression
+        TypeInterface
+          PsiElement(KEYWORD_INTERFACE)('interface')
+          PsiElement({)('{')
+          PsiElement(})('}')
+        PsiElement(()('(')
+        Literal
+          PsiElement(IDENTIFIER)('nil')
+        PsiElement())(')')
+  PsiElement(WS_NEW_LINES)('\n')
+  PsiErrorElement:unknown.token
+    PsiElement(--)('--')
+  PsiErrorElement:unknown.token
+    PsiElement(--)('--')

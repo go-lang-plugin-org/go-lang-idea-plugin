@@ -12,6 +12,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.parser.GoParserDefinition;
 
 /**
  * Created by IntelliJ IDEA.
@@ -39,13 +40,13 @@ public class GoFormatterModelBuilder implements FormattingModelBuilder {
     public TextRange getRangeAffectingIndent(PsiFile file, int offset, ASTNode elementAtOffset) {
         ASTNode current = elementAtOffset;
 
-        while (current != null && current.getElementType() != GoElementTypes.BLOCK_STATEMENT) {
+        while (current != null && current.getElementType() != GoElementTypes.BLOCK_STATEMENT && current.getElementType() != GoParserDefinition.GO_FILE_TYPE) {
             current = current.getTreeParent();
         }
 
         // current = findNearestExpressionParent(current);
         if (current == null) {
-            return elementAtOffset.getTextRange();
+            return current.getTextRange();
         } else {
             return current.getTreeParent().getTextRange();
         }

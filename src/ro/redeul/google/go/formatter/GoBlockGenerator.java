@@ -14,6 +14,7 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.parser.GoParserDefinition;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -156,7 +157,6 @@ public class GoBlockGenerator {
     private static boolean canBeCorrectBlock(final ASTNode node) {
         return (node.getText().trim().length() > 0) && node.getElementType() != GoElementTypes.wsNLS;
     }
-
 
     private static ASTNode[] getGoChildren(final ASTNode node) {
         PsiElement psi = node.getPsi();

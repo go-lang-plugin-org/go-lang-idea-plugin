@@ -28,7 +28,7 @@ public class GoParser implements PsiParser {
     @NotNull
     public ASTNode parse(IElementType root, PsiBuilder builder) {
 
-        builder.setDebugMode(true);
+//        builder.setDebugMode(true);
 
         PsiBuilder.Marker rootMarker = builder.mark();
 

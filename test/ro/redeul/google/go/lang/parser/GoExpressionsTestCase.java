@@ -94,6 +94,8 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
 
     @Test public void testPrimaryPrimary8() throws Throwable { doTest(); }
 
+    @Test public void testPrimaryPrimary9() throws Throwable { doTest(); }
+
     @Test public void testBinarySimpleAdditive() throws Throwable { doTest(); }
 
     @Test public void testBinarySimpleMultiplicative() throws Throwable { doTest(); }

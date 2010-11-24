@@ -4,10 +4,7 @@ import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
-import ro.redeul.google.go.lang.parser.parsing.types.ArrayType;
-import ro.redeul.google.go.lang.parser.parsing.types.MapType;
-import ro.redeul.google.go.lang.parser.parsing.types.SliceType;
-import ro.redeul.google.go.lang.parser.parsing.types.StructType;
+import ro.redeul.google.go.lang.parser.parsing.types.*;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 public class PrimaryExpression implements GoElementTypes {
@@ -188,6 +185,10 @@ public class PrimaryExpression implements GoElementTypes {
 
         if ( kSTRUCT == builder.getTokenType() ) {
             return StructType.parse(builder, parser);
+        }
+
+        if ( kINTERFACE == builder.getTokenType() ) {
+            return InterfaceType.parse(builder, parser);
         }
 
         if ( pLBRACK == builder.getTokenType() ) {
