@@ -38,7 +38,7 @@ Intellij IDEA homepage:
 * Open the Plugins installation page: File -> Settings -> Plugins -> Available Plugins
 * Search for google go
 * Right click on the proper plugin and install
-* Download latest release of the Google Go language (http://golang.org/doc/install.html).
+* Download [[http://golang.org/doc/install.html|latest release of the Google Go language]].
 * Build and install it.
 * Open IDEA and create an empty Java project.
 * Go to File -> Project Structure and select SDKs entry in the left column of the new window
@@ -50,7 +50,7 @@ Now you are ready to write and compile google go programs.
 
 == Tutorials by other people ==
 
-* http://www.philipandrew.com/?p=46
+* [[http://www.philipandrew.com/?p=46|Philip Andrew's Intellij Go Plugin tutorial]]
 
 == BUGS
 
@@ -61,7 +61,7 @@ http://github.com/mtoader/google-go-lang-idea-plugin/issues
 
 == AUTHORS
 
-* Toader Mihai Claudiu (mtoader@gmail.com)
+* [[http://redeul.ro|Toader Mihai Claudiu (mtoader@gmail.com)]]
 
   I'm an entrepreneur and I also build software applications. I'm currently open to
 consulting work in interesting projects.
