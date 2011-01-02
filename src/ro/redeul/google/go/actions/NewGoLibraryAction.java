@@ -40,15 +40,18 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
         return file;
     }
 
-    @NotNull
-    @Override
-    protected CreateFileFromTemplateDialog.Builder buildDialog(Project project, PsiDirectory directory) {
-        CreateFileFromTemplateDialog.Builder builder = CreateFileFromTemplateDialog.createDialog(project, "New Go file creation");
 
-        buildDialog(project, directory, builder);
+//    @NotNull
+//    protected CreateFileFromTemplateDialog.Builder buildDialog(Project project, PsiDirectory directory) {
+//        CreateFileFromTemplateDialog.Builder builder = CreateFileFromTemplateDialog.createDialog(project);
+//
+//        builder.setTitle("New Go file creation");
+//
+//        buildDialog(project, directory, builder);
+//
+//        return builder;
+//    }
 
-        return builder;
-    }
 
     @Override
     protected String getErrorTitle() {
@@ -62,8 +65,9 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
 
     @Override
     protected boolean isAvailable(DataContext dataContext) {
-        return super.isAvailable(dataContext)
-                && hasGoFacet(DataKeys.MODULE.getData(dataContext));
+//        return super.isAvailable(dataContext)
+//                && hasGoFacet(DataKeys.MODULE.getData(dataContext));
+        return super.isAvailable(dataContext);
     }
 
     private boolean hasGoFacet(Module module) {        

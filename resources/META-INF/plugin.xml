@@ -110,7 +110,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="95.000" until-build="96.000"/>
+    <idea-version since-build="99.000" until-build="100.000"/>
 
     <category>Custom Languages</category>
 
@@ -168,6 +168,8 @@
         <facetType implementation="ro.redeul.google.go.config.facet.GoFacetType"/>
         <sdkType implementation="ro.redeul.google.go.config.sdk.GoSdkType"/>
 
+        <moduleType id="GO_MODULE" implementationClass="ro.redeul.google.go.ide.GoModuleType" classpathProvider="true"/>
+        <moduleConfigurationEditorProvider implementation="ro.redeul.google.go.ide.GoModuleEditorsProvider"/>
         <!--<compiler.makeDependencyProcessor implementation="ro.redeul.google.go.compilation.GoDependencyProvider"/>-->
         <!--<compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>-->
 
@@ -182,6 +184,7 @@
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
 
+        <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoPackageName"/>
         <!--<enterHandlerDelegate implementation="ro.redeul.google.go.editor.actions.GoEnterHandler" order="after EnterBetweenBracesHandler"/>-->
     </extensions>
 </idea-plugin>

@@ -1,6 +1,6 @@
 package ro.redeul.google.go.runner.ui;
 
-import com.intellij.execution.junit2.configuration.ConfigurationModuleSelector;
+import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.ide.util.TreeFileChooser;
 import com.intellij.ide.util.TreeFileChooserFactory;
 import com.intellij.openapi.options.ConfigurationException;
@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.runner.GoApplicationConfiguration;
-import ro.redeul.google.go.ui.GoApplicationBrowser;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -37,7 +36,6 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
     private JComboBox comboModules;
 
     private ConfigurationModuleSelector moduleSelector;
-    private GoApplicationBrowser applicationBrowser;
     private Project project;
 
     @Override
@@ -79,7 +77,11 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
 
                 fileChooser.showDialog();
 
-                setChosenFile(fileChooser.getSelectedFile().getVirtualFile());
+
+                PsiFile selectedFile = fileChooser.getSelectedFile();
+                if ( selectedFile != null ) {
+                    setChosenFile(selectedFile.getVirtualFile());
+                }
             }
         });
     }
@@ -91,23 +93,6 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
     @NotNull
     @Override
     protected JComponent createEditor() {
-//        modulesModel = new DefaultComboBoxModel();
-//        comboModules.setModel(modulesModel);
-//
-//        comboModules.setRenderer(new DefaultListCellRenderer() {
-//            public Component getListCellRendererComponent(JList list, final Object value, int index, boolean isSelected, boolean cellHasFocus) {
-//                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-//                final Module module = (Module) value;
-//
-//                if (module != null) {
-//                    setIcon(module.getModuleType().getNodeIcon(false));
-//                    setText(module.getName());
-//                }
-//
-//                return this;
-//            }
-//        });
-//
         moduleSelector = new ConfigurationModuleSelector(project, comboModules);
         return component;
     }

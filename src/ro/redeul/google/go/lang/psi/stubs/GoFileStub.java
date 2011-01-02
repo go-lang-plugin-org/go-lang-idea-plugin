@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.stubs;
 
-import com.intellij.psi.stubs.PsiFileStubImpl;
+import com.intellij.psi.stubs.PsiFileStub;
+import com.intellij.util.io.StringRef;
 import ro.redeul.google.go.lang.psi.GoFile;
 
 /**
@@ -10,13 +11,10 @@ import ro.redeul.google.go.lang.psi.GoFile;
  * Time: 10:25:59 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GoFileStub extends PsiFileStubImpl<GoFile> {
-    
-    public GoFileStub(GoFile file) {
-        super(file);
-    }
+public interface GoFileStub extends PsiFileStub<GoFile> {
 
-    public GoFileStub() {
-        super(null);
-    }
+    StringRef getPackageName();
+
+    boolean isMain();
+
 }

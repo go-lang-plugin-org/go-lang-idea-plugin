@@ -50,10 +50,9 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
     }
 
     @NotNull
-    @Override
     protected CreateFileFromTemplateDialog.Builder buildDialog(Project project, PsiDirectory directory) {
 
-        CreateFileFromTemplateDialog.Builder builder = CreateFileFromTemplateDialog.createDialog(project, getErrorTitle());
+        CreateFileFromTemplateDialog.Builder builder = CreateFileFromTemplateDialog.createDialog(project);
 
         buildDialog(project, directory, builder);
 

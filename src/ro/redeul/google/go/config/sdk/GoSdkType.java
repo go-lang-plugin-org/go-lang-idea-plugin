@@ -75,6 +75,7 @@ public class GoSdkType extends SdkType {
 
         sdkModel.addListener(new SdkModel.Listener() {
             public void sdkAdded(Sdk sdk) {
+                // goConfigurable.
 //              if (sdk.getSdkType().equals(JavaSdk.getInstance())) {
 //                goConfigurable.addJavaSdk(sdk);
 //              }
@@ -125,6 +126,7 @@ public class GoSdkType extends SdkType {
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             public void run() {
                 sdkModificator.addRoot(librariesRoot, OrderRootType.CLASSES);
+                sdkModificator.addRoot(sourcesRoot, OrderRootType.CLASSES);
                 sdkModificator.addRoot(sourcesRoot, OrderRootType.SOURCES);
             }
         });
@@ -132,6 +134,7 @@ public class GoSdkType extends SdkType {
         sdkModificator.setVersionString(sdkData.VERSION);
         sdkModificator.setSdkAdditionalData(sdkData);        
         sdkModificator.commitChanges();
+
         return true;
     }
 

@@ -23,7 +23,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
-import com.intellij.openapi.projectRoots.impl.JavaSdkImpl;
 import com.intellij.openapi.roots.CompilerProjectExtension;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Key;
@@ -31,7 +30,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
-import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture;
 import com.intellij.testFramework.fixtures.TempDirTestFixture;
 import com.intellij.testFramework.fixtures.impl.TempDirTestFixtureImpl;
 import com.intellij.util.concurrency.Semaphore;
@@ -50,6 +48,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static junit.framework.Assert.fail;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
 
 public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase {
 
@@ -153,6 +155,7 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
         file.setBinaryContent(content, file.getModificationStamp() + 1, file.getTimeStamp() + 1);
     }
 
+/*
     protected void tuneModuleFixture(JavaModuleFixtureBuilder moduleFixtureBuilder, JavaCodeInsightTestFixture fixture) {
         moduleFixtureBuilder.addSourceContentRoot(fixture.getTempDirPath());
         moduleFixtureBuilder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
@@ -160,6 +163,7 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
 
 //        super.tuneModuleFixture(moduleFixtureBuilder, fixture);
     }
+*/
 
     protected List<String> make() {
         final Semaphore semaphore = new Semaphore();
@@ -246,8 +250,7 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
 
         final DefaultRunExecutor extension = Executor.EXECUTOR_EXTENSION_NAME.findExtension(DefaultRunExecutor.class);
 
-
-        final ExecutionEnvironment environment = new ExecutionEnvironment(configuration, SimpleDataContext.getProjectContext(myFixture.getProject()));
+        final ExecutionEnvironment environment = new ExecutionEnvironment(configuration, SimpleDataContext.getProjectContext(getProject()));
 
         final DefaultProgramRunner runner = ProgramRunner.PROGRAM_RUNNER_EP.findExtension(DefaultProgramRunner.class);
         final StringBuffer sb = new StringBuffer();
@@ -256,7 +259,7 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
         semaphore.down();
         runner.execute(extension, environment, new ProgramRunner.Callback() {
             public void processStarted(final RunContentDescriptor descriptor) {
-                Disposer.register(myFixture.getProject(), new Disposable() {
+                Disposer.register(getProject(), new Disposable() {
                     public void dispose() {
                         descriptor.dispose();
                     }

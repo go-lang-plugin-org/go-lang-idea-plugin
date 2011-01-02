@@ -88,7 +88,7 @@ public class GoFacetTab extends FacetEditorTab {
 
     @Nls
     public String getDisplayName() {
-        return "Google go facet";
+        return "Google Go facet";
     }
 
     public JComponent createComponent() {
@@ -110,8 +110,7 @@ public class GoFacetTab extends FacetEditorTab {
     }
     
     public void apply() throws ConfigurationException {
-        facetConfiguration.SDK_NAME = ((Sdk)goSdks.getComboBox().getSelectedItem()).getName();
-        
+        facetConfiguration.setGoSdkName(((Sdk)goSdks.getComboBox().getSelectedItem()).getName());
         modified = false;
     }
 }

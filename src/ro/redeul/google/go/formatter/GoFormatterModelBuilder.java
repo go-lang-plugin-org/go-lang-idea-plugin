@@ -22,6 +22,7 @@ import ro.redeul.google.go.lang.parser.GoParserDefinition;
  * To change this template use File | Settings | File Templates.
  */
 public class GoFormatterModelBuilder implements FormattingModelBuilder {
+
     @NotNull
     public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
         ASTNode node = element.getNode();
@@ -38,17 +39,17 @@ public class GoFormatterModelBuilder implements FormattingModelBuilder {
     }
 
     public TextRange getRangeAffectingIndent(PsiFile file, int offset, ASTNode elementAtOffset) {
+
         ASTNode current = elementAtOffset;
 
         while (current != null && current.getElementType() != GoElementTypes.BLOCK_STATEMENT && current.getElementType() != GoParserDefinition.GO_FILE_TYPE) {
             current = current.getTreeParent();
         }
 
-        // current = findNearestExpressionParent(current);
-        if (current == null) {
+        if (current != null ) {
             return current.getTextRange();
         } else {
-            return current.getTreeParent().getTextRange();
+            return file.getTextRange();
         }
     }
 }

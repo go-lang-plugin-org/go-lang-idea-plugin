@@ -27,7 +27,7 @@ public class GoCustomLiveTemplate implements CustomLiveTemplate {
         return "f";
     }
 
-    public boolean isApplicable(PsiFile file, int offset) {
+    public boolean isApplicable(PsiFile file, int offset, boolean wrapping) {
         return false;
     }
 
@@ -38,13 +38,12 @@ public class GoCustomLiveTemplate implements CustomLiveTemplate {
     public void expand(String key, @NotNull CustomTemplateCallback callback) {
         LiveTemplateBuilder builder = new LiveTemplateBuilder();
 
-        builder.insertText(0, "unc () {\n\t\n}");
+        builder.insertText(0, "unc () {\n\t\n}", true);
 
         builder.insertVariableSegment(5, "name()");
         builder.insertVariableSegment(10, TemplateImpl.END);
 
-        callback.expandTemplate(builder.buildTemplate(), null);
-//        callback.startTemplate();
+        callback.startTemplate(builder.buildTemplate(), null, null);
     }
 
     public void wrap(String selection, @NotNull CustomTemplateCallback callback) {

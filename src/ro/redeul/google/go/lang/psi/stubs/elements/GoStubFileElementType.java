@@ -4,8 +4,11 @@ import com.intellij.lang.Language;
 import com.intellij.psi.StubBuilder;
 import com.intellij.psi.stubs.*;
 import com.intellij.psi.tree.IStubFileElementType;
+import com.intellij.util.io.StringRef;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStub;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStubBuilder;
+import ro.redeul.google.go.lang.psi.stubs.impl.GoFileStubImpl;
+import ro.redeul.google.go.lang.psi.stubs.index.GoPackageName;
 
 import java.io.IOException;
 
@@ -42,6 +45,8 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
 
     @Override
     public void serialize(final GoFileStub stub, final StubOutputStream dataStream) throws IOException {
+        dataStream.writeName(stub.getPackageName().toString());
+        dataStream.writeBoolean(stub.isMain());
 //        dataStream.writeName(stub.getPackageReference().toString());
 //        dataStream.writeName(stub.getPackageReference().toString());
 //        dataStream.writeBoolean(stub.isScript());
@@ -50,13 +55,16 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
 
     @Override
     public GoFileStub deserialize(final StubInputStream dataStream, final StubElement parentStub) throws IOException {
-//        StringRef packName = dataStream.readName();
-//        StringRef name = dataStream.readName();
-//        boolean isScript = dataStream.readBoolean();
-        return new GoFileStub();
+        StringRef packageName = dataStream.readName();
+        boolean isMain = dataStream.readBoolean();
+        return new GoFileStubImpl(packageName, isMain);
     }
 
     public void indexStub(GoFileStub stub, IndexSink sink) {
+
+        sink.occurrence(GoPackageName.KEY, stub.getPackageName().toString());
+
+        int a = 10;
 //        String name = stub.getPackageReference().toString();
 //        if (stub.isScript() && name != null) {
 //            sink.occurrence(GrScriptClassNameIndex.KEY, name);

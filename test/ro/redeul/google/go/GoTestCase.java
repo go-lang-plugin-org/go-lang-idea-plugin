@@ -11,7 +11,6 @@ import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.testFramework.IdeaTestCase;
-import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.builders.ModuleFixtureBuilder;
 import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
@@ -118,7 +117,7 @@ public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> ext
         return getTestName();
     }
 
-    protected LightProjectDescriptor getProjectDescriptor() {
+    protected DefaultLightProjectDescriptor getProjectDescriptor() {
 
         return new DefaultLightProjectDescriptor() {
 

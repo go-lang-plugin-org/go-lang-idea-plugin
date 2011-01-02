@@ -18,11 +18,16 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class GoFacet extends Facet<GoFacetConfiguration> {
+
     public GoFacet(@NotNull FacetType facetType, @NotNull Module module, @NotNull String name, @NotNull GoFacetConfiguration configuration, Facet underlyingFacet) {
+
         super(facetType, module, name, configuration, underlyingFacet);
+
+        configuration.setGoFacet(this);
     }
 
     public Sdk getGoSdk() {
+
         List<Sdk> sdks = ProjectJdkTable.getInstance().getSdksOfType(GoSdkType.getInstance());
 
         for (Sdk sdk : sdks) {
@@ -30,6 +35,7 @@ public class GoFacet extends Facet<GoFacetConfiguration> {
                 return sdk;
             }
         }
+
 
         return null;
     }
