@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Google Go Language plugin</name>
-    <version>0.2.9</version>
+    <version>0.3.0</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[
@@ -19,16 +19,26 @@
             <li>Auto completion of sdk package names and/or local application packages.</li>
             <li>Compilation of the go applications (supported semantics are similar to those of gobuild)</li>
             <li>Go To definition (for types) works across files and Go SDK</li>
-            <li>Code formatting</li>
+            <li>Code formatting - experimental (disabled)</li>
             <li>Type name completion</li>
             <li>ColorsAndSettings page with a new color scheme</li>
             <li>Automatically add new line at end of file</li>
             <li>Force UTF-8 encoding for go files</li>
+            <li>Go module type</li>
+            <li>Go SDK indexing mode</li>
         </ul>
     ]]>
     </description>
     <change-notes>
         <![CDATA[
+        <h3>0.3.0 changes:</h3>
+                <ul>
+                    <li>[bugfix] Fixed to run under Idea 10 version</li>
+                    <li>[feature] Adding indexing of the go SDK (right now only for package names. More to follow</li>
+                    <li>[feature] Added go module type / removed go facet.</li>
+                    <li>[feature] Disabled go formatter (in the process of rebuilding).</li>
+                </ul>
+        </h3>
         <h3>0.2.9 changes:</h3>
                 <ul>
                     <li>[bugfix] wrong indent when hitting enter in top level elements</li>
@@ -157,7 +167,7 @@
         <lang.foldingBuilder language="Google Go" implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
         <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
         <lang.findUsagesProvider language="Google Go" implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
-        <lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFormatterModelBuilder" />
+        <!--<lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFormatterModelBuilder" />-->
 
         <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
 
