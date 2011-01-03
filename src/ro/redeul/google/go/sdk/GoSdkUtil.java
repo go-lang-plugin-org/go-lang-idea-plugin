@@ -6,19 +6,19 @@ import com.intellij.execution.process.CapturingProcessHandler;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
 import com.intellij.facet.FacetManager;
+import com.intellij.ide.projectView.impl.ProjectRootsUtil;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.FileIndex;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.roots.*;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import ro.redeul.google.go.config.facet.GoFacet;
 import ro.redeul.google.go.config.facet.GoFacetType;
+import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkTool;
 
 import java.io.File;
@@ -143,17 +143,19 @@ public class GoSdkUtil {
 
     public static Sdk getGoogleGoSdkForModule(Module module) {
 
-        GoFacet goFacet = FacetManager.getInstance(module).getFacetByType(GoFacetType.GO_FACET_TYPE_ID);
+        ModuleRootModel moduleRootModel = ModuleRootManager.getInstance(module);
 
-        if (goFacet == null)
-            return null;
+        Sdk sdk = null;
+        if ( ! moduleRootModel.isSdkInherited() ) {
+            sdk = moduleRootModel.getSdk();
+        } else {
+            sdk = ProjectRootManager.getInstance(module.getProject()).getProjectSdk();
+        }
 
-        Sdk sdk = goFacet.getGoSdk();
-        if (sdk != null) {
+        if ( GoSdkType.isInstance(sdk) ) {
             return sdk;
         }
 
-        // other checks (module of type .. etc)
         return null;
     }
 

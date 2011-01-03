@@ -164,4 +164,8 @@ public class GoSdkType extends SdkType {
 
         return false;
     }
+
+    public static boolean isInstance(Sdk sdk) {
+        return sdk != null && sdk.getSdkType() == GoSdkType.getInstance();
+    }
 }

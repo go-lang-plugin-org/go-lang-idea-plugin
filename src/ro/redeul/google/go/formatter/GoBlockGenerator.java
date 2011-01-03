@@ -1,9 +1,6 @@
 package ro.redeul.google.go.formatter;
 
-import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Block;
-import com.intellij.formatting.Indent;
-import com.intellij.formatting.Wrap;
+import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -107,23 +104,50 @@ public class GoBlockGenerator {
 
             final ArrayList<Block> subBlocks = new ArrayList<Block>();
             ASTNode[] children = node.getChildren(null);
-            Alignment defaultAlignment = Alignment.createAlignment();
-            Alignment indentedAlignment = Alignment.createAlignment();
+
+            Alignment newAlignment = Alignment.createChildAlignment(alignment);
+            Wrap none = Wrap.createWrap(WrapType.NONE, false);
+
 
             for (ASTNode childNode : children) {
-                if ( canBeCorrectBlock(childNode) ) {
-                    Indent myIndent = Indent.getNoneIndent();
-                    Alignment myAlignment = null;
-                    Wrap myWrap = null;
+                Indent childIndent = Indent.getNoneIndent();
+                Alignment childAlignment = alignment;
+                Wrap childWrapping = wrap;
 
-                    if ( isStatement(childNode) || isComment(childNode) ) {
-                        myIndent = Indent.getNormalIndent();
-                        myAlignment = null;
-                        myWrap = null;
-                    }
-
-                    subBlocks.add(new GoBlock(childNode, myAlignment, myIndent, myWrap, settings));
+                if (isStatement(childNode) || isComment(childNode)) {
+                    childIndent = Indent.getNormalIndent(true);
+                    childAlignment = newAlignment;
+                    childWrapping = none;
                 }
+
+                subBlocks.add(new GoBlock(childNode, childAlignment, childIndent, childWrapping, settings));
+            }
+
+            return subBlocks;
+        }
+
+        if (node.getElementType() == GoElementTypes.IMPORT_DECLARATION) {
+
+            final ArrayList<Block> subBlocks = new ArrayList<Block>();
+            ASTNode[] children = node.getChildren(null);
+
+            Alignment newAlignment = Alignment.createChildAlignment(alignment);
+            Wrap none = Wrap.createWrap(WrapType.NONE, false);
+
+            for (ASTNode childNode : children) {
+//                if ( canBeCorrectBlock(node)) {
+                Indent myIndent = Indent.getNoneIndent();
+                Alignment myAlignment = alignment;
+                Wrap myWrap = wrap;
+
+                if (isImportSpec(childNode)) {
+                    myIndent = Indent.getNormalIndent(true);
+                    myAlignment = newAlignment;
+                    myWrap = none;
+                }
+
+                subBlocks.add(new GoBlock(childNode, myAlignment, myIndent, myWrap, settings));
+//                }
             }
 
             return subBlocks;
@@ -132,13 +156,15 @@ public class GoBlockGenerator {
         final ArrayList<Block> subBlocks = new ArrayList<Block>();
         ASTNode[] children = getGoChildren(node);
         for (ASTNode childNode : children) {
-            if (canBeCorrectBlock(childNode)) {
-                final Indent indent = Indent.getNoneIndent();
-                subBlocks.add(new GoBlock(childNode, node.getPsi() instanceof GoBlockStatement ? null : alignment, indent, wrap, settings));
-            }
+            final Indent indent = Indent.getNoneIndent();
+            subBlocks.add(new GoBlock(childNode, alignment, indent, wrap, settings));
         }
 
         return subBlocks;
+    }
+
+    private static boolean isImportSpec(ASTNode childNode) {
+        return childNode.getElementType() == GoElementTypes.IMPORT_SPEC;
     }
 
     private static boolean isNewLine(ASTNode childNode) {
@@ -155,17 +181,18 @@ public class GoBlockGenerator {
     }
 
     private static boolean canBeCorrectBlock(final ASTNode node) {
-        return (node.getText().trim().length() > 0) && node.getElementType() != GoElementTypes.wsNLS;
+        return (node.getText().trim().length() > 0) /*&& node.getElementType() != GoElementTypes.wsNLS*/;
     }
 
     private static ASTNode[] getGoChildren(final ASTNode node) {
+
         PsiElement psi = node.getPsi();
         if (psi instanceof OuterLanguageElement) {
             TextRange range = node.getTextRange();
             ArrayList<ASTNode> childList = new ArrayList<ASTNode>();
-            PsiFile groovyFile = psi.getContainingFile().getViewProvider().getPsi(GoFileType.GO_LANGUAGE);
-            if (groovyFile instanceof GoFile) {
-                addChildNodes(groovyFile, childList, range);
+            PsiFile goFile = psi.getContainingFile().getViewProvider().getPsi(GoFileType.GO_LANGUAGE);
+            if (goFile instanceof GoFile) {
+                addChildNodes(goFile, childList, range);
             }
 
             return childList.toArray(new ASTNode[childList.size()]);

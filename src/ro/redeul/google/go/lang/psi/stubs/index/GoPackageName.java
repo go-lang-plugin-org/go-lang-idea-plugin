@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
  */
 public class GoPackageName extends StringStubIndexExtension<GoFile> {
 
-    public static final StubIndexKey<String, GoFile> KEY = StubIndexKey.createIndexKey("go.package.name");
+    public static final StubIndexKey<String, GoFile> KEY = StubIndexKey.createIndexKey("go.package.names");
 
     public StubIndexKey<String, GoFile> getKey() {
       return KEY;

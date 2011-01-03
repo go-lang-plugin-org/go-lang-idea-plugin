@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.impl.DebugUtil;
@@ -11,13 +10,10 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.or;
 
 /**
  * Created by IntelliJ IDEA.
@@ -47,6 +43,10 @@ public class GoCompletionContributor extends CompletionContributor {
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
             PsiElement element = parameters.getOriginalPosition();
+            if ( element == null ) {
+                return;
+            }
+
             String currentPath = element.getText();
 
             LookupElement elements[];
@@ -67,7 +67,9 @@ public class GoCompletionContributor extends CompletionContributor {
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
             PsiElement element = parameters.getOriginalPosition();
-            String currentPath = element.getText();
+            if ( element == null ) {
+                return;
+            }
 
             LookupElement elements[];
 //            if (currentPath.startsWith("\"./")) {
