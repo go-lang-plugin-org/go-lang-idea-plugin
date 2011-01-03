@@ -26,11 +26,15 @@ Intellij IDEA homepage:
 * File type icon
 * Go application file and library generation.
 * Auto completion of sdk package names and/or local application packages.
-* Compilation and Run configuration
+* Compilation of the go applications (supported semantics are similar to those of gobuild)
 * Go To definition (for types) works across files and Go SDK
+* Code formatting - experimental (disabled)
+* Type name completion
 * ColorsAndSettings page with a new color scheme
 * Automatically add new line at end of file
 * Force UTF-8 encoding for go files
+* Go module type
+* Go SDK indexing mode
 
 == How to use it
 
