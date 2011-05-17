@@ -120,7 +120,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="99.000" until-build="100.000"/>
+    <idea-version since-build="99.000" />
 
     <category>Custom Languages</category>
 
