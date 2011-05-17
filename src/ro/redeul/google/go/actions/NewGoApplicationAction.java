@@ -68,7 +68,7 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
     protected boolean isAvailable(DataContext dataContext) {
         return
                 super.isAvailable(dataContext)
-                        && hasGoFacet(DataKeys.MODULE.getData(dataContext))
+                        // && hasGoFacet(DataKeys.MODULE.getData(dataContext))
                         && isNotIsSourceRoot(dataContext);
     }
 

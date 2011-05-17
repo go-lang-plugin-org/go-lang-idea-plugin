@@ -170,8 +170,6 @@
     <inspection_tool class="PhpUnimplementedMethodsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpUnusedLocalVariableInspection" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="DONT_REPORT_FOREACH_VALUE" value="false" />
-      <option name="DONT_REPORT_CATCH_EXCEPTION" value="true" />
-      <option name="DONT_REPORT_INSIDE_LIST" value="false" />
     </inspection_tool>
     <inspection_tool class="PhpUnusedPrivateFieldInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PointcutMethodStyleInspection" enabled="false" level="WARNING" enabled_by_default="false" />

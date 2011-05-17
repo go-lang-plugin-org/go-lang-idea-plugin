@@ -8,26 +8,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
     </content>
-    <orderEntry type="jdk" jdkName="IDEA IC-99.SNAPSHOT" jdkType="IDEA JDK" />
+    <orderEntry type="jdk" jdkName="IDEA IU-107.85" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="testng" level="application" />
-    <orderEntry type="module-library" scope="PROVIDED">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Tools/idea-IC-99.SNAPSHOT/lib/idea.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/../IntellijIdea/idea2/platform/platform-impl/src" />
-          <root url="file://$MODULE_DIR$/../IntellijIdea/idea2/xml/dom-impl/src" />
-          <root url="file://$MODULE_DIR$/../IntellijIdea/idea2/xml/impl/src" />
-          <root url="file://$MODULE_DIR$/../IntellijIdea/idea2/java/execution/impl/src" />
-          <root url="file://$MODULE_DIR$/../IntellijIdea/idea2/platform/lang-impl/src" />
-          <root url="file://$MODULE_DIR$/../IntellijIdea/idea2/java/java-impl/src" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="library" scope="PROVIDED" name="idea android plugin" level="project" />
   </component>
 </module>
 
