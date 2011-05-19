@@ -8,6 +8,7 @@ import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.gocode.GocodeClient;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
@@ -91,12 +92,19 @@ public class GoCompletionContributor extends CompletionContributor {
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
             String originalFile = DebugUtil.psiToString(parameters.getOriginalFile(), false);
             String currentFile = DebugUtil.psiToString(parameters.getPosition().getContainingFile(), false);
+            GocodeClient client = new GocodeClient();
+            for (LookupElement lookupElement : client.getGocodeCompletions(parameters, context))
+            {
+                result.addElement(lookupElement);
+            }
+
 
             int a = 10;
         }
     };
 
     public GoCompletionContributor() {
+
 
         extend(CompletionType.BASIC,
                 psiElement(),
