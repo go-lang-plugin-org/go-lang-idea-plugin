@@ -199,6 +199,8 @@
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
 
+        <java.shortNamesCache implementation="ro.redeul.google.go.lang.stubs.GoNamesCache" />
+
         <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoPackageName"/>
         <!--<enterHandlerDelegate implementation="ro.redeul.google.go.editor.actions.GoEnterHandler" order="after EnterBetweenBracesHandler"/>-->
     </extensions>

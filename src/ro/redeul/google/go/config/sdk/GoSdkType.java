@@ -22,7 +22,7 @@ public class GoSdkType extends SdkType {
     }
 
     public static GoSdkType getInstance() {
-      return SdkType.findInstance(GoSdkType.class);
+        return SdkType.findInstance(GoSdkType.class);
     }
 
     @Override
@@ -71,36 +71,7 @@ public class GoSdkType extends SdkType {
 
     @Override
     public AdditionalDataConfigurable createAdditionalDataConfigurable(SdkModel sdkModel, SdkModificator sdkModificator) {
-        GoSdkConfigurable goConfigurable = new GoSdkConfigurable(sdkModel, sdkModificator);
-
-        sdkModel.addListener(new SdkModel.Listener() {
-            public void sdkAdded(Sdk sdk) {
-                // goConfigurable.
-//              if (sdk.getSdkType().equals(JavaSdk.getInstance())) {
-//                goConfigurable.addJavaSdk(sdk);
-//              }
-            }
-
-            public void beforeSdkRemove(Sdk sdk) {
-//              if (sdk.getSdkType().equals(JavaSdk.getInstance())) {
-//                goConfigurable.removeJavaSdk(sdk);
-//              }
-            }
-
-            public void sdkChanged(Sdk sdk, String previousName) {
-//              if (sdk.getSdkType().equals(JavaSdk.getInstance())) {
-//                goConfigurable.updateJavaSdkList(sdk, previousName);
-//              }
-            }
-
-            public void sdkHomeSelected(final Sdk sdk, final String newSdkHome) {
-//              if (sdk.getSdkType() instanceof GoSdkType) {
-//                goConfigurable.internalJdkUpdate(sdk);
-//              }
-            }
-        });
-
-        return goConfigurable;
+        return null;
     }
 
     @Override
@@ -108,17 +79,17 @@ public class GoSdkType extends SdkType {
 
         VirtualFile homeDirectory = sdk.getHomeDirectory();
 
-        if (sdk.getSdkType() != this || homeDirectory == null ) {
+        if (sdk.getSdkType() != this || homeDirectory == null) {
             return false;
         }
 
         final VirtualFile librariesRoot = homeDirectory.findFileByRelativePath(String.format("pkg/%s_%s/", sdkData.TARGET_OS, sdkData.TARGET_ARCH));
         final VirtualFile sourcesRoot = homeDirectory.findFileByRelativePath("src/pkg/");
 
-        if ( librariesRoot != null ) {
+        if (librariesRoot != null) {
             librariesRoot.refresh(false, false);
         }
-        if ( sourcesRoot != null ) {
+        if (sourcesRoot != null) {
             sourcesRoot.refresh(false, false);
         }
 
@@ -132,7 +103,7 @@ public class GoSdkType extends SdkType {
         });
 
         sdkModificator.setVersionString(sdkData.VERSION);
-        sdkModificator.setSdkAdditionalData(sdkData);        
+        sdkModificator.setSdkAdditionalData(sdkData);
         sdkModificator.commitChanges();
 
         return true;
@@ -157,12 +128,7 @@ public class GoSdkType extends SdkType {
 
     @Override
     public boolean isRootTypeApplicable(OrderRootType type) {
-
-        if ( type == OrderRootType.CLASSES || type == OrderRootType.SOURCES ) {
-            return true;
-        }
-
-        return false;
+        return type == OrderRootType.CLASSES || type == OrderRootType.SOURCES;
     }
 
     public static boolean isInstance(Sdk sdk) {

@@ -13,11 +13,10 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Sep 21, 2010
  * Time: 4:47:46 AM
- * To change this template use File | Settings | File Templates.
  */
 public class TypesReferencesScopeProcessor extends BaseScopeProcessor {
 

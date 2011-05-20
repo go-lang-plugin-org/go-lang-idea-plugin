@@ -151,7 +151,6 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
             builtInTypes.add("bool");
             builtInTypes.add("string");
 
-
             NamedTypesScopeProcessor2 namedTypesProcessor = new NamedTypesScopeProcessor2(builtInTypes);
 
             PsiScopesUtil.treeWalkUp(namedTypesProcessor, this, this.getContainingFile());

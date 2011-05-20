@@ -8,11 +8,10 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStub;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 13, 2010
  * Time: 10:25:59 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoFileStubImpl extends PsiFileStubImpl<GoFile> implements GoFileStub {
 

@@ -4,6 +4,8 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
@@ -32,6 +34,17 @@ public class GoFunctionDeclarationImpl extends GoPsiElementImpl implements GoFun
         return identifier != null ? identifier.getText() : "";
     }
 
+
+    @Override
+    public String getName() {
+        return getFunctionName();
+    }
+
+    @Override
+    public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
+        return null;
+    }
+
     public boolean isMain() {
         return getFunctionName().equals("main");
     }
@@ -50,17 +63,6 @@ public class GoFunctionDeclarationImpl extends GoPsiElementImpl implements GoFun
 
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-        PsiElement[] childs = getChildren();
-        for (PsiElement child : childs) {
-            if (child instanceof GoTypeDeclaration) {
-                child.processDeclarations(processor, state, null, place);
-            }
-
-            if (lastParent == child) {
-                break;
-            }
-        }
-
-        return super.processDeclarations(processor, state, lastParent, place);    //To change body of overridden methods use File | Settings | File Templates.
+        return processor.execute(this, state);
     }
 }

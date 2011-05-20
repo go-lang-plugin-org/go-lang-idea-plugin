@@ -13,11 +13,10 @@ import ro.redeul.google.go.lang.psi.stubs.index.GoPackageName;
 import java.io.IOException;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 13, 2010
  * Time: 10:25:14 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
 
@@ -64,7 +63,6 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
 
         sink.occurrence(GoPackageName.KEY, stub.getPackageName().toString());
 
-        int a = 10;
 //        String name = stub.getPackageReference().toString();
 //        if (stub.isScript() && name != null) {
 //            sink.occurrence(GrScriptClassNameIndex.KEY, name);

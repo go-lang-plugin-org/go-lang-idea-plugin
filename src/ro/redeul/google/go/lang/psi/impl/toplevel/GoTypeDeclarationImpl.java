@@ -31,10 +31,5 @@ public class GoTypeDeclarationImpl extends GoPsiElementImpl implements GoTypeDec
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeDeclaration(this);
     }
-
-    @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-        return processor.execute(this, state);
-    }
 }
 

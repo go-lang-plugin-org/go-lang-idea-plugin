@@ -3,22 +3,23 @@ package ro.redeul.google.go.lang.psi.processors;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
+import groovy.lang.StringWriterIOException;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
+import ro.redeul.google.go.lang.psi.resolve.GoResolveUtil;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Sep 21, 2010
  * Time: 4:24:00 AM
- * To change this template use File | Settings | File Templates.
  */
 public class ImportedPackagesCollectorProcessor extends BaseScopeProcessor {
 
-    List<String> imports = new ArrayList<String>();
+    List<GoImportSpec> imports = new ArrayList<GoImportSpec>();
 
     public boolean execute(PsiElement element, ResolveState state) {
 
@@ -30,22 +31,32 @@ public class ImportedPackagesCollectorProcessor extends BaseScopeProcessor {
     }
 
     private void processImport(GoImportSpec importSpec) {
+        imports.add(importSpec);
+    }
 
-        GoPackageReference packageReference = importSpec.getPackageReference();
-
-        if ( packageReference == null ) {
-            imports.add(importSpec.getImportPath());
-            return;
-        }
-
-        if ( packageReference.isLocal() || packageReference.isBlank() ) {
-            return;
-        }
-
-        imports.add(packageReference.getString());
+    public List<GoImportSpec> getPackageImportSpecs() {
+        return imports;
     }
 
     public String[] getPackageImports() {
-        return imports.toArray(new String[imports.size()]);
+
+        List<String> packageImports = new ArrayList<String>();
+
+        for (GoImportSpec importSpec : imports) {
+            GoPackageReference packageReference = importSpec.getPackageReference();
+
+            if ( packageReference == null ) {
+                packageImports.add(importSpec.getImportPath());
+                continue;
+            }
+
+            if ( packageReference.isLocal() || packageReference.isBlank() ) {
+                continue;
+            }
+
+            packageImports.add(packageReference.getString());
+        }
+
+        return packageImports.toArray(new String[packageImports.size()]);
     }
 }

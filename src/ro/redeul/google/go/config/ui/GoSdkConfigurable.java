@@ -35,6 +35,10 @@ public class GoSdkConfigurable implements AdditionalDataConfigurable {
         this.sdk = sdk;
     }
 
+    public void removeSdk(Sdk sdk) {
+        this.sdk = null;
+    }
+
     public JComponent createComponent() {
         return component;
     }

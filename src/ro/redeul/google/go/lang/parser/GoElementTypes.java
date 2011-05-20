@@ -21,7 +21,7 @@ public interface GoElementTypes extends GoTokenTypes {
 
     // Indicates the wrongway of parsing
     GoElementType WRONGWAY = new GoElementTypeImpl("Wrong way!");
-    GoElementType LITERAL = new GoElementTypeImpl("Literal");
+    GoElementType LITERAL_EXPRESSION = new GoElementTypeImpl("Literal");
 
     //Packaging
     GoElementType PACKAGE_NAME = new GoElementTypeImpl("Package name");

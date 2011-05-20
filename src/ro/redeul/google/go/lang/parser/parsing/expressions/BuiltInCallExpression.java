@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.parser.parsing.expressions;
 
 import com.intellij.lang.PsiBuilder;
-import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -57,7 +56,7 @@ public class BuiltInCallExpression implements GoElementTypes {
             return false;
         }
 
-        ParserUtils.eatElement(builder, LITERAL);
+        ParserUtils.eatElement(builder, LITERAL_EXPRESSION);
         ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
 
         if ( hasTypeParameter.contains(callName) ) {

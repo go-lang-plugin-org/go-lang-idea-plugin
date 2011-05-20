@@ -3,24 +3,35 @@ package ro.redeul.google.go.lang.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.impl.DebugUtil;
+import com.intellij.psi.scope.util.PsiScopesUtil;
+import com.intellij.psi.search.ProjectAndLibrariesScope;
+import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.ProcessingContext;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.GoPsiExpression;
+import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.processors.GoExpressionTypeResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
+
+import java.util.Collection;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 19, 2010
  * Time: 9:09:20 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoCompletionContributor extends CompletionContributor {
 
@@ -42,22 +53,28 @@ public class GoCompletionContributor extends CompletionContributor {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
-            PsiElement element = parameters.getOriginalPosition();
-            if ( element == null ) {
-                return;
+            String currentPath = parameters.getPosition().getText().replaceAll("Intellij.*", "");
+
+            if (!currentPath.startsWith("\".")) {
+                Project project = parameters.getOriginalFile().getProject();
+
+                GoNamesCache packageNamesCache = ContainerUtil.findInstance(project.getExtensions(PsiShortNamesCache.EP_NAME), GoNamesCache.class);
+
+                if ( packageNamesCache != null ) {
+                    String packages[] = packageNamesCache.getPackagesByName("a", new ProjectAndLibrariesScope(project));
+
+                    for (String aPackage : packages) {
+                        result.addElement(LookupElementBuilder.create(aPackage).setTypeText("via sdk"));
+                    }
+                }
             }
 
-            String currentPath = element.getText();
-
-            LookupElement elements[];
-            if (currentPath.startsWith("\"./")) {
-                elements = GoCompletionUtil.resolveLocalPackagesForPath(element.getProject(), element.getContainingFile(), currentPath);
-            } else {
-                elements = GoCompletionUtil.resolveSdkPackagesForPath(element.getProject(), element.getContainingFile(), currentPath);
-            }
-
-            for (LookupElement lookupElement : elements) {
-                result.addElement(lookupElement);
+            PsiElement pos = parameters.getOriginalPosition();
+            if ( pos != null && pos.getContainingFile() != null ) {
+                Collection<LookupElementBuilder> elements = GoCompletionUtil.resolveLocalPackagesForPath(pos.getProject(), pos.getContainingFile(), currentPath);
+                for (LookupElementBuilder lookupElement : elements) {
+                    result.addElement(lookupElement);
+                }
             }
         }
     };
@@ -83,6 +100,31 @@ public class GoCompletionContributor extends CompletionContributor {
                 result.addElement(lookupElement);
             }
 
+        }
+    };
+
+    CompletionProvider<CompletionParameters> packageMethodCompletionProvider = new CompletionProvider<CompletionParameters>() {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+
+            PsiElement node = parameters.getOriginalPosition();
+            if ( node == null || node.getParent() == null || ! (node.getParent() instanceof GoSelectorExpression) )
+                return;
+
+            GoSelectorExpression expression = (GoSelectorExpression) node.getParent();
+
+            if ( expression.getExpressionContext() == null )
+                return;
+
+            GoPsiExpression expressionContext = expression.getExpressionContext();
+
+            GoExpressionTypeResolver expressionTypeResolver = new GoExpressionTypeResolver(expressionContext);
+
+            PsiScopesUtil.treeWalkUp(expressionTypeResolver, expressionContext, expressionContext.getContainingFile());
+
+            for (PsiNamedElement psiElement : expressionTypeResolver.getFunctions()) {
+                result.addElement(LookupElementBuilder.create(psiElement));
+            }
         }
     };
 
@@ -114,6 +156,9 @@ public class GoCompletionContributor extends CompletionContributor {
                 psiElement().withElementType(GoTokenTypes.litSTRING).withParent(psiElement(GoImportSpec.class)),
                 importPathCompletionProvider);
 
+        extend(CompletionType.BASIC,
+                psiElement().withElementType(GoTokenTypes.mIDENT)/*.withParent(psiElement(GoSelectorExpression.class))*/,
+                packageMethodCompletionProvider);
 //        extend(CompletionType.BASIC,
 //                psiElement().withParent(or(psiElement(GoTypeName.class), psiElement().withParent(GoTypeName.class))),
 //                typeNameCompletionProvider);

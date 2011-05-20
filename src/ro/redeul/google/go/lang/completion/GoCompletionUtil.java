@@ -21,10 +21,7 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -89,19 +86,19 @@ public class GoCompletionUtil {
         return currentPath.replaceAll("^\"", "").replaceAll("\"$", "");
     }
 
-    public static LookupElement[] resolveLocalPackagesForPath(final Project project, PsiFile containingFile, String currentPath) {
+    public static Collection<LookupElementBuilder> resolveLocalPackagesForPath(final Project project, PsiFile containingFile, String currentPath) {
 
         String importPath = cleanupImportPath(currentPath);
 
         final VirtualFile targetFile = containingFile.getVirtualFile();
         if (targetFile == null) {
-            return LookupElement.EMPTY_ARRAY;
+            return Collections.emptyList();
         }
 
         ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
         Module module = projectFileIndex.getModuleForFile(targetFile);
         if (module == null) {
-            return LookupElement.EMPTY_ARRAY;
+            return Collections.emptyList();
         }
 
         final PsiManager psiManager = PsiManager.getInstance(project);
@@ -152,12 +149,22 @@ public class GoCompletionUtil {
 
         VfsUtil.processFilesRecursively(targetFile.getParent(), processor);
 
-        List<LookupElement> elements = new ArrayList<LookupElement>();
+        List<LookupElementBuilder> elements = new ArrayList<LookupElementBuilder>();
         for (String localPackage : localPackages.getResults()) {
-            elements.add(LookupElementBuilder.create(localPackage));
+            LookupElementBuilder elementBuilder = null;
+
+            if ( importPath.startsWith("./") ) {
+                elementBuilder = LookupElementBuilder.create(localPackage).setBold().setTypeText("via project");
+            } else if ( importPath.startsWith(".") ) {
+                elementBuilder = LookupElementBuilder.create("/" + localPackage).setBold().setTypeText("via project");
+            } else {
+                elementBuilder = LookupElementBuilder.create("./" + localPackage).setBold().setTypeText("via project");
+            }
+
+            elements.add(elementBuilder);
         }
 
-        return elements.toArray(new LookupElement[elements.size()]);
+        return elements;
     }
 
     public static LookupElement[] getImportedPackagesNames(PsiFile file) {

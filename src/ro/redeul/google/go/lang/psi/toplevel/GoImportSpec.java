@@ -15,4 +15,8 @@ public interface GoImportSpec extends GoPsiElement {
     GoPackageReference getPackageReference();
 
     String getImportPath();
+
+    String getPackageName();
+
+    String getVisiblePackageName();
 }

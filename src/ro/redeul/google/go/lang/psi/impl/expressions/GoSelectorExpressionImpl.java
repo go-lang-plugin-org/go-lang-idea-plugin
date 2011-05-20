@@ -1,22 +1,24 @@
 package ro.redeul.google.go.lang.psi.impl.expressions;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiExpression;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
-import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
+import ro.redeul.google.go.lang.psi.expressions.GoPsiExpression;
+import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
- * Date: Jul 24, 2010
- * Time: 10:43:49 PM
+ * Date: 5/19/11
+ * Time: 10:58 PM
  */
-public class GoIdentifierImpl extends GoPsiExpressionImpl implements GoIdentifier {
+public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoSelectorExpression {
 
-    public GoIdentifierImpl(@NotNull ASTNode node) {
+    public GoSelectorExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -28,4 +30,11 @@ public class GoIdentifierImpl extends GoPsiExpressionImpl implements GoIdentifie
     protected GoType resolveType() {
         return null;
     }
+
+    @Override
+    public GoPsiExpression getExpressionContext() {
+        return findChildByClass(GoPsiExpression.class);
+    }
+
+
 }

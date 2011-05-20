@@ -15,11 +15,10 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 7:56:42 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoFileImpl extends PsiFileBase implements GoFile {
 
@@ -92,29 +91,37 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
         GoTypeDeclaration declarations[] = getTypeDeclarations();
         for (GoTypeDeclaration declaration : declarations) {
-            if ( ! declaration.processDeclarations(processor, state, null, place) ) {
-                return false;
+            if (declaration != lastParent) {
+                if (!declaration.processDeclarations(processor, state, null, place)) {
+                    return false;
+                }
             }
         }
 
         GoMethodDeclaration methods[] = getMethods();
         for (GoMethodDeclaration method : methods) {
-            if  ( ! method.processDeclarations(processor, state, null, place) ) {
-                return false;
+            if (method != lastParent) {
+                if (!method.processDeclarations(processor, state, null, place)) {
+                    return false;
+                }
             }
         }
 
         GoFunctionDeclaration functions[] = getFunctions();
         for (GoFunctionDeclaration function : functions) {
-            if  ( ! function.processDeclarations(processor, state, null, place) ) {
-                return false;
+            if ( function != lastParent ) {
+                if (!function.processDeclarations(processor, state, null, place)) {
+                    return false;
+                }
             }
         }
 
         GoImportDeclaration importDeclarations[] = getImportDeclarations();
         for (GoImportDeclaration importDeclaration : importDeclarations) {
-            if ( ! importDeclaration.processDeclarations(processor, state, null, place) ) {
-                return false;
+            if( importDeclaration != lastParent ) {
+                if (!importDeclaration.processDeclarations(processor, state, null, place)) {
+                    return false;
+                }
             }
         }
 
