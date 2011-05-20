@@ -35,6 +35,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
  */
 public class GoCompletionContributor extends CompletionContributor {
 
+
     CompletionProvider<CompletionParameters> packageCompletionProvider = new CompletionProvider<CompletionParameters>() {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
