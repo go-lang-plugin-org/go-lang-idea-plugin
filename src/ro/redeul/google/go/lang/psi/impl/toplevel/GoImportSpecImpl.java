@@ -79,10 +79,6 @@ public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
             return true;
         }
 
-        if (! processor.execute(this, state) ) {
-            return false;
-        }
-
         String thePackageName = getPackageName();
 
         GoNamesCache namesCache = ContainerUtil.findInstance(getProject().getExtensions(PsiShortNamesCache.EP_NAME), GoNamesCache.class);
@@ -94,6 +90,11 @@ public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
         Collection<GoFile> files = namesCache.getFilesByPackageName(thePackageName);
 
         if (!state.get(ResolveStateKeys.ProcessOnlyLocalDeclarations)) {
+
+            if (! processor.execute(this, state) ) {
+                return false;
+            }
+
             for (GoFile file : files) {
                 if (!file.processDeclarations(
                         processor,
