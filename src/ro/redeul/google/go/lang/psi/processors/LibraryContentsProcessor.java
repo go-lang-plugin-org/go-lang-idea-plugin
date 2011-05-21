@@ -26,31 +26,23 @@ public class LibraryContentsProcessor extends BaseScopeProcessor {
     }
 
     public boolean execute(PsiElement element, ResolveState state) {
-        if ( ! tryImportSpec(element, state) ) {
-            return false;
-        }
-
-        tryTypeDeclaration(element, state);
-
-        return true;
+        return tryTypeDeclaration(element, state);
     }
 
     private boolean tryTypeDeclaration(PsiElement element, ResolveState state) {
-        if (!(element instanceof GoTypeDeclaration)) {
+        if ( !(element instanceof GoTypeSpec) ) {
             return true;
         }
 
-        GoTypeDeclaration typeDeclaration = (GoTypeDeclaration) element;
+        GoTypeSpec typeSpec = (GoTypeSpec) element;
 
-        for (GoTypeSpec typeSpec : typeDeclaration.getTypeSpecs()) {
+        GoTypeNameDeclaration typeNameDeclaration = typeSpec.getTypeNameDeclaration();
 
-            GoTypeNameDeclaration typeNameDeclaration = typeSpec.getTypeNameDeclaration();
-            if (typeNameDeclaration != null ) {
-                String typeName = typeNameDeclaration.getName();
+        if (typeNameDeclaration != null ) {
+            String typeName = typeNameDeclaration.getName();
 
-                if ( typeName != null && Character.isUpperCase(typeName.charAt(0)) ) {
-                    objects.add(qualifiedName.getPackageReference().getString() + "." + typeName);
-                }
+            if ( typeName != null && Character.isUpperCase(typeName.charAt(0)) ) {
+                objects.add(qualifiedName.getPackageReference().getString() + "." + typeName);
             }
         }
 

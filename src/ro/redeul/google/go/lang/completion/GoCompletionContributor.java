@@ -21,11 +21,13 @@ import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.processors.GoExpressionTypeResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
+import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.Collection;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.or;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -157,13 +159,14 @@ public class GoCompletionContributor extends CompletionContributor {
                 psiElement().withElementType(GoTokenTypes.litSTRING).withParent(psiElement(GoImportSpec.class)),
                 importPathCompletionProvider);
 
-        extend(CompletionType.BASIC,
-                psiElement().withElementType(GoTokenTypes.mIDENT)/*.withParent(psiElement(GoSelectorExpression.class))*/,
-                packageMethodCompletionProvider);
+//        extend(CompletionType.BASIC,
+//                psiElement().withElementType(GoTokenTypes.mIDENT)/*.withParent(psiElement(GoSelectorExpression.class))*/,
+//                packageMethodCompletionProvider);
+
 //        extend(CompletionType.BASIC,
 //                psiElement().withParent(or(psiElement(GoTypeName.class), psiElement().withParent(GoTypeName.class))),
 //                typeNameCompletionProvider);
-
+//
 //        extend(
 //                CompletionType.BASIC,
 //                psiElement().withParent(GoFile.class),

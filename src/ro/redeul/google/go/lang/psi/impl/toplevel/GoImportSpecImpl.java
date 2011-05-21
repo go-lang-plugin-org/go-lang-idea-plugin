@@ -71,11 +71,16 @@ public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
     }
 
     @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-
+    public boolean processDeclarations(
+            @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+    {
         // import _ "a"; ( no definitions )
         if (getPackageReference() != null && getPackageReference().isBlank()) {
             return true;
+        }
+
+        if (! processor.execute(this, state) ) {
+            return false;
         }
 
         String thePackageName = getPackageName();

@@ -35,8 +35,7 @@ public class GoExpressionTypeResolver extends BaseScopeProcessor {
 
             String functionName = function.getFunctionName();
 
-            if ( functionName.matches("^\\p{Lu}\\p{L}*$") ) {
-                System.out.println("Adding: " + functionName);
+            if ( GoNamesUtil.isPublicFunction(functionName) ) {
                 nodeFunctions.add(function);
             }
 

@@ -11,11 +11,10 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 30, 2010
  * Time: 8:59:20 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoTypeDeclarationImpl extends GoPsiElementImpl implements GoTypeDeclaration {
 
@@ -30,6 +29,21 @@ public class GoTypeDeclarationImpl extends GoPsiElementImpl implements GoTypeDec
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeDeclaration(this);
+    }
+
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+
+        GoTypeSpec typeSpecs[] = getTypeSpecs();
+        for (GoTypeSpec typeSpec : typeSpecs) {
+            if ( typeSpec != lastParent ) {
+                if ( ! typeSpec.processDeclarations(processor, state, null, place) ) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
 
