@@ -2,10 +2,14 @@
   <artifact build-on-make="true" name="idea-home">
     <output-path>$PROJECT_DIR$/idea-home</output-path>
     <root id="root">
-      <element id="directory" name="testdata">
-        <element id="dir-copy" path="$PROJECT_DIR$/testdata" />
-      </element>
       <element id="dir-copy" path="$PROJECT_DIR$/mock-sdks" />
+      <element id="directory" name="plugins">
+        <element id="directory" name="google-go-language">
+          <element id="directory" name="testdata">
+            <element id="dir-copy" path="$PROJECT_DIR$/testdata" />
+          </element>
+        </element>
+      </element>
     </root>
   </artifact>
 </component>

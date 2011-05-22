@@ -39,38 +39,38 @@ Go file
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue
-              Literal
+              LiteralExpr
                 PsiElement(IDENTIFIER)('a')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementValue
               CompositeLiteral
-                Literal
+                LiteralExpr
                   PsiElement(IDENTIFIER)('Point')
                 CompositeLiteralElementList
                   PsiElement({)('{')
                   CompositeLiteralElement
                     CompositeLiteralElementKey
-                      Literal
+                      LiteralExpr
                         PsiElement(IDENTIFIER)('y')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
                     CompositeLiteralElementValue
                       UnaryExpression
                         PsiElement(-)('-')
-                        Literal
+                        LiteralExpr
                           PsiElement(LITERAL_INT)('1')
                   PsiElement(,)(',')
                   PsiWhiteSpace(' ')
                   CompositeLiteralElement
                     CompositeLiteralElementKey
-                      Literal
+                      LiteralExpr
                         PsiElement(IDENTIFIER)('x')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
                     CompositeLiteralElementValue
-                      Literal
+                      LiteralExpr
                         PsiElement(LITERAL_INT)('10')
                   PsiElement(})('}')
           PsiElement(})('}')

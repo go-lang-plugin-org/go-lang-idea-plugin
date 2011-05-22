@@ -17,44 +17,44 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CompositeLiteral
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('Line')
         CompositeLiteralElementList
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue
-              Literal
+              LiteralExpr
                 PsiElement(IDENTIFIER)('origin')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementValue
               CompositeLiteral
-                Literal
+                LiteralExpr
                   PsiElement(IDENTIFIER)('Point')
                 CompositeLiteralElementList
                   PsiElement({)('{')
                   CompositeLiteralElement
                     CompositeLiteralElementKey
-                      Literal
+                      LiteralExpr
                         PsiElement(IDENTIFIER)('y')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
                     CompositeLiteralElementValue
                       UnaryExpression
                         PsiElement(-)('-')
-                        Literal
+                        LiteralExpr
                           PsiElement(LITERAL_INT)('4')
                   PsiElement(,)(',')
                   PsiWhiteSpace(' ')
                   CompositeLiteralElement
                     CompositeLiteralElementKey
-                      Literal
+                      LiteralExpr
                         PsiElement(IDENTIFIER)('z')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
                     CompositeLiteralElementValue
-                      Literal
+                      LiteralExpr
                         PsiElement(LITERAL_FLOAT)('12.3')
                   PsiElement(})('}')
           PsiElement(})('}')

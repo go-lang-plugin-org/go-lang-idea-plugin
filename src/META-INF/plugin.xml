@@ -31,6 +31,11 @@
     </description>
     <change-notes>
         <![CDATA[
+        <h3>0.3.4 changes:</h3>
+                <ul>
+                    <li>[feature] Properly resolve not public types from the current package.</li>
+                </ul>
+        </h3>
         <h3>0.3.3 changes:</h3>
                 <ul>
                     <li>[bugfix] Minor bug with types completion</li>

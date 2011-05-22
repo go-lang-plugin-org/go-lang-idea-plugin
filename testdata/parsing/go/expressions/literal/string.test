@@ -17,9 +17,9 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       ExpressionList
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_STRING)('"asdfasdf"')
         PsiElement(,)(',')
         PsiWhiteSpace(' ')
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_STRING)('"adfad\"adfadsf"')

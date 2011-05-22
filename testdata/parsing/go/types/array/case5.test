@@ -16,17 +16,17 @@ Go file
       PsiWhiteSpace(' ')
       TypeArray
         PsiElement([)('[')
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_INT)('2')
         PsiElement(])(']')
         TypeArray
           PsiElement([)('[')
-          Literal
+          LiteralExpr
             PsiElement(LITERAL_INT)('2')
           PsiElement(])(']')
           TypeArray
             PsiElement([)('[')
-            Literal
+            LiteralExpr
               PsiElement(LITERAL_INT)('2')
             PsiElement(])(']')
             TypeName

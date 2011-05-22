@@ -19,6 +19,7 @@ import ro.redeul.google.go.lang.psi.types.GoType;
  * Time: 11:08 PM
  */
 public class GoLiteralExpressionImpl extends GoPsiExpressionImpl implements GoLiteralExpression {
+
     public GoLiteralExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -31,6 +32,10 @@ public class GoLiteralExpressionImpl extends GoPsiExpressionImpl implements GoLi
     @Override
     protected GoType resolveType() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public String toString() {
+        return "LiteralExpr";
     }
 
     @Override

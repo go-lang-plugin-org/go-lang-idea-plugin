@@ -27,7 +27,7 @@ Go file
         PsiWhiteSpace(' ')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         BlockStmt
@@ -37,7 +37,7 @@ Go file
           ReturnStmt
             PsiElement(KEYWORD_RETURN)('return')
             PsiWhiteSpace(' ')
-            Literal
+            LiteralExpr
               PsiElement(LITERAL_INT)('1')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('    ')

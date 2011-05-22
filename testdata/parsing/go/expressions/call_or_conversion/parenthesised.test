@@ -21,10 +21,10 @@ Go file
           PsiElement(()('(')
           UnaryExpression
             PsiElement(*)('*')
-            Literal
+            LiteralExpr
               PsiElement(IDENTIFIER)('v')
           PsiElement())(')')
         PsiElement(()('(')
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_CHAR)(''a'')
         PsiElement())(')')

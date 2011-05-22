@@ -23,7 +23,7 @@ Go file
           PsiElement({)('{')
           PsiElement(})('}')
         PsiElement(()('(')
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('nil')
         PsiElement())(')')
   PsiElement(WS_NEW_LINES)('\n')

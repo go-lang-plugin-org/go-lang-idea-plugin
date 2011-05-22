@@ -18,15 +18,15 @@ Go file
       PsiWhiteSpace(' ')
       AdditiveExpression
         AdditiveExpression
-          Literal
+          LiteralExpr
             PsiElement(LITERAL_INT)('1')
           PsiWhiteSpace(' ')
           PsiElement(+)('+')
           PsiWhiteSpace(' ')
-          Literal
+          LiteralExpr
             PsiElement(LITERAL_INT)('2')
         PsiWhiteSpace(' ')
         PsiElement(+)('+')
         PsiWhiteSpace(' ')
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_INT)('3')

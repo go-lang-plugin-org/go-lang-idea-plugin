@@ -17,14 +17,14 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CallOrConversionExpression
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('v')
         PsiElement(()('(')
         ExpressionList
-          Literal
+          LiteralExpr
             PsiElement(LITERAL_CHAR)(''a'')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
-          Literal
+          LiteralExpr
             PsiElement(LITERAL_STRING)('"b"')
         PsiElement())(')')

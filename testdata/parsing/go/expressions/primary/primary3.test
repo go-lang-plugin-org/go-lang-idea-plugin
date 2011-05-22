@@ -17,18 +17,18 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CompositeLiteral
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('Point')
         CompositeLiteralElementList
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue
-              Literal
+              LiteralExpr
                 PsiElement(LITERAL_INT)('1')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementValue
-              Literal
+              LiteralExpr
                 PsiElement(LITERAL_INT)('2')
           PsiElement(})('}')

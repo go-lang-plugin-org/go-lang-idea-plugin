@@ -18,6 +18,6 @@ Go file
       PsiWhiteSpace(' ')
       ParenthesisedExpression
         PsiElement(()('(')
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('a')
         PsiElement())(')')

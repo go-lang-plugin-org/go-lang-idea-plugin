@@ -22,6 +22,10 @@ public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoS
         super(node);
     }
 
+    public String toString() {
+        return "SelectorExpression";
+    }
+
     public void accept(GoElementVisitor visitor) {
 //        visitor.visitIdentifier(this);
     }

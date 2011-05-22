@@ -22,12 +22,12 @@ Go file
         PsiWhiteSpace(' ')
         ForConditionClause
           AdditiveExpression
-            Literal
+            LiteralExpr
               PsiElement(IDENTIFIER)('a')
             PsiWhiteSpace(' ')
             PsiElement(+)('+')
             PsiWhiteSpace(' ')
-            Literal
+            LiteralExpr
               PsiElement(IDENTIFIER)('b')
         PsiWhiteSpace(' ')
         BlockStmt

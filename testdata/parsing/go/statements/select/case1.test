@@ -34,12 +34,12 @@ Go file
           PsiWhiteSpace(' ')
           SelectCaseSendExpr
             CommunicationExpression
-              Literal
+              LiteralExpr
                 PsiElement(IDENTIFIER)('a')
               PsiWhiteSpace(' ')
               PsiElement(<-)('<-')
               PsiWhiteSpace(' ')
-              Literal
+              LiteralExpr
                 PsiElement(IDENTIFIER)('b')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')

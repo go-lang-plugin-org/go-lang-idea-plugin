@@ -6,11 +6,10 @@ import ro.redeul.google.go.lang.lexer.GoElementTypeImpl;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 7:40:35 PM
- * To change this template use File | Settings | File Templates.
  */
 public interface GoElementTypes extends GoTokenTypes {
     GoElementType NONE = new GoElementTypeImpl("no token"); //not a node

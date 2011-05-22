@@ -17,10 +17,10 @@ Go file
       TypeArray
         PsiElement([)('[')
         MultiplicativeExpression
-          Literal
+          LiteralExpr
             PsiElement(LITERAL_INT)('2')
           PsiElement(*)('*')
-          Literal
+          LiteralExpr
             PsiElement(IDENTIFIER)('N')
         PsiElement(])(']')
         PsiWhiteSpace(' ')

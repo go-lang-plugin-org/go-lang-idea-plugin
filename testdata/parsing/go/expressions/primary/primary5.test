@@ -17,20 +17,20 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       SliceExpression
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('s')
         PsiElement([)('[')
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('i')
         PsiWhiteSpace(' ')
         PsiElement(:)(':')
         PsiWhiteSpace(' ')
         AdditiveExpression
-          Literal
+          LiteralExpr
             PsiElement(IDENTIFIER)('j')
           PsiWhiteSpace(' ')
           PsiElement(+)('+')
           PsiWhiteSpace(' ')
-          Literal
+          LiteralExpr
             PsiElement(LITERAL_INT)('1')
         PsiElement(])(']')

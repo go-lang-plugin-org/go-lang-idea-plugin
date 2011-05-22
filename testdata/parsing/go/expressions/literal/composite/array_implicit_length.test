@@ -27,12 +27,12 @@ Go file
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue
-              Literal
+              LiteralExpr
                 PsiElement(LITERAL_STRING)('"str1"')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementValue
-              Literal
+              LiteralExpr
                 PsiElement(LITERAL_STRING)('"str2"')
           PsiElement(})('}')

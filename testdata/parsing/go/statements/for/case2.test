@@ -21,7 +21,7 @@ Go file
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
         ForConditionClause
-          Literal
+          LiteralExpr
             PsiElement(IDENTIFIER)('a')
         PsiWhiteSpace(' ')
         BlockStmt

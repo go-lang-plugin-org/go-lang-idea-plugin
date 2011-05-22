@@ -27,14 +27,14 @@ Go file
             PsiWhiteSpace(' ')
             PsiElement(:=)(':=')
             PsiWhiteSpace(' ')
-            Literal
+            LiteralExpr
               PsiElement(LITERAL_INT)('0')
           PsiElement(;)(';')
           PsiWhiteSpace(' ')
           PsiElement(;)(';')
           PsiWhiteSpace(' ')
           IncDecStmt
-            Literal
+            LiteralExpr
               PsiElement(IDENTIFIER)('i')
             PsiElement(++)('++')
         PsiWhiteSpace(' ')

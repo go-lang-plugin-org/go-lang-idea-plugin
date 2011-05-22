@@ -8,11 +8,10 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 25, 2010
  * Time: 8:01:22 PM
- * To change this template use File | Settings | File Templates.
  */
 public class ForStatement implements GoElementTypes {
 

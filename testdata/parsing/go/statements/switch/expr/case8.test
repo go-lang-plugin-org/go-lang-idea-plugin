@@ -28,25 +28,25 @@ Go file
         PsiWhiteSpace(' ')
         AssignStmt
           ExpressionList
-            Literal
+            LiteralExpr
               PsiElement(IDENTIFIER)('e1')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
-            Literal
+            LiteralExpr
               PsiElement(IDENTIFIER)('e2')
           PsiWhiteSpace(' ')
           PsiElement(*=)('*=')
           PsiWhiteSpace(' ')
           ExpressionList
-            Literal
+            LiteralExpr
               PsiElement(LITERAL_INT)('2')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
-            Literal
+            LiteralExpr
               PsiElement(LITERAL_INT)('3')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('e1')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
@@ -55,7 +55,7 @@ Go file
         SwitchExprCase
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
-          Literal
+          LiteralExpr
             PsiElement(IDENTIFIER)('a')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')
@@ -63,7 +63,7 @@ Go file
           ReturnStmt
             PsiElement(KEYWORD_RETURN)('return')
             PsiWhiteSpace(' ')
-            Literal
+            LiteralExpr
               PsiElement(LITERAL_INT)('1')
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')

@@ -17,9 +17,9 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CallOrConversionExpression
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('v')
         PsiElement(()('(')
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_CHAR)(''a'')
         PsiElement())(')')

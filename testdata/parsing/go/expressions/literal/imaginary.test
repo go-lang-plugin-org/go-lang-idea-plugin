@@ -20,9 +20,9 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       ExpressionList
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_IMAGINARY_FLOAT)('6.67428e-11i')
         PsiElement(,)(',')
         PsiWhiteSpace(' ')
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_IMAGINARY_INTEGER)('3i')

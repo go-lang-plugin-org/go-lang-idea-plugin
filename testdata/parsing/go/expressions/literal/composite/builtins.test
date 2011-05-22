@@ -20,7 +20,7 @@ Go file
         PsiElement(&)('&')
         CompositeLiteral
           SelectorExpression
-            Literal
+            LiteralExpr
               PsiElement(IDENTIFIER)('ast')
             PsiElement(.)('.')
             PsiElement(IDENTIFIER)('ArrayType')
@@ -28,18 +28,18 @@ Go file
             PsiElement({)('{')
             CompositeLiteralElement
               CompositeLiteralElementValue
-                Literal
+                LiteralExpr
                   PsiElement(IDENTIFIER)('lbrack')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
             CompositeLiteralElement
               CompositeLiteralElementValue
-                Literal
+                LiteralExpr
                   PsiElement(IDENTIFIER)('len')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
             CompositeLiteralElement
               CompositeLiteralElementValue
-                Literal
+                LiteralExpr
                   PsiElement(IDENTIFIER)('elt')
             PsiElement(})('}')

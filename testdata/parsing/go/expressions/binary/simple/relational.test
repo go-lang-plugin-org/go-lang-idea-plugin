@@ -17,10 +17,10 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       RelationalExpression
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_INT)('1')
         PsiWhiteSpace(' ')
         PsiElement(==)('==')
         PsiWhiteSpace(' ')
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_INT)('2')

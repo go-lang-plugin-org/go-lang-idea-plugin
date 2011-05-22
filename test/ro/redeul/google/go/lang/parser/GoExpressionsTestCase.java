@@ -5,117 +5,212 @@ import org.testng.annotations.Test;
 import java.io.File;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 5, 2010
  * Time: 9:56:52 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoExpressionsTestCase extends GoParsingTestCase {
 
     @Override
-    protected String getRelativeDataPath() {
-        return super.getRelativeDataPath() + File.separator + "expressions";
+    protected String getBasePath() {
+        return super.getBasePath() + File.separator + "expressions";
     }
 
-    @Test public void testCall_or_conversionSimple() throws Throwable { doTest(); }
+    public void testCall_or_conversion$parameter() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testCall_or_conversionParameter() throws Throwable { doTest(); }
+    public void testCall_or_conversion$simple() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testCall_or_conversionParameters() throws Throwable { doTest(); }
+    public void testCall_or_conversion$parameters() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testCall_or_conversionParenthesised() throws Throwable { doTest(); }
+    public void testCall_or_conversion$parenthesised() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testIndexSimple() throws Throwable { doTest(); }
+    public void testIndex$simple() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testIndexExpression() throws Throwable { doTest(); }
+    public void testIndex$expression() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testSliceSimple() throws Throwable { doTest(); }
+    public void testSlice$simple() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testSliceExpressions() throws Throwable { doTest(); }
+    public void testSlice$expressions() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testType_assertionSimple() throws Throwable { doTest(); }
-    
-    @Test public void testType_assertionType() throws Throwable { doTest(); }
+    public void testType_assertion$simple() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testSelectorSimple() throws Throwable { doTest(); }
+    public void testType_assertion$type() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testSelectorDouble() throws Throwable { doTest(); }
+    public void testSelector$simple() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testParenthesisedBasic() throws Throwable { doTest(); }
+    public void testSelector$double() throws Throwable {
+        doTest();
+    }
 
-//    @Test public void testParenthesisedPointer_type() throws Throwable { doTest(); }
+    public void testParenthesised$basic() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralIdentifier() throws Throwable { doTest(); }
+//    @Test public void testParenthesised$Pointer_type() throws Throwable { doTest(); }
 
-    @Test public void testLiteralInteger() throws Throwable { doTest(); }
+    public void testLiteral$identifier() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralFloat() throws Throwable { doTest(); }
+    public void testLiteral$integer() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralImaginary() throws Throwable { doTest(); }
+    public void testLiteral$float() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralChar() throws Throwable { doTest(); }
+    public void testLiteral$imaginary() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralString() throws Throwable { doTest(); }
+    public void testLiteral$char() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralCompositeError1() throws Throwable { doTest(); }
+    public void testLiteral$string() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralCompositeBuiltins() throws Throwable { doTest(); }
+    public void testLiteral$composite$error1() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralCompositeStruct() throws Throwable { doTest(); }
+    public void testLiteral$composite$builtins() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralCompositeStruct_nested() throws Throwable { doTest(); }
+    public void testLiteral$composite$struct() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralCompositeSlice() throws Throwable { doTest(); }
+    public void testLiteral$composite$struct_nested() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralCompositeArray() throws Throwable { doTest(); }
+    public void testLiteral$composite$slice() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralCompositeArray_implicit_length() throws Throwable { doTest(); }
+    public void testLiteral$composite$array() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralCompositeMap() throws Throwable { doTest(); }
+    public void testLiteral$composite$array_implicit_length() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralCompositeType() throws Throwable { doTest(); }
+    public void testLiteral$composite$map() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testLiteralFunction() throws Throwable { doTest(); }
+    public void testLiteral$composite$type() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testPrimaryPrimary1() throws Throwable { doTest(); }
+    public void testLiteral$function() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testPrimaryPrimary2() throws Throwable { doTest(); }
+    public void testPrimary$primary1() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testPrimaryPrimary3() throws Throwable { doTest(); }
+    public void testPrimary$primary2() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testPrimaryPrimary4() throws Throwable { doTest(); }
+    public void testPrimary$primary3() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testPrimaryPrimary5() throws Throwable { doTest(); }
+    public void testPrimary$primary4() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testPrimaryPrimary6() throws Throwable { doTest(); }
+    public void testPrimary$primary5() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testPrimaryPrimary7() throws Throwable { doTest(); }
+    public void testPrimary$primary6() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testPrimaryPrimary8() throws Throwable { doTest(); }
+    public void testPrimary$primary7() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testPrimaryPrimary9() throws Throwable { doTest(); }
+    public void testPrimary$primary8() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testBinarySimpleAdditive() throws Throwable { doTest(); }
+    public void testPrimary$primary9() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testBinarySimpleMultiplicative() throws Throwable { doTest(); }
+    public void testBinary$simple$additive() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testBinarySimpleRelational() throws Throwable { doTest(); }
+    public void testBinary$simple$multiplicative() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testBinarySimpleCommunication() throws Throwable { doTest(); }
+    public void testBinary$simple$relational() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testBinarySimpleLogical_and() throws Throwable { doTest(); }
+    public void testBinary$simple$communication() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testBinarySimpleLogical_or() throws Throwable { doTest(); }
+    public void testBinary$simple$logical_and() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testBinaryNestedAdditive() throws Throwable { doTest(); }
+    public void testBinary$simple$logical_or() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testBinaryNestedPrecedence1() throws Throwable { doTest(); }
+    public void testBinary$nested$additive() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testBuiltinMake_channel() throws Throwable { doTest(); }
+    public void testBinary$nested$precedence1() throws Throwable {
+        doTest();
+    }
 
-    @Test public void testBuiltinLiterals() throws Throwable { doTest(); }
+    public void testBuiltin$make_channel() throws Throwable {
+        doTest();
+    }
 
-//    @Test public void testLiteralsCompositeStruct_nested() throws Throwable { doTest(); }
+    public void testBuiltin$literals() throws Throwable {
+        doTest();
+    }
+
+//    @Test public void testLiterals$Composite$struct_nested() throws Throwable { doTest(); }
 
 }

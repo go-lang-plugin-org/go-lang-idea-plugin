@@ -16,7 +16,7 @@ Go file
       PsiWhiteSpace(' ')
       TypeArray
         PsiElement([)('[')
-        Literal
+        LiteralExpr
           PsiElement(LITERAL_INT)('1000')
         PsiElement(])(']')
         TypePointer

@@ -24,11 +24,11 @@ Go file
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
         ExpressionStmt
-          Literal
+          LiteralExpr
             PsiElement(IDENTIFIER)('e')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         BlockStmt

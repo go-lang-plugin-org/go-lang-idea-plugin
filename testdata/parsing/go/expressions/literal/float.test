@@ -16,5 +16,5 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      Literal
+      LiteralExpr
         PsiElement(LITERAL_FLOAT)('6.67428e-11')

@@ -29,20 +29,20 @@ Go file
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementKey
-              Literal
+              LiteralExpr
                 PsiElement(LITERAL_STRING)('"key1"')
             PsiElement(:)(':')
             CompositeLiteralElementValue
-              Literal
+              LiteralExpr
                 PsiElement(LITERAL_INT)('1')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementKey
-              Literal
+              LiteralExpr
                 PsiElement(LITERAL_STRING)('"key2"')
             PsiElement(:)(':')
             CompositeLiteralElementValue
-              Literal
+              LiteralExpr
                 PsiElement(LITERAL_INT)('2')
           PsiElement(})('}')

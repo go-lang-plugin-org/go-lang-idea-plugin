@@ -1,7 +1,11 @@
 package ro.redeul.google.go.lang.parser;
 
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.application.PluginPathManager;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
+import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import ro.redeul.google.go.lang.GoCodeInsightTestCase;
 import ro.redeul.google.go.util.TestUtils;
 
@@ -9,22 +13,29 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class GoParsingTestCase extends GoCodeInsightTestCase {
+public abstract class GoParsingTestCase extends LightCodeInsightFixtureTestCase {
+
     @Override
-    protected String getRelativeDataPath() {
-        return "parsing" + File.separator + "go";
+    protected String getBasePath() {
+        String base = FileUtil.toSystemIndependentName(PluginPathManager.getPluginHomePathRelative("google-go-language")) + "/testdata/";
+
+        return base + File.separator + "parsing" + File.separator + "go";
+    }
+
+    protected String getLocalTestDataPath() {
+        return getBasePath();
     }
 
     public void doTest() throws IOException {
-        doTest(getTestName() + ".test");
+        doTest(getTestName(true).replace('$', '/') + ".test");
     }
 
     private void doTest(String fileName) throws IOException {
-        final List<String> list = TestUtils.readInput(getTestRootPath() + "/" + fileName);
+        final List<String> list = TestUtils.readInput(getTestDataPath() + "/" + fileName);
 
         final String input = list.get(0);
         if ( list.size() != 2 || list.get(1).trim().length() == 0 ) {
-            dumpParsingTree(input, getTestRootPath() + "/" + fileName);
+            dumpParsingTree(input, getTestDataPath() + "/" + fileName);
         } else {
             checkParsing(input, list.get(1).trim());
         }

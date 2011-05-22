@@ -17,10 +17,10 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       LogicalAndExpression
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('a')
         PsiWhiteSpace(' ')
         PsiElement(&&)('&&')
         PsiWhiteSpace(' ')
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('b')

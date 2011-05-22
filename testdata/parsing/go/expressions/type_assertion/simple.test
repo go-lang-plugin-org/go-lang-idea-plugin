@@ -17,7 +17,7 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       TypeAssertionExpression
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('x')
         PsiElement(.)('.')
         PsiElement(()('(')

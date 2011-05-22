@@ -29,7 +29,7 @@ Go file
           PsiWhiteSpace(' ')
           PsiElement(=)('=')
           PsiWhiteSpace(' ')
-          Literal
+          LiteralExpr
             PsiElement(IDENTIFIER)('b')
       PsiWhiteSpace(' ')
       PsiElement(WS_NEW_LINES)('\n')

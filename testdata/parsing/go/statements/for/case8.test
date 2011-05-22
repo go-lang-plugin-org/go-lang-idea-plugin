@@ -26,12 +26,12 @@ Go file
           PsiElement(;)(';')
           PsiWhiteSpace(' ')
           RelationalExpression
-            Literal
+            LiteralExpr
               PsiElement(IDENTIFIER)('i')
             PsiWhiteSpace(' ')
             PsiElement(<)('<')
             PsiWhiteSpace(' ')
-            Literal
+            LiteralExpr
               PsiElement(LITERAL_INT)('10')
           PsiElement(;)(';')
           PsiWhiteSpace(' ')

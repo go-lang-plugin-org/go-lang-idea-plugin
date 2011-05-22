@@ -34,15 +34,15 @@ Go file
           PsiElement(:=)(':=')
           PsiWhiteSpace(' ')
           ExpressionList
-            Literal
+            LiteralExpr
               PsiElement(LITERAL_INT)('2')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
-            Literal
+            LiteralExpr
               PsiElement(LITERAL_INT)('3')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('e1')
         PsiWhiteSpace(' ')
         BlockStmt

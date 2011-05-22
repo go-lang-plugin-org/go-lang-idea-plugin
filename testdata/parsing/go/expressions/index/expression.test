@@ -17,11 +17,11 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       IndexExpression
-        Literal
+        LiteralExpr
           PsiElement(IDENTIFIER)('a')
         PsiElement([)('[')
         SelectorExpression
-          Literal
+          LiteralExpr
             PsiElement(IDENTIFIER)('b')
           PsiElement(.)('.')
           PsiElement(IDENTIFIER)('c')

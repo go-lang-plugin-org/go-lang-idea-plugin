@@ -19,12 +19,12 @@ Go file
       ParenthesisedExpression
         PsiElement(()('(')
         AdditiveExpression
-          Literal
+          LiteralExpr
             PsiElement(IDENTIFIER)('s')
           PsiWhiteSpace(' ')
           PsiElement(+)('+')
           PsiWhiteSpace(' ')
-          Literal
+          LiteralExpr
             PsiElement(LITERAL_STRING)('".txt"')
         PsiElement())(')')
 
