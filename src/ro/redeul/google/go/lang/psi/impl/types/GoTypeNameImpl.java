@@ -11,13 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
-import ro.redeul.google.go.lang.psi.processors.NamedTypesProcessor;
-import ro.redeul.google.go.lang.psi.processors.TypesReferencesScopeProcessor;
+import ro.redeul.google.go.lang.psi.processors.NamedTypeVariantsCollector;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.NamedTypeResolver;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -61,17 +59,6 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
         return findChildByClass(GoPackageReference.class);
     }
 
-    public PsiElement resolve() {
-
-        TypesReferencesScopeProcessor namedTypesProcessor = new TypesReferencesScopeProcessor(this);
-
-        if (!PsiScopesUtil.treeWalkUp(namedTypesProcessor, this, this.getContainingFile())) {
-            return namedTypesProcessor.getFoundType();
-        }
-
-        return null;
-    }
-
     @NotNull
     public String getCanonicalText() {
         return getText();
@@ -97,12 +84,24 @@ public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
         return true;
     }
 
+    public PsiElement resolve() {
+
+        NamedTypeResolver namedTypesProcessor = new NamedTypeResolver(this);
+
+        if (!PsiScopesUtil.treeWalkUp(namedTypesProcessor, this, this.getContainingFile(), GoResolveStates.initial()))
+        {
+            return namedTypesProcessor.getResolvedTypeName();
+        }
+
+        return null;
+    }
+
     @NotNull
     public Object[] getVariants() {
 
-        NamedTypesProcessor namedTypesProcessor = new NamedTypesProcessor();
+        NamedTypeVariantsCollector namedTypesProcessor = new NamedTypeVariantsCollector();
 
-        PsiScopesUtil.treeWalkUp(namedTypesProcessor, this, this.getContainingFile());
+        PsiScopesUtil.treeWalkUp(namedTypesProcessor, this, this.getContainingFile(), GoResolveStates.initial());
 
         return namedTypesProcessor.references();
     }

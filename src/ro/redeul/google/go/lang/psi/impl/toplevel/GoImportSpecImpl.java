@@ -5,25 +5,19 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.PsiShortNamesCache;
-import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.xml.Resolve;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
-import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
-import ro.redeul.google.go.lang.psi.processors.ResolveStateKeys;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveUtil;
-import ro.redeul.google.go.lang.psi.stubs.index.GoPackageName;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -72,14 +66,11 @@ public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
 
     @Override
     public boolean processDeclarations(
-            @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
-    {
-        // import _ "a"; ( no definitions )
+            @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+        // import _ "a"; ( no declarations are visible from this import )
         if (getPackageReference() != null && getPackageReference().isBlank()) {
             return true;
         }
-
-        String thePackageName = getPackageName();
 
         GoNamesCache namesCache = ContainerUtil.findInstance(getProject().getExtensions(PsiShortNamesCache.EP_NAME), GoNamesCache.class);
 
@@ -87,22 +78,13 @@ public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
             return true;
         }
 
-        Collection<GoFile> files = namesCache.getFilesByPackageName(thePackageName);
+        // get the file included in the imported package name
+        Collection<GoFile> files = namesCache.getFilesByPackageName(getPackageName());
 
-        if (!state.get(ResolveStateKeys.ProcessOnlyLocalDeclarations)) {
-
-            if (! processor.execute(this, state) ) {
+        for (GoFile file : files) {
+            if (!file.processDeclarations(processor, GoResolveStates.imported(getPackageName(), getVisiblePackageName()), null, place))
+            {
                 return false;
-            }
-
-            for (GoFile file : files) {
-                if (!file.processDeclarations(
-                        processor,
-                        ResolveState.initial().put(ResolveStateKeys.ProcessOnlyLocalDeclarations, Boolean.TRUE),
-                        null, place))
-                {
-                    return false;
-                }
             }
         }
 
