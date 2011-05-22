@@ -30,7 +30,8 @@ Go file
           PsiElement(KEYWORD_IF)('if')
           PsiWhiteSpace(' ')
           LiteralExpr
-            PsiElement(IDENTIFIER)('e')
+            Identifier
+              PsiElement(IDENTIFIER)('e')
           PsiWhiteSpace(' ')
           BlockStmt
             PsiElement({)('{')

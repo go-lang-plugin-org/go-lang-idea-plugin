@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.expressions;
 
+import com.intellij.psi.PsiReference;
+
 /**
  * Created by IntelliJ IDEA.
  * User: mtoader
@@ -7,6 +9,6 @@ package ro.redeul.google.go.lang.psi.expressions;
  * Time: 10:42:42 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface GoIdentifier extends GoPsiExpression {
+public interface GoIdentifier extends GoPsiExpression, PsiReference {
 
 }

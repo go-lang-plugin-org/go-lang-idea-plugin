@@ -75,6 +75,6 @@ public class GoPsiUtils {
     }
 
     public static String findDefaultPackageName(String importPath) {
-        return importPath.replaceAll("(?:[a-zA-Z\\.]+/)+", "");
+        return importPath != null ? importPath.replaceAll("(?:[a-zA-Z\\.]+/)+", "") : null;
     }
 }

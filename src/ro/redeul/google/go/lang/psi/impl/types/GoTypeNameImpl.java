@@ -18,11 +18,10 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 30, 2010
  * Time: 7:12:16 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoTypeNameImpl extends GoPsiElementImpl implements GoTypeName {
 

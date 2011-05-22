@@ -23,10 +23,12 @@ Go file
         ForConditionClause
           IndexExpression
             LiteralExpr
-              PsiElement(IDENTIFIER)('a')
+              Identifier
+                PsiElement(IDENTIFIER)('a')
             PsiElement([)('[')
             LiteralExpr
-              PsiElement(IDENTIFIER)('i')
+              Identifier
+                PsiElement(IDENTIFIER)('i')
             PsiElement(])(']')
         PsiWhiteSpace(' ')
         BlockStmt

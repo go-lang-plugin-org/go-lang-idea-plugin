@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Google Go Language plugin</name>
-    <version>0.3.3</version>
+    <version>0.3.4</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[
@@ -21,6 +21,7 @@
             <li>Go To definition (for types) works across files and Go SDK</li>
             <li>Code formatting - experimental (disabled)</li>
             <li>Type name completion and resolution</li>
+            <li>Function name completion</li>
             <li>ColorsAndSettings page with a new color scheme</li>
             <li>Automatically add new line at end of file</li>
             <li>Force UTF-8 encoding for go files</li>
@@ -34,6 +35,7 @@
         <h3>0.3.4 changes:</h3>
                 <ul>
                     <li>[feature] Properly resolve not public types from the current package.</li>
+                    <li>[feature] Function names completion (from current package and imported packages) where an identifier is possible.</li>
                 </ul>
         </h3>
         <h3>0.3.3 changes:</h3>

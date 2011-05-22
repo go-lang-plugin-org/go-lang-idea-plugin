@@ -20,7 +20,8 @@ Go file
         PsiElement(()('(')
         AdditiveExpression
           LiteralExpr
-            PsiElement(IDENTIFIER)('s')
+            Identifier
+              PsiElement(IDENTIFIER)('s')
           PsiWhiteSpace(' ')
           PsiElement(+)('+')
           PsiWhiteSpace(' ')

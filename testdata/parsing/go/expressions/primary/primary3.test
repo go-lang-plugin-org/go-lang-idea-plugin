@@ -18,7 +18,8 @@ Go file
       PsiWhiteSpace(' ')
       CompositeLiteral
         LiteralExpr
-          PsiElement(IDENTIFIER)('Point')
+          Identifier
+            PsiElement(IDENTIFIER)('Point')
         CompositeLiteralElementList
           PsiElement({)('{')
           CompositeLiteralElement

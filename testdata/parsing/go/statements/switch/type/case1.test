@@ -28,7 +28,8 @@ Go file
         PsiWhiteSpace(' ')
         SwitchTypeGuard
           LiteralExpr
-            PsiElement(IDENTIFIER)('x')
+            Identifier
+              PsiElement(IDENTIFIER)('x')
           PsiElement(.)('.')
           PsiElement(()('(')
           PsiElement(KEYWORD_TYPE)('type')

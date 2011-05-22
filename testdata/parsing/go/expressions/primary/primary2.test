@@ -18,7 +18,8 @@ Go file
       PsiWhiteSpace(' ')
       CallOrConversionExpression
         LiteralExpr
-          PsiElement(IDENTIFIER)('f')
+          Identifier
+            PsiElement(IDENTIFIER)('f')
         PsiElement(()('(')
         ExpressionList
           LiteralExpr
@@ -26,5 +27,6 @@ Go file
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           LiteralExpr
-            PsiElement(IDENTIFIER)('true')
+            Identifier
+              PsiElement(IDENTIFIER)('true')
         PsiElement())(')')

@@ -25,12 +25,14 @@ Go file
         PsiWhiteSpace(' ')
         IncDecStmt
           LiteralExpr
-            PsiElement(IDENTIFIER)('e')
+            Identifier
+              PsiElement(IDENTIFIER)('e')
           PsiElement(++)('++')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpr
-          PsiElement(IDENTIFIER)('e')
+          Identifier
+            PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         BlockStmt
           PsiElement({)('{')

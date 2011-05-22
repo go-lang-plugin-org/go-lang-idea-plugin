@@ -18,26 +18,30 @@ Go file
       PsiWhiteSpace(' ')
       CompositeLiteral
         LiteralExpr
-          PsiElement(IDENTIFIER)('Line')
+          Identifier
+            PsiElement(IDENTIFIER)('Line')
         CompositeLiteralElementList
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue
               LiteralExpr
-                PsiElement(IDENTIFIER)('origin')
+                Identifier
+                  PsiElement(IDENTIFIER)('origin')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementValue
               CompositeLiteral
                 LiteralExpr
-                  PsiElement(IDENTIFIER)('Point')
+                  Identifier
+                    PsiElement(IDENTIFIER)('Point')
                 CompositeLiteralElementList
                   PsiElement({)('{')
                   CompositeLiteralElement
                     CompositeLiteralElementKey
                       LiteralExpr
-                        PsiElement(IDENTIFIER)('y')
+                        Identifier
+                          PsiElement(IDENTIFIER)('y')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
                     CompositeLiteralElementValue
@@ -50,7 +54,8 @@ Go file
                   CompositeLiteralElement
                     CompositeLiteralElementKey
                       LiteralExpr
-                        PsiElement(IDENTIFIER)('z')
+                        Identifier
+                          PsiElement(IDENTIFIER)('z')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
                     CompositeLiteralElementValue

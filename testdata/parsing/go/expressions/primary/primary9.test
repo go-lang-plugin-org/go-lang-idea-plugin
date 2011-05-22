@@ -24,7 +24,8 @@ Go file
           PsiElement(})('}')
         PsiElement(()('(')
         LiteralExpr
-          PsiElement(IDENTIFIER)('nil')
+          Identifier
+            PsiElement(IDENTIFIER)('nil')
         PsiElement())(')')
   PsiElement(WS_NEW_LINES)('\n')
   PsiErrorElement:unknown.token

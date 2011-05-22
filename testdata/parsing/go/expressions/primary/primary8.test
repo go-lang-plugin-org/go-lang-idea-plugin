@@ -21,12 +21,14 @@ Go file
           IndexExpression
             SelectorExpression
               LiteralExpr
-                PsiElement(IDENTIFIER)('f')
+                Identifier
+                  PsiElement(IDENTIFIER)('f')
               PsiElement(.)('.')
               PsiElement(IDENTIFIER)('p')
             PsiElement([)('[')
             LiteralExpr
-              PsiElement(IDENTIFIER)('i')
+              Identifier
+                PsiElement(IDENTIFIER)('i')
             PsiElement(])(']')
           PsiElement(.)('.')
           PsiElement(IDENTIFIER)('x')

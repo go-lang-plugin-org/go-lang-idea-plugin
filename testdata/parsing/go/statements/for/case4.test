@@ -23,12 +23,14 @@ Go file
         ForConditionClause
           LogicalAndExpression
             LiteralExpr
-              PsiElement(IDENTIFIER)('a')
+              Identifier
+                PsiElement(IDENTIFIER)('a')
             PsiWhiteSpace(' ')
             PsiElement(&&)('&&')
             PsiWhiteSpace(' ')
             LiteralExpr
-              PsiElement(IDENTIFIER)('b')
+              Identifier
+                PsiElement(IDENTIFIER)('b')
         PsiWhiteSpace(' ')
         BlockStmt
           PsiElement({)('{')

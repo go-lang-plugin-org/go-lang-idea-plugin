@@ -21,7 +21,8 @@ Go file
             PsiElement(LITERAL_INT)('2')
           PsiElement(*)('*')
           LiteralExpr
-            PsiElement(IDENTIFIER)('N')
+            Identifier
+              PsiElement(IDENTIFIER)('N')
         PsiElement(])(']')
         PsiWhiteSpace(' ')
         TypeStruct

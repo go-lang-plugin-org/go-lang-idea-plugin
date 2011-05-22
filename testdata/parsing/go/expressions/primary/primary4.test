@@ -18,7 +18,8 @@ Go file
       PsiWhiteSpace(' ')
       IndexExpression
         LiteralExpr
-          PsiElement(IDENTIFIER)('m')
+          Identifier
+            PsiElement(IDENTIFIER)('m')
         PsiElement([)('[')
         LiteralExpr
           PsiElement(LITERAL_STRING)('"foo"')

@@ -28,11 +28,13 @@ Go file
         PsiWhiteSpace(' ')
         ExpressionStmt
           LiteralExpr
-            PsiElement(IDENTIFIER)('e')
+            Identifier
+              PsiElement(IDENTIFIER)('e')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpr
-          PsiElement(IDENTIFIER)('e')
+          Identifier
+            PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiElement(WS_NEW_LINES)('\n')
@@ -41,7 +43,8 @@ Go file
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           LiteralExpr
-            PsiElement(IDENTIFIER)('a')
+            Identifier
+              PsiElement(IDENTIFIER)('a')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('             ')

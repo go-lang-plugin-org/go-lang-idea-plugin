@@ -19,5 +19,6 @@ Go file
       ParenthesisedExpression
         PsiElement(()('(')
         LiteralExpr
-          PsiElement(IDENTIFIER)('a')
+          Identifier
+            PsiElement(IDENTIFIER)('a')
         PsiElement())(')')

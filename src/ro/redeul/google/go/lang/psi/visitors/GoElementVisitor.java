@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.visitors;
 
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.impl.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeNameDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeSpecImpl;
@@ -77,5 +78,9 @@ public class GoElementVisitor {
 
     public void acceptTypeNameDeclaration(GoTypeNameDeclaration nameDeclaration) {
         visitElement(nameDeclaration);
+    }
+
+    public void visitIdentifier(GoIdentifierImpl goIdentifier) {
+        visitElement(goIdentifier);
     }
 }

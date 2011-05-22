@@ -22,7 +22,8 @@ Go file
         PsiWhiteSpace(' ')
         ForConditionClause
           LiteralExpr
-            PsiElement(IDENTIFIER)('a')
+            Identifier
+              PsiElement(IDENTIFIER)('a')
         PsiWhiteSpace(' ')
         BlockStmt
           PsiElement({)('{')

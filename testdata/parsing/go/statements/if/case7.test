@@ -27,7 +27,8 @@ Go file
         PsiWhiteSpace(' ')
         AssignStmt
           LiteralExpr
-            PsiElement(IDENTIFIER)('e')
+            Identifier
+              PsiElement(IDENTIFIER)('e')
           PsiWhiteSpace(' ')
           PsiElement(+=)('+=')
           PsiWhiteSpace(' ')
@@ -36,7 +37,8 @@ Go file
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpr
-          PsiElement(IDENTIFIER)('e')
+          Identifier
+            PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         BlockStmt
           PsiElement({)('{')

@@ -18,9 +18,11 @@ Go file
       PsiWhiteSpace(' ')
       CommunicationExpression
         LiteralExpr
-          PsiElement(IDENTIFIER)('a')
+          Identifier
+            PsiElement(IDENTIFIER)('a')
         PsiWhiteSpace(' ')
         PsiElement(<-)('<-')
         PsiWhiteSpace(' ')
         LiteralExpr
-          PsiElement(IDENTIFIER)('b')
+          Identifier
+            PsiElement(IDENTIFIER)('b')

@@ -18,6 +18,7 @@ Go file
       PsiWhiteSpace(' ')
       SelectorExpression
         LiteralExpr
-          PsiElement(IDENTIFIER)('obj')
+          Identifier
+            PsiElement(IDENTIFIER)('obj')
         PsiElement(.)('.')
         PsiElement(IDENTIFIER)('color')

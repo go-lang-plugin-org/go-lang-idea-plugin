@@ -27,11 +27,13 @@ Go file
         AssignStmt
           ExpressionList
             LiteralExpr
-              PsiElement(IDENTIFIER)('e1')
+              Identifier
+                PsiElement(IDENTIFIER)('e1')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
             LiteralExpr
-              PsiElement(IDENTIFIER)('e2')
+              Identifier
+                PsiElement(IDENTIFIER)('e2')
           PsiWhiteSpace(' ')
           PsiElement(*=)('*=')
           PsiWhiteSpace(' ')
@@ -45,7 +47,8 @@ Go file
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpr
-          PsiElement(IDENTIFIER)('e1')
+          Identifier
+            PsiElement(IDENTIFIER)('e1')
         PsiWhiteSpace(' ')
         BlockStmt
           PsiElement({)('{')

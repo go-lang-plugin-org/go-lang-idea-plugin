@@ -18,16 +18,19 @@ Go file
       PsiWhiteSpace(' ')
       SliceExpression
         LiteralExpr
-          PsiElement(IDENTIFIER)('s')
+          Identifier
+            PsiElement(IDENTIFIER)('s')
         PsiElement([)('[')
         LiteralExpr
-          PsiElement(IDENTIFIER)('i')
+          Identifier
+            PsiElement(IDENTIFIER)('i')
         PsiWhiteSpace(' ')
         PsiElement(:)(':')
         PsiWhiteSpace(' ')
         AdditiveExpression
           LiteralExpr
-            PsiElement(IDENTIFIER)('j')
+            Identifier
+              PsiElement(IDENTIFIER)('j')
           PsiWhiteSpace(' ')
           PsiElement(+)('+')
           PsiWhiteSpace(' ')

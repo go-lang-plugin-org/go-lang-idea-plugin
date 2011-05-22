@@ -1,5 +1,6 @@
 package main
-var e = v('a')
+import a "a"
+var x = a.A()
 -----
 Go file
   PackageDeclaration(main)
@@ -7,20 +8,29 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
+  ImportDeclarations
+    PsiElement(KEYWORD_IMPORT)('import')
+    PsiWhiteSpace(' ')
+    ImportSpec
+      PackageReference
+        PsiElement(IDENTIFIER)('a')
+      PsiWhiteSpace(' ')
+      PsiElement(LITERAL_STRING)('"a"')
+  PsiElement(WS_NEW_LINES)('\n')
   VarDeclarations
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarSpec
       Identifiers
-        PsiElement(IDENTIFIER)('e')
+        PsiElement(IDENTIFIER)('x')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CallOrConversionExpression
         LiteralExpr
           Identifier
-            PsiElement(IDENTIFIER)('v')
+            PsiElement(IDENTIFIER)('a')
+            PsiElement(.)('.')
+            PsiElement(IDENTIFIER)('A')
         PsiElement(()('(')
-        LiteralExpr
-          PsiElement(LITERAL_CHAR)(''a'')
         PsiElement())(')')

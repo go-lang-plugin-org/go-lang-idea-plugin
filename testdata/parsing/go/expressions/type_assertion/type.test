@@ -17,7 +17,8 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       LiteralExpr
-        PsiElement(IDENTIFIER)('x')
+        Identifier
+          PsiElement(IDENTIFIER)('x')
       PsiErrorElement:semicolon.or.newline.right.parenthesis.expected
         PsiElement(.)('.')
         PsiElement(()('(')

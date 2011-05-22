@@ -29,7 +29,8 @@ Go file
         PsiWhiteSpace(' ')
         AssignStmt
           LiteralExpr
-            PsiElement(IDENTIFIER)('e')
+            Identifier
+              PsiElement(IDENTIFIER)('e')
           PsiWhiteSpace(' ')
           PsiElement(=)('=')
           PsiWhiteSpace(' ')
@@ -40,7 +41,8 @@ Go file
         SwitchTypeGuard
           SliceExpression
             LiteralExpr
-              PsiElement(IDENTIFIER)('x')
+              Identifier
+                PsiElement(IDENTIFIER)('x')
             PsiElement([)('[')
             LiteralExpr
               PsiElement(LITERAL_INT)('1')

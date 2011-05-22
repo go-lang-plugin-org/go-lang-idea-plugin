@@ -32,7 +32,8 @@ Go file
           PsiElement(:=)(':=')
           PsiWhiteSpace(' ')
           LiteralExpr
-            PsiElement(IDENTIFIER)('x')
+            Identifier
+              PsiElement(IDENTIFIER)('x')
           PsiElement(.)('.')
           PsiElement(()('(')
           PsiElement(KEYWORD_TYPE)('type')

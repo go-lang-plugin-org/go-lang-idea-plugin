@@ -26,7 +26,7 @@ public abstract class GoPsiExpressionImpl extends GoPsiElementImpl implements Go
     }
 
     public String toString() {
-        return getString();
+        return getNode().getElementType().toString();
     }
 
     @Override

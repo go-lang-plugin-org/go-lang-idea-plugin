@@ -18,7 +18,8 @@ Go file
       PsiWhiteSpace(' ')
       IndexExpression
         LiteralExpr
-          PsiElement(IDENTIFIER)('a')
+          Identifier
+            PsiElement(IDENTIFIER)('a')
         PsiElement([)('[')
         LiteralExpr
           PsiElement(LITERAL_INT)('1')

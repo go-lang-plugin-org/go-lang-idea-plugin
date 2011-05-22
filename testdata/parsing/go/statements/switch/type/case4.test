@@ -28,12 +28,14 @@ Go file
         PsiWhiteSpace(' ')
         ExpressionStmt
           LiteralExpr
-            PsiElement(IDENTIFIER)('a')
+            Identifier
+              PsiElement(IDENTIFIER)('a')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         SwitchTypeGuard
           LiteralExpr
-            PsiElement(IDENTIFIER)('x')
+            Identifier
+              PsiElement(IDENTIFIER)('x')
           PsiElement(.)('.')
           PsiElement(()('(')
           PsiElement(KEYWORD_TYPE)('type')

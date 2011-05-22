@@ -40,20 +40,23 @@ Go file
           CompositeLiteralElement
             CompositeLiteralElementValue
               LiteralExpr
-                PsiElement(IDENTIFIER)('a')
+                Identifier
+                  PsiElement(IDENTIFIER)('a')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementValue
               CompositeLiteral
                 LiteralExpr
-                  PsiElement(IDENTIFIER)('Point')
+                  Identifier
+                    PsiElement(IDENTIFIER)('Point')
                 CompositeLiteralElementList
                   PsiElement({)('{')
                   CompositeLiteralElement
                     CompositeLiteralElementKey
                       LiteralExpr
-                        PsiElement(IDENTIFIER)('y')
+                        Identifier
+                          PsiElement(IDENTIFIER)('y')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
                     CompositeLiteralElementValue
@@ -66,7 +69,8 @@ Go file
                   CompositeLiteralElement
                     CompositeLiteralElementKey
                       LiteralExpr
-                        PsiElement(IDENTIFIER)('x')
+                        Identifier
+                          PsiElement(IDENTIFIER)('x')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
                     CompositeLiteralElementValue

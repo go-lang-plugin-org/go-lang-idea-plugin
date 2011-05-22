@@ -25,11 +25,13 @@ Go file
         PsiWhiteSpace(' ')
         ExpressionStmt
           LiteralExpr
-            PsiElement(IDENTIFIER)('e')
+            Identifier
+              PsiElement(IDENTIFIER)('e')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpr
-          PsiElement(IDENTIFIER)('e')
+          Identifier
+            PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         BlockStmt
           PsiElement({)('{')

@@ -29,7 +29,8 @@ Go file
         PsiWhiteSpace(' ')
         AssignStmt
           LiteralExpr
-            PsiElement(IDENTIFIER)('e')
+            Identifier
+              PsiElement(IDENTIFIER)('e')
           PsiWhiteSpace(' ')
           PsiElement(=)('=')
           PsiWhiteSpace(' ')
@@ -44,10 +45,12 @@ Go file
           PsiWhiteSpace(' ')
           IndexExpression
             LiteralExpr
-              PsiElement(IDENTIFIER)('x')
+              Identifier
+                PsiElement(IDENTIFIER)('x')
             PsiElement([)('[')
             LiteralExpr
-              PsiElement(IDENTIFIER)('i')
+              Identifier
+                PsiElement(IDENTIFIER)('i')
             PsiElement(])(']')
           PsiElement(.)('.')
           PsiElement(()('(')

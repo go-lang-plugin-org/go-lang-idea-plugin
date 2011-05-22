@@ -17,4 +17,5 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       LiteralExpr
-        PsiElement(IDENTIFIER)('a')
+        Identifier
+          PsiElement(IDENTIFIER)('a')

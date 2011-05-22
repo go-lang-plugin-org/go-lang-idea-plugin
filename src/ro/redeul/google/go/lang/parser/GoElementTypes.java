@@ -14,7 +14,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 public interface GoElementTypes extends GoTokenTypes {
     GoElementType NONE = new GoElementTypeImpl("no token"); //not a node
 
-    GoElementType IDENTIFIER = new GoElementTypeImpl("Go identifier");
+    GoElementType IDENTIFIER = new GoElementTypeImpl("Identifier");
 
     GoElementType BUILTIN_FUNCTION = new GoElementTypeImpl("Built in call");
 

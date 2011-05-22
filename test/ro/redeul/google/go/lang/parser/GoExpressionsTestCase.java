@@ -71,6 +71,10 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
 
 //    @Test public void testParenthesised$Pointer_type() throws Throwable { doTest(); }
 
+    public void testLiteral$identifier_qualified() throws Throwable {
+        doTest();
+    }
+
     public void testLiteral$identifier() throws Throwable {
         doTest();
     }
@@ -160,6 +164,10 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
     }
 
     public void testPrimary$primary7() throws Throwable {
+        doTest();
+    }
+
+    public void testPrimary$primary7_qualified() throws Throwable {
         doTest();
     }
 

@@ -29,7 +29,8 @@ Go file
           PsiWhiteSpace(' ')
           IncDecStmt
             LiteralExpr
-              PsiElement(IDENTIFIER)('i')
+              Identifier
+                PsiElement(IDENTIFIER)('i')
             PsiElement(++)('++')
         PsiWhiteSpace(' ')
         BlockStmt

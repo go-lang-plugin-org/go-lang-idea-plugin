@@ -18,6 +18,7 @@ Go file
       PsiWhiteSpace(' ')
       CallOrConversionExpression
         LiteralExpr
-          PsiElement(IDENTIFIER)('v')
+          Identifier
+            PsiElement(IDENTIFIER)('v')
         PsiElement(()('(')
         PsiElement())(')')

@@ -16,14 +16,18 @@ import ro.redeul.google.go.lang.parser.parsing.toplevel.CompilationUnit;
 import ro.redeul.google.go.lang.parser.parsing.types.Types;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 7:31:03 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoParser implements PsiParser {
+
+    Set<String> packageNames = new HashSet<String>();
 
     @NotNull
     public ASTNode parse(IElementType root, PsiBuilder builder) {
@@ -118,5 +122,13 @@ public class GoParser implements PsiParser {
 
     public boolean tryParseSimpleStmt(PsiBuilder builder, boolean inControlStmt) {
         return Statements.tryParseSimple(builder, this, inControlStmt);
+    }
+
+    public void setKnownPackage(String packageName) {
+        packageNames.add(packageName);
+    }
+
+    public boolean isPackageName(String name) {
+        return packageNames.contains(name);
     }
 }

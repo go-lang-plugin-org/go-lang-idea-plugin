@@ -35,12 +35,14 @@ Go file
           SelectCaseSendExpr
             CommunicationExpression
               LiteralExpr
-                PsiElement(IDENTIFIER)('a')
+                Identifier
+                  PsiElement(IDENTIFIER)('a')
               PsiWhiteSpace(' ')
               PsiElement(<-)('<-')
               PsiWhiteSpace(' ')
               LiteralExpr
-                PsiElement(IDENTIFIER)('b')
+                Identifier
+                  PsiElement(IDENTIFIER)('b')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('            ')

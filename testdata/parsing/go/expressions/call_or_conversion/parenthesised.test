@@ -22,7 +22,8 @@ Go file
           UnaryExpression
             PsiElement(*)('*')
             LiteralExpr
-              PsiElement(IDENTIFIER)('v')
+              Identifier
+                PsiElement(IDENTIFIER)('v')
           PsiElement())(')')
         PsiElement(()('(')
         LiteralExpr

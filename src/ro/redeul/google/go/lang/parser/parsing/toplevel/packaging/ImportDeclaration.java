@@ -6,13 +6,14 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.Delimiters;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
+import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 9:21:12 PM
- * To change this template use File | Settings | File Templates.
  */
 public class ImportDeclaration implements GoElementTypes {
 
@@ -60,7 +61,10 @@ public class ImportDeclaration implements GoElementTypes {
 
         PsiBuilder.Marker importStatement = builder.mark();
 
+        String packageName = null;
+
         if ( localImportTokens.contains(builder.getTokenType())) {
+            packageName = builder.getTokenText();
             ParserUtils.eatElement(builder, PACKAGE_REFERENCE);
         }
 
@@ -68,11 +72,18 @@ public class ImportDeclaration implements GoElementTypes {
 
         boolean parsed = false;
         PsiBuilder.Marker importPath = builder.mark();
+
+        String tokenText = builder.getTokenText();
+
         if ( ! ParserUtils.getToken(builder, litSTRING) ) {
             importPath.rollbackTo();
             builder.error("import.path.expected");
         } else {
             parsed = true;
+            if ( packageName == null) {
+                packageName = GoPsiUtils.findDefaultPackageName(GoPsiUtils.cleanupImportPath(tokenText));
+            }
+
             importPath.drop();
         }
 
@@ -81,7 +92,11 @@ public class ImportDeclaration implements GoElementTypes {
         }
 
         ParserUtils.getToken(builder, oSEMI);
-        
+
+
+        if ( parsed ) {
+            parser.setKnownPackage(packageName);
+        }
         importStatement.done(IMPORT_SPEC);
         return parsed;
     }

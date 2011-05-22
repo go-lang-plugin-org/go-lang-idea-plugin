@@ -40,23 +40,8 @@ public class GoLiteralExpressionImpl extends GoPsiExpressionImpl implements GoLi
 
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-
-        ImportedPackagesCollectorProcessor importedPackagesCollectorProcessor = new ImportedPackagesCollectorProcessor();
-
-        PsiScopesUtil.treeWalkUp(importedPackagesCollectorProcessor, this.getParent(), this.getContainingFile());
-
-        GoImportSpec expressionImportSpec = null;
-        for (GoImportSpec importSpec : importedPackagesCollectorProcessor.getPackageImportSpecs()) {
-            if ( getText().equals(importSpec.getVisiblePackageName()) ) {
-                expressionImportSpec = importSpec;
-                break;
-            }
-        }
-
-        if ( expressionImportSpec == null ) {
-            return true;
-        }
-
-        return expressionImportSpec.processDeclarations(processor, state, lastParent, place);
+        return super.processDeclarations(processor, state, lastParent, place);
     }
+
+
 }
