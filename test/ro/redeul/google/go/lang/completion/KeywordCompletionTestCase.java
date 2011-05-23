@@ -11,7 +11,7 @@ import java.io.File;
  * Time: 5:29:50 PM
  * To change this template use File | Settings | File Templates.
  */
-public class KeywordCompletionTestCase extends GoCompletionTestBase {
+public abstract class KeywordCompletionTestCase extends GoCompletionTestBase {
     @Override
     protected String getRelativeDataPath() {
         return super.getRelativeDataPath() + File.separator + "keywords";

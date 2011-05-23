@@ -1,10 +1,7 @@
 package ro.redeul.google.go.compiler;
 
-import org.testng.annotations.Test;
-
 public class FullCompilationTest extends GoCompilerTestCase {
 
-    @Test
     public void testSimpleApplication() throws Exception {
         myFixture.addFileToProject("main.go",
                 "package main\n" +
@@ -17,7 +14,6 @@ public class FullCompilationTest extends GoCompilerTestCase {
         assertOutput("main", "239");
     }
 
-    @Test
     public void testMultipleSourceFiles() throws Exception {
         myFixture.addFileToProject("main.go",
                 "package main\n" +
@@ -36,7 +32,6 @@ public class FullCompilationTest extends GoCompilerTestCase {
         assertOutput("main", "239");
     }
 
-    @Test
     public void testSimpleMainWithLocalLibrary() throws Exception {
         myFixture.addFileToProject("tools.go",
                 "package tools\n" +
@@ -56,7 +51,6 @@ public class FullCompilationTest extends GoCompilerTestCase {
         assertOutput("main", "10");
     }
 
-    @Test
     public void testSimpleMainWithDifferentTargetAndLocalLibrary() throws Exception {
         myFixture.addFileToProject("tools.go",
                 "package tools\n" +
@@ -76,7 +70,6 @@ public class FullCompilationTest extends GoCompilerTestCase {
         assertOutput("app", "10");
     }
 
-    @Test
     public void testSimpleMainWithMultipleLocalLibrary() throws Exception {
         myFixture.addFileToProject("tools/a.go",
                 "package tools\n" +
@@ -102,7 +95,6 @@ public class FullCompilationTest extends GoCompilerTestCase {
         assertOutput("main", "10");
     }
 
-    @Test
     public void testSimpleMainWithMultipleLocalLibraries() throws Exception {
         myFixture.addFileToProject("tools1/a.go",
                 "package tools1\n" +
