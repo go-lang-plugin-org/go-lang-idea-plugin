@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * Date: Sep 8, 2010
  * Time: 2:59:17 PM
  */
-public class GoTypeResolvingTestCase extends GoResolveTestCase {
+public abstract class GoTypeResolvingTestCase extends GoResolveTestCase {
 
     public void testLocalTypeResolving() throws Exception {
         PsiReference reference = configure();

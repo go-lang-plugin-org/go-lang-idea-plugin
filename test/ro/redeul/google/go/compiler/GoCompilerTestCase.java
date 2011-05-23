@@ -13,6 +13,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.facet.FacetManager;
+import com.intellij.internal.inspector.UiInspectorAction;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.application.Result;
@@ -24,6 +25,9 @@ import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.roots.CompilerProjectExtension;
+import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
@@ -33,6 +37,7 @@ import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import com.intellij.testFramework.fixtures.TempDirTestFixture;
 import com.intellij.testFramework.fixtures.impl.TempDirTestFixtureImpl;
 import com.intellij.util.concurrency.Semaphore;
+import com.intellij.util.ui.UIUtil;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import ro.redeul.google.go.components.GoCompilerLoader;
@@ -44,6 +49,7 @@ import ro.redeul.google.go.runner.GoApplicationConfiguration;
 import ro.redeul.google.go.runner.GoRunConfigurationType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,8 +86,8 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
 //    }
 
 
-    @BeforeMethod
-    public void setupOutputFixture() throws Exception {
+    @Override
+    public void setUp() throws Exception {
         myMainOutput = new TempDirTestFixtureImpl();
         myMainOutput.setUp();
         super.setUp();
@@ -97,11 +103,20 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
         }.execute();
     }
 
-    @AfterMethod
+    @Override
     public void tearDown() throws Exception {
-        myMainOutput.tearDown();
-        myMainOutput = null;
-        super.tearDown();
+        UIUtil.invokeAndWaitIfNeeded(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    myMainOutput.tearDown();
+                    myMainOutput = null;
+                    GoCompilerTestCase.super.tearDown();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
 
@@ -128,18 +143,23 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
 
         ProjectJdkTable.getInstance().addJdk(sdk);
 
+        ProjectRootManager.getInstance(project).setProjectSdk(sdk);
+
+        ModifiableRootModel modifiableModel = ModuleRootManager.getInstance(module).getModifiableModel();
+        modifiableModel.inheritSdk();
+        modifiableModel.commit();
         // add go module facet
-        FacetManager facetManager = FacetManager.getInstance(module);
-
-        GoFacet goFacet = facetManager.addFacet(new GoFacetType(), "go facet", null);
-
-        goFacet.getConfiguration().SDK_NAME = goSdkName;
+    //        FacetManager facetManager = FacetManager.getInstance(module);
+    //
+    //        GoFacet goFacet = facetManager.addFacet(new GoFacetType(), "go facet", null);
+    //
+    //        goFacet.getConfiguration().SDK_NAME = goSdkName;
     }
 
     @Override
     protected void tuneFixture(JavaModuleFixtureBuilder moduleBuilder) throws Exception {
-        moduleBuilder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
-//        moduleBuilder.addJdk(JavaSdkImpl.getMockJdkCE().getHomePath());
+//        moduleBuilder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
+//        moduleBuilder.addJdk(GoSdkUtil.testGoogleGoSdk());
         super.tuneFixture(moduleBuilder);
     }
 
@@ -169,30 +189,25 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
         final Semaphore semaphore = new Semaphore();
         semaphore.down();
         final ErrorReportingCallback callback = new ErrorReportingCallback(semaphore);
-        CompilerManager.getInstance(getProject()).make(callback);
-        semaphore.waitFor();
+
+        UIUtil.invokeAndWaitIfNeeded(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    CompilerManager.getInstance(getProject()).make(callback);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        while (!semaphore.waitFor(100)) {
+            if (SwingUtilities.isEventDispatchThread()) {
+                UIUtil.dispatchAllInvocationEvents();
+            }
+        }
         callback.throwException();
         return callback.getMessages();
-
-//        final Semaphore semaphore = new Semaphore();
-//        semaphore.down();
-//
-//        List<VirtualFile> roots = Arrays.asList(ModuleRootManager.getInstance(getModule()).getSourceRoots());
-
-//        TranslatingCompilerFilesMonitor.getInstance().scanSourceContent(getProject(), roots, roots.size(), true);
-
-//        TranslatingCompilerFilesMonitor.ourDebugMode = true;
-//        TranslatingCompilerFilesMonitor.getInstance().scanSourcesForCompilableFiles(getProject());
-
-//        for (VirtualFile root : roots) {
-//            root.refresh(false, true);
-//        }
-//
-//        final ErrorReportingCallback callback = new ErrorReportingCallback(semaphore);
-//        CompilerManager.getInstance(getProject()).make(callback);
-//        semaphore.waitFor();
-//        callback.throwException();
-//        return callback.getMessages();
     }
 
 
