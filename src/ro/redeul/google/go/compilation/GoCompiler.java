@@ -6,6 +6,9 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.CapturingProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
+import com.intellij.ide.errorTreeView.ErrorTreeElementKind;
+import com.intellij.ide.errorTreeView.GroupingElement;
+import com.intellij.ide.errorTreeView.NavigatableMessageElement;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -28,6 +31,8 @@ import com.intellij.openapi.util.Trinity;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.pom.Navigatable;
+import com.intellij.pom.NavigatableWithText;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.Chunk;
@@ -47,6 +52,8 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.ProcessUtil;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -551,20 +558,20 @@ public class GoCompiler implements TranslatingCompiler {
                     Charset.defaultCharset(),
                     command.getCommandLineString()).runProcess();
 
+            GoCompilerOutputStreamParser outputStreamParser = new GoCompilerOutputStreamParser();
             if (output.getExitCode() != 0) {
-                List<String> lines = output.getStderrLines();
+                List<CompilerMessage> compilerMessages = outputStreamParser.parseStream(output.getStderr());
 
-                if (lines.size() > 0) {
-                    for (String errorLine : lines) {
-                        context.addMessage(CompilerMessageCategory.ERROR, errorLine, null, -1, -1);
-                    }
+                for (CompilerMessage compilerMessage : compilerMessages) {
+                    String url = generateFileUrl(path, compilerMessage);
+                    context.addMessage(CompilerMessageCategory.ERROR, compilerMessage.message, url, compilerMessage.row, compilerMessage.column);
                 }
 
-                lines = output.getStdoutLines();
-                if (lines.size() > 0) {
-                    for (String errorLine : lines) {
-                        context.addMessage(CompilerMessageCategory.ERROR, errorLine, null, -1, -1);
-                    }
+                compilerMessages = outputStreamParser.parseStream(output.getStdout());
+
+                for (CompilerMessage compilerMessage : compilerMessages) {
+                    String url = generateFileUrl(path, compilerMessage);
+                    context.addMessage(CompilerMessageCategory.ERROR, compilerMessage.message, url, compilerMessage.row, compilerMessage.column);
                 }
 
                 context.addMessage(CompilerMessageCategory.WARNING, "process exited with code: " + output.getExitCode(), null, -1, -1);
@@ -575,6 +582,20 @@ public class GoCompiler implements TranslatingCompiler {
             context.addMessage(CompilerMessageCategory.WARNING, ex.getMessage(), null, -1, -1);
             return null;
         }
+    }
+
+    private String generateFileUrl(String workingDirectory, CompilerMessage compilerMessage) {
+        // Using this method instead of File.toURI().toUrl() because it doesn't use the two slashes after ':'
+        // and IDEA doesn't recognises this as a valid URL (even though it seems to be spec compliant)
+
+        File sourceFile = new File(workingDirectory, compilerMessage.fileName);
+        String url = null;
+        try {
+            url = "file://" + sourceFile.getCanonicalPath();
+        } catch (IOException e) {
+            LOG.error("Cannot create url for compiler message: " + compilerMessage, e);
+        }
+        return url;
     }
 
     private Map<VirtualFile, Map<String, List<Trinity<VirtualFile, String, List<String>>>>> sortFilesBySourceRoots(CompileContext context, final Module module, List<VirtualFile> files) {
@@ -719,7 +740,7 @@ public class GoCompiler implements TranslatingCompiler {
 
     private static class GoCompilerOutputStreamParser implements ProcessUtil.StreamParser<List<CompilerMessage>> {
 
-        Pattern pattern = Pattern.compile("((?:/[^/:]+)+):(\\d+): ((?:(?:.)|(?:\\n(?!/)))+)", Pattern.UNIX_LINES);
+        Pattern pattern = Pattern.compile("([^:]+):(\\d+): ((?:(?:.)|(?:\\n(?!/)))+)", Pattern.UNIX_LINES);
 
         public List<CompilerMessage> parseStream(String data) {
 
