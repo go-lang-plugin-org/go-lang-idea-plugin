@@ -81,7 +81,7 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType TYPE_NAME = new GoElementTypeImpl("TypeName");
 
     GoStubElementType<GoTypeNameDeclarationStub, GoTypeNameDeclaration>
-            TYPE_NAME_DECLARATION = new GoTypeNameDeclarationType("TypeNameDeclaration");
+            TYPE_NAME_DECLARATION = new GoTypeNameDeclarationType();
 
     GoElementType TYPE_ARRAY = new GoElementTypeImpl("TypeArray");
     GoElementType TYPE_MAP = new GoElementTypeImpl("TypeMap");

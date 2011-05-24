@@ -5,6 +5,7 @@ import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeNameDeclarationImpl;
+import ro.redeul.google.go.lang.psi.stubs.GoStubUtils;
 import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
 import ro.redeul.google.go.lang.psi.stubs.index.GoQualifiedTypeName;
 import ro.redeul.google.go.lang.psi.stubs.index.GoTypeName;
@@ -20,8 +21,8 @@ import java.io.IOException;
  */
 public class GoTypeNameDeclarationType extends GoStubElementType<GoTypeNameDeclarationStub, GoTypeNameDeclaration> {
 
-    public GoTypeNameDeclarationType(@NotNull @NonNls String debugName) {
-        super(debugName);
+    public GoTypeNameDeclarationType() {
+        super("type.name");
     }
 
     @Override
@@ -37,15 +38,16 @@ public class GoTypeNameDeclarationType extends GoStubElementType<GoTypeNameDecla
     @Override
     public void serialize(GoTypeNameDeclarationStub stub, StubOutputStream dataStream) throws IOException {
         dataStream.writeName(stub.getName());
-        dataStream.writeName(stub.getPackage());
+        GoStubUtils.writeNullableString(dataStream, stub.getPackage());
     }
 
     @Override
     public GoTypeNameDeclarationStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
         return
-                new GoTypeNameDeclarationStub(parentStub, this,
+                new GoTypeNameDeclarationStub(parentStub,
+                        this,
                         StringRef.toString(dataStream.readName()),
-                        StringRef.toString(dataStream.readName()));
+                        GoStubUtils.readNullableString(dataStream));
     }
 
     @Override

@@ -37,7 +37,11 @@ public class GoTypeNameDeclarationStub extends StubBase<GoTypeNameDeclaration> i
     }
 
     public String getQualifiedName() {
-        return String.format("%s.%s", getPackage(), getName());
+        if (getPackage() != null && getPackage().length() > 0 ) {
+            return String.format("%s.%s", getPackage(), getName());
+        } else {
+            return getName();
+        }
     }
 
     public String getPackage() {
