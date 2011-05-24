@@ -4,6 +4,11 @@ import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.lexer.GoElementType;
 import ro.redeul.google.go.lang.lexer.GoElementTypeImpl;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.impl.GoStubPsiElementBase;
+import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
+import ro.redeul.google.go.lang.psi.stubs.elements.GoStubElementType;
+import ro.redeul.google.go.lang.psi.stubs.elements.GoTypeNameDeclarationType;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -74,7 +79,9 @@ public interface GoElementTypes extends GoTokenTypes {
 
     GoElementType TYPE_LIST = new GoElementTypeImpl("TypeList");
     GoElementType TYPE_NAME = new GoElementTypeImpl("TypeName");
-    GoElementType TYPE_NAME_DECLARATION = new GoElementTypeImpl("TypeNameDeclaration");
+
+    GoStubElementType<GoTypeNameDeclarationStub, GoTypeNameDeclaration>
+            TYPE_NAME_DECLARATION = new GoTypeNameDeclarationType("TypeNameDeclaration");
 
     GoElementType TYPE_ARRAY = new GoElementTypeImpl("TypeArray");
     GoElementType TYPE_MAP = new GoElementTypeImpl("TypeMap");

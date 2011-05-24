@@ -1,11 +1,16 @@
 package ro.redeul.google.go.lang.psi.stubs;
 
-import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.psi.stubs.PsiFileStubImpl;
 import com.intellij.psi.tree.IStubFileElementType;
 import com.intellij.util.io.StringRef;
 import ro.redeul.google.go.lang.parser.GoParserDefinition;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -15,20 +20,20 @@ import ro.redeul.google.go.lang.psi.GoFile;
  */
 public class GoFileStub extends PsiFileStubImpl<GoFile> {
 
-    private final StringRef myPackageName;
+    private final StringRef packageName;
     private final boolean isMain;
 
     public GoFileStub(GoFile file) {
         super(file);
 
-        myPackageName = StringRef.fromString(file.getPackage().getPackageName());
+        packageName = StringRef.fromString(file.getPackage().getPackageName());
         isMain = file.getMainFunction() != null;
     }
 
     public GoFileStub(StringRef packageName, boolean isMain) {
         super(null);
 
-        myPackageName = packageName;
+        this.packageName = packageName;
         this.isMain = isMain;
     }
 
@@ -37,7 +42,7 @@ public class GoFileStub extends PsiFileStubImpl<GoFile> {
     }
 
     public StringRef getPackageName() {
-        return myPackageName;
+        return packageName;
     }
 
     public boolean isMain() {

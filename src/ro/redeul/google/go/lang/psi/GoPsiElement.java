@@ -13,8 +13,6 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  */
 public interface GoPsiElement extends PsiElement {
 
-    IElementType getTokenType();
-
     void accept(GoElementVisitor visitor);
 
     void acceptChildren(GoElementVisitor visitor);

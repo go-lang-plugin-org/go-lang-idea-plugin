@@ -16,7 +16,7 @@ import ro.redeul.google.go.lang.psi.processors.ImportedPackagesCollectorProcesso
  * Date: Sep 4, 2010
  * Time: 10:41:21 PM
  */
-public class GoPackageReferenceImpl extends GoPsiElementImpl implements GoPackageReference {
+public class GoPackageReferenceImpl extends GoPsiElementBase implements GoPackageReference {
 
     public GoPackageReferenceImpl(@NotNull ASTNode node) {
         super(node);

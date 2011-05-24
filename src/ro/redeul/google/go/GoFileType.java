@@ -16,49 +16,48 @@ import javax.swing.*;
 import java.nio.charset.Charset;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 2:37:45 AM
- * To change this template use File | Settings | File Templates.
  */
 public class GoFileType extends LanguageFileType {
 
     public static final GoFileType GO_FILE_TYPE = new GoFileType();
 
-     public static final Language GO_LANGUAGE = GO_FILE_TYPE.getLanguage();
-     @NonNls
-     public static final String DEFAULT_EXTENSION = "go";
+    public static final Language GO_LANGUAGE = GO_FILE_TYPE.getLanguage();
+    @NonNls
+    public static final String DEFAULT_EXTENSION = "go";
 
-     private GoFileType() {
-       super(new GoLanguage());
-     }
+    private GoFileType() {
+        super(new GoLanguage());
+    }
 
-     @NotNull
-     @NonNls
-     public String getName() {
-       return "Google Go";
-     }
+    @NotNull
+    @NonNls
+    public String getName() {
+        return "Google Go";
+    }
 
-     @NonNls
-     @NotNull
-     public String getDescription() {
-       return "Google go Files";
-     }
+    @NonNls
+    @NotNull
+    public String getDescription() {
+        return "Google go Files";
+    }
 
-     @NotNull
-     @NonNls
-     public String getDefaultExtension() {
-       return DEFAULT_EXTENSION;
-     }
+    @NotNull
+    @NonNls
+    public String getDefaultExtension() {
+        return DEFAULT_EXTENSION;
+    }
 
-     public Icon getIcon() {
-         return GoIcons.GO_ICON_16x16;
-     }
+    public Icon getIcon() {
+        return GoIcons.GO_ICON_16x16;
+    }
 
-     public boolean isJVMDebuggingSupported() {
-       return false;
-     }
+    public boolean isJVMDebuggingSupported() {
+        return false;
+    }
 
     @Override
     public String getCharset(@NotNull VirtualFile file, byte[] content) {
@@ -66,7 +65,8 @@ public class GoFileType extends LanguageFileType {
     }
 
     public EditorHighlighter getEditorHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile, @NotNull EditorColorsScheme colors) {
-       return new GoEditorHighlighter(colors, project, virtualFile);
-     }
+        return new GoEditorHighlighter(colors, project, virtualFile);
+    }
+
 
 }

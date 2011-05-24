@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,7 +15,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
  * Time: 10:29:46 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GoPackageDeclarationImpl extends GoPsiElementImpl implements GoPackageDeclaration {
+public class GoPackageDeclarationImpl extends GoPsiElementBase implements GoPackageDeclaration {
 
     private static final String MAIN_PACKAGE_NAME = "main";
 

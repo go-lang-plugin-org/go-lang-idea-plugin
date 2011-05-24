@@ -7,8 +7,9 @@ import com.intellij.psi.tree.IStubFileElementType;
 import com.intellij.util.io.StringRef;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStub;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStubBuilder;
-import ro.redeul.google.go.lang.psi.stubs.impl.GoFileStubImpl;
+import ro.redeul.google.go.lang.psi.stubs.GoStubUtils;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageName;
+import ro.redeul.google.go.lang.psi.stubs.index.GoTypeName;
 
 import java.io.IOException;
 
@@ -18,9 +19,9 @@ import java.io.IOException;
  * Date: Aug 13, 2010
  * Time: 10:25:14 PM
  */
-public class GoFileStubElementType extends IStubFileElementType<GoFileStub> {
+public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
 
-    public GoFileStubElementType(Language language) {
+    public GoStubFileElementType(Language language) {
         super(language);
     }
 
@@ -30,7 +31,7 @@ public class GoFileStubElementType extends IStubFileElementType<GoFileStub> {
 
     @Override
     public int getStubVersion() {
-        return super.getStubVersion() + 6;
+        return super.getStubVersion() + 7;
     }
 
     public String getExternalId() {
@@ -38,41 +39,20 @@ public class GoFileStubElementType extends IStubFileElementType<GoFileStub> {
     }
 
     @Override
-    public void indexStub(PsiFileStub stub, IndexSink sink) {
-        super.indexStub(stub, sink);
-    }
-
-    @Override
     public void serialize(final GoFileStub stub, final StubOutputStream dataStream) throws IOException {
         dataStream.writeName(stub.getPackageName().toString());
         dataStream.writeBoolean(stub.isMain());
-//        dataStream.writeName(stub.getPackageReference().toString());
-//        dataStream.writeName(stub.getPackageReference().toString());
-//        dataStream.writeBoolean(stub.isScript());
-//        GrStubUtils.writeStringArray(dataStream, stub.getAnnotations());
     }
 
     @Override
     public GoFileStub deserialize(final StubInputStream dataStream, final StubElement parentStub) throws IOException {
         StringRef packageName = dataStream.readName();
         boolean isMain = dataStream.readBoolean();
-        return new GoFileStubImpl(packageName, isMain);
+
+        return new GoFileStub(packageName, isMain);
     }
 
     public void indexStub(GoFileStub stub, IndexSink sink) {
-
         sink.occurrence(GoPackageName.KEY, stub.getPackageName().toString());
-
-//        String name = stub.getPackageReference().toString();
-//        if (stub.isScript() && name != null) {
-//            sink.occurrence(GrScriptClassNameIndex.KEY, name);
-//            final String pName = stub.getPackageReference().toString();
-//            final String fqn = pName == null || pName.length() == 0 ? name : pName + "." + name;
-//            sink.occurrence(GrFullScriptNameIndex.KEY, fqn.hashCode());
-//        }
-//
-//        for (String anno : stub.getAnnotations()) {
-//            sink.occurrence(GrAnnotatedMemberIndex.KEY, anno);
-//        }
     }
 }

@@ -9,11 +9,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 2:45:10 AM
- * To change this template use File | Settings | File Templates.
  */
 public class GoFileTypeLoader extends FileTypeFactory {
 
@@ -33,4 +32,5 @@ public class GoFileTypeLoader extends FileTypeFactory {
         consumer.consume(GoFileType.GO_FILE_TYPE, StringUtil.join(getAllGoExtensions(), ";"));
         GO_FILE_TYPES.add(GoFileType.GO_FILE_TYPE);
     }
+
 }

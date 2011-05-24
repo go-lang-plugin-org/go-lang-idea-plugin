@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Google Go Language plugin</name>
-    <version>0.3.5</version>
+    <version>0.3.6</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[
@@ -22,6 +22,7 @@
             <li>Code formatting - experimental (disabled)</li>
             <li>Type name completion and resolution</li>
             <li>Function name completion</li>
+            <li>GoTo class (go types) implementation</li>
             <li>ColorsAndSettings page with a new color scheme</li>
             <li>Automatically add new line at end of file</li>
             <li>Force UTF-8 encoding for go files</li>
@@ -32,6 +33,11 @@
     </description>
     <change-notes>
         <![CDATA[
+        <h3>0.3.6 changes:</h3>
+                <ul>
+                    <li>[feature] GoTo class (go types) implementation</li>
+                </ul>
+        </h3>
         <h3>0.3.5 changes:</h3>
                 <ul>
                     <li>[bugfix] Go to error on compilation error. Thanks alexandre :)</li>
@@ -201,6 +207,7 @@
         <completion.contributor language="Google Go"
                                 implementationClass="ro.redeul.google.go.lang.completion.GoCompletionContributor"/>
 
+        <gotoClassContributor implementation="ro.redeul.google.go.ide.contributor.GoGoToClassContributor" />
         <!--<frameworkSupport implementation="ro.redeul.google.go.config.framework.GoFrameworkSupportProvider"/>-->
         <!--<facetType implementation="ro.redeul.google.go.config.facet.GoFacetType"/>-->
         <sdkType implementation="ro.redeul.google.go.config.sdk.GoSdkType"/>
@@ -223,7 +230,9 @@
 
         <java.shortNamesCache implementation="ro.redeul.google.go.lang.stubs.GoNamesCache" />
 
-        <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoPackageName"/>
+        <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoPackageName" />
+        <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoTypeName" />
+        <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoQualifiedTypeName" />
         <!--<enterHandlerDelegate implementation="ro.redeul.google.go.editor.actions.GoEnterHandler" order="after EnterBetweenBracesHandler"/>-->
     </extensions>
 </idea-plugin>

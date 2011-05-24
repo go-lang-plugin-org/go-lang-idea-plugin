@@ -16,7 +16,7 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.lexer.GoLexer;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.psi.impl.GoFileImpl;
-import ro.redeul.google.go.lang.psi.stubs.elements.GoFileStubElementType;
+import ro.redeul.google.go.lang.psi.stubs.elements.GoStubFileElementType;
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,7 +27,7 @@ import ro.redeul.google.go.lang.psi.stubs.elements.GoFileStubElementType;
  */
 public class GoParserDefinition implements ParserDefinition {
 
-    public static final IStubFileElementType GO_FILE_TYPE = new GoFileStubElementType(GoFileType.GO_FILE_TYPE.getLanguage());
+    public static final IStubFileElementType GO_FILE_TYPE = new GoStubFileElementType(GoFileType.GO_FILE_TYPE.getLanguage());
 
     @NotNull
     public Lexer createLexer(Project project) {

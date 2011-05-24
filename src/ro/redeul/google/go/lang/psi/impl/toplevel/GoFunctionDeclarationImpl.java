@@ -9,10 +9,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 /**
@@ -22,7 +20,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
  * Time: 2:33:51 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GoFunctionDeclarationImpl extends GoPsiElementImpl implements GoFunctionDeclaration {
+public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFunctionDeclaration {
 
     public GoFunctionDeclarationImpl(@NotNull ASTNode node) {
         super(node);

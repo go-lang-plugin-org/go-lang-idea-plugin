@@ -3,7 +3,7 @@ package ro.redeul.google.go.lang.psi.impl.expressions;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoPsiExpression;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: 5/19/11
  * Time: 10:58 PM
  */
-public abstract class GoPsiExpressionImpl extends GoPsiElementImpl implements GoPsiExpression {
+public abstract class GoPsiExpressionImpl extends GoPsiElementBase implements GoPsiExpression {
 
     GoType type;
 

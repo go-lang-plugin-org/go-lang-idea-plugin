@@ -2,7 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoMapType;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -14,7 +14,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Time: 12:53:17 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GoMapTypeImpl extends GoPsiElementImpl implements GoMapType {
+public class GoMapTypeImpl extends GoPsiElementBase implements GoMapType {
     public GoMapTypeImpl(@NotNull ASTNode node) {
         super(node);
     }

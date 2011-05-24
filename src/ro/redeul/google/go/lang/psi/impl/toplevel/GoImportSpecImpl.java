@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveUtil;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementImpl;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
@@ -25,7 +25,7 @@ import java.util.Collection;
  * Date: Jul 24, 2010
  * Time: 11:31:29 PM
  */
-public class GoImportSpecImpl extends GoPsiElementImpl implements GoImportSpec {
+public class GoImportSpecImpl extends GoPsiElementBase implements GoImportSpec {
     public GoImportSpecImpl(@NotNull ASTNode node) {
         super(node);
     }
