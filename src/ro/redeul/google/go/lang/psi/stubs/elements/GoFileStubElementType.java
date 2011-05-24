@@ -18,9 +18,9 @@ import java.io.IOException;
  * Date: Aug 13, 2010
  * Time: 10:25:14 PM
  */
-public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
+public class GoFileStubElementType extends IStubFileElementType<GoFileStub> {
 
-    public GoStubFileElementType(Language language) {
+    public GoFileStubElementType(Language language) {
         super(language);
     }
 
