@@ -3,35 +3,29 @@ package ro.redeul.google.go.sdk;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.CapturingProcessHandler;
-import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
-import com.intellij.facet.FacetManager;
-import com.intellij.ide.projectView.impl.ProjectRootsUtil;
 import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.*;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ModuleRootModel;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.psi.PsiFile;
-import ro.redeul.google.go.config.facet.GoFacet;
-import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.config.sdk.GoSdkType;
-import ro.redeul.google.go.sdk.GoSdkTool;
+import ro.redeul.google.go.util.GoUtil;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
 
 public class GoSdkUtil {
 
     public static final String PACKAGES = "src/pkg";
 
     private static final Logger LOG = Logger.getInstance("ro.redeul.google.go.sdk.GoSdkUtil");
+    private static final String TEST_SDK_PATH = "go.test.sdk.home";
 
     private static final String DEFAULT_MOCK_PATH = "go/default";
 
@@ -97,8 +91,29 @@ public class GoSdkUtil {
         }
     }
 
+    /**
+     * Uses the following to get the go sdk for tests:
+     *  1. Uses the path given by the system property go.test.sdk.home, if given
+     *  2. Uses the path given by the GOROOT environment variable, if available
+     *  3. Uses HOMEPATH/go/default
+     * @return the go sdk parameters or array of zero elements if error
+     */
     public static String[] getMockGoogleSdk() {
-        return getMockGoogleSdk(PathManager.getHomePath() + "/" + DEFAULT_MOCK_PATH);
+        // Fallback to default home path / default mock path
+        String sdkPath = PathManager.getHomePath() + "/" + DEFAULT_MOCK_PATH;
+
+        String testSdkHome = System.getProperty(TEST_SDK_PATH);
+        String goRoot = GoUtil.resolveGoogleGoHomePath();
+
+        // Use the test sdk path before anything else, if available
+        if (testSdkHome != null) {
+            sdkPath = testSdkHome;
+        }
+        else if (goRoot != null) {
+            sdkPath = goRoot;
+        }
+
+        return getMockGoogleSdk(sdkPath);
     }
 
     public static String[] getMockGoogleSdk(String path) {

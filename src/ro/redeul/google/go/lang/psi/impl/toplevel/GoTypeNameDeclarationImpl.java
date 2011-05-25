@@ -1,27 +1,16 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
-import com.intellij.ide.projectView.impl.ProjectRootsUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.projectRoots.impl.ProjectRootUtil;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.VirtualFileSystem;
-import com.intellij.openapi.vfs.ex.VirtualFileManagerEx;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
-import com.intellij.psi.presentation.java.JavaPresentationUtil;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.io.fs.FileSystem;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.groovy.lang.psi.stubs.GrMethodStub;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoStubPsiElementBase;
 import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
