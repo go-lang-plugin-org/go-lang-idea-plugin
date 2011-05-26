@@ -8,7 +8,10 @@ import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
 import ro.redeul.google.go.lang.psi.processors.ImportedPackagesCollectorProcessor;
+import ro.redeul.google.go.lang.psi.processors.VariableTypeResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 
@@ -31,6 +34,13 @@ public class GoLiteralExpressionImpl extends GoPsiExpressionImpl implements GoLi
 
     @Override
     protected GoType resolveType() {
+
+        VariableTypeResolver variableTypeResolver = new VariableTypeResolver();
+
+        PsiScopesUtil.treeWalkUp(variableTypeResolver, this, this.getContainingFile(), GoResolveStates.initial());
+
+        // return identifierVariantsCollector.references();
+
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
