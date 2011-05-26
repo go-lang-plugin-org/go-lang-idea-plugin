@@ -5,27 +5,18 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoSliceType;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.types.GoStructType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
- * Date: Sep 2, 2010
- * Time: 12:50:44 PM
+ * Date: 5/27/11
+ * Time: 12:17 AM
  */
-public class GoSliceTypeImpl extends GoPsiElementBase implements GoSliceType {
-    public GoSliceTypeImpl(@NotNull ASTNode node) {
+public class GoStructTypeImpl extends GoPsiElementBase implements GoStructType {
+
+    public GoStructTypeImpl(@NotNull ASTNode node) {
         super(node);
-    }
-
-    public GoType getElementType() {
-        return findChildByClass(GoType.class);
-    }
-
-    @Override
-    public void accept(GoElementVisitor visitor) {
-        visitor.visitSliceType(this);
     }
 
     @Override

@@ -62,6 +62,15 @@ public class GoPsiCreator implements GoElementTypes {
         if ( elementType.equals(TYPE_MAP) )
             return new GoMapTypeImpl(node);
 
+        if ( elementType.equals(TYPE_POINTER) )
+            return new GoPointerTypeImpl(node);
+
+        if ( elementType.equals(FUNCTION_PARAMETER_LIST) )
+            return new GoFunctionParameterListImpl(node);
+
+        if ( elementType.equals(FUNCTION_PARAMETER) )
+            return new GoFunctionParameterImpl(node);
+
         if ( elementType.equals(TYPE_CHAN_BIDIRECTIONAL) )
             return new GoChannelTypeImpl(node, GoChannelType.ChannelType.Bidirectional);
 

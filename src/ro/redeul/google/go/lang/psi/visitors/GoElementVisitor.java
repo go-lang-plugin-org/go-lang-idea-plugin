@@ -2,25 +2,19 @@ package ro.redeul.google.go.lang.psi.visitors;
 
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.impl.GoIdentifierImpl;
-import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeDeclarationImpl;
-import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeNameDeclarationImpl;
-import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeSpecImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoArrayTypeImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoChannelTypeImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoMapTypeImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoSliceTypeImpl;
+import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
+import ro.redeul.google.go.lang.psi.impl.types.GoPointerTypeImpl;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 30, 2010
  * Time: 8:10:51 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoElementVisitor {
+
     public void visitElement(GoPsiElement element) {
     }
 
@@ -80,7 +74,19 @@ public class GoElementVisitor {
         visitElement(nameDeclaration);
     }
 
-    public void visitIdentifier(GoIdentifierImpl goIdentifier) {
+    public void visitIdentifier(GoIdentifier goIdentifier) {
         visitElement(goIdentifier);
+    }
+
+    public void acceptFunctionParameterList(GoFunctionParameterList goFunctionParameterList) {
+        visitElement(goFunctionParameterList);
+    }
+
+    public void acceptFunctionParameter(GoFunctionParameter functionParameter) {
+        visitElement(functionParameter);
+    }
+
+    public void visitPointerType(GoPointerType pointerType) {
+        visitElement(pointerType);
     }
 }

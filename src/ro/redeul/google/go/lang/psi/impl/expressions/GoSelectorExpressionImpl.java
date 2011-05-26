@@ -98,7 +98,11 @@ public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoS
 
         GoType contextType = getExpressionContext().getType();
 
-        return new Object[0];  //To change body of implemented methods use File | Settings | File Templates.
+        if ( contextType == null ) {
+            return new Object[0];
+        }
+
+        return contextType.getMembers();
     }
 
     @Override

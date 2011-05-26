@@ -2,17 +2,17 @@ package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoChannelType;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Sep 2, 2010
  * Time: 1:22:29 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoChannelTypeImpl extends GoPsiElementBase implements GoChannelType {
 
@@ -34,5 +34,10 @@ public class GoChannelTypeImpl extends GoPsiElementBase implements GoChannelType
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitChannelType(this);
+    }
+
+    @Override
+    public GoPsiElement[] getMembers() {
+        return new GoPsiElement[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

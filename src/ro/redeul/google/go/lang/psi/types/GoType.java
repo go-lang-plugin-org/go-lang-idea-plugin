@@ -9,4 +9,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
  * Time: 8:58:40 PM
  */
 public interface GoType extends GoPsiElement {
+
+    GoPsiElement[] getMembers();
+
 }

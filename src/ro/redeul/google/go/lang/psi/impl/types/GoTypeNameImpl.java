@@ -9,11 +9,14 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.NamedTypeVariantsCollector;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.NamedTypeResolver;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -83,13 +86,13 @@ public class GoTypeNameImpl extends GoPsiElementBase implements GoTypeName {
         return true;
     }
 
-    public PsiElement resolve() {
+    public GoTypeNameDeclaration resolve() {
 
         NamedTypeResolver namedTypesProcessor = new NamedTypeResolver(this);
 
         if (!PsiScopesUtil.treeWalkUp(namedTypesProcessor, this, this.getContainingFile(), GoResolveStates.initial()))
         {
-            return namedTypesProcessor.getResolvedTypeName();
+            return (GoTypeNameDeclaration) namedTypesProcessor.getResolvedTypeName();
         }
 
         return null;
@@ -113,4 +116,14 @@ public class GoTypeNameImpl extends GoPsiElementBase implements GoTypeName {
         visitor.visitTypeName(this);
     }
 
+    @Override
+    public GoPsiElement[] getMembers() {
+        GoTypeNameDeclaration declaration = resolve();
+
+        if ( declaration != null && declaration.getTypeSpec() != null ) {
+            return declaration.getTypeSpec().getType().getMembers();
+        }
+
+        return new GoPsiElement[0];
+    }
 }

@@ -6,11 +6,10 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 25, 2010
  * Time: 12:05:14 AM
- * To change this template use File | Settings | File Templates.
  */
 public class FunctionOrMethodDeclaration implements GoElementTypes {
 
@@ -120,7 +119,7 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
             boolean isVariadic = false;
             int pos = builder.getCurrentOffset();
             PsiBuilder.Marker parameterSignature = builder.mark();
-            parser.parseIdentifierList(builder);
+            parser.parseIdentifierList(builder, false);
 
             ParserUtils.skipNLS(builder);
             if ( builder.getTokenType() == oTRIPLE_DOT ) {

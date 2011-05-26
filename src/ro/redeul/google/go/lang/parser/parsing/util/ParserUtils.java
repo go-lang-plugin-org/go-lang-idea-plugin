@@ -6,11 +6,10 @@ import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 9:12:06 PM
- * To change this template use File | Settings | File Templates.
  */
 public abstract class ParserUtils {
 
@@ -69,9 +68,11 @@ public abstract class ParserUtils {
     /**
      * Same as simple getToken() method but with TokenSet
      *
-     * @param builder
-     * @param tokenSet
-     * @return
+     * @param builder the builder
+     * @param tokenSet the token set accepted
+     * @param msg error message if nto applicable
+     *
+     * @return true/false (the operation result
      */
     public static boolean getToken(PsiBuilder builder, TokenSet tokenSet, String msg) {
         if (tokenSet.contains(builder.getTokenType())) {

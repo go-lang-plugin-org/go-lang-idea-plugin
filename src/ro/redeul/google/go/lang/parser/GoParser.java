@@ -81,7 +81,11 @@ public class GoParser implements PsiParser {
     }
 
     public int parseIdentifierList(PsiBuilder builder) {
-        return IdentifierList.parse(builder, this);
+        return parseIdentifierList(builder, true);
+    }
+
+    public int parseIdentifierList(PsiBuilder builder, boolean markList) {
+        return IdentifierList.parse(builder, this, markList);
     }
 
     public boolean parseBody(PsiBuilder builder) {

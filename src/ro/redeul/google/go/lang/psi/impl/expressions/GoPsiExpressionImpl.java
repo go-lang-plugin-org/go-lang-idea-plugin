@@ -25,10 +25,6 @@ public abstract class GoPsiExpressionImpl extends GoPsiElementBase implements Go
         return getText();
     }
 
-    public String toString() {
-        return getNode().getElementType().toString();
-    }
-
     @Override
     public GoType getType() {
         return resolveType();

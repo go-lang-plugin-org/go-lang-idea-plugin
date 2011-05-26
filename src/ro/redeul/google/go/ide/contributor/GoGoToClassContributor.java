@@ -36,7 +36,6 @@ public class GoGoToClassContributor implements ChooseByNameContributor {
     public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
         StubIndex index = StubIndex.getInstance();
 
-        System.out.println("name: " + name);
         Collection<GoTypeNameDeclaration> typeNameDeclarations =
                 index.get(
                         GoTypeName.KEY,
