@@ -12,8 +12,6 @@ import com.intellij.execution.runners.DefaultProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.facet.FacetManager;
-import com.intellij.internal.inspector.UiInspectorAction;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.application.Result;
@@ -38,11 +36,7 @@ import com.intellij.testFramework.fixtures.TempDirTestFixture;
 import com.intellij.testFramework.fixtures.impl.TempDirTestFixtureImpl;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.ui.UIUtil;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import ro.redeul.google.go.components.GoCompilerLoader;
-import ro.redeul.google.go.config.facet.GoFacet;
-import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.runner.GoApplicationConfiguration;
@@ -54,10 +48,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static junit.framework.Assert.fail;
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
 
 public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase {
 
@@ -131,6 +121,9 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
         GoSdkData goSdkData = new GoSdkData();
 
         String[] goSdkParams = GoSdkUtil.getMockGoogleSdk();
+
+        assertTrue("Test go sdk not available to run tests, check that the system property [go.test.sdk.home] or your GOROOT environment variable are set correctly.", goSdkParams.length > 0);
+
         goSdkData.BINARY_PATH = goSdkParams[1];
         goSdkData.TARGET_OS = goSdkParams[2];
         goSdkData.TARGET_ARCH = goSdkParams[3];
