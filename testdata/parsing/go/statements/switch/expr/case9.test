@@ -27,10 +27,11 @@ Go file
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
         ShortVarStmt
-          Identifiers
+          Identifier
             PsiElement(IDENTIFIER)('e1')
-            PsiElement(,)(',')
-            PsiWhiteSpace(' ')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          Identifier
             PsiElement(IDENTIFIER)('e2')
           PsiWhiteSpace(' ')
           PsiElement(:=)(':=')

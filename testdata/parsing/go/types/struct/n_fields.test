@@ -1,0 +1,83 @@
+package main
+type T struct {
+	x, y int
+	u float32
+	_ float32
+	A *[]int
+	F func()
+}
+------
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      NamedType(T)
+        PsiElement(IDENTIFIER)('T')
+      PsiWhiteSpace(' ')
+      TypeStruct
+        PsiElement(KEYWORD_STRUCT)('struct')
+        PsiWhiteSpace(' ')
+        PsiElement({)('{')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\t')
+        TypeStruct field
+          Identifier
+            PsiElement(IDENTIFIER)('x')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          Identifier
+            PsiElement(IDENTIFIER)('y')
+          PsiWhiteSpace(' ')
+          TypeName
+            PsiElement(IDENTIFIER)('int')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\t')
+        TypeStruct field
+          Identifier
+            PsiElement(IDENTIFIER)('u')
+          PsiWhiteSpace(' ')
+          TypeName
+            PsiElement(IDENTIFIER)('float32')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\t')
+        TypeStruct field
+          Identifier
+            PsiElement(IDENTIFIER)('_')
+          PsiWhiteSpace(' ')
+          TypeName
+            PsiElement(IDENTIFIER)('float32')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\t')
+        TypeStruct field
+          Identifier
+            PsiElement(IDENTIFIER)('A')
+          PsiWhiteSpace(' ')
+          TypePointer
+            PsiElement(*)('*')
+            TypeSlice
+              PsiElement([)('[')
+              PsiElement(])(']')
+              TypeName
+                PsiElement(IDENTIFIER)('int')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\t')
+        TypeStruct field
+          Identifier
+            PsiElement(IDENTIFIER)('F')
+          PsiWhiteSpace(' ')
+          TypeFunction
+            PsiElement(KEYWORD_FUNC)('func')
+            PsiElement(()('(')
+            PsiElement())(')')
+            PsiElement(WS_NEW_LINES)('\n')
+            FunctionResult
+              FunctionParameterList
+                FunctionParameter
+                  <empty list>
+        PsiElement(})('}')

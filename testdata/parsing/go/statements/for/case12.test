@@ -22,7 +22,7 @@ Go file
         PsiWhiteSpace(' ')
         ForForClause
           ShortVarStmt
-            Identifiers
+            Identifier
               PsiElement(IDENTIFIER)('i')
             PsiWhiteSpace(' ')
             PsiElement(:=)(':=')

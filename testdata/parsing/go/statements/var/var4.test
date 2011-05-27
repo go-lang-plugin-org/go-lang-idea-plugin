@@ -25,7 +25,8 @@ Go file
         PsiWhiteSpace(' ')
         VarSpec
           Identifiers
-            PsiElement(IDENTIFIER)('a')
+            Identifier
+              PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
           TypeName
             PsiElement(IDENTIFIER)('int')

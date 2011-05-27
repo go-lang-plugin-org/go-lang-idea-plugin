@@ -38,11 +38,11 @@ public class GoLiteralExpressionImpl extends GoPsiExpressionImpl implements GoLi
 
         // WARN: Disabled some type resolution.
 
-//        VariableTypeResolver variableTypeResolver = new VariableTypeResolver(this.getIdentifier());
-//
-//        if ( ! PsiScopesUtil.treeWalkUp(variableTypeResolver, this, this.getContainingFile(), GoResolveStates.initial()) ) {
-//            return variableTypeResolver.getResolvedType();
-//        }
+        VariableTypeResolver variableTypeResolver = new VariableTypeResolver(this.getIdentifier());
+
+        if ( ! PsiScopesUtil.treeWalkUp(variableTypeResolver, this, this.getContainingFile(), GoResolveStates.initial()) ) {
+            return variableTypeResolver.getResolvedType();
+        }
 
         return null;
     }

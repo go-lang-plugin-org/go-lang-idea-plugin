@@ -7,11 +7,10 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 25, 2010
  * Time: 2:52:27 AM
- * To change this template use File | Settings | File Templates.
  */
 public class StructType implements GoElementTypes {
     public static boolean parse(PsiBuilder builder, GoParser parser) {
@@ -51,6 +50,7 @@ public class StructType implements GoElementTypes {
 
         PsiBuilder.Marker fieldDeclaration = builder.mark();
 
+        boolean parsed = false;
         if ( ParserUtils.lookAhead(builder, mIDENT, oDOT) ||
              ParserUtils.lookAhead(builder, oMUL, mIDENT) ||
              ParserUtils.lookAhead(builder, mIDENT, litSTRING) ||
@@ -58,18 +58,24 @@ public class StructType implements GoElementTypes {
              ParserUtils.lookAhead(builder, mIDENT, pRCURLY)
             ) {
             parseAnonymousField(builder, parser);
+            parsed = true;
         } else if ( builder.getTokenType() == mIDENT )  {
 
-            parser.parseIdentifierList(builder);
+            parser.parseIdentifierList(builder, false);
 
             parser.parseType(builder);
+            parsed = true;
         }
 
         if ( builder.getTokenType() == litSTRING ) {
             ParserUtils.eatElement(builder, IDENTIFIER);
         }
-        
-        fieldDeclaration.done(TYPE_STRUCT_FIELD);
+
+        if (parsed ) {
+            fieldDeclaration.done(TYPE_STRUCT_FIELD);
+        } else {
+            fieldDeclaration.drop();
+        }
 
         return true;
     }

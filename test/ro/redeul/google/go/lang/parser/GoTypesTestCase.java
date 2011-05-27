@@ -53,4 +53,10 @@ public class GoTypesTestCase extends GoParsingTestCase {
     public void testArray$case3() throws Throwable { doTest(); }
     public void testArray$case4() throws Throwable { doTest(); }
     public void testArray$case5() throws Throwable { doTest(); }
+
+    public void testStruct$empty() throws Throwable { doTest(); }
+    public void testStruct$one_field() throws Throwable { doTest(); }
+    public void testStruct$two_fields() throws Throwable { doTest(); }
+    public void testStruct$two_fields2() throws Throwable { doTest(); }
+    public void testStruct$n_fields() throws Throwable { doTest(); }
 }

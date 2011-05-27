@@ -12,7 +12,8 @@ Go file
     PsiWhiteSpace(' ')
     VarSpec
       Identifiers
-        PsiElement(IDENTIFIER)('e')
+        Identifier
+          PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')

@@ -12,10 +12,12 @@ Go file
     PsiWhiteSpace(' ')
     VarSpec
       Identifiers
-        PsiElement(IDENTIFIER)('t1')
+        Identifier
+          PsiElement(IDENTIFIER)('t1')
         PsiElement(,)(',')
         PsiWhiteSpace(' ')
-        PsiElement(IDENTIFIER)('t2')
+        Identifier
+          PsiElement(IDENTIFIER)('t2')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')

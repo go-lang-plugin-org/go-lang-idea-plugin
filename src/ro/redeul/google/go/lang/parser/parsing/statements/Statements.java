@@ -9,11 +9,10 @@ import ro.redeul.google.go.lang.parser.parsing.declarations.Declaration;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 25, 2010
  * Time: 7:47:51 PM
- * To change this template use File | Settings | File Templates.
  */
 public class Statements implements GoElementTypes {
 
@@ -171,7 +170,7 @@ public class Statements implements GoElementTypes {
             mark.rollbackTo();
 
             mark = builder.mark();
-            parser.parseIdentifierList(builder);
+            parser.parseIdentifierList(builder, false);
             ParserUtils.getToken(builder, oVAR_ASSIGN, "assignment.operator.expected");
 
             ParserUtils.skipNLS(builder);

@@ -12,7 +12,8 @@ Go file
     PsiWhiteSpace(' ')
     VarSpec
       Identifiers
-        PsiElement(IDENTIFIER)('f')
+        Identifier
+          PsiElement(IDENTIFIER)('f')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
@@ -22,10 +23,11 @@ Go file
           PsiElement(()('(')
           FunctionParameterList
             FunctionParameter
-              Identifiers
+              Identifier
                 PsiElement(IDENTIFIER)('x')
-                PsiElement(,)(',')
-                PsiWhiteSpace(' ')
+              PsiElement(,)(',')
+              PsiWhiteSpace(' ')
+              Identifier
                 PsiElement(IDENTIFIER)('y')
               PsiWhiteSpace(' ')
               TypeName

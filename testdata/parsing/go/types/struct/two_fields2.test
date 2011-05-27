@@ -1,0 +1,37 @@
+package main
+type T struct { x int
+y int32 }
+------
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      NamedType(T)
+        PsiElement(IDENTIFIER)('T')
+      PsiWhiteSpace(' ')
+      TypeStruct
+        PsiElement(KEYWORD_STRUCT)('struct')
+        PsiWhiteSpace(' ')
+        PsiElement({)('{')
+        PsiWhiteSpace(' ')
+        TypeStruct field
+          Identifier
+            PsiElement(IDENTIFIER)('x')
+          PsiWhiteSpace(' ')
+          TypeName
+            PsiElement(IDENTIFIER)('int')
+        PsiElement(WS_NEW_LINES)('\n')
+        TypeStruct field
+          Identifier
+            PsiElement(IDENTIFIER)('y')
+          PsiWhiteSpace(' ')
+          TypeName
+            PsiElement(IDENTIFIER)('int32')
+        PsiWhiteSpace(' ')
+        PsiElement(})('}')

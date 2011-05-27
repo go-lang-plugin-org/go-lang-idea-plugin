@@ -1,6 +1,11 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ro.redeul.google.go in google-go-language" type="JUnit" factoryName="JUnit">
-    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+    <extension name="coverage" enabled="true" merge="false" per_test_coverage_enabled="false" runner="idea">
+      <pattern>
+        <option name="PATTERN" value="ro.redeul.google.go.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
     <module name="google-go-language" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />

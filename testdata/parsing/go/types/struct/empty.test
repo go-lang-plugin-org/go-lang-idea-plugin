@@ -1,0 +1,21 @@
+package main
+type T struct {}
+------
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      NamedType(T)
+        PsiElement(IDENTIFIER)('T')
+      PsiWhiteSpace(' ')
+      TypeStruct
+        PsiElement(KEYWORD_STRUCT)('struct')
+        PsiWhiteSpace(' ')
+        PsiElement({)('{')
+        PsiElement(})('}')

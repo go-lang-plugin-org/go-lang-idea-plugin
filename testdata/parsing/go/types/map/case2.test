@@ -30,10 +30,11 @@ Go file
           PsiElement({)('{')
           PsiWhiteSpace(' ')
           TypeStruct field
-            Identifiers
+            Identifier
               PsiElement(IDENTIFIER)('x')
-              PsiElement(,)(',')
-              PsiWhiteSpace(' ')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            Identifier
               PsiElement(IDENTIFIER)('y')
             PsiWhiteSpace(' ')
             TypeName

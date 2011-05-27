@@ -19,7 +19,7 @@ Go file
         PsiElement(()('(')
         FunctionParameterList
           FunctionParameter
-            Identifiers
+            Identifier
               PsiElement(IDENTIFIER)('n')
             PsiWhiteSpace(' ')
             TypeName
@@ -34,7 +34,7 @@ Go file
                 PsiElement(()('(')
                 FunctionParameterList
                   FunctionParameter
-                    Identifiers
+                    Identifier
                       PsiElement(IDENTIFIER)('p')
                     PsiWhiteSpace(' ')
                     TypePointer

@@ -14,10 +14,11 @@ Go file
     PsiElement(()('(')
     FunctionParameterList
       FunctionParameter
-        Identifiers
+        Identifier
           PsiElement(IDENTIFIER)('a')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        Identifier
           PsiElement(IDENTIFIER)('b')
         PsiWhiteSpace(' ')
         TypeName
@@ -25,7 +26,7 @@ Go file
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       FunctionParameter
-        Identifiers
+        Identifier
           PsiElement(IDENTIFIER)('z')
         PsiWhiteSpace(' ')
         TypeName
@@ -33,7 +34,7 @@ Go file
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       FunctionParameterVariadic
-        Identifiers
+        Identifier
           PsiElement(IDENTIFIER)('opt')
         PsiWhiteSpace(' ')
         PsiElement(...)('...')
@@ -47,7 +48,7 @@ Go file
       PsiElement(()('(')
       FunctionParameterList
         FunctionParameter
-          Identifiers
+          Identifier
             PsiElement(IDENTIFIER)('success')
           PsiWhiteSpace(' ')
           TypeName

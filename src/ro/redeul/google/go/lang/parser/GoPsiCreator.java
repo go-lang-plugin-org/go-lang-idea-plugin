@@ -65,6 +65,9 @@ public class GoPsiCreator implements GoElementTypes {
         if ( elementType.equals(TYPE_POINTER) )
             return new GoPointerTypeImpl(node);
 
+        if ( elementType.equals(TYPE_STRUCT) )
+            return new GoStructTypeImpl(node);
+
         if ( elementType.equals(FUNCTION_PARAMETER_LIST) )
             return new GoFunctionParameterListImpl(node);
 
