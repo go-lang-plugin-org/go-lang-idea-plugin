@@ -14,11 +14,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 24, 2010
  * Time: 1:27:29 AM
- * To change this template use File | Settings | File Templates.
  */
 public class GoCompilerLoader extends AbstractProjectComponent {
 
