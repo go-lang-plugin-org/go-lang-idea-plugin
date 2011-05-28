@@ -8,5 +8,5 @@ package ro.redeul.google.go.sdk;
  * To change this template use File | Settings | File Templates.
  */
 public enum GoSdkTool {
-    GoCompiler, GoLinker, GoArchivePacker
+    GoCompiler, GoLinker, GoArchivePacker, GoMake
 }
