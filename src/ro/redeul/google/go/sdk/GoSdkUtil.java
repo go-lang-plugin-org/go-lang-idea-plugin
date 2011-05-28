@@ -192,6 +192,8 @@ public class GoSdkUtil {
                 return binariesDesignation + "l";
             case GoArchivePacker:
                 return "gopack";
+            case GoMake:
+                return "gomake";
         }
 
         return "";
