@@ -3,12 +3,12 @@ package ro.redeul.google.go.lang.psi.types;
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
- * Date: Aug 30, 2010
- * Time: 9:07:04 PM
+ * Date: Sep 2, 2010
+ * Time: 12:52:20 PM
  */
-public interface GoArrayType extends GoType {
+public interface GoTypeMap extends GoType {
 
-//    GoExpression getArrayLength();
+    GoType getKeyType();
 
     GoType getElementType();
 }

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.struct.GoStructTypeField;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -16,15 +16,16 @@ import ro.redeul.google.go.lang.psi.types.struct.GoStructTypeField;
  * Date: 5/29/11
  * Time: 12:28 PM
  */
-public class GoStructTypeFieldImpl extends GoPsiElementBase implements GoStructTypeField {
+public class GoTypeStructFieldImpl extends GoPsiElementBase implements GoTypeStructField {
 
-    public GoStructTypeFieldImpl(@NotNull ASTNode node) {
+    public GoTypeStructFieldImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     @Override
     public String getName() {
-        return getIdentifier().getText();
+//        return getIdentifiers().getText();
+        return "x";
     }
 
     @Override
@@ -33,8 +34,15 @@ public class GoStructTypeFieldImpl extends GoPsiElementBase implements GoStructT
     }
 
     @Override
-    public GoIdentifier getIdentifier() {
-        return findChildByClass(GoIdentifier.class);
+    public boolean isBlank() {
+        GoIdentifier identifiers[] = getIdentifiers();
+
+        return identifiers.length == 1 && identifiers[0].isBlank();
+    }
+
+    @Override
+    public GoIdentifier[] getIdentifiers() {
+        return findChildrenByClass(GoIdentifier.class);
     }
 
     @Override

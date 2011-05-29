@@ -4,7 +4,7 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.types.GoMapType;
+import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -12,25 +12,28 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
  * Date: Sep 2, 2010
- * Time: 12:53:17 PM
+ * Time: 1:22:29 PM
  */
-public class GoMapTypeImpl extends GoPsiElementBase implements GoMapType {
+public class GoTypeChannelImpl extends GoPsiElementBase implements GoTypeChannel {
 
-    public GoMapTypeImpl(@NotNull ASTNode node) {
+    private ChannelType channelType;
+
+    public GoTypeChannelImpl(@NotNull ASTNode node, ChannelType channelType) {
         super(node);
+        this.channelType = channelType;
     }
 
-    public GoType getKeyType() {
-        return findChildrenByClass(GoType.class)[0];
+    public ChannelType getChannelType() {
+        return channelType;
     }
 
     public GoType getElementType() {
-        return findChildrenByClass(GoType.class)[1];
+        return findChildByClass(GoType.class);
     }
 
     @Override
     public void accept(GoElementVisitor visitor) {
-        visitor.visitMapType(this);
+        visitor.visitChannelType(this);
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.intellij.codeInsight.navigation.actions.GotoTypeDeclarationAction;
  * Date: 5/26/11
  * Time: 11:52 PM
  */
-public interface GoPointerType extends GoType {
+public interface GoTypePointer extends GoType {
 
     GoType getTargetType();
 

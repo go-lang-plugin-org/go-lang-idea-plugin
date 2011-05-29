@@ -17,6 +17,7 @@ import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.NamedTypeResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -121,7 +122,12 @@ public class GoTypeNameImpl extends GoPsiElementBase implements GoTypeName {
         GoTypeNameDeclaration declaration = resolve();
 
         if ( declaration != null && declaration.getTypeSpec() != null ) {
-            return declaration.getTypeSpec().getType().getMembers();
+
+            GoType declarationType = declaration.getTypeSpec().getType();
+
+            if (declarationType != null) {
+                return declarationType.getMembers();
+            }
         }
 
         return new GoPsiElement[0];

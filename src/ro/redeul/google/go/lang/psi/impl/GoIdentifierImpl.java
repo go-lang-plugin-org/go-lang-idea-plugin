@@ -6,6 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoPsiExpressionImpl;
@@ -57,6 +58,16 @@ public class GoIdentifierImpl extends GoPsiExpressionImpl implements GoIdentifie
     }
 
     @Override
+    public String getName() {
+        return getText();
+    }
+
+    @Override
+    public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
+        return null;
+    }
+
+    @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -93,5 +104,10 @@ public class GoIdentifierImpl extends GoPsiExpressionImpl implements GoIdentifie
         PsiScopesUtil.treeWalkUp(identifierVariantsCollector, this, this.getContainingFile(), GoResolveStates.initial());
 
         return identifierVariantsCollector.references();
+    }
+
+    @Override
+    public boolean isBlank() {
+        return getText().equals("_");
     }
 }
