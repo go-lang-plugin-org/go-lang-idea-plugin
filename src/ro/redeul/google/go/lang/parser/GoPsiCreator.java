@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.*;
 import ro.redeul.google.go.lang.psi.impl.types.*;
+import ro.redeul.google.go.lang.psi.impl.types.struct.GoStructTypeFieldImpl;
 import ro.redeul.google.go.lang.psi.types.GoChannelType;
 
 public class GoPsiCreator implements GoElementTypes {
@@ -67,6 +68,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if ( elementType.equals(TYPE_STRUCT) )
             return new GoStructTypeImpl(node);
+
+        if ( elementType.equals(TYPE_STRUCT_FIELD) )
+            return new GoStructTypeFieldImpl(node);
 
         if ( elementType.equals(FUNCTION_PARAMETER_LIST) )
             return new GoFunctionParameterListImpl(node);

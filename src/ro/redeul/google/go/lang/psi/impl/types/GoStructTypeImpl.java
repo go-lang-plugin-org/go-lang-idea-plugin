@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -21,6 +22,12 @@ public class GoStructTypeImpl extends GoPsiElementBase implements GoStructType {
 
     @Override
     public GoPsiElement[] getMembers() {
-        return new GoPsiElement[0];  //To change body of implemented methods use File | Settings | File Templates.
+        GoPsiElement childPsiElements[] = new GoPsiElement[getChildren().length];
+        PsiElement[] children = getChildren();
+        for (int i = 0, childrenLength = children.length; i < childrenLength; i++) {
+            childPsiElements[i] = (GoPsiElement) children[i];
+        }
+
+        return childPsiElements;
     }
 }
