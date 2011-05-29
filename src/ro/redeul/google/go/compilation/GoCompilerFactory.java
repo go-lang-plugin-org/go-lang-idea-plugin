@@ -20,7 +20,7 @@ public class GoCompilerFactory implements CompilerFactory {
     }
 
     public Compiler[] createCompilers(CompilerManager compilerManager) {
-        return new Compiler[] { new GoCompiler(project) };
+        return new Compiler[] { new GoCompiler(project), new GoMakefileCompiler(project)};
     }
 
 }

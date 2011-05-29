@@ -2,9 +2,7 @@ package ro.redeul.google.go.compilation;
 
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.make.MakeUtil;
-import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.CapturingProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
@@ -32,10 +30,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.Chunk;
 import com.intellij.util.CommonProcessors;
-import com.intellij.util.EnvironmentUtil;
-import com.intellij.util.StringBuilderSpinAllocator;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
@@ -48,8 +42,6 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.ProcessUtil;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,27 +95,6 @@ public class GoCompiler implements TranslatingCompiler {
             }
         }
 
-        // Check for project sdk only if experimental make system is enabled (for now)
-        if (isMakeSystemEnabled()) {
-            Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdk();
-            if (projectSdk == null )
-            {
-                Messages.showErrorDialog(
-                                        project,
-                                        GoBundle.message("cannot.compile.no.go.project.sdk", project.getName()),
-                                        GoBundle.message("cannot.compile"));
-                return false;
-
-            }
-            else if (!(projectSdk.getSdkAdditionalData() instanceof GoSdkData)) {
-                Messages.showErrorDialog(
-                                        project,
-                                        GoBundle.message("cannot.compile.invalid.project.sdk", project.getName()),
-                                        GoBundle.message("cannot.compile"));
-                return false;
-            }
-        }
-
         return true;
     }
 
@@ -132,52 +103,11 @@ public class GoCompiler implements TranslatingCompiler {
     }
 
     public void compile(CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
-        // Experimental, fork on makefilesystem
-        if (isMakeSystemEnabled()) {
-            make(context, moduleChunk, files, sink);
-        }
-        // Default to standard compiling
-        else {
-            VirtualFile allFiles[] = findAllFiles(moduleChunk);
-            Map<Module, List<VirtualFile>> mapToFiles = CompilerUtil.buildModuleToFilesMap(context, allFiles);
+        VirtualFile allFiles[] = findAllFiles(moduleChunk);
+        Map<Module, List<VirtualFile>> mapToFiles = CompilerUtil.buildModuleToFilesMap(context, allFiles);
 
-            for (Module module : mapToFiles.keySet()) {
-                compileFilesInsideModule(module, mapToFiles.get(module), context, sink);
-            }
-        }
-    }
-
-    private boolean isMakeSystemEnabled() {
-        return Boolean.parseBoolean(System.getProperty("makefile.system.enabled"));
-    }
-
-    private void make(CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
-        String basePath = project.getBaseDir().getPath();
-        File makeFile = new File(basePath, "/Makefile");
-        if (!makeFile.exists()) {
-            // TODO Generate the Makefile
-            context.addMessage(CompilerMessageCategory.ERROR, "Makefile doesn't exist at " + makeFile.getPath(), null, -1, -1);
-        }
-        else {
-            GeneralCommandLine command = new GeneralCommandLine();
-            final Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdk();
-            final GoSdkData goSdkData = goSdkData(projectSdk);
-            command.setExePath(getMakeBinary(projectSdk));
-            command.addParameter("-C");
-            command.addParameter(project.getBaseDir().getPath());
-            command.addParameter("-f");
-            command.addParameter(makeFile.getPath());
-            command.addParameter("install");
-            command.addParameter("clean");
-            command.setEnvParams(new HashMap<String, String>() {{
-                put("GOROOT", projectSdk.getHomePath());
-                put("GOARCH", goSdkData.TARGET_ARCH);
-                put("GOOS", goSdkData.TARGET_OS);
-                put("GOBIN", goSdkData.BINARY_PATH);
-                put("PATH", System.getenv("PATH") + File.pathSeparator + goSdkData.BINARY_PATH);
-            }});
-
-            executeCommandInFolder(command, basePath, context);
+        for (Module module : mapToFiles.keySet()) {
+            compileFilesInsideModule(module, mapToFiles.get(module), context, sink);
         }
     }
 
@@ -401,7 +331,8 @@ public class GoCompiler implements TranslatingCompiler {
             command.addParameter(VfsUtil.getRelativePath(file, sourceRoot, '/'));
         }
 
-        ProcessOutput output = executeCommandInFolder(command, sourceRoot.getPath(), context);
+        CompilationTaskWorker compilationTaskWorker = new CompilationTaskWorker(new GoCompilerOutputStreamParser(sourceRoot.getPath()));
+        ProcessOutput output = compilationTaskWorker.executeTask(command, sourceRoot.getPath(), context);
 
         if (output == null || output.getExitCode() != 0) {
             return false;
@@ -432,7 +363,7 @@ public class GoCompiler implements TranslatingCompiler {
         }});
 
 
-        output = executeCommandInFolder(libraryPackCommand, sourceRoot.getPath(), context);
+        output = compilationTaskWorker.executeTask(libraryPackCommand, sourceRoot.getPath(), context);
 
         VirtualFile libraryFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(outputLibrary);
         if (libraryFile == null) {
@@ -483,7 +414,8 @@ public class GoCompiler implements TranslatingCompiler {
             command.addParameter("../" + VfsUtil.getPath(outputVirtualFile, file, '/'));
         }
 
-        ProcessOutput output = executeCommandInFolder(command, executionPath, context);
+        CompilationTaskWorker compilationTaskWorker = new CompilationTaskWorker(new GoCompilerOutputStreamParser(executionPath));
+        ProcessOutput output = compilationTaskWorker.executeTask(command, executionPath, context);
 
         if (output == null || output.getExitCode() != 0) {
             return false;
@@ -513,7 +445,7 @@ public class GoCompiler implements TranslatingCompiler {
             put("GOROOT", sdk.getHomePath());
         }});
 
-        output = executeCommandInFolder(applicationLinkCommand, sourceRoot.getPath(), context);
+        output = compilationTaskWorker.executeTask(applicationLinkCommand, sourceRoot.getPath(), context);
 
         VirtualFile libraryFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(outputApplication);
         if (libraryFile == null) {
@@ -576,84 +508,6 @@ public class GoCompiler implements TranslatingCompiler {
                 return applicationName;
             }
         });
-    }
-
-    private ProcessOutput executeCommandInFolder(GeneralCommandLine command, String path, CompileContext context) {
-
-        if (LOG.isDebugEnabled()) {
-            @NonNls final StringBuilder buf = StringBuilderSpinAllocator.alloc();
-            try {
-                buf.append("\n===== Environment:===========================\n");
-                for (String pair : EnvironmentUtil.getEnvironment()) {
-                    buf.append("\t").append(pair).append("\n");
-                }
-
-                Map<String, String> map = command.getEnvParams();
-                if (map != null) {
-                    buf.append("===== Custom environment:").append("\n");
-                    for (String key : map.keySet()) {
-                        buf.append("\t").append(key).append("=").append(map.get(key)).append("\n");
-                    }
-                }
-                buf.append("===== Working folder:===========================\n");
-                buf.append("\t").append(path).append("\n");
-                buf.append("===== Command: ").append("\n");
-                buf.append("\t").append(command.getCommandLineString()).append("\n");
-                buf.append("=============================================================================\n");
-                LOG.debug(buf.toString());
-            } finally {
-                StringBuilderSpinAllocator.dispose(buf);
-            }
-        }
-
-        command.setWorkDirectory(path);
-
-        try {
-            ProcessOutput output = new CapturingProcessHandler(
-                    command.createProcess(),
-                    Charset.defaultCharset(),
-                    command.getCommandLineString()).runProcess();
-
-            ProcessUtil.StreamParser<List<CompilerMessage>> outputStreamParser = getOutputStreamParser(path);
-            if (output.getExitCode() != 0) {
-
-                processErrors(path, context, output.getStderrLines(), outputStreamParser);
-                processErrors(path, context, output.getStdoutLines(), outputStreamParser);
-
-                context.addMessage(CompilerMessageCategory.WARNING, "process exited with code: " + output.getExitCode(), null, -1, -1);
-            }
-
-            return output;
-        } catch (ExecutionException ex) {
-            context.addMessage(CompilerMessageCategory.WARNING, ex.getMessage(), null, -1, -1);
-            return null;
-        }
-    }
-
-    private void processErrors(String path, CompileContext context, List<String> outputLines, ProcessUtil.StreamParser<List<CompilerMessage>> outputStreamParser) {
-        if (!outputLines.isEmpty()) {
-            for (String line : outputLines) {
-                List<CompilerMessage> compilerMessages = outputStreamParser.parseStream(line);
-
-                for (CompilerMessage compilerMessage : compilerMessages) {
-                    context.addMessage(CompilerMessageCategory.ERROR, compilerMessage.message, compilerMessage.fileName, compilerMessage.row, compilerMessage.column);
-                }
-            }
-        }
-    }
-
-    private static String generateFileUrl(String workingDirectory, String filename) {
-        // Using this method instead of File.toURI().toUrl() because it doesn't use the two slashes after ':'
-        // and IDEA doesn't recognises this as a valid URL (even though it seems to be spec compliant)
-
-        File sourceFile = new File(workingDirectory, filename);
-        String url = null;
-        try {
-            url = "file://" + sourceFile.getCanonicalPath();
-        } catch (IOException e) {
-            LOG.error("Cannot create url for compiler message: " + filename, e);
-        }
-        return url;
     }
 
     private Map<VirtualFile, Map<String, List<Trinity<VirtualFile, String, List<String>>>>> sortFilesBySourceRoots(CompileContext context, final Module module, List<VirtualFile> files) {
@@ -757,10 +611,7 @@ public class GoCompiler implements TranslatingCompiler {
         return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoCompiler);
     }
 
-    private String getMakeBinary(Sdk sdk) {
-        GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoMake);
-    }
+
 
     private String getPackerBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
@@ -785,32 +636,6 @@ public class GoCompiler implements TranslatingCompiler {
         return GoSdkUtil.getGoogleGoSdkForModule(module);
     }
 
-    static class CompilerMessage {
-        public CompilerMessageCategory category;
-        public String message;
-        public String fileName;
-        public int row;
-        public int column = -1;
-
-        CompilerMessage(CompilerMessageCategory category, String message, String fileName, int row, int column) {
-            this.category = category;
-            this.message = message;
-            this.fileName = fileName;
-            this.row = row;
-            this.column = column;
-        }
-    }
-
-    private ProcessUtil.StreamParser<List<CompilerMessage>> getOutputStreamParser(String basePath) {
-        if (isMakeSystemEnabled()) {
-            Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdk();
-            return new MakeOutputStreamParser(projectSdk, goSdkData(projectSdk), basePath);
-        }
-        else {
-            return new GoCompilerOutputStreamParser(basePath);
-        }
-    }
-
     private static class GoCompilerOutputStreamParser implements ProcessUtil.StreamParser<List<CompilerMessage>> {
 
         private final static Pattern pattern = Pattern.compile("([^:]+):(\\d+): ((?:(?:.)|(?:\\n(?!/)))+)", Pattern.UNIX_LINES);
@@ -828,7 +653,7 @@ public class GoCompiler implements TranslatingCompiler {
 
             while (matcher.find()) {
                 String filename = matcher.group(1);
-                String url = generateFileUrl(basePath, filename);
+                String url = CompilationTaskWorker.generateFileUrl(basePath, filename);
                 messages.add(
                         new CompilerMessage(
                                 CompilerMessageCategory.ERROR, matcher.group(3), url, Integer.parseInt(matcher.group(2)), -1));
@@ -837,46 +662,6 @@ public class GoCompiler implements TranslatingCompiler {
             return messages;
         }
     }
-
-    private static class MakeOutputStreamParser implements ProcessUtil.StreamParser<List<CompilerMessage>> {
-
-        private final static Pattern pattern = Pattern.compile("([^:]+):(\\d+): ((?:(?:.)|(?:\\n(?!/)))+)", Pattern.UNIX_LINES);
-        private Sdk projectSdk;
-        private GoSdkData goSdkData;
-        private String basePath;
-
-        public MakeOutputStreamParser(Sdk projectSdk, GoSdkData goSdkData, String basePath) {
-            this.goSdkData = goSdkData;
-            this.projectSdk = projectSdk;
-            this.basePath = basePath;
-        }
-
-        public List<CompilerMessage> parseStream(String data) {
-
-            List<CompilerMessage> messages = new ArrayList<CompilerMessage>();
-
-            Matcher matcher = pattern.matcher(data);
-
-            if (matcher.find()) {
-                String filename = matcher.group(1);
-                String url = generateFileUrl(basePath, filename);
-                messages.add(
-                        new CompilerMessage(
-                                CompilerMessageCategory.ERROR, matcher.group(3), url, Integer.parseInt(matcher.group(2)), -1));
-            }
-            else {
-
-                // Ignore error lines that start with the compiler as the line that follows this contains the error that
-                // we're interested in. Otherwise, the error is more severe and we should display it
-                if (!StringUtils.startsWith(data, GoSdkUtil.getCompilerName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH))) {
-                    messages.add(new CompilerMessage(CompilerMessageCategory.ERROR, data, null, -1, -1));
-                }
-            }
-
-            return messages;
-        }
-    }
-
 
     private static class MyOutputItem implements OutputItem {
         private final String outputBinary;
