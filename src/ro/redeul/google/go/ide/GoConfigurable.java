@@ -1,13 +1,22 @@
 package ro.redeul.google.go.ide;
 
+import com.intellij.openapi.compiler.*;
+import com.intellij.openapi.compiler.Compiler;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.compilation.GoCompiler;
+import ro.redeul.google.go.compilation.GoMakefileCompiler;
+import ro.redeul.google.go.components.GoCompilerLoader;
 
 import javax.swing.*;
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -70,6 +79,36 @@ public class GoConfigurable implements SearchableConfigurable {
         if ( goConfigurableForm != null ) {
             goConfigurableForm.apply(bean);
             getProjectSettings().loadState(bean);
+            applyCompilerSettings(bean);
+        }
+    }
+
+    private void applyCompilerSettings(GoProjectSettings.GoProjectSettingsBean bean) {
+        // Remove current GoCompilers and add the currently configured
+        CompilerManager compilerManager = CompilerManager.getInstance(project);
+        Compiler[] compilers = compilerManager.getCompilers(GoCompiler.class);
+        for (Compiler compiler : compilers) {
+            compilerManager.removeCompiler(compiler);
+        }
+        compilers = compilerManager.getCompilers(GoMakefileCompiler.class);
+        for (Compiler compiler : compilers) {
+            compilerManager.removeCompiler(compiler);
+        }
+
+        switch (bean.BUILD_SYSTEM_TYPE) {
+        case Internal:
+            compilerManager.addTranslatingCompiler(
+                    new GoCompiler(project),
+                    new HashSet<FileType>(Arrays.asList(GoFileType.GO_FILE_TYPE)),
+                    new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
+
+            break;
+        case Makefile:
+            compilerManager.addTranslatingCompiler(
+                    new GoMakefileCompiler(project),
+                    new HashSet<FileType>(Arrays.asList(GoFileType.GO_FILE_TYPE)),
+                    new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
+            break;
         }
     }
 

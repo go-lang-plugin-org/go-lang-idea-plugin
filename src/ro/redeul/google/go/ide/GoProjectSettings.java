@@ -18,7 +18,7 @@ import com.intellij.openapi.project.Project;
 )
 public class GoProjectSettings implements PersistentStateComponent<GoProjectSettings.GoProjectSettingsBean> {
 
-    enum BuildSystemType {
+    public enum BuildSystemType {
         Internal, Makefile
     }
 
