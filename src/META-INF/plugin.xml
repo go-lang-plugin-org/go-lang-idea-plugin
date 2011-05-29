@@ -192,6 +192,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
+        <projectService serviceInterface="ro.redeul.google.go.ide.GoProjectSettings" serviceImplementation="ro.redeul.google.go.ide.GoProjectSettings"/>
+        <projectConfigurable instance="ro.redeul.google.go.ide.GoConfigurable"/>
 
         <syntaxHighlighter key="Google Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighter"/>
 

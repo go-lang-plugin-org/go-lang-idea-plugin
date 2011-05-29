@@ -17,11 +17,10 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Sep 7, 2010
  * Time: 4:13:53 PM
- * To change this template use File | Settings | File Templates.
  */
 public class EditorTweakingComponent implements ProjectComponent {
 

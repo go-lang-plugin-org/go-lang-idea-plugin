@@ -42,10 +42,6 @@ public class GoGoToClassContributor implements ChooseByNameContributor {
                         name, project,
                         includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project));
 
-        if ( typeNameDeclarations.size() > 0 ) {
-            int a = 10;
-        }
-
         return typeNameDeclarations.toArray(new NavigationItem[typeNameDeclarations.size()]);
     }
 }
