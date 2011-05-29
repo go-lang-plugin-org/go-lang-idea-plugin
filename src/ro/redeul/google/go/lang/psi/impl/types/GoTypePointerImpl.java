@@ -1,11 +1,10 @@
 package ro.redeul.google.go.lang.psi.impl.types;
 
-import com.intellij.codeInsight.navigation.actions.GotoTypeDeclarationAction;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.types.GoPointerType;
+import ro.redeul.google.go.lang.psi.types.GoTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -15,9 +14,9 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: 5/26/11
  * Time: 11:53 PM
  */
-public class GoPointerTypeImpl extends GoPsiElementBase implements GoPointerType {
+public class GoTypePointerImpl extends GoPsiElementBase implements GoTypePointer {
 
-    public GoPointerTypeImpl(@NotNull ASTNode node) {
+    public GoTypePointerImpl(@NotNull ASTNode node) {
         super(node);
     }
 

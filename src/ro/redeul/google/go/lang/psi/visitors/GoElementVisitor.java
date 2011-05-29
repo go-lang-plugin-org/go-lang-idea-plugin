@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.psi.visitors;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
-import ro.redeul.google.go.lang.psi.impl.types.GoPointerTypeImpl;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 
@@ -54,19 +53,19 @@ public class GoElementVisitor {
         visitElement(typeSpec);
     }
 
-    public void visitArrayType(GoArrayType arrayType) {
+    public void visitArrayType(GoTypeArray arrayType) {
         visitElement(arrayType);
     }
 
-    public void visitSliceType(GoSliceType sliceType) {
+    public void visitSliceType(GoTypeSlice sliceType) {
         visitElement(sliceType);
     }
 
-    public void visitMapType(GoMapType mapType) {
+    public void visitMapType(GoTypeMap mapType) {
         visitElement(mapType);
     }
 
-    public void visitChannelType(GoChannelType channelType) {
+    public void visitChannelType(GoTypeChannel channelType) {
         visitElement(channelType);
     }
 
@@ -86,7 +85,7 @@ public class GoElementVisitor {
         visitElement(functionParameter);
     }
 
-    public void visitPointerType(GoPointerType pointerType) {
+    public void visitPointerType(GoTypePointer pointerType) {
         visitElement(pointerType);
     }
 }

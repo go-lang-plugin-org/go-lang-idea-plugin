@@ -4,29 +4,33 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.types.GoArrayType;
+import ro.redeul.google.go.lang.psi.types.GoTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
- * Date: Aug 30, 2010
- * Time: 9:07:51 PM
+ * Date: Sep 2, 2010
+ * Time: 12:53:17 PM
  */
-public class GoArrayTypeImpl extends GoPsiElementBase implements GoArrayType {
+public class GoTypeMapImpl extends GoPsiElementBase implements GoTypeMap {
 
-    public GoArrayTypeImpl(@NotNull ASTNode node) {
+    public GoTypeMapImpl(@NotNull ASTNode node) {
         super(node);
     }
 
+    public GoType getKeyType() {
+        return findChildrenByClass(GoType.class)[0];
+    }
+
     public GoType getElementType() {
-        return findChildByClass(GoType.class);
+        return findChildrenByClass(GoType.class)[1];
     }
 
     @Override
     public void accept(GoElementVisitor visitor) {
-        visitor.visitArrayType(this);
+        visitor.visitMapType(this);
     }
 
     @Override
