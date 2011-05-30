@@ -88,8 +88,8 @@ public class GoPackageReferenceImpl extends GoPsiElementBase implements GoPackag
         return null;
     }
 
-    @Override
-    public GoPsiElement[] getMembers() {
-        return new GoPsiElement[0];  //To change body of implemented methods use File | Settings | File Templates.
-    }
+//    @Override
+//    public GoPsiElement[] getMembers() {
+//        return new GoPsiElement[0];  //To change body of implemented methods use File | Settings | File Templates.
+//    }
 }

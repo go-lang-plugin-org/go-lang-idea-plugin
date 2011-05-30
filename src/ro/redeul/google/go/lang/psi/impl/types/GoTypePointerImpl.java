@@ -36,4 +36,11 @@ public class GoTypePointerImpl extends GoPsiElementBase implements GoTypePointer
 
         return targetType != null ? getTargetType().getMembers() : new GoPsiElement[0];
     }
+
+    @Override
+    public GoType getMemberType(String name) {
+        GoType targetType = getTargetType();
+
+        return targetType != null ? getTargetType().getMemberType(name) : null;
+    }
 }

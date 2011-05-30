@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.types;
 
+import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 
 /**
@@ -12,4 +13,5 @@ public interface GoType extends GoPsiElement {
 
     GoPsiElement[] getMembers();
 
+    GoType getMemberType(String name);
 }

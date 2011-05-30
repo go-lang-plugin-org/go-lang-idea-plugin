@@ -10,7 +10,7 @@ import ro.redeul.google.go.lang.psi.types.GoType;
  * Date: Jul 24, 2010
  * Time: 10:43:12 PM
  */
-public interface GoPackageReference extends GoPsiElement, PsiReference, PsiNamedElement, GoType {
+public interface GoPackageReference extends GoPsiElement, PsiReference, PsiNamedElement {
 
     String getString();
 

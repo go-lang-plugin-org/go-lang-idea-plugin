@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.*;
 import ro.redeul.google.go.lang.psi.impl.types.*;
+import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructAnonymousFieldImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructFieldImpl;
 import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
 
@@ -71,6 +72,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if ( elementType.equals(TYPE_STRUCT_FIELD) )
             return new GoTypeStructFieldImpl(node);
+
+        if ( elementType.equals(TYPE_STRUCT_FIELD_ANONYMOUS) )
+            return new GoTypeStructAnonymousFieldImpl(node);
 
         if ( elementType.equals(TYPE_INTERFACE) )
             return new GoTypeInterfaceImpl(node);

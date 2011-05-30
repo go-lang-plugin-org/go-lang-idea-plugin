@@ -132,4 +132,20 @@ public class GoTypeNameImpl extends GoPsiElementBase implements GoTypeName {
 
         return new GoPsiElement[0];
     }
+
+    @Override
+    public GoType getMemberType(String name) {
+        GoTypeNameDeclaration declaration = resolve();
+
+        if ( declaration != null && declaration.getTypeSpec() != null ) {
+
+            GoType declarationType = declaration.getTypeSpec().getType();
+
+            if (declarationType != null) {
+                return declarationType.getMemberType(name);
+            }
+        }
+
+        return null;
+    }
 }

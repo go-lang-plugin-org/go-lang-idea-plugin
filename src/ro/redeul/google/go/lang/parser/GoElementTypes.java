@@ -97,9 +97,9 @@ public interface GoElementTypes extends GoTokenTypes {
     
     GoElementType INTERFACE_REFERENCE  = new GoElementTypeImpl("interface type");
     GoElementType TYPE_STRUCT = new GoElementTypeImpl("TypeStruct");
-    GoElementType TYPE_STRUCT_FIELD = new GoElementTypeImpl("TypeStruct field");
-    GoElementType TYPE_STRUCT_FIELD_ADDRESS = new GoElementTypeImpl("struct field address type");
-    GoElementType TYPE_STRUCT_FIELD_ANONYMOUS_TYPE = new GoElementTypeImpl("struct field anonymous stype");
+    GoElementType TYPE_STRUCT_FIELD = new GoElementTypeImpl("TypeStructField");
+//    GoElementType TYPE_STRUCT_FIELD_ADDRESS = new GoElementTypeImpl("struct field address type");
+    GoElementType TYPE_STRUCT_FIELD_ANONYMOUS = new GoElementTypeImpl("TypeStructFieldAnonymous");
 
     GoElementType FUNCTION_DECLARATION = new GoElementTypeImpl("FunctionDeclaration(f)");
     GoElementType METHOD_DECLARATION = new GoElementTypeImpl("MethodDeclaration");

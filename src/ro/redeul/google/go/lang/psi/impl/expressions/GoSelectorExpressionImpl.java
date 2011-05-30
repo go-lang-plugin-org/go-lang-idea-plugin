@@ -4,14 +4,10 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.GoPsiExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
-import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -37,6 +33,13 @@ public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoS
 
     @Override
     protected GoType resolveType() {
+
+        PsiElement psiElement = resolve();
+
+        if ( psiElement != null && psiElement instanceof GoType ) {
+            return (GoType) psiElement;
+        }
+
         return null;
     }
 
@@ -60,7 +63,14 @@ public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoS
 
     @Override
     public PsiElement resolve() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+        GoType contextType = getExpressionContext().getType();
+
+        if ( contextType == null ) {
+            return null;
+        }
+
+        return contextType.getMemberType(getText().substring(getText().indexOf(".") + 1));
     }
 
     @NotNull

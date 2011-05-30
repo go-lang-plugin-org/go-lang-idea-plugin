@@ -1,6 +1,8 @@
 package ro.redeul.google.go.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -8,12 +10,16 @@ import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoPsiExpressionImpl;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
+import javax.swing.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -109,5 +115,26 @@ public class GoIdentifierImpl extends GoPsiExpressionImpl implements GoIdentifie
     @Override
     public boolean isBlank() {
         return getText().equals("_");
+    }
+
+    @Override
+    public ItemPresentation getPresentation() {
+        return new ItemPresentation() {
+            public String getPresentableText() {
+                return getName();
+            }
+
+            public TextAttributesKey getTextAttributesKey() {
+                return null;
+            }
+
+            public String getLocationString() {
+                return String.format(" %s (%s)", ((GoFile) getContainingFile()).getPackage().getPackageName(), getContainingFile().getVirtualFile().getPath());
+            }
+
+            public Icon getIcon(boolean open) {
+                return GoIcons.GO_ICON_16x16;
+            }
+        };
     }
 }

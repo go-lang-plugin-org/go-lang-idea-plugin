@@ -1,15 +1,10 @@
 package ro.redeul.google.go.lang.psi.impl.types.struct;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
-import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

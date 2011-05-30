@@ -29,7 +29,7 @@ Go file
           PsiWhiteSpace(' ')
           PsiElement({)('{')
           PsiWhiteSpace(' ')
-          TypeStruct field
+          TypeStructField
             Identifier
               PsiElement(IDENTIFIER)('x')
             PsiElement(,)(',')

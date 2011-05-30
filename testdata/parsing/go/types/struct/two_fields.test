@@ -19,7 +19,7 @@ Go file
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiWhiteSpace(' ')
-        TypeStruct field
+        TypeStructField
           Identifier
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
@@ -27,7 +27,7 @@ Go file
             PsiElement(IDENTIFIER)('int')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        TypeStruct field
+        TypeStructField
           Identifier
             PsiElement(IDENTIFIER)('y')
           PsiWhiteSpace(' ')

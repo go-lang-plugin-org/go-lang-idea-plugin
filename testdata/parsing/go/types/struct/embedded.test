@@ -1,6 +1,9 @@
 package main
-type T struct { x int }
-------
+type T struct {
+    T2
+    x int
+}
+----------
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -18,12 +21,18 @@ Go file
         PsiElement(KEYWORD_STRUCT)('struct')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
-        PsiWhiteSpace(' ')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('    ')
+        TypeStructFieldAnonymous
+          TypeName
+            PsiElement(IDENTIFIER)('T2')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('    ')
         TypeStructField
           Identifier
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
           TypeName
             PsiElement(IDENTIFIER)('int')
-        PsiWhiteSpace(' ')
+        PsiElement(WS_NEW_LINES)('\n')
         PsiElement(})('}')

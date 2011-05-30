@@ -33,4 +33,9 @@ public class GoTypeArrayImpl extends GoPsiElementBase implements GoTypeArray {
     public GoPsiElement[] getMembers() {
         return new GoPsiElement[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public GoType getMemberType(String name) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
