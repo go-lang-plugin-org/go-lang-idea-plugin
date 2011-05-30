@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.compilation.GoCompiler;
 import ro.redeul.google.go.compilation.GoMakefileCompiler;
+import ro.redeul.google.go.ide.GoProjectSettings;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -43,20 +44,20 @@ public class GoCompilerLoader extends AbstractProjectComponent {
         CompilerManager compilerManager = CompilerManager.getInstance(myProject);
         compilerManager.addCompilableFileType(GoFileType.GO_FILE_TYPE);
 
-        // Only enabled with the system property for now.
-        // TODO make gui to have it configurable?
-        boolean makeSystemEnabled = Boolean.parseBoolean(System.getProperty("makefile.system.enabled"));
-        if (makeSystemEnabled) {
-            compilerManager.addTranslatingCompiler(
-                    new GoMakefileCompiler(myProject),
-                    new HashSet<FileType>(Arrays.asList(GoFileType.GO_FILE_TYPE)),
-                    new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
-        }
-        else {
-            compilerManager.addTranslatingCompiler(
-                    new GoCompiler(myProject),
-                    new HashSet<FileType>(Arrays.asList(GoFileType.GO_FILE_TYPE)),
-                    new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
+        switch (GoProjectSettings.getInstance(myProject).getState().BUILD_SYSTEM_TYPE) {
+            case Internal:
+                compilerManager.addTranslatingCompiler(
+                        new GoCompiler(myProject),
+                        new HashSet<FileType>(Arrays.asList(GoFileType.GO_FILE_TYPE)),
+                        new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
+
+                break;
+            case Makefile:
+                compilerManager.addTranslatingCompiler(
+                        new GoMakefileCompiler(myProject),
+                        new HashSet<FileType>(Arrays.asList(GoFileType.GO_FILE_TYPE)),
+                        new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
+                break;
         }
     }
 

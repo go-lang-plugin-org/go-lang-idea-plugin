@@ -1,8 +1,6 @@
 package ro.redeul.google.go.ide;
 
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.util.io.FileUtil;
-import org.jetbrains.plugins.groovy.util.SdkHomeSettings;
 
 import javax.swing.*;
 
