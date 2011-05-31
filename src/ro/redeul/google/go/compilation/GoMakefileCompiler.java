@@ -82,7 +82,7 @@ public class GoMakefileCompiler implements TranslatingCompiler {
         make(context, moduleChunk, files, sink);
     }
 
-    private void make(CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
+    private void make(final CompileContext context, final Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
         String basePath = project.getBaseDir().getPath();
         File makeFile = new File(basePath, "/Makefile");
         if (!makeFile.exists()) {
@@ -106,13 +106,28 @@ public class GoMakefileCompiler implements TranslatingCompiler {
                 put("GOOS", goSdkData.TARGET_OS);
                 put("GOBIN", goSdkData.BINARY_PATH);
                 put("PATH", System.getenv("PATH") + File.pathSeparator + goSdkData.BINARY_PATH);
-                put("TARGDIR", CompilerProjectExtension.getInstance(project).getCompilerOutput().getPath() + "/go-out");
+                put("TARGDIR", getOutputPath(context, moduleChunk));
             }});
 
             CompilationTaskWorker compilationTaskWorker = new CompilationTaskWorker(
                     new MakeOutputStreamParser(projectSdk, goSdkData, basePath));
             compilationTaskWorker.executeTask(command, basePath, context);
         }
+    }
+
+    private String getOutputPath(CompileContext context, Chunk<Module> moduleChunk) {
+        if (moduleChunk.getNodes().isEmpty()) {
+            context.addMessage(CompilerMessageCategory.WARNING, "No module defined, running application might not function properly.",
+                    null, -1, -1);
+            return CompilerProjectExtension.getInstance(project).getCompilerOutput().getPath() + "/go-bins";
+        }
+        else {
+            // TODO This is a hack to keep GoMakefileCompiler compatible with the way Runner expects binaries, we
+            // use any module assuming the path is the same for all
+            Module firstModule = moduleChunk.getNodes().iterator().next();
+            return context.getModuleOutputDirectory(firstModule).getPath() + "/go-bins";
+        }
+
     }
 
     private static class MakeOutputStreamParser implements ProcessUtil.StreamParser<List<CompilerMessage>> {
