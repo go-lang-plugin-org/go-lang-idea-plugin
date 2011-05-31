@@ -1,14 +1,18 @@
 package ro.redeul.google.go.lang.psi.impl.expressions;
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.expressions.GoPsiExpression;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.GoExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
@@ -17,7 +21,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: 5/19/11
  * Time: 10:58 PM
  */
-public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoSelectorExpression {
+public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSelectorExpression {
 
     public GoSelectorExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -36,7 +40,7 @@ public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoS
 
         PsiElement psiElement = resolve();
 
-        if ( psiElement != null && psiElement instanceof GoType ) {
+        if (psiElement != null && psiElement instanceof GoType) {
             return (GoType) psiElement;
         }
 
@@ -44,8 +48,8 @@ public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoS
     }
 
     @Override
-    public GoPsiExpression getExpressionContext() {
-        return findChildByClass(GoPsiExpression.class);
+    public GoExpression getExpressionContext() {
+        return findChildByClass(GoExpression.class);
     }
 
     @Override
@@ -56,7 +60,7 @@ public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoS
     @Override
     public TextRange getRangeInElement() {
 
-        GoPsiExpression context = getExpressionContext();
+        GoExpression context = getExpressionContext();
 
         return context != null ? new TextRange(context.getTextLength() + 1, getTextLength()) : null;
     }
@@ -66,7 +70,7 @@ public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoS
 
         GoType contextType = getExpressionContext().getType();
 
-        if ( contextType == null ) {
+        if (contextType == null) {
             return null;
         }
 
@@ -108,12 +112,53 @@ public class GoSelectorExpressionImpl extends GoPsiExpressionImpl implements GoS
 
         GoType contextType = getExpressionContext().getType();
 
-        if ( contextType == null ) {
+        if (contextType == null) {
             return new Object[0];
         }
 
-        return contextType.getMembers();
+        return convertToPresentation(contextType, contextType.getMembers());
     }
+
+    private Object[] convertToPresentation(GoType type, GoPsiElement[] members) {
+
+        Object[] presentations = new Object[members.length];
+
+        for (int i = 0, membersLength = members.length; i < membersLength; i++) {
+
+            GoPsiElement member = members[i];
+
+            if (member instanceof GoIdentifier) {
+                presentations[i] = getFieldPresentation(type, (GoIdentifier) member);
+            } else {
+                presentations[i] = member;
+            }
+        }
+
+        return presentations;
+    }
+
+    private LookupElementBuilder getFieldPresentation(GoType type, GoIdentifier id) {
+
+        String name = id.getName();
+
+        LookupElementBuilder builder = LookupElementBuilder.create(id, name);
+
+        GoType ownerType = null;
+        if (id.getParent() != null && id.getParent() instanceof GoTypeStructField) {
+            GoTypeStructField structField = (GoTypeStructField) id.getParent();
+            ownerType = (GoType) structField.getParent();
+        }
+
+        if (ownerType == null) {
+            return builder;
+        }
+
+        return builder
+                .setBold()
+                .setTailText(String.format(" (defined by: %s)", ownerType.getQualifiedName()))
+                .setTypeText("<field>", ownerType != type);
+    }
+
 
     @Override
     public boolean isSoft() {

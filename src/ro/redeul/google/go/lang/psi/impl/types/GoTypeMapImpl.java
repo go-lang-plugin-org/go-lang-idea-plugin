@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -14,7 +15,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: Sep 2, 2010
  * Time: 12:53:17 PM
  */
-public class GoTypeMapImpl extends GoPsiElementBase implements GoTypeMap {
+public class GoTypeMapImpl extends GoPsiPackagedElementBase implements GoTypeMap {
 
     public GoTypeMapImpl(@NotNull ASTNode node) {
         super(node);

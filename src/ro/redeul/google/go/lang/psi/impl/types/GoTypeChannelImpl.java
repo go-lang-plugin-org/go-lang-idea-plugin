@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -14,7 +15,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: Sep 2, 2010
  * Time: 1:22:29 PM
  */
-public class GoTypeChannelImpl extends GoPsiElementBase implements GoTypeChannel {
+public class GoTypeChannelImpl extends GoPsiPackagedElementBase implements GoTypeChannel {
 
     private ChannelType channelType;
 

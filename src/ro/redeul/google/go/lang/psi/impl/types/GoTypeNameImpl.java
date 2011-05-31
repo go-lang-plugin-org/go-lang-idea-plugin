@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.processors.NamedTypeVariantsCollector;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.NamedTypeResolver;
@@ -27,7 +28,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: Aug 30, 2010
  * Time: 7:12:16 PM
  */
-public class GoTypeNameImpl extends GoPsiElementBase implements GoTypeName {
+public class GoTypeNameImpl extends GoPsiPackagedElementBase implements GoTypeName {
 
     public GoTypeNameImpl(@NotNull ASTNode node) {
         super(node);

@@ -1,6 +1,5 @@
 package ro.redeul.google.go.lang.psi.expressions;
 
-import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiReference;
 
 /**
@@ -9,8 +8,8 @@ import com.intellij.psi.PsiReference;
  * Date: 5/19/11
  * Time: 10:56 PM
  */
-public interface GoSelectorExpression extends GoPsiExpression, PsiReference {
+public interface GoSelectorExpression extends GoExpression, PsiReference {
 
-    GoPsiExpression getExpressionContext();
+    GoExpression getExpressionContext();
 
 }

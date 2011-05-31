@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
 
@@ -13,7 +14,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
  * Date: 5/29/11
  * Time: 2:14 PM
  */
-public class GoTypeInterfaceImpl extends GoPsiElementBase implements GoTypeInterface {
+public class GoTypeInterfaceImpl extends GoPsiPackagedElementBase implements GoTypeInterface {
 
     public GoTypeInterfaceImpl(@NotNull ASTNode node) {
         super(node);

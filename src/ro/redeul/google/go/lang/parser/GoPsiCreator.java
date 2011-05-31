@@ -7,6 +7,7 @@ import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.psi.impl.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.declarations.GoShortVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoLiteralExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
@@ -102,6 +103,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if ( elementType.equals(LITERAL_EXPRESSION) )
             return new GoLiteralExpressionImpl(node);
+
+        if ( elementType.equals(SHORT_VAR_STATEMENT) )
+            return new GoShortVarDeclarationImpl(node);
 
         if ( elementType.equals(wsNLS) )
             return (PsiElement) ASTFactory.whitespace(node.getText());

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoPsiExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
 import ro.redeul.google.go.lang.psi.types.GoType;
@@ -27,7 +27,7 @@ import javax.swing.*;
  * Date: Jul 24, 2010
  * Time: 10:43:49 PM
  */
-public class GoIdentifierImpl extends GoPsiExpressionImpl implements GoIdentifier {
+public class GoIdentifierImpl extends GoExpressionBase implements GoIdentifier {
 
     public GoIdentifierImpl(@NotNull ASTNode node) {
         super(node);

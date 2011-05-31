@@ -9,10 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
-import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
-import ro.redeul.google.go.lang.psi.processors.ImportedPackagesCollectorProcessor;
 import ro.redeul.google.go.lang.psi.processors.VariableTypeResolver;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 
 /**
@@ -21,7 +18,7 @@ import ro.redeul.google.go.lang.psi.types.GoType;
  * Date: 5/19/11
  * Time: 11:08 PM
  */
-public class GoLiteralExpressionImpl extends GoPsiExpressionImpl implements GoLiteralExpression {
+public class GoLiteralExpressionImpl extends GoExpressionBase implements GoLiteralExpression {
 
     public GoLiteralExpressionImpl(@NotNull ASTNode node) {
         super(node);

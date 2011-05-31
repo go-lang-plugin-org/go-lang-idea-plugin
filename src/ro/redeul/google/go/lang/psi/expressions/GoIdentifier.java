@@ -9,7 +9,7 @@ import com.intellij.psi.PsiReference;
  * Date: Sep 4, 2010
  * Time: 10:42:42 PM
  */
-public interface GoIdentifier extends GoPsiExpression, PsiReference, PsiNamedElement {
+public interface GoIdentifier extends GoExpression, PsiReference, PsiNamedElement {
 
     boolean isBlank();
 }

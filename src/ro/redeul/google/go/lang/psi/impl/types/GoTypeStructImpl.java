@@ -6,14 +6,13 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -21,10 +20,15 @@ import java.util.List;
  * Date: 5/27/11
  * Time: 12:17 AM
  */
-public class GoTypeStructImpl extends GoPsiElementBase implements GoTypeStruct {
+public class GoTypeStructImpl extends GoPsiPackagedElementBase implements GoTypeStruct {
 
     public GoTypeStructImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public String getName() {
+        return super.getParent().getFirstChild().getText();
     }
 
     @Override

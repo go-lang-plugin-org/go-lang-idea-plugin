@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import ro.redeul.google.go.lang.psi.expressions.GoPsiExpression;
+import ro.redeul.google.go.lang.psi.expressions.GoExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 
@@ -21,9 +21,9 @@ public class GoExpressionTypeResolver extends BaseScopeProcessor {
 
     List<GoFunctionDeclaration> nodeFunctions = new ArrayList<GoFunctionDeclaration>();
 
-    private GoPsiExpression contextualExpression;
+    private GoExpression contextualExpression;
 
-    public GoExpressionTypeResolver(GoPsiExpression contextualExpression) {
+    public GoExpressionTypeResolver(GoExpression contextualExpression) {
         this.contextualExpression = contextualExpression;
     }
 

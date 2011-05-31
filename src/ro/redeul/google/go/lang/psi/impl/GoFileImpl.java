@@ -94,6 +94,16 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     }
 
     @Override
+    public String getPackageName() {
+        return getPackage().getPackageName();
+    }
+
+    @Override
+    public String getQualifiedName() {
+        return String.format("%s.%s", getPackageName(), getName());
+    }
+
+    @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
 
         String myPackageName = getPackage().getPackageName();

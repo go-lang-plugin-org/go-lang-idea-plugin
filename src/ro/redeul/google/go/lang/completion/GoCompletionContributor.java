@@ -16,18 +16,16 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.GoPsiExpression;
+import ro.redeul.google.go.lang.psi.expressions.GoExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.processors.GoExpressionTypeResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.Collection;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.or;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -119,7 +117,7 @@ public class GoCompletionContributor extends CompletionContributor {
             if ( expression.getExpressionContext() == null )
                 return;
 
-            GoPsiExpression expressionContext = expression.getExpressionContext();
+            GoExpression expressionContext = expression.getExpressionContext();
 
             GoExpressionTypeResolver expressionTypeResolver = new GoExpressionTypeResolver(expressionContext);
 

@@ -10,12 +10,9 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 
-import java.util.List;
-
-public class GoBlockStatementImpl extends GoPsiElementBase implements GoBlockStatement {
-    public GoBlockStatementImpl(@NotNull ASTNode node) {
+public class GoShortVarStatementImpl extends GoPsiElementBase implements GoBlockStatement {
+    public GoShortVarStatementImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -23,9 +20,7 @@ public class GoBlockStatementImpl extends GoPsiElementBase implements GoBlockSta
         return findChildrenByClass(GoStatement.class);
     }
 
-    static TokenSet tokenSet = TokenSet.create(
-            GoElementTypes.SHORT_VAR_STATEMENT, GoElementTypes.CONST_DECLARATIONS,
-            GoElementTypes.VAR_DECLARATIONS,  GoElementTypes.TYPE_DECLARATIONS);
+    static TokenSet tokenSet = TokenSet.create( GoElementTypes.SHORT_VAR_STATEMENT, GoElementTypes.CONST_DECLARATIONS,  GoElementTypes.VAR_DECLARATIONS, GoElementTypes.TYPE_DECLARATIONS);
 
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
