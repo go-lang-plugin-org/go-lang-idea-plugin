@@ -3,9 +3,9 @@ package ro.redeul.google.go.lang.psi.processors;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoLiteralExpressionImpl;
+import ro.redeul.google.go.lang.psi.declarations.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoType;
 
@@ -29,6 +29,23 @@ public class VariableTypeResolver extends BaseScopeProcessor {
 
         if ( element instanceof GoFunctionParameter ) {
             return checkFunctionParameters((GoFunctionParameter) element);
+        }
+
+        if ( element instanceof GoShortVarDeclaration ) {
+            GoShortVarDeclaration shortVarDeclaration = (GoShortVarDeclaration) element;
+
+            GoIdentifier identifiers[] = shortVarDeclaration.getIdentifiers();
+            GoExpr expressions[] = shortVarDeclaration.getExpressions();
+
+            for (int i = 0, identifiersLength = identifiers.length; i < identifiersLength; i++) {
+
+                GoIdentifier identifier = identifiers[i];
+
+                if (identifier.getName().equalsIgnoreCase(this.identifier.getName())) {
+                    type = expressions[i].getType();
+                    return false;
+                }
+            }
         }
 
         return true;

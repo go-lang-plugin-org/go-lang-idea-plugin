@@ -1,4 +1,4 @@
-package ro.redeul.google.go.lang.psi.impl.expressions;
+package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
@@ -6,8 +6,9 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.VariableTypeResolver;
 import ro.redeul.google.go.lang.psi.types.GoType;
@@ -18,9 +19,9 @@ import ro.redeul.google.go.lang.psi.types.GoType;
  * Date: 5/19/11
  * Time: 11:08 PM
  */
-public class GoLiteralExpressionImpl extends GoExpressionBase implements GoLiteralExpression {
+public class GoLiteralExprImpl extends GoExpressionBase implements GoLiteralExpression {
 
-    public GoLiteralExpressionImpl(@NotNull ASTNode node) {
+    public GoLiteralExprImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -32,12 +33,13 @@ public class GoLiteralExpressionImpl extends GoExpressionBase implements GoLiter
     @Override
     protected GoType resolveType() {
 
-
-        // WARN: Disabled some type resolution.
+        if ( this.getIdentifier() == null ) {
+            return null;
+        }
 
         VariableTypeResolver variableTypeResolver = new VariableTypeResolver(this.getIdentifier());
 
-        if ( ! PsiScopesUtil.treeWalkUp(variableTypeResolver, this, this.getContainingFile(), GoResolveStates.initial()) ) {
+        if ( ! PsiScopesUtil.treeWalkUp(variableTypeResolver, this, this.getContainingFile(), GoResolveStates.variables()) ) {
             return variableTypeResolver.getResolvedType();
         }
 

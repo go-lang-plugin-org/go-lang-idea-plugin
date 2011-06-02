@@ -8,8 +8,8 @@ import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.GoExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -48,8 +48,8 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     }
 
     @Override
-    public GoExpression getExpressionContext() {
-        return findChildByClass(GoExpression.class);
+    public GoExpr getExpressionContext() {
+        return findChildByClass(GoExpr.class);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     @Override
     public TextRange getRangeInElement() {
 
-        GoExpression context = getExpressionContext();
+        GoExpr context = getExpressionContext();
 
         return context != null ? new TextRange(context.getTextLength() + 1, getTextLength()) : null;
     }

@@ -1,4 +1,4 @@
-package ro.redeul.google.go.lang.psi.impl;
+package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
@@ -12,7 +12,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
@@ -27,7 +28,7 @@ import javax.swing.*;
  * Date: Jul 24, 2010
  * Time: 10:43:49 PM
  */
-public class GoIdentifierImpl extends GoExpressionBase implements GoIdentifier {
+public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
 
     public GoIdentifierImpl(@NotNull ASTNode node) {
         super(node);
@@ -35,11 +36,6 @@ public class GoIdentifierImpl extends GoExpressionBase implements GoIdentifier {
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitIdentifier(this);
-    }
-
-    @Override
-    protected GoType resolveType() {
-        return null;
     }
 
     @Override

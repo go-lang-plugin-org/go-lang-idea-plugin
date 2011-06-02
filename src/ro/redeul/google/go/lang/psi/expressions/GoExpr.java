@@ -12,7 +12,7 @@ import ro.redeul.google.go.lang.psi.types.GoType;
  * Date: 5/19/11
  * Time: 10:55 PM
  */
-public interface GoExpression extends GoPsiElement {
+public interface GoExpr extends GoPsiElement {
 
     GoType getType();
 

@@ -6,8 +6,8 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.declarations.GoShortVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.GoExpression;
-import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 
 /**
@@ -28,8 +28,9 @@ public class GoShortVarDeclarationImpl extends GoPsiElementBase implements GoSho
     }
 
     @Override
-    public GoExpression[] getExpressions() {
-        return findChildrenByClass(GoExpression.class);
+    @NotNull
+    public GoExpr[] getExpressions() {
+        return findChildrenByClass(GoExpr.class);
     }
 
     @Override

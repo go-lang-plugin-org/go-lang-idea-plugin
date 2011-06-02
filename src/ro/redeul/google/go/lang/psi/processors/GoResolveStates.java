@@ -16,7 +16,8 @@ public class GoResolveStates {
     {
         return ResolveState.initial()
                 .put(IsOriginalFile, true)
-                .put(IsOriginalPackage, true);
+                .put(IsOriginalPackage, true)
+                .put(ResolvingVariables, false);
     }
 
     public static ResolveState imported(String importName, String visibleName)
@@ -28,8 +29,15 @@ public class GoResolveStates {
                 .put(VisiblePackageName, visibleName);
     }
 
-    public static Key<Boolean> IsOriginalFile = new Key<Boolean>("IsOriginalFile");
+    public static ResolveState variables() {
+        return ResolveState.initial()
+                .put(ResolvingVariables, true)
+                .put(IsOriginalFile, true)
+                .put(IsOriginalPackage, true);
+    }
 
+    public static Key<Boolean> ResolvingVariables = new Key<Boolean>("ResolvingVariables");
+    public static Key<Boolean> IsOriginalFile = new Key<Boolean>("IsOriginalFile");
     public static Key<Boolean> IsOriginalPackage = new Key<Boolean>("IsOriginalPackage");
 
     public static Key<String> VisiblePackageName = new Key<String>("VisiblePackageName");

@@ -8,8 +8,8 @@ import com.intellij.psi.PsiReference;
  * Date: 5/19/11
  * Time: 10:56 PM
  */
-public interface GoSelectorExpression extends GoExpression, PsiReference {
+public interface GoSelectorExpression extends GoExpr, PsiReference {
 
-    GoExpression getExpressionContext();
+    GoExpr getExpressionContext();
 
 }

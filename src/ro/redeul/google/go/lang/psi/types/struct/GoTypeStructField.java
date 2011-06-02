@@ -2,7 +2,7 @@ package ro.redeul.google.go.lang.psi.types.struct;
 
 import com.intellij.psi.PsiNamedElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.types.GoType;
 
 /**

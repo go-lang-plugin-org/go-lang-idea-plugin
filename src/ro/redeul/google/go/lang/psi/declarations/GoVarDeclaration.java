@@ -1,8 +1,8 @@
 package ro.redeul.google.go.lang.psi.declarations;
 
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.GoIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.GoExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -13,5 +13,6 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpression;
 public interface GoVarDeclaration extends GoPsiElement {
 
     GoIdentifier[] getIdentifiers();
-    GoExpression[] getExpressions();
+
+    GoExpr[] getExpressions();
 }

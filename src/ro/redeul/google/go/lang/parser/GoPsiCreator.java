@@ -4,11 +4,12 @@ import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
-import ro.redeul.google.go.lang.psi.impl.GoIdentifierImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoBuiltinCallExprImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoShortVarDeclarationImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoLiteralExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.*;
@@ -102,10 +103,13 @@ public class GoPsiCreator implements GoElementTypes {
             return new GoSelectorExpressionImpl(node);
 
         if ( elementType.equals(LITERAL_EXPRESSION) )
-            return new GoLiteralExpressionImpl(node);
+            return new GoLiteralExprImpl(node);
 
         if ( elementType.equals(SHORT_VAR_STATEMENT) )
             return new GoShortVarDeclarationImpl(node);
+
+        if (elementType.equals(BUILTIN_CALL_EXPRESSION) )
+            return new GoBuiltinCallExprImpl(node);
 
         if ( elementType.equals(wsNLS) )
             return (PsiElement) ASTFactory.whitespace(node.getText());

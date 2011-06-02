@@ -19,7 +19,7 @@ public class Expressions implements GoElementTypes {
 
     public static int parseList(PsiBuilder builder, GoParser parser, boolean inControlStmts) {
 
-        PsiBuilder.Marker marker = builder.mark();
+//        PsiBuilder.Marker marker = builder.mark();
 
         int count = 0;
         do {
@@ -41,11 +41,11 @@ public class Expressions implements GoElementTypes {
 
         } while ( ! builder.eof() );
 
-        if ( count > 1 ) {
-            marker.done(EXPRESSION_LIST);
-        } else {
-            marker.drop();
-        }
+//        if ( count > 1 ) {
+//            marker.done(EXPRESSION_LIST);
+//        } else {
+//            marker.drop();
+//        }
 
         return count;
     }

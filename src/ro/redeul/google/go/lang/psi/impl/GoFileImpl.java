@@ -110,34 +110,40 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
         ResolveState newState = state.put(GoResolveStates.PackageName, myPackageName);
 
-        GoTypeDeclaration declarations[] = getTypeDeclarations();
-        for (GoTypeDeclaration declaration : declarations) {
-            if (declaration != lastParent) {
-                if (!declaration.processDeclarations(processor, newState, null, place)) {
-                    return false;
+        if ( ! state.get(GoResolveStates.ResolvingVariables) ) {
+            GoTypeDeclaration declarations[] = getTypeDeclarations();
+            for (GoTypeDeclaration declaration : declarations) {
+                if (declaration != lastParent) {
+                    if (!declaration.processDeclarations(processor, newState, null, place)) {
+                        return false;
+                    }
                 }
             }
         }
 
-        GoMethodDeclaration methods[] = getMethods();
-        for (GoMethodDeclaration method : methods) {
-            if (method != lastParent) {
-                if (!method.processDeclarations(processor, newState, null, place)) {
-                    return false;
+        if ( ! state.get(GoResolveStates.ResolvingVariables) ) {
+            GoMethodDeclaration methods[] = getMethods();
+            for (GoMethodDeclaration method : methods) {
+                if (method != lastParent) {
+                    if (!method.processDeclarations(processor, newState, null, place)) {
+                        return false;
+                    }
                 }
             }
         }
 
-        GoFunctionDeclaration functions[] = getFunctions();
-        for (GoFunctionDeclaration function : functions) {
-            if (function != lastParent) {
-                if (!function.processDeclarations(processor, newState, null, place)) {
-                    return false;
+        if ( ! state.get(GoResolveStates.ResolvingVariables)) {
+            GoFunctionDeclaration functions[] = getFunctions();
+            for (GoFunctionDeclaration function : functions) {
+                if (function != lastParent) {
+                    if (!function.processDeclarations(processor, newState, null, place)) {
+                        return false;
+                    }
                 }
             }
         }
 
-        if ( newState.get(GoResolveStates.IsOriginalFile) ) {
+        if ( newState.get(GoResolveStates.IsOriginalFile) && ! (state.get(GoResolveStates.ResolvingVariables)) ) {
 
             GoImportDeclaration importDeclarations[] = getImportDeclarations();
             for (GoImportDeclaration importDeclaration : importDeclarations) {
