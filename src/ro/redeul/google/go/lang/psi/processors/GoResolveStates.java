@@ -26,6 +26,7 @@ public class GoResolveStates {
                 .put(IsOriginalFile, false)
                 .put(IsOriginalPackage, false)
                 .put(PackageName, importName)
+                .put(ResolvingVariables, false)
                 .put(VisiblePackageName, visibleName);
     }
 

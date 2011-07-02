@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Google Go Language plugin</name>
-    <version>0.3.6</version>
+    <version>0.3.7</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[
@@ -28,11 +28,20 @@
             <li>Force UTF-8 encoding for go files</li>
             <li>Go module type</li>
             <li>Go SDK indexing mode</li>
+            <li>experimental Makefile based build system (bring your on Makefile's). Configured in project settings.</li>
+            <li>some more completion options on variables (work in progress)</li>
         </ul>
     ]]>
     </description>
     <change-notes>
         <![CDATA[
+        <h3>0.3.7 changes:</h3>
+                <ul>
+                    <li>[feature] experimental Makefile based build system (bring your on Makefile's). Configured in project settings.</li>
+                    <li>[feature] some more completion options on variables (work in progress)</li>
+                    <li>[bugfix] invalid framework import causing incompatibility with idea 10.5+ </li>
+                </ul>
+        </h3>
         <h3>0.3.6 changes:</h3>
                 <ul>
                     <li>[feature] GoTo class (go types) implementation</li>
