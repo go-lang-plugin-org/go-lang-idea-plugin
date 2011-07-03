@@ -17,6 +17,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
+import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsResolver;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -50,7 +51,13 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
 
     @Override
     public PsiElement resolve() {
-        return this;
+
+        IdentifierVariantsResolver identifierVariantsResolver = new IdentifierVariantsResolver(this);
+
+        PsiScopesUtil.treeWalkUp(identifierVariantsResolver, this, this.getContainingFile(), GoResolveStates.initial());
+
+        return identifierVariantsResolver.reference();
+
     }
 
     @NotNull

@@ -1,0 +1,74 @@
+package main
+var e = LoggedUserInfo{
+                Email:    email,
+                LastTime: datastore.SecondsToTime(time.Seconds()),
+        }
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarations
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarSpec
+      Identifiers
+        Identifier
+          PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CompositeLiteral
+        LiteralExpr
+          Identifier
+            PsiElement(IDENTIFIER)('LoggedUserInfo')
+        CompositeLiteralElementList
+          PsiElement({)('{')
+          PsiElement(WS_NEW_LINES)('\n')
+          PsiWhiteSpace('                ')
+          CompositeLiteralElement
+            CompositeLiteralElementKey
+              LiteralExpr
+                Identifier
+                  PsiElement(IDENTIFIER)('Email')
+            PsiElement(:)(':')
+            PsiWhiteSpace('    ')
+            CompositeLiteralElementValue
+              LiteralExpr
+                Identifier
+                  PsiElement(IDENTIFIER)('email')
+          PsiElement(,)(',')
+          PsiElement(WS_NEW_LINES)('\n')
+          PsiWhiteSpace('                ')
+          CompositeLiteralElement
+            CompositeLiteralElementKey
+              LiteralExpr
+                Identifier
+                  PsiElement(IDENTIFIER)('LastTime')
+            PsiElement(:)(':')
+            PsiWhiteSpace(' ')
+            CompositeLiteralElementValue
+              CallOrConversionExpression
+                SelectorExpression
+                  LiteralExpr
+                    Identifier
+                      PsiElement(IDENTIFIER)('datastore')
+                  PsiElement(.)('.')
+                  PsiElement(IDENTIFIER)('SecondsToTime')
+                PsiElement(()('(')
+                CallOrConversionExpression
+                  SelectorExpression
+                    LiteralExpr
+                      Identifier
+                        PsiElement(IDENTIFIER)('time')
+                    PsiElement(.)('.')
+                    PsiElement(IDENTIFIER)('Seconds')
+                  PsiElement(()('(')
+                  PsiElement())(')')
+                PsiElement())(')')
+          PsiElement(,)(',')
+          PsiElement(WS_NEW_LINES)('\n')
+          PsiWhiteSpace('        ')
+          PsiElement(})('}')

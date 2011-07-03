@@ -7,6 +7,8 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.types.*;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
+import javax.swing.text.html.parser.Parser;
+
 public class PrimaryExpression implements GoElementTypes {
 
     public static boolean parse(PsiBuilder builder, GoParser parser, boolean inControlExpressions) {
@@ -79,8 +81,8 @@ public class PrimaryExpression implements GoElementTypes {
     private static boolean parseCompositeLiteral(PsiBuilder builder, GoParser parser, PsiBuilder.Marker mark) {
 
         PsiBuilder.Marker marker = builder.mark();
-        ParserUtils.getToken(builder, pLCURCLY);
 
+        ParserUtils.getToken(builder, pLCURCLY);
         ParserUtils.skipNLS(builder);
 
         while ( ! builder.eof() && builder.getTokenType() != pRCURLY ) {
@@ -107,7 +109,9 @@ public class PrimaryExpression implements GoElementTypes {
             elementMarker.done(COMPOSITE_LITERAL_ELEMENT);
             if ( builder.getTokenType() != pRCURLY ) {
                 ParserUtils.getToken(builder, oCOMMA, "comma.expected");
-            }                       
+            }
+
+            ParserUtils.skipNLS(builder);
         }
 
         ParserUtils.getToken(builder, pRCURLY, "closed.parenthesis.expected");
