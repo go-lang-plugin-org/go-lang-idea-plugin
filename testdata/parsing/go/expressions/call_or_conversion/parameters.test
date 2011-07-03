@@ -22,11 +22,10 @@ Go file
           Identifier
             PsiElement(IDENTIFIER)('v')
         PsiElement(()('(')
-        ExpressionList
-          LiteralExpr
-            PsiElement(LITERAL_CHAR)(''a'')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
-          LiteralExpr
-            PsiElement(LITERAL_STRING)('"b"')
+        LiteralExpr
+          PsiElement(LITERAL_CHAR)(''a'')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        LiteralExpr
+          PsiElement(LITERAL_STRING)('"b"')
         PsiElement())(')')

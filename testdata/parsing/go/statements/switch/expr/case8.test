@@ -27,25 +27,23 @@ Go file
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
         AssignStmt
-          ExpressionList
-            LiteralExpr
-              Identifier
-                PsiElement(IDENTIFIER)('e1')
-            PsiElement(,)(',')
-            PsiWhiteSpace(' ')
-            LiteralExpr
-              Identifier
-                PsiElement(IDENTIFIER)('e2')
+          LiteralExpr
+            Identifier
+              PsiElement(IDENTIFIER)('e1')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          LiteralExpr
+            Identifier
+              PsiElement(IDENTIFIER)('e2')
           PsiWhiteSpace(' ')
           PsiElement(*=)('*=')
           PsiWhiteSpace(' ')
-          ExpressionList
-            LiteralExpr
-              PsiElement(LITERAL_INT)('2')
-            PsiElement(,)(',')
-            PsiWhiteSpace(' ')
-            LiteralExpr
-              PsiElement(LITERAL_INT)('3')
+          LiteralExpr
+            PsiElement(LITERAL_INT)('2')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          LiteralExpr
+            PsiElement(LITERAL_INT)('3')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpr

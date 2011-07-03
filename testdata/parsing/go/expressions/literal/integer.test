@@ -29,18 +29,17 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_INT)('1')
-        PsiElement(,)(',')
-        PsiWhiteSpace(' ')
-        LiteralExpr
-          PsiElement(LITERAL_OCT)('0600')
-        PsiElement(,)(',')
-        PsiWhiteSpace(' ')
-        LiteralExpr
-          PsiElement(LITERAL_HEX)('0xBadFace')
-        PsiElement(,)(',')
-        PsiWhiteSpace(' ')
-        LiteralExpr
-          PsiElement(LITERAL_INT)('170141183460469231731687303715884105727')
+      LiteralExpr
+        PsiElement(LITERAL_INT)('1')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      LiteralExpr
+        PsiElement(LITERAL_OCT)('0600')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      LiteralExpr
+        PsiElement(LITERAL_HEX)('0xBadFace')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      LiteralExpr
+        PsiElement(LITERAL_INT)('170141183460469231731687303715884105727')

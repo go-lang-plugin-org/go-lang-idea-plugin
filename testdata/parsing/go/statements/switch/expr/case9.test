@@ -36,13 +36,12 @@ Go file
           PsiWhiteSpace(' ')
           PsiElement(:=)(':=')
           PsiWhiteSpace(' ')
-          ExpressionList
-            LiteralExpr
-              PsiElement(LITERAL_INT)('2')
-            PsiElement(,)(',')
-            PsiWhiteSpace(' ')
-            LiteralExpr
-              PsiElement(LITERAL_INT)('3')
+          LiteralExpr
+            PsiElement(LITERAL_INT)('2')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          LiteralExpr
+            PsiElement(LITERAL_INT)('3')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpr

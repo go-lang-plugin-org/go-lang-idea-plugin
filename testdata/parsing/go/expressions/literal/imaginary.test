@@ -21,10 +21,9 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_IMAGINARY_FLOAT)('6.67428e-11i')
-        PsiElement(,)(',')
-        PsiWhiteSpace(' ')
-        LiteralExpr
-          PsiElement(LITERAL_IMAGINARY_INTEGER)('3i')
+      LiteralExpr
+        PsiElement(LITERAL_IMAGINARY_FLOAT)('6.67428e-11i')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      LiteralExpr
+        PsiElement(LITERAL_IMAGINARY_INTEGER)('3i')

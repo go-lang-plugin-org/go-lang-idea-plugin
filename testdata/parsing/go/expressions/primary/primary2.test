@@ -22,12 +22,11 @@ Go file
           Identifier
             PsiElement(IDENTIFIER)('f')
         PsiElement(()('(')
-        ExpressionList
-          LiteralExpr
-            PsiElement(LITERAL_FLOAT)('3.1415')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
-          LiteralExpr
-            Identifier
-              PsiElement(IDENTIFIER)('true')
+        LiteralExpr
+          PsiElement(LITERAL_FLOAT)('3.1415')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        LiteralExpr
+          Identifier
+            PsiElement(IDENTIFIER)('true')
         PsiElement())(')')
