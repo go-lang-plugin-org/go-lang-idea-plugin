@@ -16,8 +16,13 @@ public class GoConfigurableForm {
 
     public JRadioButton internalBuildSystemRadioButton;
     public JRadioButton makefileBasedRadioButton;
+    private JCheckBox enableVariablesCompletionCheckBox;
 
     public boolean isModified(GoProjectSettings.GoProjectSettingsBean settingsBean) {
+
+        if ( settingsBean.enableVariablesCompletion != enableVariablesCompletionCheckBox.isSelected() ) {
+            return true;
+        }
 
         switch (settingsBean.BUILD_SYSTEM_TYPE) {
             case Internal:
@@ -35,6 +40,8 @@ public class GoConfigurableForm {
         } else if ( makefileBasedRadioButton.isSelected() ) {
             settingsBean.BUILD_SYSTEM_TYPE = GoProjectSettings.BuildSystemType.Makefile;
         }
+
+        settingsBean.enableVariablesCompletion = enableVariablesCompletionCheckBox.isSelected();
     }
 
     public void reset(GoProjectSettings.GoProjectSettingsBean settingsBean) {
@@ -46,5 +53,7 @@ public class GoConfigurableForm {
                 makefileBasedRadioButton.setSelected(true);
                 break;
         }
+
+        enableVariablesCompletionCheckBox.setSelected(settingsBean.enableVariablesCompletion);
     }
 }

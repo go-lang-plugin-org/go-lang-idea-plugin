@@ -7,10 +7,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -68,13 +69,17 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     @Override
     public PsiElement resolve() {
 
-        GoType contextType = getExpressionContext().getType();
+        if (GoProjectSettings.getInstance(getProject()).getState().enableVariablesCompletion) {
+            GoType contextType = getExpressionContext().getType();
 
-        if (contextType == null) {
-            return null;
+            if (contextType == null) {
+                return null;
+            }
+
+            return contextType.getMemberType(getText().substring(getText().indexOf(".") + 1));
         }
 
-        return contextType.getMemberType(getText().substring(getText().indexOf(".") + 1));
+        return null;
     }
 
     @NotNull
@@ -110,13 +115,17 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     @Override
     public Object[] getVariants() {
 
-        GoType contextType = getExpressionContext().getType();
+        if (GoProjectSettings.getInstance(getProject()).getState().enableVariablesCompletion) {
+            GoType contextType = getExpressionContext().getType();
 
-        if (contextType == null) {
-            return new Object[0];
+            if (contextType == null) {
+                return new Object[0];
+            }
+
+            return convertToPresentation(contextType, contextType.getMembers());
         }
 
-        return convertToPresentation(contextType, contextType.getMembers());
+        return new Object[0];
     }
 
     private Object[] convertToPresentation(GoType type, GoPsiElement[] members) {

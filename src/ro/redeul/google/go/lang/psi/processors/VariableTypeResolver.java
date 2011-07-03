@@ -42,7 +42,9 @@ public class VariableTypeResolver extends BaseScopeProcessor {
                 GoIdentifier identifier = identifiers[i];
 
                 if (identifier.getName().equalsIgnoreCase(this.identifier.getName())) {
-                    type = expressions[i].getType();
+                    if ( expressions != null && expressions.length >= i ) {
+                        type = expressions[i].getType();
+                    }
                     return false;
                 }
             }
