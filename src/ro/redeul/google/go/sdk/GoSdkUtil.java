@@ -14,6 +14,7 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.psi.PsiFile;
 import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.formatter.GoFmt;
 import ro.redeul.google.go.util.GoUtil;
 
 import java.io.File;
@@ -194,6 +195,8 @@ public class GoSdkUtil {
                 return "gopack";
             case GoMake:
                 return "gomake";
+            case GoFmt:
+                return "gofmt";
         }
 
         return "";

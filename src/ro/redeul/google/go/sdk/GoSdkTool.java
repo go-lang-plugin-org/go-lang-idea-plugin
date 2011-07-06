@@ -1,12 +1,11 @@
 package ro.redeul.google.go.sdk;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Sep 10, 2010
  * Time: 12:00:51 AM
- * To change this template use File | Settings | File Templates.
  */
 public enum GoSdkTool {
-    GoCompiler, GoLinker, GoArchivePacker, GoMake
+    GoCompiler, GoLinker, GoArchivePacker, GoMake, GoFmt
 }
