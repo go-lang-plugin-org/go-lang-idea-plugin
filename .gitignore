@@ -6,3 +6,5 @@ mock-sdks/java/
 out/
 src/icons/
 testdata.tar.gz
+
+.DS_Store
