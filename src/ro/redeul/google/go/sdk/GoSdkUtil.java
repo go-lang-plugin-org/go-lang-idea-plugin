@@ -13,6 +13,7 @@ import com.intellij.openapi.roots.ModuleRootModel;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.psi.PsiFile;
+import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.formatter.GoFmt;
 import ro.redeul.google.go.util.GoUtil;
@@ -180,6 +181,10 @@ public class GoSdkUtil {
         Module module = projectFileIndex.getModuleForFile(file.getVirtualFile());
 
         return getGoogleGoSdkForModule(module);
+    }
+
+    public static String getTool(GoSdkData goSdkData, GoSdkTool tool) {
+        return String.format("%s/%s", goSdkData.BINARY_PATH, getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, tool));
     }
 
     public static String getToolName(String os, String arch, GoSdkTool tool) {
