@@ -35,6 +35,11 @@
     </description>
     <change-notes>
         <![CDATA[
+		 <h3>0.3.13 changes:</h3>
+                <ul>
+                    <li>Added simple Structure View for Go files.</li>
+                </ul>
+        </h3>
          <h3>0.3.12 changes:</h3>
                 <ul>
                     <li>Using gofmt as formatter when formatting a file (Ctrl + Alt + L). Thanks https://github.com/khronnuz.</li>
