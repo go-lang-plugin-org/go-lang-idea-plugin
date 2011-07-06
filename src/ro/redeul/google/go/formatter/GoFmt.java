@@ -2,25 +2,19 @@ package ro.redeul.google.go.formatter;
 
 import com.ansorgit.plugins.bash.editor.formatting.noOpModel.NoOpBlock;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.formatting.CustomFormattingModelBuilder;
 import com.intellij.formatting.FormattingModel;
 import com.intellij.formatting.FormattingModelBuilder;
 import com.intellij.formatting.FormattingModelProvider;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
-import ro.redeul.google.go.sdk.GoSdkTool;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 /**
@@ -28,66 +22,50 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
  * Date: 05/07/11
  */
 public class GoFmt implements FormattingModelBuilder {
-
     @NotNull
     @Override
     public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
-
-        FileDocumentManager documentManager = FileDocumentManager.getInstance();
-
         PsiFile containingFile = element.getContainingFile();
-        final VirtualFile file = containingFile.getVirtualFile();
 
-        // try to format using go's default formatter
         try {
-            if (file != null) {
-                Document document = containingFile.getViewProvider().getDocument();
+            // try to format using go's default formatter
+            if (CommandProcessor.getInstance().getCurrentCommandName().equals("Reformat Code")) {
 
-//                if ( document != null ) {
-//                    PsiDocumentManager.getInstance(element.getProject()).commitDocument(document);
-//                }
-
-                String filePath = file.getPath();
+                String filePath = containingFile.getVirtualFile().getPath();
                 Sdk sdk = GoSdkUtil.getGoogleGoSdkForFile(containingFile);
 
-                GeneralCommandLine command = new GeneralCommandLine();
-                GoSdkData sdkData = (GoSdkData) sdk.getSdkAdditionalData();
+                if (sdk == null) {
+                    Messages.showMessageDialog(
+                            "Please configure the GO SDK!",
+                            "Error formatting code",
+                            Messages.getInformationIcon()
+                    );
+                } else {
 
-                if (sdkData != null) {
-                    String goFmtPath = sdkData.BINARY_PATH + "/" + GoSdkUtil.getToolName(sdkData.TARGET_OS, sdkData.TARGET_ARCH, GoSdkTool.GoFmt);
+                    GeneralCommandLine command = new GeneralCommandLine();
+
+                    String goFmtPath = ((GoSdkData) sdk.getSdkAdditionalData()).BINARY_PATH + "/gofmt";
 
                     command.setExePath(goFmtPath);
                     command.addParameter("-w");
                     command.addParameter(filePath);
 
-                    Process process = command.createProcess();
-                    process.waitFor();
-
-//                    if ( document != null ) {
-//                        file.refresh(false, true);
-//                        documentManager.reloadFromDisk(document);
-//                    }
+                    command.createProcess();
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // return a block that does nothing
-
         ASTNode astNode = containingFile.getNode();
-        return FormattingModelProvider.createFormattingModelForPsiFile(containingFile, new NoOpBlock(astNode), settings);
+        // return a block that does nothing
+        return FormattingModelProvider.createFormattingModelForPsiFile(containingFile,
+                new NoOpBlock(astNode), settings);
     }
 
     @Override
     public TextRange getRangeAffectingIndent(PsiFile psiFile, int i, ASTNode astNode) {
         return null;
     }
-
-//    @Override
-//    public boolean isEngagedToFormat(PsiElement context) {
-//        System.out.println(context.toString());
-//        return true;
-//    }
-
 }
