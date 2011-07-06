@@ -43,9 +43,9 @@ public class GoFmt implements FormattingModelBuilder {
             if (file != null) {
                 Document document = containingFile.getViewProvider().getDocument();
 
-//                if ( document != null ) {
-//                    PsiDocumentManager.getInstance(element.getProject()).commitDocument(document);
-//                }
+                if ( document != null ) {
+                    PsiDocumentManager.getInstance(element.getProject()).commitDocument(document);
+                }
 
                 String filePath = file.getPath();
                 Sdk sdk = GoSdkUtil.getGoogleGoSdkForFile(containingFile);
@@ -63,10 +63,10 @@ public class GoFmt implements FormattingModelBuilder {
                     Process process = command.createProcess();
                     process.waitFor();
 
-//                    if ( document != null ) {
-//                        file.refresh(false, true);
-//                        documentManager.reloadFromDisk(document);
-//                    }
+                    if ( document != null ) {
+                        file.refresh(false, true);
+                        documentManager.reloadFromDisk(document);
+                    }
                 }
             }
         } catch (Exception e) {
