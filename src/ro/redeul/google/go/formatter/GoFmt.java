@@ -56,7 +56,7 @@ public class GoFmt implements FormattingModelBuilder {
 
     private void formatDocument(final PsiFile psiFile) {
 
-        Sdk sdk = GoSdkUtil.getGoogleGoSdkForFile(psiFile);
+        final Sdk sdk = GoSdkUtil.getGoogleGoSdkForFile(psiFile);
 
         if (sdk == null) {
             showBalloon(psiFile.getProject(), "Error formatting code", "There is no Go SDK attached to module/project.", MessageType.ERROR);
@@ -73,30 +73,33 @@ public class GoFmt implements FormattingModelBuilder {
 
         // commit file changes to disk
         if (fileDocument != null) {
-            final FileDocumentManager documentManager = FileDocumentManager.getInstance();
-            PsiDocumentManager.getInstance(psiFile.getProject()).commitDocument(fileDocument);
 
-            documentManager.saveDocument(fileDocument);
+            PsiDocumentManager.getInstance(psiFile.getProject()).performForCommittedDocument(fileDocument, new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final FileDocumentManager documentManager = FileDocumentManager.getInstance();
 
-            try {
+                        GeneralCommandLine command = new GeneralCommandLine();
 
-                GeneralCommandLine command = new GeneralCommandLine();
+                        String goFmtPath = GoSdkUtil.getTool((GoSdkData) sdk.getSdkAdditionalData(), GoSdkTool.GoFmt);
 
-                String goFmtPath = GoSdkUtil.getTool((GoSdkData) sdk.getSdkAdditionalData(), GoSdkTool.GoFmt);
+                        command.setExePath(goFmtPath);
+                        command.addParameter("-w");
+                        command.addParameter(file.getPath());
 
-                command.setExePath(goFmtPath);
-                command.addParameter("-w");
-                command.addParameter(file.getPath());
+                        Process process = command.createProcess();
+                        process.waitFor();
 
-                Process process = command.createProcess();
-                process.waitFor();
+                        file.refresh(false, true);
+                        documentManager.reloadFromDisk(fileDocument);
 
-                file.refresh(false, true);
-                documentManager.reloadFromDisk(fileDocument);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
         }
     }
 
