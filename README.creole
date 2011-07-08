@@ -71,10 +71,9 @@ http://github.com/mtoader/google-go-lang-idea-plugin/issues
 consulting work in interesting projects.
 
 * [[https://github.com/alexandre-normand|Alexandre Normand]]
-
-  gomake integration
+** gomake integration
 
 * [[https://github.com/khronnuz|Jhonny]]
-
-  gofmt integration
+**  gofmt integration
+**  simple Structure View for Go files.
 
