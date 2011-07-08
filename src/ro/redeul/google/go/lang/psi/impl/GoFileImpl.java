@@ -9,6 +9,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
@@ -52,7 +53,16 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     }
 
     public GoFunctionDeclaration[] getFunctions() {
-        return findChildrenByClass(GoFunctionDeclaration.class);
+        return ContainerUtil.mapNotNull(findChildrenByClass(GoFunctionDeclaration.class), new Function<GoFunctionDeclaration, GoFunctionDeclaration>() {
+            @Override
+            public GoFunctionDeclaration fun(GoFunctionDeclaration functionDeclaration) {
+                if ( functionDeclaration instanceof GoMethodDeclaration ) {
+                    return null;
+                }
+
+                return functionDeclaration;
+            }
+        }, new GoFunctionDeclaration[]{});
     }
 
     public GoMethodDeclaration[] getMethods() {

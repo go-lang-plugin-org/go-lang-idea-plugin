@@ -239,6 +239,8 @@
         <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
         <lang.findUsagesProvider language="Google Go" implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
         <lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFmt" />
+        <lang.psiStructureViewFactory language="Google Go"
+                implementationClass="ro.redeul.google.go.ide.GoStructureView"/>
 
         <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
 
