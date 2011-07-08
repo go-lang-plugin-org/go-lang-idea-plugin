@@ -30,6 +30,7 @@
             <li>Go SDK indexing mode</li>
             <li>Makefile based build system (bring your own Makefile). Experimental. Configured in project settings.</li>
             <li>More completion options on variables (work in progress). Can be disabled from the Settings: Project -> Go Settings.</li>
+            <li>Simple structure view</li>
         </ul>
     ]]>
     </description>
@@ -37,12 +38,12 @@
         <![CDATA[
 		 <h3>0.3.13 changes:</h3>
                 <ul>
-                    <li>Added simple Structure View for Go files. Thanks https://github.com/khronnuz.</li>
+                    <li>[feature] Added simple Structure View for Go files. Thanks https://github.com/khronnuz.</li>
                 </ul>
         </h3>
          <h3>0.3.12 changes:</h3>
                 <ul>
-                    <li>Using gofmt as formatter when formatting a file (Ctrl + Alt + L). Thanks https://github.com/khronnuz.</li>
+                    <li>[feature] Using gofmt as formatter when formatting a file (Ctrl + Alt + L). Thanks https://github.com/khronnuz.</li>
                 </ul>
         </h3>
         <h3>0.3.11 changes:</h3>
