@@ -70,6 +70,11 @@ public class GoSdkUtil {
         String binariesPath = System.getenv("GOBIN");
         if (binariesPath == null) {
             binariesPath = path + "/bin";
+
+            if ( ! (new File(binariesPath).isDirectory()) ) {
+                binariesPath = "/usr/bin";
+            }
+
         }
 
         GeneralCommandLine command = new GeneralCommandLine();

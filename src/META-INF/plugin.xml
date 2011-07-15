@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Google Go Language plugin</name>
-    <version>0.3.14</version>
+    <version>0.3.15</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[
@@ -31,11 +31,17 @@
             <li>Makefile based build system (bring your own Makefile). Experimental. Configured in project settings.</li>
             <li>More completion options on variables (work in progress). Can be disabled from the Settings: Project -> Go Settings.</li>
             <li>Simple structure view</li>
+            <li>Support for Go packages by the weekly-ppa on Ubuntu </li>
         </ul>
     ]]>
     </description>
     <change-notes>
         <![CDATA[
+		 <h3>0.3.15 changes:</h3>
+                <ul>
+                    <li>[feature] Support GO sdk as packaged by the gophers/go PPA on Ubuntu.</li>
+                </ul>
+        </h3>
 		 <h3>0.3.14 changes:</h3>
                 <ul>
                     <li>[bugfix] Fix the broken run configuration on MacOS. https://github.com/alexandre-normand.</li>

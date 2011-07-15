@@ -1,11 +1,14 @@
 package ro.redeul.google.go.config.sdk;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.ui.GoSdkConfigurable;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -28,6 +31,30 @@ public class GoSdkType extends SdkType {
     @Override
     public String suggestHomePath() {
         return GoUtil.resolveGoogleGoHomePath();
+    }
+
+    @Override
+    public FileChooserDescriptor getHomeChooserDescriptor() {
+        final FileChooserDescriptor descriptor = new FileChooserDescriptor(true, true, false, false, false, false) {
+          public void validateSelectedFiles(VirtualFile[] files) throws Exception {
+            if (files.length != 0){
+              final String selectedPath = files[0].getPath();
+              boolean valid = isValidSdkHome(selectedPath);
+              if (!valid){
+                valid = isValidSdkHome(adjustSelectedSdkHome(selectedPath));
+                if (!valid) {
+                  String message = files[0].isDirectory()
+                                   ? ProjectBundle.message("sdk.configure.home.invalid.error", getPresentableName())
+                                   : ProjectBundle.message("sdk.configure.home.file.invalid.error", getPresentableName());
+                  throw new Exception(message);
+                }
+              }
+            }
+          }
+        };
+        descriptor.setTitle(GoBundle.message("go.sdk.configure.title", getPresentableName()));
+        return descriptor;
+
     }
 
     @Override

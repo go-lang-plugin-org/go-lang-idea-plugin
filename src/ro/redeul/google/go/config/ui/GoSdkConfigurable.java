@@ -10,11 +10,10 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 import javax.swing.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 19, 2010
  * Time: 6:37:17 AM
- * To change this template use File | Settings | File Templates.
  */
 public class GoSdkConfigurable implements AdditionalDataConfigurable {
     private JPanel component;
