@@ -17,10 +17,15 @@ public class GoConfigurableForm {
     public JRadioButton internalBuildSystemRadioButton;
     public JRadioButton makefileBasedRadioButton;
     private JCheckBox enableVariablesCompletionCheckBox;
+    private JCheckBox enableImportsOptimizer;
 
     public boolean isModified(GoProjectSettings.GoProjectSettingsBean settingsBean) {
 
         if ( settingsBean.enableVariablesCompletion != enableVariablesCompletionCheckBox.isSelected() ) {
+            return true;
+        }
+
+        if ( settingsBean.enableOptimizeImports != enableImportsOptimizer.isSelected() ) {
             return true;
         }
 
@@ -42,6 +47,7 @@ public class GoConfigurableForm {
         }
 
         settingsBean.enableVariablesCompletion = enableVariablesCompletionCheckBox.isSelected();
+        settingsBean.enableOptimizeImports = enableImportsOptimizer.isSelected();
     }
 
     public void reset(GoProjectSettings.GoProjectSettingsBean settingsBean) {
@@ -55,5 +61,6 @@ public class GoConfigurableForm {
         }
 
         enableVariablesCompletionCheckBox.setSelected(settingsBean.enableVariablesCompletion);
+        enableImportsOptimizer.setSelected(settingsBean.enableOptimizeImports);
     }
 }
