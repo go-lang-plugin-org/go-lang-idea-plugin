@@ -31,7 +31,7 @@
             <li>Makefile based build system (bring your own Makefile). Experimental. Configured in project settings.</li>
             <li>More completion options on variables (work in progress). Can be disabled from the Settings: Project -> Go Settings.</li>
             <li>Simple structure view</li>
-            <li>Support for Go packages by the weekly-ppa on Ubuntu </li>
+            <li>Support GO sdk as packaged by the gophers/go PPA on Ubuntu.</li>
         </ul>
     ]]>
     </description>
