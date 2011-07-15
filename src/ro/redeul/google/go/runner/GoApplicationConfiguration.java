@@ -120,9 +120,10 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
             for (VirtualFile sourceRoot : sourceRoots) {
 
                 if (VfsUtil.isAncestor(sourceRoot, file, true)) {
-                    String relativePath = VfsUtil.getRelativePath(file.getParent(), sourceRoot, '/');
+                    String relativePath = VfsUtil.getRelativePath(file.getParent(), sourceRoot, File.separatorChar);
 
-                    return CompilerPaths.getModuleOutputPath(module, false) + "/go-bins/" + relativePath + file.getNameWithoutExtension();
+                    return CompilerPaths.getModuleOutputPath(module, false) + "/go-bins/" + relativePath + "/" +
+                            file.getNameWithoutExtension();
                 }
             }
         }
