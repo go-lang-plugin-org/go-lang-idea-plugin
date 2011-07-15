@@ -11,14 +11,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 3:38:01 AM
- * To change this template use File | Settings | File Templates.
  */
 public class GoEditorHighlighter extends LayeredLexerEditorHighlighter {
     public GoEditorHighlighter(EditorColorsScheme scheme, Project project, VirtualFile virtualFile) {
         super(new GoSyntaxHighlighter(), scheme);
     }
+
 }

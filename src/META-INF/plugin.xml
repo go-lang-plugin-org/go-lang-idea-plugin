@@ -251,8 +251,8 @@
         <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
         <lang.findUsagesProvider language="Google Go" implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
         <lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFmt" />
-        <lang.psiStructureViewFactory language="Google Go"
-                implementationClass="ro.redeul.google.go.ide.GoStructureView"/>
+        <lang.psiStructureViewFactory language="Google Go" implementationClass="ro.redeul.google.go.ide.GoStructureView"/>
+        <lang.importOptimizer language="Google Go" implementationClass="ro.redeul.google.go.imports.GoImportOptimizer" />
 
         <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
 
@@ -286,5 +286,10 @@
         <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoTypeName" />
         <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoQualifiedTypeName" />
         <!--<enterHandlerDelegate implementation="ro.redeul.google.go.editor.actions.GoEnterHandler" order="after EnterBetweenBracesHandler"/>-->
+
+        <projectService serviceInterface="ro.redeul.google.go.services.GoCodeManager"
+                        serviceImplementation="ro.redeul.google.go.services.GoCodeManager"/>
+
+
     </extensions>
 </idea-plugin>

@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.VariableTypeResolver;
 import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -23,6 +24,11 @@ public class GoLiteralExprImpl extends GoExpressionBase implements GoLiteralExpr
 
     public GoLiteralExprImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitLiteralExpr(this);
     }
 
     @Override

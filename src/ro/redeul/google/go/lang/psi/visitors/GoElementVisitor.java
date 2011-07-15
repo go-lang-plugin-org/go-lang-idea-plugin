@@ -3,6 +3,8 @@ package ro.redeul.google.go.lang.psi.visitors;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 
@@ -69,7 +71,7 @@ public class GoElementVisitor {
         visitElement(channelType);
     }
 
-    public void acceptTypeNameDeclaration(GoTypeNameDeclaration nameDeclaration) {
+    public void visitTypeNameDeclaration(GoTypeNameDeclaration nameDeclaration) {
         visitElement(nameDeclaration);
     }
 
@@ -87,5 +89,9 @@ public class GoElementVisitor {
 
     public void visitPointerType(GoTypePointer pointerType) {
         visitElement(pointerType);
+    }
+
+    public void visitLiteralExpr(GoLiteralExpression literalExpr) {
+        visitElement(literalExpr);
     }
 }

@@ -25,6 +25,7 @@ public class GoProjectSettings implements PersistentStateComponent<GoProjectSett
     public static class GoProjectSettingsBean {
         public BuildSystemType BUILD_SYSTEM_TYPE = BuildSystemType.Internal;
         public boolean enableVariablesCompletion = true;
+        public boolean enableOptimizeImports = false;
     }
 
     GoProjectSettingsBean bean;
