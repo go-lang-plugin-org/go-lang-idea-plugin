@@ -1,15 +1,20 @@
 package ro.redeul.google.go.imports;
 
+import com.intellij.lang.ASTNode;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.ide.GoProjectSettings;
+import ro.redeul.google.go.lang.lexer.GoElementTypeImpl;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
@@ -41,7 +46,7 @@ public class GoImportOptimizer implements ImportOptimizer {
 
         final GoFile goFile = (GoFile) file;
 
-        // go the enableOptimizeImports declaration and change it to true if you want to see it working.
+        //go the enableOptimizeImports declaration and change it to true if you want to see it working.
         if ( ! GoProjectSettings.getInstance(goFile.getProject()).getState().enableOptimizeImports ) {
             return EmptyRunnable.getInstance();
         }
@@ -69,8 +74,28 @@ public class GoImportOptimizer implements ImportOptimizer {
 
                         for (GoImportSpec importSpec : importSpecs) {
                             if (!usedImports.contains(importSpec)) {
-                                importDeclaration.deleteChildRange(importSpec, importSpec);
+                                // get the start of the import spec line
+                                PsiElement start = importSpec;
+                                IElementType actualToken =  start.getNode().getElementType();
+                                while(!(actualToken.equals(GoTokenTypes.wsNLS) || actualToken.equals(GoTokenTypes.pLPAREN) ) && start.getPrevSibling() != null){
+
+                                    start = start.getPrevSibling();
+                                    actualToken =  start.getNode().getElementType();
+                                }
+                                // go forward to after the import
+                                start = start.getNextSibling();
+
+                                PsiElement end = importSpec;
+                                actualToken =  end.getNode().getElementType();
+                                while(!actualToken.equals(GoTokenTypes.wsNLS) && end.getNextSibling() != null){
+                                    end = end.getNextSibling();
+                                    actualToken =  end.getNode().getElementType();
+                                }
+                                // go back to before the new line
+                                //end = end.getPrevSibling();
+                                importDeclaration.deleteChildRange(start, end);
                             }
+
                         }
 
                         if (importDeclaration.getImports().length == 0) {
