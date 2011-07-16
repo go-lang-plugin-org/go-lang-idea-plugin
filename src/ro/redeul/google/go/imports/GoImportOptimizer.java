@@ -1,6 +1,5 @@
 package ro.redeul.google.go.imports;
 
-import com.intellij.lang.ASTNode;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -10,14 +9,12 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.ide.GoProjectSettings;
-import ro.redeul.google.go.lang.lexer.GoElementTypeImpl;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.services.GoCodeManager;
 
 import java.util.Set;
@@ -65,14 +62,14 @@ public class GoImportOptimizer implements ImportOptimizer {
                 GoCodeManager goCodeManager = GoCodeManager.getInstance(project);
 
                 try {
-                    Set<GoImportSpec> usedImports = goCodeManager.findUsedImports(goFile);
+                    Set<GoImportDeclaration> usedImports = goCodeManager.findUsedImports(goFile);
 
-                    GoImportDeclaration[] importDeclarations = goFile.getImportDeclarations();
+                    GoImportDeclarations[] importDeclarations = goFile.getImportDeclarations();
 
-                    for (GoImportDeclaration importDeclaration : importDeclarations) {
-                        GoImportSpec[] importSpecs = importDeclaration.getImports();
+                    for (GoImportDeclarations importDeclaration : importDeclarations) {
+                        GoImportDeclaration[] importSpecs = importDeclaration.getDeclarations();
 
-                        for (GoImportSpec importSpec : importSpecs) {
+                        for (GoImportDeclaration importSpec : importSpecs) {
                             if (!usedImports.contains(importSpec)) {
                                 // get the start of the import spec line
                                 PsiElement start = importSpec;
@@ -98,7 +95,7 @@ public class GoImportOptimizer implements ImportOptimizer {
 
                         }
 
-                        if (importDeclaration.getImports().length == 0) {
+                        if (importDeclaration.getDeclarations().length == 0) {
                             goFile.deleteChildRange(importDeclaration, importDeclaration);
                         }
                     }

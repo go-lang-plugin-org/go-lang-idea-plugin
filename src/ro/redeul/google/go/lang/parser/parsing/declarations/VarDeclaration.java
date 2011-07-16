@@ -7,11 +7,10 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 9:38:55 PM
- * To change this template use File | Settings | File Templates.
  */
 public class VarDeclaration implements GoElementTypes {
 
@@ -19,27 +18,33 @@ public class VarDeclaration implements GoElementTypes {
 
         PsiBuilder.Marker marker = builder.mark();
 
-        if ( ! ParserUtils.getToken(builder, kVAR) ) {
+        if (!ParserUtils.getToken(builder, kVAR)) {
             marker.rollbackTo();
             return false;
         }
 
-        ParserUtils.skipNLS(builder);
-
-        if ( builder.getTokenType() == pLPAREN ) {
-            ParserUtils.eatElement(builder, pLPAREN);
+        if (ParserUtils.lookAhead(builder, pLPAREN)) {
+            ParserUtils.advance(builder);
 
             do {
                 parseVarSpecification(builder, parser);
-                ParserUtils.skipNLS(builder);
-            } while ( !builder.eof() && builder.getTokenType() != pRPAREN );
 
-            ParserUtils.skipNLS(builder);
-            ParserUtils.eatElement(builder, pRPAREN);
+                if (builder.getTokenType() != oSEMI &&
+                        builder.getTokenType() != pRPAREN &&
+                        builder.getTokenType() != wsNLS) {
+                    builder.error("semicolon.or.newline.or.closed.parenthesis.expected");
+                } else {
+                    ParserUtils.getToken(builder, oSEMI);
+                    ParserUtils.skipNLS(builder);
+                }
+            } while (!ParserUtils.lookAhead(builder, pRPAREN) && !builder.eof());
+
+            ParserUtils.advance(builder);
 
         } else {
             parseVarSpecification(builder, parser);
         }
+
         marker.done(VAR_DECLARATIONS);
         return true;
     }
@@ -49,35 +54,33 @@ public class VarDeclaration implements GoElementTypes {
     private static void parseVarSpecification(PsiBuilder builder, GoParser parser) {
 
         ParserUtils.skipNLS(builder);
-
         PsiBuilder.Marker varStatementSpecification = builder.mark();
 
-        if ( parser.parseIdentifierList(builder) == 0 ) {
+        if (parser.parseIdentifierList(builder, false) == 0) {
             builder.error("identifier.list.expected");
         }
 
         boolean hasType = false;
         ParserUtils.skipNLS(builder);
-        if ( builder.getTokenType() != oASSIGN ) {
+        if (builder.getTokenType() != oASSIGN) {
             hasType = true;
             parser.parseType(builder);
         }
 
         if (!hasType || (builder.getTokenType() != oSEMI && builder.getTokenType() != wsNLS)) {
             ParserUtils.skipNLS(builder);
-            if ( ParserUtils.getToken(builder, oASSIGN) ) {
-
+            if (ParserUtils.getToken(builder, oASSIGN)) {
                 ParserUtils.skipNLS(builder);
                 parser.parseExpressionList(builder, false);
             } else {
-                if ( ! hasType ) {
+                if (!hasType) {
                     builder.error("assign.operator.expected");
                 }
-            }                    
+            }
         }
 
         ParserUtils.waitNext(builder, TokenSet.create(oSEMI, wsNLS, pRPAREN, pRCURLY), "semicolon.or.newline.right.parenthesis.expected");
         ParserUtils.getToken(builder, oSEMI);
-        varStatementSpecification.done(VAR_SPEC);
+        varStatementSpecification.done(VAR_DECLARATION);
     }
 }

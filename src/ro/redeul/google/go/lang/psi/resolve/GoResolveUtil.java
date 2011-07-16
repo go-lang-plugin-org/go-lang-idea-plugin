@@ -2,7 +2,7 @@ package ro.redeul.google.go.lang.psi.resolve;
 
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 /**
@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
  * To change this template use File | Settings | File Templates.
  */
 public class GoResolveUtil {
-    public static boolean inSamePackage(GoQualifiedNameElement qualifiedElement, GoImportSpec importSpec) {
+    public static boolean inSamePackage(GoQualifiedNameElement qualifiedElement, GoImportDeclaration importSpec) {
         GoPackageReference importedPackageReference = importSpec.getPackageReference();
         GoPackageReference elementReference = qualifiedElement.getPackageReference();
 

@@ -31,7 +31,7 @@ public class VariableTypeResolver extends BaseScopeProcessor {
             return checkFunctionParameters((GoFunctionParameter) element);
         }
 
-        if ( element instanceof GoShortVarDeclaration ) {
+        if ( element instanceof GoShortVarDeclaration) {
             GoShortVarDeclaration shortVarDeclaration = (GoShortVarDeclaration) element;
 
             GoIdentifier identifiers[] = shortVarDeclaration.getIdentifiers();

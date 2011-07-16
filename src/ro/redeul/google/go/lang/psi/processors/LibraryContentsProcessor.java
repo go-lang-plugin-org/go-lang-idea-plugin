@@ -6,8 +6,7 @@ import com.intellij.psi.scope.BaseScopeProcessor;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveUtil;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -51,11 +50,11 @@ public class LibraryContentsProcessor extends BaseScopeProcessor {
 
     private boolean tryImportSpec(PsiElement element, ResolveState state) {
 
-        if (!(element instanceof GoImportSpec)) {
+        if (!(element instanceof GoImportDeclaration)) {
             return true;
         }
 
-        GoImportSpec importSpec = (GoImportSpec) element;
+        GoImportDeclaration importSpec = (GoImportDeclaration) element;
 
         if (!GoResolveUtil.inSamePackage(qualifiedName, importSpec)) {
             return true;

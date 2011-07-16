@@ -5,12 +5,18 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import org.eclipse.jdt.internal.compiler.ast.TrueLiteral;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -25,53 +31,93 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
     };
 
     List<LookupElement> variants = new ArrayList<LookupElement>();
+    Set<String> names = new HashSet<String>();
 
     @Override
     public boolean execute(PsiElement element, ResolveState state) {
+
         if ( element instanceof GoFunctionDeclaration && ! (element instanceof GoMethodDeclaration) ) {
             collectFunctionName((GoFunctionDeclaration) element, state);
+            return true;
+        }
+
+        if ( element instanceof GoVarDeclaration) {
+            collectVariableDeclaration((GoVarDeclaration) element, state);
+            return true;
+        }
+
+        if ( element instanceof GoConstDeclaration) {
+            collectVariableDeclaration((GoConstDeclaration) element, state);
+            return true;
         }
 
         return true;
     }
 
-    private void collectFunctionName(GoFunctionDeclaration functionDeclaration, ResolveState state) {
+    private void collectVariableDeclaration(GoVarDeclaration declaration, ResolveState state) {
+
+        GoIdentifier identifiers[] = declaration.getIdentifiers();
+
+        boolean isImported = isImported(declaration, state);
+
+        for (GoIdentifier identifier : identifiers) {
+            if ( ! isImported || GoNamesUtil.isPublicType(identifier.getName()) ) {
+                addVariant(identifier, identifier.getName(), state);
+            }
+        }
+    }
+
+    private void collectVariableDeclaration(GoConstDeclaration declaration, ResolveState state) {
+
+        GoIdentifier identifiers[] = declaration.getIdentifiers();
+
+        boolean isImported = isImported(declaration, state);
+
+        for (GoIdentifier identifier : identifiers) {
+            if ( ! isImported || GoNamesUtil.isPublicType(identifier.getName()) ) {
+                addVariant(identifier, identifier.getName(), state);
+            }
+        }
+    }
+
+    private void collectFunctionName(GoFunctionDeclaration function, ResolveState state) {
 
         // include this if:
         //   - inside the same package
         //   - is a public name
 
-        if ( functionDeclaration.isMain() ) {
+        if ( function.isMain() ) {
             return;
         }
 
-        String functionName = functionDeclaration.getFunctionName();
+        if ( ! isImported(function, state) || GoNamesUtil.isPublicType(function.getFunctionName()) ) {
+            addVariant(function, function.getName(), state);
+        }
+    }
 
-        String suggestionTypeText = state.get(GoResolveStates.PackageName);
+    private boolean isImported(PsiElement target, ResolveState state) {
+        return !(state.get(GoResolveStates.IsOriginalFile) || state.get(GoResolveStates.IsOriginalPackage));
+    }
 
-        boolean isCandidate = false;
-        if ( GoNamesUtil.isPublicType(functionName) ) {
-            isCandidate = true;
+    private void addVariant(PsiElement target, String name, ResolveState state) {
+
+        boolean isImported = isImported(target, state);
+
+        String displayName = name;
+        String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
+
+        if ( isImported && visiblePackageName != null && visiblePackageName.length() > 0 ) {
+            displayName = String.format("%s.%s", visiblePackageName, name);
         }
 
-        if ( state.get(GoResolveStates.IsOriginalFile) || state.get(GoResolveStates.IsOriginalPackage) ) {
-            isCandidate = true;
-            suggestionTypeText = "<current>";
-        }
-
-        if ( isCandidate ) {
-
-            String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
-
-            if ( visiblePackageName != null && visiblePackageName.length() > 0 ) {
-                functionName = String.format("%s.%s", visiblePackageName, functionName);
-            }
-
-            variants.add(LookupElementBuilder.create(functionDeclaration, functionName).setTypeText(suggestionTypeText) );
+        if ( ! names.contains(displayName)) {
+            variants.add(LookupElementBuilder.create(target, displayName).setTypeText(isImported ? state.get(GoResolveStates.PackageName) : "<current>"));
+            names.add(displayName);
         }
     }
 
     public Object[] references() {
+
         for (String builtInType : builtInFunctions) {
             variants.add(LookupElementBuilder.create(builtInType).setTypeText("builtin", true).setBold());
         }

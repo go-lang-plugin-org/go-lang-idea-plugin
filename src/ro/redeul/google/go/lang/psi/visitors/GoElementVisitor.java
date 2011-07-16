@@ -4,7 +4,6 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 
@@ -31,11 +30,11 @@ public class GoElementVisitor {
         visitElement(packageDeclaration);
     }
 
-    public void visitImportDeclaration(GoImportDeclaration importDeclaration) {
+    public void visitImportDeclaration(GoImportDeclarations importDeclaration) {
         visitElement(importDeclaration);
     }
 
-    public void visitImportSpec(GoImportSpec importSpec) {
+    public void visitImportSpec(GoImportDeclaration importSpec) {
         visitElement(importSpec);
     }
 

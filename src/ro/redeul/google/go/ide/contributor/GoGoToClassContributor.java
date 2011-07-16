@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.stubs.index.GoQualifiedTypeName;
 import ro.redeul.google.go.lang.psi.stubs.index.GoTypeName;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.Collection;
@@ -25,6 +26,11 @@ import java.util.Collection;
 public class GoGoToClassContributor implements ChooseByNameContributor {
     @Override
     public String[] getNames(Project project, boolean includeNonProjectItems) {
+
+        if ( GoSdkUtil.getGoogleGoSdkForProject(project) == null ) {
+            return new String[0];
+        }
+
         StubIndex index = StubIndex.getInstance();
 
         Collection<String> typeNames = index.getAllKeys(GoTypeName.KEY, project);
@@ -34,6 +40,11 @@ public class GoGoToClassContributor implements ChooseByNameContributor {
 
     @Override
     public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
+
+        if ( GoSdkUtil.getGoogleGoSdkForProject(project) == null ) {
+            return new NavigationItem[0];
+        }
+
         StubIndex index = StubIndex.getInstance();
 
         Collection<GoTypeNameDeclaration> typeNameDeclarations =

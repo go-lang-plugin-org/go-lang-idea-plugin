@@ -31,17 +31,17 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType PACKAGE_NAME = new GoElementTypeImpl("Package name");
     GoElementType PACKAGE_DECLARATION = new GoElementTypeImpl("PackageDeclaration");
 
-    GoElementType IMPORT_DECLARATION = new GoElementTypeImpl("ImportDeclarations");
-    GoElementType IMPORT_SPEC = new GoElementTypeImpl("ImportSpec");
+    GoElementType IMPORT_DECLARATIONS = new GoElementTypeImpl("ImportDeclarations");
+    GoElementType IMPORT_DECLARATION = new GoElementTypeImpl("ImportSpec");
 
     GoElementType CONST_DECLARATIONS = new GoElementTypeImpl("ConstDeclarations");
-    GoElementType CONST_SPEC = new GoElementTypeImpl("ConstSpec");
+    GoElementType CONST_DECLARATION = new GoElementTypeImpl("ConstSpec");
 
     GoElementType VAR_DECLARATIONS = new GoElementTypeImpl("VarDeclarations");
-    GoElementType VAR_SPEC = new GoElementTypeImpl("VarSpec");
+    GoElementType VAR_DECLARATION = new GoElementTypeImpl("VarDeclaration");
 
     GoElementType TYPE_DECLARATIONS = new GoElementTypeImpl("TypeDeclarations");
-    GoElementType TYPE_SPEC = new GoElementTypeImpl("TypeSpec");
+    GoElementType TYPE_DECLARATION = new GoElementTypeImpl("TypeSpec");
 
     GoElementType IDENTIFIERS = new GoElementTypeImpl("Identifiers");
     GoElementType EXPRESSION_LIST = new GoElementTypeImpl("ExpressionList");

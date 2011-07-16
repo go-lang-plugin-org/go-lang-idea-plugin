@@ -4,11 +4,11 @@ import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
+import ro.redeul.google.go.lang.psi.impl.declarations.*;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoBuiltinCallExprImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.impl.declarations.GoShortVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
@@ -30,11 +30,11 @@ public class GoPsiCreator implements GoElementTypes {
         if ( elementType.equals(PACKAGE_DECLARATION) )
             return new GoPackageDeclarationImpl(node);
 
+        if ( elementType.equals(IMPORT_DECLARATIONS) )
+            return new GoImportDeclarationsImpl(node);
+
         if ( elementType.equals(IMPORT_DECLARATION) )
             return new GoImportDeclarationImpl(node);
-
-        if ( elementType.equals(IMPORT_SPEC) )
-            return new GoImportSpecImpl(node);
 
         if ( elementType.equals(PACKAGE_REFERENCE) )
             return new GoPackageReferenceImpl(node);
@@ -42,8 +42,20 @@ public class GoPsiCreator implements GoElementTypes {
         if ( elementType.equals(TYPE_DECLARATIONS) )
             return new GoTypeDeclarationImpl(node);
 
-        if ( elementType.equals(TYPE_SPEC) )
+        if ( elementType.equals(TYPE_DECLARATION) )
             return new GoTypeSpecImpl(node);
+
+        if ( elementType.equals(VAR_DECLARATIONS) )
+            return new GoVarDeclarationsImpl(node);
+
+        if ( elementType.equals(VAR_DECLARATION) )
+            return new GoVarDeclarationImpl(node);
+
+        if (elementType.equals(CONST_DECLARATIONS) )
+            return new GoConstDeclarationsImpl(node);
+
+        if (elementType.equals(CONST_DECLARATION) )
+            return new GoConstDeclarationImpl(node);
 
         if ( elementType.equals(TYPE_NAME_DECLARATION) )
             return new GoTypeNameDeclarationImpl(node);

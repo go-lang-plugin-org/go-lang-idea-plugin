@@ -14,6 +14,8 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -48,8 +50,8 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         return findChildByClass(GoPackageDeclaration.class);
     }
 
-    public GoImportDeclaration[] getImportDeclarations() {
-        return findChildrenByClass(GoImportDeclaration.class);
+    public GoImportDeclarations[] getImportDeclarations() {
+        return findChildrenByClass(GoImportDeclarations.class);
     }
 
     public GoFunctionDeclaration[] getFunctions() {
@@ -116,54 +118,38 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
 
+        if ( state.get(GoResolveStates.ResolvingVariables) ) {
+            return true;
+        }
+
         String myPackageName = getPackage().getPackageName();
 
         ResolveState newState = state.put(GoResolveStates.PackageName, myPackageName);
 
-        if ( ! state.get(GoResolveStates.ResolvingVariables) ) {
-            GoTypeDeclaration declarations[] = getTypeDeclarations();
-            for (GoTypeDeclaration declaration : declarations) {
-                if (declaration != lastParent) {
-                    if (!declaration.processDeclarations(processor, newState, null, place)) {
+        // process current file
+        PsiElement child = lastParent != null ? lastParent.getPrevSibling() : this.getLastChild();
+        while ( child != null ) {
+
+            if ( GoPsiUtils.isNodeOfType(child, GoTokenSets.GO_FILE_ENTRY_POINT_TYPES) ) {
+
+                boolean shouldProcessDeclarations = true;
+
+                if ( child instanceof GoImportDeclarations) {
+                    shouldProcessDeclarations = state.get(GoResolveStates.IsOriginalFile);
+                    newState = newState.put(GoResolveStates.IsOriginalFile, false);
+                }
+
+                if ( shouldProcessDeclarations ) {
+                    if ( ! child.processDeclarations(processor, newState, null, place)) {
                         return false;
                     }
                 }
             }
+
+            child = child.getPrevSibling();
         }
 
-        if ( ! state.get(GoResolveStates.ResolvingVariables) ) {
-            GoMethodDeclaration methods[] = getMethods();
-            for (GoMethodDeclaration method : methods) {
-                if (method != lastParent) {
-                    if (!method.processDeclarations(processor, newState, null, place)) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        if ( ! state.get(GoResolveStates.ResolvingVariables)) {
-            GoFunctionDeclaration functions[] = getFunctions();
-            for (GoFunctionDeclaration function : functions) {
-                if (function != lastParent) {
-                    if (!function.processDeclarations(processor, newState, null, place)) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        if ( newState.get(GoResolveStates.IsOriginalFile) && ! (state.get(GoResolveStates.ResolvingVariables)) ) {
-
-            GoImportDeclaration importDeclarations[] = getImportDeclarations();
-            for (GoImportDeclaration importDeclaration : importDeclarations) {
-                if (importDeclaration != lastParent) {
-                    if (!importDeclaration.processDeclarations(processor, newState.put(GoResolveStates.IsOriginalFile, false), null, place)) {
-                        return false;
-                    }
-                }
-            }
-
+        if ( state.get(GoResolveStates.IsOriginalFile) ) {
             GoNamesCache namesCache = ContainerUtil.findInstance(getProject().getExtensions(PsiShortNamesCache.EP_NAME), GoNamesCache.class);
 
             if (namesCache != null) {
@@ -173,8 +159,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
                     PsiDirectory directory = file.getContainingDirectory();
 
-                    if ( directory != null && directory.isEquivalentTo(getOriginalFile().getContainingDirectory()) && ! file.isEquivalentTo(getOriginalFile()))
-                    {
+                    if ( directory != null && directory.isEquivalentTo(getOriginalFile().getContainingDirectory()) && ! file.isEquivalentTo(getOriginalFile())) {
                         if (!file.processDeclarations(processor, newState.put(GoResolveStates.IsOriginalFile, false), null, place))
                         {
                             return false;

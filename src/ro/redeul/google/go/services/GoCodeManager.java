@@ -3,14 +3,11 @@ package ro.redeul.google.go.services;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
-import org.apache.xmlbeans.impl.xb.xsdschema.ImportDocument;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.lang.psi.visitors.GoImportUsageChecker;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,15 +31,15 @@ public class GoCodeManager {
         return ServiceManager.getService(project, GoCodeManager.class);
     }
 
-    public Set<GoImportSpec> findUsedImports(GoFile file) {
-        GoImportDeclaration[] declarations = file.getImportDeclarations();
+    public Set<GoImportDeclaration> findUsedImports(GoFile file) {
+        GoImportDeclarations[] declarations = file.getImportDeclarations();
 
-        Set<GoImportSpec> usedImports = new HashSet<GoImportSpec>();
+        Set<GoImportDeclaration> usedImports = new HashSet<GoImportDeclaration>();
 
-        for (GoImportDeclaration declaration : declarations) {
-            GoImportSpec importSpecs[] = declaration.getImports();
+        for (GoImportDeclarations declaration : declarations) {
+            GoImportDeclaration importSpecs[] = declaration.getDeclarations();
 
-            for (GoImportSpec importSpec : importSpecs) {
+            for (GoImportDeclaration importSpec : importSpecs) {
                 if ( isImportUsed(importSpec, file) ) {
                     usedImports.add(importSpec);
                 }
@@ -52,7 +49,7 @@ public class GoCodeManager {
         return usedImports;
     }
 
-    private boolean isImportUsed(GoImportSpec importSpec, GoFile file) {
+    private boolean isImportUsed(GoImportDeclaration importSpec, GoFile file) {
         GoImportUsageChecker importUsageChecker = new GoImportUsageChecker(importSpec);
 
         file.accept(importUsageChecker);

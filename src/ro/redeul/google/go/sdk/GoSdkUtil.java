@@ -7,6 +7,7 @@ import com.intellij.execution.process.ProcessOutput;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ModuleRootModel;
@@ -173,6 +174,17 @@ public class GoSdkUtil {
         } else {
             sdk = ProjectRootManager.getInstance(module.getProject()).getProjectSdk();
         }
+
+        if ( GoSdkType.isInstance(sdk) ) {
+            return sdk;
+        }
+
+        return null;
+    }
+
+    public static Sdk getGoogleGoSdkForProject(Project project) {
+
+        Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
 
         if ( GoSdkType.isInstance(sdk) ) {
             return sdk;

@@ -35,8 +35,8 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
 import ro.redeul.google.go.sdk.GoSdkTool;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.ProcessUtil;
@@ -552,13 +552,13 @@ public class GoCompiler implements TranslatingCompiler {
                     }
 
                     String packageName = file.getPackage().getPackageName();
-                    GoImportDeclaration[] importDeclarations = file.getImportDeclarations();
+                    GoImportDeclarations[] importDeclarations = file.getImportDeclarations();
 
                     List<String> imports = new ArrayList<String>();
-                    for (GoImportDeclaration importDeclaration : importDeclarations) {
-                        GoImportSpec[] importSpecs = importDeclaration.getImports();
+                    for (GoImportDeclarations importDeclaration : importDeclarations) {
+                        GoImportDeclaration[] importSpecs = importDeclaration.getDeclarations();
 
-                        for (GoImportSpec importSpec : importSpecs) {
+                        for (GoImportDeclaration importSpec : importSpecs) {
                             if (!importSpec.getImportPath().startsWith("\"./")) {
                                 continue;
                             }

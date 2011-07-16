@@ -15,7 +15,7 @@ public interface GoFile extends PsiFile, GoPsiElement, GoPackagedElement {
 
     GoPackageDeclaration getPackage();
 
-    GoImportDeclaration[] getImportDeclarations();
+    GoImportDeclarations[] getImportDeclarations();
 
     GoFunctionDeclaration[] getFunctions();
 

@@ -3,10 +3,8 @@ package ro.redeul.google.go.lang.psi.processors;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import groovy.lang.StringWriterIOException;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
-import ro.redeul.google.go.lang.psi.resolve.GoResolveUtil;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,22 +17,22 @@ import java.util.List;
  */
 public class ImportedPackagesCollectorProcessor extends BaseScopeProcessor {
 
-    List<GoImportSpec> imports = new ArrayList<GoImportSpec>();
+    List<GoImportDeclaration> imports = new ArrayList<GoImportDeclaration>();
 
     public boolean execute(PsiElement element, ResolveState state) {
 
-        if ( element instanceof GoImportSpec ) {
-            processImport((GoImportSpec) element);
+        if ( element instanceof GoImportDeclaration) {
+            processImport((GoImportDeclaration) element);
         }
 
         return true;
     }
 
-    private void processImport(GoImportSpec importSpec) {
+    private void processImport(GoImportDeclaration importSpec) {
         imports.add(importSpec);
     }
 
-    public List<GoImportSpec> getPackageImportSpecs() {
+    public List<GoImportDeclaration> getPackageImportSpecs() {
         return imports;
     }
 
@@ -42,7 +40,7 @@ public class ImportedPackagesCollectorProcessor extends BaseScopeProcessor {
 
         List<String> packageImports = new ArrayList<String>();
 
-        for (GoImportSpec importSpec : imports) {
+        for (GoImportDeclaration importSpec : imports) {
             GoPackageReference packageReference = importSpec.getPackageReference();
 
             if ( packageReference == null ) {

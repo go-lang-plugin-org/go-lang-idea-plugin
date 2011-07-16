@@ -19,7 +19,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.processors.GoExpressionTypeResolver;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
@@ -154,7 +154,7 @@ public class GoCompletionContributor extends CompletionContributor {
                 importCompletionProvider);
 
         extend(CompletionType.BASIC,
-                psiElement().withElementType(GoTokenTypes.litSTRING).withParent(psiElement(GoImportSpec.class)),
+                psiElement().withElementType(GoTokenTypes.litSTRING).withParent(psiElement(GoImportDeclaration.class)),
                 importPathCompletionProvider);
 
 //        extend(CompletionType.BASIC,

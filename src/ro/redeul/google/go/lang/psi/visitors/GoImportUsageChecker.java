@@ -2,8 +2,7 @@ package ro.redeul.google.go.lang.psi.visitors;
 
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportSpec;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 
 /**
@@ -14,11 +13,11 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
  */
 public class GoImportUsageChecker extends GoRecursiveElementVisitor {
 
-    private GoImportSpec importSpec;
+    private GoImportDeclaration importSpec;
     private boolean isUsed = false;
     String importPrefix = "";
 
-    public GoImportUsageChecker(GoImportSpec importSpec) {
+    public GoImportUsageChecker(GoImportDeclaration importSpec) {
         this.importSpec = importSpec;
 
         String visiblePackageName = importSpec.getVisiblePackageName();

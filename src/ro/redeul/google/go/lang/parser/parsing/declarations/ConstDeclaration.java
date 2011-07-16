@@ -7,11 +7,10 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 9:38:55 PM
- * To change this template use File | Settings | File Templates.
  */
 public class ConstDeclaration implements GoElementTypes {
 
@@ -25,23 +24,23 @@ public class ConstDeclaration implements GoElementTypes {
             return false;
         }                
 
-        ParserUtils.skipNLS(builder);
-
-        if ( builder.getTokenType() == pLPAREN ) {
-            ParserUtils.eatElement(builder, pLPAREN);
+        if (ParserUtils.lookAhead(builder, pLPAREN)) {
+            ParserUtils.advance(builder);
 
             do {
-                ParserUtils.skipNLS(builder);
-                if ( ! parseConstSpecification(builder, parser) ) {
-                    if ( wsNLS != builder.getTokenType()) {
-                        builder.advanceLexer();
-                    }
-                }
-                ParserUtils.skipNLS(builder);
-            } while ( ! builder.eof() && builder.getTokenType() != pRPAREN );
+                parseConstSpecification(builder, parser);
 
-            ParserUtils.skipNLS(builder);
-            ParserUtils.eatElement(builder, pRPAREN);
+                if (builder.getTokenType() != oSEMI &&
+                        builder.getTokenType() != pRPAREN &&
+                        builder.getTokenType() != wsNLS) {
+                    builder.error("semicolon.or.newline.or.closed.parenthesis.expected");
+                } else {
+                    ParserUtils.getToken(builder, oSEMI);
+                    ParserUtils.skipNLS(builder);
+                }
+            } while (!ParserUtils.lookAhead(builder, pRPAREN) && !builder.eof());
+
+            ParserUtils.advance(builder);
 
         } else {
             parseConstSpecification(builder, parser);
@@ -57,7 +56,7 @@ public class ConstDeclaration implements GoElementTypes {
 
         PsiBuilder.Marker initializer = builder.mark();
 
-        if ( parser.parseIdentifierList(builder) == 0 ) {
+        if ( parser.parseIdentifierList(builder, false) == 0 ) {
             initializer.drop();
             return false;
         }
@@ -81,7 +80,7 @@ public class ConstDeclaration implements GoElementTypes {
         }
         
         ParserUtils.getToken(builder, oSEMI);
-        initializer.done(CONST_SPEC);
+        initializer.done(CONST_DECLARATION);
         
         return true;
     }

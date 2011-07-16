@@ -11,6 +11,8 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 
 import java.util.List;
 
@@ -30,20 +32,18 @@ public class GoBlockStatementImpl extends GoPsiElementBase implements GoBlockSta
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
 
-        PsiElement[] children = getChildren();
+        PsiElement node = lastParent != null ? lastParent.getPrevSibling() : this.getLastChild();
 
-        boolean before = false;
-        for (int i = children.length - 1; i >= 0; i--) {
-            if (children[i] == lastParent) {
-                before = true;
-                continue;
-            }
+        while ( node != null ) {
 
-            if ( before && tokenSet.contains(children[i].getNode().getElementType()) ) {
-                if ( ! children[i].processDeclarations(processor, state, null, place) ) {
+            if (GoPsiUtils.isNodeOfType(node, GoTokenSets.GO_BLOCK_ENTRY_POINT_TYPES)) {
+
+                if ( ! node.processDeclarations(processor, state, null, place) ) {
                     return false;
                 }
             }
+
+            node = node.getPrevSibling();
         }
 
         return true;

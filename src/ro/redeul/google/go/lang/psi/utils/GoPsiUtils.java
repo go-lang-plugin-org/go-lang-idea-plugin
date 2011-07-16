@@ -5,7 +5,10 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -76,5 +79,13 @@ public class GoPsiUtils {
 
     public static String findDefaultPackageName(String importPath) {
         return importPath != null ? importPath.replaceAll("(?:[a-zA-Z\\.]+/)+", "") : null;
+    }
+
+    public static boolean isNodeOfType(PsiElement node, TokenSet tokenSet) {
+        return tokenSet.contains(node.getNode().getElementType());
+    }
+
+    public static boolean isNodeOfType(PsiElement node, IElementType type) {
+        return node.getNode().getElementType() == type;
     }
 }

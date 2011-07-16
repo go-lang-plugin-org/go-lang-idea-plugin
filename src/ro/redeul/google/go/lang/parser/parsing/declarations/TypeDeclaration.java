@@ -8,11 +8,10 @@ import ro.redeul.google.go.lang.parser.parsing.types.Types;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 9:38:55 PM
- * To change this template use File | Settings | File Templates.
  */
 public class TypeDeclaration implements GoElementTypes {
 
@@ -74,7 +73,7 @@ public class TypeDeclaration implements GoElementTypes {
             builder.error("type.expected");
         }
 
-        typeStatement.done(TYPE_SPEC);
+        typeStatement.done(TYPE_DECLARATION);
 
         return true;
     }

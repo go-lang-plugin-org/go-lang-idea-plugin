@@ -4,6 +4,8 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -27,24 +29,49 @@ public class IdentifierVariantsResolver extends BaseScopeProcessor {
     @Override
     public boolean execute(PsiElement element, ResolveState state) {
         if ( element instanceof GoFunctionDeclaration && ! (element instanceof GoMethodDeclaration) ) {
-            tryResolveToFunction((GoFunctionDeclaration) element, state);
+            return tryResolveToFunction((GoFunctionDeclaration) element, state);
+        }
+
+        if ( element instanceof GoVarDeclaration) {
+            return tryResolveToIdentifiers(((GoVarDeclaration) element).getIdentifiers(), state);
+        }
+
+        if ( element instanceof GoConstDeclaration) {
+            return tryResolveToIdentifiers(((GoConstDeclaration) element).getIdentifiers(), state);
         }
 
         return true;
     }
 
-    private boolean tryResolveToFunction(GoFunctionDeclaration functionDeclaration, ResolveState state) {
+    private boolean tryResolveToIdentifiers(GoIdentifier []identifiers, ResolveState state) {
 
-        String functionName = functionDeclaration.getFunctionName();
+        for (GoIdentifier identifier : identifiers) {
+
+            if ( this.identifier.getText().equalsIgnoreCase(getVisibleName(identifier.getName(), state)) ) {
+                reference = identifier;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private String getVisibleName(String name, ResolveState state) {
 
         String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
 
-        String finalName = functionName;
         if ( visiblePackageName != null ) {
-            finalName = visiblePackageName + '.' + functionName;
+            return visiblePackageName + '.' + name;
         }
 
-        if ( identifier.getText().equalsIgnoreCase(finalName) ) {
+        return name;
+
+    }
+
+    private boolean tryResolveToFunction(GoFunctionDeclaration functionDeclaration, ResolveState state) {
+
+        String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
+
+        if ( identifier.getText().equalsIgnoreCase(getVisibleName(functionDeclaration.getFunctionName(), state)) ) {
             reference = functionDeclaration;
             return false;
         }

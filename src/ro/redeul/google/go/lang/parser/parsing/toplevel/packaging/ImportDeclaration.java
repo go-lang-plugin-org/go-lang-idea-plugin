@@ -6,7 +6,6 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.Delimiters;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
-import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 /**
@@ -51,7 +50,7 @@ public class ImportDeclaration implements GoElementTypes {
             parseImportStatement(builder, parser);
         }
         
-        marker.done(IMPORT_DECLARATION);
+        marker.done(IMPORT_DECLARATIONS);
         return true;
     }
 
@@ -97,7 +96,7 @@ public class ImportDeclaration implements GoElementTypes {
         if ( parsed ) {
             parser.setKnownPackage(packageName);
         }
-        importStatement.done(IMPORT_SPEC);
+        importStatement.done(IMPORT_DECLARATION);
         return parsed;
     }
 }

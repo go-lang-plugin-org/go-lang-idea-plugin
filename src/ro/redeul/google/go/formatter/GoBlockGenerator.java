@@ -8,13 +8,9 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import ro.redeul.google.go.GoFileType;
-import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.parser.GoParserDefinition;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +122,7 @@ public class GoBlockGenerator {
             return subBlocks;
         }
 
-        if (node.getElementType() == GoElementTypes.IMPORT_DECLARATION) {
+        if (node.getElementType() == GoElementTypes.IMPORT_DECLARATIONS) {
 
             final ArrayList<Block> subBlocks = new ArrayList<Block>();
             ASTNode[] children = node.getChildren(null);
@@ -164,7 +160,7 @@ public class GoBlockGenerator {
     }
 
     private static boolean isImportSpec(ASTNode childNode) {
-        return childNode.getElementType() == GoElementTypes.IMPORT_SPEC;
+        return childNode.getElementType() == GoElementTypes.IMPORT_DECLARATION;
     }
 
     private static boolean isNewLine(ASTNode childNode) {
