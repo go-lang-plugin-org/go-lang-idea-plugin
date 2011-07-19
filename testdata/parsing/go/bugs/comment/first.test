@@ -1,0 +1,50 @@
+package main
+
+import "fmt"
+
+func main() {
+    /* sdsds */
+
+    fmt.Printf("Hello world3!")
+
+}
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n\n')
+  ImportDeclarations
+    PsiElement(KEYWORD_IMPORT)('import')
+    PsiWhiteSpace(' ')
+    ImportSpec
+      PsiElement(LITERAL_STRING)('"fmt"')
+  PsiElement(WS_NEW_LINES)('\n\n')
+  FunctionDeclaration(main)
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      PsiComment(ML_COMMENT)('/* sdsds */')
+      PsiElement(WS_NEW_LINES)('\n\n')
+      PsiWhiteSpace('    ')
+      ExpressionStmt
+        CallOrConversionExpression
+          LiteralExpr
+            Identifier
+              PsiElement(IDENTIFIER)('fmt')
+              PsiElement(.)('.')
+              PsiElement(IDENTIFIER)('Printf')
+          PsiElement(()('(')
+          LiteralExpr
+            PsiElement(LITERAL_STRING)('"Hello world3!"')
+          PsiElement())(')')
+      PsiElement(WS_NEW_LINES)('\n\n')
+      PsiElement(})('}')

@@ -18,6 +18,6 @@ Go file
         <empty list>
   VarDeclarations
     PsiElement(KEYWORD_VAR)('var')
-    VarSpec
+    VarDeclaration
       PsiErrorElement:identifier.list.expected
         <empty list>

@@ -10,22 +10,21 @@ Go file
   VarDeclarations
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
-    VarSpec
-      Identifiers
-        Identifier
-          PsiElement(IDENTIFIER)('t1')
-        PsiElement(,)(',')
-        PsiWhiteSpace(' ')
-        Identifier
-          PsiElement(IDENTIFIER)('t2')
-        PsiElement(,)(',')
-        PsiWhiteSpace(' ')
-        Identifier
-          PsiElement(IDENTIFIER)('t3')
-        PsiElement(,)(',')
-        PsiWhiteSpace(' ')
-        Identifier
-          PsiElement(IDENTIFIER)('t4')
+    VarDeclaration
+      Identifier
+        PsiElement(IDENTIFIER)('t1')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      Identifier
+        PsiElement(IDENTIFIER)('t2')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      Identifier
+        PsiElement(IDENTIFIER)('t3')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      Identifier
+        PsiElement(IDENTIFIER)('t4')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')

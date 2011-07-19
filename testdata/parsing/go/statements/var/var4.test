@@ -23,10 +23,9 @@ Go file
       VarDeclarations
         PsiElement(KEYWORD_VAR)('var')
         PsiWhiteSpace(' ')
-        VarSpec
-          Identifiers
-            Identifier
-              PsiElement(IDENTIFIER)('a')
+        VarDeclaration
+          Identifier
+            PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
           TypeName
             PsiElement(IDENTIFIER)('int')
