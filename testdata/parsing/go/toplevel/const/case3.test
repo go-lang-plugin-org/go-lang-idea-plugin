@@ -1,0 +1,27 @@
+package main
+const a int = 1; /* adfaf * sdf */
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  ConstDeclarations
+    PsiElement(KEYWORD_CONST)('const')
+    PsiWhiteSpace(' ')
+    ConstSpec
+      Identifier
+        PsiElement(IDENTIFIER)('a')
+      PsiWhiteSpace(' ')
+      TypeName
+        PsiElement(IDENTIFIER)('int')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_INT)('1')
+      PsiElement(;)(';')
+  PsiWhiteSpace(' ')
+  PsiComment(ML_COMMENT)('/* adfaf * sdf */')

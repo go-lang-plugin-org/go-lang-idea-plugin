@@ -1,0 +1,24 @@
+/*
+ * ELF constants and data structures
+ */
+package elf
+func main() {}
+-----
+Go file
+  PsiComment(ML_COMMENT)('/*\n * ELF constants and data structures\n */')
+  PsiElement(WS_NEW_LINES)('\n')
+  PackageDeclaration(elf)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('elf')
+  PsiElement(WS_NEW_LINES)('\n')
+  FunctionDeclaration(main)
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmt
+      PsiElement({)('{')
+      PsiElement(})('}')

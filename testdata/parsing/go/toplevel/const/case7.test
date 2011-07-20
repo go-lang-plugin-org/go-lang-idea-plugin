@@ -1,0 +1,169 @@
+package main
+const (
+      ET_NONE   Type = 0      /* Unknown type. */
+      ET_REL    Type = 1      /* Relocatable. */
+      ET_EXEC   Type = 2      /* Executable. */
+      ET_DYN    Type = 3      /* Shared object. */
+      ET_CORE   Type = 4      /* Core file. */
+      ET_LOOS   Type = 0xfe00 /* First operating system specific. */
+      ET_HIOS   Type = 0xfeff /* Last operating system-specific. */
+      ET_LOPROC Type = 0xff00 /* First processor-specific. */
+      ET_HIPROC Type = 0xffff /* Last processor-specific. */
+)
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  ConstDeclarations
+    PsiElement(KEYWORD_CONST)('const')
+    PsiWhiteSpace(' ')
+    PsiElement(()('(')
+    ConstSpec
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('      ')
+      Identifier
+        PsiElement(IDENTIFIER)('ET_NONE')
+      PsiWhiteSpace('   ')
+      TypeName
+        PsiElement(IDENTIFIER)('Type')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_INT)('0')
+    PsiWhiteSpace('      ')
+    PsiComment(ML_COMMENT)('/* Unknown type. */')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('      ')
+    ConstSpec
+      Identifier
+        PsiElement(IDENTIFIER)('ET_REL')
+      PsiWhiteSpace('    ')
+      TypeName
+        PsiElement(IDENTIFIER)('Type')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_INT)('1')
+    PsiWhiteSpace('      ')
+    PsiComment(ML_COMMENT)('/* Relocatable. */')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('      ')
+    ConstSpec
+      Identifier
+        PsiElement(IDENTIFIER)('ET_EXEC')
+      PsiWhiteSpace('   ')
+      TypeName
+        PsiElement(IDENTIFIER)('Type')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_INT)('2')
+    PsiWhiteSpace('      ')
+    PsiComment(ML_COMMENT)('/* Executable. */')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('      ')
+    ConstSpec
+      Identifier
+        PsiElement(IDENTIFIER)('ET_DYN')
+      PsiWhiteSpace('    ')
+      TypeName
+        PsiElement(IDENTIFIER)('Type')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_INT)('3')
+    PsiWhiteSpace('      ')
+    PsiComment(ML_COMMENT)('/* Shared object. */')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('      ')
+    ConstSpec
+      Identifier
+        PsiElement(IDENTIFIER)('ET_CORE')
+      PsiWhiteSpace('   ')
+      TypeName
+        PsiElement(IDENTIFIER)('Type')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_INT)('4')
+    PsiWhiteSpace('      ')
+    PsiComment(ML_COMMENT)('/* Core file. */')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('      ')
+    ConstSpec
+      Identifier
+        PsiElement(IDENTIFIER)('ET_LOOS')
+      PsiWhiteSpace('   ')
+      TypeName
+        PsiElement(IDENTIFIER)('Type')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_HEX)('0xfe00')
+    PsiWhiteSpace(' ')
+    PsiComment(ML_COMMENT)('/* First operating system specific. */')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('      ')
+    ConstSpec
+      Identifier
+        PsiElement(IDENTIFIER)('ET_HIOS')
+      PsiWhiteSpace('   ')
+      TypeName
+        PsiElement(IDENTIFIER)('Type')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_HEX)('0xfeff')
+    PsiWhiteSpace(' ')
+    PsiComment(ML_COMMENT)('/* Last operating system-specific. */')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('      ')
+    ConstSpec
+      Identifier
+        PsiElement(IDENTIFIER)('ET_LOPROC')
+      PsiWhiteSpace(' ')
+      TypeName
+        PsiElement(IDENTIFIER)('Type')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_HEX)('0xff00')
+    PsiWhiteSpace(' ')
+    PsiComment(ML_COMMENT)('/* First processor-specific. */')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('      ')
+    ConstSpec
+      Identifier
+        PsiElement(IDENTIFIER)('ET_HIPROC')
+      PsiWhiteSpace(' ')
+      TypeName
+        PsiElement(IDENTIFIER)('Type')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_HEX)('0xffff')
+    PsiWhiteSpace(' ')
+    PsiComment(ML_COMMENT)('/* Last processor-specific. */')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiElement())(')')

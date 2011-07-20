@@ -283,4 +283,10 @@ public abstract class ParserUtils {
             builder.advanceLexer();            
         }
     }
+
+    public static void skipComments(PsiBuilder builder) {
+        while ( GoElementTypes.COMMENTS.contains(builder.getTokenType()) ) {
+            builder.advanceLexer();
+        }
+    }
 }

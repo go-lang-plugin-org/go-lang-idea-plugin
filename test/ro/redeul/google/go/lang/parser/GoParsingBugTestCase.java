@@ -19,4 +19,12 @@ public class GoParsingBugTestCase extends GoParsingTestCase {
         doTest();
     }
 
+    public void testComment$second() throws Throwable {
+        doTest();
+    }
+
+    public void testComment$elf() throws Throwable {
+        doTest();
+    }
+
 }

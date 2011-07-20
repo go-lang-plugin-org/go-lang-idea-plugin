@@ -172,4 +172,9 @@ public interface GoElementTypes extends GoTokenTypes {
             SHORT_VAR_STATEMENT,
             VAR_DECLARATIONS
     );
+
+    public final TokenSet COMMENTS = TokenSet.create(
+            mSL_COMMENT,
+            mML_COMMENT
+    );
 }

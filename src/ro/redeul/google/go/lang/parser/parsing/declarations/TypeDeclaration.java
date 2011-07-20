@@ -25,30 +25,11 @@ public class TypeDeclaration implements GoElementTypes {
             return false;
         }                
 
-        if ( ParserUtils.lookAhead(builder, pLPAREN) ) {
-            ParserUtils.advance(builder);
-
-            do {
+        NestedDeclarationParser.parseNestedOrBasicDeclaration(builder, parser, new NestedDeclarationParser.DeclarationParser() {
+            public void parse(PsiBuilder builder, GoParser parser) {
                 parseTypeSpecification(builder, parser);
-
-                if ( builder.getTokenType() != oSEMI  &&
-                     builder.getTokenType() != pRPAREN  &&
-                     builder.getTokenType() != wsNLS )
-                {
-                    builder.error("semicolon.or.newline.or.closed.parenthesis.expected");
-                }
-                else
-                {
-                    ParserUtils.getToken(builder, oSEMI);
-                    ParserUtils.skipNLS(builder);
-                }
-            } while ( ! ParserUtils.lookAhead(builder, pRPAREN) && ! builder.eof() );
-
-            ParserUtils.advance(builder);
-
-        } else {
-            parseTypeSpecification(builder, parser);
-        }
+            }
+        });
 
         marker.done(TYPE_DECLARATIONS);
         return true;

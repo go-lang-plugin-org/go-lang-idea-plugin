@@ -68,11 +68,11 @@ mWS = [ \t\f]    // Whitespaces
 ////////// Comments ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-C_STYLE_COMMENT="/*" ~"*/" 
-// COMMENT_TAIL=( [^"*"]* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
+//C_STYLE_COMMENT="/*" [^"*/"]* "*/"
+//COMMENT_TAIL=( [^"*"]* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
 mSL_COMMENT = "//" [^\r\n]*
-mML_COMMENT = {C_STYLE_COMMENT}
+//mML_COMMENT = "/*" "*"
 
 mLETTER = [:letter:] | "_"
 mDIGIT = [:digit:]
@@ -211,6 +211,12 @@ mIDENT = {mLETTER} ({mLETTER} | {mDIGIT} )*
 {mWS}                                     { return wsWS; }
 {mNL}+                                    { return wsNLS; }
 
+{mSL_COMMENT}                             { return( mSL_COMMENT ); }
+//{mML_COMMENT}                             { return( mML_COMMENT ); }
+"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return( mML_COMMENT ); }
+
+//([^"*/"] | [\r\n])+ "*/"?
+
 "..."                                     { return oTRIPLE_DOT; }
 "."                                       { return oDOT; }
 
@@ -290,9 +296,6 @@ mIDENT = {mLETTER} ({mLETTER} | {mDIGIT} )*
 ":="                                      { return oVAR_ASSIGN; }
 
 
-{mSL_COMMENT}                             { return( mSL_COMMENT ); }
-{mML_COMMENT}                             { return( mML_COMMENT ); }
-
 "break"                                   { return( kBREAK );  }
 "default"                                 { return( kDEFAULT );  }
 "package"                                 { return( kPACKAGE );  }
@@ -332,8 +335,6 @@ mIDENT = {mLETTER} ({mLETTER} | {mDIGIT} )*
 {mNUM_OCT}                                {  return litOCT; }
 {mNUM_HEX}                                {  return litHEX; }
 {mNUM_INT}                                {  return litINT; }
-
-
 
 .                                         {  return mWRONG; }
 }
