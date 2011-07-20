@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.expressions;
 
 import com.intellij.lang.PsiBuilder;
+import com.sun.xml.internal.ws.wsdl.parser.ParserUtil;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -31,6 +32,8 @@ public class Expressions implements GoElementTypes {
             if ( builder.getTokenType() == wsNLS || builder.getTokenType() == oSEMI ) {
                 break;
             }
+
+            ParserUtils.getToken(builder, oTRIPLE_DOT);
             
             if  (builder.getTokenType() == oCOMMA ) {
                 ParserUtils.getToken(builder, oCOMMA);
