@@ -1,0 +1,190 @@
+---
+layout: template
+title: go-ide Changelog
+---
+              <h4>0.3.18 changes:</h4>
+                <ul>
+                    <li>[bugfix] Fixed parsing error when the last function element is ...</li>
+                    <li>[bugfix] Fixed multiline comment parsing in certain cases.</li>
+                    <li>[bugfix] Fixed regression when parsing big const declaration with comments.</li>
+                </ul>
+         </h4>
+                 <h4>0.3.17 changes:</h4>
+                <ul>
+                    <li>[feature] Improved completion (use the top level var and const declarations as completion variants).</li>
+                </ul>
+        </h4>
+                 <h4>0.3.16 changes:</h4>
+                <ul>
+                    <li>[feature] Go aware imports optimizer (experimental).</li>
+                </ul>
+        </h4>
+                 <h4>0.3.15 changes:</h4>
+                <ul>
+                    <li>[feature] Support GO sdk as packaged by the gophers/go PPA on Ubuntu.</li>
+                </ul>
+        </h4>
+                 <h4>0.3.14 changes:</h4>
+                <ul>
+                    <li>[bugfix] Fix the broken run configuration on MacOS. https://github.com/alexandre-normand.</li>
+                </ul>
+        </h4>
+                 <h4>0.3.13 changes:</h4>
+                <ul>
+                    <li>[feature] Added simple Structure View for Go files. Thanks https://github.com/khronnuz.</li>
+                </ul>
+        </h4>
+         <h4>0.3.12 changes:</h4>
+                <ul>
+                    <li>[feature] Using gofmt as formatter when formatting a file (Ctrl + Alt + L). Thanks https://github.com/khronnuz.</li>
+                </ul>
+        </h4>
+        <h4>0.3.11 changes:</h4>
+                <ul>
+                    <li>Bump the stub index version.</li>
+                </ul>
+        </h4>
+        <h4>0.3.10 changes:</h4>
+                <ul>
+                    <li>[bugfix] Go To function definitions was broken by the variable completion changes. Fixed.</li>
+                    <li>[bugfix] Invalid error highlight when parsing a CompositeLiteral ending with a comma.</li>
+                </ul>
+        </h4>
+        <h4>0.3.9 changes:</h4>
+                <ul>
+                    <li>[feature] Added a setting to allow disabling of the variable completion.</li>
+                    <li>[bugfix] fix ArrayIndexOutOfBoundException when running on some wild code.</li>
+                </ul>
+        </h4>
+      <h4>0.3.7 changes:</h4>
+                <ul>
+                    <li>[feature] experimental Makefile based build system (bring your on Makefile's). Configured in project settings. Thanks to https://github.com/alexandre-normand</li>
+                    <li>[feature] some more completion options on variables (work in progress)</li>
+                    <li>[bugfix] invalid framework import causing incompatibility with idea 10.5+ </li>
+                </ul>
+        </h4>
+        <h4>0.3.6 changes:</h4>
+                <ul>
+                    <li>[feature] GoTo class (go types) implementation</li>
+                </ul>
+        </h4>
+        <h4>0.3.5 changes:</h4>
+                <ul>
+                    <li>[bugfix] Go to error on compilation error. Thanks alexandre :)</li>
+                </ul>
+        </h4>
+        <h4>0.3.4 changes:</h4>
+                <ul>
+                    <li>[feature] Properly resolve not public types from the current package.</li>
+                    <li>[feature] Function names completion (from current package and imported packages) where an identifier is possible.</li>
+                </ul>
+        </h4>
+        <h4>0.3.3 changes:</h4>
+                <ul>
+                    <li>[bugfix] Minor bug with types completion</li>
+                </ul>
+        </h4>
+        <h4>0.3.2 changes:</h4>
+                <ul>
+                    <li>[feature] Fixed and upgraded go types resolution and completion</li>
+                </ul>
+        </h4>
+        <h4>0.3.1 changes:</h4>
+                <ul>
+                    <li>[feature] Removed the version limitation</li>
+                </ul>
+        </h4>
+        <h4>0.3.0 changes:</h4>
+                <ul>
+                    <li>[bugfix] Fixed to run under Idea 10 version</li>
+                    <li>[feature] Adding indexing of the go SDK (right now only for package names. More to follow</li>
+                    <li>[feature] Added go module type / removed go facet.</li>
+                    <li>[feature] Disabled go formatter (in the process of rebuilding).</li>
+                </ul>
+        </h4>
+i      <h4>0.2.9 changes:</h4>
+                <ul>
+                    <li>[bugfix] wrong indent when hitting enter in top level elements</li>
+                    <li>[bugfix] parsing infinite loop with the latest go release.</li>
+                </ul>
+        </h4>
+
+        <h4>0.2.8 features:</h4>
+                <ul>
+                    <li>[bugfix] wrong indent when hitting enter</li>
+                </ul>
+        </h4>
+
+        <h4>0.2.7 features:</h4>
+                <ul>
+                    <li>[feature] Type name completion.</li>
+                    <li>[feature] Code formatting.</li>
+                    <li>[bugfix] Some parsing errors.</li>
+                </ul>
+        </h4>
+
+        <h4>0.2.6 features:</h4>
+                <ul>
+                    <li>[bugfix] Fix compilation for windows.</li>
+                </ul>
+        </h4>
+
+        <h4>0.2.5 features:</h4>
+                <ul>
+                    <li>[bugfix] Force encoding for go files to UTF-8 all the time</li>
+                </ul>
+        </h4>
+
+        <h4>0.2.4 features:</h4>
+                <ul>
+                    <li>[bugfix] Make sure the latest go release is detected as a Go Sdk</li>
+                </ul>
+        </h4>
+
+        <h4>0.2.3 features:</h4>
+                <ul>
+                    <li>[feature] Go To definition (for types) works across files and Go SDK</li>
+                    <li>[feature] ColorsAndSettings page with a new color scheme</li>
+                    <li>[feature] Automatically add new line at end of file</li>
+                </ul>
+        </h4>
+
+        <h4>0.2.2 features:</h4>
+                <ul>
+                    <li>[feature] Go To definition (for types defined inside the same file)</li>
+                    <li>[bugfixes] Fixed the plugin to work with idea 9.0.3.</li>
+                </ul>
+        </h4>
+       <h4>0.2.2 features:</h4>
+                <ul>
+                    <li>[feature] Go To definition (for types defined inside the same file)</li>
+                    <li>[bugfixes] Fixed the plugin to work with idea 9.0.3.</li>
+                </ul>
+        </h4>
+
+        <h4>0.2.1 features:</h4>
+                <ul>
+                    <li>[feature] Update Go SDK (to work with the latest release and on windows)</li>
+                    <li>[feature] Compilation of the go applications (supported semantics are similar to those of gobuild)</li>
+                    <li>[feature] Go application file and library generation.</li>
+                    <li>[feature] Auto completion of sdk package names and/or local application packages.</li>
+                    <li>[bugfixes] Some parsing issues with comments.</li>
+                </ul>
+        </h4>
+
+        <h4>0.1.1 features:</h4>
+                <ul>
+                    <li>[feature] Go Sdk type (with auto configuration)</li>
+                    <li>[feature] Icons</li>
+                </ul>
+        </h4>
+
+        <h4>0.1.0 features:</h4>
+                <ul>
+                    <li>[feature] basic language parsing and highlighting</li>
+                    <li>[feature] Code folding</li>
+                    <li>[feature] Brace matching</li>
+                    <li>[feature] Comment/Uncomment (Single/Multiple line) support</li>
+                </ul>
+
+
