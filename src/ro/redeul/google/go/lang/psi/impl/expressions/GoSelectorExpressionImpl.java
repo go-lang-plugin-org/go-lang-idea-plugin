@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -49,6 +50,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     }
 
     @Override
+    @Nullable
     public GoExpr getExpressionContext() {
         return findChildByClass(GoExpr.class);
     }
@@ -63,20 +65,24 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
         GoExpr context = getExpressionContext();
 
-        return context != null ? new TextRange(context.getTextLength() + 1, getTextLength()) : null;
+        return context != null ? new TextRange(context.getTextLength() + 1, getTextLength()) : getTextRange();
     }
 
     @Override
     public PsiElement resolve() {
 
         if (GoProjectSettings.getInstance(getProject()).getState().enableVariablesCompletion) {
-            GoType contextType = getExpressionContext().getType();
+            GoExpr expressionContext = getExpressionContext();
 
-            if (contextType == null) {
-                return null;
+            if ( expressionContext != null ) {
+                GoType contextType = expressionContext.getType();
+
+                if (contextType == null) {
+                    return null;
+                }
+
+                return contextType.getMemberType(getText().substring(getText().indexOf(".") + 1));
             }
-
-            return contextType.getMemberType(getText().substring(getText().indexOf(".") + 1));
         }
 
         return null;

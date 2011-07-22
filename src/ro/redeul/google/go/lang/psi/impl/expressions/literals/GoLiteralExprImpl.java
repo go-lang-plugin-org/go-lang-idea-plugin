@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
@@ -61,5 +62,8 @@ public class GoLiteralExprImpl extends GoExpressionBase implements GoLiteralExpr
         return super.processDeclarations(processor, state, lastParent, place);
     }
 
-
+    @Override
+    public PsiReference getReference() {
+        return null;
+    }
 }
