@@ -167,4 +167,6 @@ public class GoNamesCache extends PsiShortNamesCache {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    public void resolveGoPackageName(String importPackageName) {
+    }
 }

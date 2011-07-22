@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Google Go language</name>
-    <version>0.3.18</version>
+    <version>0.4.0</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[
@@ -33,11 +33,22 @@
             <li>Simple structure view</li>
             <li>Go aware imports optimizer  (experimental)</li>
             <li>Support GO sdk as packaged by the gophers/go PPA on Ubuntu.</li>
+            <!--<li>[feature] Go App Engine SDK support (not done) ...</li>-->
+            <!--<li>[feature] Go App Engine tools support (not done) ...</li>-->
+            <!--<li>[feature] Highlight non existent imported packages.</li>-->
         </ul>
     ]]>
     </description>
     <change-notes>
         <![CDATA[
+		 <h3>0.4.0 changes:</h3>
+                <ul>
+                    <!--<li>[feature] Go App Engine SDK support (not done) ...</li>-->
+                    <!--<li>[feature] Go App Engine tools support (not done) ...</li>-->
+                    <li>[bugfix] NullPointerException while highlighting selector expression with non resolving context (Issue #34).</li>
+                    <li>[feature] Highlight non existent imported packages.</li>
+                </ul>
+         </h3>
 		 <h3>0.3.18 changes:</h3>
                 <ul>
                     <li>[bugfix] Fixed parsing error when the last function element is ...</li>

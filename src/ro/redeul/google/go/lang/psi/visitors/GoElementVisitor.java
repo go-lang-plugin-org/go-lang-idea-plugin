@@ -30,11 +30,11 @@ public class GoElementVisitor {
         visitElement(packageDeclaration);
     }
 
-    public void visitImportDeclaration(GoImportDeclarations importDeclaration) {
+    public void visitImportDeclarations(GoImportDeclarations importDeclaration) {
         visitElement(importDeclaration);
     }
 
-    public void visitImportSpec(GoImportDeclaration importSpec) {
+    public void visitImportDeclaration(GoImportDeclaration importSpec) {
         visitElement(importSpec);
     }
 

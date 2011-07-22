@@ -27,7 +27,7 @@ public class GoImportDeclarationsImpl extends GoPsiElementBase implements GoImpo
     }
 
     public void accept(GoElementVisitor visitor) {
-        visitor.visitImportDeclaration(this);
+        visitor.visitImportDeclarations(this);
     }
 
     @Override
