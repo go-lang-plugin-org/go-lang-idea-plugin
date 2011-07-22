@@ -22,7 +22,11 @@ import java.io.IOException;
 public class GoTypeNameDeclarationType extends GoStubElementType<GoTypeNameDeclarationStub, GoTypeNameDeclaration> {
 
     public GoTypeNameDeclarationType() {
-        super("type.name");
+        super("type.name.declaration.stub");
+    }
+
+    public String getExternalId() {
+        return "go.type.name.declaration";
     }
 
     @Override

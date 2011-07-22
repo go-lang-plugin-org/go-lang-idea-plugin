@@ -6,9 +6,7 @@ import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.stubs.elements.GoTypeNameDeclarationType;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

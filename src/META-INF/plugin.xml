@@ -300,6 +300,8 @@
 
         <java.shortNamesCache implementation="ro.redeul.google.go.lang.stubs.GoNamesCache" />
 
+        <stubElementTypeHolder class="ro.redeul.google.go.lang.parser.GoElementTypes" />
+
         <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoPackageName" />
         <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoTypeName" />
         <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoQualifiedTypeName" />
