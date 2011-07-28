@@ -4,7 +4,8 @@ PLUGINSOURCEPATH=/Volumes/Bubble/projects/google-go-lang-idea-plugin
 
 # Build the go sdk
 cd $GOSOURCEPATH/src
-#./all.bash
+./all.bash
+rm -r $IDEASOURCEPATH/build/conf/mac/go-sdk
 cp -r $GOSOURCEPATH $IDEASOURCEPATH/build/conf/mac/go-sdk
 
 # Copy Go logo and about images
@@ -12,7 +13,7 @@ cp $PLUGINSOURCEPATH/go-ide/resources/idea_community_about.png $IDEASOURCEPATH/c
 cp $PLUGINSOURCEPATH/go-ide/resources/idea_community_logo.png $IDEASOURCEPATH/community-resources/src/
 
 cd $IDEASOURCEPATH
-#ant build
+ant build
 VERSION=$(cat build.txt)
 cp $IDEASOURCEPATH/out/artifacts/ideaIC-$VERSION.mac.zip $PLUGINSOURCEPATH/go-ide
 cd $PLUGINSOURCEPATH/go-ide
