@@ -84,38 +84,22 @@ public class GAEApplicationConfiguration extends ModuleBasedConfiguration<GoAppl
     }
 
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
-        CommandLineState state = new CommandLineState(env) {
-
-            @Override
-            protected OSProcessHandler startProcess() throws ExecutionException {
-
-                GeneralCommandLine commandLine = new GeneralCommandLine();
-
-                //commandLine.setExePath(getCompiledFileName(getModule(), scriptName));
-                if ( scriptArguments != null && scriptArguments.trim().length() > 0 ) {
-                    commandLine.addParameter(scriptArguments);
-                }
-                commandLine.setExePath(sdkDirectory + "/dev_appserver.py");
-                commandLine.addParameter(".");
-                commandLine.setWorkDirectory(workDir);
-
-                return GoApplicationProcessHandler.runCommandLine(commandLine);
-            }
-        };
-
-        state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject()));
+        GAERunningState state = new GAERunningState(env,sdkDirectory,scriptArguments,workDir);
         return state;
+
     }
+
+
 
     private String getCompiledFileName(Module module, String scriptName) {
 
         VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
         VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(new File(scriptName));
 
-        if ( file == null ) {
+        if (file == null) {
             for (VirtualFile sourceRoot : sourceRoots) {
                 file = sourceRoot.findChild(scriptName);
-                if ( file != null) {
+                if (file != null) {
                     break;
                 }
             }
