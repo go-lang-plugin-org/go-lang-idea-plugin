@@ -1,17 +1,14 @@
 package ro.redeul.google.go.lang.lexer;
 
-import com.intellij.lang.Language;
-import com.sun.istack.internal.Nullable;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 24, 2010
  * Time: 2:35:19 AM
- * To change this template use File | Settings | File Templates.
  */
 public class GoElementTypeImpl extends GoElementType {
 

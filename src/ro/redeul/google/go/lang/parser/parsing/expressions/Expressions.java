@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.parser.parsing.expressions;
 
 import com.intellij.lang.PsiBuilder;
-import com.sun.xml.internal.ws.wsdl.parser.ParserUtil;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -74,6 +73,11 @@ public class Expressions implements GoElementTypes {
      *                  PrimaryExpr TypeAssertion |
      *                  PrimaryExpr Call .
      *
+     * @param builder the psi builder
+     * @param parser the actual go parser to use
+     * @param inControlStmts if we are parsing expressions inside an if/for type of control expressions
+     *
+     * @return true/false depending on how successful we were
      */
     public static boolean parsePrimary(PsiBuilder builder, GoParser parser, boolean inControlStmts) {
         return PrimaryExpression.parse(builder, parser, inControlStmts);

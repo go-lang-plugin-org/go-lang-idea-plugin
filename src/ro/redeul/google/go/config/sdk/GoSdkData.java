@@ -7,11 +7,10 @@ import com.intellij.openapi.projectRoots.SdkModel;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 19, 2010
  * Time: 8:07:05 AM
- * To change this template use File | Settings | File Templates.
  */
 public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<GoSdkData> {
 

@@ -235,17 +235,22 @@
     <category>Custom Languages</category>
 
     <application-components>
-        <!-- Add your application components here -->
+        <component>
+            <implementation-class>ro.redeul.google.go.components.GoBundledSdkDetector</implementation-class>
+        </component>
     </application-components>
 
     <project-components>
+
         <!-- Add your project components here -->
         <component>
             <implementation-class>ro.redeul.google.go.components.GoCompilerLoader</implementation-class>
         </component>
+
         <component>
             <implementation-class>ro.redeul.google.go.components.EditorTweakingComponent</implementation-class>
         </component>
+
     </project-components>
     
     <actions>
@@ -264,6 +269,16 @@
             
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </group>
+
+        <group id="Go.Tools" popup="true" text="Go Tools" description="Go tools support" icon="/icons/go_16x16.png">
+            <action id="Go.Tools.AddGoSdk" text="Add Go Sdk Support"
+                description="Add Go Sdk to current module"
+                class="ro.redeul.google.go.tools.actions.AddGoSdkSupport">
+            </action>
+
+            <add-to-group group-id="ToolsMenu" anchor="last" />
+        </group>
+
 
     </actions>
 

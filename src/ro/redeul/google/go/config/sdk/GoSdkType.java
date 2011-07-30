@@ -1,6 +1,7 @@
 package ro.redeul.google.go.config.sdk;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.*;
@@ -10,15 +11,12 @@ import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.config.ui.GoSdkConfigurable;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.GoUtil;
 
 import javax.swing.*;
 
 public class GoSdkType extends SdkType {
-
-    GoSdkData sdkData;
 
     public GoSdkType() {
         super("Google Go SDK");
@@ -52,28 +50,17 @@ public class GoSdkType extends SdkType {
             }
           }
         };
+
         descriptor.setTitle(GoBundle.message("go.sdk.configure.title", getPresentableName()));
         return descriptor;
-
     }
 
     @Override
     public boolean isValidSdkHome(String path) {
         String[] stringList = GoSdkUtil.testGoogleGoSdk(path);
 
-        boolean isValid =
-                stringList != null && stringList.length == 5 &&
-                        (stringList[0].equalsIgnoreCase(path) || stringList[0].equalsIgnoreCase(path + "/"));
-
-        if (isValid) {
-            sdkData = new GoSdkData();
-            sdkData.BINARY_PATH = stringList[1];
-            sdkData.TARGET_OS = stringList[2];
-            sdkData.TARGET_ARCH = stringList[3];
-            sdkData.VERSION = stringList[4];
-        }
-
-        return isValid;
+        return stringList != null && stringList.length == 5 &&
+                (stringList[0].equalsIgnoreCase(path) || stringList[0].equalsIgnoreCase(path + "/"));
     }
 
     @Override
@@ -93,7 +80,14 @@ public class GoSdkType extends SdkType {
 
     @Override
     public String suggestSdkName(String currentSdkName, String sdkHome) {
-        return "Go" + (sdkData.VERSION != null && sdkData.VERSION.trim().length() > 0 ? " (" + sdkData.VERSION + ")" : "");
+        String homePath = PathManager.getHomePath();
+
+        if ( sdkHome.startsWith(homePath + "/bundled-go/go-sdk") ) {
+            return "Bundled Go Sdk";
+        }
+
+//        return "Go" + (sdkData != null && sdkData.VERSION != null && sdkData.VERSION.trim().length() > 0 ? " (" + sdkData.VERSION + ")" : "");
+        return "Go";
     }
 
     @Override
@@ -102,13 +96,31 @@ public class GoSdkType extends SdkType {
     }
 
     @Override
-    public boolean setupSdkPaths(final Sdk sdk, SdkModel sdkModel) {
-
+    public void setupSdkPaths(Sdk sdk) {
         VirtualFile homeDirectory = sdk.getHomeDirectory();
 
         if (sdk.getSdkType() != this || homeDirectory == null) {
-            return false;
+            return;
         }
+
+        String path = homeDirectory.getPath();
+
+        String[] stringList = GoSdkUtil.testGoogleGoSdk(path);
+
+        boolean isValid =
+                stringList != null && stringList.length == 5 &&
+                        (stringList[0].equalsIgnoreCase(path) || stringList[0].equalsIgnoreCase(path + "/"));
+
+        if ( ! isValid ) {
+            return;
+        }
+
+        GoSdkData sdkData = new GoSdkData();
+
+        sdkData.BINARY_PATH = stringList[1];
+        sdkData.TARGET_OS = stringList[2];
+        sdkData.TARGET_ARCH = stringList[3];
+        sdkData.VERSION = stringList[4];
 
         final VirtualFile librariesRoot = homeDirectory.findFileByRelativePath(String.format("pkg/%s_%s/", sdkData.TARGET_OS, sdkData.TARGET_ARCH));
         final VirtualFile sourcesRoot = homeDirectory.findFileByRelativePath("src/pkg/");
@@ -132,8 +144,6 @@ public class GoSdkType extends SdkType {
         sdkModificator.setVersionString(sdkData.VERSION);
         sdkModificator.setSdkAdditionalData(sdkData);
         sdkModificator.commitChanges();
-
-        return true;
     }
 
     @Override
@@ -151,6 +161,11 @@ public class GoSdkType extends SdkType {
     @Override
     public String getPresentableName() {
         return "Go SDK";
+    }
+
+    @Override
+    public String getVersionString(Sdk sdk) {
+        return sdk.getVersionString();
     }
 
     @Override

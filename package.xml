@@ -1,0 +1,58 @@
+<project name="Idea Google Go language scripted build file" default="package" basedir=".">
+
+    <!-- set global properties for this build -->
+    <property name="src" location="src"/>
+    <property name="build" location="."/>
+    <property name="dist" location="dist"/>
+    <property name="idea.community.build" location="${user.home}/Tools/idea-IU-107.322/" />
+    <property name="target.plugin.name" value="ro.redeul.google.go" />
+
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2">
+        <classpath>
+            <pathelement location="${idea.community.build}/redist/forms_rt.jar"/>
+            <pathelement location="${idea.community.build}/redist/javac2.jar"/>
+            <pathelement location="${idea.community.build}/redist/annotations.jar"/>
+            <fileset dir="${idea.community.build}" includes="**/*.jar" />
+        </classpath>
+
+    </taskdef>
+
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}"/>
+        <!--<mkdir dir="${dist}"/>-->
+
+    </target>
+
+    <target name="compile" depends="clean,init" description="compile the source ">
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac2 srcdir="${src}" destdir="${build}" includeantruntime="false" >
+            <classpath>
+                <fileset dir="${idea.community.build}" includes="**/*.jar" />
+            </classpath>
+            <compilerarg value="-Xlint:deprecation" />
+        </javac2>
+    </target>
+
+    <target name="package" depends="compile" description="generate the distribution">
+        <!-- Create the distribution directory -->
+
+        <mkdir dir="${dist}"/>
+
+        <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+        <!--<jar jarfile="${dist}/lib/MyProject-${DSTAMP}.jar" basedir="${build}"/>-->
+        <jar jarfile="${dist}/${target.plugin.name}.jar">
+            <fileset dir="${build}" includes="**/*.*" />
+            <fileset dir="${src}" excludes="**/*.java" />
+        </jar>
+
+    </target>
+
+    <target name="clean" description="clean up">
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+</project>
