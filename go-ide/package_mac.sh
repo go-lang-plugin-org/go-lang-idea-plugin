@@ -1,6 +1,15 @@
-GOSOURCEPATH=/Volumes/Bubble/projects/go
-IDEASOURCEPATH=/Volumes/Bubble/projects/idea
-PLUGINSOURCEPATH=/Volumes/Bubble/projects/google-go-lang-idea-plugin
+# Author: Alexandre Normand (https://github.com/alexandre-normand)
+# Date: July 30th, 2011
+
+if [ $# -ne 3 ]
+then
+    echo "Syntax: $0 <Go source path> <Idea community source path> <Google-go-lang plugin source path>"
+    exit
+fi
+
+GOSOURCEPATH=$1
+IDEASOURCEPATH=$2
+PLUGINSOURCEPATH=$3
 
 # Build the go sdk
 cd $GOSOURCEPATH/src
