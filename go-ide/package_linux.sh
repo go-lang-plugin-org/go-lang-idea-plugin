@@ -85,7 +85,7 @@ function build_go_sdk() {
 
     ./clean.bash
     ./all.bash
-
+    GOOS=linux GOARCH=386 ./all.bash
     popd
 
     #    rm -r $IDEASOURCEPATH/build/conf/mac/go-sdk
