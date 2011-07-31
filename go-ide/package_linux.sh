@@ -1,11 +1,19 @@
 #!/bin/bash
 
-SOURCE_PATH_GO=~/Tools/google-go/release/
-SOURCE_PATH_IDEA=~/Work/IntellijIdea/idea/
-SOURCE_PATH_GO_PLUGIN=~/Work/google-go-language/
+SOURCE_PATH_GO=${SOURCE_PATH_GO:-${HOME}/Tools/google-go/release/}
+SOURCE_PATH_IDEA=${SOURCE_PATH_IDEA:-${HOME}/Work/IntellijIdea/idea/}
+SOURCE_PATH_IDEA_BUILT=idea_community_not_built
+SOURCE_PATH_GO_PLUGIN=${SOURCE_PATH_GO_PLUGIN:-`pwd`/..}
 
-RELEASE_TAG_GO="release.r58.1"
-RELEASE_TAG_IDEA=idea/107.322
+SKIP_GO_SDK_BUILD=${SKIP_GO_SDK_BUILD:-false}
+SKIP_IDEA_BUILD=${SKIP_IDEA_BUILD:-false}
+
+RELEASE_TAG_GO=${RELEASE_TAG_GO:-release.r58.1}
+RELEASE_TAG_IDEA=${RELEASE_TAG_IDEA:-idea/107.322}
+
+GO_IDE_VERSION=${GO_IDE_VERSION:-0.4.18}
+
+FOLDER_DIST=${FOLDER_DIST:-$SOURCE_PATH_GO_PLUGIN/dist}
 
 function validate_go_sdk_location {
 
@@ -58,38 +66,89 @@ function validate_idea_community_location() {
 }
 
 function build_go_sdk() {
+    echo
+    echo
     echo "Clean building Go Sdk"
+    echo
 
-    pushd "$SOURCE_PATH_GO/src"
+    pushd "$SOURCE_PATH_GO/src" >/dev/null
 
-    # fixup for when you also have a weekly go installed inside on your system.
-    /home/mtoader/Tools/google-go/release/bin
-    PATH=${SOURCE_PATH_GO}bin:$PATH
+    ./clean.bash
+    ./all.bash
 
-    export PATH
-    # call the build
-    echo $PATH
-    ./clean.bash && ./all.bash && popd
+    popd
 
     #    rm -r $IDEASOURCEPATH/build/conf/mac/go-sdk
     #    cp -r $GOSOURCEPATH $IDEASOURCEPATH/build/conf/mac/go-sdk
 }
 
 function build_idea_community() {
-    cp "$SOURCE_PATH_GO_PLUGIN/go-ide/resources/idea_community_{about,logo}.png" "$SOURCE_PATH_IDEA/community-resources/src"
 
+    cp "$SOURCE_PATH_GO_PLUGIN/go-ide/resources/idea_community_about.png" "$SOURCE_PATH_IDEA/community-resources/src"
+    cp "$SOURCE_PATH_GO_PLUGIN/go-ide/resources/idea_community_logo.png" "$SOURCE_PATH_IDEA/community-resources/src"
+
+    echo
+    echo
     echo "Cleanly building Idea Community"
-    pushd ${SOURCE_PATH_IDEA}
+    echo
+    pushd ${SOURCE_PATH_IDEA} >/dev/null
 
     # the default build target in Intellij Community will do a clean,build
     ant
+    popd
 }
+
+function build_idea_go_plugin() {
+
+    echo
+    echo
+    echo "Cleanly building Idea Go plugin"
+    echo
+    pushd "$SOURCE_PATH_GO_PLUGIN" >/dev/null
+
+    # the default build target in Intellij Community will do a clean,build
+    ant -Didea.community.build=$SOURCE_PATH_IDEA_BUILT -f build-package.xml
+
+    popd
+}
+
+function extract_idea_community_build() {
+     IDEA_BUILD_VERSION=`cat "$SOURCE_PATH_IDEA/build.txt"`
+
+    if [ -d "$FOLDER_DIST/idea-$IDEA_BUILD_VERSION" ]; then
+        rm -rf "$FOLDER_DIST/idea-$IDEA_BUILD_VERSION"
+    fi
+
+    mkdir -p "$FOLDER_DIST/idea-$IDEA_BUILD_VERSION"
+
+    pushd "$FOLDER_DIST" >/dev/null
+    tar -xzvf $SOURCE_PATH_IDEA/out/artifacts/ideaIC-$IDEA_BUILD_VERSION.tar.gz
+
+    SOURCE_PATH_IDEA_BUILT=$FOLDER_DIST/idea-$IDEA_BUILD_VERSION
+    popd
+}
+
+# fail on command errors
+set -eo pipefail
 
 validate_go_sdk_location
 validate_idea_community_location
 
-build_go_sdk && build_idea_community
-#build_idea_community
+if [ $SKIP_GO_SDK_BUILD != "true" ]; then
+    build_go_sdk
+fi
+
+if [ ! $SKIP_IDEA_BUILD != "true" ]; then
+    build_idea_community
+fi
+
+extract_idea_community_build
+
+echo
+
+build_idea_go_plugin
+
+assemble_distribution
 
 exit 0;
 
