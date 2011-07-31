@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# the go sdk and idea community builds are time consuming.
+#
+# Once you have built them once you can skip the build again by invoking this script like this
+#
+# SKIP_GO_SDK_BUILD=true SKIP_IDEA_BUILD=true ./package_linux.sh
+#
+# Every variable below (except for SOURCE_PATH_IDEA_BUILT) can be overridden in this fashion.
+#
+
+
 SOURCE_PATH_GO=${SOURCE_PATH_GO:-${HOME}/Tools/google-go/release/}
 SOURCE_PATH_IDEA=${SOURCE_PATH_IDEA:-${HOME}/Work/IntellijIdea/idea/}
 SOURCE_PATH_IDEA_BUILT=idea_community_not_built
@@ -116,61 +126,51 @@ function extract_idea_community_build() {
      IDEA_BUILD_VERSION=`cat "$SOURCE_PATH_IDEA/build.txt"`
 
     if [ -d "$FOLDER_DIST/idea-$IDEA_BUILD_VERSION" ]; then
-        rm -rf "$FOLDER_DIST/idea-$IDEA_BUILD_VERSION"
+        rm -rf "$FOLDER_DIST/idea-IC-$IDEA_BUILD_VERSION"
     fi
 
-    mkdir -p "$FOLDER_DIST/idea-$IDEA_BUILD_VERSION"
+    mkdir -p "$FOLDER_DIST/idea-IC-$IDEA_BUILD_VERSION"
 
     pushd "$FOLDER_DIST" >/dev/null
     tar -xzvf $SOURCE_PATH_IDEA/out/artifacts/ideaIC-$IDEA_BUILD_VERSION.tar.gz
 
-    SOURCE_PATH_IDEA_BUILT=$FOLDER_DIST/idea-$IDEA_BUILD_VERSION
+    SOURCE_PATH_IDEA_BUILT=$FOLDER_DIST/idea-IC-$IDEA_BUILD_VERSION
+    echo $SOURCE_PATH_IDEA_BUILT
     popd
 }
 
-# fail on command errors
+function assemble_distribution() {
+    echo
+    echo
+    echo "Assembling distribution"
+    echo
+    pushd "$SOURCE_PATH_GO_PLUGIN" >/dev/null
+
+    # the default build target in Intellij Community will do a clean,build
+    ant \
+        -Didea.community.build=$SOURCE_PATH_IDEA_BUILT \
+        -Dgo.sdk.build=$SOURCE_PATH_GO \
+        -Dgo.plugin=$SOURCE_PATH_GO_PLUGIN/dist/ro.redeul.google.go.jar \
+        -f build-distribution.xml
+
+    popd
+}
+
+# enable fail on command errors
 set -eo pipefail
 
 validate_go_sdk_location
 validate_idea_community_location
 
-if [ $SKIP_GO_SDK_BUILD != "true" ]; then
+if [ "$SKIP_GO_SDK_BUILD" != "true" ]; then
     build_go_sdk
 fi
 
-if [ ! $SKIP_IDEA_BUILD != "true" ]; then
+if [ "$SKIP_IDEA_BUILD" != "true" ]; then
     build_idea_community
 fi
 
 extract_idea_community_build
-
-echo
-
 build_idea_go_plugin
 
 assemble_distribution
-
-exit 0;
-
-# Build the go sdk
-cd $GOSOURCEPATH/src
-./all.bash
-rm -r $IDEASOURCEPATH/build/conf/mac/go-sdk
-cp -r $GOSOURCEPATH $IDEASOURCEPATH/build/conf/mac/go-sdk
-
-# Copy Go logo and about images
-cp $PLUGINSOURCEPATH/go-ide/resources/idea_community_about.png $IDEASOURCEPATH/community-resources/src/
-cp $PLUGINSOURCEPATH/go-ide/resources/idea_community_logo.png $IDEASOURCEPATH/community-resources/src/
-
-cd $IDEASOURCEPATH
-ant build
-VERSION=$(cat build.txt)
-cp $IDEASOURCEPATH/out/artifacts/ideaIC-$VERSION.mac.zip $PLUGINSOURCEPATH/go-ide
-cd $PLUGINSOURCEPATH/go-ide
-rm -r Community\ Edition-IC-$VERSION.app
-unzip ideaIC-$VERSION.mac.zip
-
-unzip ../google-go-language.zip -d Community\ Edition-IC-$VERSION.app/plugins
-rm ideaIC-$VERSION.mac.zip
-
-echo "Now open up dmgCreator to make the dmg."

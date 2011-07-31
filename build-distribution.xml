@@ -1,0 +1,47 @@
+<project name="Idea Google Go language scripted build file" default="assemble" basedir=".">
+
+    <!-- set global properties for this build -->
+    <property name="work" location="build"/>
+    <property name="dist" location="dist"/>
+
+    <property name="go.plugin" value="${dist}/ro.redeul.google.go.jar" />
+
+    <property name="idea.community.build" location="${dist}/idea-IC-107.SNAPSHOT/" />
+    <property name="go.sdk.build" location="${user.home}/Tools/google-go/release/" />
+
+    <property name="target.platform" value="linux" />
+
+    <property name="target.root" value="${dist}/go-ide-${target.platform}" />
+
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the build directory structure used by compile -->
+        <!--<mkdir dir="${target.root}" />-->
+
+        <echo message="Assembling Go-Ide into archive: ${target.root}.zip" />
+    </target>
+
+    <target name="assemble" depends="clean,init" description="compile the source ">
+
+        <zip file="${target.root}.zip" preserve0permissions="true">
+
+            <zipfileset dir="${idea.community.build}" prefix="go-ide" includes="**/*" excludes="bin/*.sh" />
+            <zipfileset dir="${idea.community.build}" prefix="go-ide" includes="bin/*.sh" filemode="755" />
+
+            <zipfileset file="${go.plugin}" prefix="go-ide/plugins/ro.redeul.google.go/lib/" />
+
+            <zipfileset dir="${go.sdk.build}" prefix="go-ide/bundled/go-sdk" includes="bin/**/*" filemode="755"/>
+            <zipfileset dir="${go.sdk.build}" prefix="go-ide/bundled/go-sdk" includes="lib/**/*" />
+            <zipfileset dir="${go.sdk.build}" prefix="go-ide/bundled/go-sdk" includes="pkg/**/*" />
+            <zipfileset dir="${go.sdk.build}" prefix="go-ide/bundled/go-sdk" includes="src/pkg/**/*" />
+            <zipfileset dir="${go.sdk.build}" prefix="go-ide/bundled/go-sdk" includes="*" />
+        </zip>
+
+    </target>
+
+    <target name="clean" description="clean up">
+        <delete file="${target.root}.zip" />
+    </target>
+
+</project>
