@@ -84,8 +84,8 @@ function build_go_sdk() {
     pushd "$SOURCE_PATH_GO/src" >/dev/null
 
     ./clean.bash
-    ./all.bash
-    GOOS=linux GOARCH=386 ./all.bash
+    GOARCH=amd64 GOHOSTARCH=amd64 ./all.bash
+    GOARCH=386 GOHOSTARCH=386 ./all.bash
     popd
 
     #    rm -r $IDEASOURCEPATH/build/conf/mac/go-sdk
