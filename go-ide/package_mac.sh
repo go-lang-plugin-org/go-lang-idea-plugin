@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # Author: Alexandre Normand (https://github.com/alexandre-normand)
 # Date: July 30th, 2011
 
