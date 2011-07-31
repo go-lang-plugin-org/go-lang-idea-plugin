@@ -28,6 +28,7 @@
 
             <zipfileset dir="${idea.community.build}" prefix="go-ide" includes="**/*" excludes="bin/*.sh" />
             <zipfileset dir="${idea.community.build}" prefix="go-ide" includes="bin/*.sh" filemode="755" />
+            <zipfileset dir="${idea.community.build}" prefix="go-ide" includes="bin/fsnotifier*" filemode="755" />
 
             <zipfileset file="${go.plugin}" prefix="go-ide/plugins/ro.redeul.google.go/lib/" />
 
