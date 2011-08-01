@@ -93,8 +93,9 @@ function build_go_sdk() {
 
     ./clean.bash
     rm -rf $SOURCE_PATH_GO/pkg/*
-    GOROOT_FINAL="$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1" GOHOSTARCH=$1 GOARCH=amd64 ./all.bash
-    GOROOT_FINAL="$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1" GOHOSTARCH=$1 GOARCH=386 ./all.bash
+#    GOROOT_FINAL="$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1" GOHOSTARCH=$1 GOARCH=amd64 ./all.bash
+#    GOROOT_FINAL="$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1" GOHOSTARCH=$1 GOARCH=386 ./all.bash
+    GOHOSTARCH=$1 ./all.bash
     popd >/dev/null
 
     rm -rf "$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1"
@@ -182,7 +183,7 @@ if [ "$SKIP_IDEA_BUILD" != "true" ]; then
 fi
 
 extract_idea_community_build
-#build_idea_go_plugin
+build_idea_go_plugin
 
 assemble_distribution 386
 assemble_distribution amd64

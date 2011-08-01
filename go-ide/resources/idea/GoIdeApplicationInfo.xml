@@ -9,7 +9,7 @@
   <package code="__PACKAGE_CODE__"/>
   <names product="GoIde" fullname="Go Ide"/>
 
-  <welcome-screen caption-url="/welcomeCaption.png" slogan-url="/developSlogan.png"/>
+  <welcome-screen caption-url="/welcomeCaption_community.png" slogan-url="/developSlogan_community.png"/>
 
   <update-urls check="http://go-ide.com/updates.xml" patches="http://download.jetbrains.com/idea/"/>
 
