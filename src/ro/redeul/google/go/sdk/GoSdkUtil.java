@@ -16,7 +16,6 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.psi.PsiFile;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
-import ro.redeul.google.go.formatter.GoFmt;
 import ro.redeul.google.go.util.GoUtil;
 
 import java.io.File;
@@ -75,7 +74,6 @@ public class GoSdkUtil {
             if ( ! (new File(binariesPath).isDirectory()) ) {
                 binariesPath = "/usr/bin";
             }
-
         }
 
         GeneralCommandLine command = new GeneralCommandLine();
@@ -90,12 +88,14 @@ public class GoSdkUtil {
                     command.getCommandLineString()).runProcess();
 
             if (output.getExitCode() != 0) {
-                return new String[5];
+                LOG.error("Go compiler exited with invalid exit code: " + output.getExitCode());
+                return new String[0];
             }
 
             return new String[]{path, binariesPath, target[0], target[1], output.getStdout().replaceAll("[\r\n]+", "")};
         } catch (ExecutionException e) {
-            return new String[5];
+            LOG.error("Exception while executing the process:", e);
+            return new String[0];
         }
     }
 

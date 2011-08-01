@@ -1,0 +1,27 @@
+<component>
+  <version codename="Up Quark" major="1" minor="0.0" eap="false" update-channel="GOIDE1"/>
+  
+  <build number="GOIDE-1.40" date="20110801"/>
+  <install-over minbuild="0" maxbuild="0" version="10.0"/>
+  <logo url="/goide/logo.png" textcolor="919191"/>
+  <about url="/goide/about.png"/>
+  <icon size32="/icon.png" size16="/icon_small.png" size32opaque="/icon_white.png" size12="/general/toolWindowProject.png"/>
+  <package code="__PACKAGE_CODE__"/>
+  <names product="GoIde" fullname="Go Ide"/>
+
+  <welcome-screen caption-url="/welcomeCaption.png" slogan-url="/developSlogan.png"/>
+
+  <update-urls check="http://go-ide.com/updates.xml" patches="http://download.jetbrains.com/idea/"/>
+
+  <help file="ideahelp.jar" root="idea" webhelp-url="http://www.jetbrains.com/idea/webhelp/"/>
+  <documentation url="http://www.jetbrains.com/idea/documentation"/>
+  <support url="http://www.jetbrains.com/support/idea/index.html"/>
+  <feedback eap-url="http://youtrack.jetbrains.net" release-url="http://www.jetbrains.com/feedback/feedback.jsp?product=IDEA&amp;build=$BUILD&amp;timezone=$TIMEZONE&amp;eval=$EVAL"/>
+  <plugins url="http://plugins.intellij.net"/>
+  <whatsnew url="http://www.jetbrains.com/idea/whatsnew/index.html"/>
+  <keymap win="http://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard.pdf"
+          mac="http://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard_Mac.pdf"/>
+
+  <plugins-page category="VCS Integration" title="Select VCS Integration Plugins"/>
+  <plugins-page title="Select Other Plugins"/>
+</component>

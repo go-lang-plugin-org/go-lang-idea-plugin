@@ -25,6 +25,8 @@ GO_IDE_VERSION=${GO_IDE_VERSION:-0.4.18}
 
 FOLDER_DIST=${FOLDER_DIST:-$SOURCE_PATH_GO_PLUGIN/dist}
 
+TARGET_GO_HOST=${TARGET_GO_HOST:-linux}
+
 function validate_go_sdk_location {
 
     if [ ! -d "${SOURCE_PATH_GO}" ]; then
@@ -64,10 +66,16 @@ function validate_idea_community_location() {
 
     pushd "$SOURCE_PATH_IDEA" >/dev/null
     ACTUAL_RELEASE_TAG_IDEA=`git describe`
-    if [ "x$RELEASE_TAG_IDEA" != "x$ACTUAL_RELEASE_TAG_IDEA" ]; then
+    if [[ "x$RELEASE_TAG_IDEA.+" =~ "x$ACTUAL_RELEASE_TAG_IDEA" ]]; then
         echo "Error: Intellij Idea Community source tree is at the wrong tag: $ACTUAL_RELEASE_TAG_IDEA"
         echo -e " Try this:"
         echo -e "\tpushd '$SOURCE_PATH_IDEA' && git pull && git checkout $RELEASE_TAG_IDEA && popd"
+        echo -e "\tYou will also need to edit & commit the platform/platform-main/src/com/intellij/idea/MainImpl.java"
+        echo -e "\tby replacing the System.setProperty(\"idea.platform.prefix\", \"Idea\"); line (at the start of the start method with this:"
+        echo -e "\t    if ( System.getProperty(\"idea.platform.prefix\", \"Idea\").equals(\"Idea\")) {"
+    	echo -e "\t      System.setProperty(\"idea.platform.prefix\", \"Idea\");"
+        echo -e "\t    }"
+        echo
         exit 1
     fi
 
@@ -84,19 +92,20 @@ function build_go_sdk() {
     pushd "$SOURCE_PATH_GO/src" >/dev/null
 
     ./clean.bash
-    GOARCH=amd64 GOHOSTARCH=amd64 ./all.bash
-    GOARCH=386 GOHOSTARCH=386 ./all.bash
-    popd
+    rm -rf $SOURCE_PATH_GO/pkg/*
+    GOROOT_FINAL="$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1" GOHOSTARCH=$1 GOARCH=amd64 ./all.bash
+    GOROOT_FINAL="$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1" GOHOSTARCH=$1 GOARCH=386 ./all.bash
+    popd >/dev/null
 
-    #    rm -r $IDEASOURCEPATH/build/conf/mac/go-sdk
-    #    cp -r $GOSOURCEPATH $IDEASOURCEPATH/build/conf/mac/go-sdk
+    rm -rf "$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1"
+    mkdir -p "$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1"
+
+    cp -r "$SOURCE_PATH_GO/bin" "$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1/bin"
+    cp -r "$SOURCE_PATH_GO/src" "$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1/src"
+    cp -r "$SOURCE_PATH_GO/pkg/" "$FOLDER_DIST/go-sdk-${TARGET_GO_HOST}_$1/pkg"
 }
 
 function build_idea_community() {
-
-    cp "$SOURCE_PATH_GO_PLUGIN/go-ide/resources/idea_community_about.png" "$SOURCE_PATH_IDEA/community-resources/src"
-    cp "$SOURCE_PATH_GO_PLUGIN/go-ide/resources/idea_community_logo.png" "$SOURCE_PATH_IDEA/community-resources/src"
-
     echo
     echo
     echo "Cleanly building Idea Community"
@@ -142,14 +151,15 @@ function extract_idea_community_build() {
 function assemble_distribution() {
     echo
     echo
-    echo "Assembling distribution"
+    echo "Assembling distribution for arch $1"
     echo
     pushd "$SOURCE_PATH_GO_PLUGIN" >/dev/null
 
     # the default build target in Intellij Community will do a clean,build
     ant \
+        -Dgo.ide.target.package=$SOURCE_PATH_GO_PLUGIN/dist/goide-${TARGET_GO_HOST}_$1.zip \
         -Didea.community.build=$SOURCE_PATH_IDEA_BUILT \
-        -Dgo.sdk.build=$SOURCE_PATH_GO \
+        -Dgo.sdk.build=$SOURCE_PATH_GO_PLUGIN/dist/go-sdk-${TARGET_GO_HOST}_$1 \
         -Dgo.plugin=$SOURCE_PATH_GO_PLUGIN/dist/ro.redeul.google.go.jar \
         -f build-distribution.xml
 
@@ -163,7 +173,8 @@ validate_go_sdk_location
 validate_idea_community_location
 
 if [ "$SKIP_GO_SDK_BUILD" != "true" ]; then
-    build_go_sdk
+    build_go_sdk 386
+    build_go_sdk amd64
 fi
 
 if [ "$SKIP_IDEA_BUILD" != "true" ]; then
@@ -171,6 +182,7 @@ if [ "$SKIP_IDEA_BUILD" != "true" ]; then
 fi
 
 extract_idea_community_build
-build_idea_go_plugin
+#build_idea_go_plugin
 
-assemble_distribution
+assemble_distribution 386
+assemble_distribution amd64
