@@ -15,11 +15,10 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 27, 2010
  * Time: 1:51:43 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoApplicationRunner extends DefaultProgramRunner {
 

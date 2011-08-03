@@ -37,6 +37,7 @@
             <!--<li>[feature] Go App Engine tools support (not done) ...</li>-->
             <li>[feature] Partial error highlighting of non existent imported packages.</li>
             <li>[feature] Detection of bundled Go Sdk packages (usefull when deployed as GoIde)</li>
+            <li>[feature] Run configuration creator (right click on a program file and you can run it). </li>
         </ul>
     ]]>
     </description>
@@ -49,6 +50,7 @@
                     <li>[feature] Detection of bundled Go Sdk packages (usefull when deployed as GoIde)</li>
                     <li>[bugfix] NullPointerException while highlighting selector expression with non resolving context (Issue #34).</li>
                     <li>[feature] Partial error highlighting of non existent imported packages.</li>
+                    <li>[feature] Run configuration creator (right click on a program file and you can run it). </li>
                 </ul>
          </h3>
 		 <h3>0.3.18 changes:</h3>
@@ -316,7 +318,7 @@
         <!--<compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>-->
 
         <configurationType implementation="ro.redeul.google.go.runner.GoRunConfigurationType"/>
-        <!--<configurationProducer implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>-->
+        <configurationProducer implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>
 
         <customLiveTemplate implementation="ro.redeul.google.go.editor.GoCustomLiveTemplate"/>
 

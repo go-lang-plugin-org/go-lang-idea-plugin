@@ -13,11 +13,10 @@ import ro.redeul.google.go.GoIcons;
 import javax.swing.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 19, 2010
  * Time: 2:49:26 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoRunConfigurationType implements ConfigurationType {
 
