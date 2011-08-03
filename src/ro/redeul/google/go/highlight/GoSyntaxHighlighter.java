@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoLexer;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -34,10 +33,9 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
 
     @NonNls
     public static final String CURLY_ID = "Go Curly";
+
     @NonNls
-    public static final String BRACES_ID = "Go Braces";
-    @NonNls
-    public static final String BRACKETS_ID = "Go Brackets";
+    public static final String BRACKETS_ID = "go.brackets";
 
     @NonNls
     public static final String OPERATOR_ID = "Go Operator";
@@ -78,7 +76,7 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
 //    public static final String VAR_USE_COMPOSED_ID = "Variable use of composed variable like ${A}";
 //
 
-    private static final TextAttributes DEFAULT_ATTRIB = new TextAttributes(Color.black, Color.white, null, null, Font.PLAIN);
+    private static final TextAttributes DEFAULT_ATTRIB = new TextAttributes(Color.black, null, null, null, Font.PLAIN);
 
     static {
 //        TextAttributesKey.createTextAttributesKey(LINE_COMMENT_ID, SyntaxHighlighterColors.LINE_COMMENT.getDefaultAttributes());
@@ -137,7 +135,7 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
             new TextAttributes(Color.gray, null, null, null, Font.BOLD));
 
     public static final TextAttributesKey BRACKET = TextAttributesKey.createTextAttributesKey(BRACKETS_ID, DEFAULT_ATTRIB.clone());
-    public static final TextAttributesKey CURLY = TextAttributesKey.createTextAttributesKey(CURLY_ID, DEFAULT_ATTRIB.clone());
+//    public static final TextAttributesKey CURLY = TextAttributesKey.createTextAttributesKey(CURLY_ID, DEFAULT_ATTRIB.clone());
     public static final TextAttributesKey OPERATOR = TextAttributesKey.createTextAttributesKey(OPERATOR_ID, DEFAULT_ATTRIB.clone());
 
     public static final TextAttributesKey DEFAULT = TextAttributesKey.createTextAttributesKey(DEFAULT_SETTINGS_ID);
@@ -150,7 +148,7 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
         fillMap(ATTRIBUTES, STRINGS, STRING);
         fillMap(ATTRIBUTES, TokenSet.create(pLPAREN, pRPAREN), BRACKET);
         fillMap(ATTRIBUTES, TokenSet.create(pLBRACK, pRBRACK), BRACKET);
-        fillMap(ATTRIBUTES, TokenSet.create(pLCURCLY, pRCURLY), CURLY);
+        fillMap(ATTRIBUTES, TokenSet.create(pLCURCLY, pRCURLY), BRACKET);
         fillMap(ATTRIBUTES, OPERATORS, OPERATOR);
         fillMap(ATTRIBUTES, IDENTIFIERS, IDENTIFIER);
         fillMap(ATTRIBUTES, BAD_TOKENS, CodeInsightColors.ERRORS_ATTRIBUTES);

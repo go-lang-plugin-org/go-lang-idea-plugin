@@ -31,7 +31,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                     new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.LINE_COMMENT_ID), GoSyntaxHighlighter.LINE_COMMENT),
                     new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.BLOCK_COMMENT_ID), GoSyntaxHighlighter.BLOCK_COMMENT),
                     new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.KEYWORD_ID), GoSyntaxHighlighter.KEYWORD),
-//                    new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.BRACES_ID), GoSyntaxHighlighter.BRACKET),
+                    new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.BRACKETS_ID), GoSyntaxHighlighter.BRACKET),
 //                    new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.BRACKETS_ID), GoSyntaxHighlighter.BRACKET),
                     new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.NUMBER_ID), GoSyntaxHighlighter.NUMBER),
                     new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.STRING_ID), GoSyntaxHighlighter.STRING),
