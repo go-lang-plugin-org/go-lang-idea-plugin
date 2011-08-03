@@ -35,7 +35,8 @@
             <li>Support GO sdk as packaged by the gophers/go PPA on Ubuntu.</li>
             <!--<li>[feature] Go App Engine SDK support (not done) ...</li>-->
             <!--<li>[feature] Go App Engine tools support (not done) ...</li>-->
-            <!--<li>[feature] Highlight non existent imported packages.</li>-->
+            <li>[feature] Partial error highlighting of non existent imported packages.</li>
+            <li>[feature] Detection of bundled Go Sdk packages (usefull when deployed as GoIde)</li>
         </ul>
     ]]>
     </description>
@@ -45,8 +46,9 @@
                 <ul>
                     <!--<li>[feature] Go App Engine SDK support (not done) ...</li>-->
                     <!--<li>[feature] Go App Engine tools support (not done) ...</li>-->
+                    <li>[feature] Detection of bundled Go Sdk packages (usefull when deployed as GoIde)</li>
                     <li>[bugfix] NullPointerException while highlighting selector expression with non resolving context (Issue #34).</li>
-                    <li>[feature] Highlight non existent imported packages.</li>
+                    <li>[feature] Partial error highlighting of non existent imported packages.</li>
                 </ul>
          </h3>
 		 <h3>0.3.18 changes:</h3>
@@ -235,9 +237,9 @@
     <category>Custom Languages</category>
 
     <application-components>
-        <!--<component>-->
-            <!--<implementation-class>ro.redeul.google.go.components.GoBundledSdkDetector</implementation-class>-->
-        <!--</component>-->
+        <component>
+            <implementation-class>ro.redeul.google.go.components.GoBundledSdkDetector</implementation-class>
+        </component>
     </application-components>
 
     <project-components>

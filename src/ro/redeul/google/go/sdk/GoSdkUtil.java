@@ -99,6 +99,12 @@ public class GoSdkUtil {
         }
     }
 
+    public static boolean validateSdkTestingResult(String[] data, String home) {
+        return
+                data != null && data.length == 5 &&
+                        (data[0].equalsIgnoreCase(home) || data[0].equalsIgnoreCase(home + "/"));
+    }
+
     /**
      * Uses the following to get the go sdk for tests:
      *  1. Uses the path given by the system property go.test.sdk.home, if given

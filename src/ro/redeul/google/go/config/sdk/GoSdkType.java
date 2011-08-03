@@ -1,7 +1,6 @@
 package ro.redeul.google.go.config.sdk;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.*;
@@ -59,8 +58,7 @@ public class GoSdkType extends SdkType {
     public boolean isValidSdkHome(String path) {
         String[] stringList = GoSdkUtil.testGoogleGoSdk(path);
 
-        return stringList != null && stringList.length == 5 &&
-                (stringList[0].equalsIgnoreCase(path) || stringList[0].equalsIgnoreCase(path + "/"));
+        return GoSdkUtil.validateSdkTestingResult(stringList, path);
     }
 
     @Override
@@ -80,14 +78,8 @@ public class GoSdkType extends SdkType {
 
     @Override
     public String suggestSdkName(String currentSdkName, String sdkHome) {
-        String homePath = PathManager.getHomePath();
-
-        if ( sdkHome.startsWith(homePath + "/bundled-go/go-sdk") ) {
-            return "Bundled Go Sdk";
-        }
-
 //        return "Go" + (sdkData != null && sdkData.VERSION != null && sdkData.VERSION.trim().length() > 0 ? " (" + sdkData.VERSION + ")" : "");
-        return "Go";
+        return "Go Sdk";
     }
 
     @Override
@@ -107,11 +99,7 @@ public class GoSdkType extends SdkType {
 
         String[] stringList = GoSdkUtil.testGoogleGoSdk(path);
 
-        boolean isValid =
-                stringList != null && stringList.length == 5 &&
-                        (stringList[0].equalsIgnoreCase(path) || stringList[0].equalsIgnoreCase(path + "/"));
-
-        if ( ! isValid ) {
+        if ( ! GoSdkUtil.validateSdkTestingResult(stringList, path) ) {
             return;
         }
 
