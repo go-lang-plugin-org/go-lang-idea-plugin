@@ -26,6 +26,7 @@ GO_IDE_VERSION=${GO_IDE_VERSION:-0.4.18}
 FOLDER_DIST=${FOLDER_DIST:-$SOURCE_PATH_GO_PLUGIN/dist}
 
 TARGET_GO_HOST=${TARGET_GO_HOST:-linux}
+TARGET_OS=${TARGET_OS:-linux}
 
 function validate_go_sdk_location {
 
@@ -132,6 +133,28 @@ function build_idea_go_plugin() {
     popd
 }
 
+function getIdeaPackageFileNameSuffixForOS()
+{
+    if [ "$1" == "linux" ]; then
+       ideaFileNameSuffix=".tar.gz"
+    elif [ "$1" == "mac" ]; then
+       ideaFileNameSuffix=".mac.zip"
+    elif [ "$1" == "windows" ]; then
+       ideaFileNameSuffix=".win.zip"
+    fi
+}
+
+function decompressBuild()
+{
+    if [ "$1" == "linux" ]; then
+       tar -xzvf $2
+    elif [ "$1" == "mac" ]; then
+       unzip $2
+    elif [ "$1" == "windows" ]; then
+       unzip $2
+    fi 
+}
+
 function extract_idea_community_build() {
      IDEA_BUILD_VERSION=`cat "$SOURCE_PATH_IDEA/build.txt"`
 
@@ -142,7 +165,9 @@ function extract_idea_community_build() {
     mkdir -p "$FOLDER_DIST/idea-IC-$IDEA_BUILD_VERSION"
 
     pushd "$FOLDER_DIST" >/dev/null
-    tar -xzvf $SOURCE_PATH_IDEA/out/artifacts/ideaIC-$IDEA_BUILD_VERSION.tar.gz
+    getIdeaPackageFileNameSuffixForOS $TARGET_OS    
+    buildFile=$SOURCE_PATH_IDEA/out/artifacts/ideaIC-$IDEA_BUILD_VERSION$ideaFileNameSuffix 
+    decompressBuild $TARGET_OS $buildFile
 
     SOURCE_PATH_IDEA_BUILT=$FOLDER_DIST/idea-IC-$IDEA_BUILD_VERSION
     echo $SOURCE_PATH_IDEA_BUILT
