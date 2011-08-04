@@ -128,7 +128,7 @@ function build_idea_go_plugin() {
     pushd "$SOURCE_PATH_GO_PLUGIN" >/dev/null
 
     # the default build target in Intellij Community will do a clean,build
-    ant -Didea.community.build=$SOURCE_PATH_IDEA_BUILT -f build-package.xml
+    ant -Didea.community.build=$sourcePathIdeaBuilt -f build-package.xml
 
     popd
 }
@@ -149,10 +149,32 @@ function decompressBuild()
     if [ "$1" == "linux" ]; then
        tar -xzvf $2
     elif [ "$1" == "mac" ]; then
-       unzip $2
+       unzip -f $2
     elif [ "$1" == "windows" ]; then
        unzip $2
     fi 
+}
+
+function decompressBuild()
+{
+    if [ "$1" == "linux" ]; then
+       tar -xzvf $2
+    elif [ "$1" == "mac" ]; then
+       unzip -f $2
+    elif [ "$1" == "windows" ]; then
+       unzip $2 -d idea-IC-win
+    fi 
+}
+
+function getSourcePathIdeaBuilt()
+{   
+    if [ "$1" == "linux" ]; then
+       sourcePathIdeaBuilt=$FOLDER_DIST/idea-IC-$IDEA_BUILD_VERSION
+    elif [ "$1" == "mac" ]; then
+       sourcePathIdeaBuilt=$FOLDER_DIST/IntelliJ\ IDEA\ 10\ CE.app
+    elif [ "$1" == "windows" ]; then
+       sourcePathIdeaBuilt=$FOLDER_DIST/idea-IC-win
+    fi
 }
 
 function extract_idea_community_build() {
@@ -168,9 +190,9 @@ function extract_idea_community_build() {
     getIdeaPackageFileNameSuffixForOS $TARGET_OS    
     buildFile=$SOURCE_PATH_IDEA/out/artifacts/ideaIC-$IDEA_BUILD_VERSION$ideaFileNameSuffix 
     decompressBuild $TARGET_OS $buildFile
-
-    SOURCE_PATH_IDEA_BUILT=$FOLDER_DIST/idea-IC-$IDEA_BUILD_VERSION
-    echo $SOURCE_PATH_IDEA_BUILT
+    
+    getSourcePathIdeaBuilt $TARGET_OS     
+    echo $sourcePathIdeaBuilt
     popd
 }
 
@@ -181,10 +203,10 @@ function assemble_distribution() {
     echo
     pushd "$SOURCE_PATH_GO_PLUGIN" >/dev/null
 
-    # the default build target in Intellij Community will do a clean,build
+    # the default build target in \ Community will do a clean,build
     ant \
         -Dgo.ide.target.package=$SOURCE_PATH_GO_PLUGIN/dist/goide-${TARGET_GO_HOST}_$1.zip \
-        -Didea.community.build=$SOURCE_PATH_IDEA_BUILT \
+        -Didea.community.build=$sourcePathIdeaBuilt \
         -Dgo.sdk.build=$SOURCE_PATH_GO_PLUGIN/dist/go-sdk-${TARGET_GO_HOST}_$1 \
         -Dgo.plugin=$SOURCE_PATH_GO_PLUGIN/dist/ro.redeul.google.go.jar \
         -f build-distribution.xml
