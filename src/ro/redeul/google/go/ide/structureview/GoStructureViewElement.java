@@ -5,18 +5,15 @@ import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
-import com.intellij.util.Icons;
+import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * User: jhonny
@@ -74,12 +71,13 @@ public class GoStructureViewElement implements StructureViewTreeElement {
 
             public Icon getIcon(boolean open) {
                 if (element instanceof GoMethodDeclaration)
-                    return Icons.METHOD_ICON;
+                    return PlatformIcons.METHOD_ICON;
                 if (element instanceof GoFunctionDeclaration)
-                    return Icons.FUNCTION_ICON;
+                    return PlatformIcons.FUNCTION_ICON;
                 if (element instanceof GoTypeNameDeclaration)
-                    return Icons.CLASS_ICON;
-                return Icons.EXCLUDED_FROM_COMPILE_ICON;
+                    return PlatformIcons.CLASS_ICON;
+
+                return PlatformIcons.EXCLUDED_FROM_COMPILE_ICON;
             }
         };
     }

@@ -1,7 +1,7 @@
 package ro.redeul.google.go.editor.actions;
 
 import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegate;
+import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
@@ -17,13 +17,12 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Sep 27, 2010
  * Time: 6:47:04 PM
- * To change this template use File | Settings | File Templates.
  */
-public class GoEnterHandler implements EnterHandlerDelegate {
+public class GoEnterHandler extends EnterHandlerDelegateAdapter {
 
     public Result preprocessEnter(PsiFile file, Editor editor,
                                   Ref<Integer> caretOffset,
@@ -55,4 +54,5 @@ public class GoEnterHandler implements EnterHandlerDelegate {
 
         return Result.Continue;
     }
+
 }
