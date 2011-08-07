@@ -4,6 +4,11 @@
 # Date: July 30th, 2011
 # 
 # Many variables (including source paths) can/must be overriden. 
-# Refer to package_linux.sh for the list
+# Refer to package.sh for the list
 
-TARGET_GO_HOST=darwin TARGET_OS=mac ./package_linux.sh 
+TARGET_HOST=darwin ./package.sh
+
+echo
+echo Please use the native .dmg package creator tool to finish the packages from here:
+echo    $SOURCE_PATH_GO_PLUGIN/dist/goide-${TARGET_HOST}_386.zip
+echo    $SOURCE_PATH_GO_PLUGIN/dist/goide-${TARGET_HOST}_amd64.zip

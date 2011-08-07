@@ -6,4 +6,4 @@
 # Many variables (including source paths) can/must be overriden.
 # Refer to package.sh for the list
 
-TARGET_HOST=linux ./package.sh
+TARGET_HOST=windows ./package.sh
