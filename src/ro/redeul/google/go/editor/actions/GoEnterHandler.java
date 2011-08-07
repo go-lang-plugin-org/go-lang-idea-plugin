@@ -1,7 +1,7 @@
 package ro.redeul.google.go.editor.actions;
 
 import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter;
+import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegate;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
@@ -13,8 +13,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -22,7 +22,11 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
  * Date: Sep 27, 2010
  * Time: 6:47:04 PM
  */
-public class GoEnterHandler extends EnterHandlerDelegateAdapter {
+public class GoEnterHandler implements EnterHandlerDelegate {
+
+    public Result postProcessEnter(@NotNull PsiFile file, @NotNull Editor editor, @NotNull DataContext dataContext) {
+        return Result.Continue;
+    }
 
     public Result preprocessEnter(PsiFile file, Editor editor,
                                   Ref<Integer> caretOffset,

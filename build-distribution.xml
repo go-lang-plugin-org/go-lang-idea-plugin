@@ -69,7 +69,7 @@
             <zipfileset dir="${go.sdk.build}"
                         prefix="go-ide/bundled/go-sdk"
                         includes="doc/**/*,include/**/*,pkg/**/*,src/**/*,*"
-                        excludes="*.o.*.a.*.so"
+                        excludes="**/*.o,**/*.a,**/*.so"
                     />
         </zip>
 
