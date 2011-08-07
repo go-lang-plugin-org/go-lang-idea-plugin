@@ -9,8 +9,9 @@
 # Every variable below (except for SOURCE_PATH_IDEA_BUILT) can be overridden in this fashion.
 #
 
-
 SOURCE_PATH_GO=${SOURCE_PATH_GO:-${HOME}/Tools/google-go/release/}
+SOURCE_PATH_GO_WIN=${SOURCE_PATH_GO_WIN:-${HOME}/Tools/google-go/gowin32_release.r59.zip}
+
 SOURCE_PATH_IDEA=${SOURCE_PATH_IDEA:-${HOME}/Work/IntellijIdea/idea/}
 SOURCE_PATH_IDEA_BUILT=idea_community_not_built
 SOURCE_PATH_GO_PLUGIN=${SOURCE_PATH_GO_PLUGIN:-`pwd`/..}
@@ -18,10 +19,10 @@ SOURCE_PATH_GO_PLUGIN=${SOURCE_PATH_GO_PLUGIN:-`pwd`/..}
 SKIP_GO_SDK_BUILD=${SKIP_GO_SDK_BUILD:-false}
 SKIP_IDEA_BUILD=${SKIP_IDEA_BUILD:-false}
 
-RELEASE_TAG_GO=${RELEASE_TAG_GO:-release.r58.1}
+RELEASE_TAG_GO=${RELEASE_TAG_GO:-release.r59.1}
 RELEASE_TAG_IDEA=${RELEASE_TAG_IDEA:-idea/108.857}
 
-GO_IDE_VERSION=${GO_IDE_VERSION:-0.4.18}
+GO_IDE_VERSION=${GO_IDE_VERSION:-1.0.0}
 
 FOLDER_DIST=${FOLDER_DIST:-$SOURCE_PATH_GO_PLUGIN/dist}
 
@@ -71,11 +72,6 @@ function validate_idea_community_location() {
         echo "Error: Intellij Idea Community source tree is at the wrong tag: $ACTUAL_RELEASE_TAG_IDEA"
         echo -e " Try this:"
         echo -e "\tpushd '$SOURCE_PATH_IDEA' && git pull && git checkout $RELEASE_TAG_IDEA && popd"
-#        echo -e "\tYou will also need to edit & commit the platform/platform-main/src/com/intellij/idea/MainImpl.java"
-#        echo -e "\tby replacing the System.setProperty(\"idea.platform.prefix\", \"Idea\"); line (at the start of the start method with this:"
-#        echo -e "\t    if ( System.getProperty(\"idea.platform.prefix\", \"Idea\").equals(\"Idea\")) {"
-#    	echo -e "\t      System.setProperty(\"idea.platform.prefix\", \"Idea\");"
-#        echo -e "\t    }"
         echo
         exit 1
     fi
