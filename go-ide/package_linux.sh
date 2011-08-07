@@ -19,7 +19,7 @@ SKIP_GO_SDK_BUILD=${SKIP_GO_SDK_BUILD:-false}
 SKIP_IDEA_BUILD=${SKIP_IDEA_BUILD:-false}
 
 RELEASE_TAG_GO=${RELEASE_TAG_GO:-release.r58.1}
-RELEASE_TAG_IDEA=${RELEASE_TAG_IDEA:-idea/107.322}
+RELEASE_TAG_IDEA=${RELEASE_TAG_IDEA:-idea/108.857}
 
 GO_IDE_VERSION=${GO_IDE_VERSION:-0.4.18}
 
@@ -67,15 +67,15 @@ function validate_idea_community_location() {
 
     pushd "$SOURCE_PATH_IDEA" >/dev/null
     ACTUAL_RELEASE_TAG_IDEA=`git describe`
-    if [[ "x$RELEASE_TAG_IDEA.+" =~ "x$ACTUAL_RELEASE_TAG_IDEA" ]]; then
+    if [[ "x$RELEASE_TAG_IDEA" =~ "x$ACTUAL_RELEASE_TAG_IDEA" ]]; then
         echo "Error: Intellij Idea Community source tree is at the wrong tag: $ACTUAL_RELEASE_TAG_IDEA"
         echo -e " Try this:"
         echo -e "\tpushd '$SOURCE_PATH_IDEA' && git pull && git checkout $RELEASE_TAG_IDEA && popd"
-        echo -e "\tYou will also need to edit & commit the platform/platform-main/src/com/intellij/idea/MainImpl.java"
-        echo -e "\tby replacing the System.setProperty(\"idea.platform.prefix\", \"Idea\"); line (at the start of the start method with this:"
-        echo -e "\t    if ( System.getProperty(\"idea.platform.prefix\", \"Idea\").equals(\"Idea\")) {"
-    	echo -e "\t      System.setProperty(\"idea.platform.prefix\", \"Idea\");"
-        echo -e "\t    }"
+#        echo -e "\tYou will also need to edit & commit the platform/platform-main/src/com/intellij/idea/MainImpl.java"
+#        echo -e "\tby replacing the System.setProperty(\"idea.platform.prefix\", \"Idea\"); line (at the start of the start method with this:"
+#        echo -e "\t    if ( System.getProperty(\"idea.platform.prefix\", \"Idea\").equals(\"Idea\")) {"
+#    	echo -e "\t      System.setProperty(\"idea.platform.prefix\", \"Idea\");"
+#        echo -e "\t    }"
         echo
         exit 1
     fi
