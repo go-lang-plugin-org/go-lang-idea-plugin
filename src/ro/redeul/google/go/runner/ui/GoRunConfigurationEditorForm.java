@@ -99,6 +99,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
 
     @Override
     protected void disposeEditor() {
+        component.setVisible(false);
     }
 
 }

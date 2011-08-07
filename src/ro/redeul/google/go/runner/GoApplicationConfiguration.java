@@ -71,6 +71,8 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
         return new GoRunConfigurationEditorForm(getProject());
     }
 
+
+
     public void readExternal(final Element element) throws InvalidDataException {
         PathMacroManager.getInstance(getProject()).expandPaths(element);
         super.readExternal(element);
