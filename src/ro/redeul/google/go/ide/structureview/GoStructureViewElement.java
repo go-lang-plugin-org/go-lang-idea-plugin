@@ -7,7 +7,7 @@ import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
-import com.intellij.util.PlatformIcons;
+import com.intellij.util.Icons;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 
@@ -71,13 +71,13 @@ public class GoStructureViewElement implements StructureViewTreeElement {
 
             public Icon getIcon(boolean open) {
                 if (element instanceof GoMethodDeclaration)
-                    return PlatformIcons.METHOD_ICON;
+                    return Icons.METHOD_ICON;
                 if (element instanceof GoFunctionDeclaration)
-                    return PlatformIcons.FUNCTION_ICON;
+                    return Icons.FUNCTION_ICON;
                 if (element instanceof GoTypeNameDeclaration)
-                    return PlatformIcons.CLASS_ICON;
+                    return Icons.CLASS_ICON;
 
-                return PlatformIcons.EXCLUDED_FROM_COMPILE_ICON;
+                return Icons.EXCLUDED_FROM_COMPILE_ICON;
             }
         };
     }
