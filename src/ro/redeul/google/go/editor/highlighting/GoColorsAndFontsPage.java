@@ -17,11 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Sep 6, 2010
  * Time: 5:50:01 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoColorsAndFontsPage implements ColorSettingsPage {
 
@@ -32,6 +31,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                     new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.BLOCK_COMMENT_ID), GoSyntaxHighlighter.BLOCK_COMMENT),
                     new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.KEYWORD_ID), GoSyntaxHighlighter.KEYWORD),
                     new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.BRACKETS_ID), GoSyntaxHighlighter.BRACKET),
+                    new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.OPERATOR_ID), GoSyntaxHighlighter.OPERATOR),
 //                    new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.BRACKETS_ID), GoSyntaxHighlighter.BRACKET),
                     new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.NUMBER_ID), GoSyntaxHighlighter.NUMBER),
                     new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.STRING_ID), GoSyntaxHighlighter.STRING),
@@ -64,7 +64,9 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
 
     @NotNull
     public SyntaxHighlighter getHighlighter() {
-        return SyntaxHighlighter.PROVIDER.create(GoFileType.GO_FILE_TYPE, null, null);
+        final SyntaxHighlighter highlighter = SyntaxHighlighter.PROVIDER.create(GoFileType.GO_FILE_TYPE, null, null);
+        assert highlighter != null;
+        return highlighter;
     }
 
     @NotNull
@@ -83,6 +85,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                         "// line comment \n" +
                         "func(<variable>t</variable>* <typeName>T1</typeName>) function1(<variable>a</variable>, <variable>b</variable> <typeName>int</typeName>, <variable>c</variable> <typeName>T</typeName>) (<typeName>string</typeName>) {\n" +
                         "   var <variable>x</variable> <typeName>T1</typeName> = 10.10 + 20\n" +
+                        "   fmt.Printf(<variable>x</variable>);\n" +
                         "   return <variable>x</variable>\n" +
                         "}\n" +
                         "<error>function</error>\n";

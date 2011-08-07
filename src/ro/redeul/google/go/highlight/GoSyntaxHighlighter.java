@@ -38,7 +38,7 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
     public static final String BRACKETS_ID = "go.brackets";
 
     @NonNls
-    public static final String OPERATOR_ID = "Go Operator";
+    public static final String OPERATOR_ID = "go.operators";
 
 
     // psi formats
