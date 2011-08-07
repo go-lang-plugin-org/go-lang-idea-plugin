@@ -57,6 +57,16 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
         return new GoApplicationConfiguration(getName(), getProject(), GoRunConfigurationType.getInstance());
     }
 
+    @Override
+    public void checkConfiguration() throws RuntimeConfigurationException {
+        super.checkConfiguration();
+
+        if (scriptName == null || scriptName.length() == 0)
+            throw new RuntimeConfigurationException("Please select the file to run.");
+        if (getModule() == null)
+            throw new RuntimeConfigurationException("Please select the module.");
+    }
+
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
         return new GoRunConfigurationEditorForm(getProject());
     }
@@ -88,7 +98,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                 GeneralCommandLine commandLine = new GeneralCommandLine();
 
                 commandLine.setExePath(getCompiledFileName(getModule(), scriptName));
-                if ( scriptArguments != null && scriptArguments.trim().length() > 0 ) {
+                if (scriptArguments != null && scriptArguments.trim().length() > 0) {
                     commandLine.addParameter(scriptArguments);
                 }
                 commandLine.setWorkDirectory(workDir);
@@ -106,10 +116,10 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
         VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
         VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(new File(scriptName));
 
-        if ( file == null ) {
+        if (file == null) {
             for (VirtualFile sourceRoot : sourceRoots) {
                 file = sourceRoot.findChild(scriptName);
-                if ( file != null) {
+                if (file != null) {
                     break;
                 }
             }
