@@ -1,0 +1,19 @@
+---
+layout: template
+title: GoIde 1.0 release (Linux, Windows)
+excrept: Integrated Development Environment for Go 1.0 is released for Windows and Linux (soon for Mac)
+---
+<h1>GoIde 1.0.0 release (linux and windows)</h1>
+<p>We are proud to present the first release for the GoIde. It's built using our Idea plugin, the Intellij Platform and it will provide you with a ready to use IDE for Google Go.</p>
+<p>All you need to have is an Oracle Java installation available on the machine and a environment variable named IDEA_JDK pointing to it and you can download and run our IDE. It comes bundled with a prebuilt Go release r59 and our plugin.</p>
+<h3>How to get it</h3>
+<p>You need to first download the package appropiate for your operating system:</p>
+<ul>
+<li><a href="http://go-ide-packages.s3.amazonaws.com/goide-linux_386.zip">GoIde 1.0 for linux (386)</a></li>
+<li><a href="http://go-ide-packages.s3.amazonaws.com/goide-linux_amd64.zip">GoIde 1.0 for linux (amd64)</a></li>
+<li><a href="http://go-ide-packages.s3.amazonaws.com/goide-windows_386.zip">GoIde 1.0 for windows (386)</a></li>
+</ul>
+<p>You need to make sure you have you have an oracle java installation on your machine. If not then you should go on the oracle java download website, download and install it. We recommend the 6.0u26 version available from here: <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk-6u26-download-400750.html">Java SE Development Kit 6 Update 26</a>.</p>
+<p>After you install Java make sure to set the IDEA_JDK system variable and point to your newly installed JDK home.</p>
+<p>Unzip the binary package of the go ide and change to it's bin folder and execute idea.sh or idea.bat (depending on your operation system). You should see it starting up. File -&gt; New Project -&gt; Create project from scratch -&gt; Choose Go Module - Next, Next -&gt; Select the bundled Go on the JDK selection pages and press Finish.</p><p>Now you will have to wait until it indexes the go sdk files (this is done only once). Once finished it will open the project view and you should go to the src folder, do a right click and select New Go Application. Write hello and press enter. Now right click the hello.go file and select Run. It will compile and run the application.</p>
+<p>Now you are ready to play with Google Go. Enjoy!</p>
