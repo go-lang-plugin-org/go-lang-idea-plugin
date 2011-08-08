@@ -111,7 +111,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
 //             map.put("dummy", TextAttributesKey.find("dummy"));
 //             return map;
 
-        map.put("variable", GoSyntaxHighlighter.TYPE_NAME);
+        map.put("variable", GoSyntaxHighlighter.VARIABLE);
         map.put("typeName", GoSyntaxHighlighter.TYPE_NAME);
         map.put("error", CodeInsightColors.ERRORS_ATTRIBUTES);
 

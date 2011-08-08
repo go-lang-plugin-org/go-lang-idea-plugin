@@ -68,8 +68,13 @@
             <zipfileset dir="${go.sdk.build}" prefix="go-ide/bundled/go-sdk" includes="bin/**/*" filemode="755"/>
             <zipfileset dir="${go.sdk.build}"
                         prefix="go-ide/bundled/go-sdk"
-                        includes="doc/**/*,include/**/*,pkg/**/*,src/**/*,*"
+                        includes="doc/**/*,include/**/*,src/**/*,*"
                         excludes="**/*.o,**/*.a,**/*.so"
+                    />
+
+            <zipfileset dir="${go.sdk.build}"
+                        prefix="go-ide/bundled/go-sdk"
+                        includes="pkg/**/*"
                     />
         </zip>
 
