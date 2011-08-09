@@ -7,8 +7,7 @@
 # Refer to package.sh for the list
 
 SOURCE_PATH_GO_PLUGIN=${SOURCE_PATH_GO_PLUGIN:-`pwd`/..}
-#TARGET_HOST=darwin ./package.sh
-
+TARGET_HOST=darwin ./package.sh
 
 function createDmg()
 {
@@ -24,4 +23,4 @@ function createDmg()
 }
 
 createDmg 386
-#createDmg amd64
+createDmg amd64

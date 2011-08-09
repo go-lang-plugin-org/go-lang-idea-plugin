@@ -36,6 +36,7 @@ sleep 6
 
 # make sure it's not world writeable
 echo "Fixing permissions..."
+chmod +x "${MOUNT_DIR}/Go Ide.app/Contents/MacOS/idea"
 # workaround: output is sent to /dev/null to supress permission errors when chmodding .Trashes
 chmod -Rf go-w "${MOUNT_DIR}" >& /dev/null || true
 echo "Done fixing permissions."
