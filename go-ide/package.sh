@@ -89,7 +89,7 @@ function build_go_sdk() {
     pushd "$SOURCE_PATH_GO/src" >/dev/null
 
     ./clean.bash
-    rm -rf $SOURCE_PATH_GO/pkg/*
+    rm -rf "$SOURCE_PATH_GO"/{pkg,bin}/*
     GOHOSTARCH=$1 ./all.bash
     popd >/dev/null
 
