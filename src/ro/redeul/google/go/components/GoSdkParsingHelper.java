@@ -110,7 +110,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
         }
 
         String relativePath = VfsUtil.getRelativePath(virtualFile.getParent(), ownerSdkRoot, '/');
-        if (relativePath != null ) {
+        if (relativePath != null && mappings.containsKey(relativePath) ) {
             return mappings.get(relativePath);
         }
 
@@ -196,7 +196,12 @@ public class GoSdkParsingHelper implements ApplicationComponent {
                 if ( matcher.find() ) {
                     String libraryName = matcher.group(1);
                     if ( librariesSet.contains(libraryName) ) {
-                        result.put(VfsUtil.getRelativePath(makefile.getParent(), sourcesRoot, '/'), libraryName);
+                        String relativePath = VfsUtil.getRelativePath(makefile.getParent(), sourcesRoot, '/');
+                        if ( relativePath != null ) {
+                            result.put(relativePath, libraryName);
+                        } else {
+                            int a = 10;
+                        }
                     }
                 }
             } catch (IOException e) {
