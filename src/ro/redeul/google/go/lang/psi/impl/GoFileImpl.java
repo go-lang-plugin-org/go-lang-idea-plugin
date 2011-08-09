@@ -13,13 +13,14 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.components.GoSdkParsingHelper;
+import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.Collection;
@@ -44,6 +45,11 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     @Override
     public String toString() {
         return "Go file";
+    }
+
+    @Override
+    public String getPackageImportPath() {
+        return GoSdkParsingHelper.getInstance().getPackageImportPath(getProject(), this);
     }
 
     public GoPackageDeclaration getPackage() {

@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.highlight.GoEditorHighlighter;
 
 import javax.swing.*;
-import java.nio.charset.Charset;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -67,6 +66,4 @@ public class GoFileType extends LanguageFileType {
     public EditorHighlighter getEditorHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile, @NotNull EditorColorsScheme colors) {
         return new GoEditorHighlighter(colors, project, virtualFile);
     }
-
-
 }

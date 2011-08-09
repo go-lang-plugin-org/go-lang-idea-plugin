@@ -1,28 +1,21 @@
 package ro.redeul.google.go.lang.stubs;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.impl.scopes.JdkScope;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.ProjectJdkTable;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.roots.ex.ProjectRootManagerEx;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileUrlChangeAdapter;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.ProjectAndLibrariesScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.stubs.StubIndex;
-import com.intellij.util.containers.CollectionFactory;
 import com.intellij.util.containers.HashSet;
-import groovy.lang.StringWriterIOException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.stubs.index.GoPackageImportPath;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageName;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -103,10 +96,7 @@ public class GoNamesCache extends PsiShortNamesCache {
     public Collection<GoFile> getFilesByPackageName(String packageName) {
         StubIndex index = StubIndex.getInstance();
 
-        Collection<GoFile> goFiles = index.get(GoPackageName.KEY, packageName, project, GlobalSearchScope.allScope(project));
-        GoFile xx[] = goFiles.toArray(new GoFile[goFiles.size()]);
-
-        return Arrays.asList(xx);
+        return index.get(GoPackageImportPath.KEY, packageName, project, GlobalSearchScope.allScope(project));
     }
 
 

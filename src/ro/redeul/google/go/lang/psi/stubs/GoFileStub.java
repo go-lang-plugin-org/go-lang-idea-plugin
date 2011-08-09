@@ -5,12 +5,6 @@ import com.intellij.psi.tree.IStubFileElementType;
 import com.intellij.util.io.StringRef;
 import ro.redeul.google.go.lang.parser.GoParserDefinition;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -22,23 +16,30 @@ public class GoFileStub extends PsiFileStubImpl<GoFile> {
 
     private final StringRef packageName;
     private final boolean isMain;
+    private final StringRef packageImportPath;
 
     public GoFileStub(GoFile file) {
         super(file);
 
+        packageImportPath = StringRef.fromString(file.getPackageImportPath());
         packageName = StringRef.fromString(file.getPackage().getPackageName());
         isMain = file.getMainFunction() != null;
     }
 
-    public GoFileStub(StringRef packageName, boolean isMain) {
+    public GoFileStub(StringRef packageImportPath, StringRef packageName, boolean isMain) {
         super(null);
 
+        this.packageImportPath = packageImportPath;
         this.packageName = packageName;
         this.isMain = isMain;
     }
 
     public IStubFileElementType getType() {
         return GoParserDefinition.GO_FILE_TYPE;
+    }
+
+    public StringRef getPackageImportPath() {
+        return packageImportPath;
     }
 
     public StringRef getPackageName() {

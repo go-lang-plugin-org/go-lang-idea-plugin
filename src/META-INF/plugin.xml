@@ -248,6 +248,11 @@
         <component>
             <implementation-class>ro.redeul.google.go.components.GoBundledSdkDetector</implementation-class>
         </component>
+
+        <component>
+            <implementation-class>ro.redeul.google.go.components.GoSdkParsingHelper</implementation-class>
+        </component>
+
     </application-components>
 
     <project-components>
@@ -339,8 +344,10 @@
         <stubElementTypeHolder class="ro.redeul.google.go.lang.parser.GoElementTypes" />
 
         <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoPackageName" />
+        <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoPackageImportPath" />
         <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoTypeName" />
         <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoQualifiedTypeName" />
+
         <!--<enterHandlerDelegate implementation="ro.redeul.google.go.editor.actions.GoEnterHandler" order="after EnterBetweenBracesHandler"/>-->
 
         <projectService serviceInterface="ro.redeul.google.go.services.GoCodeManager"

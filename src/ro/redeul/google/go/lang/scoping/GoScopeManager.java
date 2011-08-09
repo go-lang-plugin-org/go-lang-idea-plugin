@@ -3,11 +3,10 @@ package ro.redeul.google.go.lang.scoping;
 import java.util.Set;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Sep 2, 2010
  * Time: 1:30:13 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoScopeManager {
 

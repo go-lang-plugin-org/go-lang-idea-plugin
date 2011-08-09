@@ -50,7 +50,7 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitImportDeclaration(GoImportDeclaration importDeclaration) {
-        Collection<GoFile> fileCollection = goNamesCache.getFilesByPackageName(importDeclaration.getPackageName());
+        Collection<GoFile> fileCollection = goNamesCache.getFilesByPackageName(importDeclaration.getImportPath().replaceAll("^\"|\"$", ""));
         if ( fileCollection == null || fileCollection.size() == 0 ) {
             annotationHolder.createErrorAnnotation(importDeclaration, "Invalid package import path");
         }
