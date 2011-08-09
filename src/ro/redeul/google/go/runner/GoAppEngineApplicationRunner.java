@@ -15,21 +15,20 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Johnny Everson
+ * <p/>
  * Date: Aug 27, 2010
  * Time: 1:51:43 PM
- * To change this template use File | Settings | File Templates.
  */
-public class GAEApplicationRunner extends DefaultProgramRunner {
+public class GoAppEngineApplicationRunner extends DefaultProgramRunner {
 
     @NotNull
     public String getRunnerId() {
-        return "GAEApplicationRunner";
+        return "GoAppEngineApplicationRunner";
     }
 
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof GAEApplicationConfiguration;
+        return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof GoAppEngineApplicationConfiguration;
     }
 
     @Override

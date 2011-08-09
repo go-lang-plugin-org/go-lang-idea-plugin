@@ -313,7 +313,7 @@
         <!--<compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>-->
 
         <configurationType implementation="ro.redeul.google.go.runner.GoRunConfigurationType"/>
-        <configurationType implementation="ro.redeul.google.go.runner.GAERunConfigurationType"/>  
+        <configurationType implementation="ro.redeul.google.go.runner.GoAppEngineRunConfigurationType"/>
         <configurationProducer implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>
 
         <customLiveTemplate implementation="ro.redeul.google.go.editor.GoCustomLiveTemplate"/>
@@ -323,7 +323,7 @@
         <colorSettingsPage implementation="ro.redeul.google.go.editor.highlighting.GoColorsAndFontsPage"/>
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
-        <programRunner implementation="ro.redeul.google.go.runner.GAEApplicationRunner" />
+        <programRunner implementation="ro.redeul.google.go.runner.GoAppEngineApplicationRunner" />
 
         <java.shortNamesCache implementation="ro.redeul.google.go.lang.stubs.GoNamesCache" />
 

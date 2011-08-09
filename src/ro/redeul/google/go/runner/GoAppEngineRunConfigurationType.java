@@ -13,18 +13,17 @@ import ro.redeul.google.go.GoIcons;
 import javax.swing.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Jhonny Everson
+ * <p/>
  * Date: Aug 19, 2010
  * Time: 2:49:26 PM
- * To change this template use File | Settings | File Templates.
  */
-public class GAERunConfigurationType implements ConfigurationType {
+public class GoAppEngineRunConfigurationType implements ConfigurationType {
 
-    private final GAEFactory myConfigurationFactory;
+    private final GoAppEngineRunConfigurationFactory myConfigurationFactory;
 
-    public GAERunConfigurationType() {
-        myConfigurationFactory = new GAEFactory(this);
+    public GoAppEngineRunConfigurationType() {
+        myConfigurationFactory = new GoAppEngineRunConfigurationFactory(this);
     }
 
     public String getDisplayName() {
@@ -49,18 +48,18 @@ public class GAERunConfigurationType implements ConfigurationType {
         return new ConfigurationFactory[]{myConfigurationFactory};
     }
 
-    public static GAERunConfigurationType getInstance() {
-        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GAERunConfigurationType.class);
+    public static GoAppEngineRunConfigurationType getInstance() {
+        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GoAppEngineRunConfigurationType.class);
     }
 
-    public static class GAEFactory extends ConfigurationFactory {
+    public static class GoAppEngineRunConfigurationFactory extends ConfigurationFactory {
 
-        public GAEFactory(ConfigurationType type) {
+        public GoAppEngineRunConfigurationFactory(ConfigurationType type) {
             super(type);
         }
 
         public RunConfiguration createTemplateConfiguration(Project project) {
-            return new GAEApplicationConfiguration("Application Engine Server", project, getInstance());
+            return new GoAppEngineApplicationConfiguration("Application Engine Server", project, getInstance());
         }        
     }
 }

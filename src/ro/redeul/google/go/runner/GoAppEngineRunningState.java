@@ -17,10 +17,10 @@ import java.util.regex.Pattern;
  * User: jhonny
  * Date: 28/07/11
  */
-public class GAERunningState extends CommandLineState {
+public class GoAppEngineRunningState extends CommandLineState {
 
-    private static final String ID = "App Engine Console";
-    private static final String TITLE = "App Engine Console Output";
+    private static final String ID = "Go App Engine Console";
+    private static final String TITLE = "Go App Engine Console Output";
 
     private String sdkDirectory;
     private String scriptArguments;
@@ -29,7 +29,7 @@ public class GAERunningState extends CommandLineState {
     private ExecutionEnvironment env;
     //private OSProcessHandler processHandler;
 
-    public GAERunningState(ExecutionEnvironment env, String sdkDirectory, String scriptArguments, String workDir) {
+    public GoAppEngineRunningState(ExecutionEnvironment env, String sdkDirectory, String scriptArguments, String workDir) {
         super(env);
         this.sdkDirectory = sdkDirectory;
         this.scriptArguments = scriptArguments;

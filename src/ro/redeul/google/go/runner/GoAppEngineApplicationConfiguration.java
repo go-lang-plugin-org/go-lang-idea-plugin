@@ -23,20 +23,19 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.runner.ui.GAERunConfigurationEditorForm;
+import ro.redeul.google.go.runner.ui.GoAppEngineRunConfigurationEditorForm;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Jhonny Everson
+ * <p/>
  * Date: Aug 19, 2010
  * Time: 2:53:03 PM
- * To change this template use File | Settings | File Templates.
  */
-public class GAEApplicationConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration> {
+public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration> {
 
     public String sdkDirectory;
     public String email;
@@ -44,7 +43,7 @@ public class GAEApplicationConfiguration extends ModuleBasedConfiguration<GoAppl
     public String scriptArguments;
     public String workDir;
 
-    public GAEApplicationConfiguration(String name, Project project, GAERunConfigurationType configurationType) {
+    public GoAppEngineApplicationConfiguration(String name, Project project, GoAppEngineRunConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
         workDir = PathUtil.getLocalPath(project.getBaseDir());
     }
@@ -57,11 +56,11 @@ public class GAEApplicationConfiguration extends ModuleBasedConfiguration<GoAppl
 
     @Override
     protected ModuleBasedConfiguration createInstance() {
-        return new GAEApplicationConfiguration(getName(), getProject(), GAERunConfigurationType.getInstance());
+        return new GoAppEngineApplicationConfiguration(getName(), getProject(), GoAppEngineRunConfigurationType.getInstance());
     }
 
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        return new GAERunConfigurationEditorForm(getProject());
+        return new GoAppEngineRunConfigurationEditorForm(getProject());
     }
 
     public void readExternal(final Element element) throws InvalidDataException {
@@ -83,7 +82,7 @@ public class GAEApplicationConfiguration extends ModuleBasedConfiguration<GoAppl
     }
 
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
-        GAERunningState state = new GAERunningState(env,sdkDirectory,scriptArguments,workDir);
+        GoAppEngineRunningState state = new GoAppEngineRunningState(env,sdkDirectory,scriptArguments,workDir);
         return state;
 
     }
