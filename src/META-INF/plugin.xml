@@ -33,32 +33,11 @@
             <li>Simple structure view</li>
             <li>Go aware imports optimizer  (experimental)</li>
             <li>Support GO sdk as packaged by the gophers/go PPA on Ubuntu.</li>
-            <li>Partial error highlighting of non existent imported packages.</li>
-            <li>Detection of bundled Go Sdk packages (useful when deployed as GoIde)</li>
-            <li>Run configuration creator (right click on a program file and you can run it). </li>
-            <li>Run configuration validation.</li>
         </ul>
     ]]>
     </description>
     <change-notes>
         <![CDATA[
-         <h3>0.4.2 changes:</h3>
-            <ul>
-                <li>[enhancement] Enable control for the operators colors when doing syntax highlighting.</li>
-            </ul>
-         <h3>0.4.1 changes:</h3>
-            <ul>
-                <li>[bugfix] Revert to using Icons instead of PlatformIcons.</li>
-            </ul>
-		 <h3>0.4.0 changes:</h3>
-                <ul>
-                    <li>[feature] Detection of bundled Go Sdk packages (useful when deployed as GoIde)</li>
-                    <li>[bugfix] NullPointerException while highlighting selector expression with non resolving context (Issue #34).</li>
-                    <li>[feature] Partial error highlighting of non existent imported packages.</li>
-                    <li>[feature] Run configuration creator (right click on a program file and you can run it). </li>
-                    <li>[feature] Run configuration validation. </li>
-                </ul>
-         </h3>
 		 <h3>0.3.18 changes:</h3>
                 <ul>
                     <li>[bugfix] Fixed parsing error when the last function element is ...</li>
@@ -285,15 +264,20 @@
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </group>
 
-        <!--<group id="Go.Tools" popup="true" text="Go Tools" description="Go tools support" icon="/icons/go_16x16.png">-->
+        <group id="Go.Tools" popup="true" text="Go Tools" description="Go tools support" icon="/icons/go_16x16.png">
             <!--<action id="Go.Tools.AddGoSdk" text="Add Go Sdk Support"-->
                 <!--description="Add Go Sdk to current module"-->
                 <!--class="ro.redeul.google.go.tools.actions.AddGoSdkSupport">-->
             <!--</action>-->
 
-            <!--<add-to-group group-id="ToolsMenu" anchor="last" />-->
-        <!--</group>-->
+            <action id="Go.AppEngine.Upload" class="ro.redeul.google.go.ide.actions.GoAppEngineUpload"
+                    text="App Engine Upload" description="Upload to App Engine"
+                    icon="/icons/gae_16x16.png">
+                <keyboard-shortcut first-keystroke="ctrl alt U" keymap="$default"/>
+            </action>
 
+            <add-to-group group-id="ToolsMenu" anchor="last" />
+        </group>
 
     </actions>
 
@@ -329,6 +313,7 @@
         <!--<compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>-->
 
         <configurationType implementation="ro.redeul.google.go.runner.GoRunConfigurationType"/>
+        <configurationType implementation="ro.redeul.google.go.runner.GAERunConfigurationType"/>  
         <configurationProducer implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>
 
         <customLiveTemplate implementation="ro.redeul.google.go.editor.GoCustomLiveTemplate"/>
@@ -338,6 +323,7 @@
         <colorSettingsPage implementation="ro.redeul.google.go.editor.highlighting.GoColorsAndFontsPage"/>
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
+        <programRunner implementation="ro.redeul.google.go.runner.GAEApplicationRunner" />
 
         <java.shortNamesCache implementation="ro.redeul.google.go.lang.stubs.GoNamesCache" />
 
@@ -355,4 +341,5 @@
 
 
     </extensions>
+
 </idea-plugin>
