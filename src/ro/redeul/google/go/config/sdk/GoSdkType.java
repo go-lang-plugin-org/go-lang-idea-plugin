@@ -27,7 +27,7 @@ public class GoSdkType extends SdkType {
 
     @Override
     public String suggestHomePath() {
-        return GoUtil.resolveGoogleGoHomePath();
+        return GoUtil.resolvePotentialGoogleGoHomePath();
     }
 
     @Override
@@ -78,8 +78,20 @@ public class GoSdkType extends SdkType {
 
     @Override
     public String suggestSdkName(String currentSdkName, String sdkHome) {
+
+        String name = "Go Sdk";
+        if ( sdkHome.matches(".*bundled/go-sdk/?$") ) {
+            name = "Bundled Go Sdk";
+        }
+
+        return name;
 //        return "Go" + (sdkData != null && sdkData.VERSION != null && sdkData.VERSION.trim().length() > 0 ? " (" + sdkData.VERSION + ")" : "");
-        return "Go Sdk";
+//        return "Go Sdk";
+    }
+
+    @Override
+    public String getVersionString(String sdkHome) {
+        return super.getVersionString(sdkHome);
     }
 
     @Override
@@ -148,7 +160,7 @@ public class GoSdkType extends SdkType {
 
     @Override
     public String getPresentableName() {
-        return "Go SDK";
+        return "Go Sdk";
     }
 
     @Override

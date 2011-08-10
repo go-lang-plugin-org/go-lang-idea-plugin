@@ -21,6 +21,7 @@ import ro.redeul.google.go.util.GoUtil;
 import java.io.File;
 import java.io.FileFilter;
 import java.nio.charset.Charset;
+import java.util.regex.Pattern;
 
 public class GoSdkUtil {
 
@@ -30,6 +31,8 @@ public class GoSdkUtil {
     private static final String TEST_SDK_PATH = "go.test.sdk.home";
 
     private static final String DEFAULT_MOCK_PATH = "go/default";
+
+    private static Pattern RE_VERSION_MATCHER = Pattern.compile("([^ ]+) version ([^ ]+) ]")
 
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static String[] testGoogleGoSdk(String path) {
@@ -92,7 +95,10 @@ public class GoSdkUtil {
                 return new String[0];
             }
 
-            return new String[]{path, binariesPath, target[0], target[1], output.getStdout().replaceAll("[\r\n]+", "")};
+            String outputString = output.getStdout().replaceAll("[\r\n]+", "");
+
+
+            return new String[]{path, binariesPath, target[0], target[1], outputString};
         } catch (ExecutionException e) {
             LOG.error("Exception while executing the process:", e);
             return new String[0];
@@ -117,7 +123,7 @@ public class GoSdkUtil {
         String sdkPath = PathManager.getHomePath() + "/" + DEFAULT_MOCK_PATH;
 
         String testSdkHome = System.getProperty(TEST_SDK_PATH);
-        String goRoot = GoUtil.resolveGoogleGoHomePath();
+        String goRoot = GoUtil.resolvePotentialGoogleGoHomePath();
 
         // Use the test sdk path before anything else, if available
         if (testSdkHome != null) {
