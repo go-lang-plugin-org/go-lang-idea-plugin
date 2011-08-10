@@ -20,6 +20,9 @@
         <!--<mkdir dir="${target.root}" />-->
 
         <echo message="Assembling Go-Ide into archive: ${go.ide.target.package}"/>
+        <condition property="is.darwin">
+            <equals arg1="${target.platform}" arg2="darwin" />
+        </condition>
     </target>
 
     <target name="resources" depends="init" description="Builds the GoIde resources jar">
@@ -36,7 +39,58 @@
         </jar>
     </target>
 
-    <target name="assemble" depends="clean,init,resources" description="compile the source">
+    <target name="fix.Info.plist" depends="init" if="is.darwin" >
+        <replaceregexp
+                file="${idea.community.build}/Contents/Info.plist"
+                byline="false"
+                match="(&lt;key&gt;idea.platform.prefix&lt;/key&gt;[\r\n \t]+&lt;string&gt;)Idea(&lt;/string&gt;)"
+                replace="\1GoIde\2"
+                />
+
+        <replaceregexp
+                file="${idea.community.build}/Contents/Info.plist"
+                byline="false"
+                match="(&lt;key&gt;idea.paths.selector&lt;/key&gt;[\r\n \t]+&lt;string&gt;)[^&lt;]+(&lt;/string&gt;)"
+                replace="\1.GoIde1\2"
+                />
+
+        <replaceregexp
+                file="${idea.community.build}/Contents/Info.plist"
+                byline="false"
+                match="(&lt;key&gt;CFBundleName&lt;/key&gt;[\r\n \t]+&lt;string&gt;)[^&lt;]+(&lt;/string&gt;)"
+                replace="\1Go Ide\2"
+                />
+
+        <replaceregexp
+                file="${idea.community.build}/Contents/Info.plist"
+                byline="false"
+                match="(&lt;key&gt;CFBundleIdentifier&lt;/key&gt;[\r\n \t]+&lt;string&gt;)[^&lt;]+(&lt;/string&gt;)"
+                replace="\1ro.redeul.google.go.ide\2"
+                />
+
+        <replaceregexp
+                file="${idea.community.build}/Contents/Info.plist"
+                byline="false"
+                match="(&lt;key&gt;CFBundleGetInfoString&lt;/key&gt;[\r\n \t]+&lt;string&gt;)[^&lt;]+(&lt;/string&gt;)"
+                replace="\1GoIde 1.0.0, build 0.4.2\2"
+                />
+
+        <replaceregexp
+                file="${idea.community.build}/Contents/Info.plist"
+                byline="false"
+                match="(&lt;key&gt;CFBundleShortVersionString&lt;/key&gt;[\r\n \t]+&lt;string&gt;)[^&lt;]+(&lt;/string&gt;)"
+                replace="\11.0.0\2"
+                />
+
+        <replaceregexp
+                file="${idea.community.build}/Contents/Info.plist"
+                byline="false"
+                match="(&lt;key&gt;CFBundleVersion&lt;/key&gt;[\r\n \t]+&lt;string&gt;)[^&lt;]+(&lt;/string&gt;)"
+                replace="\11.0.0 (0.4.2)\2"
+                />
+    </target>
+
+    <target name="assemble" depends="clean,init,resources,fix.Info.plist" description="compile the source">
 
         <concat destfile="${work}/idea.properties" force="true">
             <fileset dir="${idea.community.build}/bin" includes="idea.properties"/>
