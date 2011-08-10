@@ -35,8 +35,8 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.sdk.GoSdkTool;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.ProcessUtil;
@@ -313,7 +313,9 @@ public class GoCompiler implements TranslatingCompiler {
             outputFolder = outputFolder.getParentFile();
         }
 
-        outputFolder.mkdirs();
+        if ( ! outputFolder.mkdirs() ) {
+            LOG.warn("Could not create parent folders: " + outputFolder);
+        }
 
         String outputBinary = outputFolder.getAbsolutePath() + File.separator + packageName + "." + getTargetExtension(sdk);
 
@@ -328,7 +330,10 @@ public class GoCompiler implements TranslatingCompiler {
         }});
 
         for (VirtualFile file : files) {
-            command.addParameter(VfsUtil.getRelativePath(file, sourceRoot, '/'));
+            String fileRelativePath = VfsUtil.getRelativePath(file, sourceRoot, '/');
+            if (fileRelativePath != null ) {
+                command.addParameter(fileRelativePath);
+            }
         }
 
         CompilationTaskWorker compilationTaskWorker = new CompilationTaskWorker(new GoCompilerOutputStreamParser(sourceRoot.getPath()));
@@ -378,14 +383,17 @@ public class GoCompiler implements TranslatingCompiler {
     }
 
 
-    private boolean doCompileApplication(VirtualFile sourceRoot, String baseOutputPath, final Sdk sdk, CompileContext context, OutputSink sink, String relativePath, String currentPackage, Collection<VirtualFile> files) {
+    private boolean doCompileApplication(VirtualFile sourceRoot, String baseOutputPath, final Sdk sdk, CompileContext context, OutputSink sink, String relativePath,
+                                         String currentPackage, Collection<VirtualFile> files) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("[compiling] Compiling application in folder [" + relativePath + "] - " + files);
         }
 
         File outputFolder = new File(baseOutputPath + "/" + relativePath);
 
-        outputFolder.mkdirs();
+        if ( ! outputFolder.mkdirs() ) {
+            LOG.warn("Could not create parent dirs: " + outputFolder);
+        }
 
         String targetApplication = findTargetApplicationName(files, context);
 
@@ -463,7 +471,7 @@ public class GoCompiler implements TranslatingCompiler {
 
         GoSdkData goSdkData = goSdkData(sdk);
 
-        if ( goSdkData.TARGET_OS.equals("windows") ){
+        if ( goSdkData.TARGET_OS == GoSdkData.Os.Windows ){
             return outputApplication + ".exe";
         }
 
@@ -608,19 +616,17 @@ public class GoCompiler implements TranslatingCompiler {
 
     private String getCompilerBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoCompiler);
+        return goSdkData.BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoCompiler);
     }
-
-
 
     private String getPackerBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoArchivePacker);
+        return goSdkData.BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoArchivePacker);
     }
 
     private String getLinkerBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.BINARY_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoLinker);
+        return goSdkData.BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoLinker);
     }
 
     private String getTargetExtension(Sdk sdk) {

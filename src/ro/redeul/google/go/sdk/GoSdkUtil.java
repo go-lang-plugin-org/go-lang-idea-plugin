@@ -21,6 +21,7 @@ import ro.redeul.google.go.util.GoUtil;
 import java.io.File;
 import java.io.FileFilter;
 import java.nio.charset.Charset;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GoSdkUtil {
@@ -32,28 +33,30 @@ public class GoSdkUtil {
 
     private static final String DEFAULT_MOCK_PATH = "go/default";
 
-    private static Pattern RE_VERSION_MATCHER = Pattern.compile("([^ ]+) version ([^ ]+) ]")
+    // 8g version release.r59 9305
+    private static Pattern RE_VERSION_MATCHER = Pattern.compile("([^ ]+) version ([^ ]+) (.+)$");
+
 
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
-    public static String[] testGoogleGoSdk(String path) {
+    public static GoSdkData testGoogleGoSdk(String path) {
 
         File rootFile = new File(path);
 
         // check that the selection was a folder
         if (!rootFile.exists() || !rootFile.isDirectory()) {
-            return new String[0];
+            return null;
         }
 
         // check to see if we have a %GOROOT/src folder
         File srcFolder = new File(rootFile, "src");
         if (!srcFolder.exists() || !srcFolder.isDirectory()) {
-            return new String[0];
+            return null;
         }
 
         // check to see if we have a %GOROOT/pkg folder
         File pkgFolder = new File(rootFile, "pkg");
         if (!pkgFolder.exists() || !pkgFolder.isDirectory()) {
-            return new String[0];
+            return null;
         }
 
         File targets[] = pkgFolder.listFiles(new FileFilter() {
@@ -63,12 +66,15 @@ public class GoSdkUtil {
         });
 
         if (targets.length != 1 || !targets[0].getName().matches("(windows|linux|darwin|freebsd)_(386|amd64|arm)")) {
-            return new String[0];
+            return null;
         }
 
         String[] target = targets[0].getName().split("_");
 
-        String compilerName = getCompilerName(target[0], target[1]);
+        GoSdkData.Os targetOs = GoSdkData.Os.fromString(target[0]);
+        GoSdkData.Arch targetArch = GoSdkData.Arch.fromString(target[1]);
+
+        String compilerName = getCompilerName(targetOs, targetArch);
 
         String binariesPath = System.getenv("GOBIN");
         if (binariesPath == null) {
@@ -92,23 +98,21 @@ public class GoSdkUtil {
 
             if (output.getExitCode() != 0) {
                 LOG.error("Go compiler exited with invalid exit code: " + output.getExitCode());
-                return new String[0];
+                return null;
             }
 
             String outputString = output.getStdout().replaceAll("[\r\n]+", "");
 
+            Matcher matcher = RE_VERSION_MATCHER.matcher(outputString);
+            if ( matcher.matches() ) {
+                return new GoSdkData(path, binariesPath, targetOs, targetArch, matcher.group(2), matcher.group(3));
+            }
 
-            return new String[]{path, binariesPath, target[0], target[1], outputString};
+            return null;
         } catch (ExecutionException e) {
             LOG.error("Exception while executing the process:", e);
-            return new String[0];
+            return null;
         }
-    }
-
-    public static boolean validateSdkTestingResult(String[] data, String home) {
-        return
-                data != null && data.length == 5 &&
-                        (data[0].equalsIgnoreCase(home) || data[0].equalsIgnoreCase(home + "/"));
     }
 
     /**
@@ -118,7 +122,7 @@ public class GoSdkUtil {
      *  3. Uses HOMEPATH/go/default
      * @return the go sdk parameters or array of zero elements if error
      */
-    public static String[] getMockGoogleSdk() {
+    public static GoSdkData getMockGoogleSdk() {
         // Fallback to default home path / default mock path
         String sdkPath = PathManager.getHomePath() + "/" + DEFAULT_MOCK_PATH;
 
@@ -136,41 +140,40 @@ public class GoSdkUtil {
         return getMockGoogleSdk(sdkPath);
     }
 
-    public static String[] getMockGoogleSdk(String path) {
-        String[] strings = testGoogleGoSdk(path);
-        if (strings.length > 0) {
-            new File(strings[1], getCompilerName(strings[2], strings[3])).setExecutable(true);
-            new File(strings[1], getLinkerName(strings[2], strings[3])).setExecutable(true);
-            new File(strings[1], getArchivePackerName(strings[2], strings[3])).setExecutable(true);
+    public static GoSdkData getMockGoogleSdk(String path) {
+        GoSdkData sdkData = testGoogleGoSdk(path);
+        if (sdkData != null ) {
+            new File(sdkData.BIN_PATH, getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
+            new File(sdkData.BIN_PATH, getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
+            new File(sdkData.BIN_PATH, getArchivePackerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
         }
 
-        return strings;
+        return sdkData;
     }
 
-    private static String getArchivePackerName(String os, String arch) {
+    private static String getArchivePackerName(GoSdkData.Os os, GoSdkData.Arch arch) {
         return "gopack";
     }
 
-    public static String getCompilerName(String os, String arch) {
+    public static String getCompilerName(GoSdkData.Os os, GoSdkData.Arch arch) {
         return getBinariesDesignation(os, arch) + "g";
     }
 
-    public static String getLinkerName(String os, String arch) {
+    public static String getLinkerName(GoSdkData.Os os, GoSdkData.Arch arch) {
         return getBinariesDesignation(os, arch) + "l";
     }
 
-    public static String getBinariesDesignation(String os, String arch) {
+    public static String getBinariesDesignation(GoSdkData.Os os, GoSdkData.Arch arch) {
 
-        if (arch.equalsIgnoreCase("amd64")) {
-            return "6";
-        }
+        switch (arch) {
+            case _386:
+                return "8";
 
-        if (arch.equalsIgnoreCase("386")) {
-            return "8";
-        }
+            case _amd64:
+                return  "6";
 
-        if (arch.equalsIgnoreCase("arm")) {
-            return "5";
+            case _arm:
+                return "5";
         }
 
         return "unknown";
@@ -213,10 +216,10 @@ public class GoSdkUtil {
     }
 
     public static String getTool(GoSdkData goSdkData, GoSdkTool tool) {
-        return String.format("%s/%s", goSdkData.BINARY_PATH, getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, tool));
+        return String.format("%s/%s", goSdkData.BIN_PATH, getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, tool));
     }
 
-    public static String getToolName(String os, String arch, GoSdkTool tool) {
+    public static String getToolName(GoSdkData.Os os, GoSdkData.Arch arch, GoSdkTool tool) {
 
         String binariesDesignation = getBinariesDesignation(os, arch);
 

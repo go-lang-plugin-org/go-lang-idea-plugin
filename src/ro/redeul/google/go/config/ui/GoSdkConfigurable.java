@@ -2,8 +2,6 @@ package ro.redeul.google.go.config.ui;
 
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.*;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -19,7 +17,7 @@ public class GoSdkConfigurable implements AdditionalDataConfigurable {
     private JPanel component;
     private JLabel labelSdkVersion;
     private JLabel labelSdkTarget;
-    private TextFieldWithBrowseButton binariesPath;
+    private JLabel labelBinariesPath;
 
     private SdkModel model;
     private SdkModificator modifier;
@@ -58,13 +56,14 @@ public class GoSdkConfigurable implements AdditionalDataConfigurable {
 
         GoSdkData sdkData = (GoSdkData) data;
 
-        labelSdkVersion.setText(sdkData.VERSION);
+        labelSdkVersion.setText(sdkData.VERSION_MAJOR);
         labelSdkTarget.setText(String.format("%s-%s (%s, %s)",
-                sdkData.TARGET_OS, sdkData.TARGET_ARCH,
+                sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName(),
                 GoSdkUtil.getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH),
                 GoSdkUtil.getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
         ));
-        binariesPath.setText(sdkData.BINARY_PATH);
+
+        labelBinariesPath.setText(sdkData.BIN_PATH);
     }
 
     public void disposeUIResources() {

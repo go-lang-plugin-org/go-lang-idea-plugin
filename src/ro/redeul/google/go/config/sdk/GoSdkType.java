@@ -10,6 +10,7 @@ import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.config.ui.GoSdkConfigurable;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.GoUtil;
 
@@ -17,12 +18,22 @@ import javax.swing.*;
 
 public class GoSdkType extends SdkType {
 
+    GoSdkData sdkData;
+
     public GoSdkType() {
         super("Google Go SDK");
     }
 
     public static GoSdkType getInstance() {
         return SdkType.findInstance(GoSdkType.class);
+    }
+
+    public GoSdkData getSdkData() {
+        return sdkData;
+    }
+
+    public void setSdkData(GoSdkData sdkData) {
+        this.sdkData = sdkData;
     }
 
     @Override
@@ -56,9 +67,8 @@ public class GoSdkType extends SdkType {
 
     @Override
     public boolean isValidSdkHome(String path) {
-        String[] stringList = GoSdkUtil.testGoogleGoSdk(path);
-
-        return GoSdkUtil.validateSdkTestingResult(stringList, path);
+        sdkData = GoSdkUtil.testGoogleGoSdk(path);
+        return sdkData != null;
     }
 
     @Override
@@ -79,24 +89,28 @@ public class GoSdkType extends SdkType {
     @Override
     public String suggestSdkName(String currentSdkName, String sdkHome) {
 
-        String name = "Go Sdk";
-        if ( sdkHome.matches(".*bundled/go-sdk/?$") ) {
-            name = "Bundled Go Sdk";
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("Go sdk");
+        if ( getSdkData() != null ) {
+            builder.append(" ").append(getSdkData().VERSION_MAJOR);
         }
 
-        return name;
-//        return "Go" + (sdkData != null && sdkData.VERSION != null && sdkData.VERSION.trim().length() > 0 ? " (" + sdkData.VERSION + ")" : "");
-//        return "Go Sdk";
+        if ( sdkHome.matches(".*bundled/go-sdk/?$") ) {
+            builder.append(" (bundled)");
+        }
+
+        return builder.toString();
     }
 
     @Override
     public String getVersionString(String sdkHome) {
-        return super.getVersionString(sdkHome);
+        return sdkData != null ? sdkData.VERSION_MINOR : super.getVersionString(sdkHome);
     }
 
     @Override
     public AdditionalDataConfigurable createAdditionalDataConfigurable(SdkModel sdkModel, SdkModificator sdkModificator) {
-        return null;
+        return new GoSdkConfigurable(sdkModel, sdkModificator);
     }
 
     @Override
@@ -109,20 +123,14 @@ public class GoSdkType extends SdkType {
 
         String path = homeDirectory.getPath();
 
-        String[] stringList = GoSdkUtil.testGoogleGoSdk(path);
+        GoSdkData sdkData = GoSdkUtil.testGoogleGoSdk(path);
 
-        if ( ! GoSdkUtil.validateSdkTestingResult(stringList, path) ) {
+        if ( sdkData == null )
             return;
-        }
 
-        GoSdkData sdkData = new GoSdkData();
+        final VirtualFile librariesRoot =
+                homeDirectory.findFileByRelativePath(String.format("pkg/%s_%s/", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName()));
 
-        sdkData.BINARY_PATH = stringList[1];
-        sdkData.TARGET_OS = stringList[2];
-        sdkData.TARGET_ARCH = stringList[3];
-        sdkData.VERSION = stringList[4];
-
-        final VirtualFile librariesRoot = homeDirectory.findFileByRelativePath(String.format("pkg/%s_%s/", sdkData.TARGET_OS, sdkData.TARGET_ARCH));
         final VirtualFile sourcesRoot = homeDirectory.findFileByRelativePath("src/pkg/");
 
         if (librariesRoot != null) {
@@ -141,7 +149,7 @@ public class GoSdkType extends SdkType {
             }
         });
 
-        sdkModificator.setVersionString(sdkData.VERSION);
+        sdkModificator.setVersionString(String.format("%s %s", sdkData.VERSION_MAJOR, sdkData.VERSION_MINOR));
         sdkModificator.setSdkAdditionalData(sdkData);
         sdkModificator.commitChanges();
     }

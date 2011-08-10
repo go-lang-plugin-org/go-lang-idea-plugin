@@ -118,19 +118,13 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
 
         SdkModificator sdkModificator = sdk.getSdkModificator();
 
-        GoSdkData goSdkData = new GoSdkData();
+        GoSdkData goSdkData= GoSdkUtil.getMockGoogleSdk();
 
-        String[] goSdkParams = GoSdkUtil.getMockGoogleSdk();
+        assertTrue("Test go sdk not available to run tests, check that the system property [go.test.sdk.home] or your GOROOT environment variable are set correctly.",
+                goSdkData != null);
 
-        assertTrue("Test go sdk not available to run tests, check that the system property [go.test.sdk.home] or your GOROOT environment variable are set correctly.", goSdkParams.length > 0);
-
-        goSdkData.BINARY_PATH = goSdkParams[1];
-        goSdkData.TARGET_OS = goSdkParams[2];
-        goSdkData.TARGET_ARCH = goSdkParams[3];
-        goSdkData.VERSION = goSdkParams[4];
-
-        sdkModificator.setHomePath(goSdkParams[0]);
-        sdkModificator.setVersionString(goSdkData.VERSION);
+        sdkModificator.setHomePath(goSdkData.HOME_PATH);
+        sdkModificator.setVersionString(goSdkData.VERSION_MAJOR);
         sdkModificator.setSdkAdditionalData(goSdkData);
         sdkModificator.commitChanges();
 

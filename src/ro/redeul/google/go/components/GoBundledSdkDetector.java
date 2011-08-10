@@ -10,6 +10,7 @@ import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl;
 import com.intellij.openapi.projectRoots.impl.SdkConfigurationUtil;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -50,9 +51,9 @@ public class GoBundledSdkDetector implements ApplicationComponent {
         }
 
         // validate the sdk
-        String[] data = GoSdkUtil.testGoogleGoSdk(homePath);
+        GoSdkData sdkData = GoSdkUtil.testGoogleGoSdk(homePath);
 
-        if ( ! GoSdkUtil.validateSdkTestingResult(data, homePath) ) {
+        if ( sdkData == null ) {
             // skip since the folder isn't a proper go sdk
             return;
         }
@@ -62,8 +63,8 @@ public class GoBundledSdkDetector implements ApplicationComponent {
             final ProjectJdkImpl bundledGoSdk;
             final GoSdkType goSdkType = GoSdkType.getInstance();
 
-
-            String newSdkName = SdkConfigurationUtil.createUniqueSdkName("Bundled Go Sdk (" + data[4] + ")", Arrays.asList(jdkTable.getAllJdks()));
+            goSdkType.setSdkData(sdkData);
+            String newSdkName = SdkConfigurationUtil.createUniqueSdkName(goSdkType, sdkData.HOME_PATH, Arrays.asList(jdkTable.getAllJdks()));
             bundledGoSdk = new ProjectJdkImpl(newSdkName, goSdkType);
             bundledGoSdk.setHomePath(homePath);
             ApplicationManager.getApplication().runWriteAction(new Runnable() {
@@ -76,7 +77,7 @@ public class GoBundledSdkDetector implements ApplicationComponent {
             });
 
         } catch (Exception e) {
-            LOG.error("Exception while adding the bundled sdk");
+            LOG.error("Exception while adding the bundled sdk", e);
         }
     }
 
