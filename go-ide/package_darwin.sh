@@ -18,7 +18,7 @@ function createDmg()
     rm -r ${SOURCE_PATH_GO_PLUGIN}/dist/darwin_$1
     unzip -o ${SOURCE_PATH_GO_PLUGIN}/dist/goide-darwin_$1.zip -d ${SOURCE_PATH_GO_PLUGIN}/dist/darwin_$1
     mv -f "${SOURCE_PATH_GO_PLUGIN}/dist/darwin_$1/go-ide" "${SOURCE_PATH_GO_PLUGIN}/dist/darwin_$1/Go Ide.app"
-    SRC_FOLDER="${SOURCE_PATH_GO_PLUGIN}/dist/darwin_$1" IMAGE_FILE=${SOURCE_PATH_GO_PLUGIN}/dist/goide_$1.dmg ./make_dmg.sh
+    SRC_FOLDER="${SOURCE_PATH_GO_PLUGIN}/dist/darwin_$1" IMAGE_FILE=${SOURCE_PATH_GO_PLUGIN}/dist/goide_osx_$1.dmg ./make_dmg.sh
 }
 
 createDmg 386
