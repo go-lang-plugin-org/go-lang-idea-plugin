@@ -9,13 +9,12 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
- * Date: Aug 19, 2010
- * Time: 8:07:05 AM
+ * Date: 8/10/11
+ * Time: 8:14 AM
  */
-public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<GoSdkData> {
+public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateComponent<GoAppEngineSdkData> {
 
     public String GO_HOME_PATH = "";
-    public String GO_BIN_PATH = "";
 
     public GoTargetOs TARGET_OS = null;
     public GoTargetArch TARGET_ARCH = null;
@@ -23,16 +22,15 @@ public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<Go
     public String VERSION_MAJOR = "";
     public String VERSION_MINOR = "";
 
-    public GoSdkData() {
+    public GoAppEngineSdkData() {
     }
 
-    public GoSdkData(String homePath, String binaryPath, GoTargetOs targetOs, GoTargetArch targetArch, String versionMajor, String versionMinor) {
+    public GoAppEngineSdkData(String homePath, String binPath, GoTargetOs TARGET_OS, GoTargetArch TARGET_ARCH, String VERSION_MAJOR, String VERSION_MINOR) {
         this.GO_HOME_PATH = homePath;
-        this.GO_BIN_PATH = binaryPath;
-        this.TARGET_OS = targetOs;
-        this.TARGET_ARCH = targetArch;
-        this.VERSION_MAJOR = versionMajor;
-        this.VERSION_MINOR = versionMinor;
+        this.TARGET_OS = TARGET_OS;
+        this.TARGET_ARCH = TARGET_ARCH;
+        this.VERSION_MAJOR = VERSION_MAJOR;
+        this.VERSION_MINOR = VERSION_MINOR;
     }
 
     @SuppressWarnings({"CloneDoesntCallSuperClone"})
@@ -41,16 +39,18 @@ public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<Go
         return super.clone();
     }
 
+    @Override
     public void checkValid(SdkModel sdkModel) throws ConfigurationException {
-
+        //
     }
 
-    public GoSdkData getState() {
-        return this;
-    }
-
-    public void loadState(GoSdkData state) {
+    @Override
+    public void loadState(GoAppEngineSdkData state) {
         XmlSerializerUtil.copyBean(state, this);
+    }
+
+    public GoAppEngineSdkData getState() {
+        return this;
     }
 
 }

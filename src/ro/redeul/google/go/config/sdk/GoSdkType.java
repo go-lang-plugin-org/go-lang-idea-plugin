@@ -155,7 +155,7 @@ public class GoSdkType extends SdkType {
     }
 
     @Override
-    public SdkAdditionalData loadAdditionalData(Sdk currentSdk, Element additional) {
+    public SdkAdditionalData loadAdditionalData(Element additional) {
         return XmlSerializer.deserialize(additional, GoSdkData.class);
     }
 

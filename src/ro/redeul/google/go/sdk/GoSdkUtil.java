@@ -13,13 +13,15 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ModuleRootModel;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.psi.PsiFile;
-import ro.redeul.google.go.config.sdk.GoSdkData;
-import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.config.sdk.*;
 import ro.redeul.google.go.util.GoUtil;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,28 +38,19 @@ public class GoSdkUtil {
     // 8g version release.r59 9305
     private static Pattern RE_VERSION_MATCHER = Pattern.compile("([^ ]+) version ([^ ]+) (.+)$");
 
+    // release: "xx"
+    private static Pattern RE_APP_ENGINE_VERSION_MATCHER = Pattern.compile("^release: \"([^\"]+)\"$", Pattern.MULTILINE);
+    private static Pattern RE_APP_ENGINE_TIMESTAMP_MATCHER = Pattern.compile("^timestamp: ([0-9]+)$", Pattern.MULTILINE);
+    private static Pattern RE_APP_ENGINE_API_VERSIONS_MATCHER = Pattern.compile("^api_versions: \\[([^\\]]+)\\]$", Pattern.MULTILINE);
 
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static GoSdkData testGoogleGoSdk(String path) {
 
-        File rootFile = new File(path);
-
-        // check that the selection was a folder
-        if (!rootFile.exists() || !rootFile.isDirectory()) {
+        if ( ! checkFolderExists(path) || ! checkFolderExists(path, "src") || ! checkFolderExists(path, "pkg") ) {
             return null;
         }
 
-        // check to see if we have a %GOROOT/src folder
-        File srcFolder = new File(rootFile, "src");
-        if (!srcFolder.exists() || !srcFolder.isDirectory()) {
-            return null;
-        }
-
-        // check to see if we have a %GOROOT/pkg folder
-        File pkgFolder = new File(rootFile, "pkg");
-        if (!pkgFolder.exists() || !pkgFolder.isDirectory()) {
-            return null;
-        }
+        File pkgFolder = new File(path, "pkg");
 
         File targets[] = pkgFolder.listFiles(new FileFilter() {
             public boolean accept(File pathName) {
@@ -71,8 +64,8 @@ public class GoSdkUtil {
 
         String[] target = targets[0].getName().split("_");
 
-        GoSdkData.Os targetOs = GoSdkData.Os.fromString(target[0]);
-        GoSdkData.Arch targetArch = GoSdkData.Arch.fromString(target[1]);
+        GoTargetOs targetOs = GoTargetOs.fromString(target[0]);
+        GoTargetArch targetArch = GoTargetArch.fromString(target[1]);
 
         String compilerName = getCompilerName(targetOs, targetArch);
 
@@ -115,6 +108,73 @@ public class GoSdkUtil {
         }
     }
 
+    public static GoAppEngineSdkData testGoAppEngineSdk(String path) {
+
+        if ( ! checkFolderExists(path) || ! checkFileExists(path, "dev_appserver.py")
+                || ! checkFolderExists(path, "goroot") || ! checkFolderExists(path, "goroot", "pkg"))
+            return null;
+
+        if ( ! checkFileExists(path, "VERSION") )
+            return null;
+
+
+        GoAppEngineSdkData sdkData = new GoAppEngineSdkData();
+
+        sdkData.GO_HOME_PATH = String.format("%s/goroot", path);
+
+        sdkData.TARGET_ARCH = GoTargetArch._amd64;
+        sdkData.TARGET_OS = GoTargetOs.Linux;
+
+        try {
+            String fileContent = VfsUtil.loadText(VfsUtil.findFileByURL(new URL(VfsUtil.pathToUrl(String.format("%s/VERSION", path)))));
+
+            Matcher matcher = RE_APP_ENGINE_VERSION_MATCHER.matcher(fileContent);
+
+            if ( ! matcher.find() )
+                return null;
+            sdkData.VERSION_MAJOR = matcher.group(1);
+
+            matcher = RE_APP_ENGINE_TIMESTAMP_MATCHER.matcher(fileContent);
+            if ( ! matcher.find() )
+                return null;
+            sdkData.VERSION_MINOR = matcher.group(1);
+
+            matcher = RE_APP_ENGINE_API_VERSIONS_MATCHER.matcher(fileContent);
+            if ( ! matcher.find() )
+                return null;
+
+        } catch (IOException e) {
+            return null;
+        }
+
+        return sdkData;
+    }
+
+    private static boolean checkFileExists(String path, String child) {
+        return checkFileExists(new File(path, child));
+    }
+
+    private static boolean checkFileExists(File file) {
+        return file.exists() && file.isFile();
+    }
+
+    private static boolean checkFolderExists(String path) {
+        return checkFolderExists(new File(path));
+    }
+
+    private static boolean checkFolderExists(File file) {
+        return file.exists() && file.isDirectory();
+    }
+
+    private static boolean checkFolderExists(String path, String child) {
+        return checkFolderExists(new File(path, child));
+    }
+
+    private static boolean checkFolderExists(String path, String child, String child2) {
+        return checkFolderExists(new File(new File(path, child), child2));
+    }
+
+
     /**
      * Uses the following to get the go sdk for tests:
      *  1. Uses the path given by the system property go.test.sdk.home, if given
@@ -143,27 +203,27 @@ public class GoSdkUtil {
     public static GoSdkData getMockGoogleSdk(String path) {
         GoSdkData sdkData = testGoogleGoSdk(path);
         if (sdkData != null ) {
-            new File(sdkData.BIN_PATH, getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
-            new File(sdkData.BIN_PATH, getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
-            new File(sdkData.BIN_PATH, getArchivePackerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
+            new File(sdkData.GO_BIN_PATH, getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
+            new File(sdkData.GO_BIN_PATH, getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
+            new File(sdkData.GO_BIN_PATH, getArchivePackerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
         }
 
         return sdkData;
     }
 
-    private static String getArchivePackerName(GoSdkData.Os os, GoSdkData.Arch arch) {
+    private static String getArchivePackerName(GoTargetOs os, GoTargetArch arch) {
         return "gopack";
     }
 
-    public static String getCompilerName(GoSdkData.Os os, GoSdkData.Arch arch) {
+    public static String getCompilerName(GoTargetOs os, GoTargetArch arch) {
         return getBinariesDesignation(os, arch) + "g";
     }
 
-    public static String getLinkerName(GoSdkData.Os os, GoSdkData.Arch arch) {
+    public static String getLinkerName(GoTargetOs os, GoTargetArch arch) {
         return getBinariesDesignation(os, arch) + "l";
     }
 
-    public static String getBinariesDesignation(GoSdkData.Os os, GoSdkData.Arch arch) {
+    public static String getBinariesDesignation(GoTargetOs os, GoTargetArch arch) {
 
         switch (arch) {
             case _386:
@@ -216,10 +276,10 @@ public class GoSdkUtil {
     }
 
     public static String getTool(GoSdkData goSdkData, GoSdkTool tool) {
-        return String.format("%s/%s", goSdkData.BIN_PATH, getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, tool));
+        return String.format("%s/%s", goSdkData.GO_BIN_PATH, getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, tool));
     }
 
-    public static String getToolName(GoSdkData.Os os, GoSdkData.Arch arch, GoSdkTool tool) {
+    public static String getToolName(GoTargetOs os, GoTargetArch arch, GoSdkTool tool) {
 
         String binariesDesignation = getBinariesDesignation(os, arch);
 
@@ -238,4 +298,5 @@ public class GoSdkUtil {
 
         return "";
     }
+
 }

@@ -123,7 +123,7 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
         assertTrue("Test go sdk not available to run tests, check that the system property [go.test.sdk.home] or your GOROOT environment variable are set correctly.",
                 goSdkData != null);
 
-        sdkModificator.setHomePath(goSdkData.HOME_PATH);
+        sdkModificator.setHomePath(goSdkData.GO_HOME_PATH);
         sdkModificator.setVersionString(goSdkData.VERSION_MAJOR);
         sdkModificator.setSdkAdditionalData(goSdkData);
         sdkModificator.commitChanges();

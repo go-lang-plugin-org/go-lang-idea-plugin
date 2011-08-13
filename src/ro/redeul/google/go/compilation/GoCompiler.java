@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.config.sdk.GoTargetOs;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
@@ -471,7 +472,7 @@ public class GoCompiler implements TranslatingCompiler {
 
         GoSdkData goSdkData = goSdkData(sdk);
 
-        if ( goSdkData.TARGET_OS == GoSdkData.Os.Windows ){
+        if ( goSdkData.TARGET_OS == GoTargetOs.Windows ){
             return outputApplication + ".exe";
         }
 
@@ -616,17 +617,17 @@ public class GoCompiler implements TranslatingCompiler {
 
     private String getCompilerBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoCompiler);
+        return goSdkData.GO_BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoCompiler);
     }
 
     private String getPackerBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoArchivePacker);
+        return goSdkData.GO_BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoArchivePacker);
     }
 
     private String getLinkerBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoLinker);
+        return goSdkData.GO_BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoLinker);
     }
 
     private String getTargetExtension(Sdk sdk) {

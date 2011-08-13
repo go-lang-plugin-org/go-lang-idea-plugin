@@ -63,7 +63,7 @@ public class GoSdkConfigurable implements AdditionalDataConfigurable {
                 GoSdkUtil.getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
         ));
 
-        labelBinariesPath.setText(sdkData.BIN_PATH);
+        labelBinariesPath.setText(sdkData.GO_BIN_PATH);
     }
 
     public void disposeUIResources() {

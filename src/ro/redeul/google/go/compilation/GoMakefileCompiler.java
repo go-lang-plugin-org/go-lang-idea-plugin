@@ -104,8 +104,8 @@ public class GoMakefileCompiler implements TranslatingCompiler {
                 put("GOROOT", projectSdk.getHomePath());
                 put("GOARCH", goSdkData.TARGET_ARCH.getName());
                 put("GOOS", goSdkData.TARGET_OS.getName());
-                put("GOBIN", goSdkData.BIN_PATH);
-                put("PATH", System.getenv("PATH") + File.pathSeparator + goSdkData.BIN_PATH);
+                put("GOBIN", goSdkData.GO_BIN_PATH);
+                put("PATH", System.getenv("PATH") + File.pathSeparator + goSdkData.GO_BIN_PATH);
                 put("TARGDIR", getOutputPath(context, moduleChunk));
             }});
 
@@ -170,7 +170,7 @@ public class GoMakefileCompiler implements TranslatingCompiler {
 
     private String getMakeBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoMake);
+        return goSdkData.GO_BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoMake);
     }
 
     private GoSdkData goSdkData(Sdk sdk) {

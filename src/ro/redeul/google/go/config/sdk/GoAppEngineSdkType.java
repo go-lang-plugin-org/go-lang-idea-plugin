@@ -1,13 +1,17 @@
 package ro.redeul.google.go.config.sdk;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.config.ui.GoAppEngineSdkConfigurable;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.GoUtil;
 
 import javax.swing.*;
@@ -20,8 +24,18 @@ import javax.swing.*;
  */
 public class GoAppEngineSdkType extends SdkType {
 
+    GoAppEngineSdkData sdkData;
+
     public GoAppEngineSdkType() {
         super("Google Go App Engine SDK");
+    }
+
+    public GoAppEngineSdkData getSdkData() {
+        return sdkData;
+    }
+
+    public void setSdkData(GoAppEngineSdkData sdkData) {
+        this.sdkData = sdkData;
     }
 
     @Override
@@ -31,22 +45,76 @@ public class GoAppEngineSdkType extends SdkType {
 
     @Override
     public boolean isValidSdkHome(String path) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        sdkData = GoSdkUtil.testGoAppEngineSdk(path);
+        return sdkData != null;
     }
 
     @Override
     public String suggestSdkName(String currentSdkName, String sdkHome) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("Go App Engine");
+        if ( getSdkData() != null ) {
+            builder.append(" ").append(getSdkData().VERSION_MAJOR);
+        }
+
+        if ( sdkHome.matches(".*bundled/go-appengine-sdk/?$") ) {
+            builder.append(" (bundled)");
+        }
+
+        return builder.toString();
     }
 
     @Override
     public AdditionalDataConfigurable createAdditionalDataConfigurable(SdkModel sdkModel, SdkModificator sdkModificator) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new GoAppEngineSdkConfigurable(sdkModel, sdkModificator);
     }
 
     @Override
-    public void saveAdditionalData(SdkAdditionalData additionalData, Element additional) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public String getVersionString(Sdk sdk) {
+        return sdk.getVersionString();
+    }
+
+    @Override
+    public void setupSdkPaths(Sdk sdk) {
+
+        VirtualFile homeDirectory = sdk.getHomeDirectory();
+
+        if (sdk.getSdkType() != this || homeDirectory == null) {
+            return;
+        }
+
+        String path = homeDirectory.getPath();
+
+        GoAppEngineSdkData sdkData = GoSdkUtil.testGoAppEngineSdk(path);
+
+        if ( sdkData == null )
+            return;
+
+        final VirtualFile librariesRoot =
+                homeDirectory.findFileByRelativePath(String.format("goroot/pkg/%s_%s/", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName()));
+
+        final VirtualFile sourcesRoot = homeDirectory.findFileByRelativePath("goroot/src/pkg/");
+
+        if (librariesRoot != null) {
+            librariesRoot.refresh(false, false);
+        }
+        if (sourcesRoot != null) {
+            sourcesRoot.refresh(false, false);
+        }
+
+        final SdkModificator sdkModificator = sdk.getSdkModificator();
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            public void run() {
+                sdkModificator.addRoot(librariesRoot, OrderRootType.CLASSES);
+                sdkModificator.addRoot(sourcesRoot, OrderRootType.CLASSES);
+                sdkModificator.addRoot(sourcesRoot, OrderRootType.SOURCES);
+            }
+        });
+
+        sdkModificator.setVersionString(String.format("%s %s", sdkData.VERSION_MAJOR, sdkData.VERSION_MINOR));
+        sdkModificator.setSdkAdditionalData(sdkData);
+        sdkModificator.commitChanges();
     }
 
     @Override
@@ -71,7 +139,6 @@ public class GoAppEngineSdkType extends SdkType {
 
         descriptor.setTitle(GoBundle.message("go.sdk.appengine.configure.title", getPresentableName()));
         return descriptor;
-
     }
 
     @Override
@@ -101,5 +168,17 @@ public class GoAppEngineSdkType extends SdkType {
 
     public static SdkType getInstance() {
         return SdkType.findInstance(GoAppEngineSdkType.class);
+    }
+
+    @Override
+    public SdkAdditionalData loadAdditionalData(Element additional) {
+        return XmlSerializer.deserialize(additional, GoAppEngineSdkData.class);
+    }
+
+    @Override
+    public void saveAdditionalData(SdkAdditionalData additionalData, Element additional) {
+        if (additionalData instanceof GoAppEngineSdkData) {
+            XmlSerializer.serializeInto(additionalData, additional);
+        }
     }
 }

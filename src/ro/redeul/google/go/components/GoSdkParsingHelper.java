@@ -17,6 +17,8 @@ import com.intellij.util.FilteringProcessor;
 import com.intellij.util.Function;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -75,7 +77,10 @@ public class GoSdkParsingHelper implements ApplicationComponent {
         ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
 
         ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
-        List<Sdk> sdkList = jdkTable.getSdksOfType(GoSdkType.getInstance());
+        List<Sdk> sdkList = new ArrayList<Sdk>();
+
+        sdkList.addAll(jdkTable.getSdksOfType(GoSdkType.getInstance()));
+        sdkList.addAll(jdkTable.getSdksOfType(GoAppEngineSdkType.getInstance()));
 
         Sdk ownerSdk = null;
 
@@ -120,29 +125,44 @@ public class GoSdkParsingHelper implements ApplicationComponent {
     private Map<String, String> findPackageMappings(Sdk ownerSdk) {
         Map<String, String> result = new HashMap<String, String>();
 
-        if (ownerSdk.getSdkType() != GoSdkType.getInstance())
+        if (ownerSdk.getSdkType() != GoSdkType.getInstance() && ownerSdk.getSdkType() != GoAppEngineSdkType.getInstance())
             return result;
-
 
         VirtualFile home = ownerSdk.getHomeDirectory();
         if (home == null) {
             return result;
         }
 
+        String activeTarget = "";
+        VirtualFile goRoot = home;
+
+        if ( ownerSdk.getSdkType() == GoAppEngineSdkType.getInstance() ) {
+            goRoot = home.findFileByRelativePath("goroot");
+
+            GoAppEngineSdkData sdkData = (GoAppEngineSdkData) ownerSdk.getSdkAdditionalData();
+            if ( sdkData != null ) {
+                activeTarget = String.format("%s_%s", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName());
+            }
+        } else {
+            GoSdkData sdkData = (GoSdkData) ownerSdk.getSdkAdditionalData();
+            if ( sdkData != null ) {
+                activeTarget = String.format("%s_%s", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName());
+            }
+        }
+
+        if ( goRoot == null ) {
+            return result;
+        }
+
         // find libraries
-        final VirtualFile packageRoot = home.findFileByRelativePath("pkg");
+        final VirtualFile packageRoot = goRoot.findFileByRelativePath("pkg");
         if (packageRoot == null) {
             return result;
         }
 
         CommonProcessors.CollectUniquesProcessor<String> libraryNames = new CommonProcessors.CollectUniquesProcessor<String>();
 
-        GoSdkData sdkData = (GoSdkData) ownerSdk.getSdkAdditionalData();
-
-        final VirtualFile librariesRoot =
-                sdkData != null
-                    ? packageRoot.findFileByRelativePath(String.format("%s_%s", sdkData.TARGET_OS, sdkData.TARGET_ARCH))
-                    : packageRoot;
+        final VirtualFile librariesRoot = packageRoot.findFileByRelativePath(activeTarget);
 
         if ( librariesRoot == null ) {
             return result;
@@ -172,7 +192,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
 
         // find makefiles
         CommonProcessors.CollectUniquesProcessor<VirtualFile> makefiles = new CommonProcessors.CollectUniquesProcessor<VirtualFile>();
-        final VirtualFile sourcesRoot = home.findFileByRelativePath("src/pkg");
+        final VirtualFile sourcesRoot = home.findFileByRelativePath(ownerSdk.getSdkType() == GoSdkType.getInstance() ? "src/pkg" : "goroot/src/pkg");
         if (sourcesRoot == null) {
             return result;
         }
@@ -199,8 +219,8 @@ public class GoSdkParsingHelper implements ApplicationComponent {
                         String relativePath = VfsUtil.getRelativePath(makefile.getParent(), sourcesRoot, '/');
                         if ( relativePath != null ) {
                             result.put(relativePath, libraryName);
-                        } else {
-                            int a = 10;
+//                        } else {
+//                            int a = 10;
                         }
                     }
                 }
