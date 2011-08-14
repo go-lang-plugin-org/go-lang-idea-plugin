@@ -45,7 +45,8 @@
         <![CDATA[
          <h3>0.4.3 changes:</h3>
             <ul>
-                <li>Go App engine sdk type</li>
+                <li>[feature] Go App engine sdk type</li>
+                <li>[bugfix] Pass the arguments on a run config as separate arguments</li>
             </ul>
          <h3>0.4.2 changes:</h3>
             <ul>

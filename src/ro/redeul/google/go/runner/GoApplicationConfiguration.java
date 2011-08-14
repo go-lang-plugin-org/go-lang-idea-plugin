@@ -71,8 +71,6 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
         return new GoRunConfigurationEditorForm(getProject());
     }
 
-
-
     public void readExternal(final Element element) throws InvalidDataException {
         PathMacroManager.getInstance(getProject()).expandPaths(element);
         super.readExternal(element);
@@ -92,6 +90,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     }
 
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
+
         CommandLineState state = new CommandLineState(env) {
 
             @Override
@@ -101,7 +100,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
                 commandLine.setExePath(getCompiledFileName(getModule(), scriptName));
                 if (scriptArguments != null && scriptArguments.trim().length() > 0) {
-                    commandLine.addParameter(scriptArguments);
+                    commandLine.getParametersList().addParametersString(scriptArguments);
                 }
                 commandLine.setWorkDirectory(workDir);
 
