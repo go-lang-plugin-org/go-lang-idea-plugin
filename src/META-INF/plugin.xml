@@ -51,6 +51,7 @@
                 <li>[feature] Go App engine credentials safe storage</li>
                 <li>[feature] Added go application wizard</li>
                 <li>[bugfix] Pass the arguments on a run config as separate arguments</li>
+                <li>[bugfix] Exception while saving the document (nested modification exception)</li>
             </ul>
          <h3>0.4.2 changes:</h3>
             <ul>
@@ -272,10 +273,6 @@
             <implementation-class>ro.redeul.google.go.components.GoCompilerLoader</implementation-class>
         </component>
 
-        <component>
-            <implementation-class>ro.redeul.google.go.components.EditorTweakingComponent</implementation-class>
-        </component>
-
     </project-components>
     
     <actions>
@@ -383,6 +380,9 @@
 
         <!-- wizards -->
         <wizardMode implementation="ro.redeul.google.go.wizards.GoApplicationWizard"/>
+
+        <!-- Editor tweaks -->
+        <fileDocumentManagerListener implementation="ro.redeul.google.go.components.EditorTweakingComponent" />
     </extensions>
 
 </idea-plugin>
