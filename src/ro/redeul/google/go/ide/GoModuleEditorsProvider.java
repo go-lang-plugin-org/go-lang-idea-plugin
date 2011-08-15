@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: 1/2/11
  * Time: 11:40 AM
- * To change this template use File | Settings | File Templates.
  */
 public class GoModuleEditorsProvider implements ModuleConfigurationEditorProvider {
 

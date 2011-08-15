@@ -19,11 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: 1/2/11
  * Time: 10:34 AM
- * To change this template use File | Settings | File Templates.
  */
 public class GoModuleType extends ModuleType<GoModuleBuilder> {
 
@@ -63,12 +62,12 @@ public class GoModuleType extends ModuleType<GoModuleBuilder> {
     }
 
     public boolean isValidSdk(final Module module, final Sdk projectSdk) {
-        return true;
+        return projectSdk.getSdkType() == GoSdkType.getInstance();
     }
 
     @Override
-    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext, GoModuleBuilder moduleBuilder, ModulesProvider modulesProvider) {
-
+    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext, GoModuleBuilder moduleBuilder, ModulesProvider modulesProvider)
+    {
         List<ModuleWizardStep> steps = new ArrayList<ModuleWizardStep>();
 
         ProjectWizardStepFactory factory = ProjectWizardStepFactory.getInstance();

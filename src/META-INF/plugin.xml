@@ -38,6 +38,8 @@
             <li>Run configuration creator (right click on a program file and you can run it). </li>
             <li>Run configuration validation.</li>
             <li>Go App engine sdk type</li>
+            <li>Go App engine credentials safe storage</li>
+            <li>Added go application wizard</li>
         </ul>
     ]]>
     </description>
@@ -46,6 +48,8 @@
          <h3>0.4.3 changes:</h3>
             <ul>
                 <li>[feature] Go App engine sdk type</li>
+                <li>[feature] Go App engine credentials safe storage</li>
+                <li>[feature] Added go application wizard</li>
                 <li>[bugfix] Pass the arguments on a run config as separate arguments</li>
             </ul>
          <h3>0.4.2 changes:</h3>
@@ -309,8 +313,17 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
+
+        <applicationService serviceInterface="ro.redeul.google.go.ide.GoAppEngineSettings"
+                                serviceImplementation="ro.redeul.google.go.ide.GoAppEngineSettings"/>
+
+        <applicationConfigurable instance="ro.redeul.google.go.ide.GoAppEngineSettingsConfigurable"/>
+
         <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
-        <projectService serviceInterface="ro.redeul.google.go.ide.GoProjectSettings" serviceImplementation="ro.redeul.google.go.ide.GoProjectSettings"/>
+
+        <projectService serviceInterface="ro.redeul.google.go.ide.GoProjectSettings"
+                        serviceImplementation="ro.redeul.google.go.ide.GoProjectSettings"/>
+
         <projectConfigurable instance="ro.redeul.google.go.ide.GoConfigurable"/>
 
         <syntaxHighlighter key="Google Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighter"/>
