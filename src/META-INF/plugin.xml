@@ -368,6 +368,8 @@
                         serviceImplementation="ro.redeul.google.go.services.GoCodeManager"/>
 
 
+        <!-- wizards -->
+        <wizardMode implementation="ro.redeul.google.go.wizards.GoApplicationWizard"/>
     </extensions>
 
 </idea-plugin>

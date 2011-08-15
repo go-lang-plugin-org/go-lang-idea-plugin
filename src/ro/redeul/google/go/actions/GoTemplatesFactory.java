@@ -1,18 +1,19 @@
 package ro.redeul.google.go.actions;
 
-import com.intellij.ide.fileTemplates.*;
+import com.intellij.ide.fileTemplates.FileTemplate;
+import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor;
+import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptorFactory;
+import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
-import ro.redeul.google.go.GoBundle;
-import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
 
 import java.util.Properties;
 
 public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
 
-    enum Template {
+    public enum Template {
         GoAppMain("Go Application"), GoFile("Go File");
 
         String file;
