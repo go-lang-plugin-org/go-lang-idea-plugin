@@ -20,7 +20,7 @@ public class GoModuleEditorsProvider implements ModuleConfigurationEditorProvide
     public ModuleConfigurationEditor[] createEditors(ModuleConfigurationState state) {
         final Module module = state.getRootModel().getModule();
 
-        if (module.getModuleType() != GoModuleType.getInstance())
+        if (module.getModuleType() != GoModuleType.getInstance() && module.getModuleType() != GoAppEngineModuleType.getInstance() )
             return ModuleConfigurationEditor.EMPTY;
 
         final DefaultModuleConfigurationEditorFactory editorFactory = DefaultModuleConfigurationEditorFactory.getInstance();

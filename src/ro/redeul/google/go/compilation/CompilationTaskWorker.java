@@ -26,6 +26,7 @@ import java.util.Map;
  * Time: 8:45 PM
  */
 public class CompilationTaskWorker {
+
     private static final Logger LOG = Logger.getInstance("#ro.redeul.google.go.compilation.CompilationTaskWorker");
 
     private final ProcessUtil.StreamParser<List<CompilerMessage>> outputParser;
@@ -91,7 +92,7 @@ public class CompilationTaskWorker {
                 List<CompilerMessage> compilerMessages = outputStreamParser.parseStream(line);
 
                 for (CompilerMessage compilerMessage : compilerMessages) {
-                    context.addMessage(CompilerMessageCategory.ERROR, compilerMessage.getMessage(),
+                    context.addMessage(compilerMessage.getCategory(), compilerMessage.getMessage(),
                             compilerMessage.getFileName(), compilerMessage.getRow(), compilerMessage.getColumn());
                 }
             }

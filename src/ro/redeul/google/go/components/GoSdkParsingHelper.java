@@ -2,6 +2,7 @@ package ro.redeul.google.go.components;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -22,11 +23,9 @@ import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.util.GoUtil;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -38,7 +37,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
 
     Map<Sdk, Map<String, String>> sdkPackageMappings = new HashMap<Sdk, Map<String, String>>();
 
-    private final static Pattern RE_PACKAGE_TARGET = Pattern.compile("^TARG=([^\\s]+)\\s*$", Pattern.MULTILINE);
+
 
     public static GoSdkParsingHelper getInstance() {
         return ApplicationManager.getApplication().getComponent(GoSdkParsingHelper.class);
@@ -105,7 +104,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
         }
 
         if (ownerSdk == null) {
-            return "";
+            return getPackageImportPathFromProject(project, projectFileIndex, virtualFile);
         }
 
         Map<String, String> mappings = sdkPackageMappings.get(ownerSdk);
@@ -119,6 +118,26 @@ public class GoSdkParsingHelper implements ApplicationComponent {
             return mappings.get(relativePath);
         }
 
+        return "";
+    }
+
+    private String getPackageImportPathFromProject(Project project, ProjectFileIndex projectIndex, VirtualFile virtualFile) {
+
+        Module module = projectIndex.getModuleForFile(virtualFile);
+        VirtualFile contentRoot = projectIndex.getContentRootForFile(virtualFile);
+        if ( contentRoot == null ) {
+            return "";
+        }
+
+        String relativePath = VfsUtil.getRelativePath(virtualFile, contentRoot.getParent(), '/');
+        if ( relativePath == null ) {
+            return "";
+        }
+
+        VirtualFile makefile = virtualFile.getParent().findChild("Makefile");
+        if ( makefile != null ) {
+
+        }
         return "";
     }
 
@@ -209,23 +228,13 @@ public class GoSdkParsingHelper implements ApplicationComponent {
                 ));
 
         for (VirtualFile makefile : makefiles.getResults() ) {
-            try {
-                String content = new String(makefile.contentsToByteArray(), "UTF-8");
+            String targetName = GoUtil.getTargetFromMakefile(makefile);
 
-                Matcher matcher = RE_PACKAGE_TARGET.matcher(content);
-                if ( matcher.find() ) {
-                    String libraryName = matcher.group(1);
-                    if ( librariesSet.contains(libraryName) ) {
-                        String relativePath = VfsUtil.getRelativePath(makefile.getParent(), sourcesRoot, '/');
-                        if ( relativePath != null ) {
-                            result.put(relativePath, libraryName);
-//                        } else {
-//                            int a = 10;
-                        }
-                    }
+            if ( targetName != null && librariesSet.contains(targetName) ) {
+                String relativePath = VfsUtil.getRelativePath(makefile.getParent(), sourcesRoot, '/');
+                if ( relativePath != null ) {
+                    result.put(relativePath, targetName);
                 }
-            } catch (IOException e) {
-                //
             }
         }
 

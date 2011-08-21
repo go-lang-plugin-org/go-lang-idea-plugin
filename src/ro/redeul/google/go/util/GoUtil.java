@@ -18,6 +18,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -27,6 +29,7 @@ import java.util.List;
  */
 public class GoUtil {
     public static final String ENV_GO_ROOT = "GOROOT";
+
 
     /**
      * Gets the idea home directory.
@@ -120,9 +123,36 @@ public class GoUtil {
         return false;
     }
 
-
     private static boolean testPathExists(String goRoot) {
         return goRoot != null && goRoot.trim().length() > 0 && new File(goRoot).isDirectory();
+    }
+
+    private final static Pattern RE_PACKAGE_TARGET = Pattern.compile("^TARG=([^\\s]+)\\s*$", Pattern.MULTILINE);
+
+    /**
+     * Returns a string if there is a TARG=xxx specified in the provided makefile and null if there is no such file.
+     *
+     * @param makefile the file we want to test (can be null)
+     *
+     * @return the specified target or null
+     */
+    public static String getTargetFromMakefile(VirtualFile makefile) {
+        if ( makefile == null ) {
+            return null;
+        }
+
+        try {
+            String content = new String(makefile.contentsToByteArray(), "UTF-8");
+
+            Matcher matcher = RE_PACKAGE_TARGET.matcher(content);
+            if ( matcher.find() ) {
+                return matcher.group(1);
+            }
+        } catch (IOException e) {
+            //
+        }
+
+        return null;
     }
 }
 

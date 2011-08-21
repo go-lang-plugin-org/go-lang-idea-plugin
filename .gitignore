@@ -4,8 +4,9 @@ google-go-language.jar
 idea-home/
 mock-sdks/java/
 out/
-src/icons/
 testdata.tar.gz
 dist/
 build/
 .DS_Store
+src/icons/go-logo-black.png
+src/icons/logo-153x55.png

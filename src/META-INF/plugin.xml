@@ -346,6 +346,8 @@
         <sdkType implementation="ro.redeul.google.go.config.sdk.GoAppEngineSdkType"/>
 
         <moduleType id="GO_MODULE" implementationClass="ro.redeul.google.go.ide.GoModuleType" classpathProvider="true"/>
+        <moduleType id="GO_APP_ENGINE_MODULE" implementationClass="ro.redeul.google.go.ide.GoAppEngineModuleType" classpathProvider="true"/>
+
         <moduleConfigurationEditorProvider implementation="ro.redeul.google.go.ide.GoModuleEditorsProvider"/>
         <!--<compiler.makeDependencyProcessor implementation="ro.redeul.google.go.compilation.GoDependencyProvider"/>-->
         <!--<compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>-->
