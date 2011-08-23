@@ -23,6 +23,8 @@ public interface GoFile extends PsiFile, GoPsiElement, GoPackagedElement {
 
     GoMethodDeclaration[] getMethods();
 
+    boolean isApplicationPart();
+
     GoFunctionDeclaration getMainFunction();
 
     GoTypeDeclaration[] getTypeDeclarations();

@@ -18,6 +18,7 @@ import com.intellij.util.FilteringProcessor;
 import com.intellij.util.Function;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
@@ -36,7 +37,6 @@ import java.util.*;
 public class GoSdkParsingHelper implements ApplicationComponent {
 
     Map<Sdk, Map<String, String>> sdkPackageMappings = new HashMap<Sdk, Map<String, String>>();
-
 
 
     public static GoSdkParsingHelper getInstance() {
@@ -59,9 +59,10 @@ public class GoSdkParsingHelper implements ApplicationComponent {
         return "GoSdkParsingHelper";
     }
 
-    public String getPackageImportPath(Project project, GoFile goFile) {
+    @Nullable
+    public synchronized String getPackageImportPath(Project project, GoFile goFile) {
         if (goFile == null) {
-            return "";
+            return null;
         }
 
         VirtualFile virtualFile = goFile.getVirtualFile();
@@ -70,7 +71,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
         }
 
         if (virtualFile == null || !virtualFile.getName().matches(".*\\.go")) {
-            return "";
+            return null;
         }
 
         ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
@@ -104,7 +105,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
         }
 
         if (ownerSdk == null) {
-            return getPackageImportPathFromProject(project, projectFileIndex, virtualFile);
+            return null;
         }
 
         Map<String, String> mappings = sdkPackageMappings.get(ownerSdk);
@@ -118,7 +119,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
             return mappings.get(relativePath);
         }
 
-        return "";
+        return null;
     }
 
     private String getPackageImportPathFromProject(Project project, ProjectFileIndex projectIndex, VirtualFile virtualFile) {

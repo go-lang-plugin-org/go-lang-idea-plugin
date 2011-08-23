@@ -9,7 +9,6 @@ import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.search.ProjectAndLibrariesScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
@@ -54,27 +53,21 @@ public class GoCompletionContributor extends CompletionContributor {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
-            String currentPath = parameters.getPosition().getText().replaceAll("Intellij.*", "");
+            Project project = parameters.getOriginalFile().getProject();
 
-            if (!currentPath.startsWith("\".")) {
-                Project project = parameters.getOriginalFile().getProject();
+            GoNamesCache packageNamesCache = ContainerUtil.findInstance(project.getExtensions(PsiShortNamesCache.EP_NAME), GoNamesCache.class);
 
-                GoNamesCache packageNamesCache = ContainerUtil.findInstance(project.getExtensions(PsiShortNamesCache.EP_NAME), GoNamesCache.class);
+            if ( packageNamesCache != null ) {
+                Collection<String> goSdkPackages = packageNamesCache.getSdkPackages();
 
-                if ( packageNamesCache != null ) {
-                    String packages[] = packageNamesCache.getPackagesByName("a", new ProjectAndLibrariesScope(project));
-
-                    for (String aPackage : packages) {
-                        result.addElement(LookupElementBuilder.create(aPackage).setTypeText("via sdk"));
-                    }
+                for (String goPackage : goSdkPackages) {
+                    result.addElement(LookupElementBuilder.create(goPackage).setTypeText("via sdk"));
                 }
-            }
 
-            PsiElement pos = parameters.getOriginalPosition();
-            if ( pos != null && pos.getContainingFile() != null ) {
-                Collection<LookupElementBuilder> elements = GoCompletionUtil.resolveLocalPackagesForPath(pos.getProject(), pos.getContainingFile(), currentPath);
-                for (LookupElementBuilder lookupElement : elements) {
-                    result.addElement(lookupElement);
+                Collection<String> goProjectPackages = packageNamesCache.getProjectPackages();
+
+                for (String goPackage : goProjectPackages) {
+                    result.addElement(LookupElementBuilder.create(goPackage).setBold().setTypeText("via project"));
                 }
             }
         }

@@ -1,8 +1,9 @@
 package ro.redeul.google.go.lang.stubs;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.stubs.StubIndex;
@@ -11,12 +12,9 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageImportPath;
-import ro.redeul.google.go.lang.psi.stubs.index.GoPackageName;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -31,66 +29,34 @@ public class GoNamesCache extends PsiShortNamesCache {
 
     private final static Pattern RE_PACKAGE_TARGET = Pattern.compile("^TARG=([^\\s]+)\\s*$", Pattern.MULTILINE);
 
-    private String[] sdkPackages;
-
     public GoNamesCache(Project project) {
         this.project = project;
     }
 
-    public @NotNull String[] getPackagesByName(@NotNull @NonNls String name, @NotNull GlobalSearchScope scope) {
-        return getSdkPackages();
+    public Collection<String> getProjectPackages() {
+        return getGoPackagesInScope(GlobalSearchScope.projectScope(project));
     }
 
-    private String[] getSdkPackages() {
-        if ( sdkPackages != null) {
-            return sdkPackages;
-        }
+    public Collection<String> getSdkPackages() {
+        return getGoPackagesInScope(GlobalSearchScope.notScope(GlobalSearchScope.projectScope(project)));
+    }
+
+    private Collection<String> getGoPackagesInScope(GlobalSearchScope scope) {
 
         StubIndex index = StubIndex.getInstance();
 
-        Collection<String> keys = index.getAllKeys(GoPackageName.KEY, project);
+        Collection<String> keys = index.getAllKeys(GoPackageImportPath.KEY, project);
 
-        Set<VirtualFile> virtualFiles = new java.util.HashSet<VirtualFile>();
+        Collection<String> packagesCollection = new ArrayList<String>();
 
         for (String key : keys) {
-            Collection<GoFile> files = index.get(
-                    GoPackageName.KEY, key, project,
-                    GlobalSearchScope.allScope(project).intersectWith(GlobalSearchScope.notScope(GlobalSearchScope.projectScope(project))));
-
-
-            for (GoFile file : files) {
-                PsiDirectory directory = file.getParent();
-
-                if ( directory == null )
-                    continue;
-
-                PsiFile makefile = directory.findFile("Makefile");
-
-                if ( makefile == null || makefile.getVirtualFile() == null )
-                    continue;
-
-                virtualFiles.add(makefile.getVirtualFile());
+            Collection<GoFile> files = index.get(GoPackageImportPath.KEY, key, project, scope);
+            if ( files != null && files.size() > 0 ) {
+                packagesCollection.add(key);
             }
         }
 
-        Set<String> packages = new java.util.HashSet<String>();
-
-        for (VirtualFile virtualFile : virtualFiles) {
-            try {
-                String content = new String(virtualFile.contentsToByteArray(), "UTF-8");
-
-                Matcher matcher = RE_PACKAGE_TARGET.matcher(content);
-                if ( matcher.find() ) {
-                    packages.add(matcher.group(1));
-                }
-            } catch (IOException e) {
-                //
-            }
-        }
-
-        sdkPackages = packages.toArray(new String[packages.size()]);
-
-        return sdkPackages;
+        return packagesCollection;
     }
 
     public Collection<GoFile> getFilesByPackageName(String packageName) {

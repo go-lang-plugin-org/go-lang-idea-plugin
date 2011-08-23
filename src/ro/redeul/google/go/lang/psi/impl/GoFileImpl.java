@@ -2,6 +2,10 @@ package ro.redeul.google.go.lang.psi.impl;
 
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -11,7 +15,9 @@ import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.components.GoSdkParsingHelper;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -22,6 +28,7 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.util.GoUtil;
 
 import java.util.Collection;
 
@@ -48,8 +55,64 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     }
 
     @Override
+    @Nullable
     public String getPackageImportPath() {
-        return GoSdkParsingHelper.getInstance().getPackageImportPath(getProject(), this);
+
+        if ( isApplicationPart() ) {
+            return null;
+        }
+
+        // look to see if the file is part of the sdk and extract the import path from there.
+        String importPath = GoSdkParsingHelper.getInstance().getPackageImportPath(getProject(), this);
+
+        // the current file was part of the sdk
+        if ( importPath != null ) {
+            return importPath;
+        }
+
+        // look in the current project to find the current package import path.
+        VirtualFile virtualFile = getOriginalFile().getVirtualFile();
+
+        if ( virtualFile == null ) {
+            virtualFile = getUserData(FileBasedIndex.VIRTUAL_FILE);
+        }
+        if ( virtualFile == null ) {
+            return null;
+        }
+
+        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(getProject()).getFileIndex();
+
+        if ( ! projectFileIndex.isInSource(virtualFile) || projectFileIndex.isLibraryClassFile(virtualFile) ) {
+            return null;
+        }
+
+        VirtualFile sourceRoot = projectFileIndex.getSourceRootForFile(virtualFile);
+        if ( sourceRoot == null ) {
+            return null;
+        }
+
+        String path = VfsUtil.getRelativePath(virtualFile.getParent(), sourceRoot, '/');
+
+        if ( path == null || path.equals("") ) {
+            path = getPackageName();
+        }
+
+        if ( path != null && ! path.endsWith(getPackageName()) ) {
+            path = path + "/" + getPackageName();
+        }
+
+        String makefileTarget = GoUtil.getTargetFromMakefile(virtualFile.getParent().findChild("Makefile"));
+        if ( makefileTarget != null ) {
+            path = makefileTarget;
+        }
+
+        System.out.println(String.format("%s -> %s", VfsUtil.getRelativePath(virtualFile, sourceRoot, '/'), path));
+
+        return path;
+    }
+
+    public boolean isApplicationPart() {
+        return getPackageName().equals("main");
     }
 
     public GoPackageDeclaration getPackage() {
