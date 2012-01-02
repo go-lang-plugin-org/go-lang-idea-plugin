@@ -101,7 +101,7 @@ public abstract class ParserUtils {
             if ( builder.getTokenType() != GoElementTypes.wsNLS ) {
                 i++;
             }
-            
+
             builder.advanceLexer();
         }
         rb.rollbackTo();
@@ -247,7 +247,7 @@ public abstract class ParserUtils {
             builder.advanceLexer();
             i++;
         }
-        
+
         return i == 0;
     }
 
@@ -273,14 +273,14 @@ public abstract class ParserUtils {
             builder.advanceLexer();
         }
     }
-    
+
     public static void advance(PsiBuilder builder) {
         advance(builder, 1);
     }
-    
+
     public static void skipNLS(PsiBuilder builder) {
         while (builder.getTokenType() == GoElementTypes.wsNLS) {
-            builder.advanceLexer();            
+            builder.advanceLexer();
         }
     }
 
