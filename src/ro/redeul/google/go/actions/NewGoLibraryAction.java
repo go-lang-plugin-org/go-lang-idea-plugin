@@ -23,11 +23,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 20, 2010
  * Time: 11:41:58 PM
- * To change this template use File | Settings | File Templates.
  */
 public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> implements DumbAware {
 
@@ -39,19 +38,6 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
     protected PsiElement getNavigationElement(@NotNull GoFile file) {
         return file;
     }
-
-
-//    @NotNull
-//    protected CreateFileFromTemplateDialog.Builder buildDialog(Project project, PsiDirectory directory) {
-//        CreateFileFromTemplateDialog.Builder builder = CreateFileFromTemplateDialog.createDialog(project);
-//
-//        builder.setTitle("New Go file creation");
-//
-//        buildDialog(project, directory, builder);
-//
-//        return builder;
-//    }
-
 
     @Override
     protected String getErrorTitle() {
@@ -70,11 +56,10 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
         return super.isAvailable(dataContext);
     }
 
-    private boolean hasGoFacet(Module module) {        
+    private boolean hasGoFacet(Module module) {
         return FacetManager.getInstance(module).getFacetByType(GoFacetType.GO_FACET_TYPE_ID) != null;
     }
 
-    @Override
     protected void doCheckCreate(PsiDirectory dir, String parameterName, String typeName) throws IncorrectOperationException {
         // check to see if a file with the same name already exists
 

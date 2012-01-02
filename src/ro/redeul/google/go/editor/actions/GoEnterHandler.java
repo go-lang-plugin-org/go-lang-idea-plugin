@@ -2,6 +2,7 @@ package ro.redeul.google.go.editor.actions;
 
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegate;
+import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
@@ -22,17 +23,14 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
  * Date: Sep 27, 2010
  * Time: 6:47:04 PM
  */
-public class GoEnterHandler implements EnterHandlerDelegate {
+public class GoEnterHandler extends EnterHandlerDelegateAdapter {
 
-    public Result postProcessEnter(@NotNull PsiFile file, @NotNull Editor editor, @NotNull DataContext dataContext) {
-        return Result.Continue;
-    }
-
-    public Result preprocessEnter(PsiFile file, Editor editor,
-                                  Ref<Integer> caretOffset,
-                                  Ref<Integer> caretAdvance,
-                                  DataContext dataContext, EditorActionHandler originalHandler) {
-
+    @Override
+    public Result preprocessEnter(@NotNull PsiFile file, @NotNull Editor editor,
+                                  @NotNull Ref<Integer> caretOffset,
+                                  @NotNull Ref<Integer> caretAdvance,
+                                  @NotNull DataContext dataContext,
+                                  EditorActionHandler originalHandler) {
         String text = editor.getDocument().getText();
 
         if (StringUtil.isEmpty(text)) {
@@ -42,8 +40,11 @@ public class GoEnterHandler implements EnterHandlerDelegate {
         final int caret = editor.getCaretModel().getOffset();
         final EditorHighlighter highlighter = ((EditorEx)editor).getHighlighter();
 
-        if (caret >= 1 && caret < text.length() && CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER) {
+        if (caret >= 1 && caret < text.length() &&
+            CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER)
+        {
             HighlighterIterator iterator = highlighter.createIterator(caret);
+
             iterator.retreat();
             while (!iterator.atEnd() && GoTokenTypes.wsNLS == iterator.getTokenType() && GoTokenTypes.wsWS == iterator.getTokenType() ) {
               iterator.retreat();
@@ -58,5 +59,4 @@ public class GoEnterHandler implements EnterHandlerDelegate {
 
         return Result.Continue;
     }
-
 }

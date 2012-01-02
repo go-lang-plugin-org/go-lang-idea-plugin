@@ -15,7 +15,7 @@ import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.indexing.FileBasedIndex;
+import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
@@ -62,22 +62,17 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
             return null;
         }
 
+        // look in the current project to find the current package import path.
+        VirtualFile virtualFile = getCurrentOrIndexedVirtualFile();
+
         // look to see if the file is part of the sdk and extract the import path from there.
-        String importPath = GoSdkParsingHelper.getInstance().getPackageImportPath(getProject(), this);
+        String importPath =
+            GoSdkParsingHelper.getInstance()
+                              .getPackageImportPath(getProject(), this, virtualFile);
 
         // the current file was part of the sdk
         if ( importPath != null ) {
             return importPath;
-        }
-
-        // look in the current project to find the current package import path.
-        VirtualFile virtualFile = getOriginalFile().getVirtualFile();
-
-        if ( virtualFile == null ) {
-            virtualFile = getUserData(FileBasedIndex.VIRTUAL_FILE);
-        }
-        if ( virtualFile == null ) {
-            return null;
         }
 
         ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(getProject()).getFileIndex();
@@ -155,6 +150,18 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         return findChildrenByClass(GoTypeDeclaration.class);
     }
 
+    private VirtualFile getCurrentOrIndexedVirtualFile() {
+        VirtualFile virtualFile = getVirtualFile();
+
+        // if the GoFile Psi tree was built from a memory data check to see
+        // if it was built from an indexed copy
+        if ( virtualFile == null ) {
+            virtualFile = getUserData(IndexingDataKeys.VIRTUAL_FILE);
+        }
+
+        return virtualFile;
+    }
+
     public IElementType getTokenType() {
         return null;
     }
@@ -185,8 +192,11 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     }
 
     @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent,
+                                       @NotNull PsiElement place)
+    {
         if ( state.get(GoResolveStates.ResolvingVariables) ) {
             return true;
         }
@@ -228,9 +238,13 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
                     PsiDirectory directory = file.getContainingDirectory();
 
-                    if ( directory != null && directory.isEquivalentTo(getOriginalFile().getContainingDirectory()) && ! file.isEquivalentTo(getOriginalFile())) {
-                        if (!file.processDeclarations(processor, newState.put(GoResolveStates.IsOriginalFile, false), null, place))
-                        {
+                    if ( directory != null
+                        && directory.isEquivalentTo(getOriginalFile().getContainingDirectory())
+                        && ! file.isEquivalentTo(getOriginalFile()))
+                    {
+                        if (!file.processDeclarations(processor,
+                                                      newState.put(GoResolveStates.IsOriginalFile, false),
+                                                      null, place)) {
                             return false;
                         }
                     }

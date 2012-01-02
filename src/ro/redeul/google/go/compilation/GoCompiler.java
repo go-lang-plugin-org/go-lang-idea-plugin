@@ -87,7 +87,9 @@ public class GoCompiler implements TranslatingCompiler {
                         GoBundle.message("cannot.compile.go.files.no.facet", affectedModule.getName()),
                         GoBundle.message("cannot.compile"));
 
-                ModulesConfigurator.showDialog(affectedModule.getProject(), affectedModule.getName(), ClasspathEditor.NAME, false);
+                ModulesConfigurator.showDialog(affectedModule.getProject(),
+                                               affectedModule.getName(),
+                                               ClasspathEditor.NAME);
 
                 return false;
             }

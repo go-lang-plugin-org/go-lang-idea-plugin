@@ -33,7 +33,7 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
 
     @Override
     public int getStubVersion() {
-        return super.getStubVersion() + 11;
+        return super.getStubVersion() + 12;
     }
 
     public String getExternalId() {

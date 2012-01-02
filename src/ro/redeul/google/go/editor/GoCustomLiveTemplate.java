@@ -3,25 +3,18 @@ package ro.redeul.google.go.editor;
 import com.intellij.codeInsight.template.CustomLiveTemplate;
 import com.intellij.codeInsight.template.CustomTemplateCallback;
 import com.intellij.codeInsight.template.LiveTemplateBuilder;
-import com.intellij.codeInsight.template.TemplateInvokationListener;
 import com.intellij.codeInsight.template.impl.TemplateImpl;
 import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 20, 2010
  * Time: 9:21:24 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoCustomLiveTemplate implements CustomLiveTemplate {
-
-    public void wrap(String selection, @NotNull CustomTemplateCallback callback, @Nullable TemplateInvokationListener listener) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     public String computeTemplateKey(@NotNull CustomTemplateCallback callback) {
         return "f";
@@ -47,7 +40,6 @@ public class GoCustomLiveTemplate implements CustomLiveTemplate {
     }
 
     public void wrap(String selection, @NotNull CustomTemplateCallback callback) {
-        int a = 10;
     }
 
     @NotNull

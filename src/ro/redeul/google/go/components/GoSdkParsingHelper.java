@@ -17,6 +17,7 @@ import com.intellij.util.CommonProcessors;
 import com.intellij.util.FilteringProcessor;
 import com.intellij.util.Function;
 import com.intellij.util.indexing.FileBasedIndex;
+import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
@@ -37,7 +38,6 @@ import java.util.*;
 public class GoSdkParsingHelper implements ApplicationComponent {
 
     Map<Sdk, Map<String, String>> sdkPackageMappings = new HashMap<Sdk, Map<String, String>>();
-
 
     public static GoSdkParsingHelper getInstance() {
         return ApplicationManager.getApplication().getComponent(GoSdkParsingHelper.class);
@@ -60,21 +60,19 @@ public class GoSdkParsingHelper implements ApplicationComponent {
     }
 
     @Nullable
-    public synchronized String getPackageImportPath(Project project, GoFile goFile) {
+    public synchronized String getPackageImportPath(Project project,
+                                                    GoFile goFile,
+                                                    VirtualFile virtualFile) {
         if (goFile == null) {
             return null;
-        }
-
-        VirtualFile virtualFile = goFile.getVirtualFile();
-        if (virtualFile == null) {
-            virtualFile = goFile.getUserData(FileBasedIndex.VIRTUAL_FILE);
         }
 
         if (virtualFile == null || !virtualFile.getName().matches(".*\\.go")) {
             return null;
         }
 
-        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+        ProjectFileIndex projectFileIndex =
+            ProjectRootManager.getInstance(project).getFileIndex();
 
         ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
         List<Sdk> sdkList = new ArrayList<Sdk>();

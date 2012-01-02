@@ -95,7 +95,9 @@ public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
     }
 
     @Override
-    protected RunnerAndConfigurationSettings findExistingByElement(Location location, @NotNull RunnerAndConfigurationSettings[] existingConfigurations, ConfigurationContext context) {
+    protected RunnerAndConfigurationSettings findExistingByElement(Location location,
+                                                                   @NotNull RunnerAndConfigurationSettings[] existingConfigurations,
+                                                                   ConfigurationContext context) {
         for (RunnerAndConfigurationSettings existingConfiguration : existingConfigurations) {
             final RunConfiguration configuration = existingConfiguration.getConfiguration();
 
@@ -112,8 +114,6 @@ public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
                     return existingConfiguration;
                 }
             }
-
-            System.out.println("Not matched Configuration: " + configuration);
         }
 
         return null;

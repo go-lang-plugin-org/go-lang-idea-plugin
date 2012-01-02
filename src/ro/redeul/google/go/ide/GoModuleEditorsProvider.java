@@ -2,6 +2,7 @@ package ro.redeul.google.go.ide;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleConfigurationEditor;
+import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.roots.ui.configuration.DefaultModuleConfigurationEditorFactory;
 import com.intellij.openapi.roots.ui.configuration.ModuleConfigurationEditorProvider;
 import com.intellij.openapi.roots.ui.configuration.ModuleConfigurationState;
@@ -20,8 +21,12 @@ public class GoModuleEditorsProvider implements ModuleConfigurationEditorProvide
     public ModuleConfigurationEditor[] createEditors(ModuleConfigurationState state) {
         final Module module = state.getRootModel().getModule();
 
-        if (module.getModuleType() != GoModuleType.getInstance() && module.getModuleType() != GoAppEngineModuleType.getInstance() )
-            return ModuleConfigurationEditor.EMPTY;
+        final ModuleType moduleType = ModuleType.get(module);
+
+        if (!(moduleType instanceof GoModuleType) &&
+                !(moduleType instanceof GoAppEngineModuleType)) {
+              return ModuleConfigurationEditor.EMPTY;
+        }
 
         final DefaultModuleConfigurationEditorFactory editorFactory = DefaultModuleConfigurationEditorFactory.getInstance();
         List<ModuleConfigurationEditor> editors = new ArrayList<ModuleConfigurationEditor>();

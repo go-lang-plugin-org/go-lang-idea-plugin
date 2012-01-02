@@ -1,13 +1,13 @@
 <idea-plugin version="2" url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Google Go language</name>
-    <version>0.4.2</version>
+    <version>0.5.0</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[
         <p>Intellij IDEA support for Google Go language.</p>
         <p>The plugin provides the following features:</p>
-        
+
         <ul>
             <li>Basic language parsing and highlighting</li>
             <li>Code folding</li>
@@ -45,13 +45,15 @@
     </description>
     <change-notes>
         <![CDATA[
-         <h3>0.4.3 changes:</h3>
+         <h3>0.5.0 changes:</h3>
             <ul>
                 <li>[feature] Go App engine sdk type</li>
                 <li>[feature] Go App engine credentials safe storage</li>
                 <li>[feature] Added go application wizard</li>
                 <li>[bugfix] Pass the arguments on a run config as separate arguments</li>
                 <li>[bugfix] Exception while saving the document (nested modification exception)</li>
+                <li>[bugfix] Wrong highlighting of a map type with a function inner type</li>
+                <li>[bugfix] Idea 11 compatibility</li>
             </ul>
          <h3>0.4.2 changes:</h3>
             <ul>
@@ -251,7 +253,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="99.000" />
+    <idea-version since-build="111.000" />
 
     <category>Custom Languages</category>
 
@@ -274,10 +276,10 @@
         </component>
 
     </project-components>
-    
+
     <actions>
         <group id="Go.ActionGroup" popup="true" text="Go" description="ads" icon="/icons/go_16x16.png">
-            
+
             <action id="Go.NewApplication" text="Go application"
                     description="Create new application in the GO language"
                     class="ro.redeul.google.go.actions.NewGoApplicationAction">
@@ -285,10 +287,10 @@
 
             <action id="Go.NewLibrary" text="Go library"
                     description="Create new library in the GO language"
-                    class="ro.redeul.google.go.actions.NewGoLibraryAction">                
+                    class="ro.redeul.google.go.actions.NewGoLibraryAction">
             </action>
 
-            
+
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </group>
 

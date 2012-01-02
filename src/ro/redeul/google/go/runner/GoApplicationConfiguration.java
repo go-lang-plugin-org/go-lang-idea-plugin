@@ -2,7 +2,6 @@ package ro.redeul.google.go.runner;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
-import com.intellij.execution.RunConfigurationExtension;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
@@ -14,8 +13,8 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -74,16 +73,18 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     public void readExternal(final Element element) throws InvalidDataException {
         PathMacroManager.getInstance(getProject()).expandPaths(element);
         super.readExternal(element);
-        RunConfigurationExtension.readSettings(this, element);
-        DefaultJDOMExternalizer.readExternal(this, element);
+        JDOMExternalizerUtil.readField(element, "scriptName");
+        JDOMExternalizerUtil.readField(element, "scriptArguments");
+        JDOMExternalizerUtil.readField(element, "workDir");
         readModule(element);
 //        EnvironmentVariablesComponent.readExternal(element, getEnvs());
     }
 
     public void writeExternal(final Element element) throws WriteExternalException {
         super.writeExternal(element);
-        RunConfigurationExtension.writeSettings(this, element);
-        DefaultJDOMExternalizer.writeExternal(this, element);
+        JDOMExternalizerUtil.writeField(element, "scriptName", scriptName);
+        JDOMExternalizerUtil.writeField(element, "scriptArguments",scriptArguments);
+        JDOMExternalizerUtil.writeField(element, "workDir", workDir);
         writeModule(element);
 //        EnvironmentVariablesComponent.writeExternal(element, getEnvs());
         PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
@@ -93,6 +94,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
         CommandLineState state = new CommandLineState(env) {
 
+            @NotNull
             @Override
             protected OSProcessHandler startProcess() throws ExecutionException {
 

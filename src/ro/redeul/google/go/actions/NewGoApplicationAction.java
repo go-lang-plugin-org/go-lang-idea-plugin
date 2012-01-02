@@ -28,11 +28,10 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import static ro.redeul.google.go.actions.GoTemplatesFactory.Template;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Aug 21, 2010
  * Time: 12:26:52 AM
- * To change this template use File | Settings | File Templates.
  */
 public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile> implements DumbAware {
 
@@ -77,6 +76,9 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
         final Project project = PlatformDataKeys.PROJECT.getData(dataContext);
         final IdeView view = LangDataKeys.IDE_VIEW.getData(dataContext);
 
+        if ( view == null )
+            return false;
+
         ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
         for (PsiDirectory dir : view.getDirectories()) {
 
@@ -85,7 +87,8 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
             if (projectFileIndex.isInSourceContent(dirVirtualFile)) {
                 VirtualFile sourceRoot = projectFileIndex.getSourceRootForFile(dirVirtualFile);
 
-                if (sourceRoot.getUrl().compareTo(dirVirtualFile.getUrl()) == 0) {
+                if (sourceRoot != null
+                    && sourceRoot.getUrl().compareTo(dirVirtualFile.getUrl()) == 0) {
                     return true;
                 }
             }
@@ -98,7 +101,6 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
         return FacetManager.getInstance(module).getFacetByType(GoFacetType.GO_FACET_TYPE_ID) != null;
     }
 
-    @Override
     protected void doCheckCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException {
         // check to see if a file with the same name already exists
         PsiFile files[] = dir.getFiles();

@@ -2,7 +2,6 @@ package ro.redeul.google.go.runner;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
-import com.intellij.execution.RunConfigurationExtension;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.configurations.RunProfileState;
@@ -14,8 +13,8 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -66,16 +65,24 @@ public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguratio
     public void readExternal(final Element element) throws InvalidDataException {
         PathMacroManager.getInstance(getProject()).expandPaths(element);
         super.readExternal(element);
-        RunConfigurationExtension.readSettings(this, element);
-        DefaultJDOMExternalizer.readExternal(this, element);
+
+        sdkDirectory = JDOMExternalizerUtil.readField(element, "sdkDirectory");
+        email = JDOMExternalizerUtil.readField(element, "email");
+        password = JDOMExternalizerUtil.readField(element, "password");
+        scriptArguments = JDOMExternalizerUtil.readField(element, "scriptArguments");
+        workDir = JDOMExternalizerUtil.readField(element, "workDir");
+
         readModule(element);
 //        EnvironmentVariablesComponent.readExternal(element, getEnvs());
     }
 
     public void writeExternal(final Element element) throws WriteExternalException {
         super.writeExternal(element);
-        RunConfigurationExtension.writeSettings(this, element);
-        DefaultJDOMExternalizer.writeExternal(this, element);
+        JDOMExternalizerUtil.writeField(element, "sdkDirectory", sdkDirectory);
+        JDOMExternalizerUtil.writeField(element, "email", email);
+        JDOMExternalizerUtil.writeField(element, "password", password);
+        JDOMExternalizerUtil.writeField(element, "scriptArguments", scriptArguments);
+        JDOMExternalizerUtil.writeField(element, "workDir", workDir);
         writeModule(element);
 //        EnvironmentVariablesComponent.writeExternal(element, getEnvs());
         PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
@@ -84,10 +91,7 @@ public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguratio
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
         GoAppEngineRunningState state = new GoAppEngineRunningState(env,sdkDirectory,scriptArguments,workDir);
         return state;
-
     }
-
-
 
     private String getCompiledFileName(Module module, String scriptName) {
 

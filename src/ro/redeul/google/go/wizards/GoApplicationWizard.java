@@ -56,7 +56,7 @@ public class GoApplicationWizard extends WizardMode {
 
         final boolean isNewProject = context.getProject() == null;
         if (isNewProject) {
-            sequence.addCommonStep(new ProjectNameStep(context, sequence, this));
+            sequence.addCommonStep(new ProjectNameStep(context, this));
         }
 
         sequence.addCommonStep(factory.createProjectJdkStep(context, GoSdkType.getInstance(), goModuleBuilder, new Computable<Boolean>() {
@@ -78,11 +78,6 @@ public class GoApplicationWizard extends WizardMode {
     @Override
     public ProjectBuilder getModuleBuilder() {
         return goModuleBuilder;
-    }
-
-    @Override
-    public JComponent getAdditionalSettings() {
-        return null;
     }
 
     @Override
