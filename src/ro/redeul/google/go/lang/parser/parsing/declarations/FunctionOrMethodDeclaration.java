@@ -18,7 +18,7 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
         boolean isMethod = false;
 
         ParserUtils.skipNLS(builder);
-        
+
         PsiBuilder.Marker marker = builder.mark();
 
         // check the production name
@@ -35,7 +35,7 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
         }
 
         // expecting method name
-        ParserUtils.skipNLS(builder);        
+        ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, mIDENT, "identifier.expected");
 
         ParserUtils.skipNLS(builder);
@@ -44,17 +44,15 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
         ParserUtils.skipNLS(builder);
 
         parser.parseBody(builder);
-        
+
         marker.done(isMethod ? METHOD_DECLARATION : FUNCTION_DECLARATION);
 
         return true;
     }
 
     public static boolean parseCompleteMethodSignature(PsiBuilder builder, GoParser parser) {
-        
         parseSignature(builder, parser);
 
-        ParserUtils.skipNLS(builder);
         if ( builder.getTokenType() == pLPAREN ) {
 
             PsiBuilder.Marker result = builder.mark();
@@ -91,7 +89,7 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
         PsiBuilder.Marker receiverDeclarationMarker = builder.mark();
 
         if ( ParserUtils.lookAhead(builder, mIDENT, mIDENT) || ParserUtils.lookAhead(builder, mIDENT, oMUL) ) {
-            ParserUtils.eatElement(builder, IDENTIFIER); 
+            ParserUtils.eatElement(builder, IDENTIFIER);
         }
 
         ParserUtils.skipNLS(builder);
@@ -169,9 +167,9 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
                 argument.done(FUNCTION_PARAMETER);
                 parameterCount++;
             } else {
-                argument.drop();                
+                argument.drop();
             }
-            
+
             ParserUtils.skipNLS(builder);
             if ( builder.getTokenType() == oCOMMA ) {
                 builder.advanceLexer();

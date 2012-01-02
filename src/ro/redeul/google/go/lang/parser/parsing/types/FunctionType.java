@@ -6,11 +6,10 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
+ * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * <p/>
  * Date: Jul 25, 2010
  * Time: 2:52:27 AM
- * To change this template use File | Settings | File Templates.
  */
 public class FunctionType implements GoElementTypes {
     public static boolean parse(PsiBuilder builder, GoParser parser) {
@@ -18,7 +17,7 @@ public class FunctionType implements GoElementTypes {
         PsiBuilder.Marker marker = builder.mark();
 
         if ( ! ParserUtils.getToken(builder, kFUNC, "func.keyword.expected") ) {
-            marker.drop();            
+            marker.drop();
             return false;
         }
 

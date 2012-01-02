@@ -47,6 +47,8 @@ public class GoTypesTestCase extends GoParsingTestCase {
     public void testMap$case1() throws Throwable { doTest(); }
     public void testMap$case2() throws Throwable { doTest(); }
     public void testMap$case3() throws Throwable { doTest(); }
+    public void testMap$case4_func1() throws Throwable { doTest(); }
+    public void testMap$case4_func2() throws Throwable { doTest(); }
 
     public void testArray$case1() throws Throwable { doTest(); }
     public void testArray$case2() throws Throwable { doTest(); }

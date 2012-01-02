@@ -1,0 +1,113 @@
+package main
+type myHandler struct {
+handlers map[string]func(
+    w http.ResponseWriter,
+    r *http.Request,
+    queues *yqs.Queues) (int)
+templates map[string]*template.Template
+}
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpec
+      NamedType(myHandler)
+        PsiElement(IDENTIFIER)('myHandler')
+      PsiWhiteSpace(' ')
+      TypeStruct
+        PsiElement(KEYWORD_STRUCT)('struct')
+        PsiWhiteSpace(' ')
+        PsiElement({)('{')
+        PsiElement(WS_NEW_LINES)('\n')
+        TypeStructField
+          Identifier
+            PsiElement(IDENTIFIER)('handlers')
+          PsiWhiteSpace(' ')
+          TypeMap
+            PsiElement(KEYWORD_MAP)('map')
+            PsiElement([)('[')
+            TypeName
+              PsiElement(IDENTIFIER)('string')
+            PsiElement(])(']')
+            TypeFunction
+              PsiElement(KEYWORD_FUNC)('func')
+              PsiElement(()('(')
+              PsiElement(WS_NEW_LINES)('\n')
+              PsiWhiteSpace('    ')
+              FunctionParameterList
+                FunctionParameter
+                  Identifier
+                    PsiElement(IDENTIFIER)('w')
+                  PsiWhiteSpace(' ')
+                  TypeName
+                    PackageReference
+                      PsiElement(IDENTIFIER)('http')
+                    PsiElement(.)('.')
+                    Identifier
+                      PsiElement(IDENTIFIER)('ResponseWriter')
+                PsiElement(,)(',')
+                PsiElement(WS_NEW_LINES)('\n')
+                PsiWhiteSpace('    ')
+                FunctionParameter
+                  Identifier
+                    PsiElement(IDENTIFIER)('r')
+                  PsiWhiteSpace(' ')
+                  TypePointer
+                    PsiElement(*)('*')
+                    TypeName
+                      PackageReference
+                        PsiElement(IDENTIFIER)('http')
+                      PsiElement(.)('.')
+                      Identifier
+                        PsiElement(IDENTIFIER)('Request')
+                PsiElement(,)(',')
+                PsiElement(WS_NEW_LINES)('\n')
+                PsiWhiteSpace('    ')
+                FunctionParameter
+                  Identifier
+                    PsiElement(IDENTIFIER)('queues')
+                  PsiWhiteSpace(' ')
+                  TypePointer
+                    PsiElement(*)('*')
+                    TypeName
+                      PackageReference
+                        PsiElement(IDENTIFIER)('yqs')
+                      PsiElement(.)('.')
+                      Identifier
+                        PsiElement(IDENTIFIER)('Queues')
+              PsiElement())(')')
+              PsiWhiteSpace(' ')
+              FunctionResult
+                PsiElement(()('(')
+                FunctionParameterList
+                  FunctionParameter
+                    TypeName
+                      PsiElement(IDENTIFIER)('int')
+                PsiElement())(')')
+        PsiElement(WS_NEW_LINES)('\n')
+        TypeStructField
+          Identifier
+            PsiElement(IDENTIFIER)('templates')
+          PsiWhiteSpace(' ')
+          TypeMap
+            PsiElement(KEYWORD_MAP)('map')
+            PsiElement([)('[')
+            TypeName
+              PsiElement(IDENTIFIER)('string')
+            PsiElement(])(']')
+            TypePointer
+              PsiElement(*)('*')
+              TypeName
+                PackageReference
+                  PsiElement(IDENTIFIER)('template')
+                PsiElement(.)('.')
+                Identifier
+                  PsiElement(IDENTIFIER)('Template')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiElement(})('}')
