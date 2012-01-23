@@ -50,18 +50,24 @@ public class GoSdkConfigurable implements AdditionalDataConfigurable {
 
     public void reset() {
         SdkAdditionalData data = sdk.getSdkAdditionalData();
-        if ( ! (data instanceof GoSdkData)) {
+        if ( data == null || ! (data instanceof GoSdkData)) {
             return;
         }
 
         GoSdkData sdkData = (GoSdkData) data;
 
         labelSdkVersion.setText(sdkData.VERSION_MAJOR);
-        labelSdkTarget.setText(String.format("%s-%s (%s, %s)",
-                sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName(),
-                GoSdkUtil.getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH),
-                GoSdkUtil.getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
-        ));
+        if (sdkData.TARGET_OS != null  && sdkData.TARGET_ARCH != null ) {
+            labelSdkTarget.setText(
+                String.format("%s-%s (%s, %s)",
+                    sdkData.TARGET_OS.getName(),
+                    sdkData.TARGET_ARCH.getName(),
+                    GoSdkUtil.getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH),
+                    GoSdkUtil.getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
+            ));
+        } else {
+            labelSdkTarget.setText("Unknown target");
+        }
 
         labelBinariesPath.setText(sdkData.GO_BIN_PATH);
     }

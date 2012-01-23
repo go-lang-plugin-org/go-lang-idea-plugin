@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl;
 
 import com.intellij.extapi.psi.PsiFileBase;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -39,6 +40,8 @@ import java.util.Collection;
  * Time: 7:56:42 PM
  */
 public class GoFileImpl extends PsiFileBase implements GoFile {
+
+    private static final Logger LOG = Logger.getInstance(GoFileImpl.class);
 
     public GoFileImpl(FileViewProvider viewProvider) {
         super(viewProvider, GoFileType.GO_LANGUAGE);
@@ -101,7 +104,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
             path = makefileTarget;
         }
 
-        System.out.println(String.format("%s -> %s", VfsUtil.getRelativePath(virtualFile, sourceRoot, '/'), path));
+        LOG.debug(String.format("%s -> %s", VfsUtil.getRelativePath(virtualFile, sourceRoot, '/'), path));
 
         return path;
     }

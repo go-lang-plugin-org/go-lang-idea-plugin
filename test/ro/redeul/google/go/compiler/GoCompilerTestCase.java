@@ -13,6 +13,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -252,7 +253,9 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
 
         final DefaultRunExecutor extension = Executor.EXECUTOR_EXTENSION_NAME.findExtension(DefaultRunExecutor.class);
 
-        final ExecutionEnvironment environment = new ExecutionEnvironment(configuration, SimpleDataContext.getProjectContext(getProject()));
+        final ExecutionEnvironment environment = new ExecutionEnvironment(
+            configuration,
+            getProject(), null, null, null);
 
         final DefaultProgramRunner runner = ProgramRunner.PROGRAM_RUNNER_EP.findExtension(DefaultProgramRunner.class);
         final StringBuffer sb = new StringBuffer();

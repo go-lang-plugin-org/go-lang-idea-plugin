@@ -73,11 +73,10 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     public void readExternal(final Element element) throws InvalidDataException {
         PathMacroManager.getInstance(getProject()).expandPaths(element);
         super.readExternal(element);
-        JDOMExternalizerUtil.readField(element, "scriptName");
-        JDOMExternalizerUtil.readField(element, "scriptArguments");
-        JDOMExternalizerUtil.readField(element, "workDir");
+        scriptName = JDOMExternalizerUtil.readField(element, "scriptName");
+        scriptArguments = JDOMExternalizerUtil.readField(element, "scriptArguments");
+        workDir = JDOMExternalizerUtil.readField(element, "workDir");
         readModule(element);
-//        EnvironmentVariablesComponent.readExternal(element, getEnvs());
     }
 
     public void writeExternal(final Element element) throws WriteExternalException {
@@ -86,7 +85,6 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
         JDOMExternalizerUtil.writeField(element, "scriptArguments",scriptArguments);
         JDOMExternalizerUtil.writeField(element, "workDir", workDir);
         writeModule(element);
-//        EnvironmentVariablesComponent.writeExternal(element, getEnvs());
         PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
     }
 

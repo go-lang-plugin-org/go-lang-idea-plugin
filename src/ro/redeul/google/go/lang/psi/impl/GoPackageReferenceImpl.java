@@ -49,16 +49,17 @@ public class GoPackageReferenceImpl extends GoPsiElementBase implements GoPackag
         return null;
     }
 
+    @NotNull
     public String getCanonicalText() {
         return getText();
     }
 
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     public boolean isReferenceTo(PsiElement element) {
