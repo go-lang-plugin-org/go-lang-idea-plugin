@@ -46,7 +46,7 @@ public class GoSdkUtil {
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static GoSdkData testGoogleGoSdk(String path) {
 
-        if ( ! checkFolderExists(path) || ! checkFolderExists(path, "src") || ! checkFolderExists(path, "pkg") ) {
+        if (!checkFolderExists(path) || !checkFolderExists(path, "src") || !checkFolderExists(path, "pkg")) {
             return null;
         }
 
@@ -62,17 +62,11 @@ public class GoSdkUtil {
         boolean pkgExists = false;
         boolean toolsExists = false;
         String pkgName = "";
-        for (File t : targets){
-            if(t.getName().matches("(windows|linux|darwin|freebsd)_(386|amd64|arm)")){
+        for (File t : targets) {
+            if (t.getName().matches("(windows|linux|darwin|freebsd)_(386|amd64|arm)")) {
                 pkgExists = true;
                 pkgName = t.getName();
             }
-            if(t.getName().matches("tool")){
-                toolsExists = true;
-            }
-        }
-        if(!pkgExists || !toolsExists){
-            return null;
         }
 
         String[] target = pkgName.split("_");
@@ -84,10 +78,15 @@ public class GoSdkUtil {
 
         String binariesPath = System.getenv("GOBIN");
         if (binariesPath == null) {
-            binariesPath = path + "/bin";
+            // new go packaging
+            binariesPath = path + "/pkg/tool/" + pkgName;
 
-            if ( ! (new File(binariesPath).isDirectory()) ) {
-                binariesPath = "/usr/bin";
+            // old
+            if (!(new File(binariesPath).isDirectory())) {
+                binariesPath = path + "/bin";
+                if (!(new File(binariesPath).isDirectory())) {
+                    binariesPath = "/usr/bin";
+                }
             }
         }
 
@@ -110,7 +109,7 @@ public class GoSdkUtil {
             String outputString = output.getStdout().replaceAll("[\r\n]+", "");
 
             Matcher matcher = RE_VERSION_MATCHER.matcher(outputString);
-            if ( matcher.matches() ) {
+            if (matcher.matches()) {
                 return new GoSdkData(path, binariesPath, targetOs, targetArch, matcher.group(2), matcher.group(3));
             }
 
@@ -123,11 +122,11 @@ public class GoSdkUtil {
 
     public static GoAppEngineSdkData testGoAppEngineSdk(String path) {
 
-        if ( ! checkFolderExists(path) || ! checkFileExists(path, "dev_appserver.py")
-                || ! checkFolderExists(path, "goroot") || ! checkFolderExists(path, "goroot", "pkg"))
+        if (!checkFolderExists(path) || !checkFileExists(path, "dev_appserver.py")
+                || !checkFolderExists(path, "goroot") || !checkFolderExists(path, "goroot", "pkg"))
             return null;
 
-        if ( ! checkFileExists(path, "VERSION") )
+        if (!checkFileExists(path, "VERSION"))
             return null;
 
 
@@ -143,17 +142,17 @@ public class GoSdkUtil {
 
             Matcher matcher = RE_APP_ENGINE_VERSION_MATCHER.matcher(fileContent);
 
-            if ( ! matcher.find() )
+            if (!matcher.find())
                 return null;
             sdkData.VERSION_MAJOR = matcher.group(1);
 
             matcher = RE_APP_ENGINE_TIMESTAMP_MATCHER.matcher(fileContent);
-            if ( ! matcher.find() )
+            if (!matcher.find())
                 return null;
             sdkData.VERSION_MINOR = matcher.group(1);
 
             matcher = RE_APP_ENGINE_API_VERSIONS_MATCHER.matcher(fileContent);
-            if ( ! matcher.find() )
+            if (!matcher.find())
                 return null;
 
         } catch (IOException e) {
@@ -190,9 +189,10 @@ public class GoSdkUtil {
 
     /**
      * Uses the following to get the go sdk for tests:
-     *  1. Uses the path given by the system property go.test.sdk.home, if given
-     *  2. Uses the path given by the GOROOT environment variable, if available
-     *  3. Uses HOMEPATH/go/default
+     * 1. Uses the path given by the system property go.test.sdk.home, if given
+     * 2. Uses the path given by the GOROOT environment variable, if available
+     * 3. Uses HOMEPATH/go/default
+     *
      * @return the go sdk parameters or array of zero elements if error
      */
     public static GoSdkData getMockGoogleSdk() {
@@ -205,8 +205,7 @@ public class GoSdkUtil {
         // Use the test sdk path before anything else, if available
         if (testSdkHome != null) {
             sdkPath = testSdkHome;
-        }
-        else if (goRoot != null) {
+        } else if (goRoot != null) {
             sdkPath = goRoot;
         }
 
@@ -215,7 +214,7 @@ public class GoSdkUtil {
 
     public static GoSdkData getMockGoogleSdk(String path) {
         GoSdkData sdkData = testGoogleGoSdk(path);
-        if (sdkData != null ) {
+        if (sdkData != null) {
             new File(sdkData.GO_BIN_PATH, getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
             new File(sdkData.GO_BIN_PATH, getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
             new File(sdkData.GO_BIN_PATH, getArchivePackerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
@@ -243,7 +242,7 @@ public class GoSdkUtil {
                 return "8";
 
             case _amd64:
-                return  "6";
+                return "6";
 
             case _arm:
                 return "5";
@@ -257,13 +256,13 @@ public class GoSdkUtil {
         ModuleRootModel moduleRootModel = ModuleRootManager.getInstance(module);
 
         Sdk sdk = null;
-        if ( ! moduleRootModel.isSdkInherited() ) {
+        if (!moduleRootModel.isSdkInherited()) {
             sdk = moduleRootModel.getSdk();
         } else {
             sdk = ProjectRootManager.getInstance(module.getProject()).getProjectSdk();
         }
 
-        if ( GoSdkType.isInstance(sdk) ) {
+        if (GoSdkType.isInstance(sdk)) {
             return sdk;
         }
 
@@ -274,7 +273,7 @@ public class GoSdkUtil {
 
         Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
 
-        if ( GoSdkType.isInstance(sdk) ) {
+        if (GoSdkType.isInstance(sdk)) {
             return sdk;
         }
 
