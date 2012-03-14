@@ -58,11 +58,24 @@ public class GoSdkUtil {
             }
         });
 
-        if (targets.length != 1 || !targets[0].getName().matches("(windows|linux|darwin|freebsd)_(386|amd64|arm)")) {
+        // At least a directory with package
+        boolean pkgExists = false;
+        boolean toolsExists = false;
+        String pkgName = "";
+        for (File t : targets){
+            if(t.getName().matches("(windows|linux|darwin|freebsd)_(386|amd64|arm)")){
+                pkgExists = true;
+                pkgName = t.getName();
+            }
+            if(t.getName().matches("tool")){
+                toolsExists = true;
+            }
+        }
+        if(!pkgExists || !toolsExists){
             return null;
         }
 
-        String[] target = targets[0].getName().split("_");
+        String[] target = pkgName.split("_");
 
         GoTargetOs targetOs = GoTargetOs.fromString(target[0]);
         GoTargetArch targetArch = GoTargetArch.fromString(target[1]);
