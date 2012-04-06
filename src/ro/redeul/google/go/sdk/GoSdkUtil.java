@@ -36,7 +36,8 @@ public class GoSdkUtil {
     private static final String DEFAULT_MOCK_PATH = "go/default";
 
     // 8g version release.r59 9305
-    private static Pattern RE_VERSION_MATCHER = Pattern.compile("([^ ]+) version ([^ ]+) (.+)$");
+    // 6g version go1
+    private static Pattern RE_VERSION_MATCHER = Pattern.compile("([^ ]+) version ([^ ]+)( (.+))*$");
 
     // release: "xx"
     private static Pattern RE_APP_ENGINE_VERSION_MATCHER = Pattern.compile("^release: \"([^\"]+)\"$", Pattern.MULTILINE);
