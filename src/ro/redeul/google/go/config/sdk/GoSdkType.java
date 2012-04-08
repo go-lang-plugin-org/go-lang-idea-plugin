@@ -15,6 +15,7 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.GoUtil;
 
 import javax.swing.*;
+import static java.lang.String.format;
 
 public class GoSdkType extends SdkType {
 
@@ -129,7 +130,9 @@ public class GoSdkType extends SdkType {
             return;
 
         final VirtualFile librariesRoot =
-                homeDirectory.findFileByRelativePath(String.format("pkg/%s_%s/", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName()));
+                homeDirectory.findFileByRelativePath(
+                    format("pkg/%s_%s/", sdkData.TARGET_OS.getName(),
+                           sdkData.TARGET_ARCH.getName()));
 
         final VirtualFile sourcesRoot = homeDirectory.findFileByRelativePath("src/pkg/");
 
@@ -149,7 +152,12 @@ public class GoSdkType extends SdkType {
             }
         });
 
-        sdkModificator.setVersionString(String.format("%s %s", sdkData.VERSION_MAJOR, sdkData.VERSION_MINOR));
+        sdkModificator.setVersionString(
+            format("%s%s",
+                   sdkData.VERSION_MAJOR,
+                   sdkData.VERSION_MINOR == null
+                       ? ""
+                       : " " + sdkData.VERSION_MINOR));
         sdkModificator.setSdkAdditionalData(sdkData);
         sdkModificator.commitChanges();
     }

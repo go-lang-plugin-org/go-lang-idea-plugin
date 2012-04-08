@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Google Go language</name>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[
@@ -32,7 +32,7 @@
             <li>More completion options on variables (work in progress). Can be disabled from the Settings: Project -> Go Settings.</li>
             <li>Simple structure view</li>
             <li>Go aware imports optimizer  (experimental)</li>
-            <li>Support GO sdk as packaged by the gophers/go PPA on Ubuntu.</li>
+            <li>Support GO sdk as packaged by the gophers/go PPA on Ubuntu. (supports Go 1 release)</li>
             <li>Partial error highlighting of non existent imported packages.</li>
             <li>Detection of bundled Go Sdk packages (useful when deployed as GoIde)</li>
             <li>Run configuration creator (right click on a program file and you can run it). </li>
@@ -45,6 +45,10 @@
     </description>
     <change-notes>
         <![CDATA[
+         <h3>0.5.1 changes:</h3>
+            <ul>
+                <li>[feature] Support for Go 1 release</li>
+            </ul>
          <h3>0.5.0 changes:</h3>
             <ul>
                 <li>[feature] Go App engine sdk type</li>
