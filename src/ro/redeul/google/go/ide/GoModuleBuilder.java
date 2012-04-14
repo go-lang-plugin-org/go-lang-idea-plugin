@@ -25,6 +25,10 @@ import ro.redeul.google.go.config.sdk.GoSdkType;
  */
 public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBuilder, ModuleBuilderListener {
 
+    public GoModuleBuilder() {
+        addListener(this);
+    }
+
     @Override
     public void moduleCreated(@NotNull Module module) {
 
@@ -44,7 +48,6 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
 
     @Override
     public void setupRootModel(ModifiableRootModel modifiableRootModel) throws ConfigurationException {
-        addListener(this);
         super.setupRootModel(modifiableRootModel);
 
         modifiableRootModel.inheritSdk();
@@ -53,6 +56,7 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
         ProjectRootManager projectRootManager = ProjectRootManager.getInstance(modifiableRootModel.getProject());
         projectRootManager.setProjectSdk(getModuleJdk());
     }
+
 
     @Override
     public ModuleType getModuleType() {
