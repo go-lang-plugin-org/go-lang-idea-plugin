@@ -46,17 +46,15 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
         }
     }
 
-    @Override
-    public void setupRootModel(ModifiableRootModel modifiableRootModel) throws ConfigurationException {
-        super.setupRootModel(modifiableRootModel);
+//    @Override
+//    public void setupRootModel(ModifiableRootModel modifiableRootModel) throws ConfigurationException {
+//        super.setupRootModel(modifiableRootModel);
 
-        modifiableRootModel.inheritSdk();
-        modifiableRootModel.commit();
-
-        ProjectRootManager projectRootManager = ProjectRootManager.getInstance(modifiableRootModel.getProject());
-        projectRootManager.setProjectSdk(getModuleJdk());
-    }
-
+//        modifiableRootModel.inheritSdk();
+//        modifiableRootModel.commit();
+//        ProjectRootManager projectRootManager = ProjectRootManager.getInstance(modifiableRootModel.getProject());
+//        projectRootManager.setProjectSdk(getModuleJdk());
+//    }
 
     @Override
     public ModuleType getModuleType() {
