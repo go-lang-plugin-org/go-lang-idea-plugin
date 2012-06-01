@@ -298,6 +298,13 @@
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </group>
 
+        <action id="Go.NewFile" text="Go file"
+                description="Create a new Go in the current project"
+                class="ro.redeul.google.go.actions.NewGoFileAction">
+
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="Go.ActionGroup" />
+        </action>
+
         <group id="Go.Tools" popup="true" text="Go Tools" description="Go tools support" icon="/icons/go_16x16.png">
             <!--<action id="Go.Tools.AddGoSdk" text="Add Go Sdk Support"-->
                 <!--description="Add Go Sdk to current module"-->
