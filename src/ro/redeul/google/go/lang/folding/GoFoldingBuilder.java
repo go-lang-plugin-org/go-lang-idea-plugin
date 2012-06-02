@@ -31,26 +31,25 @@ public class GoFoldingBuilder implements FoldingBuilder, DumbAware, GoElementTyp
 
     private void appendDescriptors(PsiElement psi, Document document, List<FoldingDescriptor> descriptors) {
         ASTNode node = psi.getNode();
-        if (node == null) return;
+        if (node == null || !isMultiline(psi)) return;
         IElementType type = node.getElementType();
 
-        if (mML_COMMENT == type && isMultiline(psi)) {
+        if (mML_COMMENT == type) {
             descriptors.add(new FoldingDescriptor(node, node.getTextRange()));
             return;
         }
 
-        if ( TYPE_DECLARATIONS == type && isMultiline(psi)) {
+        if ( TYPE_DECLARATIONS == type) {
             addDescriptorStartFromChildNode(descriptors, node, "{");
             return;
         }
 
-        if ((CONST_DECLARATIONS == type || VAR_DECLARATIONS == type || IMPORT_DECLARATIONS == type) &&
-                isMultiline(psi)) {
+        if (CONST_DECLARATIONS == type || VAR_DECLARATIONS == type || IMPORT_DECLARATIONS == type) {
             addDescriptorStartFromChildNode(descriptors, node, "(");
             return;
         }
 
-        if ( BLOCK_STATEMENT == type && isMultiline(psi)) {
+        if ( BLOCK_STATEMENT == type) {
             descriptors.add(new FoldingDescriptor(node, node.getTextRange()));
         }
 
