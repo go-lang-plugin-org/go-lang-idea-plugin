@@ -90,7 +90,7 @@ mNUM_HEX = ("0x" | "0X") {mHEX_DIGIT}+
 mNUM_OCT = "0" {mOCT_DIGIT}+
 
 mFLOAT_EXPONENT = [eE] [+-]? {mDIGIT}+
-mNUM_FLOAT = ( ( ({mDIGIT}+ "." {mDIGIT}*) | ({mDIGIT}* "." {mDIGIT}+) ) {mFLOAT_EXPONENT}?) | ({mDIGIT}+ {mFLOAT_EXPONENT}) 
+mNUM_FLOAT = ( ( ({mDIGIT}+ "." {mDIGIT}*) | ({mDIGIT}* "." {mDIGIT}+) ) {mFLOAT_EXPONENT}?) | ({mDIGIT}+ {mFLOAT_EXPONENT})
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////      identifiers      ////////////////////////////////////////////////////////////////////////////

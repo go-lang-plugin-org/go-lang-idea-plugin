@@ -1,11 +1,10 @@
 #!/bin/sh
 
-/home/mtoader/Work/IntellijIdea/ideaIC-95.429/tools/lexer/jflex-1.4/bin/jflex \
+IDEA_HOME=/Users/mtoader/Work/Personal/idea/
+${IDEA_HOME}/tools/lexer/jflex-1.4/bin/jflex \
     --table \
-    --skel /home/mtoader/Work/IntellijIdea/ideaIC-95.429/tools/lexer/idea-flex.skeleton \
+    --skel ${IDEA_HOME}/tools/lexer/idea-flex.skeleton \
     --charat --nobak \
     -d src/ro/redeul/google/go/lang/lexer \
     src/ro/redeul/google/go/lang/lexer/go.flex
 
-
-    
