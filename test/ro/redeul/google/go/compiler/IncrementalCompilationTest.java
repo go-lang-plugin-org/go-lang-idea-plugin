@@ -1,11 +1,9 @@
 package ro.redeul.google.go.compiler;
 
 import com.intellij.psi.PsiFile;
-import org.testng.annotations.Test;
 
-public class IncrementalCompilationTest extends GoCompilerTestCase {
+public abstract class IncrementalCompilationTest extends GoCompilerTestCase {
 
-    @Test
     public void testSimpleMainWithLocalLibrary() throws Exception {
         PsiFile file = myFixture.addFileToProject("tools.go",
                 "package tools\n" +
@@ -34,7 +32,6 @@ public class IncrementalCompilationTest extends GoCompilerTestCase {
         assertOutput("main", "11");
     }
 
-    @Test
     public void testSimpleMainWithMultipleLocalLibrary() throws Exception {
         myFixture.addFileToProject("tools/a.go",
                 "package tools\n" +

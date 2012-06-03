@@ -1,6 +1,6 @@
 package ro.redeul.google.go.compiler;
 
-public class FullCompilationTest extends GoCompilerTestCase {
+public abstract class FullCompilationTest extends GoCompilerTestCase {
 
     public void testSimpleApplication() throws Exception {
         myFixture.addFileToProject("main.go",
