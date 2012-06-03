@@ -1,5 +1,13 @@
 package ro.redeul.google.go.sdk;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.CapturingProcessHandler;
@@ -15,16 +23,12 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.psi.PsiFile;
-import ro.redeul.google.go.config.sdk.*;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
+import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.config.sdk.GoTargetArch;
+import ro.redeul.google.go.config.sdk.GoTargetOs;
 import ro.redeul.google.go.util.GoUtil;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class GoSdkUtil {
 
@@ -37,12 +41,18 @@ public class GoSdkUtil {
 
     // 8g version release.r59 9305
     // 6g version go1
-    private static Pattern RE_VERSION_MATCHER = Pattern.compile("([^ ]+) version ([^ ]+)( (.+))*$");
+    private static Pattern RE_VERSION_MATCHER =
+        Pattern.compile("([^ ]+) version ([^ ]+)( (.+))*$");
 
     // release: "xx"
-    private static Pattern RE_APP_ENGINE_VERSION_MATCHER = Pattern.compile("^release: \"([^\"]+)\"$", Pattern.MULTILINE);
-    private static Pattern RE_APP_ENGINE_TIMESTAMP_MATCHER = Pattern.compile("^timestamp: ([0-9]+)$", Pattern.MULTILINE);
-    private static Pattern RE_APP_ENGINE_API_VERSIONS_MATCHER = Pattern.compile("^api_versions: \\[([^\\]]+)\\]$", Pattern.MULTILINE);
+    private static Pattern RE_APP_ENGINE_VERSION_MATCHER =
+        Pattern.compile("^release: \"([^\"]+)\"$", Pattern.MULTILINE);
+
+    private static Pattern RE_APP_ENGINE_TIMESTAMP_MATCHER =
+        Pattern.compile("^timestamp: ([0-9]+)$", Pattern.MULTILINE);
+
+    private static Pattern RE_APP_ENGINE_API_VERSIONS_MATCHER =
+        Pattern.compile("^api_versions: \\[([^\\]]+)\\]$", Pattern.MULTILINE);
 
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static GoSdkData testGoogleGoSdk(String path) {
