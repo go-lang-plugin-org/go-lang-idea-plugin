@@ -39,9 +39,9 @@ public abstract class TestUtils {
     public static final String TEMP_FILE = "temp.go";
 
 //  public static final String GSP_TEMP_FILE = "temp.gsp";
-//  public static final String CARET_MARKER = "<caret>";
-//  public static final String BEGIN_MARKER = "<begin>";
-//  public static final String END_MARKER = "<end>";
+    public static final String CARET_MARKER = "<caret>";
+    public static final String BEGIN_MARKER = "<begin>";
+    public static final String END_MARKER = "<end>";
 //  public static final String GRAILS_JAR = "grails-web.jar";
 //  public static final String GROOVY_JAR = "groovy-all.jar";
 //  public static final String GROOVY_JAR_17 = "groovy-all-1.7.jar";
@@ -90,16 +90,16 @@ public abstract class TestUtils {
 //        return "/testdata/";
     }
 
-//  public static String removeBeginMarker(String text) {
-//    int index = text.indexOf(BEGIN_MARKER);
-//    return text.substring(0, index) + text.substring(index + BEGIN_MARKER.length());
-//  }
-//
-//  public static String removeEndMarker(String text) {
-//    int index = text.indexOf(END_MARKER);
-//    return text.substring(0, index) + text.substring(index + END_MARKER.length());
-//  }
-//
+    public static String removeBeginMarker(String text) {
+        int index = text.indexOf(BEGIN_MARKER);
+        return text.substring(0, index) + text.substring(index + BEGIN_MARKER.length());
+    }
+
+    public static String removeEndMarker(String text) {
+        int index = text.indexOf(END_MARKER);
+        return text.substring(0, index) + text.substring(index + END_MARKER.length());
+    }
+
 
     public static List<String> readInput(String filePath) throws IOException {
         String content = new String(FileUtil.loadFileText(new File(filePath)));

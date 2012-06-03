@@ -5,11 +5,11 @@ import com.intellij.lang.folding.FoldingBuilder;
 import com.intellij.lang.folding.FoldingDescriptor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.parser.parsing.statements.BlockStatement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,60 +31,56 @@ public class GoFoldingBuilder implements FoldingBuilder, DumbAware, GoElementTyp
 
     private void appendDescriptors(PsiElement psi, Document document, List<FoldingDescriptor> descriptors) {
         ASTNode node = psi.getNode();
-        if (node == null) return;
+        if (node == null || !isMultiline(psi)) return;
         IElementType type = node.getElementType();
 
-        if (mML_COMMENT == type && isMultiline(psi)) {
+        if (mML_COMMENT == type) {
             descriptors.add(new FoldingDescriptor(node, node.getTextRange()));
             return;
         }
 
-        if ( TYPE_DECLARATIONS == type && isMultiline(psi)) {
-            descriptors.add(new FoldingDescriptor(node, node.getTextRange()));
+        if ( TYPE_DECLARATIONS == type) {
+            addDescriptorStartFromChildNode(descriptors, node, "{");
             return;
         }
 
-        if ( CONST_DECLARATIONS == type && isMultiline(psi)) {
-            descriptors.add(new FoldingDescriptor(node, node.getTextRange()));
+        if (CONST_DECLARATIONS == type || VAR_DECLARATIONS == type || IMPORT_DECLARATIONS == type) {
+            addDescriptorStartFromChildNode(descriptors, node, "(");
             return;
         }
 
-        if ( VAR_DECLARATIONS == type && isMultiline(psi)) {
-            descriptors.add(new FoldingDescriptor(node, node.getTextRange()));
-            return;
-        }
-
-        if ( BLOCK_STATEMENT == type && isMultiline(psi)) {
+        if ( BLOCK_STATEMENT == type) {
             descriptors.add(new FoldingDescriptor(node, node.getTextRange()));
         }
-
-        if ( METHOD_DECLARATION == type && isMultiline(psi)) {
-            descriptors.add(new FoldingDescriptor(node, node.getTextRange()));
-        }
-
-        if ( FUNCTION_DECLARATION == type && isMultiline(psi)) {
-            descriptors.add(new FoldingDescriptor(node, node.getTextRange()));
-        }
-
 
         PsiElement child = psi.getFirstChild();
         while (child != null) {
-          appendDescriptors(child, document, descriptors);
-          child = child.getNextSibling();
+            appendDescriptors(child, document, descriptors);
+            child = child.getNextSibling();
         }
+    }
 
-//        PsiElement child = element.getFirstChild();
-//        while (child != null) {
-//          appendDescriptors(child, document, descriptors);
-//          child = child.getNextSibling();
-//        }
-//
-//        if (element instanceof GroovyFile) {
-//          GroovyFile file = (GroovyFile)element;
-//          addFoldingsForImports(descriptors, file);
-//        }
+    private void addDescriptorStartFromChildNode(List<FoldingDescriptor> descriptors, ASTNode node, String childText) {
+        ASTNode startNode = findChildOfText(node, childText);
+        if (startNode != null) {
+            int end = node.getStartOffset() + node.getTextLength();
+            descriptors.add(new FoldingDescriptor(node, new TextRange(startNode.getStartOffset(), end)));
+        }
+    }
 
-
+    private static ASTNode findChildOfText(ASTNode parent, String text) {
+        ASTNode child = parent.getFirstChildNode();
+        while (child != null) {
+            if (child.getText().equals(text)) {
+                break;
+            }
+            ASTNode sub = findChildOfText(child, text);
+            if (sub != null) {
+                return sub;
+            }
+            child = child.getTreeNext();
+        }
+        return child;
     }
 
     public String getPlaceholderText(@NotNull ASTNode node) {
