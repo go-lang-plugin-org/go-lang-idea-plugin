@@ -343,6 +343,8 @@
         <lang.foldingBuilder language="Google Go" implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
         <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
         <lang.findUsagesProvider language="Google Go" implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
+        <lang.refactoringSupport language="Google Go" implementationClass="ro.redeul.google.go.refactoring.GoRefactoringSupportProvider"/>
+
         <lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFmt" />
         <!--<lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFormatterModelBuilder" />-->
         <lang.psiStructureViewFactory language="Google Go" implementationClass="ro.redeul.google.go.ide.GoStructureView"/>
