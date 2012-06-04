@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import org.junit.Assert;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.TestUtils;
 
@@ -22,7 +23,7 @@ public abstract class FileDataBasedTest extends LightCodeInsightFixtureTestCase 
     protected void doTest() throws Exception {
         final List<String> data = TestUtils.readInput(getTestDataPath() + getTestName(true) + ".test");
         String expected = data.get(1).trim();
-        assertEquals(expected, processFile(data.get(0), expected.contains(TestUtils.CARET_MARKER)).trim());
+        Assert.assertEquals(expected, processFile(data.get(0), expected.contains(TestUtils.CARET_MARKER)).trim());
     }
 
     private String processFile(String fileText, boolean addCaretMarker) {
