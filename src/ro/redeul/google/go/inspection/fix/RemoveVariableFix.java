@@ -48,9 +48,7 @@ public class RemoveVariableFix implements LocalQuickFix {
     }
 
     private void removeIdentifier(GoIdentifier id, PsiElement parent, GoIdentifier[] ids, GoExpr[] exprs) {
-        boolean idWithDummy = ids.length == 2 && (ids[0].isBlank() && ids[1].isEquivalentTo(id) ||
-                                        ids[1].isBlank() && ids[0].isEquivalentTo(id));
-        if (ids.length == 1 || idWithDummy) {
+        if (isIdWithDummy(id, ids)) {
             removeWholeElement(parent);
             return;
         }
@@ -73,6 +71,15 @@ public class RemoveVariableFix implements LocalQuickFix {
                 parent.deleteChildRange(exprs[index], exprs[index + 1].getPrevSibling());
             }
         }
+    }
+
+    private static boolean isIdWithDummy(GoIdentifier id, GoIdentifier[] ids) {
+        for (GoIdentifier i : ids) {
+            if (!i.isBlank() && !i.isEquivalentTo(id)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static int identifierIndex(GoIdentifier[] ids, GoIdentifier id) {

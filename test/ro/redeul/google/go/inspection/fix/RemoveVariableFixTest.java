@@ -21,6 +21,7 @@ public class RemoveVariableFixTest extends FileDataBasedTest {
 
     public void testVarAndDummy1() throws Exception{ doTest(); }
     public void testVarAndDummy2() throws Exception{ doTest(); }
+    public void testVarAndDummy3() throws Exception{ doTest(); }
     public void testOnlyOneVar1() throws Exception{ doTest(); }
     public void testOnlyOneVar2() throws Exception{ doTest(); }
     public void testOnlyOneVarWithType1() throws Exception{ doTest(); }
