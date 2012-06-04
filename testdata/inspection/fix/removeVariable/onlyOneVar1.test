@@ -1,0 +1,13 @@
+package main
+
+func main() {
+    var <begin>v<end>, a = 5, 6
+    println("Hello world!")
+}
+-----
+<caret>package main
+
+func main() {
+    var a = 6
+    println("Hello world!")
+}

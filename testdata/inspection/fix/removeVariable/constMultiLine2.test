@@ -1,0 +1,20 @@
+package main
+
+const (
+    <begin>N<end> = 5
+    A = 2
+)
+
+func main() {
+    println("Hello world!")
+}
+-----
+<caret>package main
+
+const (
+    A = 2
+)
+
+func main() {
+    println("Hello world!")
+}

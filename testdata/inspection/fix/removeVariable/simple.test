@@ -1,0 +1,12 @@
+package main
+
+func main() {
+    <begin>v<end> := 5
+    println("Hello world!")
+}
+-----
+<caret>package main
+
+func main() {
+    println("Hello world!")
+}
