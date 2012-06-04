@@ -20,13 +20,13 @@ public class RemoveVariableFix implements LocalQuickFix {
     @NotNull
     @Override
     public String getName() {
-        return "Remove unused import";
+        return "Remove unused variable";
     }
 
     @NotNull
     @Override
     public String getFamilyName() {
-        return "Import";
+        return "Variable";
     }
 
     @Override

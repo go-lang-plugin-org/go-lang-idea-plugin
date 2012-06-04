@@ -49,6 +49,9 @@
             <ul>
                 <li>[feature] Refactoring: Introduce variable</li>
                 <li>[feature] Inspection: Unused imports</li>
+                <li>[feature] Inspection: Unused variables</li>
+                <li>[feature] Inspection: Unused constants</li>
+                <li>[feature] Inspection: Unused parameters</li>
                 <li>[enhancement] code folding improvement.</li>
             </ul>
          <h3>0.5.1 changes:</h3>
@@ -346,6 +349,8 @@
 
         <localInspection language="Google Go" shortName="UnusedImport" displayName="Unused import" groupName="Google Go" enabledByDefault="true"
                          level="ERROR" implementationClass="ro.redeul.google.go.inspection.UnusedImportInspection"/>
+        <localInspection language="Google Go" shortName="UnusedVariable" displayName="Unused variable" groupName="Google Go" enabledByDefault="true"
+                         level="ERROR" implementationClass="ro.redeul.google.go.inspection.UnusedVariableInspection"/>
 
         <lang.parserDefinition language="Google Go" implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
         <lang.braceMatcher language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoBraceMatcher"/>
