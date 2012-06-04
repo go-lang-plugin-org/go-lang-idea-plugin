@@ -1,14 +1,10 @@
 package ro.redeul.google.go.lang.parser;
 
-import org.testng.annotations.Test;
-
 import java.io.File;
 
 /**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Aug 5, 2010
- * Time: 9:56:52 PM
+ * @author Mihai Claudiu Toader <mtoader@gmail.com>
+ *         Date: Aug 5, 2010
  */
 public class GoExpressionsTestCase extends GoParsingTestCase {
 

@@ -34,7 +34,8 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     }
 
     public void accept(GoElementVisitor visitor) {
-//        visitor.visitIdentifier(this);
+        // TODO: implement this properly
+        visitor.visitElement(this);
     }
 
     @Override

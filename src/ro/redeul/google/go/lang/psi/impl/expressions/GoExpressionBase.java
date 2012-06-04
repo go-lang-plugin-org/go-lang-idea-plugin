@@ -33,6 +33,7 @@ public abstract class GoExpressionBase extends GoPsiElementBase implements GoExp
     protected abstract GoType resolveType();
 
     public void accept(GoElementVisitor visitor) {
-//        visitor.visitIdentifier(this);
+        // TODO: implement this properly
+        visitor.visitElement(this);
     }
 }

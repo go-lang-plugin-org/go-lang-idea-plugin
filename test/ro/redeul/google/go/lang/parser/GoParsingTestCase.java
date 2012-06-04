@@ -1,17 +1,15 @@
 package ro.redeul.google.go.lang.parser;
 
-import com.intellij.openapi.application.PathManager;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import com.intellij.openapi.application.PluginPathManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import ro.redeul.google.go.lang.GoCodeInsightTestCase;
 import ro.redeul.google.go.util.TestUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 public abstract class GoParsingTestCase extends LightCodeInsightFixtureTestCase {
 
@@ -51,6 +49,6 @@ public abstract class GoParsingTestCase extends LightCodeInsightFixtureTestCase 
     protected void checkParsing(String input, String output) {
         final PsiFile psiFile = TestUtils.createPseudoPhysicalGoFile(getProject(), input);
         String psiTree = DebugUtil.psiToString(psiFile, false);
-        org.testng.Assert.assertEquals(psiTree.trim(), output.trim());        
+        org.testng.Assert.assertEquals(psiTree.trim(), output.trim());
     }
 }

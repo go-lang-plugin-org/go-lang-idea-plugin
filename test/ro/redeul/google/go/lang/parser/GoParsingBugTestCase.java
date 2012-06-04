@@ -3,10 +3,8 @@ package ro.redeul.google.go.lang.parser;
 import java.io.File;
 
 /**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
+ * @author Mihai Claudiu Toader <mtoader@gmail.com>
  * Date: 7/19/11
- * Time: 5:15 PM
  */
 public class GoParsingBugTestCase extends GoParsingTestCase {
 
