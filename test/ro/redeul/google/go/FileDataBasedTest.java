@@ -5,9 +5,9 @@ import com.intellij.openapi.application.PluginPathManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.TestUtils;
 
 import java.util.List;
@@ -28,15 +28,16 @@ public abstract class FileDataBasedTest extends LightCodeInsightFixtureTestCase 
     private String processFile(String fileText, boolean addCaretMarker) {
         String result;
 
+        final GoFile goFile;
         int startOffset = fileText.indexOf(TestUtils.BEGIN_MARKER);
         if (startOffset != -1) {
             fileText = TestUtils.removeBeginMarker(fileText);
             int endOffset = fileText.indexOf(TestUtils.END_MARKER);
             fileText = TestUtils.removeEndMarker(fileText);
-            myFixture.configureByText(GoFileType.GO_FILE_TYPE, fileText);
+            goFile = (GoFile) myFixture.configureByText(GoFileType.GO_FILE_TYPE, fileText);
             myFixture.getEditor().getSelectionModel().setSelection(startOffset, endOffset);
         } else {
-            myFixture.configureByText(GoFileType.GO_FILE_TYPE, fileText);
+            goFile = (GoFile) myFixture.configureByText(GoFileType.GO_FILE_TYPE, fileText);
         }
 
         final Editor myEditor = myFixture.getEditor();
@@ -44,7 +45,7 @@ public abstract class FileDataBasedTest extends LightCodeInsightFixtureTestCase 
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
-                invoke(getProject(), myEditor, myFixture.getFile());
+                invoke(getProject(), myEditor, goFile);
                 PostprocessReformattingAspect.getInstance(getProject()).doPostponedFormatting();
             }
         });
@@ -58,6 +59,6 @@ public abstract class FileDataBasedTest extends LightCodeInsightFixtureTestCase 
         return result.substring(0, caretOffset) + TestUtils.CARET_MARKER + result.substring(caretOffset);
     }
 
-    protected abstract void invoke(Project project, Editor myEditor, PsiFile file);
+    protected abstract void invoke(Project project, Editor myEditor, GoFile file);
     protected abstract String getTestDataRelativePath();
 }
