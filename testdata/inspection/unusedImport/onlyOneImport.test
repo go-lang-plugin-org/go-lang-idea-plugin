@@ -1,0 +1,15 @@
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    println("Hello world!")
+}
+-----
+package main
+
+func main() {
+    println("Hello world!")
+}
