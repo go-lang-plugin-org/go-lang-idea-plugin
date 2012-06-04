@@ -1,0 +1,20 @@
+package main
+
+import (
+    <begin>"fmt"<end>
+    "io"
+)
+
+func main() {
+    println("Hello world!")
+}
+-----
+<caret>package main
+
+import (
+    "io"
+)
+
+func main() {
+    println("Hello world!")
+}

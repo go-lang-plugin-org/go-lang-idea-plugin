@@ -1,0 +1,15 @@
+package main
+
+import (
+    <begin>"fmt"<end>
+)
+
+func main() {
+    println("Hello world!")
+}
+-----
+<caret>package main
+
+func main() {
+    println("Hello world!")
+}
