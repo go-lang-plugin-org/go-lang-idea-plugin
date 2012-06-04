@@ -21,20 +21,25 @@ public abstract class FileDataBasedTest extends LightCodeInsightFixtureTestCase 
 
     protected void doTest() throws Exception {
         final List<String> data = TestUtils.readInput(getTestDataPath() + getTestName(true) + ".test");
-        assertEquals(data.get(1).trim(), processFile(data.get(0)).trim());
+        String expected = data.get(1).trim();
+        assertEquals(expected, processFile(data.get(0), expected.contains(TestUtils.CARET_MARKER)).trim());
     }
 
-    private String processFile(String fileText) {
+    private String processFile(String fileText, boolean addCaretMarker) {
         String result;
+
         int startOffset = fileText.indexOf(TestUtils.BEGIN_MARKER);
-        fileText = TestUtils.removeBeginMarker(fileText);
-        int endOffset = fileText.indexOf(TestUtils.END_MARKER);
-        fileText = TestUtils.removeEndMarker(fileText);
-        myFixture.configureByText(GoFileType.GO_FILE_TYPE, fileText);
+        if (startOffset != -1) {
+            fileText = TestUtils.removeBeginMarker(fileText);
+            int endOffset = fileText.indexOf(TestUtils.END_MARKER);
+            fileText = TestUtils.removeEndMarker(fileText);
+            myFixture.configureByText(GoFileType.GO_FILE_TYPE, fileText);
+            myFixture.getEditor().getSelectionModel().setSelection(startOffset, endOffset);
+        } else {
+            myFixture.configureByText(GoFileType.GO_FILE_TYPE, fileText);
+        }
 
         final Editor myEditor = myFixture.getEditor();
-
-        myEditor.getSelectionModel().setSelection(startOffset, endOffset);
 
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
@@ -45,6 +50,10 @@ public abstract class FileDataBasedTest extends LightCodeInsightFixtureTestCase 
         });
 
         result = myEditor.getDocument().getText();
+        if (!addCaretMarker) {
+            return result;
+        }
+
         int caretOffset = myEditor.getCaretModel().getOffset();
         return result.substring(0, caretOffset) + TestUtils.CARET_MARKER + result.substring(caretOffset);
     }
