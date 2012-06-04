@@ -21,9 +21,9 @@ Go file
     PsiElement(KEYWORD_CONST)('const')
     PsiWhiteSpace(' ')
     PsiElement(()('(')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('      ')
     ConstSpec
-      PsiElement(WS_NEW_LINES)('\n')
-      PsiWhiteSpace('      ')
       Identifier
         PsiElement(IDENTIFIER)('ET_NONE')
       PsiWhiteSpace('   ')

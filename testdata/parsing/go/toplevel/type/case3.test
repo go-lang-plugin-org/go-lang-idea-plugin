@@ -1,0 +1,66 @@
+package main
+type (
+    Point int
+    TreeNode struct {
+	    left, right *TreeNode
+	    value *Comparable
+    }
+)
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  TypeDeclarations
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    PsiElement(()('(')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('    ')
+    TypeSpec
+      NamedType(Point)
+        PsiElement(IDENTIFIER)('Point')
+      PsiWhiteSpace(' ')
+      TypeName
+        PsiElement(IDENTIFIER)('int')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('    ')
+    TypeSpec
+      NamedType(TreeNode)
+        PsiElement(IDENTIFIER)('TreeNode')
+      PsiWhiteSpace(' ')
+      TypeStruct
+        PsiElement(KEYWORD_STRUCT)('struct')
+        PsiWhiteSpace(' ')
+        PsiElement({)('{')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\t    ')
+        TypeStructField
+          Identifier
+            PsiElement(IDENTIFIER)('left')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          Identifier
+            PsiElement(IDENTIFIER)('right')
+          PsiWhiteSpace(' ')
+          TypePointer
+            PsiElement(*)('*')
+            TypeName
+              PsiElement(IDENTIFIER)('TreeNode')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\t    ')
+        TypeStructField
+          Identifier
+            PsiElement(IDENTIFIER)('value')
+          PsiWhiteSpace(' ')
+          TypePointer
+            PsiElement(*)('*')
+            TypeName
+              PsiElement(IDENTIFIER)('Comparable')
+        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('    ')
+        PsiElement(})('}')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiElement())(')')

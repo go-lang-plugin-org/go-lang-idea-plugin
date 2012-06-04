@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.parser;
 
-import org.testng.annotations.Test;
-
 import java.io.File;
 
 /**
@@ -56,6 +54,10 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     public void testConst$case2() throws Throwable { doTest(); }
     public void testConst$case3() throws Throwable { doTest(); }
     public void testConst$case7() throws Throwable { doTest(); }
+
+    public void testType$case1() throws Throwable { doTest(); }
+    public void testType$case2() throws Throwable { doTest(); }
+    public void testType$case3() throws Throwable { doTest(); }
 
     public void testFunction$case1() throws Throwable { doTest(); }
     public void testFunction$case2() throws Throwable { doTest(); }

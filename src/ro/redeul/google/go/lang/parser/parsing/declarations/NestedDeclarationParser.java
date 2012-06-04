@@ -4,37 +4,48 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
-import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.advance;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.getToken;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.lookAhead;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.skipComments;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.skipNLS;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.wrapError;
 
 /**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: 7/20/11
- * Time: 5:11 PM
+ * @author Mihai Claudiu Toader <mtoader@gmail.com>
+ *         Date: 7/20/11
  */
 public class NestedDeclarationParser implements GoElementTypes {
 
-    public static final TokenSet DECLARATION_END = TokenSet.create(oSEMI, pRPAREN, wsNLS);
+    public static final TokenSet DECLARATION_END = TokenSet.create(oSEMI,
+                                                                   pRPAREN,
+                                                                   wsNLS);
 
-    public static void parseNestedOrBasicDeclaration(PsiBuilder builder, GoParser parser, DeclarationParser declarationParser) {
+    public static void parseNestedOrBasicDeclaration(PsiBuilder builder,
+                                                     GoParser parser,
+                                                     DeclarationParser declarationParser) {
 
-        if (ParserUtils.lookAhead(builder, pLPAREN)) {
-            ParserUtils.advance(builder);
+        if (lookAhead(builder, pLPAREN)) {
+            advance(builder);
 
             do {
+                skipNLS(builder);
                 declarationParser.parse(builder, parser);
 
-                ParserUtils.skipComments(builder);
+                skipComments(builder);
 
-                if ( !builder.eof() && !DECLARATION_END.contains(builder.getTokenType() ) ) {
-                    ParserUtils.wrapError(builder, "semicolon.or.newline.or.closed.parenthesis.expected");
+                if (!builder.eof() &&
+                    !DECLARATION_END.contains(builder.getTokenType())) {
+
+                    wrapError(builder,
+                              "semicolon.or.newline.or.closed.parenthesis.expected");
                 } else {
-                    ParserUtils.getToken(builder, oSEMI);
-                    ParserUtils.skipNLS(builder);
+                    getToken(builder, oSEMI);
+                    skipNLS(builder);
                 }
-            } while (!ParserUtils.lookAhead(builder, pRPAREN) && !builder.eof());
+            } while (!lookAhead(builder, pRPAREN) && !builder.eof());
 
-            ParserUtils.advance(builder);
+            advance(builder);
 
         } else {
             declarationParser.parse(builder, parser);

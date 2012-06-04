@@ -1,3 +1,22 @@
 package main
-const a = 1
+const a = 1;
 -----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  ConstDeclarations
+    PsiElement(KEYWORD_CONST)('const')
+    PsiWhiteSpace(' ')
+    ConstSpec
+      Identifier
+        PsiElement(IDENTIFIER)('a')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      ExpressionList
+        LiteralExpr
+          PsiElement(LITERAL_INT)('1')
+      PsiElement(;)(';')
