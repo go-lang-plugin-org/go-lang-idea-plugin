@@ -23,6 +23,8 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.components.GoSdkParsingHelper;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -136,6 +138,16 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
     public GoMethodDeclaration[] getMethods() {
         return findChildrenByClass(GoMethodDeclaration.class);
+    }
+
+    @Override
+    public GoConstDeclarations[] getConsts() {
+        return findChildrenByClass(GoConstDeclarations.class);
+    }
+
+    @Override
+    public GoVarDeclarations[] getGlobalVariables() {
+        return findChildrenByClass(GoVarDeclarations.class);
     }
 
     public GoFunctionDeclaration getMainFunction() {

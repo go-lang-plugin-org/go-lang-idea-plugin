@@ -1,6 +1,8 @@
 package ro.redeul.google.go.lang.psi;
 
 import com.intellij.psi.PsiFile;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 
 /**
@@ -22,6 +24,10 @@ public interface GoFile extends PsiFile, GoPsiElement, GoPackagedElement {
     GoFunctionDeclaration[] getFunctions();
 
     GoMethodDeclaration[] getMethods();
+
+    GoConstDeclarations[] getConsts();
+
+    GoVarDeclarations[] getGlobalVariables();
 
     boolean isApplicationPart();
 
