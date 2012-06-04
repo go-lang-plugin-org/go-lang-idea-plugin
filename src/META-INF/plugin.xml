@@ -338,6 +338,9 @@
 
         <syntaxHighlighter key="Google Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighter"/>
 
+        <localInspection language="Google Go" shortName="UnusedImport" displayName="Unused import" groupName="Google Go" enabledByDefault="true"
+                         level="ERROR" implementationClass="ro.redeul.google.go.inspection.UnusedImportInspection"/>
+
         <lang.parserDefinition language="Google Go" implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
         <lang.braceMatcher language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoBraceMatcher"/>
         <lang.foldingBuilder language="Google Go" implementationClass="ro.redeul.google.go.lang.folding.GoFoldingBuilder"/>
