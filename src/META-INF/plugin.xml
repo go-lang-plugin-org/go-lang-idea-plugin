@@ -47,7 +47,9 @@
         <![CDATA[
          <h3>0.6.0 changes:</h3>
             <ul>
-                <li>[feature] xxx</li>
+                <li>[feature] Refactoring: Introduce variable</li>
+                <li>[feature] Inspection: Unused imports</li>
+                <li>[enhancement] code folding improvement.</li>
             </ul>
          <h3>0.5.1 changes:</h3>
             <ul>
