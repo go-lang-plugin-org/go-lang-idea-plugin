@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class Ctx {
+class Context {
     public final List<ProblemDescriptor> problems;
     public final InspectionManager manager;
     public final List<Map<String, VariableUsage>> variables = new ArrayList<Map<String, VariableUsage>>();
 
-    Ctx(List<ProblemDescriptor> problems, InspectionManager manager, Map<String, VariableUsage> global) {
+    Context(List<ProblemDescriptor> problems, InspectionManager manager, Map<String, VariableUsage> global) {
         this.problems = problems;
         this.manager = manager;
         this.variables.add(global);

@@ -26,7 +26,7 @@ import java.util.Map;
 public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     private List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
     private InspectionManager manager;
-    private Ctx ctx;
+    private Context ctx;
 
     public GoVariableUsageStatVisitor(InspectionManager manager) {
         this.manager = manager;
@@ -37,7 +37,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     }
 
     private void beforeVisitFile(GoFile file) {
-        ctx = new Ctx(problems, manager, getGlobalVariables(file));
+        ctx = new Context(problems, manager, getGlobalVariables(file));
     }
 
     private void afterVisitFile(GoFile file) {
