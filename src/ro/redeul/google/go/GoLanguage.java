@@ -2,14 +2,20 @@ package ro.redeul.google.go;
 
 import com.intellij.lang.Language;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Jul 24, 2010
- * Time: 2:36:51 AM
- */
 public class GoLanguage extends Language {
-    public GoLanguage() {
-        super("Google Go");
+    public static final Language INSTANCE = new GoLanguage();
+
+    private GoLanguage() {
+        super("Google Go", "text/go", "text/x-go", "application/x-go");
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Google Go Lang";
+    }
+
+    @Override
+    public boolean isCaseSensitive() {
+        return true;
     }
 }

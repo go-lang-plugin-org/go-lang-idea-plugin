@@ -1,6 +1,7 @@
 package ro.redeul.google.go;
 
-import com.intellij.lang.Language;
+import javax.swing.*;
+
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.fileTypes.LanguageFileType;
@@ -12,24 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.highlight.GoEditorHighlighter;
 
-import javax.swing.*;
-
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Jul 24, 2010
- * Time: 2:37:45 AM
- */
 public class GoFileType extends LanguageFileType {
 
-    public static final GoFileType GO_FILE_TYPE = new GoFileType();
+    public static final GoFileType INSTANCE = new GoFileType();
 
-    public static final Language GO_LANGUAGE = GO_FILE_TYPE.getLanguage();
     @NonNls
     public static final String DEFAULT_EXTENSION = "go";
 
     private GoFileType() {
-        super(new GoLanguage());
+        super(GoLanguage.INSTANCE);
     }
 
     @NotNull
@@ -41,7 +33,7 @@ public class GoFileType extends LanguageFileType {
     @NonNls
     @NotNull
     public String getDescription() {
-        return "Google go Files";
+        return "Google Go files";
     }
 
     @NotNull
@@ -63,7 +55,9 @@ public class GoFileType extends LanguageFileType {
         return CharsetToolkit.UTF8;
     }
 
-    public EditorHighlighter getEditorHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile, @NotNull EditorColorsScheme colors) {
+    public EditorHighlighter getEditorHighlighter(@Nullable Project project,
+                                                  @Nullable VirtualFile virtualFile,
+                                                  @NotNull EditorColorsScheme colors) {
         return new GoEditorHighlighter(colors, project, virtualFile);
     }
 }

@@ -1,8 +1,14 @@
 package ro.redeul.google.go.lang.completion;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.facet.FacetManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -21,14 +27,9 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-import java.util.*;
-
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
- * Date: Aug 22, 2010
- * Time: 10:22:13 AM
- * To change this template use File | Settings | File Templates.
+ * @author Mihai Claudiu Toader <mtoader@gmail.com>
+ *         Date: Aug 22, 2010
  */
 public class GoCompletionUtil {
 
@@ -112,7 +113,7 @@ public class GoCompletionUtil {
                 if ( goFile == null ) {
                     return "";
                 }
-                
+
                 String packageName = goFile.getPackage().getPackageName();
 
                 // in the same folder as the target file we just import the package
@@ -132,7 +133,7 @@ public class GoCompletionUtil {
         Processor<VirtualFile> processor = new AdapterProcessor<VirtualFile, String>(localPackages, convertor) {
             @Override
             public boolean process(VirtualFile file) {
-                if ( file.getFileType() == GoFileType.GO_FILE_TYPE ) {
+                if ( file.getFileType() == GoFileType.INSTANCE) {
                     GoFile goFile = (GoFile) psiManager.findFile(file);
 
                     if ( goFile != null && ! goFile.getPackage().isMainPackage() ) {

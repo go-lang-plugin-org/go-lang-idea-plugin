@@ -17,7 +17,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -320,7 +320,7 @@ public class GoBlockGenerator {
             List<ASTNode> childList = new ArrayList<ASTNode>();
             PsiFile goFile = psi.getContainingFile()
                                 .getViewProvider()
-                                .getPsi(GoFileType.GO_LANGUAGE);
+                                .getPsi(GoLanguage.INSTANCE);
             if (goFile instanceof GoFile) {
                 addChildNodes(goFile, childList, range);
             }

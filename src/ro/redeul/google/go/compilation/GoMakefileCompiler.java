@@ -1,5 +1,12 @@
 package ro.redeul.google.go.compilation;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
@@ -23,13 +30,6 @@ import ro.redeul.google.go.sdk.GoSdkTool;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.ProcessUtil;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Go Makefile compiler implementation.
  * <p/>
@@ -39,7 +39,8 @@ import java.util.regex.Pattern;
  */
 public class GoMakefileCompiler implements TranslatingCompiler {
 
-    private static final Logger LOG = Logger.getInstance("#ro.redeul.google.go.compilation.GoMakefileCompiler");
+    private static final Logger LOG =
+        Logger.getInstance("#ro.redeul.google.go.compilation.GoMakefileCompiler");
 
     Project project;
 
@@ -75,7 +76,7 @@ public class GoMakefileCompiler implements TranslatingCompiler {
     }
 
     public boolean isCompilableFile(VirtualFile file, CompileContext context) {
-        return file.getFileType() == GoFileType.GO_FILE_TYPE;
+        return file.getFileType() == GoFileType.INSTANCE;
     }
 
     public void compile(CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {

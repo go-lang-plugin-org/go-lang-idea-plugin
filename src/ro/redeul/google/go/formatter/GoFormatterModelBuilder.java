@@ -13,7 +13,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParserDefinition;
 
@@ -31,7 +31,7 @@ public class GoFormatterModelBuilder implements FormattingModelBuilder {
 
         PsiFile containingFile = element.getContainingFile()
                                         .getViewProvider()
-                                        .getPsi(GoFileType.GO_LANGUAGE);
+                                        .getPsi(GoLanguage.INSTANCE);
         assert containingFile != null : element.getContainingFile();
 
         ASTNode astNode = containingFile.getNode();

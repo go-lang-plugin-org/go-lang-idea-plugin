@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl;
 
+import java.util.Collection;
+
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
@@ -20,38 +22,36 @@ import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.components.GoSdkParsingHelper;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
-import ro.redeul.google.go.lang.psi.toplevel.*;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.util.GoUtil;
+import static ro.redeul.google.go.lang.psi.processors.GoResolveStates.IsOriginalFile;
 
-import java.util.Collection;
-
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Jul 24, 2010
- * Time: 7:56:42 PM
- */
 public class GoFileImpl extends PsiFileBase implements GoFile {
 
     private static final Logger LOG = Logger.getInstance(GoFileImpl.class);
 
     public GoFileImpl(FileViewProvider viewProvider) {
-        super(viewProvider, GoFileType.GO_LANGUAGE);
+        super(viewProvider, GoLanguage.INSTANCE);
     }
 
     @NotNull
     public FileType getFileType() {
-        return GoFileType.GO_FILE_TYPE;
+        return GoFileType.INSTANCE;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     @Nullable
     public String getPackageImportPath() {
 
-        if ( isApplicationPart() ) {
+        if (isApplicationPart()) {
             return null;
         }
 
@@ -73,40 +73,48 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         // look to see if the file is part of the sdk and extract the import path from there.
         String importPath =
             GoSdkParsingHelper.getInstance()
-                              .getPackageImportPath(getProject(), this, virtualFile);
+                              .getPackageImportPath(getProject(), this,
+                                                    virtualFile);
 
         // the current file was part of the sdk
-        if ( importPath != null ) {
+        if (importPath != null) {
             return importPath;
         }
 
-        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(getProject()).getFileIndex();
+        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(
+            getProject()).getFileIndex();
 
-        if ( ! projectFileIndex.isInSource(virtualFile) || projectFileIndex.isLibraryClassFile(virtualFile) ) {
+        if (!projectFileIndex.isInSource(
+            virtualFile) || projectFileIndex.isLibraryClassFile(virtualFile)) {
             return null;
         }
 
-        VirtualFile sourceRoot = projectFileIndex.getSourceRootForFile(virtualFile);
-        if ( sourceRoot == null ) {
+        VirtualFile sourceRoot = projectFileIndex.getSourceRootForFile(
+            virtualFile);
+        if (sourceRoot == null) {
             return null;
         }
 
-        String path = VfsUtil.getRelativePath(virtualFile.getParent(), sourceRoot, '/');
+        String path = VfsUtil.getRelativePath(virtualFile.getParent(),
+                                              sourceRoot, '/');
 
-        if ( path == null || path.equals("") ) {
+        if (path == null || path.equals("")) {
             path = getPackageName();
         }
 
-        if ( path != null && ! path.endsWith(getPackageName()) ) {
+        if (path != null && !path.endsWith(getPackageName())) {
             path = path + "/" + getPackageName();
         }
 
-        String makefileTarget = GoUtil.getTargetFromMakefile(virtualFile.getParent().findChild("Makefile"));
-        if ( makefileTarget != null ) {
+        String makefileTarget = GoUtil.getTargetFromMakefile(
+            virtualFile.getParent().findChild("Makefile"));
+        if (makefileTarget != null) {
             path = makefileTarget;
         }
 
-        LOG.debug(String.format("%s -> %s", VfsUtil.getRelativePath(virtualFile, sourceRoot, '/'), path));
+        LOG.debug(String.format("%s -> %s",
+                                VfsUtil.getRelativePath(virtualFile, sourceRoot,
+                                                        '/'), path));
 
         return path;
     }
@@ -124,16 +132,20 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     }
 
     public GoFunctionDeclaration[] getFunctions() {
-        return ContainerUtil.mapNotNull(findChildrenByClass(GoFunctionDeclaration.class), new Function<GoFunctionDeclaration, GoFunctionDeclaration>() {
-            @Override
-            public GoFunctionDeclaration fun(GoFunctionDeclaration functionDeclaration) {
-                if ( functionDeclaration instanceof GoMethodDeclaration ) {
-                    return null;
-                }
+        return
+            ContainerUtil.mapNotNull(
+                findChildrenByClass(GoFunctionDeclaration.class),
+                new Function<GoFunctionDeclaration, GoFunctionDeclaration>() {
+                    @Override
+                    public GoFunctionDeclaration fun(
+                        GoFunctionDeclaration functionDeclaration) {
+                        if (functionDeclaration instanceof GoMethodDeclaration) {
+                            return null;
+                        }
 
-                return functionDeclaration;
-            }
-        }, new GoFunctionDeclaration[]{});
+                        return functionDeclaration;
+                    }
+                }, new GoFunctionDeclaration[]{});
     }
 
     public GoMethodDeclaration[] getMethods() {
@@ -170,7 +182,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
         // if the GoFile Psi tree was built from a memory data check to see
         // if it was built from an indexed copy
-        if ( virtualFile == null ) {
+        if (virtualFile == null) {
             virtualFile = getUserData(IndexingDataKeys.VIRTUAL_FILE);
         }
 
@@ -210,31 +222,33 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
-                                       @NotNull PsiElement place)
-    {
-        if ( state.get(GoResolveStates.ResolvingVariables) ) {
+                                       @NotNull PsiElement place) {
+        if (state.get(GoResolveStates.ResolvingVariables)) {
             return true;
         }
 
         String myPackageName = getPackage().getPackageName();
 
-        ResolveState newState = state.put(GoResolveStates.PackageName, myPackageName);
+        ResolveState newState = state.put(GoResolveStates.PackageName,
+                                          myPackageName);
 
         // process current file
-        PsiElement child = lastParent != null ? lastParent.getPrevSibling() : this.getLastChild();
-        while ( child != null ) {
+        PsiElement child = lastParent != null ? lastParent.getPrevSibling() : this
+            .getLastChild();
+        while (child != null) {
 
-            if ( GoPsiUtils.isNodeOfType(child, GoTokenSets.GO_FILE_ENTRY_POINT_TYPES) ) {
+            if (GoPsiUtils.isNodeOfType(child,
+                                        GoTokenSets.GO_FILE_ENTRY_POINT_TYPES)) {
 
                 boolean shouldProcessDeclarations = true;
 
-                if ( child instanceof GoImportDeclarations) {
-                    shouldProcessDeclarations = state.get(GoResolveStates.IsOriginalFile);
-                    newState = newState.put(GoResolveStates.IsOriginalFile, false);
+                if (child instanceof GoImportDeclarations) {
+                    shouldProcessDeclarations = state.get(IsOriginalFile);
+                    newState = newState.put(IsOriginalFile, false);
                 }
 
-                if ( shouldProcessDeclarations ) {
-                    if ( ! child.processDeclarations(processor, newState, null, place)) {
+                if (shouldProcessDeclarations) {
+                    if (!child.processDeclarations(processor, newState, null, place)) {
                         return false;
                     }
                 }
@@ -243,22 +257,27 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
             child = child.getPrevSibling();
         }
 
-        if ( state.get(GoResolveStates.IsOriginalFile) ) {
-            GoNamesCache namesCache = ContainerUtil.findInstance(getProject().getExtensions(PsiShortNamesCache.EP_NAME), GoNamesCache.class);
+        if (state.get(IsOriginalFile)) {
+            GoNamesCache namesCache = ContainerUtil.findInstance(
+                getProject().getExtensions(PsiShortNamesCache.EP_NAME),
+                GoNamesCache.class);
 
             if (namesCache != null) {
-                Collection<GoFile> files = namesCache.getFilesByPackageName(myPackageName);
+                Collection<GoFile> files = namesCache.getFilesByPackageName(
+                    myPackageName);
 
                 for (GoFile file : files) {
 
                     PsiDirectory directory = file.getContainingDirectory();
 
-                    if ( directory != null
-                        && directory.isEquivalentTo(getOriginalFile().getContainingDirectory())
-                        && ! file.isEquivalentTo(getOriginalFile()))
-                    {
+                    if (directory != null
+                        && directory.isEquivalentTo(
+                        getOriginalFile().getContainingDirectory())
+                        && !file.isEquivalentTo(getOriginalFile())) {
                         if (!file.processDeclarations(processor,
-                                                      newState.put(GoResolveStates.IsOriginalFile, false),
+                                                      newState.put(
+                                                          IsOriginalFile,
+                                                          false),
                                                       null, place)) {
                             return false;
                         }

@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.psi.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.OrderRootType;
@@ -14,16 +17,6 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Created by IntelliJ IDEA.
- * User: mtoader
- * Date: Sep 4, 2010
- * Time: 10:14:07 PM
- * To change this template use File | Settings | File Templates.
- */
 public class GoPsiUtils {
 
     public static String cleanupImportPath(String path) {
@@ -63,7 +56,8 @@ public class GoPsiUtils {
         List<GoFile> files = new ArrayList<GoFile>();
 
         for (VirtualFile child : children) {
-            if ( child.getFileType() != GoFileType.GO_FILE_TYPE || child.getNameWithoutExtension().endsWith("_test") ) {
+            if ( child.getFileType() != GoFileType.INSTANCE ||
+                child.getNameWithoutExtension().endsWith("_test") ) {
                 continue;
             }
 

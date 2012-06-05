@@ -12,18 +12,11 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.compilation.GoCompiler;
 import ro.redeul.google.go.compilation.GoMakefileCompiler;
-import ro.redeul.google.go.components.GoCompilerLoader;
 
 import javax.swing.*;
 import java.util.Arrays;
 import java.util.HashSet;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: 5/29/11
- * Time: 11:19 AM
- */
 public class GoConfigurable implements SearchableConfigurable {
 
     GoConfigurableForm goConfigurableForm;
@@ -57,6 +50,7 @@ public class GoConfigurable implements SearchableConfigurable {
     }
 
     @Override
+    @NotNull
     public String getHelpTopic() {
         return "reference.settingsdialog.project.go";
     }
@@ -99,14 +93,14 @@ public class GoConfigurable implements SearchableConfigurable {
         case Internal:
             compilerManager.addTranslatingCompiler(
                     new GoCompiler(project),
-                    new HashSet<FileType>(Arrays.asList(GoFileType.GO_FILE_TYPE)),
+                    new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
                     new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
 
             break;
         case Makefile:
             compilerManager.addTranslatingCompiler(
                     new GoMakefileCompiler(project),
-                    new HashSet<FileType>(Arrays.asList(GoFileType.GO_FILE_TYPE)),
+                    new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
                     new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
             break;
         }
