@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -26,6 +27,11 @@ public class GoConstDeclarationsImpl extends GoPsiElementBase implements GoConst
     @Override
     public GoConstDeclaration[] getDeclarations() {
         return findChildrenByClass(GoConstDeclaration.class);
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitConstDeclarations(this);
     }
 
     @Override

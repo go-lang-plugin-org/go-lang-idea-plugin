@@ -2,6 +2,8 @@ package ro.redeul.google.go.lang.psi.visitors;
 
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.*;
@@ -92,5 +94,13 @@ public class GoElementVisitor {
 
     public void visitLiteralExpr(GoLiteralExpression literalExpr) {
         visitElement(literalExpr);
+    }
+
+    public void visitConstDeclarations(GoConstDeclarations constDeclarations) {
+        visitElement(constDeclarations);
+    }
+
+    public void visitConstDeclaration(GoConstDeclaration constDeclaration) {
+        visitElement(constDeclaration);
     }
 }
