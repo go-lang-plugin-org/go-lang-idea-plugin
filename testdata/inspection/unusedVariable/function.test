@@ -1,5 +1,7 @@
 package main
 
+import "io"
+
 func reverse(a, b int) (c, d int) {
     c, d = b, a
 	return
@@ -15,6 +17,14 @@ func gen2() (g2v int) {
 }
 
 func noop() {
+}
+
+func Fprintln(w io.Writer, a ...interface{}) (n int, err error) {
+	p := newPrinter()
+	p.doPrint(a, true, true)
+	n64, err := w.Write(p.buf)
+	p.free()
+	return int(n64), err
 }
 
 func main() {

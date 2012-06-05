@@ -16,7 +16,8 @@ func (v Vertex) Abs2() float64 {
 }
 
 func main() {
-    v := &Vertex{3, 4}
-    println(v.Abs())
-    println(v.Abs2())
+    v1 := &Vertex{3, 4}
+    v2 := &Vertex{X:3, Y:4}
+    println(v1.Abs())
+    println(v2.Abs2())
 }

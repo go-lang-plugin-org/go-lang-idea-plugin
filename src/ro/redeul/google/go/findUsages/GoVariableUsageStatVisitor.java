@@ -17,6 +17,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -26,13 +27,11 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.intellij.psi.impl.source.tree.TreeUtil.findSibling;
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
@@ -145,19 +144,44 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     }
 
     public void beforeVisitIdentifier(GoIdentifier id) {
-        if (isFunctionOrMethodCall(id) || isTypeField(id) || isType(id)) {
+        if (isFunctionOrMethodCall(id) || isTypeField(id) || isType(id) ||
+                // if there is any dots in the identifier, it could be from other packages.
+                // usage collection of other package variables is not implemented yet.
+                id.getText().contains(".")) {
             return;
         }
         ctx.addUsage(id);
     }
 
     private boolean isType(GoIdentifier id) {
-        IElementType et = id.getParent().getNode().getElementType();
-        return et == GoElementTypes.BASE_TYPE_NAME || et == GoElementTypes.REFERENCE_BASE_TYPE_NAME;
+        PsiElement parent = id.getParent();
+        IElementType et = parent.getNode().getElementType();
+        return et == GoElementTypes.BASE_TYPE_NAME || et == GoElementTypes.REFERENCE_BASE_TYPE_NAME || parent instanceof GoTypeName;
     }
 
     private boolean isTypeField(GoIdentifier id) {
-        return id.getParent() instanceof GoTypeStructField;
+        return id.getParent() instanceof GoTypeStructField || isTypeFieldInitializer(id);
+    }
+
+    /**
+     * Check whether id is a field name in composite literals
+     * @param id
+     * @return
+     */
+    private boolean isTypeFieldInitializer(GoIdentifier id) {
+        if (!(id.getParent() instanceof GoLiteralExpression)) {
+            return false;
+        }
+
+        PsiElement parent = id.getParent().getParent();
+        if (parent == null || parent.getNode() == null ||
+                parent.getNode().getElementType() != GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY) {
+            return false;
+        }
+
+        PsiElement sibling = parent.getNextSibling();
+        return sibling != null && ":".equals(sibling.getText());
+
     }
 
     private boolean isFunctionOrMethodCall(GoIdentifier id) {
