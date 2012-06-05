@@ -1,5 +1,5 @@
 package main
-func f() { for a + b { } }
+func f() { for key = range m { } }
 -----
 Go file
   PackageDeclaration(main)
@@ -20,17 +20,18 @@ Go file
       ForStmt
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
-        ForConditionClause
-          AdditiveExpressionImpl
-            LiteralExpr
-              IdentifierImpl
-                PsiElement(IDENTIFIER)('a')
-            PsiWhiteSpace(' ')
-            PsiElement(+)('+')
-            PsiWhiteSpace(' ')
-            LiteralExpr
-              IdentifierImpl
-                PsiElement(IDENTIFIER)('b')
+        ForRangeClause
+          LiteralExpr
+            IdentifierImpl
+              PsiElement(IDENTIFIER)('key')
+          PsiWhiteSpace(' ')
+          PsiElement(=)('=')
+          PsiWhiteSpace(' ')
+          PsiElement(KEYWORD_RANGE)('range')
+          PsiWhiteSpace(' ')
+          LiteralExpr
+            IdentifierImpl
+              PsiElement(IDENTIFIER)('m')
         PsiWhiteSpace(' ')
         BlockStmtImpl
           PsiElement({)('{')

@@ -16,7 +16,7 @@ Go file
       PsiWhiteSpace(' ')
       TypeArrayImpl
         PsiElement([)('[')
-        MultiplicativeExpression
+        MultiplicativeExpressionImpl
           LiteralExpr
             PsiElement(LITERAL_INT)('2')
           PsiElement(*)('*')

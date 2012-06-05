@@ -1,5 +1,7 @@
 package ro.redeul.google.go.annotator;
 
+import java.util.Collection;
+
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -7,19 +9,21 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
-
-import java.util.Collection;
-
-import static ro.redeul.google.go.inspection.ConstDeclarationInspection.*;
+import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isExtraExpressionInConst;
+import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isFirstConstExpressionMissed;
+import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isMissingExpressionInConst;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -45,6 +49,13 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
         }
     }
 
+    @Override
+    public void visitIdentifier(GoIdentifier id) {
+        if ( !GoPsiUtils.isIotaInConstantDeclaration(id) && id.resolve() == null ) {
+            annotationHolder.createErrorAnnotation(
+                id, GoBundle.message("warning.unresolved.identifier"));
+        }
+    }
 
     @Override
     public void visitTypeName(GoTypeName typeName) {

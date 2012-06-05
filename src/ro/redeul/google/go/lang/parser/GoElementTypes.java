@@ -229,4 +229,23 @@ public interface GoElementTypes extends GoTokenTypes {
         BUILTIN_CALL_EXPRESSION, FUNCTION_LITERAL_EXPRESSION,
         COMPOSITE_LITERAL_ELEMENT
     );
+
+    public final TokenSet BINARY_OPS = TokenSet.create(
+        oPLUS, oPLUS_ASSIGN, oMINUS, oMINUS_ASSIGN,
+        oMUL, oMUL_ASSIGN, oQUOTIENT, oQUOTIENT_ASSIGN,
+        oREMAINDER, oREMAINDER_ASSIGN,
+
+        oBIT_AND, oBIT_AND_ASSIGN, oBIT_OR, oBIT_OR_ASSIGN,
+        oBIT_XOR, oBIT_XOR_ASSIGN,
+        oSHIFT_LEFT, oSHIFT_LEFT_ASSIGN, oSHIFT_RIGHT, oSHIFT_RIGHT_ASSIGN,
+        oBIT_CLEAR, oBIT_CLEAR_ASSIGN,
+
+        oCOND_AND, oCOND_OR
+    );
+
+    public final TokenSet RELATIONAL_OPS = TokenSet.create(
+        oEQ, oNOT_EQ, oLESS, oLESS_OR_EQUAL, oGREATER, oGREATER_OR_EQUAL
+    );
+
+
 }

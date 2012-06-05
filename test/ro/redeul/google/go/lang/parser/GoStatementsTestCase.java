@@ -1,15 +1,7 @@
 package ro.redeul.google.go.lang.parser;
 
-import org.testng.annotations.Test;
-
 import java.io.File;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Aug 5, 2010
- * Time: 9:56:52 PM
- */
 public class GoStatementsTestCase extends GoParsingTestCase {
 
     @Override
@@ -69,7 +61,7 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testIf$else1() throws Throwable { doTest(); }
     public void testIf$else2() throws Throwable { doTest(); }
     public void testIf$else_if1() throws Throwable { doTest(); }
-    
+
     public void testLabeled$case1() throws Throwable { doTest(); }
     public void testLabeled$case2() throws Throwable { doTest(); }
     public void testLabeled$case3() throws Throwable { doTest(); }
@@ -81,8 +73,8 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testSelect$case4() throws Throwable { doTest(); }
 //    @Test public void testSelectCase2() throws Throwable { doTest(); }
 //    @Test public void testSelectCase3() throws Throwable { doTest(); }
-    
-    
+
+
     public void testFor$case1() throws Throwable { doTest(); }
     public void testFor$case2() throws Throwable { doTest(); }
     public void testFor$case3() throws Throwable { doTest(); }
@@ -96,5 +88,7 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testFor$case11() throws Throwable { doTest(); }
     public void testFor$case12() throws Throwable { doTest(); }
     public void testFor$case13() throws Throwable { doTest(); }
+    public void testFor$case14() throws Throwable { doTest(); }
+    public void testFor$case15() throws Throwable { doTest(); }
 
 }

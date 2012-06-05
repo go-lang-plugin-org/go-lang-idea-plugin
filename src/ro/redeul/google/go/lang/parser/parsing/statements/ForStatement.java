@@ -1,22 +1,14 @@
 package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
-import com.intellij.psi.tree.IElementType;
-import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Jul 25, 2010
- * Time: 8:01:22 PM
- */
 public class ForStatement implements GoElementTypes {
 
     public static boolean parse(PsiBuilder builder, GoParser parser) {
-    
+
         PsiBuilder.Marker marker = builder.mark();
 
         if (!ParserUtils.getToken(builder, kFOR)) {
@@ -48,7 +40,7 @@ public class ForStatement implements GoElementTypes {
 
         clause.rollbackTo();
         clause = builder.mark();
-        
+
         if ( tryParseRangeClause(builder, parser) ) {
             clause.drop();
             return;
@@ -71,7 +63,7 @@ public class ForStatement implements GoElementTypes {
 
         parser.parseExpressionList(builder, true);
 
-        if ( builder.getTokenType() == oVAR_ASSIGN ) {
+        if ( builder.getTokenType() == oVAR_ASSIGN || builder.getTokenType() == oASSIGN ) {
 
             ParserUtils.advance(builder);
             ParserUtils.skipNLS(builder);

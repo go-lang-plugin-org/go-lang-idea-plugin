@@ -183,6 +183,10 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
         doTest();
     }
 
+    public void testBinary$simple$substraction() throws Throwable {
+        doTest();
+    }
+
     public void testBinary$simple$multiplicative() throws Throwable {
         doTest();
     }

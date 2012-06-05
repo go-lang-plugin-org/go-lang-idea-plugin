@@ -16,7 +16,7 @@ public interface GoTokenTypes {
 
     IElementType litCHAR = new GoElementTypeImpl("LITERAL_CHAR");
     IElementType litSTRING = new GoElementTypeImpl("LITERAL_STRING");
-    
+
     IElementType litOCT = new GoElementTypeImpl("LITERAL_OCT");
     IElementType litINT = new GoElementTypeImpl("LITERAL_INT");
     IElementType litHEX = new GoElementTypeImpl("LITERAL_HEX");
@@ -90,9 +90,9 @@ public interface GoTokenTypes {
     IElementType oMINUS_ASSIGN = new GoElementTypeImpl("-=");
     IElementType oMINUS = new GoElementTypeImpl("-");
 
-    IElementType oCOND_OR = new GoElementTypeImpl("||");
     IElementType oBIT_OR_ASSIGN = new GoElementTypeImpl("|=");
     IElementType oBIT_OR = new GoElementTypeImpl("|");
+    IElementType oCOND_OR = new GoElementTypeImpl("||");
 
     IElementType oBIT_CLEAR_ASSIGN = new GoElementTypeImpl("&^=");
     IElementType oBIT_CLEAR = new GoElementTypeImpl("&^");

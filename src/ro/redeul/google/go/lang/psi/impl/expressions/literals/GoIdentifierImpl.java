@@ -51,13 +51,11 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
 
     @Override
     public PsiElement resolve() {
-
         IdentifierVariantsResolver identifierVariantsResolver = new IdentifierVariantsResolver(this);
 
         PsiScopesUtil.treeWalkUp(identifierVariantsResolver, this, this.getContainingFile(), GoResolveStates.initial());
 
         return identifierVariantsResolver.reference();
-
     }
 
     @NotNull

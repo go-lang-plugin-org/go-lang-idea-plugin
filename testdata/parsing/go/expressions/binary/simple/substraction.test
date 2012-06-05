@@ -1,5 +1,5 @@
 package main
-var e = 1 + 2 / 3
+var e = 1 - 2
 -----
 Go file
   PackageDeclaration(main)
@@ -20,13 +20,7 @@ Go file
         LiteralExpr
           PsiElement(LITERAL_INT)('1')
         PsiWhiteSpace(' ')
-        PsiElement(+)('+')
+        PsiElement(-)('-')
         PsiWhiteSpace(' ')
-        MultiplicativeExpressionImpl
-          LiteralExpr
-            PsiElement(LITERAL_INT)('2')
-          PsiWhiteSpace(' ')
-          PsiElement(/)('/')
-          PsiWhiteSpace(' ')
-          LiteralExpr
-            PsiElement(LITERAL_INT)('3')
+        LiteralExpr
+          PsiElement(LITERAL_INT)('2')

@@ -10,44 +10,44 @@ import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isFirstC
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isMissingExpressionInConst;
 
 public class ConstDeclarationInspectionTest extends LightCodeInsightFixtureTestCase {
-    private GoConstDeclarations compile(String fileText) {
+    private GoConstDeclarations parse(String fileText) {
         GoFile goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
         return goFile.getConsts()[0];
     }
 
     public void testIsFirstConstExpressionMissed() {
-        assertFalse(isFirstConstExpressionMissed(compile("const A = 5")));
-        assertFalse(isFirstConstExpressionMissed(compile("const (A = 5)")));
-        assertFalse(isFirstConstExpressionMissed(compile("const (A = 5 + 1)")));
-        assertFalse(isFirstConstExpressionMissed(compile("const (A = iota)")));
+        assertFalse(isFirstConstExpressionMissed(parse("const A = 5")));
+        assertFalse(isFirstConstExpressionMissed(parse("const (A = 5)")));
+        assertFalse(isFirstConstExpressionMissed(parse("const (A = 5 + 1)")));
+        assertFalse(isFirstConstExpressionMissed(parse("const (A = iota)")));
 
-        assertTrue(isFirstConstExpressionMissed(compile("const A")));
-        assertTrue(isFirstConstExpressionMissed(compile("const (\nA\n)")));
-        assertTrue(isFirstConstExpressionMissed(compile("const (\nA\nB\n)")));
-        assertTrue(isFirstConstExpressionMissed(compile("const (\nA\nB = 2\n)")));
-        assertTrue(isFirstConstExpressionMissed(compile("const (\nA, B\n)")));
+        assertTrue(isFirstConstExpressionMissed(parse("const A")));
+        assertTrue(isFirstConstExpressionMissed(parse("const (\nA\n)")));
+        assertTrue(isFirstConstExpressionMissed(parse("const (\nA\nB\n)")));
+        assertTrue(isFirstConstExpressionMissed(parse("const (\nA\nB = 2\n)")));
+        assertTrue(isFirstConstExpressionMissed(parse("const (\nA, B\n)")));
     }
 
     public void testIsMissingExpressionInConst() {
-        assertFalse(isMissingExpressionInConst(compile("const A").getDeclarations()[0]));
-        assertFalse(isMissingExpressionInConst(compile("const A = 5").getDeclarations()[0]));
-        assertFalse(isMissingExpressionInConst(compile("const A,B = 5,3").getDeclarations()[0]));
-        assertFalse(isMissingExpressionInConst(compile("const A,B = 3,5,3").getDeclarations()[0]));
-        assertFalse(isMissingExpressionInConst(compile("const (\nA,B = 5,3\n)").getDeclarations()[0]));
+        assertFalse(isMissingExpressionInConst(parse("const A").getDeclarations()[0]));
+        assertFalse(isMissingExpressionInConst(parse("const A = 5").getDeclarations()[0]));
+        assertFalse(isMissingExpressionInConst(parse("const A,B = 5,3").getDeclarations()[0]));
+        assertFalse(isMissingExpressionInConst(parse("const A,B = 3,5,3").getDeclarations()[0]));
+        assertFalse(isMissingExpressionInConst(parse("const (\nA,B = 5,3\n)").getDeclarations()[0]));
 
-        assertTrue(isMissingExpressionInConst(compile("const A, B = 1 + 2").getDeclarations()[0]));
-        assertTrue(isMissingExpressionInConst(compile("const (\nA,B = 5\n)").getDeclarations()[0]));
+        assertTrue(isMissingExpressionInConst(parse("const A, B = 1 + 2").getDeclarations()[0]));
+        assertTrue(isMissingExpressionInConst(parse("const (\nA,B = 5\n)").getDeclarations()[0]));
     }
 
     public void testIsExtraExpressionInConst() {
-        assertFalse(isExtraExpressionInConst(compile("const A").getDeclarations()[0]));
-        assertFalse(isExtraExpressionInConst(compile("const A = 5").getDeclarations()[0]));
-        assertFalse(isExtraExpressionInConst(compile("const A,B = 5,3").getDeclarations()[0]));
-        assertFalse(isExtraExpressionInConst(compile("const A,B,C = 5,3").getDeclarations()[0]));
-        assertFalse(isExtraExpressionInConst(compile("const (\nA,B = 5,3\n)").getDeclarations()[0]));
+        assertFalse(isExtraExpressionInConst(parse("const A").getDeclarations()[0]));
+        assertFalse(isExtraExpressionInConst(parse("const A = 5").getDeclarations()[0]));
+        assertFalse(isExtraExpressionInConst(parse("const A,B = 5,3").getDeclarations()[0]));
+        assertFalse(isExtraExpressionInConst(parse("const A,B,C = 5,3").getDeclarations()[0]));
+        assertFalse(isExtraExpressionInConst(parse("const (\nA,B = 5,3\n)").getDeclarations()[0]));
 
-        assertTrue(isExtraExpressionInConst(compile("const A = 1, 2").getDeclarations()[0]));
-        assertTrue(isExtraExpressionInConst(compile("const A,B = 5,3,4\n)").getDeclarations()[0]));
-        assertTrue(isExtraExpressionInConst(compile("const (\nA = 5,3\n)").getDeclarations()[0]));
+        assertTrue(isExtraExpressionInConst(parse("const A = 1, 2").getDeclarations()[0]));
+        assertTrue(isExtraExpressionInConst(parse("const A,B = 5,3,4\n)").getDeclarations()[0]));
+        assertTrue(isExtraExpressionInConst(parse("const (\nA = 5,3\n)").getDeclarations()[0]));
     }
 }

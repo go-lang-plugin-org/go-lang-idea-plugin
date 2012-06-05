@@ -16,7 +16,7 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      AdditiveExpression
+      AdditiveExpressionImpl
         LiteralExpr
           PsiElement(LITERAL_INT)('1')
         PsiWhiteSpace(' ')

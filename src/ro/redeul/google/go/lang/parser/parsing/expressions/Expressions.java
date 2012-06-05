@@ -5,12 +5,6 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Jul 25, 2010
- * Time: 12:28:51 AM
- */
 public class Expressions implements GoElementTypes {
 
     public static boolean parse(PsiBuilder builder, GoParser parser, boolean inControlExpressions) {
@@ -33,7 +27,7 @@ public class Expressions implements GoElementTypes {
             }
 
             ParserUtils.getToken(builder, oTRIPLE_DOT);
-            
+
             if  (builder.getTokenType() == oCOMMA ) {
                 ParserUtils.getToken(builder, oCOMMA);
                 ParserUtils.skipNLS(builder);
@@ -66,7 +60,7 @@ public class Expressions implements GoElementTypes {
      *                  Type "{"                                            -> CompositeLiteral
      *                  Type "(" Expression ")"                             -> ConversionCall
      *
-     * 
+     *
      *                  PrimaryExpr Selector |
      *                  PrimaryExpr Index |
      *                  PrimaryExpr Slice |

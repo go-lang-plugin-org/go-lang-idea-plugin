@@ -27,7 +27,7 @@ Go file
         PsiWhiteSpace(' ')
         PsiElement(:)(':')
         PsiWhiteSpace(' ')
-        AdditiveExpression
+        AdditiveExpressionImpl
           LiteralExpr
             IdentifierImpl
               PsiElement(IDENTIFIER)('j')
