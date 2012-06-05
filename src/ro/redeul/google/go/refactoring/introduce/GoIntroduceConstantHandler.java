@@ -17,6 +17,8 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isEnclosedByParenthesis;
+
 public class GoIntroduceConstantHandler extends GoIntroduceHandlerBase {
     @Override
     protected void doIntroduce(Project project, Editor editor, GoFile file, int start, int end) throws GoRefactoringException {
@@ -81,7 +83,7 @@ public class GoIntroduceConstantHandler extends GoIntroduceHandlerBase {
 
     private void appendConstToLastDeclaration(Document document, int start, String variable, String declaration, GoConstDeclarations declarations) {
         GoConstDeclaration[] consts = declarations.getDeclarations();
-        if (consts.length == 1 && !parenthesisAroundDeclaration(declarations)) {
+        if (consts.length == 1 && !isEnclosedByParenthesis(consts[0])) {
             GoConstDeclaration lastConst = consts[0];
             int offset = lastConst.getTextOffset();
             StringBuilder sb = new StringBuilder("(\n");
@@ -97,10 +99,5 @@ public class GoIntroduceConstantHandler extends GoIntroduceHandlerBase {
         String indent = findIndent(document.getText(new TextRange(lineStart, start)));
         int offset = lastConst.getTextOffset() + lastConst.getTextLength();
         document.insertString(offset, "\n" + indent + variable + " = " + declaration);
-    }
-
-    private boolean parenthesisAroundDeclaration(GoConstDeclarations decl) {
-        PsiElement lastChild = decl.getLastChild();
-        return lastChild != null && ")".equals(lastChild.getText());
     }
 }

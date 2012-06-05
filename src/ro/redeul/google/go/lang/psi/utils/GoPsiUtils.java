@@ -110,4 +110,18 @@ public class GoPsiUtils {
         PsiElement constDeclaration = findParentOfType(expressionList, GoElementTypes.CONST_DECLARATION);
         return constDeclaration != null;
     }
+
+    public static boolean isEnclosedByParenthesis(PsiElement element) {
+        if (element == null) {
+            return false;
+        }
+
+        PsiElement parent = element.getParent();
+        if (parent == null) {
+            return false;
+        }
+
+        PsiElement lastChild = parent.getLastChild();
+        return lastChild != null && ")".equals(lastChild.getText());
+    }
 }
