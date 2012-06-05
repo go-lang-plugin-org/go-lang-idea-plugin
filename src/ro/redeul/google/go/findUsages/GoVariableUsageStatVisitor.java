@@ -153,19 +153,16 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
             }
         }
     }
+
     private Map<String, VariableUsage> getFunctionParameters(GoFunctionDeclaration fd) {
         Map<String, VariableUsage> variables = ctx.addNewScopeLevel();
 
         if (fd instanceof GoMethodDeclaration) {
             // Add method receiver to parameter list
-            GoMethodDeclaration md = (GoMethodDeclaration) fd;
-            GoPsiElement methodReceiver = md.getMethodReceiver();
-            ASTNode idNode = methodReceiver.getNode().findChildByType(GoElementTypes.IDENTIFIER);
-            if (idNode != null && idNode.getPsi() instanceof GoPsiElementBase) {
-                GoPsiElementBase receiver = (GoPsiElementBase) idNode.getPsi();
+            GoPsiElementBase receiver = getMethodReceiverIdentifier((GoMethodDeclaration) fd);
+            if (receiver != null) {
                 variables.put(receiver.getName(), new VariableUsage(receiver));
             }
-
         }
 
         GoFunctionParameterList parameters = fd.getParameters();
@@ -184,6 +181,19 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
             }
         }
         return variables;
+    }
+
+    private GoPsiElementBase getMethodReceiverIdentifier(GoMethodDeclaration md) {
+        GoPsiElement methodReceiver = md.getMethodReceiver();
+        if (methodReceiver == null) {
+            return null;
+        }
+
+        ASTNode idNode = methodReceiver.getNode().findChildByType(GoElementTypes.IDENTIFIER);
+        if (idNode != null && idNode.getPsi() instanceof GoPsiElementBase) {
+            return (GoPsiElementBase) idNode.getPsi();
+        }
+        return null;
     }
 
     private Map<String, VariableUsage> getGlobalVariables(GoFile file) {
