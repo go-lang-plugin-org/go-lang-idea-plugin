@@ -7,6 +7,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 
@@ -30,7 +31,14 @@ public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDecla
     @Override
     @NotNull
     public GoExpr[] getExpressions() {
-        return findChildrenByClass(GoExpr.class);
+        GoExpressionList list = getExpressionsList();
+
+        return list != null ? list.getExpressions() : new GoExpr[0];
+    }
+
+    @Override
+    public GoExpressionList getExpressionsList() {
+        return findChildByClass(GoExpressionList.class);
     }
 
     @Override

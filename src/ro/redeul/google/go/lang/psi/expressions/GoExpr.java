@@ -1,16 +1,10 @@
 package ro.redeul.google.go.lang.psi.expressions;
 
-import com.intellij.codeInsight.navigation.actions.GotoTypeDeclarationAction;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.types.GoType;
 
 /**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: 5/19/11
- * Time: 10:55 PM
+ * GoPsi interface for all the Psi nodes that are expressions.
  */
 public interface GoExpr extends GoPsiElement {
 
