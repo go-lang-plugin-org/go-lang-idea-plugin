@@ -11,6 +11,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 public class UnusedImportInspectionTest extends FileDataBasedTest {
     public void testSimple() throws Exception{ doTest(); }
     public void testOnlyOneImport() throws Exception{ doTest(); }
+    public void testBlankImport() throws Exception{ doTest(); }
 
     @Override
     protected void invoke(Project project, Editor myEditor, GoFile file) {
