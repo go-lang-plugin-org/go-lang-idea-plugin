@@ -14,14 +14,14 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 
 public class RemoveVariableFixTest extends FileDataBasedTest {
     public void testSimple() throws Exception{ doTest(); }
-    public void testShortVarAndDummy1() throws Exception{ doTest(); }
-    public void testShortVarAndDummy2() throws Exception{ doTest(); }
+    public void testShortVarAndBlank1() throws Exception{ doTest(); }
+    public void testShortVarAndBlank2() throws Exception{ doTest(); }
     public void testShortOnlyOneVar1() throws Exception{ doTest(); }
     public void testShortOnlyOneVar2() throws Exception{ doTest(); }
 
-    public void testVarAndDummy1() throws Exception{ doTest(); }
-    public void testVarAndDummy2() throws Exception{ doTest(); }
-    public void testVarAndDummy3() throws Exception{ doTest(); }
+    public void testVarAndBlank1() throws Exception{ doTest(); }
+    public void testVarAndBlank2() throws Exception{ doTest(); }
+    public void testVarAndBlank3() throws Exception{ doTest(); }
     public void testOnlyOneVar1() throws Exception{ doTest(); }
     public void testOnlyOneVar2() throws Exception{ doTest(); }
     public void testOnlyOneVarWithType1() throws Exception{ doTest(); }
