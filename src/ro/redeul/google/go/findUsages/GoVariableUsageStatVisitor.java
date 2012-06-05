@@ -144,10 +144,15 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     }
 
     public void beforeVisitIdentifier(GoIdentifier id) {
-        if (isFunctionOrMethodCall(id) || isTypeField(id)) {
+        if (isFunctionOrMethodCall(id) || isTypeField(id) || isType(id)) {
             return;
         }
         ctx.addUsage(id);
+    }
+
+    private boolean isType(GoIdentifier id) {
+        IElementType et = id.getParent().getNode().getElementType();
+        return et == GoElementTypes.BASE_TYPE_NAME || et == GoElementTypes.REFERENCE_BASE_TYPE_NAME;
     }
 
     private boolean isTypeField(GoIdentifier id) {
