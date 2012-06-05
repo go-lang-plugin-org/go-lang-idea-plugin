@@ -40,6 +40,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     private List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
     private InspectionManager manager;
     private Context ctx;
+    private int ignore = 0;
 
     public GoVariableUsageStatVisitor(InspectionManager manager) {
         this.manager = manager;
@@ -63,6 +64,15 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
 
     @Override
     protected void beforeVisitElement(PsiElement element) {
+        if (element instanceof GoTypeDeclaration) {
+            // Ignore type definition.
+            ignore++;
+        }
+
+        if (ignore > 0) {
+            return;
+        }
+
         if (element instanceof GoFile) {
             beforeVisitFile((GoFile) element);
         } else if (element instanceof GoVarDeclarations) {
@@ -98,6 +108,14 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
 
     @Override
     protected void afterVisitElement(PsiElement element) {
+        if (element instanceof GoTypeDeclaration) {
+            ignore--;
+        }
+
+        if (ignore > 0) {
+            return;
+        }
+
         if (element instanceof GoFile) {
             afterVisitFile((GoFile) element);
         } else if (element instanceof GoFunctionDeclaration) {
