@@ -12,29 +12,31 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.GoLanguage;
+import ro.redeul.google.go.formatter.blocks.GoBlock;
+import ro.redeul.google.go.formatter.blocks.GoConstBlock;
+import ro.redeul.google.go.formatter.blocks.GoFileBlock;
+import ro.redeul.google.go.formatter.blocks.GoLeafBlock;
+import ro.redeul.google.go.formatter.blocks.GoPackageBlock;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtoader
- * Date: Sep 27, 2010
- * Time: 7:05:55 PM
- * To change this template use File | Settings | File Templates.
+ * @author Mihai Claudiu Toader <mtoader@gmail.com>
+ *         Date: Sep 27, 2010
  */
 public class GoBlockGenerator {
 
-    public static final TokenSet GO_ELEMENT_TYPES =
-        TokenSet.not(
-            TokenSet.create(
-                GoTokenTypes.wsNLS, GoTokenTypes.wsWS, TokenType.WHITE_SPACE));
+    public static final Wrap NO_WRAP = Wrap.createWrap(WrapType.NONE, false);
 
     public static List<Block> generateSubBlocks(ASTNode node,
                                                 Alignment alignment, Wrap wrap,
@@ -116,7 +118,8 @@ public class GoBlockGenerator {
 
         if (nodeType == GoElementTypes.BLOCK_STATEMENT)
             return indentChildrens(block, node,
-                                   TokenSet.orSet(GoElementTypes.COMMENTS, GoElementTypes.STATEMENTS),
+                                   TokenSet.orSet(GoElementTypes.COMMENTS,
+                                                  GoElementTypes.STATEMENTS),
                                    settings);
 //            return forBlockStatement(node, block, alignment, wrap, settings);
 
@@ -136,19 +139,22 @@ public class GoBlockGenerator {
                                                       GoElementTypes.FUNCTION_DECLARATION)),
                                    settings);
 
-        final List<Block> subBlocks = new ArrayList<Block>();
-        ASTNode[] children = getGoChildren(node);
-        for (ASTNode childNode : children) {
-            subBlocks.add(
-                new GoBlock(childNode,
-                            block.getAlignment(),
-                            Indent.getNoneIndent(),
-                            block.getWrap(),
-                            settings));
-        }
+//        final List<Block> subBlocks = new ArrayList<Block>();
+//        ASTNode[] children = getGoChildren(node);
+//        for (ASTNode childNode : children) {
+//            subBlocks.add(
+//                new GoBlock(childNode,
+//                            block.getAlignment(),
+//                            Indent.getNoneIndent(),
+//                            block.getWrap(),
+//                            settings));
+//        }
 
-        return subBlocks;
+//        return subBlocks;
+        return null;
     }
+
+
 
     private static List<Block> indentChildrens(Block parent, ASTNode node,
                                                TokenSet childTypes,
@@ -157,22 +163,23 @@ public class GoBlockGenerator {
         ASTNode[] children = getGoChildren(node);
 
         Alignment childAlignment =
-            Alignment.createChildAlignment(parent.getAlignment());
+            Alignment.createAlignment();
 
         Block childBlock = null;
         for (ASTNode child : children) {
-            if (childTypes.contains(child.getElementType())) {
-                childBlock = new GoBlock(child, Alignment.createAlignment(),
-                                         Indent.getNormalIndent(),
-                                         Wrap.createWrap(WrapType.NONE, false),
-                                         settings);
-            } else {
-                childBlock = new GoBlock(child,
-                                         Alignment.createAlignment(),
-                                         Indent.getNoneIndent(),
-                                         Wrap.createWrap(WrapType.NONE, false),
-                                         settings);
-            }
+//            if (childTypes.contains(child.getElementType())) {
+//                childBlock = new GoBlock(child,
+//                                         childAlignment,
+//                                         Indent.getNormalIndent(),
+//                                         Wrap.createWrap(WrapType.NONE, false),
+//                                         settings);
+//            } else {
+//                childBlock = new GoBlock(child,
+//                                         Alignment.createAlignment(),
+//                                         Indent.getNoneIndent(),
+//                                         Wrap.createWrap(WrapType.NONE, false),
+//                                         settings);
+//            }
 
             childBlocks.add(childBlock);
         }
@@ -198,9 +205,9 @@ public class GoBlockGenerator {
                 myWrap = Wrap.createWrap(WrapType.NONE, false);
             }
 
-            subBlocks.add(
-                new GoBlock(childNode, myAlignment, myIndent, myWrap,
-                            settings));
+//            subBlocks.add(
+//                new GoBlock(childNode, myAlignment, myIndent, myWrap,
+//                            settings));
         }
 
         return subBlocks;
@@ -224,9 +231,9 @@ public class GoBlockGenerator {
                 myWrap = Wrap.createWrap(WrapType.NONE, false);
             }
 
-            subBlocks.add(
-                new GoBlock(childNode, myAlignment, myIndent, myWrap,
-                            settings));
+//            subBlocks.add(
+//                new GoBlock(childNode, myAlignment, myIndent, myWrap,
+//                            settings));
         }
 
         return subBlocks;
@@ -251,9 +258,9 @@ public class GoBlockGenerator {
                 myWrap = Wrap.createWrap(WrapType.NONE, false);
             }
 
-            subBlocks.add(
-                new GoBlock(childNode, myAlignment, myIndent, myWrap,
-                            settings));
+//            subBlocks.add(
+//                new GoBlock(childNode, myAlignment, myIndent, myWrap,
+//                            settings));
         }
 
         return subBlocks;
@@ -281,8 +288,8 @@ public class GoBlockGenerator {
                 chWrap = none;
             }
 
-            subBlocks.add(
-                new GoBlock(childNode, chAlign, chIdent, chWrap, settings));
+//            subBlocks.add(
+//                new GoBlock(childNode, chAlign, chIdent, chWrap, settings));
         }
 
         return subBlocks;
@@ -328,7 +335,8 @@ public class GoBlockGenerator {
             return childList.toArray(new ASTNode[childList.size()]);
         }
 
-        return node.getChildren(GO_ELEMENT_TYPES);
+//        return node.getChildren(GO_ELEMENT_TYPES);
+        return null;
     }
 
     private static void addChildNodes(PsiElement elem,
@@ -342,5 +350,82 @@ public class GoBlockGenerator {
                 addChildNodes(child, childNodes, range);
             }
         }
+    }
+
+    public static Block generateBlock(ASTNode node,
+                                      CommonCodeStyleSettings settings) {
+        return generateBlock(node, Indent.getNoneIndent(), settings);
+    }
+
+
+    public static Block generateBlock(ASTNode node, Indent indent, CommonCodeStyleSettings styleSettings) {
+        return generateBlock(node, null, indent, NO_WRAP,
+                             styleSettings);
+    }
+
+    public static Block generateBlock(ASTNode node, Alignment align, Indent indent,
+                                      Wrap wrap, CommonCodeStyleSettings settings)
+    {
+        if (node.getPsi() instanceof GoFile)
+            return generateGoFileBlock(node, settings);
+
+        if (node.getPsi() instanceof GoPackageDeclaration)
+            return generatePackageBlock(node, settings);
+
+        if (node.getPsi() instanceof GoFunctionDeclaration)
+            return generateMethodBlock(node, settings);
+
+        if (node.getPsi() instanceof GoConstDeclarations)
+            return new GoConstBlock((GoConstDeclarations) node.getPsi(),
+                                    align, indent, wrap, settings);
+        return
+            generateDefaultGoBlock(node, align, indent, wrap, settings);
+    }
+
+    private static Block generatePackageBlock(ASTNode node,
+                                              CommonCodeStyleSettings settings) {
+        return new GoPackageBlock(node,
+                                  Alignment.createAlignment(),
+                                  Indent.getNoneIndent(),
+                                  Wrap.createWrap(WrapType.NONE, false),
+                                  settings);
+    }
+
+    private static Block generateMethodBlock(ASTNode node,
+                                             CommonCodeStyleSettings settings) {
+        return new GoBlock(node, Alignment.createAlignment(),
+                           Indent.getNoneIndent(), NO_WRAP, settings) {
+            @Override
+            protected TokenSet getIndentedElements() {
+                return GoElementTypes.STATEMENTS;
+            }
+        };
+    }
+
+    private static Block generateGoFileBlock(ASTNode node,
+                                             CommonCodeStyleSettings settings) {
+        return new GoFileBlock(node,
+                               Alignment.createAlignment(),
+                               Indent.getAbsoluteNoneIndent(),
+                               Wrap.createWrap(WrapType.NONE, false),
+                               settings);
+    }
+
+    private static Block generateDefaultGoBlock(ASTNode node, Alignment align,
+                                                Indent indent, Wrap wrap,
+                                                CommonCodeStyleSettings settings) {
+
+        if ( node.getElementType() == GoTokenTypes.kPACKAGE ||
+            node.getElementType() == GoTokenTypes.mIDENT ||
+            node.getElementType() == GoTokenTypes.oSEMI) {
+            return new GoLeafBlock(node,
+                                   align,
+                                   Indent.getAbsoluteNoneIndent(),
+                                   Wrap.createWrap(WrapType.NONE, false),
+                                   settings);
+        }
+
+        return new GoBlock(node, align, indent, wrap, settings) {
+        };
     }
 }
