@@ -1,0 +1,22 @@
+package main
+
+import "math"
+
+// don't check type fields
+type Vertex struct {
+    X, Y float64
+}
+
+func (v *Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+func (v Vertex) Abs2() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+func main() {
+    v := &Vertex{3, 4}
+    println(v.Abs())
+    println(v.Abs2())
+}

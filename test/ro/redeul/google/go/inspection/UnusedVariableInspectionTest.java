@@ -21,6 +21,12 @@ import java.util.List;
 
 public class UnusedVariableInspectionTest extends LightCodeInsightFixtureTestCase {
     public void testSimple() throws Exception{ doTest(); }
+    public void testIfScope() throws Exception{ doTest(); }
+    public void testForScope() throws Exception{ doTest(); }
+    public void testTypeFields() throws Exception{ doTest(); }
+    public void testUnusedConst() throws Exception{ doTest(); }
+    public void testUnusedParameter() throws Exception{ doTest(); }
+    public void testLocalHidesGlobal() throws Exception{ doTest(); }
 
     @Override
     protected String getBasePath() {

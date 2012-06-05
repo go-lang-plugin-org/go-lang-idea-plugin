@@ -1,0 +1,14 @@
+package main
+
+// simple const
+const <begin>CA<end.Unused global> = 5
+
+// const with parenthesis
+const (
+    <begin>CB<end.Unused global> = 5
+    CC = 3
+)
+
+func main() {
+    println(CC)
+}

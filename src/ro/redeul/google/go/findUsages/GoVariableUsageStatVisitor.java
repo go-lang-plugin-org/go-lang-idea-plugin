@@ -4,6 +4,7 @@ import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +22,11 @@ import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor2;
 
 import java.util.ArrayList;
@@ -116,10 +122,14 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     }
 
     public void beforeVisitIdentifier(GoIdentifier id) {
-        if (isFunctionOrMethodCall(id)) {
+        if (isFunctionOrMethodCall(id) || isTypeField(id)) {
             return;
         }
         ctx.addUsage(id);
+    }
+
+    private boolean isTypeField(GoIdentifier id) {
+        return id.getParent() instanceof GoTypeStructField;
     }
 
     private boolean isFunctionOrMethodCall(GoIdentifier id) {
@@ -145,6 +155,19 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     }
     private Map<String, VariableUsage> getFunctionParameters(GoFunctionDeclaration fd) {
         Map<String, VariableUsage> variables = ctx.addNewScopeLevel();
+
+        if (fd instanceof GoMethodDeclaration) {
+            // Add method receiver to parameter list
+            GoMethodDeclaration md = (GoMethodDeclaration) fd;
+            GoPsiElement methodReceiver = md.getMethodReceiver();
+            ASTNode idNode = methodReceiver.getNode().findChildByType(GoElementTypes.IDENTIFIER);
+            if (idNode != null && idNode.getPsi() instanceof GoPsiElementBase) {
+                GoPsiElementBase receiver = (GoPsiElementBase) idNode.getPsi();
+                variables.put(receiver.getName(), new VariableUsage(receiver));
+            }
+
+        }
+
         GoFunctionParameterList parameters = fd.getParameters();
         if (parameters == null) {
             return variables;
@@ -178,6 +201,20 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
                 for (GoIdentifier id : vd.getIdentifiers()) {
                     variables.put(id.getName(), new VariableUsage(id));
                 }
+            }
+        }
+
+        for (GoMethodDeclaration md : file.getMethods()) {
+            variables.put(md.getFunctionName(), new VariableUsage(md));
+        }
+
+        for (GoFunctionDeclaration fd : file.getFunctions()) {
+            variables.put(fd.getFunctionName(), new VariableUsage(fd));
+        }
+
+        for (GoTypeDeclaration types : file.getTypeDeclarations()) {
+            for (GoTypeSpec spec : types.getTypeSpecs()) {
+                variables.put(spec.getType().getName(), new VariableUsage(spec.getType()));
             }
         }
         return variables;
@@ -219,6 +256,11 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         }
 
         public void unusedGlobalVariable(VariableUsage variableUsage) {
+            if (variableUsage.element instanceof GoFunctionDeclaration ||
+                    variableUsage.element instanceof GoType) {
+                return;
+            }
+
             addProblem(variableUsage, "Unused global", ProblemHighlightType.LIKE_UNUSED_SYMBOL, new RemoveVariableFix());
         }
 

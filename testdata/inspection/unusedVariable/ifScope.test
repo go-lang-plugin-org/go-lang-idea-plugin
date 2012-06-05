@@ -1,0 +1,15 @@
+package main
+
+import "math"
+
+func pow(x, n, lim float64) float64 {
+    if v := math.Pow(x, n); v < lim {
+        return v
+    }
+    <begin>v<end.Undefined variable>
+    return lim
+}
+
+func main() {
+    println(pow(2, 2, 10))
+}
