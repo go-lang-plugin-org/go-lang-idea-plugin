@@ -10,4 +10,5 @@ func foo(a, <begin>b<end.Unused parameter> int) int {
 
 func main() {
     <begin>k<end.Unused variable> := 5
+    println(true, false)
 }
