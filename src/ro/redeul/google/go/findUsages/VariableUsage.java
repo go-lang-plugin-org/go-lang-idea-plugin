@@ -5,11 +5,11 @@ import com.intellij.psi.PsiElement;
 import java.util.ArrayList;
 import java.util.List;
 
-class Var {
+class VariableUsage {
     public final PsiElement element;
     public final List<PsiElement> usages = new ArrayList<PsiElement>();
 
-    Var(PsiElement element) {
+    VariableUsage(PsiElement element) {
         this.element = element;
     }
 
@@ -27,7 +27,7 @@ class Var {
 
     @Override
     public String toString() {
-        return "Var{" + element +
+        return "VariableUsage{" + element +
                ", usages=" + usages.size() +
                '}';
     }

@@ -16,63 +16,63 @@ import java.util.Map;
 class Ctx {
     public final List<ProblemDescriptor> problems;
     public final InspectionManager manager;
-    public final List<Map<String, Var>> variables = new ArrayList<Map<String, Var>>();
+    public final List<Map<String, VariableUsage>> variables = new ArrayList<Map<String, VariableUsage>>();
 
-    Ctx(List<ProblemDescriptor> problems, InspectionManager manager, Map<String, Var> global) {
+    Ctx(List<ProblemDescriptor> problems, InspectionManager manager, Map<String, VariableUsage> global) {
         this.problems = problems;
         this.manager = manager;
         this.variables.add(global);
     }
 
-    public Map<String, Var> addNewScopeLevel() {
-        Map<String, Var> variables = new HashMap<String, Var>();
+    public Map<String, VariableUsage> addNewScopeLevel() {
+        Map<String, VariableUsage> variables = new HashMap<String, VariableUsage>();
         this.variables.add(variables);
         return variables;
     }
 
-    public Map<String, Var> popLastScopeLevel() {
+    public Map<String, VariableUsage> popLastScopeLevel() {
         return variables.remove(variables.size() - 1);
     }
 
-    public void unusedVariable(Var var) {
-        if (var.isBlank()) {
+    public void unusedVariable(VariableUsage variableUsage) {
+        if (variableUsage.isBlank()) {
             return;
         }
 
-        addProblem(var, "Unused variable", ProblemHighlightType.ERROR, new RemoveVariableFix());
+        addProblem(variableUsage, "Unused variable", ProblemHighlightType.ERROR, new RemoveVariableFix());
     }
 
-    public void unusedParameter(Var var) {
-        if (!var.isBlank()) {
-            addProblem(var, "Unused parameter", ProblemHighlightType.LIKE_UNUSED_SYMBOL, null);
+    public void unusedParameter(VariableUsage variableUsage) {
+        if (!variableUsage.isBlank()) {
+            addProblem(variableUsage, "Unused parameter", ProblemHighlightType.LIKE_UNUSED_SYMBOL, null);
         }
     }
 
-    public void unusedGlobalVariable(Var var) {
-        addProblem(var, "Unused global", ProblemHighlightType.LIKE_UNUSED_SYMBOL, new RemoveVariableFix());
+    public void unusedGlobalVariable(VariableUsage variableUsage) {
+        addProblem(variableUsage, "Unused global", ProblemHighlightType.LIKE_UNUSED_SYMBOL, new RemoveVariableFix());
     }
 
-    public void undefinedVariable(Var var) {
-        addProblem(var, "Undefined variable", ProblemHighlightType.ERROR, null);
+    public void undefinedVariable(VariableUsage variableUsage) {
+        addProblem(variableUsage, "Undefined variable", ProblemHighlightType.ERROR, null);
     }
 
-    private void addProblem(Var var, String desc, ProblemHighlightType highlightType, @Nullable LocalQuickFix fix) {
-        problems.add(manager.createProblemDescriptor(var.element, desc, fix, highlightType, true));
+    private void addProblem(VariableUsage variableUsage, String desc, ProblemHighlightType highlightType, @Nullable LocalQuickFix fix) {
+        problems.add(manager.createProblemDescriptor(variableUsage.element, desc, fix, highlightType, true));
     }
 
     public void addDefinition(GoPsiElement element) {
-        variables.get(variables.size() - 1).put(element.getText(), new Var(element));
+        variables.get(variables.size() - 1).put(element.getText(), new VariableUsage(element));
     }
 
     public void addUsage(GoPsiElement element) {
         for (int i = variables.size() - 1; i >= 0; i--) {
-            Var var = variables.get(i).get(element.getText());
-            if (var != null) {
-                var.addUsage(element);
+            VariableUsage variableUsage = variables.get(i).get(element.getText());
+            if (variableUsage != null) {
+                variableUsage.addUsage(element);
                 return;
             }
         }
 
-        undefinedVariable(new Var(element));
+        undefinedVariable(new VariableUsage(element));
     }
 }

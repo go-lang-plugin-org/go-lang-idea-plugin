@@ -41,7 +41,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     }
 
     private void afterVisitFile(GoFile file) {
-        for (Var v : ctx.popLastScopeLevel().values()) {
+        for (VariableUsage v : ctx.popLastScopeLevel().values()) {
             if (!v.isUsed()) {
                 ctx.unusedGlobalVariable(v);
             }
@@ -90,7 +90,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         } else if (element instanceof GoFunctionDeclaration) {
             afterVisitGoFunctionDeclaration((GoFunctionDeclaration) element);
         } else if (couldOpenNewScope(element)) {
-            for (Var v : ctx.popLastScopeLevel().values()) {
+            for (VariableUsage v : ctx.popLastScopeLevel().values()) {
                 if (!v.isUsed()) {
                     ctx.unusedVariable(v);
                 }
@@ -132,14 +132,14 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     }
 
     public void afterVisitGoFunctionDeclaration(GoFunctionDeclaration fd) {
-        for (Var v : ctx.popLastScopeLevel().values()) {
+        for (VariableUsage v : ctx.popLastScopeLevel().values()) {
             if (!v.isUsed()) {
                 ctx.unusedParameter(v);
             }
         }
     }
-    private Map<String, Var> getFunctionParameters(GoFunctionDeclaration fd) {
-        Map<String, Var> variables = ctx.addNewScopeLevel();
+    private Map<String, VariableUsage> getFunctionParameters(GoFunctionDeclaration fd) {
+        Map<String, VariableUsage> variables = ctx.addNewScopeLevel();
         GoFunctionParameterList parameters = fd.getParameters();
         if (parameters == null) {
             return variables;
@@ -152,18 +152,18 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
 
         for (GoFunctionParameter fp : functionParameters) {
             for (GoIdentifier id : fp.getIdentifiers()) {
-                variables.put(id.getName(), new Var(id));
+                variables.put(id.getName(), new VariableUsage(id));
             }
         }
         return variables;
     }
 
-    private Map<String, Var> getGlobalVariables(GoFile file) {
-        Map<String, Var> variables = new HashMap<String, Var>();
+    private Map<String, VariableUsage> getGlobalVariables(GoFile file) {
+        Map<String, VariableUsage> variables = new HashMap<String, VariableUsage>();
         for (GoConstDeclarations allConsts : file.getConsts()) {
             for (GoConstDeclaration cd : allConsts.getDeclarations()) {
                 for (GoIdentifier id : cd.getIdentifiers()) {
-                    variables.put(id.getName(), new Var(id));
+                    variables.put(id.getName(), new VariableUsage(id));
                 }
             }
         }
@@ -171,7 +171,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         for (GoVarDeclarations allVariables : file.getGlobalVariables()) {
             for (GoVarDeclaration vd : allVariables.getDeclarations()) {
                 for (GoIdentifier id : vd.getIdentifiers()) {
-                    variables.put(id.getName(), new Var(id));
+                    variables.put(id.getName(), new VariableUsage(id));
                 }
             }
         }
