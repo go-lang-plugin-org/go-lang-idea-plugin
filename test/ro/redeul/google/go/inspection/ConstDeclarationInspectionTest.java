@@ -11,7 +11,7 @@ import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isMissin
 
 public class ConstDeclarationInspectionTest extends LightCodeInsightFixtureTestCase {
     private GoConstDeclarations compile(String fileText) {
-        GoFile goFile = (GoFile) myFixture.configureByText(GoFileType.GO_FILE_TYPE, fileText);
+        GoFile goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
         return goFile.getConsts()[0];
     }
 
