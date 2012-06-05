@@ -37,6 +37,7 @@ import java.util.Map;
 import static com.intellij.psi.impl.source.tree.TreeUtil.findSibling;
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedConstant;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDeclaration;
 
 public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     private List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
@@ -324,6 +325,11 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
 
         public void undefinedVariable(VariableUsage variableUsage) {
             if (isPredefinedConstant(variableUsage.element.getText())) {
+                return;
+            }
+
+            // It's valid to use "iota" in const declaration expression list.
+            if (isIotaInConstantDeclaration(variableUsage.element)) {
                 return;
             }
 
