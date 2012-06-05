@@ -1,15 +1,23 @@
 package ro.redeul.google.go.refactoring.introduce;
 
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.application.AccessToken;
+import com.intellij.openapi.application.WriteAction;
+import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Pass;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.refactoring.IntroduceTargetChooser;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
+import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -20,7 +28,7 @@ import java.util.List;
 
 public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler {
     @Override
-    public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
         try {
             if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) {
                 throw new GoRefactoringException("It's a readonly file!");
@@ -28,20 +36,74 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
 
             PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-            doInvoke(project, editor, file, dataContext);
+            final SelectionModel sm = editor.getSelectionModel();
+            if (sm.hasSelection()) {
+                introduce(project, editor, file, sm.getSelectionStart(), sm.getSelectionEnd());
+                return;
+            }
+
+            // If nothing is selected in editor, find all potential expressions.
+            int offset = editor.getCaretModel().getOffset();
+            List<GoPsiElementBase> expressions = collectExpressions(file, editor, offset);
+            if (expressions.isEmpty()) {
+                return;
+            }
+
+            if (expressions.size() == 1) {
+                TextRange range = expressions.get(0).getNode().getTextRange();
+                introduce(project, editor, file, range.getStartOffset(), range.getEndOffset());
+                return;
+            }
+
+            // If there are multiple potential expressions, let user select one.
+            IntroduceTargetChooser.showChooser(editor, expressions, new Pass<GoPsiElementBase>() {
+                        @Override
+                        public void pass(GoPsiElementBase expr) {
+                            TextRange range = expr.getNode().getTextRange();
+                            introduce(project, editor, file, range.getStartOffset(), range.getEndOffset());
+                        }
+                    }, new Function<GoPsiElementBase, String>() {
+                        @Override
+                        public String fun(GoPsiElementBase goExpressionBase) {
+                            return goExpressionBase.getText();
+                        }
+                    }
+            );
         } catch (GoRefactoringException e) {
             CommonRefactoringUtil.showErrorHint(project, editor, e.getMessage(), "Refactoring error!", null);
         }
     }
 
-    protected abstract void doInvoke(Project project, Editor editor, PsiFile file, DataContext dataContext) throws GoRefactoringException;
+    private void introduce(final Project project, final Editor editor, final PsiFile file, final int start, final int end) {
+        CommandProcessor.getInstance().executeCommand(project, new Runnable() {
+            public void run() {
+                AccessToken accessToken = WriteAction.start();
+                try {
+                    doIntroduce(project, editor, file, start, end);
+                } catch (GoRefactoringException e) {
+                    CommonRefactoringUtil.showErrorHint(project, editor, e.getMessage(), "Refactoring error!", null);
+                } finally {
+                    accessToken.finish();
+                }
+            }
+        }, "Introduce", null);
+    }
+
+    protected abstract void doIntroduce(Project project, Editor editor, PsiFile file, int start, int end) throws GoRefactoringException;
+
+    protected boolean isExpressionValid(GoPsiElementBase expression) {
+        IElementType tt = expression.getTokenType();
+        return tt != GoElementTypes.CALL_OR_CONVERSION_EXPRESSION &&
+               tt != GoElementTypes.BUILTIN_CALL_EXPRESSION &&
+               tt != GoElementTypes.BLOCK_STATEMENT;
+    }
 
     @Override
     public void invoke(@NotNull Project project, @NotNull PsiElement[] elements, DataContext dataContext) {
         // invoked from elsewhere (other from editor). do nothing.
     }
 
-    protected static List<GoPsiElementBase> collectExpressions(PsiFile file, Editor editor, int offset) {
+    protected List<GoPsiElementBase> collectExpressions(PsiFile file, Editor editor, int offset) {
         final PsiElement elementAtCaret = file.findElementAt(offset);
         if (elementAtCaret == null) {
             return new ArrayList<GoPsiElementBase>();
@@ -55,14 +117,22 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
             if (tt == GoElementTypes.EXPRESSION_PARENTHESIZED) {
                 continue;
             }
-            if (tt == GoElementTypes.CALL_OR_CONVERSION_EXPRESSION ||
-                    tt == GoElementTypes.BUILTIN_CALL_EXPRESSION ||
-                    tt == GoElementTypes.BLOCK_STATEMENT) {
+
+            if (!isExpressionValid(expression)) {
                 break;
             }
 
             expressions.add(expression);
         }
         return expressions;
+    }
+
+    protected static String findIndent(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != ' ' && s.charAt(i) != '\t') {
+                return s.substring(0, i);
+            }
+        }
+        return s;
     }
 }
