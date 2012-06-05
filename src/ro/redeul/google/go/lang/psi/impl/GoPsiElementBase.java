@@ -25,6 +25,9 @@ public class GoPsiElementBase extends ASTWrapperPsiElement implements GoPsiEleme
     }
 
     public String toString() {
+//        if (getClass() != GoPsiElementBase.class)
+//            return "GoPsi" + getTokenType().toString();
+
         return getTokenType().toString();
     }
 
