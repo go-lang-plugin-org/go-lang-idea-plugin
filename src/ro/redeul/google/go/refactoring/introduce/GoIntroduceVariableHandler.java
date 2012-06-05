@@ -6,15 +6,15 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
 public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
     @Override
-    protected void doIntroduce(Project project, Editor editor, PsiFile file, int start, int end) throws GoRefactoringException {
+    protected void doIntroduce(Project project, Editor editor, GoFile file, int start, int end) throws GoRefactoringException {
         GoPsiElementBase e = CodeInsightUtilBase.findElementInRange(file, start, end, GoPsiElementBase.class, GoFileType.GO_LANGUAGE);
         if (e == null) {
             throw new GoRefactoringException("It's not a valid expression!");

@@ -20,6 +20,7 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
@@ -28,11 +29,17 @@ import java.util.List;
 
 public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler {
     @Override
-    public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
+    public void invoke(@NotNull final Project project, final Editor editor, PsiFile psiFile, DataContext dataContext) {
         try {
-            if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) {
+            if (!CommonRefactoringUtil.checkReadOnlyStatus(project, psiFile)) {
                 throw new GoRefactoringException("It's a readonly file!");
             }
+
+            if (!(psiFile instanceof GoFile)) {
+                throw new GoRefactoringException("Only go file could be handled.");
+            }
+
+            final GoFile file = (GoFile) psiFile;
 
             PsiDocumentManager.getInstance(project).commitAllDocuments();
 
@@ -74,7 +81,7 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
         }
     }
 
-    private void introduce(final Project project, final Editor editor, final PsiFile file, final int start, final int end) {
+    private void introduce(final Project project, final Editor editor, final GoFile file, final int start, final int end) {
         CommandProcessor.getInstance().executeCommand(project, new Runnable() {
             public void run() {
                 AccessToken accessToken = WriteAction.start();
@@ -89,7 +96,7 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
         }, "Introduce", null);
     }
 
-    protected abstract void doIntroduce(Project project, Editor editor, PsiFile file, int start, int end) throws GoRefactoringException;
+    protected abstract void doIntroduce(Project project, Editor editor, GoFile file, int start, int end) throws GoRefactoringException;
 
     protected boolean isExpressionValid(GoPsiElementBase expression) {
         IElementType tt = expression.getTokenType();
