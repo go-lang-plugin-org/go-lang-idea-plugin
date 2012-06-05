@@ -12,10 +12,8 @@ import com.intellij.util.text.CharArrayUtil;
 import ro.redeul.google.go.GoFileType;
 
 /**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Sep 7, 2010
- * Time: 4:13:53 PM
+ * @author Mihai Claudiu Toader <mtoader@gmail.com>
+ *         Date: Sep 7, 2010
  */
 public class EditorTweakingComponent extends FileDocumentManagerAdapter {
 
@@ -26,11 +24,13 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
             return;
 
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-        if (file == null || file.getFileType() != GoFileType.GO_FILE_TYPE) {
+        if (file == null || file.getFileType() != GoFileType.INSTANCE) {
             return;
         }
 
-        final EditorSettingsExternalizable settings = EditorSettingsExternalizable.getInstance();
+        final EditorSettingsExternalizable settings =
+            EditorSettingsExternalizable.getInstance();
+
         if (settings != null && settings.isEnsureNewLineAtEOF()) {
             return;
         }
@@ -40,20 +40,23 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
             final int start = document.getLineStartOffset(lines - 1);
             final int end = document.getLineEndOffset(lines - 1);
             if (start != end) {
-                ApplicationManager.getApplication().runWriteAction(new DocumentRunnable(document, null) {
-                    public void run() {
-                        CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
-                            public void run() {
-                                CharSequence content = document.getCharsSequence();
-                                if (CharArrayUtil.containsOnlyWhiteSpaces(content.subSequence(start, end))) {
-                                    document.deleteString(start, end);
-                                } else {
-                                    document.insertString(end, "\n");
-                                }
-                            }
-                        });
-                    }
-                });
+                ApplicationManager.getApplication().runWriteAction(
+                    new DocumentRunnable(document, null) {
+                        public void run() {
+                            CommandProcessor.getInstance().runUndoTransparentAction(
+                                new Runnable() {
+                                    public void run() {
+                                        CharSequence content = document.getCharsSequence();
+                                        if (CharArrayUtil.containsOnlyWhiteSpaces(
+                                            content.subSequence(start, end))) {
+                                            document.deleteString(start, end);
+                                        } else {
+                                            document.insertString(end, "\n");
+                                        }
+                                    }
+                                });
+                        }
+                    });
             }
         }
     }

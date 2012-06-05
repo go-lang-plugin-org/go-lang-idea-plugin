@@ -1,5 +1,9 @@
 package ro.redeul.google.go.runner.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+
 import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.ide.util.TreeFileChooser;
 import com.intellij.ide.util.TreeFileChooserFactory;
@@ -15,17 +19,6 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.runner.GoApplicationConfiguration;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-/**
- * Created by IntelliJ IDEA.
- * User: mtoader
- * Date: Aug 19, 2010
- * Time: 3:00:32 PM
- * To change this template use File | Settings | File Templates.
- */
 public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationConfiguration> {
 
     private DefaultComboBoxModel modulesModel;
@@ -57,11 +50,14 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
 
         this.project = project;
 
-        applicationName.getButton().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        applicationName.getButton().addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
 
-                TreeFileChooser fileChooser = TreeFileChooserFactory.getInstance(project).createFileChooser("Go Application Chooser", null,
-                        GoFileType.GO_FILE_TYPE,
+                TreeFileChooser fileChooser =
+                    TreeFileChooserFactory.getInstance(project).createFileChooser(
+                        "Go Application Chooser", null,
+                        GoFileType.INSTANCE,
                         new TreeFileChooser.PsiFileFilter() {
                             public boolean accept(PsiFile file) {
 

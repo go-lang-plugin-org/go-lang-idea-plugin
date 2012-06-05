@@ -62,7 +62,7 @@ public class GoCompiler implements TranslatingCompiler {
 
     public boolean validateConfiguration(CompileScope scope) {
 
-        final VirtualFile files[] = scope.getFiles(GoFileType.GO_FILE_TYPE, true);
+        final VirtualFile files[] = scope.getFiles(GoFileType.INSTANCE, true);
 
         final Set<Module> affectedModules = new HashSet<Module>();
 
@@ -99,7 +99,7 @@ public class GoCompiler implements TranslatingCompiler {
     }
 
     public boolean isCompilableFile(VirtualFile file, CompileContext context) {
-        return file.getFileType() == GoFileType.GO_FILE_TYPE;
+        return file.getFileType() == GoFileType.INSTANCE;
     }
 
     public void compile(CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
@@ -130,7 +130,7 @@ public class GoCompiler implements TranslatingCompiler {
                         VfsUtil.processFilesRecursively(sourceRoot, new FilteringProcessor<VirtualFile>(new Condition<VirtualFile>() {
                             @Override
                             public boolean value(VirtualFile virtualFile) {
-                                return virtualFile.getFileType() == GoFileType.GO_FILE_TYPE &&
+                                return virtualFile.getFileType() == GoFileType.INSTANCE &&
                                         ! virtualFile.getNameWithoutExtension().matches(".*_test$");
                             }
                         }, collector));
@@ -541,7 +541,7 @@ public class GoCompiler implements TranslatingCompiler {
         // we need to find and sort the files as packages in order to compile them properly
         for (final VirtualFile virtualFile : files) {
 
-            if (virtualFile.getFileType() != GoFileType.GO_FILE_TYPE || virtualFile.getNameWithoutExtension().matches(".*_test$") ) {
+            if (virtualFile.getFileType() != GoFileType.INSTANCE || virtualFile.getNameWithoutExtension().matches(".*_test$") ) {
                 continue;
             }
 

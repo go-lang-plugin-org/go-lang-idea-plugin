@@ -1,14 +1,13 @@
 package ro.redeul.google.go.ide;
 
-import com.intellij.openapi.components.*;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StorageScheme;
 import com.intellij.openapi.project.Project;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: 5/29/11
- * Time: 11:41 AM
- */
 @State(
         name = "GoProjectSettings",
         storages = {
@@ -31,6 +30,7 @@ public class GoProjectSettings implements PersistentStateComponent<GoProjectSett
     GoProjectSettingsBean bean;
 
     @Override
+    @NotNull
     public GoProjectSettingsBean getState() {
         return bean != null ? bean : new GoProjectSettingsBean();
     }
@@ -40,6 +40,7 @@ public class GoProjectSettings implements PersistentStateComponent<GoProjectSett
         this.bean = settingsBean;
     }
 
+    @NotNull
     public static GoProjectSettings getInstance(Project project) {
         return ServiceManager.getService(project, GoProjectSettings.class);
     }

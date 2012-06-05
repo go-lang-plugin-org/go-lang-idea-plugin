@@ -18,16 +18,10 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.psi.impl.GoFileImpl;
 import ro.redeul.google.go.lang.psi.stubs.elements.GoStubFileElementType;
 
-/**
- * Created by IntelliJ IDEA.
- * User: mtoader
- * Date: Jul 24, 2010
- * Time: 7:29:44 PM
- * To change this template use File | Settings | File Templates.
- */
 public class GoParserDefinition implements ParserDefinition {
 
-    public static final IStubFileElementType GO_FILE_TYPE = new GoStubFileElementType(GoFileType.GO_FILE_TYPE.getLanguage());
+    public static final IStubFileElementType GO_FILE_TYPE =
+        new GoStubFileElementType(GoFileType.INSTANCE.getLanguage());
 
     @NotNull
     public Lexer createLexer(Project project) {
@@ -35,7 +29,7 @@ public class GoParserDefinition implements ParserDefinition {
     }
 
     public PsiParser createParser(Project project) {
-        return new GoParser(); 
+        return new GoParser();
     }
 
     public IFileElementType getFileNodeType() {
@@ -66,7 +60,8 @@ public class GoParserDefinition implements ParserDefinition {
         return new GoFileImpl(viewProvider);
     }
 
-    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
+    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left,
+                                                             ASTNode right) {
         return SpaceRequirements.MAY;
     }
 }

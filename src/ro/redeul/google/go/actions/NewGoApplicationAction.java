@@ -5,7 +5,6 @@ import com.intellij.ide.IdeView;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.actions.CreateTemplateInPackageAction;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.module.Module;
@@ -27,13 +26,8 @@ import ro.redeul.google.go.lang.psi.GoFile;
 
 import static ro.redeul.google.go.actions.GoTemplatesFactory.Template;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Aug 21, 2010
- * Time: 12:26:52 AM
- */
-public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile> implements DumbAware {
+public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile>
+    implements DumbAware {
 
     public NewGoApplicationAction() {
         super(GoBundle.message("new.go.app"), GoBundle.message("new.go.app.description"), GoIcons.GO_ICON_16x16, true);
@@ -105,7 +99,8 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
         // check to see if a file with the same name already exists
         PsiFile files[] = dir.getFiles();
         for (PsiFile file : files) {
-            if (file.getFileType() == GoFileType.GO_FILE_TYPE && file.getVirtualFile().getNameWithoutExtension().equals(className)) {
+            if (file.getFileType() == GoFileType.INSTANCE &&
+                file.getVirtualFile().getNameWithoutExtension().equals(className)) {
                 throw new IncorrectOperationException();
             }
         }

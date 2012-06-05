@@ -1,5 +1,7 @@
 package ro.redeul.google.go;
 
+import java.util.List;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PluginPathManager;
 import com.intellij.openapi.editor.Editor;
@@ -10,8 +12,6 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.junit.Assert;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.TestUtils;
-
-import java.util.List;
 
 public abstract class FileDataBasedTest extends LightCodeInsightFixtureTestCase {
     @Override
@@ -35,10 +35,10 @@ public abstract class FileDataBasedTest extends LightCodeInsightFixtureTestCase 
             fileText = TestUtils.removeBeginMarker(fileText);
             int endOffset = fileText.indexOf(TestUtils.END_MARKER);
             fileText = TestUtils.removeEndMarker(fileText);
-            goFile = (GoFile) myFixture.configureByText(GoFileType.GO_FILE_TYPE, fileText);
+            goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
             myFixture.getEditor().getSelectionModel().setSelection(startOffset, endOffset);
         } else {
-            goFile = (GoFile) myFixture.configureByText(GoFileType.GO_FILE_TYPE, fileText);
+            goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
         }
 
         final Editor myEditor = myFixture.getEditor();

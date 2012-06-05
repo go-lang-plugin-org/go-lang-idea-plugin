@@ -1,12 +1,12 @@
 package ro.redeul.google.go.lang.completion;
 
+import java.io.File;
+import java.util.List;
+
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.testFramework.UsefulTestCase;
 import org.testng.Assert;
 import ro.redeul.google.go.lang.GoCodeInsightTestCase;
-
-import java.io.File;
-import java.util.List;
 
 public abstract class GoCompletionTestBase extends GoCodeInsightTestCase {
 
@@ -56,7 +56,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightTestCase {
     public void doTest() throws Exception {
 //        final List<String> data = TestUtils.readInput(getTestCaseDataPath() + getTestName(true) + ".test");
 
-//        fixture.configureByText(GoFileType.GO_FILE_TYPE, data.get(0));
+//        fixture.configureByText(GoFileType.INSTANCE, data.get(0));
 
 //       final List<SmartEnterProcessor> processors = getSmartProcessors(GroovyFileType.GROOVY_LANGUAGE);
 //       new WriteCommandAction(getProject()) {
