@@ -1,0 +1,18 @@
+package main
+
+const N = 5
+
+func main() {
+    println(<begin>1 + 2<end>)
+}
+-----
+package main
+
+const (
+    N = 5
+    VALUE = 1 + 2
+)
+
+func main() {
+    println(VALUE<caret>)
+}

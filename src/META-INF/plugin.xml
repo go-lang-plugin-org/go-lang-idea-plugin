@@ -48,6 +48,7 @@
          <h3>0.6.0 changes:</h3>
             <ul>
                 <li>[feature] Refactoring: Introduce variable</li>
+                <li>[feature] Refactoring: Introduce constant</li>
                 <li>[feature] Inspection: Unused imports</li>
                 <li>[feature] Inspection: Unused variables</li>
                 <li>[feature] Inspection: Unused constants</li>

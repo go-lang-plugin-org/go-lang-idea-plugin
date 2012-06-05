@@ -1,0 +1,17 @@
+package main
+
+import "fmt"
+
+func main() {
+    println(<begin>1 + 2<end>)
+}
+-----
+package main
+
+import "fmt"
+
+const VALUE = 1 + 2
+
+func main() {
+    println(VALUE<caret>)
+}
