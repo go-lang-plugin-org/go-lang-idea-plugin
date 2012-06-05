@@ -8,9 +8,15 @@ import java.util.List;
 class VariableUsage {
     public final PsiElement element;
     public final List<PsiElement> usages = new ArrayList<PsiElement>();
+    public final boolean ignoreAnyProblem;
 
     VariableUsage(PsiElement element) {
+        this(element, false);
+    }
+
+    VariableUsage(PsiElement element, boolean ignoreAnyProblem) {
         this.element = element;
+        this.ignoreAnyProblem = ignoreAnyProblem;
     }
 
     public void addUsage(PsiElement use) {

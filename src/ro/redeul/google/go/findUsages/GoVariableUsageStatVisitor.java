@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.intellij.psi.impl.source.tree.TreeUtil.findSibling;
+import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedConstant;
 
 public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
@@ -174,6 +176,20 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         }
     }
 
+    private GoFunctionParameterList getFunctionResult(GoFunctionDeclaration fd) {
+        PsiElement c = fd.getFirstChild();
+        if (c == null) {
+            return null;
+        }
+
+        ASTNode resultNode = findSibling(c.getNode(), GoElementTypes.FUNCTION_RESULT);
+        if (resultNode == null) {
+            return null;
+        }
+
+        return findChildOfType(resultNode.getPsi(), GoFunctionParameterList.class);
+    }
+
     private Map<String, VariableUsage> getFunctionParameters(GoFunctionDeclaration fd) {
         Map<String, VariableUsage> variables = ctx.addNewScopeLevel();
 
@@ -185,22 +201,29 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
             }
         }
 
-        GoFunctionParameterList parameters = fd.getParameters();
-        if (parameters == null) {
-            return variables;
+        addFunctionParametersToMap(fd.getParameters(), variables, false);
+
+        // Don't detect usage problem on function result
+        addFunctionParametersToMap(getFunctionResult(fd), variables, true);
+        return variables;
+    }
+
+    private void addFunctionParametersToMap(GoFunctionParameterList list, Map<String, VariableUsage> variables,
+                                            boolean ignoreProblem) {
+        if (list == null) {
+            return;
         }
 
-        GoFunctionParameter[] functionParameters = parameters.getFunctionParameters();
+        GoFunctionParameter[] functionParameters = list.getFunctionParameters();
         if (functionParameters == null) {
-            return variables;
+            return;
         }
 
-        for (GoFunctionParameter fp : functionParameters) {
-            for (GoIdentifier id : fp.getIdentifiers()) {
-                variables.put(id.getName(), new VariableUsage(id));
+        for (GoFunctionParameter p : list.getFunctionParameters()) {
+            for (GoIdentifier id : p.getIdentifiers()) {
+                variables.put(id.getName(), new VariableUsage(id, ignoreProblem));
             }
         }
-        return variables;
     }
 
     private GoPsiElementBase getMethodReceiverIdentifier(GoMethodDeclaration md) {
@@ -304,6 +327,9 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
 
         private void addProblem(VariableUsage variableUsage, String desc, ProblemHighlightType highlightType,
                                 @Nullable LocalQuickFix fix) {
+            if (variableUsage.ignoreAnyProblem) {
+                return;
+            }
             problems.add(manager.createProblemDescriptor(variableUsage.element, desc, fix, highlightType, true));
         }
 

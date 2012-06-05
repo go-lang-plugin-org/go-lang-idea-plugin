@@ -1,0 +1,23 @@
+package main
+
+func reverse(a, b int) (c, d int) {
+    c, d = b, a
+	return
+}
+
+func gen1() (g1v int) {
+    g1v = 5
+    return
+}
+
+func gen2() (g2v int) {
+    return 6
+}
+
+func noop() {
+}
+
+func main() {
+    a, b := reverse(1, 2)
+    println(a, b, gen1(), gen2())
+}

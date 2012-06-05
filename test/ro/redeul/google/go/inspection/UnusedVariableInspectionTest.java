@@ -27,6 +27,7 @@ public class UnusedVariableInspectionTest extends LightCodeInsightFixtureTestCas
     public void testUnusedConst() throws Exception{ doTest(); }
     public void testUnusedParameter() throws Exception{ doTest(); }
     public void testLocalHidesGlobal() throws Exception{ doTest(); }
+    public void testFunction() throws Exception{ doTest(); }
 
     @Override
     protected String getBasePath() {
