@@ -4,26 +4,47 @@ import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
-import ro.redeul.google.go.lang.psi.impl.declarations.*;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoBuiltinCallExprImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
+import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationsImpl;
+import ro.redeul.google.go.lang.psi.impl.declarations.GoShortVarDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationsImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoBuiltinCallExprImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionListImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.toplevel.*;
-import ro.redeul.google.go.lang.psi.impl.types.*;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionParameterImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionParameterListImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationsImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoMethodDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoPackageDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeNameDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeSpecImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypeArrayImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypeChannelImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypeInterfaceImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypeMapImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypeNameImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypePointerImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypeSliceImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypeStructImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructAnonymousFieldImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructFieldImpl;
 import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
 
 public class GoPsiCreator implements GoElementTypes {
-    
+
     public static PsiElement createElement(ASTNode node) {
 
         IElementType elementType = node.getElementType();
-        
+
         if ( elementType.equals(IDENTIFIER) )
             return new GoIdentifierImpl(node);
 
@@ -111,6 +132,9 @@ public class GoPsiCreator implements GoElementTypes {
         if ( elementType.equals(BLOCK_STATEMENT))
             return new GoBlockStatementImpl(node);
 
+        if ( elementType.equals(EXPRESSION_LIST))
+            return new GoExpressionListImpl(node);
+
         if ( elementType.equals(SELECTOR_EXPRESSION) )
             return new GoSelectorExpressionImpl(node);
 
@@ -125,7 +149,7 @@ public class GoPsiCreator implements GoElementTypes {
 
         if ( elementType.equals(wsNLS) )
             return (PsiElement) ASTFactory.whitespace(node.getText());
-        
+
         return new GoPsiElementBase(node);
     }
 }
