@@ -8,23 +8,23 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  VarDeclarations
+  VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
-    VarDeclaration
-      Identifier
+    VarDeclarationImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CallOrConversionExpression
-        TypeInterface
+        TypeInterfaceImpl
           PsiElement(KEYWORD_INTERFACE)('interface')
           PsiElement({)('{')
           PsiElement(})('}')
         PsiElement(()('(')
         LiteralExpr
-          Identifier
+          IdentifierImpl
             PsiElement(IDENTIFIER)('nil')
         PsiElement())(')')
   PsiElement(WS_NEW_LINES)('\n')

@@ -7,22 +7,22 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  VarDeclarations
+  VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
-    VarDeclaration
-      Identifier
+    VarDeclarationImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CommunicationExpression
         LiteralExpr
-          Identifier
+          IdentifierImpl
             PsiElement(IDENTIFIER)('a')
         PsiWhiteSpace(' ')
         PsiElement(<-)('<-')
         PsiWhiteSpace(' ')
         LiteralExpr
-          Identifier
+          IdentifierImpl
             PsiElement(IDENTIFIER)('b')

@@ -12,34 +12,34 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('f')
     PsiElement(()('(')
-    FunctionParameterList
-      FunctionParameter
+    FunctionParameterListImpl
+      FunctionParameterImpl
         TypeName
           PsiElement(IDENTIFIER)('int')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      FunctionParameter
+      FunctionParameterImpl
         TypeName
           PsiElement(IDENTIFIER)('int')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      FunctionParameter
+      FunctionParameterImpl
         TypeName
           PsiElement(IDENTIFIER)('float')
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
       PsiElement(()('(')
-      FunctionParameterList
-        FunctionParameter
+      FunctionParameterListImpl
+        FunctionParameterImpl
           TypeName
             PsiElement(IDENTIFIER)('float')
         PsiElement(,)(',')
         PsiWhiteSpace(' ')
-        FunctionParameter
-          TypePointer
+        FunctionParameterImpl
+          TypePointerImpl
             PsiElement(*)('*')
-            TypeSlice
+            TypeSliceImpl
               PsiElement([)('[')
               PsiElement(])(']')
               TypeName

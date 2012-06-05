@@ -8,8 +8,8 @@ Go file
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
   PsiWhiteSpace(' ')
-  ImportDeclarations
+  ImportDeclarationsImpl
     PsiElement(KEYWORD_IMPORT)('import')
-    ImportSpec
+    ImportSpecImpl
       PsiErrorElement:import.path.expected
         <empty list>

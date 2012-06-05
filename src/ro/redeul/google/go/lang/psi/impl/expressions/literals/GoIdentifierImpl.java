@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
+import javax.swing.*;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -12,19 +14,14 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsResolver;
-import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-
-import javax.swing.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -125,6 +122,11 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
     @Override
     public boolean isBlank() {
         return getText().equals("_");
+    }
+
+    @Override
+    public boolean isIota() {
+        return getText().equals("iota");
     }
 
     @Override

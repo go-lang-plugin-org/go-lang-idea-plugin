@@ -15,7 +15,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
-        FunctionParameter
+      FunctionParameterListImpl
+        FunctionParameterImpl
           TypeName
             PsiElement(IDENTIFIER)('int')

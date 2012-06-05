@@ -14,7 +14,7 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace(' ')
       ForStmt
@@ -28,7 +28,7 @@ Go file
           PsiWhiteSpace(' ')
           EmptyStmt
             <empty list>
-        BlockStmt
+        BlockStmtImpl
           PsiElement({)('{')
           PsiWhiteSpace(' ')
           PsiElement(})('}')

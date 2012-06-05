@@ -14,15 +14,15 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace(' ')
       ForStmt
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
         ForForClause
-          ShortVarStmt
-            Identifier
+          ShortVarStmtImpl
+            IdentifierImpl
               PsiElement(IDENTIFIER)('i')
             PsiWhiteSpace(' ')
             PsiElement(:=)(':=')
@@ -35,11 +35,11 @@ Go file
           PsiWhiteSpace(' ')
           IncDecStmt
             LiteralExpr
-              Identifier
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('i')
             PsiElement(++)('++')
         PsiWhiteSpace(' ')
-        BlockStmt
+        BlockStmtImpl
           PsiElement({)('{')
           PsiWhiteSpace(' ')
           PsiElement(})('}')

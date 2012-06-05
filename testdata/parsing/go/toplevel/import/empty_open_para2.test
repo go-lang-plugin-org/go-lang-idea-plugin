@@ -8,16 +8,16 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  ImportDeclarations
+  ImportDeclarationsImpl
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')
     PsiElement(()('(')
     PsiElement(WS_NEW_LINES)('\n')
-    ImportSpec
+    ImportSpecImpl
       PsiErrorElement:import.path.expected
         <empty list>
-  VarDeclarations
+  VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
-    VarDeclaration
+    VarDeclarationImpl
       PsiErrorElement:identifier.list.expected
         <empty list>

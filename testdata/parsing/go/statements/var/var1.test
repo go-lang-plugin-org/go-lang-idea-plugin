@@ -1,6 +1,6 @@
 package main
 func main() {
-    var a = b 
+    var a = b
 }
 -----
 Go file
@@ -16,22 +16,21 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
-      VarDeclarations
+      VarDeclarationsImpl
         PsiElement(KEYWORD_VAR)('var')
         PsiWhiteSpace(' ')
-        VarDeclaration
-          Identifier
+        VarDeclarationImpl
+          IdentifierImpl
             PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
           PsiElement(=)('=')
           PsiWhiteSpace(' ')
           LiteralExpr
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('b')
-      PsiWhiteSpace(' ')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')

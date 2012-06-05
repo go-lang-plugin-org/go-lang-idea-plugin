@@ -55,6 +55,14 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     public void testConst$case3() throws Throwable { doTest(); }
     public void testConst$case7() throws Throwable { doTest(); }
 
+    public void testVar$case1() throws Throwable { doTest(); }
+    public void testVar$case2() throws Throwable { doTest(); }
+    public void testVar$case3() throws Throwable { doTest(); }
+    public void testVar$case4() throws Throwable { doTest(); }
+    public void testVar$case5() throws Throwable { doTest(); }
+    public void testVar$case6() throws Throwable { doTest(); }
+    public void testVar$case7() throws Throwable { doTest(); }
+
     public void testType$case1() throws Throwable { doTest(); }
     public void testType$case2() throws Throwable { doTest(); }
     public void testType$case3() throws Throwable { doTest(); }

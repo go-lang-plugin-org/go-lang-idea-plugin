@@ -16,7 +16,7 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
@@ -24,10 +24,10 @@ Go file
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
         LiteralExpr
-          Identifier
+          IdentifierImpl
             PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
-        BlockStmt
+        BlockStmtImpl
           PsiElement({)('{')
           PsiWhiteSpace(' ')
           PsiElement(})('}')

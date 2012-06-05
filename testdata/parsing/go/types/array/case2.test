@@ -7,35 +7,35 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  TypeDeclarations
+  TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
-    TypeSpec
+    TypeSpecImpl
       NamedType(t)
         PsiElement(IDENTIFIER)('t')
       PsiWhiteSpace(' ')
-      TypeArray
+      TypeArrayImpl
         PsiElement([)('[')
         MultiplicativeExpression
           LiteralExpr
             PsiElement(LITERAL_INT)('2')
           PsiElement(*)('*')
           LiteralExpr
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('N')
         PsiElement(])(']')
         PsiWhiteSpace(' ')
-        TypeStruct
+        TypeStructImpl
           PsiElement(KEYWORD_STRUCT)('struct')
           PsiWhiteSpace(' ')
           PsiElement({)('{')
           PsiWhiteSpace(' ')
-          TypeStructField
-            Identifier
+          TypeStructFieldImpl
+            IdentifierImpl
               PsiElement(IDENTIFIER)('x')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('y')
             PsiWhiteSpace(' ')
             TypeName

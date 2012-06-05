@@ -8,27 +8,27 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  TypeDeclarations
+  TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
-    TypeSpec
+    TypeSpecImpl
       NamedType(T)
         PsiElement(IDENTIFIER)('T')
       PsiWhiteSpace(' ')
-      TypeStruct
+      TypeStructImpl
         PsiElement(KEYWORD_STRUCT)('struct')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiWhiteSpace(' ')
-        TypeStructField
-          Identifier
+        TypeStructFieldImpl
+          IdentifierImpl
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
           TypeName
             PsiElement(IDENTIFIER)('int')
         PsiElement(WS_NEW_LINES)('\n')
-        TypeStructField
-          Identifier
+        TypeStructFieldImpl
+          IdentifierImpl
             PsiElement(IDENTIFIER)('y')
           PsiWhiteSpace(' ')
           TypeName

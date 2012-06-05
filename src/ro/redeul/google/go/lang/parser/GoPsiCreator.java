@@ -12,7 +12,6 @@ import ro.redeul.google.go.lang.psi.impl.declarations.GoShortVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoBuiltinCallExprImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionListImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
@@ -131,9 +130,6 @@ public class GoPsiCreator implements GoElementTypes {
 
         if ( elementType.equals(BLOCK_STATEMENT))
             return new GoBlockStatementImpl(node);
-
-        if ( elementType.equals(EXPRESSION_LIST))
-            return new GoExpressionListImpl(node);
 
         if ( elementType.equals(SELECTOR_EXPRESSION) )
             return new GoSelectorExpressionImpl(node);

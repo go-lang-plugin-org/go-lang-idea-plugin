@@ -12,9 +12,9 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('f')
     PsiElement(()('(')
-    FunctionParameterList
-      FunctionParameter
-        Identifier
+    FunctionParameterListImpl
+      FunctionParameterImpl
+        IdentifierImpl
           PsiElement(IDENTIFIER)('n')
         PsiWhiteSpace(' ')
         TypeName
@@ -22,22 +22,22 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
-        FunctionParameter
+      FunctionParameterListImpl
+        FunctionParameterImpl
           TypeFunction
             PsiElement(KEYWORD_FUNC)('func')
             PsiElement(()('(')
-            FunctionParameterList
-              FunctionParameter
-                Identifier
+            FunctionParameterListImpl
+              FunctionParameterImpl
+                IdentifierImpl
                   PsiElement(IDENTIFIER)('p')
                 PsiWhiteSpace(' ')
-                TypePointer
+                TypePointerImpl
                   PsiElement(*)('*')
                   TypeName
                     PsiElement(IDENTIFIER)('T')
             PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(})('}')

@@ -14,7 +14,7 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace(' ')
       ForStmt
@@ -29,11 +29,11 @@ Go file
           PsiWhiteSpace(' ')
           IncDecStmt
             LiteralExpr
-              Identifier
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('i')
             PsiElement(++)('++')
         PsiWhiteSpace(' ')
-        BlockStmt
+        BlockStmtImpl
           PsiElement({)('{')
           PsiWhiteSpace(' ')
           PsiElement(})('}')

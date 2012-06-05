@@ -12,21 +12,21 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('f')
     PsiElement(()('(')
-    FunctionParameterList
-      FunctionParameter
-        Identifier
+    FunctionParameterListImpl
+      FunctionParameterImpl
+        IdentifierImpl
           PsiElement(IDENTIFIER)('a')
         PsiElement(,)(',')
         PsiWhiteSpace(' ')
-        Identifier
+        IdentifierImpl
           PsiElement(IDENTIFIER)('b')
         PsiWhiteSpace(' ')
         TypeName
           PsiElement(IDENTIFIER)('int')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      FunctionParameter
-        Identifier
+      FunctionParameterImpl
+        IdentifierImpl
           PsiElement(IDENTIFIER)('z')
         PsiWhiteSpace(' ')
         TypeName
@@ -34,11 +34,11 @@ Go file
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       FunctionParameterVariadic
-        Identifier
+        IdentifierImpl
           PsiElement(IDENTIFIER)('opt')
         PsiWhiteSpace(' ')
         PsiElement(...)('...')
-        TypeInterface
+        TypeInterfaceImpl
           PsiElement(KEYWORD_INTERFACE)('interface')
           PsiElement({)('{')
           PsiElement(})('}')
@@ -46,15 +46,15 @@ Go file
     PsiWhiteSpace(' ')
     FunctionResult
       PsiElement(()('(')
-      FunctionParameterList
-        FunctionParameter
-          Identifier
+      FunctionParameterListImpl
+        FunctionParameterImpl
+          IdentifierImpl
             PsiElement(IDENTIFIER)('success')
           PsiWhiteSpace(' ')
           TypeName
             PsiElement(IDENTIFIER)('bool')
       PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(})('}')

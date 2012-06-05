@@ -12,9 +12,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import com.intellij.util.ReflectionCache;
 import ro.redeul.google.go.GoFileType;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 public class GoPsiUtils {
@@ -94,15 +95,21 @@ public class GoPsiUtils {
         return null;
     }
 
+    public static PsiElement findParentOfType(PsiElement node, Class<? extends PsiElement> type) {
+        while (node != null && !ReflectionCache.isInstance(node, type)) {
+            node = node.getParent();
+        }
+
+        return node;
+    }
+
     /**
      * Check whether element is the predeclared identifier "iota" in a const declaration
      * @param element the element to check
      * @return true if the element is a valid use of "iota" in const declaration
      */
     public static boolean isIotaInConstantDeclaration(PsiElement element) {
-        PsiElement expressionList = findParentOfType(element, GoElementTypes.EXPRESSION_LIST);
-        PsiElement constDeclaration = findParentOfType(expressionList, GoElementTypes.CONST_DECLARATION);
-        return constDeclaration != null;
+        return findParentOfType(element, GoConstDeclaration.class) != null;
     }
 
     public static boolean isEnclosedByParenthesis(PsiElement element) {

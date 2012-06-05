@@ -1,0 +1,18 @@
+package main
+var i int
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarationsImpl
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarDeclarationImpl
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('i')
+      PsiWhiteSpace(' ')
+      TypeName
+        PsiElement(IDENTIFIER)('int')

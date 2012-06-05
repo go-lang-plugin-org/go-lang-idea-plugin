@@ -53,11 +53,11 @@ public class ConstDeclaration implements GoElementTypes {
         if (ParserUtils.lookAhead(builder, oASSIGN)) {
             ParserUtils.advance(builder);
 
-            PsiBuilder.Marker valuesList = builder.mark();
+//            PsiBuilder.Marker valuesList = builder.mark();
             do {
                 parser.parseExpression(builder, false);
             } while (ParserUtils.getToken(builder, oCOMMA));
-            valuesList.done(EXPRESSION_LIST);
+//            valuesList.done(EXPRESSION_LIST);
         }
 
         if (builder.getTokenType() != oSEMI && builder.getTokenType() != pRPAREN && builder

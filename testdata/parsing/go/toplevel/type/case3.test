@@ -13,13 +13,13 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  TypeDeclarations
+  TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
     PsiElement(()('(')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('    ')
-    TypeSpec
+    TypeSpecImpl
       NamedType(Point)
         PsiElement(IDENTIFIER)('Point')
       PsiWhiteSpace(' ')
@@ -27,35 +27,35 @@ Go file
         PsiElement(IDENTIFIER)('int')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('    ')
-    TypeSpec
+    TypeSpecImpl
       NamedType(TreeNode)
         PsiElement(IDENTIFIER)('TreeNode')
       PsiWhiteSpace(' ')
-      TypeStruct
+      TypeStructImpl
         PsiElement(KEYWORD_STRUCT)('struct')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t    ')
-        TypeStructField
-          Identifier
+        TypeStructFieldImpl
+          IdentifierImpl
             PsiElement(IDENTIFIER)('left')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
-          Identifier
+          IdentifierImpl
             PsiElement(IDENTIFIER)('right')
           PsiWhiteSpace(' ')
-          TypePointer
+          TypePointerImpl
             PsiElement(*)('*')
             TypeName
               PsiElement(IDENTIFIER)('TreeNode')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t    ')
-        TypeStructField
-          Identifier
+        TypeStructFieldImpl
+          IdentifierImpl
             PsiElement(IDENTIFIER)('value')
           PsiWhiteSpace(' ')
-          TypePointer
+          TypePointerImpl
             PsiElement(*)('*')
             TypeName
               PsiElement(IDENTIFIER)('Comparable')

@@ -7,10 +7,10 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  VarDeclarations
+  VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
-    VarDeclaration
+    VarDeclarationImpl
       Identifiers
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')

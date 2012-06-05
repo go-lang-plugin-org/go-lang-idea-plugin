@@ -7,11 +7,11 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  VarDeclarations
+  VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
-    VarDeclaration
-      Identifier
+    VarDeclarationImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -21,7 +21,7 @@ Go file
         CompositeLiteral
           SelectorExpression
             LiteralExpr
-              Identifier
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('ast')
             PsiElement(.)('.')
             PsiElement(IDENTIFIER)('ArrayType')
@@ -30,20 +30,20 @@ Go file
             CompositeLiteralElement
               CompositeLiteralElementValue
                 LiteralExpr
-                  Identifier
+                  IdentifierImpl
                     PsiElement(IDENTIFIER)('lbrack')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
             CompositeLiteralElement
               CompositeLiteralElementValue
                 LiteralExpr
-                  Identifier
+                  IdentifierImpl
                     PsiElement(IDENTIFIER)('len')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
             CompositeLiteralElement
               CompositeLiteralElementValue
                 LiteralExpr
-                  Identifier
+                  IdentifierImpl
                     PsiElement(IDENTIFIER)('elt')
             PsiElement(})('}')

@@ -19,7 +19,7 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
@@ -28,7 +28,7 @@ Go file
         PsiWhiteSpace(' ')
         IncDecStmt
           LiteralExpr
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('a')
           PsiElement(++)('++')
         PsiElement(;)(';')
@@ -40,11 +40,11 @@ Go file
           PsiWhiteSpace(' ')
           IndexExpression
             LiteralExpr
-              Identifier
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('x')
             PsiElement([)('[')
             LiteralExpr
-              Identifier
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('i')
             PsiElement(])(']')
           PsiElement(.)('.')

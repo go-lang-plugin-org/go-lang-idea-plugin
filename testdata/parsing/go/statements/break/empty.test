@@ -1,6 +1,6 @@
 package main
 func main() {
-    break 
+    break
 }
 -----
 Go file
@@ -16,12 +16,11 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
       BreakStmt
         PsiElement(KEYWORD_BREAK)('break')
-      PsiWhiteSpace(' ')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')

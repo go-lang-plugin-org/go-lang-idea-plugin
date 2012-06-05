@@ -7,25 +7,25 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  VarDeclarations
+  VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
-    VarDeclaration
-      Identifier
+    VarDeclarationImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CompositeLiteral
         LiteralExpr
-          Identifier
+          IdentifierImpl
             PsiElement(IDENTIFIER)('Line')
         CompositeLiteralElementList
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue
               LiteralExpr
-                Identifier
+                IdentifierImpl
                   PsiElement(IDENTIFIER)('origin')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
@@ -33,14 +33,14 @@ Go file
             CompositeLiteralElementValue
               CompositeLiteral
                 LiteralExpr
-                  Identifier
+                  IdentifierImpl
                     PsiElement(IDENTIFIER)('Point')
                 CompositeLiteralElementList
                   PsiElement({)('{')
                   CompositeLiteralElement
                     CompositeLiteralElementKey
                       LiteralExpr
-                        Identifier
+                        IdentifierImpl
                           PsiElement(IDENTIFIER)('y')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
@@ -54,7 +54,7 @@ Go file
                   CompositeLiteralElement
                     CompositeLiteralElementKey
                       LiteralExpr
-                        Identifier
+                        IdentifierImpl
                           PsiElement(IDENTIFIER)('z')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')

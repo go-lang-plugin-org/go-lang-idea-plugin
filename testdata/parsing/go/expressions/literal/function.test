@@ -7,11 +7,11 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  VarDeclarations
+  VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
-    VarDeclaration
-      Identifier
+    VarDeclarationImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('f')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -20,13 +20,13 @@ Go file
         TypeFunction
           PsiElement(KEYWORD_FUNC)('func')
           PsiElement(()('(')
-          FunctionParameterList
-            FunctionParameter
-              Identifier
+          FunctionParameterListImpl
+            FunctionParameterImpl
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('x')
               PsiElement(,)(',')
               PsiWhiteSpace(' ')
-              Identifier
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('y')
               PsiWhiteSpace(' ')
               TypeName
@@ -34,12 +34,12 @@ Go file
           PsiElement())(')')
           PsiWhiteSpace(' ')
           FunctionResult
-            FunctionParameterList
-              FunctionParameter
+            FunctionParameterListImpl
+              FunctionParameterImpl
                 TypeName
                   PsiElement(IDENTIFIER)('int')
         PsiWhiteSpace(' ')
-        BlockStmt
+        BlockStmtImpl
           PsiElement({)('{')
           PsiWhiteSpace(' ')
           PsiElement(})('}')

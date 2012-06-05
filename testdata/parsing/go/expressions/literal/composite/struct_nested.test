@@ -7,29 +7,29 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  VarDeclarations
+  VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
-    VarDeclaration
-      Identifier
+    VarDeclarationImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CompositeLiteral
-        TypeStruct
+        TypeStructImpl
           PsiElement(KEYWORD_STRUCT)('struct')
           PsiElement({)('{')
-          TypeStructField
-            Identifier
+          TypeStructFieldImpl
+            IdentifierImpl
               PsiElement(IDENTIFIER)('a')
             PsiWhiteSpace(' ')
             TypeName
               PsiElement(IDENTIFIER)('int')
           PsiElement(;)(';')
           PsiWhiteSpace(' ')
-          TypeStructField
-            Identifier
+          TypeStructFieldImpl
+            IdentifierImpl
               PsiElement(IDENTIFIER)('b')
             PsiWhiteSpace(' ')
             TypeName
@@ -40,7 +40,7 @@ Go file
           CompositeLiteralElement
             CompositeLiteralElementValue
               LiteralExpr
-                Identifier
+                IdentifierImpl
                   PsiElement(IDENTIFIER)('a')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
@@ -48,14 +48,14 @@ Go file
             CompositeLiteralElementValue
               CompositeLiteral
                 LiteralExpr
-                  Identifier
+                  IdentifierImpl
                     PsiElement(IDENTIFIER)('Point')
                 CompositeLiteralElementList
                   PsiElement({)('{')
                   CompositeLiteralElement
                     CompositeLiteralElementKey
                       LiteralExpr
-                        Identifier
+                        IdentifierImpl
                           PsiElement(IDENTIFIER)('y')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
@@ -69,7 +69,7 @@ Go file
                   CompositeLiteralElement
                     CompositeLiteralElementKey
                       LiteralExpr
-                        Identifier
+                        IdentifierImpl
                           PsiElement(IDENTIFIER)('x')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')

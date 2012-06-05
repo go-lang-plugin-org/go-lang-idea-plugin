@@ -17,14 +17,14 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  ConstDeclarations
+  ConstDeclarationsImpl
     PsiElement(KEYWORD_CONST)('const')
     PsiWhiteSpace(' ')
     PsiElement(()('(')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('      ')
-    ConstSpec
-      Identifier
+    ConstSpecImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('ET_NONE')
       PsiWhiteSpace('   ')
       TypeName
@@ -32,15 +32,14 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_INT)('0')
+      LiteralExpr
+        PsiElement(LITERAL_INT)('0')
     PsiWhiteSpace('      ')
     PsiComment(ML_COMMENT)('/* Unknown type. */')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('      ')
-    ConstSpec
-      Identifier
+    ConstSpecImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('ET_REL')
       PsiWhiteSpace('    ')
       TypeName
@@ -48,15 +47,14 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_INT)('1')
+      LiteralExpr
+        PsiElement(LITERAL_INT)('1')
     PsiWhiteSpace('      ')
     PsiComment(ML_COMMENT)('/* Relocatable. */')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('      ')
-    ConstSpec
-      Identifier
+    ConstSpecImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('ET_EXEC')
       PsiWhiteSpace('   ')
       TypeName
@@ -64,15 +62,14 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_INT)('2')
+      LiteralExpr
+        PsiElement(LITERAL_INT)('2')
     PsiWhiteSpace('      ')
     PsiComment(ML_COMMENT)('/* Executable. */')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('      ')
-    ConstSpec
-      Identifier
+    ConstSpecImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('ET_DYN')
       PsiWhiteSpace('    ')
       TypeName
@@ -80,15 +77,14 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_INT)('3')
+      LiteralExpr
+        PsiElement(LITERAL_INT)('3')
     PsiWhiteSpace('      ')
     PsiComment(ML_COMMENT)('/* Shared object. */')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('      ')
-    ConstSpec
-      Identifier
+    ConstSpecImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('ET_CORE')
       PsiWhiteSpace('   ')
       TypeName
@@ -96,15 +92,14 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_INT)('4')
+      LiteralExpr
+        PsiElement(LITERAL_INT)('4')
     PsiWhiteSpace('      ')
     PsiComment(ML_COMMENT)('/* Core file. */')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('      ')
-    ConstSpec
-      Identifier
+    ConstSpecImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('ET_LOOS')
       PsiWhiteSpace('   ')
       TypeName
@@ -112,15 +107,14 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_HEX)('0xfe00')
+      LiteralExpr
+        PsiElement(LITERAL_HEX)('0xfe00')
     PsiWhiteSpace(' ')
     PsiComment(ML_COMMENT)('/* First operating system specific. */')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('      ')
-    ConstSpec
-      Identifier
+    ConstSpecImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('ET_HIOS')
       PsiWhiteSpace('   ')
       TypeName
@@ -128,15 +122,14 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_HEX)('0xfeff')
+      LiteralExpr
+        PsiElement(LITERAL_HEX)('0xfeff')
     PsiWhiteSpace(' ')
     PsiComment(ML_COMMENT)('/* Last operating system-specific. */')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('      ')
-    ConstSpec
-      Identifier
+    ConstSpecImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('ET_LOPROC')
       PsiWhiteSpace(' ')
       TypeName
@@ -144,15 +137,14 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_HEX)('0xff00')
+      LiteralExpr
+        PsiElement(LITERAL_HEX)('0xff00')
     PsiWhiteSpace(' ')
     PsiComment(ML_COMMENT)('/* First processor-specific. */')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('      ')
-    ConstSpec
-      Identifier
+    ConstSpecImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('ET_HIPROC')
       PsiWhiteSpace(' ')
       TypeName
@@ -160,9 +152,8 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_HEX)('0xffff')
+      LiteralExpr
+        PsiElement(LITERAL_HEX)('0xffff')
     PsiWhiteSpace(' ')
     PsiComment(ML_COMMENT)('/* Last processor-specific. */')
     PsiElement(WS_NEW_LINES)('\n')

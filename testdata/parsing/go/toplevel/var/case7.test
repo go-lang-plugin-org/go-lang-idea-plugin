@@ -1,0 +1,31 @@
+package main
+var _, found = entries[name]
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarationsImpl
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarDeclarationImpl
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('_')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('found')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      IndexExpression
+        LiteralExpr
+          IdentifierImpl
+            PsiElement(IDENTIFIER)('entries')
+        PsiElement([)('[')
+        LiteralExpr
+          IdentifierImpl
+            PsiElement(IDENTIFIER)('name')
+        PsiElement(])(']')

@@ -10,26 +10,26 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  TypeDeclarations
+  TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
-    TypeSpec
+    TypeSpecImpl
       NamedType(T)
         PsiElement(IDENTIFIER)('T')
       PsiWhiteSpace(' ')
-      TypeStruct
+      TypeStructImpl
         PsiElement(KEYWORD_STRUCT)('struct')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
-        TypeStructFieldAnonymous
+        TypeStructFieldAnonymousImpl
           TypeName
             PsiElement(IDENTIFIER)('T2')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
-        TypeStructField
-          Identifier
+        TypeStructFieldImpl
+          IdentifierImpl
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
           TypeName

@@ -21,7 +21,7 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
@@ -29,7 +29,7 @@ Go file
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
         LiteralExpr
-          Identifier
+          IdentifierImpl
             PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
@@ -39,26 +39,26 @@ Go file
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           LiteralExpr
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('a')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('            ')
-          ShortVarStmt
-            Identifier
+          ShortVarStmtImpl
+            IdentifierImpl
               PsiElement(IDENTIFIER)('x')
             PsiWhiteSpace(' ')
             PsiElement(:=)(':=')
             PsiWhiteSpace(' ')
             LiteralExpr
-              Identifier
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('y')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('            ')
           ExpressionStmt
             CallOrConversionExpression
               LiteralExpr
-                Identifier
+                IdentifierImpl
                   PsiElement(IDENTIFIER)('x')
               PsiElement(()('(')
               PsiElement())(')')

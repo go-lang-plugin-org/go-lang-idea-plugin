@@ -15,10 +15,10 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n\n')
-  ImportDeclarations
+  ImportDeclarationsImpl
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')
-    ImportSpec
+    ImportSpecImpl
       PsiElement(LITERAL_STRING)('"fmt"')
   PsiElement(WS_NEW_LINES)('\n\n')
   FunctionDeclaration(main)
@@ -28,7 +28,7 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
@@ -38,7 +38,7 @@ Go file
       ExpressionStmt
         CallOrConversionExpression
           LiteralExpr
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('fmt')
               PsiElement(.)('.')
               PsiElement(IDENTIFIER)('Printf')

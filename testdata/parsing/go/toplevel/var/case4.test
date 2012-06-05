@@ -1,0 +1,35 @@
+package main
+var x, y float32 = -1, -2
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarationsImpl
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarDeclarationImpl
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('x')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('y')
+      PsiWhiteSpace(' ')
+      TypeName
+        PsiElement(IDENTIFIER)('float32')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      UnaryExpression
+        PsiElement(-)('-')
+        LiteralExpr
+          PsiElement(LITERAL_INT)('1')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      UnaryExpression
+        PsiElement(-)('-')
+        LiteralExpr
+          PsiElement(LITERAL_INT)('2')

@@ -1,0 +1,20 @@
+package main
+var k = 0
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarationsImpl
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarDeclarationImpl
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('k')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      LiteralExpr
+        PsiElement(LITERAL_INT)('0')

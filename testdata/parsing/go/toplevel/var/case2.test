@@ -1,0 +1,26 @@
+package main
+var U, V, W float64
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarationsImpl
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarDeclarationImpl
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('U')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('V')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('W')
+      PsiWhiteSpace(' ')
+      TypeName
+        PsiElement(IDENTIFIER)('float64')

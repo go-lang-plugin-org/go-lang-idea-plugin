@@ -7,7 +7,6 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -27,17 +26,9 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
     @Override
     @NotNull
     public GoExpr[] getExpressions() {
-        GoExpressionList expressionList = getExpressionsList();
-
-        return expressionList != null
-            ? expressionList.getExpressions()
-            : new GoExpr[0];
+        return findChildrenByClass(GoExpr.class);
     }
 
-    @Override
-    public GoExpressionList getExpressionsList() {
-        return findChildByClass(GoExpressionList.class);
-    }
 
     @Override
     public void accept(GoElementVisitor visitor) {

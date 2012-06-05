@@ -12,15 +12,15 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('f')
     PsiElement(()('(')
-    FunctionParameterList
-      FunctionParameter
-        Identifier
+    FunctionParameterListImpl
+      FunctionParameterImpl
+        IdentifierImpl
           PsiElement(IDENTIFIER)('x')
         PsiWhiteSpace(' ')
         TypeName
           PsiElement(IDENTIFIER)('int')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(})('}')

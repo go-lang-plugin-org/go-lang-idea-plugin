@@ -7,31 +7,31 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  TypeDeclarations
+  TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
-    TypeSpec
+    TypeSpecImpl
       NamedType(f)
         PsiElement(IDENTIFIER)('f')
       PsiWhiteSpace(' ')
       TypeFunction
         PsiElement(KEYWORD_FUNC)('func')
         PsiElement(()('(')
-        FunctionParameterList
-          FunctionParameter
-            Identifier
+        FunctionParameterListImpl
+          FunctionParameterImpl
+            IdentifierImpl
               PsiElement(IDENTIFIER)('a')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('b')
             PsiWhiteSpace(' ')
             TypeName
               PsiElement(IDENTIFIER)('int')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
-          FunctionParameter
-            Identifier
+          FunctionParameterImpl
+            IdentifierImpl
               PsiElement(IDENTIFIER)('z')
             PsiWhiteSpace(' ')
             TypeName
@@ -39,11 +39,11 @@ Go file
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           FunctionParameterVariadic
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('opt')
             PsiWhiteSpace(' ')
             PsiElement(...)('...')
-            TypeInterface
+            TypeInterfaceImpl
               PsiElement(KEYWORD_INTERFACE)('interface')
               PsiElement({)('{')
               PsiElement(})('}')
@@ -51,9 +51,9 @@ Go file
         PsiWhiteSpace(' ')
         FunctionResult
           PsiElement(()('(')
-          FunctionParameterList
-            FunctionParameter
-              Identifier
+          FunctionParameterListImpl
+            FunctionParameterImpl
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('success')
               PsiWhiteSpace(' ')
               TypeName

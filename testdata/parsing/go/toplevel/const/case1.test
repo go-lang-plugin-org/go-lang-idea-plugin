@@ -7,16 +7,15 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  ConstDeclarations
+  ConstDeclarationsImpl
     PsiElement(KEYWORD_CONST)('const')
     PsiWhiteSpace(' ')
-    ConstSpec
-      Identifier
+    ConstSpecImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('a')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ExpressionList
-        LiteralExpr
-          PsiElement(LITERAL_INT)('1')
+      LiteralExpr
+        PsiElement(LITERAL_INT)('1')
       PsiElement(;)(';')

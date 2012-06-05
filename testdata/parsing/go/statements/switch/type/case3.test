@@ -19,7 +19,7 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
@@ -30,7 +30,7 @@ Go file
         PsiWhiteSpace(' ')
         SwitchTypeGuard
           LiteralExpr
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('x')
           PsiElement(.)('.')
           PsiElement(()('(')

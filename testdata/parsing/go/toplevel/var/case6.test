@@ -1,0 +1,32 @@
+package main
+var re, im = complexSqrt(-1)
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarationsImpl
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarDeclarationImpl
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('re')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('im')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CallOrConversionExpression
+        LiteralExpr
+          IdentifierImpl
+            PsiElement(IDENTIFIER)('complexSqrt')
+        PsiElement(()('(')
+        UnaryExpression
+          PsiElement(-)('-')
+          LiteralExpr
+            PsiElement(LITERAL_INT)('1')
+        PsiElement())(')')

@@ -7,11 +7,11 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  VarDeclarations
+  VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
-    VarDeclaration
-      Identifier
+    VarDeclarationImpl
+      IdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -21,13 +21,13 @@ Go file
           IndexExpression
             SelectorExpression
               LiteralExpr
-                Identifier
+                IdentifierImpl
                   PsiElement(IDENTIFIER)('f')
               PsiElement(.)('.')
               PsiElement(IDENTIFIER)('p')
             PsiElement([)('[')
             LiteralExpr
-              Identifier
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('i')
             PsiElement(])(']')
           PsiElement(.)('.')

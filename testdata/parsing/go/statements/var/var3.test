@@ -17,15 +17,15 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
-      VarDeclarations
+      VarDeclarationsImpl
         PsiElement(KEYWORD_VAR)('var')
         PsiWhiteSpace(' ')
-        VarDeclaration
-          Identifier
+        VarDeclarationImpl
+          IdentifierImpl
             PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
           TypeName
@@ -34,13 +34,13 @@ Go file
           PsiElement(=)('=')
           PsiWhiteSpace(' ')
           LiteralExpr
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('b')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
       ExpressionStmt
         LiteralExpr
-          Identifier
+          IdentifierImpl
             PsiElement(IDENTIFIER)('a')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')

@@ -13,4 +13,6 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 public interface GoIdentifier extends GoPsiElement, PsiReference, PsiNamedElement {
 
     boolean isBlank();
+
+    boolean isIota();
 }

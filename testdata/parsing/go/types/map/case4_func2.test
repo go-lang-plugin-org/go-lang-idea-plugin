@@ -13,23 +13,23 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  TypeDeclarations
+  TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
-    TypeSpec
+    TypeSpecImpl
       NamedType(myHandler)
         PsiElement(IDENTIFIER)('myHandler')
       PsiWhiteSpace(' ')
-      TypeStruct
+      TypeStructImpl
         PsiElement(KEYWORD_STRUCT)('struct')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiElement(WS_NEW_LINES)('\n')
-        TypeStructField
-          Identifier
+        TypeStructFieldImpl
+          IdentifierImpl
             PsiElement(IDENTIFIER)('handlers')
           PsiWhiteSpace(' ')
-          TypeMap
+          TypeMapImpl
             PsiElement(KEYWORD_MAP)('map')
             PsiElement([)('[')
             TypeName
@@ -40,74 +40,74 @@ Go file
               PsiElement(()('(')
               PsiElement(WS_NEW_LINES)('\n')
               PsiWhiteSpace('    ')
-              FunctionParameterList
-                FunctionParameter
-                  Identifier
+              FunctionParameterListImpl
+                FunctionParameterImpl
+                  IdentifierImpl
                     PsiElement(IDENTIFIER)('w')
                   PsiWhiteSpace(' ')
                   TypeName
-                    PackageReference
+                    PackageReferenceImpl
                       PsiElement(IDENTIFIER)('http')
                     PsiElement(.)('.')
-                    Identifier
+                    IdentifierImpl
                       PsiElement(IDENTIFIER)('ResponseWriter')
                 PsiElement(,)(',')
                 PsiElement(WS_NEW_LINES)('\n')
                 PsiWhiteSpace('    ')
-                FunctionParameter
-                  Identifier
+                FunctionParameterImpl
+                  IdentifierImpl
                     PsiElement(IDENTIFIER)('r')
                   PsiWhiteSpace(' ')
-                  TypePointer
+                  TypePointerImpl
                     PsiElement(*)('*')
                     TypeName
-                      PackageReference
+                      PackageReferenceImpl
                         PsiElement(IDENTIFIER)('http')
                       PsiElement(.)('.')
-                      Identifier
+                      IdentifierImpl
                         PsiElement(IDENTIFIER)('Request')
                 PsiElement(,)(',')
                 PsiElement(WS_NEW_LINES)('\n')
                 PsiWhiteSpace('    ')
-                FunctionParameter
-                  Identifier
+                FunctionParameterImpl
+                  IdentifierImpl
                     PsiElement(IDENTIFIER)('queues')
                   PsiWhiteSpace(' ')
-                  TypePointer
+                  TypePointerImpl
                     PsiElement(*)('*')
                     TypeName
-                      PackageReference
+                      PackageReferenceImpl
                         PsiElement(IDENTIFIER)('yqs')
                       PsiElement(.)('.')
-                      Identifier
+                      IdentifierImpl
                         PsiElement(IDENTIFIER)('Queues')
               PsiElement())(')')
               PsiWhiteSpace(' ')
               FunctionResult
                 PsiElement(()('(')
-                FunctionParameterList
-                  FunctionParameter
+                FunctionParameterListImpl
+                  FunctionParameterImpl
                     TypeName
                       PsiElement(IDENTIFIER)('int')
                 PsiElement())(')')
         PsiElement(WS_NEW_LINES)('\n')
-        TypeStructField
-          Identifier
+        TypeStructFieldImpl
+          IdentifierImpl
             PsiElement(IDENTIFIER)('templates')
           PsiWhiteSpace(' ')
-          TypeMap
+          TypeMapImpl
             PsiElement(KEYWORD_MAP)('map')
             PsiElement([)('[')
             TypeName
               PsiElement(IDENTIFIER)('string')
             PsiElement(])(']')
-            TypePointer
+            TypePointerImpl
               PsiElement(*)('*')
               TypeName
-                PackageReference
+                PackageReferenceImpl
                   PsiElement(IDENTIFIER)('template')
                 PsiElement(.)('.')
-                Identifier
+                IdentifierImpl
                   PsiElement(IDENTIFIER)('Template')
         PsiElement(WS_NEW_LINES)('\n')
         PsiElement(})('}')

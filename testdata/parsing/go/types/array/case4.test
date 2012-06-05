@@ -7,19 +7,19 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  TypeDeclarations
+  TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
-    TypeSpec
+    TypeSpecImpl
       NamedType(t)
         PsiElement(IDENTIFIER)('t')
       PsiWhiteSpace(' ')
-      TypeArray
+      TypeArrayImpl
         PsiElement([)('[')
         LiteralExpr
           PsiElement(LITERAL_INT)('3')
         PsiElement(])(']')
-        TypeArray
+        TypeArrayImpl
           PsiElement([)('[')
           LiteralExpr
             PsiElement(LITERAL_INT)('5')

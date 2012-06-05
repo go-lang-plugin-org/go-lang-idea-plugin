@@ -1,7 +1,7 @@
 package main
 func main() {
     switch e = 2; x[1:2].(type) {
-        case nil:        
+        case nil:
         case int, []string:
              return 1
     }
@@ -20,7 +20,7 @@ Go file
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    BlockStmt
+    BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
@@ -29,7 +29,7 @@ Go file
         PsiWhiteSpace(' ')
         AssignStmt
           LiteralExpr
-            Identifier
+            IdentifierImpl
               PsiElement(IDENTIFIER)('e')
           PsiWhiteSpace(' ')
           PsiElement(=)('=')
@@ -41,7 +41,7 @@ Go file
         SwitchTypeGuard
           SliceExpression
             LiteralExpr
-              Identifier
+              IdentifierImpl
                 PsiElement(IDENTIFIER)('x')
             PsiElement([)('[')
             LiteralExpr
@@ -64,7 +64,6 @@ Go file
           TypeName
             PsiElement(IDENTIFIER)('nil')
           PsiElement(:)(':')
-          PsiWhiteSpace('        ')
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('        ')
         SwitchTypeCase
@@ -75,7 +74,7 @@ Go file
               PsiElement(IDENTIFIER)('int')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
-            TypeSlice
+            TypeSliceImpl
               PsiElement([)('[')
               PsiElement(])(']')
               TypeName

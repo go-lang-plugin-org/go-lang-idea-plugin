@@ -7,11 +7,11 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  ImportDeclarations
+  ImportDeclarationsImpl
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')
-    ImportSpec
-      PackageReference
+    ImportSpecImpl
+      PackageReferenceImpl
         PsiElement(IDENTIFIER)('_')
       PsiWhiteSpace(' ')
       PsiElement(LITERAL_STRING)('"package"')
