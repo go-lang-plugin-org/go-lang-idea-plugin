@@ -7,7 +7,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.DebugUtil;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -59,7 +58,6 @@ public class GoIntroduceConstantHandler extends GoIntroduceHandlerBase {
         GoConstDeclarations[] allConstDeclarations = file.getConsts();
         if (allConstDeclarations.length > 0) {
             GoConstDeclarations declarations = allConstDeclarations[allConstDeclarations.length - 1];
-            System.out.println(DebugUtil.psiToString(file, false, true));
             appendConstToLastDeclaration(document, start, variable, declaration, declarations);
         } else {
             appendConstToLastImportOrPackage(document, file, variable, declaration);
