@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class UnusedImportInspection extends AbstractGoInspection {
+public class UnusedImportInspection extends AbstractWholeGoFileInspection {
     @Nls
     @NotNull
     @Override

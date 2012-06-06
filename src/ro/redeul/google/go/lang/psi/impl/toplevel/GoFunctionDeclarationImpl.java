@@ -9,11 +9,13 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+
+import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -54,6 +56,12 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFun
     @Override
     public GoFunctionParameterList getParameters() {
         return findChildByClass(GoFunctionParameterList.class);
+    }
+
+    @Override
+    public GoFunctionParameterList getResults() {
+        PsiElement result = findChildByType(GoElementTypes.FUNCTION_RESULT);
+        return findChildOfType(result, GoFunctionParameterList.class);
     }
 
     public String toString() {

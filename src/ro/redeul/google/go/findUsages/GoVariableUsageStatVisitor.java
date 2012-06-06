@@ -1,10 +1,5 @@
 package ro.redeul.google.go.findUsages;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -45,6 +40,7 @@ import static com.intellij.psi.impl.source.tree.TreeUtil.findSibling;
 import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedConstant;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDeclaration;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     private List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
@@ -163,8 +159,8 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
 
     private boolean isType(GoIdentifier id) {
         PsiElement parent = id.getParent();
-        IElementType et = parent.getNode().getElementType();
-        return et == GoElementTypes.BASE_TYPE_NAME || et == GoElementTypes.REFERENCE_BASE_TYPE_NAME || parent instanceof GoTypeName;
+        return isNodeOfType(parent, GoElementTypes.BASE_TYPE_NAME) ||
+               isNodeOfType(parent, GoElementTypes.REFERENCE_BASE_TYPE_NAME) || parent instanceof GoTypeName;
     }
 
     private boolean isTypeField(GoIdentifier id) {

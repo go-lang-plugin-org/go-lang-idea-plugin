@@ -1,8 +1,6 @@
 package ro.redeul.google.go.lang.psi.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.OrderRootType;
@@ -14,9 +12,13 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.ReflectionCache;
 import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GoPsiUtils {
 
@@ -82,13 +84,18 @@ public class GoPsiUtils {
     }
 
     public static boolean isNodeOfType(PsiElement node, IElementType type) {
-        return node.getNode().getElementType() == type;
+        if (node == null) {
+            return false;
+        }
+
+        ASTNode astNode = node.getNode();
+        return astNode != null && astNode.getElementType() == type;
     }
 
     public static PsiElement findParentOfType(PsiElement node, IElementType type) {
         while (node != null) {
             node = node.getParent();
-            if (node != null && node.getNode() != null && node.getNode().getElementType() == type) {
+            if (isNodeOfType(node, type)) {
                 return node;
             }
         }
@@ -124,5 +131,39 @@ public class GoPsiUtils {
 
         PsiElement lastChild = parent.getLastChild();
         return lastChild != null && ")".equals(lastChild.getText());
+    }
+
+    public static PsiElement getPrevSiblingIfItsWhiteSpace(PsiElement element) {
+        while (element != null) {
+            ASTNode node = element.getNode();
+            if (node == null) {
+                return null;
+            }
+
+            IElementType type = node.getElementType();
+            if (type != GoElementTypes.wsNLS && type != GoElementTypes.wsWS) {
+                return element;
+            }
+
+            element = element.getPrevSibling();
+        }
+        return null;
+    }
+
+    public static PsiElement getNextSiblingIfItsWhiteSpace(PsiElement element) {
+        while (element != null) {
+            ASTNode node = element.getNode();
+            if (node == null) {
+                return null;
+            }
+
+            IElementType type = node.getElementType();
+            if (type != GoElementTypes.wsNLS && type != GoElementTypes.wsWS) {
+                return element;
+            }
+
+            element = element.getNextSibling();
+        }
+        return null;
     }
 }

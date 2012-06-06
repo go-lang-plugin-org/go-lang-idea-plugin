@@ -1,0 +1,13 @@
+package main
+
+<begin>func NoReturn1() int <end.Function ends without a return statement>{
+}
+
+<begin>func NoReturn2() (int, int) <end.Function ends without a return statement>{
+}
+
+<begin>func NoReturn3(a int) (int, int) <end.Function ends without a return statement>{
+    if a == 5 {
+        return a, a
+    }
+}
