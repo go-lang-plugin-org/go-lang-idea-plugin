@@ -1,0 +1,30 @@
+package main
+func main() { return 1,2; }
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  FunctionDeclaration(main)
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmtImpl
+      PsiElement({)('{')
+      PsiWhiteSpace(' ')
+      ReturnStmtImpl
+        PsiElement(KEYWORD_RETURN)('return')
+        PsiWhiteSpace(' ')
+        LiteralExpr
+          PsiElement(LITERAL_INT)('1')
+        PsiElement(,)(',')
+        LiteralExpr
+          PsiElement(LITERAL_INT)('2')
+        PsiElement(;)(';')
+      PsiWhiteSpace(' ')
+      PsiElement(})('}')

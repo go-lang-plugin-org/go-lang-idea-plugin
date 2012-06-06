@@ -14,6 +14,9 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testReturn$empty_semi2() throws Throwable { doTest(); }
     public void testReturn$empty_enter() throws Throwable { doTest(); }
     public void testReturn$empty_enter2() throws Throwable { doTest(); }
+    public void testReturn$multiple() throws Throwable { doTest(); }
+    public void testReturn$multiple2() throws Throwable { doTest(); }
+    public void testReturn$multiple3() throws Throwable { doTest(); }
 
     public void testVar$var1() throws Throwable { doTest(); }
     public void testVar$var2() throws Throwable { doTest(); }

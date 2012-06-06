@@ -13,7 +13,7 @@ public class GoReturnStatementImpl extends GoPsiElementBase
     }
 
     @Override
-    public GoExpr getExpression() {
-        return findChildByClass(GoExpr.class);
+    public GoExpr[] getExpressions() {
+        return findChildrenByClass(GoExpr.class);
     }
 }
