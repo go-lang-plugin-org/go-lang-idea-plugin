@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -30,6 +31,11 @@ public class GoFunctionParameterImpl extends GoPsiElementBase implements GoFunct
     }
 
     @Override
+    public boolean isVariadic() {
+        return getTokenType() == GoElementTypes.FUNCTION_PARAMETER_VARIADIC;
+    }
+
+    @Override
     public GoIdentifier[] getIdentifiers() {
         return findChildrenByClass(GoIdentifierImpl.class);
     }
@@ -47,4 +53,8 @@ public class GoFunctionParameterImpl extends GoPsiElementBase implements GoFunct
         return super.processDeclarations(processor, state, lastParent, place);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
+    @Override
+    public String toString() {
+        return isVariadic() ? "FunctionParameterVariadicImpl" : "FunctionParameterImpl";
+    }
 }

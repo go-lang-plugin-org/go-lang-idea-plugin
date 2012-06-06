@@ -17,7 +17,7 @@ Go file
       TypeFunction
         PsiElement(KEYWORD_FUNC)('func')
         PsiElement(()('(')
-        FunctionParameterListImpl
+        FunctionParameterList
           FunctionParameterImpl
             IdentifierImpl
               PsiElement(IDENTIFIER)('a')
@@ -38,7 +38,7 @@ Go file
               PsiElement(IDENTIFIER)('float')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
-          FunctionParameterVariadic
+          FunctionParameterVariadicImpl
             IdentifierImpl
               PsiElement(IDENTIFIER)('opt')
             PsiWhiteSpace(' ')
@@ -51,7 +51,7 @@ Go file
         PsiWhiteSpace(' ')
         FunctionResult
           PsiElement(()('(')
-          FunctionParameterListImpl
+          FunctionParameterList
             FunctionParameterImpl
               IdentifierImpl
                 PsiElement(IDENTIFIER)('success')

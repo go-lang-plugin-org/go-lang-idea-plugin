@@ -17,7 +17,7 @@ Go file
       TypeFunction
         PsiElement(KEYWORD_FUNC)('func')
         PsiElement(()('(')
-        FunctionParameterListImpl
+        FunctionParameterList
           FunctionParameterImpl
             IdentifierImpl
               PsiElement(IDENTIFIER)('a')
@@ -39,7 +39,7 @@ Go file
         PsiElement())(')')
         PsiWhiteSpace(' ')
         FunctionResult
-          FunctionParameterListImpl
+          FunctionParameterList
             FunctionParameterImpl
               TypeName
                 PsiElement(IDENTIFIER)('bool')

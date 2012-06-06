@@ -4,10 +4,24 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.toplevel.*;
-import ro.redeul.google.go.lang.psi.types.*;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoTypeArray;
+import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
+import ro.redeul.google.go.lang.psi.types.GoTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoTypePointer;
+import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -80,10 +94,6 @@ public class GoElementVisitor {
         visitElement(goIdentifier);
     }
 
-    public void acceptFunctionParameterList(GoFunctionParameterList goFunctionParameterList) {
-        visitElement(goFunctionParameterList);
-    }
-
     public void acceptFunctionParameter(GoFunctionParameter functionParameter) {
         visitElement(functionParameter);
     }
@@ -92,7 +102,7 @@ public class GoElementVisitor {
         visitElement(pointerType);
     }
 
-    public void visitLiteralExpr(GoLiteralExpression literalExpr) {
+    public void visitLiteralExpr(GoLiteral literalExpr) {
         visitElement(literalExpr);
     }
 
@@ -102,5 +112,9 @@ public class GoElementVisitor {
 
     public void visitConstDeclaration(GoConstDeclaration constDeclaration) {
         visitElement(constDeclaration);
+    }
+
+    public void visitFunctionLiteral(GoFunctionLiteral functionLiteral) {
+        visitElement(functionLiteral);
     }
 }

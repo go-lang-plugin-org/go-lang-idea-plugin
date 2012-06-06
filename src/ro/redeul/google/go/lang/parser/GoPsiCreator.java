@@ -15,13 +15,13 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoBuiltinCallExprImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoAdditiveExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoMultiplicativeExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoFunctionLiteralImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoReturnStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionParameterImpl;
-import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionParameterListImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoMethodDeclarationImpl;
@@ -116,10 +116,13 @@ public class GoPsiCreator implements GoElementTypes {
         if ( elementType.equals(TYPE_INTERFACE) )
             return new GoTypeInterfaceImpl(node);
 
-        if ( elementType.equals(FUNCTION_PARAMETER_LIST) )
-            return new GoFunctionParameterListImpl(node);
+//        if ( elementType.equals(FUNCTION_PARAMETER_LIST) )
+//            return new GoFunctionParameterListImpl(node);
 
         if ( elementType.equals(FUNCTION_PARAMETER) )
+            return new GoFunctionParameterImpl(node);
+
+        if ( elementType.equals(FUNCTION_PARAMETER_VARIADIC) )
             return new GoFunctionParameterImpl(node);
 
         if ( elementType.equals(TYPE_CHAN_BIDIRECTIONAL) )
@@ -138,7 +141,10 @@ public class GoPsiCreator implements GoElementTypes {
             return new GoSelectorExpressionImpl(node);
 
         if ( elementType.equals(LITERAL_EXPRESSION) )
-            return new GoLiteralExprImpl(node);
+            return new GoLiteralImpl(node);
+
+        if ( elementType.equals(FUNCTION_LITERAL_EXPRESSION) )
+            return new GoFunctionLiteralImpl(node);
 
         if ( elementType.equals(ADD_EXPRESSION) )
             return new GoAdditiveExpressionImpl(node);

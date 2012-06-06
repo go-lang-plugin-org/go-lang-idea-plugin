@@ -1,7 +1,7 @@
 package ro.redeul.google.go.lang.psi;
 
 import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -27,7 +27,7 @@ public class GoPsiStatementsTestCase extends AbstractGoPsiTestCase {
         GoReturnStatement returnStmt =
             getAs(blockStmt.getStatements(), 0, GoReturnStatement.class);
 
-        assertNotNull(getAs(returnStmt.getExpressions(), 0, GoLiteralExpression.class));
+        assertNotNull(getAs(returnStmt.getExpressions(), 0, GoLiteral.class));
     }
 
     public void testReturnMultiple() {
@@ -38,8 +38,8 @@ public class GoPsiStatementsTestCase extends AbstractGoPsiTestCase {
         GoReturnStatement returnStmt =
             getAs(blockStmt.getStatements(), 0, GoReturnStatement.class);
 
-        assertNotNull(getAs(returnStmt.getExpressions(), 0, GoLiteralExpression.class));
-        assertNotNull(getAs(returnStmt.getExpressions(), 1, GoLiteralExpression.class));
+        assertNotNull(getAs(returnStmt.getExpressions(), 0, GoLiteral.class));
+        assertNotNull(getAs(returnStmt.getExpressions(), 1, GoLiteral.class));
     }
 
     public void testReturnLiteral2() {
@@ -50,7 +50,7 @@ public class GoPsiStatementsTestCase extends AbstractGoPsiTestCase {
         GoReturnStatement returnStmt =
             getAs(blockStmt.getStatements(), 0, GoReturnStatement.class);
 
-        assertNotNull(getAs(returnStmt.getExpressions(), 0, GoLiteralExpression.class));
+        assertNotNull(getAs(returnStmt.getExpressions(), 0, GoLiteral.class));
     }
 
     public void testReturnAddExpression() {

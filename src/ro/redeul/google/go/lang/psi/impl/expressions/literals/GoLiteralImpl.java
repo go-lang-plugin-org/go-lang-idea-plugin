@@ -8,22 +8,16 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.VariableTypeResolver;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: 5/19/11
- * Time: 11:08 PM
- */
-public class GoLiteralExprImpl extends GoExpressionBase implements GoLiteralExpression {
+public class GoLiteralImpl extends GoExpressionBase implements GoLiteral {
 
-    public GoLiteralExprImpl(@NotNull ASTNode node) {
+    public GoLiteralImpl(@NotNull ASTNode node) {
         super(node);
     }
 

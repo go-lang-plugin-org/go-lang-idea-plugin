@@ -1,5 +1,5 @@
 package main
-func f(prefix string, values ...int)
+func foo(a ...interface{}) {}
 -----
 Go file
   PackageDeclaration(main)
@@ -7,25 +7,23 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiElement(WS_NEW_LINES)('\n')
-  FunctionDeclaration(f)
+  FunctionDeclaration(foo)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('f')
+    PsiElement(IDENTIFIER)('foo')
     PsiElement(()('(')
     FunctionParameterList
-      FunctionParameterImpl
-        IdentifierImpl
-          PsiElement(IDENTIFIER)('prefix')
-        PsiWhiteSpace(' ')
-        TypeName
-          PsiElement(IDENTIFIER)('string')
-      PsiElement(,)(',')
-      PsiWhiteSpace(' ')
       FunctionParameterVariadicImpl
         IdentifierImpl
-          PsiElement(IDENTIFIER)('values')
+          PsiElement(IDENTIFIER)('a')
         PsiWhiteSpace(' ')
         PsiElement(...)('...')
-        TypeName
-          PsiElement(IDENTIFIER)('int')
+        TypeInterfaceImpl
+          PsiElement(KEYWORD_INTERFACE)('interface')
+          PsiElement({)('{')
+          PsiElement(})('}')
     PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmtImpl
+      PsiElement({)('{')
+      PsiElement(})('}')

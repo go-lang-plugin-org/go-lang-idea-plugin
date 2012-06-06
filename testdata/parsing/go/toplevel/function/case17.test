@@ -12,7 +12,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('f')
     PsiElement(()('(')
-    FunctionParameterListImpl
+    FunctionParameterList
       FunctionParameterImpl
         TypeName
           PsiElement(IDENTIFIER)('int')
@@ -30,7 +30,7 @@ Go file
     PsiWhiteSpace(' ')
     FunctionResult
       PsiElement(()('(')
-      FunctionParameterListImpl
+      FunctionParameterList
         FunctionParameterImpl
           TypeName
             PsiElement(IDENTIFIER)('float')

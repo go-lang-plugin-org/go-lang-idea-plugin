@@ -17,11 +17,11 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CallOrConversionExpression
-        FunctionLiteral
+        FunctionLiteralImpl
           TypeFunction
             PsiElement(KEYWORD_FUNC)('func')
             PsiElement(()('(')
-            FunctionParameterListImpl
+            FunctionParameterList
               FunctionParameterImpl
                 IdentifierImpl
                   PsiElement(IDENTIFIER)('x')
@@ -35,7 +35,7 @@ Go file
             PsiElement())(')')
             PsiWhiteSpace(' ')
             FunctionResult
-              FunctionParameterListImpl
+              FunctionParameterList
                 FunctionParameterImpl
                   TypeName
                     PsiElement(IDENTIFIER)('int')

@@ -18,7 +18,8 @@ public interface GoFunctionDeclaration extends GoPsiElement, PsiNamedElement {
 
     GoBlockStatement getBlock();
 
-    GoFunctionParameterList getParameters();
+//    GoFunctionParameterList getParameters();
+    GoFunctionParameter[] getParameters();
 
-    GoFunctionParameterList getResults();
+    GoFunctionParameter[] getResults();
 }

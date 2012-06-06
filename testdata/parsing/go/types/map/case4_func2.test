@@ -40,7 +40,7 @@ Go file
               PsiElement(()('(')
               PsiElement(WS_NEW_LINES)('\n')
               PsiWhiteSpace('    ')
-              FunctionParameterListImpl
+              FunctionParameterList
                 FunctionParameterImpl
                   IdentifierImpl
                     PsiElement(IDENTIFIER)('w')
@@ -85,7 +85,7 @@ Go file
               PsiWhiteSpace(' ')
               FunctionResult
                 PsiElement(()('(')
-                FunctionParameterListImpl
+                FunctionParameterList
                   FunctionParameterImpl
                     TypeName
                       PsiElement(IDENTIFIER)('int')

@@ -1,5 +1,10 @@
 package ro.redeul.google.go.findUsages;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -17,12 +22,11 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
@@ -30,14 +34,6 @@ import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor2;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.intellij.psi.impl.source.tree.TreeUtil.findSibling;
-import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedConstant;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
@@ -173,7 +169,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
      * @return
      */
     private boolean isTypeFieldInitializer(GoIdentifier id) {
-        if (!(id.getParent() instanceof GoLiteralExpression)) {
+        if (!(id.getParent() instanceof GoLiteral)) {
             return false;
         }
 
@@ -189,7 +185,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     }
 
     private boolean isFunctionOrMethodCall(GoIdentifier id) {
-        if (!(id.getParent() instanceof GoLiteralExprImpl)) {
+        if (!(id.getParent() instanceof GoLiteralImpl)) {
             return false;
         }
 
@@ -211,23 +207,6 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         }
     }
 
-    private GoFunctionParameterList getFunctionResult(
-        GoFunctionDeclaration fd) {
-        PsiElement c = fd.getFirstChild();
-        if (c == null) {
-            return null;
-        }
-
-        ASTNode resultNode = findSibling(c.getNode(),
-                                         GoElementTypes.FUNCTION_RESULT);
-        if (resultNode == null) {
-            return null;
-        }
-
-        return findChildOfType(resultNode.getPsi(),
-                               GoFunctionParameterList.class);
-    }
-
     private Map<String, VariableUsage> getFunctionParameters(
         GoFunctionDeclaration fd) {
         Map<String, VariableUsage> variables = ctx.addNewScopeLevel();
@@ -244,23 +223,14 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         addFunctionParametersToMap(fd.getParameters(), variables, false);
 
         // Don't detect usage problem on function result
-        addFunctionParametersToMap(getFunctionResult(fd), variables, true);
+        addFunctionParametersToMap(fd.getResults(), variables, true);
         return variables;
     }
 
-    private void addFunctionParametersToMap(GoFunctionParameterList list,
+    private void addFunctionParametersToMap(GoFunctionParameter[] parameters,
                                             Map<String, VariableUsage> variables,
                                             boolean ignoreProblem) {
-        if (list == null) {
-            return;
-        }
-
-        GoFunctionParameter[] functionParameters = list.getFunctionParameters();
-        if (functionParameters == null) {
-            return;
-        }
-
-        for (GoFunctionParameter p : list.getFunctionParameters()) {
+        for (GoFunctionParameter p : parameters) {
             for (GoIdentifier id : p.getIdentifiers()) {
                 variables.put(id.getName(),
                               new VariableUsage(id, ignoreProblem));

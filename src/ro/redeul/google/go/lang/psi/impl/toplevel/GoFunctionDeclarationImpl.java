@@ -12,10 +12,9 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-
-import static com.intellij.psi.util.PsiTreeUtil.findChildOfType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -54,14 +53,15 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFun
     }
 
     @Override
-    public GoFunctionParameterList getParameters() {
-        return findChildByClass(GoFunctionParameterList.class);
+    public GoFunctionParameter[] getParameters() {
+        return GoPsiUtils.getParameters(this);
     }
 
     @Override
-    public GoFunctionParameterList getResults() {
+    public GoFunctionParameter[] getResults() {
         PsiElement result = findChildByType(GoElementTypes.FUNCTION_RESULT);
-        return findChildOfType(result, GoFunctionParameterList.class);
+
+        return GoPsiUtils.getParameters(result);
     }
 
     public String toString() {
@@ -73,17 +73,14 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFun
     }
 
     @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent,
+                                       @NotNull PsiElement place) {
 
-        // try the parameter list
-        // TODO: implement the actual PsiElement for FunctionParameterList
-        PsiElement functionParameterList = findChildByType(GoElementTypes.FUNCTION_PARAMETER_LIST);
-        if ( functionParameterList != null && functionParameterList != lastParent ) {
-            PsiElement functionParameters[] = functionParameterList.getChildren();
-            for (PsiElement functionParameter : functionParameters) {
-                if ( ! processor.execute(functionParameter, state) )  {
-                    return false;
-                }
+        for (GoFunctionParameter functionParameter : getParameters()) {
+            if ( ! processor.execute(functionParameter, state) )  {
+                return false;
             }
         }
 

@@ -1,7 +1,7 @@
 package ro.redeul.google.go.lang.psi.visitors;
 
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 
@@ -30,7 +30,7 @@ public class GoImportUsageChecker extends GoRecursiveElementVisitor {
 
 
     @Override
-    public void visitLiteralExpr(GoLiteralExpression literalExpr) {
+    public void visitLiteralExpr(GoLiteral literalExpr) {
         GoIdentifier goIdentifier = literalExpr.getIdentifier();
         if ( goIdentifier == null ) {
             return;

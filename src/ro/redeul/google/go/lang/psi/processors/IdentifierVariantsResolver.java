@@ -1,14 +1,13 @@
 package ro.redeul.google.go.lang.psi.processors;
 
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 
 /**
@@ -40,6 +39,9 @@ public class IdentifierVariantsResolver extends BaseScopeProcessor {
             return tryResolveToIdentifiers(((GoConstDeclaration) element).getIdentifiers(), state);
         }
 
+        if ( element instanceof GoFunctionParameter ) {
+            return tryResolveToIdentifiers( ((GoFunctionParameter)element).getIdentifiers(), state);
+        }
         return true;
     }
 

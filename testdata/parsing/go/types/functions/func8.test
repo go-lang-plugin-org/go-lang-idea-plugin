@@ -17,7 +17,7 @@ Go file
       TypeFunction
         PsiElement(KEYWORD_FUNC)('func')
         PsiElement(()('(')
-        FunctionParameterListImpl
+        FunctionParameterList
           FunctionParameterImpl
             TypeName
               PsiElement(IDENTIFIER)('int')
@@ -35,7 +35,7 @@ Go file
         PsiWhiteSpace(' ')
         FunctionResult
           PsiElement(()('(')
-          FunctionParameterListImpl
+          FunctionParameterList
             FunctionParameterImpl
               TypeName
                 PsiElement(IDENTIFIER)('float')

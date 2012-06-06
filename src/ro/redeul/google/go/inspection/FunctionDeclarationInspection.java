@@ -1,5 +1,10 @@
 package ro.redeul.google.go.inspection;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -10,12 +15,6 @@ import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpace;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
@@ -45,7 +44,7 @@ public class FunctionDeclarationInspection {
 
     public void hasDuplicateArgument() {
         Set<String> parameters = new HashSet<String>();
-        for (GoFunctionParameter fp : getFunctionParameters(function.getParameters())) {
+        for (GoFunctionParameter fp : function.getParameters()) {
             for (GoIdentifier id : fp.getIdentifiers()) {
                 if (id.isBlank()) {
                     continue;
@@ -64,7 +63,7 @@ public class FunctionDeclarationInspection {
     public void hasRedeclaredParameterInResultList() {
         Set<String> parameters = new HashSet<String>(getParameterNames(function.getParameters()));
 
-        for (GoFunctionParameter fp : getFunctionParameters(function.getResults())) {
+        for (GoFunctionParameter fp : function.getResults()) {
             for (GoIdentifier id : fp.getIdentifiers()) {
                 String text = id.getText();
                 if (!id.isBlank() && parameters.contains(text)) {
@@ -97,7 +96,7 @@ public class FunctionDeclarationInspection {
     }
 
     private boolean hasResult() {
-        return getFunctionParameters(function.getResults()).length > 0;
+        return function.getResults().length > 0;
     }
 
     private boolean hasBody() {
@@ -119,16 +118,16 @@ public class FunctionDeclarationInspection {
         return isNodeOfType(lastChild, GoElementTypes.RETURN_STATEMENT);
     }
 
-    private List<String> getParameterNames(GoFunctionParameterList list) {
-        List<String> parameters = new ArrayList<String>();
-        for (GoFunctionParameter fp : getFunctionParameters(list)) {
+    private List<String> getParameterNames(GoFunctionParameter[] parameters) {
+        List<String> parameterNames = new ArrayList<String>();
+        for (GoFunctionParameter fp : parameters) {
             for (GoIdentifier id : fp.getIdentifiers()) {
                 if (!id.isBlank()) {
-                    parameters.add(id.getText());
+                    parameterNames.add(id.getText());
                 }
             }
         }
-        return parameters;
+        return parameterNames;
     }
 
     private static GoFunctionParameter[] getFunctionParameters(GoFunctionParameterList list) {

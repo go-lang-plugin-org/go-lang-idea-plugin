@@ -12,7 +12,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('f')
     PsiElement(()('(')
-    FunctionParameterListImpl
+    FunctionParameterList
       FunctionParameterImpl
         IdentifierImpl
           PsiElement(IDENTIFIER)('prefix')
@@ -21,7 +21,7 @@ Go file
           PsiElement(IDENTIFIER)('string')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      FunctionParameterVariadic
+      FunctionParameterVariadicImpl
         IdentifierImpl
           PsiElement(IDENTIFIER)('values')
         PsiWhiteSpace(' ')

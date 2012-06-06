@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.psi.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -10,15 +13,14 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ReflectionCache;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.sdk.GoSdkUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GoPsiUtils {
 
@@ -165,5 +167,19 @@ public class GoPsiUtils {
             element = element.getNextSibling();
         }
         return null;
+    }
+
+    public static GoFunctionParameter[] getParameters(PsiElement psiNode) {
+
+        if (psiNode == null)
+            return GoFunctionParameter.EMPTY_ARRAY;
+
+        ASTNode list =
+            psiNode.getNode().findChildByType(GoElementTypes.FUNCTION_PARAMETER_LIST);
+
+        if (list == null)
+            return GoFunctionParameter.EMPTY_ARRAY;
+
+        return PsiTreeUtil.getChildrenOfType(list.getPsi(), GoFunctionParameter.class);
     }
 }
