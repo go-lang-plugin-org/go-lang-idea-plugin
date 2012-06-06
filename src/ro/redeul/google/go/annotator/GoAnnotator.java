@@ -82,8 +82,8 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
-        FunctionDeclarationInspection fdi = new FunctionDeclarationInspection(inspectionManager);
-        for (ProblemDescriptor pd : fdi.checkFunction(functionDeclaration)) {
+        FunctionDeclarationInspection fdi = new FunctionDeclarationInspection(inspectionManager, functionDeclaration);
+        for (ProblemDescriptor pd : fdi.checkFunction()) {
             int start = pd.getStartElement().getTextOffset();
             int end = pd.getEndElement().getTextOffset() + pd.getEndElement().getTextLength();
             annotationHolder.createErrorAnnotation(new TextRange(start, end), pd.getDescriptionTemplate());

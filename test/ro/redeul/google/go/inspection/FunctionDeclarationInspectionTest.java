@@ -23,9 +23,9 @@ public class FunctionDeclarationInspectionTest extends AbstractProblemDescriptio
     @Override
     protected ProblemDescriptor[] detectProblems(GoFile file, InspectionManager inspectionManager) {
         List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
-        FunctionDeclarationInspection fdi = new FunctionDeclarationInspection(inspectionManager);
         for (GoFunctionDeclaration fd : file.getFunctions()) {
-            problems.addAll(Arrays.asList(fdi.checkFunction(fd)));
+            FunctionDeclarationInspection fdi = new FunctionDeclarationInspection(inspectionManager, fd);
+            problems.addAll(Arrays.asList(fdi.checkFunction()));
         }
         return problems.toArray(new ProblemDescriptor[problems.size()]);
     }
