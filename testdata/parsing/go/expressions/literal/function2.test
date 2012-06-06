@@ -1,0 +1,54 @@
+package main
+var f = func(x, y int) int { }(1, 2)
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarationsImpl
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarDeclarationImpl
+      IdentifierImpl
+        PsiElement(IDENTIFIER)('f')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      CallOrConversionExpression
+        FunctionLiteral
+          TypeFunction
+            PsiElement(KEYWORD_FUNC)('func')
+            PsiElement(()('(')
+            FunctionParameterListImpl
+              FunctionParameterImpl
+                IdentifierImpl
+                  PsiElement(IDENTIFIER)('x')
+                PsiElement(,)(',')
+                PsiWhiteSpace(' ')
+                IdentifierImpl
+                  PsiElement(IDENTIFIER)('y')
+                PsiWhiteSpace(' ')
+                TypeName
+                  PsiElement(IDENTIFIER)('int')
+            PsiElement())(')')
+            PsiWhiteSpace(' ')
+            FunctionResult
+              FunctionParameterListImpl
+                FunctionParameterImpl
+                  TypeName
+                    PsiElement(IDENTIFIER)('int')
+          PsiWhiteSpace(' ')
+          BlockStmtImpl
+            PsiElement({)('{')
+            PsiWhiteSpace(' ')
+            PsiElement(})('}')
+        PsiElement(()('(')
+        LiteralExpr
+          PsiElement(LITERAL_INT)('1')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        LiteralExpr
+          PsiElement(LITERAL_INT)('2')
+        PsiElement())(')')

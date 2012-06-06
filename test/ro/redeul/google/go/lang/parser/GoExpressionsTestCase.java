@@ -135,7 +135,11 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
         doTest();
     }
 
-    public void testLiteral$function() throws Throwable {
+    public void testLiteral$function1() throws Throwable {
+        doTest();
+    }
+
+    public void testLiteral$function2() throws Throwable {
         doTest();
     }
 
