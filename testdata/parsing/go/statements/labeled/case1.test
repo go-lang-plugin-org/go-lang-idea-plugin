@@ -21,7 +21,7 @@ Go file
         PsiElement(IDENTIFIER)('L')
         PsiElement(:)(':')
         PsiWhiteSpace(' ')
-        ReturnStmt
+        ReturnStmtImpl
           PsiElement(KEYWORD_RETURN)('return')
           PsiWhiteSpace(' ')
           LiteralExpr

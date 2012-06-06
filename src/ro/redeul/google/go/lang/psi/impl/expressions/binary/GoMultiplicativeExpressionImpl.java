@@ -1,6 +1,3 @@
-/*
-* Copyright 2012 Midokura Europe SARL
-*/
 package ro.redeul.google.go.lang.psi.impl.expressions.binary;
 
 import com.intellij.lang.ASTNode;

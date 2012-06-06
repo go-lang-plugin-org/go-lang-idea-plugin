@@ -17,7 +17,7 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace(' ')
-      ReturnStmt
+      ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
       PsiWhiteSpace(' ')
       PsiElement(})('}')

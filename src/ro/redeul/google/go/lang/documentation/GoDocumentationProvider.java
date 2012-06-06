@@ -1,6 +1,3 @@
-/*
-* Copyright 2012 Midokura Europe SARL
-*/
 package ro.redeul.google.go.lang.documentation;
 
 import java.util.List;

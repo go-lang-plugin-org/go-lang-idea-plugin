@@ -1,6 +1,3 @@
-/*
-* Copyright 2012 Midokura Europe SARL
-*/
 package ro.redeul.google.go.lang.psi.impl.expressions.binary;
 
 import com.intellij.lang.ASTNode;
@@ -13,12 +10,6 @@ import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 
-/**
- * // TODO: Explain yourself.
- *
- * @author Mihai Claudiu Toader <mtoader@midokura.com>
- *         Date: 6/6/12
- */
 public abstract class GoBinaryExpressionImpl extends GoExpressionBase
     implements GoBinaryExpression {
 

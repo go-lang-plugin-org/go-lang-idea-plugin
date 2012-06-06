@@ -8,12 +8,6 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.declarations.Declaration;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Jul 25, 2010
- * Time: 7:47:51 PM
- */
 public class Statements implements GoElementTypes {
 
     static TokenSet SIMPLE_STMT = TokenSet.create(
@@ -24,7 +18,7 @@ public class Statements implements GoElementTypes {
     );
 
     public static boolean parse(PsiBuilder builder, GoParser parser, boolean inControlClause) {
-        
+
         if ( builder.getTokenType() == kVAR || builder.getTokenType() == kCONST || builder.getTokenType() == kTYPE ) {
             return Declaration.parse(builder, parser);
         }
@@ -80,7 +74,7 @@ public class Statements implements GoElementTypes {
         if ( builder.getTokenType() == kSELECT ) {
             return SelectStatement.parse(builder, parser);
         }
-        
+
         if ( builder.getTokenType() == kFOR ) {
             return ForStatement.parse(builder, parser);
         }
@@ -133,7 +127,7 @@ public class Statements implements GoElementTypes {
                                 oSEMI == builder.getTokenType()
                 )) {
             rememberMarker.rollbackTo();
-            parseSimple(builder, parser, inControlClause);            
+            parseSimple(builder, parser, inControlClause);
             ParserUtils.getToken(builder, oSEMI);
             return true;
         } else {
@@ -163,7 +157,7 @@ public class Statements implements GoElementTypes {
             ParserUtils.getToken(builder, builder.getTokenType());
 
             mark.done(INC_DEC_STATEMENT);
-            return true;            
+            return true;
         }
 
         if  (oVAR_ASSIGN == builder.getTokenType() ) {

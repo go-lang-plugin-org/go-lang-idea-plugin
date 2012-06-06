@@ -18,6 +18,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoMultiplicativeExpr
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralExprImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoReturnStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionParameterImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionParameterListImpl;
@@ -144,6 +145,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if ( elementType.equals(MUL_EXPRESSION) )
             return new GoMultiplicativeExpressionImpl(node);
+
+        if ( elementType.equals(RETURN_STATEMENT) )
+            return new GoReturnStatementImpl(node);
 
         if ( elementType.equals(SHORT_VAR_STATEMENT) )
             return new GoShortVarDeclarationImpl(node);

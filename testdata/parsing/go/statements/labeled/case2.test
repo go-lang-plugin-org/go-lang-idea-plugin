@@ -22,7 +22,7 @@ Go file
         PsiElement(IDENTIFIER)('L')
         PsiElement(:)(':')
         PsiElement(WS_NEW_LINES)('\n')
-        ReturnStmt
+        ReturnStmtImpl
           PsiElement(KEYWORD_RETURN)('return')
           PsiWhiteSpace(' ')
           LiteralExpr

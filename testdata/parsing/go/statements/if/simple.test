@@ -40,7 +40,7 @@ Go file
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('             ')
-          ReturnStmt
+          ReturnStmtImpl
             PsiElement(KEYWORD_RETURN)('return')
             PsiWhiteSpace(' ')
             LiteralExpr

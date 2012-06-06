@@ -1,6 +1,6 @@
 package main
 func main() {
-    return
+    return;
 }
 -----
 Go file
@@ -22,5 +22,6 @@ Go file
       PsiWhiteSpace('    ')
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
+        PsiElement(;)(';')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')
