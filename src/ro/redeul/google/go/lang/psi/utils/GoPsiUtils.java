@@ -1,16 +1,15 @@
 package ro.redeul.google.go.lang.psi.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -21,6 +20,9 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GoPsiUtils {
 
@@ -112,6 +114,20 @@ public class GoPsiUtils {
         return node;
     }
 
+    public static PsiElement findChildOfType(PsiElement node, IElementType type) {
+        if (node == null) {
+            return null;
+        }
+
+        for (PsiElement element : node.getChildren()) {
+            if (isNodeOfType(element, type)) {
+                return element;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Check whether element is the predeclared identifier "iota" in a const declaration
      * @param element the element to check
@@ -135,7 +151,7 @@ public class GoPsiUtils {
         return lastChild != null && ")".equals(lastChild.getText());
     }
 
-    public static PsiElement getPrevSiblingIfItsWhiteSpace(PsiElement element) {
+    public static PsiElement getPrevSiblingIfItsWhiteSpaceOrComment(PsiElement element) {
         while (element != null) {
             ASTNode node = element.getNode();
             if (node == null) {
@@ -143,28 +159,12 @@ public class GoPsiUtils {
             }
 
             IElementType type = node.getElementType();
-            if (type != GoElementTypes.wsNLS && type != GoElementTypes.wsWS) {
+            if (type != GoElementTypes.wsNLS && type != GoElementTypes.wsWS && !(element instanceof PsiWhiteSpace) &&
+                !(element instanceof PsiComment)) {
                 return element;
             }
 
             element = element.getPrevSibling();
-        }
-        return null;
-    }
-
-    public static PsiElement getNextSiblingIfItsWhiteSpace(PsiElement element) {
-        while (element != null) {
-            ASTNode node = element.getNode();
-            if (node == null) {
-                return null;
-            }
-
-            IElementType type = node.getElementType();
-            if (type != GoElementTypes.wsNLS && type != GoElementTypes.wsWS) {
-                return element;
-            }
-
-            element = element.getNextSibling();
         }
         return null;
     }

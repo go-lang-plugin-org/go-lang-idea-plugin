@@ -13,6 +13,8 @@ import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
+
 public class GoFunctionLiteralImpl extends GoExpressionBase
     implements GoFunctionLiteral {
 
@@ -34,7 +36,8 @@ public class GoFunctionLiteralImpl extends GoExpressionBase
 
     @Override
     public GoFunctionParameter[] getResults() {
-        PsiElement result = findChildByType(GoElementTypes.FUNCTION_RESULT);
+        PsiElement typeFunction = findChildOfType(this, GoElementTypes.TYPE_FUNCTION);
+        PsiElement result = findChildOfType(typeFunction, GoElementTypes.FUNCTION_RESULT);
 
         return GoPsiUtils.getParameters(result);
     }

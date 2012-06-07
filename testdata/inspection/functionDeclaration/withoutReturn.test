@@ -1,5 +1,11 @@
 package main
 
+func Ok1() int {
+    return 3
+    /*  */
+    //
+}
+
 <begin>func NoReturn1() int <end.Function ends without a return statement>{
 }
 

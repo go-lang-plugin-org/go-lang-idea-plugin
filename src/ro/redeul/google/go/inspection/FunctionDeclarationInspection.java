@@ -1,21 +1,24 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
+import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpace;
+import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor2;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class FunctionDeclarationInspection {
@@ -74,7 +77,7 @@ public class FunctionDeclarationInspection {
     }
 
     public void hasReturnParameterQuantityUnmatch() {
-        // TODO: implement this after method of getting expression list of return statement is provided
+        new ReturnVisitor().visitElement(function);
     }
 
     public ProblemDescriptor[] getProblems() {
@@ -109,16 +112,16 @@ public class FunctionDeclarationInspection {
             return false;
         }
 
-        PsiElement lastChild = getPrevSiblingIfItsWhiteSpace(block.getLastChild());
+        PsiElement lastChild = getPrevSiblingIfItsWhiteSpaceOrComment(block.getLastChild());
         if (lastChild == null || !"}".equals(lastChild.getText())) {
             return false;
         }
 
-        lastChild = getPrevSiblingIfItsWhiteSpace(lastChild.getPrevSibling());
+        lastChild = getPrevSiblingIfItsWhiteSpaceOrComment(lastChild.getPrevSibling());
         return isNodeOfType(lastChild, GoElementTypes.RETURN_STATEMENT);
     }
 
-    private List<String> getParameterNames(GoFunctionParameter[] parameters) {
+    private static List<String> getParameterNames(GoFunctionParameter[] parameters) {
         List<String> parameterNames = new ArrayList<String>();
         for (GoFunctionParameter fp : parameters) {
             for (GoIdentifier id : fp.getIdentifiers()) {
@@ -130,12 +133,55 @@ public class FunctionDeclarationInspection {
         return parameterNames;
     }
 
-    private static GoFunctionParameter[] getFunctionParameters(GoFunctionParameterList list) {
-        if (list == null) {
-            return new GoFunctionParameter[0];
+    private static class FunctionResult {
+        public final boolean namedResult;
+        public final int resultCount;
+        private FunctionResult(GoFunctionParameter[] results) {
+            namedResult = results.length == 0 || results[0].getIdentifiers().length > 0;
+            resultCount = getResultCount(results);
         }
 
-        GoFunctionParameter[] fps = list.getFunctionParameters();
-        return fps == null ? new GoFunctionParameter[0] : fps;
+        private static int getResultCount(GoFunctionParameter[] results) {
+            int count = 0;
+            for (GoFunctionParameter result : results) {
+                count += Math.max(result.getIdentifiers().length, 1);
+            }
+            return count;
+        }
+    }
+
+    /**
+     * Recursively look for return statement, and compare its expression list with function's result list
+     */
+    private class ReturnVisitor extends GoRecursiveElementVisitor2 {
+        private List<FunctionResult> functionResults = new ArrayList<FunctionResult>();
+        @Override
+        protected void beforeVisitElement(PsiElement element) {
+            if (element instanceof GoFunctionDeclaration) {
+                functionResults.add(new FunctionResult(((GoFunctionDeclaration) element).getResults()));
+            } else if (element instanceof GoFunctionLiteral) {
+                functionResults.add(new FunctionResult(((GoFunctionLiteral) element).getResults()));
+            } else if (element instanceof GoReturnStatement) {
+                GoReturnStatement returnStatement = (GoReturnStatement) element;
+                int returnCount = returnStatement.getExpressions().length;
+                FunctionResult fr = functionResults.get(functionResults.size() - 1);
+                if (fr == null || fr.resultCount == returnCount || returnCount == 0 && fr.namedResult) {
+                    return;
+                }
+
+                if (fr.resultCount < returnCount) {
+                    addProblem(element, "Too many arguments to return");
+                } else {
+                    addProblem(element, "Not enough arguments to return");
+                }
+            }
+        }
+
+        @Override
+        protected void afterVisitElement(PsiElement element) {
+            if (element instanceof GoFunctionDeclaration || element instanceof GoFunctionLiteral) {
+                functionResults.remove(functionResults.size() - 1);
+            }
+        }
     }
 }

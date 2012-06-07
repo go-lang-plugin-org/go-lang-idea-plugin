@@ -5,7 +5,6 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.containers.ContainerUtil;
@@ -30,6 +29,7 @@ import java.util.Collection;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isExtraExpressionInConst;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isFirstConstExpressionMissed;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isMissingExpressionInConst;
+import static ro.redeul.google.go.inspection.InspectionUtil.getProblemRange;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -84,9 +84,7 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
     public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
         FunctionDeclarationInspection fdi = new FunctionDeclarationInspection(inspectionManager, functionDeclaration);
         for (ProblemDescriptor pd : fdi.checkFunction()) {
-            int start = pd.getStartElement().getTextOffset();
-            int end = pd.getEndElement().getTextOffset() + pd.getEndElement().getTextLength();
-            annotationHolder.createErrorAnnotation(new TextRange(start, end), pd.getDescriptionTemplate());
+            annotationHolder.createErrorAnnotation(getProblemRange(pd), pd.getDescriptionTemplate());
         }
     }
 
