@@ -5,6 +5,7 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
@@ -30,6 +31,8 @@ public class GoTypeNameDeclarationImpl
         implements GoTypeNameDeclaration, StubBasedPsiElement<GoTypeNameDeclarationStub>
 {
 
+    private SearchScope scope;
+
     public GoTypeNameDeclarationImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -46,6 +49,17 @@ public class GoTypeNameDeclarationImpl
 
     public PsiElement setName(@NonNls String name) throws IncorrectOperationException {
         return null;
+    }
+
+    @Override
+    public void setUseScope(SearchScope scope) {
+        this.scope = scope;
+    }
+
+    @NotNull
+    @Override
+    public SearchScope getUseScope() {
+        return scope != null ? scope : super.getUseScope();
     }
 
     @Override

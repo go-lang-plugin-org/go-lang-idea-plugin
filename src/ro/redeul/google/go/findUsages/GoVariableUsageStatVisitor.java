@@ -6,6 +6,7 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.inspection.fix.RemoveVariableFix;
@@ -31,10 +32,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedConstant;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDeclaration;
@@ -64,6 +62,30 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
                 ctx.unusedGlobalVariable(v);
             }
         }
+    }
+
+    private static void setElementScope(Collection<VariableUsage> variables) {
+        GoPsiElementBase[] goElements = getGoElements(variables);
+        LocalSearchScope scope = new LocalSearchScope(goElements);
+        for (GoPsiElementBase ge : goElements) {
+            ge.setUseScope(scope);
+        }
+    }
+
+    private static GoPsiElementBase[] getGoElements(Collection<VariableUsage> variables) {
+        List<GoPsiElementBase> result = new ArrayList<GoPsiElementBase>();
+        for (VariableUsage variable : variables) {
+            if (variable.element instanceof GoPsiElementBase) {
+                result.add((GoPsiElementBase) variable.element);
+            }
+
+            for (PsiElement e : variable.usages) {
+                if (e instanceof GoPsiElementBase) {
+                    result.add((GoPsiElementBase) e);
+                }
+            }
+        }
+        return result.toArray(new GoPsiElementBase[result.size()]);
     }
 
     @Override
@@ -298,6 +320,8 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
                 }
             }
         }
+
+        setElementScope(variables.values());
         return variables;
     }
 
@@ -320,7 +344,9 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         }
 
         public Map<String, VariableUsage> popLastScopeLevel() {
-            return variables.remove(variables.size() - 1);
+            Map<String, VariableUsage> map = variables.remove(variables.size() - 1);
+            setElementScope(map.values());
+            return map;
         }
 
         public void unusedVariable(VariableUsage variableUsage) {

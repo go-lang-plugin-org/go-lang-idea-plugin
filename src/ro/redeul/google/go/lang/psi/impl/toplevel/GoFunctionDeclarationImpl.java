@@ -88,4 +88,9 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFun
 
         return processor.execute(this, state);
     }
+
+    @Override
+    public PsiElement getNameIdentifier() {
+        return findChildByType(GoTokenTypes.mIDENT);
+    }
 }

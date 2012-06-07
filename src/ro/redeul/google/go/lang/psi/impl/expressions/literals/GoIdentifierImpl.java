@@ -147,4 +147,9 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
             }
         };
     }
+
+    @Override
+    public PsiElement getNameIdentifier() {
+        return this;
+    }
 }

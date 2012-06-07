@@ -15,6 +15,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
@@ -44,6 +45,7 @@ import static ro.redeul.google.go.lang.psi.processors.GoResolveStates.IsOriginal
 public class GoFileImpl extends PsiFileBase implements GoFile {
 
     private static final Logger LOG = Logger.getInstance(GoFileImpl.class);
+    private SearchScope scope;
 
     public GoFileImpl(FileViewProvider viewProvider) {
         super(viewProvider, GoLanguage.INSTANCE);
@@ -191,6 +193,17 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
     public IElementType getTokenType() {
         return null;
+    }
+
+    @Override
+    public void setUseScope(SearchScope scope) {
+        this.scope = scope;
+    }
+
+    @NotNull
+    @Override
+    public SearchScope getUseScope() {
+        return scope != null ? scope : super.getUseScope();
     }
 
     public void accept(GoElementVisitor visitor) {
