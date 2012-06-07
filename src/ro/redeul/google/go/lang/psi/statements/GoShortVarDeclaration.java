@@ -1,6 +1,6 @@
-package ro.redeul.google.go.lang.psi.declarations;
+package ro.redeul.google.go.lang.psi.statements;
 
-import ro.redeul.google.go.lang.psi.statements.GoStatement;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

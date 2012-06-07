@@ -85,7 +85,6 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFun
         }
 
         // TODO: try the return parameters
-
         return processor.execute(this, state);
     }
 

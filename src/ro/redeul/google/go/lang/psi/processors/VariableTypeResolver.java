@@ -3,7 +3,7 @@ package ro.redeul.google.go.lang.psi.processors;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import ro.redeul.google.go.lang.psi.declarations.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;

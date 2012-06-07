@@ -17,21 +17,20 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace(' ')
-      ForStmt
+      ForWithRangeStmtImpl
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
-        ForRangeClause
-          LiteralExpr
-            IdentifierImpl
-              PsiElement(IDENTIFIER)('key')
-          PsiWhiteSpace(' ')
-          PsiElement(=)('=')
-          PsiWhiteSpace(' ')
-          PsiElement(KEYWORD_RANGE)('range')
-          PsiWhiteSpace(' ')
-          LiteralExpr
-            IdentifierImpl
-              PsiElement(IDENTIFIER)('m')
+        LiteralExpr
+          IdentifierImpl
+            PsiElement(IDENTIFIER)('key')
+        PsiWhiteSpace(' ')
+        PsiElement(=)('=')
+        PsiWhiteSpace(' ')
+        PsiElement(KEYWORD_RANGE)('range')
+        PsiWhiteSpace(' ')
+        LiteralExpr
+          IdentifierImpl
+            PsiElement(IDENTIFIER)('m')
         PsiWhiteSpace(' ')
         BlockStmtImpl
           PsiElement({)('{')

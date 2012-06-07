@@ -1,11 +1,11 @@
 package ro.redeul.google.go.lang.psi;
 
-import ro.redeul.google.go.lang.psi.declarations.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 public class GoPsiBlockTestCase extends AbstractGoPsiTestCase {

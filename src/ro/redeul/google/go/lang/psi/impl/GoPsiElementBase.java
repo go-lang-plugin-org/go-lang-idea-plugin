@@ -6,8 +6,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -15,7 +15,8 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
  * Date: Jul 24, 2010
  * Time: 10:26:02 PM
  */
-public class GoPsiElementBase extends ASTWrapperPsiElement implements GoPsiElement {
+public class GoPsiElementBase extends ASTWrapperPsiElement
+    implements GoPsiElement {
 
     private SearchScope searchScope;
 
@@ -47,6 +48,12 @@ public class GoPsiElementBase extends ASTWrapperPsiElement implements GoPsiEleme
 
             child = child.getNextSibling();
         }
+    }
+
+    protected <GoPsi extends GoPsiElement> GoPsi findChildByClass(
+        Class<GoPsi> psiType, int pos) {
+        GoPsi children[] = findChildrenByClass(psiType);
+        return children.length > pos ? children[pos] : null;
     }
 
     @Override

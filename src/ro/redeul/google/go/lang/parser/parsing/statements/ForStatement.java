@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
+import ro.redeul.google.go.lang.lexer.GoElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -18,32 +19,32 @@ public class ForStatement implements GoElementTypes {
 
         ParserUtils.skipNLS(builder);
 
+        GoElementType forType = FOR_WITH_CONDITION_STATEMENT;
         if ( builder.getTokenType() != pLCURCLY ) {
-            parseConditionOrForClauseOrRangeClause(builder, parser);
-
+            forType = parseConditionOrForClauseOrRangeClause(builder, parser);
         }
 
         parser.parseBody(builder);
 
-        marker.done(FOR_STATEMENT);
+        marker.done(forType);
         return true;
 
     }
 
-    private static void parseConditionOrForClauseOrRangeClause(PsiBuilder builder, GoParser parser) {
+    private static GoElementType parseConditionOrForClauseOrRangeClause(
+        PsiBuilder builder, GoParser parser)
+    {
         PsiBuilder.Marker clause = builder.mark();
         parser.parseExpression(builder, true);
         if ( pLCURCLY == builder.getTokenType() ) {
-            clause.done(FOR_STATEMENT_CONDITION_CLAUSE);
-            return;
+            clause.drop();
+            return FOR_WITH_CONDITION_STATEMENT;
         }
 
         clause.rollbackTo();
-        clause = builder.mark();
 
         if ( tryParseRangeClause(builder, parser) ) {
-            clause.drop();
-            return;
+            return FOR_WITH_RANGE_STATEMENT;
         }
 
         parser.parseStatementSimple(builder, true);
@@ -55,7 +56,8 @@ public class ForStatement implements GoElementTypes {
 
         ParserUtils.skipNLS(builder);
         parser.parseStatementSimple(builder, true);
-        clause.done(FOR_STATEMENT_FOR_CLAUSE);
+
+        return FOR_WITH_CLAUSES_STATEMENT;
     }
 
     private static boolean tryParseRangeClause(PsiBuilder builder, GoParser parser) {
@@ -70,10 +72,9 @@ public class ForStatement implements GoElementTypes {
 
             if ( builder.getTokenType() == kRANGE ) {
                 ParserUtils.getToken(builder, kRANGE);
-
                 parser.parseExpression(builder, true);
 
-                m.done(FOR_STATEMENT_RANGE_CLAUSE);
+                m.drop();
                 return true;
             }
         }

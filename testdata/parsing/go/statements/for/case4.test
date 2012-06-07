@@ -17,20 +17,19 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace(' ')
-      ForStmt
+      ForWithConditionStmtImpl
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
-        ForConditionClause
-          LogicalAndExpression
-            LiteralExpr
-              IdentifierImpl
-                PsiElement(IDENTIFIER)('a')
-            PsiWhiteSpace(' ')
-            PsiElement(&&)('&&')
-            PsiWhiteSpace(' ')
-            LiteralExpr
-              IdentifierImpl
-                PsiElement(IDENTIFIER)('b')
+        LogicalAndExpression
+          LiteralExpr
+            IdentifierImpl
+              PsiElement(IDENTIFIER)('a')
+          PsiWhiteSpace(' ')
+          PsiElement(&&)('&&')
+          PsiWhiteSpace(' ')
+          LiteralExpr
+            IdentifierImpl
+              PsiElement(IDENTIFIER)('b')
         PsiWhiteSpace(' ')
         BlockStmtImpl
           PsiElement({)('{')

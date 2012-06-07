@@ -17,36 +17,35 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace(' ')
-      ForStmt
+      ForWithClausesStmtImpl
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
-        ForForClause
-          ShortVarStmtImpl
+        ShortVarStmtImpl
+          IdentifierImpl
+            PsiElement(IDENTIFIER)('i')
+          PsiWhiteSpace(' ')
+          PsiElement(:=)(':=')
+          PsiWhiteSpace(' ')
+          LiteralExpr
+            PsiElement(LITERAL_INT)('0')
+        PsiElement(;)(';')
+        PsiWhiteSpace(' ')
+        RelationalExpression
+          LiteralExpr
             IdentifierImpl
               PsiElement(IDENTIFIER)('i')
-            PsiWhiteSpace(' ')
-            PsiElement(:=)(':=')
-            PsiWhiteSpace(' ')
-            LiteralExpr
-              PsiElement(LITERAL_INT)('0')
-          PsiElement(;)(';')
           PsiWhiteSpace(' ')
-          RelationalExpression
-            LiteralExpr
-              IdentifierImpl
-                PsiElement(IDENTIFIER)('i')
-            PsiWhiteSpace(' ')
-            PsiElement(<)('<')
-            PsiWhiteSpace(' ')
-            LiteralExpr
-              PsiElement(LITERAL_INT)('10')
-          PsiElement(;)(';')
+          PsiElement(<)('<')
           PsiWhiteSpace(' ')
-          IncDecStmt
-            LiteralExpr
-              IdentifierImpl
-                PsiElement(IDENTIFIER)('i')
-            PsiElement(++)('++')
+          LiteralExpr
+            PsiElement(LITERAL_INT)('10')
+        PsiElement(;)(';')
+        PsiWhiteSpace(' ')
+        IncDecStmt
+          LiteralExpr
+            IdentifierImpl
+              PsiElement(IDENTIFIER)('i')
+          PsiElement(++)('++')
         PsiWhiteSpace(' ')
         BlockStmtImpl
           PsiElement({)('{')

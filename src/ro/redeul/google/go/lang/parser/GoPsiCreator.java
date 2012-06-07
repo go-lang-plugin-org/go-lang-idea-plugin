@@ -8,7 +8,10 @@ import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationsImpl;
-import ro.redeul.google.go.lang.psi.impl.declarations.GoShortVarDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoForWithRangeStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoForWithClausesStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoForWithConditionStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoShortVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoBuiltinCallExprImpl;
@@ -49,115 +52,115 @@ public class GoPsiCreator implements GoElementTypes {
 
         IElementType elementType = node.getElementType();
 
-        if ( elementType.equals(IDENTIFIER) )
+        if (elementType.equals(IDENTIFIER))
             return new GoIdentifierImpl(node);
 
-        if ( elementType.equals(PACKAGE_DECLARATION) )
+        if (elementType.equals(PACKAGE_DECLARATION))
             return new GoPackageDeclarationImpl(node);
 
-        if ( elementType.equals(IMPORT_DECLARATIONS) )
+        if (elementType.equals(IMPORT_DECLARATIONS))
             return new GoImportDeclarationsImpl(node);
 
-        if ( elementType.equals(IMPORT_DECLARATION) )
+        if (elementType.equals(IMPORT_DECLARATION))
             return new GoImportDeclarationImpl(node);
 
-        if ( elementType.equals(PACKAGE_REFERENCE) )
+        if (elementType.equals(PACKAGE_REFERENCE))
             return new GoPackageReferenceImpl(node);
 
-        if ( elementType.equals(TYPE_DECLARATIONS) )
+        if (elementType.equals(TYPE_DECLARATIONS))
             return new GoTypeDeclarationImpl(node);
 
-        if ( elementType.equals(TYPE_DECLARATION) )
+        if (elementType.equals(TYPE_DECLARATION))
             return new GoTypeSpecImpl(node);
 
-        if ( elementType.equals(VAR_DECLARATIONS) )
+        if (elementType.equals(VAR_DECLARATIONS))
             return new GoVarDeclarationsImpl(node);
 
-        if ( elementType.equals(VAR_DECLARATION) )
+        if (elementType.equals(VAR_DECLARATION))
             return new GoVarDeclarationImpl(node);
 
-        if (elementType.equals(CONST_DECLARATIONS) )
+        if (elementType.equals(CONST_DECLARATIONS))
             return new GoConstDeclarationsImpl(node);
 
-        if (elementType.equals(CONST_DECLARATION) )
+        if (elementType.equals(CONST_DECLARATION))
             return new GoConstDeclarationImpl(node);
 
-        if ( elementType.equals(TYPE_NAME_DECLARATION) )
+        if (elementType.equals(TYPE_NAME_DECLARATION))
             return new GoTypeNameDeclarationImpl(node);
 
-        if ( elementType.equals(FUNCTION_DECLARATION) )
+        if (elementType.equals(FUNCTION_DECLARATION))
             return new GoFunctionDeclarationImpl(node);
 
-        if ( elementType.equals(METHOD_DECLARATION) )
+        if (elementType.equals(METHOD_DECLARATION))
             return new GoMethodDeclarationImpl(node);
 
-        if ( elementType.equals(TYPE_NAME) )
+        if (elementType.equals(TYPE_NAME))
             return new GoTypeNameImpl(node);
 
-        if ( elementType.equals(TYPE_ARRAY) )
+        if (elementType.equals(TYPE_ARRAY))
             return new GoTypeArrayImpl(node);
 
-        if ( elementType.equals(TYPE_SLICE) )
+        if (elementType.equals(TYPE_SLICE))
             return new GoTypeSliceImpl(node);
 
-        if ( elementType.equals(TYPE_MAP) )
+        if (elementType.equals(TYPE_MAP))
             return new GoTypeMapImpl(node);
 
-        if ( elementType.equals(TYPE_POINTER) )
+        if (elementType.equals(TYPE_POINTER))
             return new GoTypePointerImpl(node);
 
-        if ( elementType.equals(TYPE_STRUCT) )
+        if (elementType.equals(TYPE_STRUCT))
             return new GoTypeStructImpl(node);
 
-        if ( elementType.equals(TYPE_STRUCT_FIELD) )
+        if (elementType.equals(TYPE_STRUCT_FIELD))
             return new GoTypeStructFieldImpl(node);
 
-        if ( elementType.equals(TYPE_STRUCT_FIELD_ANONYMOUS) )
+        if (elementType.equals(TYPE_STRUCT_FIELD_ANONYMOUS))
             return new GoTypeStructAnonymousFieldImpl(node);
 
-        if ( elementType.equals(TYPE_INTERFACE) )
+        if (elementType.equals(TYPE_INTERFACE))
             return new GoTypeInterfaceImpl(node);
 
-//        if ( elementType.equals(FUNCTION_PARAMETER_LIST) )
-//            return new GoFunctionParameterListImpl(node);
-
-        if ( elementType.equals(FUNCTION_PARAMETER) )
+        if (elementType.equals(FUNCTION_PARAMETER))
             return new GoFunctionParameterImpl(node);
 
-        if ( elementType.equals(FUNCTION_PARAMETER_VARIADIC) )
+        if (elementType.equals(FUNCTION_PARAMETER_VARIADIC))
             return new GoFunctionParameterImpl(node);
 
-        if ( elementType.equals(TYPE_CHAN_BIDIRECTIONAL) )
-            return new GoTypeChannelImpl(node, GoTypeChannel.ChannelType.Bidirectional);
+        if (elementType.equals(TYPE_CHAN_BIDIRECTIONAL))
+            return new GoTypeChannelImpl(node,
+                                         GoTypeChannel.ChannelType.Bidirectional);
 
-        if ( elementType.equals(TYPE_CHAN_SENDING) )
-            return new GoTypeChannelImpl(node, GoTypeChannel.ChannelType.Sending);
+        if (elementType.equals(TYPE_CHAN_SENDING))
+            return new GoTypeChannelImpl(node,
+                                         GoTypeChannel.ChannelType.Sending);
 
-        if ( elementType.equals(TYPE_CHAN_RECEIVING) )
-            return new GoTypeChannelImpl(node, GoTypeChannel.ChannelType.Receiving);
+        if (elementType.equals(TYPE_CHAN_RECEIVING))
+            return new GoTypeChannelImpl(node,
+                                         GoTypeChannel.ChannelType.Receiving);
 
-        if ( elementType.equals(BLOCK_STATEMENT))
+        if (elementType.equals(BLOCK_STATEMENT))
             return new GoBlockStatementImpl(node);
 
-        if ( elementType.equals(SELECTOR_EXPRESSION) )
+        if (elementType.equals(SELECTOR_EXPRESSION))
             return new GoSelectorExpressionImpl(node);
 
-        if ( elementType.equals(LITERAL_EXPRESSION) )
+        if (elementType.equals(LITERAL_EXPRESSION))
             return new GoLiteralImpl(node);
 
-        if ( elementType.equals(FUNCTION_LITERAL_EXPRESSION) )
+        if (elementType.equals(FUNCTION_LITERAL_EXPRESSION))
             return new GoFunctionLiteralImpl(node);
 
-        if ( elementType.equals(ADD_EXPRESSION) )
+        if (elementType.equals(ADD_EXPRESSION))
             return new GoAdditiveExpressionImpl(node);
 
-        if ( elementType.equals(MUL_EXPRESSION) )
+        if (elementType.equals(MUL_EXPRESSION))
             return new GoMultiplicativeExpressionImpl(node);
 
-        if ( elementType.equals(RETURN_STATEMENT) )
+        if (elementType.equals(RETURN_STATEMENT))
             return new GoReturnStatementImpl(node);
 
-        if ( elementType.equals(SHORT_VAR_STATEMENT) )
+        if (elementType.equals(SHORT_VAR_STATEMENT))
             return new GoShortVarDeclarationImpl(node);
 
         if ( elementType.equals(EXPRESSION_STATEMENT) )
@@ -166,10 +169,19 @@ public class GoPsiCreator implements GoElementTypes {
         if ( elementType.equals(CALL_OR_CONVERSION_EXPRESSION) )
             return new GoCallOrConversionExpressionImpl(node);
 
-        if (elementType.equals(BUILTIN_CALL_EXPRESSION) )
+        if (elementType.equals(FOR_WITH_CONDITION_STATEMENT))
+            return new GoForWithConditionStatementImpl(node);
+
+        if (elementType.equals(FOR_WITH_CLAUSES_STATEMENT))
+            return new GoForWithClausesStatementImpl(node);
+
+        if (elementType.equals(FOR_WITH_RANGE_STATEMENT))
+            return new GoForWithRangeStatementImpl(node);
+
+        if (elementType.equals(BUILTIN_CALL_EXPRESSION))
             return new GoBuiltinCallExprImpl(node);
 
-        if ( elementType.equals(wsNLS) )
+        if (elementType.equals(wsNLS))
             return (PsiElement) ASTFactory.whitespace(node.getText());
 
         return new GoPsiElementBase(node);

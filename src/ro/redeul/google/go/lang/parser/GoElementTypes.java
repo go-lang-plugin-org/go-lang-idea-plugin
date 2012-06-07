@@ -9,12 +9,6 @@ import ro.redeul.google.go.lang.psi.stubs.elements.GoStubElementType;
 import ro.redeul.google.go.lang.psi.stubs.elements.GoTypeNameDeclarationType;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Jul 24, 2010
- * Time: 7:40:35 PM
- */
 public interface GoElementTypes extends GoTokenTypes {
     GoElementType NONE = new GoElementTypeImpl("no token"); //not a node
 
@@ -148,7 +142,12 @@ public interface GoElementTypes extends GoTokenTypes {
 
     //Branch statements
     GoElementType IF_STATEMENT = new GoElementTypeImpl("IfStmt");
-    GoElementType FOR_STATEMENT = new GoElementTypeImpl("ForStmt");
+    GoElementType FOR_WITH_CLAUSES_STATEMENT =
+        new GoElementTypeImpl("ForWithClausesStmt");
+    GoElementType FOR_WITH_CONDITION_STATEMENT =
+        new GoElementTypeImpl("ForWithConditionStmt");
+    GoElementType FOR_WITH_RANGE_STATEMENT =
+        new GoElementTypeImpl("ForWithRangeStmt");
 
     GoElementType FOR_STATEMENT_CONDITION_CLAUSE =
         new GoElementTypeImpl("ForConditionClause");
@@ -206,7 +205,9 @@ public interface GoElementTypes extends GoTokenTypes {
         BREAK_STATEMENT,
         CONTINUE_STATEMENT,
         SELECT_STATEMENT,
-        FOR_STATEMENT,
+        FOR_WITH_CLAUSES_STATEMENT,
+        FOR_WITH_CONDITION_STATEMENT,
+        FOR_WITH_RANGE_STATEMENT,
         INC_DEC_STATEMENT,
         RETURN_STATEMENT,
         IF_STATEMENT,

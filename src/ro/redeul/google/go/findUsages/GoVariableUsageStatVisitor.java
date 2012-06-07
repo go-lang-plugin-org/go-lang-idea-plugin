@@ -129,9 +129,13 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
             return false;
         }
 
-        GoPsiElementBase gpeb = (GoPsiElementBase) element;
-        IElementType tt = gpeb.getTokenType();
-        return tt == GoElementTypes.IF_STATEMENT || tt == GoElementTypes.FOR_STATEMENT || tt == GoElementTypes.BLOCK_STATEMENT;
+        IElementType tt = element.getNode().getElementType();
+        return
+            tt == GoElementTypes.IF_STATEMENT ||
+            tt == GoElementTypes.FOR_WITH_CLAUSES_STATEMENT ||
+            tt == GoElementTypes.FOR_WITH_CONDITION_STATEMENT ||
+            tt == GoElementTypes.FOR_WITH_RANGE_STATEMENT ||
+            tt == GoElementTypes.BLOCK_STATEMENT;
     }
 
     @Override
