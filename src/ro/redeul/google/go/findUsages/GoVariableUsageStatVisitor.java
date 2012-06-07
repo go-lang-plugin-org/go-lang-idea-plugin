@@ -292,8 +292,10 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
 
         for (GoTypeDeclaration types : file.getTypeDeclarations()) {
             for (GoTypeSpec spec : types.getTypeSpecs()) {
-                variables.put(spec.getType().getName(),
-                              new VariableUsage(spec.getType()));
+                GoType type = spec.getType();
+                if (type != null) {
+                    variables.put(type.getName(), new VariableUsage(type));
+                }
             }
         }
         return variables;
