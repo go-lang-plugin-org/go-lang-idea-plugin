@@ -36,6 +36,7 @@ public class FunctionDeclarationInspection {
         hasDuplicateArgument();
         hasRedeclaredParameterInResultList();
         hasReturnParameterQuantityUnmatch();
+        hasVariadicProblems();
         return getProblems();
     }
 
@@ -78,6 +79,28 @@ public class FunctionDeclarationInspection {
 
     public void hasReturnParameterQuantityUnmatch() {
         new ReturnVisitor().visitElement(function);
+    }
+
+    public void hasVariadicProblems() {
+        // cannot use variadic in output argument list
+        for (GoFunctionParameter parameter : function.getResults()) {
+            if (parameter.isVariadic()) {
+                addProblem(parameter, "Cannot use ... in output argument list");
+            }
+        }
+
+        GoFunctionParameter[] parameters = function.getParameters();
+        if (parameters.length == 0) {
+            return;
+        }
+
+        // only last argument could be variadic
+        for (int i = 0; i < parameters.length - 1; i++) {
+            GoFunctionParameter parameter = parameters[i];
+            if (parameter.isVariadic()) {
+                addProblem(parameter, "Can only use ... as final argument in list");
+            }
+        }
     }
 
     public ProblemDescriptor[] getProblems() {

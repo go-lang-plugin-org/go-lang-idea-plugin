@@ -14,6 +14,7 @@ public class FunctionDeclarationInspectionTest extends AbstractProblemDescriptio
     public void testWithoutReturn() throws Exception{ doTest(); }
     public void testRedeclaredParameterInResultList() throws Exception{ doTest(); }
     public void testReturnParameterQuantityUnmatch() throws Exception{ doTest(); }
+    public void testVariadic() throws Exception{ doTest(); }
 
     @Override
     protected String getInspectionName() {

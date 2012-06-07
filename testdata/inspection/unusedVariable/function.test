@@ -27,6 +27,13 @@ func Fprintln(w io.Writer, a ...interface{}) (n int, err error) {
 	return int(n64), err
 }
 
+func coroutineTest(<begin>a<end.Unused parameter> int) int {
+    go func(a, <begin>b<end.Unused parameter> int) int {
+        return a
+    }()
+    return 2
+}
+
 func main() {
     a, b := reverse(1, 2)
     println(a, b, gen1(), gen2())

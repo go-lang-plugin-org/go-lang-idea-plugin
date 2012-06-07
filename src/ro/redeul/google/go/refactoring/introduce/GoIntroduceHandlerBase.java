@@ -25,7 +25,9 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler {
     @Override
@@ -116,12 +118,14 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
             return new ArrayList<GoPsiElementBase>();
         }
 
+        Set<TextRange> expressionRanges = new HashSet<TextRange>();
         List<GoPsiElementBase> expressions = new ArrayList<GoPsiElementBase>();
         for (GoPsiElementBase expression = PsiTreeUtil.getParentOfType(elementAtCaret, GoPsiElementBase.class);
              expression != null;
              expression = PsiTreeUtil.getParentOfType(expression, GoPsiElementBase.class)) {
             IElementType tt = expression.getTokenType();
-            if (tt == GoElementTypes.EXPRESSION_PARENTHESIZED) {
+            if (tt == GoElementTypes.EXPRESSION_PARENTHESIZED ||
+                expressionRanges.contains(expression.getTextRange())) {
                 continue;
             }
 
@@ -130,6 +134,7 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
             }
 
             expressions.add(expression);
+            expressionRanges.add(expression.getTextRange());
         }
         return expressions;
     }

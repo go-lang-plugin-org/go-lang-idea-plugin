@@ -1,10 +1,5 @@
 package ro.redeul.google.go.findUsages;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -21,6 +16,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -34,6 +30,12 @@ import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor2;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedConstant;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
@@ -93,6 +95,8 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
             beforeVisitIdentifier((GoIdentifier) element);
         } else if (element instanceof GoFunctionDeclaration) {
             beforeVisitFunctionDeclaration((GoFunctionDeclaration) element);
+        } else if (element instanceof GoFunctionLiteral) {
+            beforeVisitFunctionDeclaration((GoFunctionLiteral) element);
         } else if (couldOpenNewScope(element)) {
             ctx.addNewScopeLevel();
         }
@@ -120,8 +124,8 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
 
         if (element instanceof GoFile) {
             afterVisitFile((GoFile) element);
-        } else if (element instanceof GoFunctionDeclaration) {
-            afterVisitGoFunctionDeclaration((GoFunctionDeclaration) element);
+        } else if (element instanceof GoFunctionDeclaration || element instanceof GoFunctionLiteral) {
+            afterVisitGoFunctionDeclaration();
         } else if (couldOpenNewScope(element)) {
             for (VariableUsage v : ctx.popLastScopeLevel().values()) {
                 if (!v.isUsed()) {
@@ -190,16 +194,19 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         }
 
         PsiElement grandpa = id.getParent().getParent();
-        return grandpa.getNode()
-                      .getElementType() == GoElementTypes.CALL_OR_CONVERSION_EXPRESSION &&
-            grandpa.getFirstChild().isEquivalentTo(id.getParent());
+        return grandpa.getNode().getElementType() == GoElementTypes.CALL_OR_CONVERSION_EXPRESSION &&
+               id.getParent().isEquivalentTo(grandpa.getFirstChild());
     }
 
     public void beforeVisitFunctionDeclaration(GoFunctionDeclaration fd) {
         getFunctionParameters(fd);
     }
 
-    public void afterVisitGoFunctionDeclaration(GoFunctionDeclaration fd) {
+    public void beforeVisitFunctionDeclaration(GoFunctionLiteral fl) {
+        createFunctionParametersMap(fl.getParameters(), fl.getResults());
+    }
+
+    public void afterVisitGoFunctionDeclaration() {
         for (VariableUsage v : ctx.popLastScopeLevel().values()) {
             if (!v.isUsed()) {
                 ctx.unusedParameter(v);
@@ -207,23 +214,26 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         }
     }
 
-    private Map<String, VariableUsage> getFunctionParameters(
-        GoFunctionDeclaration fd) {
-        Map<String, VariableUsage> variables = ctx.addNewScopeLevel();
+    private Map<String, VariableUsage> getFunctionParameters(GoFunctionDeclaration fd) {
+        Map<String, VariableUsage> variables = createFunctionParametersMap(fd.getParameters(), fd.getResults());
 
         if (fd instanceof GoMethodDeclaration) {
             // Add method receiver to parameter list
-            GoPsiElementBase receiver = getMethodReceiverIdentifier(
-                (GoMethodDeclaration) fd);
+            GoPsiElementBase receiver = getMethodReceiverIdentifier((GoMethodDeclaration) fd);
             if (receiver != null) {
                 variables.put(receiver.getName(), new VariableUsage(receiver));
             }
         }
+        return variables;
+    }
 
-        addFunctionParametersToMap(fd.getParameters(), variables, false);
+    private Map<String, VariableUsage> createFunctionParametersMap(GoFunctionParameter[] parameters,
+                                                                   GoFunctionParameter[] results) {
+        Map<String, VariableUsage> variables = ctx.addNewScopeLevel();
+        addFunctionParametersToMap(parameters, variables, false);
 
         // Don't detect usage problem on function result
-        addFunctionParametersToMap(fd.getResults(), variables, true);
+        addFunctionParametersToMap(results, variables, true);
         return variables;
     }
 
