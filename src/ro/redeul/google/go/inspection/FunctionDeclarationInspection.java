@@ -1,9 +1,11 @@
 package ro.redeul.google.go.inspection;
 
 import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
+import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
@@ -42,7 +44,8 @@ public class FunctionDeclarationInspection {
 
     public void hasResultButNoReturnAtTheEnd() {
         if (hasResult() && hasBody() && !hasReturnAtTheEnd()) {
-            addProblem("Function ends without a return statement");
+            AddReturnStmtFix fix = new AddReturnStmtFix(function);
+            addProblem(function.getBlock().getLastChild(), "Function ends without a return statement", fix);
         }
     }
 
@@ -107,18 +110,18 @@ public class FunctionDeclarationInspection {
         return problems.toArray(new ProblemDescriptor[problems.size()]);
     }
 
-    private void addProblem(String msg) {
+    private void addProblem(String msg, LocalQuickFix... fixes) {
         PsiElement start = function.getFirstChild();
         PsiElement end = hasBody() ? function.getBlock().getPrevSibling() : function.getLastChild();
-        addProblem(start, end, msg);
+        addProblem(start, end, msg, fixes);
     }
 
-    private void addProblem(PsiElement element, String msg) {
-        addProblem(element, element, msg);
+    private void addProblem(PsiElement element, String msg, LocalQuickFix... fixes) {
+        addProblem(element, element, msg, fixes);
     }
 
-    private void addProblem(PsiElement start, PsiElement end, String msg) {
-        problems.add(manager.createProblemDescriptor(start, end, msg, ProblemHighlightType.ERROR, true));
+    private void addProblem(PsiElement start, PsiElement end, String msg, LocalQuickFix... fixes) {
+        problems.add(manager.createProblemDescriptor(start, end, msg, ProblemHighlightType.ERROR, true, fixes));
     }
 
     private boolean hasResult() {

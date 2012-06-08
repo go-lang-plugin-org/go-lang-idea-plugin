@@ -1,9 +1,10 @@
 package ro.redeul.google.go.annotator;
 
-import java.util.Collection;
-
+import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.QuickFix;
+import com.intellij.codeInspection.ex.QuickFixWrapper;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -26,6 +27,9 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+
+import java.util.Collection;
+
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isExtraExpressionInConst;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isFirstConstExpressionMissed;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isMissingExpressionInConst;
@@ -86,7 +90,19 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
     public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
         FunctionDeclarationInspection fdi = new FunctionDeclarationInspection(inspectionManager, functionDeclaration);
         for (ProblemDescriptor pd : fdi.checkFunction()) {
-            annotationHolder.createErrorAnnotation(getProblemRange(pd), pd.getDescriptionTemplate());
+            Annotation anno = annotationHolder.createErrorAnnotation(getProblemRange(pd), pd.getDescriptionTemplate());
+            QuickFix[] fixes = pd.getFixes();
+            if (fixes == null) {
+                continue;
+            }
+
+            for (int i = 0; i < fixes.length; i++) {
+                if (fixes[i] instanceof IntentionAction) {
+                    anno.registerFix((IntentionAction) fixes[i]);
+                } else {
+                    anno.registerFix(QuickFixWrapper.wrap(pd, i));
+                }
+            }
         }
     }
 
