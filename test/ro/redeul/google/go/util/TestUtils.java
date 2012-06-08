@@ -15,22 +15,24 @@
 
 package ro.redeul.google.go.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.openapi.application.PluginPathManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.LocalTimeCounter;
 import org.junit.Assert;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import static com.intellij.testFramework.UsefulTestCase.assertInstanceOf;
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * Utility class, that contains various methods for testing
@@ -136,4 +138,17 @@ public abstract class TestUtils {
     public static void writeTestFile(String data, String parseTree, String fileName) throws IOException {
         FileUtil.writeToFile(new File(fileName), (data + "\n-----\n" + parseTree).getBytes());
     }
+
+    public static <T> T assertAs(Class<T> type, PsiElement element) {
+        assertInstanceOf(element, type);
+        return type.cast(element);
+    }
+
+    public static <T> T assertParentType(Class<T> type, PsiElement node) {
+        assertNotNull(node);
+        assertNotNull(node.getParent());
+
+        return assertAs(type, node.getParent());
+    }
 }
+
