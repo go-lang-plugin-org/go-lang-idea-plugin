@@ -13,12 +13,15 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsResolver;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -94,6 +97,17 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
 
     @Override
     public PsiReference getReference() {
+        PsiElement parent = getParent();
+
+        if (parent instanceof GoFunctionDeclaration)
+            return null;
+
+        if (parent instanceof GoTypeStructField)
+            return null;
+
+        if (GoPsiUtils.isNodeOfType(parent, GoElementTypes.METHOD_RECEIVER))
+            return null;
+
         return this;
     }
 
