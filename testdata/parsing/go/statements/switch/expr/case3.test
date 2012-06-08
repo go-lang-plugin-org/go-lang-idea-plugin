@@ -26,7 +26,7 @@ Go file
       SwitchExprStmt
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
-        ExpressionStmt
+        ExpressionStmtImpl
           LiteralExpr
             IdentifierImpl
               PsiElement(IDENTIFIER)('e')

@@ -55,7 +55,7 @@ Go file
                 PsiElement(IDENTIFIER)('y')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('            ')
-          ExpressionStmt
+          ExpressionStmtImpl
             CallOrConversionExpression
               LiteralExpr
                 IdentifierImpl

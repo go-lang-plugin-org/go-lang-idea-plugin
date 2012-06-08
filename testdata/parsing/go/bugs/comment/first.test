@@ -35,7 +35,7 @@ Go file
       PsiComment(ML_COMMENT)('/* sdsds */')
       PsiElement(WS_NEW_LINES)('\n\n')
       PsiWhiteSpace('    ')
-      ExpressionStmt
+      ExpressionStmtImpl
         CallOrConversionExpression
           LiteralExpr
             IdentifierImpl

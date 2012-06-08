@@ -38,7 +38,7 @@ Go file
               PsiElement(IDENTIFIER)('b')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
-      ExpressionStmt
+      ExpressionStmtImpl
         LiteralExpr
           IdentifierImpl
             PsiElement(IDENTIFIER)('a')
