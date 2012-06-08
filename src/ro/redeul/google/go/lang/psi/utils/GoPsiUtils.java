@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.psi.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -13,18 +16,14 @@ import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ReflectionCache;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.sdk.GoSdkUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GoPsiUtils {
 
@@ -171,6 +170,7 @@ public class GoPsiUtils {
         return null;
     }
 
+    @NotNull
     public static GoFunctionParameter[] getParameters(PsiElement psiNode) {
 
         if (psiNode == null)
@@ -182,6 +182,9 @@ public class GoPsiUtils {
         if (list == null)
             return GoFunctionParameter.EMPTY_ARRAY;
 
-        return PsiTreeUtil.getChildrenOfType(list.getPsi(), GoFunctionParameter.class);
+        GoFunctionParameter params[] =
+            PsiTreeUtil.getChildrenOfType(list.getPsi(), GoFunctionParameter.class);
+
+        return params != null ? params : GoFunctionParameter.EMPTY_ARRAY;
     }
 }
