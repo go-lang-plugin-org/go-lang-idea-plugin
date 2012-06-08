@@ -37,6 +37,18 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
                 GoLiteral.class, variable));
     }
 
+    public void testDeclaredInForRange2() throws Exception {
+        PsiElement psiElement = resolve().resolve();
+
+        GoIdentifier variable = assertAs(GoIdentifier.class, psiElement);
+        assertEquals("i", variable.getName());
+
+        assertParentType(
+            GoForWithRangeStatement.class,
+            assertParentType(
+                GoLiteral.class, variable));
+    }
+
     public void testDeclaredInForRangeAsValue() throws Exception {
         PsiReference reference = resolve();
         PsiElement psiElement = reference.resolve();
