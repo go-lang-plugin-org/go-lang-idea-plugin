@@ -36,7 +36,7 @@ Go file
       PsiElement(WS_NEW_LINES)('\n\n')
       PsiWhiteSpace('    ')
       ExpressionStmtImpl
-        CallOrConversionExpression
+        CallOrConversionExpressionImpl
           LiteralExpr
             IdentifierImpl
               PsiElement(IDENTIFIER)('fmt')

@@ -20,7 +20,7 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CallOrConversionExpression
+      CallOrConversionExpressionImpl
         LiteralExpr
           IdentifierImpl
             PsiElement(IDENTIFIER)('complexSqrt')

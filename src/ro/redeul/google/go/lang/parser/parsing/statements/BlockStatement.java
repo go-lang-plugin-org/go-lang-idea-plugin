@@ -30,11 +30,11 @@ public class BlockStatement implements GoElementTypes {
             ParserUtils.skipNLS(builder);
         } while ( ! builder.eof() && builder.getTokenType() != pRCURLY );
 
-        ParserUtils.getToken(builder, pRCURLY, "right.curly.expected");        
+        ParserUtils.getToken(builder, pRCURLY, "right.curly.expected");
         block.done(BLOCK_STATEMENT);
 
         return true;
 
     }
-    
+
 }

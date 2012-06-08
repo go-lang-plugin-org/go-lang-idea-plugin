@@ -49,7 +49,7 @@ Go file
             PsiElement(:)(':')
             PsiWhiteSpace(' ')
             CompositeLiteralElementValue
-              CallOrConversionExpression
+              CallOrConversionExpressionImpl
                 SelectorExpression
                   LiteralExpr
                     IdentifierImpl
@@ -57,7 +57,7 @@ Go file
                   PsiElement(.)('.')
                   PsiElement(IDENTIFIER)('SecondsToTime')
                 PsiElement(()('(')
-                CallOrConversionExpression
+                CallOrConversionExpressionImpl
                   SelectorExpression
                     LiteralExpr
                       IdentifierImpl

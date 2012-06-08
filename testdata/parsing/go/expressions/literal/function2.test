@@ -16,7 +16,7 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CallOrConversionExpression
+      CallOrConversionExpressionImpl
         FunctionLiteralImpl
           TypeFunction
             PsiElement(KEYWORD_FUNC)('func')
