@@ -17,16 +17,14 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImpl;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
+import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -119,8 +117,33 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
             beforeVisitFunctionDeclaration((GoFunctionDeclaration) element);
         } else if (element instanceof GoFunctionLiteral) {
             beforeVisitFunctionDeclaration((GoFunctionLiteral) element);
+        } else if (element instanceof GoForWithRangeStatement) {
+            beforeVisitForWithRange((GoForWithRangeStatement) element);
         } else if (couldOpenNewScope(element)) {
             ctx.addNewScopeLevel();
+        }
+    }
+
+    private void beforeVisitForWithRange(GoForWithRangeStatement element) {
+        ctx.addNewScopeLevel();
+
+        boolean isDeclaration = element.isDeclaration();
+        visitExpressionAsIdentifier(element.getKey(), isDeclaration);
+        visitExpressionAsIdentifier(element.getValue(), isDeclaration);
+    }
+
+    private void visitExpressionAsIdentifier(GoExpr expr, boolean declaration) {
+        if (!(expr instanceof GoLiteral)) {
+            return;
+        }
+
+        GoIdentifier id = ((GoLiteral) expr).getIdentifier();
+        if (needToCollectUsage(id)) {
+            if (declaration) {
+                ctx.addDefinition(id);
+            } else {
+                ctx.addUsage(id);
+            }
         }
     }
 
@@ -174,13 +197,16 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     }
 
     public void beforeVisitIdentifier(GoIdentifier id) {
-        if (isFunctionOrMethodCall(id) || isTypeField(id) || isType(id) ||
+        if (needToCollectUsage(id)) {
+            ctx.addUsage(id);
+        }
+    }
+
+    private boolean needToCollectUsage(GoIdentifier id) {
+        return id != null && !isFunctionOrMethodCall(id) && !isTypeField(id) && !isType(id) &&
                 // if there is any dots in the identifier, it could be from other packages.
                 // usage collection of other package variables is not implemented yet.
-                id.getText().contains(".")) {
-            return;
-        }
-        ctx.addUsage(id);
+                !id.getText().contains(".");
     }
 
     private boolean isType(GoIdentifier id) {
@@ -406,8 +432,13 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         }
 
         public void addDefinition(GoPsiElement element) {
-            variables.get(variables.size() - 1)
-                     .put(element.getText(), new VariableUsage(element));
+            Map<String, VariableUsage> map = variables.get(variables.size() - 1);
+            VariableUsage variableUsage = map.get(element.getText());
+            if (variableUsage != null) {
+                variableUsage.addUsage(element);
+            } else {
+                map.put(element.getText(), new VariableUsage(element));
+            }
         }
 
         public void addUsage(GoPsiElement element) {
