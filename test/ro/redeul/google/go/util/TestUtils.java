@@ -28,10 +28,12 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.LocalTimeCounter;
 import org.junit.Assert;
 import static com.intellij.testFramework.UsefulTestCase.assertInstanceOf;
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 /**
@@ -149,6 +151,16 @@ public abstract class TestUtils {
         assertNotNull(node.getParent());
 
         return assertAs(type, node.getParent());
+    }
+
+    public static PsiElement assertParentType(IElementType type, PsiElement node) {
+        assertNotNull(node);
+
+        PsiElement parent = node.getParent();
+        assertNotNull(parent);
+
+        assertEquals(type, parent.getNode().getElementType());
+        return parent;
     }
 }
 

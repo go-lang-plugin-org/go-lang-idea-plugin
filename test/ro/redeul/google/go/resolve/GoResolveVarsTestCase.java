@@ -2,11 +2,13 @@ package ro.redeul.google.go.resolve;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import static ro.redeul.google.go.util.TestUtils.assertAs;
 import static ro.redeul.google.go.util.TestUtils.assertParentType;
@@ -73,12 +75,41 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
                 GoShortVarDeclaration.class, variable));
     }
 
-    public void testSimpleMethodParameter() throws Exception {
+    public void testMethodReturn() throws Exception {
         PsiElement resolved = resolve().resolve();
 
         GoIdentifier param = assertAs(GoIdentifier.class, resolved);
-        assertEquals("x", param.getName());
+        assertEquals("c", param.getName());
 
-        assertParentType(GoFunctionParameter.class, param);
+        GoFunctionDeclaration functionDeclaration =
+            assertParentType(
+                GoFunctionDeclaration.class,
+                assertParentType(
+                    GoElementTypes.FUNCTION_RESULT,
+                    assertParentType(
+                        GoElementTypes.FUNCTION_PARAMETER_LIST,
+                        assertParentType(GoFunctionParameter.class,
+                                         param))));
+
+        assertEquals("function", functionDeclaration.getFunctionName());
+    }
+
+    public void testMethodReturn2() throws Exception {
+        PsiElement resolved = resolve().resolve();
+
+        GoIdentifier param = assertAs(GoIdentifier.class, resolved);
+        assertEquals("g1v", param.getName());
+
+        GoFunctionDeclaration functionDeclaration =
+            assertParentType(
+                GoFunctionDeclaration.class,
+                assertParentType(
+                    GoElementTypes.FUNCTION_RESULT,
+                    assertParentType(
+                        GoElementTypes.FUNCTION_PARAMETER_LIST,
+                        assertParentType(GoFunctionParameter.class,
+                                         param))));
+
+        assertEquals("gen1", functionDeclaration.getFunctionName());
     }
 }
