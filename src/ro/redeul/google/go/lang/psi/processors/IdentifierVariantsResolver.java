@@ -71,7 +71,7 @@ public class IdentifierVariantsResolver extends BaseScopeProcessor {
 
         GoLiteral literal = (GoLiteral) expression;
 
-        return tryResolveToIdentifiers(state, literal.getIdentifier());
+        return ! tryResolveToIdentifiers(state, literal.getIdentifier());
     }
 
     private boolean tryResolveToIdentifiers(ResolveState state,
