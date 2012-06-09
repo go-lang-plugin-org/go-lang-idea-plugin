@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDeclaration {
 
@@ -25,6 +26,11 @@ public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDecla
     @NotNull
     public GoExpr[] getExpressions() {
         return findChildrenByClass(GoExpr.class);
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitVarDeclaration(this);
     }
 
     @Override

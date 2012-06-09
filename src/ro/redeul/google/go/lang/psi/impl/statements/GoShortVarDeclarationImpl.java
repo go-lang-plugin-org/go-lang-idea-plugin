@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -18,4 +19,8 @@ public class GoShortVarDeclarationImpl extends GoVarDeclarationImpl
         super(node);
     }
 
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitShortVarDeclaration(this);
+    }
 }

@@ -1,12 +1,18 @@
 package ro.redeul.google.go.lang.psi.visitors;
 
+import ro.redeul.google.go.lang.parser.parsing.declarations.VarDeclaration;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
+import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
@@ -116,5 +122,25 @@ public class GoElementVisitor {
 
     public void visitFunctionLiteral(GoFunctionLiteral functionLiteral) {
         visitElement(functionLiteral);
+    }
+
+    public void visitForWithRange(GoForWithRangeStatement forWithRange) {
+        visitElement(forWithRange);
+    }
+
+    public void visitForWithClauses(GoForWithClausesStatement forWithClauses) {
+        visitElement(forWithClauses);
+    }
+
+    public void visitForWithCondition(GoForWithConditionStatement forWithCondition) {
+        visitElement(forWithCondition);
+    }
+
+    public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
+        visitElement(varDeclaration);
+    }
+
+    public void visitShortVarDeclaration(GoShortVarDeclaration shortVarDeclaration) {
+        visitElement(shortVarDeclaration);
     }
 }

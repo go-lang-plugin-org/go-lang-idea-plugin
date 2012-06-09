@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoForWithConditionStatementImpl extends GoPsiElementBase
     implements GoForWithConditionStatement {
@@ -15,5 +16,10 @@ public class GoForWithConditionStatementImpl extends GoPsiElementBase
     @Override
     public GoExpr getCondition() {
         return findChildByClass(GoExpr.class);
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitForWithCondition(this);
     }
 }

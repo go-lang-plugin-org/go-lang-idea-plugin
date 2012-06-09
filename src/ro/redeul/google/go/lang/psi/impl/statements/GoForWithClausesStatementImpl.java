@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoForWithClausesStatementImpl
     extends GoPsiElementBase
@@ -31,6 +32,11 @@ public class GoForWithClausesStatementImpl
     @Override
     public GoStatement getPostStatement() {
         return findChildByClass(GoStatement.class, 1);
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitForWithClauses(this);
     }
 
     @Override

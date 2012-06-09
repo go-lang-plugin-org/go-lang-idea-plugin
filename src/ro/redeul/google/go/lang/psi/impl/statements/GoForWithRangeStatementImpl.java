@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoForWithRangeStatementImpl extends GoPsiElementBase
     implements GoForWithRangeStatement
@@ -45,6 +46,11 @@ public class GoForWithRangeStatementImpl extends GoPsiElementBase
         }
 
         return null;
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitForWithRange(this);
     }
 
     @Override
