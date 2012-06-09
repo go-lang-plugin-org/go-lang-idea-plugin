@@ -404,7 +404,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         public void unusedParameter(VariableUsage variableUsage) {
             if (!variableUsage.isBlank()) {
                 addProblem(variableUsage, "Unused parameter",
-                           ProblemHighlightType.LIKE_UNUSED_SYMBOL, null);
+                           ProblemHighlightType.LIKE_UNUSED_SYMBOL);
             }
         }
 
@@ -430,14 +430,14 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
             }
 
             addProblem(variableUsage, "Undefined variable",
-                       ProblemHighlightType.ERROR, null);
+                       ProblemHighlightType.ERROR);
         }
 
         public void addProblem(VariableUsage variableUsage, String desc,
                                 ProblemHighlightType highlightType,
-                                @Nullable LocalQuickFix fix) {
+                                LocalQuickFix... fixes) {
             if (!variableUsage.ignoreAnyProblem) {
-                result.addProblem(variableUsage.element, desc, highlightType, fix);
+                result.addProblem(variableUsage.element, desc, highlightType, fixes);
             }
         }
 

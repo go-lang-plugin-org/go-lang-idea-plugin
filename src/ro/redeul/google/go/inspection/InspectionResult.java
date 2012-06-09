@@ -30,7 +30,7 @@ public class InspectionResult {
     }
 
     public void addProblem(PsiElement start, PsiElement end, String msg, LocalQuickFix... fixes) {
-        addProblem(start, end, msg, ProblemHighlightType.ERROR, fixes);
+        addProblem(start, end, msg, ProblemHighlightType.GENERIC_ERROR, fixes);
     }
 
     public void addProblem(PsiElement start, PsiElement end, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {

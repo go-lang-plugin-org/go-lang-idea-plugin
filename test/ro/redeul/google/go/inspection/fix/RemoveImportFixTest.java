@@ -35,7 +35,7 @@ public class RemoveImportFixTest extends FileDataBasedTest {
         InspectionManager im = InspectionManager.getInstance(project);
         LocalQuickFix fix = null;
         ProblemDescriptor pd = im.createProblemDescriptor(element, "", fix, ProblemHighlightType.ERROR, true);
-        new RemoveImportFix().applyFix(project, pd);
+        new RemoveImportFix(element).applyFix(project, pd);
     }
 
     @Override

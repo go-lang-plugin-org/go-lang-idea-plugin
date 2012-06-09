@@ -49,7 +49,7 @@ public class GoCodeManager {
         return usedImports;
     }
 
-    private boolean isImportUsed(GoImportDeclaration importSpec, GoFile file) {
+    public boolean isImportUsed(GoImportDeclaration importSpec, GoFile file) {
         GoImportUsageChecker importUsageChecker = new GoImportUsageChecker(importSpec);
 
         file.accept(importUsageChecker);

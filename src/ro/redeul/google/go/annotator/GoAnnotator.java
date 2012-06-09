@@ -8,28 +8,30 @@ import com.intellij.codeInspection.ex.QuickFixWrapper;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
 import ro.redeul.google.go.inspection.FunctionDeclarationInspection;
 import ro.redeul.google.go.inspection.VarDeclarationInspection;
+import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.services.GoCodeManager;
 
 import java.util.Collection;
 
@@ -65,14 +67,58 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
         }
     }
 
-    @Override
-    public void visitIdentifier(GoIdentifier id) {
-        PsiReference reference = id.getReference();
+    private Annotation toAnnotation(ProblemDescriptor pd) {
+        TextRange problemRange = getProblemRange(pd);
+        String desc = pd.getDescriptionTemplate();
+        switch (pd.getHighlightType()) {
+            case GENERIC_ERROR_OR_WARNING:
+            case ERROR:
+            case GENERIC_ERROR:
+            case LIKE_UNKNOWN_SYMBOL:
+                return annotationHolder.createErrorAnnotation(problemRange, desc);
 
-        if ( !GoPsiUtils.isIotaInConstantDeclaration(id)
-            && reference != null && reference.resolve() == null ) {
-            annotationHolder.createErrorAnnotation(id, GoBundle.message("warning.unresolved.identifier"));
+            case LIKE_DEPRECATED:
+            case LIKE_UNUSED_SYMBOL:
+                return annotationHolder.createWeakWarningAnnotation(problemRange, desc);
+
+            case INFO:
+            case INFORMATION:
+                return annotationHolder.createInfoAnnotation(problemRange, desc);
+
+            case WEAK_WARNING:
+            default:
+                return annotationHolder.createWarningAnnotation(problemRange, desc);
         }
+    }
+
+    /**
+     * Add all problems to annotation holder.
+     * @param problems problems to be added to annotation holder
+     */
+    private void addProblems(ProblemDescriptor[] problems) {
+        for (ProblemDescriptor pd : problems) {
+            Annotation anno = toAnnotation(pd);
+            anno.setHighlightType(pd.getHighlightType());
+            QuickFix[] fixes = pd.getFixes();
+            if (fixes == null) {
+                continue;
+            }
+
+            for (int i = 0; i < fixes.length; i++) {
+                if (fixes[i] instanceof IntentionAction) {
+                    anno.registerFix((IntentionAction) fixes[i]);
+                } else {
+                    anno.registerFix(QuickFixWrapper.wrap(pd, i));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void visitFile(GoFile file) {
+        GoVariableUsageStatVisitor visitor = new GoVariableUsageStatVisitor(inspectionManager);
+        visitor.visitFile(file);
+        addProblems(visitor.getProblems());
     }
 
     @Override
@@ -87,26 +133,22 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
         if ( fileCollection == null || fileCollection.size() == 0 ) {
             annotationHolder.createErrorAnnotation(importDeclaration, "Invalid package import path");
         }
+
+        Project project = importDeclaration.getProject();
+        PsiFile file = importDeclaration.getContainingFile();
+        if (!(file instanceof GoFile)) {
+            return;
+        }
+
+        if (!GoCodeManager.getInstance(project).isImportUsed(importDeclaration, (GoFile) file)) {
+            Annotation anno = annotationHolder.createErrorAnnotation(importDeclaration, "Unused import");
+            anno.registerFix(new RemoveImportFix(importDeclaration));
+        }
     }
 
     @Override
-    public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
-        FunctionDeclarationInspection fdi = new FunctionDeclarationInspection(inspectionManager, functionDeclaration);
-        for (ProblemDescriptor pd : fdi.checkFunction()) {
-            Annotation anno = annotationHolder.createErrorAnnotation(getProblemRange(pd), pd.getDescriptionTemplate());
-            QuickFix[] fixes = pd.getFixes();
-            if (fixes == null) {
-                continue;
-            }
-
-            for (int i = 0; i < fixes.length; i++) {
-                if (fixes[i] instanceof IntentionAction) {
-                    anno.registerFix((IntentionAction) fixes[i]);
-                } else {
-                    anno.registerFix(QuickFixWrapper.wrap(pd, i));
-                }
-            }
-        }
+    public void visitFunctionDeclaration(GoFunctionDeclaration fd) {
+        addProblems(new FunctionDeclarationInspection(inspectionManager, fd).checkFunction());
     }
 
     @Override
@@ -133,9 +175,6 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
-        ProblemDescriptor[] problems = new VarDeclarationInspection(inspectionManager, varDeclaration).checkVar();
-        for (ProblemDescriptor pd : problems) {
-            annotationHolder.createErrorAnnotation(getProblemRange(pd), pd.getDescriptionTemplate());
-        }
+        addProblems(new VarDeclarationInspection(inspectionManager, varDeclaration).checkVar());
     }
 }

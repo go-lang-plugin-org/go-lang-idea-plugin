@@ -41,7 +41,7 @@ public class UnusedImportInspection extends AbstractWholeGoFileInspection {
         Set<GoImportDeclaration> usedImports = GoCodeManager.getInstance(project).findUsedImports(file);
         for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
             for (GoImportDeclaration id : importDeclarations.getDeclarations()) {
-                RemoveImportFix fix = new RemoveImportFix();
+                RemoveImportFix fix = new RemoveImportFix(id);
                 if (id.getText().trim().isEmpty() || usedImports.contains(id)) {
                     continue;
                 }

@@ -2,6 +2,7 @@ package ro.redeul.google.go.inspection;
 
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemHighlightType;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -40,6 +41,6 @@ public class VarDeclarationInspection {
         }
 
         String msg = String.format("Assignment count mismatch: %d = %d", ids.length, exprs.length);
-        result.addProblem(varDeclaration, msg);
+        result.addProblem(varDeclaration, msg, ProblemHighlightType.GENERIC_ERROR);
     }
 }

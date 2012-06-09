@@ -1,21 +1,29 @@
 package ro.redeul.google.go.inspection.fix;
 
 import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
-public class RemoveImportFix implements LocalQuickFix {
+public class RemoveImportFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+    public RemoveImportFix(@Nullable PsiElement element) {
+        super(element);
+    }
+
     @NotNull
     @Override
-    public String getName() {
+    public String getText() {
         return "Remove unused import";
     }
 
@@ -26,13 +34,14 @@ public class RemoveImportFix implements LocalQuickFix {
     }
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-        PsiElement element = descriptor.getPsiElement();
-        if (!(element instanceof GoImportDeclaration)) {
+    public void invoke(@NotNull Project project, @NotNull PsiFile file,
+                       @Nullable("is null when called from inspection") Editor editor,
+                       @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
+        if (!(startElement instanceof GoImportDeclaration)) {
             return;
         }
 
-        GoImportDeclaration declaration = (GoImportDeclaration) element;
+        GoImportDeclaration declaration = (GoImportDeclaration) startElement;
         GoImportDeclarations declarations = (GoImportDeclarations) declaration.getParent();
 
         PsiElement elementToDelete;
