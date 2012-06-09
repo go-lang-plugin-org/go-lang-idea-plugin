@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationsImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoIndexExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithRangeStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithClausesStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithConditionStatementImpl;
@@ -141,6 +142,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(BLOCK_STATEMENT))
             return new GoBlockStatementImpl(node);
+
+        if (elementType.equals(INDEX_EXPRESSION))
+            return new GoIndexExpressionImpl(node);
 
         if (elementType.equals(SELECTOR_EXPRESSION))
             return new GoSelectorExpressionImpl(node);

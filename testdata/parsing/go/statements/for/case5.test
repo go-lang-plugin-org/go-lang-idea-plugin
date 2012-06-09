@@ -20,7 +20,7 @@ Go file
       ForWithConditionStmtImpl
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
-        IndexExpression
+        IndexExpressionImpl
           LiteralExpr
             IdentifierImpl
               PsiElement(IDENTIFIER)('a')

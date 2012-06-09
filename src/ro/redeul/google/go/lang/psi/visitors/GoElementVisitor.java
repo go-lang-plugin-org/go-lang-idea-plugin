@@ -1,11 +1,11 @@
 package ro.redeul.google.go.lang.psi.visitors;
 
-import ro.redeul.google.go.lang.parser.parsing.declarations.VarDeclaration;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
@@ -142,5 +142,9 @@ public class GoElementVisitor {
 
     public void visitShortVarDeclaration(GoShortVarDeclaration shortVarDeclaration) {
         visitElement(shortVarDeclaration);
+    }
+
+    public void visitIndexExpression(GoIndexExpression indexExpression) {
+        visitElement(indexExpression);
     }
 }

@@ -43,7 +43,7 @@ Go file
           PsiWhiteSpace(' ')
           PsiElement(:=)(':=')
           PsiWhiteSpace(' ')
-          IndexExpression
+          IndexExpressionImpl
             LiteralExpr
               IdentifierImpl
                 PsiElement(IDENTIFIER)('x')
