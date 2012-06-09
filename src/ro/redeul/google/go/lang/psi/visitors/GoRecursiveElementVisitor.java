@@ -10,7 +10,8 @@ public class GoRecursiveElementVisitor extends GoElementVisitor {
 
     @Override
     public void visitElement(GoPsiElement element) {
-        element.acceptChildren(this);
+        if (element != null) {
+            element.acceptChildren(this);
+        }
     }
-
 }

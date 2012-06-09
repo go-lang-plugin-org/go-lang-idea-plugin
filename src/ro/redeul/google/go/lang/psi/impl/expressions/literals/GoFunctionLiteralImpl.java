@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
+import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -40,6 +41,11 @@ public class GoFunctionLiteralImpl extends GoExpressionBase
         PsiElement result = findChildOfType(typeFunction, GoElementTypes.FUNCTION_RESULT);
 
         return GoPsiUtils.getParameters(result);
+    }
+
+    @Override
+    public GoBlockStatement getBlock() {
+        return findChildByClass(GoBlockStatement.class);
     }
 
     @Override

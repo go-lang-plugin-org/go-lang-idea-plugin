@@ -6,13 +6,12 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoForWithClausesStatementImpl
-    extends GoPsiElementBase
+    extends GoForStatementImpl
     implements GoForWithClausesStatement
 {
     public GoForWithClausesStatementImpl(@NotNull ASTNode node) {

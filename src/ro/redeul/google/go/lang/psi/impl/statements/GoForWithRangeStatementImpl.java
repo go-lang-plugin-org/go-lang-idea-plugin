@@ -7,11 +7,10 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public class GoForWithRangeStatementImpl extends GoPsiElementBase
+public class GoForWithRangeStatementImpl extends GoForStatementImpl
     implements GoForWithRangeStatement
 {
     public GoForWithRangeStatementImpl(@NotNull ASTNode node) {
