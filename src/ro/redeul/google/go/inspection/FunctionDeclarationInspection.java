@@ -6,6 +6,7 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
+import ro.redeul.google.go.inspection.fix.RemoveFunctionResultFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
@@ -46,8 +47,9 @@ public class FunctionDeclarationInspection {
 
     public void hasResultButNoReturnAtTheEnd() {
         if (hasResult() && hasBody() && !hasReturnAtTheEnd()) {
-            AddReturnStmtFix fix = new AddReturnStmtFix(function);
-            addProblem(function.getBlock().getLastChild(), "Function ends without a return statement", fix);
+            LocalQuickFix fix1 = new AddReturnStmtFix(function);
+            LocalQuickFix fix2 = new RemoveFunctionResultFix(function);
+            addProblem(function.getBlock().getLastChild(), "Function ends without a return statement", fix1, fix2);
         }
     }
 
