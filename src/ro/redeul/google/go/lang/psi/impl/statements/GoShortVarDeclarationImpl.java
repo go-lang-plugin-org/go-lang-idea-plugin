@@ -23,4 +23,9 @@ public class GoShortVarDeclarationImpl extends GoVarDeclarationImpl
     public void accept(GoElementVisitor visitor) {
         visitor.visitShortVarDeclaration(this);
     }
+
+    @Override
+    public boolean mayRedeclareVariable() {
+        return true;
+    }
 }

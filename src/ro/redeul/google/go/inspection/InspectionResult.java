@@ -13,7 +13,7 @@ public class InspectionResult {
     private final InspectionManager manager;
     private final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
 
-    protected InspectionResult(InspectionManager manager) {
+    public InspectionResult(InspectionManager manager) {
         this.manager = manager;
     }
 
@@ -25,7 +25,15 @@ public class InspectionResult {
         addProblem(element, element, msg, fixes);
     }
 
+    public void addProblem(PsiElement element, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {
+        addProblem(element, element, msg, type, fixes);
+    }
+
     public void addProblem(PsiElement start, PsiElement end, String msg, LocalQuickFix... fixes) {
-        problems.add(manager.createProblemDescriptor(start, end, msg, ProblemHighlightType.ERROR, true, fixes));
+        addProblem(start, end, msg, ProblemHighlightType.ERROR, fixes);
+    }
+
+    public void addProblem(PsiElement start, PsiElement end, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {
+        problems.add(manager.createProblemDescriptor(start, end, msg, type, true, fixes));
     }
 }

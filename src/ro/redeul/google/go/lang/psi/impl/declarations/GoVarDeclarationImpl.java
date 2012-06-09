@@ -29,6 +29,11 @@ public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDecla
     }
 
     @Override
+    public boolean mayRedeclareVariable() {
+        return false;
+    }
+
+    @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitVarDeclaration(this);
     }

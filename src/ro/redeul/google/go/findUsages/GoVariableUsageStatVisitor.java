@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.inspection.fix.RemoveVariableFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -38,7 +39,6 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDecl
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
-    private List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
     private InspectionManager manager;
     private Context ctx;
 
@@ -47,13 +47,13 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     public ProblemDescriptor[] getProblems() {
-        return problems.toArray(new ProblemDescriptor[problems.size()]);
+        return ctx.getProblems();
     }
 
     @Override
     public void visitFile(GoFile file) {
         HashMap<String, VariableUsage> global = new HashMap<String, VariableUsage>();
-        ctx = new Context(problems, manager, global);
+        ctx = new Context(manager, global);
         getGlobalVariables(file, global);
 
         for (GoFunctionDeclaration fd : file.getFunctions()) {
@@ -87,17 +87,17 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
     @Override
     public void visitConstDeclaration(GoConstDeclaration gcd) {
-        visitIdentifiersAndExpressions(gcd.getIdentifiers(), gcd.getExpressions());
+        visitIdentifiersAndExpressions(gcd.getIdentifiers(), gcd.getExpressions(), false);
     }
 
     @Override
     public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
-        visitIdentifiersAndExpressions(varDeclaration.getIdentifiers(), varDeclaration.getExpressions());
+        visitIdentifiersAndExpressions(varDeclaration.getIdentifiers(), varDeclaration.getExpressions(), false);
     }
 
     @Override
-    public void visitShortVarDeclaration(GoShortVarDeclaration shortVarDeclaration) {
-        visitIdentifiersAndExpressions(shortVarDeclaration.getIdentifiers(), shortVarDeclaration.getExpressions());
+    public void visitShortVarDeclaration(GoShortVarDeclaration svd) {
+        visitIdentifiersAndExpressions(svd.getIdentifiers(), svd.getExpressions(), true);
     }
 
     @Override
@@ -140,7 +140,33 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
     }
 
-    private void visitIdentifiersAndExpressions(GoIdentifier[] identifiers, GoExpr[] exprs) {
+    private void visitIdentifiersAndExpressions(GoIdentifier[] identifiers, GoExpr[] exprs,
+                                                boolean mayRedeclareVariable) {
+        int nonBlankIdCount = 0;
+        List<GoIdentifier> redeclaredIds = new ArrayList<GoIdentifier>();
+        for (GoIdentifier id : identifiers) {
+            if (!id.isBlank()) {
+                nonBlankIdCount++;
+                if (ctx.isDefinedInCurrentScope(id)) {
+                    redeclaredIds.add(id);
+                }
+            }
+        }
+
+        if (mayRedeclareVariable) {
+            if (!redeclaredIds.isEmpty() && redeclaredIds.size() == nonBlankIdCount) {
+                PsiElement start = identifiers[0];
+                PsiElement end = identifiers[identifiers.length - 1];
+                String msg = "No new variables declared";
+                ctx.addProblem(start, end, msg, ProblemHighlightType.GENERIC_ERROR);
+            }
+        } else {
+            for (GoIdentifier redeclaredId : redeclaredIds) {
+                String msg = redeclaredId.getText() + " redeclared in this block";
+                ctx.addProblem(redeclaredId, redeclaredId, msg, ProblemHighlightType.GENERIC_ERROR);
+            }
+        }
+
         for (GoIdentifier id : identifiers) {
             ctx.addDefinition(id);
         }
@@ -346,14 +372,11 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     private static class Context {
-        public final List<ProblemDescriptor> problems;
-        public final InspectionManager manager;
+        public final InspectionResult result;
         public final List<Map<String, VariableUsage>> variables = new ArrayList<Map<String, VariableUsage>>();
 
-        Context(List<ProblemDescriptor> problems, InspectionManager manager,
-                Map<String, VariableUsage> global) {
-            this.problems = problems;
-            this.manager = manager;
+        Context(InspectionManager manager, Map<String, VariableUsage> global) {
+            this.result = new InspectionResult(manager);
             this.variables.add(global);
         }
 
@@ -410,15 +433,20 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
                        ProblemHighlightType.ERROR, null);
         }
 
-        private void addProblem(VariableUsage variableUsage, String desc,
+        public void addProblem(VariableUsage variableUsage, String desc,
                                 ProblemHighlightType highlightType,
                                 @Nullable LocalQuickFix fix) {
-            if (variableUsage.ignoreAnyProblem) {
-                return;
+            if (!variableUsage.ignoreAnyProblem) {
+                result.addProblem(variableUsage.element, desc, highlightType, fix);
             }
-            problems.add(
-                manager.createProblemDescriptor(variableUsage.element, desc,
-                                                fix, highlightType, true));
+        }
+
+        public void addProblem(PsiElement start, PsiElement end, String desc, ProblemHighlightType type, LocalQuickFix... fixes) {
+            result.addProblem(start, end, desc, type, fixes);
+        }
+
+        public boolean isDefinedInCurrentScope(GoPsiElement element) {
+            return variables.get(variables.size() - 1).containsKey(element.getText());
         }
 
         public void addDefinition(GoPsiElement element) {
@@ -442,6 +470,10 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
             }
 
             undefinedVariable(new VariableUsage(element));
+        }
+
+        public ProblemDescriptor[] getProblems() {
+            return result.getProblems();
         }
     }
 }
