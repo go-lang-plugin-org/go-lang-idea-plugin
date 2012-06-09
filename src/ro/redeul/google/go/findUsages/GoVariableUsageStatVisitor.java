@@ -451,8 +451,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
                 return;
             }
 
-            addProblem(variableUsage, "Undefined variable",
-                       ProblemHighlightType.GENERIC_ERROR);
+            addProblem(variableUsage, "Undefined variable", ProblemHighlightType.ERROR);
         }
 
         public void addProblem(VariableUsage variableUsage, String desc,

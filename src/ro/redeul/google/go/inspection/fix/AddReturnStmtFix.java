@@ -37,9 +37,12 @@ public class AddReturnStmtFix extends LocalQuickFixAndIntentionActionOnPsiElemen
     public void invoke(@NotNull Project project, @NotNull PsiFile file,
                        @Nullable("is null when called from inspection") Editor editor,
                        @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
-        if (!(file instanceof GoFile)) {
+        if (!(file instanceof GoFile) || editor == null) {
             return;
         }
+
+        Document doc = editor.getDocument();
+        int lineNumber = doc.getLineNumber(editor.getCaretModel().getOffset());
 
         GoFile goFile = (GoFile) file;
         PsiElement rightCurly;
@@ -64,13 +67,7 @@ public class AddReturnStmtFix extends LocalQuickFixAndIntentionActionOnPsiElemen
 
         block.addRangeBefore(elements[0], elements[elements.length - 1], rightCurly);
 
-        if (editor == null) {
-            return;
-        }
-
-        Document doc = editor.getDocument();
-        int offset = doc.getLineEndOffset(doc.getLineNumber(editor.getCaretModel().getOffset()));
-        editor.getCaretModel().moveToOffset(offset);
+        editor.getCaretModel().moveToOffset(doc.getLineEndOffset(lineNumber));
         editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
     }
 }
