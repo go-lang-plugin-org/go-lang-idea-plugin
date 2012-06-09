@@ -10,7 +10,7 @@ public class UnusedVariableInspection extends AbstractWholeGoFileInspection {
     @Override
     protected ProblemDescriptor[] doCheckFile(@NotNull GoFile file, @NotNull InspectionManager manager) {
         GoVariableUsageStatVisitor visitor = new GoVariableUsageStatVisitor(manager);
-        visitor.visitElement(file);
+        visitor.visitFile(file);
         return visitor.getProblems();
     }
 }

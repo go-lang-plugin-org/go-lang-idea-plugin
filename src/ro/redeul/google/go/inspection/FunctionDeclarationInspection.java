@@ -7,13 +7,15 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor2;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -81,7 +83,7 @@ public class FunctionDeclarationInspection {
     }
 
     public void hasReturnParameterQuantityUnmatch() {
-        new ReturnVisitor().visitElement(function);
+        new ReturnVisitor().visitFunctionDeclaration(function);
     }
 
     public void hasVariadicProblems() {
@@ -179,15 +181,34 @@ public class FunctionDeclarationInspection {
     /**
      * Recursively look for return statement, and compare its expression list with function's result list
      */
-    private class ReturnVisitor extends GoRecursiveElementVisitor2 {
+    private class ReturnVisitor extends GoRecursiveElementVisitor {
         private List<FunctionResult> functionResults = new ArrayList<FunctionResult>();
+
         @Override
-        protected void beforeVisitElement(PsiElement element) {
-            if (element instanceof GoFunctionDeclaration) {
-                functionResults.add(new FunctionResult(((GoFunctionDeclaration) element).getResults()));
-            } else if (element instanceof GoFunctionLiteral) {
-                functionResults.add(new FunctionResult(((GoFunctionLiteral) element).getResults()));
-            } else if (element instanceof GoReturnStatement) {
+        public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
+            functionResults.add(new FunctionResult(functionDeclaration.getResults()));
+            super.visitFunctionDeclaration(functionDeclaration);
+            functionResults.remove(functionResults.size() - 1);
+        }
+
+        @Override
+        public void visitFunctionLiteral(GoFunctionLiteral functionLiteral) {
+            functionResults.add(new FunctionResult(functionLiteral.getResults()));
+            super.visitFunctionLiteral(functionLiteral);
+            functionResults.remove(functionResults.size() - 1);
+        }
+
+        @Override
+        public void visitMethodDeclaration(GoMethodDeclaration methodDeclaration) {
+            functionResults.add(new FunctionResult(methodDeclaration.getResults()));
+            super.visitMethodDeclaration(methodDeclaration);
+            functionResults.remove(functionResults.size() - 1);
+        }
+
+        @Override
+        public void visitElement(GoPsiElement element) {
+            super.visitElement(element);
+            if (element instanceof GoReturnStatement) {
                 GoReturnStatement returnStatement = (GoReturnStatement) element;
                 int returnCount = returnStatement.getExpressions().length;
                 FunctionResult fr = functionResults.get(functionResults.size() - 1);
@@ -200,13 +221,6 @@ public class FunctionDeclarationInspection {
                 } else {
                     addProblem(element, "Not enough arguments to return");
                 }
-            }
-        }
-
-        @Override
-        protected void afterVisitElement(PsiElement element) {
-            if (element instanceof GoFunctionDeclaration || element instanceof GoFunctionLiteral) {
-                functionResults.remove(functionResults.size() - 1);
             }
         }
     }

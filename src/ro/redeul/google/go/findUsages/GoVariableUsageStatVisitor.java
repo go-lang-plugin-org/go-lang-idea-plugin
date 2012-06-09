@@ -24,11 +24,12 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImpl;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
-import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor2;
+import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 import java.util.*;
 
@@ -36,11 +37,10 @@ import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedCo
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
-public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
+public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     private List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
     private InspectionManager manager;
     private Context ctx;
-    private int ignore = 0;
 
     public GoVariableUsageStatVisitor(InspectionManager manager) {
         this.manager = manager;
@@ -50,15 +50,103 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         return problems.toArray(new ProblemDescriptor[problems.size()]);
     }
 
-    private void beforeVisitFile(GoFile file) {
-        ctx = new Context(problems, manager, getGlobalVariables(file));
-    }
+    @Override
+    public void visitFile(GoFile file) {
+        HashMap<String, VariableUsage> global = new HashMap<String, VariableUsage>();
+        ctx = new Context(problems, manager, global);
+        getGlobalVariables(file, global);
 
-    private void afterVisitFile(GoFile file) {
+        for (GoFunctionDeclaration fd : file.getFunctions()) {
+            visitFunctionDeclaration(fd);
+        }
+
         for (VariableUsage v : ctx.popLastScopeLevel().values()) {
             if (!v.isUsed()) {
                 ctx.unusedGlobalVariable(v);
             }
+        }
+    }
+
+    @Override
+    public void visitElement(GoPsiElement element) {
+        if (!couldOpenNewScope(element)) {
+            super.visitElement(element);
+            return;
+        }
+
+        ctx.addNewScopeLevel();
+
+        super.visitElement(element);
+
+        for (VariableUsage v : ctx.popLastScopeLevel().values()) {
+            if (!v.isUsed()) {
+                ctx.unusedVariable(v);
+            }
+        }
+    }
+
+    @Override
+    public void visitConstDeclaration(GoConstDeclaration gcd) {
+        visitIdentifiersAndExpressions(gcd.getIdentifiers(), gcd.getExpressions());
+    }
+
+    @Override
+    public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
+        visitIdentifiersAndExpressions(varDeclaration.getIdentifiers(), varDeclaration.getExpressions());
+    }
+
+    @Override
+    public void visitShortVarDeclaration(GoShortVarDeclaration shortVarDeclaration) {
+        visitIdentifiersAndExpressions(shortVarDeclaration.getIdentifiers(), shortVarDeclaration.getExpressions());
+    }
+
+    @Override
+    public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
+        getFunctionParameters(functionDeclaration);
+        visitElement(functionDeclaration.getBlock());
+        afterVisitGoFunctionDeclaration();
+    }
+
+    @Override
+    public void visitMethodDeclaration(GoMethodDeclaration methodDeclaration) {
+        getFunctionParameters(methodDeclaration);
+        visitElement(methodDeclaration.getBlock());
+        afterVisitGoFunctionDeclaration();
+    }
+
+    @Override
+    public void visitFunctionLiteral(GoFunctionLiteral functionLiteral) {
+        createFunctionParametersMap(functionLiteral.getParameters(), functionLiteral.getResults());
+        visitElement(functionLiteral.getBlock());
+        afterVisitGoFunctionDeclaration();
+    }
+
+    @Override
+    public void visitForWithRange(GoForWithRangeStatement forWithRange) {
+        ctx.addNewScopeLevel();
+
+        boolean isDeclaration = forWithRange.isDeclaration();
+        visitExpressionAsIdentifier(forWithRange.getKey(), isDeclaration);
+        visitExpressionAsIdentifier(forWithRange.getValue(), isDeclaration);
+
+        visitElement(forWithRange.getRangeExpression());
+        visitElement(forWithRange.getBlock());
+    }
+
+    @Override
+    public void visitIdentifier(GoIdentifier id) {
+        if (needToCollectUsage(id)) {
+            ctx.addUsage(id);
+        }
+    }
+
+    private void visitIdentifiersAndExpressions(GoIdentifier[] identifiers, GoExpr[] exprs) {
+        for (GoIdentifier id : identifiers) {
+            ctx.addDefinition(id);
+        }
+
+        for (GoExpr expr : exprs) {
+            visitElement(expr);
         }
     }
 
@@ -86,50 +174,19 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         return result.toArray(new GoPsiElementBase[result.size()]);
     }
 
-    @Override
-    protected void beforeVisitElement(PsiElement element) {
-        if (element instanceof GoTypeDeclaration) {
-            // Ignore type definition.
-            ignore++;
+
+    private static boolean couldOpenNewScope(PsiElement element) {
+        if (!(element instanceof GoPsiElementBase)) {
+            return false;
         }
 
-        if (ignore > 0) {
-            return;
-        }
-
-        if (element instanceof GoFile) {
-            beforeVisitFile((GoFile) element);
-        } else if (element instanceof GoVarDeclarations) {
-            for (GoVarDeclaration gvd : ((GoVarDeclarations) element).getDeclarations()) {
-                beforeVisitGoVarDeclaration(gvd);
-            }
-        } else if (element instanceof GoVarDeclaration) {
-            beforeVisitGoVarDeclaration((GoVarDeclaration) element);
-        } else if (element instanceof GoConstDeclarations) {
-            for (GoConstDeclaration gcd : ((GoConstDeclarations) element).getDeclarations()) {
-                beforeVisitGoConstDeclaration(gcd);
-            }
-        } else if (element instanceof GoConstDeclaration) {
-            beforeVisitGoConstDeclaration((GoConstDeclaration) element);
-        } else if (element instanceof GoIdentifier) {
-            beforeVisitIdentifier((GoIdentifier) element);
-        } else if (element instanceof GoFunctionDeclaration) {
-            beforeVisitFunctionDeclaration((GoFunctionDeclaration) element);
-        } else if (element instanceof GoFunctionLiteral) {
-            beforeVisitFunctionDeclaration((GoFunctionLiteral) element);
-        } else if (element instanceof GoForWithRangeStatement) {
-            beforeVisitForWithRange((GoForWithRangeStatement) element);
-        } else if (couldOpenNewScope(element)) {
-            ctx.addNewScopeLevel();
-        }
-    }
-
-    private void beforeVisitForWithRange(GoForWithRangeStatement element) {
-        ctx.addNewScopeLevel();
-
-        boolean isDeclaration = element.isDeclaration();
-        visitExpressionAsIdentifier(element.getKey(), isDeclaration);
-        visitExpressionAsIdentifier(element.getValue(), isDeclaration);
+        IElementType tt = element.getNode().getElementType();
+        return
+                tt == GoElementTypes.IF_STATEMENT ||
+                        tt == GoElementTypes.FOR_WITH_CLAUSES_STATEMENT ||
+                        tt == GoElementTypes.FOR_WITH_CONDITION_STATEMENT ||
+                        tt == GoElementTypes.FOR_WITH_RANGE_STATEMENT ||
+                        tt == GoElementTypes.BLOCK_STATEMENT;
     }
 
     private void visitExpressionAsIdentifier(GoExpr expr, boolean declaration) {
@@ -147,61 +204,6 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         }
     }
 
-    private static boolean couldOpenNewScope(PsiElement element) {
-        if (!(element instanceof GoPsiElementBase)) {
-            return false;
-        }
-
-        IElementType tt = element.getNode().getElementType();
-        return
-            tt == GoElementTypes.IF_STATEMENT ||
-            tt == GoElementTypes.FOR_WITH_CLAUSES_STATEMENT ||
-            tt == GoElementTypes.FOR_WITH_CONDITION_STATEMENT ||
-            tt == GoElementTypes.FOR_WITH_RANGE_STATEMENT ||
-            tt == GoElementTypes.BLOCK_STATEMENT;
-    }
-
-    @Override
-    protected void afterVisitElement(PsiElement element) {
-        if (element instanceof GoTypeDeclaration) {
-            ignore--;
-        }
-
-        if (ignore > 0) {
-            return;
-        }
-
-        if (element instanceof GoFile) {
-            afterVisitFile((GoFile) element);
-        } else if (element instanceof GoFunctionDeclaration || element instanceof GoFunctionLiteral) {
-            afterVisitGoFunctionDeclaration();
-        } else if (couldOpenNewScope(element)) {
-            for (VariableUsage v : ctx.popLastScopeLevel().values()) {
-                if (!v.isUsed()) {
-                    ctx.unusedVariable(v);
-                }
-            }
-        }
-    }
-
-    private void beforeVisitGoConstDeclaration(GoConstDeclaration gcd) {
-        for (GoIdentifier id : gcd.getIdentifiers()) {
-            ctx.addDefinition(id);
-        }
-    }
-
-    private void beforeVisitGoVarDeclaration(GoVarDeclaration gvd) {
-        for (GoIdentifier id : gvd.getIdentifiers()) {
-            ctx.addDefinition(id);
-        }
-    }
-
-    public void beforeVisitIdentifier(GoIdentifier id) {
-        if (needToCollectUsage(id)) {
-            ctx.addUsage(id);
-        }
-    }
-
     private boolean needToCollectUsage(GoIdentifier id) {
         return id != null && !isFunctionOrMethodCall(id) && !isTypeField(id) && !isType(id) &&
                 // if there is any dots in the identifier, it could be from other packages.
@@ -212,7 +214,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
     private boolean isType(GoIdentifier id) {
         PsiElement parent = id.getParent();
         return isNodeOfType(parent, GoElementTypes.BASE_TYPE_NAME) ||
-               isNodeOfType(parent, GoElementTypes.REFERENCE_BASE_TYPE_NAME) || parent instanceof GoTypeName;
+                isNodeOfType(parent, GoElementTypes.REFERENCE_BASE_TYPE_NAME) || parent instanceof GoTypeName;
     }
 
     private boolean isTypeField(GoIdentifier id) {
@@ -247,24 +249,69 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
 
         PsiElement grandpa = id.getParent().getParent();
         return grandpa.getNode().getElementType() == GoElementTypes.CALL_OR_CONVERSION_EXPRESSION &&
-               id.getParent().isEquivalentTo(grandpa.getFirstChild());
+                id.getParent().isEquivalentTo(grandpa.getFirstChild());
     }
 
-    public void beforeVisitFunctionDeclaration(GoFunctionDeclaration fd) {
-        getFunctionParameters(fd);
-    }
-
-    public void beforeVisitFunctionDeclaration(GoFunctionLiteral fl) {
-        createFunctionParametersMap(fl.getParameters(), fl.getResults());
-    }
-
-    public void afterVisitGoFunctionDeclaration() {
-        for (VariableUsage v : ctx.popLastScopeLevel().values()) {
-            if (!v.isUsed()) {
-                ctx.unusedParameter(v);
+    private void addFunctionParametersToMap(GoFunctionParameter[] parameters,
+                                            Map<String, VariableUsage> variables,
+                                            boolean ignoreProblem) {
+        for (GoFunctionParameter p : parameters) {
+            for (GoIdentifier id : p.getIdentifiers()) {
+                variables.put(id.getName(),
+                        new VariableUsage(id, ignoreProblem));
             }
         }
     }
+
+    private GoPsiElementBase getMethodReceiverIdentifier(
+            GoMethodDeclaration md) {
+        GoPsiElement methodReceiver = md.getMethodReceiver();
+        if (methodReceiver == null) {
+            return null;
+        }
+
+        ASTNode idNode = methodReceiver.getNode()
+                .findChildByType(
+                        GoElementTypes.IDENTIFIER);
+        if (idNode != null && idNode.getPsi() instanceof GoPsiElementBase) {
+            return (GoPsiElementBase) idNode.getPsi();
+        }
+        return null;
+    }
+
+    private void getGlobalVariables(GoFile file, HashMap<String, VariableUsage> variables) {
+        for (GoConstDeclarations allConsts : file.getConsts()) {
+            for (GoConstDeclaration cd : allConsts.getDeclarations()) {
+                visitConstDeclaration(cd);
+            }
+        }
+
+        for (GoVarDeclarations allVariables : file.getGlobalVariables()) {
+            for (GoVarDeclaration vd : allVariables.getDeclarations()) {
+                visitVarDeclaration(vd);
+            }
+        }
+
+        for (GoMethodDeclaration md : file.getMethods()) {
+            variables.put(md.getFunctionName(), new VariableUsage(md));
+        }
+
+        for (GoFunctionDeclaration fd : file.getFunctions()) {
+            variables.put(fd.getFunctionName(), new VariableUsage(fd));
+        }
+
+        for (GoTypeDeclaration types : file.getTypeDeclarations()) {
+            for (GoTypeSpec spec : types.getTypeSpecs()) {
+                GoType type = spec.getType();
+                if (type != null) {
+                    variables.put(type.getName(), new VariableUsage(type));
+                }
+            }
+        }
+
+        setElementScope(variables.values());
+    }
+
 
     private Map<String, VariableUsage> getFunctionParameters(GoFunctionDeclaration fd) {
         Map<String, VariableUsage> variables = createFunctionParametersMap(fd.getParameters(), fd.getResults());
@@ -289,70 +336,13 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor2 {
         return variables;
     }
 
-    private void addFunctionParametersToMap(GoFunctionParameter[] parameters,
-                                            Map<String, VariableUsage> variables,
-                                            boolean ignoreProblem) {
-        for (GoFunctionParameter p : parameters) {
-            for (GoIdentifier id : p.getIdentifiers()) {
-                variables.put(id.getName(),
-                              new VariableUsage(id, ignoreProblem));
+
+    public void afterVisitGoFunctionDeclaration() {
+        for (VariableUsage v : ctx.popLastScopeLevel().values()) {
+            if (!v.isUsed()) {
+                ctx.unusedParameter(v);
             }
         }
-    }
-
-    private GoPsiElementBase getMethodReceiverIdentifier(
-        GoMethodDeclaration md) {
-        GoPsiElement methodReceiver = md.getMethodReceiver();
-        if (methodReceiver == null) {
-            return null;
-        }
-
-        ASTNode idNode = methodReceiver.getNode()
-                                       .findChildByType(
-                                           GoElementTypes.IDENTIFIER);
-        if (idNode != null && idNode.getPsi() instanceof GoPsiElementBase) {
-            return (GoPsiElementBase) idNode.getPsi();
-        }
-        return null;
-    }
-
-    private Map<String, VariableUsage> getGlobalVariables(GoFile file) {
-        Map<String, VariableUsage> variables = new HashMap<String, VariableUsage>();
-        for (GoConstDeclarations allConsts : file.getConsts()) {
-            for (GoConstDeclaration cd : allConsts.getDeclarations()) {
-                for (GoIdentifier id : cd.getIdentifiers()) {
-                    variables.put(id.getName(), new VariableUsage(id));
-                }
-            }
-        }
-
-        for (GoVarDeclarations allVariables : file.getGlobalVariables()) {
-            for (GoVarDeclaration vd : allVariables.getDeclarations()) {
-                for (GoIdentifier id : vd.getIdentifiers()) {
-                    variables.put(id.getName(), new VariableUsage(id));
-                }
-            }
-        }
-
-        for (GoMethodDeclaration md : file.getMethods()) {
-            variables.put(md.getFunctionName(), new VariableUsage(md));
-        }
-
-        for (GoFunctionDeclaration fd : file.getFunctions()) {
-            variables.put(fd.getFunctionName(), new VariableUsage(fd));
-        }
-
-        for (GoTypeDeclaration types : file.getTypeDeclarations()) {
-            for (GoTypeSpec spec : types.getTypeSpecs()) {
-                GoType type = spec.getType();
-                if (type != null) {
-                    variables.put(type.getName(), new VariableUsage(type));
-                }
-            }
-        }
-
-        setElementScope(variables.values());
-        return variables;
     }
 
     private static class Context {

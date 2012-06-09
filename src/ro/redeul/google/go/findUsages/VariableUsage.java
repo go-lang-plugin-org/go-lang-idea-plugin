@@ -24,7 +24,7 @@ class VariableUsage {
     }
 
     public boolean isUsed() {
-        return usages.size() > 1;
+        return usages.size() > 0;
     }
 
     public boolean isBlank() {
