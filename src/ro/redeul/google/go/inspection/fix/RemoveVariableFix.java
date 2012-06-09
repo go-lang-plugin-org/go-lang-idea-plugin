@@ -4,9 +4,7 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
@@ -14,7 +12,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.inspection.fix.FixUtil.removeWholeElement;
 
 public class RemoveVariableFix implements LocalQuickFix {
     @NotNull
@@ -49,6 +47,9 @@ public class RemoveVariableFix implements LocalQuickFix {
 
     private void removeIdentifier(GoIdentifier id, PsiElement parent, GoIdentifier[] ids, GoExpr[] exprs) {
         if (isIdWithBlank(id, ids)) {
+            if (isOnlyVarDeclaration(parent) || isOnlyConstDeclaration(parent)) {
+                parent = parent.getParent();
+            }
             removeWholeElement(parent);
             return;
         }
@@ -89,24 +90,6 @@ public class RemoveVariableFix implements LocalQuickFix {
             }
         }
         return -1;
-    }
-
-    private static void removeWholeElement(PsiElement element) {
-        if (isOnlyVarDeclaration(element) || isOnlyConstDeclaration(element)) {
-            element = element.getParent();
-        }
-
-        PsiElement prev = element.getPrevSibling();
-        if (prev instanceof PsiWhiteSpace) {
-            prev.delete();
-        }
-
-        PsiElement next = element.getNextSibling();
-        if (next != null && isNodeOfType(next, GoTokenTypes.wsNLS)) {
-            next.delete();
-        }
-
-        element.delete();
     }
 
     private static boolean isOnlyConstDeclaration(PsiElement e) {

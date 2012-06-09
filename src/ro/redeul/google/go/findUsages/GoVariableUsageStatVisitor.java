@@ -8,8 +8,9 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.inspection.InspectionResult;
+import ro.redeul.google.go.inspection.fix.ConvertToAssignmentFix;
+import ro.redeul.google.go.inspection.fix.DeleteStmtFix;
 import ro.redeul.google.go.inspection.fix.RemoveVariableFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -26,13 +27,21 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImpl;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.*;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedConstant;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDeclaration;
@@ -131,6 +140,12 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
         visitElement(forWithRange.getRangeExpression());
         visitElement(forWithRange.getBlock());
+
+        for (VariableUsage v : ctx.popLastScopeLevel().values()) {
+            if (!v.isUsed()) {
+                ctx.unusedVariable(v);
+            }
+        }
     }
 
     @Override
@@ -142,6 +157,10 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
     private void visitIdentifiersAndExpressions(GoIdentifier[] identifiers, GoExpr[] exprs,
                                                 boolean mayRedeclareVariable) {
+        if (identifiers.length == 0) {
+            return;
+        }
+
         int nonBlankIdCount = 0;
         List<GoIdentifier> redeclaredIds = new ArrayList<GoIdentifier>();
         for (GoIdentifier id : identifiers) {
@@ -154,11 +173,14 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
 
         if (mayRedeclareVariable) {
-            if (!redeclaredIds.isEmpty() && redeclaredIds.size() == nonBlankIdCount) {
+            String msg = "No new variables declared";
+            if (nonBlankIdCount == 0) {
+                PsiElement start = identifiers[0].getParent();
+                ctx.addProblem(start, start, msg, ProblemHighlightType.GENERIC_ERROR, new DeleteStmtFix());
+            } else if (redeclaredIds.size() == nonBlankIdCount) {
                 PsiElement start = identifiers[0];
                 PsiElement end = identifiers[identifiers.length - 1];
-                String msg = "No new variables declared";
-                ctx.addProblem(start, end, msg, ProblemHighlightType.GENERIC_ERROR);
+                ctx.addProblem(start, end, msg, ProblemHighlightType.GENERIC_ERROR, new ConvertToAssignmentFix());
             }
         } else {
             for (GoIdentifier redeclaredId : redeclaredIds) {
@@ -398,7 +420,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
             }
 
             addProblem(variableUsage, "Unused variable",
-                       ProblemHighlightType.ERROR, new RemoveVariableFix());
+                       ProblemHighlightType.GENERIC_ERROR, new RemoveVariableFix());
         }
 
         public void unusedParameter(VariableUsage variableUsage) {
@@ -430,7 +452,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
             }
 
             addProblem(variableUsage, "Undefined variable",
-                       ProblemHighlightType.ERROR);
+                       ProblemHighlightType.GENERIC_ERROR);
         }
 
         public void addProblem(VariableUsage variableUsage, String desc,
