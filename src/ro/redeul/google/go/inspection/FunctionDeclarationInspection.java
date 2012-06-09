@@ -3,7 +3,6 @@ package ro.redeul.google.go.inspection;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
 import ro.redeul.google.go.inspection.fix.RemoveFunctionResultFix;
@@ -27,12 +26,11 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsW
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class FunctionDeclarationInspection {
-    private final InspectionManager manager;
+    private final InspectionResult result;
     private final GoFunctionDeclaration function;
-    private final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
 
     public FunctionDeclarationInspection(InspectionManager manager, GoFunctionDeclaration function) {
-        this.manager = manager;
+        this.result = new InspectionResult(manager);
         this.function = function;
     }
 
@@ -40,16 +38,16 @@ public class FunctionDeclarationInspection {
         hasResultButNoReturnAtTheEnd();
         hasDuplicateArgument();
         hasRedeclaredParameterInResultList();
-        hasReturnParameterQuantityUnmatch();
+        hasReturnParameterCountDismatch();
         hasVariadicProblems();
-        return getProblems();
+        return result.getProblems();
     }
 
     public void hasResultButNoReturnAtTheEnd() {
         if (hasResult() && hasBody() && !hasReturnAtTheEnd()) {
             LocalQuickFix fix1 = new AddReturnStmtFix(function);
             LocalQuickFix fix2 = new RemoveFunctionResultFix(function);
-            addProblem(function.getBlock().getLastChild(), "Function ends without a return statement", fix1, fix2);
+            result.addProblem(function.getBlock().getLastChild(), "Function ends without a return statement", fix1, fix2);
         }
     }
 
@@ -63,7 +61,7 @@ public class FunctionDeclarationInspection {
 
                 String text = id.getText();
                 if (parameters.contains(text)) {
-                    addProblem(id, "Duplicate argument " + text);
+                    result.addProblem(id, "Duplicate argument " + text);
                 } else {
                     parameters.add(text);
                 }
@@ -78,13 +76,13 @@ public class FunctionDeclarationInspection {
             for (GoIdentifier id : fp.getIdentifiers()) {
                 String text = id.getText();
                 if (!id.isBlank() && parameters.contains(text)) {
-                    addProblem(id, text + " redeclared in this block");
+                    result.addProblem(id, text + " redeclared in this block");
                 }
             }
         }
     }
 
-    public void hasReturnParameterQuantityUnmatch() {
+    public void hasReturnParameterCountDismatch() {
         new ReturnVisitor().visitFunctionDeclaration(function);
     }
 
@@ -92,7 +90,7 @@ public class FunctionDeclarationInspection {
         // cannot use variadic in output argument list
         for (GoFunctionParameter parameter : function.getResults()) {
             if (parameter.isVariadic()) {
-                addProblem(parameter, "Cannot use ... in output argument list");
+                result.addProblem(parameter, "Cannot use ... in output argument list");
             }
         }
 
@@ -105,27 +103,9 @@ public class FunctionDeclarationInspection {
         for (int i = 0; i < parameters.length - 1; i++) {
             GoFunctionParameter parameter = parameters[i];
             if (parameter.isVariadic()) {
-                addProblem(parameter, "Can only use ... as final argument in list");
+                result.addProblem(parameter, "Can only use ... as final argument in list");
             }
         }
-    }
-
-    public ProblemDescriptor[] getProblems() {
-        return problems.toArray(new ProblemDescriptor[problems.size()]);
-    }
-
-    private void addProblem(String msg, LocalQuickFix... fixes) {
-        PsiElement start = function.getFirstChild();
-        PsiElement end = hasBody() ? function.getBlock().getPrevSibling() : function.getLastChild();
-        addProblem(start, end, msg, fixes);
-    }
-
-    private void addProblem(PsiElement element, String msg, LocalQuickFix... fixes) {
-        addProblem(element, element, msg, fixes);
-    }
-
-    private void addProblem(PsiElement start, PsiElement end, String msg, LocalQuickFix... fixes) {
-        problems.add(manager.createProblemDescriptor(start, end, msg, ProblemHighlightType.ERROR, true, fixes));
     }
 
     private boolean hasResult() {
@@ -219,9 +199,9 @@ public class FunctionDeclarationInspection {
                 }
 
                 if (fr.resultCount < returnCount) {
-                    addProblem(element, "Too many arguments to return");
+                    result.addProblem(element, "Too many arguments to return");
                 } else {
-                    addProblem(element, "Not enough arguments to return");
+                    result.addProblem(element, "Not enough arguments to return");
                 }
             }
         }

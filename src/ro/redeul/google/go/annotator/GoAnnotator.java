@@ -16,11 +16,14 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
 import ro.redeul.google.go.inspection.FunctionDeclarationInspection;
+import ro.redeul.google.go.inspection.VarDeclarationInspection;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
@@ -120,6 +123,19 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
             annotationHolder.createErrorAnnotation(constDeclaration, "Missing expression in const declaration");
         } else if (isExtraExpressionInConst(constDeclaration)) {
             annotationHolder.createErrorAnnotation(constDeclaration, "Extra expression in const declaration");
+        }
+    }
+
+    @Override
+    public void visitShortVarDeclaration(GoShortVarDeclaration shortVarDeclaration) {
+        visitVarDeclaration(shortVarDeclaration);
+    }
+
+    @Override
+    public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
+        ProblemDescriptor[] problems = new VarDeclarationInspection(inspectionManager, varDeclaration).checkVar();
+        for (ProblemDescriptor pd : problems) {
+            annotationHolder.createErrorAnnotation(getProblemRange(pd), pd.getDescriptionTemplate());
         }
     }
 }
