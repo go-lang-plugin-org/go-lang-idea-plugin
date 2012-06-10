@@ -11,7 +11,7 @@ import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
@@ -28,7 +28,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
         new GoRecursiveElementVisitor() {
             @Override
-            public void visitIdentifier(GoIdentifier identifier) {
+            public void visitIdentifier(GoLiteralIdentifier identifier) {
                 PsiReference reference = identifier.getReference();
 
                 if (!identifier.isIota() && reference != null &&

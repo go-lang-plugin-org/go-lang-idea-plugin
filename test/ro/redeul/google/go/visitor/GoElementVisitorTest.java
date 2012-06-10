@@ -10,7 +10,7 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import junit.framework.Assert;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.util.TestUtils;
 
@@ -61,7 +61,7 @@ public class GoElementVisitorTest extends LightCodeInsightFixtureTestCase {
         if (elemType.equals("GoIdentifier")) {
             return new GoRecursiveCollectorVisitor() {
                 @Override
-                public void visitIdentifier(GoIdentifier goIdentifier) {
+                public void visitIdentifier(GoLiteralIdentifier goIdentifier) {
                     elements.add(goIdentifier);
                 }
             };

@@ -3,7 +3,7 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
@@ -62,7 +62,7 @@ public class GoTypeStructImpl extends GoPsiPackagedElementBase implements GoType
 
         GoTypeStructField fields[] = getFields();
         for (GoTypeStructField field : fields) {
-            for (GoIdentifier identifier : field.getIdentifiers()) {
+            for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                 String identifierName = identifier.getName();
 
                 if ( identifierName != null && identifierName.equals(name) ) {

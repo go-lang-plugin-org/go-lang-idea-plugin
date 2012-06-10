@@ -18,7 +18,7 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
@@ -38,7 +38,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Time: 10:43:49 PM
  */
 public class GoLiteralIdentifierImpl extends GoPsiElementBase
-    implements GoIdentifier {
+    implements GoLiteralIdentifier {
 
     boolean isIota;
 

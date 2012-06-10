@@ -30,7 +30,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
@@ -118,7 +118,7 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
     }
 
     @Override
-    public void visitIdentifier(GoIdentifier id) {
+    public void visitIdentifier(GoLiteralIdentifier id) {
     }
 
     @Override

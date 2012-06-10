@@ -14,7 +14,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.inspection.fix.ConvertToAssignmentFix;
 import ro.redeul.google.go.inspection.fix.DeleteStmtFix;
@@ -28,7 +27,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -43,12 +42,6 @@ import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedConstant;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDeclaration;
@@ -157,21 +150,21 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitIdentifier(GoIdentifier id) {
+    public void visitIdentifier(GoLiteralIdentifier id) {
         if (needToCollectUsage(id)) {
             ctx.addUsage(id);
         }
     }
 
-    private void visitIdentifiersAndExpressions(GoIdentifier[] identifiers, GoExpr[] exprs,
+    private void visitIdentifiersAndExpressions(GoLiteralIdentifier[] identifiers, GoExpr[] exprs,
                                                 boolean mayRedeclareVariable) {
         if (identifiers.length == 0) {
             return;
         }
 
         int nonBlankIdCount = 0;
-        List<GoIdentifier> redeclaredIds = new ArrayList<GoIdentifier>();
-        for (GoIdentifier id : identifiers) {
+        List<GoLiteralIdentifier> redeclaredIds = new ArrayList<GoLiteralIdentifier>();
+        for (GoLiteralIdentifier id : identifiers) {
             if (!id.isBlank()) {
                 nonBlankIdCount++;
                 if (ctx.isDefinedInCurrentScope(id)) {
@@ -191,13 +184,13 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
                 ctx.addProblem(start, end, msg, ProblemHighlightType.GENERIC_ERROR, new ConvertToAssignmentFix());
             }
         } else {
-            for (GoIdentifier redeclaredId : redeclaredIds) {
+            for (GoLiteralIdentifier redeclaredId : redeclaredIds) {
                 String msg = redeclaredId.getText() + " redeclared in this block";
                 ctx.addProblem(redeclaredId, redeclaredId, msg, ProblemHighlightType.GENERIC_ERROR);
             }
         }
 
-        for (GoIdentifier id : identifiers) {
+        for (GoLiteralIdentifier id : identifiers) {
             ctx.addDefinition(id);
         }
 
@@ -252,7 +245,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
         GoLiteral literal = ((GoLiteralExpression) expr).getLiteral();
         if ( literal.getType() == GoLiteral.Type.Identifier )
-        if (needToCollectUsage((GoIdentifier)literal)) {
+        if (needToCollectUsage((GoLiteralIdentifier)literal)) {
             if (declaration) {
                 ctx.addDefinition(literal);
             } else {
@@ -261,20 +254,20 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
     }
 
-    private boolean needToCollectUsage(GoIdentifier id) {
+    private boolean needToCollectUsage(GoLiteralIdentifier id) {
         return id != null && !isFunctionOrMethodCall(id) && !isTypeField(id) && !isType(id) &&
                 // if there is any dots in the identifier, it could be from other packages.
                 // usage collection of other package variables is not implemented yet.
                 !id.getText().contains(".");
     }
 
-    private boolean isType(GoIdentifier id) {
+    private boolean isType(GoLiteralIdentifier id) {
         PsiElement parent = id.getParent();
         return isNodeOfType(parent, GoElementTypes.BASE_TYPE_NAME) ||
                 isNodeOfType(parent, GoElementTypes.REFERENCE_BASE_TYPE_NAME) || parent instanceof GoTypeName;
     }
 
-    private boolean isTypeField(GoIdentifier id) {
+    private boolean isTypeField(GoLiteralIdentifier id) {
         return id.getParent() instanceof GoTypeStructField || isTypeFieldInitializer(id);
     }
 
@@ -283,7 +276,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
      * @param id
      * @return
      */
-    private boolean isTypeFieldInitializer(GoIdentifier id) {
+    private boolean isTypeFieldInitializer(GoLiteralIdentifier id) {
         if (!(id.getParent() instanceof GoLiteral)) {
             return false;
         }
@@ -299,7 +292,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
     }
 
-    private boolean isFunctionOrMethodCall(GoIdentifier id) {
+    private boolean isFunctionOrMethodCall(GoLiteralIdentifier id) {
         if (!(id.getParent() instanceof GoLiteralExpression)) {
             return false;
         }
@@ -313,7 +306,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
                                             Map<String, VariableUsage> variables,
                                             boolean ignoreProblem) {
         for (GoFunctionParameter p : parameters) {
-            for (GoIdentifier id : p.getIdentifiers()) {
+            for (GoLiteralIdentifier id : p.getIdentifiers()) {
                 variables.put(id.getName(),
                         new VariableUsage(id, ignoreProblem));
             }

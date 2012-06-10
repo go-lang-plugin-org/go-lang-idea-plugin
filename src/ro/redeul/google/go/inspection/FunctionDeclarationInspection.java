@@ -13,7 +13,7 @@ import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
 import ro.redeul.google.go.inspection.fix.RemoveFunctionResultFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
@@ -53,7 +53,7 @@ public class FunctionDeclarationInspection {
     public void hasDuplicateArgument() {
         Set<String> parameters = new HashSet<String>();
         for (GoFunctionParameter fp : function.getParameters()) {
-            for (GoIdentifier id : fp.getIdentifiers()) {
+            for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 if (id.isBlank()) {
                     continue;
                 }
@@ -72,7 +72,7 @@ public class FunctionDeclarationInspection {
         Set<String> parameters = new HashSet<String>(getParameterNames(function.getParameters()));
 
         for (GoFunctionParameter fp : function.getResults()) {
-            for (GoIdentifier id : fp.getIdentifiers()) {
+            for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 String text = id.getText();
                 if (!id.isBlank() && parameters.contains(text)) {
                     result.addProblem(id, text + " redeclared in this block");
@@ -133,7 +133,7 @@ public class FunctionDeclarationInspection {
     private static List<String> getParameterNames(GoFunctionParameter[] parameters) {
         List<String> parameterNames = new ArrayList<String>();
         for (GoFunctionParameter fp : parameters) {
-            for (GoIdentifier id : fp.getIdentifiers()) {
+            for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 if (!id.isBlank()) {
                     parameterNames.add(id.getText());
                 }

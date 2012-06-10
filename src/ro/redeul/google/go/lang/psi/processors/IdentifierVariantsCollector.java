@@ -7,7 +7,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 
@@ -54,11 +54,11 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
 
     private void collectVariableDeclaration(GoVarDeclaration declaration, ResolveState state) {
 
-        GoIdentifier identifiers[] = declaration.getIdentifiers();
+        GoLiteralIdentifier identifiers[] = declaration.getIdentifiers();
 
         boolean isImported = isImported(declaration, state);
 
-        for (GoIdentifier identifier : identifiers) {
+        for (GoLiteralIdentifier identifier : identifiers) {
             if ( ! isImported || GoNamesUtil.isPublicType(identifier.getName()) ) {
                 addVariant(identifier, identifier.getName(), state);
             }
@@ -67,11 +67,11 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
 
     private void collectVariableDeclaration(GoConstDeclaration declaration, ResolveState state) {
 
-        GoIdentifier identifiers[] = declaration.getIdentifiers();
+        GoLiteralIdentifier identifiers[] = declaration.getIdentifiers();
 
         boolean isImported = isImported(declaration, state);
 
-        for (GoIdentifier identifier : identifiers) {
+        for (GoLiteralIdentifier identifier : identifiers) {
             if ( ! isImported || GoNamesUtil.isPublicType(identifier.getName()) ) {
                 addVariant(identifier, identifier.getName(), state);
             }

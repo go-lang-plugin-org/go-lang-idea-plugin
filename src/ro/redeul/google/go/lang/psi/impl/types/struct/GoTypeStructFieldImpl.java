@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -41,14 +41,14 @@ public class GoTypeStructFieldImpl extends GoPsiElementBase implements GoTypeStr
 
     @Override
     public boolean isBlank() {
-        GoIdentifier identifiers[] = getIdentifiers();
+        GoLiteralIdentifier identifiers[] = getIdentifiers();
 
         return identifiers.length == 1 && identifiers[0].isBlank();
     }
 
     @Override
-    public GoIdentifier[] getIdentifiers() {
-        return findChildrenByClass(GoIdentifier.class);
+    public GoLiteralIdentifier[] getIdentifiers() {
+        return findChildrenByClass(GoLiteralIdentifier.class);
     }
 
     @Override

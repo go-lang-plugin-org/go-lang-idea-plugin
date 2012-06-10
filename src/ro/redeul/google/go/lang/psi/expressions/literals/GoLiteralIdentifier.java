@@ -9,7 +9,7 @@ import com.intellij.psi.PsiReference;
  * Date: Sep 4, 2010
  * Time: 10:42:42 PM
  */
-public interface GoIdentifier extends GoLiteral<String>, PsiReference, PsiNameIdentifierOwner {
+public interface GoLiteralIdentifier extends GoLiteral<String>, PsiReference, PsiNameIdentifierOwner {
 
     boolean isBlank();
 

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.processors.NamedTypeVariantsCollector;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
@@ -40,7 +40,7 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase implements GoTypeNa
     @Override
     public String getName() {
 
-        GoIdentifier identifier = findChildByClass(GoIdentifier.class);
+        GoLiteralIdentifier identifier = findChildByClass(GoLiteralIdentifier.class);
 
         return identifier != null ? identifier.getText() : getText();
     }

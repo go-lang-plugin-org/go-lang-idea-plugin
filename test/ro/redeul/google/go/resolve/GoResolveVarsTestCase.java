@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
@@ -30,7 +30,7 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
         PsiReference reference = resolve();
         PsiElement psiElement = reference.resolve();
 
-        GoIdentifier variable = assertAs(GoIdentifier.class, psiElement);
+        GoLiteralIdentifier variable = assertAs(GoLiteralIdentifier.class, psiElement);
         assertEquals("key", variable.getName());
 
         assertParentType(
@@ -42,7 +42,7 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
     public void testDeclaredInForRange2() throws Exception {
         PsiElement psiElement = resolve().resolve();
 
-        GoIdentifier variable = assertAs(GoIdentifier.class, psiElement);
+        GoLiteralIdentifier variable = assertAs(GoLiteralIdentifier.class, psiElement);
         assertEquals("i", variable.getName());
 
         assertParentType(
@@ -55,7 +55,7 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
         PsiReference reference = resolve();
         PsiElement psiElement = reference.resolve();
 
-        GoIdentifier variable = assertAs(GoIdentifier.class, psiElement);
+        GoLiteralIdentifier variable = assertAs(GoLiteralIdentifier.class, psiElement);
         assertEquals("key2", variable.getName());
 
         assertParentType(
@@ -67,7 +67,7 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
     public void testDeclaredInForClause() throws Exception {
         PsiElement psiElement = resolve().resolve();
 
-        GoIdentifier variable = assertAs(GoIdentifier.class, psiElement);
+        GoLiteralIdentifier variable = assertAs(GoLiteralIdentifier.class, psiElement);
         assertEquals("i", variable.getName());
 
         assertParentType(
@@ -79,7 +79,7 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
     public void testMethodReturn() throws Exception {
         PsiElement resolved = resolve().resolve();
 
-        GoIdentifier param = assertAs(GoIdentifier.class, resolved);
+        GoLiteralIdentifier param = assertAs(GoLiteralIdentifier.class, resolved);
         assertEquals("c", param.getName());
 
         GoFunctionDeclaration functionDeclaration =
@@ -98,7 +98,7 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
     public void testMethodReturn2() throws Exception {
         PsiElement resolved = resolve().resolve();
 
-        GoIdentifier param = assertAs(GoIdentifier.class, resolved);
+        GoLiteralIdentifier param = assertAs(GoLiteralIdentifier.class, resolved);
         assertEquals("g1v", param.getName());
 
         GoFunctionDeclaration functionDeclaration =

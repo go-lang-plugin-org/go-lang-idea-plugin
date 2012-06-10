@@ -3,9 +3,9 @@ package ro.redeul.google.go.lang.psi.processors;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoType;
 
@@ -18,9 +18,9 @@ import ro.redeul.google.go.lang.psi.types.GoType;
 public class VariableTypeResolver extends BaseScopeProcessor {
 
     private GoType type;
-    private GoIdentifier identifier;
+    private GoLiteralIdentifier identifier;
 
-    public VariableTypeResolver(GoIdentifier identifier) {
+    public VariableTypeResolver(GoLiteralIdentifier identifier) {
         this.identifier = identifier;
     }
 
@@ -34,12 +34,12 @@ public class VariableTypeResolver extends BaseScopeProcessor {
         if ( element instanceof GoShortVarDeclaration) {
             GoShortVarDeclaration shortVarDeclaration = (GoShortVarDeclaration) element;
 
-            GoIdentifier identifiers[] = shortVarDeclaration.getIdentifiers();
+            GoLiteralIdentifier identifiers[] = shortVarDeclaration.getIdentifiers();
             GoExpr expressions[] = shortVarDeclaration.getExpressions();
 
             for (int i = 0, identifiersLength = identifiers.length; i < identifiersLength; i++) {
 
-                GoIdentifier identifier = identifiers[i];
+                GoLiteralIdentifier identifier = identifiers[i];
 
                 if (identifier.getName().equalsIgnoreCase(this.identifier.getName())) {
                     if ( expressions != null && expressions.length > i ) {
@@ -55,9 +55,9 @@ public class VariableTypeResolver extends BaseScopeProcessor {
 
     private boolean checkFunctionParameters(GoFunctionParameter parameter) {
 
-        GoIdentifier []identifiers = parameter.getIdentifiers();
+        GoLiteralIdentifier[]identifiers = parameter.getIdentifiers();
 
-        for (GoIdentifier identifier : identifiers) {
+        for (GoLiteralIdentifier identifier : identifiers) {
             if ( identifier.getText().equalsIgnoreCase(this.identifier.getText()) ) {
                 type = parameter.getType();
                 return false;

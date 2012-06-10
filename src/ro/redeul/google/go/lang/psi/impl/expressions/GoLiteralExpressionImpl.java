@@ -36,8 +36,8 @@ public class GoLiteralExpressionImpl extends GoPsiElementBase
     }
 
     //    @Override
-//    public GoIdentifier getIdentifier() {
-//        return findChildByClass(GoIdentifier.class);
+//    public GoLiteralIdentifier getIdentifier() {
+//        return findChildByClass(GoLiteralIdentifier.class);
 //    }
 //
 //    @Override

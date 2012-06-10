@@ -3,7 +3,7 @@ package ro.redeul.google.go.inspection;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
 public class ConstDeclarationInspection {
     public static boolean isFirstConstExpressionMissed(GoConstDeclarations constDeclarations) {
@@ -12,13 +12,13 @@ public class ConstDeclarationInspection {
     }
 
     public static boolean isMissingExpressionInConst(GoConstDeclaration constDeclaration) {
-        GoIdentifier[] ids = constDeclaration.getIdentifiers();
+        GoLiteralIdentifier[] ids = constDeclaration.getIdentifiers();
         GoExpr[] exprs = constDeclaration.getExpressions();
         return exprs.length != 0 && ids.length > exprs.length;
     }
 
     public static boolean isExtraExpressionInConst(GoConstDeclaration constDeclaration) {
-        GoIdentifier[] ids = constDeclaration.getIdentifiers();
+        GoLiteralIdentifier[] ids = constDeclaration.getIdentifiers();
         GoExpr[] exprs = constDeclaration.getExpressions();
         return exprs.length != 0 && ids.length < exprs.length;
     }

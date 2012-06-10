@@ -10,7 +10,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.DebugUtil;
 import ro.redeul.google.go.FileDataBasedTest;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
 public class RemoveVariableFixTest extends FileDataBasedTest {
     public void testSimple() throws Exception{ doTest(); }
@@ -38,10 +38,10 @@ public class RemoveVariableFixTest extends FileDataBasedTest {
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {
         PsiElement element = file.findElementAt(editor.getSelectionModel().getSelectionStart());
-        if (!(element instanceof GoIdentifier)) {
+        if (!(element instanceof GoLiteralIdentifier)) {
             element = element.getParent();
         }
-        assertTrue(element instanceof GoIdentifier);
+        assertTrue(element instanceof GoLiteralIdentifier);
         System.out.println(DebugUtil.psiToString(file, false, true));
         InspectionManager im = InspectionManager.getInstance(project);
         LocalQuickFix fix = null;

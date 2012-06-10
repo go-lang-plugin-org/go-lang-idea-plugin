@@ -8,7 +8,7 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 
 public class VarDeclarationInspection {
@@ -26,7 +26,7 @@ public class VarDeclarationInspection {
     }
 
     private void hasAssignmentCountMismatch() {
-        GoIdentifier[] ids = varDeclaration.getIdentifiers();
+        GoLiteralIdentifier[] ids = varDeclaration.getIdentifiers();
         GoExpr[] exprs = varDeclaration.getExpressions();
         if (ids.length == exprs.length) {
             return;

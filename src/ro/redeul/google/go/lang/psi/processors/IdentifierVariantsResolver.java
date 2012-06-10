@@ -6,7 +6,7 @@ import com.intellij.psi.scope.BaseScopeProcessor;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -21,9 +21,9 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 public class IdentifierVariantsResolver extends BaseScopeProcessor {
 
     PsiElement reference;
-    GoIdentifier identifier;
+    GoLiteralIdentifier identifier;
 
-    public IdentifierVariantsResolver(GoIdentifier identifier) {
+    public IdentifierVariantsResolver(GoLiteralIdentifier identifier) {
         this.identifier = identifier;
     }
 
@@ -52,8 +52,8 @@ public class IdentifierVariantsResolver extends BaseScopeProcessor {
                                            ((GoFunctionParameter)element).getIdentifiers());
         }
 
-        if ( element instanceof GoIdentifier) {
-            return tryResolveToIdentifiers(state, (GoIdentifier)element);
+        if ( element instanceof GoLiteralIdentifier) {
+            return tryResolveToIdentifiers(state, (GoLiteralIdentifier)element);
         }
 
         return true;
@@ -65,16 +65,16 @@ public class IdentifierVariantsResolver extends BaseScopeProcessor {
         GoLiteral literal = expression.getLiteral();
 
         if ( literal != null && literal.getType() == GoLiteral.Type.Identifier ) {
-            return tryResolveToIdentifiers(state, (GoIdentifier) literal);
+            return tryResolveToIdentifiers(state, (GoLiteralIdentifier) literal);
         }
 
         return true;
     }
 
     private boolean tryResolveToIdentifiers(ResolveState state,
-                                            GoIdentifier ... identifiers) {
+                                            GoLiteralIdentifier... identifiers) {
 
-        for (GoIdentifier identifier : identifiers) {
+        for (GoLiteralIdentifier identifier : identifiers) {
 
             if ( this.identifier.getText().equalsIgnoreCase(getVisibleName(identifier.getName(), state)) ) {
                 reference = identifier;

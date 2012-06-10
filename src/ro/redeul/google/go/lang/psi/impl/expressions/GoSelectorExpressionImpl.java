@@ -12,7 +12,7 @@ import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -143,8 +143,8 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
             GoPsiElement member = members[i];
 
-            if (member instanceof GoIdentifier) {
-                presentations[i] = getFieldPresentation(type, (GoIdentifier) member);
+            if (member instanceof GoLiteralIdentifier) {
+                presentations[i] = getFieldPresentation(type, (GoLiteralIdentifier) member);
             } else {
                 presentations[i] = member;
             }
@@ -153,7 +153,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
         return presentations;
     }
 
-    private LookupElementBuilder getFieldPresentation(GoType type, GoIdentifier id) {
+    private LookupElementBuilder getFieldPresentation(GoType type, GoLiteralIdentifier id) {
 
         String name = id.getName();
 
