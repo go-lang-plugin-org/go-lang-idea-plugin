@@ -14,14 +14,14 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CompositeLiteral
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('LoggedUserInfo')
         CompositeLiteralElementList
           PsiElement({)('{')
@@ -29,38 +29,38 @@ Go file
           PsiWhiteSpace('                ')
           CompositeLiteralElement
             CompositeLiteralElementKey
-              LiteralExpr
-                IdentifierImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('Email')
             PsiElement(:)(':')
             PsiWhiteSpace('    ')
             CompositeLiteralElementValue
-              LiteralExpr
-                IdentifierImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('email')
           PsiElement(,)(',')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('                ')
           CompositeLiteralElement
             CompositeLiteralElementKey
-              LiteralExpr
-                IdentifierImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('LastTime')
             PsiElement(:)(':')
             PsiWhiteSpace(' ')
             CompositeLiteralElementValue
               CallOrConversionExpressionImpl
                 SelectorExpression
-                  LiteralExpr
-                    IdentifierImpl
+                  LiteralExpressionImpl
+                    LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('datastore')
                   PsiElement(.)('.')
                   PsiElement(IDENTIFIER)('SecondsToTime')
                 PsiElement(()('(')
                 CallOrConversionExpressionImpl
                   SelectorExpression
-                    LiteralExpr
-                      IdentifierImpl
+                    LiteralExpressionImpl
+                      LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('time')
                     PsiElement(.)('.')
                     PsiElement(IDENTIFIER)('Seconds')

@@ -20,6 +20,6 @@ Go file
         TypeName
           PsiElement(IDENTIFIER)('string')
         PsiElement(()('(')
-        LiteralExpr
+        LiteralExpressionImpl
           PsiElement(LITERAL_CHAR)(''a'')
         PsiElement())(')')

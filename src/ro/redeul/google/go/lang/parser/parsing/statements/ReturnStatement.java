@@ -16,7 +16,7 @@ public class ReturnStatement implements GoElementTypes {
         }
 
         PsiBuilder.Marker mark = builder.mark();
-        if ( parser.parseExpressionList(builder, false) == 0 ) {
+        if ( parser.parseExpressionList(builder, false, false) == 0 ) {
             mark.rollbackTo();
         } else {
             mark.drop();

@@ -29,8 +29,8 @@ Go file
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         SwitchTypeGuard
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('x')
           PsiElement(.)('.')
           PsiElement(()('(')
@@ -51,8 +51,9 @@ Go file
           ReturnStmtImpl
             PsiElement(KEYWORD_RETURN)('return')
             PsiWhiteSpace(' ')
-            LiteralExpr
-              PsiElement(LITERAL_INT)('1')
+            LiteralExpressionImpl
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('1')
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
         PsiElement(})('}')

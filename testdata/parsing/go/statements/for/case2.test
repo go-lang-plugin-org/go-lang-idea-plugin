@@ -20,8 +20,8 @@ Go file
       ForWithConditionStmtImpl
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('a')
         PsiWhiteSpace(' ')
         BlockStmtImpl

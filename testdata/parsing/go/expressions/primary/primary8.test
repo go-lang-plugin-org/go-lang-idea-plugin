@@ -11,7 +11,7 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -20,14 +20,14 @@ Go file
         SelectorExpression
           IndexExpressionImpl
             SelectorExpression
-              LiteralExpr
-                IdentifierImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('f')
               PsiElement(.)('.')
               PsiElement(IDENTIFIER)('p')
             PsiElement([)('[')
-            LiteralExpr
-              IdentifierImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('i')
             PsiElement(])(']')
           PsiElement(.)('.')

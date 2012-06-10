@@ -12,7 +12,7 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -23,8 +23,8 @@ Go file
           PsiElement({)('{')
           PsiElement(})('}')
         PsiElement(()('(')
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('nil')
         PsiElement())(')')
   PsiElement(WS_NEW_LINES)('\n')

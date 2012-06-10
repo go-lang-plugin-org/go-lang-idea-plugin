@@ -45,7 +45,7 @@ public class SwitchStatement implements GoElementTypes {
                 if ( tryParseTypeSwitchGuard(builder, parser) ) {
                     isTypeSwitch = true;
                 } else {
-                    parser.parseExpression(builder, true);
+                    parser.parseExpression(builder, true, false);
                 }
             }
         }
@@ -64,7 +64,7 @@ public class SwitchStatement implements GoElementTypes {
                 if ( isTypeSwitch ) {
                     parser.parseTypeList(builder);
                 } else {
-                    parser.parseExpressionList(builder, true);
+                    parser.parseExpressionList(builder, true, false);
                 }
                 ParserUtils.getToken(builder, oCOLON, "colon.expected");
             } else if (builder.getTokenType() == kDEFAULT) {
@@ -102,7 +102,7 @@ public class SwitchStatement implements GoElementTypes {
     private static boolean tryParseSimpleStmt(PsiBuilder builder, GoParser parser) {
         PsiBuilder.Marker rememberMarker = builder.mark();
 
-        int expressionCount = parser.parseExpressionList(builder, true);
+        int expressionCount = parser.parseExpressionList(builder, true, false);
 
         // parse assign expression
         if (expressionCount >= 1 &&
@@ -131,7 +131,7 @@ public class SwitchStatement implements GoElementTypes {
             ParserUtils.getToken(builder, oVAR_ASSIGN);
         }
 
-        if (!parser.parsePrimaryExpression(builder, true)) {
+        if (!parser.parsePrimaryExpression(builder, true, false)) {
             marker.rollbackTo();
             return false;
         }

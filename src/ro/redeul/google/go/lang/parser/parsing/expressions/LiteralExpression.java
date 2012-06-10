@@ -1,14 +1,12 @@
 package ro.redeul.google.go.lang.parser.parsing.expressions;
 
+import java.util.regex.Pattern;
+
 import com.intellij.lang.PsiBuilder;
-import org.apache.velocity.runtime.directive.Parse;
-import ro.redeul.google.go.lang.lexer.GoElementType;
-import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
-
-import javax.swing.text.html.parser.Parser;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -18,36 +16,79 @@ import javax.swing.text.html.parser.Parser;
  */
 public class LiteralExpression implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    static Pattern BOOLEAN_LITERAL = Pattern.compile("true|false");
+    static Pattern IOTA_LITERAL = Pattern.compile("iota");
+
+    public static boolean parse(PsiBuilder builder, GoParser parser,
+                                boolean parseIota)
+    {
+        PsiBuilder.Marker mark = builder.mark();
+        if (mIDENT == builder.getTokenType()) {
+            parseIdentifier(builder, parser, parseIota);
+            mark.done(LITERAL_EXPRESSION);
+            return true;
+        }
+
+        if (litSTRING == builder.getTokenType()) {
+            ParserUtils.eatElement(builder, LITERAL_STRING);
+            mark.done(LITERAL_EXPRESSION);
+            return true;
+        }
+
+        if (litCHAR == builder.getTokenType()) {
+            ParserUtils.eatElement(builder, LITERAL_CHAR);
+            mark.done(LITERAL_EXPRESSION);
+            return true;
+        }
+
+        if (LITERALS_IMAGINARY.contains(builder.getTokenType())) {
+            ParserUtils.eatElement(builder, LITERAL_IMAGINARY);
+            mark.done(LITERAL_EXPRESSION);
+            return true;
+        }
+
+        if (LITERALS_INT.contains(builder.getTokenType())) {
+            ParserUtils.eatElement(builder, LITERAL_INTEGER);
+            mark.done(LITERAL_EXPRESSION);
+            return true;
+        }
+
+        if (LITERALS_FLOAT.contains(builder.getTokenType())) {
+            ParserUtils.eatElement(builder, LITERAL_FLOAT);
+            mark.done(LITERAL_EXPRESSION);
+            return true;
+        }
+
+        mark.drop();
+        return true;
+    }
+
+    private static boolean parseIdentifier(PsiBuilder builder,
+                                           GoParser parser,
+                                           boolean parseIota) {
+        String identifier = builder.getTokenText();
+
+        if ( BOOLEAN_LITERAL.matcher(identifier).matches() ) {
+            ParserUtils.eatElement(builder, LITERAL_BOOL);
+            return true;
+        }
+
+        if ( IOTA_LITERAL.matcher(identifier).matches() && parseIota ) {
+            ParserUtils.eatElement(builder, LITERAL_IOTA);
+            return true;
+        }
 
         PsiBuilder.Marker mark = builder.mark();
 
-        PsiBuilder.Marker identifier = null;
+        ParserUtils.getToken(builder, mIDENT);
 
-        if ( ParserUtils.lookAhead(builder, mIDENT) ) {
-            identifier = builder.mark();
-
-            if ( parser.isPackageName(builder.getTokenText()) && ParserUtils.lookAhead(builder, mIDENT, oDOT) ) {
-                ParserUtils.getToken(builder, mIDENT);
-                ParserUtils.getToken(builder, oDOT);
-            }
+        if (parser.isPackageName(identifier) &&
+            ParserUtils.lookAhead(builder, oDOT)) {
+            ParserUtils.getToken(builder, oDOT);
+            ParserUtils.getToken(builder, mIDENT, GoBundle.message("identifier.expected"));
         }
 
-        if ( ! ParserUtils.getToken(builder, GoTokenTypeSets.LITERALS, "literal.expected") ) {
-            if  (identifier != null ) {
-                identifier.drop();
-            }
-
-            mark.drop();
-            return false;
-        }
-
-        if ( identifier != null ) {
-            identifier.done(IDENTIFIER);
-        }
-
-        mark.done(LITERAL_EXPRESSION);
-
+        mark.done(GoElementTypes.LITERAL_IDENTIFIER);
         return true;
-    }    
+    }
 }

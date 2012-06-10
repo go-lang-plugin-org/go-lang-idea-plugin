@@ -16,18 +16,21 @@ Go file
       PsiWhiteSpace(' ')
       TypeArrayImpl
         PsiElement([)('[')
-        LiteralExpr
-          PsiElement(LITERAL_INT)('2')
+        LiteralExpressionImpl
+          LiteralIntegerImpl
+            PsiElement(LITERAL_INT)('2')
         PsiElement(])(']')
         TypeArrayImpl
           PsiElement([)('[')
-          LiteralExpr
-            PsiElement(LITERAL_INT)('2')
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('2')
           PsiElement(])(']')
           TypeArrayImpl
             PsiElement([)('[')
-            LiteralExpr
-              PsiElement(LITERAL_INT)('2')
+            LiteralExpressionImpl
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('2')
             PsiElement(])(']')
             TypeName
               PsiElement(IDENTIFIER)('float64')

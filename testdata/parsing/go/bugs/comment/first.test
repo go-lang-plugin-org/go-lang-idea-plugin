@@ -37,14 +37,15 @@ Go file
       PsiWhiteSpace('    ')
       ExpressionStmtImpl
         CallOrConversionExpressionImpl
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('fmt')
               PsiElement(.)('.')
               PsiElement(IDENTIFIER)('Printf')
           PsiElement(()('(')
-          LiteralExpr
-            PsiElement(LITERAL_STRING)('"Hello world3!"')
+          LiteralExpressionImpl
+            LiteralStringImpl
+              PsiElement(LITERAL_STRING)('"Hello world3!"')
           PsiElement())(')')
       PsiElement(WS_NEW_LINES)('\n\n')
       PsiElement(})('}')

@@ -7,7 +7,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralIdentifierImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoType;
@@ -37,7 +37,7 @@ public class GoFunctionParameterImpl extends GoPsiElementBase implements GoFunct
 
     @Override
     public GoIdentifier[] getIdentifiers() {
-        return findChildrenByClass(GoIdentifierImpl.class);
+        return findChildrenByClass(GoLiteralIdentifierImpl.class);
     }
 
     @Override

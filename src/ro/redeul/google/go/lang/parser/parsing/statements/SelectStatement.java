@@ -77,18 +77,18 @@ public class SelectStatement implements GoElementTypes {
             builder.advanceLexer();
 
             ParserUtils.skipNLS(builder);
-            parser.parseExpression(builder, false);
+            parser.parseExpression(builder, false, false);
             marker.done(SELECT_CASE_RECV_EXPRESSION);
             return;
         }
 
         PsiBuilder.Marker mark = builder.mark();
 
-        parser.parseExpression(builder, false);
+        parser.parseExpression(builder, false, false);
         if ( oSEND_CHANNEL == builder.getTokenType() ) {
             builder.advanceLexer();
             ParserUtils.skipNLS(builder);
-            parser.parseExpression(builder, false);
+            parser.parseExpression(builder, false, false);
             mark.done(SELECT_CASE_SEND_EXPRESSION);
             return;
         }
@@ -100,7 +100,7 @@ public class SelectStatement implements GoElementTypes {
             ParserUtils.getToken(builder, oSEND_CHANNEL, "send.channel.operator.expected");
 
             ParserUtils.skipNLS(builder);
-            parser.parseExpression(builder, false);
+            parser.parseExpression(builder, false, false);
 
             mark.done(SELECT_CASE_RECV_EXPRESSION);
             return;
@@ -113,7 +113,7 @@ public class SelectStatement implements GoElementTypes {
 
         builder.error("assign.or.varassign.or.send.channel.operator.expected");
 
-        parser.parseExpression(builder, false);
+        parser.parseExpression(builder, false, false);
 
         mark.done(SELECT_CASE_SEND_EXPRESSION);
     }

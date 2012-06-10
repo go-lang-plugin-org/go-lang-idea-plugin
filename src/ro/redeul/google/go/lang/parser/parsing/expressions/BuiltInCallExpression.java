@@ -1,12 +1,12 @@
 package ro.redeul.google.go.lang.parser.parsing.expressions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -39,7 +39,7 @@ public class BuiltInCallExpression implements GoElementTypes {
         add("real");
         add("recover");
     }};
-    
+
 
     public static boolean isBuiltInCall(String methodCall) {
         return hasTypeParameter.contains(methodCall) || noTypeParameter.contains(methodCall);
@@ -50,7 +50,7 @@ public class BuiltInCallExpression implements GoElementTypes {
         PsiBuilder.Marker mark = builder.mark();
 
         String callName = builder.getTokenText();
-        
+
         if ( builder.getTokenType() != mIDENT || (!hasTypeParameter.contains(callName) && !noTypeParameter.contains(builder.getTokenText()) )) {
             mark.drop();
             return false;
@@ -68,11 +68,11 @@ public class BuiltInCallExpression implements GoElementTypes {
         }
 
         if ( builder.getTokenType() != pRPAREN ) {
-            parser.parseExpressionList(builder, false);
+            parser.parseExpressionList(builder, false, false);
         }
 
         ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");
-        
+
         mark.done(BUILTIN_CALL_EXPRESSION);
 
         return true;

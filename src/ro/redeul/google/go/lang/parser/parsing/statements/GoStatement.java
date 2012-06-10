@@ -15,7 +15,7 @@ public class GoStatement implements GoElementTypes {
             return false;
         }
 
-        parser.parseExpression(builder, false);
+        parser.parseExpression(builder, false, false);
         marker.done(GO_STATEMENT);
         return true;
 

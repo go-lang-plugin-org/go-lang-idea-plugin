@@ -1,5 +1,9 @@
 package ro.redeul.google.go.inspection;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -14,10 +18,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.services.GoCodeManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 public class UnusedImportInspection extends AbstractWholeGoFileInspection {
     @Nls
     @NotNull
@@ -27,7 +27,9 @@ public class UnusedImportInspection extends AbstractWholeGoFileInspection {
     }
 
     @Override
-    protected ProblemDescriptor[] doCheckFile(@NotNull GoFile file, @NotNull InspectionManager manager) {
+    protected List<ProblemDescriptor> doCheckFile(@NotNull GoFile file,
+                                                  @NotNull InspectionManager manager,
+                                                  boolean onTheFly) {
         List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
 
         Project project = file.getProject();
@@ -49,6 +51,7 @@ public class UnusedImportInspection extends AbstractWholeGoFileInspection {
                 problems.add(manager.createProblemDescriptor(id, "Unused import", fix, ProblemHighlightType.ERROR, true));
             }
         }
-        return problems.toArray(new ProblemDescriptor[problems.size()]);
+
+        return problems;
     }
 }

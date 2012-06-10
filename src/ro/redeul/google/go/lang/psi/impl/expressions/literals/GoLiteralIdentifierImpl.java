@@ -8,6 +8,8 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
@@ -15,11 +17,14 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsResolver;
+import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -32,10 +37,39 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: Jul 24, 2010
  * Time: 10:43:49 PM
  */
-public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
+public class GoLiteralIdentifierImpl extends GoPsiElementBase
+    implements GoIdentifier {
 
-    public GoIdentifierImpl(@NotNull ASTNode node) {
+    boolean isIota;
+
+    public GoLiteralIdentifierImpl(@NotNull ASTNode node) {
+        this(node, false);
+    }
+
+    public GoLiteralIdentifierImpl(@NotNull ASTNode node, boolean isIota) {
         super(node);
+
+        this.isIota = isIota;
+    }
+
+    @Override
+    public boolean isBlank() {
+        return getText().equals("_");
+    }
+
+    @Override
+    public boolean isIota() {
+        return isIota;
+    }
+
+    @Override
+    public String getValue() {
+        return getText();
+    }
+
+    @Override
+    public Type getType() {
+        return Type.Identifier;
     }
 
     public void accept(GoElementVisitor visitor) {
@@ -54,9 +88,13 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
 
     @Override
     public PsiElement resolve() {
-        IdentifierVariantsResolver identifierVariantsResolver = new IdentifierVariantsResolver(this);
+        IdentifierVariantsResolver identifierVariantsResolver =
+            new IdentifierVariantsResolver(this);
 
-        PsiScopesUtil.treeWalkUp(identifierVariantsResolver, this, this.getContainingFile(), GoResolveStates.initial());
+        PsiScopesUtil.treeWalkUp(
+            identifierVariantsResolver,
+            this, this.getContainingFile(),
+            GoResolveStates.initial());
 
         return identifierVariantsResolver.reference();
     }
@@ -73,21 +111,25 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
     }
 
     @Override
-    public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
+    public PsiElement setName(@NonNls @NotNull String name)
+        throws IncorrectOperationException {
         return null;
     }
 
     @Override
-    public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+    public PsiElement handleElementRename(String newElementName)
+        throws IncorrectOperationException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+    public PsiElement bindToElement(@NotNull PsiElement element)
+        throws IncorrectOperationException {
         if (isReferenceTo(element))
             return this;
 
-        throw new IncorrectOperationException("Cannot bind to:" + element + " of class " + element.getClass());
+        throw new IncorrectOperationException(
+            "Cannot bind to:" + element + " of class " + element.getClass());
     }
 
     @Override
@@ -105,6 +147,16 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
         if (parent instanceof GoTypeStructField)
             return null;
 
+        if (parent instanceof GoLiteralExpression) {
+            PsiElement grandParent = parent.getParent();
+
+            if ( grandParent instanceof  GoForWithRangeStatement ||
+                 grandParent instanceof GoForWithClausesStatement) {
+                return null;
+            }
+        }
+
+        // TODO: add GoMethodReceiver
         if (GoPsiUtils.isNodeOfType(parent, GoElementTypes.METHOD_RECEIVER))
             return null;
 
@@ -120,25 +172,18 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
     @Override
     public Object[] getVariants() {
 
-        if (GoPsiUtils.isNodeOfType(getParent(), GoTokenSets.NO_IDENTIFIER_COMPLETION_PARENTS)) {
+        if (GoPsiUtils.isNodeOfType(getParent(),
+                                    GoTokenSets.NO_IDENTIFIER_COMPLETION_PARENTS)) {
             return PsiReference.EMPTY_ARRAY;
         }
 
         IdentifierVariantsCollector identifierVariantsCollector = new IdentifierVariantsCollector();
 
-        PsiScopesUtil.treeWalkUp(identifierVariantsCollector, this, this.getContainingFile(), GoResolveStates.initial());
+        PsiScopesUtil.treeWalkUp(identifierVariantsCollector, this,
+                                 this.getContainingFile(),
+                                 GoResolveStates.initial());
 
         return identifierVariantsCollector.references();
-    }
-
-    @Override
-    public boolean isBlank() {
-        return getText().equals("_");
-    }
-
-    @Override
-    public boolean isIota() {
-        return getText().equals("iota");
     }
 
     @Override
@@ -153,7 +198,11 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
             }
 
             public String getLocationString() {
-                return String.format(" %s (%s)", ((GoFile) getContainingFile()).getPackage().getPackageName(), getContainingFile().getVirtualFile().getPath());
+                return String.format(" %s (%s)",
+                                     ((GoFile) getContainingFile()).getPackage()
+                                                                   .getPackageName(),
+                                     getContainingFile().getVirtualFile()
+                                         .getPath());
             }
 
             public Icon getIcon(boolean open) {
@@ -165,5 +214,13 @@ public class GoIdentifierImpl extends GoPsiElementBase implements GoIdentifier {
     @Override
     public PsiElement getNameIdentifier() {
         return this;
+    }
+
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent,
+                                       @NotNull PsiElement place) {
+        return processor.execute(this, state);
     }
 }

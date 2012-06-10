@@ -5,10 +5,9 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
-import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
@@ -30,6 +29,10 @@ public class IdentifierVariantsResolver extends BaseScopeProcessor {
 
     @Override
     public boolean execute(PsiElement element, ResolveState state) {
+        if ( element == identifier ) {
+            return true;
+        }
+
         if ( element instanceof GoFunctionDeclaration && ! (element instanceof GoMethodDeclaration) ) {
             return tryResolveToFunction((GoFunctionDeclaration) element, state);
         }
@@ -49,29 +52,23 @@ public class IdentifierVariantsResolver extends BaseScopeProcessor {
                                            ((GoFunctionParameter)element).getIdentifiers());
         }
 
-        if ( element instanceof GoForWithRangeStatement ) {
-            GoForWithRangeStatement forRange = (GoForWithRangeStatement)element;
-            if (forRange.isDeclaration()) {
-                if (tryResolveToLiteralExpression(state, forRange.getKey())) {
-                    return false;
-                }
-                if (tryResolveToLiteralExpression(state, forRange.getValue())) {
-                    return false;
-                }
-            }
+        if ( element instanceof GoIdentifier) {
+            return tryResolveToIdentifiers(state, (GoIdentifier)element);
         }
+
         return true;
     }
 
     private boolean tryResolveToLiteralExpression(ResolveState state,
-                                                  GoExpr expression) {
-        if ( ! (expression instanceof GoLiteral) ) {
-            return false;
+                                                  GoLiteralExpression expression)
+    {
+        GoLiteral literal = expression.getLiteral();
+
+        if ( literal != null && literal.getType() == GoLiteral.Type.Identifier ) {
+            return tryResolveToIdentifiers(state, (GoIdentifier) literal);
         }
 
-        GoLiteral literal = (GoLiteral) expression;
-
-        return ! tryResolveToIdentifiers(state, literal.getIdentifier());
+        return true;
     }
 
     private boolean tryResolveToIdentifiers(ResolveState state,

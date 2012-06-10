@@ -1,8 +1,12 @@
 package ro.redeul.google.go.annotator;
 
+import java.util.Collection;
+import java.util.List;
+
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.QuickFix;
 import com.intellij.codeInspection.ex.QuickFixWrapper;
 import com.intellij.lang.annotation.Annotation;
@@ -15,6 +19,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
 import ro.redeul.google.go.inspection.FunctionDeclarationInspection;
@@ -25,6 +30,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
@@ -32,9 +38,6 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.services.GoCodeManager;
-
-import java.util.Collection;
-
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isExtraExpressionInConst;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isFirstConstExpressionMissed;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isMissingExpressionInConst;
@@ -95,7 +98,7 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
      * Add all problems to annotation holder.
      * @param problems problems to be added to annotation holder
      */
-    private void addProblems(ProblemDescriptor[] problems) {
+    private void addProblems(List<ProblemDescriptor> problems) {
         for (ProblemDescriptor pd : problems) {
             Annotation anno = toAnnotation(pd);
             anno.setHighlightType(pd.getHighlightType());
@@ -115,8 +118,13 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
     }
 
     @Override
+    public void visitIdentifier(GoIdentifier id) {
+    }
+
+    @Override
     public void visitFile(GoFile file) {
-        GoVariableUsageStatVisitor visitor = new GoVariableUsageStatVisitor(inspectionManager);
+        GoVariableUsageStatVisitor visitor =
+            new GoVariableUsageStatVisitor(inspectionManager);
         visitor.visitFile(file);
         addProblems(visitor.getProblems());
     }
@@ -129,9 +137,17 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitImportDeclaration(GoImportDeclaration importDeclaration) {
-        Collection<GoFile> fileCollection = goNamesCache.getFilesByPackageName(importDeclaration.getImportPath().replaceAll("^\"|\"$", ""));
+        Collection<GoFile> fileCollection =
+            goNamesCache.getFilesByPackageName(
+                importDeclaration.getImportPath().replaceAll("^\"|\"$", ""));
+
         if ( fileCollection == null || fileCollection.size() == 0 ) {
-            annotationHolder.createErrorAnnotation(importDeclaration, "Invalid package import path");
+            Annotation annotation =
+                annotationHolder.createErrorAnnotation(
+                    importDeclaration, GoBundle.message("error.invalid.import"));
+
+            if (annotation != null)
+                annotation.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
         }
 
         Project project = importDeclaration.getProject();

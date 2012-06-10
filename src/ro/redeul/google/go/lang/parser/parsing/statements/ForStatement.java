@@ -35,7 +35,7 @@ public class ForStatement implements GoElementTypes {
         PsiBuilder builder, GoParser parser)
     {
         PsiBuilder.Marker clause = builder.mark();
-        parser.parseExpression(builder, true);
+        parser.parseExpression(builder, true, false);
         if ( pLCURCLY == builder.getTokenType() ) {
             clause.drop();
             return FOR_WITH_CONDITION_STATEMENT;
@@ -51,7 +51,7 @@ public class ForStatement implements GoElementTypes {
         ParserUtils.getToken(builder, oSEMI, "semicolon.expected");
 
         ParserUtils.skipNLS(builder);
-        parser.parseExpression(builder, true);
+        parser.parseExpression(builder, true, false);
         ParserUtils.getToken(builder, oSEMI, "semicolon.expected");
 
         ParserUtils.skipNLS(builder);
@@ -63,7 +63,7 @@ public class ForStatement implements GoElementTypes {
     private static boolean tryParseRangeClause(PsiBuilder builder, GoParser parser) {
         PsiBuilder.Marker m = builder.mark();
 
-        parser.parseExpressionList(builder, true);
+        parser.parseExpressionList(builder, true, false);
 
         if ( builder.getTokenType() == oVAR_ASSIGN || builder.getTokenType() == oASSIGN ) {
 
@@ -72,7 +72,7 @@ public class ForStatement implements GoElementTypes {
 
             if ( builder.getTokenType() == kRANGE ) {
                 ParserUtils.getToken(builder, kRANGE);
-                parser.parseExpression(builder, true);
+                parser.parseExpression(builder, true, false);
 
                 m.drop();
                 return true;

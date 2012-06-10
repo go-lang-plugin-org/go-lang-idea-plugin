@@ -17,7 +17,7 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       BuiltInCallExpressionImpl
-        LiteralExpr
+        LiteralExpressionImpl
           PsiElement(IDENTIFIER)('make')
         PsiElement(()('(')
         TypeChanBidiImpl

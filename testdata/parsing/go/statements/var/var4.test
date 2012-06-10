@@ -24,7 +24,7 @@ Go file
         PsiElement(KEYWORD_VAR)('var')
         PsiWhiteSpace(' ')
         VarDeclarationImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
           TypeName

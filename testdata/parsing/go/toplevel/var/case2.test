@@ -11,15 +11,15 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('U')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('V')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('W')
       PsiWhiteSpace(' ')
       TypeName

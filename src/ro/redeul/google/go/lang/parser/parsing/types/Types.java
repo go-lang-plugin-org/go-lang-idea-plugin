@@ -28,7 +28,7 @@ public class Types implements GoElementTypes {
             }
 
             marker.done(TYPE_PARANTHESIZED);
-            
+
             return true;
         }
 
@@ -67,7 +67,7 @@ public class Types implements GoElementTypes {
         if ( ParserUtils.lookAhead(builder, mIDENT) ) {
             return parseQualifiedType(builder);
         }
-        
+
         return false;  //To change body of created methods use File | Settings | File Templates.
     }
 
@@ -81,27 +81,27 @@ public class Types implements GoElementTypes {
         }
 
         if ( builder.getTokenType() == oDOT ) {
-            marker.done(PACKAGE_REFERENCE);            
+            marker.done(PACKAGE_REFERENCE);
             builder.advanceLexer();
 
             ParserUtils.skipNLS(builder);
             if ( builder.getTokenType() != mIDENT ) {
                 ParserUtils.wrapError(builder, "identifier.expected");
             } else {
-                ParserUtils.eatElement(builder, IDENTIFIER);
+                ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
 
                 marker.precede().done(TYPE_NAME);
             }
         } else {
             marker.done(TYPE_NAME);
         }
-        
+
         return true;
     }
 
     /**
      * typeName := [ "*" ] identifier .
-     * 
+     *
      * @param builder
      * @param parser
      * @return
@@ -143,7 +143,7 @@ public class Types implements GoElementTypes {
         } else {
             marker.drop();
         }
-        
+
         return count;
     }
 }

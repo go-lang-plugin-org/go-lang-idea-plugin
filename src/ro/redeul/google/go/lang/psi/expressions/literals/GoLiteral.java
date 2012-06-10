@@ -1,9 +1,19 @@
 package ro.redeul.google.go.lang.psi.expressions.literals;
 
-import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 
-public interface GoLiteral extends GoExpr {
+public interface GoLiteral<T> extends GoPsiElement {
 
-    GoIdentifier getIdentifier();
+    public enum Type {
+        RawString, InterpretedString,
+        Bool, Char,
+        Int, ImaginaryInt,
+        Float, Identifier, ImaginaryFloat
+    }
 
+    @Nullable
+    T getValue();
+
+    Type getType();
 }

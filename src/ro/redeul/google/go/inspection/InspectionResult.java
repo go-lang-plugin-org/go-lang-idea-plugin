@@ -1,13 +1,13 @@
 package ro.redeul.google.go.inspection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class InspectionResult {
     private final InspectionManager manager;
@@ -17,8 +17,8 @@ public class InspectionResult {
         this.manager = manager;
     }
 
-    public ProblemDescriptor[] getProblems() {
-        return problems.toArray(new ProblemDescriptor[problems.size()]);
+    public List<ProblemDescriptor> getProblems() {
+        return problems;
     }
 
     public void addProblem(PsiElement element, String msg, LocalQuickFix... fixes) {

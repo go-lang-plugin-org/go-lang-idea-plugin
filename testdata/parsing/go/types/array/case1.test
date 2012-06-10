@@ -16,8 +16,9 @@ Go file
       PsiWhiteSpace(' ')
       TypeArrayImpl
         PsiElement([)('[')
-        LiteralExpr
-          PsiElement(LITERAL_INT)('32')
+        LiteralExpressionImpl
+          LiteralIntegerImpl
+            PsiElement(LITERAL_INT)('32')
         PsiElement(])(']')
         TypeName
           PsiElement(IDENTIFIER)('byte')

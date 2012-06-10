@@ -477,7 +477,7 @@ func (p *parser) parseQualifiedIdent() ast.Expr {
 
 	var x ast.Expr = p.findIdent()
 	if p.tok == token.PERIOD {
-		// first identifier is a package IdentifierImpl
+		// first identifier is a package LiteralIdentifierImpl
 		p.next()
 		sel := p.findIdentInScope(nil)
 		x = &ast.SelectorExpr{x, sel}
@@ -1972,7 +1972,7 @@ func parseTypeSpec(p *parser, doc *ast.CommentGroup) ast.Spec {
 	ident := p.parseIdent(ast.Typ)
 	// the scope of a type outside any function is
 	// the package scope; the scope of a type inside
-	// a function starts at the type IdentifierImpl
+	// a function starts at the type LiteralIdentifierImpl
 	scope := p.funcScope
 	if scope == nil {
 		scope = p.pkgScope
@@ -2062,7 +2062,7 @@ func (p *parser) parseReceiver(scope *ast.Scope) *ast.FieldList {
 		return par
 	}
 
-	// recv type must be of the form ["*"] IdentifierImpl
+	// recv type must be of the form ["*"] LiteralIdentifierImpl
 	recv := par.List[0]
 	base := deref(recv.Type)
 	if _, isIdent := base.(*ast.Ident); !isIdent {

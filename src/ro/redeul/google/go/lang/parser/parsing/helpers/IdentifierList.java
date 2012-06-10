@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.parser.parsing.helpers;
 
 import com.intellij.lang.PsiBuilder;
-import org.apache.velocity.runtime.directive.Parse;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -36,7 +35,7 @@ public class IdentifierList implements GoElementTypes {
         }
 
         while ( ParserUtils.lookAhead(builder, mIDENT) ) {
-            ParserUtils.eatElement(builder, GoElementTypes.IDENTIFIER);
+            ParserUtils.eatElement(builder, GoElementTypes.LITERAL_IDENTIFIER);
 
             length++;
             if ( ! (builder.getTokenType() == oCOMMA) ) {

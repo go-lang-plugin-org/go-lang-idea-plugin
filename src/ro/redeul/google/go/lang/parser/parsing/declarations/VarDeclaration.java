@@ -55,7 +55,7 @@ public class VarDeclaration implements GoElementTypes {
             ParserUtils.skipNLS(builder);
             if (ParserUtils.getToken(builder, oASSIGN)) {
                 ParserUtils.skipNLS(builder);
-                parser.parseExpressionList(builder, false);
+                parser.parseExpressionList(builder, false, false);
             } else {
                 if (!hasType) {
                     builder.error("assign.operator.expected");

@@ -21,12 +21,12 @@ Go file
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
         IndexExpressionImpl
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('a')
           PsiElement([)('[')
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('i')
           PsiElement(])(']')
         PsiWhiteSpace(' ')

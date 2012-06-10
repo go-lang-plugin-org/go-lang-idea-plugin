@@ -6,9 +6,9 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoIndexExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
+import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
@@ -35,7 +35,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
  * Date: Aug 30, 2010
  * Time: 8:10:51 PM
  */
-public class GoElementVisitor {
+public class GoElementVisitor  {
 
     public void visitElement(GoPsiElement element) {
     }
@@ -108,8 +108,8 @@ public class GoElementVisitor {
         visitElement(pointerType);
     }
 
-    public void visitLiteralExpr(GoLiteral literalExpr) {
-        visitElement(literalExpr);
+    public void visitLiteralExpression(GoLiteralExpression literalExpression) {
+        visitElement(literalExpression);
     }
 
     public void visitConstDeclarations(GoConstDeclarations constDeclarations) {
@@ -120,8 +120,8 @@ public class GoElementVisitor {
         visitElement(constDeclaration);
     }
 
-    public void visitFunctionLiteral(GoFunctionLiteral functionLiteral) {
-        visitElement(functionLiteral);
+    public void visitFunctionLiteral(GoLiteralFunction literalFunction) {
+        visitElement(literalFunction);
     }
 
     public void visitForWithRange(GoForWithRangeStatement forWithRange) {

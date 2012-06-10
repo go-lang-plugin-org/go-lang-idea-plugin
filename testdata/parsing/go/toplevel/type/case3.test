@@ -38,11 +38,11 @@ Go file
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t    ')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('left')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('right')
           PsiWhiteSpace(' ')
           TypePointerImpl
@@ -52,7 +52,7 @@ Go file
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t    ')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('value')
           PsiWhiteSpace(' ')
           TypePointerImpl

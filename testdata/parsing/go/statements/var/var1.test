@@ -24,13 +24,13 @@ Go file
         PsiElement(KEYWORD_VAR)('var')
         PsiWhiteSpace(' ')
         VarDeclarationImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
           PsiElement(=)('=')
           PsiWhiteSpace(' ')
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('b')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')

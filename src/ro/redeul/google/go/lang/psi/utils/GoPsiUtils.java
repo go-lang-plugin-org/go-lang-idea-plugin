@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -135,7 +135,7 @@ public class GoPsiUtils {
      * @return true if the element is a valid use of "iota" in const declaration
      */
     public static boolean isIotaInConstantDeclaration(PsiElement element) {
-        return findParentOfType(element, GoConstDeclaration.class) != null;
+        return element instanceof GoIdentifier && ((GoIdentifier)element).isIota();
     }
 
     public static boolean isEnclosedByParenthesis(PsiElement element) {

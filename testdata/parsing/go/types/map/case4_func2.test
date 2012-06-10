@@ -26,7 +26,7 @@ Go file
         PsiElement({)('{')
         PsiElement(WS_NEW_LINES)('\n')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('handlers')
           PsiWhiteSpace(' ')
           TypeMapImpl
@@ -42,20 +42,20 @@ Go file
               PsiWhiteSpace('    ')
               FunctionParameterList
                 FunctionParameterImpl
-                  IdentifierImpl
+                  LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('w')
                   PsiWhiteSpace(' ')
                   TypeName
                     PackageReferenceImpl
                       PsiElement(IDENTIFIER)('http')
                     PsiElement(.)('.')
-                    IdentifierImpl
+                    LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('ResponseWriter')
                 PsiElement(,)(',')
                 PsiElement(WS_NEW_LINES)('\n')
                 PsiWhiteSpace('    ')
                 FunctionParameterImpl
-                  IdentifierImpl
+                  LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('r')
                   PsiWhiteSpace(' ')
                   TypePointerImpl
@@ -64,13 +64,13 @@ Go file
                       PackageReferenceImpl
                         PsiElement(IDENTIFIER)('http')
                       PsiElement(.)('.')
-                      IdentifierImpl
+                      LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('Request')
                 PsiElement(,)(',')
                 PsiElement(WS_NEW_LINES)('\n')
                 PsiWhiteSpace('    ')
                 FunctionParameterImpl
-                  IdentifierImpl
+                  LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('queues')
                   PsiWhiteSpace(' ')
                   TypePointerImpl
@@ -79,7 +79,7 @@ Go file
                       PackageReferenceImpl
                         PsiElement(IDENTIFIER)('yqs')
                       PsiElement(.)('.')
-                      IdentifierImpl
+                      LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('Queues')
               PsiElement())(')')
               PsiWhiteSpace(' ')
@@ -92,7 +92,7 @@ Go file
                 PsiElement())(')')
         PsiElement(WS_NEW_LINES)('\n')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('templates')
           PsiWhiteSpace(' ')
           TypeMapImpl
@@ -107,7 +107,7 @@ Go file
                 PackageReferenceImpl
                   PsiElement(IDENTIFIER)('template')
                 PsiElement(.)('.')
-                IdentifierImpl
+                LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('Template')
         PsiElement(WS_NEW_LINES)('\n')
         PsiElement(})('}')

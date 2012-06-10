@@ -11,21 +11,21 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('_')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('found')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       IndexExpressionImpl
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('entries')
         PsiElement([)('[')
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('name')
         PsiElement(])(']')

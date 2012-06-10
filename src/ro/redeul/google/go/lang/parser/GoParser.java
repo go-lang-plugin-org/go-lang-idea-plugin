@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.parser;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
@@ -15,9 +18,6 @@ import ro.redeul.google.go.lang.parser.parsing.statements.Statements;
 import ro.redeul.google.go.lang.parser.parsing.toplevel.CompilationUnit;
 import ro.redeul.google.go.lang.parser.parsing.types.Types;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -37,11 +37,11 @@ public class GoParser implements PsiParser {
         PsiBuilder.Marker rootMarker = builder.mark();
 
         CompilationUnit.parse(builder, this);
-        
+
         while ( ! builder.eof() ) {
             builder.advanceLexer();
         }
-        
+
         rootMarker.done(root);
 
         return builder.getTreeBuilt();
@@ -50,9 +50,9 @@ public class GoParser implements PsiParser {
     public boolean parseTopLevelDeclarations(PsiBuilder builder) {
 
         while ( ! builder.eof() ) {
-            
+
             if ( ! parseTopLevelDeclaration(builder) ) {
-                ParserUtils.wrapError(builder, "unknown.token");                
+                ParserUtils.wrapError(builder, "unknown.token");
             }
 
             ParserUtils.skipNLS(builder);
@@ -64,7 +64,7 @@ public class GoParser implements PsiParser {
     private boolean parseTopLevelDeclaration(PsiBuilder builder) {
 
         ParserUtils.skipNLS(builder);
-        
+
         if (GoTokenTypes.kFUNC.equals(builder.getTokenType())) {
             return FunctionOrMethodDeclaration.parse(builder, this);
         }
@@ -72,8 +72,9 @@ public class GoParser implements PsiParser {
         return Declaration.parse(builder, this);
     }
 
-    public boolean parseExpression(PsiBuilder builder, boolean inControlStmts) {
-        return Expressions.parse(builder, this, inControlStmts);
+    public boolean parseExpression(PsiBuilder builder,
+                                   boolean inControlStmts, boolean parseIota) {
+        return Expressions.parse(builder, this, inControlStmts, parseIota);
     }
 
     public boolean parseType(PsiBuilder builder) {
@@ -108,12 +109,16 @@ public class GoParser implements PsiParser {
         return FunctionOrMethodDeclaration.parseSignature(builder, this);
     }
 
-    public int parseExpressionList(PsiBuilder builder, boolean inControlStmts) {
-        return Expressions.parseList(builder, this, inControlStmts);
+    public int parseExpressionList(PsiBuilder builder,
+                                   boolean inControlStmts, boolean parseIota) {
+        return Expressions.parseList(builder, this, inControlStmts, parseIota);
     }
 
-    public boolean parsePrimaryExpression(PsiBuilder builder, boolean inControlStmts) {
-        return Expressions.parsePrimary(builder, this, inControlStmts);
+    public boolean parsePrimaryExpression(PsiBuilder builder,
+                                          boolean inControlStmts,
+                                          boolean parseIota)
+    {
+        return Expressions.parsePrimary(builder, this, inControlStmts, parseIota);
     }
 
     public boolean parseFunctionSignature(PsiBuilder builder) {

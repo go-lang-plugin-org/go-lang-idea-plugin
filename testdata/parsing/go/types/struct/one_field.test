@@ -20,7 +20,7 @@ Go file
         PsiElement({)('{')
         PsiWhiteSpace(' ')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
           TypeName

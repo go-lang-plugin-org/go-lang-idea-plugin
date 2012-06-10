@@ -113,10 +113,11 @@ public class Statements implements GoElementTypes {
             oBIT_CLEAR_ASSIGN
     );
 
-    public static boolean tryParseSimple(PsiBuilder builder, GoParser parser, boolean inControlClause) {
+    public static boolean tryParseSimple(PsiBuilder builder, GoParser parser,
+                                         boolean inControlClause) {
         PsiBuilder.Marker rememberMarker = builder.mark();
 
-        int expressionCount = parser.parseExpressionList(builder, true);
+        int expressionCount = parser.parseExpressionList(builder, true, false);
 
         // parse assign expression
         if (expressionCount >= 1 &&
@@ -140,14 +141,14 @@ public class Statements implements GoElementTypes {
 
         PsiBuilder.Marker mark = builder.mark();
 
-        int expressionCount = parser.parseExpressionList(builder, inControlClause);
+        int expressionCount = parser.parseExpressionList(builder, inControlClause, false);
 
         if ( ASSIGN_OPERATORS.contains(builder.getTokenType()) ) {
             ParserUtils.getToken(builder, builder.getTokenType());
 
             ParserUtils.skipNLS(builder);
 
-            parser.parseExpressionList(builder, inControlClause);
+            parser.parseExpressionList(builder, inControlClause, false);
 
             mark.done(ASSIGN_STATEMENT);
             return true;
@@ -168,7 +169,7 @@ public class Statements implements GoElementTypes {
             ParserUtils.getToken(builder, oVAR_ASSIGN, "assignment.operator.expected");
 
             ParserUtils.skipNLS(builder);
-            parser.parseExpressionList(builder, inControlClause);
+            parser.parseExpressionList(builder, inControlClause, false);
             mark.done(SHORT_VAR_STATEMENT);
             return true;
         }

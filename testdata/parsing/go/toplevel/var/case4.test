@@ -11,11 +11,11 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('x')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('y')
       PsiWhiteSpace(' ')
       TypeName
@@ -25,11 +25,13 @@ Go file
       PsiWhiteSpace(' ')
       UnaryExpression
         PsiElement(-)('-')
-        LiteralExpr
-          PsiElement(LITERAL_INT)('1')
+        LiteralExpressionImpl
+          LiteralIntegerImpl
+            PsiElement(LITERAL_INT)('1')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       UnaryExpression
         PsiElement(-)('-')
-        LiteralExpr
-          PsiElement(LITERAL_INT)('2')
+        LiteralExpressionImpl
+          LiteralIntegerImpl
+            PsiElement(LITERAL_INT)('2')

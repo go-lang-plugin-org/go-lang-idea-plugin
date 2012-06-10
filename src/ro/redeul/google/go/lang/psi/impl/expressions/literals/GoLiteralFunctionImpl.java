@@ -6,7 +6,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -16,10 +16,10 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
 
-public class GoFunctionLiteralImpl extends GoExpressionBase
-    implements GoFunctionLiteral {
+public class GoLiteralFunctionImpl extends GoExpressionBase
+    implements GoLiteralFunction {
 
-    public GoFunctionLiteralImpl(@NotNull ASTNode node) {
+    public GoLiteralFunctionImpl(@NotNull ASTNode node) {
         super(node);
     }
 

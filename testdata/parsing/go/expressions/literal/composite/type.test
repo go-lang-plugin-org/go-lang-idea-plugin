@@ -11,55 +11,57 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CompositeLiteral
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('Line')
         CompositeLiteralElementList
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue
-              LiteralExpr
-                IdentifierImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('origin')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementValue
               CompositeLiteral
-                LiteralExpr
-                  IdentifierImpl
+                LiteralExpressionImpl
+                  LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('Point')
                 CompositeLiteralElementList
                   PsiElement({)('{')
                   CompositeLiteralElement
                     CompositeLiteralElementKey
-                      LiteralExpr
-                        IdentifierImpl
+                      LiteralExpressionImpl
+                        LiteralIdentifierImpl
                           PsiElement(IDENTIFIER)('y')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
                     CompositeLiteralElementValue
                       UnaryExpression
                         PsiElement(-)('-')
-                        LiteralExpr
-                          PsiElement(LITERAL_INT)('4')
+                        LiteralExpressionImpl
+                          LiteralIntegerImpl
+                            PsiElement(LITERAL_INT)('4')
                   PsiElement(,)(',')
                   PsiWhiteSpace(' ')
                   CompositeLiteralElement
                     CompositeLiteralElementKey
-                      LiteralExpr
-                        IdentifierImpl
+                      LiteralExpressionImpl
+                        LiteralIdentifierImpl
                           PsiElement(IDENTIFIER)('z')
                     PsiElement(:)(':')
                     PsiWhiteSpace(' ')
                     CompositeLiteralElementValue
-                      LiteralExpr
-                        PsiElement(LITERAL_FLOAT)('12.3')
+                      LiteralExpressionImpl
+                        LiteralFloatImpl
+                          PsiElement(LITERAL_FLOAT)('12.3')
                   PsiElement(})('}')
           PsiElement(})('}')

@@ -11,18 +11,20 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('t1')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('t2')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_IMAGINARY_FLOAT)('6.67428e-11i')
+      LiteralExpressionImpl
+        LiteralImaginaryImpl
+          PsiElement(LITERAL_IMAGINARY_FLOAT)('6.67428e-11i')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_IMAGINARY_INTEGER)('3i')
+      LiteralExpressionImpl
+        LiteralImaginaryImpl
+          PsiElement(LITERAL_IMAGINARY_INTEGER)('3i')

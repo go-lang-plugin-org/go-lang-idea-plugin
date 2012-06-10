@@ -11,11 +11,11 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('t')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        IdentifierImpl
+      LiteralExpressionImpl
+        LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('a')

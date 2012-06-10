@@ -11,22 +11,23 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('re')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('im')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CallOrConversionExpressionImpl
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('complexSqrt')
         PsiElement(()('(')
         UnaryExpression
           PsiElement(-)('-')
-          LiteralExpr
-            PsiElement(LITERAL_INT)('1')
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('1')
         PsiElement())(')')

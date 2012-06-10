@@ -27,8 +27,8 @@ Go file
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
         IncDecStmt
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('a')
           PsiElement(++)('++')
         PsiElement(;)(';')
@@ -39,12 +39,12 @@ Go file
           PsiElement(:=)(':=')
           PsiWhiteSpace(' ')
           IndexExpressionImpl
-            LiteralExpr
-              IdentifierImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('x')
             PsiElement([)('[')
-            LiteralExpr
-              IdentifierImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('i')
             PsiElement(])(']')
           PsiElement(.)('.')
@@ -66,8 +66,9 @@ Go file
           ReturnStmtImpl
             PsiElement(KEYWORD_RETURN)('return')
             PsiWhiteSpace(' ')
-            LiteralExpr
-              PsiElement(LITERAL_INT)('1')
+            LiteralExpressionImpl
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('1')
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
         PsiElement(})('}')

@@ -14,19 +14,20 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class ParenthesizedExpression implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static boolean parse(PsiBuilder builder, GoParser parser,
+                                boolean parseIota) {
 
         PsiBuilder.Marker expression = builder.mark();
 
         ParserUtils.getToken(builder, pLPAREN);
 
         ParserUtils.skipNLS(builder);
-        parser.parseExpression(builder, false);
+        parser.parseExpression(builder, false, parseIota);
 
         ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, pRPAREN, "right.parenthesis.expected");
         expression.done(EXPRESSION_PARENTHESIZED);
 
         return true;
-    }    
+    }
 }

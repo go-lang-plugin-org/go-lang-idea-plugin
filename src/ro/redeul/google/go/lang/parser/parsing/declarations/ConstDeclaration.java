@@ -55,13 +55,14 @@ public class ConstDeclaration implements GoElementTypes {
 
 //            PsiBuilder.Marker valuesList = builder.mark();
             do {
-                parser.parseExpression(builder, false);
+                parser.parseExpression(builder, false, true);
             } while (ParserUtils.getToken(builder, oCOMMA));
 //            valuesList.done(EXPRESSION_LIST);
         }
 
-        if (builder.getTokenType() != oSEMI && builder.getTokenType() != pRPAREN && builder
-            .getTokenType() != wsNLS) {
+        if (builder.getTokenType() != oSEMI &&
+            builder.getTokenType() != pRPAREN &&
+            builder.getTokenType() != wsNLS) {
             builder.error("semicolon.or.newline.or.right.parenthesis.expected");
         }
 

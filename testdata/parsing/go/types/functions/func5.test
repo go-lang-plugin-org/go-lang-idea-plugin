@@ -19,11 +19,11 @@ Go file
         PsiElement(()('(')
         FunctionParameterList
           FunctionParameterImpl
-            IdentifierImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('a')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
-            IdentifierImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('b')
             PsiWhiteSpace(' ')
             TypeName
@@ -31,7 +31,7 @@ Go file
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           FunctionParameterImpl
-            IdentifierImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('z')
             PsiWhiteSpace(' ')
             TypeName

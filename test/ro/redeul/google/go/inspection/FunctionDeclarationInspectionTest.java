@@ -1,13 +1,12 @@
 package ro.redeul.google.go.inspection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class FunctionDeclarationInspectionTest extends AbstractProblemDescriptionBasedTest {
     public void testDuplicateArg() throws Exception{ doTest(); }
@@ -22,12 +21,13 @@ public class FunctionDeclarationInspectionTest extends AbstractProblemDescriptio
     }
 
     @Override
-    protected ProblemDescriptor[] detectProblems(GoFile file, InspectionManager inspectionManager) {
+    protected List<ProblemDescriptor> detectProblems(GoFile file, InspectionManager inspectionManager) {
         List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
         for (GoFunctionDeclaration fd : file.getFunctions()) {
             FunctionDeclarationInspection fdi = new FunctionDeclarationInspection(inspectionManager, fd);
-            problems.addAll(Arrays.asList(fdi.checkFunction()));
+            problems.addAll(fdi.checkFunction());
         }
-        return problems.toArray(new ProblemDescriptor[problems.size()]);
+
+        return problems;
     }
 }

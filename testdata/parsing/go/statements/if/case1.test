@@ -23,8 +23,8 @@ Go file
       IfStmt
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         BlockStmtImpl

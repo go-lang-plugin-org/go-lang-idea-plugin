@@ -20,16 +20,16 @@ Go file
       ForWithRangeStmtImpl
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('key')
         PsiWhiteSpace(' ')
         PsiElement(=)('=')
         PsiWhiteSpace(' ')
         PsiElement(KEYWORD_RANGE)('range')
         PsiWhiteSpace(' ')
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('m')
         PsiWhiteSpace(' ')
         BlockStmtImpl

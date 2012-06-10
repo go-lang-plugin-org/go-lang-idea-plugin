@@ -14,7 +14,7 @@ Go file
     PsiElement(()('(')
     FunctionParameterList
       FunctionParameterImpl
-        IdentifierImpl
+        LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('x')
         PsiWhiteSpace(' ')
         TypeName

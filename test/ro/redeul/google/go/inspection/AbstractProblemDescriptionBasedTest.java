@@ -1,5 +1,12 @@
 package ro.redeul.google.go.inspection;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.application.PluginPathManager;
@@ -13,17 +20,10 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.TestUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
 public abstract class AbstractProblemDescriptionBasedTest extends LightCodeInsightFixtureTestCase {
     protected abstract String getInspectionName();
 
-    protected abstract ProblemDescriptor[] detectProblems(GoFile file, InspectionManager inspectionManager);
+    protected abstract List<ProblemDescriptor> detectProblems(GoFile file, InspectionManager inspectionManager);
 
     @Override
     protected final String getBasePath() {
@@ -65,12 +65,14 @@ public abstract class AbstractProblemDescriptionBasedTest extends LightCodeInsig
         System.out.println(DebugUtil.psiToString(file, false, true));
 
         InspectionManager im = InspectionManager.getInstance(getProject());
-        ProblemDescriptor[] problems = detectProblems(file, im);
+        List<ProblemDescriptor> problems = detectProblems(file, im);
 
-        Arrays.sort(problems, new Comparator<ProblemDescriptor>() {
+        Collections.sort(problems, new Comparator<ProblemDescriptor>() {
             @Override
             public int compare(ProblemDescriptor o1, ProblemDescriptor o2) {
-                return o1.getStartElement().getTextOffset() - o2.getStartElement().getTextOffset();
+                return o1.getStartElement()
+                         .getTextOffset() - o2.getStartElement()
+                                              .getTextOffset();
             }
         });
 

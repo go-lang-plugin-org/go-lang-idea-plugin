@@ -33,16 +33,16 @@ Go file
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           SelectCaseRecvExpr
-            LiteralExpr
-              IdentifierImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('a')
             PsiWhiteSpace(' ')
             PsiElement(=)('=')
             PsiWhiteSpace(' ')
             PsiElement(<-)('<-')
             PsiWhiteSpace(' ')
-            LiteralExpr
-              IdentifierImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('b')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')

@@ -11,13 +11,13 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       BuiltInCallExpressionImpl
-        LiteralExpr
+        LiteralExpressionImpl
           PsiElement(IDENTIFIER)('make')
         PsiElement(()('(')
         TypeChanBidiImpl

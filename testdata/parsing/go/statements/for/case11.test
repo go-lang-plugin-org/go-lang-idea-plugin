@@ -21,20 +21,21 @@ Go file
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
         ShortVarStmtImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('i')
           PsiWhiteSpace(' ')
           PsiElement(:=)(':=')
           PsiWhiteSpace(' ')
-          LiteralExpr
-            PsiElement(LITERAL_INT)('0')
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('0')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         IncDecStmt
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('i')
           PsiElement(++)('++')
         PsiWhiteSpace(' ')

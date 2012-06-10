@@ -18,8 +18,9 @@ public class UnaryExpression implements GoElementTypes {
     static TokenSet UNARY_OPS = TokenSet.create(
             oPLUS, oMINUS, oNOT, oBIT_XOR, oBIT_AND, kRANGE, oMUL
     );
-    
-    public static boolean parse(PsiBuilder builder, GoParser parser, boolean inControlStmts) {
+
+    public static boolean parse(PsiBuilder builder, GoParser parser,
+                                boolean inControlStmts, boolean parseIota) {
 
         ParserUtils.skipNLS(builder);
 
@@ -28,7 +29,7 @@ public class UnaryExpression implements GoElementTypes {
         if ( UNARY_OPS.contains(builder.getTokenType()) ) {
             ParserUtils.getToken(builder, builder.getTokenType());
 
-            parse(builder, parser, inControlStmts);
+            parse(builder, parser, inControlStmts, parseIota);
             mark.done(UNARY_EXPRESSION);
             return true;
         }
@@ -52,13 +53,13 @@ public class UnaryExpression implements GoElementTypes {
                 marker.drop();
             }
 
-            parse(builder, parser, inControlStmts);
+            parse(builder, parser, inControlStmts, parseIota);
             mark.done(UNARY_EXPRESSION);
             return true;
         }
 
         mark.rollbackTo();
-        
-        return parser.parsePrimaryExpression(builder, inControlStmts);
+
+        return parser.parsePrimaryExpression(builder, inControlStmts, parseIota);
     }
 }

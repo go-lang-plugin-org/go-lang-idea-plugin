@@ -11,34 +11,38 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('t1')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('t2')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('t3')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('t4')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_INT)('1')
+      LiteralExpressionImpl
+        LiteralIntegerImpl
+          PsiElement(LITERAL_INT)('1')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_OCT)('0600')
+      LiteralExpressionImpl
+        LiteralIntegerImpl
+          PsiElement(LITERAL_OCT)('0600')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_HEX)('0xBadFace')
+      LiteralExpressionImpl
+        LiteralIntegerImpl
+          PsiElement(LITERAL_HEX)('0xBadFace')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_INT)('170141183460469231731687303715884105727')
+      LiteralExpressionImpl
+        LiteralIntegerImpl
+          PsiElement(LITERAL_INT)('170141183460469231731687303715884105727')

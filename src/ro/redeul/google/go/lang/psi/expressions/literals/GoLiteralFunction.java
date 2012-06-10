@@ -4,7 +4,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 
-public interface GoFunctionLiteral extends GoExpr {
+public interface GoLiteralFunction extends GoExpr {
 
     GoFunctionParameter[] getParameters();
 

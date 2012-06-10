@@ -21,14 +21,14 @@ Go file
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
         LogicalAndExpression
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
           PsiElement(&&)('&&')
           PsiWhiteSpace(' ')
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('b')
         PsiWhiteSpace(' ')
         BlockStmtImpl

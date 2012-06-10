@@ -11,50 +11,61 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('c')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''a'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''a'')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''ä'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''ä'')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''本'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''本'')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''\t'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''\t'')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''\000'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''\000'')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''\007'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''\007'')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''\377'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''\377'')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''\x07'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''\x07'')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''\xff'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''\xff'')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''\u12e4'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''\u12e4'')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_CHAR)(''\U00101234'')
+      LiteralExpressionImpl
+        LiteralCharImpl
+          PsiElement(LITERAL_CHAR)(''\U00101234'')

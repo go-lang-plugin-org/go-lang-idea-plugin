@@ -16,15 +16,10 @@ public interface GoElementTypes extends GoTokenTypes {
 
     GoElementType BUILTIN_FUNCTION = new GoElementTypeImpl("Built in call");
 
-    // Indicates the wrongway of parsing
-    GoElementType WRONGWAY = new GoElementTypeImpl("Wrong way!");
-    GoElementType LITERAL_EXPRESSION = new GoElementTypeImpl("Literal");
-
     //Packaging
     GoElementType PACKAGE_NAME = new GoElementTypeImpl("Package name");
     GoElementType PACKAGE_DECLARATION =
         new GoElementTypeImpl("PackageDeclaration");
-
     GoElementType IMPORT_DECLARATIONS =
         new GoElementTypeImpl("ImportDeclarations");
     GoElementType IMPORT_DECLARATION =
@@ -40,8 +35,37 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType TYPE_DECLARATION = new GoElementTypeImpl("TypeSpec");
 
     GoElementType IDENTIFIERS = new GoElementTypeImpl("Identifiers");
+
+    // literals
+    GoElementType LITERAL_IDENTIFIER =
+        new GoElementTypeImpl("LiteralIdentifier");
+
+    GoElementType LITERAL_IOTA =
+        new GoElementTypeImpl("LiteralIota");
+
+    GoElementType LITERAL_BOOL =
+        new GoElementTypeImpl("LiteralBool");
+
+    GoElementType LITERAL_STRING =
+        new GoElementTypeImpl("LiteralString");
+
+    GoElementType LITERAL_CHAR =
+        new GoElementTypeImpl("LiteralChar");
+
+    GoElementType LITERAL_IMAGINARY =
+        new GoElementTypeImpl("LiteralImaginary");
+
+    GoElementType LITERAL_INTEGER =
+        new GoElementTypeImpl("LiteralInteger");
+
+    GoElementType LITERAL_FLOAT =
+        new GoElementTypeImpl("LiteralFloat");
+
     GoElementType EXPRESSION_PARENTHESIZED =
         new GoElementTypeImpl("ParenthesisedExpression");
+
+    GoElementType LITERAL_EXPRESSION =
+        new GoElementTypeImpl("LiteralExpression");
 
     GoElementType ADD_EXPRESSION = new GoElementTypeImpl("AdditiveExpression");
     GoElementType MUL_EXPRESSION =
@@ -220,6 +244,18 @@ public interface GoElementTypes extends GoTokenTypes {
         mML_COMMENT
     );
 
+    public final TokenSet LITERALS_INT = TokenSet.create(
+        litHEX, litINT, litOCT
+    );
+
+    public final TokenSet LITERALS_IMAGINARY = TokenSet.create(
+        litFLOAT_I, litDECIMAL_I
+    );
+
+    public final TokenSet LITERALS_FLOAT = TokenSet.create(
+        litFLOAT
+    );
+
     public final TokenSet EXPRESSIONS = TokenSet.create(
         EXPRESSION_PARENTHESIZED,
         ADD_EXPRESSION, MUL_EXPRESSION, REL_EXPRESSION, COM_EXPRESSION,
@@ -247,6 +283,4 @@ public interface GoElementTypes extends GoTokenTypes {
     public final TokenSet RELATIONAL_OPS = TokenSet.create(
         oEQ, oNOT_EQ, oLESS, oLESS_OR_EQUAL, oGREATER, oGREATER_OR_EQUAL
     );
-
-
 }

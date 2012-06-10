@@ -35,8 +35,8 @@ Go file
           SelectCaseRecvExpr
             PsiElement(<-)('<-')
             PsiWhiteSpace(' ')
-            LiteralExpr
-              IdentifierImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('b')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')

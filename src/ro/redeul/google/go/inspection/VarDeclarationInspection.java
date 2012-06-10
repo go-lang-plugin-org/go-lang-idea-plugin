@@ -1,5 +1,7 @@
 package ro.redeul.google.go.inspection;
 
+import java.util.List;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -18,7 +20,7 @@ public class VarDeclarationInspection {
         this.varDeclaration = varDeclaration;
     }
 
-    public ProblemDescriptor[] checkVar() {
+    public List<ProblemDescriptor> checkVar() {
         hasAssignmentCountMismatch();
         return result.getProblems();
     }

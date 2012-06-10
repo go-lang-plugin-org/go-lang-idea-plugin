@@ -57,6 +57,19 @@ public class GoForWithRangeStatementImpl extends GoForStatementImpl
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        return processor.execute(this, state);
+
+        if ( isDeclaration() )  {
+            if (getValue() != null ) {
+                if ( ! getValue().processDeclarations(processor, state, null, place))
+                    return false;
+            }
+
+            if (getKey() != null ) {
+                if ( ! getKey().processDeclarations(processor, state, null, place))
+                    return false;
+            }
+        }
+
+        return true;
     }
 }

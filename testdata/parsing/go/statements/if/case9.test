@@ -25,25 +25,27 @@ Go file
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
         ShortVarStmtImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('e1')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('e2')
           PsiWhiteSpace(' ')
           PsiElement(:=)(':=')
           PsiWhiteSpace(' ')
-          LiteralExpr
-            PsiElement(LITERAL_INT)('2')
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('2')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
-          LiteralExpr
-            PsiElement(LITERAL_INT)('3')
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('3')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('e1')
         PsiWhiteSpace(' ')
         BlockStmtImpl

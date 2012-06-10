@@ -11,7 +11,7 @@ Go file
     PsiElement(KEYWORD_CONST)('const')
     PsiWhiteSpace(' ')
     ConstSpecImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('a')
       PsiWhiteSpace(' ')
       TypeName
@@ -19,8 +19,9 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_INT)('1')
+      LiteralExpressionImpl
+        LiteralIntegerImpl
+          PsiElement(LITERAL_INT)('1')
       PsiElement(;)(';')
   PsiWhiteSpace(' ')
   PsiComment(ML_COMMENT)('/* adfaf * sdf */')

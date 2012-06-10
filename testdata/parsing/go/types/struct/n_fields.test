@@ -27,11 +27,11 @@ Go file
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('x')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('y')
           PsiWhiteSpace(' ')
           TypeName
@@ -39,7 +39,7 @@ Go file
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('u')
           PsiWhiteSpace(' ')
           TypeName
@@ -47,7 +47,7 @@ Go file
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('_')
           PsiWhiteSpace(' ')
           TypeName
@@ -55,7 +55,7 @@ Go file
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('A')
           PsiWhiteSpace(' ')
           TypePointerImpl
@@ -68,7 +68,7 @@ Go file
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('F')
           PsiWhiteSpace(' ')
           TypeFunction

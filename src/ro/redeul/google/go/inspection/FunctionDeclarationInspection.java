@@ -1,5 +1,10 @@
 package ro.redeul.google.go.inspection;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -8,20 +13,14 @@ import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
 import ro.redeul.google.go.inspection.fix.RemoveFunctionResultFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
@@ -34,7 +33,7 @@ public class FunctionDeclarationInspection {
         this.function = function;
     }
 
-    public ProblemDescriptor[] checkFunction() {
+    public List<ProblemDescriptor> checkFunction() {
         hasResultButNoReturnAtTheEnd();
         hasDuplicateArgument();
         hasRedeclaredParameterInResultList();
@@ -174,9 +173,9 @@ public class FunctionDeclarationInspection {
         }
 
         @Override
-        public void visitFunctionLiteral(GoFunctionLiteral functionLiteral) {
-            functionResults.add(new FunctionResult(functionLiteral.getResults()));
-            super.visitFunctionLiteral(functionLiteral);
+        public void visitFunctionLiteral(GoLiteralFunction literalFunction) {
+            functionResults.add(new FunctionResult(literalFunction.getResults()));
+            super.visitFunctionLiteral(literalFunction);
             functionResults.remove(functionResults.size() - 1);
         }
 

@@ -16,7 +16,7 @@ public class UnusedImportInspectionTest extends FileDataBasedTest {
     @Override
     protected void invoke(Project project, Editor myEditor, GoFile file) {
         InspectionManager im = InspectionManager.getInstance(project);
-        for (ProblemDescriptor pd : new UnusedImportInspection().doCheckFile(file, im)) {
+        for (ProblemDescriptor pd : new UnusedImportInspection().doCheckFile(file, im, false)) {
             QuickFix[] fixes = pd.getFixes();
             assertEquals(1, fixes.length);
             fixes[0].applyFix(project, pd);

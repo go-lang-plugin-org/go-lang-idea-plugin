@@ -25,7 +25,8 @@ Go file
         ReturnStmtImpl
           PsiElement(KEYWORD_RETURN)('return')
           PsiWhiteSpace(' ')
-          LiteralExpr
-            PsiElement(LITERAL_INT)('1')
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('1')
       PsiWhiteSpace(' ')
       PsiElement(})('}')

@@ -15,7 +15,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 public class IfStatement implements GoElementTypes {
 
     public static boolean parse(PsiBuilder builder, GoParser parser) {
-    
+
         PsiBuilder.Marker marker = builder.mark();
 
         if (!ParserUtils.getToken(builder, kIF)) {
@@ -29,8 +29,8 @@ public class IfStatement implements GoElementTypes {
             if ( ParserUtils.getToken(builder, oSEMI) ) {
                 ParserUtils.skipNLS(builder);
             }
-            
-            parser.parseExpression(builder, true);
+
+            parser.parseExpression(builder, true, false);
         }
 
         parser.parseBody(builder);
@@ -41,7 +41,7 @@ public class IfStatement implements GoElementTypes {
             ParserUtils.skipNLS(builder);
             Statements.parse(builder, parser, false);
         }
-        
+
         marker.done(IF_STATEMENT);
         return true;
 

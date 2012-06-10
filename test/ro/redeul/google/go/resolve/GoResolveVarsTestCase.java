@@ -3,8 +3,8 @@ package ro.redeul.google.go.resolve;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
@@ -36,7 +36,7 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
         assertParentType(
             GoForWithRangeStatement.class,
             assertParentType(
-                GoLiteral.class, variable));
+                GoLiteralExpression.class, variable));
     }
 
     public void testDeclaredInForRange2() throws Exception {
@@ -48,7 +48,7 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
         assertParentType(
             GoForWithRangeStatement.class,
             assertParentType(
-                GoLiteral.class, variable));
+                GoLiteralExpression.class, variable));
     }
 
     public void testDeclaredInForRangeAsValue() throws Exception {
@@ -60,7 +60,8 @@ public class GoResolveVarsTestCase extends GoResolveTestCase {
 
         assertParentType(
             GoForWithRangeStatement.class,
-            assertParentType(GoLiteral.class, variable));
+            assertParentType(
+                GoLiteralExpression.class, variable));
     }
 
     public void testDeclaredInForClause() throws Exception {

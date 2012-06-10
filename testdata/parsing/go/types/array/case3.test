@@ -16,8 +16,9 @@ Go file
       PsiWhiteSpace(' ')
       TypeArrayImpl
         PsiElement([)('[')
-        LiteralExpr
-          PsiElement(LITERAL_INT)('1000')
+        LiteralExpressionImpl
+          LiteralIntegerImpl
+            PsiElement(LITERAL_INT)('1000')
         PsiElement(])(']')
         TypePointerImpl
           PsiElement(*)('*')

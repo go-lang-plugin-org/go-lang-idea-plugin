@@ -11,7 +11,7 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -21,7 +21,7 @@ Go file
           PsiElement(KEYWORD_STRUCT)('struct')
           PsiElement({)('{')
           TypeStructFieldImpl
-            IdentifierImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('a')
             PsiWhiteSpace(' ')
             TypeName
@@ -29,7 +29,7 @@ Go file
           PsiElement(;)(';')
           PsiWhiteSpace(' ')
           TypeStructFieldImpl
-            IdentifierImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('b')
             PsiWhiteSpace(' ')
             TypeName
@@ -39,22 +39,24 @@ Go file
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementKey
-              LiteralExpr
-                IdentifierImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('a')
             PsiElement(:)(':')
             CompositeLiteralElementValue
-              LiteralExpr
-                PsiElement(LITERAL_INT)('10')
+              LiteralExpressionImpl
+                LiteralIntegerImpl
+                  PsiElement(LITERAL_INT)('10')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementKey
-              LiteralExpr
-                IdentifierImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('b')
             PsiElement(:)(':')
             CompositeLiteralElementValue
-              LiteralExpr
-                PsiElement(LITERAL_INT)('10')
+              LiteralExpressionImpl
+                LiteralIntegerImpl
+                  PsiElement(LITERAL_INT)('10')
           PsiElement(})('}')

@@ -11,14 +11,16 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('c')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_STRING)('"asdfasdf"')
+      LiteralExpressionImpl
+        LiteralStringImpl
+          PsiElement(LITERAL_STRING)('"asdfasdf"')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_STRING)('"adfad\"adfadsf"')
+      LiteralExpressionImpl
+        LiteralStringImpl
+          PsiElement(LITERAL_STRING)('"adfad\"adfadsf"')

@@ -7,18 +7,21 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 public class Expressions implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser, boolean inControlExpressions) {
-        return BinaryExpression.parse(builder, parser, inControlExpressions);
+    public static boolean parse(PsiBuilder builder, GoParser parser,
+                                boolean inControlExpressions, boolean parseIota) {
+        return BinaryExpression.parse(builder, parser,
+                                      inControlExpressions, parseIota);
     }
 
-    public static int parseList(PsiBuilder builder, GoParser parser, boolean inControlStmts) {
+    public static int parseList(PsiBuilder builder, GoParser parser,
+                                boolean inControlStmts, boolean parseIota) {
 
 //        PsiBuilder.Marker marker = builder.mark();
 
         int count = 0;
         do {
 
-            if ( parse(builder, parser, inControlStmts) ) {
+            if ( parse(builder, parser, inControlStmts, parseIota) ) {
                 count++;
             }
 
@@ -73,8 +76,9 @@ public class Expressions implements GoElementTypes {
      *
      * @return true/false depending on how successful we were
      */
-    public static boolean parsePrimary(PsiBuilder builder, GoParser parser, boolean inControlStmts) {
-        return PrimaryExpression.parse(builder, parser, inControlStmts);
+    public static boolean parsePrimary(PsiBuilder builder, GoParser parser,
+                                       boolean inControlStmts, boolean parseIota) {
+        return PrimaryExpression.parse(builder, parser, inControlStmts, parseIota);
     }
 
 //    private static boolean parseBuiltInCall(PsiBuilder builder) {

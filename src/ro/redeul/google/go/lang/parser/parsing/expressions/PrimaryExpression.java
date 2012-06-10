@@ -4,34 +4,35 @@ import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
-import ro.redeul.google.go.lang.parser.parsing.types.*;
+import ro.redeul.google.go.lang.parser.parsing.types.ArrayType;
+import ro.redeul.google.go.lang.parser.parsing.types.InterfaceType;
+import ro.redeul.google.go.lang.parser.parsing.types.MapType;
+import ro.redeul.google.go.lang.parser.parsing.types.SliceType;
+import ro.redeul.google.go.lang.parser.parsing.types.StructType;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
-
-import javax.swing.text.html.parser.Parser;
 
 public class PrimaryExpression implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser, boolean inControlExpressions) {
+    public static boolean parse(PsiBuilder builder, GoParser parser,
+                                boolean inControlExpressions, boolean parseIota) {
 
         ParserUtils.skipNLS(builder);
 
-        int position = builder.getCurrentOffset();        
+        int position = builder.getCurrentOffset();
         PsiBuilder.Marker mark = builder.mark();
-        parseOperand(builder, parser);
+        parseOperand(builder, parser, parseIota);
         // if we have a basic literal operand
 
-//        int size = 1;
-
-        boolean keepParsing = false;
+        boolean keepParsing;
         do {
             if ( builder.getTokenType() == oDOT ) {
                 keepParsing = parseSelectorOrTypeAssertion(builder, parser, mark);
             } else if ( builder.getTokenType() == pLPAREN ) {
-                keepParsing = parseCallOrConversion(builder, parser, mark);
+                keepParsing = parseCallOrConversion(builder, parser, mark, parseIota);
             } else if ( builder.getTokenType() == pLBRACK ) {
                 keepParsing = parseIndexOrSlice(builder, parser, mark);
             } else if ( builder.getTokenType() == pLCURCLY && ! inControlExpressions ) {
-                keepParsing = parseCompositeLiteral(builder, parser, mark);
+                keepParsing = parseCompositeLiteral(builder, parser, mark, parseIota);
             } else {
                 break;
             }
@@ -41,16 +42,9 @@ public class PrimaryExpression implements GoElementTypes {
             }
 
         } while ( ! builder.eof() && keepParsing );
-               
-//        if ( size == 1 || builder.eof() || position == builder.getCurrentOffset() ) {
-        mark.drop();
-//        } else {
-//            mark.done(PRIMARY_EXPRESSION);
-//        }
 
-        if ( position == builder.getCurrentOffset() ) {
-            int a = 10;
-        }
+        mark.drop();
+
         return position != builder.getCurrentOffset();
     }
 
@@ -59,7 +53,7 @@ public class PrimaryExpression implements GoElementTypes {
         ParserUtils.getToken(builder, pLBRACK);
         ParserUtils.skipNLS(builder);
 
-        parser.parseExpression(builder, false);
+        parser.parseExpression(builder, false, false);
         ParserUtils.skipNLS(builder);
 
         boolean isSlice = false;
@@ -67,7 +61,7 @@ public class PrimaryExpression implements GoElementTypes {
             builder.advanceLexer();
             isSlice = true;
 
-            parser.parseExpression(builder, false);
+            parser.parseExpression(builder, false, false);
             ParserUtils.skipNLS(builder);
         }
 
@@ -78,7 +72,8 @@ public class PrimaryExpression implements GoElementTypes {
         return true;
     }
 
-    private static boolean parseCompositeLiteral(PsiBuilder builder, GoParser parser, PsiBuilder.Marker mark) {
+    private static boolean parseCompositeLiteral(PsiBuilder builder, GoParser parser,
+                                                 PsiBuilder.Marker mark, boolean parseIota) {
 
         PsiBuilder.Marker marker = builder.mark();
 
@@ -90,8 +85,8 @@ public class PrimaryExpression implements GoElementTypes {
             PsiBuilder.Marker elementMarker = builder.mark();
 
             PsiBuilder.Marker keyOrValueExpression = builder.mark();
-            
-            if ( ! parser.parseExpression(builder, false) ) {                
+
+            if ( ! parser.parseExpression(builder, false, parseIota) ) {
                 ParserUtils.wrapError(builder, "expression.expected");
             }
 
@@ -101,7 +96,7 @@ public class PrimaryExpression implements GoElementTypes {
                 ParserUtils.skipNLS(builder);
 
                 keyOrValueExpression = builder.mark();
-                parser.parseExpression(builder, false);
+                parser.parseExpression(builder, false, parseIota);
             }
 
             keyOrValueExpression.done(COMPOSITE_LITERAL_ELEMENT_VALUE);
@@ -121,12 +116,14 @@ public class PrimaryExpression implements GoElementTypes {
         return true;
     }
 
-    private static boolean parseCallOrConversion(PsiBuilder builder, GoParser parser, PsiBuilder.Marker mark) {
+    private static boolean parseCallOrConversion(PsiBuilder builder, GoParser parser,
+                                                 PsiBuilder.Marker mark,
+                                                 boolean parseIota) {
 
         ParserUtils.getToken(builder, pLPAREN);
 
         if ( builder.getTokenType() != pRPAREN ) {
-            parser.parseExpressionList(builder, false);
+            parser.parseExpressionList(builder, false, parseIota);
         }
 
         ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");
@@ -138,7 +135,7 @@ public class PrimaryExpression implements GoElementTypes {
     private static boolean parseSelectorOrTypeAssertion(PsiBuilder builder, GoParser parser, PsiBuilder.Marker mark) {
 
         PsiBuilder.Marker rollBackMarker = builder.mark();
-        
+
         ParserUtils.getToken(builder, oDOT);
 
         ParserUtils.skipNLS(builder);
@@ -167,16 +164,17 @@ public class PrimaryExpression implements GoElementTypes {
         return true;
     }
 
-    private static boolean parseOperand(PsiBuilder builder, GoParser parser) {
+    private static boolean parseOperand(PsiBuilder builder, GoParser parser,
+                                        boolean parseIota) {
 
         if ( ParserUtils.lookAhead(builder, mIDENT, pLPAREN) && BuiltInCallExpression.isBuiltInCall(builder.getTokenText() ) )
-            return BuiltInCallExpression.parse(builder, parser); 
+            return BuiltInCallExpression.parse(builder, parser);
 
         if ( GoTokenTypeSets.LITERALS.contains(builder.getTokenType()) )
-            return LiteralExpression.parse(builder, parser);
+            return LiteralExpression.parse(builder, parser, parseIota);
 
         if ( pLPAREN == builder.getTokenType() ) {
-            return ParenthesizedExpression.parse(builder, parser);
+            return ParenthesizedExpression.parse(builder, parser, parseIota);
         }
 
         if ( kFUNC == builder.getTokenType() ) {
@@ -208,7 +206,7 @@ public class PrimaryExpression implements GoElementTypes {
             }
         }
 
-        return false;        
+        return false;
     }
 
     private static boolean parseFunctionTypeOrLiteral(PsiBuilder builder, GoParser parser) {

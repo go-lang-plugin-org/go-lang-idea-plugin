@@ -17,7 +17,7 @@ Go file
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('\t')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('i')
       PsiWhiteSpace('       ')
       TypeName
@@ -25,28 +25,31 @@ Go file
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('\t')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('u')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('v')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('s')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_FLOAT)('2.0')
+      LiteralExpressionImpl
+        LiteralFloatImpl
+          PsiElement(LITERAL_FLOAT)('2.0')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_FLOAT)('3.0')
+      LiteralExpressionImpl
+        LiteralFloatImpl
+          PsiElement(LITERAL_FLOAT)('3.0')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      LiteralExpr
-        PsiElement(LITERAL_STRING)('"bar"')
+      LiteralExpressionImpl
+        LiteralStringImpl
+          PsiElement(LITERAL_STRING)('"bar"')
     PsiElement(WS_NEW_LINES)('\n')
     PsiElement())(')')

@@ -8,24 +8,29 @@ import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationsImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoIndexExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoForWithRangeStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoForWithClausesStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoForWithConditionStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoShortVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoBuiltinCallExprImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoCallOrConversionExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoIndexExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoLiteralExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoAdditiveExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoMultiplicativeExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoFunctionLiteralImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoIdentifierImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralBoolImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralFloatImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralFunctionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralIdentifierImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImaginaryImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralIntegerImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralStringImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoExpressionStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoForWithClausesStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoForWithConditionStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoForWithRangeStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoReturnStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoShortVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionParameterImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationImpl;
@@ -45,7 +50,7 @@ import ro.redeul.google.go.lang.psi.impl.types.GoTypeSliceImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeStructImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructAnonymousFieldImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructFieldImpl;
-import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
+import static ro.redeul.google.go.lang.psi.types.GoTypeChannel.ChannelType;
 
 public class GoPsiCreator implements GoElementTypes {
 
@@ -53,8 +58,8 @@ public class GoPsiCreator implements GoElementTypes {
 
         IElementType elementType = node.getElementType();
 
-        if (elementType.equals(IDENTIFIER))
-            return new GoIdentifierImpl(node);
+//        if (elementType.equals(IDENTIFIER))
+//            return new GoLiteralIdentifierImpl(node);
 
         if (elementType.equals(PACKAGE_DECLARATION))
             return new GoPackageDeclarationImpl(node);
@@ -129,16 +134,13 @@ public class GoPsiCreator implements GoElementTypes {
             return new GoFunctionParameterImpl(node);
 
         if (elementType.equals(TYPE_CHAN_BIDIRECTIONAL))
-            return new GoTypeChannelImpl(node,
-                                         GoTypeChannel.ChannelType.Bidirectional);
+            return new GoTypeChannelImpl(node, ChannelType.Bidirectional);
 
         if (elementType.equals(TYPE_CHAN_SENDING))
-            return new GoTypeChannelImpl(node,
-                                         GoTypeChannel.ChannelType.Sending);
+            return new GoTypeChannelImpl(node, ChannelType.Sending);
 
         if (elementType.equals(TYPE_CHAN_RECEIVING))
-            return new GoTypeChannelImpl(node,
-                                         GoTypeChannel.ChannelType.Receiving);
+            return new GoTypeChannelImpl(node, ChannelType.Receiving);
 
         if (elementType.equals(BLOCK_STATEMENT))
             return new GoBlockStatementImpl(node);
@@ -149,11 +151,35 @@ public class GoPsiCreator implements GoElementTypes {
         if (elementType.equals(SELECTOR_EXPRESSION))
             return new GoSelectorExpressionImpl(node);
 
-        if (elementType.equals(LITERAL_EXPRESSION))
-            return new GoLiteralImpl(node);
+        if (elementType.equals(LITERAL_BOOL))
+            return new GoLiteralBoolImpl(node);
 
+        if (elementType.equals(LITERAL_FLOAT))
+            return new GoLiteralFloatImpl(node);
+
+        if (elementType.equals(LITERAL_INTEGER))
+            return new GoLiteralIntegerImpl(node);
+
+        if (elementType.equals(LITERAL_STRING))
+            return new GoLiteralStringImpl(node);
+
+        if (elementType.equals(LITERAL_CHAR))
+            return new GoLiteralStringImpl(node);
+
+        if (elementType.equals(LITERAL_IMAGINARY))
+            return new GoLiteralImaginaryImpl(node);
+
+        if (elementType.equals(LITERAL_IOTA))
+            return new GoLiteralIdentifierImpl(node, true);
+
+        if (elementType.equals(LITERAL_IDENTIFIER))
+            return new GoLiteralIdentifierImpl(node);
+
+        if (elementType.equals(LITERAL_EXPRESSION))
+            return new GoLiteralExpressionImpl(node);
+//
         if (elementType.equals(FUNCTION_LITERAL_EXPRESSION))
-            return new GoFunctionLiteralImpl(node);
+            return new GoLiteralFunctionImpl(node);
 
         if (elementType.equals(ADD_EXPRESSION))
             return new GoAdditiveExpressionImpl(node);

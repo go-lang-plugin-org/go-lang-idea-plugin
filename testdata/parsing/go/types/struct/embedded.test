@@ -29,7 +29,7 @@ Go file
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
           TypeName

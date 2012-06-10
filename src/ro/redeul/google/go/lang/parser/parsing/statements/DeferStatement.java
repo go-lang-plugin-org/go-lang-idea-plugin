@@ -22,7 +22,7 @@ public class DeferStatement implements GoElementTypes {
             return false;
         }
 
-        parser.parseExpression(builder, false);
+        parser.parseExpression(builder, false, false);
         marker.done(DEFER_STATEMENT);
         return true;
 

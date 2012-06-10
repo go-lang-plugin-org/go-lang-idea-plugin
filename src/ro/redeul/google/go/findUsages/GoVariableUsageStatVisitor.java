@@ -1,5 +1,11 @@
 package ro.redeul.google.go.findUsages;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -8,6 +14,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.tree.IElementType;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.inspection.fix.ConvertToAssignmentFix;
 import ro.redeul.google.go.inspection.fix.DeleteStmtFix;
@@ -20,11 +27,11 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoFunctionLiteral;
+import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImpl;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -55,7 +62,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         this.manager = manager;
     }
 
-    public ProblemDescriptor[] getProblems() {
+    public List<ProblemDescriptor> getProblems() {
         return ctx.getProblems();
     }
 
@@ -124,9 +131,10 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitFunctionLiteral(GoFunctionLiteral functionLiteral) {
-        createFunctionParametersMap(functionLiteral.getParameters(), functionLiteral.getResults());
-        visitElement(functionLiteral.getBlock());
+    public void visitFunctionLiteral(GoLiteralFunction literalFunction) {
+        createFunctionParametersMap(literalFunction.getParameters(), literalFunction
+            .getResults());
+        visitElement(literalFunction.getBlock());
         afterVisitGoFunctionDeclaration();
     }
 
@@ -238,16 +246,17 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     private void visitExpressionAsIdentifier(GoExpr expr, boolean declaration) {
-        if (!(expr instanceof GoLiteral)) {
+        if (!(expr instanceof GoLiteralExpression)) {
             return;
         }
 
-        GoIdentifier id = ((GoLiteral) expr).getIdentifier();
-        if (needToCollectUsage(id)) {
+        GoLiteral literal = ((GoLiteralExpression) expr).getLiteral();
+        if ( literal.getType() == GoLiteral.Type.Identifier )
+        if (needToCollectUsage((GoIdentifier)literal)) {
             if (declaration) {
-                ctx.addDefinition(id);
+                ctx.addDefinition(literal);
             } else {
-                ctx.addUsage(id);
+                ctx.addUsage(literal);
             }
         }
     }
@@ -291,7 +300,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     private boolean isFunctionOrMethodCall(GoIdentifier id) {
-        if (!(id.getParent() instanceof GoLiteralImpl)) {
+        if (!(id.getParent() instanceof GoLiteralExpression)) {
             return false;
         }
 
@@ -451,7 +460,10 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
                 return;
             }
 
-            addProblem(variableUsage, "Undefined variable", ProblemHighlightType.ERROR);
+//          Removed since it will clash with the UnresolvedSymbols inspection
+//          (which uses the declaration resolution mechanism).
+//            addProblem(variableUsage, "Undefined variable",
+//                       ProblemHighlightType.ERROR);
         }
 
         public void addProblem(VariableUsage variableUsage, String desc,
@@ -493,7 +505,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
             undefinedVariable(new VariableUsage(element));
         }
 
-        public ProblemDescriptor[] getProblems() {
+        public List<ProblemDescriptor> getProblems() {
             return result.getProblems();
         }
     }

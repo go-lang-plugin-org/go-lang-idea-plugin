@@ -21,14 +21,14 @@ Go file
         PsiElement({)('{')
         PsiWhiteSpace(' ')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
           TypeName
             PsiElement(IDENTIFIER)('int')
         PsiElement(WS_NEW_LINES)('\n')
         TypeStructFieldImpl
-          IdentifierImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('y')
           PsiWhiteSpace(' ')
           TypeName

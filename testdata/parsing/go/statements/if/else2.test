@@ -24,13 +24,13 @@ Go file
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
         ExpressionStmtImpl
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('e')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        LiteralExpr
-          IdentifierImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         BlockStmtImpl
@@ -41,13 +41,14 @@ Go file
         PsiElement(KEYWORD_ELSE)('else')
         PsiWhiteSpace(' ')
         AssignStmt
-          LiteralExpr
-            IdentifierImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
           PsiElement(=)('=')
           PsiWhiteSpace(' ')
-          LiteralExpr
-            PsiElement(LITERAL_INT)('10')
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('10')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')

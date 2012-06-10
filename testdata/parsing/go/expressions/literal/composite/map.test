@@ -11,7 +11,7 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      IdentifierImpl
+      LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -29,20 +29,24 @@ Go file
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementKey
-              LiteralExpr
-                PsiElement(LITERAL_STRING)('"key1"')
+              LiteralExpressionImpl
+                LiteralStringImpl
+                  PsiElement(LITERAL_STRING)('"key1"')
             PsiElement(:)(':')
             CompositeLiteralElementValue
-              LiteralExpr
-                PsiElement(LITERAL_INT)('1')
+              LiteralExpressionImpl
+                LiteralIntegerImpl
+                  PsiElement(LITERAL_INT)('1')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementKey
-              LiteralExpr
-                PsiElement(LITERAL_STRING)('"key2"')
+              LiteralExpressionImpl
+                LiteralStringImpl
+                  PsiElement(LITERAL_STRING)('"key2"')
             PsiElement(:)(':')
             CompositeLiteralElementValue
-              LiteralExpr
-                PsiElement(LITERAL_INT)('2')
+              LiteralExpressionImpl
+                LiteralIntegerImpl
+                  PsiElement(LITERAL_INT)('2')
           PsiElement(})('}')
