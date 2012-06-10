@@ -20,9 +20,9 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
     protected List<ProblemDescriptor> doCheckFile(@NotNull GoFile file,
                                                   @NotNull final InspectionManager manager,
                                                   final boolean isOnTheFly) {
-        if (isOnTheFly) {
-            return null;
-        }
+//        if (isOnTheFly) {
+//            return null;
+//        }
 
         final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
 
