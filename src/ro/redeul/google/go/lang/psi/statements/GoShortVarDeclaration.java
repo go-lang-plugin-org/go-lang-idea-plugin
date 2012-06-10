@@ -8,5 +8,5 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
  * Date: 5/31/11
  * Time: 11:23 PM
  */
-public interface GoShortVarDeclaration extends GoVarDeclaration, GoStatement {
+public interface GoShortVarDeclaration extends GoVarDeclaration, GoSimpleStatement {
 }
