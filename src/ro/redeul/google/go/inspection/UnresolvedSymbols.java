@@ -20,7 +20,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
     @NotNull
     @Override
     public String getDisplayName() {
-        return "Unresolved symbols";
+        return "Highlights unresolved symbols";
     }
 
     @Override

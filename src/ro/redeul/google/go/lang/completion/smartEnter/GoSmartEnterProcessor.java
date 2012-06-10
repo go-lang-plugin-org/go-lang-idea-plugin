@@ -25,7 +25,7 @@ public class GoSmartEnterProcessor extends SmartEnterProcessor {
             PsiElement previous = GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment(atCaret);
             if (previous != null) {
                 atCaret = previous;
-            } else if (atCaret.getParent() != null) {
+            } else if (atCaret != null && atCaret.getParent() != null) {
                 atCaret = atCaret.getParent();
             }
         }

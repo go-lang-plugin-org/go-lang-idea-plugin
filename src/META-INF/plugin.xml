@@ -392,9 +392,9 @@
 
         <colorSettingsPage implementation="ro.redeul.google.go.editor.highlighting.GoColorsAndFontsPage"/>
 
-        <localInspection groupName="Google Go" language="Google Go"
-                         shortName="UnresolvedSymbols" displayName="Highlight unresolved symbols"
-                         enabledByDefault="true" level="ERROR"
+        <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
+                         shortName="UnresolvedSymbols" displayName="Highlights unresolved symbols"
+                         level="ERROR"
                          implementationClass="ro.redeul.google.go.inspection.UnresolvedSymbols"/>
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
