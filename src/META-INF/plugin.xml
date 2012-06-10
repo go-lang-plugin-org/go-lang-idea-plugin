@@ -361,6 +361,8 @@
         <lang.psiStructureViewFactory language="Google Go" implementationClass="ro.redeul.google.go.ide.GoStructureView"/>
         <lang.importOptimizer language="Google Go" implementationClass="ro.redeul.google.go.imports.GoImportOptimizer" />
         <lang.documentationProvider language="Google Go" implementationClass="ro.redeul.google.go.lang.documentation.GoDocumentationProvider" />
+        <lang.smartEnterProcessor language="Google Go"
+                                  implementationClass="ro.redeul.google.go.lang.completion.smartEnter.GoSmartEnterProcessor"/>
 
         <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
 

@@ -1,8 +1,5 @@
 package ro.redeul.google.go.lang.psi.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -24,6 +21,9 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GoPsiUtils {
 
@@ -113,6 +113,10 @@ public class GoPsiUtils {
         }
 
         return node;
+    }
+
+    public static boolean isWhiteSpaceNode(PsiElement node) {
+        return isNodeOfType(node, GoElementTypes.wsWS) || isNodeOfType(node, GoElementTypes.wsNLS);
     }
 
     public static PsiElement findChildOfType(PsiElement node, IElementType type) {
