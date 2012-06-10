@@ -20,7 +20,7 @@ Go file
         TypeSliceImpl
           PsiElement([)('[')
           PsiElement(])(']')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('string')
         CompositeLiteralElementList
           PsiElement({)('{')

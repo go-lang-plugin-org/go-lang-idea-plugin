@@ -27,7 +27,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('int')
           PsiWhiteSpace(' ')
           PsiElement(=)('=')

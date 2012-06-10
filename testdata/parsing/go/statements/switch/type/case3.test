@@ -43,7 +43,7 @@ Go file
         SwitchTypeCase
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('a')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')

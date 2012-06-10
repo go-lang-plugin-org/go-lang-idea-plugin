@@ -22,6 +22,6 @@ Go file
             PsiElement(IDENTIFIER)('x')
         PsiElement(.)('.')
         PsiElement(()('(')
-        TypeName
+        TypeNameImpl
           PsiElement(IDENTIFIER)('T')
         PsiElement())(')')

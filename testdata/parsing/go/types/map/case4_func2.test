@@ -32,7 +32,7 @@ Go file
           TypeMapImpl
             PsiElement(KEYWORD_MAP)('map')
             PsiElement([)('[')
-            TypeName
+            TypeNameImpl
               PsiElement(IDENTIFIER)('string')
             PsiElement(])(']')
             TypeFunction
@@ -45,7 +45,7 @@ Go file
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('w')
                   PsiWhiteSpace(' ')
-                  TypeName
+                  TypeNameImpl
                     PackageReferenceImpl
                       PsiElement(IDENTIFIER)('http')
                     PsiElement(.)('.')
@@ -60,7 +60,7 @@ Go file
                   PsiWhiteSpace(' ')
                   TypePointerImpl
                     PsiElement(*)('*')
-                    TypeName
+                    TypeNameImpl
                       PackageReferenceImpl
                         PsiElement(IDENTIFIER)('http')
                       PsiElement(.)('.')
@@ -75,7 +75,7 @@ Go file
                   PsiWhiteSpace(' ')
                   TypePointerImpl
                     PsiElement(*)('*')
-                    TypeName
+                    TypeNameImpl
                       PackageReferenceImpl
                         PsiElement(IDENTIFIER)('yqs')
                       PsiElement(.)('.')
@@ -87,7 +87,7 @@ Go file
                 PsiElement(()('(')
                 FunctionParameterList
                   FunctionParameterImpl
-                    TypeName
+                    TypeNameImpl
                       PsiElement(IDENTIFIER)('int')
                 PsiElement())(')')
         PsiElement(WS_NEW_LINES)('\n')
@@ -98,12 +98,12 @@ Go file
           TypeMapImpl
             PsiElement(KEYWORD_MAP)('map')
             PsiElement([)('[')
-            TypeName
+            TypeNameImpl
               PsiElement(IDENTIFIER)('string')
             PsiElement(])(']')
             TypePointerImpl
               PsiElement(*)('*')
-              TypeName
+              TypeNameImpl
                 PackageReferenceImpl
                   PsiElement(IDENTIFIER)('template')
                 PsiElement(.)('.')

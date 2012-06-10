@@ -30,14 +30,14 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('y')
                 PsiWhiteSpace(' ')
-                TypeName
+                TypeNameImpl
                   PsiElement(IDENTIFIER)('int')
             PsiElement())(')')
             PsiWhiteSpace(' ')
             FunctionResult
               FunctionParameterList
                 FunctionParameterImpl
-                  TypeName
+                  TypeNameImpl
                     PsiElement(IDENTIFIER)('int')
           PsiWhiteSpace(' ')
           BlockStmtImpl

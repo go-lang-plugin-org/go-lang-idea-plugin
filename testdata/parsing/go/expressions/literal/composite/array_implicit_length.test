@@ -21,7 +21,7 @@ Go file
           PsiElement([)('[')
           PsiElement(...)('...')
           PsiElement(])(']')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('string')
         CompositeLiteralElementList
           PsiElement({)('{')

@@ -11,6 +11,7 @@ public class UnresolvedSymbolsTest extends AbstractProblemDescriptionBasedTest {
     public void testForWithClause() throws Exception{ doTest(); }
     public void testForWithRange() throws Exception{ doTest(); }
     public void testIota() throws Exception{ doTest(); }
+    public void testUndefinedTypeInMethodReceiver() throws Exception { doTest(); }
 
     @Override
     protected String getInspectionName() {

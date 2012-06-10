@@ -45,7 +45,7 @@ public class NamedTypeResolver extends BaseScopeProcessor {
 
         String fqm = String.format("%s%s", visiblePackageName != null ? visiblePackageName + "." : "", declaredTypeName);
 
-        if ( fqm.equals(this.targetName.getText())) {
+        if ( fqm.equals(this.targetName.getName())) {
             resolvedTypeName = typeNameDeclaration;
             return true;
         }

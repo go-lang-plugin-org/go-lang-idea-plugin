@@ -17,5 +17,5 @@ Go file
       TypeChanBidiImpl
         PsiElement(KEYWORD_CHAN)('chan')
         PsiWhiteSpace(' ')
-        TypeName
+        TypeNameImpl
           PsiElement(IDENTIFIER)('int')

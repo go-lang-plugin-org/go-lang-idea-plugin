@@ -1,0 +1,36 @@
+package main
+func (p *Point) Length() float64 {}
+------
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  MethodDeclaration(Length)
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(()('(')
+    MethodReceiverImpl
+      LiteralIdentifierImpl
+        PsiElement(IDENTIFIER)('p')
+      PsiWhiteSpace(' ')
+      TypeNameImpl
+        PsiElement(*)('*')
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('Point')
+      PsiElement())(')')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('Length')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    FunctionResult
+      FunctionParameterList
+        FunctionParameterImpl
+          TypeNameImpl
+            PsiElement(IDENTIFIER)('float64')
+    PsiWhiteSpace(' ')
+    BlockStmtImpl
+      PsiElement({)('{')
+      PsiElement(})('}')

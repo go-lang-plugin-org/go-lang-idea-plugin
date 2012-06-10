@@ -32,5 +32,5 @@ Go file
               LiteralIntegerImpl
                 PsiElement(LITERAL_INT)('2')
             PsiElement(])(']')
-            TypeName
+            TypeNameImpl
               PsiElement(IDENTIFIER)('float64')

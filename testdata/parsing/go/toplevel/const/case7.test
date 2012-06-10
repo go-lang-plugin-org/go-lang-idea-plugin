@@ -27,7 +27,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('ET_NONE')
       PsiWhiteSpace('   ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('Type')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -43,7 +43,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('ET_REL')
       PsiWhiteSpace('    ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('Type')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -59,7 +59,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('ET_EXEC')
       PsiWhiteSpace('   ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('Type')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -75,7 +75,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('ET_DYN')
       PsiWhiteSpace('    ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('Type')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -91,7 +91,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('ET_CORE')
       PsiWhiteSpace('   ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('Type')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -107,7 +107,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('ET_LOOS')
       PsiWhiteSpace('   ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('Type')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -123,7 +123,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('ET_HIOS')
       PsiWhiteSpace('   ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('Type')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -139,7 +139,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('ET_LOPROC')
       PsiWhiteSpace(' ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('Type')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
@@ -155,7 +155,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('ET_HIPROC')
       PsiWhiteSpace(' ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('Type')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')

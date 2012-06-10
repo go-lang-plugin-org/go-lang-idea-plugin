@@ -16,4 +16,8 @@ public class GoResolveTypesTestCase extends GoResolveTestCase {
     public void testLocalType() throws Exception {
         doTestResolve();
     }
+
+    public void testFromMethodReceiver() throws Exception {
+        doTestResolve();
+    }
 }

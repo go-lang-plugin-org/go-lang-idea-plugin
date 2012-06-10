@@ -21,7 +21,7 @@ Go file
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('b')
         PsiWhiteSpace(' ')
-        TypeName
+        TypeNameImpl
           PsiElement(IDENTIFIER)('int')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
@@ -29,7 +29,7 @@ Go file
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('z')
         PsiWhiteSpace(' ')
-        TypeName
+        TypeNameImpl
           PsiElement(IDENTIFIER)('float')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
@@ -51,7 +51,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('success')
           PsiWhiteSpace(' ')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('bool')
       PsiElement())(')')
     PsiWhiteSpace(' ')

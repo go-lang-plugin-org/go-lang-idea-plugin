@@ -87,4 +87,9 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     public void testFunction$case18() throws Throwable { doTest(); }
     public void testFunction$case19() throws Throwable { doTest(); }
 
+    public void testMethod$case1() throws Throwable { doTest(); }
+    public void testMethod$case2() throws Throwable { doTest(); }
+    public void testMethod$case3() throws Throwable { doTest(); }
+    public void testMethod$case4() throws Throwable { doTest(); }
+
 }

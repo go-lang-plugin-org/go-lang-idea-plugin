@@ -157,8 +157,9 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType FUNCTION_RESULT = new GoElementTypeImpl("FunctionResult");
 
     GoElementType REFERENCE_BASE_TYPE_NAME =
-        new GoElementTypeImpl("reference base type name");
-    GoElementType BASE_TYPE_NAME = new GoElementTypeImpl("base type name");
+        new GoElementTypeImpl("ReferenceBaseTypeName");
+    GoElementType BASE_TYPE_NAME =
+        new GoElementTypeImpl("BaseTypeName");
 
     GoElementType STATEMENT = new GoElementTypeImpl("statement");
 

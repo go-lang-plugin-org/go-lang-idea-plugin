@@ -101,7 +101,7 @@ public class GoParser implements PsiParser {
         return Statements.parseSimple(builder, this, inControlClause);
     }
 
-    public boolean parseSimpleType(PsiBuilder builder) {
+    public boolean parseTypeName(PsiBuilder builder) {
         return Types.parseTypeName(builder, this);
     }
 

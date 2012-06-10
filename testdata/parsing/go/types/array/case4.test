@@ -26,5 +26,5 @@ Go file
             LiteralIntegerImpl
               PsiElement(LITERAL_INT)('5')
           PsiElement(])(']')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('int')

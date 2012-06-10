@@ -64,7 +64,7 @@ Go file
         SwitchTypeCase
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('nil')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')
@@ -73,14 +73,14 @@ Go file
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           TypeList
-            TypeName
+            TypeNameImpl
               PsiElement(IDENTIFIER)('int')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
             TypeSliceImpl
               PsiElement([)('[')
               PsiElement(])(']')
-              TypeName
+              TypeNameImpl
                 PsiElement(IDENTIFIER)('string')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')

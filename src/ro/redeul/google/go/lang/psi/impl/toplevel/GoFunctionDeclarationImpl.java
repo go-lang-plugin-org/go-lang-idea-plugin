@@ -22,7 +22,8 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: Aug 26, 2010
  * Time: 2:33:51 PM
  */
-public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFunctionDeclaration {
+public class GoFunctionDeclarationImpl extends GoPsiElementBase
+    implements GoFunctionDeclaration {
 
     public GoFunctionDeclarationImpl(@NotNull ASTNode node) {
         super(node);
@@ -40,7 +41,8 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFun
     }
 
     @Override
-    public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
+    public PsiElement setName(@NonNls @NotNull String name)
+        throws IncorrectOperationException {
         return null;
     }
 
@@ -78,20 +80,24 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFun
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
 
+        if (lastParent == null) {
+            return processor.execute(this, state);
+        }
+
         for (GoFunctionParameter functionParameter : getParameters()) {
-            if ( ! processor.execute(functionParameter, state) )  {
+            if (!processor.execute(functionParameter, state)) {
                 return false;
             }
         }
 
-        for (GoFunctionParameter returnParameter: getResults()) {
-            if ( ! processor.execute(returnParameter, state) ) {
+
+        for (GoFunctionParameter returnParameter : getResults()) {
+            if (!processor.execute(returnParameter, state)) {
                 return false;
             }
         }
 
-        // TODO: try the return parameters
-        return processor.execute(this, state);
+        return true;
     }
 
     @Override

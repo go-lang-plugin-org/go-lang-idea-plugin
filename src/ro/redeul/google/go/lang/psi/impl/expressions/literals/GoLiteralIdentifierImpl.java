@@ -26,6 +26,7 @@ import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsResolver;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
@@ -145,6 +146,9 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             return null;
 
         if (parent instanceof GoTypeStructField)
+            return null;
+
+        if (parent instanceof GoTypeName)
             return null;
 
         if (parent instanceof GoLiteralExpression) {

@@ -117,12 +117,13 @@ public class Types implements GoElementTypes {
         }
 
         if ( builder.getTokenType() == mIDENT) {
-            ParserUtils.eatElement(builder, IDENTIFIER);
+            ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
         } else {
             ParserUtils.wrapError(builder, "identifier.expected");
         }
 
-        typeNameMarker.done(isReferenceType ? REFERENCE_BASE_TYPE_NAME : BASE_TYPE_NAME);
+        typeNameMarker.done(TYPE_NAME);
+//        typeNameMarker.done(isReferenceType ? REFERENCE_BASE_TYPE_NAME : BASE_TYPE_NAME);
         return true;
     }
 

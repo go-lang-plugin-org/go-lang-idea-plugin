@@ -18,7 +18,7 @@ Go file
         PsiElement(KEYWORD_MAP)('map')
         PsiWhiteSpace(' ')
         PsiElement([)('[')
-        TypeName
+        TypeNameImpl
           PsiElement(IDENTIFIER)('string')
         PsiElement(])(']')
         PsiWhiteSpace(' ')

@@ -11,5 +11,10 @@ import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
  * Date: Aug 30, 2010
  * Time: 7:11:26 PM
  */
-public interface GoTypeName extends GoPsiElement, PsiNamedElement, PsiReference, GoQualifiedNameElement, GoType {
+public interface GoTypeName extends GoPsiElement, PsiNamedElement, PsiReference,
+                                    GoQualifiedNameElement, GoType
+{
+    boolean isReference();
+
+    boolean isPrimitive();
 }

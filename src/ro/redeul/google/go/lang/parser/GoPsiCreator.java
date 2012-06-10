@@ -37,6 +37,7 @@ import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionParameterImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoMethodDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoMethodReceiverImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoPackageDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeNameDeclarationImpl;
@@ -100,6 +101,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(METHOD_DECLARATION))
             return new GoMethodDeclarationImpl(node);
+
+        if (elementType.equals(METHOD_RECEIVER))
+            return new GoMethodReceiverImpl(node);
 
         if (elementType.equals(TYPE_NAME))
             return new GoTypeNameImpl(node);

@@ -20,10 +20,10 @@ Go file
         TypeMapImpl
           PsiElement(KEYWORD_MAP)('map')
           PsiElement([)('[')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('string')
           PsiElement(])(']')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('int')
         CompositeLiteralElementList
           PsiElement({)('{')

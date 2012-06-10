@@ -24,7 +24,7 @@ Go file
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
         TypeStructFieldAnonymousImpl
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('T2')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
@@ -32,7 +32,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('int')
         PsiElement(WS_NEW_LINES)('\n')
         PsiElement(})('}')

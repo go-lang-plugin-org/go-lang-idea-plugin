@@ -20,7 +20,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('i')
       PsiWhiteSpace('       ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('int')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('\t')

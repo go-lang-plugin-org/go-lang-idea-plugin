@@ -34,7 +34,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('y')
           PsiWhiteSpace(' ')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('int')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
@@ -42,7 +42,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('u')
           PsiWhiteSpace(' ')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('float32')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
@@ -50,7 +50,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('_')
           PsiWhiteSpace(' ')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('float32')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
@@ -63,7 +63,7 @@ Go file
             TypeSliceImpl
               PsiElement([)('[')
               PsiElement(])(']')
-              TypeName
+              TypeNameImpl
                 PsiElement(IDENTIFIER)('int')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')

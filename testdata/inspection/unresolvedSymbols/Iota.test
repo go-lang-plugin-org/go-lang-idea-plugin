@@ -11,7 +11,7 @@ const (
 
 var v = <begin>iota<end.Unresolved symbol: 'iota'>
 
-func foo(a, <begin>iota<end.Unresolved symbol: 'iota'> int) int {
+func foo(a, iota int) int {
     return a + 1
 }
 

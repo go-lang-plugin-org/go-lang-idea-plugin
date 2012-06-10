@@ -20,5 +20,5 @@ Go file
           LiteralIntegerImpl
             PsiElement(LITERAL_INT)('32')
         PsiElement(])(']')
-        TypeName
+        TypeNameImpl
           PsiElement(IDENTIFIER)('byte')

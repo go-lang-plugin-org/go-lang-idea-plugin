@@ -24,7 +24,7 @@ Go file
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('a')
             PsiWhiteSpace(' ')
-            TypeName
+            TypeNameImpl
               PsiElement(IDENTIFIER)('int')
           PsiElement(;)(';')
           PsiWhiteSpace(' ')
@@ -32,7 +32,7 @@ Go file
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('b')
             PsiWhiteSpace(' ')
-            TypeName
+            TypeNameImpl
               PsiElement(IDENTIFIER)('int')
           PsiElement(})('}')
         CompositeLiteralElementList

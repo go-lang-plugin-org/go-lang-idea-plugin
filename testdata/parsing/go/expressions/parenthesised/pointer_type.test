@@ -17,7 +17,7 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       ConversionExpression
-        TypeName
+        TypeNameImpl
           PsiElement(IDENTIFIER)('string')
         PsiElement(()('(')
         LiteralExpressionImpl

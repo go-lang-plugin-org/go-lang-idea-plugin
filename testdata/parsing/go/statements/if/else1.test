@@ -23,7 +23,7 @@ Go file
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
-      IfStmt
+      IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
         LiteralExpressionImpl

@@ -20,7 +20,7 @@ Go file
         PsiElement([)('[')
         TypePointerImpl
           PsiElement(*)('*')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('T')
         PsiElement(])(']')
         PsiWhiteSpace(' ')
@@ -37,7 +37,7 @@ Go file
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('y')
             PsiWhiteSpace(' ')
-            TypeName
+            TypeNameImpl
               PsiElement(IDENTIFIER)('float')
           PsiWhiteSpace(' ')
           PsiElement(})('}')

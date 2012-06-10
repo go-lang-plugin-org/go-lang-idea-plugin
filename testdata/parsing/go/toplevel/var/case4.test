@@ -18,7 +18,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('y')
       PsiWhiteSpace(' ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('float32')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')

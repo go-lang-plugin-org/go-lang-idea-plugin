@@ -17,5 +17,5 @@ Go file
     FunctionResult
       FunctionParameterList
         FunctionParameterImpl
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('int')

@@ -18,5 +18,5 @@ Go file
         PsiElement(<-)('<-')
         PsiElement(KEYWORD_CHAN)('chan')
         PsiWhiteSpace(' ')
-        TypeName
+        TypeNameImpl
           PsiElement(IDENTIFIER)('int')

@@ -20,7 +20,7 @@ Go file
       NamedType(Point)
         PsiElement(IDENTIFIER)('Point')
       PsiWhiteSpace(' ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('int')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('\t')
@@ -28,7 +28,7 @@ Go file
       NamedType(Polar)
         PsiElement(IDENTIFIER)('Polar')
       PsiWhiteSpace(' ')
-      TypeName
+      TypeNameImpl
         PsiElement(IDENTIFIER)('Point')
     PsiElement(WS_NEW_LINES)('\n')
     PsiElement())(')')

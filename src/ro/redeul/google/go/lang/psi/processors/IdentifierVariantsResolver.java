@@ -11,6 +11,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -32,6 +33,9 @@ public class IdentifierVariantsResolver extends BaseScopeProcessor {
         if ( element == identifier ) {
             return true;
         }
+
+        if ( element instanceof GoMethodReceiver )
+            return tryResolveToIdentifiers(state, ((GoMethodReceiver)element).getIdentifier());
 
         if ( element instanceof GoFunctionDeclaration && ! (element instanceof GoMethodDeclaration) ) {
             return tryResolveToFunction((GoFunctionDeclaration) element, state);

@@ -89,11 +89,11 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
         PsiBuilder.Marker receiverDeclarationMarker = builder.mark();
 
         if ( ParserUtils.lookAhead(builder, mIDENT, mIDENT) || ParserUtils.lookAhead(builder, mIDENT, oMUL) ) {
-            ParserUtils.eatElement(builder, IDENTIFIER);
+            ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
         }
 
         ParserUtils.skipNLS(builder);
-        parser.parseSimpleType(builder);
+        parser.parseTypeName(builder);
 
         ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, pRPAREN, "close.parenthesis.expected");

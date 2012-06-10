@@ -23,7 +23,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('int')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
@@ -31,7 +31,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('y')
           PsiWhiteSpace(' ')
-          TypeName
+          TypeNameImpl
             PsiElement(IDENTIFIER)('int32')
         PsiWhiteSpace(' ')
         PsiElement(})('}')
