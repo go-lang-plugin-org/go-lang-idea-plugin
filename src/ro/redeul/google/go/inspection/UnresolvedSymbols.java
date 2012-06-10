@@ -8,6 +8,7 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiReference;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -15,6 +16,12 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
+    @Nls
+    @NotNull
+    @Override
+    public String getDisplayName() {
+        return "Unresolved symbols";
+    }
 
     @Override
     protected List<ProblemDescriptor> doCheckFile(@NotNull GoFile file,
