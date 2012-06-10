@@ -1,5 +1,5 @@
 package main
 
-func method(x int) {
+func method(<def>x int) {
     <ref>x
 }
