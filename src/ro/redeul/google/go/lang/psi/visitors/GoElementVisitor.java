@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
+import ro.redeul.google.go.lang.psi.impl.statements.GoIfStatementImpl;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
@@ -146,5 +147,9 @@ public class GoElementVisitor  {
 
     public void visitIndexExpression(GoIndexExpression indexExpression) {
         visitElement(indexExpression);
+    }
+
+    public void visitIfStatement(GoIfStatementImpl ifStatement) {
+        visitElement(ifStatement);
     }
 }

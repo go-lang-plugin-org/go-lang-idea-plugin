@@ -29,6 +29,7 @@ import ro.redeul.google.go.lang.psi.impl.statements.GoExpressionStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithClausesStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithConditionStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithRangeStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoIfStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoReturnStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoShortVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionDeclarationImpl;
@@ -210,6 +211,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(BUILTIN_CALL_EXPRESSION))
             return new GoBuiltinCallExprImpl(node);
+
+        if (elementType.equals(IF_STATEMENT))
+            return new GoIfStatementImpl(node);
 
         if (elementType.equals(wsNLS))
             return (PsiElement) ASTFactory.whitespace(node.getText());
