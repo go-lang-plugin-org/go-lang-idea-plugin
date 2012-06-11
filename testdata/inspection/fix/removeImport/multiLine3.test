@@ -11,9 +11,7 @@ func main() {
 -----
 <caret>package main
 
-import (
-    "io"
-)
+import "io"
 
 func main() {
     println("Hello world!")

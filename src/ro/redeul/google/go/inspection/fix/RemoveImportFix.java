@@ -5,14 +5,14 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.inspection.fix.FixUtil.removeWholeElement;
+import static ro.redeul.google.go.lang.psi.GoPsiElementFactory.createGoFile;
 
 public class RemoveImportFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     public RemoveImportFix(@Nullable PsiElement element) {
@@ -35,30 +35,61 @@ public class RemoveImportFix extends LocalQuickFixAndIntentionActionOnPsiElement
     public void invoke(@NotNull Project project, @NotNull PsiFile file,
                        @Nullable("is null when called from inspection") Editor editor,
                        @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
-        if (!(startElement instanceof GoImportDeclaration)) {
+        if (!(startElement instanceof GoImportDeclaration) || !(file instanceof GoFile)) {
             return;
         }
 
         GoImportDeclaration declaration = (GoImportDeclaration) startElement;
         GoImportDeclarations declarations = (GoImportDeclarations) declaration.getParent();
+        String removeImport = declaration.getText();
+        if (removeImport == null) {
+            return;
+        }
 
-        PsiElement elementToDelete;
-        if (declarations.getDeclarations().length == 1) {
-            elementToDelete = declarations;
+        GoImportDeclaration[] da = declarations.getDeclarations();
+        // if there are more than 2 imports, just remove current one.
+        if (da.length > 2) {
+            removeWholeElement(declaration);
+            return;
+        }
+
+        // if there are exactly 2 imports, replace the whole import to import "theOther". i.e. remove parenthesis.
+        if (da.length == 2) {
+            PsiElement newImport = getNewImport(da, startElement.getText(), (GoFile) file);
+            if (newImport != null) {
+                declarations.replace(newImport);
+                return;
+            }
+        }
+
+        // remove the whole declarations, if current one is the only one left.
+        removeWholeElement(declarations);
+    }
+
+    private PsiElement getNewImport(GoImportDeclaration[] da, String importToRemove, GoFile file) {
+        if (da[0] == null || da[1] == null) {
+            return null;
+        }
+
+        String otherImport;
+        if (da[0].getText().equals(importToRemove)) {
+            otherImport = da[1].getText();
+        } else if (da[1].getText().equals(importToRemove)) {
+            otherImport = da[0].getText();
         } else {
-            elementToDelete = declaration;
+            return null;
         }
 
-        PsiElement prev = elementToDelete.getPrevSibling();
-        if (prev instanceof PsiWhiteSpace) {
-            prev.delete();
+        String script = "package main\nimport " + otherImport;
+        GoFile newFile = createGoFile(file, script);
+        if (newFile == null) {
+            return null;
+        }
+        GoImportDeclarations[] imports = newFile.getImportDeclarations();
+        if (imports == null || imports.length != 1) {
+            return null;
         }
 
-        PsiElement next = elementToDelete.getNextSibling();
-        if (next != null && isNodeOfType(next, GoTokenTypes.wsNLS)) {
-            next.delete();
-        }
-
-        elementToDelete.delete();
+        return imports[0];
     }
 }
