@@ -20,7 +20,14 @@ public class GoSmartEnterProcessor extends SmartEnterProcessor {
 
     @Override
     public boolean process(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile psiFile) {
-        PsiElement atCaret = psiFile.findElementAt(editor.getCaretModel().getOffset());
+        int offset = editor.getCaretModel().getOffset();
+        PsiElement atCaret = psiFile.findElementAt(offset);
+
+        // When the caret is put at the end of document, no element could be found, find the previous one.
+        if (atCaret == null) {
+            atCaret = psiFile.findElementAt(offset - 1);
+        }
+
         if (isWhiteSpaceNode(atCaret)) {
             PsiElement previous = GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment(atCaret);
             if (previous != null) {
