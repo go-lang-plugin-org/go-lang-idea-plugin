@@ -124,11 +124,27 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitIdentifier(GoLiteralIdentifier id) {
+        Annotation annotation = annotationHolder.createInfoAnnotation(id, null);
+        annotation.setTextAttributes(GoSyntaxHighlighter.VARIABLE);
+
+        if (id.isBlank()) {
+            return;
+        }
+
+        // make iota a keyword
+        if (id.isIota()) {
+            annotation.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
+            return;
+        }
+
         PsiElement resolve = id.resolve();
-        // if the identifier resolves to a const, set const highlight
-        if (resolve != null && resolve.getParent() instanceof GoConstDeclaration) {
-            Annotation annotation = annotationHolder.createInfoAnnotation(id, null);
-            annotation.setTextAttributes(GoSyntaxHighlighter.CONST);
+        if (resolve != null) {
+            // if the identifier resolves to a const, set const highlight
+            if (resolve.getParent() instanceof GoConstDeclaration) {
+                annotation.setTextAttributes(GoSyntaxHighlighter.CONST);
+            } else if (id.isGlobal()) {
+                annotation.setTextAttributes(GoSyntaxHighlighter.GLOBAL_VARIABLE);
+            }
         }
     }
 

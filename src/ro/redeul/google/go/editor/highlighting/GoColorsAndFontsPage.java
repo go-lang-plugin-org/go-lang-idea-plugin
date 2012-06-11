@@ -63,6 +63,9 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
             new AttributesDescriptor(
                 GoBundle.message("color." + GoSyntaxHighlighter.VARIABLE_ID),
                 GoSyntaxHighlighter.VARIABLE),
+            new AttributesDescriptor(
+                GoBundle.message("color." + GoSyntaxHighlighter.GLOBAL_VARIABLE_ID),
+                GoSyntaxHighlighter.GLOBAL_VARIABLE),
         };
 
 
@@ -106,10 +109,11 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                 "type (\n" +
                 "   <typeName>T1</typeName> []<typeName>T</typeName>\n" +
                 ")\n" +
-                "const <const>C</const> = iota\n" +
+                "const <const>CONST_VALUE</const> = 10\n\n" +
+                "var <globalVariable>globalValue</globalVariable> = 5" +
                 "// line comment \n" +
                 "func(<variable>t</variable>* <typeName>T1</typeName>) function1(<variable>a</variable>, <variable>b</variable> <typeName>int</typeName>, <variable>c</variable> <typeName>T</typeName>) (<typeName>string</typeName>) {\n" +
-                "   var <variable>x</variable> <typeName>T1</typeName> = 10.10 + 20 + <const>C</const>\n" +
+                "   var <variable>x</variable> <typeName>T1</typeName> = 10.10 + <globalVariable>globalValue</globalVariable> + <const>CONST_VALUE</const>\n" +
                 "   fmt.Printf(<variable>x</variable>);\n" +
                 "   return <variable>x</variable>\n" +
                 "}\n" +
@@ -120,6 +124,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
         final Map<String, TextAttributesKey> map = new HashMap<String, TextAttributesKey>();
 
         map.put("variable", GoSyntaxHighlighter.VARIABLE);
+        map.put("globalVariable", GoSyntaxHighlighter.GLOBAL_VARIABLE);
         map.put("typeName", GoSyntaxHighlighter.TYPE_NAME);
         map.put("const", GoSyntaxHighlighter.CONST);
         map.put("error", CodeInsightColors.ERRORS_ATTRIBUTES);

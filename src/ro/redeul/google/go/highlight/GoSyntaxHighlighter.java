@@ -47,6 +47,7 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
     public static final String CONST_ID = "go.const";
 
     public static final String VARIABLE_ID = "go.variable";
+    public static final String GLOBAL_VARIABLE_ID = "go.global.variable";
 
 //    @NonNls
 //    public static final String CONDITIONAL_ID = "Conditional operator";
@@ -114,21 +115,21 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
     }
 
     public static final TextAttributesKey LINE_COMMENT = TextAttributesKey.createTextAttributesKey(LINE_COMMENT_ID,
-            new TextAttributes(new Color(128, 128, 0), null, null, null, Font.PLAIN));
+            new TextAttributes(Color.GRAY, null, null, null, Font.ITALIC));
 
     public static final TextAttributesKey BLOCK_COMMENT = TextAttributesKey.createTextAttributesKey(BLOCK_COMMENT_ID,
-            new TextAttributes(new Color(128, 128, 0), null, null, null, Font.PLAIN));
+            new TextAttributes(Color.GRAY, null, null, null, Font.ITALIC));
 
     public static final TextAttributesKey KEYWORD = TextAttributesKey.createTextAttributesKey(KEYWORD_ID,
-            new TextAttributes(new Color(0, 102, 153), null, null, null, Font.BOLD));
+            new TextAttributes(new Color(0, 0, 128), null, null, null, Font.BOLD));
 
     public static final TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey(STRING_ID,
-            new TextAttributes(Color.blue, null, null, null, Font.PLAIN));
+            new TextAttributes(new Color(0, 128,0), null, null, null, Font.BOLD));
 
     public static final TextAttributesKey IDENTIFIER = TextAttributesKey.createTextAttributesKey(IDENTIFIER_ID, DEFAULT_ATTRIB.clone());
 
     public static final TextAttributesKey NUMBER = TextAttributesKey.createTextAttributesKey(NUMBER_ID,
-            TextAttributes.merge(DEFAULT_ATTRIB, new TextAttributes(Color.red, null, null, null, Font.PLAIN)));
+            TextAttributes.merge(DEFAULT_ATTRIB, new TextAttributes(Color.blue, null, null, null, Font.PLAIN)));
 
     public static final TextAttributesKey TYPE_NAME = TextAttributesKey.createTextAttributesKey(TYPE_NAME_ID,
             new TextAttributes(new Color(0, 128, 0), null, null, null, Font.BOLD));
@@ -136,8 +137,9 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
     public static final TextAttributesKey CONST = TextAttributesKey.createTextAttributesKey(CONST_ID,
             new TextAttributes(new Color(102, 14, 122), null, null, null, Font.BOLD | Font.ITALIC));
 
-    public static final TextAttributesKey VARIABLE = TextAttributesKey.createTextAttributesKey(VARIABLE_ID,
-            new TextAttributes(Color.gray, null, null, null, Font.BOLD));
+    public static final TextAttributesKey VARIABLE = TextAttributesKey.createTextAttributesKey(VARIABLE_ID, DEFAULT_ATTRIB.clone());
+    public static final TextAttributesKey GLOBAL_VARIABLE = TextAttributesKey.createTextAttributesKey(GLOBAL_VARIABLE_ID,
+            new TextAttributes(new Color(102, 14, 122), null, null, null, Font.BOLD));
 
     public static final TextAttributesKey BRACKET = TextAttributesKey.createTextAttributesKey(BRACKETS_ID, DEFAULT_ATTRIB.clone());
 //    public static final TextAttributesKey CURLY = TextAttributesKey.createTextAttributesKey(CURLY_ID, DEFAULT_ATTRIB.clone());

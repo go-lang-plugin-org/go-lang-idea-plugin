@@ -14,4 +14,9 @@ public interface GoLiteralIdentifier extends GoLiteral<String>, PsiReference, Ps
     boolean isBlank();
 
     boolean isIota();
+
+    /**
+     * @return true if the identifier is a global variable or global constant.
+     */
+    boolean isGlobal();
 }

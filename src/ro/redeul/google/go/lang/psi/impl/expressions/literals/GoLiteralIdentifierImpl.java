@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
-import javax.swing.*;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -17,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -31,6 +31,8 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
+import javax.swing.Icon;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -218,6 +220,23 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     @Override
     public PsiElement getNameIdentifier() {
         return this;
+    }
+
+    @Override
+    public boolean isGlobal() {
+        PsiElement resolve = resolve();
+        if (resolve == null) {
+            return false;
+        }
+
+        PsiElement parent = resolve.getParent();
+        if (!(parent instanceof GoVarDeclaration) && !(parent instanceof GoConstDeclaration)) {
+            return false;
+        }
+
+        PsiElement grandpa = parent.getParent();
+        return grandpa != null && grandpa.getParent() instanceof GoFile;
+
     }
 
     @Override
