@@ -124,6 +124,12 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitIdentifier(GoLiteralIdentifier id) {
+        PsiElement resolve = id.resolve();
+        // if the identifier resolves to a const, set const highlight
+        if (resolve != null && resolve.getParent() instanceof GoConstDeclaration) {
+            Annotation annotation = annotationHolder.createInfoAnnotation(id, null);
+            annotation.setTextAttributes(GoSyntaxHighlighter.CONST);
+        }
     }
 
     @Override

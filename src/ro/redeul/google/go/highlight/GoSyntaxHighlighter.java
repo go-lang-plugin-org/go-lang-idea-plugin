@@ -44,6 +44,8 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
     // psi formats
     public static final String TYPE_NAME_ID = "go.type.name";
 
+    public static final String CONST_ID = "go.const";
+
     public static final String VARIABLE_ID = "go.variable";
 
 //    @NonNls
@@ -130,6 +132,9 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
 
     public static final TextAttributesKey TYPE_NAME = TextAttributesKey.createTextAttributesKey(TYPE_NAME_ID,
             new TextAttributes(new Color(0, 128, 0), null, null, null, Font.BOLD));
+
+    public static final TextAttributesKey CONST = TextAttributesKey.createTextAttributesKey(CONST_ID,
+            new TextAttributes(new Color(102, 14, 122), null, null, null, Font.BOLD | Font.ITALIC));
 
     public static final TextAttributesKey VARIABLE = TextAttributesKey.createTextAttributesKey(VARIABLE_ID,
             new TextAttributes(Color.gray, null, null, null, Font.BOLD));

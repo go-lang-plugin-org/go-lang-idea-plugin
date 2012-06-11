@@ -1,9 +1,5 @@
 package ro.redeul.google.go.editor.highlighting;
 
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.*;
-
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
@@ -15,6 +11,10 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
+
+import javax.swing.Icon;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
@@ -57,6 +57,9 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
             new AttributesDescriptor(
                 GoBundle.message("color." + GoSyntaxHighlighter.TYPE_NAME_ID),
                 GoSyntaxHighlighter.TYPE_NAME),
+            new AttributesDescriptor(
+                GoBundle.message("color." + GoSyntaxHighlighter.CONST_ID),
+                GoSyntaxHighlighter.CONST),
             new AttributesDescriptor(
                 GoBundle.message("color." + GoSyntaxHighlighter.VARIABLE_ID),
                 GoSyntaxHighlighter.VARIABLE),
@@ -103,10 +106,10 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                 "type (\n" +
                 "   <typeName>T1</typeName> []<typeName>T</typeName>\n" +
                 ")\n" +
-                "const C iota\n" +
+                "const <const>C</const> = iota\n" +
                 "// line comment \n" +
                 "func(<variable>t</variable>* <typeName>T1</typeName>) function1(<variable>a</variable>, <variable>b</variable> <typeName>int</typeName>, <variable>c</variable> <typeName>T</typeName>) (<typeName>string</typeName>) {\n" +
-                "   var <variable>x</variable> <typeName>T1</typeName> = 10.10 + 20\n" +
+                "   var <variable>x</variable> <typeName>T1</typeName> = 10.10 + 20 + <const>C</const>\n" +
                 "   fmt.Printf(<variable>x</variable>);\n" +
                 "   return <variable>x</variable>\n" +
                 "}\n" +
@@ -118,6 +121,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
 
         map.put("variable", GoSyntaxHighlighter.VARIABLE);
         map.put("typeName", GoSyntaxHighlighter.TYPE_NAME);
+        map.put("const", GoSyntaxHighlighter.CONST);
         map.put("error", CodeInsightColors.ERRORS_ATTRIBUTES);
 
         return map;
