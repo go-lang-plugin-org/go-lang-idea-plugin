@@ -7,13 +7,15 @@ import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
-import com.intellij.util.Icons;
-import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.toplevel.*;
+import com.intellij.util.PlatformIcons;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import javax.swing.Icon;
 
 /**
  * User: jhonny
@@ -21,12 +23,16 @@ import java.util.Arrays;
  */
 public class GoStructureViewElement implements StructureViewTreeElement {
 
-    private boolean isRoot;
     private PsiElement element;
+    private TreeElement[] children;
 
-    public GoStructureViewElement(PsiElement element, boolean isRoot) {
-        this.isRoot = isRoot;
+    public GoStructureViewElement(PsiElement element) {
+        this(element, new TreeElement[0]);
+    }
+
+    public GoStructureViewElement(PsiElement element, TreeElement[] children) {
         this.element = element;
+        this.children = children;
     }
 
     @Override
@@ -71,45 +77,27 @@ public class GoStructureViewElement implements StructureViewTreeElement {
 
             public Icon getIcon(boolean open) {
                 if (element instanceof GoMethodDeclaration)
-                    return Icons.METHOD_ICON;
+                    return PlatformIcons.METHOD_ICON;
                 if (element instanceof GoFunctionDeclaration)
-                    return Icons.FUNCTION_ICON;
-                if (element instanceof GoTypeNameDeclaration)
-                    return Icons.CLASS_ICON;
+                    return PlatformIcons.FUNCTION_ICON;
+                if (element instanceof GoTypeSpec) {
+                    GoType type = ((GoTypeSpec) element).getType();
+                    if (type instanceof GoTypeInterface)
+                        return PlatformIcons.INTERFACE_ICON;
+                    return PlatformIcons.CLASS_ICON;
+                }
 
-                return Icons.EXCLUDED_FROM_COMPILE_ICON;
+                if (element instanceof GoLiteralIdentifier) {
+                    return PlatformIcons.FIELD_ICON;
+                }
+
+                return PlatformIcons.EXCLUDED_FROM_COMPILE_ICON;
             }
         };
     }
 
     @Override
     public TreeElement[] getChildren() {
-        TreeElement[] children;
-        if (isRoot) {
-            GoFile psiFile = (GoFile) element;
-            GoFunctionDeclaration[] functionDeclarations = psiFile.getFunctions();
-            GoMethodDeclaration[] methodDeclarations = psiFile.getMethods();
-            GoTypeDeclaration[] typeDeclarations = psiFile.getTypeDeclarations();
-
-            ArrayList<PsiElement> items = new ArrayList<PsiElement>();//Arrays.asList(array)
-            // add just the typeNameDec to be listed at root
-            for (GoTypeDeclaration typeDec : typeDeclarations) {
-                for (GoTypeSpec spec : typeDec.getTypeSpecs()) {
-                    items.add(spec.getTypeNameDeclaration());
-                }
-            }
-
-            items.addAll(Arrays.asList(methodDeclarations));
-            items.addAll(Arrays.asList(functionDeclarations));
-
-            children = new TreeElement[items.size()];
-
-            for (int i = 0; i < items.size(); i++) {
-                children[i] = new GoStructureViewElement(items.get(i), false);
-            }
-        } else {
-            children = new TreeElement[0];
-        }
         return children;
     }
 }
