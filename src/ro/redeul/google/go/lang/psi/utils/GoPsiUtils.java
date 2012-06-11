@@ -109,12 +109,12 @@ public class GoPsiUtils {
         return null;
     }
 
-    public static PsiElement findParentOfType(PsiElement node, Class<? extends PsiElement> type) {
+    public static <T extends PsiElement> T findParentOfType(PsiElement node, Class<? extends T> type) {
         while (node != null && !ReflectionCache.isInstance(node, type)) {
             node = node.getParent();
         }
 
-        return node;
+        return (T) node;
     }
 
     public static boolean isWhiteSpaceNode(PsiElement node) {

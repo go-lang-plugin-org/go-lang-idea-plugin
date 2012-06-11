@@ -12,10 +12,13 @@ import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.inspection.fix.CreateFunctionFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+
+import static ro.redeul.google.go.inspection.fix.CreateFunctionFix.isFunctionCallIdentifier;
 
 public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
     @Nls
@@ -50,11 +53,12 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
             private void tryToResolveReference(PsiNamedElement element, PsiReference reference) {
                 if (reference != null && reference.resolve() == null) {
+                    LocalQuickFix fix = isFunctionCallIdentifier(element) ? new CreateFunctionFix(element) : null;
                     problems.add(
                         manager.createProblemDescriptor(
                             element,
                             GoBundle.message("warning.unresolved.symbol", element.getName()),
-                            (LocalQuickFix) null,
+                            fix,
                             ProblemHighlightType.LIKE_UNKNOWN_SYMBOL,
                             isOnTheFly
                         )
