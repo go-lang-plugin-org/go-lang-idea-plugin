@@ -65,7 +65,8 @@ Go file
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('nil')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('nil')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('        ')
@@ -74,14 +75,16 @@ Go file
           PsiWhiteSpace(' ')
           TypeList
             TypeNameImpl
-              PsiElement(IDENTIFIER)('int')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('int')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
             TypeSliceImpl
               PsiElement([)('[')
               PsiElement(])(']')
               TypeNameImpl
-                PsiElement(IDENTIFIER)('string')
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('string')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('             ')

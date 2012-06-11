@@ -24,7 +24,8 @@ Go file
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('int')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('int')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         TypeStructFieldImpl
@@ -32,6 +33,7 @@ Go file
             PsiElement(IDENTIFIER)('y')
           PsiWhiteSpace(' ')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('int32')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('int32')
         PsiWhiteSpace(' ')
         PsiElement(})('}')

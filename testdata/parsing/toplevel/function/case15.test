@@ -22,7 +22,8 @@ Go file
           PsiElement(IDENTIFIER)('b')
         PsiWhiteSpace(' ')
         TypeNameImpl
-          PsiElement(IDENTIFIER)('int')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('int')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       FunctionParameterImpl
@@ -30,7 +31,8 @@ Go file
           PsiElement(IDENTIFIER)('z')
         PsiWhiteSpace(' ')
         TypeNameImpl
-          PsiElement(IDENTIFIER)('float')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('float')
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
@@ -38,7 +40,8 @@ Go file
       FunctionParameterList
         FunctionParameterImpl
           TypeNameImpl
-            PsiElement(IDENTIFIER)('bool')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('bool')
       PsiElement())(')')
     PsiWhiteSpace(' ')
     BlockStmtImpl

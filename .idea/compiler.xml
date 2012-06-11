@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CompilerAPISettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:-serial" />
+  </component>
   <component name="CompilerConfiguration">
     <option name="DEFAULT_COMPILER" value="compAPI" />
     <resourceExtensions>

@@ -61,6 +61,22 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType LITERAL_FLOAT =
         new GoElementTypeImpl("LiteralFloat");
 
+    GoElementType LITERAL_COMPOSITE =
+        new GoElementTypeImpl("LiteralComposite");
+
+    GoElementType LITERAL_FUNCTION =
+        new GoElementTypeImpl("LiteralFunction");
+
+    GoElementType COMPOSITE_LITERAL_ELEMENT =
+        new GoElementTypeImpl("CompositeLiteralElement");
+    GoElementType COMPOSITE_LITERAL_ELEMENT_KEY =
+        new GoElementTypeImpl("CompositeLiteralElementKey");
+    GoElementType COMPOSITE_LITERAL_ELEMENT_VALUE =
+        new GoElementTypeImpl("CompositeLiteralElementValue");
+
+    GoElementType LITERAL_COMPOSITE_VALUE =
+        new GoElementTypeImpl("CompositeLiteralValue");
+
     GoElementType EXPRESSION_PARENTHESIZED =
         new GoElementTypeImpl("ParenthesisedExpression");
 
@@ -94,22 +110,10 @@ public interface GoElementTypes extends GoTokenTypes {
         new GoElementTypeImpl("SelectorExpression");
     GoElementType BUILTIN_CALL_EXPRESSION =
         new GoElementTypeImpl("BuiltInCallExpression");
-    GoElementType FUNCTION_LITERAL_EXPRESSION =
-        new GoElementTypeImpl("FunctionLiteral");
-    GoElementType COMPOSITE_LITERAL_EXPRESSION =
-        new GoElementTypeImpl("CompositeLiteral");
-    GoElementType COMPOSITE_LITERAL_ELEMENT_LIST =
-        new GoElementTypeImpl("CompositeLiteralElementList");
-    GoElementType COMPOSITE_LITERAL_ELEMENT =
-        new GoElementTypeImpl("CompositeLiteralElement");
-    GoElementType COMPOSITE_LITERAL_ELEMENT_KEY =
-        new GoElementTypeImpl("CompositeLiteralElementKey");
-    GoElementType COMPOSITE_LITERAL_ELEMENT_VALUE =
-        new GoElementTypeImpl("CompositeLiteralElementValue");
 
 
-    GoElementType TYPE_PARANTHESIZED = new GoElementTypeImpl(
-        "paranthesized type");
+    GoElementType TYPE_PARENTHESIZED =
+        new GoElementTypeImpl("TypeParenthesized");
 
     GoElementType PACKAGE_REFERENCE = new GoElementTypeImpl("PackageReference");
 
@@ -264,7 +268,7 @@ public interface GoElementTypes extends GoTokenTypes {
         CALL_OR_CONVERSION_EXPRESSION,
         INDEX_EXPRESSION, SLICE_EXPRESSION, TYPE_ASSERTION_EXPRESSION,
         UNARY_EXPRESSION, SELECTOR_EXPRESSION,
-        BUILTIN_CALL_EXPRESSION, FUNCTION_LITERAL_EXPRESSION,
+        BUILTIN_CALL_EXPRESSION, LITERAL_FUNCTION,
         COMPOSITE_LITERAL_ELEMENT
     );
 
@@ -284,4 +288,5 @@ public interface GoElementTypes extends GoTokenTypes {
     public final TokenSet RELATIONAL_OPS = TokenSet.create(
         oEQ, oNOT_EQ, oLESS, oLESS_OR_EQUAL, oGREATER, oGREATER_OR_EQUAL
     );
+    GoElementType METHOD_EXPRESSION = new GoElementTypeImpl("MethodExpression");
 }

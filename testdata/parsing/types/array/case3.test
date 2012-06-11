@@ -23,4 +23,5 @@ Go file
         TypePointerImpl
           PsiElement(*)('*')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('float64')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('float64')

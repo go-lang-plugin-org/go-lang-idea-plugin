@@ -1,6 +1,8 @@
 package ro.redeul.google.go.lang.parser.parsing.declarations;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -11,55 +13,59 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 25, 2010
  * Time: 12:05:14 AM
  */
-public class FunctionOrMethodDeclaration implements GoElementTypes {
+public class FunctionOrMethodDeclaration extends ParserUtils
+    implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-        boolean isMethod = false;
 
-        ParserUtils.skipNLS(builder);
+        skipNLS(builder);
+
+        if (!ParserUtils.lookAhead(builder, kFUNC))
+            return null;
 
         PsiBuilder.Marker marker = builder.mark();
 
-        // check the production name
-        if ( ! ParserUtils.getToken(builder, kFUNC) ) {
-            marker.rollbackTo();
-            return false;
-        }
-
+        ParserUtils.getToken(builder, kFUNC);
         // parse the receiver description
-        ParserUtils.skipNLS(builder);
-        if ( builder.getTokenType() == pLPAREN ) {
-            isMethod = true;
+        skipNLS(builder);
+        IElementType nodeType = FUNCTION_DECLARATION;
+        if (lookAhead(builder, pLPAREN)) {
             parseReceiverDeclaration(builder, parser);
+            nodeType = METHOD_DECLARATION;
         }
 
         // expecting method name
-        ParserUtils.skipNLS(builder);
-        ParserUtils.getToken(builder, mIDENT, "identifier.expected");
+        skipNLS(builder);
+        if (parser.isSet(GoParser.ParsingFlag.Debug)) {
+            LOG.debug("Method: " + builder.getTokenText());
+        }
 
-        ParserUtils.skipNLS(builder);
+        getToken(builder, mIDENT,
+                 GoBundle.message("error.method.name.expected"));
+
+        skipNLS(builder);
         parseCompleteMethodSignature(builder, parser);
 
-        ParserUtils.skipNLS(builder);
+        skipNLS(builder);
 
         parser.parseBody(builder);
 
-        marker.done(isMethod ? METHOD_DECLARATION : FUNCTION_DECLARATION);
-
-        return true;
+        marker.done(nodeType);
+        return nodeType;
     }
 
-    public static boolean parseCompleteMethodSignature(PsiBuilder builder, GoParser parser) {
+    public static boolean parseCompleteMethodSignature(PsiBuilder builder,
+                                                       GoParser parser) {
         parseSignature(builder, parser);
 
-        if ( builder.getTokenType() == pLPAREN ) {
+        if (builder.getTokenType() == pLPAREN) {
 
             PsiBuilder.Marker result = builder.mark();
             parseSignature(builder, parser);
             result.done(FUNCTION_RESULT);
 
-        } else if ( ! builder.eof() && builder.getTokenType() != pLCURCLY ) {
+        } else if (!builder.eof() && builder.getTokenType() != pLCURCLY) {
             PsiBuilder.Marker result = builder.mark();
             parser.parseType(builder);
 
@@ -82,13 +88,17 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
      * @param builder
      * @param parser
      */
-    private static void parseReceiverDeclaration(PsiBuilder builder, GoParser parser) {
+    private static void parseReceiverDeclaration(PsiBuilder builder,
+                                                 GoParser parser) {
 
         ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
 
         PsiBuilder.Marker receiverDeclarationMarker = builder.mark();
 
-        if ( ParserUtils.lookAhead(builder, mIDENT, mIDENT) || ParserUtils.lookAhead(builder, mIDENT, oMUL) ) {
+        if (ParserUtils.lookAhead(builder, mIDENT,
+                                  mIDENT) || ParserUtils.lookAhead(builder,
+                                                                   mIDENT,
+                                                                   oMUL)) {
             ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
         }
 
@@ -107,12 +117,12 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
 
         ParserUtils.skipNLS(builder);
 
-        if ( tryParameterListAsAnonymousTypes(builder, parser) )
+        if (tryParameterListAsAnonymousTypes(builder, parser))
             return true;
 
         PsiBuilder.Marker signature = builder.mark();
 
-        while ( !builder.eof() && builder.getTokenType() != pRPAREN ) {
+        while (!builder.eof() && builder.getTokenType() != pRPAREN) {
 
             boolean isVariadic = false;
             int pos = builder.getCurrentOffset();
@@ -120,7 +130,7 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
             parser.parseIdentifierList(builder, false);
 
             ParserUtils.skipNLS(builder);
-            if ( builder.getTokenType() == oTRIPLE_DOT ) {
+            if (builder.getTokenType() == oTRIPLE_DOT) {
                 ParserUtils.advance(builder);
                 isVariadic = true;
             }
@@ -128,15 +138,16 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
             ParserUtils.skipNLS(builder);
             parser.parseType(builder);
 
-            parameterSignature.done(isVariadic ? FUNCTION_PARAMETER_VARIADIC: FUNCTION_PARAMETER);
+            parameterSignature.done(
+                isVariadic ? FUNCTION_PARAMETER_VARIADIC : FUNCTION_PARAMETER);
 
             ParserUtils.skipNLS(builder);
-            if ( builder.getTokenType() == oCOMMA )  {
+            if (builder.getTokenType() == oCOMMA) {
                 ParserUtils.advance(builder);
                 ParserUtils.skipNLS(builder);
             }
 
-            if ( pos == builder.getCurrentOffset() ) {
+            if (pos == builder.getCurrentOffset()) {
                 ParserUtils.wrapError(builder, "unexpected.char");
             }
         }
@@ -150,20 +161,21 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
         return true;
     }
 
-    private static boolean tryParameterListAsAnonymousTypes(PsiBuilder builder, GoParser parser) {
+    private static boolean tryParameterListAsAnonymousTypes(PsiBuilder builder,
+                                                            GoParser parser) {
         PsiBuilder.Marker signature = builder.mark();
 
         int parameterCount = 0;
         // first try to parse as a list of types
-        while ( ! builder.eof() ) {
+        while (!builder.eof()) {
             PsiBuilder.Marker argument = builder.mark();
 
-            if ( builder.getTokenType() == oTRIPLE_DOT ) {
+            if (builder.getTokenType() == oTRIPLE_DOT) {
                 ParserUtils.eatElement(builder, oTRIPLE_DOT);
             }
 
             ParserUtils.skipNLS(builder);
-            if ( parser.parseType(builder) ) {
+            if (parser.parseType(builder)) {
                 argument.done(FUNCTION_PARAMETER);
                 parameterCount++;
             } else {
@@ -171,7 +183,7 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
             }
 
             ParserUtils.skipNLS(builder);
-            if ( builder.getTokenType() == oCOMMA ) {
+            if (builder.getTokenType() == oCOMMA) {
                 builder.advanceLexer();
                 ParserUtils.skipNLS(builder);
             } else {
@@ -179,8 +191,8 @@ public class FunctionOrMethodDeclaration implements GoElementTypes {
             }
         }
 
-        if ( builder.getTokenType() == pRPAREN ) {
-            if ( parameterCount > 0 ) {
+        if (builder.getTokenType() == pRPAREN) {
+            if (parameterCount > 0) {
                 signature.done(FUNCTION_PARAMETER_LIST);
             } else {
                 signature.drop();

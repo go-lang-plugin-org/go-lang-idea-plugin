@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -14,17 +15,16 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class DeferStatement implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
         PsiBuilder.Marker marker = builder.mark();
 
         if (!ParserUtils.getToken(builder, kDEFER)) {
             marker.rollbackTo();
-            return false;
+            return null;
         }
 
-        parser.parseExpression(builder, false, false);
+        parser.parseExpression(builder);
         marker.done(DEFER_STATEMENT);
-        return true;
-
+        return DEFER_STATEMENT;
     }
 }

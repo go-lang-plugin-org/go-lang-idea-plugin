@@ -30,7 +30,8 @@ Go file
             PsiElement(KEYWORD_MAP)('map')
             PsiElement([)('[')
             TypeNameImpl
-              PsiElement(IDENTIFIER)('string')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('string')
             PsiElement(])(']')
             TypeFunction
               PsiElement(KEYWORD_FUNC)('func')
@@ -41,10 +42,9 @@ Go file
                     PsiElement(IDENTIFIER)('w')
                   PsiWhiteSpace(' ')
                   TypeNameImpl
-                    PackageReferenceImpl
-                      PsiElement(IDENTIFIER)('http')
-                    PsiElement(.)('.')
                     LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('http')
+                      PsiElement(.)('.')
                       PsiElement(IDENTIFIER)('ResponseWriter')
                 PsiElement(,)(',')
                 PsiWhiteSpace(' ')
@@ -55,10 +55,9 @@ Go file
                   TypePointerImpl
                     PsiElement(*)('*')
                     TypeNameImpl
-                      PackageReferenceImpl
-                        PsiElement(IDENTIFIER)('http')
-                      PsiElement(.)('.')
                       LiteralIdentifierImpl
+                        PsiElement(IDENTIFIER)('http')
+                        PsiElement(.)('.')
                         PsiElement(IDENTIFIER)('Request')
                 PsiElement(,)(',')
                 PsiWhiteSpace(' ')
@@ -69,10 +68,9 @@ Go file
                   TypePointerImpl
                     PsiElement(*)('*')
                     TypeNameImpl
-                      PackageReferenceImpl
-                        PsiElement(IDENTIFIER)('yqs')
-                      PsiElement(.)('.')
                       LiteralIdentifierImpl
+                        PsiElement(IDENTIFIER)('yqs')
+                        PsiElement(.)('.')
                         PsiElement(IDENTIFIER)('Queues')
               PsiElement())(')')
               FunctionResult
@@ -88,15 +86,15 @@ Go file
             PsiElement(KEYWORD_MAP)('map')
             PsiElement([)('[')
             TypeNameImpl
-              PsiElement(IDENTIFIER)('string')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('string')
             PsiElement(])(']')
             TypePointerImpl
               PsiElement(*)('*')
               TypeNameImpl
-                PackageReferenceImpl
-                  PsiElement(IDENTIFIER)('template')
-                PsiElement(.)('.')
                 LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('template')
+                  PsiElement(.)('.')
                   PsiElement(IDENTIFIER)('Template')
         PsiElement(WS_NEW_LINES)('\n')
         PsiElement(})('}')

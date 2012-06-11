@@ -19,8 +19,10 @@ Go file
         PsiWhiteSpace(' ')
         PsiElement([)('[')
         TypeNameImpl
-          PsiElement(IDENTIFIER)('string')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('string')
         PsiElement(])(']')
         PsiWhiteSpace(' ')
         TypeNameImpl
-          PsiElement(IDENTIFIER)('int')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('int')

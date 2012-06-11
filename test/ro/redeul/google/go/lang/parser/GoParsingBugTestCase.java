@@ -32,4 +32,8 @@ public class GoParsingBugTestCase extends GoParsingTestCase {
         doTest();
     }
 
+    public void testSwitch_stmt_with_compositeLiteral() throws Throwable { doTest(); }
+    public void testSwitch_stmt_with_parenthesized() throws Throwable { doTest(); }
+    public void testfunction_with_string() throws Throwable { doTest(); }
+
 }

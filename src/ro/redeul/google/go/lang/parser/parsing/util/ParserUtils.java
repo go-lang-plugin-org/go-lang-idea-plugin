@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.util;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
@@ -12,6 +13,8 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
  * Time: 9:12:06 PM
  */
 public abstract class ParserUtils {
+
+    public static final Logger LOG = Logger.getInstance("#ro.redeul.google.go.lang.parsing");
 
     /**
      * Auxiliary method for strict token appearance
@@ -288,5 +291,32 @@ public abstract class ParserUtils {
         while ( GoElementTypes.COMMENTS.contains(builder.getTokenType()) ) {
             builder.advanceLexer();
         }
+    }
+
+    public static PsiBuilder.Marker resetTo(PsiBuilder builder, PsiBuilder.Marker mark) {
+        mark.rollbackTo();
+        return builder.mark();
+    }
+
+    public static boolean markTokenIf(PsiBuilder builder,
+                                      IElementType markerToken,
+                                      IElementType tokenType) {
+        if (builder.getTokenType() == tokenType) {
+            eatElement(builder, markerToken);
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean markTokenIf(PsiBuilder builder,
+                                      IElementType markerToken,
+                                      TokenSet tokenTypes) {
+        if ( tokenTypes.contains(builder.getTokenType())) {
+            eatElement(builder, markerToken);
+            return true;
+        }
+
+        return false;
     }
 }

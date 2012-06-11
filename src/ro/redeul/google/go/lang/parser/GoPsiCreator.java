@@ -24,6 +24,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralIdentifie
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImaginaryImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralIntegerImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralStringImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoDeferStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoExpressionStatementImpl;
@@ -49,6 +50,7 @@ import ro.redeul.google.go.lang.psi.impl.types.GoTypeChannelImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeInterfaceImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeMapImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeNameImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypeParenthesizedImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypePointerImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeSliceImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeStructImpl;
@@ -107,6 +109,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(METHOD_RECEIVER))
             return new GoMethodReceiverImpl(node);
+
+        if (elementType.equals(TYPE_PARENTHESIZED))
+            return new GoTypeParenthesizedImpl(node);
 
         if (elementType.equals(TYPE_NAME))
             return new GoTypeNameImpl(node);
@@ -185,8 +190,11 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(LITERAL_EXPRESSION))
             return new GoLiteralExpressionImpl(node);
+
+        if (elementType.equals(LITERAL_COMPOSITE))
+            return new GoLiteralCompositeImpl(node);
 //
-        if (elementType.equals(FUNCTION_LITERAL_EXPRESSION))
+        if (elementType.equals(LITERAL_FUNCTION))
             return new GoLiteralFunctionImpl(node);
 
         if (elementType.equals(ADD_EXPRESSION))

@@ -18,4 +18,5 @@ Go file
         PsiElement(KEYWORD_CHAN)('chan')
         PsiWhiteSpace(' ')
         TypeNameImpl
-          PsiElement(IDENTIFIER)('int')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('int')

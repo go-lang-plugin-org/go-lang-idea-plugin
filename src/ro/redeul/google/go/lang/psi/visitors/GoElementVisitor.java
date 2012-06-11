@@ -9,6 +9,8 @@ import ro.redeul.google.go.lang.psi.expressions.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
+import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
@@ -151,6 +153,14 @@ public class GoElementVisitor  {
         visitElement(indexExpression);
     }
 
+    public void visitLiteralCompositeVal(GoLiteralCompositeValue compositeValue) {
+        visitElement(compositeValue);
+    }
+
+    public void visitLiteralComposite(GoLiteralComposite literalComposite) {
+        visitElement(literalComposite);
+    }
+
     public void visitIfStatement(GoIfStatement ifStatement) {
         visitElement(ifStatement);
     }
@@ -162,4 +172,5 @@ public class GoElementVisitor  {
     public void visitDeferStatement(GoDeferStatement deferStatement) {
         visitElement(deferStatement);
     }
+
 }

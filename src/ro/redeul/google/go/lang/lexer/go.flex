@@ -75,7 +75,7 @@ mSL_COMMENT = "//" [^\r\n]*
 //mML_COMMENT = "/*" "*"
 
 mLETTER = [:letter:] | "_"
-mDIGIT = [:digit:]
+mDIGIT =  [:digit:]
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////      integers and floats     /////////////////////////////////////////////////////////////////////
@@ -99,7 +99,9 @@ mNUM_FLOAT = ( ( ({mDIGIT}+ "." {mDIGIT}*) | ({mDIGIT}* "." {mDIGIT}+) ) {mFLOAT
 mIDENT = {mLETTER} ({mLETTER} | {mDIGIT} )*
 //mIDENT_NOBUCKS = {mLETTER} ({mLETTER} | {mDIGIT})*
 
-// mCHAR = "'" [^'] "'"
+mSLASH =    "\\"
+mSTR =      "\""
+mESCAPES = [abfnrtv]
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////// String & regexprs ///////////////////////////////////////////////////////////////////////////////////////////
@@ -138,9 +140,6 @@ mIDENT = {mLETTER} ({mLETTER} | {mDIGIT} )*
 
 //mGSTRING_LITERAL = \"\" | \" ([^\\\"\n\r"$"] | {mSTRING_ESC})? {mGSTRING_SINGLE_CONTENT} \" | \"\"\" {mGSTRING_TRIPLE_CTOR_END}
 
-
-%state IN_CHAR_LITERAL
-%state IN_STRING_LITERAL
 
 // %state IN_COMMENT
 
@@ -231,7 +230,11 @@ mIDENT = {mLETTER} ({mLETTER} | {mDIGIT} )*
                                                         { return litCHAR; }
 
 "`" [^`]* "`"                             { return litSTRING; }
-"\"" ("\\\"" | [^\"])* "\""               { return litSTRING; }
+{mSTR}
+    (
+        [^\"\\] | "\\" ("\\" | {mSTR} | {mESCAPES} | [0-8xuU] )
+    )*
+(EOF | {mSTR})                            { return litSTRING; }
 "{"                                       { return pLCURCLY; }
 "}"                                       { return pRCURLY; }
 

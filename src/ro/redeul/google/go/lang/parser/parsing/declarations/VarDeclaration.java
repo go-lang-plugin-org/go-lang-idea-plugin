@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.declarations;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
@@ -12,30 +13,33 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 24, 2010
  * Time: 9:38:55 PM
  */
-public class VarDeclaration implements GoElementTypes {
+public class VarDeclaration extends ParserUtils implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
         PsiBuilder.Marker marker = builder.mark();
 
-        if (!ParserUtils.getToken(builder, kVAR)) {
+        if (!getToken(builder, kVAR)) {
             marker.rollbackTo();
-            return false;
+            return null;
         }
 
-        NestedDeclarationParser.parseNestedOrBasicDeclaration(builder, parser, new NestedDeclarationParser.DeclarationParser() {
-            public void parse(PsiBuilder builder, GoParser parser) {
-                parseVarSpecification(builder, parser);
-            }
-        });
+        NestedDeclarationParser.parseNestedOrBasicDeclaration(
+            builder, parser,
+            new NestedDeclarationParser.DeclarationParser() {
+                public void parse(PsiBuilder builder, GoParser parser) {
+                    parseVarSpecification(builder, parser);
+                }
+            });
 
         marker.done(VAR_DECLARATIONS);
-        return true;
+        return VAR_DECLARATIONS;
     }
 
     static TokenSet localImportTokens = TokenSet.create(mIDENT, oDOT);
 
-    private static void parseVarSpecification(PsiBuilder builder, GoParser parser) {
+    private static void parseVarSpecification(PsiBuilder builder,
+                                              GoParser parser) {
 
         ParserUtils.skipNLS(builder);
         PsiBuilder.Marker varStatementSpecification = builder.mark();
@@ -55,7 +59,7 @@ public class VarDeclaration implements GoElementTypes {
             ParserUtils.skipNLS(builder);
             if (ParserUtils.getToken(builder, oASSIGN)) {
                 ParserUtils.skipNLS(builder);
-                parser.parseExpressionList(builder, false, false);
+                parser.parseExpressionList(builder);
             } else {
                 if (!hasType) {
                     builder.error("assign.operator.expected");
@@ -63,7 +67,9 @@ public class VarDeclaration implements GoElementTypes {
             }
         }
 
-        ParserUtils.waitNext(builder, TokenSet.create(oSEMI, wsNLS, pRPAREN, pRCURLY), "semicolon.or.newline.right.parenthesis.expected");
+        ParserUtils.waitNext(builder,
+                             TokenSet.create(oSEMI, wsNLS, pRPAREN, pRCURLY),
+                             "semicolon.or.newline.right.parenthesis.expected");
         ParserUtils.getToken(builder, oSEMI);
         varStatementSpecification.done(VAR_DECLARATION);
     }

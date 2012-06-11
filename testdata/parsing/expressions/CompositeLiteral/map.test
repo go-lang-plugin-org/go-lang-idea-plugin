@@ -16,16 +16,18 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CompositeLiteral
-        TypeMapImpl
-          PsiElement(KEYWORD_MAP)('map')
-          PsiElement([)('[')
-          TypeNameImpl
-            PsiElement(IDENTIFIER)('string')
-          PsiElement(])(']')
-          TypeNameImpl
-            PsiElement(IDENTIFIER)('int')
-        CompositeLiteralElementList
+      LiteralExpressionImpl
+        LiteralCompositeImpl
+          TypeMapImpl
+            PsiElement(KEYWORD_MAP)('map')
+            PsiElement([)('[')
+            TypeNameImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('string')
+            PsiElement(])(']')
+            TypeNameImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('int')
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementKey

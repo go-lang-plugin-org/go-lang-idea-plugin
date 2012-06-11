@@ -19,4 +19,5 @@ Go file
         PsiElement(<-)('<-')
         PsiWhiteSpace(' ')
         TypeNameImpl
-          PsiElement(IDENTIFIER)('int')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('int')

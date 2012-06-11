@@ -16,26 +16,28 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CompositeLiteral
-        TypeStructImpl
-          PsiElement(KEYWORD_STRUCT)('struct')
-          PsiElement({)('{')
-          TypeStructFieldImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('a')
+      LiteralExpressionImpl
+        LiteralCompositeImpl
+          TypeStructImpl
+            PsiElement(KEYWORD_STRUCT)('struct')
+            PsiElement({)('{')
+            TypeStructFieldImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('a')
+              PsiWhiteSpace(' ')
+              TypeNameImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('int')
+            PsiElement(;)(';')
             PsiWhiteSpace(' ')
-            TypeNameImpl
-              PsiElement(IDENTIFIER)('int')
-          PsiElement(;)(';')
-          PsiWhiteSpace(' ')
-          TypeStructFieldImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('b')
-            PsiWhiteSpace(' ')
-            TypeNameImpl
-              PsiElement(IDENTIFIER)('int')
-          PsiElement(})('}')
-        CompositeLiteralElementList
+            TypeStructFieldImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('b')
+              PsiWhiteSpace(' ')
+              TypeNameImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('int')
+            PsiElement(})('}')
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue
@@ -46,37 +48,36 @@ Go file
           PsiWhiteSpace(' ')
           CompositeLiteralElement
             CompositeLiteralElementValue
-              CompositeLiteral
-                LiteralExpressionImpl
+              LiteralCompositeImpl
+                TypeNameImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('Point')
-                CompositeLiteralElementList
-                  PsiElement({)('{')
-                  CompositeLiteralElement
-                    CompositeLiteralElementKey
-                      LiteralExpressionImpl
-                        LiteralIdentifierImpl
-                          PsiElement(IDENTIFIER)('y')
-                    PsiElement(:)(':')
-                    PsiWhiteSpace(' ')
-                    CompositeLiteralElementValue
-                      UnaryExpression
-                        PsiElement(-)('-')
-                        LiteralExpressionImpl
-                          LiteralIntegerImpl
-                            PsiElement(LITERAL_INT)('1')
-                  PsiElement(,)(',')
+                PsiElement({)('{')
+                CompositeLiteralElement
+                  CompositeLiteralElementKey
+                    LiteralExpressionImpl
+                      LiteralIdentifierImpl
+                        PsiElement(IDENTIFIER)('y')
+                  PsiElement(:)(':')
                   PsiWhiteSpace(' ')
-                  CompositeLiteralElement
-                    CompositeLiteralElementKey
-                      LiteralExpressionImpl
-                        LiteralIdentifierImpl
-                          PsiElement(IDENTIFIER)('x')
-                    PsiElement(:)(':')
-                    PsiWhiteSpace(' ')
-                    CompositeLiteralElementValue
+                  CompositeLiteralElementValue
+                    UnaryExpression
+                      PsiElement(-)('-')
                       LiteralExpressionImpl
                         LiteralIntegerImpl
-                          PsiElement(LITERAL_INT)('10')
-                  PsiElement(})('}')
+                          PsiElement(LITERAL_INT)('1')
+                PsiElement(,)(',')
+                PsiWhiteSpace(' ')
+                CompositeLiteralElement
+                  CompositeLiteralElementKey
+                    LiteralExpressionImpl
+                      LiteralIdentifierImpl
+                        PsiElement(IDENTIFIER)('x')
+                  PsiElement(:)(':')
+                  PsiWhiteSpace(' ')
+                  CompositeLiteralElementValue
+                    LiteralExpressionImpl
+                      LiteralIntegerImpl
+                        PsiElement(LITERAL_INT)('10')
+                PsiElement(})('}')
           PsiElement(})('}')

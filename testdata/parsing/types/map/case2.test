@@ -21,7 +21,8 @@ Go file
         TypePointerImpl
           PsiElement(*)('*')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('T')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('T')
         PsiElement(])(']')
         PsiWhiteSpace(' ')
         TypeStructImpl
@@ -38,6 +39,7 @@ Go file
               PsiElement(IDENTIFIER)('y')
             PsiWhiteSpace(' ')
             TypeNameImpl
-              PsiElement(IDENTIFIER)('float')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('float')
           PsiWhiteSpace(' ')
           PsiElement(})('}')

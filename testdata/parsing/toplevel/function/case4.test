@@ -18,7 +18,8 @@ Go file
           PsiElement(IDENTIFIER)('prefix')
         PsiWhiteSpace(' ')
         TypeNameImpl
-          PsiElement(IDENTIFIER)('string')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('string')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       FunctionParameterVariadicImpl
@@ -27,5 +28,6 @@ Go file
         PsiWhiteSpace(' ')
         PsiElement(...)('...')
         TypeNameImpl
-          PsiElement(IDENTIFIER)('int')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('int')
     PsiElement())(')')

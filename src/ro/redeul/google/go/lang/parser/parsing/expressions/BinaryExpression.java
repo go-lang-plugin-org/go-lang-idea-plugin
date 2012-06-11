@@ -36,19 +36,16 @@ public class BinaryExpression implements GoElementTypes {
             MUL_EXPR,
     };
 
-    public static boolean parse(PsiBuilder builder, GoParser parser,
-                                boolean inControlStmts, boolean parseIota) {
-        return parse(builder, parser, inControlStmts, parseIota, 0);
+    public static boolean parse(PsiBuilder builder, GoParser parser) {
+        return parse(builder, parser, 0);
     }
 
-    private static boolean parse(PsiBuilder builder, GoParser parser,
-                                 boolean inControlStmts, boolean parseIota,
-                                 int level) {
+    private static boolean parse(PsiBuilder builder, GoParser parser, int level) {
 
         ParserUtils.skipNLS(builder);
 
         PsiBuilder.Marker marker = builder.mark();
-        if ( ! UnaryExpression.parse(builder, parser, inControlStmts, parseIota) ) {
+        if ( ! UnaryExpression.parse(builder, parser) ) {
             marker.rollbackTo();
             return false;
         }
@@ -64,7 +61,7 @@ public class BinaryExpression implements GoElementTypes {
                     ParserUtils.getToken(builder, builder.getTokenType());
                     ParserUtils.skipNLS(builder);
 
-                    parse(builder, parser, inControlStmts, parseIota, i + 1);
+                    parse(builder, parser, i + 1);
 
                     marker.done(precedence[i].elementType);
                     marker = marker.precede();

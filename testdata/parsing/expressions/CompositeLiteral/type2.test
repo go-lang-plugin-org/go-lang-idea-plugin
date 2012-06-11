@@ -19,11 +19,11 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CompositeLiteral
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('LoggedUserInfo')
-        CompositeLiteralElementList
+      LiteralExpressionImpl
+        LiteralCompositeImpl
+          TypeNameImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('LoggedUserInfo')
           PsiElement({)('{')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('                ')

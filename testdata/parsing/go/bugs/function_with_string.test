@@ -1,0 +1,448 @@
+/*
+Derived from Inferno's utils/iyacc/yacc.c
+http://code.google.com/p/inferno-os/source/browse/utils/iyacc/yacc.c
+
+This copyright NOTICE applies to all files in this directory and
+subdirectories, unless another copyright notice appears in a given
+file or subdirectory.  If you take substantial code from this software to use in
+other programs, you must somehow include with it an appropriate
+copyright notice that includes the copyright notice and the other
+notices below.  It is fine (and often tidier) to do that in a separate
+file such as NOTICE, LICENCE or COPYING.
+
+	Copyright © 1994-1999 Lucent Technologies Inc.  All rights reserved.
+	Portions Copyright © 1995-1997 C H Forsyth (forsyth@terzarima.net)
+	Portions Copyright © 1997-1999 Vita Nuova Limited
+	Portions Copyright © 2000-2007 Vita Nuova Holdings Limited (www.vitanuova.com)
+	Portions Copyright © 2004,2006 Bruce Ellis
+	Portions Copyright © 2005-2007 C H Forsyth (forsyth@terzarima.net)
+	Revisions Copyright © 2000-2007 Lucent Technologies Inc. and others
+	Portions Copyright © 2009 The Go Authors.  All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
+package main
+
+//
+// copies and protects "'s in q
+//
+func chcopy(q string) string {
+	s := ""
+	i := 0
+	j := 0
+	for i = 0; i < len(q); i++ {
+		if q[i] == '"' {
+			s += q[j:i] + "\\"
+			j = i
+		}
+	}
+	return s + q[j:i]
+}
+
+func usage() {
+	fmt.Fprintf(stderr, "usage: yacc [-o output] [-v parsetable] input\n")
+	exit(1)
+}
+
+func bitset(set Lkset, bit int) int { return set[bit>>5] & (1 << uint(bit&31)) }
+
+func setbit(set Lkset, bit int) { set[bit>>5] |= (1 << uint(bit&31)) }
+
+func mkset() Lkset { return make([]int, tbitset) }
+
+//
+// set a to the union of a and b
+// return 1 if b is not a subset of a, 0 otherwise
+//
+func setunion(a, b []int) int {
+	sub := 0
+	for i := 0; i < tbitset; i++ {
+		x := a[i]
+		y := x | b[i]
+		a[i] = y
+		if y != x {
+			sub = 1
+		}
+	}
+	return sub
+}
+
+func prlook(p Lkset) {
+	if p == nil {
+		fmt.Fprintf(foutput, "\tNULL")
+		return
+	}
+	fmt.Fprintf(foutput, " { ")
+	for j := 0; j <= ntokens; j++ {
+		if bitset(p, j) != 0 {
+			fmt.Fprintf(foutput, "%v ", symnam(j))
+		}
+	}
+	fmt.Fprintf(foutput, "}")
+}
+
+//
+// utility routines
+//
+var peekrune rune
+
+func isdigit(c rune) bool { return c >= '0' && c <= '9' }
+
+func isword(c rune) bool {
+	return c >= 0xa0 || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+}
+
+func mktemp(t string) string { return t }
+
+//
+// return 1 if 2 arrays are equal
+// return 0 if not equal
+//
+func aryeq(a []int, b []int) int {
+	n := len(a)
+	if len(b) != n {
+		return 0
+	}
+	for ll := 0; ll < n; ll++ {
+		if a[ll] != b[ll] {
+			return 0
+		}
+	}
+	return 1
+}
+
+func putrune(f *bufio.Writer, c int) {
+	s := string(c)
+	for i := 0; i < len(s); i++ {
+		f.WriteByte(s[i])
+	}
+}
+
+func getrune(f *bufio.Reader) rune {
+	var r rune
+
+	if peekrune != 0 {
+		if peekrune == EOF {
+			return EOF
+		}
+		r = peekrune
+		peekrune = 0
+		return r
+	}
+
+	c, n, err := f.ReadRune()
+	if n == 0 {
+		return EOF
+	}
+	if err != nil {
+		errorf("read error: %v", err)
+	}
+	//fmt.Printf("rune = %v n=%v\n", string(c), n);
+	return c
+}
+
+func ungetrune(f *bufio.Reader, c rune) {
+	if f != finput {
+		panic("ungetc - not finput")
+	}
+	if peekrune != 0 {
+		panic("ungetc - 2nd unget")
+	}
+	peekrune = c
+}
+
+func write(f *bufio.Writer, b []byte, n int) int {
+	panic("write")
+	return 0
+}
+
+func open(s string) *bufio.Reader {
+	fi, err := os.Open(s)
+	if err != nil {
+		errorf("error opening %v: %v", s, err)
+	}
+	//fmt.Printf("open %v\n", s);
+	return bufio.NewReader(fi)
+}
+
+func create(s string) *bufio.Writer {
+	fo, err := os.Create(s)
+	if err != nil {
+		errorf("error creating %v: %v", s, err)
+	}
+	//fmt.Printf("create %v mode %v\n", s);
+	return bufio.NewWriter(fo)
+}
+
+//
+// write out error comment
+//
+func errorf(s string, v ...interface{}) {
+	nerrors++
+	fmt.Fprintf(stderr, s, v...)
+	fmt.Fprintf(stderr, ": %v:%v\n", infile, lineno)
+	if fatfl != 0 {
+		summary()
+		exit(1)
+	}
+}
+
+func exit(status int) {
+	if ftable != nil {
+		ftable.Flush()
+		ftable = nil
+	}
+	if foutput != nil {
+		foutput.Flush()
+		foutput = nil
+	}
+	if stderr != nil {
+		stderr.Flush()
+		stderr = nil
+	}
+	os.Exit(status)
+}
+
+var yaccpar string // will be processed version of yaccpartext: s/$$/prefix/g
+var yaccpartext = `
+/*	parser for yacc output	*/
+
+var $$Debug = 0
+
+type $$Lexer interface {
+	Lex(lval *$$SymType) int
+	Error(s string)
+}
+
+const $$Flag = -1000
+
+func $$Tokname(c int) string {
+	if c > 0 && c <= len($$Toknames) {
+		if $$Toknames[c-1] != "" {
+			return $$Toknames[c-1]
+		}
+	}
+	return fmt.Sprintf("tok-%v", c)
+}
+
+func $$Statname(s int) string {
+	if s >= 0 && s < len($$Statenames) {
+		if $$Statenames[s] != "" {
+			return $$Statenames[s]
+		}
+	}
+	return fmt.Sprintf("state-%v", s)
+}
+
+func $$lex1(lex $$Lexer, lval *$$SymType) int {
+	c := 0
+	char := lex.Lex(lval)
+	if char <= 0 {
+		c = $$Tok1[0]
+		goto out
+	}
+	if char < len($$Tok1) {
+		c = $$Tok1[char]
+		goto out
+	}
+	if char >= $$Private {
+		if char < $$Private+len($$Tok2) {
+			c = $$Tok2[char-$$Private]
+			goto out
+		}
+	}
+	for i := 0; i < len($$Tok3); i += 2 {
+		c = $$Tok3[i+0]
+		if c == char {
+			c = $$Tok3[i+1]
+			goto out
+		}
+	}
+
+out:
+	if c == 0 {
+		c = $$Tok2[1] /* unknown char */
+	}
+	if $$Debug >= 3 {
+		fmt.Printf("lex %U %s\n", uint(char), $$Tokname(c))
+	}
+	return c
+}
+
+func $$Parse($$lex $$Lexer) int {
+	var $$n int
+	var $$lval $$SymType
+	var $$VAL $$SymType
+	$$S := make([]$$SymType, $$MaxDepth)
+
+	Nerrs := 0   /* number of errors */
+	Errflag := 0 /* error recovery flag */
+	$$state := 0
+	$$char := -1
+	$$p := -1
+	goto $$stack
+
+ret0:
+	return 0
+
+ret1:
+	return 1
+
+$$stack:
+	/* put a state and value onto the stack */
+	if $$Debug >= 4 {
+		fmt.Printf("char %v in %v\n", $$Tokname($$char), $$Statname($$state))
+	}
+
+	$$p++
+	if $$p >= len($$S) {
+		nyys := make([]$$SymType, len($$S)*2)
+		copy(nyys, $$S)
+		$$S = nyys
+	}
+	$$S[$$p] = $$VAL
+	$$S[$$p].yys = $$state
+
+$$newstate:
+	$$n = $$Pact[$$state]
+	if $$n <= $$Flag {
+		goto $$default /* simple state */
+	}
+	if $$char < 0 {
+		$$char = $$lex1($$lex, &$$lval)
+	}
+	$$n += $$char
+	if $$n < 0 || $$n >= $$Last {
+		goto $$default
+	}
+	$$n = $$Act[$$n]
+	if $$Chk[$$n] == $$char { /* valid shift */
+		$$char = -1
+		$$VAL = $$lval
+		$$state = $$n
+		if Errflag > 0 {
+			Errflag--
+		}
+		goto $$stack
+	}
+
+$$default:
+	/* default state action */
+	$$n = $$Def[$$state]
+	if $$n == -2 {
+		if $$char < 0 {
+			$$char = $$lex1($$lex, &$$lval)
+		}
+
+		/* look through exception table */
+		xi := 0
+		for {
+			if $$Exca[xi+0] == -1 && $$Exca[xi+1] == $$state {
+				break
+			}
+			xi += 2
+		}
+		for xi += 2; ; xi += 2 {
+			$$n = $$Exca[xi+0]
+			if $$n < 0 || $$n == $$char {
+				break
+			}
+		}
+		$$n = $$Exca[xi+1]
+		if $$n < 0 {
+			goto ret0
+		}
+	}
+	if $$n == 0 {
+		/* error ... attempt to resume parsing */
+		switch Errflag {
+		case 0: /* brand new error */
+			$$lex.Error("syntax error")
+			Nerrs++
+			if $$Debug >= 1 {
+				fmt.Printf("%s", $$Statname($$state))
+				fmt.Printf("saw %s\n", $$Tokname($$char))
+			}
+			fallthrough
+
+		case 1, 2: /* incompletely recovered error ... try again */
+			Errflag = 3
+
+			/* find a state where "error" is a legal shift action */
+			for $$p >= 0 {
+				$$n = $$Pact[$$S[$$p].yys] + $$ErrCode
+				if $$n >= 0 && $$n < $$Last {
+					$$state = $$Act[$$n] /* simulate a shift of "error" */
+					if $$Chk[$$state] == $$ErrCode {
+						goto $$stack
+					}
+				}
+
+				/* the current p has no shift on "error", pop stack */
+				if $$Debug >= 2 {
+					fmt.Printf("error recovery pops state %d\n", $$S[$$p].yys)
+				}
+				$$p--
+			}
+			/* there is no state on the stack with an error shift ... abort */
+			goto ret1
+
+		case 3: /* no shift yet; clobber input char */
+			if $$Debug >= 2 {
+				fmt.Printf("error recovery discards %s\n", $$Tokname($$char))
+			}
+			if $$char == $$EofCode {
+				goto ret1
+			}
+			$$char = -1
+			goto $$newstate /* try again in the same state */
+		}
+	}
+
+	/* reduction by production $$n */
+	if $$Debug >= 2 {
+		fmt.Printf("reduce %v in:\n\t%v\n", $$n, $$Statname($$state))
+	}
+
+	$$nt := $$n
+	$$pt := $$p
+	_ = $$pt // guard against "declared and not used"
+
+	$$p -= $$R2[$$n]
+	$$VAL = $$S[$$p+1]
+
+	/* consult goto table to find next state */
+	$$n = $$R1[$$n]
+	$$g := $$Pgo[$$n]
+	$$j := $$g + $$S[$$p].yys + 1
+
+	if $$j >= $$Last {
+		$$state = $$Act[$$g]
+	} else {
+		$$state = $$Act[$$j]
+		if $$Chk[$$state] != -$$n {
+			$$state = $$Act[$$g]
+		}
+	}
+	// dummy call; replaced with literal code
+	$$run()
+	goto $$stack /* stack new state and value */
+}
+`

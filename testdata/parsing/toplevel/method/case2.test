@@ -30,7 +30,8 @@ Go file
           PsiElement(IDENTIFIER)('factor')
         PsiWhiteSpace(' ')
         TypeNameImpl
-          PsiElement(IDENTIFIER)('float64')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('float64')
     PsiElement())(')')
     PsiWhiteSpace(' ')
     BlockStmtImpl

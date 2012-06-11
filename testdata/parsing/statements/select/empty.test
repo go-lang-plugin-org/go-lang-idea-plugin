@@ -22,7 +22,5 @@ Go file
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiElement(})('}')
-        PsiWhiteSpace(' ')
-        PsiElement(})('}')
-      PsiErrorElement:right.curly.expected
-        <empty list>
+      PsiWhiteSpace(' ')
+      PsiElement(})('}')

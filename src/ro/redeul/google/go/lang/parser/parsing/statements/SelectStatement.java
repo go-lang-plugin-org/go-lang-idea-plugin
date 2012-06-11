@@ -1,23 +1,26 @@
 package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 public class SelectStatement implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
-        PsiBuilder.Marker marker = builder.mark();
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-        if (!ParserUtils.getToken(builder, kSELECT)) {
-            marker.rollbackTo();
-            return false;
-        }
+        if (!ParserUtils.lookAhead(builder, kSELECT))
+            return null;
+
+        PsiBuilder.Marker marker = builder.mark();
+        ParserUtils.getToken(builder, kSELECT);
 
         ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, pLCURCLY, "open.curly.expected");
-        do {
+        ParserUtils.skipNLS(builder);
+
+        while ( !builder.eof() && builder.getTokenType() != pRCURLY) {
             ParserUtils.skipNLS(builder);
 
             PsiBuilder.Marker caseMark = builder.mark();
@@ -41,7 +44,7 @@ public class SelectStatement implements GoElementTypes {
             ParserUtils.skipNLS(builder);
             if ( validCase ) {
                 while (builder.getTokenType() != kCASE && builder.getTokenType() != kDEFAULT && builder.getTokenType() != pRCURLY) {
-                    if (!parser.parseStatement(builder)) {
+                    if (parser.parseStatement(builder) == null) {
                         break;
                     }
                     ParserUtils.skipNLS(builder);
@@ -58,14 +61,13 @@ public class SelectStatement implements GoElementTypes {
                 builder.advanceLexer();
             }
 
-        } while (!builder.eof() && builder.getTokenType() != pRCURLY);
-
+        }
 
         ParserUtils.getToken(builder, pRCURLY, "closed.curly.expected");
 
         ParserUtils.skipNLS(builder);
         marker.done(SELECT_STATEMENT);
-        return true;
+        return SELECT_STATEMENT;
     }
 
     private static void parseSendOrRecvExpression(PsiBuilder builder, GoParser parser) {
@@ -77,18 +79,18 @@ public class SelectStatement implements GoElementTypes {
             builder.advanceLexer();
 
             ParserUtils.skipNLS(builder);
-            parser.parseExpression(builder, false, false);
+            parser.parseExpression(builder);
             marker.done(SELECT_CASE_RECV_EXPRESSION);
             return;
         }
 
         PsiBuilder.Marker mark = builder.mark();
 
-        parser.parseExpression(builder, false, false);
+        parser.parseExpression(builder);
         if ( oSEND_CHANNEL == builder.getTokenType() ) {
             builder.advanceLexer();
             ParserUtils.skipNLS(builder);
-            parser.parseExpression(builder, false, false);
+            parser.parseExpression(builder);
             mark.done(SELECT_CASE_SEND_EXPRESSION);
             return;
         }
@@ -100,7 +102,7 @@ public class SelectStatement implements GoElementTypes {
             ParserUtils.getToken(builder, oSEND_CHANNEL, "send.channel.operator.expected");
 
             ParserUtils.skipNLS(builder);
-            parser.parseExpression(builder, false, false);
+            parser.parseExpression(builder);
 
             mark.done(SELECT_CASE_RECV_EXPRESSION);
             return;
@@ -113,7 +115,7 @@ public class SelectStatement implements GoElementTypes {
 
         builder.error("assign.or.varassign.or.send.channel.operator.expected");
 
-        parser.parseExpression(builder, false, false);
+        parser.parseExpression(builder);
 
         mark.done(SELECT_CASE_SEND_EXPRESSION);
     }

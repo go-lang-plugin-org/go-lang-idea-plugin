@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -14,12 +15,12 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class LabeledStatement implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
         PsiBuilder.Marker marker = builder.mark();
 
         if (!ParserUtils.lookAhead(builder, mIDENT, oCOLON)) {
             marker.rollbackTo();
-            return false;
+            return null;
         }
 
         ParserUtils.getToken(builder, mIDENT);
@@ -28,7 +29,6 @@ public class LabeledStatement implements GoElementTypes {
         ParserUtils.skipNLS(builder);
         parser.parseStatement(builder);
         marker.done(LABELED_STATEMENT);
-        return true;
-
+        return LABELED_STATEMENT;
     }
 }

@@ -48,7 +48,8 @@ Go file
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('a')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('a')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('             ')

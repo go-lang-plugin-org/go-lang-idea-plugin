@@ -27,9 +27,9 @@ public class FunctionLiteralExpression implements GoElementTypes {
 
         ParserUtils.skipNLS(builder);
         parser.parseBody(builder);
-        
-        mark.done(FUNCTION_LITERAL_EXPRESSION);
+
+        mark.done(LITERAL_FUNCTION);
 
         return true;
-    }    
+    }
 }

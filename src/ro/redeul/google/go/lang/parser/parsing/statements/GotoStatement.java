@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -13,13 +14,13 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * To change this template use File | Settings | File Templates.
  */
 public class GotoStatement implements GoElementTypes {
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
         PsiBuilder.Marker marker = builder.mark();
 
         if (!ParserUtils.getToken(builder, kGOTO)) {
             marker.rollbackTo();
-            return false;
+            return null;
         }
 
         PsiBuilder.Marker labelMarker = builder.mark();
@@ -29,9 +30,8 @@ public class GotoStatement implements GoElementTypes {
             labelMarker.done(IDENTIFIER);
         }
 
-        ParserUtils.getToken(builder, oSEMI, "semicolon.expected");                         
+        ParserUtils.getToken(builder, oSEMI, "semicolon.expected");
         marker.done(GOTO_STATEMENT);
-        return true;
-
+        return GOTO_STATEMENT;
     }
 }

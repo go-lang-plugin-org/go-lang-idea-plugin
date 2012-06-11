@@ -33,4 +33,5 @@ Go file
                 PsiElement(LITERAL_INT)('2')
             PsiElement(])(']')
             TypeNameImpl
-              PsiElement(IDENTIFIER)('float64')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('float64')

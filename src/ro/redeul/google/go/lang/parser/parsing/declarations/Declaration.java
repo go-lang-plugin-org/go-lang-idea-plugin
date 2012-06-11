@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.declarations;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -11,15 +12,15 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 25, 2010
  * Time: 12:03:28 AM
  */
-public class Declaration implements GoElementTypes {
+public class Declaration extends ParserUtils implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser goParser) {
+    public static IElementType parse(PsiBuilder builder, GoParser goParser) {
 
-        if ( ParserUtils.lookAhead(builder, kCONST) ) {
+        if ( lookAhead(builder, kCONST) ) {
             return ConstDeclaration.parse(builder, goParser);
         }
-                
-        if ( ParserUtils.lookAhead(builder, kVAR) ) {
+
+        if ( lookAhead(builder, kVAR) ) {
             return VarDeclaration.parse(builder, goParser);
         }
 
@@ -27,6 +28,6 @@ public class Declaration implements GoElementTypes {
             return TypeDeclaration.parse(builder, goParser);
         }
 
-        return false;
+        return null;
     }
 }

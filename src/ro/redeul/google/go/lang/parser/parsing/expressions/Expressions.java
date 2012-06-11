@@ -7,21 +7,19 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 public class Expressions implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser,
-                                boolean inControlExpressions, boolean parseIota) {
-        return BinaryExpression.parse(builder, parser,
-                                      inControlExpressions, parseIota);
+    public static boolean parse(PsiBuilder builder, GoParser parser) {
+        return BinaryExpression.parse(builder, parser);
     }
 
-    public static int parseList(PsiBuilder builder, GoParser parser,
-                                boolean inControlStmts, boolean parseIota) {
+    public static int parseList(PsiBuilder builder, GoParser parser) {
 
 //        PsiBuilder.Marker marker = builder.mark();
 
+        parser.setFlag(GoParser.ParsingFlag.WrapCompositeInExpression);
         int count = 0;
         do {
 
-            if ( parse(builder, parser, inControlStmts, parseIota) ) {
+            if ( parse(builder, parser) ) {
                 count++;
             }
 
@@ -46,39 +44,12 @@ public class Expressions implements GoElementTypes {
 //            marker.drop();
 //        }
 
+        parser.unsetFlag(GoParser.ParsingFlag.WrapCompositeInExpression);
         return count;
     }
 
-    /**
-     * PrimaryExpr :=
-     *                  int_lit | float_lit | imaginary_lit | char_lit | string_lit |
-     *                  "func"                                              -> function literal
-     *                  "(" Expression ")"                                  -> ExpressionLiteral
-     *                  "(" Type ") "{"                                     -> CompositeLiteral
-     *                  "(" "*" [ PackageName "." ] identifier ")" "."      -> MethodExpr
-     *                  identifier "("                                      -> BuiltinCall
-
-     *                  [ PackageName "." ] identifier                      -> QualifiedIdent     *
-     *                  [ PackageName "." ] identifier "."                  -> MethodExpr
-     *                  Type "{"                                            -> CompositeLiteral
-     *                  Type "(" Expression ")"                             -> ConversionCall
-     *
-     *
-     *                  PrimaryExpr Selector |
-     *                  PrimaryExpr Index |
-     *                  PrimaryExpr Slice |
-     *                  PrimaryExpr TypeAssertion |
-     *                  PrimaryExpr Call .
-     *
-     * @param builder the psi builder
-     * @param parser the actual go parser to use
-     * @param inControlStmts if we are parsing expressions inside an if/for type of control expressions
-     *
-     * @return true/false depending on how successful we were
-     */
-    public static boolean parsePrimary(PsiBuilder builder, GoParser parser,
-                                       boolean inControlStmts, boolean parseIota) {
-        return PrimaryExpression.parse(builder, parser, inControlStmts, parseIota);
+    public static boolean parsePrimary(PsiBuilder builder, GoParser parser) {
+        return PrimaryExpression.parse(builder, parser);
     }
 
 //    private static boolean parseBuiltInCall(PsiBuilder builder) {

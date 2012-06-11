@@ -63,6 +63,7 @@ public class FunctionDeclarationInspection
     /**
      * @deprecated
      */
+    @Deprecated
     public List<ProblemDescriptor> checkFunction() {
         hasResultButNoReturnAtTheEnd();
         hasDuplicateArgument();

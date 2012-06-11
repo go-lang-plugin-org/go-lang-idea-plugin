@@ -25,13 +25,15 @@ Go file
             PsiElement(IDENTIFIER)('x')
           PsiWhiteSpace(' ')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('int')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('int')
         PsiElement(WS_NEW_LINES)('\n')
         TypeStructFieldImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('y')
           PsiWhiteSpace(' ')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('int32')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('int32')
         PsiWhiteSpace(' ')
         PsiElement(})('}')

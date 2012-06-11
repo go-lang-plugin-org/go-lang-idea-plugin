@@ -27,4 +27,5 @@ Go file
               PsiElement(LITERAL_INT)('5')
           PsiElement(])(']')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('int')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('int')

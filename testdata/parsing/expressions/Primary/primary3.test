@@ -16,11 +16,11 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CompositeLiteral
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('Point')
-        CompositeLiteralElementList
+      LiteralExpressionImpl
+        LiteralCompositeImpl
+          TypeNameImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('Point')
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue

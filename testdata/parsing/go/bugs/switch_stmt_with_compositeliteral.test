@@ -1,0 +1,10 @@
+package main
+func (p *Package) gccMachine() []string {
+	switch goarch {
+	case "amd64":
+		return []string{"-m64"}
+	case "386":
+		return []string{"-m32"}
+	}
+	return nil
+}

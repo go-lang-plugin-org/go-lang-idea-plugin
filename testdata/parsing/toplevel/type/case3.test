@@ -24,7 +24,8 @@ Go file
         PsiElement(IDENTIFIER)('Point')
       PsiWhiteSpace(' ')
       TypeNameImpl
-        PsiElement(IDENTIFIER)('int')
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('int')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('    ')
     TypeSpecImpl
@@ -48,7 +49,8 @@ Go file
           TypePointerImpl
             PsiElement(*)('*')
             TypeNameImpl
-              PsiElement(IDENTIFIER)('TreeNode')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('TreeNode')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t    ')
         TypeStructFieldImpl
@@ -58,7 +60,8 @@ Go file
           TypePointerImpl
             PsiElement(*)('*')
             TypeNameImpl
-              PsiElement(IDENTIFIER)('Comparable')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('Comparable')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
         PsiElement(})('}')

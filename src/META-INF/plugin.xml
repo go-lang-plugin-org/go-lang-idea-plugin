@@ -369,7 +369,7 @@
         <lang.smartEnterProcessor language="Google Go"
                                   implementationClass="ro.redeul.google.go.lang.completion.smartEnter.GoSmartEnterProcessor"/>
 
-        <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
+        <!--<annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>-->
 
         <completion.contributor language="Google Go"
                                 implementationClass="ro.redeul.google.go.lang.completion.GoCompletionContributor"/>

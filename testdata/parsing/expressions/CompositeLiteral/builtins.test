@@ -1,4 +1,5 @@
 package main
+import "ast"
 var e = &ast.ArrayType{lbrack, len, elt}
 -----
 Go file
@@ -6,6 +7,12 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  ImportDeclarationsImpl
+    PsiElement(KEYWORD_IMPORT)('import')
+    PsiWhiteSpace(' ')
+    ImportSpecImpl
+      PsiElement(LITERAL_STRING)('"ast"')
   PsiElement(WS_NEW_LINES)('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
@@ -18,14 +25,13 @@ Go file
       PsiWhiteSpace(' ')
       UnaryExpression
         PsiElement(&)('&')
-        CompositeLiteral
-          SelectorExpression
-            LiteralExpressionImpl
+        LiteralExpressionImpl
+          LiteralCompositeImpl
+            TypeNameImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('ast')
-            PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('ArrayType')
-          CompositeLiteralElementList
+                PsiElement(.)('.')
+                PsiElement(IDENTIFIER)('ArrayType')
             PsiElement({)('{')
             CompositeLiteralElement
               CompositeLiteralElementValue

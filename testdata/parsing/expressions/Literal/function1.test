@@ -16,8 +16,8 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      FunctionLiteralImpl
-        TypeFunction
+      LiteralExpressionImpl
+        LiteralFunctionImpl
           PsiElement(KEYWORD_FUNC)('func')
           PsiElement(()('(')
           FunctionParameterList
@@ -30,16 +30,18 @@ Go file
                 PsiElement(IDENTIFIER)('y')
               PsiWhiteSpace(' ')
               TypeNameImpl
-                PsiElement(IDENTIFIER)('int')
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('int')
           PsiElement())(')')
           PsiWhiteSpace(' ')
           FunctionResult
             FunctionParameterList
               FunctionParameterImpl
                 TypeNameImpl
-                  PsiElement(IDENTIFIER)('int')
-        PsiWhiteSpace(' ')
-        BlockStmtImpl
-          PsiElement({)('{')
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('int')
           PsiWhiteSpace(' ')
-          PsiElement(})('}')
+          BlockStmtImpl
+            PsiElement({)('{')
+            PsiWhiteSpace(' ')
+            PsiElement(})('}')

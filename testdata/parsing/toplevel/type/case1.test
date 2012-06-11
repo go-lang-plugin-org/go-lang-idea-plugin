@@ -15,4 +15,5 @@ Go file
         PsiElement(IDENTIFIER)('IntArray')
       PsiWhiteSpace(' ')
       TypeNameImpl
-        PsiElement(IDENTIFIER)('int')
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('int')

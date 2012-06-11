@@ -26,7 +26,7 @@ public class ArrayType implements GoElementTypes {
         ParserUtils.skipNLS(builder);
         if ( oTRIPLE_DOT == builder.getTokenType() ) {
             ParserUtils.getToken(builder, oTRIPLE_DOT);
-        } else  if ( ! parser.parseExpression(builder, false, false) ) {
+        } else  if ( ! parser.parseExpression(builder) ) {
             builder.error("expression.expected");
             ParserUtils.waitNext(builder, pRBRACK, "right.bracket.expected");
         }

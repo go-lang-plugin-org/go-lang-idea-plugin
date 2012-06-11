@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.parser;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,14 +26,53 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 24, 2010
  * Time: 7:31:03 PM
  */
-public class GoParser implements PsiParser {
+public class GoParser extends ParserUtils implements PsiParser {
+
+    public enum ParsingFlag {
+        Debug,
+        WrapCompositeInExpression,
+        AllowCompositeLiteral,
+        ParseIota
+    }
+
+    EnumSet<ParsingFlag> flags = EnumSet.noneOf(ParsingFlag.class);
 
     Set<String> packageNames = new HashSet<String>();
+
+    public boolean isSet(ParsingFlag parseFlag) {
+        return flags.contains(parseFlag);
+    }
+
+    public void setFlag(ParsingFlag parsingFlag) {
+        flags.add(parsingFlag);
+    }
+
+    public boolean resetFlag(ParsingFlag parsingFlag, boolean state) {
+        boolean oldState = flags.contains(parsingFlag);
+
+        if (state)
+            setFlag(parsingFlag);
+        else
+            unsetFlag(parsingFlag);
+
+        return oldState;
+    }
+
+    public void unsetFlag(ParsingFlag parsingFlag) {
+        flags.remove(parsingFlag);
+    }
 
     @NotNull
     public ASTNode parse(IElementType root, PsiBuilder builder) {
 
-//        builder.setDebugMode(true);
+        boolean debugging = false;
+        builder.setDebugMode(debugging);
+
+        resetFlag(ParsingFlag.AllowCompositeLiteral, true);
+        resetFlag(ParsingFlag.ParseIota, false);
+        resetFlag(ParsingFlag.WrapCompositeInExpression, true);
+        resetFlag(ParsingFlag.Debug, true);
+        packageNames.clear();
 
         PsiBuilder.Marker rootMarker = builder.mark();
 
@@ -51,7 +91,7 @@ public class GoParser implements PsiParser {
 
         while ( ! builder.eof() ) {
 
-            if ( ! parseTopLevelDeclaration(builder) ) {
+            if ( parseTopLevelDeclaration(builder) == null ) {
                 ParserUtils.wrapError(builder, "unknown.token");
             }
 
@@ -61,20 +101,18 @@ public class GoParser implements PsiParser {
         return true;
     }
 
-    private boolean parseTopLevelDeclaration(PsiBuilder builder) {
+    private IElementType parseTopLevelDeclaration(PsiBuilder builder) {
 
         ParserUtils.skipNLS(builder);
 
-        if (GoTokenTypes.kFUNC.equals(builder.getTokenType())) {
+        if (lookAhead(builder, GoTokenTypes.kFUNC))
             return FunctionOrMethodDeclaration.parse(builder, this);
-        }
 
         return Declaration.parse(builder, this);
     }
 
-    public boolean parseExpression(PsiBuilder builder,
-                                   boolean inControlStmts, boolean parseIota) {
-        return Expressions.parse(builder, this, inControlStmts, parseIota);
+    public boolean parseExpression(PsiBuilder builder) {
+        return Expressions.parse(builder, this);
     }
 
     public boolean parseType(PsiBuilder builder) {
@@ -89,16 +127,16 @@ public class GoParser implements PsiParser {
         return IdentifierList.parse(builder, this, markList);
     }
 
-    public boolean parseBody(PsiBuilder builder) {
+    public IElementType parseBody(PsiBuilder builder) {
         return BlockStatement.parse(builder, this);
     }
 
-    public boolean parseStatement(PsiBuilder builder) {
-        return Statements.parse(builder, this, false);
+    public IElementType parseStatement(PsiBuilder builder) {
+        return Statements.parse(builder, this);
     }
 
-    public boolean parseStatementSimple(PsiBuilder builder, boolean inControlClause) {
-        return Statements.parseSimple(builder, this, inControlClause);
+    public IElementType parseStatementSimple(PsiBuilder builder) {
+        return Statements.parseSimple(builder, this);
     }
 
     public boolean parseTypeName(PsiBuilder builder) {
@@ -109,16 +147,24 @@ public class GoParser implements PsiParser {
         return FunctionOrMethodDeclaration.parseSignature(builder, this);
     }
 
-    public int parseExpressionList(PsiBuilder builder,
-                                   boolean inControlStmts, boolean parseIota) {
-        return Expressions.parseList(builder, this, inControlStmts, parseIota);
+    public int parseExpressionList(PsiBuilder builder) {
+        return Expressions.parseList(builder, this);
     }
 
-    public boolean parsePrimaryExpression(PsiBuilder builder,
-                                          boolean inControlStmts,
-                                          boolean parseIota)
-    {
-        return Expressions.parsePrimary(builder, this, inControlStmts, parseIota);
+    public int tryParseExpressionList(PsiBuilder builder) {
+        PsiBuilder.Marker mark = builder.mark();
+        int expressionCount = Expressions.parseList(builder, this);
+        if ( expressionCount == 0 ) {
+            mark.rollbackTo();
+        } else {
+            mark.drop();
+        }
+
+        return expressionCount;
+    }
+
+    public boolean parsePrimaryExpression(PsiBuilder builder) {
+        return Expressions.parsePrimary(builder, this);
     }
 
     public boolean parseFunctionSignature(PsiBuilder builder) {
@@ -129,8 +175,8 @@ public class GoParser implements PsiParser {
         return Types.parseTypeDeclarationList(builder, this);
     }
 
-    public boolean tryParseSimpleStmt(PsiBuilder builder, boolean inControlStmt) {
-        return Statements.tryParseSimple(builder, this, inControlStmt);
+    public boolean tryParseSimpleStmt(PsiBuilder builder) {
+        return Statements.tryParseSimple(builder, this);
     }
 
     public void setKnownPackage(String packageName) {

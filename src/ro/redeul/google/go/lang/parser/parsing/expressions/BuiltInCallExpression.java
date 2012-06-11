@@ -23,7 +23,7 @@ public class BuiltInCallExpression implements GoElementTypes {
     }};
 
     // cap close closed cmplx copy imag len make
-	// new panic print println real recover
+    // new panic print println real recover
 
     static Set<String> noTypeParameter = new HashSet<String>() {{
         add("cap");
@@ -42,33 +42,35 @@ public class BuiltInCallExpression implements GoElementTypes {
 
 
     public static boolean isBuiltInCall(String methodCall) {
-        return hasTypeParameter.contains(methodCall) || noTypeParameter.contains(methodCall);
+        return
+            hasTypeParameter.contains(methodCall) ||
+                noTypeParameter.contains(methodCall);
     }
 
     public static boolean parse(PsiBuilder builder, GoParser parser) {
 
-        PsiBuilder.Marker mark = builder.mark();
-
         String callName = builder.getTokenText();
 
-        if ( builder.getTokenType() != mIDENT || (!hasTypeParameter.contains(callName) && !noTypeParameter.contains(builder.getTokenText()) )) {
-            mark.drop();
+        if (!ParserUtils.lookAhead(builder, mIDENT, pLPAREN))
             return false;
-        }
 
+        if (!isBuiltInCall(callName))
+            return false;
+
+        PsiBuilder.Marker mark = builder.mark();
         ParserUtils.eatElement(builder, LITERAL_EXPRESSION);
         ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
 
-        if ( hasTypeParameter.contains(callName) ) {
+        if (hasTypeParameter.contains(callName)) {
             parser.parseType(builder);
-            if ( oCOMMA == builder.getTokenType() ) {
+            if (oCOMMA == builder.getTokenType()) {
                 builder.advanceLexer();
                 ParserUtils.skipNLS(builder);
             }
         }
 
-        if ( builder.getTokenType() != pRPAREN ) {
-            parser.parseExpressionList(builder, false, false);
+        if (builder.getTokenType() != pRPAREN) {
+            parser.parseExpressionList(builder);
         }
 
         ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");

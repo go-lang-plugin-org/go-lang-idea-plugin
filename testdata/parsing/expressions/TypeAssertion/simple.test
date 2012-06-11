@@ -23,5 +23,6 @@ Go file
         PsiElement(.)('.')
         PsiElement(()('(')
         TypeNameImpl
-          PsiElement(IDENTIFIER)('T')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('T')
         PsiElement())(')')

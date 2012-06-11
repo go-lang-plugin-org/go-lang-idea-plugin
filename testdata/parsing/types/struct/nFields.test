@@ -35,7 +35,8 @@ Go file
             PsiElement(IDENTIFIER)('y')
           PsiWhiteSpace(' ')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('int')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('int')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         TypeStructFieldImpl
@@ -43,7 +44,8 @@ Go file
             PsiElement(IDENTIFIER)('u')
           PsiWhiteSpace(' ')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('float32')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('float32')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         TypeStructFieldImpl
@@ -51,7 +53,8 @@ Go file
             PsiElement(IDENTIFIER)('_')
           PsiWhiteSpace(' ')
           TypeNameImpl
-            PsiElement(IDENTIFIER)('float32')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('float32')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         TypeStructFieldImpl
@@ -64,7 +67,8 @@ Go file
               PsiElement([)('[')
               PsiElement(])(']')
               TypeNameImpl
-                PsiElement(IDENTIFIER)('int')
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('int')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         TypeStructFieldImpl

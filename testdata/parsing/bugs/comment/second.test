@@ -31,7 +31,7 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
-      PsiErrorElement:statement.expected
+      PsiErrorElement:right.curly.expected
         <empty list>
   PsiWhiteSpace('    ')
   PsiComment(ML_COMMENT)('/* sdsds\n\n    fmt.Printf("Hello world3!")\n\n}')

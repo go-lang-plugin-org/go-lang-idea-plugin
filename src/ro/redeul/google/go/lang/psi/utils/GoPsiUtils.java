@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.psi.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -24,9 +27,6 @@ import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.sdk.GoSdkUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GoPsiUtils {
 
@@ -110,12 +110,13 @@ public class GoPsiUtils {
         return null;
     }
 
-    public static <T extends PsiElement> T findParentOfType(@Nullable PsiElement node, Class<? extends T> type) {
+    public static <T extends PsiElement> T findParentOfType(@Nullable PsiElement node,
+                                                            Class<? extends T> type) {
         while (node != null && !ReflectionCache.isInstance(node, type)) {
             node = node.getParent();
         }
 
-        return (T) node;
+        return type.cast(node);
     }
 
     public static boolean isWhiteSpaceNode(PsiElement node) {

@@ -29,7 +29,8 @@ Go file
       FunctionParameterList
         FunctionParameterImpl
           TypeNameImpl
-            PsiElement(IDENTIFIER)('float64')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('float64')
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')

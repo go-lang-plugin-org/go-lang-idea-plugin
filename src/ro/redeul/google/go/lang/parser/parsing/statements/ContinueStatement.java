@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -13,19 +14,19 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * To change this template use File | Settings | File Templates.
  */
 public class ContinueStatement implements GoElementTypes {
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
         PsiBuilder.Marker marker = builder.mark();
 
         if (!ParserUtils.getToken(builder, kCONTINUE)) {
             marker.rollbackTo();
-            return false;
+            return null;
         }
 
         ParserUtils.getToken(builder, mIDENT);
         marker.done(CONTINUE_STATEMENT);
 
-        return true;
+        return CONTINUE_STATEMENT;
 
     }
 }

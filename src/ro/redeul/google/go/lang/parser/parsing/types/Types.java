@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.types;
 
 import com.intellij.lang.PsiBuilder;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -19,7 +20,7 @@ public class Types implements GoElementTypes {
 
             PsiBuilder.Marker marker = builder.mark();
 
-            ParserUtils.eatElement(builder, pLPAREN);
+            ParserUtils.getToken(builder, pLPAREN);
 
             parseTypeDeclaration(builder, parser);
 
@@ -27,7 +28,7 @@ public class Types implements GoElementTypes {
                 ParserUtils.waitNext(builder, pRPAREN, "right.parenthesis.expected");
             }
 
-            marker.done(TYPE_PARANTHESIZED);
+            marker.done(TYPE_PARENTHESIZED);
 
             return true;
         }
@@ -80,50 +81,45 @@ public class Types implements GoElementTypes {
             return false;
         }
 
-        if ( builder.getTokenType() == oDOT ) {
-            marker.done(PACKAGE_REFERENCE);
-            builder.advanceLexer();
-
+        if (ParserUtils.getToken(builder, oDOT)) {
             ParserUtils.skipNLS(builder);
-            if ( builder.getTokenType() != mIDENT ) {
-                ParserUtils.wrapError(builder, "identifier.expected");
-            } else {
-                ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
-
-                marker.precede().done(TYPE_NAME);
-            }
-        } else {
-            marker.done(TYPE_NAME);
+            ParserUtils.getToken(builder, mIDENT, GoBundle.message("error.identifier.expected"));
         }
+
+        marker.done(LITERAL_IDENTIFIER);
+//        marker.done(TYPE_NAME);
+        marker.precede().done(TYPE_NAME);
 
         return true;
     }
 
     /**
      * typeName := [ "*" ] identifier .
-     *
-     * @param builder
-     * @param parser
-     * @return
      */
     public static boolean parseTypeName(PsiBuilder builder, GoParser parser) {
         PsiBuilder.Marker typeNameMarker = builder.mark();
 
-        boolean isReferenceType = false;
-        if ( builder.getTokenType() == oMUL ) {
-            ParserUtils.getToken(builder, oMUL);
-            ParserUtils.skipNLS(builder);
-            isReferenceType = true;
-        }
+        ParserUtils.getToken(builder, oMUL);
+        ParserUtils.skipNLS(builder);
 
+        PsiBuilder.Marker identifier = builder.mark();
         if ( builder.getTokenType() == mIDENT) {
-            ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
+            String identifierName = builder.getTokenText();
+            ParserUtils.getToken(builder, mIDENT);
+
+            if (parser.isPackageName(identifierName) && ParserUtils.lookAhead(builder, oDOT) ) {
+                ParserUtils.getToken(builder, oDOT);
+                ParserUtils.getToken(builder, mIDENT,
+                                     GoBundle.message("identifier.expected"));
+            }
+
+            identifier.done(LITERAL_IDENTIFIER);
         } else {
             ParserUtils.wrapError(builder, "identifier.expected");
+            identifier.drop();
         }
 
         typeNameMarker.done(TYPE_NAME);
-//        typeNameMarker.done(isReferenceType ? REFERENCE_BASE_TYPE_NAME : BASE_TYPE_NAME);
         return true;
     }
 

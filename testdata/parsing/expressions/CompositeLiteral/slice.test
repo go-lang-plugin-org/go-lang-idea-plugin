@@ -16,13 +16,14 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CompositeLiteral
-        TypeSliceImpl
-          PsiElement([)('[')
-          PsiElement(])(']')
-          TypeNameImpl
-            PsiElement(IDENTIFIER)('string')
-        CompositeLiteralElementList
+      LiteralExpressionImpl
+        LiteralCompositeImpl
+          TypeSliceImpl
+            PsiElement([)('[')
+            PsiElement(])(']')
+            TypeNameImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('string')
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue

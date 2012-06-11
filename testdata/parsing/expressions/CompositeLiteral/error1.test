@@ -16,26 +16,28 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CompositeLiteral
-        TypeStructImpl
-          PsiElement(KEYWORD_STRUCT)('struct')
-          PsiElement({)('{')
-          TypeStructFieldImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('a')
+      LiteralExpressionImpl
+        LiteralCompositeImpl
+          TypeStructImpl
+            PsiElement(KEYWORD_STRUCT)('struct')
+            PsiElement({)('{')
+            TypeStructFieldImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('a')
+              PsiWhiteSpace(' ')
+              TypeNameImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('int')
+            PsiElement(;)(';')
             PsiWhiteSpace(' ')
-            TypeNameImpl
-              PsiElement(IDENTIFIER)('int')
-          PsiElement(;)(';')
-          PsiWhiteSpace(' ')
-          TypeStructFieldImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('b')
-            PsiWhiteSpace(' ')
-            TypeNameImpl
-              PsiElement(IDENTIFIER)('int')
-          PsiElement(})('}')
-        CompositeLiteralElementList
+            TypeStructFieldImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('b')
+              PsiWhiteSpace(' ')
+              TypeNameImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('int')
+            PsiElement(})('}')
           PsiElement({)('{')
           CompositeLiteralElement
             CompositeLiteralElementValue

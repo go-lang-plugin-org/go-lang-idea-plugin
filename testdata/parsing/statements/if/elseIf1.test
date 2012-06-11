@@ -25,6 +25,8 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
+        EmptyStmt
+          <empty list>
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpressionImpl

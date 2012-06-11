@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
@@ -17,7 +18,7 @@ public class Statements implements GoElementTypes {
         oMUL, oBIT_AND, oSEND_CHANNEL, oPLUS, oMINUS, oBIT_XOR
     );
 
-    public static boolean parse(PsiBuilder builder, GoParser parser, boolean inControlClause) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
         if ( builder.getTokenType() == kVAR || builder.getTokenType() == kCONST || builder.getTokenType() == kTYPE ) {
             return Declaration.parse(builder, parser);
@@ -28,7 +29,7 @@ public class Statements implements GoElementTypes {
         }
 
         if ( SIMPLE_STMT.contains(builder.getTokenType()) ) {
-            return parseSimple(builder, parser, inControlClause);
+            return parseSimple(builder, parser);
         }
 
         if ( builder.getTokenType() == kGO ) {
@@ -79,31 +80,14 @@ public class Statements implements GoElementTypes {
             return ForStatement.parse(builder, parser);
         }
 
-        if ( builder.getTokenType() == oSEMI ) {
-            ParserUtils.eatElement(builder, STATEMENT);
-            return true;
-        }
-
-        if ( builder.getTokenType() == pRCURLY) {
-//            ParserUtils.eatElement(builder, STATEMENT);
-            return true;
+        if ( ParserUtils.lookAhead(builder, TokenSet.create(oSEMI, pRCURLY)) ) {
+            builder.mark().done(EMPTY_STATEMENT);
+            ParserUtils.getToken(builder, oSEMI);
+            return EMPTY_STATEMENT;
         }
 
         builder.error("statement.expected");
-//
-//
-//        PsiBuilder.Marker marker = builder.mark();
-//
-//        while ( builder.getTokenType() != oSEMI && ! builder.eof() )
-//        {
-//            builder.advanceLexer();
-//        }
-//
-//        ParserUtils.getToken(builder, oSEMI);
-//
-//        marker.done(STATEMENT);
-//
-        return false;
+        return null;
     }
 
     static TokenSet ASSIGN_OPERATORS = TokenSet.create(
@@ -113,11 +97,10 @@ public class Statements implements GoElementTypes {
             oBIT_CLEAR_ASSIGN
     );
 
-    public static boolean tryParseSimple(PsiBuilder builder, GoParser parser,
-                                         boolean inControlClause) {
+    public static boolean tryParseSimple(PsiBuilder builder, GoParser parser) {
         PsiBuilder.Marker rememberMarker = builder.mark();
 
-        int expressionCount = parser.parseExpressionList(builder, true, false);
+        int expressionCount = parser.parseExpressionList(builder);
 
         // parse assign expression
         if (expressionCount >= 1 &&
@@ -128,8 +111,8 @@ public class Statements implements GoElementTypes {
                                 oSEMI == builder.getTokenType()
                 )) {
             rememberMarker.rollbackTo();
-            parseSimple(builder, parser, inControlClause);
-            ParserUtils.getToken(builder, oSEMI);
+            parseSimple(builder, parser);
+ //           ParserUtils.getToken(builder, oSEMI);
             return true;
         } else {
             rememberMarker.drop();
@@ -137,49 +120,59 @@ public class Statements implements GoElementTypes {
         }
     }
 
-    public static boolean parseSimple(PsiBuilder builder, GoParser parser, boolean inControlClause) {
+    public static IElementType parseSimple(PsiBuilder builder, GoParser parser) {
 
         PsiBuilder.Marker mark = builder.mark();
 
-        int expressionCount = parser.parseExpressionList(builder, inControlClause, false);
+        int expressionCount = parser.parseExpressionList(builder);
 
         if ( ASSIGN_OPERATORS.contains(builder.getTokenType()) ) {
             ParserUtils.getToken(builder, builder.getTokenType());
 
             ParserUtils.skipNLS(builder);
 
-            parser.parseExpressionList(builder, inControlClause, false);
+            parser.parseExpressionList(builder);
 
             mark.done(ASSIGN_STATEMENT);
-            return true;
+            return ASSIGN_STATEMENT;
         }
 
         if ( oMINUS_MINUS == builder.getTokenType() || oPLUS_PLUS == builder.getTokenType() ) {
             ParserUtils.getToken(builder, builder.getTokenType());
 
             mark.done(INC_DEC_STATEMENT);
-            return true;
+            return INC_DEC_STATEMENT;
         }
+
+//        if (ParserUtils.lookAhead(builder, oVAR_ASSIGN)) {
+//            ParserUtils.getToken(builder, oVAR_ASSIGN);
+//            parser.parseExpressionList(builder);
+//            mark.done(SHORT_VAR_STATEMENT);
+//            return SHORT_VAR_STATEMENT;
+//        }
 
         if  (oVAR_ASSIGN == builder.getTokenType() ) {
             mark.rollbackTo();
-
             mark = builder.mark();
             parser.parseIdentifierList(builder, false);
-            ParserUtils.getToken(builder, oVAR_ASSIGN, "assignment.operator.expected");
+            if ( ! ParserUtils.getToken(builder, oVAR_ASSIGN) ) {
+                mark.rollbackTo();
+                return null;
+            }
 
             ParserUtils.skipNLS(builder);
-            parser.parseExpressionList(builder, inControlClause, false);
+
+            parser.parseExpressionList(builder);
             mark.done(SHORT_VAR_STATEMENT);
-            return true;
+            return SHORT_VAR_STATEMENT;
         }
 
         if ( expressionCount == 0 ) {
             mark.done(EMPTY_STATEMENT);
-            return true;
+            return EMPTY_STATEMENT;
         }
 
         mark.done(EXPRESSION_STATEMENT);
-        return true;
+        return EXPRESSION_STATEMENT;
     }
 }
