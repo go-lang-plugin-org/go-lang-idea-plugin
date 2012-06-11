@@ -290,6 +290,9 @@
             <implementation-class>ro.redeul.google.go.components.GoCompilerLoader</implementation-class>
         </component>
 
+        <component>
+            <implementation-class>ro.redeul.google.go.imports.AutoImportHighlighterPassFactory</implementation-class>
+        </component>
     </project-components>
 
     <actions>

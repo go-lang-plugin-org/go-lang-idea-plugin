@@ -44,6 +44,10 @@ public class GoNamesCache extends PsiShortNamesCache {
         return getGoPackagesInScope(GlobalSearchScope.notScope(GlobalSearchScope.projectScope(project)));
     }
 
+    public Collection<String> getAllPackages() {
+        return getGoPackagesInScope(GlobalSearchScope.allScope(project));
+    }
+
     private Collection<String> getGoPackagesInScope(GlobalSearchScope scope) {
 
         StubIndex index = StubIndex.getInstance();
