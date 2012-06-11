@@ -1,5 +1,10 @@
 package main
 
+import (
+    "crypto/md5"
+    "hash"
+)
+
 var (
     a = 2
     <begin>b, c = 3<end.Assignment count mismatch: 2 = 1>
@@ -7,6 +12,12 @@ var (
 )
 
 var f int
+
+func typeAssertion() {
+    h := md5.New()
+    i, ok := b.(hash.Hash)
+    println(i, ok)
+}
 
 func main() {
     <begin>b := 5, 6<end.Assignment count mismatch: 1 = 2>
