@@ -7,12 +7,14 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
-import ro.redeul.google.go.lang.psi.impl.statements.GoIfStatementImpl;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
+import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
+import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -149,7 +151,15 @@ public class GoElementVisitor  {
         visitElement(indexExpression);
     }
 
-    public void visitIfStatement(GoIfStatementImpl ifStatement) {
+    public void visitIfStatement(GoIfStatement ifStatement) {
         visitElement(ifStatement);
+    }
+
+    public void visitGoStatement(GoGoStatement goStatement) {
+        visitElement(goStatement);
+    }
+
+    public void visitDeferStatement(GoDeferStatement deferStatement) {
+        visitElement(deferStatement);
     }
 }

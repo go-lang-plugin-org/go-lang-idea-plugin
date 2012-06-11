@@ -25,10 +25,12 @@ import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImaginary
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralIntegerImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralStringImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoDeferStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoExpressionStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithClausesStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithConditionStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithRangeStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoGoStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoIfStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoReturnStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoShortVarDeclarationImpl;
@@ -52,6 +54,7 @@ import ro.redeul.google.go.lang.psi.impl.types.GoTypeSliceImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeStructImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructAnonymousFieldImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructFieldImpl;
+
 import static ro.redeul.google.go.lang.psi.types.GoTypeChannel.ChannelType;
 
 public class GoPsiCreator implements GoElementTypes {
@@ -218,6 +221,12 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(IF_STATEMENT))
             return new GoIfStatementImpl(node);
+
+        if (elementType.equals(GO_STATEMENT))
+            return new GoGoStatementImpl(node);
+
+        if (elementType.equals(DEFER_STATEMENT))
+            return new GoDeferStatementImpl(node);
 
         if (elementType.equals(wsNLS))
             return (PsiElement) ASTFactory.whitespace(node.getText());

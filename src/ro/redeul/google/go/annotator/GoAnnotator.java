@@ -1,8 +1,5 @@
 package ro.redeul.google.go.annotator;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -31,17 +28,25 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
+import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.services.GoCodeManager;
+
+import java.util.Collection;
+import java.util.List;
+
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isExtraExpressionInConst;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isFirstConstExpressionMissed;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isMissingExpressionInConst;
 import static ro.redeul.google.go.inspection.InspectionUtil.getProblemRange;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isFunctionOrMethodCall;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -192,5 +197,29 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
     @Override
     public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
         addProblems(new VarDeclarationInspection(inspectionManager, varDeclaration).checkVar());
+    }
+
+    @Override
+    public void visitGoStatement(GoGoStatement goStatement) {
+        if (!isFunctionOrMethodCall(goStatement.getExpression())) {
+            PsiElement lastChild = GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment(goStatement.getLastChild());
+            if (lastChild == null) {
+                lastChild = goStatement;
+            }
+
+            annotationHolder.createErrorAnnotation(lastChild, "Argument to go must be function call");
+        }
+    }
+
+    @Override
+    public void visitDeferStatement(GoDeferStatement deferStatement) {
+        if (!isFunctionOrMethodCall(deferStatement.getExpression())) {
+            PsiElement lastChild = GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment(deferStatement.getLastChild());
+            if (lastChild == null) {
+                lastChild = deferStatement;
+            }
+
+            annotationHolder.createErrorAnnotation(lastChild, "Argument to defer must be function call");
+        }
     }
 }

@@ -18,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.GoBuiltinCallExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -190,5 +192,9 @@ public class GoPsiUtils {
             PsiTreeUtil.getChildrenOfType(list.getPsi(), GoFunctionParameter.class);
 
         return params != null ? params : GoFunctionParameter.EMPTY_ARRAY;
+    }
+
+    public static boolean isFunctionOrMethodCall(PsiElement element) {
+        return element instanceof GoBuiltinCallExpr || element instanceof GoCallOrConversionExpression;
     }
 }
