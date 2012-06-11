@@ -1,5 +1,6 @@
 package ro.redeul.google.go.runner;
 
+import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
@@ -98,7 +99,12 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
                 GeneralCommandLine commandLine = new GeneralCommandLine();
 
-                commandLine.setExePath(getCompiledFileName(getModule(), scriptName));
+                String compiledFileName = getCompiledFileName(getModule(), scriptName);
+                if (!new File(compiledFileName).exists()) {
+                    throw new CantRunException("Cannot find target. Is main function defined in main package?");
+                }
+
+                commandLine.setExePath(compiledFileName);
                 if (scriptArguments != null && scriptArguments.trim().length() > 0) {
                     commandLine.getParametersList().addParametersString(scriptArguments);
                 }
