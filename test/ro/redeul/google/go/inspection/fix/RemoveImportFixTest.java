@@ -8,12 +8,13 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.DebugUtil;
-import ro.redeul.google.go.FileDataBasedTest;
+import ro.redeul.google.go.GoEditorAwareTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 
-public class RemoveImportFixTest extends FileDataBasedTest {
+public class RemoveImportFixTest extends GoEditorAwareTestCase {
+
     public void testSimple() throws Exception{ doTest(); }
     public void testMultiLine1() throws Exception{ doTest(); }
     public void testMultiLine2() throws Exception{ doTest(); }
@@ -40,6 +41,6 @@ public class RemoveImportFixTest extends FileDataBasedTest {
 
     @Override
     protected String getTestDataRelativePath() {
-        return "inspection/fix/removeImport/";
+        return "fixes/removeImport/";
     }
 }

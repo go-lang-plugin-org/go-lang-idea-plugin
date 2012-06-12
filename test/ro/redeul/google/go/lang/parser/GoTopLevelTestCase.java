@@ -11,85 +11,85 @@ import java.io.File;
 public class GoTopLevelTestCase extends GoParsingTestCase {
 
     @Override
-    protected String getBasePath() {
-        return super.getBasePath() + File.separator + "toplevel";
+    protected String getTestDataRelativePath() {
+        return super.getTestDataRelativePath() + File.separator + "toplevel";
     }
 
-    public void testImport$simple_nil() throws Throwable { doTest(); }
-    public void testImport$simple_default() throws Throwable { doTest(); }
-    public void testImport$simple_current() throws Throwable { doTest(); }
-    public void testImport$simple_named() throws Throwable { doTest(); }
+    public void testImport_simpleNil() throws Throwable { doTest(); }
+    public void testImport_simpleDefault() throws Throwable { doTest(); }
+    public void testImport_simpleCurrent() throws Throwable { doTest(); }
+    public void testImport_simpleNamed() throws Throwable { doTest(); }
 
-    public void testImport$empty() throws Throwable { doTest(); }
-    public void testImport$empty_open_para() throws Throwable { doTest(); }
-    public void testImport$empty_open_para2() throws Throwable { doTest(); }
+    public void testImport_empty() throws Throwable { doTest(); }
+    public void testImport_emptyOpenPara() throws Throwable { doTest(); }
+    public void testImport_emptyOpenPara2() throws Throwable { doTest(); }
 
-    public void testImport$empty2() throws Throwable { doTest(); }
+    public void testImport_empty2() throws Throwable { doTest(); }
 
-    public void testImport$multiple1() throws Throwable { doTest(); }
-    public void testImport$multiple2() throws Throwable { doTest(); }
+    public void testImport_multiple1() throws Throwable { doTest(); }
+    public void testImport_multiple2() throws Throwable { doTest(); }
 
-    public void testImport$with_comments() throws Throwable { doTest(); }
+    public void testImport_withComments() throws Throwable { doTest(); }
 
-    public void testPackage$empty() throws Throwable { doTest(); }
-    public void testPackage$empty_nl() throws Throwable { doTest(); }
-    public void testPackage$main() throws Throwable { doTest(); }
-    public void testPackage$semi() throws Throwable { doTest(); }
+    public void testPackage_empty() throws Throwable { doTest(); }
+    public void testPackage_emptyNl() throws Throwable { doTest(); }
+    public void testPackage_main() throws Throwable { doTest(); }
+    public void testPackage_semi() throws Throwable { doTest(); }
 
-    public void testPackage$error1() throws Throwable { doTest(); }
-    public void testPackage$error2() throws Throwable { doTest(); }
+    public void testPackage_error1() throws Throwable { doTest(); }
+    public void testPackage_error2() throws Throwable { doTest(); }
 
-    public void testComment$case1() throws Throwable { doTest(); }
-    public void testComment$case2() throws Throwable { doTest(); }
-    public void testComment$case3() throws Throwable { doTest(); }
-    public void testComment$case4() throws Throwable { doTest(); }
-    public void testComment$case5() throws Throwable { doTest(); }
-    public void testComment$case6() throws Throwable { doTest(); }
-    public void testComment$case7() throws Throwable { doTest(); }
-    public void testComment$case8() throws Throwable { doTest(); }
-    public void testComment$case9() throws Throwable { doTest(); }
-    public void testComment$case10() throws Throwable { doTest(); }
+    public void testComment_case1() throws Throwable { doTest(); }
+    public void testComment_case2() throws Throwable { doTest(); }
+    public void testComment_case3() throws Throwable { doTest(); }
+    public void testComment_case4() throws Throwable { doTest(); }
+    public void testComment_case5() throws Throwable { doTest(); }
+    public void testComment_case6() throws Throwable { doTest(); }
+    public void testComment_case7() throws Throwable { doTest(); }
+    public void testComment_case8() throws Throwable { doTest(); }
+    public void testComment_case9() throws Throwable { doTest(); }
+    public void testComment_case10() throws Throwable { doTest(); }
 
-    public void testConst$case1() throws Throwable { doTest(); }
-    public void testConst$case2() throws Throwable { doTest(); }
-    public void testConst$case3() throws Throwable { doTest(); }
-    public void testConst$case7() throws Throwable { doTest(); }
+    public void testConst_case1() throws Throwable { doTest(); }
+    public void testConst_case2() throws Throwable { doTest(); }
+    public void testConst_case3() throws Throwable { doTest(); }
+    public void testConst_case7() throws Throwable { doTest(); }
 
-    public void testVar$case1() throws Throwable { doTest(); }
-    public void testVar$case2() throws Throwable { doTest(); }
-    public void testVar$case3() throws Throwable { doTest(); }
-    public void testVar$case4() throws Throwable { doTest(); }
-    public void testVar$case5() throws Throwable { doTest(); }
-    public void testVar$case6() throws Throwable { doTest(); }
-    public void testVar$case7() throws Throwable { doTest(); }
+    public void testVar_case1() throws Throwable { doTest(); }
+    public void testVar_case2() throws Throwable { doTest(); }
+    public void testVar_case3() throws Throwable { doTest(); }
+    public void testVar_case4() throws Throwable { doTest(); }
+    public void testVar_case5() throws Throwable { doTest(); }
+    public void testVar_case6() throws Throwable { doTest(); }
+    public void testVar_case7() throws Throwable { doTest(); }
 
-    public void testType$case1() throws Throwable { doTest(); }
-    public void testType$case2() throws Throwable { doTest(); }
-    public void testType$case3() throws Throwable { doTest(); }
+    public void testType_case1() throws Throwable { doTest(); }
+    public void testType_case2() throws Throwable { doTest(); }
+    public void testType_case3() throws Throwable { doTest(); }
 
-    public void testFunction$case1() throws Throwable { doTest(); }
-    public void testFunction$case2() throws Throwable { doTest(); }
-    public void testFunction$case3() throws Throwable { doTest(); }
-    public void testFunction$case4() throws Throwable { doTest(); }
-    public void testFunction$case5() throws Throwable { doTest(); }
-    public void testFunction$case6() throws Throwable { doTest(); }
-    public void testFunction$case7() throws Throwable { doTest(); }
-    public void testFunction$case8() throws Throwable { doTest(); }
-    public void testFunction$case9() throws Throwable { doTest(); }
-    public void testFunction$case10() throws Throwable { doTest(); }
-    public void testFunction$case11() throws Throwable { doTest(); }
-    public void testFunction$case12() throws Throwable { doTest(); }
-    public void testFunction$case13() throws Throwable { doTest(); }
-    public void testFunction$case14() throws Throwable { doTest(); }
-    public void testFunction$case15() throws Throwable { doTest(); }
-    public void testFunction$case16() throws Throwable { doTest(); }
-    public void testFunction$case17() throws Throwable { doTest(); }
-    public void testFunction$case18() throws Throwable { doTest(); }
-    public void testFunction$case19() throws Throwable { doTest(); }
+    public void testFunction_case1() throws Throwable { doTest(); }
+    public void testFunction_case2() throws Throwable { doTest(); }
+    public void testFunction_case3() throws Throwable { doTest(); }
+    public void testFunction_case4() throws Throwable { doTest(); }
+    public void testFunction_case5() throws Throwable { doTest(); }
+    public void testFunction_case6() throws Throwable { doTest(); }
+    public void testFunction_case7() throws Throwable { doTest(); }
+    public void testFunction_case8() throws Throwable { doTest(); }
+    public void testFunction_case9() throws Throwable { doTest(); }
+    public void testFunction_case10() throws Throwable { doTest(); }
+    public void testFunction_case11() throws Throwable { doTest(); }
+    public void testFunction_case12() throws Throwable { doTest(); }
+    public void testFunction_case13() throws Throwable { doTest(); }
+    public void testFunction_case14() throws Throwable { doTest(); }
+    public void testFunction_case15() throws Throwable { doTest(); }
+    public void testFunction_case16() throws Throwable { doTest(); }
+    public void testFunction_case17() throws Throwable { doTest(); }
+    public void testFunction_case18() throws Throwable { doTest(); }
+    public void testFunction_case19() throws Throwable { doTest(); }
 
-    public void testMethod$case1() throws Throwable { doTest(); }
-    public void testMethod$case2() throws Throwable { doTest(); }
-    public void testMethod$case3() throws Throwable { doTest(); }
-    public void testMethod$case4() throws Throwable { doTest(); }
+    public void testMethod_case1() throws Throwable { doTest(); }
+    public void testMethod_case2() throws Throwable { doTest(); }
+    public void testMethod_case3() throws Throwable { doTest(); }
+    public void testMethod_case4() throws Throwable { doTest(); }
 
 }

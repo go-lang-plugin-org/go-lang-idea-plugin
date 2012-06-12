@@ -1,12 +1,12 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.List;
+public class UnusedVariableInspectionTest
+    extends GoInspectionTestCase<UnusedVariableInspection>
+{
+    public UnusedVariableInspectionTest() {
+        super(UnusedVariableInspection.class);
+    }
 
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.ProblemDescriptor;
-import ro.redeul.google.go.lang.psi.GoFile;
-
-public class UnusedVariableInspectionTest extends AbstractProblemDescriptionBasedTest {
     public void testSimple() throws Exception{ doTest(); }
     public void testForScope() throws Exception{ doTest(); }
     public void testTypeFields() throws Exception{ doTest(); }
@@ -17,13 +17,4 @@ public class UnusedVariableInspectionTest extends AbstractProblemDescriptionBase
     public void testInterface() throws Exception{ doTest(); }
     public void testIota() throws Exception{ doTest(); }
 
-    @Override
-    protected String getInspectionName() {
-        return "unusedVariable";
-    }
-
-    @Override
-    protected List<ProblemDescriptor> detectProblems(GoFile file, InspectionManager inspectionManager) {
-        return new UnusedVariableInspection().doCheckFile(file, inspectionManager, false);
-    }
 }

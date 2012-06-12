@@ -6,17 +6,18 @@ import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import ro.redeul.google.go.lang.psi.GoFile;
 
-public class UnresolvedSymbolsTest extends AbstractProblemDescriptionBasedTest {
+public class UnresolvedSymbolsTest
+    extends GoInspectionTestCase<UnresolvedSymbols> {
+
+    public UnresolvedSymbolsTest() {
+        super(UnresolvedSymbols.class);
+    }
+
     public void testIfScope() throws Exception{ doTest(); }
     public void testForWithClause() throws Exception{ doTest(); }
     public void testForWithRange() throws Exception{ doTest(); }
     public void testIota() throws Exception{ doTest(); }
     public void testUndefinedTypeInMethodReceiver() throws Exception { doTest(); }
-
-    @Override
-    protected String getInspectionName() {
-        return "unresolvedSymbols";
-    }
 
     @Override
     protected List<ProblemDescriptor> detectProblems(GoFile file, InspectionManager inspectionManager) {

@@ -9,12 +9,14 @@ import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
 import ro.redeul.google.go.inspection.fix.RemoveFunctionResultFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -24,15 +26,43 @@ import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
-public class FunctionDeclarationInspection {
-    private final InspectionResult result;
-    private final GoFunctionDeclaration function;
+public class FunctionDeclarationInspection
+    extends AbstractWholeGoFileInspection
+{
+    @Override
+    protected List<ProblemDescriptor> doCheckFile(@NotNull GoFile file,
+                                                  @NotNull InspectionManager manager,
+                                                  boolean isOnTheFly) {
+        List<ProblemDescriptor> problems =
+            new ArrayList<ProblemDescriptor>();
 
-    public FunctionDeclarationInspection(InspectionManager manager, GoFunctionDeclaration function) {
-        this.result = new InspectionResult(manager);
-        this.function = function;
+        for (GoFunctionDeclaration functionDeclaration : file.getFunctions()) {
+            problems.addAll(checkFunction(manager, functionDeclaration));
+        }
+
+        return problems;
     }
 
+    private InspectionResult result;
+    private GoFunctionDeclaration function;
+
+//    public FunctionDeclarationInspection(InspectionManager manager, GoFunctionDeclaration function) {
+//        this.result = new InspectionResult(manager);
+//        this.function = function;
+//    }
+
+    public List<ProblemDescriptor> checkFunction(InspectionManager manager,
+                                                 GoFunctionDeclaration function) {
+
+        this.function = function;
+        this.result = new InspectionResult(manager);
+
+        return checkFunction();
+    }
+
+    /**
+     * @deprecated
+     */
     public List<ProblemDescriptor> checkFunction() {
         hasResultButNoReturnAtTheEnd();
         hasDuplicateArgument();

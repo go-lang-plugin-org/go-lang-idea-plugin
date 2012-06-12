@@ -11,23 +11,23 @@ import java.io.File;
 public class GoTypesTestCase extends GoParsingTestCase {
 
     @Override
-    protected String getBasePath() {
-        return super.getBasePath() + File.separator + "types";
+    protected String getTestDataRelativePath() {
+        return super.getTestDataRelativePath() + File.separator + "types";
     }
 
-    public void testFunctions$func1() throws Throwable { doTest(); }
-    public void testFunctions$func2() throws Throwable { doTest(); }
-    public void testFunctions$func3() throws Throwable { doTest(); }
-    public void testFunctions$func4() throws Throwable { doTest(); }
-    public void testFunctions$func5() throws Throwable { doTest(); }
-    public void testFunctions$func6() throws Throwable { doTest(); }
-    public void testFunctions$func7() throws Throwable { doTest(); }
-    public void testFunctions$func8() throws Throwable { doTest(); }
-    public void testFunctions$func9() throws Throwable { doTest(); }
+    public void testFunctions_func1() throws Throwable { doTest(); }
+    public void testFunctions_func2() throws Throwable { doTest(); }
+    public void testFunctions_func3() throws Throwable { doTest(); }
+    public void testFunctions_func4() throws Throwable { doTest(); }
+    public void testFunctions_func5() throws Throwable { doTest(); }
+    public void testFunctions_func6() throws Throwable { doTest(); }
+    public void testFunctions_func7() throws Throwable { doTest(); }
+    public void testFunctions_func8() throws Throwable { doTest(); }
+    public void testFunctions_func9() throws Throwable { doTest(); }
 
-    public void testChannel$bidi() throws Throwable { doTest(); }
-    public void testChannel$send() throws Throwable { doTest(); }
-    public void testChannel$recv() throws Throwable { doTest(); }
+    public void testChannel_bidi() throws Throwable { doTest(); }
+    public void testChannel_send() throws Throwable { doTest(); }
+    public void testChannel_recv() throws Throwable { doTest(); }
 
 //    @Test public void testLiteralsInteger() throws Throwable { doTest(); }
 //    @Test public void testLiteralsFloat() throws Throwable { doTest(); }
@@ -44,22 +44,22 @@ public class GoTypesTestCase extends GoParsingTestCase {
 //    @Test public void testLiteralsFunction() throws Throwable { doTest(); }
 //    @Test public void testLiteralsCompositeStruct_nested() throws Throwable { doTest(); }
 
-    public void testMap$case1() throws Throwable { doTest(); }
-    public void testMap$case2() throws Throwable { doTest(); }
-    public void testMap$case3() throws Throwable { doTest(); }
-    public void testMap$case4_func1() throws Throwable { doTest(); }
-    public void testMap$case4_func2() throws Throwable { doTest(); }
+    public void testMap_case1() throws Throwable { doTest(); }
+    public void testMap_case2() throws Throwable { doTest(); }
+    public void testMap_case3() throws Throwable { doTest(); }
+    public void testMap_case4Func1() throws Throwable { doTest(); }
+    public void testMap_case4Func2() throws Throwable { doTest(); }
 
-    public void testArray$case1() throws Throwable { doTest(); }
-    public void testArray$case2() throws Throwable { doTest(); }
-    public void testArray$case3() throws Throwable { doTest(); }
-    public void testArray$case4() throws Throwable { doTest(); }
-    public void testArray$case5() throws Throwable { doTest(); }
+    public void testArray_case1() throws Throwable { doTest(); }
+    public void testArray_case2() throws Throwable { doTest(); }
+    public void testArray_case3() throws Throwable { doTest(); }
+    public void testArray_case4() throws Throwable { doTest(); }
+    public void testArray_case5() throws Throwable { doTest(); }
 
-    public void testStruct$empty() throws Throwable { doTest(); }
-    public void testStruct$one_field() throws Throwable { doTest(); }
-    public void testStruct$two_fields() throws Throwable { doTest(); }
-    public void testStruct$two_fields2() throws Throwable { doTest(); }
-    public void testStruct$n_fields() throws Throwable { doTest(); }
-    public void testStruct$embedded() throws Throwable { doTest(); }
+    public void testStruct_empty() throws Throwable { doTest(); }
+    public void testStruct_oneField() throws Throwable { doTest(); }
+    public void testStruct_twoFields() throws Throwable { doTest(); }
+    public void testStruct_twoFields2() throws Throwable { doTest(); }
+    public void testStruct_nFields() throws Throwable { doTest(); }
+    public void testStruct_embedded() throws Throwable { doTest(); }
 }

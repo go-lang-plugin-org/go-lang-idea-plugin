@@ -54,7 +54,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightTestCase {
     }
 
     public void doTest() throws Exception {
-//        final List<String> data = TestUtils.readInput(getTestCaseDataPath() + getTestName(true) + ".test");
+//        final List<String> data = GoTestUtils.readInput(getTestCaseDataPath() + getTestName(true) + ".test");
 
 //        fixture.configureByText(GoFileType.INSTANCE, data.get(0));
 

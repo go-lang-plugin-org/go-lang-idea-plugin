@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
-import ro.redeul.google.go.inspection.FunctionDeclarationInspection;
+import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.inspection.VarDeclarationInspection;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -207,8 +207,9 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration fd) {
-        addProblems(new FunctionDeclarationInspection(inspectionManager,
-                                                      fd).checkFunction());
+        // TODO: fix this
+//        addProblems(new FunctionDeclarationInspection(inspectionManager,
+//                                                      fd).checkFunction());
     }
 
     @Override
@@ -236,7 +237,9 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
-        addProblems(new VarDeclarationInspection(inspectionManager, varDeclaration).checkVar());
+        InspectionResult result = new InspectionResult(inspectionManager);
+        VarDeclarationInspection.checkVar(varDeclaration, result);
+        addProblems(result.getProblems());
     }
 
     @Override

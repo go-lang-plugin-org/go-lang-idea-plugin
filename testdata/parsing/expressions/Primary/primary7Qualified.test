@@ -1,0 +1,33 @@
+package main
+import M "math"
+var e = M.sin
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  ImportDeclarationsImpl
+    PsiElement(KEYWORD_IMPORT)('import')
+    PsiWhiteSpace(' ')
+    ImportSpecImpl
+      PackageReferenceImpl
+        PsiElement(IDENTIFIER)('M')
+      PsiWhiteSpace(' ')
+      PsiElement(LITERAL_STRING)('"math"')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarationsImpl
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarDeclarationImpl
+      LiteralIdentifierImpl
+        PsiElement(IDENTIFIER)('e')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      LiteralExpressionImpl
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('M')
+          PsiElement(.)('.')
+          PsiElement(IDENTIFIER)('sin')

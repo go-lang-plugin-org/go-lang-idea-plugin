@@ -5,10 +5,11 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.QuickFix;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import ro.redeul.google.go.FileDataBasedTest;
+import ro.redeul.google.go.GoEditorAwareTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 
-public class UnusedImportInspectionTest extends FileDataBasedTest {
+public class UnusedImportInspectionTest
+    extends GoEditorAwareTestCase {
     public void testSimple() throws Exception{ doTest(); }
     public void testOnlyOneImport() throws Exception{ doTest(); }
     public void testBlankImport() throws Exception{ doTest(); }
