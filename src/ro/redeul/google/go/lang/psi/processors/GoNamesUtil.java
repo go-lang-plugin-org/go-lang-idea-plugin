@@ -24,8 +24,8 @@ public class GoNamesUtil {
         return RE_PUBLIC_NAME.matcher(type).matches();
     }
 
-    public static boolean isPublicFunction(String functionName) {
-        return RE_PUBLIC_NAME.matcher(functionName).matches();
+    public static boolean isExportedName(String name) {
+        return RE_PUBLIC_NAME.matcher(name).matches();
     }
 
     public static boolean isPredefinedConstant(String variable) {

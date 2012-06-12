@@ -26,4 +26,6 @@ public interface GoIcons {
     Icon GAE_ICON_32x32 = IconLoader.getIcon("/icons/gae_32x32.png");
 
     Icon GAE_ICON_48x48 = IconLoader.getIcon("/icons/gae_48x48.png");
+
+    Icon CONST_ICON = IconLoader.getIcon("/icons/const.png");
 }

@@ -1,12 +1,13 @@
-package ro.redeul.google.go.ide;
+package ro.redeul.google.go.ide.structureview;
 
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.ide.structureView.StructureViewModel;
+import com.intellij.ide.structureView.StructureViewTreeElement;
+import com.intellij.ide.structureView.TextEditorBasedStructureViewModel;
 import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
 import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.ide.structureview.GoStructureViewModel;
 
 /**
  * User: jhonny
@@ -18,7 +19,13 @@ public class GoStructureView implements PsiStructureViewFactory {
         return new TreeBasedStructureViewBuilder() {
             @NotNull
             public StructureViewModel createStructureViewModel() {
-                return new GoStructureViewModel(psiFile);
+                return new TextEditorBasedStructureViewModel(psiFile) {
+                    @NotNull
+                    @Override
+                    public StructureViewTreeElement getRoot() {
+                        return new GoStructureViewElement(getPsiFile());
+                    }
+                };
             }
 
             public boolean isRootNodeShown() {

@@ -361,7 +361,7 @@
 
         <lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFmt" />
         <!--<lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFormatterModelBuilder" />-->
-        <lang.psiStructureViewFactory language="Google Go" implementationClass="ro.redeul.google.go.ide.GoStructureView"/>
+        <lang.psiStructureViewFactory language="Google Go" implementationClass="ro.redeul.google.go.ide.structureview.GoStructureView"/>
         <lang.importOptimizer language="Google Go" implementationClass="ro.redeul.google.go.imports.GoImportOptimizer" />
         <lang.documentationProvider language="Google Go" implementationClass="ro.redeul.google.go.lang.documentation.GoDocumentationProvider" />
         <lang.smartEnterProcessor language="Google Go"
