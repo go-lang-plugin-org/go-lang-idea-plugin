@@ -1,5 +1,8 @@
 package ro.redeul.google.go.annotator;
 
+import java.util.Collection;
+import java.util.List;
+
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -38,10 +41,6 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.services.GoCodeManager;
-
-import java.util.Collection;
-import java.util.List;
-
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isExtraExpressionInConst;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isFirstConstExpressionMissed;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isMissingExpressionInConst;
@@ -78,25 +77,41 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
     private Annotation toAnnotation(ProblemDescriptor pd) {
         TextRange problemRange = getProblemRange(pd);
         String desc = pd.getDescriptionTemplate();
+
+        Annotation annotation = null;
+
         switch (pd.getHighlightType()) {
             case GENERIC_ERROR_OR_WARNING:
             case ERROR:
             case GENERIC_ERROR:
             case LIKE_UNKNOWN_SYMBOL:
-                return annotationHolder.createErrorAnnotation(problemRange, desc);
+                annotation = annotationHolder.createErrorAnnotation(problemRange, desc);
+                break;
 
             case LIKE_DEPRECATED:
-            case LIKE_UNUSED_SYMBOL:
-                return annotationHolder.createWeakWarningAnnotation(problemRange, desc);
+            case LIKE_UNUSED_SYMBOL: {
+                 annotation =
+                    annotationHolder.createWeakWarningAnnotation(problemRange, desc);
+                break;
+            }
 
             case INFO:
             case INFORMATION:
-                return annotationHolder.createInfoAnnotation(problemRange, desc);
+                annotation =
+                    annotationHolder.createInfoAnnotation(problemRange, desc);
+                break;
 
             case WEAK_WARNING:
             default:
-                return annotationHolder.createWarningAnnotation(problemRange, desc);
+                annotation =
+                    annotationHolder.createWarningAnnotation(problemRange, desc);
         }
+
+        if ( annotation != null ){
+            annotation.setHighlightType(pd.getHighlightType());
+        }
+
+        return annotation;
     }
 
     /**
@@ -170,7 +185,7 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
         if ( fileCollection == null || fileCollection.size() == 0 ) {
             Annotation annotation =
-                annotationHolder.createErrorAnnotation(
+                annotationHolder.createWeakWarningAnnotation(
                     importDeclaration, GoBundle.message("error.invalid.import"));
 
             if (annotation != null)
@@ -186,19 +201,22 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
         if (!GoCodeManager.getInstance(project).isImportUsed(importDeclaration, (GoFile) file)) {
             Annotation anno = annotationHolder.createErrorAnnotation(importDeclaration, "Unused import");
             anno.registerFix(new RemoveImportFix(importDeclaration));
+            anno.setHighlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL);
         }
     }
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration fd) {
-        addProblems(new FunctionDeclarationInspection(inspectionManager, fd).checkFunction());
+        addProblems(new FunctionDeclarationInspection(inspectionManager,
+                                                      fd).checkFunction());
     }
 
     @Override
     public void visitConstDeclarations(GoConstDeclarations constDeclarations) {
         if (isFirstConstExpressionMissed(constDeclarations)) {
             GoConstDeclaration declaration = constDeclarations.getDeclarations()[0];
-            annotationHolder.createErrorAnnotation(declaration, "Unexpected semicolon or newline");
+            annotationHolder.createErrorAnnotation(declaration,
+                                                   "Unexpected semicolon or newline");
         }
     }
 

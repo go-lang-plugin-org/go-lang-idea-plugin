@@ -422,7 +422,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
             }
 
             addProblem(variableUsage, "Unused variable",
-                       ProblemHighlightType.GENERIC_ERROR, new RemoveVariableFix());
+                       ProblemHighlightType.LIKE_UNUSED_SYMBOL, new RemoveVariableFix());
         }
 
         public void unusedParameter(VariableUsage variableUsage) {

@@ -40,7 +40,9 @@ public class UnusedImportInspection extends AbstractWholeGoFileInspection {
             pdm.commitDocument(document);
         }
 
-        Set<GoImportDeclaration> usedImports = GoCodeManager.getInstance(project).findUsedImports(file);
+        Set<GoImportDeclaration> usedImports =
+            GoCodeManager.getInstance(project).findUsedImports(file);
+
         for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
             for (GoImportDeclaration id : importDeclarations.getDeclarations()) {
                 RemoveImportFix fix = new RemoveImportFix(id);
@@ -48,7 +50,12 @@ public class UnusedImportInspection extends AbstractWholeGoFileInspection {
                     continue;
                 }
 
-                problems.add(manager.createProblemDescriptor(id, "Unused import", fix, ProblemHighlightType.ERROR, true));
+                problems.add(
+                    manager.createProblemDescriptor(id,
+                                                    "Unused import",
+                                                    fix,
+                                                    ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                                                    true));
             }
         }
 
