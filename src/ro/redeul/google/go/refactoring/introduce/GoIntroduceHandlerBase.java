@@ -21,7 +21,7 @@ import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
 
             // If nothing is selected in editor, find all potential expressions.
             int offset = editor.getCaretModel().getOffset();
-            List<GoPsiElementBase> expressions = collectExpressions(file, editor, offset);
+            List<GoExpr> expressions = collectExpressions(file, offset);
             if (expressions.isEmpty()) {
                 return;
             }
@@ -65,16 +65,16 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
             }
 
             // If there are multiple potential expressions, let user select one.
-            IntroduceTargetChooser.showChooser(editor, expressions, new Pass<GoPsiElementBase>() {
+            IntroduceTargetChooser.showChooser(editor, expressions, new Pass<GoExpr>() {
                         @Override
-                        public void pass(GoPsiElementBase expr) {
+                        public void pass(GoExpr expr) {
                             TextRange range = expr.getNode().getTextRange();
                             introduce(project, editor, file, range.getStartOffset(), range.getEndOffset());
                         }
-                    }, new Function<GoPsiElementBase, String>() {
+                    }, new Function<GoExpr, String>() {
                         @Override
-                        public String fun(GoPsiElementBase goExpressionBase) {
-                            return goExpressionBase.getText();
+                        public String fun(GoExpr expr) {
+                            return expr.getText();
                         }
                     }
             );
@@ -100,11 +100,8 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
 
     protected abstract void doIntroduce(Project project, Editor editor, GoFile file, int start, int end) throws GoRefactoringException;
 
-    protected boolean isExpressionValid(GoPsiElementBase expression) {
-        IElementType tt = expression.getTokenType();
-        return tt != GoElementTypes.CALL_OR_CONVERSION_EXPRESSION &&
-               tt != GoElementTypes.BUILTIN_CALL_EXPRESSION &&
-               tt != GoElementTypes.BLOCK_STATEMENT;
+    protected boolean isExpressionValid(GoExpr expression) {
+        return true;
     }
 
     @Override
@@ -112,18 +109,13 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
         // invoked from elsewhere (other from editor). do nothing.
     }
 
-    protected List<GoPsiElementBase> collectExpressions(PsiFile file, Editor editor, int offset) {
-        final PsiElement elementAtCaret = file.findElementAt(offset);
-        if (elementAtCaret == null) {
-            return new ArrayList<GoPsiElementBase>();
-        }
-
+    protected List<GoExpr> collectExpressions(PsiFile file, int offset) {
         Set<TextRange> expressionRanges = new HashSet<TextRange>();
-        List<GoPsiElementBase> expressions = new ArrayList<GoPsiElementBase>();
-        for (GoPsiElementBase expression = PsiTreeUtil.getParentOfType(elementAtCaret, GoPsiElementBase.class);
+        List<GoExpr> expressions = new ArrayList<GoExpr>();
+        for (GoExpr expression = PsiTreeUtil.findElementOfClassAtOffset(file, offset, GoExpr.class, false);
              expression != null;
-             expression = PsiTreeUtil.getParentOfType(expression, GoPsiElementBase.class)) {
-            IElementType tt = expression.getTokenType();
+             expression = PsiTreeUtil.getParentOfType(expression, GoExpr.class)) {
+            IElementType tt = expression.getNode().getElementType();
             if (tt == GoElementTypes.EXPRESSION_PARENTHESIZED ||
                 expressionRanges.contains(expression.getTextRange())) {
                 continue;
