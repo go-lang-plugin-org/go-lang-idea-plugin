@@ -15,4 +15,5 @@ public class IntroduceVariableTest
     public void testParenthesis2() throws Exception { doTest(); }
     public void testParenthesis3() throws Exception { doTest(); }
     public void testParenthesis4() throws Exception { doTest(); }
+    public void testMultiLine() throws Exception { doTest(); }
 }

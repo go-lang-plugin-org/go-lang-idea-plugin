@@ -13,7 +13,8 @@ public abstract class GoRefactoringTestCase<T extends GoIntroduceHandlerBase>
 
     @Override
     protected String getTestDataRelativePath() {
-        return "refactoring/" + getClass().getSimpleName().replaceAll("[tT]est", "") + "/";
+        String name = getClass().getSimpleName().replaceAll("Test$", "");
+        return "refactoring/" + name.substring(0, 1).toLowerCase() + name.substring(1) + "/";
     }
 
     @Override

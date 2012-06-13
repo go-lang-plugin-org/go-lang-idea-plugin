@@ -12,8 +12,10 @@ import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
@@ -33,6 +35,11 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
             }
         }
 
+        GoStatement stmt = findParentOfType(e, GoStatement.class);
+        if (stmt == null) {
+            return;
+        }
+
         // Remove redundant parenthesis around declaration.
         boolean needToRemoveParenthesis = isNodeOfType(e, GoElementTypes.EXPRESSION_PARENTHESIZED);
 
@@ -43,7 +50,7 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
         }
 
         String variable = "value";
-        int lineStart = document.getLineStartOffset(document.getLineNumber(start));
+        int lineStart = document.getLineStartOffset(document.getLineNumber(stmt.getTextOffset()));
         String declaration = e.getText().trim();
         if (needToRemoveParenthesis) {
             declaration = declaration.substring(1, declaration.length() - 1);
