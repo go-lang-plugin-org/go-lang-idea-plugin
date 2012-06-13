@@ -1,6 +1,8 @@
 package ro.redeul.google.go.refactoring.introduce;
 
 import com.intellij.codeInsight.CodeInsightUtilBase;
+import com.intellij.codeInsight.template.TemplateManager;
+import com.intellij.codeInsight.template.impl.TemplateImpl;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -11,6 +13,8 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
     @Override
@@ -30,7 +34,7 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
         }
 
         // Remove redundant parenthesis around declaration.
-        boolean needToRemoveParenthesis = e.getTokenType() == GoElementTypes.EXPRESSION_PARENTHESIZED;
+        boolean needToRemoveParenthesis = isNodeOfType(e, GoElementTypes.EXPRESSION_PARENTHESIZED);
 
         PsiDocumentManager manager = PsiDocumentManager.getInstance(project);
         Document document = manager.getDocument(file);
@@ -44,14 +48,15 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
         if (needToRemoveParenthesis) {
             declaration = declaration.substring(1, declaration.length() - 1);
         }
+
+        editor.getSelectionModel().setSelection(lineStart, end);
         String indent = findIndent(document.getText(new TextRange(lineStart, start)));
-        editor.getCaretModel().moveToOffset(end);
-        // Replace expression with variable name.
-        document.replaceString(start, end, variable);
-
-        // Declare variable.
-        document.insertString(lineStart, indent + variable + " := " + declaration + "\n");
-
-        // TODO: trigger an in-place variable rename.
+        String originalText = document.getText(new TextRange(lineStart, start));
+        String text = String.format(indent + "$v$ := %s\n%s$v$", declaration, originalText);
+        TemplateImpl template = new TemplateImpl("", text, "other");
+        template.setToIndent(false);
+        String quotedValue = '"' + variable + '"';
+        template.addVariable("v", quotedValue, quotedValue, true);
+        TemplateManager.getInstance(project).startTemplate(editor, "", template);
     }
 }
