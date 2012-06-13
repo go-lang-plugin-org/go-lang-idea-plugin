@@ -1,0 +1,3 @@
+if a == 1 <spot>&&</spot> b == 1 {
+    return 2
+}

@@ -423,6 +423,12 @@
 
         <!-- Editor tweaks -->
         <fileDocumentManagerListener implementation="ro.redeul.google.go.components.EditorTweakingComponent" />
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
+            <className>ro.redeul.google.go.intentions.control.SplitIfIntention</className>
+        </intentionAction>
     </extensions>
 
 </idea-plugin>
