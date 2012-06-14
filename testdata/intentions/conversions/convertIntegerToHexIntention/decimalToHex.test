@@ -1,0 +1,9 @@
+package main
+func main() {
+    println(<caret>100)
+}
+-----
+package main
+func main() {
+    println(<caret>0x64)
+}

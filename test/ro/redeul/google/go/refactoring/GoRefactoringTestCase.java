@@ -18,7 +18,7 @@ public abstract class GoRefactoringTestCase<T extends GoIntroduceHandlerBase>
     }
 
     @Override
-    protected void invoke(Project project, Editor myEditor, GoFile file) {
-        createHandler().invoke(getProject(), myEditor, file, null);
+    protected void invoke(Project project, Editor editor, GoFile file) {
+        createHandler().invoke(getProject(), editor, file, null);
     }
 }

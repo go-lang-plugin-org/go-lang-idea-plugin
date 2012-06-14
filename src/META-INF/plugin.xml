@@ -429,6 +429,25 @@
             <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
             <className>ro.redeul.google.go.intentions.control.SplitIfIntention</className>
         </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.conversions</categoryKey>
+            <className>ro.redeul.google.go.intentions.conversions.ConvertIntegerToHexIntention</className>
+        </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.conversions</categoryKey>
+            <className>ro.redeul.google.go.intentions.conversions.ConvertIntegerToOctalIntention</className>
+        </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.conversions</categoryKey>
+            <className>ro.redeul.google.go.intentions.conversions.ConvertIntegerToDecimalIntention</className>
+        </intentionAction>
+
     </extensions>
 
 </idea-plugin>

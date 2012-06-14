@@ -15,7 +15,7 @@ public class UnusedImportInspectionTest
     public void testBlankImport() throws Exception{ doTest(); }
 
     @Override
-    protected void invoke(Project project, Editor myEditor, GoFile file) {
+    protected void invoke(Project project, Editor editor, GoFile file) {
         InspectionManager im = InspectionManager.getInstance(project);
         for (ProblemDescriptor pd : new UnusedImportInspection().doCheckFile(file, im, false)) {
             QuickFix[] fixes = pd.getFixes();
