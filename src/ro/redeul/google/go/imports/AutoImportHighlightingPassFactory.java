@@ -12,8 +12,8 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 
-public class AutoImportHighlighterPassFactory extends AbstractProjectComponent implements TextEditorHighlightingPassFactory {
-    protected AutoImportHighlighterPassFactory(Project project, TextEditorHighlightingPassRegistrar hlRegistrar) {
+public class AutoImportHighlightingPassFactory extends AbstractProjectComponent implements TextEditorHighlightingPassFactory {
+    protected AutoImportHighlightingPassFactory(Project project, TextEditorHighlightingPassRegistrar hlRegistrar) {
         super(project);
 
         hlRegistrar.registerTextEditorHighlightingPass(this, null, new int[]{Pass.LINE_MARKERS}, false, -1);
@@ -27,6 +27,6 @@ public class AutoImportHighlighterPassFactory extends AbstractProjectComponent i
             return null;
         }
 
-        return new AutoImportHighlighterPass(file.getProject(), (GoFile) file, editor);
+        return new AutoImportHighlightingPass(file.getProject(), (GoFile) file, editor);
     }
 }

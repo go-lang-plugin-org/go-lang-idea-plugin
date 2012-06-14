@@ -291,7 +291,7 @@
         </component>
 
         <component>
-            <implementation-class>ro.redeul.google.go.imports.AutoImportHighlighterPassFactory</implementation-class>
+            <implementation-class>ro.redeul.google.go.imports.AutoImportHighlightingPassFactory</implementation-class>
         </component>
     </project-components>
 
@@ -350,7 +350,7 @@
 
         <projectConfigurable instance="ro.redeul.google.go.ide.GoConfigurable"/>
 
-        <syntaxHighlighter key="Google Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighter"/>
+        <lang.syntaxHighlighterFactory key="Google Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighterFactory"/>
 
         <lang.parserDefinition language="Google Go" implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
         <lang.braceMatcher language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoBraceMatcher"/>
@@ -423,6 +423,8 @@
 
         <!-- Editor tweaks -->
         <fileDocumentManagerListener implementation="ro.redeul.google.go.components.EditorTweakingComponent" />
+
+        <todoIndexer filetype="Google Go" implementationClass="ro.redeul.google.go.highlight.GoToDoIndexer"/>
 
         <intentionAction>
             <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>

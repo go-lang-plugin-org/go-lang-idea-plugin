@@ -31,13 +31,13 @@ import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
  * This class search for all "Unresolved symbols" highlights, try to prompt user to import
  * potential packages.
  */
-public class AutoImportHighlighterPass extends TextEditorHighlightingPass {
+public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
     private final GoFile file;
     private final Editor editor;
     private TextRange visibleRange;
     private final AtomicReference<Data> toImport = new AtomicReference<Data>();
 
-    public AutoImportHighlighterPass(Project project, GoFile file, Editor editor) {
+    public AutoImportHighlightingPass(Project project, GoFile file, Editor editor) {
         super(project, editor.getDocument(), false);
 
         this.file = file;
