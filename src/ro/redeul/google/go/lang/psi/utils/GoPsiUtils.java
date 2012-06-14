@@ -15,6 +15,7 @@ import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ReflectionCache;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -109,7 +110,7 @@ public class GoPsiUtils {
         return null;
     }
 
-    public static <T extends PsiElement> T findParentOfType(PsiElement node, Class<? extends T> type) {
+    public static <T extends PsiElement> T findParentOfType(@Nullable PsiElement node, Class<? extends T> type) {
         while (node != null && !ReflectionCache.isInstance(node, type)) {
             node = node.getParent();
         }

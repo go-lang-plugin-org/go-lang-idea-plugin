@@ -391,6 +391,15 @@
 
         <customLiveTemplate implementation="ro.redeul.google.go.editor.GoCustomLiveTemplate"/>
 
+        <liveTemplateContext implementation="ro.redeul.google.go.template.GoTemplateContextType$Generic"/>
+        <liveTemplateContext implementation="ro.redeul.google.go.template.GoTemplateContextType$Function"/>
+
+        <liveTemplateMacro implementation="ro.redeul.google.go.template.macro.FunctionNameMacro"/>
+        <liveTemplateMacro implementation="ro.redeul.google.go.template.macro.ParameterListMacro"/>
+        <liveTemplateMacro implementation="ro.redeul.google.go.template.macro.ParameterFormatMacro"/>
+
+        <defaultLiveTemplatesProvider implementation="ro.redeul.google.go.template.GoTemplatesProvider"/>
+
         <fileTemplateGroup implementation="ro.redeul.google.go.actions.GoTemplatesFactory"/>
 
         <colorSettingsPage implementation="ro.redeul.google.go.editor.highlighting.GoColorsAndFontsPage"/>
