@@ -21,6 +21,7 @@
       <entry name="/**/?*.test" />
       <entry name="/**/?*.go" />
       <entry name="?*.template" />
+      <entry name="?*.dic" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>

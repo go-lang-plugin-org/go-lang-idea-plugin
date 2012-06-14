@@ -350,6 +350,8 @@
 
         <projectConfigurable instance="ro.redeul.google.go.ide.GoConfigurable"/>
 
+        <spellchecker.bundledDictionaryProvider implementation="ro.redeul.google.go.spellchecker.GoDictionaryProvider"/>
+
         <lang.syntaxHighlighterFactory key="Google Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighterFactory"/>
 
         <lang.parserDefinition language="Google Go" implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
