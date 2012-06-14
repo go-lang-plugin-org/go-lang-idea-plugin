@@ -16,7 +16,7 @@ public class AutoImportHighlightingPassFactory extends AbstractProjectComponent 
     protected AutoImportHighlightingPassFactory(Project project, TextEditorHighlightingPassRegistrar hlRegistrar) {
         super(project);
 
-        hlRegistrar.registerTextEditorHighlightingPass(this, null, new int[]{Pass.LINE_MARKERS}, false, -1);
+        hlRegistrar.registerTextEditorHighlightingPass(this, new int[]{Pass.UPDATE_ALL}, null, false, -1);
     }
 
     @Override

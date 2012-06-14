@@ -23,7 +23,6 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
 
@@ -35,7 +34,6 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
     private final GoFile file;
     private final Editor editor;
     private TextRange visibleRange;
-    private final AtomicReference<Data> toImport = new AtomicReference<Data>();
 
     public AutoImportHighlightingPass(Project project, GoFile file, Editor editor) {
         super(project, editor.getDocument(), false);
@@ -47,28 +45,22 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
     @Override
     public void doCollectInformation(ProgressIndicator progress) {
-        UIUtil.invokeLaterIfNeeded(new Runnable() {
-            @Override
-            public void run() {
-                getVisibleHighlights();
-            }
-        });
     }
 
-    private void getVisibleHighlights() {
-        toImport.set(null);
+    private Data getVisibleHighlights() {
 
         Project project = editor.getProject();
         int caretOffset = editor.getCaretModel().getOffset();
         if (project == null) {
-            return;
+            return null;
         }
 
         GoNamesCache namesCache = getGoNamesCache(project);
         if (namesCache == null) {
-            return;
+            return null;
         }
 
+        Data toImport = null;
         for (RangeHighlighter highlighter : getAllHighlighters(project)) {
             int start = highlighter.getStartOffset();
             int end = highlighter.getEndOffset();
@@ -97,11 +89,12 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                 continue;
             }
 
-            toImport.set(new Data(id, packages));
+            toImport = new Data(id, packages);
             if (id.getTextRange().getEndOffset() > caretOffset) {
-                return;
+                return toImport;
             }
         }
+        return toImport;
     }
 
     private List<String> getAllPotentialPackages(GoNamesCache namesCache, GoLiteralExpression id) {
@@ -126,14 +119,18 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
     @Override
     public void doApplyInformationToEditor() {
-        final Data data = toImport.get();
-        if (data == null || !editor.getContentComponent().hasFocus()) {
+        if (!editor.getContentComponent().hasFocus()) {
             return;
         }
 
         UIUtil.invokeLaterIfNeeded(new Runnable() {
             public void run() {
                 if (HintManager.getInstance().hasShownHintsThatWillHideByOtherHint(true)) {
+                    return;
+                }
+
+                Data data = getVisibleHighlights();
+                if (data == null) {
                     return;
                 }
 
