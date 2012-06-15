@@ -14,21 +14,25 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
 
 public class AddImportFix implements QuestionAction {
-    private final List<String> pathsToImport;
+    private final List<String> pathsToImport = new ArrayList<String>();
+    private final List<String> sdkPackages;
     private final GoFile file;
     private final Document document;
     private final Editor editor;
 
-    public AddImportFix(List<String> pathsToImport, GoFile file, Editor editor) {
-        this.pathsToImport = pathsToImport;
+    public AddImportFix(List<String> sdkPackages, List<String> projectPackages, GoFile file, Editor editor) {
+        this.sdkPackages = sdkPackages;
         this.file = file;
         this.editor = editor;
         this.document = editor.getDocument();
+        pathsToImport.addAll(projectPackages);
+        pathsToImport.addAll(sdkPackages);
     }
 
     @Override
@@ -114,7 +118,7 @@ public class AddImportFix implements QuestionAction {
 
         @Override
         public Icon getIconFor(String aValue) {
-            return PlatformIcons.PACKAGE_ICON;
+            return sdkPackages.contains(aValue) ? PlatformIcons.LIBRARY_ICON : PlatformIcons.PACKAGE_ICON;
         }
 
         @Override

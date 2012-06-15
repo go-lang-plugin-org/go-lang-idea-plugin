@@ -22,6 +22,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
@@ -84,12 +85,14 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             }
 
             // packages exist
-            List<String> packages = getAllPotentialPackages(namesCache, id.getText());
-            if (packages.size() == 0) {
+            String expectedPackage = id.getText();
+            List<String> sdkPackages = getPotentialPackages(namesCache.getSdkPackages(), expectedPackage);
+            List<String> projectPackages = getPotentialPackages(namesCache.getProjectPackages(), expectedPackage);
+            if (sdkPackages.size() == 0 && projectPackages.size() == 0) {
                 continue;
             }
 
-            toImport = new Data(id, packages);
+            toImport = new Data(id, sdkPackages, projectPackages);
             if (id.getTextRange().getEndOffset() > caretOffset) {
                 return toImport;
             }
@@ -97,9 +100,9 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         return toImport;
     }
 
-    private List<String> getAllPotentialPackages(GoNamesCache namesCache, String expectedPackage) {
+    private List<String> getPotentialPackages(Collection<String> allPackages, String expectedPackage) {
         List<String> packageFiles = new ArrayList<String>();
-        for (String p : namesCache.getAllPackages()) {
+        for (String p : allPackages) {
             if (expectedPackage.equals(p) || p.endsWith("/" + expectedPackage)) {
                 packageFiles.add(p);
             }
@@ -133,8 +136,10 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                     return;
                 }
 
-                String importMessage = getPromptMessage(data.packages);
-                AddImportFix fix = new AddImportFix(data.packages, file, editor);
+                List<String> allPackages = new ArrayList<String>(data.projectPackages);
+                allPackages.addAll(data.sdkPackages);
+                String importMessage = getPromptMessage(allPackages);
+                AddImportFix fix = new AddImportFix(data.sdkPackages, data.projectPackages, file, editor);
                 int start = data.element.getTextOffset();
                 int end = data.element.getTextRange().getEndOffset();
                 HintManager.getInstance().showQuestionHint(editor, importMessage, start, end, fix);
@@ -150,11 +155,13 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
     private static final class Data {
         public final PsiElement element;
-        public final List<String> packages;
+        public final List<String> sdkPackages;
+        public final List<String> projectPackages;
 
-        private Data(PsiElement element, List<String> packages) {
+        private Data(PsiElement element, List<String> sdkPackages, List<String> projectPackages) {
             this.element = element;
-            this.packages = packages;
+            this.sdkPackages = sdkPackages;
+            this.projectPackages = projectPackages;
         }
     }
 }
