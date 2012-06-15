@@ -35,19 +35,18 @@ Go file
             PsiElement(})('}')
           LiteralCompositeValueImpl
             PsiElement({)('{')
-            LiteralCompositeValueImpl
-              PsiElement({)('{')
-              CompositeLiteralElement
-                CompositeLiteralElementValue
+            LiteralCompositeElementImpl
+              LiteralCompositeValueImpl
+                PsiElement({)('{')
+                LiteralCompositeElementImpl
                   LiteralExpressionImpl
                     LiteralIntegerImpl
                       PsiElement(LITERAL_INT)('1')
-              PsiElement(,)(',')
-              PsiWhiteSpace(' ')
-              CompositeLiteralElement
-                CompositeLiteralElementValue
+                PsiElement(,)(',')
+                PsiWhiteSpace(' ')
+                LiteralCompositeElementImpl
                   LiteralExpressionImpl
                     LiteralIntegerImpl
                       PsiElement(LITERAL_INT)('2')
-              PsiElement(})('}')
+                PsiElement(})('}')
             PsiElement(})('}')

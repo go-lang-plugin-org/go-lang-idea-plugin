@@ -70,12 +70,13 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType LITERAL_COMPOSITE_VALUE =
         new GoElementTypeImpl("LiteralCompositeValue");
 
-    GoElementType COMPOSITE_LITERAL_ELEMENT =
-        new GoElementTypeImpl("CompositeLiteralElement");
+    GoElementType LITERAL_COMPOSITE_ELEMENT =
+        new GoElementTypeImpl("LiteralCompositeElement");
+
     GoElementType COMPOSITE_LITERAL_ELEMENT_KEY =
         new GoElementTypeImpl("CompositeLiteralElementKey");
-    GoElementType COMPOSITE_LITERAL_ELEMENT_VALUE =
-        new GoElementTypeImpl("CompositeLiteralElementValue");
+    GoElementType LITERAL_COMPOSITE_ELEMENT_VALUE =
+        new GoElementTypeImpl("LiteralCompositeElementValue");
 
 
     GoElementType EXPRESSION_PARENTHESIZED =
@@ -270,7 +271,7 @@ public interface GoElementTypes extends GoTokenTypes {
         INDEX_EXPRESSION, SLICE_EXPRESSION, TYPE_ASSERTION_EXPRESSION,
         UNARY_EXPRESSION, SELECTOR_EXPRESSION,
         BUILTIN_CALL_EXPRESSION, LITERAL_FUNCTION,
-        COMPOSITE_LITERAL_ELEMENT
+        LITERAL_COMPOSITE_ELEMENT
     );
 
     public final TokenSet BINARY_OPS = TokenSet.create(

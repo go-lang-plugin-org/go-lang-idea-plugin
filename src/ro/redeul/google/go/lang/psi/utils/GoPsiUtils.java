@@ -1,5 +1,9 @@
 package ro.redeul.google.go.lang.psi.utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -25,58 +29,62 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class GoPsiUtils {
 
     public static String cleanupImportPath(String path) {
         return path.replaceAll("^\"", "").replaceAll("\"$", "");
     }
 
-    public static GoFile[] findFilesForPackage(String importPath, GoFile importingFile) {
+    public static GoFile[] findFilesForPackage(String importPath,
+                                               GoFile importingFile) {
 
         Project project = importingFile.getProject();
 
         String defaultPackageName = findDefaultPackageName(importPath);
 
         VirtualFile packageFilesLocation = null;
-        if ( importPath.startsWith("./") ) { // local import path
-            packageFilesLocation = VfsUtil.findRelativeFile(importPath.replaceAll("./", ""), importingFile.getVirtualFile());
+        if (importPath.startsWith("./")) { // local import path
+            packageFilesLocation = VfsUtil.findRelativeFile(
+                importPath.replaceAll("./", ""),
+                importingFile.getVirtualFile());
         } else {
             Sdk sdk = GoSdkUtil.getGoogleGoSdkForFile(importingFile);
 
-            VirtualFile sdkSourceRoots[] = sdk.getRootProvider().getFiles(OrderRootType.SOURCES);
+            VirtualFile sdkSourceRoots[] = sdk.getRootProvider()
+                                              .getFiles(OrderRootType.SOURCES);
 
             for (VirtualFile sdkSourceRoot : sdkSourceRoots) {
-                VirtualFile packageFile = VfsUtil.findRelativeFile(importPath, sdkSourceRoot);
+                VirtualFile packageFile = VfsUtil.findRelativeFile(importPath,
+                                                                   sdkSourceRoot);
 
-                if ( packageFile != null ) {
+                if (packageFile != null) {
                     packageFilesLocation = packageFile;
                     break;
                 }
             }
         }
 
-        if ( packageFilesLocation == null ) {
+        if (packageFilesLocation == null) {
             return GoFile.EMPTY_ARRAY;
         }
 
-        VirtualFile []children = packageFilesLocation.getChildren();
+        VirtualFile[] children = packageFilesLocation.getChildren();
 
         List<GoFile> files = new ArrayList<GoFile>();
 
         for (VirtualFile child : children) {
-            if ( child.getFileType() != GoFileType.INSTANCE ||
-                child.getNameWithoutExtension().endsWith("_test") ) {
+            if (child.getFileType() != GoFileType.INSTANCE ||
+                child.getNameWithoutExtension().endsWith("_test")) {
                 continue;
             }
 
-            GoFile packageGoFile = (GoFile) PsiManager.getInstance(project).findFile(child);
+            GoFile packageGoFile = (GoFile) PsiManager.getInstance(project)
+                                                      .findFile(child);
             assert packageGoFile != null;
 
-            if ( packageGoFile.getPackage().getPackageName().equals(defaultPackageName)) {
+            if (packageGoFile.getPackage()
+                             .getPackageName()
+                             .equals(defaultPackageName)) {
                 files.add(packageGoFile);
             }
         }
@@ -85,7 +93,8 @@ public class GoPsiUtils {
     }
 
     public static String findDefaultPackageName(String importPath) {
-        return importPath != null ? importPath.replaceAll("(?:[a-zA-Z\\.]+/)+", "") : null;
+        return importPath != null ? importPath.replaceAll("(?:[a-zA-Z\\.]+/)+",
+                                                          "") : null;
     }
 
     public static boolean isNodeOfType(PsiElement node, TokenSet tokenSet) {
@@ -101,7 +110,8 @@ public class GoPsiUtils {
         return astNode != null && astNode.getElementType() == type;
     }
 
-    public static PsiElement findParentOfType(PsiElement node, IElementType type) {
+    public static PsiElement findParentOfType(PsiElement node,
+                                              IElementType type) {
         while (node != null) {
             node = node.getParent();
             if (isNodeOfType(node, type)) {
@@ -111,8 +121,9 @@ public class GoPsiUtils {
         return null;
     }
 
-    public static <T extends PsiElement> T findParentOfType(@Nullable PsiElement node,
-                                                            Class<? extends T> type) {
+    public static <T extends PsiElement> T findParentOfType(
+        @Nullable PsiElement node,
+        Class<? extends T> type) {
         while (node != null && !ReflectionCache.isInstance(node, type)) {
             node = node.getParent();
         }
@@ -121,10 +132,12 @@ public class GoPsiUtils {
     }
 
     public static boolean isWhiteSpaceNode(PsiElement node) {
-        return isNodeOfType(node, GoElementTypes.wsWS) || isNodeOfType(node, GoElementTypes.wsNLS);
+        return isNodeOfType(node, GoElementTypes.wsWS) || isNodeOfType(node,
+                                                                       GoElementTypes.wsNLS);
     }
 
-    public static PsiElement findChildOfType(PsiElement node, IElementType type) {
+    public static PsiElement findChildOfType(PsiElement node,
+                                             IElementType type) {
         if (node == null) {
             return null;
         }
@@ -138,8 +151,9 @@ public class GoPsiUtils {
         return null;
     }
 
-    public static <T extends PsiElement> List<T> findChildrenOfType(@Nullable PsiElement node,
-                                                                    Class<? extends T> type) {
+    public static <T extends PsiElement> List<T> findChildrenOfType(
+        @Nullable PsiElement node,
+        Class<? extends T> type) {
         if (node == null) {
             return Collections.emptyList();
         }
@@ -156,11 +170,13 @@ public class GoPsiUtils {
 
     /**
      * Check whether element is the predeclared identifier "iota" in a const declaration
+     *
      * @param element the element to check
      * @return true if the element is a valid use of "iota" in const declaration
      */
     public static boolean isIotaInConstantDeclaration(PsiElement element) {
-        return element instanceof GoLiteralIdentifier && ((GoLiteralIdentifier)element).isIota();
+        return element instanceof GoLiteralIdentifier && ((GoLiteralIdentifier) element)
+            .isIota();
     }
 
     public static boolean isEnclosedByParenthesis(PsiElement element) {
@@ -177,7 +193,8 @@ public class GoPsiUtils {
         return lastChild != null && ")".equals(lastChild.getText());
     }
 
-    public static PsiElement getPrevSiblingIfItsWhiteSpaceOrComment(PsiElement element) {
+    public static PsiElement getPrevSiblingIfItsWhiteSpaceOrComment(
+        PsiElement element) {
         while (element != null) {
             ASTNode node = element.getNode();
             if (node == null) {
@@ -202,18 +219,30 @@ public class GoPsiUtils {
             return GoFunctionParameter.EMPTY_ARRAY;
 
         ASTNode list =
-            psiNode.getNode().findChildByType(GoElementTypes.FUNCTION_PARAMETER_LIST);
+            psiNode.getNode()
+                   .findChildByType(GoElementTypes.FUNCTION_PARAMETER_LIST);
 
         if (list == null)
             return GoFunctionParameter.EMPTY_ARRAY;
 
         GoFunctionParameter params[] =
-            PsiTreeUtil.getChildrenOfType(list.getPsi(), GoFunctionParameter.class);
+            PsiTreeUtil.getChildrenOfType(list.getPsi(),
+                                          GoFunctionParameter.class);
 
         return params != null ? params : GoFunctionParameter.EMPTY_ARRAY;
     }
 
     public static boolean isFunctionOrMethodCall(PsiElement element) {
         return element instanceof GoBuiltinCallExpr || element instanceof GoCallOrConversionExpression;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <Psi extends PsiElement> Psi findChildOfClass(PsiElement node,
+                                                            Class<Psi> type) {
+
+        for (PsiElement cur = node.getFirstChild(); cur != null; cur = cur.getNextSibling()) {
+            if (ReflectionCache.isInstance(cur, type)) return (Psi)cur;
+        }
+        return null;
     }
 }

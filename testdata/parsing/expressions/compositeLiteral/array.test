@@ -29,16 +29,14 @@ Go file
                 PsiElement(IDENTIFIER)('string')
           LiteralCompositeValueImpl
             PsiElement({)('{')
-            CompositeLiteralElement
-              CompositeLiteralElementValue
-                LiteralExpressionImpl
-                  LiteralStringImpl
-                    PsiElement(LITERAL_STRING)('"str1"')
+            LiteralCompositeElementImpl
+              LiteralExpressionImpl
+                LiteralStringImpl
+                  PsiElement(LITERAL_STRING)('"str1"')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
-            CompositeLiteralElement
-              CompositeLiteralElementValue
-                LiteralExpressionImpl
-                  LiteralStringImpl
-                    PsiElement(LITERAL_STRING)('"str2"')
+            LiteralCompositeElementImpl
+              LiteralExpressionImpl
+                LiteralStringImpl
+                  PsiElement(LITERAL_STRING)('"str2"')
             PsiElement(})('}')

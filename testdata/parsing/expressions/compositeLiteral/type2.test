@@ -28,46 +28,44 @@ Go file
             PsiElement({)('{')
             PsiElement(WS_NEW_LINES)('\n')
             PsiWhiteSpace('                ')
-            CompositeLiteralElement
+            LiteralCompositeElementImpl
               CompositeLiteralElementKey
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('Email')
               PsiElement(:)(':')
               PsiWhiteSpace('    ')
-              CompositeLiteralElementValue
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('email')
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('email')
             PsiElement(,)(',')
             PsiElement(WS_NEW_LINES)('\n')
             PsiWhiteSpace('                ')
-            CompositeLiteralElement
+            LiteralCompositeElementImpl
               CompositeLiteralElementKey
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('LastTime')
               PsiElement(:)(':')
               PsiWhiteSpace(' ')
-              CompositeLiteralElementValue
+              CallOrConversionExpressionImpl
+                SelectorExpression
+                  LiteralExpressionImpl
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('datastore')
+                  PsiElement(.)('.')
+                  PsiElement(IDENTIFIER)('SecondsToTime')
+                PsiElement(()('(')
                 CallOrConversionExpressionImpl
                   SelectorExpression
                     LiteralExpressionImpl
                       LiteralIdentifierImpl
-                        PsiElement(IDENTIFIER)('datastore')
+                        PsiElement(IDENTIFIER)('time')
                     PsiElement(.)('.')
-                    PsiElement(IDENTIFIER)('SecondsToTime')
+                    PsiElement(IDENTIFIER)('Seconds')
                   PsiElement(()('(')
-                  CallOrConversionExpressionImpl
-                    SelectorExpression
-                      LiteralExpressionImpl
-                        LiteralIdentifierImpl
-                          PsiElement(IDENTIFIER)('time')
-                      PsiElement(.)('.')
-                      PsiElement(IDENTIFIER)('Seconds')
-                    PsiElement(()('(')
-                    PsiElement())(')')
                   PsiElement())(')')
+                PsiElement())(')')
             PsiElement(,)(',')
             PsiElement(WS_NEW_LINES)('\n')
             PsiWhiteSpace('        ')

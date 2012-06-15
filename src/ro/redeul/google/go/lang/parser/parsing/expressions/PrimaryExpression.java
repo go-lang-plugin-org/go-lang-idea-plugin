@@ -10,7 +10,6 @@ import ro.redeul.google.go.lang.parser.parsing.declarations.FunctionOrMethodDecl
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowCompositeLiteral;
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.ParseIota;
-import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.WrapCompositeInExpression;
 
 public class PrimaryExpression implements GoElementTypes {
 
@@ -185,7 +184,7 @@ public class PrimaryExpression implements GoElementTypes {
     }
 
     private static boolean parseLiteralFunction(PsiBuilder builder,
-                                               GoParser parser) {
+                                                GoParser parser) {
 
         PsiBuilder.Marker mark = builder.mark();
 
@@ -194,7 +193,8 @@ public class PrimaryExpression implements GoElementTypes {
             return false;
         }
 
-        FunctionOrMethodDeclaration.parseCompleteMethodSignature(builder, parser);
+        FunctionOrMethodDeclaration.parseCompleteMethodSignature(builder,
+                                                                 parser);
 
         ParserUtils.skipNLS(builder);
         parser.parseBody(builder);
@@ -320,8 +320,8 @@ public class PrimaryExpression implements GoElementTypes {
         if (!parser.isSet(AllowCompositeLiteral))
             return false;
 
-        boolean wrapCompositeInExpression =
-            parser.resetFlag(WrapCompositeInExpression, false);
+//        boolean wrapCompositeInExpression =
+//            parser.resetFlag(WrapCompositeInExpression, false);
 
         boolean allowComposite =
             parser.resetFlag(AllowCompositeLiteral, true);
@@ -335,13 +335,13 @@ public class PrimaryExpression implements GoElementTypes {
 
         mark.done(LITERAL_COMPOSITE);
 
-        if (wrapCompositeInExpression) {
+//        if (wrapCompositeInExpression) {
             mark.precede().done(LITERAL_EXPRESSION);
-        }
+//        }
 
         parser.resetFlag(AllowCompositeLiteral, allowComposite);
-        parser.resetFlag(WrapCompositeInExpression,
-                         wrapCompositeInExpression);
+//        parser.resetFlag(WrapCompositeInExpression,
+//                         wrapCompositeInExpression);
 
         return true;
     }
@@ -356,37 +356,11 @@ public class PrimaryExpression implements GoElementTypes {
 
         while (!builder.eof() && builder.getTokenType() != pRCURLY) {
 
-            PsiBuilder.Marker elementMarker = builder.mark();
+            parseCompositeLiteralValueElement(builder, parser);
 
-            if ( builder.getTokenType() == pLCURCLY ) {
-                parseCompositeLiteralValue(builder, parser);
-                ParserUtils.skipNLS(builder);
-                elementMarker.drop();
-                continue;
-            } else {
-                PsiBuilder.Marker keyOrValueExpression = builder.mark();
-
-                if (!parser.parseExpression(builder)) {
-                    ParserUtils.wrapError(builder, "expression.expected");
-                }
-
-                if (builder.getTokenType() == oCOLON) {
-                    keyOrValueExpression.done(COMPOSITE_LITERAL_ELEMENT_KEY);
-                    builder.advanceLexer();
-                    ParserUtils.skipNLS(builder);
-
-                    keyOrValueExpression = builder.mark();
-                    parser.parseExpression(builder);
-                }
-
-                keyOrValueExpression.done(COMPOSITE_LITERAL_ELEMENT_VALUE);
-            }
-
-            elementMarker.done(COMPOSITE_LITERAL_ELEMENT);
-            if (builder.getTokenType() != pRCURLY) {
-                ParserUtils.getToken(builder, oCOMMA, "comma.expected");
-            }
-
+            ParserUtils.skipNLS(builder);
+            if ( ! ParserUtils.getToken(builder, oCOMMA) )
+                break;
             ParserUtils.skipNLS(builder);
         }
 
@@ -394,6 +368,36 @@ public class PrimaryExpression implements GoElementTypes {
                              "closed.parenthesis.expected");
 
         literalValue.done(LITERAL_COMPOSITE_VALUE);
+    }
+
+    private static void parseCompositeLiteralValueElement(PsiBuilder builder,
+                                                          GoParser parser) {
+
+        PsiBuilder.Marker valueElement = builder.mark();
+
+        if ( ParserUtils.lookAhead(builder, pLCURCLY) ) {
+            parseCompositeLiteralValue(builder, parser);
+        } else {
+            if (!parser.parseExpression(builder)) {
+                ParserUtils.wrapError(builder, "expression.expected");
+            }
+
+            if (ParserUtils.lookAhead(builder, oCOLON)) {
+                valueElement.done(COMPOSITE_LITERAL_ELEMENT_KEY);
+                valueElement = valueElement.precede();
+
+                ParserUtils.getToken(builder, oCOLON);
+                ParserUtils.skipNLS(builder);
+            }
+
+            if (ParserUtils.lookAhead(builder, pLCURCLY)) {
+                parseCompositeLiteralValue(builder, parser);
+            } else {
+                parser.parseExpression(builder);
+            }
+        }
+
+        valueElement.done(LITERAL_COMPOSITE_ELEMENT);
     }
 
     private static boolean parseLiteralIdentifier(PsiBuilder builder,
@@ -405,8 +409,8 @@ public class PrimaryExpression implements GoElementTypes {
             return true;
         }
 
-        if (IOTA_LITERAL.matcher(identifier).matches() && parser.isSet(ParseIota))
-        {
+        if (IOTA_LITERAL.matcher(identifier).matches() && parser.isSet(
+            ParseIota)) {
             ParserUtils.eatElement(builder, LITERAL_IOTA);
             return true;
         }

@@ -23,16 +23,14 @@ Go file
               PsiElement(IDENTIFIER)('Point')
           LiteralCompositeValueImpl
             PsiElement({)('{')
-            CompositeLiteralElement
-              CompositeLiteralElementValue
-                LiteralExpressionImpl
-                  LiteralIntegerImpl
-                    PsiElement(LITERAL_INT)('1')
+            LiteralCompositeElementImpl
+              LiteralExpressionImpl
+                LiteralIntegerImpl
+                  PsiElement(LITERAL_INT)('1')
             PsiElement(,)(',')
             PsiWhiteSpace(' ')
-            CompositeLiteralElement
-              CompositeLiteralElementValue
-                LiteralExpressionImpl
-                  LiteralIntegerImpl
-                    PsiElement(LITERAL_INT)('2')
+            LiteralCompositeElementImpl
+              LiteralExpressionImpl
+                LiteralIntegerImpl
+                  PsiElement(LITERAL_INT)('2')
             PsiElement(})('}')

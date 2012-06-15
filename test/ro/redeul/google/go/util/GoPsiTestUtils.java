@@ -9,13 +9,14 @@ import static junit.framework.Assert.assertTrue;
 
 public class GoPsiTestUtils {
 
-    public static  <Psi extends PsiElement> Psi get(Psi[] array, int i) {
+    public static <Psi extends PsiElement> Psi childAt(int i, Psi[] array) {
         assertTrue(array != null);
         assertTrue(array.length > i);
         return array[i];
     }
 
-    public static  <B extends PsiElement, D extends B> D getAs(B[] array, int i, Class<D> type) {
+    public static <B extends PsiElement, D extends B> D castAs(Class<D> type,
+                                                               int i, B[] array) {
         assertTrue(array != null);
         assertTrue(array.length > i);
         assertNotNull(type.cast(array[i]));
@@ -28,7 +29,8 @@ public class GoPsiTestUtils {
         return node;
     }
 
-    public static <B extends PsiElement, D extends B> D getAs(B node, Class<D> type) {
+    public static <B extends PsiElement, D extends B> D getAs(
+        Class<D> type, B node) {
         assertNotNull(node);
         assertNotNull(type.cast(node));
 
@@ -47,7 +49,8 @@ public class GoPsiTestUtils {
         return assertAs(type, node.getParent());
     }
 
-    public static PsiElement assertParentType(IElementType type, PsiElement node) {
+    public static PsiElement assertParentType(IElementType type,
+                                              PsiElement node) {
         assertNotNull(node);
 
         PsiElement parent = node.getParent();
