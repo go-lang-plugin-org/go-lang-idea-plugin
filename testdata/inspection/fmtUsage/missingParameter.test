@@ -3,6 +3,8 @@ package main
 import "fmt"
 
 func TestPrintf() {
+    fmt.Printf("%*.*d\n", 5, 3, 4)
+
     fmt.Printf("%d, <begin>%d<end.Missing parameter>\n", 5)
     fmt.Printf("<begin>%f<end.Missing parameter>\n")
 }

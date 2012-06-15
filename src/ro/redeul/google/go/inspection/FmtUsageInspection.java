@@ -116,8 +116,14 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
             ctx.startOffset = i;
             while (++i < fmt.length()) {
                 char verb = fmt.charAt(i);
-                if (Character.isDigit(verb) || verb == '+' || verb == '-' || verb == ' ' || verb == '#') {
+                if (Character.isDigit(verb) || verb == '+' || verb == '-' || verb == ' ' || verb == '#' ||
+                    verb == '.') {
                     // It's not a verb, it's a flag, ignore it.
+                    continue;
+                }
+
+                if (verb == '*') {
+                    assertIntParameter(ctx);
                     continue;
                 }
 
