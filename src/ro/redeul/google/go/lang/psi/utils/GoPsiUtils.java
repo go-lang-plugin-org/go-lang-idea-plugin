@@ -146,7 +146,7 @@ public class GoPsiUtils {
 
         List<T> children = new ArrayList<T>();
         for (PsiElement element : node.getChildren()) {
-            if (ReflectionCache.isInstance(node, type)) {
+            if (ReflectionCache.isInstance(element, type)) {
                 children.add(type.cast(element));
             }
         }

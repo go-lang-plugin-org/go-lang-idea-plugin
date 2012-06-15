@@ -410,6 +410,10 @@
                          shortName="UnresolvedSymbols" displayName="Highlights unresolved symbols"
                          level="ERROR"
                          implementationClass="ro.redeul.google.go.inspection.UnresolvedSymbols"/>
+        <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
+                         shortName="FmtUsage" displayName="Highlights incorrect fmt parameters"
+                         level="WARNING"
+                         implementationClass="ro.redeul.google.go.inspection.FmtUsageInspection"/>
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
         <programRunner implementation="ro.redeul.google.go.runner.GoAppEngineApplicationRunner" />

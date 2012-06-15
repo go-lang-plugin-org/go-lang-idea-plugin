@@ -8,6 +8,7 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 
 public class InspectionResult {
@@ -40,5 +41,9 @@ public class InspectionResult {
 
     public void addProblem(PsiElement start, PsiElement end, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {
         problems.add(manager.createProblemDescriptor(start, end, msg, type, true, fixes));
+    }
+
+    public void addProblem(PsiElement element, int start, int end, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {
+        problems.add(manager.createProblemDescriptor(element, new TextRange(start, end), msg, type, true, fixes));
     }
 }

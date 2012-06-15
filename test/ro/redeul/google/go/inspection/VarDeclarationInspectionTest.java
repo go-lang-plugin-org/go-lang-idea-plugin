@@ -1,11 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-public class VarDeclarationInspectionTest
-    extends GoInspectionTestCase<VarDeclarationInspection>
-{
-    public VarDeclarationInspectionTest() {
-        super(VarDeclarationInspection.class);
-    }
-
+public class VarDeclarationInspectionTest extends GoInspectionTestCase {
     public void testAssignmentCountMismatch() throws Exception{ doTest(); }
 }

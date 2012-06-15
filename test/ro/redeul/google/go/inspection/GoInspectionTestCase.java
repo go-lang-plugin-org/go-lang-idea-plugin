@@ -1,6 +1,7 @@
 package ro.redeul.google.go.inspection;
 
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ex.ProblemDescriptorImpl;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
@@ -17,29 +18,34 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class GoInspectionTestCase<T extends AbstractWholeGoFileInspection>
-    extends GoLightCodeInsightFixtureTestCase
-{
-    Class<T> inspectionType;
-
-    protected GoInspectionTestCase(Class<T> inspectionType) {
-        this.inspectionType = inspectionType;
+public abstract class GoInspectionTestCase extends GoLightCodeInsightFixtureTestCase {
+    protected AbstractWholeGoFileInspection createInspection() {
+        try {
+            String inspectionName = getClass().getName().replaceAll("Test$", "");
+            return (AbstractWholeGoFileInspection) Class.forName(inspectionName).newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     protected String getTestDataRelativePath() {
         try {
-            return String.format("inspection/%s/",
-                                  lowercaseFirstLetter(inspectionType.newInstance().getID(), true));
+            String name = getClass().getSimpleName();
+            if (name.endsWith("InspectionTest")) {
+                name = name.replaceAll("InspectionTest$", "");
+            } else if (name.endsWith("Test")) {
+                name = name.replaceAll("Test$", "");
+            }
+            return String.format("inspection/%s/", lowercaseFirstLetter(name, true));
         } catch (Exception e) {
             return "inspection/undefined/";
         }
     }
 
     protected void detectProblems(GoFile file, InspectionResult result)
-        throws IllegalAccessException, InstantiationException
-    {
-        inspectionType.newInstance().doCheckFile(file, result, true);
+            throws IllegalAccessException, InstantiationException {
+        createInspection().doCheckFile(file, result, true);
     }
 
     protected void doTest() throws Exception {
@@ -68,8 +74,7 @@ public abstract class GoInspectionTestCase<T extends AbstractWholeGoFileInspecti
         return data;
     }
 
-    protected String processFile(String fileText)
-        throws InstantiationException, IllegalAccessException {
+    protected String processFile(String fileText) throws InstantiationException, IllegalAccessException {
         GoFile file = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
         Document document = myFixture.getDocument(file);
         InspectionResult result = new InspectionResult(getProject());
@@ -79,17 +84,21 @@ public abstract class GoInspectionTestCase<T extends AbstractWholeGoFileInspecti
         Collections.sort(problems, new Comparator<ProblemDescriptor>() {
             @Override
             public int compare(ProblemDescriptor o1, ProblemDescriptor o2) {
-                return o1.getStartElement()
-                         .getTextOffset() - o2.getStartElement()
-                                              .getTextOffset();
+                return o1.getStartElement().getTextOffset() - o2.getStartElement().getTextOffset();
             }
         });
 
         StringBuilder sb = new StringBuilder();
         for (ProblemDescriptor pd : problems) {
-            int start = pd.getStartElement().getTextOffset();
-            int end = pd.getEndElement().getTextOffset() + pd.getEndElement().getTextLength();
-            String text = document.getText(new TextRange(start, end));
+            TextRange range;
+            if (pd instanceof ProblemDescriptorImpl) {
+                range = ((ProblemDescriptorImpl) pd).getTextRange();
+            } else {
+                int start = pd.getStartElement().getTextOffset();
+                int end = pd.getEndElement().getTextOffset() + pd.getEndElement().getTextLength();
+                range = new TextRange(start, end);
+            }
+            String text = document.getText(range);
             sb.append(text).append(" => ").append(pd.getDescriptionTemplate()).append("\n");
         }
         return sb.toString();
