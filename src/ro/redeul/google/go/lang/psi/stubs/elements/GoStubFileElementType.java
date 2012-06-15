@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.stubs.elements;
 
-import java.io.IOException;
-
 import com.intellij.lang.Language;
 import com.intellij.psi.StubBuilder;
 import com.intellij.psi.stubs.IndexSink;
@@ -14,6 +12,9 @@ import ro.redeul.google.go.lang.psi.stubs.GoFileStub;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStubBuilder;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageImportPath;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageName;
+
+import java.io.IOException;
+import java.util.regex.Pattern;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -68,11 +69,25 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
     }
 
     public void indexStub(GoFileStub stub, IndexSink sink) {
-
-        if ( stub.getPackageImportPath() != null ) {
-            sink.occurrence(GoPackageImportPath.KEY, stub.getPackageImportPath().toString());
+        StringRef packageImportPath = stub.getPackageImportPath();
+        if ( packageImportPath != null ) {
+            // don't index any package information on test files or test data.
+            if (isTestDataInStandardLibrary(packageImportPath) || isTestFile(packageImportPath)) {
+                return;
+            }
+            sink.occurrence(GoPackageImportPath.KEY, packageImportPath.toString());
         }
 
         sink.occurrence(GoPackageName.KEY, stub.getPackageName().toString());
     }
+
+    private boolean isTestFile(StringRef packageImportPath) {
+        return packageImportPath.toString().endsWith("_test");
+    }
+
+    private boolean isTestDataInStandardLibrary(StringRef packageImportPath) {
+        return GO_TEST_DATA_PATTERN.matcher(packageImportPath.toString()).matches();
+    }
+
+    private static final Pattern GO_TEST_DATA_PATTERN = Pattern.compile("go/.*/testdata\b.*");
 }

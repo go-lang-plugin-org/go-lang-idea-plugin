@@ -18,7 +18,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
 import ro.redeul.google.go.inspection.fix.AddImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.ArrayList;
@@ -78,13 +78,13 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                 continue;
             }
 
-            GoLiteralExpression id = findElementOfClassAtRange(file, start, end, GoLiteralExpression.class);
+            PsiElement id = findElementOfClassAtRange(file, start, end, GoLiteralIdentifier.class);
             if (id == null) {
                 continue;
             }
 
             // packages exist
-            List<String> packages = getAllPotentialPackages(namesCache, id);
+            List<String> packages = getAllPotentialPackages(namesCache, id.getText());
             if (packages.size() == 0) {
                 continue;
             }
@@ -97,8 +97,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         return toImport;
     }
 
-    private List<String> getAllPotentialPackages(GoNamesCache namesCache, GoLiteralExpression id) {
-        String expectedPackage = id.getText();
+    private List<String> getAllPotentialPackages(GoNamesCache namesCache, String expectedPackage) {
         List<String> packageFiles = new ArrayList<String>();
         for (String p : namesCache.getAllPackages()) {
             if (expectedPackage.equals(p) || p.endsWith("/" + expectedPackage)) {
