@@ -1,13 +1,13 @@
 package ro.redeul.google.go.lang.parser;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 import ro.redeul.google.go.util.GoTestUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 public abstract class GoParsingTestCase
     extends GoLightCodeInsightFixtureTestCase
@@ -18,7 +18,7 @@ public abstract class GoParsingTestCase
     }
 
     public void doTest() throws IOException {
-        doTest(getTestName(false).replaceAll("_+", File.separator) + ".test");
+        doTest(getTestName(true).replaceAll("_+", File.separator) + ".test");
     }
 
     private void doTest(String fileName) throws IOException {

@@ -1,11 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
@@ -18,6 +12,8 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.services.GoCodeManager;
 
+import java.util.Set;
+
 public class UnusedImportInspection extends AbstractWholeGoFileInspection {
     @Nls
     @NotNull
@@ -27,11 +23,7 @@ public class UnusedImportInspection extends AbstractWholeGoFileInspection {
     }
 
     @Override
-    protected List<ProblemDescriptor> doCheckFile(@NotNull GoFile file,
-                                                  @NotNull InspectionManager manager,
-                                                  boolean onTheFly) {
-        List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
-
+    protected void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result, boolean onTheFly) {
         Project project = file.getProject();
 
         PsiDocumentManager pdm = PsiDocumentManager.getInstance(project);
@@ -40,8 +32,7 @@ public class UnusedImportInspection extends AbstractWholeGoFileInspection {
             pdm.commitDocument(document);
         }
 
-        Set<GoImportDeclaration> usedImports =
-            GoCodeManager.getInstance(project).findUsedImports(file);
+        Set<GoImportDeclaration> usedImports = GoCodeManager.getInstance(project).findUsedImports(file);
 
         for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
             for (GoImportDeclaration id : importDeclarations.getDeclarations()) {
@@ -50,15 +41,8 @@ public class UnusedImportInspection extends AbstractWholeGoFileInspection {
                     continue;
                 }
 
-                problems.add(
-                    manager.createProblemDescriptor(id,
-                                                    "Unused import",
-                                                    fix,
-                                                    ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                                                    true));
+                result.addProblem(id, "Unused import", ProblemHighlightType.LIKE_UNUSED_SYMBOL, fix);
             }
         }
-
-        return problems;
     }
 }

@@ -1,9 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.List;
-
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -17,13 +13,8 @@ import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
 
     @Override
-    protected List<ProblemDescriptor> doCheckFile(@NotNull GoFile file,
-                                                  @NotNull final InspectionManager manager,
-                                                  boolean isOnTheFly) {
-
-        final InspectionResult result = new InspectionResult(manager);
-
-        file.accept(new GoRecursiveElementVisitor() {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
+        new GoRecursiveElementVisitor() {
             @Override
             public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
                 checkVar(varDeclaration, result);
@@ -33,9 +24,7 @@ public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
             public void visitShortVarDeclaration(GoShortVarDeclaration shortVarDeclaration) {
                 checkVar(shortVarDeclaration, result);
             }
-        });
-
-        return result.getProblems();
+        }.visitFile(file);
     }
 
     public static void checkVar(GoVarDeclaration varDeclaration,

@@ -1,8 +1,5 @@
 package ro.redeul.google.go.annotator;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -41,6 +38,10 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.services.GoCodeManager;
+
+import java.util.Collection;
+import java.util.List;
+
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isExtraExpressionInConst;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isFirstConstExpressionMissed;
 import static ro.redeul.google.go.inspection.ConstDeclarationInspection.isMissingExpressionInConst;
@@ -165,10 +166,10 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitFile(GoFile file) {
-        GoVariableUsageStatVisitor visitor =
-            new GoVariableUsageStatVisitor(inspectionManager);
+        InspectionResult result = new InspectionResult(inspectionManager);
+        GoVariableUsageStatVisitor visitor = new GoVariableUsageStatVisitor(result);
         visitor.visitFile(file);
-        addProblems(visitor.getProblems());
+        addProblems(result.getProblems());
     }
 
     @Override

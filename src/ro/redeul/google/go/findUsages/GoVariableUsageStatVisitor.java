@@ -1,12 +1,5 @@
 package ro.redeul.google.go.findUsages;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -27,9 +20,9 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
@@ -43,26 +36,28 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedConstant;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
-    private InspectionManager manager;
+    private InspectionResult result;
     private Context ctx;
 
-    public GoVariableUsageStatVisitor(InspectionManager manager) {
-        this.manager = manager;
-    }
-
-    public List<ProblemDescriptor> getProblems() {
-        return ctx.getProblems();
+    public GoVariableUsageStatVisitor(InspectionResult result) {
+        this.result = result;
     }
 
     @Override
     public void visitFile(GoFile file) {
         HashMap<String, VariableUsage> global = new HashMap<String, VariableUsage>();
-        ctx = new Context(manager, global);
+        ctx = new Context(result, global);
         getGlobalVariables(file, global);
 
         for (GoFunctionDeclaration fd : file.getFunctions()) {
@@ -399,8 +394,8 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         public final InspectionResult result;
         public final List<Map<String, VariableUsage>> variables = new ArrayList<Map<String, VariableUsage>>();
 
-        Context(InspectionManager manager, Map<String, VariableUsage> global) {
-            this.result = new InspectionResult(manager);
+        Context(InspectionResult result, Map<String, VariableUsage> global) {
+            this.result = result;
             this.variables.add(global);
         }
 

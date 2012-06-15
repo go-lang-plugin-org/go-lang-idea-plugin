@@ -1,6 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.QuickFix;
 import com.intellij.openapi.editor.Editor;
@@ -16,8 +15,9 @@ public class UnusedImportInspectionTest
 
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {
-        InspectionManager im = InspectionManager.getInstance(project);
-        for (ProblemDescriptor pd : new UnusedImportInspection().doCheckFile(file, im, false)) {
+        InspectionResult result = new InspectionResult(project);
+        new UnusedImportInspection().doCheckFile(file, result, false);
+        for (ProblemDescriptor pd : result.getProblems()) {
             QuickFix[] fixes = pd.getFixes();
             assertEquals(1, fixes.length);
             fixes[0].applyFix(project, pd);

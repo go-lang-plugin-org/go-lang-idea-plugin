@@ -1,13 +1,13 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.List;
-
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
+
+import java.util.List;
 
 public abstract class AbstractWholeGoFileInspection extends LocalInspectionTool {
 
@@ -19,15 +19,12 @@ public abstract class AbstractWholeGoFileInspection extends LocalInspectionTool 
             return null;
         }
 
-        List<ProblemDescriptor> problems =
-            doCheckFile((GoFile) file, manager, isOnTheFly);
+        InspectionResult result = new InspectionResult(manager);
+        doCheckFile((GoFile) file, result, isOnTheFly);
 
-        if ( problems == null )
-            return null;
-
+        List<ProblemDescriptor> problems = result.getProblems();
         return problems.toArray(new ProblemDescriptor[problems.size()]);
     }
 
-    protected abstract List<ProblemDescriptor> doCheckFile(
-        @NotNull GoFile file, @NotNull InspectionManager manager, boolean isOnTheFly);
+    protected abstract void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result, boolean isOnTheFly);
 }

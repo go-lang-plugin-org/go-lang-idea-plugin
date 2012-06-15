@@ -1,13 +1,6 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
@@ -23,6 +16,12 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
@@ -30,47 +29,28 @@ public class FunctionDeclarationInspection
     extends AbstractWholeGoFileInspection
 {
     @Override
-    protected List<ProblemDescriptor> doCheckFile(@NotNull GoFile file,
-                                                  @NotNull InspectionManager manager,
-                                                  boolean isOnTheFly) {
-        List<ProblemDescriptor> problems =
-            new ArrayList<ProblemDescriptor>();
+    protected void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result, boolean isOnTheFly) {
+        this.result = result;
 
         for (GoFunctionDeclaration functionDeclaration : file.getFunctions()) {
-            problems.addAll(checkFunction(manager, functionDeclaration));
+            this.function = functionDeclaration;
+            checkFunction();
         }
-
-        return problems;
     }
 
     private InspectionResult result;
     private GoFunctionDeclaration function;
 
-//    public FunctionDeclarationInspection(InspectionManager manager, GoFunctionDeclaration function) {
-//        this.result = new InspectionResult(manager);
-//        this.function = function;
-//    }
-
-    public List<ProblemDescriptor> checkFunction(InspectionManager manager,
-                                                 GoFunctionDeclaration function) {
-
-        this.function = function;
-        this.result = new InspectionResult(manager);
-
-        return checkFunction();
-    }
-
     /**
      * @deprecated
      */
     @Deprecated
-    public List<ProblemDescriptor> checkFunction() {
+    public void checkFunction() {
         hasResultButNoReturnAtTheEnd();
         hasDuplicateArgument();
         hasRedeclaredParameterInResultList();
         hasReturnParameterCountDismatch();
         hasVariadicProblems();
-        return result.getProblems();
     }
 
     public void hasResultButNoReturnAtTheEnd() {

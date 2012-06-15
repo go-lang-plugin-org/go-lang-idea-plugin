@@ -7,11 +7,16 @@ import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
 public class InspectionResult {
     private final InspectionManager manager;
     private final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
+
+    public InspectionResult(Project project) {
+        this(InspectionManager.getInstance(project));
+    }
 
     public InspectionResult(InspectionManager manager) {
         this.manager = manager;

@@ -1,13 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
@@ -17,6 +9,13 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public abstract class GoInspectionTestCase<T extends AbstractWholeGoFileInspection>
     extends GoLightCodeInsightFixtureTestCase
@@ -31,16 +30,16 @@ public abstract class GoInspectionTestCase<T extends AbstractWholeGoFileInspecti
     protected String getTestDataRelativePath() {
         try {
             return String.format("inspection/%s/",
-                                 inspectionType.newInstance().getID());
+                                  lowercaseFirstLetter(inspectionType.newInstance().getID(), true));
         } catch (Exception e) {
             return "inspection/undefined/";
         }
     }
 
-    protected List<ProblemDescriptor> detectProblems(GoFile file, InspectionManager inspectionManager)
+    protected void detectProblems(GoFile file, InspectionResult result)
         throws IllegalAccessException, InstantiationException
     {
-        return inspectionType.newInstance().doCheckFile(file, inspectionManager, true);
+        inspectionType.newInstance().doCheckFile(file, result, true);
     }
 
     protected void doTest() throws Exception {
@@ -73,11 +72,9 @@ public abstract class GoInspectionTestCase<T extends AbstractWholeGoFileInspecti
         throws InstantiationException, IllegalAccessException {
         GoFile file = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
         Document document = myFixture.getDocument(file);
-
-//        System.out.println(DebugUtil.psiToString(file, false, true));
-
-        InspectionManager im = InspectionManager.getInstance(getProject());
-        List<ProblemDescriptor> problems = detectProblems(file, im);
+        InspectionResult result = new InspectionResult(getProject());
+        detectProblems(file, result);
+        List<ProblemDescriptor> problems = result.getProblems();
 
         Collections.sort(problems, new Comparator<ProblemDescriptor>() {
             @Override

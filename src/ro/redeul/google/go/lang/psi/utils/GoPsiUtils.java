@@ -1,8 +1,5 @@
 package ro.redeul.google.go.lang.psi.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -27,6 +24,10 @@ import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class GoPsiUtils {
 
@@ -135,6 +136,22 @@ public class GoPsiUtils {
         }
 
         return null;
+    }
+
+    public static <T extends PsiElement> List<T> findChildrenOfType(@Nullable PsiElement node,
+                                                                    Class<? extends T> type) {
+        if (node == null) {
+            return Collections.emptyList();
+        }
+
+        List<T> children = new ArrayList<T>();
+        for (PsiElement element : node.getChildren()) {
+            if (ReflectionCache.isInstance(node, type)) {
+                children.add(type.cast(element));
+            }
+        }
+
+        return children;
     }
 
     /**
