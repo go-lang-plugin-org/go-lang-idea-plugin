@@ -77,13 +77,14 @@ Go file
                   TypeNameImpl
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('string')
-                PsiElement({)('{')
-                CompositeLiteralElement
-                  CompositeLiteralElementValue
-                    LiteralExpressionImpl
-                      LiteralStringImpl
-                        PsiElement(LITERAL_STRING)('"-m64"')
-                PsiElement(})('}')
+                LiteralCompositeValueImpl
+                  PsiElement({)('{')
+                  CompositeLiteralElement
+                    CompositeLiteralElementValue
+                      LiteralExpressionImpl
+                        LiteralStringImpl
+                          PsiElement(LITERAL_STRING)('"-m64"')
+                  PsiElement(})('}')
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         SwitchExprCase
@@ -106,13 +107,14 @@ Go file
                   TypeNameImpl
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('string')
-                PsiElement({)('{')
-                CompositeLiteralElement
-                  CompositeLiteralElementValue
-                    LiteralExpressionImpl
-                      LiteralStringImpl
-                        PsiElement(LITERAL_STRING)('"-m32"')
-                PsiElement(})('}')
+                LiteralCompositeValueImpl
+                  PsiElement({)('{')
+                  CompositeLiteralElement
+                    CompositeLiteralElementValue
+                      LiteralExpressionImpl
+                        LiteralStringImpl
+                          PsiElement(LITERAL_STRING)('"-m32"')
+                  PsiElement(})('}')
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         PsiElement(})('}')

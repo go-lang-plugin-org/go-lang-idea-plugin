@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.types.GoTypeName;
 
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getConstDocument;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionDocument;
@@ -102,7 +103,7 @@ public class GoDocumentationProvider implements CodeDocumentationProvider,
     @Override
     public boolean hasDocumentationFor(PsiElement element,
                                        PsiElement originalElement) {
-        if ( element instanceof GoFunctionDeclaration || element instanceof GoMethodDeclaration ) {
+        if ( element instanceof GoFunctionDeclaration || element instanceof GoTypeName) {
             return true;
         }
 
@@ -111,7 +112,7 @@ public class GoDocumentationProvider implements CodeDocumentationProvider,
 
     @Override
     public boolean canPromptToConfigureDocumentation(PsiElement element) {
-        return true;
+        return false;
     }
 
     @Override

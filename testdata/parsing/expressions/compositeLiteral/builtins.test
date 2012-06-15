@@ -32,24 +32,25 @@ Go file
                 PsiElement(IDENTIFIER)('ast')
                 PsiElement(.)('.')
                 PsiElement(IDENTIFIER)('ArrayType')
-            PsiElement({)('{')
-            CompositeLiteralElement
-              CompositeLiteralElementValue
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('lbrack')
-            PsiElement(,)(',')
-            PsiWhiteSpace(' ')
-            CompositeLiteralElement
-              CompositeLiteralElementValue
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('len')
-            PsiElement(,)(',')
-            PsiWhiteSpace(' ')
-            CompositeLiteralElement
-              CompositeLiteralElementValue
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('elt')
-            PsiElement(})('}')
+            LiteralCompositeValueImpl
+              PsiElement({)('{')
+              CompositeLiteralElement
+                CompositeLiteralElementValue
+                  LiteralExpressionImpl
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('lbrack')
+              PsiElement(,)(',')
+              PsiWhiteSpace(' ')
+              CompositeLiteralElement
+                CompositeLiteralElementValue
+                  LiteralExpressionImpl
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('len')
+              PsiElement(,)(',')
+              PsiWhiteSpace(' ')
+              CompositeLiteralElement
+                CompositeLiteralElementValue
+                  LiteralExpressionImpl
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('elt')
+              PsiElement(})('}')

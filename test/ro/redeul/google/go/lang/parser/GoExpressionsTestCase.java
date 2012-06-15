@@ -109,6 +109,10 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
         doTest();
     }
 
+    public void testCompositeLiteral_structNestedValue() throws Throwable {
+        doTest();
+    }
+
     public void testCompositeLiteral_slice() throws Throwable {
         doTest();
     }

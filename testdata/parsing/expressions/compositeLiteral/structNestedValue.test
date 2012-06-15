@@ -1,5 +1,5 @@
 package main
-var e = struct{a int; b int}{var}
+var e = struct{a, b int}{{1, 2}}
 -----
 Go file
   PackageDeclaration(main)
@@ -24,13 +24,8 @@ Go file
             TypeStructFieldImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('a')
+              PsiElement(,)(',')
               PsiWhiteSpace(' ')
-              TypeNameImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('int')
-            PsiElement(;)(';')
-            PsiWhiteSpace(' ')
-            TypeStructFieldImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('b')
               PsiWhiteSpace(' ')
@@ -40,8 +35,19 @@ Go file
             PsiElement(})('}')
           LiteralCompositeValueImpl
             PsiElement({)('{')
-            CompositeLiteralElement
-              CompositeLiteralElementValue
-                PsiErrorElement:expression.expected
-                  PsiElement(KEYWORD_VAR)('var')
+            LiteralCompositeValueImpl
+              PsiElement({)('{')
+              CompositeLiteralElement
+                CompositeLiteralElementValue
+                  LiteralExpressionImpl
+                    LiteralIntegerImpl
+                      PsiElement(LITERAL_INT)('1')
+              PsiElement(,)(',')
+              PsiWhiteSpace(' ')
+              CompositeLiteralElement
+                CompositeLiteralElementValue
+                  LiteralExpressionImpl
+                    LiteralIntegerImpl
+                      PsiElement(LITERAL_INT)('2')
+              PsiElement(})('}')
             PsiElement(})('}')

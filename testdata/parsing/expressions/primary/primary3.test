@@ -21,17 +21,18 @@ Go file
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Point')
-          PsiElement({)('{')
-          CompositeLiteralElement
-            CompositeLiteralElementValue
-              LiteralExpressionImpl
-                LiteralIntegerImpl
-                  PsiElement(LITERAL_INT)('1')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
-          CompositeLiteralElement
-            CompositeLiteralElementValue
-              LiteralExpressionImpl
-                LiteralIntegerImpl
-                  PsiElement(LITERAL_INT)('2')
-          PsiElement(})('}')
+          LiteralCompositeValueImpl
+            PsiElement({)('{')
+            CompositeLiteralElement
+              CompositeLiteralElementValue
+                LiteralExpressionImpl
+                  LiteralIntegerImpl
+                    PsiElement(LITERAL_INT)('1')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            CompositeLiteralElement
+              CompositeLiteralElementValue
+                LiteralExpressionImpl
+                  LiteralIntegerImpl
+                    PsiElement(LITERAL_INT)('2')
+            PsiElement(})('}')

@@ -38,27 +38,28 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('int')
             PsiElement(})('}')
-          PsiElement({)('{')
-          CompositeLiteralElement
-            CompositeLiteralElementKey
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('a')
-            PsiElement(:)(':')
-            CompositeLiteralElementValue
-              LiteralExpressionImpl
-                LiteralIntegerImpl
-                  PsiElement(LITERAL_INT)('10')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
-          CompositeLiteralElement
-            CompositeLiteralElementKey
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('b')
-            PsiElement(:)(':')
-            CompositeLiteralElementValue
-              LiteralExpressionImpl
-                LiteralIntegerImpl
-                  PsiElement(LITERAL_INT)('10')
-          PsiElement(})('}')
+          LiteralCompositeValueImpl
+            PsiElement({)('{')
+            CompositeLiteralElement
+              CompositeLiteralElementKey
+                LiteralExpressionImpl
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('a')
+              PsiElement(:)(':')
+              CompositeLiteralElementValue
+                LiteralExpressionImpl
+                  LiteralIntegerImpl
+                    PsiElement(LITERAL_INT)('10')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            CompositeLiteralElement
+              CompositeLiteralElementKey
+                LiteralExpressionImpl
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('b')
+              PsiElement(:)(':')
+              CompositeLiteralElementValue
+                LiteralExpressionImpl
+                  LiteralIntegerImpl
+                    PsiElement(LITERAL_INT)('10')
+            PsiElement(})('}')

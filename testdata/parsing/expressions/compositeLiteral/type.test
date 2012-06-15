@@ -21,46 +21,48 @@ Go file
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Line')
-          PsiElement({)('{')
-          CompositeLiteralElement
-            CompositeLiteralElementValue
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('origin')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
-          CompositeLiteralElement
-            CompositeLiteralElementValue
-              LiteralCompositeImpl
-                TypeNameImpl
+          LiteralCompositeValueImpl
+            PsiElement({)('{')
+            CompositeLiteralElement
+              CompositeLiteralElementValue
+                LiteralExpressionImpl
                   LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('Point')
-                PsiElement({)('{')
-                CompositeLiteralElement
-                  CompositeLiteralElementKey
-                    LiteralExpressionImpl
-                      LiteralIdentifierImpl
-                        PsiElement(IDENTIFIER)('y')
-                  PsiElement(:)(':')
-                  PsiWhiteSpace(' ')
-                  CompositeLiteralElementValue
-                    UnaryExpression
-                      PsiElement(-)('-')
-                      LiteralExpressionImpl
-                        LiteralIntegerImpl
-                          PsiElement(LITERAL_INT)('4')
-                PsiElement(,)(',')
-                PsiWhiteSpace(' ')
-                CompositeLiteralElement
-                  CompositeLiteralElementKey
-                    LiteralExpressionImpl
-                      LiteralIdentifierImpl
-                        PsiElement(IDENTIFIER)('z')
-                  PsiElement(:)(':')
-                  PsiWhiteSpace(' ')
-                  CompositeLiteralElementValue
-                    LiteralExpressionImpl
-                      LiteralFloatImpl
-                        PsiElement(LITERAL_FLOAT)('12.3')
-                PsiElement(})('}')
-          PsiElement(})('}')
+                    PsiElement(IDENTIFIER)('origin')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            CompositeLiteralElement
+              CompositeLiteralElementValue
+                LiteralCompositeImpl
+                  TypeNameImpl
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('Point')
+                  LiteralCompositeValueImpl
+                    PsiElement({)('{')
+                    CompositeLiteralElement
+                      CompositeLiteralElementKey
+                        LiteralExpressionImpl
+                          LiteralIdentifierImpl
+                            PsiElement(IDENTIFIER)('y')
+                      PsiElement(:)(':')
+                      PsiWhiteSpace(' ')
+                      CompositeLiteralElementValue
+                        UnaryExpression
+                          PsiElement(-)('-')
+                          LiteralExpressionImpl
+                            LiteralIntegerImpl
+                              PsiElement(LITERAL_INT)('4')
+                    PsiElement(,)(',')
+                    PsiWhiteSpace(' ')
+                    CompositeLiteralElement
+                      CompositeLiteralElementKey
+                        LiteralExpressionImpl
+                          LiteralIdentifierImpl
+                            PsiElement(IDENTIFIER)('z')
+                      PsiElement(:)(':')
+                      PsiWhiteSpace(' ')
+                      CompositeLiteralElementValue
+                        LiteralExpressionImpl
+                          LiteralFloatImpl
+                            PsiElement(LITERAL_FLOAT)('12.3')
+                    PsiElement(})('}')
+            PsiElement(})('}')

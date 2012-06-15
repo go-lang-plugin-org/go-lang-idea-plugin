@@ -24,17 +24,18 @@ Go file
             TypeNameImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('string')
-          PsiElement({)('{')
-          CompositeLiteralElement
-            CompositeLiteralElementValue
-              LiteralExpressionImpl
-                LiteralStringImpl
-                  PsiElement(LITERAL_STRING)('"Sat"')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
-          CompositeLiteralElement
-            CompositeLiteralElementValue
-              LiteralExpressionImpl
-                LiteralStringImpl
-                  PsiElement(LITERAL_STRING)('"Sun"')
-          PsiElement(})('}')
+          LiteralCompositeValueImpl
+            PsiElement({)('{')
+            CompositeLiteralElement
+              CompositeLiteralElementValue
+                LiteralExpressionImpl
+                  LiteralStringImpl
+                    PsiElement(LITERAL_STRING)('"Sat"')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            CompositeLiteralElement
+              CompositeLiteralElementValue
+                LiteralExpressionImpl
+                  LiteralStringImpl
+                    PsiElement(LITERAL_STRING)('"Sun"')
+            PsiElement(})('}')

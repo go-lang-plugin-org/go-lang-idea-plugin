@@ -25,6 +25,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralImaginary
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralIntegerImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralStringImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeValueImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoDeferStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoExpressionStatementImpl;
@@ -193,6 +194,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(LITERAL_COMPOSITE))
             return new GoLiteralCompositeImpl(node);
+
+        if (elementType.equals(LITERAL_COMPOSITE_VALUE))
+            return new GoLiteralCompositeValueImpl(node);
 //
         if (elementType.equals(LITERAL_FUNCTION))
             return new GoLiteralFunctionImpl(node);

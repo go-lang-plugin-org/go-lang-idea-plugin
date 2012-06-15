@@ -28,27 +28,28 @@ Go file
             TypeNameImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('int')
-          PsiElement({)('{')
-          CompositeLiteralElement
-            CompositeLiteralElementKey
-              LiteralExpressionImpl
-                LiteralStringImpl
-                  PsiElement(LITERAL_STRING)('"key1"')
-            PsiElement(:)(':')
-            CompositeLiteralElementValue
-              LiteralExpressionImpl
-                LiteralIntegerImpl
-                  PsiElement(LITERAL_INT)('1')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
-          CompositeLiteralElement
-            CompositeLiteralElementKey
-              LiteralExpressionImpl
-                LiteralStringImpl
-                  PsiElement(LITERAL_STRING)('"key2"')
-            PsiElement(:)(':')
-            CompositeLiteralElementValue
-              LiteralExpressionImpl
-                LiteralIntegerImpl
-                  PsiElement(LITERAL_INT)('2')
-          PsiElement(})('}')
+          LiteralCompositeValueImpl
+            PsiElement({)('{')
+            CompositeLiteralElement
+              CompositeLiteralElementKey
+                LiteralExpressionImpl
+                  LiteralStringImpl
+                    PsiElement(LITERAL_STRING)('"key1"')
+              PsiElement(:)(':')
+              CompositeLiteralElementValue
+                LiteralExpressionImpl
+                  LiteralIntegerImpl
+                    PsiElement(LITERAL_INT)('1')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            CompositeLiteralElement
+              CompositeLiteralElementKey
+                LiteralExpressionImpl
+                  LiteralStringImpl
+                    PsiElement(LITERAL_STRING)('"key2"')
+              PsiElement(:)(':')
+              CompositeLiteralElementValue
+                LiteralExpressionImpl
+                  LiteralIntegerImpl
+                    PsiElement(LITERAL_INT)('2')
+            PsiElement(})('}')

@@ -320,39 +320,67 @@ public class PrimaryExpression implements GoElementTypes {
         if (!parser.isSet(AllowCompositeLiteral))
             return false;
 
+        boolean wrapCompositeInExpression =
+            parser.resetFlag(WrapCompositeInExpression, false);
+
+        boolean allowComposite =
+            parser.resetFlag(AllowCompositeLiteral, true);
+
         mark.rollbackTo();
         mark = builder.mark();
 
         parser.parseType(builder);
 
+        parseCompositeLiteralValue(builder, parser);
+
+        mark.done(LITERAL_COMPOSITE);
+
+        if (wrapCompositeInExpression) {
+            mark.precede().done(LITERAL_EXPRESSION);
+        }
+
+        parser.resetFlag(AllowCompositeLiteral, allowComposite);
+        parser.resetFlag(WrapCompositeInExpression,
+                         wrapCompositeInExpression);
+
+        return true;
+    }
+
+    private static void parseCompositeLiteralValue(PsiBuilder builder,
+                                                   GoParser parser) {
+
+        PsiBuilder.Marker literalValue = builder.mark();
+
         ParserUtils.getToken(builder, pLCURCLY);
         ParserUtils.skipNLS(builder);
-
-        boolean allowComposite =
-            parser.resetFlag(AllowCompositeLiteral, true);
-        boolean wrapCompositeInExpression =
-            parser.resetFlag(WrapCompositeInExpression, false);
 
         while (!builder.eof() && builder.getTokenType() != pRCURLY) {
 
             PsiBuilder.Marker elementMarker = builder.mark();
 
-            PsiBuilder.Marker keyOrValueExpression = builder.mark();
-
-            if (!parser.parseExpression(builder)) {
-                ParserUtils.wrapError(builder, "expression.expected");
-            }
-
-            if (builder.getTokenType() == oCOLON) {
-                keyOrValueExpression.done(COMPOSITE_LITERAL_ELEMENT_KEY);
-                builder.advanceLexer();
+            if ( builder.getTokenType() == pLCURCLY ) {
+                parseCompositeLiteralValue(builder, parser);
                 ParserUtils.skipNLS(builder);
+                elementMarker.drop();
+                continue;
+            } else {
+                PsiBuilder.Marker keyOrValueExpression = builder.mark();
 
-                keyOrValueExpression = builder.mark();
-                parser.parseExpression(builder);
+                if (!parser.parseExpression(builder)) {
+                    ParserUtils.wrapError(builder, "expression.expected");
+                }
+
+                if (builder.getTokenType() == oCOLON) {
+                    keyOrValueExpression.done(COMPOSITE_LITERAL_ELEMENT_KEY);
+                    builder.advanceLexer();
+                    ParserUtils.skipNLS(builder);
+
+                    keyOrValueExpression = builder.mark();
+                    parser.parseExpression(builder);
+                }
+
+                keyOrValueExpression.done(COMPOSITE_LITERAL_ELEMENT_VALUE);
             }
-
-            keyOrValueExpression.done(COMPOSITE_LITERAL_ELEMENT_VALUE);
 
             elementMarker.done(COMPOSITE_LITERAL_ELEMENT);
             if (builder.getTokenType() != pRCURLY) {
@@ -365,16 +393,7 @@ public class PrimaryExpression implements GoElementTypes {
         ParserUtils.getToken(builder, pRCURLY,
                              "closed.parenthesis.expected");
 
-        parser.resetFlag(AllowCompositeLiteral, allowComposite);
-        parser.resetFlag(WrapCompositeInExpression,
-                         wrapCompositeInExpression);
-        mark.done(LITERAL_COMPOSITE);
-
-        if (wrapCompositeInExpression) {
-            mark.precede().done(LITERAL_EXPRESSION);
-        }
-
-        return true;
+        literalValue.done(LITERAL_COMPOSITE_VALUE);
     }
 
     private static boolean parseLiteralIdentifier(PsiBuilder builder,

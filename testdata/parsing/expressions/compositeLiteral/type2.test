@@ -24,50 +24,51 @@ Go file
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('LoggedUserInfo')
-          PsiElement({)('{')
-          PsiElement(WS_NEW_LINES)('\n')
-          PsiWhiteSpace('                ')
-          CompositeLiteralElement
-            CompositeLiteralElementKey
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('Email')
-            PsiElement(:)(':')
-            PsiWhiteSpace('    ')
-            CompositeLiteralElementValue
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('email')
-          PsiElement(,)(',')
-          PsiElement(WS_NEW_LINES)('\n')
-          PsiWhiteSpace('                ')
-          CompositeLiteralElement
-            CompositeLiteralElementKey
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('LastTime')
-            PsiElement(:)(':')
-            PsiWhiteSpace(' ')
-            CompositeLiteralElementValue
-              CallOrConversionExpressionImpl
-                SelectorExpression
-                  LiteralExpressionImpl
-                    LiteralIdentifierImpl
-                      PsiElement(IDENTIFIER)('datastore')
-                  PsiElement(.)('.')
-                  PsiElement(IDENTIFIER)('SecondsToTime')
-                PsiElement(()('(')
+          LiteralCompositeValueImpl
+            PsiElement({)('{')
+            PsiElement(WS_NEW_LINES)('\n')
+            PsiWhiteSpace('                ')
+            CompositeLiteralElement
+              CompositeLiteralElementKey
+                LiteralExpressionImpl
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('Email')
+              PsiElement(:)(':')
+              PsiWhiteSpace('    ')
+              CompositeLiteralElementValue
+                LiteralExpressionImpl
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('email')
+            PsiElement(,)(',')
+            PsiElement(WS_NEW_LINES)('\n')
+            PsiWhiteSpace('                ')
+            CompositeLiteralElement
+              CompositeLiteralElementKey
+                LiteralExpressionImpl
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('LastTime')
+              PsiElement(:)(':')
+              PsiWhiteSpace(' ')
+              CompositeLiteralElementValue
                 CallOrConversionExpressionImpl
                   SelectorExpression
                     LiteralExpressionImpl
                       LiteralIdentifierImpl
-                        PsiElement(IDENTIFIER)('time')
+                        PsiElement(IDENTIFIER)('datastore')
                     PsiElement(.)('.')
-                    PsiElement(IDENTIFIER)('Seconds')
+                    PsiElement(IDENTIFIER)('SecondsToTime')
                   PsiElement(()('(')
+                  CallOrConversionExpressionImpl
+                    SelectorExpression
+                      LiteralExpressionImpl
+                        LiteralIdentifierImpl
+                          PsiElement(IDENTIFIER)('time')
+                      PsiElement(.)('.')
+                      PsiElement(IDENTIFIER)('Seconds')
+                    PsiElement(()('(')
+                    PsiElement())(')')
                   PsiElement())(')')
-                PsiElement())(')')
-          PsiElement(,)(',')
-          PsiElement(WS_NEW_LINES)('\n')
-          PsiWhiteSpace('        ')
-          PsiElement(})('}')
+            PsiElement(,)(',')
+            PsiElement(WS_NEW_LINES)('\n')
+            PsiWhiteSpace('        ')
+            PsiElement(})('}')

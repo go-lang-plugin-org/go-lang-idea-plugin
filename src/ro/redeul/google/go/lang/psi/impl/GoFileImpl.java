@@ -242,8 +242,8 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
         String myPackageName = getPackage().getPackageName();
 
-        ResolveState newState = state.put(GoResolveStates.PackageName,
-                                          myPackageName);
+        ResolveState newState =
+            state.put(GoResolveStates.PackageName, myPackageName);
 
         // process current file
         PsiElement child = lastParent != null ? lastParent.getPrevSibling() : this

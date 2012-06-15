@@ -67,6 +67,9 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType LITERAL_FUNCTION =
         new GoElementTypeImpl("LiteralFunction");
 
+    GoElementType LITERAL_COMPOSITE_VALUE =
+        new GoElementTypeImpl("LiteralCompositeValue");
+
     GoElementType COMPOSITE_LITERAL_ELEMENT =
         new GoElementTypeImpl("CompositeLiteralElement");
     GoElementType COMPOSITE_LITERAL_ELEMENT_KEY =
@@ -74,8 +77,6 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType COMPOSITE_LITERAL_ELEMENT_VALUE =
         new GoElementTypeImpl("CompositeLiteralElementValue");
 
-    GoElementType LITERAL_COMPOSITE_VALUE =
-        new GoElementTypeImpl("CompositeLiteralValue");
 
     GoElementType EXPRESSION_PARENTHESIZED =
         new GoElementTypeImpl("ParenthesisedExpression");
