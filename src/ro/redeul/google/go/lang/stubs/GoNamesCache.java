@@ -9,6 +9,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.Processor;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +32,11 @@ public class GoNamesCache extends PsiShortNamesCache {
     private final Project project;
 
     private final static Pattern RE_PACKAGE_TARGET = Pattern.compile("^TARG=([^\\s]+)\\s*$", Pattern.MULTILINE);
+
+    public static GoNamesCache getInstance(Project project) {
+        PsiShortNamesCache[] extensions = project.getExtensions(PsiShortNamesCache.EP_NAME);
+        return ContainerUtil.findInstance(extensions, GoNamesCache.class);
+    }
 
     public GoNamesCache(Project project) {
         this.project = project;

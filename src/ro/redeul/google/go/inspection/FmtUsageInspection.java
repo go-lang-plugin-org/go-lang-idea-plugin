@@ -94,6 +94,11 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
             return;
         }
 
+        PsiElement parent = fmtExpr.getParent();
+        if (!(parent instanceof GoCallOrConversionExpression)) {
+            return;
+        }
+
         GoLiteral fmtLiteral = ((GoLiteralExpression) fmtExpr).getLiteral();
         if (fmtLiteral instanceof GoLiteralIdentifier) {
             fmtLiteral = findConstDefinition((GoLiteralIdentifier) fmtLiteral);
@@ -103,7 +108,8 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
             return;
         }
 
-        Context ctx = new Context(fmtLiteral, result, parameters.subList(2, parameters.size()), isScanning);
+        Context ctx = new Context((GoCallOrConversionExpression) parent, fmtLiteral, result,
+                parameters.subList(2, parameters.size()), isScanning);
         checkFormat(fmtLiteral.getText(), ctx);
         ctx.checkAllExtraParameters();
     }
@@ -242,6 +248,8 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
     private static class Context {
         private static final ProblemHighlightType TYPE = ProblemHighlightType.LIKE_UNUSED_SYMBOL;
 
+        public final GoCallOrConversionExpression theCall;
+        public final boolean isFmtLiteralString;
         public final GoLiteral fmtLiteral;
         public final InspectionResult result;
         public final List<GoExpr> parameters;
@@ -250,8 +258,11 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         public int startOffset = 0;
         public int endOffset = 0;
 
-        private Context(GoLiteral fmtLiteral, InspectionResult result, List<GoExpr> parameters, boolean isScanning) {
+        private Context(GoCallOrConversionExpression theCall, GoLiteral fmtLiteral,
+                        InspectionResult result, List<GoExpr> parameters, boolean isScanning) {
             this.fmtLiteral = fmtLiteral;
+            this.theCall = theCall;
+            this.isFmtLiteralString = fmtLiteral.getParent() instanceof GoCallOrConversionExpression;
             this.result = result;
             this.parameters = parameters;
             this.isScanning = isScanning;
@@ -281,6 +292,11 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         }
 
         public void missingParameter() {
+            // If the format string is defined elsewhere, also mark the right parenthesis as error.
+            if (!isFmtLiteralString) {
+                result.addProblem(theCall.getLastChild(), "Missing parameter", TYPE);
+            }
+
             result.addProblem(fmtLiteral, startOffset, endOffset + 1, "Missing parameter", TYPE);
         }
 

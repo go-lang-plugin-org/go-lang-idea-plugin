@@ -375,6 +375,7 @@
                                 implementationClass="ro.redeul.google.go.lang.completion.GoCompletionContributor"/>
 
         <gotoClassContributor implementation="ro.redeul.google.go.ide.contributor.GoGoToClassContributor" />
+        <gotoDeclarationHandler implementation="ro.redeul.google.go.codeInsight.navigation.GotoPackageHandler"/>
         <!--<frameworkSupport implementation="ro.redeul.google.go.config.framework.GoFrameworkSupportProvider"/>-->
         <!--<facetType implementation="ro.redeul.google.go.config.facet.GoFacetType"/>-->
         <sdkType implementation="ro.redeul.google.go.config.sdk.GoSdkType"/>

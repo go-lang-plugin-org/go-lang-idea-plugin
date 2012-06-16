@@ -8,6 +8,7 @@ import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.psi.tree.IStubFileElementType;
 import com.intellij.util.io.StringRef;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStub;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStubBuilder;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageImportPath;
@@ -72,7 +73,7 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
         StringRef packageImportPath = stub.getPackageImportPath();
         if ( packageImportPath != null ) {
             // don't index any package information on test files or test data.
-            if (isTestDataInStandardLibrary(packageImportPath) || isTestFile(packageImportPath)) {
+            if (isTestDataInStandardLibrary(packageImportPath) || isTestFile(stub.getPsi())) {
                 return;
             }
             sink.occurrence(GoPackageImportPath.KEY, packageImportPath.toString());
@@ -81,8 +82,8 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
         sink.occurrence(GoPackageName.KEY, stub.getPackageName().toString());
     }
 
-    private boolean isTestFile(StringRef packageImportPath) {
-        return packageImportPath.toString().endsWith("_test");
+    private boolean isTestFile(GoFile file) {
+        return file != null && file.getName().endsWith("_test.go");
     }
 
     private boolean isTestDataInStandardLibrary(StringRef packageImportPath) {

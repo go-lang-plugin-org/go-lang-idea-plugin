@@ -56,7 +56,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             return null;
         }
 
-        GoNamesCache namesCache = getGoNamesCache(project);
+        GoNamesCache namesCache = GoNamesCache.getInstance(project);
         if (namesCache == null) {
             return null;
         }
@@ -108,11 +108,6 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             }
         }
         return packageFiles;
-    }
-
-    private GoNamesCache getGoNamesCache(Project project) {
-        PsiShortNamesCache[] extensions = project.getExtensions(PsiShortNamesCache.EP_NAME);
-        return ContainerUtil.findInstance(extensions, GoNamesCache.class);
     }
 
     private RangeHighlighter[] getAllHighlighters(Project project) {
