@@ -19,7 +19,7 @@ Go file
         PsiElement(*)('*')
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('actionQueue')
-      PsiElement())(')')
+    PsiElement())(')')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('Swap')
     PsiElement(()('(')

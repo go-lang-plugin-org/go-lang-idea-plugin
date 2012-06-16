@@ -20,7 +20,7 @@ Go file
         PsiElement(*)('*')
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('Point')
-      PsiElement())(')')
+    PsiElement())(')')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('Scale')
     PsiElement(()('(')

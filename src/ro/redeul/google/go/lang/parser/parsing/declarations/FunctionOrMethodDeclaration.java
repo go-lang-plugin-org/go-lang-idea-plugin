@@ -106,9 +106,8 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         parser.parseTypeName(builder);
 
         ParserUtils.skipNLS(builder);
-        ParserUtils.getToken(builder, pRPAREN, "close.parenthesis.expected");
-
         receiverDeclarationMarker.done(METHOD_RECEIVER);
+        ParserUtils.getToken(builder, pRPAREN, "close.parenthesis.expected");
     }
 
     public static boolean parseSignature(PsiBuilder builder, GoParser parser) {

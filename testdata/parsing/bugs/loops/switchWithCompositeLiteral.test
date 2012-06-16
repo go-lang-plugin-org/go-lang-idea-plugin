@@ -27,7 +27,7 @@ Go file
         PsiElement(*)('*')
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('Package')
-      PsiElement())(')')
+    PsiElement())(')')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('gccMachine')
     PsiElement(()('(')

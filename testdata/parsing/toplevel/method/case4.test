@@ -18,7 +18,7 @@ Go file
       TypeNameImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('Point')
-      PsiElement())(')')
+    PsiElement())(')')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('Length')
     PsiElement(()('(')
