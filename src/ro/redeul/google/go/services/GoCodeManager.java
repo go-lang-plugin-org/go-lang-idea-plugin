@@ -1,15 +1,16 @@
 package ro.redeul.google.go.services;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.visitors.GoImportUsageChecker;
-
-import java.util.HashSet;
-import java.util.Set;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
+import ro.redeul.google.go.lang.psi.visitors.GoImportUsageCheckingVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -31,29 +32,20 @@ public class GoCodeManager {
         return ServiceManager.getService(project, GoCodeManager.class);
     }
 
-    public Set<GoImportDeclaration> findUsedImports(GoFile file) {
-        GoImportDeclarations[] declarations = file.getImportDeclarations();
+    public Collection<GoImportDeclaration> findUnusedImports(GoFile file) {
 
-        Set<GoImportDeclaration> usedImports = new HashSet<GoImportDeclaration>();
+        Map<String, GoImportDeclaration> imports =
+            new HashMap<String, GoImportDeclaration>();
 
-        for (GoImportDeclarations declaration : declarations) {
-            GoImportDeclaration importSpecs[] = declaration.getDeclarations();
-
-            for (GoImportDeclaration importSpec : importSpecs) {
-                if ( isImportUsed(importSpec, file) ) {
-                    usedImports.add(importSpec);
-                }
+        for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
+            for (GoImportDeclaration declaration : importDeclarations.getDeclarations()) {
+                imports.put(declaration.getVisiblePackageName(),
+                            declaration);
             }
         }
 
-        return usedImports;
-    }
+        new GoImportUsageCheckingVisitor(imports).visitFile(file);
 
-    public boolean isImportUsed(GoImportDeclaration importSpec, GoFile file) {
-        GoImportUsageChecker importUsageChecker = new GoImportUsageChecker(importSpec);
-
-        file.accept(importUsageChecker);
-
-        return importUsageChecker.isUsed();
+        return imports.values();
     }
 }

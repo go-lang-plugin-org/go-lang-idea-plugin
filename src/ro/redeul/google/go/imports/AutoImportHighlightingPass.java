@@ -1,5 +1,9 @@
 package ro.redeul.google.go.imports;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.intellij.codeHighlighting.TextEditorHighlightingPass;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.ShowAutoImportPass;
@@ -13,18 +17,11 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.PsiShortNamesCache;
-import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
 import ro.redeul.google.go.inspection.fix.AddImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
 
 /**
@@ -36,12 +33,14 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
     private final Editor editor;
     private TextRange visibleRange;
 
-    public AutoImportHighlightingPass(Project project, GoFile file, Editor editor) {
+    public AutoImportHighlightingPass(Project project, GoFile file,
+                                      Editor editor) {
         super(project, editor.getDocument(), false);
 
         this.file = file;
         this.editor = editor;
-        this.visibleRange = VisibleHighlightingPassFactory.calculateVisibleRange(editor);
+        this.visibleRange = VisibleHighlightingPassFactory.calculateVisibleRange(
+            editor);
     }
 
     @Override
@@ -68,26 +67,30 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             TextRange range = new TextRange(start, end);
             Object errorStripeTooltip = highlighter.getErrorStripeTooltip();
             if (!visibleRange.contains(range) ||
-                    editor.getFoldingModel().isOffsetCollapsed(start) ||
-                    !(errorStripeTooltip instanceof HighlightInfo)) {
+                editor.getFoldingModel().isOffsetCollapsed(start) ||
+                !(errorStripeTooltip instanceof HighlightInfo)) {
                 continue;
             }
 
             // if this a "Unresolved symbol" error
             HighlightInfo info = (HighlightInfo) errorStripeTooltip;
-            if (info.getSeverity() != HighlightSeverity.ERROR || !info.description.contains("Unresolved symbol")) {
+            if (info.getSeverity() != HighlightSeverity.ERROR ||
+                !info.description.contains("Unresolved symbol")) {
                 continue;
             }
 
-            PsiElement id = findElementOfClassAtRange(file, start, end, GoLiteralIdentifier.class);
+            PsiElement id = findElementOfClassAtRange(file, start, end,
+                                                      GoLiteralIdentifier.class);
             if (id == null) {
                 continue;
             }
 
             // packages exist
             String expectedPackage = id.getText();
-            List<String> sdkPackages = getPotentialPackages(namesCache.getSdkPackages(), expectedPackage);
-            List<String> projectPackages = getPotentialPackages(namesCache.getProjectPackages(), expectedPackage);
+            List<String> sdkPackages = getPotentialPackages(
+                namesCache.getSdkPackages(), expectedPackage);
+            List<String> projectPackages = getPotentialPackages(
+                namesCache.getProjectPackages(), expectedPackage);
             if (sdkPackages.size() == 0 && projectPackages.size() == 0) {
                 continue;
             }
@@ -100,10 +103,12 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         return toImport;
     }
 
-    private List<String> getPotentialPackages(Collection<String> allPackages, String expectedPackage) {
+    private List<String> getPotentialPackages(Collection<String> allPackages,
+                                              String expectedPackage) {
         List<String> packageFiles = new ArrayList<String>();
         for (String p : allPackages) {
-            if (expectedPackage.equals(p) || p.endsWith("/" + expectedPackage)) {
+            if (expectedPackage.equals(p) || p.endsWith(
+                "/" + expectedPackage)) {
                 packageFiles.add(p);
             }
         }
@@ -111,7 +116,8 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
     }
 
     private RangeHighlighter[] getAllHighlighters(Project project) {
-        return DocumentMarkupModel.forDocument(editor.getDocument(), project, true).getAllHighlighters();
+        return DocumentMarkupModel.forDocument(editor.getDocument(), project,
+                                               true).getAllHighlighters();
     }
 
     @Override
@@ -122,7 +128,8 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
         UIUtil.invokeLaterIfNeeded(new Runnable() {
             public void run() {
-                if (HintManager.getInstance().hasShownHintsThatWillHideByOtherHint(true)) {
+                if (HintManager.getInstance()
+                               .hasShownHintsThatWillHideByOtherHint(true)) {
                     return;
                 }
 
@@ -131,13 +138,18 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                     return;
                 }
 
-                List<String> allPackages = new ArrayList<String>(data.projectPackages);
+                List<String> allPackages = new ArrayList<String>(
+                    data.projectPackages);
                 allPackages.addAll(data.sdkPackages);
                 String importMessage = getPromptMessage(allPackages);
-                AddImportFix fix = new AddImportFix(data.sdkPackages, data.projectPackages, file, editor);
+                AddImportFix fix = new AddImportFix(data.sdkPackages,
+                                                    data.projectPackages, file,
+                                                    editor);
                 int start = data.element.getTextOffset();
                 int end = data.element.getTextRange().getEndOffset();
-                HintManager.getInstance().showQuestionHint(editor, importMessage, start, end, fix);
+                HintManager.getInstance()
+                           .showQuestionHint(editor, importMessage, start, end,
+                                             fix);
             }
         });
     }
@@ -153,7 +165,8 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         public final List<String> sdkPackages;
         public final List<String> projectPackages;
 
-        private Data(PsiElement element, List<String> sdkPackages, List<String> projectPackages) {
+        private Data(PsiElement element, List<String> sdkPackages,
+                     List<String> projectPackages) {
             this.element = element;
             this.sdkPackages = sdkPackages;
             this.projectPackages = projectPackages;

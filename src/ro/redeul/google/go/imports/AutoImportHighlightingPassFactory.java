@@ -12,7 +12,9 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 
-public class AutoImportHighlightingPassFactory extends AbstractProjectComponent implements TextEditorHighlightingPassFactory {
+public class AutoImportHighlightingPassFactory extends AbstractProjectComponent
+    implements TextEditorHighlightingPassFactory
+{
     protected AutoImportHighlightingPassFactory(Project project, TextEditorHighlightingPassRegistrar hlRegistrar) {
         super(project);
 

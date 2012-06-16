@@ -1,32 +1,26 @@
 package ro.redeul.google.go.annotator;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.QuickFix;
 import com.intellij.codeInspection.ex.QuickFixWrapper;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
 import ro.redeul.google.go.inspection.ConstDeclarationInspection;
 import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.inspection.VarDeclarationInspection;
-import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -37,12 +31,10 @@ import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
-import ro.redeul.google.go.services.GoCodeManager;
 import static ro.redeul.google.go.inspection.InspectionUtil.getProblemRange;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isFunctionOrMethodCall;
 
@@ -195,38 +187,6 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
         Annotation annotation = annotationHolder.createInfoAnnotation(typeName,
                                                                       null);
         annotation.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
-    }
-
-    @Override
-    public void visitImportDeclaration(GoImportDeclaration importDeclaration) {
-        Collection<GoFile> fileCollection =
-            goNamesCache.getFilesByPackageName(
-                importDeclaration.getImportPath().replaceAll("^\"|\"$", ""));
-
-        if (fileCollection == null || fileCollection.size() == 0) {
-            Annotation annotation =
-                annotationHolder.createWeakWarningAnnotation(
-                    importDeclaration,
-                    GoBundle.message("error.invalid.import"));
-
-            if (annotation != null)
-                annotation.setHighlightType(
-                    ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
-        }
-
-        Project project = importDeclaration.getProject();
-        PsiFile file = importDeclaration.getContainingFile();
-        if (!(file instanceof GoFile)) {
-            return;
-        }
-
-        if (!GoCodeManager.getInstance(project)
-                          .isImportUsed(importDeclaration, (GoFile) file)) {
-            Annotation anno = annotationHolder.createErrorAnnotation(
-                importDeclaration, "Unused import");
-            anno.registerFix(new RemoveImportFix(importDeclaration));
-            anno.setHighlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL);
-        }
     }
 
     @Override

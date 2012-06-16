@@ -1,5 +1,7 @@
 package ro.redeul.google.go.inspection;
 
+import java.util.Collection;
+
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
@@ -9,10 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.services.GoCodeManager;
-
-import java.util.Set;
+import static ro.redeul.google.go.GoBundle.message;
 
 public class UnusedImportInspection extends AbstractWholeGoFileInspection {
     @Nls
@@ -23,7 +23,9 @@ public class UnusedImportInspection extends AbstractWholeGoFileInspection {
     }
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result, boolean onTheFly) {
+    protected void doCheckFile(@NotNull GoFile file,
+                               @NotNull InspectionResult result,
+                               boolean onTheFly) {
         Project project = file.getProject();
 
         PsiDocumentManager pdm = PsiDocumentManager.getInstance(project);
@@ -32,17 +34,19 @@ public class UnusedImportInspection extends AbstractWholeGoFileInspection {
             pdm.commitDocument(document);
         }
 
-        Set<GoImportDeclaration> usedImports = GoCodeManager.getInstance(project).findUsedImports(file);
+        Collection<GoImportDeclaration> unusedImports =
+            GoCodeManager.getInstance(project).findUnusedImports(file);
 
-        for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
-            for (GoImportDeclaration id : importDeclarations.getDeclarations()) {
-                RemoveImportFix fix = new RemoveImportFix(id);
-                if (id.getText().trim().isEmpty() || usedImports.contains(id)) {
-                    continue;
-                }
-
-                result.addProblem(id, "Unused import", ProblemHighlightType.LIKE_UNUSED_SYMBOL, fix);
+        for (GoImportDeclaration unused : unusedImports) {
+            if (unused.getText().trim().isEmpty()) {
+                continue;
             }
+
+            result.addProblem(
+                unused,
+                message("warning.unused.import", unused.getImportPath()),
+                ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                new RemoveImportFix(unused));
         }
     }
 }

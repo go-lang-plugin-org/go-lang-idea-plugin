@@ -250,6 +250,15 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     }
 
     @Override
+    public String getLocalPackageName() {
+        if ( isQualified() ) {
+            return getText().substring(0, getText().indexOf("."));
+        }
+
+        return null;
+    }
+
+    @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,

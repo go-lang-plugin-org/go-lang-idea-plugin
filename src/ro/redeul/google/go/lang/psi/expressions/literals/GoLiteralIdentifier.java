@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.expressions.literals;
 
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.PsiReference;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -21,4 +22,7 @@ public interface GoLiteralIdentifier extends GoLiteral<String>, PsiReference, Ps
     boolean isGlobal();
 
     boolean isQualified();
+
+    @Nullable
+    String getLocalPackageName();
 }

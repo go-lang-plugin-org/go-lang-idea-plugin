@@ -164,6 +164,11 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
     }
 
     @Override
+    public GoLiteralIdentifier getIdentifier() {
+        return findChildByClass(GoLiteralIdentifier.class);
+    }
+
+    @Override
     public boolean isReference() {
         return findChildByType(GoTokenTypes.oMUL) != null;
     }

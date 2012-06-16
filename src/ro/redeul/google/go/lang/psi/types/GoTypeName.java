@@ -4,6 +4,7 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -14,6 +15,8 @@ import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
 public interface GoTypeName extends GoPsiElement, PsiNamedElement, PsiReference,
                                     GoQualifiedNameElement, GoType
 {
+    GoLiteralIdentifier getIdentifier();
+
     boolean isReference();
 
     boolean isPrimitive();
