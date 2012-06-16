@@ -79,11 +79,10 @@ Go file
                       PsiElement(IDENTIFIER)('string')
                 LiteralCompositeValueImpl
                   PsiElement({)('{')
-                  CompositeLiteralElement
-                    CompositeLiteralElementValue
-                      LiteralExpressionImpl
-                        LiteralStringImpl
-                          PsiElement(LITERAL_STRING)('"-m64"')
+                  LiteralCompositeElementImpl
+                    LiteralExpressionImpl
+                      LiteralStringImpl
+                        PsiElement(LITERAL_STRING)('"-m64"')
                   PsiElement(})('}')
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
@@ -109,11 +108,10 @@ Go file
                       PsiElement(IDENTIFIER)('string')
                 LiteralCompositeValueImpl
                   PsiElement({)('{')
-                  CompositeLiteralElement
-                    CompositeLiteralElementValue
-                      LiteralExpressionImpl
-                        LiteralStringImpl
-                          PsiElement(LITERAL_STRING)('"-m32"')
+                  LiteralCompositeElementImpl
+                    LiteralExpressionImpl
+                      LiteralStringImpl
+                        PsiElement(LITERAL_STRING)('"-m32"')
                   PsiElement(})('}')
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')

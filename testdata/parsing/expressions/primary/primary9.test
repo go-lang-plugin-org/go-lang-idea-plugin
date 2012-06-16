@@ -1,6 +1,5 @@
 package main
 var e = interface{}(nil)
-----
 -----
 Go file
   PackageDeclaration(main)
@@ -27,8 +26,3 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('nil')
         PsiElement())(')')
-  PsiElement(WS_NEW_LINES)('\n')
-  PsiErrorElement:unknown.token
-    PsiElement(--)('--')
-  PsiErrorElement:unknown.token
-    PsiElement(--)('--')

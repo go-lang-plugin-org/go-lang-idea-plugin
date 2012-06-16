@@ -1,10 +1,10 @@
 package ro.redeul.google.go.lang.parser.parsing.expressions;
 
 import com.intellij.lang.PsiBuilder;
-import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
+import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,19 +15,13 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class UnaryExpression implements GoElementTypes {
 
-    static TokenSet UNARY_OPS = TokenSet.create(
-            oPLUS, oMINUS, oNOT, oBIT_XOR, oBIT_AND, oMUL
-    );
-
     public static boolean parse(PsiBuilder builder, GoParser parser) {
 
         ParserUtils.skipNLS(builder);
 
         PsiBuilder.Marker mark = builder.mark();
 
-        if ( UNARY_OPS.contains(builder.getTokenType()) ) {
-            ParserUtils.getToken(builder, builder.getTokenType());
-
+        if ( ParserUtils.getToken(builder, GoTokenSets.UNARY_OPS)) {
             parse(builder, parser);
             mark.done(UNARY_EXPRESSION);
             return true;

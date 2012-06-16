@@ -61,7 +61,7 @@ Go file
                             PsiElement(IDENTIFIER)('y')
                       PsiElement(:)(':')
                       PsiWhiteSpace(' ')
-                      UnaryExpression
+                      UnaryExpressionImpl
                         PsiElement(-)('-')
                         LiteralExpressionImpl
                           LiteralIntegerImpl

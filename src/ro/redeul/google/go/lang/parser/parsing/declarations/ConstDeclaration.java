@@ -17,13 +17,12 @@ public class ConstDeclaration implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
+        if (!ParserUtils.lookAhead(builder, kCONST))
+            return null;
+
         PsiBuilder.Marker marker = builder.mark();
 
-        if (!ParserUtils.getToken(builder, kCONST)) {
-            ParserUtils.wrapError(builder, "const.keyword.expected");
-            marker.drop();
-            return null;
-        }
+        ParserUtils.getToken(builder, kCONST);
 
         NestedDeclarationParser.parseNestedOrBasicDeclaration(
             builder, parser, new NestedDeclarationParser.DeclarationParser() {
@@ -60,13 +59,13 @@ public class ConstDeclaration implements GoElementTypes {
             parser.resetFlag(ParseIota, parseIota);
         }
 
-        if (builder.getTokenType() != oSEMI &&
+        if (!builder.eof() &&
+            builder.getTokenType() != oSEMI &&
             builder.getTokenType() != pRPAREN &&
             builder.getTokenType() != wsNLS) {
             builder.error("semicolon.or.newline.or.right.parenthesis.expected");
         }
 
-        ParserUtils.getToken(builder, oSEMI);
         initializer.done(CONST_DECLARATION);
 
         return true;

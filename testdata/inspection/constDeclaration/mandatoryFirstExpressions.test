@@ -1,0 +1,21 @@
+package main
+
+const A = 5
+const (A = 5)
+const (A = 5 + 1)
+const (A = iota)
+const <begin>A<end.Expression for first constant is mandatory>
+const (
+<begin>A<end.Expression for first constant is mandatory>
+)
+const (
+<begin>A<end.Expression for first constant is mandatory>
+B
+)
+const (
+<begin>A<end.Expression for first constant is mandatory>
+B = 2
+)
+const (
+<begin>A, B<end.Expression for first constant is mandatory>
+)

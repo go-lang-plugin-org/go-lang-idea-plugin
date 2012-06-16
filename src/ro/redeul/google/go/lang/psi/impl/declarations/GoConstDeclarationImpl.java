@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -16,6 +17,11 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
 
     public GoConstDeclarationImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public boolean hasInitializers() {
+        return findChildByType(GoTokenTypes.oASSIGN) != null;
     }
 
     @Override

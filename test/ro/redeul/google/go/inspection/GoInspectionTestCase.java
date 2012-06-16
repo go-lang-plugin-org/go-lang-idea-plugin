@@ -1,5 +1,12 @@
 package ro.redeul.google.go.inspection;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ex.ProblemDescriptorImpl;
 import com.intellij.openapi.editor.Document;
@@ -11,14 +18,8 @@ import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 public abstract class GoInspectionTestCase extends GoLightCodeInsightFixtureTestCase {
+
     protected AbstractWholeGoFileInspection createInspection() {
         try {
             String inspectionName = getClass().getName().replaceAll("Test$", "");
@@ -32,11 +33,7 @@ public abstract class GoInspectionTestCase extends GoLightCodeInsightFixtureTest
     protected String getTestDataRelativePath() {
         try {
             String name = getClass().getSimpleName();
-            if (name.endsWith("InspectionTest")) {
-                name = name.replaceAll("InspectionTest$", "");
-            } else if (name.endsWith("Test")) {
-                name = name.replaceAll("Test$", "");
-            }
+            name = name.replaceAll("(Inspection)?Test$", "");
             return String.format("inspection/%s/", lowercaseFirstLetter(name, true));
         } catch (Exception e) {
             return "inspection/undefined/";

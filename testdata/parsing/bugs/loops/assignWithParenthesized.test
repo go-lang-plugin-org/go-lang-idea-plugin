@@ -44,7 +44,7 @@ Go file
         IndexExpressionImpl
           ParenthesisedExpression
             PsiElement(()('(')
-            UnaryExpression
+            UnaryExpressionImpl
               PsiElement(*)('*')
               LiteralExpressionImpl
                 LiteralIdentifierImpl
@@ -60,7 +60,7 @@ Go file
         IndexExpressionImpl
           ParenthesisedExpression
             PsiElement(()('(')
-            UnaryExpression
+            UnaryExpressionImpl
               PsiElement(*)('*')
               LiteralExpressionImpl
                 LiteralIdentifierImpl
@@ -77,7 +77,7 @@ Go file
         IndexExpressionImpl
           ParenthesisedExpression
             PsiElement(()('(')
-            UnaryExpression
+            UnaryExpressionImpl
               PsiElement(*)('*')
               LiteralExpressionImpl
                 LiteralIdentifierImpl
@@ -93,7 +93,7 @@ Go file
         IndexExpressionImpl
           ParenthesisedExpression
             PsiElement(()('(')
-            UnaryExpression
+            UnaryExpressionImpl
               PsiElement(*)('*')
               LiteralExpressionImpl
                 LiteralIdentifierImpl

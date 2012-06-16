@@ -6,6 +6,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
 public interface GoConstDeclaration extends GoPsiElement {
 
+    boolean hasInitializers();
+
     GoLiteralIdentifier[] getIdentifiers();
 
     GoExpr[] getExpressions();

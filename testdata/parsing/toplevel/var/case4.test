@@ -24,14 +24,14 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      UnaryExpression
+      UnaryExpressionImpl
         PsiElement(-)('-')
         LiteralExpressionImpl
           LiteralIntegerImpl
             PsiElement(LITERAL_INT)('1')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      UnaryExpression
+      UnaryExpressionImpl
         PsiElement(-)('-')
         LiteralExpressionImpl
           LiteralIntegerImpl

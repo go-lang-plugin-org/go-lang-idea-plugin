@@ -23,6 +23,6 @@ Go file
       LiteralExpressionImpl
         LiteralIntegerImpl
           PsiElement(LITERAL_INT)('1')
-      PsiElement(;)(';')
+    PsiElement(;)(';')
   PsiWhiteSpace(' ')
   PsiComment(ML_COMMENT)('/* adfaf * sdf */')

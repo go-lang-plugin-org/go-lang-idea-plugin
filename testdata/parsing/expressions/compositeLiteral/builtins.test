@@ -23,7 +23,7 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      UnaryExpression
+      UnaryExpressionImpl
         PsiElement(&)('&')
         LiteralExpressionImpl
           LiteralCompositeImpl

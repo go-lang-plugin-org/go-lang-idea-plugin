@@ -37,5 +37,5 @@ Go file
             PsiElement(IDENTIFIER)('x')
             PsiWhiteSpace(' ')
             PsiElement(IDENTIFIER)('int')
-      PsiElement(WS_NEW_LINES)('\n')
+        PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')

@@ -23,5 +23,4 @@ Go file
         PsiElement(.)('.')
         PsiElement(()('(')
         PsiElement(KEYWORD_TYPE)('type')
-  PsiErrorElement:unknown.token
     PsiElement())(')')

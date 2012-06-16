@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoCallOrConversionExpressio
 import ro.redeul.google.go.lang.psi.impl.expressions.GoIndexExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoLiteralExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoUnaryExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoAdditiveExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoMultiplicativeExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralBoolImpl;
@@ -219,6 +220,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if ( elementType.equals(EXPRESSION_STATEMENT) )
             return new GoExpressionStatementImpl(node);
+
+        if ( elementType.equals(UNARY_EXPRESSION) )
+            return new GoUnaryExpressionImpl(node);
 
         if ( elementType.equals(CALL_OR_CONVERSION_EXPRESSION) )
             return new GoCallOrConversionExpressionImpl(node);
