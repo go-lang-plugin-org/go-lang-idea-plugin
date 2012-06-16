@@ -1,5 +1,9 @@
 package ro.redeul.google.go.editor.highlighting;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.*;
+
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
@@ -11,10 +15,6 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
-
-import javax.swing.Icon;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
@@ -48,6 +48,9 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                 GoSyntaxHighlighter.NUMBER),
             new AttributesDescriptor(
                 GoBundle.message("color." + GoSyntaxHighlighter.STRING_ID),
+                GoSyntaxHighlighter.STRING),
+            new AttributesDescriptor(
+                GoBundle.message("color." + GoSyntaxHighlighter.CONST_ID),
                 GoSyntaxHighlighter.STRING),
             new AttributesDescriptor(
                 GoBundle.message("color." + GoSyntaxHighlighter.IDENTIFIER_ID),
@@ -113,6 +116,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                 "var <globalVariable>globalValue</globalVariable> = 5" +
                 "// line comment \n" +
                 "func(<variable>t</variable>* <typeName>T1</typeName>) function1(<variable>a</variable>, <variable>b</variable> <typeName>int</typeName>, <variable>c</variable> <typeName>T</typeName>) (<typeName>string</typeName>) {\n" +
+                "   x := 'a'\n" +
                 "   var <variable>x</variable> <typeName>T1</typeName> = 10.10 + <globalVariable>globalValue</globalVariable> + <const>CONST_VALUE</const>\n" +
                 "   fmt.Printf(<variable>x</variable>);\n" +
                 "   return <variable>x</variable>\n" +

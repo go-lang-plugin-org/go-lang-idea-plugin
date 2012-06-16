@@ -3,13 +3,6 @@ package ro.redeul.google.go.lang.lexer;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.TokenSet;
 
-/**
- * Created by IntelliJ IDEA.
- * User: mtoader
- * Date: Jul 24, 2010
- * Time: 8:23:02 PM
- * To change this template use File | Settings | File Templates.
- */
 public interface GoTokenTypeSets extends GoTokenTypes {
 
     static final TokenSet WHITESPACES = TokenSet.create(
@@ -50,7 +43,7 @@ public interface GoTokenTypeSets extends GoTokenTypes {
     );
 
     static final TokenSet STRINGS = TokenSet.create(
-            litSTRING
+            litSTRING, litCHAR
     );
 
     static final TokenSet IDENTIFIERS = TokenSet.create(
@@ -146,7 +139,7 @@ public interface GoTokenTypeSets extends GoTokenTypes {
     public static final TokenSet INC_DEC_OPERATORS = TokenSet.create(
             oPLUS_PLUS, oMINUS_MINUS
     );
-    
+
     public static final TokenSet OPERATORS = TokenSet.create(
             oSEMI,
             oTRIPLE_DOT,
