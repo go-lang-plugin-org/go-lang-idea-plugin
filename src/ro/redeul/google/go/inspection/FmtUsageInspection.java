@@ -1,5 +1,7 @@
 package ro.redeul.google.go.inspection;
 
+import java.util.List;
+
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nls;
@@ -14,9 +16,6 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-
-import java.util.List;
-
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildrenOfType;
 
 public class FmtUsageInspection extends AbstractWholeGoFileInspection {
@@ -293,9 +292,9 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
 
         public void missingParameter() {
             // If the format string is defined elsewhere, also mark the right parenthesis as error.
-            if (!isFmtLiteralString) {
-                result.addProblem(theCall.getLastChild(), "Missing parameter", TYPE);
-            }
+//            if (!isFmtLiteralString) {
+//                result.addProblem(theCall.getLastChild(), "Missing parameter", TYPE);
+//            }
 
             result.addProblem(fmtLiteral, startOffset, endOffset + 1, "Missing parameter", TYPE);
         }
