@@ -122,18 +122,29 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
     }
 
     public static String getFunctionPresentationText(GoFunctionDeclaration fd) {
-        StringBuilder sb = new StringBuilder(fd.getFunctionName()).append("(");
-        GoFunctionParameter[] parameters = fd.getParameters();
-        if (parameters.length == 0) {
-            return sb.append(")").toString();
+        StringBuilder sb = new StringBuilder(fd.getFunctionName());
+        String params = parametersToString(fd.getParameters());
+        String results = parametersToString(fd.getResults());
+        sb.append("(").append(params).append(")");
+        if (!results.isEmpty()) {
+            sb.append(": (").append(results).append(")");
+        }
+        return sb.toString();
+    }
+
+    private static String parametersToString(GoFunctionParameter[] parameters) {
+        if (parameters == null || parameters.length == 0) {
+            return "";
         }
 
+        StringBuilder sb = new StringBuilder();
         for (GoFunctionParameter fp : parameters) {
             GoLiteralIdentifier[] ids = fp.getIdentifiers();
             GoType type = fp.getType();
             String typeName = String.valueOf(type != null ? type.getName() : null);
             if (ids.length == 0) {
                 sb.append(typeName).append(", ");
+                continue;
             } else if (ids.length == 1) {
                 sb.append(ids[0].getName()).append(" ").append(typeName).append(", ");
                 continue;
@@ -144,7 +155,8 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
             }
             sb.insert(sb.length() - 2, (fp.isVariadic() ? " ..." : " ") + typeName);
         }
-        return sb.replace(sb.length() - 2, sb.length(), ")").toString();
+
+        return sb.delete(sb.length() - 2, sb.length()).toString();
     }
 
 

@@ -19,6 +19,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getConstDocument;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionDocument;
+import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionQuickNavigationInfo;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getMethodDocument;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getTypeDocument;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getVarDocument;
@@ -44,7 +45,11 @@ public class GoDocumentationProvider implements CodeDocumentationProvider,
     @Override
     public String getQuickNavigateInfo(PsiElement element,
                                        PsiElement originalElement) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        if (element instanceof GoFunctionDeclaration) {
+            return getFunctionQuickNavigationInfo((GoFunctionDeclaration) element);
+        }
+
+        return null;
     }
 
     @Override

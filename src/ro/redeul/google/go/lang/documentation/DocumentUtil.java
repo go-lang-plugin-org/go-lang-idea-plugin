@@ -1,9 +1,11 @@
 package ro.redeul.google.go.lang.documentation;
 
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
+import ro.redeul.google.go.ide.structureview.GoStructureViewElement;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -186,5 +188,23 @@ class DocumentUtil {
             }
         }
         return "";
+    }
+
+    public static String getElementPackageInfo(PsiElement element) {
+        PsiFile file = element.getContainingFile();
+
+        if (!(file instanceof GoFile)) {
+            return "";
+        }
+
+        VirtualFile virtualFile = file.getVirtualFile();
+        String packageName = ((GoFile) file).getPackage().getPackageName();
+        return virtualFile != null ? packageName + "/" + virtualFile.getName() : packageName;
+    }
+
+    public static String getFunctionQuickNavigationInfo(GoFunctionDeclaration fd) {
+        String packageInfo = getElementPackageInfo(fd);
+        String functionInfo = GoStructureViewElement.getFunctionPresentationText(fd);
+        return packageInfo + "\n" + functionInfo;
     }
 }
