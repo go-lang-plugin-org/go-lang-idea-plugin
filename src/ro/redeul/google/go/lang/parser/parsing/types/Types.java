@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.types;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
@@ -14,7 +15,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class Types implements GoElementTypes {
 
-    public static boolean parseTypeDeclaration(PsiBuilder builder, GoParser parser) {
+    public static IElementType parseTypeDeclaration(PsiBuilder builder, GoParser parser) {
 
         if (ParserUtils.lookAhead(builder, pLPAREN)) {
 
@@ -29,8 +30,7 @@ public class Types implements GoElementTypes {
             }
 
             marker.done(TYPE_PARENTHESIZED);
-
-            return true;
+            return TYPE_PARENTHESIZED;
         }
 
         if ( builder.getTokenType() == pLBRACK ) {
@@ -69,17 +69,16 @@ public class Types implements GoElementTypes {
             return parseQualifiedType(builder);
         }
 
-        return false;  //To change body of created methods use File | Settings | File Templates.
+        return null;
     }
 
-    private static boolean parseQualifiedType(PsiBuilder builder) {
+    private static IElementType parseQualifiedType(PsiBuilder builder) {
+
+        if (!ParserUtils.lookAhead(builder, mIDENT))
+            return null;
 
         PsiBuilder.Marker marker = builder.mark();
-
-        if ( ! ParserUtils.getToken(builder, mIDENT) ) {
-            marker.rollbackTo();
-            return false;
-        }
+        ParserUtils.getToken(builder, mIDENT);
 
         if (ParserUtils.getToken(builder, oDOT)) {
             ParserUtils.skipNLS(builder);
@@ -87,10 +86,9 @@ public class Types implements GoElementTypes {
         }
 
         marker.done(LITERAL_IDENTIFIER);
-//        marker.done(TYPE_NAME);
         marker.precede().done(TYPE_NAME);
 
-        return true;
+        return TYPE_NAME;
     }
 
     /**
@@ -128,7 +126,7 @@ public class Types implements GoElementTypes {
         PsiBuilder.Marker marker = builder.mark();
 
         int count = 0;
-        while ( ! builder.eof() && parseTypeDeclaration(builder, parser) ) {
+        while ( ! builder.eof() && parseTypeDeclaration(builder, parser) != null ) {
             count++;
             if ( ! ParserUtils.getToken(builder, oCOMMA) ) {
                 break;

@@ -54,7 +54,7 @@ public class TypeDeclaration implements GoElementTypes {
             ParserUtils.wrapError(builder, "identifier.expected");
         }
 
-        if (!Types.parseTypeDeclaration(builder, parser)) {
+        if (Types.parseTypeDeclaration(builder, parser) == null) {
             builder.error("type.expected");
         }
 

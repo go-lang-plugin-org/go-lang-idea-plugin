@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.types;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -13,13 +14,14 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class StructType implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
+
+        if (!ParserUtils.lookAhead(builder, kSTRUCT))
+            return null;
+
         PsiBuilder.Marker marker = builder.mark();
 
-        if ( ! ParserUtils.getToken(builder, kSTRUCT)) {
-            marker.rollbackTo();
-            return false;
-        }
+        ParserUtils.getToken(builder, kSTRUCT);
 
         ParserUtils.getToken(builder, pLCURCLY, "left.curly.expected");
 
@@ -41,9 +43,7 @@ public class StructType implements GoElementTypes {
 
         ParserUtils.getToken(builder, pRCURLY);
         marker.done(TYPE_STRUCT);
-
-        return true;
-
+        return TYPE_STRUCT;
     }
 
     private static boolean parseFieldDeclaration(PsiBuilder builder, GoParser parser) {

@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.types;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -14,15 +15,14 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class MapType implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
+
+        if (!ParserUtils.lookAhead(builder, kMAP))
+            return null;
 
         PsiBuilder.Marker marker = builder.mark();
 
-        if ( ! ParserUtils.getToken(builder, kMAP) ) {
-            marker.drop();
-            builder.error("map.keyword.expected");
-            return false;
-        }
+        ParserUtils.getToken(builder, kMAP);
 
         ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, pLBRACK, "left.bracket.expected");
@@ -36,6 +36,6 @@ public class MapType implements GoElementTypes {
         parser.parseType(builder);
 
         marker.done(TYPE_MAP);
-        return true;
+        return TYPE_MAP;
     }
 }

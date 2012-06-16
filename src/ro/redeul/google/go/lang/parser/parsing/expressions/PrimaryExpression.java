@@ -119,7 +119,7 @@ public class PrimaryExpression implements GoElementTypes {
             }
         }
 
-        if (parser.parseType(builder)) {
+        if (parser.parseType(builder) != null) {
             if (builder.getTokenType() == pLCURCLY) {
                 if (parseLiteralComposite(builder, parser, mark)) {
                     return true;

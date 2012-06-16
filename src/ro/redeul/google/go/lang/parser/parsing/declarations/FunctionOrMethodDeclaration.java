@@ -175,7 +175,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
             }
 
             ParserUtils.skipNLS(builder);
-            if (parser.parseType(builder)) {
+            if (parser.parseType(builder) != null) {
                 argument.done(FUNCTION_PARAMETER);
                 parameterCount++;
             } else {

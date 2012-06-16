@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.types;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -12,20 +13,20 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Time: 2:52:27 AM
  */
 public class FunctionType implements GoElementTypes {
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
+
+        if (!ParserUtils.lookAhead(builder, kFUNC))
+            return null;
 
         PsiBuilder.Marker marker = builder.mark();
 
-        if ( ! ParserUtils.getToken(builder, kFUNC, "func.keyword.expected") ) {
-            marker.drop();
-            return false;
-        }
+        ParserUtils.getToken(builder, kFUNC);
 
         ParserUtils.skipNLS(builder);
 
         parser.parseFunctionSignature(builder);
 
         marker.done(TYPE_FUNCTION);
-        return true;
+        return TYPE_FUNCTION;
     }
 }

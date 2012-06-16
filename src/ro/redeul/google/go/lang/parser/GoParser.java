@@ -115,7 +115,7 @@ public class GoParser extends ParserUtils implements PsiParser {
         return Expressions.parse(builder, this);
     }
 
-    public boolean parseType(PsiBuilder builder) {
+    public IElementType parseType(PsiBuilder builder) {
         return Types.parseTypeDeclaration(builder, this);
     }
 

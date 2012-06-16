@@ -4,6 +4,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 /**
@@ -30,7 +31,7 @@ public abstract class ParserUtils {
             return true;
         } else {
             if (errorMsg != null)
-                builder.error(errorMsg);
+                builder.error(GoBundle.message(errorMsg));
             return false;
         }
     }
