@@ -1,10 +1,13 @@
 package ro.redeul.google.go.lang.stubs;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.regex.Pattern;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.stubs.StubIndex;
@@ -13,13 +16,8 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageImportPath;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.regex.Pattern;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -76,6 +74,12 @@ public class GoNamesCache extends PsiShortNamesCache {
         StubIndex index = StubIndex.getInstance();
 
         return index.get(GoPackageImportPath.KEY, packageName, project, GlobalSearchScope.allScope(project));
+    }
+
+    public Collection<GoFile> getFilesByPackageImportPath(String importPath) {
+        StubIndex index = StubIndex.getInstance();
+
+        return index.get(GoPackageImportPath.KEY, importPath, project, GlobalSearchScope.allScope(project));
     }
 
 

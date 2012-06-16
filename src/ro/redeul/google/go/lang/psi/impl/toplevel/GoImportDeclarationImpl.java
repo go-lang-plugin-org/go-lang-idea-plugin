@@ -16,6 +16,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveUtil;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
@@ -66,8 +67,10 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
     }
 
     @Override
-    public boolean processDeclarations(
-            @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state, PsiElement lastParent,
+                                       @NotNull PsiElement place)
+    {
         // import _ "a"; ( no declarations are visible from this import )
         if (getPackageReference() != null && getPackageReference().isBlank()) {
             return true;
@@ -80,7 +83,9 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         }
 
         // get the file included in the imported package name
-        Collection<GoFile> files = namesCache.getFilesByPackageName(getPackageName());
+        Collection<GoFile> files =
+            namesCache.getFilesByPackageName(
+                GoPsiUtils.cleanupImportPath(getImportPath()));
 
         for (GoFile file : files) {
             if ( ! file.processDeclarations(processor, GoResolveStates.imported(getPackageName(), getVisiblePackageName()), null, place)) {
