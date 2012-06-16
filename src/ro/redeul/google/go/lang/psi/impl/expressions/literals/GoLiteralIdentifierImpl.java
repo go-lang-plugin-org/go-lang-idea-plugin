@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
+import javax.swing.*;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -26,13 +28,12 @@ import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsResolver;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-
-import javax.swing.Icon;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -151,6 +152,9 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             return null;
 
         if (parent instanceof GoTypeName)
+            return null;
+
+        if (parent instanceof GoFunctionParameter)
             return null;
 
         if (parent instanceof GoLiteralExpression) {
