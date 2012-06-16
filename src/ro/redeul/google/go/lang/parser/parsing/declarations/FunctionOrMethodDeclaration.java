@@ -103,6 +103,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         }
 
         ParserUtils.skipNLS(builder);
+        ParserUtils.getToken(builder, oMUL);
         parser.parseTypeName(builder);
 
         ParserUtils.skipNLS(builder);

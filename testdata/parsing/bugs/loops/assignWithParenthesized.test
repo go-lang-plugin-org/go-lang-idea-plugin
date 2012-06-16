@@ -15,8 +15,8 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('q')
       PsiWhiteSpace(' ')
+      PsiElement(*)('*')
       TypeNameImpl
-        PsiElement(*)('*')
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('actionQueue')
     PsiElement())(')')

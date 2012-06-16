@@ -8,6 +8,8 @@ public interface GoMethodReceiver extends GoPsiElement {
 
     GoLiteralIdentifier getIdentifier();
 
+    boolean isReference();
+
     GoTypeName getTypeName();
 
 }

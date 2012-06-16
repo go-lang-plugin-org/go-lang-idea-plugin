@@ -95,11 +95,10 @@ public class Types implements GoElementTypes {
      * typeName := [ "*" ] identifier .
      */
     public static boolean parseTypeName(PsiBuilder builder, GoParser parser) {
-        PsiBuilder.Marker typeNameMarker = builder.mark();
 
-        ParserUtils.getToken(builder, oMUL);
         ParserUtils.skipNLS(builder);
 
+        PsiBuilder.Marker typeNameMarker = builder.mark();
         PsiBuilder.Marker identifier = builder.mark();
         if ( builder.getTokenType() == mIDENT) {
             String identifierName = builder.getTokenText();
