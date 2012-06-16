@@ -168,6 +168,10 @@ public class GoCompletionUtil {
         return elements;
     }
 
+    public static LookupElement keywordLookup(String keyword) {
+        return LookupElementBuilder.create(keyword + " ").setBold().setTypeText("keyword");
+    }
+
     public static LookupElement[] getImportedPackagesNames(PsiFile file) {
 
         if ( ! (file instanceof GoFile) ) {
