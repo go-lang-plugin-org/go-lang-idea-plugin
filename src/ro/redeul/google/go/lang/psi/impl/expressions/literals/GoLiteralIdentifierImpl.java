@@ -15,6 +15,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -241,6 +242,11 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         PsiElement grandpa = parent.getParent();
         return grandpa != null && grandpa.getParent() instanceof GoFile;
 
+    }
+
+    @Override
+    public boolean isQualified() {
+        return findChildByType(GoTokenTypes.oDOT) != null;
     }
 
     @Override

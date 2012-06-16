@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoBuiltinCallExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -244,5 +245,9 @@ public class GoPsiUtils {
             if (ReflectionCache.isInstance(cur, type)) return (Psi)cur;
         }
         return null;
+    }
+
+    public static boolean psiIsA(PsiElement node, Class<? extends GoPsiElement> psiType) {
+        return ReflectionCache.isInstance(node, psiType);
     }
 }

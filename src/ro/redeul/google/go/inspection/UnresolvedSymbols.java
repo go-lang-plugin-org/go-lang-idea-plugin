@@ -6,14 +6,13 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.CreateFunctionFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-
-import static ro.redeul.google.go.inspection.fix.CreateFunctionFix.isFunctionCallIdentifier;
+import static ro.redeul.google.go.GoBundle.message;
+import static ro.redeul.google.go.inspection.fix.CreateFunctionFix.isExternalFunctionNameIdentifier;
 
 public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
     @Nls
@@ -24,13 +23,16 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
     }
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
+    protected void doCheckFile(@NotNull GoFile file,
+                               @NotNull final InspectionResult result,
+                               boolean isOnTheFly) {
 
         new GoRecursiveElementVisitor() {
             @Override
             public void visitIdentifier(GoLiteralIdentifier identifier) {
                 if (!identifier.isIota()) {
-                    tryToResolveReference(identifier, identifier.getReference());
+                    tryToResolveReference(identifier,
+                                          identifier.getReference());
                 }
             }
 
@@ -41,11 +43,19 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                 }
             }
 
-            private void tryToResolveReference(PsiNamedElement element, PsiReference reference) {
+            private void tryToResolveReference(PsiNamedElement element,
+                                               PsiReference reference) {
                 if (reference != null && reference.resolve() == null) {
-                    LocalQuickFix fix = isFunctionCallIdentifier(element) ? new CreateFunctionFix(element) : null;
-                    result.addProblem(element, GoBundle.message("warning.unresolved.symbol", element.getName()),
-                            ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, fix);
+
+                    LocalQuickFix fix = null;
+                    if (!isExternalFunctionNameIdentifier(element)) {
+                        fix = new CreateFunctionFix(element);
+                    }
+
+                    result.addProblem(
+                        element,
+                        message("warning.unresolved.symbol", element.getName()),
+                        ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, fix);
                 }
             }
         }.visitElement(file);

@@ -10,13 +10,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.psiIsA;
 
 public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     public CreateFunctionFix(@Nullable PsiElement element) {
@@ -41,7 +40,7 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
                        @Nullable("is null when called from inspection") final Editor editor,
                        @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
         final PsiElement e = startElement;
-        if (!e.getContainingFile().equals(file) || !isFunctionCallIdentifier(e)) {
+        if (!e.getContainingFile().equals(file) || isExternalFunctionNameIdentifier(e)) {
             return;
         }
 
@@ -66,16 +65,23 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
         });
     }
 
-    public static boolean isFunctionCallIdentifier(PsiElement e) {
-        if (!(e instanceof GoLiteralIdentifier) || !(e.getContainingFile() instanceof GoFile)) {
-            return false;
-        }
+    public static boolean isExternalFunctionNameIdentifier(PsiElement e) {
 
-        PsiElement parent = e.getParent();
-        if (!(parent instanceof GoLiteralExpression) || parent.getText().contains(".")) {
+        if (!psiIsA(e, GoLiteralIdentifier.class))
             return false;
-        }
 
-        return parent.getParent() instanceof GoCallOrConversionExpression;
+        GoLiteralIdentifier identifier = (GoLiteralIdentifier)e;
+        if (identifier.isQualified())
+            return false;
+
+        e = e.getParent();
+        if (!psiIsA(e, GoLiteralExpression.class))
+            return false;
+
+        e = e.getParent();
+        if (!psiIsA(e.getParent(), GoCallOrConversionExpression.class))
+            return false;
+
+        return true;
     }
 }
