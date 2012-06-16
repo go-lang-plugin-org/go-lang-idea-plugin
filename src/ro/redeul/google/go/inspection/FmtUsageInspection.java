@@ -6,10 +6,12 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
@@ -93,13 +95,58 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         }
 
         GoLiteral fmtLiteral = ((GoLiteralExpression) fmtExpr).getLiteral();
+        if (fmtLiteral instanceof GoLiteralIdentifier) {
+            fmtLiteral = findConstDefinition((GoLiteralIdentifier) fmtLiteral);
+        }
+
         if (!(fmtLiteral instanceof GoLiteralString)) {
             return;
         }
 
-        Context ctx = new Context(fmtExpr, result, parameters.subList(2, parameters.size()), isScanning);
+        Context ctx = new Context(fmtLiteral, result, parameters.subList(2, parameters.size()), isScanning);
         checkFormat(fmtLiteral.getText(), ctx);
         ctx.checkAllExtraParameters();
+    }
+
+    private static GoLiteralString findConstDefinition(GoLiteralIdentifier idToFind) {
+        String name = idToFind.getName();
+        if (idToFind.isBlank() || idToFind.isIota() || name == null || name.isEmpty()) {
+            return null;
+        }
+
+        PsiElement resolve = idToFind.resolve();
+        if (resolve == null) {
+            return null;
+        }
+
+        PsiElement parent = resolve.getParent();
+        if (!(parent instanceof GoConstDeclaration)) {
+            return null;
+        }
+
+        GoConstDeclaration cd = ((GoConstDeclaration) parent);
+        GoLiteralIdentifier[] ids = cd.getIdentifiers();
+        GoExpr[] exprs = cd.getExpressions();
+        if (ids == null || exprs == null || ids.length != exprs.length) {
+            return null;
+        }
+
+        for (int i = 0; i < ids.length; i++) {
+            if (name.equals(ids[i].getName())) {
+                GoExpr expr = exprs[i];
+                if (!(expr instanceof GoLiteralExpression)) {
+                    return null;
+                }
+
+                PsiElement child = expr.getFirstChild();
+                if (!(child instanceof GoLiteralString)) {
+                    return null;
+                }
+
+                return (GoLiteralString) child;
+            }
+        }
+        return null;
     }
 
     private static void checkFormat(String fmt, Context ctx) {
@@ -195,7 +242,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
     private static class Context {
         private static final ProblemHighlightType TYPE = ProblemHighlightType.LIKE_UNUSED_SYMBOL;
 
-        public final GoExpr fmtExpr;
+        public final GoLiteral fmtLiteral;
         public final InspectionResult result;
         public final List<GoExpr> parameters;
         public final boolean isScanning;
@@ -203,8 +250,8 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         public int startOffset = 0;
         public int endOffset = 0;
 
-        private Context(GoExpr fmtExpr, InspectionResult result, List<GoExpr> parameters, boolean isScanning) {
-            this.fmtExpr = fmtExpr;
+        private Context(GoLiteral fmtLiteral, InspectionResult result, List<GoExpr> parameters, boolean isScanning) {
+            this.fmtLiteral = fmtLiteral;
             this.result = result;
             this.parameters = parameters;
             this.isScanning = isScanning;
@@ -234,7 +281,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         }
 
         public void missingParameter() {
-            result.addProblem(fmtExpr, startOffset, endOffset + 1, "Missing parameter", TYPE);
+            result.addProblem(fmtLiteral, startOffset, endOffset + 1, "Missing parameter", TYPE);
         }
 
         public void extraParameter(PsiElement expr) {
@@ -242,7 +289,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         }
 
         public void unknownFlag() {
-            result.addProblem(fmtExpr, startOffset, endOffset + 1, "Unknown flag", TYPE);
+            result.addProblem(fmtLiteral, startOffset, endOffset + 1, "Unknown flag", TYPE);
         }
     }
 }
