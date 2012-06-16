@@ -1,7 +1,9 @@
 package ro.redeul.google.go.lang.psi.toplevel;
 
-import ro.redeul.google.go.lang.psi.GoPsiElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -11,11 +13,14 @@ import ro.redeul.google.go.lang.psi.GoPackageReference;
  */
 public interface GoImportDeclaration extends GoPsiElement {
 
+    @Nullable
     GoPackageReference getPackageReference();
 
+    @Nullable
     String getImportPath();
 
     String getPackageName();
 
+    @NotNull
     String getVisiblePackageName();
 }
