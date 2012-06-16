@@ -13,11 +13,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(()('(')
     PsiElement(WS_NEW_LINES)('\n')
-    ImportSpecImpl
-      PsiErrorElement:import.path.expected
-        <empty list>
-  VarDeclarationsImpl
-    PsiElement(KEYWORD_VAR)('var')
-    VarDeclarationImpl
-      PsiErrorElement:identifier.list.expected
-        <empty list>
+    PsiErrorElement:semicolon.or.newline.or.closed.parenthesis.expected
+      PsiElement(KEYWORD_VAR)('var')
+    PsiErrorElement:')' expected
+      <empty list>

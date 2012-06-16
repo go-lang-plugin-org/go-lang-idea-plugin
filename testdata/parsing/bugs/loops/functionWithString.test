@@ -1311,7 +1311,7 @@ Go file
       TypeNameImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('rune')
-    PsiElement(WS_NEW_LINES)('\n\n')
+  PsiElement(WS_NEW_LINES)('\n\n')
   FunctionDeclaration(isdigit)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
@@ -1848,7 +1848,7 @@ Go file
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('rune')
-        PsiElement(WS_NEW_LINES)('\n\n')
+      PsiElement(WS_NEW_LINES)('\n\n')
       PsiWhiteSpace('\t')
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
@@ -2774,9 +2774,9 @@ Go file
       TypeNameImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('string')
-    PsiWhiteSpace(' ')
-    PsiComment(SL_COMMENT)('// will be processed version of yaccpartext: s/$$/prefix/g')
-    PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace(' ')
+  PsiComment(SL_COMMENT)('// will be processed version of yaccpartext: s/$$/prefix/g')
+  PsiElement(WS_NEW_LINES)('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')

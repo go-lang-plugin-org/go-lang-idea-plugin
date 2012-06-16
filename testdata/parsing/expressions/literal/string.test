@@ -71,7 +71,7 @@ Go file
       LiteralExpressionImpl
         LiteralStringImpl
           PsiElement(LITERAL_STRING)('`\n\n\n`')
-    PsiElement(WS_NEW_LINES)('\n')
+  PsiElement(WS_NEW_LINES)('\n')
   FunctionDeclaration(a)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')

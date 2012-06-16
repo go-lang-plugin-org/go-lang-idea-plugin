@@ -10,6 +10,3 @@ Go file
   PsiWhiteSpace(' ')
   ImportDeclarationsImpl
     PsiElement(KEYWORD_IMPORT)('import')
-    ImportSpecImpl
-      PsiErrorElement:import.path.expected
-        <empty list>

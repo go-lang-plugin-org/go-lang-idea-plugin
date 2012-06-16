@@ -36,5 +36,5 @@ Go file
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('b')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')

@@ -11,6 +11,5 @@ Go file
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')
     PsiElement(()('(')
-    ImportSpecImpl
-      PsiErrorElement:import.path.expected
-        <empty list>
+    PsiErrorElement:')' expected
+      <empty list>

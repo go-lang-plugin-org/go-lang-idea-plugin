@@ -12,7 +12,4 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(()('(')
     PsiWhiteSpace(' ')
-    ImportSpecImpl
-      PsiErrorElement:import.path.expected
-        <empty list>
     PsiElement())(')')

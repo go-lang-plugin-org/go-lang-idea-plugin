@@ -4,7 +4,6 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 /**
@@ -15,7 +14,8 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
  */
 public abstract class ParserUtils {
 
-    public static final Logger LOG = Logger.getInstance("#ro.redeul.google.go.lang.parsing");
+    public static final Logger LOG = Logger.getInstance(
+        "#ro.redeul.google.go.lang.parsing");
 
     /**
      * Auxiliary method for strict token appearance
@@ -25,13 +25,14 @@ public abstract class ParserUtils {
      * @param errorMsg Message, that displays if element was not found; if errorMsg == null nothing displays
      * @return true if element parsed
      */
-    public static boolean getToken(PsiBuilder builder, IElementType elem, String errorMsg) {
+    public static boolean getToken(PsiBuilder builder, IElementType elem,
+                                   String errorMsg) {
         if (elem.equals(builder.getTokenType())) {
             builder.advanceLexer();
             return true;
         } else {
             if (errorMsg != null)
-                builder.error(GoBundle.message(errorMsg));
+                builder.error(errorMsg);
             return false;
         }
     }
@@ -72,13 +73,13 @@ public abstract class ParserUtils {
     /**
      * Same as simple getToken() method but with TokenSet
      *
-     * @param builder the builder
+     * @param builder  the builder
      * @param tokenSet the token set accepted
-     * @param msg error message if nto applicable
-     *
+     * @param msg      error message if nto applicable
      * @return true/false (the operation result
      */
-    public static boolean getToken(PsiBuilder builder, TokenSet tokenSet, String msg) {
+    public static boolean getToken(PsiBuilder builder, TokenSet tokenSet,
+                                   String msg) {
         if (tokenSet.contains(builder.getTokenType())) {
             return getToken(builder, builder.getTokenType(), msg);
         }
@@ -92,22 +93,45 @@ public abstract class ParserUtils {
      * @param elems   Array of need elements in order
      * @return true if following sequence is like a given
      */
-    public static boolean lookAhead(PsiBuilder builder, IElementType ... elems) {
-        if (!elems[0].equals(builder.getTokenType())) return false;
-
-        if (elems.length == 1) return true;
-
+    public static boolean lookAhead(PsiBuilder builder, IElementType... elems) {
         PsiBuilder.Marker rb = builder.mark();
-        builder.advanceLexer();
-        int i = 1;
-        while (!builder.eof() && i < elems.length && (builder.getTokenType() == GoElementTypes.wsNLS ||  elems[i].equals(builder.getTokenType()))) {
 
-            if ( builder.getTokenType() != GoElementTypes.wsNLS ) {
+        int i = 0;
+        while (
+            !builder.eof()
+                && i < elems.length
+                && elems[i].equals(builder.getTokenType())) {
+            i++;
+            builder.advanceLexer();
+        }
+
+        rb.rollbackTo();
+        return i == elems.length;
+    }
+
+    /**
+     * Checks, that following element sequence is like given
+     *
+     * @param builder Given PsiBuilder
+     * @param elems   Array of need elements in order
+     * @return true if following sequence is like a given
+     */
+    public static boolean lookAheadSkipNLS(PsiBuilder builder,
+                                           IElementType... elems) {
+        PsiBuilder.Marker rb = builder.mark();
+
+        int i = 0;
+        while (
+            !builder.eof() && i < elems.length &&
+                (builder.getTokenType() == GoElementTypes.wsNLS ||
+                    elems[i].equals(builder.getTokenType()))) {
+            if (builder.getTokenType() != GoElementTypes.wsNLS) {
                 i++;
             }
 
             builder.advanceLexer();
         }
+
         rb.rollbackTo();
         return i == elems.length;
     }
@@ -127,7 +151,8 @@ public abstract class ParserUtils {
         PsiBuilder.Marker rb = builder.mark();
         builder.advanceLexer();
         int i = 1;
-        while (!builder.eof() && i < tokenSets.length && tokenSets[i].contains(builder.getTokenType())) {
+        while (!builder.eof() && i < tokenSets.length && tokenSets[i].contains(
+            builder.getTokenType())) {
             builder.advanceLexer();
             i++;
         }
@@ -143,7 +168,8 @@ public abstract class ParserUtils {
      * @param elems      Array of need elements in order
      * @return true if following sequence is like a given
      */
-    public static boolean lookAhead(PsiBuilder builder, boolean dropMarker, IElementType... elems) {
+    public static boolean lookAhead(PsiBuilder builder, boolean dropMarker,
+                                    IElementType... elems) {
 
         if (elems.length == 0) {
             return false;
@@ -155,7 +181,8 @@ public abstract class ParserUtils {
 
         PsiBuilder.Marker rb = builder.mark();
         int i = 0;
-        while (!builder.eof() && i < elems.length && elems[i].equals(builder.getTokenType())) {
+        while (!builder.eof() && i < elems.length && elems[i].equals(
+            builder.getTokenType())) {
             builder.advanceLexer();
             i++;
         }
@@ -174,7 +201,8 @@ public abstract class ParserUtils {
      * @param elem    Node element
      * @return elem type.test
      */
-    public static IElementType eatElement(PsiBuilder builder, IElementType elem) {
+    public static IElementType eatElement(PsiBuilder builder,
+                                          IElementType elem) {
         PsiBuilder.Marker marker = builder.mark();
         builder.advanceLexer();
         marker.done(elem);
@@ -196,7 +224,9 @@ public abstract class ParserUtils {
     public static void waitNextRCurly(PsiBuilder builder) {
         int i = 0;
         PsiBuilder.Marker em = builder.mark();
-        while (!builder.eof() && !GoElementTypes.pRCURLY.equals(builder.getTokenType())) {
+        while (!builder.eof() && !GoElementTypes.pRCURLY
+                                                .equals(
+                                                    builder.getTokenType())) {
             builder.advanceLexer();
             i++;
         }
@@ -210,7 +240,9 @@ public abstract class ParserUtils {
     public static void waitNextSemi(PsiBuilder builder) {
         int i = 0;
         PsiBuilder.Marker em = builder.mark();
-        while (!builder.eof() && !GoElementTypes.oSEMI.equals(builder.getTokenType())) {
+        while (!builder.eof() && !GoElementTypes.oSEMI
+                                                .equals(
+                                                    builder.getTokenType())) {
             builder.advanceLexer();
             i++;
         }
@@ -221,7 +253,8 @@ public abstract class ParserUtils {
         }
     }
 
-    public static void waitNext(PsiBuilder builder, IElementType elem, String errorMessage) {
+    public static void waitNext(PsiBuilder builder, IElementType elem,
+                                String errorMessage) {
         int i = 0;
         PsiBuilder.Marker em = builder.mark();
         while (!builder.eof() && !elem.equals(builder.getTokenType())) {
@@ -255,7 +288,8 @@ public abstract class ParserUtils {
         return i == 0;
     }
 
-    public static void waitNext(PsiBuilder builder, TokenSet tokenSet, String errorMessage) {
+    public static void waitNext(PsiBuilder builder, TokenSet tokenSet,
+                                String errorMessage) {
         int i = 0;
 
         PsiBuilder.Marker marker = builder.mark();
@@ -289,12 +323,13 @@ public abstract class ParserUtils {
     }
 
     public static void skipComments(PsiBuilder builder) {
-        while ( GoElementTypes.COMMENTS.contains(builder.getTokenType()) ) {
+        while (GoElementTypes.COMMENTS.contains(builder.getTokenType())) {
             builder.advanceLexer();
         }
     }
 
-    public static PsiBuilder.Marker resetTo(PsiBuilder builder, PsiBuilder.Marker mark) {
+    public static PsiBuilder.Marker resetTo(PsiBuilder builder,
+                                            PsiBuilder.Marker mark) {
         mark.rollbackTo();
         return builder.mark();
     }
@@ -313,7 +348,7 @@ public abstract class ParserUtils {
     public static boolean markTokenIf(PsiBuilder builder,
                                       IElementType markerToken,
                                       TokenSet tokenTypes) {
-        if ( tokenTypes.contains(builder.getTokenType())) {
+        if (tokenTypes.contains(builder.getTokenType())) {
             eatElement(builder, markerToken);
             return true;
         }
