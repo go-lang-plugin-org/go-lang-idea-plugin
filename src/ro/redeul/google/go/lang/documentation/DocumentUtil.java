@@ -96,98 +96,73 @@ class DocumentUtil {
     }
 
     public static String getFunctionDocument(GoFunctionDeclaration function) {
-        PsiFile file = function.getContainingFile();
-        String name = function.getFunctionName();
-        if (!(file instanceof GoFile) || name == null || name.isEmpty()) {
-            return "";
-        }
-
-        for (GoFunctionDeclaration fd : ((GoFile) file).getFunctions()) {
-            if (fd != null && name.equals(fd.getFunctionName())) {
-                return getHeaderDocumentOfElement(fd);
-            }
-        }
-        return "";
+        return getHeaderDocumentOfElement(function.getOriginalElement());
     }
 
     public static String getMethodDocument(GoMethodDeclaration method) {
-        PsiFile file = method.getContainingFile();
-        String name = method.getFunctionName();
-        if (!(file instanceof GoFile) || name == null || name.isEmpty()) {
-            return "";
-        }
-
-        for (GoFunctionDeclaration fd : ((GoFile) file).getMethods()) {
-            if (fd != null && name.equals(fd.getFunctionName())) {
-                return getHeaderDocumentOfElement(fd);
-            }
-        }
-        return "";
+        return getHeaderDocumentOfElement(method.getOriginalElement());
     }
 
     public static String getVarDocument(GoLiteralIdentifier id) {
-        PsiFile file = id.getContainingFile();
-        String name = id.getName();
-        if (!(file instanceof GoFile) || name == null || name.isEmpty()) {
+        PsiElement original = id.getOriginalElement();
+        if (!(original instanceof GoLiteralIdentifier)) {
             return "";
         }
 
-        for (GoVarDeclarations vds : ((GoFile) file).getGlobalVariables()) {
-            GoVarDeclaration[] vdArray = vds.getDeclarations();
-            for (GoVarDeclaration vd : vdArray) {
-                for (GoLiteralIdentifier newId : vd.getIdentifiers()) {
-                    if (name.equals(newId.getName())) {
-                        String doc = getTailingDocumentOfElement(vd);
-                        if (doc.isEmpty()) {
-                            doc = getHeaderDocumentOfElement(vd);
-                        }
-                        if (doc.isEmpty()) {
-                            if (vdArray.length == 1) {
-                                doc = getTailingDocumentOfElement(vds);
-                            }
-                            if (doc.isEmpty()) {
-                                doc = getHeaderDocumentOfElement(vds);
-                            }
-                        }
-                        return doc;
-                    }
-                }
-            }
+        PsiElement parent = original.getParent();
+        if (!(parent instanceof GoVarDeclaration)) {
+            return "";
         }
 
-        return "";
+        PsiElement grandpa = parent.getParent();
+        if (!(grandpa instanceof GoVarDeclarations)) {
+            return "";
+        }
+
+        String doc = getTailingDocumentOfElement(parent);
+        if (doc.isEmpty()) {
+            doc = getHeaderDocumentOfElement(parent);
+        }
+
+        if (doc.isEmpty() && ((GoVarDeclarations) grandpa).getDeclarations().length == 1) {
+            doc = getTailingDocumentOfElement(grandpa);
+        }
+
+        if (doc.isEmpty()) {
+            doc = getHeaderDocumentOfElement(grandpa);
+        }
+        return doc;
     }
 
     public static String getConstDocument(GoLiteralIdentifier id) {
-        PsiFile file = id.getContainingFile();
-        String name = id.getName();
-        if (!(file instanceof GoFile) || name == null || name.isEmpty()) {
+        PsiElement original = id.getOriginalElement();
+        if (!(original instanceof GoLiteralIdentifier)) {
             return "";
         }
 
-        for (GoConstDeclarations cds : ((GoFile) file).getConsts()) {
-            GoConstDeclaration[] cdArray = cds.getDeclarations();
-            for (GoConstDeclaration cd : cdArray) {
-                for (GoLiteralIdentifier newId : cd.getIdentifiers()) {
-                    if (name.equals(newId.getName())) {
-                        String doc = getTailingDocumentOfElement(cd);
-                        if (doc.isEmpty()) {
-                            doc = getHeaderDocumentOfElement(cd);
-                        }
-                        if (doc.isEmpty()) {
-                            if (cdArray.length == 1) {
-                                doc = getTailingDocumentOfElement(cds);
-                            }
-                            if (doc.isEmpty()) {
-                                doc = getHeaderDocumentOfElement(cds);
-                            }
-                        }
-                        return doc;
-                    }
-                }
-            }
+        PsiElement parent = original.getParent();
+        if (!(parent instanceof GoConstDeclaration)) {
+            return "";
         }
-        return "";
+
+        PsiElement grandpa = parent.getParent();
+        if (!(grandpa instanceof GoConstDeclarations)) {
+            return "";
+        }
+
+        String doc = getTailingDocumentOfElement(parent);
+        if (doc.isEmpty()) {
+            doc = getHeaderDocumentOfElement(parent);
+        }
+
+        if (doc.isEmpty() && ((GoConstDeclarations) grandpa).getDeclarations().length == 1) {
+            doc = getTailingDocumentOfElement(grandpa);
+        }
+
+        if (doc.isEmpty()) {
+            doc = getHeaderDocumentOfElement(grandpa);
+        }
+        return doc;
     }
 
     public static String getElementPackageInfo(PsiElement element) {
