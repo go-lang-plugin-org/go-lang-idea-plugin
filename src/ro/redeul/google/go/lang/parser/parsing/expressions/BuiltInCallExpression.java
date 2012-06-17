@@ -58,7 +58,7 @@ public class BuiltInCallExpression implements GoElementTypes {
             return false;
 
         PsiBuilder.Marker mark = builder.mark();
-        ParserUtils.eatElement(builder, LITERAL_EXPRESSION);
+        ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
         ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
 
         if (hasTypeParameter.contains(callName)) {

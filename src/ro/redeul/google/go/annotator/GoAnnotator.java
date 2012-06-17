@@ -26,7 +26,9 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoBuiltinCallExprImpl;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
@@ -73,7 +75,7 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
         TextRange problemRange = getProblemRange(pd);
         String desc = pd.getDescriptionTemplate();
 
-        Annotation annotation = null;
+        Annotation annotation;
 
         switch (pd.getHighlightType()) {
             case GENERIC_ERROR_OR_WARNING:
@@ -92,7 +94,6 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
                 break;
             }
 
-            case INFO:
             case INFORMATION:
                 annotation =
                     annotationHolder.createInfoAnnotation(problemRange, desc);
@@ -137,6 +138,20 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
     }
 
     @Override
+    public void visitLiteralBool(GoLiteralBool literalBool) {
+        Annotation annotation =
+            annotationHolder.createInfoAnnotation(literalBool, null);
+        annotation.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
+    }
+
+    @Override
+    public void visitBuiltinCallExpression(GoBuiltinCallExprImpl expression) {
+        Annotation annotation =
+            annotationHolder.createInfoAnnotation(expression.getIdentifier(), null);
+        annotation.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
+    }
+
+    @Override
     public void visitIdentifier(GoLiteralIdentifier identifier) {
         if (identifier.isBlank()) {
             return;
@@ -151,6 +166,7 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
             annotation.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
             return;
         }
+
 
         PsiReference reference = identifier.getReference();
         if (reference == null)
@@ -184,8 +200,8 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitTypeName(GoTypeName typeName) {
-        Annotation annotation = annotationHolder.createInfoAnnotation(typeName,
-                                                                      null);
+        Annotation annotation =
+            annotationHolder.createInfoAnnotation(typeName, null);
         annotation.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
     }
 

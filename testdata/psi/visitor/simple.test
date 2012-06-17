@@ -7,4 +7,5 @@ println("Hello world!", CC + 1)
 GoIdentifier
 -----
 CC
+println
 CC

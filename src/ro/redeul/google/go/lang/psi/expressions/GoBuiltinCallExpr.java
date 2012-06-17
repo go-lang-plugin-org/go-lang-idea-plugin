@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.expressions;
 
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
@@ -7,4 +9,7 @@ package ro.redeul.google.go.lang.psi.expressions;
  * Time: 3:57 AM
  */
 public interface GoBuiltinCallExpr extends GoExpr {
+
+    GoLiteralIdentifier getIdentifier();
+
 }
