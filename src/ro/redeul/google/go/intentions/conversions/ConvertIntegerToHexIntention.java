@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.intentions.Intention;
-import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 
 import static ro.redeul.google.go.intentions.conversions.ConversionUtil.isDecimalInteger;
 import static ro.redeul.google.go.intentions.conversions.ConversionUtil.isOctalInteger;

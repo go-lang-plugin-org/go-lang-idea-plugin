@@ -80,13 +80,13 @@ public class Statements implements GoElementTypes {
             return ForStatement.parse(builder, parser);
         }
 
-        if ( ParserUtils.lookAhead(builder, TokenSet.create(oSEMI, pRCURLY)) ) {
+        if ( ParserUtils.lookAhead(builder, TokenSet.create(oSEMI, pLCURCLY, pRCURLY)) ) {
             builder.mark().done(EMPTY_STATEMENT);
             ParserUtils.getToken(builder, oSEMI);
             return EMPTY_STATEMENT;
         }
 
-        builder.error("statement.expected");
+//        builder.error(GoBundle.message("error.statement.expected"));
         return null;
     }
 
@@ -167,12 +167,18 @@ public class Statements implements GoElementTypes {
             return SHORT_VAR_STATEMENT;
         }
 
-        if ( expressionCount == 0 ) {
+        if ( expressionCount == 0 &&
+             (ParserUtils.lookAheadSkipNLS(builder, oSEMI) || ParserUtils.lookAheadSkipNLS(builder, pLCURCLY))) {
             mark.done(EMPTY_STATEMENT);
             return EMPTY_STATEMENT;
         }
 
-        mark.done(EXPRESSION_STATEMENT);
-        return EXPRESSION_STATEMENT;
+        if ( expressionCount != 0 ) {
+            mark.done(EXPRESSION_STATEMENT);
+            return EXPRESSION_STATEMENT;
+        }
+
+        mark.drop();
+        return null;
     }
 }

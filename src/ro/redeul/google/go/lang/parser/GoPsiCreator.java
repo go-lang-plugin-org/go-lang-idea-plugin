@@ -10,11 +10,11 @@ import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationsImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoBuiltinCallExprImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoCallOrConversionExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoIndexExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoLiteralExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoSelectorExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoBuiltinCallExprImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoCallOrConversionExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoIndexExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoLiteralExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoUnaryExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoAdditiveExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoMultiplicativeExpressionImpl;
@@ -28,6 +28,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralStringImp
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeElementImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeValueImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSliceExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoDeferStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoExpressionStatementImpl;
@@ -163,6 +164,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(INDEX_EXPRESSION))
             return new GoIndexExpressionImpl(node);
+
+        if (elementType.equals(SLICE_EXPRESSION))
+            return new GoSliceExpressionImpl(node);
 
         if (elementType.equals(SELECTOR_EXPRESSION))
             return new GoSelectorExpressionImpl(node);

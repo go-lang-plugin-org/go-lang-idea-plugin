@@ -1,8 +1,8 @@
-package ro.redeul.google.go.lang.psi.impl.expressions;
+package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 

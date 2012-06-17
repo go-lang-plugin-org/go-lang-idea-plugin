@@ -594,7 +594,7 @@ Go file
                 PsiElement(+=)('+=')
                 PsiWhiteSpace(' ')
                 AdditiveExpressionImpl
-                  SliceExpression
+                  SliceExpressionImpl
                     LiteralExpressionImpl
                       LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('q')
@@ -643,7 +643,7 @@ Go file
           PsiWhiteSpace(' ')
           PsiElement(+)('+')
           PsiWhiteSpace(' ')
-          SliceExpression
+          SliceExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('q')

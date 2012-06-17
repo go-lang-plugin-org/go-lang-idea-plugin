@@ -1,4 +1,4 @@
-package ro.redeul.google.go.lang.psi.impl.expressions;
+package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
@@ -11,8 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -52,8 +54,13 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
     @Override
     @Nullable
-    public GoExpr getExpressionContext() {
-        return findChildByClass(GoExpr.class);
+    public GoPrimaryExpression getBaseExpression() {
+        return findChildByClass(GoPrimaryExpression.class);
+    }
+
+    @Override
+    public GoLiteralIdentifier getIdentifier() {
+        return findChildByClass(GoLiteralIdentifier.class);
     }
 
     @Override
@@ -64,7 +71,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     @Override
     public TextRange getRangeInElement() {
 
-        GoExpr context = getExpressionContext();
+        GoExpr context = getBaseExpression();
 
         return context != null ? new TextRange(context.getTextLength() + 1, getTextLength()) : getTextRange();
     }
@@ -73,7 +80,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     public PsiElement resolve() {
 
         if (GoProjectSettings.getInstance(getProject()).getState().enableVariablesCompletion) {
-            GoExpr expressionContext = getExpressionContext();
+            GoExpr expressionContext = getBaseExpression();
 
             if ( expressionContext != null ) {
                 GoType contextType = expressionContext.getType();
@@ -123,7 +130,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     public Object[] getVariants() {
 
         if (GoProjectSettings.getInstance(getProject()).getState().enableVariablesCompletion) {
-            GoType contextType = getExpressionContext().getType();
+            GoType contextType = getBaseExpression().getType();
 
             if (contextType == null) {
                 return new Object[0];

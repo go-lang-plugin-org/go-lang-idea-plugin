@@ -1,7 +1,7 @@
 package ro.redeul.google.go.psi;
 
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;

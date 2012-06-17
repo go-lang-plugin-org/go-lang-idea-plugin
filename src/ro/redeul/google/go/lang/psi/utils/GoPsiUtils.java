@@ -24,8 +24,8 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.GoBuiltinCallExpr;
-import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpr;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -132,9 +132,9 @@ public class GoPsiUtils {
         return type.cast(node);
     }
 
+
     public static boolean isWhiteSpaceNode(PsiElement node) {
-        return isNodeOfType(node, GoElementTypes.wsWS) || isNodeOfType(node,
-                                                                       GoElementTypes.wsNLS);
+        return isNodeOfType(node, GoTokenSets.WHITESPACE);
     }
 
     public static PsiElement findChildOfType(PsiElement node,
@@ -249,5 +249,16 @@ public class GoPsiUtils {
 
     public static boolean psiIsA(PsiElement node, Class<? extends GoPsiElement> psiType) {
         return ReflectionCache.isInstance(node, psiType);
+    }
+
+    public static boolean hasPrevSiblingOfType(PsiElement node, IElementType type) {
+        if (node == null)
+            return false;
+
+        do {
+            node = node.getPrevSibling();
+        } while ( node != null && isWhiteSpaceNode(node));
+
+        return node != null && node.getNode().getElementType() == type;
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import junit.framework.Assert;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.GoIndexExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.util.GoTestUtils;

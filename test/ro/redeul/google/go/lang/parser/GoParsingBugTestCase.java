@@ -28,5 +28,6 @@ public class GoParsingBugTestCase extends GoParsingTestCase {
     public void testLoops_switchWithCompositeLiteral() throws Throwable { doTest(); }
     public void testLoops_assignWithParenthesized() throws Throwable { doTest(); }
     public void testLoops_functionWithString() throws Throwable { doTest(); }
+    public void testLoops_nonParsableStatement() throws Throwable { doTest(); }
 
 }

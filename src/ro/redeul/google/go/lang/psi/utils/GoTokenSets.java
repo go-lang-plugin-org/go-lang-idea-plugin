@@ -26,4 +26,7 @@ public class GoTokenSets {
     public static TokenSet UNARY_OPS = TokenSet.create(
         oPLUS, oMINUS, oNOT, oBIT_XOR, oBIT_AND, oMUL
     );
+    public static final TokenSet WHITESPACE = TokenSet.create(
+        wsNLS, wsWS
+    );
 }

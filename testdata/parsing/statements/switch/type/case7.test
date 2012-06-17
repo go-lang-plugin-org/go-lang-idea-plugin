@@ -40,7 +40,7 @@ Go file
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         SwitchTypeGuard
-          SliceExpression
+          SliceExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('x')

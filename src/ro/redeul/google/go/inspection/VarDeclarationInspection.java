@@ -4,7 +4,7 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;

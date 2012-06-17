@@ -1,7 +1,7 @@
 package ro.redeul.google.go.psi;
 
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralInteger;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
