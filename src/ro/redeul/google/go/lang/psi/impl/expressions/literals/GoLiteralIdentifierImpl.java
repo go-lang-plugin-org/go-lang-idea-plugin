@@ -20,6 +20,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.GoBuiltinCallExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -162,10 +163,13 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         if (parent instanceof GoMethodReceiver)
             return null;
 
+        if (parent instanceof GoBuiltinCallExpr)
+            return null;
+
         if (parent instanceof GoLiteralExpression) {
             PsiElement grandParent = parent.getParent();
 
-            if ( grandParent instanceof  GoForWithRangeStatement ||
+            if ( grandParent instanceof GoForWithRangeStatement ||
                  grandParent instanceof GoForWithClausesStatement) {
                 return null;
             }
