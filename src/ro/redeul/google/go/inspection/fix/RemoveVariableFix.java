@@ -6,9 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
@@ -47,7 +45,7 @@ public class RemoveVariableFix implements LocalQuickFix {
 
     private void removeIdentifier(GoLiteralIdentifier id, PsiElement parent, GoLiteralIdentifier[] ids, GoExpr[] exprs) {
         if (isIdWithBlank(id, ids)) {
-            if (isOnlyVarDeclaration(parent) || isOnlyConstDeclaration(parent)) {
+            if (FixUtil.isOnlyVarDeclaration(parent) || FixUtil.isOnlyConstDeclaration(parent)) {
                 parent = parent.getParent();
             }
             removeWholeElement(parent);
@@ -90,15 +88,5 @@ public class RemoveVariableFix implements LocalQuickFix {
             }
         }
         return -1;
-    }
-
-    private static boolean isOnlyConstDeclaration(PsiElement e) {
-        return e instanceof GoConstDeclaration && e.getParent() instanceof GoConstDeclarations &&
-               ((GoConstDeclarations) e.getParent()).getDeclarations().length == 1;
-    }
-
-    private static boolean isOnlyVarDeclaration(PsiElement e) {
-        return e instanceof GoVarDeclaration && e.getParent() instanceof GoVarDeclarations &&
-               ((GoVarDeclarations) e.getParent()).getDeclarations().length == 1;
     }
 }
