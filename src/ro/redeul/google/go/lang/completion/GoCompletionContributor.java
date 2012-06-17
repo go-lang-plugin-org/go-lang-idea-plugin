@@ -8,25 +8,18 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.impl.DebugUtil;
-import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.processors.GoExpressionTypeResolver;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
@@ -122,64 +115,6 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
 
-    CompletionProvider<CompletionParameters> typeNameCompletionProvider =
-        new CompletionProvider<CompletionParameters>() {
-            @Override
-            protected void addCompletions(
-                @NotNull CompletionParameters parameters,
-                ProcessingContext context,
-                @NotNull CompletionResultSet result) {
-
-                PsiElement element = parameters.getOriginalPosition();
-                if (element == null) {
-                    return;
-                }
-
-                LookupElement elements[];
-//            if (currentPath.startsWith("\"./")) {
-//                elements = GoCompletionUtil.resolveLocalPackagesForPath(element.getProject(), element.getContainingFile(), currentPath);
-//            } else {
-//                elements = GoCompletionUtil.resolveSdkPackagesForPath(element.getProject(), element.getContainingFile(), currentPath);
-//            }
-
-                elements = GoCompletionUtil.getImportedPackagesNames(
-                    element.getContainingFile());
-                for (LookupElement lookupElement : elements) {
-                    result.addElement(lookupElement);
-                }
-
-            }
-        };
-
-    CompletionProvider<CompletionParameters> packageMethodCompletionProvider = new CompletionProvider<CompletionParameters>() {
-        @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters,
-                                      ProcessingContext context,
-                                      @NotNull CompletionResultSet result) {
-
-            PsiElement node = parameters.getOriginalPosition();
-            if (node == null || node.getParent() == null || !(node.getParent() instanceof GoSelectorExpression))
-                return;
-
-            GoSelectorExpression expression = (GoSelectorExpression) node.getParent();
-
-            if (expression.getExpressionContext() == null)
-                return;
-
-            GoExpr expressionContext = expression.getExpressionContext();
-
-            GoExpressionTypeResolver expressionTypeResolver = new GoExpressionTypeResolver(
-                expressionContext);
-
-            PsiScopesUtil.treeWalkUp(expressionTypeResolver, expressionContext,
-                                     expressionContext.getContainingFile());
-
-            for (PsiNamedElement psiElement : expressionTypeResolver.getFunctions()) {
-                result.addElement(LookupElementBuilder.create(psiElement));
-            }
-        }
-    };
-
     CompletionProvider<CompletionParameters> debuggingCompletionProvider = new CompletionProvider<CompletionParameters>() {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters,
@@ -241,8 +176,16 @@ public class GoCompletionContributor extends CompletionContributor {
     }
 
     @Override
+    public void fillCompletionVariants(CompletionParameters parameters,
+                                       CompletionResultSet result) {
+        super.fillCompletionVariants(parameters,
+                                     result);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
     public void beforeCompletion(
         @NotNull CompletionInitializationContext context) {
+        super.beforeCompletion(context);
 //        if (context.getCompletionType() != CompletionType.SMART) return;
 //    PsiElement lastElement = context.getFile().findElementAt(context.getStartOffset() - 1);
 //    if (lastElement != null && lastElement.getText().equals("(")) {

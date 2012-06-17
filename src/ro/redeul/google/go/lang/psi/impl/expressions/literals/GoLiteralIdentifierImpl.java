@@ -198,7 +198,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
         IdentifierVariantsCollector identifierVariantsCollector = new IdentifierVariantsCollector();
 
-        PsiScopesUtil.treeWalkUp(identifierVariantsCollector, this,
+        PsiScopesUtil.treeWalkUp(identifierVariantsCollector, this.getOriginalElement(),
                                  this.getContainingFile(),
                                  GoResolveStates.initial());
 
