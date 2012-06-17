@@ -50,12 +50,10 @@ public class ConstDeclaration implements GoElementTypes {
         }
 
         if (ParserUtils.lookAhead(builder, oASSIGN)) {
-            ParserUtils.advance(builder);
+            ParserUtils.getToken(builder, oASSIGN);
 
             boolean parseIota = parser.resetFlag(ParseIota, true);
-            do {
-                parser.parseExpression(builder);
-            } while (ParserUtils.getToken(builder, oCOMMA));
+            parser.parseExpressionList(builder);
             parser.resetFlag(ParseIota, parseIota);
         }
 

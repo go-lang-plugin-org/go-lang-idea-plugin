@@ -38,11 +38,12 @@ public class IdentifierList implements GoElementTypes {
             ParserUtils.eatElement(builder, GoElementTypes.LITERAL_IDENTIFIER);
 
             length++;
-            if ( ! (builder.getTokenType() == oCOMMA) ) {
+            if ( !ParserUtils.lookAheadSkipNLS(builder, oCOMMA)) {
                 break;
             }
-
-            builder.advanceLexer();
+            ParserUtils.skipNLS(builder);
+            ParserUtils.getToken(builder, oCOMMA);
+            ParserUtils.skipNLS(builder);
         }
 
         if (markList ) {

@@ -1,0 +1,41 @@
+package main
+var ( a,
+ b = 1,
+
+ 2
+ )
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarationsImpl
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    PsiElement(()('(')
+    PsiWhiteSpace(' ')
+    VarDeclarationImpl
+      LiteralIdentifierImpl
+        PsiElement(IDENTIFIER)('a')
+      PsiElement(,)(',')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace(' ')
+      LiteralIdentifierImpl
+        PsiElement(IDENTIFIER)('b')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      LiteralExpressionImpl
+        LiteralIntegerImpl
+          PsiElement(LITERAL_INT)('1')
+      PsiElement(,)(',')
+      PsiElement(WS_NEW_LINES)('\n\n')
+      PsiWhiteSpace(' ')
+      LiteralExpressionImpl
+        LiteralIntegerImpl
+          PsiElement(LITERAL_INT)('2')
+    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace(' ')
+    PsiElement())(')')

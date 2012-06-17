@@ -56,6 +56,7 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     public void testConst_case4() throws Throwable { doTest(); }
     public void testConst_case7() throws Throwable { doTest(); }
     public void testConst_oneLiners() throws Throwable { doTest(); }
+    public void testConst_splitAtComma() throws Throwable { doTest(); }
 
     public void testVar_case1() throws Throwable { doTest(); }
     public void testVar_case2() throws Throwable { doTest(); }
@@ -64,6 +65,7 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     public void testVar_case5() throws Throwable { doTest(); }
     public void testVar_case6() throws Throwable { doTest(); }
     public void testVar_case7() throws Throwable { doTest(); }
+    public void testVar_splitAtComma() throws Throwable { doTest(); }
 
     public void testType_case1() throws Throwable { doTest(); }
     public void testType_case2() throws Throwable { doTest(); }

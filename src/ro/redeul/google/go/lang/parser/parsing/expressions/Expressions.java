@@ -13,8 +13,6 @@ public class Expressions implements GoElementTypes {
 
     public static int parseList(PsiBuilder builder, GoParser parser) {
 
-//        PsiBuilder.Marker marker = builder.mark();
-
         parser.setFlag(GoParser.ParsingFlag.WrapCompositeInExpression);
         int count = 0;
         do {
@@ -29,20 +27,14 @@ public class Expressions implements GoElementTypes {
 
             ParserUtils.getToken(builder, oTRIPLE_DOT);
 
-            if  (builder.getTokenType() == oCOMMA ) {
-                ParserUtils.getToken(builder, oCOMMA);
-                ParserUtils.skipNLS(builder);
-            } else {
+            if ( !ParserUtils.lookAheadSkipNLS(builder, oCOMMA))
                 break;
-            }
+
+            ParserUtils.skipNLS(builder);
+            ParserUtils.getToken(builder, oCOMMA);
+            ParserUtils.skipNLS(builder);
 
         } while ( ! builder.eof() );
-
-//        if ( count > 1 ) {
-//            marker.done(EXPRESSION_LIST);
-//        } else {
-//            marker.drop();
-//        }
 
         parser.unsetFlag(GoParser.ParsingFlag.WrapCompositeInExpression);
         return count;
