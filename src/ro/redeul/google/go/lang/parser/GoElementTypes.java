@@ -99,7 +99,8 @@ public interface GoElementTypes extends GoTokenTypes {
 
     GoElementType CALL_OR_CONVERSION_EXPRESSION =
         new GoElementTypeImpl("CallOrConversionExpression");
-    GoElementType INDEX_EXPRESSION = new GoElementTypeImpl("IndexExpression");
+    GoElementType INDEX_EXPRESSION =
+        new GoElementTypeImpl("IndexExpression");
     GoElementType SLICE_EXPRESSION = new GoElementTypeImpl("SliceExpression");
     GoElementType TYPE_ASSERTION_EXPRESSION =
         new GoElementTypeImpl("TypeAssertionExpression");

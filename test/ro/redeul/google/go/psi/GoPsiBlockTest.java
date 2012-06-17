@@ -6,8 +6,8 @@ import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.util.GoPsiTestUtils;
+import static ro.redeul.google.go.util.GoPsiTestUtils.castAs;
+import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
 import static ro.redeul.google.go.util.GoPsiTestUtils.get;
 
 public class GoPsiBlockTest extends GoPsiTestCase {
@@ -21,17 +21,15 @@ public class GoPsiBlockTest extends GoPsiTestCase {
                                     "   println(v + 1)\n" +
                                     "}"));
 
-        GoFunctionDeclaration func = GoPsiTestUtils.childAt(0,
-                                                            file.getFunctions());
-        GoBlockStatement blockStmt = get(func.getBlock());
+        GoBlockStatement block =
+            get(
+                childAt(0,
+                            file.getFunctions()
+                    ).getBlock()
+                );
 
-        assertNotNull(GoPsiTestUtils.castAs(GoShortVarDeclaration.class,
-                                            0, blockStmt.getStatements()
-        ));
-
-        assertNotNull(GoPsiTestUtils.castAs(GoExpressionStatement.class,
-                                            1, blockStmt.getStatements()
-        ));
+        castAs(GoShortVarDeclaration.class, 0, block.getStatements());
+        castAs(GoExpressionStatement.class, 1, block.getStatements());
     }
 
     public void testReturnWithExpressions() throws Exception {
@@ -41,19 +39,15 @@ public class GoPsiBlockTest extends GoPsiTestCase {
                                     "    return int(1), 1\n" +
                                     "}"));
 
-        GoFunctionDeclaration func = GoPsiTestUtils.childAt(0,
-                                                            file.getFunctions());
-        GoBlockStatement blockStmt = get(func.getBlock());
-
         GoReturnStatement statement =
-            GoPsiTestUtils.castAs(GoReturnStatement.class,
-                                  0, blockStmt.getStatements());
+            castAs(GoReturnStatement.class, 0,
+                   get(
+                       childAt(0,
+                               file.getFunctions()
+                       ).getBlock()
+                   ).getStatements()
+            );
 
-        assertNotNull(GoPsiTestUtils.castAs(GoCallOrConversionExpression.class,
-                                            0, statement.getExpressions()
-        ));
-
-//        assertNotNull(castAs(statement.getExpressions(), 1,
-//                            GoLiteral.class));
+        castAs(GoCallOrConversionExpression.class, 0, statement.getExpressions());
     }
 }

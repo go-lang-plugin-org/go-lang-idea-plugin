@@ -7,6 +7,7 @@ import java.util.List;
 import junit.framework.Assert;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.expressions.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.util.GoTestUtils;
@@ -25,6 +26,14 @@ public class GoElementVisitorTest extends GoPsiTestCase {
     public void testSimple() throws Throwable {
         doTest();
     }
+
+    public void testIndexExpressions() throws Throwable {
+        doTest();
+    }
+
+//    public void testSliceExpressions() throws Throwable {
+//        doTest();
+//    }
 
     public void doTest() throws IOException {
         doTest(getTestName(true).replace('$', '/') + ".test");
@@ -61,6 +70,15 @@ public class GoElementVisitorTest extends GoPsiTestCase {
                 @Override
                 public void visitIdentifier(GoLiteralIdentifier goIdentifier) {
                     elements.add(goIdentifier);
+                }
+            };
+        }
+
+        if (elemType.equals("GoIndexExpression")) {
+            return new GoRecursiveCollectorVisitor() {
+                @Override
+                public void visitIndexExpression(GoIndexExpression idxExpr) {
+                    elements.add(idxExpr);
                 }
             };
         }
