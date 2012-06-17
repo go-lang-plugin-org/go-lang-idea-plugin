@@ -91,5 +91,5 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
         return GO_TEST_DATA_PATTERN.matcher(packageImportPath.toString()).matches();
     }
 
-    private static final Pattern GO_TEST_DATA_PATTERN = Pattern.compile("go/.*/testdata\b.*");
+    private static final Pattern GO_TEST_DATA_PATTERN = Pattern.compile("go/.*/testdata\\b.*");
 }
