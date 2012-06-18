@@ -3,13 +3,16 @@ package ro.redeul.google.go.inspection;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
 import ro.redeul.google.go.inspection.fix.RemoveFunctionResultFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -22,6 +25,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static ro.redeul.google.go.inspection.InspectionUtil.UNKNOWN_COUNT;
+import static ro.redeul.google.go.inspection.InspectionUtil.checkExpressionShouldReturnOneResult;
+import static ro.redeul.google.go.inspection.InspectionUtil.getFunctionCallResultCount;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
@@ -29,41 +35,42 @@ public class FunctionDeclarationInspection
     extends AbstractWholeGoFileInspection
 {
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result, boolean isOnTheFly) {
-        this.result = result;
+    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
 
-        for (GoFunctionDeclaration functionDeclaration : file.getFunctions()) {
-            this.function = functionDeclaration;
-            checkFunction();
+        new GoRecursiveElementVisitor() {
+            @Override
+            public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
+                checkFunction(result, functionDeclaration);
+            }
+
+            @Override
+            public void visitMethodDeclaration(GoMethodDeclaration methodDeclaration) {
+                checkFunction(result, methodDeclaration);
+            }
+        }.visitFile(file);
+    }
+
+    public static void checkFunction(InspectionResult result, GoFunctionDeclaration function) {
+        Context ctx = new Context(result, function);
+        hasResultButNoReturnAtTheEnd(ctx);
+        hasDuplicateArgument(ctx);
+        hasRedeclaredParameterInResultList(ctx);
+        hasReturnParameterCountMismatch(ctx);
+        hasVariadicProblems(ctx);
+    }
+
+    public static void hasResultButNoReturnAtTheEnd(Context ctx) {
+        if (hasResult(ctx) && hasBody(ctx) && !hasReturnAtTheEnd(ctx)) {
+            LocalQuickFix fix1 = new AddReturnStmtFix(ctx.function);
+            LocalQuickFix fix2 = new RemoveFunctionResultFix(ctx.function);
+            PsiElement element = ctx.function.getBlock().getLastChild();
+            ctx.result.addProblem(element, GoBundle.message("error.no.return.found"), fix1, fix2);
         }
     }
 
-    private InspectionResult result;
-    private GoFunctionDeclaration function;
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public void checkFunction() {
-        hasResultButNoReturnAtTheEnd();
-        hasDuplicateArgument();
-        hasRedeclaredParameterInResultList();
-        hasReturnParameterCountDismatch();
-        hasVariadicProblems();
-    }
-
-    public void hasResultButNoReturnAtTheEnd() {
-        if (hasResult() && hasBody() && !hasReturnAtTheEnd()) {
-            LocalQuickFix fix1 = new AddReturnStmtFix(function);
-            LocalQuickFix fix2 = new RemoveFunctionResultFix(function);
-            result.addProblem(function.getBlock().getLastChild(), "Function ends without a return statement", fix1, fix2);
-        }
-    }
-
-    public void hasDuplicateArgument() {
+    public static void hasDuplicateArgument(Context ctx) {
         Set<String> parameters = new HashSet<String>();
-        for (GoFunctionParameter fp : function.getParameters()) {
+        for (GoFunctionParameter fp : ctx.function.getParameters()) {
             for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 if (id.isBlank()) {
                     continue;
@@ -71,7 +78,7 @@ public class FunctionDeclarationInspection
 
                 String text = id.getText();
                 if (parameters.contains(text)) {
-                    result.addProblem(id, "Duplicate argument " + text);
+                    ctx.result.addProblem(id, GoBundle.message("error.duplicate.argument", text));
                 } else {
                     parameters.add(text);
                 }
@@ -79,32 +86,32 @@ public class FunctionDeclarationInspection
         }
     }
 
-    public void hasRedeclaredParameterInResultList() {
-        Set<String> parameters = new HashSet<String>(getParameterNames(function.getParameters()));
+    public static void hasRedeclaredParameterInResultList(Context ctx) {
+        Set<String> parameters = new HashSet<String>(getParameterNames(ctx.function.getParameters()));
 
-        for (GoFunctionParameter fp : function.getResults()) {
+        for (GoFunctionParameter fp : ctx.function.getResults()) {
             for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 String text = id.getText();
                 if (!id.isBlank() && parameters.contains(text)) {
-                    result.addProblem(id, text + " redeclared in this block");
+                    ctx.result.addProblem(id, GoBundle.message("error.redeclared.in.block", text));
                 }
             }
         }
     }
 
-    public void hasReturnParameterCountDismatch() {
-        new ReturnVisitor().visitFunctionDeclaration(function);
+    public static void hasReturnParameterCountMismatch(Context ctx) {
+        new ReturnVisitor(ctx.result).visitFunctionDeclaration(ctx.function);
     }
 
-    public void hasVariadicProblems() {
+    public static void hasVariadicProblems(Context ctx) {
         // cannot use variadic in output argument list
-        for (GoFunctionParameter parameter : function.getResults()) {
+        for (GoFunctionParameter parameter : ctx.function.getResults()) {
             if (parameter.isVariadic()) {
-                result.addProblem(parameter, "Cannot use ... in output argument list");
+                ctx.result.addProblem(parameter, GoBundle.message("error.output.variadic"));
             }
         }
 
-        GoFunctionParameter[] parameters = function.getParameters();
+        GoFunctionParameter[] parameters = ctx.function.getParameters();
         if (parameters.length == 0) {
             return;
         }
@@ -113,21 +120,21 @@ public class FunctionDeclarationInspection
         for (int i = 0; i < parameters.length - 1; i++) {
             GoFunctionParameter parameter = parameters[i];
             if (parameter.isVariadic()) {
-                result.addProblem(parameter, "Can only use ... as final argument in list");
+                ctx.result.addProblem(parameter, GoBundle.message("error.variadic.not.the.last"));
             }
         }
     }
 
-    private boolean hasResult() {
-        return function.getResults().length > 0;
+    private static boolean hasResult(Context ctx) {
+        return ctx.function.getResults().length > 0;
     }
 
-    private boolean hasBody() {
-        return function.getBlock() != null;
+    private static boolean hasBody(Context ctx) {
+        return ctx.function.getBlock() != null;
     }
 
-    private boolean hasReturnAtTheEnd() {
-        GoBlockStatement block = function.getBlock();
+    private static boolean hasReturnAtTheEnd(Context ctx) {
+        GoBlockStatement block = ctx.function.getBlock();
         if (block == null) {
             return false;
         }
@@ -173,8 +180,13 @@ public class FunctionDeclarationInspection
     /**
      * Recursively look for return statement, and compare its expression list with function's result list
      */
-    private class ReturnVisitor extends GoRecursiveElementVisitor {
+    private static class ReturnVisitor extends GoRecursiveElementVisitor {
         private List<FunctionResult> functionResults = new ArrayList<FunctionResult>();
+        private final InspectionResult result;
+
+        public ReturnVisitor(InspectionResult result) {
+            this.result = result;
+        }
 
         @Override
         public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
@@ -200,20 +212,45 @@ public class FunctionDeclarationInspection
         @Override
         public void visitElement(GoPsiElement element) {
             super.visitElement(element);
-            if (element instanceof GoReturnStatement) {
-                GoReturnStatement returnStatement = (GoReturnStatement) element;
-                int returnCount = returnStatement.getExpressions().length;
-                FunctionResult fr = functionResults.get(functionResults.size() - 1);
-                if (fr == null || fr.resultCount == returnCount || returnCount == 0 && fr.namedResult) {
-                    return;
-                }
 
-                if (fr.resultCount < returnCount) {
-                    result.addProblem(element, "Too many arguments to return");
-                } else {
-                    result.addProblem(element, "Not enough arguments to return");
-                }
+            if (!(element instanceof GoReturnStatement)) {
+                return;
             }
+
+            GoReturnStatement returnStatement = (GoReturnStatement) element;
+            GoExpr[] expressions = returnStatement.getExpressions();
+            int returnCount = expressions.length;
+            if (returnCount == 1) {
+                if (expressions[0] instanceof GoCallOrConversionExpression) {
+                    int count = getFunctionCallResultCount((GoCallOrConversionExpression) expressions[0]);
+                    if (count != UNKNOWN_COUNT) {
+                        returnCount = count;
+                    }
+                }
+            } else {
+                checkExpressionShouldReturnOneResult(expressions, result);
+            }
+
+            FunctionResult fr = functionResults.get(functionResults.size() - 1);
+            if (fr == null || fr.resultCount == returnCount || returnCount == 0 && fr.namedResult) {
+                return;
+            }
+
+            if (fr.resultCount < returnCount) {
+                result.addProblem(element, GoBundle.message("error.too.many.arguments.to.return"));
+            } else {
+                result.addProblem(element, GoBundle.message("error.not.enough.arguments.to.return"));
+            }
+        }
+    }
+
+    private static class Context {
+        public final InspectionResult result;
+        public final GoFunctionDeclaration function;
+
+        private Context(InspectionResult result, GoFunctionDeclaration function) {
+            this.result = result;
+            this.function = function;
         }
     }
 }

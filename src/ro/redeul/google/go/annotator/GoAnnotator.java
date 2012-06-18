@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
 import ro.redeul.google.go.inspection.ConstDeclarationInspection;
+import ro.redeul.google.go.inspection.FunctionDeclarationInspection;
 import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.inspection.VarDeclarationInspection;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -206,9 +207,9 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration fd) {
-        // TODO: fix this
-//        addProblems(new FunctionDeclarationInspection(inspectionManager,
-//                                                      fd).checkFunction());
+        InspectionResult result = new InspectionResult(inspectionManager);
+        FunctionDeclarationInspection.checkFunction(result, fd);
+        addProblems(result.getProblems());
     }
 
     @Override
