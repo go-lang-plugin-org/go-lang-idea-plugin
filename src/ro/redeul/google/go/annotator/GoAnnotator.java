@@ -179,10 +179,9 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
             // if the identifier resolves to a const, set const highlight
             if (def.getParent() instanceof GoConstDeclaration) {
-//                annotation.setTextAttributes(GoSyntaxHighlighter.CONST);
+                annotation.setTextAttributes(GoSyntaxHighlighter.CONST);
             } else if (identifier.isGlobal()) {
-                annotation.setTextAttributes(
-                    GoSyntaxHighlighter.GLOBAL_VARIABLE);
+                annotation.setTextAttributes(GoSyntaxHighlighter.GLOBAL_VARIABLE);
             } else {
                 annotation.setTextAttributes(GoSyntaxHighlighter.VARIABLE);
             }
