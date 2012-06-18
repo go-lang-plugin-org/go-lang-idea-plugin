@@ -8,6 +8,7 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.lang.documentation.DocumentUtil;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -17,7 +18,6 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
@@ -119,44 +119,6 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
             return new TypeInfo(element);
         }
         return new Unknown(element);
-    }
-
-    public static String getFunctionPresentationText(GoFunctionDeclaration fd) {
-        StringBuilder sb = new StringBuilder(fd.getFunctionName());
-        String params = parametersToString(fd.getParameters());
-        String results = parametersToString(fd.getResults());
-        sb.append("(").append(params).append(")");
-        if (!results.isEmpty()) {
-            sb.append(": (").append(results).append(")");
-        }
-        return sb.toString();
-    }
-
-    private static String parametersToString(GoFunctionParameter[] parameters) {
-        if (parameters == null || parameters.length == 0) {
-            return "";
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (GoFunctionParameter fp : parameters) {
-            GoLiteralIdentifier[] ids = fp.getIdentifiers();
-            GoType type = fp.getType();
-            String typeName = String.valueOf(type != null ? type.getName() : null);
-            if (ids.length == 0) {
-                sb.append(typeName).append(", ");
-                continue;
-            } else if (ids.length == 1) {
-                sb.append(ids[0].getName()).append(" ").append(typeName).append(", ");
-                continue;
-            }
-
-            for (GoLiteralIdentifier id : ids) {
-                sb.append(id.getName()).append(", ");
-            }
-            sb.insert(sb.length() - 2, (fp.isVariadic() ? " ..." : " ") + typeName);
-        }
-
-        return sb.delete(sb.length() - 2, sb.length()).toString();
     }
 
 
@@ -320,7 +282,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
 
         @Override
         public String getPresentationText() {
-            return getFunctionPresentationText((GoFunctionDeclaration) element);
+            return DocumentUtil.getFunctionPresentationText((GoFunctionDeclaration) element);
         }
     }
 

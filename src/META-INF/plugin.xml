@@ -370,6 +370,8 @@
         <lang.documentationProvider language="Google Go" implementationClass="ro.redeul.google.go.lang.documentation.GoDocumentationProvider" />
         <lang.smartEnterProcessor language="Google Go"
                                   implementationClass="ro.redeul.google.go.lang.completion.smartEnter.GoSmartEnterProcessor"/>
+        <codeInsight.parameterInfo language="Google Go"
+                                   implementationClass="ro.redeul.google.go.lang.parameterInfo.GoParameterInfoHandler"/>
 
         <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
 

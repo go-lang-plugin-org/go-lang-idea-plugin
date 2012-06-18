@@ -1,11 +1,11 @@
 package ro.redeul.google.go.lang.documentation;
 
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
-import ro.redeul.google.go.ide.structureview.GoStructureViewElement;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -14,10 +14,12 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +27,7 @@ import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
-class DocumentUtil {
+public class DocumentUtil {
 
     public static String getTailingDocumentOfElement(PsiElement element) {
         boolean foundNewLine = false;
@@ -181,7 +183,98 @@ class DocumentUtil {
 
     public static String getFunctionQuickNavigationInfo(GoFunctionDeclaration fd) {
         String packageInfo = getElementPackageInfo(fd);
-        String functionInfo = GoStructureViewElement.getFunctionPresentationText(fd);
+        String functionInfo = getFunctionPresentationText(fd);
         return packageInfo + "\n" + functionInfo;
+    }
+
+    public static String getFunctionPresentationText(GoFunctionDeclaration fd) {
+        StringBuilder sb = new StringBuilder(fd.getFunctionName());
+        String params = parametersToString(fd.getParameters());
+        String results = parametersToString(fd.getResults());
+        sb.append("(").append(params).append(")");
+        if (!results.isEmpty()) {
+            sb.append(": (").append(results).append(")");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * In the result of {@link #getFunctionPresentationText}, find text range of specified parameter
+     * @param fd        The function definition
+     * @param index     Parameter position.
+     * @return Text range of the parameter
+     */
+    public static TextRange getFunctionParameterRangeInText(GoFunctionDeclaration fd, int index) {
+        return parameterRangeInText(fd.getParameters(), index).shiftRight(fd.getFunctionName().length() + 1);
+    }
+
+    private static TextRange parameterRangeInText(GoFunctionParameter[] parameters, int expectedIndex) {
+        if (parameters == null || parameters.length == 0) {
+            return TextRange.EMPTY_RANGE;
+        }
+
+        int start = 0;
+        int currentIndex = 0;
+        StringBuilder sb = new StringBuilder();
+        for (GoFunctionParameter fp : parameters) {
+            GoLiteralIdentifier[] ids = fp.getIdentifiers();
+            GoType type = fp.getType();
+            String typeName = String.valueOf(type != null ? type.getName() : null);
+            start = sb.length();
+            if (ids.length == 0) {
+                sb.append(typeName).append(", ");
+                if (currentIndex++ == expectedIndex) {
+                    return new TextRange(start, sb.length() - 2);
+                }
+                continue;
+            } else if (ids.length == 1) {
+                sb.append(ids[0].getName()).append(" ").append(typeName).append(", ");
+                if (currentIndex++ == expectedIndex) {
+                    return new TextRange(start, sb.length() - 2);
+                }
+                continue;
+            }
+
+            for (int i = 0; i < ids.length; i++) {
+                start = sb.length();
+                sb.append(ids[i].getName()).append(", ");
+                if (i != ids.length - 1 && currentIndex++ == expectedIndex) {
+                    return new TextRange(start, sb.length() - 2);
+                }
+            }
+            sb.insert(sb.length() - 2, (fp.isVariadic() ? " ..." : " ") + typeName);
+            if (currentIndex++ == expectedIndex) {
+                return new TextRange(start, sb.length() - 2);
+            }
+        }
+
+        return new TextRange(start, sb.length() - 2);
+    }
+
+    private static String parametersToString(GoFunctionParameter[] parameters) {
+        if (parameters == null || parameters.length == 0) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (GoFunctionParameter fp : parameters) {
+            GoLiteralIdentifier[] ids = fp.getIdentifiers();
+            GoType type = fp.getType();
+            String typeName = String.valueOf(type != null ? type.getName() : null);
+            if (ids.length == 0) {
+                sb.append(typeName).append(", ");
+                continue;
+            } else if (ids.length == 1) {
+                sb.append(ids[0].getName()).append(" ").append(typeName).append(", ");
+                continue;
+            }
+
+            for (GoLiteralIdentifier id : ids) {
+                sb.append(id.getName()).append(", ");
+            }
+            sb.insert(sb.length() - 2, (fp.isVariadic() ? " ..." : " ") + typeName);
+        }
+
+        return sb.delete(sb.length() - 2, sb.length()).toString();
     }
 }

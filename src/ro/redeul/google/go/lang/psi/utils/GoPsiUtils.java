@@ -172,6 +172,23 @@ public class GoPsiUtils {
         return children;
     }
 
+    public static List<PsiElement> findChildrenOfType(@Nullable PsiElement node, IElementType type) {
+        if (node == null) {
+            return Collections.emptyList();
+        }
+
+        List<PsiElement> children = new ArrayList<PsiElement>();
+        PsiElement child = node.getFirstChild();
+        while (child != null) {
+            if (isNodeOfType(child, type)) {
+                children.add(child);
+            }
+            child = child.getNextSibling();
+        }
+
+        return children;
+    }
+
     /**
      * Check whether element is the predeclared identifier "iota" in a const declaration
      *
