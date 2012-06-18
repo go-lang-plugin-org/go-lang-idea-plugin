@@ -61,7 +61,12 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
 
         String originalText = document.getText(new TextRange(lineStart, start));
         String indent = findIndent(originalText);
-        String text = String.format(indent + "$%s$ := %s\n%s$%s$", VARIABLE, declaration, originalText, VARIABLE);
+        String text;
+        if (new TextRange(start, end).equals(stmt.getTextRange())) {
+            text = String.format(indent + "$%s$ := %s", VARIABLE, declaration);
+        } else {
+            text = String.format(indent + "$%s$ := %s\n%s$%s$", VARIABLE, declaration, originalText, VARIABLE);
+        }
         document.replaceString(lineStart, end, text);
         runTemplate(editor, TextRange.create(range), VARIABLE, "value");
     }

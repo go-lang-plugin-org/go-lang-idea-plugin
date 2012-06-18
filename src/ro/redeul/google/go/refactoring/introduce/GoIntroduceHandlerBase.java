@@ -29,6 +29,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
+
 public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler {
     @Override
     public void invoke(@NotNull final Project project, final Editor editor, PsiFile psiFile, DataContext dataContext) {
@@ -53,6 +55,10 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
 
             // If nothing is selected in editor, find all potential expressions.
             int offset = editor.getCaretModel().getOffset();
+            PsiElement element = getPrevSiblingIfItsWhiteSpaceOrComment(file.findElementAt(offset));
+            if (element != null) {
+                offset = Math.min(offset, element.getTextRange().getEndOffset() - 1);
+            }
             List<GoExpr> expressions = collectExpressions(file, offset);
             if (expressions.isEmpty()) {
                 return;
