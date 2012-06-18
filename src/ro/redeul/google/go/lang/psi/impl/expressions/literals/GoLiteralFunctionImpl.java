@@ -7,16 +7,14 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
 
-public class GoLiteralFunctionImpl extends GoExpressionBase
+public class GoLiteralFunctionImpl extends GoPsiElementBase
     implements GoLiteralFunction {
 
     public GoLiteralFunctionImpl(@NotNull ASTNode node) {
@@ -24,21 +22,23 @@ public class GoLiteralFunctionImpl extends GoExpressionBase
     }
 
     @Override
-    protected GoType resolveType() {
+    public Object getValue() {
         return null;
     }
 
     @Override
-    public GoFunctionParameter[] getParameters() {
-        PsiElement functionType = findChildByType(GoElementTypes.TYPE_FUNCTION);
+    public Type getType() {
+        return Type.Function;
+    }
 
-        return GoPsiUtils.getParameters(functionType);
+    @Override
+    public GoFunctionParameter[] getParameters() {
+        return GoPsiUtils.getParameters(this);
     }
 
     @Override
     public GoFunctionParameter[] getResults() {
-        PsiElement typeFunction = findChildOfType(this, GoElementTypes.TYPE_FUNCTION);
-        PsiElement result = findChildOfType(typeFunction, GoElementTypes.FUNCTION_RESULT);
+        PsiElement result = findChildByType(GoElementTypes.FUNCTION_RESULT);
 
         return GoPsiUtils.getParameters(result);
     }
