@@ -89,4 +89,27 @@ public class GoPsiSliceExpressionsTestCase extends GoPsiTestCase {
         assertNull(sliceExpression.getFirstIndex());
         assertEquals("j", get(sliceExpression.getSecondIndex()).getText());
     }
+
+    public void testSliceWithCommentsAndWhitespaces() throws Exception {
+        GoFile file = get(parse("" +
+                                    "package main; func a() { " +
+                                    "   ad[\n" +
+                                    "/**/ 1/**/:/**/2/**/] }\n" +
+                                    ""));
+
+        GoSliceExpression sliceExpression =
+            getAs(GoSliceExpression.class,
+                  castAs(GoExpressionStatement.class, 0,
+                         get(
+                             childAt(0,
+                                     file.getFunctions()
+                             ).getBlock()
+                         ).getStatements()
+                  ).getExpression()
+            );
+
+        assertEquals("ad", get(sliceExpression.getBaseExpression()).getText());
+        assertEquals("1", get(sliceExpression.getFirstIndex()).getText());
+        assertEquals("2", get(sliceExpression.getSecondIndex()).getText());
+    }
 }

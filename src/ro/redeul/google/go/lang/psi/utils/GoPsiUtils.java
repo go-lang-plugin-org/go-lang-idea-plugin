@@ -132,6 +132,9 @@ public class GoPsiUtils {
         return type.cast(node);
     }
 
+    private static boolean isWhiteSpaceOrComment(PsiElement node) {
+        return isNodeOfType(node, GoTokenSets.WHITESPACE_OR_COMMENTS);
+    }
 
     public static boolean isWhiteSpaceNode(PsiElement node) {
         return isNodeOfType(node, GoTokenSets.WHITESPACE);
@@ -257,8 +260,9 @@ public class GoPsiUtils {
 
         do {
             node = node.getPrevSibling();
-        } while ( node != null && isWhiteSpaceNode(node));
+        } while ( node != null && isWhiteSpaceOrComment(node));
 
         return node != null && node.getNode().getElementType() == type;
     }
+
 }

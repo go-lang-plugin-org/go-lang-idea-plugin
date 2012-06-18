@@ -1,6 +1,8 @@
 package ro.redeul.google.go.lang.psi.utils;
 
+import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.TokenSet;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 import static ro.redeul.google.go.lang.parser.GoElementTypes.*;
 
@@ -27,6 +29,10 @@ public class GoTokenSets {
         oPLUS, oMINUS, oNOT, oBIT_XOR, oBIT_AND, oMUL
     );
     public static final TokenSet WHITESPACE = TokenSet.create(
-        wsNLS, wsWS
+        wsNLS, wsWS, TokenType.WHITE_SPACE
+    );
+
+    public static final TokenSet WHITESPACE_OR_COMMENTS = TokenSet.create(
+        wsNLS, wsWS, TokenType.WHITE_SPACE, GoElementTypes.mML_COMMENT
     );
 }
