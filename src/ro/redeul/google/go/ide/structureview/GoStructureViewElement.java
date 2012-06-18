@@ -1,5 +1,12 @@
 package ro.redeul.google.go.ide.structureview;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import javax.swing.*;
+
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
@@ -23,14 +30,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
-
-import javax.swing.Icon;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isExportedName;
 
 /**
@@ -358,9 +357,11 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
 
         List<PsiNamedElement> getMembers(GoTypeSpec typeSpec) {
             List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
-            for (GoPsiElement psi : typeSpec.getType().getMembers()) {
-                if (psi instanceof PsiNamedElement) {
-                    children.add((PsiNamedElement) psi);
+            if (typeSpec.getType() != null ) {
+                for (GoPsiElement psi : typeSpec.getType().getMembers()) {
+                    if (psi instanceof PsiNamedElement) {
+                        children.add((PsiNamedElement) psi);
+                    }
                 }
             }
 
