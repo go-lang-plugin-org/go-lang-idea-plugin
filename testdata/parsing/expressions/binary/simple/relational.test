@@ -16,7 +16,7 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      RelationalExpression
+      RelationalExpressionImpl
         LiteralExpressionImpl
           LiteralIntegerImpl
             PsiElement(LITERAL_INT)('1')

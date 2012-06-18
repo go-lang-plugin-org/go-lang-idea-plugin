@@ -24,7 +24,7 @@ Go file
           <empty list>
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('i')

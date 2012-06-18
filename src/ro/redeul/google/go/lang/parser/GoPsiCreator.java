@@ -10,6 +10,9 @@ import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationsImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalAndExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalOrExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoRelationalExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoBuiltinCallExprImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoCallOrConversionExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoIndexExpressionImpl;
@@ -220,19 +223,28 @@ public class GoPsiCreator implements GoElementTypes {
         if (elementType.equals(MUL_EXPRESSION))
             return new GoMultiplicativeExpressionImpl(node);
 
+        if (elementType.equals(REL_EXPRESSION))
+            return new GoRelationalExpressionImpl(node);
+
+        if (elementType.equals(LOG_AND_EXPRESSION))
+            return new GoLogicalAndExpressionImpl(node);
+
+        if (elementType.equals(LOG_OR_EXPRESSION))
+            return new GoLogicalOrExpressionImpl(node);
+
         if (elementType.equals(RETURN_STATEMENT))
             return new GoReturnStatementImpl(node);
 
         if (elementType.equals(SHORT_VAR_STATEMENT))
             return new GoShortVarDeclarationImpl(node);
 
-        if ( elementType.equals(EXPRESSION_STATEMENT) )
+        if (elementType.equals(EXPRESSION_STATEMENT))
             return new GoExpressionStatementImpl(node);
 
-        if ( elementType.equals(UNARY_EXPRESSION) )
+        if (elementType.equals(UNARY_EXPRESSION))
             return new GoUnaryExpressionImpl(node);
 
-        if ( elementType.equals(CALL_OR_CONVERSION_EXPRESSION) )
+        if (elementType.equals(CALL_OR_CONVERSION_EXPRESSION))
             return new GoCallOrConversionExpressionImpl(node);
 
         if (elementType.equals(FOR_WITH_CONDITION_STATEMENT))

@@ -209,7 +209,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor implements Annotator 
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
         visitElement(declaration);
 
-        new Exception().printStackTrace();
         InspectionResult result = new InspectionResult(inspectionManager);
         FunctionDeclarationInspection.checkFunction(result, declaration);
         addProblems(result.getProblems());

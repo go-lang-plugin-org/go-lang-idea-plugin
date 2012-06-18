@@ -20,7 +20,7 @@ Go file
       ForWithConditionStmtImpl
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
-        LogicalAndExpression
+        LogicalAndExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('a')

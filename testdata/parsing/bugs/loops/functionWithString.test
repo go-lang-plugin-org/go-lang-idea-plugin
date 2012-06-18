@@ -535,7 +535,7 @@ Go file
               PsiElement(LITERAL_INT)('0')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('i')
@@ -565,7 +565,7 @@ Go file
           IfStmtImpl
             PsiElement(KEYWORD_IF)('if')
             PsiWhiteSpace(' ')
-            RelationalExpression
+            RelationalExpressionImpl
               IndexExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
@@ -962,7 +962,7 @@ Go file
               PsiElement(LITERAL_INT)('0')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('i')
@@ -1046,7 +1046,7 @@ Go file
           IfStmtImpl
             PsiElement(KEYWORD_IF)('if')
             PsiWhiteSpace(' ')
-            RelationalExpression
+            RelationalExpressionImpl
               LiteralExpressionImpl
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('y')
@@ -1110,7 +1110,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('p')
@@ -1186,7 +1186,7 @@ Go file
               PsiElement(LITERAL_INT)('0')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('j')
@@ -1211,7 +1211,7 @@ Go file
           IfStmtImpl
             PsiElement(KEYWORD_IF)('if')
             PsiWhiteSpace(' ')
-            RelationalExpression
+            RelationalExpressionImpl
               CallOrConversionExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
@@ -1340,8 +1340,8 @@ Go file
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
         PsiWhiteSpace(' ')
-        LogicalAndExpression
-          RelationalExpression
+        LogicalAndExpressionImpl
+          RelationalExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('c')
@@ -1354,7 +1354,7 @@ Go file
           PsiWhiteSpace(' ')
           PsiElement(&&)('&&')
           PsiWhiteSpace(' ')
-          RelationalExpression
+          RelationalExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('c')
@@ -1396,9 +1396,9 @@ Go file
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
         PsiWhiteSpace(' ')
-        LogicalOrExpression
-          LogicalOrExpression
-            RelationalExpression
+        LogicalOrExpressionImpl
+          LogicalOrExpressionImpl
+            RelationalExpressionImpl
               LiteralExpressionImpl
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('c')
@@ -1413,8 +1413,8 @@ Go file
             PsiWhiteSpace(' ')
             ParenthesisedExpression
               PsiElement(()('(')
-              LogicalAndExpression
-                RelationalExpression
+              LogicalAndExpressionImpl
+                RelationalExpressionImpl
                   LiteralExpressionImpl
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('c')
@@ -1427,7 +1427,7 @@ Go file
                 PsiWhiteSpace(' ')
                 PsiElement(&&)('&&')
                 PsiWhiteSpace(' ')
-                RelationalExpression
+                RelationalExpressionImpl
                   LiteralExpressionImpl
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('c')
@@ -1443,8 +1443,8 @@ Go file
           PsiWhiteSpace(' ')
           ParenthesisedExpression
             PsiElement(()('(')
-            LogicalAndExpression
-              RelationalExpression
+            LogicalAndExpressionImpl
+              RelationalExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('c')
@@ -1457,7 +1457,7 @@ Go file
               PsiWhiteSpace(' ')
               PsiElement(&&)('&&')
               PsiWhiteSpace(' ')
-              RelationalExpression
+              RelationalExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('c')
@@ -1573,7 +1573,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           BuiltInCallExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('len')
@@ -1618,7 +1618,7 @@ Go file
               PsiElement(LITERAL_INT)('0')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('ll')
@@ -1643,7 +1643,7 @@ Go file
           IfStmtImpl
             PsiElement(KEYWORD_IF)('if')
             PsiWhiteSpace(' ')
-            RelationalExpression
+            RelationalExpressionImpl
               IndexExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
@@ -1756,7 +1756,7 @@ Go file
               PsiElement(LITERAL_INT)('0')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('i')
@@ -1853,7 +1853,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('peekrune')
@@ -1871,7 +1871,7 @@ Go file
           IfStmtImpl
             PsiElement(KEYWORD_IF)('if')
             PsiWhiteSpace(' ')
-            RelationalExpression
+            RelationalExpressionImpl
               LiteralExpressionImpl
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('peekrune')
@@ -1960,7 +1960,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('n')
@@ -1989,7 +1989,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('err')
@@ -2071,7 +2071,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('f')
@@ -2103,7 +2103,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('peekrune')
@@ -2273,7 +2273,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('err')
@@ -2391,7 +2391,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('err')
@@ -2554,7 +2554,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('fatfl')
@@ -2616,7 +2616,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('ftable')
@@ -2661,7 +2661,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('foutput')
@@ -2706,7 +2706,7 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('stderr')

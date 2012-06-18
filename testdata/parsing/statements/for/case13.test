@@ -31,7 +31,7 @@ Go file
               PsiElement(LITERAL_INT)('0')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        RelationalExpression
+        RelationalExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('i')
