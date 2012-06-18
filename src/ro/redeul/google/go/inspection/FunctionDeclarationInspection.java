@@ -1,5 +1,10 @@
 package ro.redeul.google.go.inspection;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +24,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import static ro.redeul.google.go.inspection.InspectionUtil.UNKNOWN_COUNT;
 import static ro.redeul.google.go.inspection.InspectionUtil.checkExpressionShouldReturnOneResult;
 import static ro.redeul.google.go.inspection.InspectionUtil.getFunctionCallResultCount;
@@ -46,6 +45,11 @@ public class FunctionDeclarationInspection
             @Override
             public void visitMethodDeclaration(GoMethodDeclaration methodDeclaration) {
                 checkFunction(result, methodDeclaration);
+            }
+
+            @Override
+            public void visitFunctionLiteral(GoLiteralFunction literalFunction) {
+                checkFunction(result, literalFunction);
             }
         }.visitFile(file);
     }

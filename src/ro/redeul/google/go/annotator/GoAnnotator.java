@@ -28,6 +28,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoBuiltinCallExprImpl;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
@@ -210,6 +211,11 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
         InspectionResult result = new InspectionResult(inspectionManager);
         FunctionDeclarationInspection.checkFunction(result, fd);
         addProblems(result.getProblems());
+    }
+
+    @Override
+    public void visitFunctionLiteral(GoLiteralFunction literalFunction) {
+        visitFunctionDeclaration(literalFunction);
     }
 
     @Override

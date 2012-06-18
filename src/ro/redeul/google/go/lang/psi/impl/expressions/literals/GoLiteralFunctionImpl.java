@@ -4,15 +4,17 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
 
 public class GoLiteralFunctionImpl extends GoPsiElementBase
     implements GoLiteralFunction {
@@ -22,13 +24,34 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
     }
 
     @Override
-    public Object getValue() {
-        return null;
+    public GoFunctionDeclaration getValue() {
+        return this;
     }
 
     @Override
     public Type getType() {
         return Type.Function;
+    }
+
+    @Override
+    public String getFunctionName() {
+        return null;
+    }
+
+    @Override
+    public boolean isMain() {
+        return false;
+    }
+
+    @Override
+    public PsiElement getNameIdentifier() {
+        return null;
+    }
+
+    @Override
+    public PsiElement setName(@NonNls @NotNull String name)
+        throws IncorrectOperationException {
+        return null;
     }
 
     @Override
