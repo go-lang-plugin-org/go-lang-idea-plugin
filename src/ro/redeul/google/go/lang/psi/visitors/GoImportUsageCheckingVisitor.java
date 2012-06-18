@@ -24,8 +24,8 @@ public class GoImportUsageCheckingVisitor extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitLiteralExpression(GoLiteralExpression literalExpr) {
-        GoLiteral literal = literalExpr.getLiteral();
+    public void visitLiteralExpression(GoLiteralExpression expression) {
+        GoLiteral literal = expression.getLiteral();
 
         if ( literal != null && literal.getType() == GoLiteral.Type.Identifier ) {
             checkQualifiedIdentifier((GoLiteralIdentifier) literal);

@@ -90,8 +90,9 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitConstDeclaration(GoConstDeclaration gcd) {
-        visitIdentifiersAndExpressions(gcd.getIdentifiers(), gcd.getExpressions(), false);
+    public void visitConstDeclaration(GoConstDeclaration declaration) {
+        visitIdentifiersAndExpressions(
+            declaration.getIdentifiers(), declaration.getExpressions(), false);
     }
 
     @Override
@@ -100,42 +101,43 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitShortVarDeclaration(GoShortVarDeclaration svd) {
-        visitIdentifiersAndExpressions(svd.getIdentifiers(), svd.getExpressions(), true);
+    public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
+        visitIdentifiersAndExpressions(
+            declaration.getIdentifiers(), declaration.getExpressions(), true);
     }
 
     @Override
-    public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
-        getFunctionParameters(functionDeclaration);
-        visitElement(functionDeclaration.getBlock());
+    public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
+        getFunctionParameters(declaration);
+        visitElement(declaration.getBlock());
         afterVisitGoFunctionDeclaration();
     }
 
     @Override
-    public void visitMethodDeclaration(GoMethodDeclaration methodDeclaration) {
-        getFunctionParameters(methodDeclaration);
-        visitElement(methodDeclaration.getBlock());
+    public void visitMethodDeclaration(GoMethodDeclaration declaration) {
+        getFunctionParameters(declaration);
+        visitElement(declaration.getBlock());
         afterVisitGoFunctionDeclaration();
     }
 
     @Override
-    public void visitFunctionLiteral(GoLiteralFunction literalFunction) {
-        createFunctionParametersMap(literalFunction.getParameters(), literalFunction
+    public void visitFunctionLiteral(GoLiteralFunction literal) {
+        createFunctionParametersMap(literal.getParameters(), literal
             .getResults());
-        visitElement(literalFunction.getBlock());
+        visitElement(literal.getBlock());
         afterVisitGoFunctionDeclaration();
     }
 
     @Override
-    public void visitForWithRange(GoForWithRangeStatement forWithRange) {
+    public void visitForWithRange(GoForWithRangeStatement statement) {
         ctx.addNewScopeLevel();
 
-        boolean isDeclaration = forWithRange.isDeclaration();
-        visitExpressionAsIdentifier(forWithRange.getKey(), isDeclaration);
-        visitExpressionAsIdentifier(forWithRange.getValue(), isDeclaration);
+        boolean isDeclaration = statement.isDeclaration();
+        visitExpressionAsIdentifier(statement.getKey(), isDeclaration);
+        visitExpressionAsIdentifier(statement.getValue(), isDeclaration);
 
-        visitElement(forWithRange.getRangeExpression());
-        visitElement(forWithRange.getBlock());
+        visitElement(statement.getRangeExpression());
+        visitElement(statement.getBlock());
 
         for (VariableUsage v : ctx.popLastScopeLevel().values()) {
             if (!v.isUsed()) {
@@ -145,9 +147,9 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitIdentifier(GoLiteralIdentifier id) {
-        if (needToCollectUsage(id)) {
-            ctx.addUsage(id);
+    public void visitIdentifier(GoLiteralIdentifier identifier) {
+        if (needToCollectUsage(identifier)) {
+            ctx.addUsage(identifier);
         }
     }
 

@@ -25,8 +25,8 @@ public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
             }
 
             @Override
-            public void visitShortVarDeclaration(GoShortVarDeclaration shortVarDeclaration) {
-                checkVar(shortVarDeclaration, result);
+            public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
+                checkVar(declaration, result);
             }
         }.visitFile(file);
     }

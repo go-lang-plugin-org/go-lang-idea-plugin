@@ -30,14 +30,14 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoBuiltinCallExprImpl;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpr;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static ro.redeul.google.go.inspection.InspectionUtil.getProblemRange;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isFunctionOrMethodCall;
@@ -48,7 +48,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isFunctionOrMethodCa
  * Date: Aug 30, 2010
  * Time: 8:30:33 PM
  */
-public class GoAnnotator extends GoElementVisitor implements Annotator {
+public class GoAnnotator extends GoRecursiveElementVisitor implements Annotator {
 
     private AnnotationHolder annotationHolder;
     private GoNamesCache goNamesCache;
@@ -140,17 +140,17 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
     }
 
     @Override
-    public void visitLiteralBool(GoLiteralBool literalBool) {
-        Annotation annotation =
-            annotationHolder.createInfoAnnotation(literalBool, null);
-        annotation.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
+    public void visitLiteralBool(GoLiteralBool literal) {
+        Annotation ann = annotationHolder.createInfoAnnotation(literal, null);
+        ann.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
     }
 
     @Override
-    public void visitBuiltinCallExpression(GoBuiltinCallExprImpl expression) {
-        Annotation annotation =
-            annotationHolder.createInfoAnnotation(expression.getIdentifier(), null);
-        annotation.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
+    public void visitBuiltinCallExpression(GoBuiltinCallExpr expression) {
+        visitElement(expression);
+
+        Annotation ann = annotationHolder.createInfoAnnotation(expression.getIdentifier(), null);
+        ann.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
     }
 
     @Override
@@ -192,68 +192,82 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
 
     @Override
     public void visitFile(GoFile file) {
+        visitElement(file);
+
         InspectionResult result = new InspectionResult(inspectionManager);
-        GoVariableUsageStatVisitor visitor =
-            new GoVariableUsageStatVisitor(result);
-        visitor.visitFile(file);
+        new GoVariableUsageStatVisitor(result).visitFile(file);
         addProblems(result.getProblems());
     }
 
     @Override
     public void visitTypeName(GoTypeName typeName) {
-        Annotation annotation =
-            annotationHolder.createInfoAnnotation(typeName, null);
-        annotation.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
+        Annotation ann = annotationHolder.createInfoAnnotation(typeName, null);
+        ann.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
     }
 
     @Override
-    public void visitFunctionDeclaration(GoFunctionDeclaration fd) {
+    public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
+        visitElement(declaration);
+
         InspectionResult result = new InspectionResult(inspectionManager);
-        FunctionDeclarationInspection.checkFunction(result, fd);
+        FunctionDeclarationInspection.checkFunction(result, declaration);
         addProblems(result.getProblems());
     }
 
     @Override
-    public void visitFunctionLiteral(GoLiteralFunction literalFunction) {
-        visitFunctionDeclaration(literalFunction);
+    public void visitFunctionLiteral(GoLiteralFunction literal) {
+        visitElement(literal);
+
+        InspectionResult result = new InspectionResult(inspectionManager);
+        FunctionDeclarationInspection.checkFunction(result, literal);
+        addProblems(result.getProblems());
     }
 
     @Override
-    public void visitConstDeclarations(GoConstDeclarations constDeclarations) {
+    public void visitConstDeclarations(GoConstDeclarations declarations) {
+        visitElement(declarations);
+
+        InspectionResult result = new InspectionResult(inspectionManager);
+        ConstDeclarationInspection.checkConstDeclarations(declarations, result);
+        addProblems(result.getProblems());
+    }
+
+    @Override
+    public void visitConstDeclaration(GoConstDeclaration declaration) {
+        visitElement(declaration);
+
         InspectionResult result = new InspectionResult(inspectionManager);
         ConstDeclarationInspection
-            .checkConstDeclarations(constDeclarations, result);
+            .checkConstDeclaration(declaration, result);
+
         addProblems(result.getProblems());
     }
 
     @Override
-    public void visitConstDeclaration(GoConstDeclaration constDeclaration) {
+    public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
+        visitElement(declaration);
+
+        visitVarDeclaration(declaration);
+    }
+
+    @Override
+    public void visitVarDeclaration(GoVarDeclaration declaration) {
+        visitElement(declaration);
+
         InspectionResult result = new InspectionResult(inspectionManager);
-        ConstDeclarationInspection
-            .checkConstDeclaration(constDeclaration, result);
-
+        VarDeclarationInspection.checkVar(declaration, result);
         addProblems(result.getProblems());
     }
 
     @Override
-    public void visitShortVarDeclaration(GoShortVarDeclaration shortVarDecl) {
-        visitVarDeclaration(shortVarDecl);
-    }
+    public void visitGoStatement(GoGoStatement statement) {
+        visitElement(statement);
 
-    @Override
-    public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
-        InspectionResult result = new InspectionResult(inspectionManager);
-        VarDeclarationInspection.checkVar(varDeclaration, result);
-        addProblems(result.getProblems());
-    }
-
-    @Override
-    public void visitGoStatement(GoGoStatement goStatement) {
-        if (!isFunctionOrMethodCall(goStatement.getExpression())) {
+        if (!isFunctionOrMethodCall(statement.getExpression())) {
             PsiElement lastChild = GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment(
-                goStatement.getLastChild());
+                statement.getLastChild());
             if (lastChild == null) {
-                lastChild = goStatement;
+                lastChild = statement;
             }
 
             annotationHolder.createErrorAnnotation(lastChild,
@@ -262,12 +276,14 @@ public class GoAnnotator extends GoElementVisitor implements Annotator {
     }
 
     @Override
-    public void visitDeferStatement(GoDeferStatement deferStatement) {
-        if (!isFunctionOrMethodCall(deferStatement.getExpression())) {
+    public void visitDeferStatement(GoDeferStatement statement) {
+        visitElement(statement);
+
+        if (!isFunctionOrMethodCall(statement.getExpression())) {
             PsiElement lastChild = GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment(
-                deferStatement.getLastChild());
+                statement.getLastChild());
             if (lastChild == null) {
-                lastChild = deferStatement;
+                lastChild = statement;
             }
 
             annotationHolder.createErrorAnnotation(lastChild,

@@ -25,9 +25,9 @@ public class ConstDeclarationInspection extends AbstractWholeGoFileInspection {
 
         new GoRecursiveElementVisitor() {
             @Override
-            public void visitConstDeclarations(GoConstDeclarations decls) {
-                checkConstDeclarations(decls, result);
-                visitElement(decls);
+            public void visitConstDeclarations(GoConstDeclarations declarations) {
+                checkConstDeclarations(declarations, result);
+                visitElement(declarations);
             }
 
             @Override

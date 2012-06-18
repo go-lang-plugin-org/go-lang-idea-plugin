@@ -5,20 +5,21 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
-import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoBuiltinCallExprImpl;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpr;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
+import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -55,131 +56,135 @@ public class GoElementVisitor  {
         visitElement(typeName);
     }
 
-    public void visitPackageDeclaration(GoPackageDeclaration packageDeclaration) {
-        visitElement(packageDeclaration);
+    public void visitPackageDeclaration(GoPackageDeclaration declaration) {
+        visitElement(declaration);
     }
 
-    public void visitImportDeclarations(GoImportDeclarations importDeclaration) {
-        visitElement(importDeclaration);
+    public void visitImportDeclarations(GoImportDeclarations declarations) {
+        visitElement(declarations);
     }
 
-    public void visitImportDeclaration(GoImportDeclaration importSpec) {
-        visitElement(importSpec);
+    public void visitImportDeclaration(GoImportDeclaration declaration) {
+        visitElement(declaration);
     }
 
-    public void visitMethodDeclaration(GoMethodDeclaration methodDeclaration) {
-        visitElement(methodDeclaration);
+    public void visitMethodDeclaration(GoMethodDeclaration declaration) {
+        visitElement(declaration);
     }
 
-    public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
-        visitElement(functionDeclaration);
+    public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
+        visitElement(declaration);
     }
 
-    public void visitTypeDeclaration(GoTypeDeclaration typeDeclaration) {
-        visitElement(typeDeclaration);
+    public void visitTypeDeclaration(GoTypeDeclaration declaration) {
+        visitElement(declaration);
     }
 
-    public void visitTypeSpec(GoTypeSpec typeSpec) {
-        visitElement(typeSpec);
+    public void visitTypeSpec(GoTypeSpec type) {
+        visitElement(type);
     }
 
-    public void visitArrayType(GoTypeArray arrayType) {
-        visitElement(arrayType);
+    public void visitArrayType(GoTypeArray type) {
+        visitElement(type);
     }
 
-    public void visitSliceType(GoTypeSlice sliceType) {
-        visitElement(sliceType);
+    public void visitSliceType(GoTypeSlice type) {
+        visitElement(type);
     }
 
-    public void visitMapType(GoTypeMap mapType) {
-        visitElement(mapType);
+    public void visitMapType(GoTypeMap type) {
+        visitElement(type);
     }
 
-    public void visitChannelType(GoTypeChannel channelType) {
-        visitElement(channelType);
+    public void visitChannelType(GoTypeChannel type) {
+        visitElement(type);
     }
 
-    public void visitTypeNameDeclaration(GoTypeNameDeclaration nameDeclaration) {
-        visitElement(nameDeclaration);
+    public void visitPointerType(GoTypePointer type) {
+        visitElement(type);
     }
 
-    public void visitIdentifier(GoLiteralIdentifier goIdentifier) {
-        visitElement(goIdentifier);
+    public void visitTypeNameDeclaration(GoTypeNameDeclaration declaration) {
+        visitElement(declaration);
     }
 
-    public void acceptFunctionParameter(GoFunctionParameter functionParameter) {
-        visitElement(functionParameter);
+    public void visitIdentifier(GoLiteralIdentifier identifier) {
+        visitElement(identifier);
     }
 
-    public void visitPointerType(GoTypePointer pointerType) {
-        visitElement(pointerType);
+    public void acceptFunctionParameter(GoFunctionParameter parameter) {
+        visitElement(parameter);
     }
 
-    public void visitLiteralExpression(GoLiteralExpression literalExpression) {
-        visitElement(literalExpression);
+    public void visitLiteralExpression(GoLiteralExpression expression) {
+        visitElement(expression);
     }
 
-    public void visitConstDeclarations(GoConstDeclarations constDeclarations) {
-        visitElement(constDeclarations);
+    public void visitConstDeclarations(GoConstDeclarations declarations) {
+        visitElement(declarations);
     }
 
-    public void visitConstDeclaration(GoConstDeclaration constDeclaration) {
-        visitElement(constDeclaration);
+    public void visitConstDeclaration(GoConstDeclaration declaration) {
+        visitElement(declaration);
     }
 
-    public void visitFunctionLiteral(GoLiteralFunction literalFunction) {
-        visitElement(literalFunction);
+    public void visitFunctionLiteral(GoLiteralFunction literal) {
+        visitElement(literal);
     }
 
-    public void visitForWithRange(GoForWithRangeStatement forWithRange) {
-        visitElement(forWithRange);
+    public void visitForWithRange(GoForWithRangeStatement statement) {
+        visitElement(statement);
     }
 
-    public void visitForWithClauses(GoForWithClausesStatement forWithClauses) {
-        visitElement(forWithClauses);
+    public void visitForWithClauses(GoForWithClausesStatement statement) {
+        visitElement(statement);
     }
 
-    public void visitForWithCondition(GoForWithConditionStatement forWithCondition) {
-        visitElement(forWithCondition);
+    public void visitForWithCondition(GoForWithConditionStatement statement) {
+        visitElement(statement);
     }
 
     public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
         visitElement(varDeclaration);
     }
 
-    public void visitShortVarDeclaration(GoShortVarDeclaration shortVarDeclaration) {
-        visitElement(shortVarDeclaration);
+    public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
+        visitElement(declaration);
     }
 
-    public void visitIndexExpression(GoIndexExpression indexExpression) {
-        visitElement(indexExpression);
+    public void visitIndexExpression(GoIndexExpression expression) {
+        visitElement(expression);
     }
 
     public void visitLiteralCompositeVal(GoLiteralCompositeValue compositeValue) {
         visitElement(compositeValue);
     }
 
-    public void visitLiteralComposite(GoLiteralComposite literalComposite) {
-        visitElement(literalComposite);
+    public void visitLiteralComposite(GoLiteralComposite composite) {
+        visitElement(composite);
     }
 
-    public void visitIfStatement(GoIfStatement ifStatement) {
-        visitElement(ifStatement);
+    public void visitIfStatement(GoIfStatement statement) {
+        visitElement(statement);
     }
 
-    public void visitGoStatement(GoGoStatement goStatement) {
-        visitElement(goStatement);
+    public void visitGoStatement(GoGoStatement statement) {
+        visitElement(statement);
     }
 
-    public void visitDeferStatement(GoDeferStatement deferStatement) {
-        visitElement(deferStatement);
+    public void visitDeferStatement(GoDeferStatement statement) {
+        visitElement(statement);
     }
 
-    public void visitBuiltinCallExpression(GoBuiltinCallExprImpl expression) {
+    public void visitBuiltinCallExpression(GoBuiltinCallExpr expression) {
         visitElement(expression);
     }
 
-    public void visitLiteralBool(GoLiteralBool literalBool) {
-        visitElement(literalBool);
+    public void visitLiteralBool(GoLiteralBool literal) {
+        visitElement(literal);
+    }
+
+    public void visitReturnStatement(GoReturnStatement statement) {
+        visitElement(statement);
     }
 }

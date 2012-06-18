@@ -13,7 +13,6 @@ import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
 import ro.redeul.google.go.inspection.fix.RemoveFunctionResultFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -38,18 +37,18 @@ public class FunctionDeclarationInspection
 
         new GoRecursiveElementVisitor() {
             @Override
-            public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
-                checkFunction(result, functionDeclaration);
+            public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
+                checkFunction(result, declaration);
             }
 
             @Override
-            public void visitMethodDeclaration(GoMethodDeclaration methodDeclaration) {
-                checkFunction(result, methodDeclaration);
+            public void visitMethodDeclaration(GoMethodDeclaration declaration) {
+                checkFunction(result, declaration);
             }
 
             @Override
-            public void visitFunctionLiteral(GoLiteralFunction literalFunction) {
-                checkFunction(result, literalFunction);
+            public void visitFunctionLiteral(GoLiteralFunction literal) {
+                checkFunction(result, literal);
             }
         }.visitFile(file);
     }
@@ -59,7 +58,7 @@ public class FunctionDeclarationInspection
         hasResultButNoReturnAtTheEnd(ctx);
         hasDuplicateArgument(ctx);
         hasRedeclaredParameterInResultList(ctx);
-        hasReturnParameterCountMismatch(ctx);
+        hasReturnParameterCountMismatch(result, function);
         hasVariadicProblems(ctx);
     }
 
@@ -103,8 +102,8 @@ public class FunctionDeclarationInspection
         }
     }
 
-    public static void hasReturnParameterCountMismatch(Context ctx) {
-        new ReturnVisitor(ctx.result).visitFunctionDeclaration(ctx.function);
+    public static void hasReturnParameterCountMismatch(InspectionResult result, GoFunctionDeclaration function) {
+        new ReturnVisitor(result, function).visitFunctionDeclaration(function);
     }
 
     public static void hasVariadicProblems(Context ctx) {
@@ -182,47 +181,32 @@ public class FunctionDeclarationInspection
     }
 
     /**
-     * Recursively look for return statement, and compare its expression list with function's result list
+     * Recursively look for return statement, and compare its expression
+     * list with function's result list
      */
     private static class ReturnVisitor extends GoRecursiveElementVisitor {
-        private List<FunctionResult> functionResults = new ArrayList<FunctionResult>();
-        private final InspectionResult result;
+        private InspectionResult result;
+        int expectedResCount;
+        private GoFunctionDeclaration declaration;
 
-        public ReturnVisitor(InspectionResult result) {
+        public ReturnVisitor(InspectionResult result, GoFunctionDeclaration declaration) {
             this.result = result;
-        }
+            this.declaration = declaration;
+            this.expectedResCount = 0;
 
-        @Override
-        public void visitFunctionDeclaration(GoFunctionDeclaration functionDeclaration) {
-            functionResults.add(new FunctionResult(functionDeclaration.getResults()));
-            super.visitFunctionDeclaration(functionDeclaration);
-            functionResults.remove(functionResults.size() - 1);
-        }
-
-        @Override
-        public void visitFunctionLiteral(GoLiteralFunction literalFunction) {
-            functionResults.add(new FunctionResult(literalFunction.getResults()));
-            super.visitFunctionLiteral(literalFunction);
-            functionResults.remove(functionResults.size() - 1);
-        }
-
-        @Override
-        public void visitMethodDeclaration(GoMethodDeclaration methodDeclaration) {
-            functionResults.add(new FunctionResult(methodDeclaration.getResults()));
-            super.visitMethodDeclaration(methodDeclaration);
-            functionResults.remove(functionResults.size() - 1);
-        }
-
-        @Override
-        public void visitElement(GoPsiElement element) {
-            super.visitElement(element);
-
-            if (!(element instanceof GoReturnStatement)) {
-                return;
+            for (GoFunctionParameter resParam : declaration.getResults()) {
+                expectedResCount += Math.max(resParam.getIdentifiers().length, 1);
             }
+        }
 
-            GoReturnStatement returnStatement = (GoReturnStatement) element;
-            GoExpr[] expressions = returnStatement.getExpressions();
+        @Override
+        public void visitFunctionLiteral(GoLiteralFunction literal) {
+            // stop the recursion here
+        }
+
+        @Override
+        public void visitReturnStatement(GoReturnStatement statement) {
+            GoExpr[] expressions = statement.getExpressions();
             int returnCount = expressions.length;
             if (returnCount == 1) {
                 if (expressions[0] instanceof GoCallOrConversionExpression) {
@@ -235,15 +219,10 @@ public class FunctionDeclarationInspection
                 checkExpressionShouldReturnOneResult(expressions, result);
             }
 
-            FunctionResult fr = functionResults.get(functionResults.size() - 1);
-            if (fr == null || fr.resultCount == returnCount || returnCount == 0 && fr.namedResult) {
-                return;
-            }
-
-            if (fr.resultCount < returnCount) {
-                result.addProblem(element, GoBundle.message("error.too.many.arguments.to.return"));
-            } else {
-                result.addProblem(element, GoBundle.message("error.not.enough.arguments.to.return"));
+            if (expectedResCount < returnCount) {
+                result.addProblem(statement, GoBundle.message("error.too.many.arguments.to.return"));
+            } else if (expectedResCount > returnCount) {
+                result.addProblem(statement, GoBundle.message("error.not.enough.arguments.to.return"));
             }
         }
     }
