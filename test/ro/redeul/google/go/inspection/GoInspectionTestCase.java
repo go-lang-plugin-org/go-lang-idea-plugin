@@ -60,13 +60,13 @@ public abstract class GoInspectionTestCase extends GoLightCodeInsightFixtureTest
         int pos = -1;
         while ((pos = content.indexOf(GoTestUtils.MARKER_BEGIN, pos + 1)) >= 0) {
             pos += GoTestUtils.MARKER_BEGIN.length();
-            int endPos = content.indexOf("<end.", pos);
+            int endPos = content.indexOf("/*end.", pos);
             String variable = content.substring(pos, endPos);
-            String info = content.substring(endPos + 5, content.indexOf(">", endPos));
+            String info = content.substring(endPos + 6, content.indexOf("*/", endPos));
             sb.append(variable).append(" => ").append(info).append("\n");
             pos = endPos;
         }
-        data.add(content.replaceAll(GoTestUtils.MARKER_BEGIN, "").replaceAll("<end\\.[^>]*>", ""));
+        data.add(content.replaceAll(GoTestUtils.MARKER_BEGIN, "").replaceAll("/\\*end\\.[^\\*/]\\*/", ""));
         data.add(sb.toString());
         return data;
     }

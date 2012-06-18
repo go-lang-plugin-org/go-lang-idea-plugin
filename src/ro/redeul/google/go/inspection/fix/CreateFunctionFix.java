@@ -10,7 +10,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -79,7 +79,7 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
             return false;
 
         e = e.getParent();
-        if (!psiIsA(e.getParent(), GoCallOrConversionExpression.class))
+        if (!psiIsA(e.getParent(), GoCallOrConvExpression.class))
             return false;
 
         return true;

@@ -16,7 +16,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -187,6 +187,7 @@ public class FunctionDeclarationInspection
     private static class ReturnVisitor extends GoRecursiveElementVisitor {
         private InspectionResult result;
         int expectedResCount;
+        boolean hasNamedReturns;
         private GoFunctionDeclaration declaration;
 
         public ReturnVisitor(InspectionResult result, GoFunctionDeclaration declaration) {
@@ -194,8 +195,11 @@ public class FunctionDeclarationInspection
             this.declaration = declaration;
             this.expectedResCount = 0;
 
+            hasNamedReturns = false;
             for (GoFunctionParameter resParam : declaration.getResults()) {
                 expectedResCount += Math.max(resParam.getIdentifiers().length, 1);
+                hasNamedReturns |= resParam.getIdentifiers().length > 0;
+
             }
         }
 
@@ -209,14 +213,20 @@ public class FunctionDeclarationInspection
             GoExpr[] expressions = statement.getExpressions();
             int returnCount = expressions.length;
             if (returnCount == 1) {
-                if (expressions[0] instanceof GoCallOrConversionExpression) {
-                    int count = getFunctionCallResultCount((GoCallOrConversionExpression) expressions[0]);
+                if (expressions[0] instanceof GoCallOrConvExpression) {
+                    int count = getFunctionCallResultCount((GoCallOrConvExpression) expressions[0]);
                     if (count != UNKNOWN_COUNT) {
                         returnCount = count;
                     }
                 }
             } else {
                 checkExpressionShouldReturnOneResult(expressions, result);
+            }
+
+            // when a method specifies named return parameters it's ok to have
+            // an empty return statement.
+            if (returnCount == 0 && hasNamedReturns ) {
+                return;
             }
 
             if (expectedResCount < returnCount) {

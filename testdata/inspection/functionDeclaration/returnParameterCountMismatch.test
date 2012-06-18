@@ -24,27 +24,27 @@ func Ok4() (int, int) {
 
 
 func NotEnough1() int {
-    <begin>return<end.Not enough arguments to return>
+    /*begin*/return/*end.Not enough arguments to return*/
 }
 
 func NotEnough2(a int) (b, c int) {
     if a == 1 {
         return
     } else if a == 2 {
-        <begin>return 1<end.Not enough arguments to return>
+        /*begin*/return 1/*end.Not enough arguments to return*/
     } else if a == 3 {
         return 1, 2
     }
-    <begin>return 3, 4, 5<end.Too many arguments to return>
+    /*begin*/return 3, 4, 5/*end.Too many arguments to return*/
 }
 
 func NotEnough3(a int) (int, int) {
     if a == 1 {
-        <begin>return<end.Not enough arguments to return>
+        /*begin*/return/*end.Not enough arguments to return*/
     } else if a == 2 {
-        <begin>return 1<end.Not enough arguments to return>
+        /*begin*/return 1/*end.Not enough arguments to return*/
     } else if a == 3 {
         return 1, 2
     }
-    <begin>return 3, 4, 5<end.Too many arguments to return>
+    /*begin*/return 3, 4, 5/*end.Too many arguments to return*/
 }

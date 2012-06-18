@@ -3,7 +3,7 @@ package main
 func main() {
     arr := make([]int, 10)
     for j, _ := range arr {
-        <begin>pow<end.Unresolved symbol: 'pow'>[j] = 1<<<begin>uint<end.Unresolved symbol: 'uint'>(j)
+        /*begin*/pow/*end.Unresolved symbol: 'pow'*/[j] = 1<</*begin*/uint/*end.Unresolved symbol: 'uint'*/(j)
     }
-    <begin>j<end.Unresolved symbol: 'j'>
+    /*begin*/j/*end.Unresolved symbol: 'j'*/
 }

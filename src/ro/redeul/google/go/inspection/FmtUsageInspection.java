@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
@@ -43,7 +43,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
             public void visitElement(GoPsiElement element) {
                 super.visitElement(element);
 
-                if (element instanceof GoCallOrConversionExpression) {
+                if (element instanceof GoCallOrConvExpression) {
                     List<GoExpr> parameters = findChildrenOfType(element, GoExpr.class);
                     if (!parameters.isEmpty()) {
                         checkFmtCall(result, parameters);
@@ -94,7 +94,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         }
 
         PsiElement parent = fmtExpr.getParent();
-        if (!(parent instanceof GoCallOrConversionExpression)) {
+        if (!(parent instanceof GoCallOrConvExpression)) {
             return;
         }
 
@@ -107,7 +107,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
             return;
         }
 
-        Context ctx = new Context((GoCallOrConversionExpression) parent, fmtLiteral, result,
+        Context ctx = new Context((GoCallOrConvExpression) parent, fmtLiteral, result,
                 parameters.subList(2, parameters.size()), isScanning);
         checkFormat(fmtLiteral.getText(), ctx);
         ctx.checkAllExtraParameters();
@@ -247,7 +247,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
     private static class Context {
         private static final ProblemHighlightType TYPE = ProblemHighlightType.LIKE_UNUSED_SYMBOL;
 
-        public final GoCallOrConversionExpression theCall;
+        public final GoCallOrConvExpression theCall;
         public final boolean isFmtLiteralString;
         public final GoLiteral fmtLiteral;
         public final InspectionResult result;
@@ -257,11 +257,11 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         public int startOffset = 0;
         public int endOffset = 0;
 
-        private Context(GoCallOrConversionExpression theCall, GoLiteral fmtLiteral,
+        private Context(GoCallOrConvExpression theCall, GoLiteral fmtLiteral,
                         InspectionResult result, List<GoExpr> parameters, boolean isScanning) {
             this.fmtLiteral = fmtLiteral;
             this.theCall = theCall;
-            this.isFmtLiteralString = fmtLiteral.getParent() instanceof GoCallOrConversionExpression;
+            this.isFmtLiteralString = fmtLiteral.getParent() instanceof GoCallOrConvExpression;
             this.result = result;
             this.parameters = parameters;
             this.isScanning = isScanning;

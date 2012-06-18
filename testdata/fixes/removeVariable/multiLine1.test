@@ -2,7 +2,7 @@ package main
 
 func main() {
     var (
-        <begin>v<end> int = 5
+        /*begin*/v/*end*/ int = 5
     )
     println("Hello world!")
 }

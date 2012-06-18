@@ -39,8 +39,8 @@ public abstract class GoTestUtils {
     public static final String TEMP_FILE = "temp.go";
 
     public static final String MARKER_CARET = "<caret>";
-    public static final String MARKER_BEGIN = "<begin>";
-    public static final String MARKER_END = "<end>";
+    public static final String MARKER_BEGIN = "/*begin*/";
+    public static final String MARKER_END = "/*end*/";
 //  public static final String GRAILS_JAR = "grails-web.jar";
 //  public static final String GROOVY_JAR = "groovy-all.jar";
 //  public static final String GROOVY_JAR_17 = "groovy-all-1.7.jar";

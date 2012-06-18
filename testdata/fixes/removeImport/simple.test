@@ -1,6 +1,6 @@
 package main
 
-<begin>import "fmt"<end>
+/*begin*/import "fmt"/*end*/
 
 func main() {
     println("Hello world!")

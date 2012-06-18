@@ -15,7 +15,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -76,8 +76,8 @@ public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement
         return pi.call;
     }
 
-    private GoCallOrConversionExpression findFunctionCallParent(PsiElement element, int offset) {
-        GoCallOrConversionExpression call = findParentOfType(element, GoCallOrConversionExpression.class);
+    private GoCallOrConvExpression findFunctionCallParent(PsiElement element, int offset) {
+        GoCallOrConvExpression call = findParentOfType(element, GoCallOrConvExpression.class);
         if (call == null) {
             return null;
         }
@@ -102,7 +102,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement
 
     private ParameterInfo findAnchorElement(int offset, PsiFile file) {
         PsiElement element = file.findElementAt(offset);
-        GoCallOrConversionExpression call = findFunctionCallParent(element, offset);
+        GoCallOrConvExpression call = findFunctionCallParent(element, offset);
         if (call == null) {
             return null;
         }
@@ -180,10 +180,10 @@ public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement
     public static class ParameterInfo {
         public final GoFunctionDeclaration functionDeclaration;
 
-        public final GoCallOrConversionExpression call;
+        public final GoCallOrConvExpression call;
         public int currentIndex;
 
-        private ParameterInfo(GoFunctionDeclaration functionDeclaration, GoCallOrConversionExpression call,
+        private ParameterInfo(GoFunctionDeclaration functionDeclaration, GoCallOrConvExpression call,
                               int currentIndex) {
             this.functionDeclaration = functionDeclaration;
             this.call = call;

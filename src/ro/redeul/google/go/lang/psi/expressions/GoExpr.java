@@ -8,6 +8,8 @@ import ro.redeul.google.go.lang.psi.types.GoType;
  */
 public interface GoExpr extends GoPsiElement {
 
+    public final GoExpr[] EMPTY_ARRAY = new GoExpr[0];
+
     GoType getType();
 
 }

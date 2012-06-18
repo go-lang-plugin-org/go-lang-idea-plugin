@@ -1,7 +1,7 @@
 package ro.redeul.google.go.psi;
 
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
@@ -48,6 +48,6 @@ public class GoPsiBlockTest extends GoPsiTestCase {
                    ).getStatements()
             );
 
-        castAs(GoCallOrConversionExpression.class, 0, statement.getExpressions());
+        castAs(GoCallOrConvExpression.class, 0, statement.getExpressions());
     }
 }

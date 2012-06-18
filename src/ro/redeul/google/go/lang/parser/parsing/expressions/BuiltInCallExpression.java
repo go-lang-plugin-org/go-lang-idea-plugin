@@ -22,15 +22,13 @@ public class BuiltInCallExpression implements GoElementTypes {
         add("make");
     }};
 
-    // cap close closed cmplx copy imag len make
-    // new panic print println real recover
-
     static Set<String> noTypeParameter = new HashSet<String>() {{
+        add("append");
         add("cap");
         add("close");
-        add("closed");
-        add("cmplx");
+        add("complex");
         add("copy");
+        add("delete");
         add("imag");
         add("len");
         add("panic");
@@ -59,6 +57,8 @@ public class BuiltInCallExpression implements GoElementTypes {
 
         PsiBuilder.Marker mark = builder.mark();
         ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
+        mark.done(LITERAL_EXPRESSION);
+        mark = mark.precede();
         ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
 
         if (hasTypeParameter.contains(callName)) {

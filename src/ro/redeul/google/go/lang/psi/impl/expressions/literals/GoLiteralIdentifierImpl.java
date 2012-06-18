@@ -16,13 +16,12 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpr;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
@@ -163,9 +162,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         if (parent instanceof GoMethodReceiver)
             return null;
 
-        if (parent instanceof GoBuiltinCallExpr)
-            return null;
-
         if (parent instanceof GoLiteralExpression) {
             PsiElement grandParent = parent.getParent();
 
@@ -173,11 +169,15 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
                  grandParent instanceof GoForWithClausesStatement) {
                 return null;
             }
-        }
 
-        // TODO: add GoMethodReceiver
-        if (GoPsiUtils.isNodeOfType(parent, GoElementTypes.METHOD_RECEIVER))
-            return null;
+            // if a identifier is the child of an expression that is the first
+            // child of a GoBuiltInExpression we don't need to actually resolve
+            // its
+            if ( grandParent instanceof GoBuiltinCallExpression &&
+                    parent.getPrevSibling() == null) {
+                return null;
+            }
+        }
 
         return this;
     }

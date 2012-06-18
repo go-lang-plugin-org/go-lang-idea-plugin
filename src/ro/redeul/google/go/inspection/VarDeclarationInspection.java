@@ -6,7 +6,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
@@ -48,8 +48,8 @@ public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
         int idCount = ids.length;
         int exprCount = exprs.length;
 
-        if (exprs.length == 1 && exprs[0] instanceof GoCallOrConversionExpression) {
-            exprCount = getFunctionCallResultCount((GoCallOrConversionExpression) exprs[0]);
+        if (exprs.length == 1 && exprs[0] instanceof GoCallOrConvExpression) {
+            exprCount = getFunctionCallResultCount((GoCallOrConvExpression) exprs[0]);
             if (exprCount == UNKNOWN_COUNT || exprCount == idCount) {
                 return;
             }

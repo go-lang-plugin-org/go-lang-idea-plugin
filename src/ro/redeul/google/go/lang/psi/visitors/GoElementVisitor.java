@@ -10,7 +10,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpr;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
@@ -176,7 +177,7 @@ public class GoElementVisitor  {
         visitElement(statement);
     }
 
-    public void visitBuiltinCallExpression(GoBuiltinCallExpr expression) {
+    public void visitBuiltinCallExpression(GoBuiltinCallExpression expression) {
         visitElement(expression);
     }
 
@@ -186,5 +187,9 @@ public class GoElementVisitor  {
 
     public void visitReturnStatement(GoReturnStatement statement) {
         visitElement(statement);
+    }
+
+    public void visitCallOrConvExpressions(GoCallOrConvExpression expression) {
+        visitElement(expression);
     }
 }

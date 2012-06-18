@@ -30,7 +30,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpr;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
@@ -146,10 +146,10 @@ public class GoAnnotator extends GoRecursiveElementVisitor implements Annotator 
     }
 
     @Override
-    public void visitBuiltinCallExpression(GoBuiltinCallExpr expression) {
+    public void visitBuiltinCallExpression(GoBuiltinCallExpression expression) {
         visitElement(expression);
 
-        Annotation ann = annotationHolder.createInfoAnnotation(expression.getIdentifier(), null);
+        Annotation ann = annotationHolder.createInfoAnnotation(expression.getBaseExpression(), null);
         ann.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
     }
 

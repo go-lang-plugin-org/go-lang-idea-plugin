@@ -1,6 +1,6 @@
 package main
 
-const <begin>N<end> = 5
+const /*begin*/N/*end*/ = 5
 
 func main() {
     println("Hello world!")

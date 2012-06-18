@@ -543,8 +543,9 @@ Go file
           PsiElement(<)('<')
           PsiWhiteSpace(' ')
           BuiltInCallExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('len')
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('len')
             PsiElement(()('(')
             LiteralExpressionImpl
               LiteralIdentifierImpl
@@ -878,8 +879,9 @@ Go file
         PsiElement(KEYWORD_RETURN)('return')
         PsiWhiteSpace(' ')
         BuiltInCallExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('make')
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('make')
           PsiElement(()('(')
           TypeSliceImpl
             PsiElement([)('[')
@@ -1561,8 +1563,9 @@ Go file
         PsiElement(:=)(':=')
         PsiWhiteSpace(' ')
         BuiltInCallExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('len')
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('len')
           PsiElement(()('(')
           LiteralExpressionImpl
             LiteralIdentifierImpl
@@ -1575,8 +1578,9 @@ Go file
         PsiWhiteSpace(' ')
         RelationalExpressionImpl
           BuiltInCallExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('len')
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('len')
             PsiElement(()('(')
             LiteralExpressionImpl
               LiteralIdentifierImpl
@@ -1764,8 +1768,9 @@ Go file
           PsiElement(<)('<')
           PsiWhiteSpace(' ')
           BuiltInCallExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('len')
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('len')
             PsiElement(()('(')
             LiteralExpressionImpl
               LiteralIdentifierImpl
@@ -2088,8 +2093,9 @@ Go file
           PsiWhiteSpace('\t\t')
           ExpressionStmtImpl
             BuiltInCallExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('panic')
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('panic')
               PsiElement(()('(')
               LiteralExpressionImpl
                 LiteralStringImpl
@@ -2120,8 +2126,9 @@ Go file
           PsiWhiteSpace('\t\t')
           ExpressionStmtImpl
             BuiltInCallExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('panic')
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('panic')
               PsiElement(()('(')
               LiteralExpressionImpl
                 LiteralStringImpl
@@ -2198,8 +2205,9 @@ Go file
       PsiWhiteSpace('\t')
       ExpressionStmtImpl
         BuiltInCallExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('panic')
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('panic')
           PsiElement(()('(')
           LiteralExpressionImpl
             LiteralStringImpl

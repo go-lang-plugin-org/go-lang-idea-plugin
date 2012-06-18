@@ -13,8 +13,8 @@ import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalAndExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalOrExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoRelationalExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoBuiltinCallExprImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoCallOrConversionExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoBuiltinCallExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoCallOrConvExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoIndexExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoLiteralExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressionImpl;
@@ -245,7 +245,7 @@ public class GoPsiCreator implements GoElementTypes {
             return new GoUnaryExpressionImpl(node);
 
         if (elementType.equals(CALL_OR_CONVERSION_EXPRESSION))
-            return new GoCallOrConversionExpressionImpl(node);
+            return new GoCallOrConvExpressionImpl(node);
 
         if (elementType.equals(FOR_WITH_CONDITION_STATEMENT))
             return new GoForWithConditionStatementImpl(node);
@@ -257,7 +257,7 @@ public class GoPsiCreator implements GoElementTypes {
             return new GoForWithRangeStatementImpl(node);
 
         if (elementType.equals(BUILTIN_CALL_EXPRESSION))
-            return new GoBuiltinCallExprImpl(node);
+            return new GoBuiltinCallExpressionImpl(node);
 
         if (elementType.equals(IF_STATEMENT))
             return new GoIfStatementImpl(node);

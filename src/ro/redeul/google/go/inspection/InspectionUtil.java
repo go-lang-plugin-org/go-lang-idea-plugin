@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -23,7 +23,7 @@ public class InspectionUtil {
 
     public static final int UNKNOWN_COUNT = -1;
 
-    public static int getFunctionCallResultCount(GoCallOrConversionExpression call) {
+    public static int getFunctionCallResultCount(GoCallOrConvExpression call) {
         GoLiteralIdentifier id = getFunctionIdentifier(call);
         if (id == null) {
             return UNKNOWN_COUNT;
@@ -41,7 +41,7 @@ public class InspectionUtil {
         return count;
     }
 
-    public static GoLiteralIdentifier getFunctionIdentifier(GoCallOrConversionExpression call) {
+    public static GoLiteralIdentifier getFunctionIdentifier(GoCallOrConvExpression call) {
         GoLiteralExpression literal = findChildOfClass(call, GoLiteralExpression.class);
         if (literal == null) {
             return null;
@@ -54,11 +54,11 @@ public class InspectionUtil {
 
     public static void checkExpressionShouldReturnOneResult(GoExpr[] exprs, InspectionResult result) {
         for (GoExpr expr : exprs) {
-            if (!(expr instanceof GoCallOrConversionExpression)) {
+            if (!(expr instanceof GoCallOrConvExpression)) {
                 continue;
             }
 
-            GoCallOrConversionExpression call = (GoCallOrConversionExpression) expr;
+            GoCallOrConvExpression call = (GoCallOrConvExpression) expr;
             GoLiteralIdentifier id = getFunctionIdentifier(call);
             if (id == null) {
                 continue;

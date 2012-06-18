@@ -1,8 +1,8 @@
 package main
 
-<begin>import (
+/*begin*/import (
     "fmt"
-)<end>
+)/*end*/
 
 func main() {
     println("Hello world!")
