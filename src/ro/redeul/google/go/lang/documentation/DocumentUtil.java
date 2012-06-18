@@ -96,11 +96,13 @@ class DocumentUtil {
     }
 
     public static String getFunctionDocument(GoFunctionDeclaration function) {
-        return getHeaderDocumentOfElement(function.getOriginalElement());
+        String text = getFunctionQuickNavigationInfo(function).replace("\n", "<br/>") + "<br/><br/>\n";
+        return text + getHeaderDocumentOfElement(function.getOriginalElement());
     }
 
     public static String getMethodDocument(GoMethodDeclaration method) {
-        return getHeaderDocumentOfElement(method.getOriginalElement());
+        String text = getFunctionQuickNavigationInfo(method).replace("\n", "<br/>") + "<br/><br/>\n";
+        return text + getHeaderDocumentOfElement(method.getOriginalElement());
     }
 
     public static String getVarDocument(GoLiteralIdentifier id) {
