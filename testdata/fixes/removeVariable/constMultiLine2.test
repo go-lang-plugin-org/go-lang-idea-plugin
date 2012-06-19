@@ -9,7 +9,7 @@ func main() {
     println("Hello world!")
 }
 -----
-<caret>package main
+package main
 
 const (
     A = 2

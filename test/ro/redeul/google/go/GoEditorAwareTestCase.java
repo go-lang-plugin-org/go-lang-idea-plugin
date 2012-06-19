@@ -34,6 +34,7 @@ public abstract class GoEditorAwareTestCase extends GoLightCodeInsightFixtureTes
             fileText = GoTestUtils.removeEndMarker(fileText);
             goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
             myFixture.getEditor().getSelectionModel().setSelection(startOffset, endOffset);
+            myFixture.getEditor().getCaretModel().moveToOffset(endOffset);
         } else {
             goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
         }

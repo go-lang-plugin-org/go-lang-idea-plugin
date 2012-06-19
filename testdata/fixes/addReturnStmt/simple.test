@@ -1,0 +1,10 @@
+package main
+
+func Foo() int {
+/*begin*/}/*end*/
+-----
+package main
+
+func Foo() int {
+    return
+}
