@@ -1,11 +1,11 @@
 package main
 
 const (
-    <begin>CB<end.Unused global> = 5
+    /*begin*/CB/*end.Unused global*/ = 5
 )
 
 var (
-    <begin>v<end.Unused global> = 3
+    /*begin*/v/*end.Unused global*/ = 3
 )
 
 func main() {

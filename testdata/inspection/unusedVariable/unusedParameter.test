@@ -1,6 +1,6 @@
 package main
 
-func Foo(a int, <begin>b<end.Unused parameter>, _ int) int {
+func Foo(a int, /*begin*/b/*end.Unused parameter*/, _ int) int {
     return a + 2
 }
 

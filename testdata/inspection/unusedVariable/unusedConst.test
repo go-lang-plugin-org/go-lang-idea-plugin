@@ -1,11 +1,11 @@
 package main
 
 // simple const
-const <begin>CA<end.Unused global> = 5
+const /*begin*/CA/*end.Unused global*/ = 5
 
 // const with parenthesis
 const (
-    <begin>CB<end.Unused global> = 5
+    /*begin*/CB/*end.Unused global*/ = 5
     CC = 3
 )
 

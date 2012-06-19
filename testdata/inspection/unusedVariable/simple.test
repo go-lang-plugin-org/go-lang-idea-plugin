@@ -1,10 +1,10 @@
 package main
 
-const <begin>N<end.Unused global> = 3
+const /*begin*/N/*end.Unused global*/ = 3
 
-var <begin>v<end.Unused global> = 2
+var /*begin*/v/*end.Unused global*/ = 2
 
-func foo(a, <begin>b<end.Unused parameter> int) int {
+func foo(a, /*begin*/b/*end.Unused parameter*/ int) int {
     var s [10]int
     var i int
 
@@ -16,7 +16,7 @@ func foo(a, <begin>b<end.Unused parameter> int) int {
 }
 
 func main() {
-    <begin>k<end.Unused variable> := 5
+    /*begin*/k/*end.Unused variable*/ := 5
     s := make([]int, 10)
     j := 3
     s[j] = 3
