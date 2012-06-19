@@ -38,10 +38,34 @@ public class BuiltInCallExpression implements GoElementTypes {
         add("recover");
     }};
 
+    static Set<String> defaultConversions = new HashSet<String>() {{
+        add("uint8");
+        add("uint16");
+        add("uint32");
+        add("uint64");
+        add("int8");
+        add("int16");
+        add("int32");
+        add("int64");
+        add("float32");
+        add("float64");
+        add("complex64");
+        add("complex128");
+        add("byte");
+        add("rune");
+        add("uint");
+        add("int");
+        add("uintptr");
+        add("string");
+        add("error");
+        add("bool");
+    }};
+
 
     public static boolean isBuiltInCall(String methodCall) {
         return
-            hasTypeParameter.contains(methodCall) ||
+            defaultConversions.contains(methodCall) ||
+                hasTypeParameter.contains(methodCall) ||
                 noTypeParameter.contains(methodCall);
     }
 
