@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.QuickFix;
 import com.intellij.codeInspection.ex.ProblemDescriptorImpl;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
@@ -96,7 +97,11 @@ public abstract class GoInspectionTestCase extends GoLightCodeInsightFixtureTest
                 range = new TextRange(start, end);
             }
             String text = document.getText(range);
-            sb.append(text).append(" => ").append(pd.getDescriptionTemplate()).append("\n");
+            sb.append(text).append(" => ").append(pd.getDescriptionTemplate());
+            for (QuickFix fix : pd.getFixes()) {
+                sb.append("|").append(fix.getClass().getSimpleName());
+            }
+            sb.append("\n");
         }
         return sb.toString();
     }

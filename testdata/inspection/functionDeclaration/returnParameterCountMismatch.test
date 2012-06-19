@@ -19,7 +19,7 @@ func Ok4() (int, int) {
             }
             return 3
         }()
-    return 1, 2
+    return Ok3()
 }
 
 

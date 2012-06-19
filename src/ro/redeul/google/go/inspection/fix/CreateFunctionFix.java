@@ -81,6 +81,7 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
         if (!psiIsA(e.getParent(), GoCallOrConvExpression.class))
             return false;
 
-        return true;
+        // function name is the first element of its parent.
+        return e.getTextOffset() == e.getParent().getTextOffset();
     }
 }
