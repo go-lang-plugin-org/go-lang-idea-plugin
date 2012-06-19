@@ -379,6 +379,7 @@
                                 implementationClass="ro.redeul.google.go.lang.completion.GoCompletionContributor"/>
 
         <gotoClassContributor implementation="ro.redeul.google.go.ide.contributor.GoGoToClassContributor" />
+        <gotoSymbolContributor implementation="ro.redeul.google.go.ide.contributor.GoGoToSymbolContributor" />
         <gotoDeclarationHandler implementation="ro.redeul.google.go.codeInsight.navigation.GotoPackageHandler"/>
         <!--<frameworkSupport implementation="ro.redeul.google.go.config.framework.GoFrameworkSupportProvider"/>-->
         <!--<facetType implementation="ro.redeul.google.go.config.facet.GoFacetType"/>-->
@@ -426,8 +427,6 @@
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
         <programRunner implementation="ro.redeul.google.go.runner.GoAppEngineApplicationRunner" />
-
-        <java.shortNamesCache implementation="ro.redeul.google.go.lang.stubs.GoNamesCache" />
 
         <stubElementTypeHolder class="ro.redeul.google.go.lang.parser.GoElementTypes" />
 

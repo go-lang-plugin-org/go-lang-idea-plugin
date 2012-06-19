@@ -61,9 +61,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor implements Annotator 
     public void annotate(@NotNull PsiElement element,
                          @NotNull AnnotationHolder holder) {
         if (element instanceof GoPsiElement) {
-            goNamesCache = ContainerUtil.findInstance(
-                element.getProject().getExtensions(PsiShortNamesCache.EP_NAME),
-                GoNamesCache.class);
+            goNamesCache = GoNamesCache.getInstance(element.getProject());
             annotationHolder = holder;
             inspectionManager = InspectionManager.getInstance(
                 element.getProject());

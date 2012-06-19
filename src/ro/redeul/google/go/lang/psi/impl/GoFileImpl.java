@@ -271,9 +271,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         }
 
         if (state.get(IsOriginalFile)) {
-            GoNamesCache namesCache = ContainerUtil.findInstance(
-                getProject().getExtensions(PsiShortNamesCache.EP_NAME),
-                GoNamesCache.class);
+            GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
             if (namesCache != null) {
                 Collection<GoFile> files = namesCache.getFilesByPackageName(

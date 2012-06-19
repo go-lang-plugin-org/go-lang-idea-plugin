@@ -76,7 +76,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
             return true;
         }
 
-        GoNamesCache namesCache = ContainerUtil.findInstance(getProject().getExtensions(PsiShortNamesCache.EP_NAME), GoNamesCache.class);
+        GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
         if (namesCache == null) {
             return true;

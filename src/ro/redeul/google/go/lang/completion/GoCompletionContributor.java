@@ -91,9 +91,7 @@ public class GoCompletionContributor extends CompletionContributor {
 
                 Project project = parameters.getOriginalFile().getProject();
 
-                GoNamesCache packageNamesCache = ContainerUtil.findInstance(
-                    project.getExtensions(PsiShortNamesCache.EP_NAME),
-                    GoNamesCache.class);
+                GoNamesCache packageNamesCache = GoNamesCache.getInstance(project);
 
                 if (packageNamesCache != null) {
                     Collection<String> goSdkPackages = packageNamesCache.getSdkPackages();
