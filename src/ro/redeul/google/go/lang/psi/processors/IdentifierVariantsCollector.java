@@ -8,6 +8,7 @@ import java.util.Set;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.util.PlatformIcons;
@@ -103,21 +104,27 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
         return !(state.get(GoResolveStates.IsOriginalFile) || state.get(GoResolveStates.IsOriginalPackage));
     }
 
-    private void addVariant(PsiElement target, String name, ResolveState state, Icon icon) {
+    private void addVariant(PsiNamedElement target, String presentableText, ResolveState state, Icon icon) {
 
         boolean isImported = isImported(target, state);
 
-        String displayName = name;
         String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
 
-        if ( isImported && visiblePackageName != null && visiblePackageName.length() > 0 ) {
-            displayName = String.format("%s.%s", visiblePackageName, name);
+        String lookupString = target.getName();
+        if (lookupString == null || presentableText == null) {
+            return;
         }
 
-        if ( displayName != null && ! names.contains(displayName)) {
+        if ( isImported && visiblePackageName != null && visiblePackageName.length() > 0 ) {
+            presentableText = visiblePackageName + "." + presentableText;
+            lookupString = visiblePackageName + "." + lookupString;
+        }
+
+        if (!names.contains(presentableText)) {
             String type = isImported ? state.get(GoResolveStates.PackageName) : "<current>";
-            variants.add(LookupElementBuilder.create(target, displayName).setIcon(icon).setTypeText(type));
-            names.add(displayName);
+            variants.add(LookupElementBuilder.create(target, lookupString).setIcon(icon).setTypeText(type)
+                    .setPresentableText(presentableText));
+            names.add(presentableText);
         }
     }
 
