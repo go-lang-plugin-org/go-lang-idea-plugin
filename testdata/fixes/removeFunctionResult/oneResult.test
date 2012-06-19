@@ -1,0 +1,9 @@
+package main
+
+func /*begin*/Foo/*end*/() int {
+}
+-----
+package main
+
+func Foo()  {
+}

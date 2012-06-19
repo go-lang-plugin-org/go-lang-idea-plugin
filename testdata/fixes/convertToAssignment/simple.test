@@ -1,0 +1,11 @@
+package main
+
+func Foo() {
+    /*begin*/a/*end*/, b := 1, 2
+}
+-----
+package main
+
+func Foo() {
+    a, b = 1, 2
+}

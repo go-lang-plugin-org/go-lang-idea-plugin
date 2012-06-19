@@ -40,7 +40,7 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
                        @Nullable("is null when called from inspection") final Editor editor,
                        @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
         final PsiElement e = startElement;
-        if (!e.getContainingFile().equals(file) || isExternalFunctionNameIdentifier(e)) {
+        if (!e.getContainingFile().equals(file) || !isExternalFunctionNameIdentifier(e)) {
             return;
         }
 
@@ -82,6 +82,6 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
             return false;
 
         // function name is the first element of its parent.
-        return e.getTextOffset() == e.getParent().getTextOffset();
+        return e.getStartOffsetInParent() == 0;
     }
 }
