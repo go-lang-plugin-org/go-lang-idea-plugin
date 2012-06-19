@@ -166,17 +166,18 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         PsiBuilder.Marker signature = builder.mark();
 
         int parameterCount = 0;
+        boolean isVariadic = false;
         // first try to parse as a list of types
         while (!builder.eof()) {
             PsiBuilder.Marker argument = builder.mark();
 
-            if (builder.getTokenType() == oTRIPLE_DOT) {
-                ParserUtils.eatElement(builder, oTRIPLE_DOT);
+            if (ParserUtils.getToken(builder, oTRIPLE_DOT)) {
+                isVariadic = true;
             }
 
             ParserUtils.skipNLS(builder);
             if (parser.parseType(builder) != null) {
-                argument.done(FUNCTION_PARAMETER);
+                argument.done(isVariadic ? FUNCTION_PARAMETER_VARIADIC : FUNCTION_PARAMETER);
                 parameterCount++;
             } else {
                 argument.drop();
