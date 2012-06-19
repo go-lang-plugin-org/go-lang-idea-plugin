@@ -12,7 +12,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 import static ro.redeul.google.go.inspection.InspectionUtil.UNKNOWN_COUNT;
 import static ro.redeul.google.go.inspection.InspectionUtil.checkExpressionShouldReturnOneResult;
-import static ro.redeul.google.go.inspection.InspectionUtil.getFunctionCallResultCount;
+import static ro.redeul.google.go.inspection.InspectionUtil.getExpressionResultCount;
 
 public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
 
@@ -48,8 +48,8 @@ public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
         int idCount = ids.length;
         int exprCount = exprs.length;
 
-        if (exprs.length == 1 && exprs[0] instanceof GoCallOrConvExpression) {
-            exprCount = getFunctionCallResultCount((GoCallOrConvExpression) exprs[0]);
+        if (exprs.length == 1) {
+            exprCount = getExpressionResultCount(exprs[0]);
             if (exprCount == UNKNOWN_COUNT || exprCount == idCount) {
                 return;
             }

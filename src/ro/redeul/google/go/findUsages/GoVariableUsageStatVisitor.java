@@ -440,22 +440,6 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
                        new RemoveVariableFix());
         }
 
-        public void undefinedVariable(VariableUsage variableUsage) {
-            if (isPredefinedConstant(variableUsage.element.getText())) {
-                return;
-            }
-
-            // It's valid to use "iota" in const declaration expression list.
-            if (isIotaInConstantDeclaration(variableUsage.element)) {
-                return;
-            }
-
-//          Removed since it will clash with the UnresolvedSymbols inspection
-//          (which uses the declaration resolution mechanism).
-//            addProblem(variableUsage, "Undefined variable",
-//                       ProblemHighlightType.ERROR);
-        }
-
         public void addProblem(VariableUsage variableUsage, String desc,
                                 ProblemHighlightType highlightType,
                                 LocalQuickFix... fixes) {
@@ -491,12 +475,6 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
                     return;
                 }
             }
-
-            undefinedVariable(new VariableUsage(element));
-        }
-
-        public List<ProblemDescriptor> getProblems() {
-            return result.getProblems();
         }
     }
 }

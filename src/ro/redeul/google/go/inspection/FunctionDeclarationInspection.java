@@ -16,7 +16,6 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -25,7 +24,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import static ro.redeul.google.go.inspection.InspectionUtil.UNKNOWN_COUNT;
 import static ro.redeul.google.go.inspection.InspectionUtil.checkExpressionShouldReturnOneResult;
-import static ro.redeul.google.go.inspection.InspectionUtil.getFunctionCallResultCount;
+import static ro.redeul.google.go.inspection.InspectionUtil.getExpressionResultCount;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
@@ -163,23 +162,6 @@ public class FunctionDeclarationInspection
         return parameterNames;
     }
 
-    private static class FunctionResult {
-        public final boolean namedResult;
-        public final int resultCount;
-        private FunctionResult(GoFunctionParameter[] results) {
-            namedResult = results.length == 0 || results[0].getIdentifiers().length > 0;
-            resultCount = getResultCount(results);
-        }
-
-        private static int getResultCount(GoFunctionParameter[] results) {
-            int count = 0;
-            for (GoFunctionParameter result : results) {
-                count += Math.max(result.getIdentifiers().length, 1);
-            }
-            return count;
-        }
-    }
-
     /**
      * Recursively look for return statement, and compare its expression
      * list with function's result list
@@ -188,18 +170,15 @@ public class FunctionDeclarationInspection
         private InspectionResult result;
         int expectedResCount;
         boolean hasNamedReturns;
-        private GoFunctionDeclaration declaration;
 
         public ReturnVisitor(InspectionResult result, GoFunctionDeclaration declaration) {
             this.result = result;
-            this.declaration = declaration;
             this.expectedResCount = 0;
 
             hasNamedReturns = false;
             for (GoFunctionParameter resParam : declaration.getResults()) {
                 expectedResCount += Math.max(resParam.getIdentifiers().length, 1);
                 hasNamedReturns |= resParam.getIdentifiers().length > 0;
-
             }
         }
 
@@ -213,11 +192,9 @@ public class FunctionDeclarationInspection
             GoExpr[] expressions = statement.getExpressions();
             int returnCount = expressions.length;
             if (returnCount == 1) {
-                if (expressions[0] instanceof GoCallOrConvExpression) {
-                    int count = getFunctionCallResultCount((GoCallOrConvExpression) expressions[0]);
-                    if (count != UNKNOWN_COUNT) {
-                        returnCount = count;
-                    }
+                int count = getExpressionResultCount(expressions[0]);
+                if (count != UNKNOWN_COUNT) {
+                    returnCount = count;
                 }
             } else {
                 checkExpressionShouldReturnOneResult(expressions, result);

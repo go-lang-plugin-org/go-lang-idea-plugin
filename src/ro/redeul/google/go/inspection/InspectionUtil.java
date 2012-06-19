@@ -5,14 +5,18 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoTypeAssertionExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfClass;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class InspectionUtil {
     public static TextRange getProblemRange(ProblemDescriptor pd) {
@@ -23,22 +27,56 @@ public class InspectionUtil {
 
     public static final int UNKNOWN_COUNT = -1;
 
-    public static int getFunctionCallResultCount(GoCallOrConvExpression call) {
+    public static int getExpressionResultCount(GoExpr call) {
+        if (call instanceof GoLiteralExpression) {
+            return 1;
+        } else if (call instanceof GoTypeAssertionExpression) {
+            return getTypeAssertionResultCount((GoTypeAssertionExpression) call);
+        } else if (call instanceof GoCallOrConvExpression) {
+            return getFunctionResultCount((GoCallOrConvExpression) call);
+        }
+
+        return UNKNOWN_COUNT;
+    }
+
+    public static int getTypeAssertionResultCount(GoTypeAssertionExpression expression) {
+        PsiElement parent = expression.getParent();
+        if (isNodeOfType(parent, GoElementTypes.ASSIGN_STATEMENT)) {
+            // TODO: get expressions and identifiers of assign statement
+            return UNKNOWN_COUNT;
+        }
+
+        if (!(parent instanceof GoVarDeclaration)) {
+            return 1;
+        }
+
+        GoLiteralIdentifier[] identifiers = ((GoVarDeclaration) parent).getIdentifiers();
+        GoExpr[] expressions = ((GoVarDeclaration) parent).getExpressions();
+        // if the type assertion is the only expression, and there are two variables.
+        // The result of the type assertion is a pair of values with types (T, bool)
+        if (identifiers.length == 2 && expressions.length == 1) {
+            return 2;
+        }
+
+        return 1;
+    }
+
+    public static int getFunctionResultCount(GoCallOrConvExpression call) {
         GoLiteralIdentifier id = getFunctionIdentifier(call);
         if (id == null) {
             return UNKNOWN_COUNT;
         }
 
         PsiElement resolve = id.resolve();
-        if (!(resolve instanceof GoFunctionDeclaration)) {
-            return UNKNOWN_COUNT;
+        if (resolve instanceof GoFunctionDeclaration) {
+            int count = 0;
+            for (GoFunctionParameter p : ((GoFunctionDeclaration) resolve).getResults()) {
+                count += Math.max(p.getIdentifiers().length, 1);
+            }
+            return count;
         }
 
-        int count = 0;
-        for (GoFunctionParameter result : ((GoFunctionDeclaration) resolve).getResults()) {
-            count += Math.max(result.getIdentifiers().length, 1);
-        }
-        return count;
+        return UNKNOWN_COUNT;
     }
 
     public static GoLiteralIdentifier getFunctionIdentifier(GoCallOrConvExpression call) {
@@ -54,19 +92,18 @@ public class InspectionUtil {
 
     public static void checkExpressionShouldReturnOneResult(GoExpr[] exprs, InspectionResult result) {
         for (GoExpr expr : exprs) {
-            if (!(expr instanceof GoCallOrConvExpression)) {
-                continue;
-            }
-
-            GoCallOrConvExpression call = (GoCallOrConvExpression) expr;
-            GoLiteralIdentifier id = getFunctionIdentifier(call);
-            if (id == null) {
-                continue;
-            }
-
-            int count = getFunctionCallResultCount(call);
+            int count = getExpressionResultCount(expr);
             if (count != UNKNOWN_COUNT && count != 1) {
-                String msg = GoBundle.message("error.multiple.value.in.single.value.context", id.getText());
+                String text = expr.getText();
+                if (expr instanceof GoCallOrConvExpression) {
+                    GoLiteralIdentifier id = getFunctionIdentifier((GoCallOrConvExpression) expr);
+                    if (id == null) {
+                        continue;
+                    }
+                    text = id.getText();
+                }
+
+                String msg = GoBundle.message("error.multiple.value.in.single.value.context", text);
                 result.addProblem(expr, msg, ProblemHighlightType.GENERIC_ERROR);
             }
         }
