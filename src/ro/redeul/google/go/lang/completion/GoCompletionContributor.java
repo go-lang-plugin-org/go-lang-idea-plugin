@@ -13,6 +13,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.util.PlatformIcons;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -99,6 +100,7 @@ public class GoCompletionContributor extends CompletionContributor {
 
                     for (String goPackage : goSdkPackages) {
                         result.addElement(LookupElementBuilder.create(goPackage)
+                                                              .setIcon(PlatformIcons.PACKAGE_ICON)
                                                               .setTypeText(
                                                                   "via sdk"));
                     }
@@ -107,6 +109,7 @@ public class GoCompletionContributor extends CompletionContributor {
 
                     for (String goPackage : goProjectPackages) {
                         result.addElement(LookupElementBuilder.create(goPackage)
+                                                              .setIcon(PlatformIcons.PACKAGE_ICON)
                                                               .setBold()
                                                               .setTypeText(
                                                                   "via project"));

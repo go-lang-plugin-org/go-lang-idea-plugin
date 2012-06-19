@@ -10,11 +10,16 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
+import com.intellij.util.PlatformIcons;
+import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.lang.documentation.DocumentUtil;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+
+import javax.swing.Icon;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -60,7 +65,7 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
 
         for (GoLiteralIdentifier identifier : identifiers) {
             if ( ! isImported || GoNamesUtil.isPublicType(identifier.getName()) ) {
-                addVariant(identifier, identifier.getName(), state);
+                addVariant(identifier, identifier.getName(), state, PlatformIcons.VARIABLE_ICON);
             }
         }
     }
@@ -73,7 +78,7 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
 
         for (GoLiteralIdentifier identifier : identifiers) {
             if ( ! isImported || GoNamesUtil.isPublicType(identifier.getName()) ) {
-                addVariant(identifier, identifier.getName(), state);
+                addVariant(identifier, identifier.getName(), state, GoIcons.CONST_ICON);
             }
         }
     }
@@ -89,7 +94,8 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
         }
 
         if ( ! isImported(function, state) || GoNamesUtil.isPublicType(function.getFunctionName()) ) {
-            addVariant(function, function.getName(), state);
+            String text = DocumentUtil.getFunctionPresentationText(function);
+            addVariant(function, text, state, PlatformIcons.FUNCTION_ICON);
         }
     }
 
@@ -97,7 +103,7 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
         return !(state.get(GoResolveStates.IsOriginalFile) || state.get(GoResolveStates.IsOriginalPackage));
     }
 
-    private void addVariant(PsiElement target, String name, ResolveState state) {
+    private void addVariant(PsiElement target, String name, ResolveState state, Icon icon) {
 
         boolean isImported = isImported(target, state);
 
@@ -109,7 +115,8 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
         }
 
         if ( displayName != null && ! names.contains(displayName)) {
-            variants.add(LookupElementBuilder.create(target, displayName).setTypeText(isImported ? state.get(GoResolveStates.PackageName) : "<current>"));
+            String type = isImported ? state.get(GoResolveStates.PackageName) : "<current>";
+            variants.add(LookupElementBuilder.create(target, displayName).setIcon(icon).setTypeText(type));
             names.add(displayName);
         }
     }
