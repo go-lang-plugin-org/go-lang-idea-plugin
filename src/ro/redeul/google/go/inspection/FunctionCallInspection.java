@@ -20,8 +20,8 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
         new GoRecursiveElementVisitor() {
             @Override
-            public void visitCallOrConvExpressions(GoCallOrConvExpression expression) {
-                super.visitCallOrConvExpressions(expression);
+            public void visitCallOrConvExpression(GoCallOrConvExpression expression) {
+                super.visitCallOrConvExpression(expression);
 
                 checkFunctionCallArguments(expression, result);
             }

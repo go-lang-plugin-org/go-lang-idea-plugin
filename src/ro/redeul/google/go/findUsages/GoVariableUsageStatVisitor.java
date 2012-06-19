@@ -96,8 +96,9 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
-        visitIdentifiersAndExpressions(varDeclaration.getIdentifiers(), varDeclaration.getExpressions(), false);
+    public void visitVarDeclaration(GoVarDeclaration declaration) {
+        visitIdentifiersAndExpressions(
+            declaration.getIdentifiers(), declaration.getExpressions(), false);
     }
 
     @Override
@@ -147,7 +148,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitIdentifier(GoLiteralIdentifier identifier) {
+    public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
         if (needToCollectUsage(identifier)) {
             ctx.addUsage(identifier);
         }

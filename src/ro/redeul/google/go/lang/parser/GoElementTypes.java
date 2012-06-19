@@ -180,13 +180,6 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType FOR_WITH_RANGE_STATEMENT =
         new GoElementTypeImpl("ForWithRangeStmt");
 
-    GoElementType FOR_STATEMENT_CONDITION_CLAUSE =
-        new GoElementTypeImpl("ForConditionClause");
-    GoElementType FOR_STATEMENT_FOR_CLAUSE =
-        new GoElementTypeImpl("ForForClause");
-    GoElementType FOR_STATEMENT_RANGE_CLAUSE =
-        new GoElementTypeImpl("ForRangeClause");
-
     GoElementType SWITCH_TYPE_STATEMENT =
         new GoElementTypeImpl("SwitchTypeStmt");
     GoElementType SWITCH_TYPE_GUARD =

@@ -1,11 +1,12 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
+import javax.swing.*;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
-import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
@@ -17,8 +18,6 @@ import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-
-import javax.swing.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -56,7 +55,7 @@ public class GoTypeNameDeclarationImpl
 
     @Override
     public String toString() {
-        return "NamedType(" + getName() + ")";
+        return "TypeNameDeclaration(" + getName() + ")";
     }
 
     @Override

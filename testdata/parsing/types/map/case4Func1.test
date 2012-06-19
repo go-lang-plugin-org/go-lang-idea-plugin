@@ -14,7 +14,7 @@ Go file
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
     TypeSpecImpl
-      NamedType(myHandler)
+      TypeNameDeclaration(myHandler)
         PsiElement(IDENTIFIER)('myHandler')
       PsiWhiteSpace(' ')
       TypeStructImpl

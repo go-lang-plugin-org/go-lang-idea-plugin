@@ -10,7 +10,7 @@ Go file
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
     TypeSpecImpl
-      NamedType(Lock)
+      TypeNameDeclaration(Lock)
         PsiElement(IDENTIFIER)('Lock')
       PsiWhiteSpace(' ')
       TypeInterfaceImpl

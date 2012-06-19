@@ -68,7 +68,8 @@ public class GoElementVisitorTest extends GoPsiTestCase {
         if (elemType.equals("GoIdentifier")) {
             return new GoRecursiveCollectorVisitor() {
                 @Override
-                public void visitIdentifier(GoLiteralIdentifier identifier) {
+                public void visitLiteralIdentifier(
+                    GoLiteralIdentifier identifier) {
                     elements.add(identifier);
                 }
             };

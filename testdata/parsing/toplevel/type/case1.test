@@ -11,7 +11,7 @@ Go file
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
     TypeSpecImpl
-      NamedType(IntArray)
+      TypeNameDeclaration(IntArray)
         PsiElement(IDENTIFIER)('IntArray')
       PsiWhiteSpace(' ')
       TypeNameImpl

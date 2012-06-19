@@ -1,20 +1,31 @@
 package ro.redeul.google.go.resolve;
 
 import java.io.File;
+import java.io.IOException;
 
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.roots.ContentEntry;
+import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
+import com.intellij.util.FilteringProcessor;
+import com.intellij.util.Processor;
 import ro.redeul.google.go.psi.GoPsiTestCase;
 
 public abstract class GoPsiResolveTestCase extends GoPsiTestCase {
 
-    public String REF_MARKER = "<ref>";
-    public String DEF_MARKER = "<def>";
+    public String REF_MARKER = "/*ref*/";
+    public String DEF_MARKER = "/*def*/";
+
+    PsiReference ref;
+    PsiElement def;
 
     @Override
     protected String getTestDataRelativePath() {
@@ -22,56 +33,145 @@ public abstract class GoPsiResolveTestCase extends GoPsiTestCase {
     }
 
     protected void doTest() throws Exception {
-        final String fullPath = getTestDataPath() + getTestName(false) + ".go";
+        final String fullPath =
+            (getTestDataPath() + getTestName(false))
+                .replace(File.separatorChar, '/');
 
-        final VirtualFile vFile =
-            LocalFileSystem.getInstance().findFileByPath(
-                fullPath.replace(File.separatorChar, '/'));
+        VirtualFile vFile;
 
-        assertNotNull("file " + fullPath + " not found", vFile);
+        vFile = LocalFileSystem.getInstance().findFileByPath(fullPath + ".go");
 
-        String fileText = StringUtil.convertLineSeparators(
-            VfsUtil.loadText(vFile));
+        File dir = createTempDirectory();
+        VirtualFile vModuleDir =
+            LocalFileSystem.getInstance()
+                           .refreshAndFindFileByPath(
+                               dir.getCanonicalPath()
+                                  .replace(File.separatorChar, '/'));
 
-        final String fileName = vFile.getName();
-
-        int definitionMark = fileText.indexOf(DEF_MARKER);
-        int referenceMark = fileText.indexOf(REF_MARKER);
-
-        assertTrue(definitionMark >= 0);
-        assertTrue(referenceMark >= 0);
-
-        if ( definitionMark < referenceMark ) {
-            fileText = fileText.substring(0, definitionMark) +
-                fileText.substring(
-                    definitionMark + DEF_MARKER.length());
-
-            referenceMark = fileText.indexOf(REF_MARKER);
-            fileText = fileText.substring(0, referenceMark) +
-                fileText.substring(referenceMark + REF_MARKER.length());
-        } else {
-            fileText = fileText.substring(0, referenceMark) +
-                fileText.substring(referenceMark + REF_MARKER.length());
-
-            definitionMark = fileText.indexOf(DEF_MARKER);
-            fileText = fileText.substring(0, definitionMark) +
-                fileText.substring(
-                    definitionMark + DEF_MARKER.length());
+        if (vFile != null) {
+            doSingleFileTest(vFile, vModuleDir);
+            removeContentRoots(vModuleDir);
+            return;
         }
 
-        myFile = createFile(myModule, fileName, fileText);
-        PsiReference ref = myFile.findReferenceAt(referenceMark);
-        PsiElement definition = myFile.findElementAt(definitionMark);
+        vFile = LocalFileSystem.getInstance().findFileByPath(fullPath);
+        if (vFile != null && vFile.isDirectory()) {
+            doDirectoryTest(vFile, vModuleDir);
+            removeContentRoots(vModuleDir);
+            return;
+        }
 
-        assertNotNull(ref);
-        assertNotNull(definition);
+        fail("no test files found in \"" + vFile + "\"");
+    }
+
+    private void removeContentRoots(VirtualFile vModuleDir) {
+        new WriteCommandAction.Simple(myModule.getProject()) {
+            @Override
+            protected void run() throws Throwable {
+                ModuleRootManager instance =
+                    ModuleRootManager.getInstance(myModule);
+
+                ModifiableRootModel modifiableModel = instance.getModifiableModel();
+
+                ContentEntry[] entries = instance.getContentEntries();
+                for (ContentEntry entry : entries) {
+                    modifiableModel.removeContentEntry(entry);
+                }
+                modifiableModel.commit();
+            }
+        }.execute().throwException();
+    }
+
+    private void doSingleFileTest(VirtualFile vFile, VirtualFile vModuleDir)
+        throws Exception {
+        parseFile(vFile, vFile.getParent(), vModuleDir);
+
+        assertResolve();
+    }
+
+    private void doDirectoryTest(final VirtualFile vFile,
+                                 final VirtualFile vModuleDir)
+        throws IOException {
+        VfsUtil.processFilesRecursively(
+            vFile,
+            new FilteringProcessor<VirtualFile>(
+                new Condition<VirtualFile>() {
+                    @Override
+                    public boolean value(VirtualFile virtualFile) {
+                        return !virtualFile.isDirectory() &&
+                            virtualFile.getName().endsWith(".go");
+                    }
+                },
+                new Processor<VirtualFile>() {
+                    @Override
+                    public boolean process(VirtualFile virtualFile) {
+                        parseFile(virtualFile, vFile, vModuleDir);
+                        return true;
+                    }
+                }
+            )
+        );
+
+        assertResolve();
+    }
+
+    private void assertResolve() {
+        assertNotNull("Source position is not at a reference", ref);
 
         PsiElement resolvedDefinition = ref.resolve();
-        assertNotNull(resolvedDefinition);
+        if ( def != null ) {
+            assertNotNull("The resolving should have been been a success",
+                          resolvedDefinition);
+            while (resolvedDefinition.getStartOffsetInParent() == 0) {
+                resolvedDefinition = resolvedDefinition.getParent();
+            }
 
-        if (definition.getNode().getElementType() == GoElementTypes.mIDENT)
-            definition = definition.getParent();
+            assertSame(def, resolvedDefinition);
+        } else {
+            assertNull("The resolving should have failed", resolvedDefinition);
+        }
+    }
 
-        assertSame(definition, resolvedDefinition);
+    private void parseFile(VirtualFile file, VirtualFile root,
+                           VirtualFile vModuleRoot) {
+        String name = VfsUtil.getRelativePath(file, root, '/');
+        try {
+            String fileContent =
+                StringUtil.convertLineSeparators(VfsUtil.loadText(file));
+
+            PsiFile psiFile = createFile(myModule, vModuleRoot, name,
+                                         fileContent);
+
+            getDefinition(psiFile, fileContent);
+            getReference(psiFile, fileContent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
+
+    private void getDefinition(PsiFile psiFile, String fileContent) {
+        if (def != null) {
+            return;
+        }
+
+        int position = fileContent.indexOf(DEF_MARKER);
+        if (position > 0) {
+            def = psiFile.findElementAt(position + DEF_MARKER.length());
+            while (def != null && def.getStartOffsetInParent() == 0) {
+                def = def.getParent();
+            }
+        }
+    }
+
+    private void getReference(PsiFile psiFile, String fileContent) {
+        if (ref != null) {
+            return;
+        }
+
+        int position = fileContent.indexOf(REF_MARKER);
+        if (position > 0) {
+            ref = psiFile.findReferenceAt(position + REF_MARKER.length());
+        }
     }
 }

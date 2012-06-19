@@ -27,7 +27,7 @@ public class GoFunctionParameterImpl extends GoPsiElementBase implements GoFunct
 
     @Override
     public void accept(GoElementVisitor visitor) {
-        visitor.acceptFunctionParameter(this);
+        visitor.visitFunctionParameter(this);
     }
 
     @Override
@@ -57,4 +57,6 @@ public class GoFunctionParameterImpl extends GoPsiElementBase implements GoFunct
     public String toString() {
         return isVariadic() ? "FunctionParameterVariadicImpl" : "FunctionParameterImpl";
     }
+
+
 }

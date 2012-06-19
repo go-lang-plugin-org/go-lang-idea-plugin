@@ -20,4 +20,20 @@ public class GoResolveTypesTest extends GoPsiResolveTestCase {
     public void testFromMethodReceiver() throws Exception {
         doTest();
     }
+
+    public void testFromDefaultImportedPackage() throws Exception {
+        doTest();
+    }
+
+    public void testFromInjectedPackage() throws Exception {
+        doTest();
+    }
+
+    public void testFromCustomImportedPackage() throws Exception {
+        doTest();
+    }
+
+    public void testIgnoreBlankImportedPackage() throws Exception {
+        doTest();
+    }
 }

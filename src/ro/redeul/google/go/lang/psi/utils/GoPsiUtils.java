@@ -175,7 +175,8 @@ public class GoPsiUtils {
         return children;
     }
 
-    public static List<PsiElement> findChildrenOfType(@Nullable PsiElement node, IElementType type) {
+    public static List<PsiElement> findChildrenOfType(@Nullable PsiElement node,
+                                                      IElementType type) {
         if (node == null) {
             return Collections.emptyList();
         }
@@ -262,25 +263,45 @@ public class GoPsiUtils {
 
     @SuppressWarnings("unchecked")
     public static <Psi extends PsiElement> Psi findChildOfClass(PsiElement node,
-                                                            Class<Psi> type) {
+                                                                Class<Psi> type) {
 
-        for (PsiElement cur = node.getFirstChild(); cur != null; cur = cur.getNextSibling()) {
-            if (ReflectionCache.isInstance(cur, type)) return (Psi)cur;
+        for (PsiElement cur = node.getFirstChild(); cur != null;
+             cur = cur.getNextSibling()) {
+            if (ReflectionCache.isInstance(cur, type)) return (Psi) cur;
         }
         return null;
     }
 
-    public static boolean psiIsA(PsiElement node, Class<? extends GoPsiElement> psiType) {
+    public static boolean psiIsA(PsiElement node,
+                                 Class<? extends GoPsiElement> psiType) {
         return ReflectionCache.isInstance(node, psiType);
     }
 
-    public static boolean hasPrevSiblingOfType(PsiElement node, IElementType type) {
+    public static boolean hasParentAs(PsiElement node, TokenSet...tokens) {
+        if (node == null)
+            return false;
+
+        node = node.getParent();
+        int parent = 0;
+        while ( node != null && parent < tokens.length ) {
+            if (! tokens[parent].contains(node.getNode().getElementType()))
+                return false;
+
+            node = node.getParent();
+            parent++;
+        }
+
+        return node != null && parent < tokens.length;
+    }
+
+    public static boolean hasPrevSiblingOfType(PsiElement node,
+                                               IElementType type) {
         if (node == null)
             return false;
 
         do {
             node = node.getPrevSibling();
-        } while ( node != null && isWhiteSpaceOrComment(node));
+        } while (node != null && isWhiteSpaceOrComment(node));
 
         return node != null && node.getNode().getElementType() == type;
     }

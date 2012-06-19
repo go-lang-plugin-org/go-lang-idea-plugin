@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl;
 
-import java.util.Collection;
-
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
@@ -10,12 +8,10 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.PsiShortNamesCache;
-import com.intellij.psi.search.SearchScope;
+import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
@@ -29,18 +25,13 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
-import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.util.GoUtil;
-import static ro.redeul.google.go.lang.psi.processors.GoResolveStates.IsOriginalFile;
 
 public class GoFileImpl extends PsiFileBase implements GoFile {
 
@@ -224,67 +215,66 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        if (state.get(GoResolveStates.ResolvingVariables)) {
-            return true;
-        }
 
         String myPackageName = getPackage().getPackageName();
 
-        ResolveState newState =
-            state.put(GoResolveStates.PackageName, myPackageName);
+//        ResolveState newState =
+//            state.put(GoResolveStates.PackageName, myPackageName);
 
         // process current file
-        PsiElement child = lastParent != null ? lastParent.getPrevSibling() : this
-            .getLastChild();
-        while (child != null) {
+//        PsiElement child = this.getLastChild();
 
-            if (GoPsiUtils.isNodeOfType(child,
-                                        GoTokenSets.GO_FILE_ENTRY_POINT_TYPES)) {
+        return PsiScopesUtil.walkChildrenScopes(this, processor, state, null, place);
 
-                boolean shouldProcessDeclarations = true;
+//        while (child != null) {
+//
+//            if (isNodeOfType(child, GoTokenSets.GO_FILE_ENTRY_POINT_TYPES)) {
+//
+//
+//                boolean shouldProcessDeclarations = true;
+//
+//                if (child instanceof GoImportDeclarations) {
+//                    shouldProcessDeclarations = state.get(IsOriginalFile);
+//                    newState = newState.put(IsOriginalFile, false);
+//                }
+//
+//                if (shouldProcessDeclarations) {
+//                    if (!child.processDeclarations(processor, newState, null, place)) {
+//                        return false;
+//                    }
+//                }
+//            }
+//
+//            child = child.getPrevSibling();
+//        }
+//
+//        if (state.get(IsOriginalFile)) {
+//            GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
+//
+//            if (namesCache != null) {
+//                Collection<GoFile> files = namesCache.getFilesByPackageName(
+//                    myPackageName);
+//
+//                for (GoFile file : files) {
+//
+//                    PsiDirectory directory = file.getContainingDirectory();
+//
+//                    if (directory != null
+//                        && directory.isEquivalentTo(
+//                        getOriginalFile().getContainingDirectory())
+//                        && !file.isEquivalentTo(getOriginalFile())) {
+//                        if (!file.processDeclarations(processor,
+//                                                      newState.put(
+//                                                          IsOriginalFile,
+//                                                          false),
+//                                                      null, place)) {
+//                            return false;
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
-                if (child instanceof GoImportDeclarations) {
-                    shouldProcessDeclarations = state.get(IsOriginalFile);
-                    newState = newState.put(IsOriginalFile, false);
-                }
-
-                if (shouldProcessDeclarations) {
-                    if (!child.processDeclarations(processor, newState, null, place)) {
-                        return false;
-                    }
-                }
-            }
-
-            child = child.getPrevSibling();
-        }
-
-        if (state.get(IsOriginalFile)) {
-            GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
-
-            if (namesCache != null) {
-                Collection<GoFile> files = namesCache.getFilesByPackageName(
-                    myPackageName);
-
-                for (GoFile file : files) {
-
-                    PsiDirectory directory = file.getContainingDirectory();
-
-                    if (directory != null
-                        && directory.isEquivalentTo(
-                        getOriginalFile().getContainingDirectory())
-                        && !file.isEquivalentTo(getOriginalFile())) {
-                        if (!file.processDeclarations(processor,
-                                                      newState.put(
-                                                          IsOriginalFile,
-                                                          false),
-                                                      null, place)) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-
-        return true;
+//        return true;
     }
 }

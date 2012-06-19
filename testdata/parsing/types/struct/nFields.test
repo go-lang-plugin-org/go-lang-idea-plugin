@@ -17,7 +17,7 @@ Go file
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
     TypeSpecImpl
-      NamedType(T)
+      TypeNameDeclaration(T)
         PsiElement(IDENTIFIER)('T')
       PsiWhiteSpace(' ')
       TypeStructImpl

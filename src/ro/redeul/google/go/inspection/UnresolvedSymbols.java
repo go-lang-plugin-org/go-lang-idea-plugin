@@ -29,7 +29,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
         new GoRecursiveElementVisitor() {
             @Override
-            public void visitIdentifier(GoLiteralIdentifier identifier) {
+            public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
                 if (!identifier.isIota() && !identifier.isBlank()) {
                     tryToResolveReference(identifier,
                                           identifier.getReference());

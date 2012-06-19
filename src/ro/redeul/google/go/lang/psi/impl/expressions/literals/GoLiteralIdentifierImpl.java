@@ -5,37 +5,33 @@ import javax.swing.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.util.TextRange;
+import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
-import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsCollector;
-import ro.redeul.google.go.lang.psi.processors.IdentifierVariantsResolver;
-import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
-import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
+import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
+import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
-import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.or;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.BUILTIN_CALL_EXPRESSION;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_CLAUSES_STATEMENT;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_RANGE_STATEMENT;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -79,39 +75,40 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     }
 
     public void accept(GoElementVisitor visitor) {
-        visitor.visitIdentifier(this);
+        visitor.visitLiteralIdentifier(this);
     }
+
+//    @Override
+//    public PsiElement getElement() {
+//        return this;
+//    }
+//
+//    @Override
+//    public TextRange getRangeInElement() {
+//        return new TextRange(0, getTextLength());
+//    }
+
+//    @Override
+//    public PsiElement resolve() {
+//        VarOrConstResolver varOrConstResolver =
+//            new VarOrConstResolver(this);
+//
+//        PsiScopesUtil.treeWalkUp(
+//            varOrConstResolver,
+//            this, this.getContainingFile(),
+//            GoResolveStates.initial());
+//
+//        return varOrConstResolver.reference();
+//    }
+//
+//    @NotNull
+//    @Override
+//    public String getCanonicalText() {
+//        return getText();
+//    }
 
     @Override
-    public PsiElement getElement() {
-        return this;
-    }
-
-    @Override
-    public TextRange getRangeInElement() {
-        return new TextRange(0, getTextLength());
-    }
-
-    @Override
-    public PsiElement resolve() {
-        IdentifierVariantsResolver identifierVariantsResolver =
-            new IdentifierVariantsResolver(this);
-
-        PsiScopesUtil.treeWalkUp(
-            identifierVariantsResolver,
-            this, this.getContainingFile(),
-            GoResolveStates.initial());
-
-        return identifierVariantsResolver.reference();
-    }
-
     @NotNull
-    @Override
-    public String getCanonicalText() {
-        return getText();
-    }
-
-    @Override
     public String getName() {
         return getText();
     }
@@ -122,71 +119,63 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         return null;
     }
 
-    @Override
-    public PsiElement handleElementRename(String newElementName)
-        throws IncorrectOperationException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
+//    @Override
+//    public PsiElement handleElementRename(String newElementName)
+//        throws IncorrectOperationException {
+//        return null;  //To change body of implemented methods use File | Settings | File Templates.
+//    }
 
-    @Override
-    public PsiElement bindToElement(@NotNull PsiElement element)
-        throws IncorrectOperationException {
-        if (isReferenceTo(element))
-            return this;
+//    @Override
+//    public PsiElement bindToElement(@NotNull PsiElement element)
+//        throws IncorrectOperationException {
+//        if (isReferenceTo(element))
+//            return this;
+//
+//        throw new IncorrectOperationException(
+//            "Cannot bind to:" + element + " of class " + element.getClass());
+//    }
+//
+//    @Override
+//    public boolean isReferenceTo(PsiElement element) {
+//        return true;
+//    }
 
-        throw new IncorrectOperationException(
-            "Cannot bind to:" + element + " of class " + element.getClass());
-    }
-
-    @Override
-    public boolean isReferenceTo(PsiElement element) {
-        return true;
-    }
+    static final ElementPattern<PsiElement> NO_REFERENCE =
+        psiElement()
+            .withParent(
+                or(
+                    psiElement(GoFunctionDeclaration.class),
+                    psiElement(GoFunctionParameter.class),
+                    psiElement(GoMethodReceiver.class),
+                    psiElement(GoTypeStructField.class),
+                    psiElement(GoTypeName.class),
+                    psiElement(GoLiteralExpression.class)
+                        .insideStarting(
+                            or(
+                                psiElement(FOR_WITH_CLAUSES_STATEMENT),
+                                psiElement(FOR_WITH_RANGE_STATEMENT),
+                                psiElement(BUILTIN_CALL_EXPRESSION)
+                            )
+                        )
+                )
+            );
 
     @Override
     public PsiReference getReference() {
-        PsiElement parent = getParent();
 
-        if (parent instanceof GoFunctionDeclaration)
+        if ( NO_REFERENCE.accepts(this) )
             return null;
 
-        if (parent instanceof GoTypeStructField)
-            return null;
+        if (CallOrConversionReference.MATCHER.accepts(this) )
+            return new CallOrConversionReference(this);
 
-        if (parent instanceof GoTypeName)
-            return null;
+        if (VarOrConstReference.MATCHER.accepts(this))
+            return new VarOrConstReference(this);
 
-        if (parent instanceof GoFunctionParameter)
-            return null;
-
-        if (parent instanceof GoMethodReceiver)
-            return null;
-
-        if (parent instanceof GoLiteralExpression) {
-            PsiElement grandParent = parent.getParent();
-
-            if ( grandParent instanceof GoForWithRangeStatement ||
-                 grandParent instanceof GoForWithClausesStatement) {
-                return null;
-            }
-
-            // if a identifier is the child of an expression that is the first
-            // child of a GoBuiltInExpression we don't need to actually resolve
-            // its
-            if ( grandParent instanceof GoBuiltinCallExpression &&
-                    parent.getPrevSibling() == null) {
-                return null;
-            }
-        }
-
-        return this;
+        return null;
     }
 
-    @Override
-    public boolean isSoft() {
-        return true;
-    }
-
+/*
     @NotNull
     @Override
     public Object[] getVariants() {
@@ -198,13 +187,15 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
         IdentifierVariantsCollector identifierVariantsCollector = new IdentifierVariantsCollector();
 
-        PsiScopesUtil.treeWalkUp(identifierVariantsCollector, this.getOriginalElement(),
+        PsiScopesUtil.treeWalkUp(identifierVariantsCollector,
+                                 this.getOriginalElement(),
                                  this.getContainingFile(),
                                  GoResolveStates.initial());
 
         return identifierVariantsCollector.references();
     }
 
+*/
     @Override
     public ItemPresentation getPresentation() {
         return new ItemPresentation() {
@@ -237,6 +228,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
     @Override
     public boolean isGlobal() {
+/*
         PsiElement resolve = resolve();
         if (resolve == null) {
             return false;
@@ -250,6 +242,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         PsiElement grandpa = parent.getParent();
         return grandpa != null && grandpa.getParent() instanceof GoFile;
 
+*/
+        return false;
     }
 
     @Override
@@ -259,8 +253,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
     @Override
     public String getLocalPackageName() {
-        if ( isQualified() ) {
-            return getText().substring(0, getText().indexOf("."));
+        if (isQualified()) {
+            return findChildrenByType(GoTokenTypes.mIDENT).get(0).getText();
         }
 
         return null;

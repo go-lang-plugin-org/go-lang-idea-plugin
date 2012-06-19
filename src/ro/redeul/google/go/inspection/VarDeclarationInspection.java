@@ -6,10 +6,8 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-
 import static ro.redeul.google.go.inspection.InspectionUtil.UNKNOWN_COUNT;
 import static ro.redeul.google.go.inspection.InspectionUtil.checkExpressionShouldReturnOneResult;
 import static ro.redeul.google.go.inspection.InspectionUtil.getExpressionResultCount;
@@ -20,8 +18,8 @@ public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
         new GoRecursiveElementVisitor() {
             @Override
-            public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
-                checkVar(varDeclaration, result);
+            public void visitVarDeclaration(GoVarDeclaration declaration) {
+                checkVar(declaration, result);
             }
 
             @Override

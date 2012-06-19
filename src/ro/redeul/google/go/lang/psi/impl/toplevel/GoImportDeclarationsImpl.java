@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -31,18 +32,9 @@ public class GoImportDeclarationsImpl extends GoPsiElementBase implements GoImpo
     }
 
     @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-
-        GoImportDeclaration[] importSpecifications = getDeclarations();
-
-        for (GoImportDeclaration importSpecification : importSpecifications) {
-            if (importSpecification != lastParent) {
-                if ( ! importSpecification.processDeclarations(processor, state, null, place)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent, @NotNull PsiElement place) {
+       return PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
     }
 }

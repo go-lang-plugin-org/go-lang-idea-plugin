@@ -13,8 +13,6 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.PsiShortNamesCache;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
@@ -35,6 +33,8 @@ import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
@@ -152,7 +152,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor implements Annotator 
     }
 
     @Override
-    public void visitIdentifier(GoLiteralIdentifier identifier) {
+    public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
         if (identifier.isBlank()) {
             return;
         }
@@ -174,14 +174,15 @@ public class GoAnnotator extends GoRecursiveElementVisitor implements Annotator 
 
         PsiElement def = reference.resolve();
         if (def != null) {
-            annotation = annotationHolder.createInfoAnnotation(identifier,
-                                                               null);
+            annotation = annotationHolder.createInfoAnnotation(identifier, null);
 
             // if the identifier resolves to a const, set const highlight
             if (def.getParent() instanceof GoConstDeclaration) {
                 annotation.setTextAttributes(GoSyntaxHighlighter.CONST);
             } else if (identifier.isGlobal()) {
                 annotation.setTextAttributes(GoSyntaxHighlighter.GLOBAL_VARIABLE);
+            } else if (def instanceof GoTypeSpec ) {
+                annotation.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
             } else {
                 annotation.setTextAttributes(GoSyntaxHighlighter.VARIABLE);
             }
@@ -200,6 +201,12 @@ public class GoAnnotator extends GoRecursiveElementVisitor implements Annotator 
     @Override
     public void visitTypeName(GoTypeName typeName) {
         Annotation ann = annotationHolder.createInfoAnnotation(typeName, null);
+        ann.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
+    }
+
+    @Override
+    public void visitTypeNameDeclaration(GoTypeNameDeclaration declaration) {
+        Annotation ann = annotationHolder.createInfoAnnotation(declaration, null);
         ann.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
     }
 

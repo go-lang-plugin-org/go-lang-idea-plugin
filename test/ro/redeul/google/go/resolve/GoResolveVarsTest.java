@@ -44,4 +44,28 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testResolveMethodReceiver() throws Exception {
         doTest();
     }
+
+    public void testGlobalVarDeclaration() throws Exception {
+        doTest();
+    }
+
+    public void testGlobalShadowedVarDeclaration() throws Exception {
+        doTest();
+    }
+
+    public void testGlobalVarDeclarationFromBlock() throws Exception {
+        doTest();
+    }
+
+    public void testShortVarDeclaration() throws Exception {
+        doTest();
+    }
+
+    public void testShortVarDeclarationFromBlock() throws Exception {
+        doTest();
+    }
+
+    public void testGlobalConstDeclaration() throws Exception {
+        doTest();
+    }
 }

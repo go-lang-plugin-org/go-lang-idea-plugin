@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.parameterInfo;
 
+import java.util.List;
+
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.lang.parameterInfo.CreateParameterInfoContext;
 import com.intellij.lang.parameterInfo.ParameterInfoContext;
@@ -19,9 +21,6 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-
-import java.util.List;
-
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionParameterRangeInText;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionPresentationText;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildrenOfType;
@@ -114,7 +113,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement
         }
 
         GoLiteralIdentifier id = (GoLiteralIdentifier) literal;
-        PsiElement functionDeclaration = id.resolve();
+        PsiElement functionDeclaration = id.getReference().resolve();
         if (!(functionDeclaration instanceof GoFunctionDeclaration)) {
             return null;
         }

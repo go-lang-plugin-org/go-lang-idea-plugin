@@ -20,7 +20,7 @@ Go file
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('    ')
     TypeSpecImpl
-      NamedType(Point)
+      TypeNameDeclaration(Point)
         PsiElement(IDENTIFIER)('Point')
       PsiWhiteSpace(' ')
       TypeNameImpl
@@ -29,7 +29,7 @@ Go file
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('    ')
     TypeSpecImpl
-      NamedType(TreeNode)
+      TypeNameDeclaration(TreeNode)
         PsiElement(IDENTIFIER)('TreeNode')
       PsiWhiteSpace(' ')
       TypeStructImpl

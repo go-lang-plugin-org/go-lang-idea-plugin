@@ -42,7 +42,6 @@ public class GoCallOrConvExpressionImpl extends GoPsiElementBase
 
     @Override
     public void accept(GoElementVisitor visitor) {
-        visitor.visitCallOrConvExpressions(this);
+        visitor.visitCallOrConvExpression(this);
     }
-
 }

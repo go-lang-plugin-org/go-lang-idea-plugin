@@ -6,8 +6,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.PsiShortNamesCache;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -72,9 +70,9 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
                                        @NotNull PsiElement place)
     {
         // import _ "a"; ( no declarations are visible from this import )
-        if (getPackageReference() != null && getPackageReference().isBlank()) {
-            return true;
-        }
+//        if (getPackageReference() != null && getPackageReference().isBlank()) {
+//            return true;
+//        }
 
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
@@ -88,7 +86,11 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
                 GoPsiUtils.cleanupImportPath(getImportPath()));
 
         for (GoFile file : files) {
-            if ( ! file.processDeclarations(processor, GoResolveStates.imported(getPackageName(), getVisiblePackageName()), null, place)) {
+            if ( ! file.processDeclarations(processor,
+                                            GoResolveStates.imported(getPackageName(),
+                                                                     getVisiblePackageName()),
+                                            null, place))
+            {
                 return false;
             }
         }

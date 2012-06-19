@@ -7,6 +7,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoMethodReceiverImpl extends GoPsiElementBase
     implements GoMethodReceiver
@@ -28,5 +29,10 @@ public class GoMethodReceiverImpl extends GoPsiElementBase
     @Override
     public GoTypeName getTypeName() {
         return findChildByClass(GoTypeName.class);
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitMethodReceiver(this);
     }
 }

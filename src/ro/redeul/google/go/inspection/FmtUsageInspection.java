@@ -119,7 +119,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
             return null;
         }
 
-        PsiElement resolve = idToFind.resolve();
+        PsiElement resolve = idToFind.getReference().resolve();
         if (resolve == null) {
             return null;
         }

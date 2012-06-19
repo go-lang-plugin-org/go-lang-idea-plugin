@@ -1,5 +1,8 @@
 package ro.redeul.google.go;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -21,7 +24,7 @@ public abstract class GoSmokeTestCase extends PsiTestCase {
         bibi(file);
     }
 
-    public void testParsingGoSources() {
+    public void testParsingGoSources() throws IOException {
         LocalFileSystem.getInstance();
 
         final VirtualFile root =

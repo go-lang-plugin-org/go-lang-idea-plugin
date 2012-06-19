@@ -47,7 +47,15 @@ public abstract class GoInspectionTestCase extends GoLightCodeInsightFixtureTest
     }
 
     protected void doTest() throws Exception {
-        final List<String> data = readInput(getTestDataPath() + getTestName(true) + ".test");
+        List<String> data;
+        // TODO: remove this once all the inheritors of this class have
+        //      been updated to use .go test cases instead of .test
+        try {
+            data = readInput(getTestDataPath() + getTestName(true) + ".go");
+        } catch (IOException e) {
+            data = readInput(getTestDataPath() + getTestName(true) + ".test");
+        }
+
         String expected = data.get(1).trim();
         Assert.assertEquals(expected, processFile(data.get(0)).trim());
     }

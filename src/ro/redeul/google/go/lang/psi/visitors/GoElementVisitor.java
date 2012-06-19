@@ -27,6 +27,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
@@ -109,11 +110,11 @@ public class GoElementVisitor  {
         visitElement(declaration);
     }
 
-    public void visitIdentifier(GoLiteralIdentifier identifier) {
+    public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
         visitElement(identifier);
     }
 
-    public void acceptFunctionParameter(GoFunctionParameter parameter) {
+    public void visitFunctionParameter(GoFunctionParameter parameter) {
         visitElement(parameter);
     }
 
@@ -145,8 +146,8 @@ public class GoElementVisitor  {
         visitElement(statement);
     }
 
-    public void visitVarDeclaration(GoVarDeclaration varDeclaration) {
-        visitElement(varDeclaration);
+    public void visitVarDeclaration(GoVarDeclaration declaration) {
+        visitElement(declaration);
     }
 
     public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
@@ -189,7 +190,11 @@ public class GoElementVisitor  {
         visitElement(statement);
     }
 
-    public void visitCallOrConvExpressions(GoCallOrConvExpression expression) {
+    public void visitCallOrConvExpression(GoCallOrConvExpression expression) {
         visitElement(expression);
+    }
+
+    public void visitMethodReceiver(GoMethodReceiver receiver) {
+        visitElement(receiver);
     }
 }
