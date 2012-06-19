@@ -79,14 +79,13 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                 continue;
             }
 
-            PsiElement id = findElementOfClassAtRange(file, start, end,
-                                                      GoLiteralIdentifier.class);
+            GoLiteralIdentifier id = findElementOfClassAtRange(file, start, end, GoLiteralIdentifier.class);
             if (id == null) {
                 continue;
             }
 
             // packages exist
-            String expectedPackage = id.getText();
+            String expectedPackage = id.isQualified() ? id.getLocalPackageName() : id.getText();
             List<String> sdkPackages = getPotentialPackages(
                 namesCache.getSdkPackages(), expectedPackage);
             List<String> projectPackages = getPotentialPackages(
