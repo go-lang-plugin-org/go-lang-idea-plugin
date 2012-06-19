@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public class GoNamesUtil {
 
-    private static Pattern RE_PUBLIC_NAME = Pattern.compile("^\\p{Lu}\\p{L}*$");
+    private static Pattern RE_PUBLIC_NAME = Pattern.compile("^\\p{Lu}.*$");
     private static final Set<String> PREDEFINED_CONSTANT = new HashSet<String>();
     static {
         PREDEFINED_CONSTANT.add("true");
