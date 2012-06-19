@@ -2,7 +2,9 @@ package ro.redeul.google.go.imports;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.intellij.codeHighlighting.TextEditorHighlightingPass;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -21,6 +23,8 @@ import com.intellij.util.ui.UIUtil;
 import ro.redeul.google.go.inspection.fix.AddImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
 
@@ -60,6 +64,15 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             return null;
         }
 
+        Set<String> imported = new HashSet<String>();
+        for (GoImportDeclarations ids : file.getImportDeclarations()) {
+            for (GoImportDeclaration id : ids.getDeclarations()) {
+                String name = id.getPackageName();
+                if (name != null) {
+                    imported.add(name);
+                }
+            }
+        }
         Data toImport = null;
         for (RangeHighlighter highlighter : getAllHighlighters(project)) {
             int start = highlighter.getStartOffset();
@@ -90,7 +103,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                 namesCache.getSdkPackages(), expectedPackage);
             List<String> projectPackages = getPotentialPackages(
                 namesCache.getProjectPackages(), expectedPackage);
-            if (sdkPackages.size() == 0 && projectPackages.size() == 0) {
+            if (imported.contains(expectedPackage) || sdkPackages.size() == 0 && projectPackages.size() == 0) {
                 continue;
             }
 

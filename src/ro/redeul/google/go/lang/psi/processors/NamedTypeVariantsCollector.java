@@ -5,10 +5,12 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import ro.redeul.google.go.lang.psi.GoFile;
+import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +68,8 @@ public class NamedTypeVariantsCollector extends BaseScopeProcessor {
         }
 
         if ( isCandidate ) {
+            boolean isInterface = typeSpec.getType() instanceof GoTypeInterface;
+            Icon icon = isInterface ? PlatformIcons.INTERFACE_ICON : PlatformIcons.CLASS_ICON;
 
             String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
 
@@ -73,7 +77,7 @@ public class NamedTypeVariantsCollector extends BaseScopeProcessor {
                 typeName = String.format("%s.%s", visiblePackageName, typeName);
             }
 
-            variants.add(LookupElementBuilder.create(typeNameDeclaration, typeName).setTypeText(typeText) );
+            variants.add(LookupElementBuilder.create(typeNameDeclaration, typeName).setIcon(icon).setTypeText(typeText));
         }
     }
 
