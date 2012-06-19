@@ -768,7 +768,7 @@ Go file
               PsiWhiteSpace(' ')
               PsiElement(<<)('<<')
               PsiWhiteSpace(' ')
-              CallOrConversionExpressionImpl
+              BuiltInCallExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('uint')
@@ -840,7 +840,7 @@ Go file
             PsiWhiteSpace(' ')
             PsiElement(<<)('<<')
             PsiWhiteSpace(' ')
-            CallOrConversionExpressionImpl
+            BuiltInCallExpressionImpl
               LiteralExpressionImpl
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('uint')
@@ -1735,7 +1735,7 @@ Go file
         PsiWhiteSpace(' ')
         PsiElement(:=)(':=')
         PsiWhiteSpace(' ')
-        CallOrConversionExpressionImpl
+        BuiltInCallExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('string')
