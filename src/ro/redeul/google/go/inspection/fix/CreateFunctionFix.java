@@ -78,7 +78,6 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
         if (!psiIsA(e, GoLiteralExpression.class))
             return false;
 
-        e = e.getParent();
         if (!psiIsA(e.getParent(), GoCallOrConvExpression.class))
             return false;
 

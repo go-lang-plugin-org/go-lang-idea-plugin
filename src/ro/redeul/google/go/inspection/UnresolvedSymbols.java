@@ -47,15 +47,17 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                                                PsiReference reference) {
                 if (reference != null && reference.resolve() == null) {
 
-                    LocalQuickFix fix = null;
-                    if (!isExternalFunctionNameIdentifier(element)) {
-                        fix = new CreateFunctionFix(element);
+                    LocalQuickFix[] fixes;
+                    if (isExternalFunctionNameIdentifier(element)) {
+                        fixes = new LocalQuickFix[]{new CreateFunctionFix(element)};
+                    } else {
+                        fixes = LocalQuickFix.EMPTY_ARRAY;
                     }
 
                     result.addProblem(
                         element,
                         message("warning.unresolved.symbol", element.getName()),
-                        ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, fix);
+                        ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, fixes);
                 }
             }
         }.visitElement(file);
