@@ -1,14 +1,8 @@
 package main
 
 import (
-    "fmt"
+    /*begin*/"fmt"/*end.Unused import "fmt"|RemoveImportFix*/
 )
-
-func main() {
-    println("Hello world!")
-}
------
-package main
 
 func main() {
     println("Hello world!")

@@ -2,16 +2,8 @@ package main
 
 import (
     "fmt"
-    "io"
+    /*begin*/"io"/*end.Unused import "io"|RemoveImportFix*/
 )
-
-func main() {
-    fmt.Printf("Hello world!")
-}
------
-package main
-
-import "fmt"
 
 func main() {
     fmt.Printf("Hello world!")
