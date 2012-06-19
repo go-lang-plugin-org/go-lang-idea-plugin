@@ -260,7 +260,8 @@ public class DocumentUtil {
         for (GoFunctionParameter fp : parameters) {
             GoLiteralIdentifier[] ids = fp.getIdentifiers();
             GoType type = fp.getType();
-            String typeName = String.valueOf(type != null ? type.getName() : null);
+            String variadic = fp.isVariadic() ? "..." : "";
+            String typeName = variadic + String.valueOf(type != null ? type.getName() : null);
             if (ids.length == 0) {
                 sb.append(typeName).append(", ");
                 continue;
@@ -272,7 +273,7 @@ public class DocumentUtil {
             for (GoLiteralIdentifier id : ids) {
                 sb.append(id.getName()).append(", ");
             }
-            sb.insert(sb.length() - 2, (fp.isVariadic() ? " ..." : " ") + typeName);
+            sb.insert(sb.length() - 2, " " + typeName);
         }
 
         return sb.delete(sb.length() - 2, sb.length()).toString();
