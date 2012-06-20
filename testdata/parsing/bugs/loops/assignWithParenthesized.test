@@ -42,7 +42,7 @@ Go file
       PsiWhiteSpace(' ')
       AssignStmt
         IndexExpressionImpl
-          ParenthesisedExpression
+          ParenthesisedExpressionImpl
             PsiElement(()('(')
             UnaryExpressionImpl
               PsiElement(*)('*')
@@ -58,7 +58,7 @@ Go file
         PsiElement(,)(',')
         PsiWhiteSpace(' ')
         IndexExpressionImpl
-          ParenthesisedExpression
+          ParenthesisedExpressionImpl
             PsiElement(()('(')
             UnaryExpressionImpl
               PsiElement(*)('*')
@@ -75,7 +75,7 @@ Go file
         PsiElement(=)('=')
         PsiWhiteSpace(' ')
         IndexExpressionImpl
-          ParenthesisedExpression
+          ParenthesisedExpressionImpl
             PsiElement(()('(')
             UnaryExpressionImpl
               PsiElement(*)('*')
@@ -91,7 +91,7 @@ Go file
         PsiElement(,)(',')
         PsiWhiteSpace(' ')
         IndexExpressionImpl
-          ParenthesisedExpression
+          ParenthesisedExpressionImpl
             PsiElement(()('(')
             UnaryExpressionImpl
               PsiElement(*)('*')

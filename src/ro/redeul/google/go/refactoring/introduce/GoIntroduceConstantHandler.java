@@ -1,11 +1,6 @@
 package ro.redeul.google.go.refactoring.introduce;
 
 import com.intellij.codeInsight.CodeInsightUtilBase;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateEditingAdapter;
-import com.intellij.codeInsight.template.TemplateEditingListener;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateImpl;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
@@ -19,7 +14,6 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
@@ -37,7 +31,7 @@ public class GoIntroduceConstantHandler extends GoIntroduceHandlerBase {
             throw new GoRefactoringException("It's not a valid expression!");
         }
 
-        if (isNodeOfType(e.getParent(), GoElementTypes.EXPRESSION_PARENTHESIZED)) {
+        if (isNodeOfType(e.getParent(), GoElementTypes.PARENTHESISED_EXPRESSION)) {
             // If there is a pair of parenthesis enclosed the expression, include the parenthesis.
             e = (GoExpr) e.getParent();
             start = e.getTextOffset();
@@ -45,7 +39,7 @@ public class GoIntroduceConstantHandler extends GoIntroduceHandlerBase {
         }
 
         // Remove redundant parenthesis around declaration.
-        boolean needToRemoveParenthesis = isNodeOfType(e, GoElementTypes.EXPRESSION_PARENTHESIZED);
+        boolean needToRemoveParenthesis = isNodeOfType(e, GoElementTypes.PARENTHESISED_EXPRESSION);
 
         PsiDocumentManager manager = PsiDocumentManager.getInstance(project);
         Document document = manager.getDocument(file);

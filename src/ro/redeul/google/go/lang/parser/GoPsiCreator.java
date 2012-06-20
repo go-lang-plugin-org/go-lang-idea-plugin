@@ -17,6 +17,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoBuiltinCallExpres
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoCallOrConvExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoIndexExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoLiteralExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoParenthesisedExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoUnaryExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoAdditiveExpressionImpl;
@@ -174,6 +175,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(SELECTOR_EXPRESSION))
             return new GoSelectorExpressionImpl(node);
+
+        if (elementType.equals(PARENTHESISED_EXPRESSION))
+            return new GoParenthesisedExpressionImpl(node);
 
         if (elementType.equals(TYPE_ASSERTION_EXPRESSION))
             return new GoTypeAssertionExpressionImpl(node);

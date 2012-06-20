@@ -78,8 +78,7 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType LITERAL_COMPOSITE_ELEMENT_VALUE =
         new GoElementTypeImpl("LiteralCompositeElementValue");
 
-
-    GoElementType EXPRESSION_PARENTHESIZED =
+    GoElementType PARENTHESISED_EXPRESSION =
         new GoElementTypeImpl("ParenthesisedExpression");
 
     GoElementType LITERAL_EXPRESSION =
@@ -265,7 +264,7 @@ public interface GoElementTypes extends GoTokenTypes {
     );
 
     public final TokenSet EXPRESSIONS = TokenSet.create(
-        EXPRESSION_PARENTHESIZED,
+        PARENTHESISED_EXPRESSION,
         ADD_EXPRESSION, MUL_EXPRESSION, REL_EXPRESSION, COM_EXPRESSION,
         LOG_AND_EXPRESSION, LOG_OR_EXPRESSION,
         CALL_OR_CONVERSION_EXPRESSION,

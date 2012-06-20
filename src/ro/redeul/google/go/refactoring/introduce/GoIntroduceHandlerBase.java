@@ -122,7 +122,7 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
              expression != null;
              expression = PsiTreeUtil.getParentOfType(expression, GoExpr.class)) {
             IElementType tt = expression.getNode().getElementType();
-            if (tt == GoElementTypes.EXPRESSION_PARENTHESIZED ||
+            if (tt == GoElementTypes.PARENTHESISED_EXPRESSION ||
                 expressionRanges.contains(expression.getTextRange())) {
                 continue;
             }

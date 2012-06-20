@@ -25,7 +25,7 @@ public class ParenthesizedExpression implements GoElementTypes {
 
         ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, pRPAREN, "right.parenthesis.expected");
-        expression.done(EXPRESSION_PARENTHESIZED);
+        expression.done(PARENTHESISED_EXPRESSION);
 
         return true;
     }

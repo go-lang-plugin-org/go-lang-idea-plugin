@@ -759,7 +759,7 @@ Go file
           PsiWhiteSpace(' ')
           PsiElement(&)('&')
           PsiWhiteSpace(' ')
-          ParenthesisedExpression
+          ParenthesisedExpressionImpl
             PsiElement(()('(')
             MultiplicativeExpressionImpl
               LiteralExpressionImpl
@@ -831,7 +831,7 @@ Go file
         PsiWhiteSpace(' ')
         PsiElement(|=)('|=')
         PsiWhiteSpace(' ')
-        ParenthesisedExpression
+        ParenthesisedExpressionImpl
           PsiElement(()('(')
           MultiplicativeExpressionImpl
             LiteralExpressionImpl
@@ -1413,7 +1413,7 @@ Go file
             PsiWhiteSpace(' ')
             PsiElement(||)('||')
             PsiWhiteSpace(' ')
-            ParenthesisedExpression
+            ParenthesisedExpressionImpl
               PsiElement(()('(')
               LogicalAndExpressionImpl
                 RelationalExpressionImpl
@@ -1443,7 +1443,7 @@ Go file
           PsiWhiteSpace(' ')
           PsiElement(||)('||')
           PsiWhiteSpace(' ')
-          ParenthesisedExpression
+          ParenthesisedExpressionImpl
             PsiElement(()('(')
             LogicalAndExpressionImpl
               RelationalExpressionImpl

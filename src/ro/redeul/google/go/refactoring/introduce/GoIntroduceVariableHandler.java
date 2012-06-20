@@ -11,7 +11,6 @@ import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
@@ -29,7 +28,7 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
             throw new GoRefactoringException("It's not a valid expression!");
         }
 
-        if (isNodeOfType(e.getParent(), GoElementTypes.EXPRESSION_PARENTHESIZED)) {
+        if (isNodeOfType(e.getParent(), GoElementTypes.PARENTHESISED_EXPRESSION)) {
             // If there is a pair of parenthesis enclosed the expression, include the parenthesis.
             e = (GoExpr) e.getParent();
             start = e.getTextOffset();
@@ -42,7 +41,7 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
         }
 
         // Remove redundant parenthesis around declaration.
-        boolean needToRemoveParenthesis = isNodeOfType(e, GoElementTypes.EXPRESSION_PARENTHESIZED);
+        boolean needToRemoveParenthesis = isNodeOfType(e, GoElementTypes.PARENTHESISED_EXPRESSION);
 
         PsiDocumentManager manager = PsiDocumentManager.getInstance(project);
         Document document = manager.getDocument(file);

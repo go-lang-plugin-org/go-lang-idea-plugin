@@ -153,7 +153,7 @@ public class PrimaryExpression implements GoElementTypes {
             if (parser.parseExpression(builder)) {
                 if (ParserUtils.getToken(builder, pRPAREN)) {
                     parser.resetFlag(AllowCompositeLiteral, allowComposite);
-                    mark.done(GoElementTypes.EXPRESSION_PARENTHESIZED);
+                    mark.done(GoElementTypes.PARENTHESISED_EXPRESSION);
                     return true;
                 }
             }
