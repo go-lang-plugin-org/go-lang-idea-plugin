@@ -4,6 +4,7 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
@@ -67,7 +68,7 @@ public class InspectionUtil {
             return UNKNOWN_COUNT;
         }
 
-        PsiElement resolve = id.resolve();
+        PsiElement resolve = resolveIdentifier(id);
         if (resolve instanceof GoFunctionDeclaration) {
             int count = 0;
             for (GoFunctionParameter p : ((GoFunctionDeclaration) resolve).getResults()) {
@@ -79,13 +80,18 @@ public class InspectionUtil {
         return UNKNOWN_COUNT;
     }
 
+    public static PsiElement resolveIdentifier(GoLiteralIdentifier id) {
+        PsiReference reference = id.getReference();
+        return reference == null ? null : reference.resolve();
+    }
+
     public static int getFunctionParameterCount(GoCallOrConvExpression call) {
         GoLiteralIdentifier id = getFunctionIdentifier(call);
         if (id == null) {
             return UNKNOWN_COUNT;
         }
 
-        PsiElement resolve = id.resolve();
+        PsiElement resolve = resolveIdentifier(id);
         if (resolve instanceof GoFunctionDeclaration) {
             int count = 0;
             for (GoFunctionParameter p : ((GoFunctionDeclaration) resolve).getParameters()) {
