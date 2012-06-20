@@ -79,6 +79,26 @@ public class InspectionUtil {
         return UNKNOWN_COUNT;
     }
 
+    public static int getFunctionParameterCount(GoCallOrConvExpression call) {
+        GoLiteralIdentifier id = getFunctionIdentifier(call);
+        if (id == null) {
+            return UNKNOWN_COUNT;
+        }
+
+        PsiElement resolve = id.resolve();
+        if (resolve instanceof GoFunctionDeclaration) {
+            int count = 0;
+            for (GoFunctionParameter p : ((GoFunctionDeclaration) resolve).getParameters()) {
+                count += Math.max(p.getIdentifiers().length, 1);
+                if (p.isVariadic()) {
+                    return UNKNOWN_COUNT;
+                }
+            }
+            return count;
+        }
+        return UNKNOWN_COUNT;
+    }
+
     public static GoLiteralIdentifier getFunctionIdentifier(GoCallOrConvExpression call) {
         GoLiteralExpression literal = findChildOfClass(call, GoLiteralExpression.class);
         if (literal == null) {
