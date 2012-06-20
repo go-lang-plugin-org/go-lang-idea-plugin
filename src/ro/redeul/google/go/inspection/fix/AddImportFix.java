@@ -45,7 +45,7 @@ public class AddImportFix implements QuestionAction {
             @Override
             public void run() {
                 if (pathsToImport.size() == 1) {
-                    addImport(pathsToImport.get(0));
+                    addImport(file, document, pathsToImport.get(0));
                 } else {
                     JBPopupFactory popup = JBPopupFactory.getInstance();
                     popup.createListPopup(new ChoosePackagePopupStep()).showInBestPositionFor(editor);
@@ -55,26 +55,26 @@ public class AddImportFix implements QuestionAction {
         return true;
     }
 
-    private void addImport(final String pathToImport) {
+    public static void addImport(final GoFile file, final Document document, final String pathToImport) {
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
-                doAddImport(pathToImport);
+                doAddImport(file, document, pathToImport);
             }
         });
     }
 
-    private void doAddImport(String pathToImport) {
+    private static void doAddImport(GoFile file, Document document, String pathToImport) {
         GoImportDeclarations[] ids = file.getImportDeclarations();
         if (ids.length == 0) {
-            addImportUnderPackage(pathToImport);
+            addImportUnderPackage(file, document, pathToImport);
             return;
         }
 
         GoImportDeclarations importDeclarations = ids[ids.length - 1];
         GoImportDeclaration[] imports = importDeclarations.getDeclarations();
         if (imports.length == 0) {
-            addImportUnderPackage(pathToImport);
+            addImportUnderPackage(file, document, pathToImport);
             return;
         }
 
@@ -82,7 +82,7 @@ public class AddImportFix implements QuestionAction {
 
         PsiElement lastChild = getPrevSiblingIfItsWhiteSpaceOrComment(importDeclarations.getLastChild());
         if (lastChild == null) {
-            addImportUnderPackage(pathToImport);
+            addImportUnderPackage(file, document, pathToImport);
             return;
         }
 
@@ -96,7 +96,7 @@ public class AddImportFix implements QuestionAction {
         }
     }
 
-    private void addImportUnderPackage(String pathToImport) {
+    private static void addImportUnderPackage(GoFile file, Document document, String pathToImport) {
         int insertPoint = file.getPackage().getTextRange().getEndOffset();
         document.insertString(insertPoint, String.format("\n\nimport \"%s\"", pathToImport));
     }
@@ -124,7 +124,7 @@ public class AddImportFix implements QuestionAction {
         @Override
         public PopupStep onChosen(String selectedValue, boolean finalChoice) {
             if (finalChoice) {
-                addImport(selectedValue);
+                addImport(file, document, selectedValue);
             }
             return FINAL_CHOICE;
         }

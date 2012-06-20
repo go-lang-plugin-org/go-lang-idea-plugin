@@ -1,0 +1,18 @@
+package main
+
+import "fmt"
+
+func Foo() {
+    println(/*begin*/io/*end*/)
+}
+-----
+package main
+
+import (
+    "fmt"
+    "io"
+)
+
+func Foo() {
+    println(io)
+}

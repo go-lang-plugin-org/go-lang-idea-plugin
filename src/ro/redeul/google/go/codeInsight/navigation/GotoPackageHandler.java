@@ -9,6 +9,8 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.Collection;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.cleanupImportPath;
+
 public class GotoPackageHandler extends GotoDeclarationHandlerBase {
     @Override
     public PsiElement getGotoDeclarationTarget(PsiElement sourceElement, Editor editor) {
@@ -22,7 +24,7 @@ public class GotoPackageHandler extends GotoDeclarationHandlerBase {
     }
 
     private PsiElement getPackageDefinition(GoImportDeclaration id) {
-        String packageName = id.getPackageName();
+        String packageName = cleanupImportPath(id.getImportPath());
         GoNamesCache namesCache = GoNamesCache.getInstance(id.getProject());
         if (namesCache == null) {
             return null;

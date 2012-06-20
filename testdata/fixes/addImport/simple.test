@@ -1,0 +1,13 @@
+package main
+
+func Foo() {
+    println(/*begin*/fmt/*end*/)
+}
+-----
+package main
+
+import "fmt"
+
+func Foo() {
+    println(fmt)
+}
