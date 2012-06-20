@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +18,6 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  */
 public class GoPsiElementBase extends ASTWrapperPsiElement
     implements GoPsiElement {
-
-    private SearchScope searchScope;
 
     public GoPsiElementBase(@NotNull ASTNode node) {
         super(node);
@@ -54,16 +53,5 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
         Class<GoPsi> psiType, int pos) {
         GoPsi children[] = findChildrenByClass(psiType);
         return children.length > pos ? children[pos] : null;
-    }
-
-    @Override
-    public void setUseScope(SearchScope scope) {
-        searchScope = scope;
-    }
-
-    @NotNull
-    @Override
-    public SearchScope getUseScope() {
-        return searchScope != null ? searchScope : super.getUseScope();
     }
 }

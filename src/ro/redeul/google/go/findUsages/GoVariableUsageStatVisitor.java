@@ -196,31 +196,6 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
     }
 
-    private static void setElementScope(Collection<VariableUsage> variables) {
-        GoPsiElementBase[] goElements = getGoElements(variables);
-        LocalSearchScope scope = new LocalSearchScope(goElements);
-        for (GoPsiElementBase ge : goElements) {
-            ge.setUseScope(scope);
-        }
-    }
-
-    private static GoPsiElementBase[] getGoElements(Collection<VariableUsage> variables) {
-        List<GoPsiElementBase> result = new ArrayList<GoPsiElementBase>();
-        for (VariableUsage variable : variables) {
-            if (variable.element instanceof GoPsiElementBase) {
-                result.add((GoPsiElementBase) variable.element);
-            }
-
-            for (PsiElement e : variable.usages) {
-                if (e instanceof GoPsiElementBase) {
-                    result.add((GoPsiElementBase) e);
-                }
-            }
-        }
-        return result.toArray(new GoPsiElementBase[result.size()]);
-    }
-
-
     private static boolean couldOpenNewScope(PsiElement element) {
         if (!(element instanceof GoPsiElementBase)) {
             return false;
@@ -355,8 +330,6 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
                 }
             }
         }
-
-        setElementScope(variables.values());
     }
 
 
@@ -408,9 +381,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
 
         public Map<String, VariableUsage> popLastScopeLevel() {
-            Map<String, VariableUsage> map = variables.remove(variables.size() - 1);
-            setElementScope(map.values());
-            return map;
+            return variables.remove(variables.size() - 1);
         }
 
         public void unusedVariable(VariableUsage variableUsage) {

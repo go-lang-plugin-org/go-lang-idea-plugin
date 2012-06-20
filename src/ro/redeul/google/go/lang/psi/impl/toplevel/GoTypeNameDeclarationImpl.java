@@ -31,8 +31,6 @@ public class GoTypeNameDeclarationImpl
         implements GoTypeNameDeclaration, StubBasedPsiElement<GoTypeNameDeclarationStub>
 {
 
-    private SearchScope scope;
-
     public GoTypeNameDeclarationImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -49,17 +47,6 @@ public class GoTypeNameDeclarationImpl
 
     public PsiElement setName(@NonNls String name) throws IncorrectOperationException {
         return null;
-    }
-
-    @Override
-    public void setUseScope(SearchScope scope) {
-        this.scope = scope;
-    }
-
-    @NotNull
-    @Override
-    public SearchScope getUseScope() {
-        return scope != null ? scope : super.getUseScope();
     }
 
     @Override
