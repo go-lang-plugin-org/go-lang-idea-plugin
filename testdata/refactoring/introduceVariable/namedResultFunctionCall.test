@@ -1,0 +1,15 @@
+package main
+func Foo()(a int, b, c int) {
+    return 1, 2, 3
+}
+func main() {
+    /*begin*/Foo()/*end*/
+}
+-----
+package main
+func Foo()(a int, b, c int) {
+    return 1, 2, 3
+}
+func main() {
+    a, b, c := Foo()
+}

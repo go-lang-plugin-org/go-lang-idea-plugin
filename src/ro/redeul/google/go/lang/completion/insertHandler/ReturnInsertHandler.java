@@ -10,6 +10,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
+import static ro.redeul.google.go.editor.TemplateUtil.getTemplateVariableExpression;
 import static ro.redeul.google.go.inspection.InspectionUtil.getFunctionResultCount;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
@@ -29,15 +30,7 @@ public class ReturnInsertHandler implements InsertHandler<LookupElement> {
             return;
         }
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < count; i++) {
-            if (sb.length() > 0) {
-                sb.append(", ");
-            }
-            sb.append("$v").append(i).append("$");
-        }
-
-        TemplateImpl template = new TemplateImpl("", sb.toString(), "");
+        TemplateImpl template = new TemplateImpl("", getTemplateVariableExpression(count, ", "), "");
         for (int i = 0; i < count; i++) {
             String defaultValue = String.format("\"v%d\"", i);
             template.addVariable("v" + i, defaultValue, defaultValue, true);
