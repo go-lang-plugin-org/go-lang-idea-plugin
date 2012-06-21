@@ -1,23 +1,19 @@
 package ro.redeul.google.go.imports;
 
-import java.util.Collection;
-
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.ide.GoProjectSettings;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.services.GoCodeManager;
+
+import java.util.Collection;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -42,12 +38,6 @@ public class GoImportOptimizer implements ImportOptimizer {
         }
 
         final GoFile goFile = (GoFile) file;
-
-        //go the enableOptimizeImports declaration and change it to true if you want to see it working.
-        if ( ! GoProjectSettings.getInstance(goFile.getProject()).getState().enableOptimizeImports ) {
-            return EmptyRunnable.getInstance();
-        }
-
         return new Runnable() {
             @Override
             public void run() {
@@ -61,47 +51,9 @@ public class GoImportOptimizer implements ImportOptimizer {
 
                 GoCodeManager goCodeManager = GoCodeManager.getInstance(project);
 
-                try {
-                    Collection<GoImportDeclaration> usedImports = goCodeManager.findUnusedImports(
-                        goFile);
-
-                    GoImportDeclarations[] importDeclarations = goFile.getImportDeclarations();
-
-                    for (GoImportDeclarations importDeclaration : importDeclarations) {
-                        GoImportDeclaration[] importSpecs = importDeclaration.getDeclarations();
-
-                        for (GoImportDeclaration importSpec : importSpecs) {
-                            if (!usedImports.contains(importSpec)) {
-                                // get the start of the import spec line
-                                PsiElement start = importSpec;
-                                IElementType actualToken =  start.getNode().getElementType();
-                                while(!(actualToken.equals(GoTokenTypes.wsNLS) || actualToken.equals(GoTokenTypes.pLPAREN) ) && start.getPrevSibling() != null){
-
-                                    start = start.getPrevSibling();
-                                    actualToken =  start.getNode().getElementType();
-                                }
-                                // go forward to after the import
-                                start = start.getNextSibling();
-
-                                PsiElement end = importSpec;
-                                actualToken =  end.getNode().getElementType();
-                                while(!actualToken.equals(GoTokenTypes.wsNLS) && end.getNextSibling() != null){
-                                    end = end.getNextSibling();
-                                    actualToken =  end.getNode().getElementType();
-                                }
-                                // go back to before the new line
-                                //end = end.getPrevSibling();
-                                importDeclaration.deleteChildRange(start, end);
-                            }
-
-                        }
-
-                        if (importDeclaration.getDeclarations().length == 0) {
-                            goFile.deleteChildRange(importDeclaration, importDeclaration);
-                        }
-                    }
-                } catch (Exception ex) {
-                    LOG.error("Exception while optimizing go imports", ex);
+                Collection<GoImportDeclaration> unusedImports = goCodeManager.findUnusedImports(goFile);
+                for (GoImportDeclaration imp : unusedImports) {
+                    new RemoveImportFix(imp).invoke(project, goFile, null, imp, imp);
                 }
             }
         };
