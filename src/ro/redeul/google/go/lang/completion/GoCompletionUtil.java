@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.module.Module;
@@ -23,6 +24,7 @@ import com.intellij.util.AdapterProcessor;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Function;
 import com.intellij.util.Processor;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -169,8 +171,13 @@ public class GoCompletionUtil {
     }
 
     public static LookupElement keywordLookup(String keyword) {
-        return LookupElementBuilder.create(keyword + " ").setBold().setTypeText("keyword");
+        return keywordLookup(keyword, null);
     }
+
+    public static LookupElement keywordLookup(String keyword, @Nullable InsertHandler<LookupElement> handler) {
+        return LookupElementBuilder.create(keyword + " ").setBold().setTypeText("keyword").setInsertHandler(handler);
+    }
+
 
     public static LookupElement[] getImportedPackagesNames(PsiFile file) {
 

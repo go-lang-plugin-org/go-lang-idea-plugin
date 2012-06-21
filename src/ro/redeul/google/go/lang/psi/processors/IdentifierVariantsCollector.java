@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
@@ -12,7 +13,9 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.util.PlatformIcons;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.lang.completion.insertHandler.FunctionInsertHandler;
 import ro.redeul.google.go.lang.documentation.DocumentUtil;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
@@ -96,7 +99,7 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
 
         if ( ! isImported(function, state) || GoNamesUtil.isPublicType(function.getFunctionName()) ) {
             String text = DocumentUtil.getFunctionPresentationText(function);
-            addVariant(function, text, state, PlatformIcons.FUNCTION_ICON);
+            addVariant(function, text, state, PlatformIcons.FUNCTION_ICON, new FunctionInsertHandler());
         }
     }
 
@@ -105,7 +108,11 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
     }
 
     private void addVariant(PsiNamedElement target, String presentableText, ResolveState state, Icon icon) {
+        addVariant(target, presentableText, state, icon, null);
+    }
 
+    private void addVariant(PsiNamedElement target, String presentableText, ResolveState state, Icon icon,
+                            @Nullable InsertHandler<LookupElement> insertHandler) {
         boolean isImported = isImported(target, state);
 
         String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
@@ -115,7 +122,7 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
             return;
         }
 
-        if ( isImported && visiblePackageName != null && visiblePackageName.length() > 0 ) {
+        if (isImported && visiblePackageName != null && visiblePackageName.length() > 0) {
             presentableText = visiblePackageName + "." + presentableText;
             lookupString = visiblePackageName + "." + lookupString;
         }
@@ -123,15 +130,21 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
         if (!names.contains(presentableText)) {
             String type = isImported ? state.get(GoResolveStates.PackageName) : "<current>";
             variants.add(LookupElementBuilder.create(target, lookupString).setIcon(icon).setTypeText(type)
-                    .setPresentableText(presentableText));
+                    .setPresentableText(presentableText).setInsertHandler(insertHandler));
             names.add(presentableText);
         }
     }
 
     public Object[] references() {
 
+        FunctionInsertHandler functionInsertHandler = new FunctionInsertHandler();
         for (String builtInType : builtInFunctions) {
-            variants.add(LookupElementBuilder.create(builtInType).setTypeText("builtin", true).setBold());
+            variants.add(
+                    LookupElementBuilder.create(builtInType)
+                            .setTypeText("builtin", true)
+                            .setInsertHandler(functionInsertHandler)
+                            .setBold()
+            );
         }
 
         return variants.toArray(new Object[variants.size()]);

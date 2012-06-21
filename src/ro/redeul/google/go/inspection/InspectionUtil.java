@@ -70,15 +70,20 @@ public class InspectionUtil {
 
         PsiElement resolve = resolveIdentifier(id);
         if (resolve instanceof GoFunctionDeclaration) {
-            int count = 0;
-            for (GoFunctionParameter p : ((GoFunctionDeclaration) resolve).getResults()) {
-                count += Math.max(p.getIdentifiers().length, 1);
-            }
-            return count;
+            return getFunctionResultCount((GoFunctionDeclaration) resolve);
         }
 
         return UNKNOWN_COUNT;
     }
+
+    public static int getFunctionResultCount(GoFunctionDeclaration function) {
+        int count = 0;
+        for (GoFunctionParameter p : function.getResults()) {
+            count += Math.max(p.getIdentifiers().length, 1);
+        }
+        return count;
+    }
+
 
     public static PsiElement resolveIdentifier(GoLiteralIdentifier id) {
         PsiReference reference = id.getReference();
