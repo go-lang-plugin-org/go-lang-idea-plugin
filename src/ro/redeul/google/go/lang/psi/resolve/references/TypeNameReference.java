@@ -4,11 +4,9 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
@@ -35,33 +33,11 @@ public class TypeNameReference extends GoPsiReference<GoTypeName> {
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        if (element instanceof GoTypeSpec) {
-            GoTypeSpec spec = (GoTypeSpec) element;
-
+        if (element instanceof GoTypeNameDeclaration) {
             GoTypeNameDeclaration typeNameDecl
-                = spec.getTypeNameDeclaration();
+                = (GoTypeNameDeclaration)element;
 
-            if (typeNameDecl == null)
-                return false;
-
-            String declaredTypeName = typeNameDecl.getName();
-            if (declaredTypeName == null)
-                declaredTypeName = "";
-
-            String visiblePackageName =
-                element.getUserData(GoResolveStates.VisiblePackageName);
-
-            if (visiblePackageName == null)
-                visiblePackageName = "";
-
-            GoLiteralIdentifier identifier = getElement().getIdentifier();
-
-            if ( identifier.isQualified() ) {
-                return
-                    (visiblePackageName + "." + declaredTypeName).equals(identifier.getName());
-            }
-
-            return declaredTypeName.equals(identifier.getName());
+            return matchesVisiblePackageName(typeNameDecl, getElement().getName());
         }
 
         return false;

@@ -1,6 +1,5 @@
 package ro.redeul.google.go.lang.psi.resolve;
 
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.references.TypeNameReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 
@@ -19,13 +18,8 @@ public class TypeNameResolver extends
 
     @Override
     public void visitTypeSpec(GoTypeSpec type) {
-        type.putUserData(GoResolveStates.VisiblePackageName,
-                         getState().get(GoResolveStates.VisiblePackageName));
-
-        if (getReference().isReferenceTo(type)){
+        if (checkReference(type.getTypeNameDeclaration())){
             addDeclaration(type);
         }
-
-        type.putUserData(GoResolveStates.VisiblePackageName, null);
     }
 }

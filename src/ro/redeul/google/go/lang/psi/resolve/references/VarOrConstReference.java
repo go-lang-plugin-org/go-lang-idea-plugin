@@ -34,68 +34,17 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        return element.getText().equalsIgnoreCase(getElement().getText());
+        return matchesVisiblePackageName(element, getElement().getName());
     }
-
-//    private String getVisibleName(String name, ResolveState state) {
-//
-//        String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
-//
-//        if ( visiblePackageName != null ) {
-//            return visiblePackageName + '.' + name;
-//        }
-//
-//        return name;
-//
-//    }
-//
-//return false;  //To change body of implemented methods use File | Settings | File Templates.
-//    }
 
     @NotNull
     @Override
     public Object[] getVariants() {
-        return new Object[0];  //To change body of implemented methods use File | Settings | File Templates.
+        return new Object[0];
     }
 
     @Override
     public boolean isSoft() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
-
-    ////    @Override
-////    public boolean isReferenceTo(PsiElement element) {
-////        if (element instanceof GoTypeSpec) {
-////            GoTypeSpec spec = (GoTypeSpec) element;
-////
-////            GoTypeNameDeclaration typeNameDecl
-////                = spec.getTypeNameDeclaration();
-////
-////            if (typeNameDecl == null)
-////                return false;
-////
-////            String declaredTypeName = typeNameDecl.getName();
-////            String visiblePackageName = element.getUserData(
-////                GoResolveStates.VisiblePackageName);
-////
-////            String fqm = String.format("%s%s",
-////                                       visiblePackageName != null ? visiblePackageName + "." : "",
-////                                       declaredTypeName);
-////
-////            return fqm.equals(getElement().getText());
-////        }
-////
-////        return false;
-////    }
-////
-//    @NotNull
-//    @Override
-//    public Object[] getVariants() {
-//        return new Object[0];  //To change body of implemented methods use File | Settings | File Templates.
-//    }
-//
-//    @Override
-//    public boolean isSoft() {
-//        return false;  //To change body of implemented methods use File | Settings | File Templates.
-//    }
 }

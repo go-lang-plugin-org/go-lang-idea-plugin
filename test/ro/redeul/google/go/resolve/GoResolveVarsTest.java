@@ -68,4 +68,16 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testGlobalConstDeclaration() throws Exception {
         doTest();
     }
+
+    public void testFromDefaultImportedPackage() throws Exception {
+        doTest();
+    }
+
+    public void testFromInjectedImportedPackage() throws Exception {
+        doTest();
+    }
+
+    public void testFromCustomImportedPackage() throws Exception {
+        doTest();
+    }
 }

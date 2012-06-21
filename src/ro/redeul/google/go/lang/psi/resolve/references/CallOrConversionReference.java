@@ -10,7 +10,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class CallOrConversionReference extends GoPsiReference<GoLiteralIdentifier> {
@@ -41,19 +41,18 @@ public class CallOrConversionReference extends GoPsiReference<GoLiteralIdentifie
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        String ourName = getElement().getName();
-        if (ourName == null) {
-            ourName = "";
-        }
-
-        if (element instanceof GoTypeSpec) {
-            GoTypeSpec spec = (GoTypeSpec) element;
-            return ourName.equals(spec.getName());
+        if (element instanceof GoTypeNameDeclaration) {
+            return matchesVisiblePackageName(element, getElement().getName());
         }
 
         if (element instanceof GoFunctionDeclaration) {
-            GoFunctionDeclaration declaration = (GoFunctionDeclaration) element;
-            return ourName.equals(declaration.getFunctionName());
+            GoFunctionDeclaration funcDeclaration =
+                (GoFunctionDeclaration) element;
+
+            return matchesVisiblePackageName(
+                funcDeclaration.getUserData(GoResolveStates.VisiblePackageName),
+                funcDeclaration.getNameIdentifier(),
+                getElement().getName());
         }
 
         return false;

@@ -132,14 +132,16 @@ public abstract class GoPsiResolveTestCase extends GoPsiTestCase {
         }
     }
 
-    private void parseFile(VirtualFile file, VirtualFile root,
-                           VirtualFile vModuleRoot) {
-        String name = VfsUtil.getRelativePath(file, root, '/');
+    private void parseFile(VirtualFile file, VirtualFile root, VirtualFile vModuleRoot) {
+
+        String folder = VfsUtil.getRelativePath(file.getParent(), root, '/');
+
+        VirtualFile folderFile = root.findFileByRelativePath(folder);
         try {
             String fileContent =
                 StringUtil.convertLineSeparators(VfsUtil.loadText(file));
 
-            PsiFile psiFile = createFile(myModule, vModuleRoot, name,
+            PsiFile psiFile = createFile(myModule, folderFile, file.getName(),
                                          fileContent);
 
             getDefinition(psiFile, fileContent);

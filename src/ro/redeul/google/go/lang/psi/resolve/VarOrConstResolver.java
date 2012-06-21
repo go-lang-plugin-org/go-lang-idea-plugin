@@ -17,16 +17,9 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 public class VarOrConstResolver extends
                                 GoPsiReferenceResolver<VarOrConstReference> {
 
-    public VarOrConstResolver(VarOrConstReference orConstReference) {
-        super(orConstReference);
+    public VarOrConstResolver(VarOrConstReference reference) {
+        super(reference);
     }
-
-//    @Override
-//    public void visitTypeSpec(GoTypeSpec type) {
-//        if (getReference().isReferenceTo(type)){
-//            addDeclaration(type);
-//        }
-//    }
 
     @Override
     public void visitMethodReceiver(GoMethodReceiver receiver) {
@@ -59,11 +52,10 @@ public class VarOrConstResolver extends
     }
 
     protected void checkIdentifiers(GoLiteralIdentifier ... identifiers) {
-        for (GoLiteralIdentifier identifier : identifiers) {
-            if (getReference().isReferenceTo(identifier)) {
-                if ( ! addDeclaration(identifier) ) {
+        for (GoLiteralIdentifier id : identifiers) {
+            if (checkReference(id)) {
+                if ( ! addDeclaration(id) )
                     return;
-                }
             }
         }
     }

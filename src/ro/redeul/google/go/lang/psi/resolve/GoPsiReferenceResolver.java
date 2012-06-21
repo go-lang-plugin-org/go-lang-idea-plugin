@@ -8,6 +8,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import static ro.redeul.google.go.lang.psi.processors.GoResolveStates.VisiblePackageName;
 
 public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
     extends GoElementVisitor
@@ -32,12 +33,22 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
         return declaration == null;
     }
 
+    protected boolean checkReference(GoPsiElement element) {
+        try {
+            element.putUserData(VisiblePackageName,
+                                getState().get(VisiblePackageName));
+            return getReference().isReferenceTo(element);
+
+        } finally {
+            element.putUserData(VisiblePackageName, null);
+        }
+    }
+
     protected Reference getReference() {
         return reference;
     }
 
     /**
-     *
      * @param declaration add new declaration
      * @return false if we want to stop processing
      */

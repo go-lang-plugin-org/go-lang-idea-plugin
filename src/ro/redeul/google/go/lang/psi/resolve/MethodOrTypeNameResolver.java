@@ -13,19 +13,19 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<CallOrConve
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-        if  ( getReference().isReferenceTo(declaration) )
+        if  ( checkReference(declaration) )
             addDeclaration(declaration);
     }
 
     @Override
     public void visitMethodDeclaration(GoMethodDeclaration declaration) {
-        if  ( getReference().isReferenceTo(declaration) )
+        if  ( checkReference(declaration) )
             addDeclaration(declaration);
     }
 
     @Override
     public void visitTypeSpec(GoTypeSpec type) {
-        if ( getReference().isReferenceTo(type) )
+        if ( checkReference(type.getTypeNameDeclaration()) )
             addDeclaration(type);
     }
 }

@@ -24,4 +24,28 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
     public void testTypeConversionToLocalType() throws Exception {
         doTest();
     }
+
+    public void testConversionToImportedType() throws Exception {
+        doTest();
+    }
+
+    public void testConversionToLocallyImportedType() throws Exception {
+        doTest();
+    }
+
+    public void testNoConversionToBlankImportedType() throws Exception {
+        doTest();
+    }
+
+    public void testConversionToImportedFunction() throws Exception {
+        doTest();
+    }
+
+//    public void testConversionToLocallyImportedType() throws Exception {
+//        doTest();
+//    }
+//
+//    public void testNoConversionToBlankImportedType() throws Exception {
+//        doTest();
+//    }
 }

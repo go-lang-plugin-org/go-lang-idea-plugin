@@ -7,6 +7,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 
 public abstract class GoPsiReference<GoPsi extends PsiNamedElement>
     implements PsiReference {
@@ -47,5 +48,30 @@ public abstract class GoPsiReference<GoPsi extends PsiNamedElement>
             GoBundle.message("error.not.implemented"));
     }
 
+    protected boolean matchesVisiblePackageName(PsiElement element,
+                                                String targetQualifiedName)
+    {
+        String visiblePackageName =
+            element.getUserData(GoResolveStates.VisiblePackageName);
 
+        return matchesVisiblePackageName(visiblePackageName, element,
+                                         targetQualifiedName);
+    }
+
+    protected boolean matchesVisiblePackageName(String currentPackageName,
+                                                PsiElement element,
+                                                String targetQualifiedName) {
+        String visiblePackageName =
+            element.getUserData(GoResolveStates.VisiblePackageName);
+
+        String elementName = element.getText();
+        if (currentPackageName == null)
+            currentPackageName = "";
+
+        if (targetQualifiedName.contains(".")) {
+            elementName = currentPackageName + "." + elementName;
+        }
+
+        return elementName.equals(targetQualifiedName);
+    }
 }

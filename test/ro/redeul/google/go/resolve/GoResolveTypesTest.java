@@ -36,4 +36,8 @@ public class GoResolveTypesTest extends GoPsiResolveTestCase {
     public void testIgnoreBlankImportedPackage() throws Exception {
         doTest();
     }
+
+    public void testFromNestedImportedPackage() throws Exception {
+        doTest();
+    }
 }
