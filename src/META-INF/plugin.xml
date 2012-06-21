@@ -432,6 +432,8 @@
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
         <programRunner implementation="ro.redeul.google.go.runner.GoAppEngineApplicationRunner" />
 
+        <testFinder implementation="ro.redeul.google.go.testIntegration.GoTestFinder"/>
+
         <stubElementTypeHolder class="ro.redeul.google.go.lang.parser.GoElementTypes" />
 
         <stubIndex implementation="ro.redeul.google.go.lang.psi.stubs.index.GoPackageName" />
