@@ -477,6 +477,17 @@
             <className>ro.redeul.google.go.intentions.conversions.ConvertIntegerToDecimalIntention</className>
         </intentionAction>
 
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.parentheses</categoryKey>
+            <className>ro.redeul.google.go.intentions.parenthesis.RemoveDeclarationParenthesesIntention</className>
+        </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.parentheses</categoryKey>
+            <className>ro.redeul.google.go.intentions.parenthesis.AddDeclarationParenthesesIntention</className>
+        </intentionAction>
     </extensions>
 
 </idea-plugin>

@@ -1,0 +1,9 @@
+package main
+var (<caret>a = 5)
+
+func main(){}
+-----
+package main
+var a = 5
+
+func main(){}

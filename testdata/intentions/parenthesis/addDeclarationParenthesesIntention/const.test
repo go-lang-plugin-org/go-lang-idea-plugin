@@ -1,0 +1,11 @@
+package main
+const <caret>A = 10
+
+func main(){}
+-----
+package main
+const (
+    A = 10
+)
+
+func main(){}
