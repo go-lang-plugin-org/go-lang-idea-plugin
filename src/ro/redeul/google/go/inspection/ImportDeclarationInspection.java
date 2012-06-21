@@ -8,11 +8,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.services.GoCodeManager;
 import static ro.redeul.google.go.GoBundle.message;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.cleanupImportPath;
 
 public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
     @Nls
@@ -24,8 +27,44 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
 
     @Override
     protected void doCheckFile(@NotNull GoFile file,
-                               @NotNull InspectionResult result,
+                               @NotNull final InspectionResult result,
                                boolean onTheFly) {
+        new GoRecursiveElementVisitor() {
+            @Override
+            public void visitFile(GoFile file) {
+                super.visitFile(file);
+                checkUnusedImport(file, result);
+            }
+
+            @Override
+            public void visitImportDeclaration(GoImportDeclaration declaration) {
+                super.visitImportDeclaration(declaration);
+
+                checkImportPath(declaration, result);
+            }
+        }.visitFile(file);
+    }
+
+    private static void checkImportPath(GoImportDeclaration declaration, InspectionResult result) {
+        String importPath = cleanupImportPath(declaration.getImportPath());
+        if (importPath == null) {
+            return;
+        }
+
+        if (importPath.isEmpty()) {
+            result.addProblem(declaration, GoBundle.message("error.import.path.is.empty"));
+        }
+
+        if (importPath.contains(" ") || importPath.contains("\t")) {
+            result.addProblem(declaration, GoBundle.message("error.import.path.contains.space"));
+        }
+
+        if (importPath.contains("\\")) {
+            result.addProblem(declaration, GoBundle.message("error.import.path.contains.backslash"));
+        }
+    }
+
+    private static void checkUnusedImport(GoFile file, InspectionResult result) {
         Project project = file.getProject();
 
         PsiDocumentManager pdm = PsiDocumentManager.getInstance(project);
@@ -38,7 +77,7 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
             GoCodeManager.getInstance(project).findUnusedImports(file);
 
         for (GoImportDeclaration unused : unusedImports) {
-            if (unused.getText().trim().isEmpty()) {
+            if (!isValidImport(unused)) {
                 continue;
             }
 
@@ -48,5 +87,26 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
                 ProblemHighlightType.LIKE_UNUSED_SYMBOL,
                 new RemoveImportFix(unused));
         }
+    }
+
+    public static boolean isValidImport(GoImportDeclaration declaration) {
+        if (declaration == null) {
+            return false;
+        }
+
+        String importPath = cleanupImportPath(declaration.getImportPath());
+        if (importPath == null || importPath.isEmpty()) {
+            return false;
+        }
+
+        if (importPath.contains(" ") || importPath.contains("\t")) {
+            return false;
+        }
+
+        if (importPath.contains("\\")) {
+            return false;
+        }
+
+        return true;
     }
 }

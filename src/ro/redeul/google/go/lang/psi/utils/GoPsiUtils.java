@@ -33,6 +33,9 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 public class GoPsiUtils {
 
     public static String cleanupImportPath(String path) {
+        if (path == null) {
+            return null;
+        }
         return path.replaceAll("^\"", "").replaceAll("\"$", "");
     }
 
