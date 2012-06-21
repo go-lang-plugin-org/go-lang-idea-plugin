@@ -1,5 +1,9 @@
 package ro.redeul.google.go.lang.stubs;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
+
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -14,10 +18,6 @@ import ro.redeul.google.go.lang.psi.stubs.index.GoTypeName;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
@@ -28,6 +28,8 @@ public class GoNamesCache {
 
     private final Project project;
 
+    // TODO: Make this a singleton ?!
+    @NotNull
     public static GoNamesCache getInstance(Project project) {
         return new GoNamesCache(project);
     }

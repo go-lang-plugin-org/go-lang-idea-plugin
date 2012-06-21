@@ -4,6 +4,7 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
@@ -44,14 +45,23 @@ public class TypeNameReference extends GoPsiReference<GoTypeName> {
                 return false;
 
             String declaredTypeName = typeNameDecl.getName();
-            String visiblePackageName = element.getUserData(
-                GoResolveStates.VisiblePackageName);
+            if (declaredTypeName == null)
+                declaredTypeName = "";
 
-            String fqm = String.format("%s%s",
-                                       visiblePackageName != null ? visiblePackageName + "." : "",
-                                       declaredTypeName);
+            String visiblePackageName =
+                element.getUserData(GoResolveStates.VisiblePackageName);
 
-            return fqm.equals(getElement().getText());
+            if (visiblePackageName == null)
+                visiblePackageName = "";
+
+            GoLiteralIdentifier identifier = getElement().getIdentifier();
+
+            if ( identifier.isQualified() ) {
+                return
+                    (visiblePackageName + "." + declaredTypeName).equals(identifier.getName());
+            }
+
+            return declaredTypeName.equals(identifier.getName());
         }
 
         return false;

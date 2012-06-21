@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.types;
 
 import com.intellij.psi.PsiNamedElement;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -14,6 +15,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 public interface GoTypeName extends GoPsiElement, PsiNamedElement,
                                     GoQualifiedNameElement, GoType
 {
+    @NotNull
     GoLiteralIdentifier getIdentifier();
 
     boolean isReference();

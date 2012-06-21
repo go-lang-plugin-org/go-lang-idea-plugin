@@ -47,11 +47,11 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
     @Override
     @NotNull
     public String getVisiblePackageName() {
-        if (getPackageReference() == null) {
+        GoPackageReference packageReference = getPackageReference();
+
+        if (packageReference == null) {
             return getPackageName();
         }
-
-        GoPackageReference packageReference = getPackageReference();
 
         if (packageReference.isBlank() || packageReference.isLocal()) {
             return "";
@@ -70,15 +70,12 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
                                        @NotNull PsiElement place)
     {
         // import _ "a"; ( no declarations are visible from this import )
-//        if (getPackageReference() != null && getPackageReference().isBlank()) {
-//            return true;
-//        }
-
-        GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
-
-        if (namesCache == null) {
+        GoPackageReference packageReference = getPackageReference();
+        if (packageReference != null && packageReference.isBlank()) {
             return true;
         }
+
+        GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
         // get the file included in the imported package name
         Collection<GoFile> files =
@@ -86,13 +83,11 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
                 GoPsiUtils.cleanupImportPath(getImportPath()));
 
         for (GoFile file : files) {
-            if ( ! file.processDeclarations(processor,
-                                            GoResolveStates.imported(getPackageName(),
-                                                                     getVisiblePackageName()),
-                                            null, place))
-            {
+            ResolveState newState =
+                GoResolveStates.imported(getPackageName(), getVisiblePackageName());
+
+            if ( ! file.processDeclarations(processor, newState, getContainingFile(), place))
                 return false;
-            }
         }
 
         return true;

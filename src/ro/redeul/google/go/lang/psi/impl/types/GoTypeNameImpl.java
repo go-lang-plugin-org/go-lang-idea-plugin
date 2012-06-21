@@ -111,6 +111,7 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
         return null;
     }
 
+    @NotNull
     @Override
     public GoLiteralIdentifier getIdentifier() {
         return findChildByClass(GoLiteralIdentifier.class);
