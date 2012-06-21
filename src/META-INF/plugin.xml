@@ -433,6 +433,7 @@
         <programRunner implementation="ro.redeul.google.go.runner.GoAppEngineApplicationRunner" />
 
         <testFinder implementation="ro.redeul.google.go.testIntegration.GoTestFinder"/>
+        <testCreator language="Google Go" implementationClass="ro.redeul.google.go.testIntegration.GoTestCreator"/>
 
         <stubElementTypeHolder class="ro.redeul.google.go.lang.parser.GoElementTypes" />
 

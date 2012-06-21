@@ -13,6 +13,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static ro.redeul.google.go.testIntegration.TestUtil.getPsiFile;
+import static ro.redeul.google.go.testIntegration.TestUtil.getTestFileName;
+import static ro.redeul.google.go.testIntegration.TestUtil.isTestFile;
+
 public class GoTestFinder implements TestFinder {
     @Override
     public PsiElement findSourceElement(@NotNull PsiElement from) {
@@ -44,7 +48,7 @@ public class GoTestFinder implements TestFinder {
             return Collections.emptyList();
         }
 
-        String testFileName = path.substring(0, path.length() - 3) + "_test.go";
+        String testFileName = getTestFileName(path);
         VirtualFile testFile = file.getFileSystem().findFileByPath(testFileName);
         if (testFile != null) {
             PsiElement psiFile = getPsiFile(containingFile.getProject(), testFile);
@@ -56,7 +60,7 @@ public class GoTestFinder implements TestFinder {
 
         List<PsiElement> tests = new ArrayList<PsiElement>();
         for (VirtualFile virtualFile : file.getParent().getChildren()) {
-            if (isTest(virtualFile)) {
+            if (isTestFile(virtualFile)) {
                 PsiFile psiFile = getPsiFile(containingFile.getProject(), virtualFile);
                 if (psiFile != null) {
                     tests.add(psiFile);
@@ -81,7 +85,7 @@ public class GoTestFinder implements TestFinder {
         }
 
         VirtualFile file = containingFile.getVirtualFile();
-        if (file == null || !isTest(file)) {
+        if (file == null || !isTestFile(file)) {
             return Collections.emptyList();
         }
 
@@ -101,14 +105,6 @@ public class GoTestFinder implements TestFinder {
     @Override
     public boolean isTest(@NotNull PsiElement element) {
         PsiFile file = element.getContainingFile();
-        return file != null && isTest(file.getVirtualFile());
-    }
-
-    private boolean isTest(VirtualFile file) {
-        return file != null && file.getName().endsWith("_test.go");
-    }
-
-    private PsiFile getPsiFile(Project project, VirtualFile file) {
-        return PsiManager.getInstance(project).findFile(file);
+        return file != null && isTestFile(file.getVirtualFile());
     }
 }
