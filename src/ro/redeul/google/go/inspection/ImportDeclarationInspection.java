@@ -14,12 +14,12 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.services.GoCodeManager;
 import static ro.redeul.google.go.GoBundle.message;
 
-public class UnusedImportInspection extends AbstractWholeGoFileInspection {
+public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
     @Nls
     @NotNull
     @Override
     public String getDisplayName() {
-        return "Unused import";
+        return "Import Declaration";
     }
 
     @Override
