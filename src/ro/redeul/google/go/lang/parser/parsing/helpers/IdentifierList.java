@@ -38,7 +38,7 @@ public class IdentifierList implements GoElementTypes {
             ParserUtils.eatElement(builder, GoElementTypes.LITERAL_IDENTIFIER);
 
             length++;
-            if ( !ParserUtils.lookAheadSkipNLS(builder, oCOMMA)) {
+            if (!ParserUtils.lookAheadSkipNLS(builder, oCOMMA, mIDENT)) {
                 break;
             }
             ParserUtils.skipNLS(builder);
