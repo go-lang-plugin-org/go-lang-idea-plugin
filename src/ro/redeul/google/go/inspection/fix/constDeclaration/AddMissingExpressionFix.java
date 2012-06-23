@@ -14,6 +14,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
+import static ro.redeul.google.go.editor.TemplateUtil.createTemplate;
 import static ro.redeul.google.go.editor.TemplateUtil.getTemplateVariableExpression;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
@@ -60,8 +61,7 @@ public class AddMissingExpressionFix implements LocalQuickFix {
             }
             sb.append("$v").append(i).append("$");
         }
-        TemplateImpl template = new TemplateImpl("", sb.toString(), "");
-        template.setToIndent(false);
+        TemplateImpl template = createTemplate(sb.toString());
         for (int i = expressions.length; i < ids.length; i++) {
             template.addVariable("v" + i, "\"value\"", "\"value\"", true);
         }
@@ -73,7 +73,7 @@ public class AddMissingExpressionFix implements LocalQuickFix {
     private void addConstInitializer(Project project, Editor editor, GoConstDeclaration cd) {
         int length = cd.getIdentifiers().length;
         String text = " = " + getTemplateVariableExpression(length, ", ");
-        TemplateImpl template = new TemplateImpl("", text, "");
+        TemplateImpl template = createTemplate(text);
         template.setToIndent(false);
         for (int i = 0; i < length; i++) {
             template.addVariable("v" + i, "\"value\"", "\"value\"", true);

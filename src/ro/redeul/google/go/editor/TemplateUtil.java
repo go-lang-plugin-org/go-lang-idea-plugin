@@ -8,6 +8,12 @@ import com.intellij.openapi.util.TextRange;
 import java.util.List;
 
 public class TemplateUtil {
+    public static TemplateImpl createTemplate(String text) {
+        TemplateImpl template = new TemplateImpl("", text, "");
+        template.setToIndent(false);
+        return template;
+    }
+
     /**
      * In the specified range of editor, replace all variables with defaultValue,
      * and let user change the value.
@@ -24,8 +30,7 @@ public class TemplateUtil {
             defaultValue = '"' + defaultValue + '"';
         }
 
-        TemplateImpl template = new TemplateImpl("", text, "");
-        template.setToIndent(false);
+        TemplateImpl template = createTemplate(text);
         template.addVariable(variable, defaultValue, defaultValue, true);
         TemplateManager.getInstance(editor.getProject()).startTemplate(editor, "", template);
     }

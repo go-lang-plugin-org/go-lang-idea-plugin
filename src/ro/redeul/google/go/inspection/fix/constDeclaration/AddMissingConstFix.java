@@ -13,6 +13,8 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
+import static ro.redeul.google.go.editor.TemplateUtil.createTemplate;
+
 public class AddMissingConstFix implements LocalQuickFix {
     @NotNull
     @Override
@@ -53,8 +55,7 @@ public class AddMissingConstFix implements LocalQuickFix {
         for (int i = ids.length; i < expressions.length; i++) {
             sb.append(", $v").append(i).append("$");
         }
-        TemplateImpl template = new TemplateImpl("", sb.toString(), "");
-        template.setToIndent(false);
+        TemplateImpl template = createTemplate(sb.toString());
         for (int i = ids.length; i < expressions.length; i++) {
             template.addVariable("v" + i, "\"C\"", "\"C\"", true);
         }

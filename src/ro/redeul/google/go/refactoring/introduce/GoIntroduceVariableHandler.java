@@ -25,6 +25,7 @@ import ro.redeul.google.go.refactoring.GoRefactoringException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ro.redeul.google.go.editor.TemplateUtil.createTemplate;
 import static ro.redeul.google.go.editor.TemplateUtil.getTemplateVariableExpression;
 import static ro.redeul.google.go.editor.TemplateUtil.runTemplate;
 import static ro.redeul.google.go.editor.TemplateUtil.setTemplateVariableValues;
@@ -113,8 +114,7 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
         String text = getTemplateVariableExpression(resultNames.size(), ", ");
         text += " := " + declaration;
 
-        TemplateImpl template = new TemplateImpl("", text, "");
-        template.setToIndent(false);
+        TemplateImpl template = createTemplate(text);
         setTemplateVariableValues(template, resultNames);
         TemplateManager.getInstance(editor.getProject()).startTemplate(editor, "", template);
         return true;
