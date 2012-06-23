@@ -49,11 +49,13 @@ public class IfStatement implements GoElementTypes {
         parser.resetFlag(AllowCompositeLiteral, allowComposite);
         parser.parseBody(builder);
 
-        ParserUtils.skipNLS(builder);
-        if (builder.getTokenType() == kELSE) {
-            ParserUtils.getToken(builder, kELSE);
+        if (ParserUtils.lookAheadSkipNLS(builder, kELSE)) {
             ParserUtils.skipNLS(builder);
-            Statements.parse(builder, parser);
+            if (builder.getTokenType() == kELSE) {
+                ParserUtils.getToken(builder, kELSE);
+                ParserUtils.skipNLS(builder);
+                Statements.parse(builder, parser);
+            }
         }
 
         marker.done(IF_STATEMENT);

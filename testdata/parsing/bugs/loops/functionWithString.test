@@ -629,7 +629,7 @@ Go file
               PsiElement(WS_NEW_LINES)('\n')
               PsiWhiteSpace('\t\t')
               PsiElement(})('}')
-            PsiElement(WS_NEW_LINES)('\n')
+          PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
       PsiElement(WS_NEW_LINES)('\n')
@@ -1076,7 +1076,7 @@ Go file
               PsiElement(WS_NEW_LINES)('\n')
               PsiWhiteSpace('\t\t')
               PsiElement(})('}')
-            PsiElement(WS_NEW_LINES)('\n')
+          PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
       PsiElement(WS_NEW_LINES)('\n')
@@ -1152,7 +1152,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       ExpressionStmtImpl
         CallOrConversionExpressionImpl
@@ -1271,7 +1271,7 @@ Go file
               PsiElement(WS_NEW_LINES)('\n')
               PsiWhiteSpace('\t\t')
               PsiElement(})('}')
-            PsiElement(WS_NEW_LINES)('\n')
+          PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
       PsiElement(WS_NEW_LINES)('\n')
@@ -1606,7 +1606,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       ForWithClausesStmtImpl
         PsiElement(KEYWORD_FOR)('for')
@@ -1683,7 +1683,7 @@ Go file
               PsiElement(WS_NEW_LINES)('\n')
               PsiWhiteSpace('\t\t')
               PsiElement(})('}')
-            PsiElement(WS_NEW_LINES)('\n')
+          PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
       PsiElement(WS_NEW_LINES)('\n')
@@ -1900,7 +1900,7 @@ Go file
               PsiElement(WS_NEW_LINES)('\n')
               PsiWhiteSpace('\t\t')
               PsiElement(})('}')
-            PsiElement(WS_NEW_LINES)('\n')
+          PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t\t')
           AssignStmt
             LiteralExpressionImpl
@@ -1935,7 +1935,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n\n')
+      PsiElement(WS_NEW_LINES)('\n\n')
       PsiWhiteSpace('\t')
       ShortVarStmtImpl
         LiteralIdentifierImpl
@@ -1989,7 +1989,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
@@ -2027,10 +2027,10 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
-        PsiWhiteSpace('\t')
-        PsiComment(SL_COMMENT)('//fmt.Printf("rune = %v n=%v\n", string(c), n);')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\t')
+      PsiComment(SL_COMMENT)('//fmt.Printf("rune = %v n=%v\n", string(c), n);')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
@@ -2104,7 +2104,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
@@ -2137,7 +2137,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       AssignStmt
         LiteralExpressionImpl
@@ -2319,10 +2319,10 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
-        PsiWhiteSpace('\t')
-        PsiComment(SL_COMMENT)('//fmt.Printf("open %v\n", s);')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\t')
+      PsiComment(SL_COMMENT)('//fmt.Printf("open %v\n", s);')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
@@ -2437,10 +2437,10 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
-        PsiWhiteSpace('\t')
-        PsiComment(SL_COMMENT)('//fmt.Printf("create %v mode %v\n", s);')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\t')
+      PsiComment(SL_COMMENT)('//fmt.Printf("create %v mode %v\n", s);')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
@@ -2599,7 +2599,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')
   PsiElement(WS_NEW_LINES)('\n\n')
   FunctionDeclaration(exit)
@@ -2664,7 +2664,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
@@ -2709,7 +2709,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
@@ -2754,7 +2754,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       ExpressionStmtImpl
         CallOrConversionExpressionImpl

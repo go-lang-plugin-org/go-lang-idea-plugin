@@ -31,5 +31,5 @@ Go file
           PsiElement({)('{')
           PsiWhiteSpace(' ')
           PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')

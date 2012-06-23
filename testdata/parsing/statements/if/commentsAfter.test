@@ -1,8 +1,9 @@
 package main
 func main() {
-    if e += 2; e {
-
-    }
+       if 1 > 2 {
+       }
+       // test
+       // test
 }
 -----
 Go file
@@ -21,30 +22,31 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
-      PsiWhiteSpace('    ')
+      PsiWhiteSpace('       ')
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        AssignStmt
+        RelationalExpressionImpl
           LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('e')
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('1')
           PsiWhiteSpace(' ')
-          PsiElement(+=)('+=')
+          PsiElement(>)('>')
           PsiWhiteSpace(' ')
           LiteralExpressionImpl
             LiteralIntegerImpl
               PsiElement(LITERAL_INT)('2')
-        PsiElement(;)(';')
-        PsiWhiteSpace(' ')
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         BlockStmtImpl
           PsiElement({)('{')
-          PsiElement(WS_NEW_LINES)('\n\n')
-          PsiWhiteSpace('    ')
+          PsiElement(WS_NEW_LINES)('\n')
+          PsiWhiteSpace('       ')
           PsiElement(})('}')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('       ')
+      PsiComment(SL_COMMENT)('// test')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('       ')
+      PsiComment(SL_COMMENT)('// test')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')
