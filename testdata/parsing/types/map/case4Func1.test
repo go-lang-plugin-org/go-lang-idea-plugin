@@ -33,7 +33,7 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('string')
             PsiElement(])(']')
-            TypeFunction
+            TypeFunctionImpl
               PsiElement(KEYWORD_FUNC)('func')
               PsiElement(()('(')
               FunctionParameterList

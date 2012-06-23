@@ -5,7 +5,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -39,26 +38,14 @@ public class GoMethodDeclarationImpl extends GoFunctionDeclarationImpl
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        if (lastParent == null) {
-            return processor.execute(this, state);
-        }
 
-        if (!processor.execute(getMethodReceiver(), state)) {
+        if ( !super.processDeclarations(processor, state, lastParent, place))
             return false;
-        }
 
-        for (GoFunctionParameter functionParameter : getParameters()) {
-            if (!processor.execute(functionParameter, state)) {
-                return false;
-            }
-        }
-
-
-        for (GoFunctionParameter returnParameter : getResults()) {
-            if (!processor.execute(returnParameter, state)) {
-                return false;
-            }
-        }
+        // if we are coming from a child then we should expose the
+        // method receiver as a declaration
+        if (lastParent != null && !processor.execute(getMethodReceiver(), state))
+            return false;
 
         return true;
     }

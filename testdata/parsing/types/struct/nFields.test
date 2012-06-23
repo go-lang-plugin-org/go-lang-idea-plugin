@@ -75,7 +75,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('F')
           PsiWhiteSpace(' ')
-          TypeFunction
+          TypeFunctionImpl
             PsiElement(KEYWORD_FUNC)('func')
             PsiElement(()('(')
             PsiElement())(')')

@@ -25,7 +25,7 @@ Go file
     FunctionResult
       FunctionParameterList
         FunctionParameterImpl
-          TypeFunction
+          TypeFunctionImpl
             PsiElement(KEYWORD_FUNC)('func')
             PsiElement(()('(')
             FunctionParameterList

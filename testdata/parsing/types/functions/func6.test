@@ -14,7 +14,7 @@ Go file
       TypeNameDeclaration(f)
         PsiElement(IDENTIFIER)('f')
       PsiWhiteSpace(' ')
-      TypeFunction
+      TypeFunctionImpl
         PsiElement(KEYWORD_FUNC)('func')
         PsiElement(()('(')
         FunctionParameterList

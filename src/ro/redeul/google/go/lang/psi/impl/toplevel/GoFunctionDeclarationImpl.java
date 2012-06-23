@@ -80,8 +80,13 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
 
-        if (! processor.execute(this, state))
+        if (!processor.execute(this, state))
             return false;
+
+        // if we are not coming from a child then we should not expose the
+        // parameters as declarations
+        if (lastParent == null)
+            return true;
 
         for (GoFunctionParameter functionParameter : getParameters()) {
             if (!processor.execute(functionParameter, state)) {
