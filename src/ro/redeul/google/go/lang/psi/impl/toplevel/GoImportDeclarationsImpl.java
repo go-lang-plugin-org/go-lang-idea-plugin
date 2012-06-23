@@ -6,6 +6,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
@@ -35,6 +36,11 @@ public class GoImportDeclarationsImpl extends GoPsiElementBase implements GoImpo
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
                                        @NotNull ResolveState state,
                                        PsiElement lastParent, @NotNull PsiElement place) {
-       return PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
+
+        // don't process recursively imported names (yet).
+        if (!state.get(GoResolveStates.IsOriginalPackage))
+            return true;
+
+        return PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
     }
 }

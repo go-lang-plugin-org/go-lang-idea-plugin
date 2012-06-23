@@ -40,4 +40,8 @@ public class GoResolveTypesTest extends GoPsiResolveTestCase {
     public void testFromNestedImportedPackage() throws Exception {
         doTest();
     }
+
+    public void testFromMultipleImportedPackage() throws Exception {
+        doTest();
+    }
 }

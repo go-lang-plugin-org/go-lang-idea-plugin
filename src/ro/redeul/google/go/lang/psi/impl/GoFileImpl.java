@@ -11,7 +11,6 @@ import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
@@ -215,66 +214,21 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
+        if ( lastParent == this )
+            return false;
 
         String myPackageName = getPackage().getPackageName();
 
-//        ResolveState newState =
-//            state.put(GoResolveStates.PackageName, myPackageName);
+        PsiElement child = this.getLastChild();
 
-        // process current file
-//        PsiElement child = this.getLastChild();
+        while (child != null) {
+            if (child != lastParent &&
+                !child.processDeclarations(processor, state, null, place))
+                return false;
 
-        return PsiScopesUtil.walkChildrenScopes(this, processor, state, null, place);
+            child = child.getPrevSibling();
+        }
 
-//        while (child != null) {
-//
-//            if (isNodeOfType(child, GoTokenSets.GO_FILE_ENTRY_POINT_TYPES)) {
-//
-//
-//                boolean shouldProcessDeclarations = true;
-//
-//                if (child instanceof GoImportDeclarations) {
-//                    shouldProcessDeclarations = state.get(IsOriginalFile);
-//                    newState = newState.put(IsOriginalFile, false);
-//                }
-//
-//                if (shouldProcessDeclarations) {
-//                    if (!child.processDeclarations(processor, newState, null, place)) {
-//                        return false;
-//                    }
-//                }
-//            }
-//
-//            child = child.getPrevSibling();
-//        }
-//
-//        if (state.get(IsOriginalFile)) {
-//            GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
-//
-//            if (namesCache != null) {
-//                Collection<GoFile> files = namesCache.getFilesByPackageName(
-//                    myPackageName);
-//
-//                for (GoFile file : files) {
-//
-//                    PsiDirectory directory = file.getContainingDirectory();
-//
-//                    if (directory != null
-//                        && directory.isEquivalentTo(
-//                        getOriginalFile().getContainingDirectory())
-//                        && !file.isEquivalentTo(getOriginalFile())) {
-//                        if (!file.processDeclarations(processor,
-//                                                      newState.put(
-//                                                          IsOriginalFile,
-//                                                          false),
-//                                                      null, place)) {
-//                            return false;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
-//        return true;
+        return true;
     }
 }

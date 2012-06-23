@@ -86,7 +86,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
             ResolveState newState =
                 GoResolveStates.imported(getPackageName(), getVisiblePackageName());
 
-            if ( ! file.processDeclarations(processor, newState, getContainingFile(), place))
+            if ( ! file.processDeclarations(processor, newState, lastParent, place))
                 return false;
         }
 
