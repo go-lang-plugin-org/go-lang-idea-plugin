@@ -116,7 +116,7 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('\t')
         PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('\t')
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')

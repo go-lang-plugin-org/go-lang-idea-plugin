@@ -102,12 +102,11 @@ public class SwitchStatement implements GoElementTypes {
         }
 
         ParserUtils.getToken(builder, pRCURLY, "closed.curly.expected");
-        parser.resetFlag(AllowCompositeLiteral, allowCompositeLiteral);
-
-        ParserUtils.skipNLS(builder);
         IElementType switchType = isTypeSwitch ? SWITCH_TYPE_STATEMENT : SWITCH_EXPR_STATEMENT;
-
         marker.done(switchType);
+
+        parser.resetFlag(AllowCompositeLiteral, allowCompositeLiteral);
+        ParserUtils.skipNLS(builder);
         return switchType;
     }
 

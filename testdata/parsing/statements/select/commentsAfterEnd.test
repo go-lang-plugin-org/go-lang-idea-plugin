@@ -1,9 +1,10 @@
 package main
 func main() {
-    switch e; e {
-        case a:
-             return 1
+    select {
+        case a := <- b:
+            break
     }
+    //comments
 }
 -----
 Go file
@@ -23,39 +24,37 @@ Go file
       PsiElement({)('{')
       PsiElement(WS_NEW_LINES)('\n')
       PsiWhiteSpace('    ')
-      SwitchExprStmt
-        PsiElement(KEYWORD_SWITCH)('switch')
-        PsiWhiteSpace(' ')
-        ExpressionStmtImpl
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('e')
-        PsiElement(;)(';')
-        PsiWhiteSpace(' ')
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('e')
+      SelectStmt
+        PsiElement(KEYWORD_SELECT)('select')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('        ')
-        SwitchExprCase
+        SelectCase
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('a')
-          PsiElement(:)(':')
-          PsiElement(WS_NEW_LINES)('\n')
-          PsiWhiteSpace('             ')
-          ReturnStmtImpl
-            PsiElement(KEYWORD_RETURN)('return')
+          SelectCaseRecvExpr
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('a')
+            PsiWhiteSpace(' ')
+            PsiElement(:=)(':=')
+            PsiWhiteSpace(' ')
+            PsiElement(<-)('<-')
             PsiWhiteSpace(' ')
             LiteralExpressionImpl
-              LiteralIntegerImpl
-                PsiElement(LITERAL_INT)('1')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('b')
+          PsiElement(:)(':')
+          PsiElement(WS_NEW_LINES)('\n')
+          PsiWhiteSpace('            ')
+          BreakStmt
+            PsiElement(KEYWORD_BREAK)('break')
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
         PsiElement(})('}')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      PsiComment(SL_COMMENT)('//comments')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')

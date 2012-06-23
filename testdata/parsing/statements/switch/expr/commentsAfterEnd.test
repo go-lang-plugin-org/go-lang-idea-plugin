@@ -1,9 +1,14 @@
 package main
 func main() {
-    switch e; e {
+    switch e {
         case a:
-             return 1
+            fallthrough
+        default:
+            return 1
     }
+    //adf
+    //adf
+    //adf
 }
 -----
 Go file
@@ -26,12 +31,6 @@ Go file
       SwitchExprStmt
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
-        ExpressionStmtImpl
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('e')
-        PsiElement(;)(';')
-        PsiWhiteSpace(' ')
         LiteralExpressionImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('e')
@@ -47,7 +46,16 @@ Go file
               PsiElement(IDENTIFIER)('a')
           PsiElement(:)(':')
           PsiElement(WS_NEW_LINES)('\n')
-          PsiWhiteSpace('             ')
+          PsiWhiteSpace('            ')
+          FallthroughStmt
+            PsiElement(KEYWORD_FALLTHROUGH)('fallthrough')
+          PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('        ')
+        SwitchExprCase
+          PsiElement(KEYWORD_DEFAULT)('default')
+          PsiElement(:)(':')
+          PsiElement(WS_NEW_LINES)('\n')
+          PsiWhiteSpace('            ')
           ReturnStmtImpl
             PsiElement(KEYWORD_RETURN)('return')
             PsiWhiteSpace(' ')
@@ -57,5 +65,14 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
         PsiElement(})('}')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      PsiComment(SL_COMMENT)('//adf')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      PsiComment(SL_COMMENT)('//adf')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      PsiComment(SL_COMMENT)('//adf')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')

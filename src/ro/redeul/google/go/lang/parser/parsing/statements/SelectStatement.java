@@ -64,9 +64,8 @@ public class SelectStatement implements GoElementTypes {
         }
 
         ParserUtils.getToken(builder, pRCURLY, "closed.curly.expected");
-
-        ParserUtils.skipNLS(builder);
         marker.done(SELECT_STATEMENT);
+        ParserUtils.skipNLS(builder);
         return SELECT_STATEMENT;
     }
 

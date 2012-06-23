@@ -1,10 +1,13 @@
 package main
 func main() {
-    switch e = 2; i := x[i].(type) {
+    switch e = 2; x[1:2].(type) {
         case nil:
         case int, []string:
              return 1
     }
+
+    //adfas
+    //adfa
 }
 -----
 Go file
@@ -40,18 +43,18 @@ Go file
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         SwitchTypeGuard
-          PsiElement(IDENTIFIER)('i')
-          PsiWhiteSpace(' ')
-          PsiElement(:=)(':=')
-          PsiWhiteSpace(' ')
-          IndexExpressionImpl
+          SliceExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('x')
             PsiElement([)('[')
             LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('i')
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('1')
+            PsiElement(:)(':')
+            LiteralExpressionImpl
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('2')
             PsiElement(])(']')
           PsiElement(.)('.')
           PsiElement(()('(')
@@ -97,5 +100,11 @@ Go file
           PsiElement(WS_NEW_LINES)('\n')
         PsiWhiteSpace('    ')
         PsiElement(})('}')
+      PsiElement(WS_NEW_LINES)('\n\n')
+      PsiWhiteSpace('    ')
+      PsiComment(SL_COMMENT)('//adfas')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      PsiComment(SL_COMMENT)('//adfa')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')
