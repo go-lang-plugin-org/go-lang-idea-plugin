@@ -33,10 +33,4 @@ public abstract class GoPsiBlock<GoPsi extends GoPsiElement>
         //noinspection unchecked
         return (GoPsi) getNode().getPsi();
     }
-
-    @NotNull
-    @Override
-    public List<Block> getSubBlocks() {
-        return super.getSubBlocks();
-    }
 }

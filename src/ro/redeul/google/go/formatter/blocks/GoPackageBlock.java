@@ -20,8 +20,6 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
  */
 public class GoPackageBlock extends GoBlock {
 
-    Spacing basicSpacing = Spacing.createSpacing(1, 1, 0, false, 0);
-    Spacing emptySpacing = Spacing.createSpacing(0, 0, 0, false, 0);
 
     public GoPackageBlock(ASTNode node, Alignment alignment, Indent indent,
                           Wrap wrap, CommonCodeStyleSettings settings) {
@@ -31,9 +29,9 @@ public class GoPackageBlock extends GoBlock {
     @Override
     public Spacing getSpacing(Block child1, Block child2) {
         if ( ((GoBlock)child1).getNode().getElementType() == GoTokenTypes.kPACKAGE )  {
-            return basicSpacing;
+            return BASIC_SPACING;
         }
 
-        return emptySpacing;
+        return EMPTY_SPACING;
     }
 }

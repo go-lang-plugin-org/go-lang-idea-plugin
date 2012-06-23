@@ -363,8 +363,7 @@
         <lang.findUsagesProvider language="Google Go" implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
         <lang.refactoringSupport language="Google Go" implementationClass="ro.redeul.google.go.refactoring.GoRefactoringSupportProvider"/>
 
-        <lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFmt" />
-        <!--<lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFormatterModelBuilder" />-->
+        <lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFormattingModelBuilder" />
         <lang.psiStructureViewFactory language="Google Go" implementationClass="ro.redeul.google.go.ide.structureview.GoStructureView"/>
         <lang.importOptimizer language="Google Go" implementationClass="ro.redeul.google.go.imports.GoImportOptimizer" />
         <lang.documentationProvider language="Google Go" implementationClass="ro.redeul.google.go.lang.documentation.GoDocumentationProvider" />

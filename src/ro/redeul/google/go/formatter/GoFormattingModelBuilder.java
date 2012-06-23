@@ -21,7 +21,7 @@ import ro.redeul.google.go.GoLanguage;
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
  *         Date: Sep 27, 2010
  */
-public class GoFormatterModelBuilder implements FormattingModelBuilder {
+public class GoFormattingModelBuilder implements FormattingModelBuilder {
 
     @NotNull
     public FormattingModel createModel(PsiElement element,

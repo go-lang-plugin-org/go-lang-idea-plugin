@@ -1,6 +1,7 @@
 package ro.redeul.google.go.formatter.blocks;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.intellij.formatting.Alignment;
@@ -15,9 +16,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.formatter.GoBlockGenerator;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
@@ -28,13 +31,14 @@ import ro.redeul.google.go.lang.psi.GoFile;
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
  *         Date: Sep 27, 2010
  */
-public abstract class GoBlock implements Block, GoElementTypes {
+public class GoBlock implements Block, GoElementTypes {
 
     final protected ASTNode myNode;
     final protected Alignment myAlignment;
     final protected Indent myIndent;
     final protected Wrap myWrap;
     final protected CommonCodeStyleSettings mySettings;
+    private Boolean myIncomplete;
 
     final static TokenSet GO_BLOCK_ELEMENTS =
         TokenSet.not(
@@ -43,7 +47,42 @@ public abstract class GoBlock implements Block, GoElementTypes {
 
     protected List<Block> mySubBlocks = null;
 
-    protected final Spacing basicSpacing = Spacing.createSpacing(1, 1, 0, false, 0);
+    protected static final Spacing BASIC_SPACING = Spacing.createSpacing(1, 1, 0, false, 0);
+    protected static final Spacing EMPTY_SPACING = Spacing.createSpacing(0, 0, 0, false, 0);
+
+    private static final TokenSet INDENT_STATEMENTS = TokenSet.create(
+        ASSIGN_STATEMENT,
+        BREAK_STATEMENT,
+        CONST_DECLARATION,
+        CONST_DECLARATIONS,
+        CONTINUE_STATEMENT,
+        DEFER_STATEMENT,
+        EXPRESSION_STATEMENT,
+        FALLTHROUGH_STATEMENT,
+        FOR_WITH_CLAUSES_STATEMENT,
+        FOR_WITH_CONDITION_STATEMENT,
+        FOR_WITH_RANGE_STATEMENT,
+        GOTO_STATEMENT,
+        GO_STATEMENT,
+        IF_STATEMENT,
+        IMPORT_DECLARATION,
+        INC_DEC_STATEMENT,
+        LITERAL_COMPOSITE_ELEMENT,
+        METHOD_DECLARATION,
+        RETURN_STATEMENT,
+        SELECT_STATEMENT,
+        SHORT_VAR_STATEMENT,
+        SWITCH_EXPR_STATEMENT,
+        SWITCH_TYPE_STATEMENT,
+        TYPE_DECLARATION,
+        TYPE_DECLARATIONS,
+        TYPE_STRUCT_FIELD,
+        TYPE_STRUCT_FIELD_ANONYMOUS,
+        VAR_DECLARATION,
+        VAR_DECLARATIONS,
+        mML_COMMENT,
+        mSL_COMMENT
+        );
 
     public GoBlock(ASTNode node, Alignment alignment, Indent indent, Wrap wrap,
                    CommonCodeStyleSettings settings) {
@@ -67,32 +106,45 @@ public abstract class GoBlock implements Block, GoElementTypes {
 
     @NotNull
     public List<Block> getSubBlocks() {
-
         if (mySubBlocks == null) {
-            mySubBlocks = new ArrayList<Block>();
-            ASTNode[] children = getGoChildren(myNode);
-
-            Block childBlock = null;
-            for (ASTNode child : children) {
-                if (getIndentedElements().contains(child.getElementType())) {
-                    childBlock =
-                        GoBlockGenerator.generateBlock(
-                            child, Indent.getNormalIndent(), mySettings);
-                } else {
-                    childBlock =
-                        GoBlockGenerator.generateBlock(
-                            child, mySettings);
-                }
-
-                mySubBlocks.add(childBlock);
+            List<Block> children = buildChildren();
+            if (children == null || children.isEmpty()) {
+                mySubBlocks = Collections.emptyList();
+            } else {
+                mySubBlocks = children;
             }
         }
 
         return mySubBlocks;
     }
 
+    @Nullable
+    protected List<Block> buildChildren() {
+        List<Block> children = new ArrayList<Block>();
+
+        for (ASTNode child : getGoChildren()) {
+            if (child.getTextRange().getLength() == 0) {
+                continue;
+            }
+            Block childBlock;
+            if (getIndentedElements().contains(child.getElementType())) {
+                childBlock =
+                    GoBlockGenerator.generateBlock(
+                        child, Indent.getNormalIndent(), mySettings);
+            } else {
+                childBlock =
+                    GoBlockGenerator.generateBlock(
+                        child, mySettings);
+            }
+
+            children.add(childBlock);
+        }
+
+        return children;
+    }
+
     protected TokenSet getIndentedElements() {
-        return TokenSet.EMPTY;
+        return INDENT_STATEMENTS;
     }
 
     public Wrap getWrap() {
@@ -111,23 +163,45 @@ public abstract class GoBlock implements Block, GoElementTypes {
         return null;
     }
 
+
+    @Override
     @NotNull
     public ChildAttributes getChildAttributes(int newChildIndex) {
-        return new ChildAttributes(Indent.getNoneIndent(), null);
+        return new ChildAttributes(getChildIndent(), getFirstChildAlignment());
     }
 
+    @Nullable
+    private Alignment getFirstChildAlignment() {
+        for (Block subBlock : getSubBlocks()) {
+            Alignment alignment = subBlock.getAlignment();
+            if (alignment != null) {
+                return alignment;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    protected Indent getChildIndent() {
+        return Indent.getNormalIndent();
+    }
+
+    @Override
     public boolean isIncomplete() {
-        return false;
+        if (myIncomplete == null) {
+            myIncomplete = FormatterUtil.isIncomplete(getNode());
+        }
+        return myIncomplete;
     }
 
     public boolean isLeaf() {
         return myNode.getFirstChildNode() == null;
     }
 
-    protected ASTNode[] getGoChildren(ASTNode node) {
-        PsiElement psi = node.getPsi();
+    protected ASTNode[] getGoChildren() {
+        PsiElement psi = myNode.getPsi();
         if (psi instanceof OuterLanguageElement) {
-            TextRange range = node.getTextRange();
+            TextRange range = myNode.getTextRange();
             List<ASTNode> childList = new ArrayList<ASTNode>();
             PsiFile goFile = psi.getContainingFile()
                                 .getViewProvider()
@@ -139,7 +213,7 @@ public abstract class GoBlock implements Block, GoElementTypes {
             return childList.toArray(new ASTNode[childList.size()]);
         }
 
-        return node.getChildren(GO_BLOCK_ELEMENTS);
+        return myNode.getChildren(GO_BLOCK_ELEMENTS);
     }
 
     private static void addChildNodes(PsiElement elem,
