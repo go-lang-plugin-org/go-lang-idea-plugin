@@ -49,10 +49,12 @@ public class CallOrConversionReference extends GoPsiReference<GoLiteralIdentifie
             GoFunctionDeclaration funcDeclaration =
                 (GoFunctionDeclaration) element;
 
-            return matchesVisiblePackageName(
-                funcDeclaration.getUserData(GoResolveStates.VisiblePackageName),
-                funcDeclaration.getNameIdentifier(),
-                getElement().getName());
+            if (funcDeclaration.getNameIdentifier() != null ) {
+                return matchesVisiblePackageName(
+                    funcDeclaration.getUserData(GoResolveStates.VisiblePackageName),
+                    funcDeclaration.getNameIdentifier(),
+                    getElement().getName());
+            }
         }
 
         return false;
