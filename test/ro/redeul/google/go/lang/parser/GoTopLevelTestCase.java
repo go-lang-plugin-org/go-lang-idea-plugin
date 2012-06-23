@@ -66,6 +66,7 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     public void testVar_case6() throws Throwable { doTest(); }
     public void testVar_case7() throws Throwable { doTest(); }
     public void testVar_splitAtComma() throws Throwable { doTest(); }
+    public void testVar_multipleOnOneLine() throws Throwable { doTest(); }
 
     public void testType_case1() throws Throwable { doTest(); }
     public void testType_case2() throws Throwable { doTest(); }

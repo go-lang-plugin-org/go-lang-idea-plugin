@@ -19,9 +19,9 @@ Go file
       LiteralExpressionImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('x')
-      PsiErrorElement:semicolon.or.newline.right.parenthesis.expected
-        PsiElement(.)('.')
-        PsiElement(()('(')
-        PsiElement(KEYWORD_TYPE)('type')
+    PsiErrorElement:semicolon.or.newline.right.parenthesis.expected
+      PsiElement(.)('.')
+      PsiElement(()('(')
+      PsiElement(KEYWORD_TYPE)('type')
   PsiErrorElement:unknown.token
     PsiElement())(')')

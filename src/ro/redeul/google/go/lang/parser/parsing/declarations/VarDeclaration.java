@@ -67,10 +67,10 @@ public class VarDeclaration extends ParserUtils implements GoElementTypes {
             }
         }
 
+        varStatementSpecification.done(VAR_DECLARATION);
         ParserUtils.waitNext(builder,
                              TokenSet.create(oSEMI, wsNLS, pRPAREN, pRCURLY),
                              "semicolon.or.newline.right.parenthesis.expected");
-        ParserUtils.getToken(builder, oSEMI);
-        varStatementSpecification.done(VAR_DECLARATION);
+       // ParserUtils.getToken(builder, oSEMI);
     }
 }

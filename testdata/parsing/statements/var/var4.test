@@ -30,12 +30,12 @@ Go file
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('int')
+        PsiWhiteSpace(' ')
+        PsiErrorElement:semicolon.or.newline.right.parenthesis.expected
+          PsiElement(KEYWORD_VAR)('var')
           PsiWhiteSpace(' ')
-          PsiErrorElement:semicolon.or.newline.right.parenthesis.expected
-            PsiElement(KEYWORD_VAR)('var')
-            PsiWhiteSpace(' ')
-            PsiElement(IDENTIFIER)('x')
-            PsiWhiteSpace(' ')
-            PsiElement(IDENTIFIER)('int')
+          PsiElement(IDENTIFIER)('x')
+          PsiWhiteSpace(' ')
+          PsiElement(IDENTIFIER)('int')
       PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')
