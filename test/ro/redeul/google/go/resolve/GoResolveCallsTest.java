@@ -41,6 +41,9 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
+    public void testRecursiveMethodCall() throws Exception {
+        doTest();
+    }
 //    public void testConversionToLocallyImportedType() throws Exception {
 //        doTest();
 //    }
