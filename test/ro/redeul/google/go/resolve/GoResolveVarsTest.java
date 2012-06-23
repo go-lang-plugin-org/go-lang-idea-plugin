@@ -80,4 +80,12 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testFromCustomImportedPackage() throws Exception {
         doTest();
     }
+
+    public void testResolveToMethod() throws Exception {
+        doTest();
+    }
+
+    public void testResolveToFunction() throws Exception {
+        doTest();
+    }
 }
