@@ -16,6 +16,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.psiIsA;
+import static ro.redeul.google.go.util.EditorUtil.pressEnter;
+import static ro.redeul.google.go.util.EditorUtil.reformatLines;
 
 public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     public CreateFunctionFix(@Nullable PsiElement element) {
@@ -56,10 +58,13 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
             @Override
             public void run() {
                 Document doc = PsiDocumentManager.getInstance(e.getProject()).getDocument(file);
-                doc.insertString(insertPoint, String.format("\n\nfunc %s() {\n    \n}\n", e.getText()));
+                doc.insertString(insertPoint, String.format("\n\nfunc %s() {\n}\n", e.getText()));
                 if (editor != null) {
-                    int offset = doc.getLineEndOffset(doc.getLineNumber(insertPoint) + 3);
+                    int line = doc.getLineNumber(insertPoint);
+                    int offset = doc.getLineEndOffset(line + 2);
                     editor.getCaretModel().moveToOffset(offset);
+                    reformatLines(file, editor, line, line + 3);
+                    pressEnter(editor);
                 }
             }
         });

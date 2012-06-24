@@ -2,9 +2,11 @@ package ro.redeul.google.go.intentions.control;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.intentions.Intention;
@@ -13,6 +15,7 @@ import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class SplitIfIntention extends Intention {
     @Override
@@ -58,6 +61,7 @@ public class SplitIfIntention extends Intention {
         GoBlockStatement then = ifStmt.getThenBlock();
         TextRange thenRange = then.getTextRange();
         Document doc = editor.getDocument();
+        RangeMarker thenRangeMarker = doc.createRangeMarker(thenRange);
 
         int lineStartOffset = doc.getLineStartOffset(doc.getLineNumber(thenRange.getEndOffset()));
         doc.insertString(lineStartOffset, "}\n");
@@ -66,5 +70,10 @@ public class SplitIfIntention extends Intention {
         doc.insertString(lineEndOffset, String.format("\nif %s {", rightExpr.getText()));
 
         doc.deleteString(leftExpr.getTextRange().getEndOffset(), rightExpr.getTextRange().getEndOffset());
+
+        PsiFile file = element.getContainingFile();
+        if (file != null) {
+            reformatPositions(file, thenRangeMarker.getStartOffset(), thenRangeMarker.getEndOffset());
+        }
     }
 }

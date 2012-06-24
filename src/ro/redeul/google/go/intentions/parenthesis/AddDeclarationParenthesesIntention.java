@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.intentions.Intention;
@@ -12,6 +13,7 @@ import ro.redeul.google.go.intentions.Intention;
 import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.getDeclaration;
 import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.getRightParenthesis;
 import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.hasOnlyOneDeclaration;
+import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class AddDeclarationParenthesesIntention extends Intention {
     @Override
@@ -25,7 +27,11 @@ public class AddDeclarationParenthesesIntention extends Intention {
         PsiElement declaration = getDeclaration(element);
         TextRange range = declaration.getTextRange();
         Document document = editor.getDocument();
-        String text = "(\n    " + declaration.getText() + "\n)";
+        String text = "(\n" + declaration.getText() + "\n)";
         document.replaceString(range.getStartOffset(), range.getEndOffset(), text);
+        PsiFile file = element.getContainingFile();
+        if (file != null) {
+            reformatPositions(file, range.getStartOffset(), range.getStartOffset() + text.length());
+        }
     }
 }

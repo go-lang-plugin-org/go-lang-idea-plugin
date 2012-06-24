@@ -18,19 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
+import static ro.redeul.google.go.util.EditorUtil.reformatLines;
+import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class AddImportFix implements QuestionAction {
     private final List<String> pathsToImport = new ArrayList<String>();
     private final List<String> sdkPackages;
     private final GoFile file;
-    private final Document document;
     private final Editor editor;
 
     public AddImportFix(List<String> sdkPackages, List<String> projectPackages, GoFile file, Editor editor) {
         this.sdkPackages = sdkPackages;
         this.file = file;
         this.editor = editor;
-        this.document = editor.getDocument();
         pathsToImport.addAll(projectPackages);
         pathsToImport.addAll(sdkPackages);
     }
@@ -45,7 +45,7 @@ public class AddImportFix implements QuestionAction {
             @Override
             public void run() {
                 if (pathsToImport.size() == 1) {
-                    addImport(file, document, pathsToImport.get(0));
+                    addImport(file, editor, pathsToImport.get(0));
                 } else {
                     JBPopupFactory popup = JBPopupFactory.getInstance();
                     popup.createListPopup(new ChoosePackagePopupStep()).showInBestPositionFor(editor);
@@ -55,17 +55,18 @@ public class AddImportFix implements QuestionAction {
         return true;
     }
 
-    public static void addImport(final GoFile file, final Document document, final String pathToImport) {
+    public static void addImport(final GoFile file, final Editor editor, final String pathToImport) {
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
-                doAddImport(file, document, pathToImport);
+                doAddImport(file, editor, pathToImport);
             }
         });
     }
 
-    private static void doAddImport(GoFile file, Document document, String pathToImport) {
+    private static void doAddImport(GoFile file, Editor editor, String pathToImport) {
         GoImportDeclarations[] ids = file.getImportDeclarations();
+        Document document = editor.getDocument();
         if (ids.length == 0) {
             addImportUnderPackage(file, document, pathToImport);
             return;
@@ -87,12 +88,16 @@ public class AddImportFix implements QuestionAction {
         }
 
         if (")".equals(lastChild.getText())) {
-            document.insertString(lastChild.getTextOffset(), "    \"" + pathToImport + "\"\n");
+            document.insertString(lastChild.getTextOffset(), "\"" + pathToImport + "\"\n");
+            int line = document.getLineNumber(lastChild.getTextOffset());
+            reformatLines(file, editor, line, line);
         } else {
             String oldImport = lastImport.getText();
             int start = lastImport.getTextOffset();
             int end = start + lastImport.getTextLength();
-            document.replaceString(start, end, String.format("(\n    %s\n    \"%s\"\n)", oldImport, pathToImport));
+            String declarations = String.format("(\n%s\n\"%s\"\n)", oldImport, pathToImport);
+            document.replaceString(start, end, declarations);
+            reformatPositions(file, start, start + declarations.length());
         }
     }
 
@@ -124,7 +129,7 @@ public class AddImportFix implements QuestionAction {
         @Override
         public PopupStep onChosen(String selectedValue, boolean finalChoice) {
             if (finalChoice) {
-                addImport(file, document, selectedValue);
+                addImport(file, editor, selectedValue);
             }
             return FINAL_CHOICE;
         }

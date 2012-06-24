@@ -16,7 +16,7 @@ public class AddImportFixTest extends GoEditorAwareTestCase {
         int start = editor.getSelectionModel().getSelectionStart();
         int end = editor.getSelectionModel().getSelectionEnd();
         String pathToImport = editor.getDocument().getText(new TextRange(start, end));
-        AddImportFix.addImport(file, editor.getDocument(), pathToImport);
+        AddImportFix.addImport(file, editor, pathToImport);
     }
 
     @Override
