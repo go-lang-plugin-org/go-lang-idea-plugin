@@ -18,6 +18,7 @@ import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +27,8 @@ import ro.redeul.google.go.formatter.GoBlockGenerator;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
@@ -42,13 +45,28 @@ public class GoBlock implements Block, GoElementTypes {
 
     final static TokenSet GO_BLOCK_ELEMENTS =
         TokenSet.not(
-            TokenSet.create(
-                GoTokenTypes.wsNLS, GoTokenTypes.wsWS, TokenType.WHITE_SPACE));
+            TokenSet.create(GoTokenTypes.wsWS, TokenType.WHITE_SPACE));
 
     protected List<Block> mySubBlocks = null;
 
     protected static final Spacing BASIC_SPACING = Spacing.createSpacing(1, 1, 0, false, 0);
     protected static final Spacing EMPTY_SPACING = Spacing.createSpacing(0, 0, 0, false, 0);
+    protected static final Spacing LINE_SPACING = Spacing.createSpacing(0, 0, 2, false, 0);
+
+    /**
+     * Those statements might contain comments which need to align together
+     * e.g.
+     *      const (
+     *          A    = 2    // The aligned
+     *          BCDE = 3456 // comment
+     *      )
+     */
+    protected static final TokenSet ALIGN_COMMENT_STATEMENTS = TokenSet.create(
+        CONST_DECLARATIONS,
+        VAR_DECLARATIONS,
+        TYPE_INTERFACE,
+        TYPE_STRUCT
+    );
 
     private static final TokenSet INDENT_STATEMENTS = TokenSet.create(
         ASSIGN_STATEMENT,
@@ -123,11 +141,13 @@ public class GoBlock implements Block, GoElementTypes {
         List<Block> children = new ArrayList<Block>();
 
         for (ASTNode child : getGoChildren()) {
-            if (child.getTextRange().getLength() == 0) {
+            if (child.getTextRange().getLength() == 0 || child.getElementType() == GoElementTypes.wsNLS) {
                 continue;
             }
+
+            IElementType type = child.getElementType();
             Block childBlock;
-            if (getIndentedElements().contains(child.getElementType())) {
+            if (getIndentedElements().contains(type)) {
                 childBlock =
                     GoBlockGenerator.generateBlock(
                         child, Indent.getNormalIndent(), mySettings);
@@ -157,6 +177,23 @@ public class GoBlock implements Block, GoElementTypes {
 
     public Alignment getAlignment() {
         return myAlignment;
+    }
+
+    protected static boolean isCommentBlock(Block block) {
+        return block instanceof GoBlock &&
+            COMMENTS.contains(((GoBlock) block).getNode().getElementType());
+    }
+
+    protected static boolean inTheSameLine(GoBlock block1, GoBlock block2) {
+        ASTNode node = block1.getNode();
+        int end = block2.getNode().getStartOffset();
+        while ((node = node.getTreeNext()) != null && node.getStartOffset() < end) {
+            if (node.getElementType() == GoElementTypes.wsNLS) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public Spacing getSpacing(Block child1, Block child2) {

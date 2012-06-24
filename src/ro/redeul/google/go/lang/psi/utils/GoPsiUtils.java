@@ -102,7 +102,12 @@ public class GoPsiUtils {
     }
 
     public static boolean isNodeOfType(PsiElement node, TokenSet tokenSet) {
-        return tokenSet.contains(node.getNode().getElementType());
+        if (node == null) {
+            return false;
+        }
+
+        ASTNode astNode = node.getNode();
+        return astNode != null && tokenSet.contains(astNode.getElementType());
     }
 
     public static boolean isNodeOfType(PsiElement node, IElementType type) {

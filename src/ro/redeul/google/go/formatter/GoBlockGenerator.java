@@ -8,11 +8,16 @@ import com.intellij.formatting.WrapType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.tree.TokenSet;
+import ro.redeul.google.go.formatter.blocks.GoAssignListBlock;
 import ro.redeul.google.go.formatter.blocks.GoBlock;
 import ro.redeul.google.go.formatter.blocks.GoFileBlock;
 import ro.redeul.google.go.formatter.blocks.GoLeafBlock;
 import ro.redeul.google.go.formatter.blocks.GoPackageBlock;
+import ro.redeul.google.go.formatter.blocks.GoTypeStructBlock;
+import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 
@@ -22,6 +27,11 @@ import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
  */
 public class GoBlockGenerator {
 
+    private static final TokenSet ALIGN_LIST_BLOCK_STATEMENTS = TokenSet.create(
+        GoElementTypes.CONST_DECLARATIONS,
+        GoElementTypes.VAR_DECLARATIONS
+    );
+
     public static final Wrap NO_WRAP = Wrap.createWrap(WrapType.NONE, false);
 
     public static Block generateBlock(ASTNode node,
@@ -29,8 +39,16 @@ public class GoBlockGenerator {
         return generateBlock(node, Indent.getNoneIndent(), settings);
     }
 
+    public static Block generateBlock(ASTNode node, Alignment alignment,
+                                      CommonCodeStyleSettings settings) {
+        return generateBlock(node, Indent.getNoneIndent(), alignment, settings);
+    }
 
     public static Block generateBlock(ASTNode node, Indent indent, CommonCodeStyleSettings styleSettings) {
+        return generateBlock(node, indent, null, styleSettings);
+    }
+
+    public static Block generateBlock(ASTNode node, Indent indent, Alignment alignment, CommonCodeStyleSettings styleSettings) {
         PsiElement psi = node.getPsi();
         if (psi instanceof GoFile)
             return generateGoFileBlock(node, styleSettings);
@@ -45,9 +63,19 @@ public class GoBlockGenerator {
                                    Indent.getAbsoluteNoneIndent(),
                                    Wrap.createWrap(WrapType.NONE, false),
                                    styleSettings);
+        } else if (GoTokenTypeSets.COMMENTS.contains(node.getElementType())) {
+            return new GoLeafBlock(node,
+                                    alignment,
+                                    indent,
+                                    Wrap.createWrap(WrapType.NONE, false),
+                                    styleSettings);
+        } else if (ALIGN_LIST_BLOCK_STATEMENTS.contains(node.getElementType())) {
+            return new GoAssignListBlock(node, alignment, indent, styleSettings);
+        } else if (node.getElementType() == GoElementTypes.TYPE_STRUCT) {
+            return new GoTypeStructBlock(node, alignment, indent, styleSettings);
         }
 
-        return new GoBlock(node, null, indent, NO_WRAP, styleSettings);
+        return new GoBlock(node, alignment, indent, NO_WRAP, styleSettings);
     }
 
     private static Block generatePackageBlock(ASTNode node,
