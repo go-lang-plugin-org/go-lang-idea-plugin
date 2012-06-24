@@ -6,6 +6,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeParenthesized;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 
 public class GoTypeParenthesizedImpl extends GoPsiPackagedElementBase
     implements GoTypeParenthesized
@@ -27,5 +28,16 @@ public class GoTypeParenthesizedImpl extends GoPsiPackagedElementBase
     @Override
     public GoType getMemberType(String name) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public GoUnderlyingType getUnderlyingType() {
+        return getInnerType().getUnderlyingType();
+    }
+
+    @Override
+    public boolean isIdentical(GoType goType) {
+        // TODO: implement this
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

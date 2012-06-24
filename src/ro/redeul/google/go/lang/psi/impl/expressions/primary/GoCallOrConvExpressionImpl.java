@@ -7,11 +7,11 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public class GoCallOrConvExpressionImpl extends GoPsiElementBase
+public class GoCallOrConvExpressionImpl extends GoExpressionBase
     implements GoCallOrConvExpression
 {
     public GoCallOrConvExpressionImpl(@NotNull ASTNode node) {
@@ -19,8 +19,9 @@ public class GoCallOrConvExpressionImpl extends GoPsiElementBase
     }
 
     @Override
-    public GoType getType() {
-        return null;
+    protected GoType[] resolveTypes() {
+        // TODO: implement
+        return super.resolveTypes();
     }
 
     @Override

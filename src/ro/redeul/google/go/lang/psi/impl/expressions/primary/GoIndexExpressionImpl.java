@@ -17,7 +17,7 @@ public class GoIndexExpressionImpl extends GoExpressionBase
     }
 
     @Override
-    protected GoType resolveType() {
+    protected GoType[] resolveTypes() {
         // TODO: fix this
         return null;
     }

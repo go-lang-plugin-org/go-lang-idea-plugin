@@ -19,7 +19,7 @@ public class GoParenthesisedExpressionImpl extends GoPsiElementBase
     }
 
     @Override
-    public GoType getType() {
+    public GoType[] getType() {
         return null;
     }
 }

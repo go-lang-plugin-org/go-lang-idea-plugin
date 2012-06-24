@@ -14,7 +14,7 @@ public class GoTypeAssertionExpressionImpl extends GoExpressionBase
     }
 
     @Override
-    protected GoType resolveType() {
+    protected GoType[] resolveTypes() {
         return null;
     }
 

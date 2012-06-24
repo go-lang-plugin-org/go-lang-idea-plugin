@@ -16,8 +16,11 @@ public interface GoVarDeclaration extends GoPsiElement {
     GoExpr[] getExpressions();
 
     /**
-     * Whether redeclare variables provided they were originally declared in the same block with the same type.
-     * In current spec, it's true for short variable declaration, false for regular variable declaration
+     * Whether redeclare variables provided they were originally declared in the
+     * same block with the same type.
+     *
+     * In current spec, it's true for short variable declaration, false for
+     * regular variable declaration
      *
      * @return true if it's possible to redeclare variables.
      */

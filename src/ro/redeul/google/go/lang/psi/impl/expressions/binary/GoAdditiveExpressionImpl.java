@@ -13,7 +13,7 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl implements
     }
 
     @Override
-    protected GoType resolveType() {
+    protected GoType[] resolveTypes() {
         GoExpr operand = getLeftOperand();
         return operand != null ? operand.getType() : null;
     }

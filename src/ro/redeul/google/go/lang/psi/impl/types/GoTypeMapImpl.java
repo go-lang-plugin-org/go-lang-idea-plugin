@@ -3,10 +3,11 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
-import ro.redeul.google.go.lang.psi.types.GoTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoTypeMap;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
@@ -42,5 +43,16 @@ public class GoTypeMapImpl extends GoPsiPackagedElementBase implements GoTypeMap
     @Override
     public GoType getMemberType(String name) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public GoUnderlyingType getUnderlyingType() {
+        return GoUnderlyingTypes.getMap(getKeyType().getUnderlyingType(),
+                                        getElementType().getUnderlyingType());
+    }
+
+    @Override
+    public boolean isIdentical(GoType goType) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -41,12 +41,12 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     }
 
     @Override
-    protected GoType resolveType() {
+    protected GoType[] resolveTypes() {
 
         PsiElement psiElement = resolve();
 
         if (psiElement != null && psiElement instanceof GoType) {
-            return (GoType) psiElement;
+            return new GoType[]{(GoType) psiElement};
         }
 
         return null;
@@ -83,13 +83,13 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
             GoExpr expressionContext = getBaseExpression();
 
             if ( expressionContext != null ) {
-                GoType contextType = expressionContext.getType();
+                GoType[] contextType = expressionContext.getType();
 
                 if (contextType == null) {
                     return null;
                 }
 
-                return contextType.getMemberType(getText().substring(getText().indexOf(".") + 1));
+//                return contextType.getMemberType(getText().substring(getText().indexOf(".") + 1));
             }
         }
 
@@ -130,13 +130,13 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     public Object[] getVariants() {
 
         if (GoProjectSettings.getInstance(getProject()).getState().enableVariablesCompletion) {
-            GoType contextType = getBaseExpression().getType();
+            GoType[] contextType = getBaseExpression().getType();
 
             if (contextType == null) {
                 return new Object[0];
             }
 
-            return convertToPresentation(contextType, contextType.getMembers());
+//            return convertToPresentation(contextType, contextType.getMembers());
         }
 
         return new Object[0];

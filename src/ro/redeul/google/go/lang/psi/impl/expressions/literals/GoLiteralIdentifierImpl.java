@@ -24,6 +24,7 @@ import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
+import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -78,7 +79,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         visitor.visitLiteralIdentifier(this);
     }
 
-//    @Override
+    //    @Override
 //    public PsiElement getElement() {
 //        return this;
 //    }

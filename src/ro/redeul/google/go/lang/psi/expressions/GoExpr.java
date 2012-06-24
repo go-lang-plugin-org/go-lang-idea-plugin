@@ -10,6 +10,5 @@ public interface GoExpr extends GoPsiElement {
 
     public final GoExpr[] EMPTY_ARRAY = new GoExpr[0];
 
-    GoType getType();
-
+    GoType[] getType();
 }

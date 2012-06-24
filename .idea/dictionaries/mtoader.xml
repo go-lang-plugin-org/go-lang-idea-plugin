@@ -13,6 +13,7 @@
       <w>stmts</w>
       <w>struct</w>
       <w>unary</w>
+      <w>uples</w>
       <w>variadic</w>
     </words>
   </dictionary>

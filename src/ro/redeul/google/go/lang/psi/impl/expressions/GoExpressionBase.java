@@ -26,14 +26,15 @@ public abstract class GoExpressionBase extends GoPsiElementBase implements GoExp
     }
 
     @Override
-    public GoType getType() {
-        return resolveType();
+    public GoType[] getType() {
+        return resolveTypes();
     }
 
-    protected abstract GoType resolveType();
+    protected GoType[] resolveTypes() {
+        return GoType.EMPTY_ARRAY;
+    }
 
     public void accept(GoElementVisitor visitor) {
-        // TODO: implement this properly
         visitor.visitElement(this);
     }
 }

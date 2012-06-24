@@ -1,5 +1,6 @@
 package ro.redeul.google.go.psi;
 
+import ro.redeul.google.go.GoPsiTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;

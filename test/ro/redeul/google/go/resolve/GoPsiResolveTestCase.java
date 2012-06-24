@@ -1,25 +1,11 @@
 package ro.redeul.google.go.resolve;
 
-import java.io.File;
-import java.io.IOException;
-
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.roots.ContentEntry;
-import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.util.FilteringProcessor;
-import com.intellij.util.Processor;
-import ro.redeul.google.go.psi.GoPsiTestCase;
+import ro.redeul.google.go.GoFileBasedPsiTestCase;
 
-public abstract class GoPsiResolveTestCase extends GoPsiTestCase {
+public abstract class GoPsiResolveTestCase extends GoFileBasedPsiTestCase {
 
     public String REF_MARKER = "/*ref*/";
     public String DEF_MARKER = "/*def*/";
@@ -32,90 +18,13 @@ public abstract class GoPsiResolveTestCase extends GoPsiTestCase {
         return "psi/resolve/";
     }
 
-    protected void doTest() throws Exception {
-        final String fullPath =
-            (getTestDataPath() + getTestName(false))
-                .replace(File.separatorChar, '/');
-
-        VirtualFile vFile;
-
-        vFile = LocalFileSystem.getInstance().findFileByPath(fullPath + ".go");
-
-        File dir = createTempDirectory();
-        VirtualFile vModuleDir =
-            LocalFileSystem.getInstance()
-                           .refreshAndFindFileByPath(
-                               dir.getCanonicalPath()
-                                  .replace(File.separatorChar, '/'));
-
-        if (vFile != null) {
-            doSingleFileTest(vFile, vModuleDir);
-            removeContentRoots(vModuleDir);
-            return;
-        }
-
-        vFile = LocalFileSystem.getInstance().findFileByPath(fullPath);
-        if (vFile != null && vFile.isDirectory()) {
-            doDirectoryTest(vFile, vModuleDir);
-            removeContentRoots(vModuleDir);
-            return;
-        }
-
-        fail("no test files found in \"" + vFile + "\"");
+    @Override
+    protected void postProcessFilePsi(PsiFile psiFile, String fileContent) {
+        getDefinition(psiFile, fileContent);
+        getReference(psiFile, fileContent);
     }
 
-    private void removeContentRoots(VirtualFile vModuleDir) {
-        new WriteCommandAction.Simple(myModule.getProject()) {
-            @Override
-            protected void run() throws Throwable {
-                ModuleRootManager instance =
-                    ModuleRootManager.getInstance(myModule);
-
-                ModifiableRootModel modifiableModel = instance.getModifiableModel();
-
-                ContentEntry[] entries = instance.getContentEntries();
-                for (ContentEntry entry : entries) {
-                    modifiableModel.removeContentEntry(entry);
-                }
-                modifiableModel.commit();
-            }
-        }.execute().throwException();
-    }
-
-    private void doSingleFileTest(VirtualFile vFile, VirtualFile vModuleDir)
-        throws Exception {
-        parseFile(vFile, vFile.getParent(), vModuleDir);
-
-        assertResolve();
-    }
-
-    private void doDirectoryTest(final VirtualFile vFile,
-                                 final VirtualFile vModuleDir)
-        throws IOException {
-        VfsUtil.processFilesRecursively(
-            vFile,
-            new FilteringProcessor<VirtualFile>(
-                new Condition<VirtualFile>() {
-                    @Override
-                    public boolean value(VirtualFile virtualFile) {
-                        return !virtualFile.isDirectory() &&
-                            virtualFile.getName().endsWith(".go");
-                    }
-                },
-                new Processor<VirtualFile>() {
-                    @Override
-                    public boolean process(VirtualFile virtualFile) {
-                        parseFile(virtualFile, vFile, vModuleDir);
-                        return true;
-                    }
-                }
-            )
-        );
-
-        assertResolve();
-    }
-
-    private void assertResolve() {
+    protected void assertTest() {
         assertNotNull("Source position is not at a reference", ref);
 
         PsiElement resolvedDefinition = ref.resolve();
@@ -129,26 +38,6 @@ public abstract class GoPsiResolveTestCase extends GoPsiTestCase {
             assertSame(def, resolvedDefinition);
         } else {
             assertNull("The resolving should have failed", resolvedDefinition);
-        }
-    }
-
-    private void parseFile(VirtualFile file, VirtualFile root, VirtualFile vModuleRoot) {
-
-        String folder = VfsUtil.getRelativePath(file.getParent(), root, '/');
-
-        VirtualFile folderFile = root.findFileByRelativePath(folder);
-        try {
-            String fileContent =
-                StringUtil.convertLineSeparators(VfsUtil.loadText(file));
-
-            PsiFile psiFile = createFile(myModule, folderFile, file.getName(),
-                                         fileContent);
-
-            getDefinition(psiFile, fileContent);
-            getReference(psiFile, fileContent);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(e.getMessage());
         }
     }
 

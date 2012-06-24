@@ -7,13 +7,17 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-public class GoLiteralExpressionImpl extends GoPsiElementBase
+public class GoLiteralExpressionImpl extends GoExpressionBase
     implements GoLiteralExpression {
 
     public GoLiteralExpressionImpl(@NotNull ASTNode node) {
@@ -31,33 +35,66 @@ public class GoLiteralExpressionImpl extends GoPsiElementBase
     }
 
     @Override
-    public GoType getType() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public GoType[] getType() {
+        GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
-    //    @Override
-//    public GoLiteralIdentifier getIdentifier() {
-//        return findChildByClass(GoLiteralIdentifier.class);
-//    }
-//
-//    @Override
-    protected GoType resolveType() {
+        switch (getLiteral().getType()) {
+            case Bool:
+                return new GoType[]{
+                    GoTypes.getBuiltin(GoTypes.Builtin.Bool, namesCache)
+                };
 
-//        if ( this.getIdentifier() == null ) {
-//            return null;
-//        }
+            case Int:
+                return new GoType[]{
+                    GoTypes.getBuiltin(GoTypes.Builtin.Int, namesCache)
+                };
 
-//        VariableTypeResolver variableTypeResolver = new VariableTypeResolver(this.getIdentifier());
-//
-//        if ( ! PsiScopesUtil.treeWalkUp(variableTypeResolver, this, this.getContainingFile(), GoResolveStates.variables()) ) {
-//            return variableTypeResolver.getResolvedType();
-//        }
-//
-        return null;
+            case Float:
+                return new GoType[]{
+                    GoTypes.getBuiltin(GoTypes.Builtin.Float32, namesCache)
+                };
+
+            case Char:
+                return new GoType[]{
+                    GoTypes.getBuiltin(GoTypes.Builtin.Rune, namesCache)
+                };
+            case ImaginaryInt:
+            case ImaginaryFloat:
+                return new GoType[]{
+                    GoTypes.getBuiltin(GoTypes.Builtin.Complex64, namesCache)
+                };
+            case RawString:
+            case InterpretedString:
+                return new GoType[]{
+                    GoTypes.getBuiltin(GoTypes.Builtin.String, namesCache)
+                };
+            case Identifier:
+                GoLiteralIdentifier identifier = (GoLiteralIdentifier) getLiteral();
+                PsiReference reference = identifier.getReference();
+                if (reference == null) {
+                    return GoType.EMPTY_ARRAY;
+                }
+
+                PsiElement resolved = reference.resolve();
+
+                if (resolved != null && resolved.getParent() instanceof GoVarDeclaration) {
+                    GoVarDeclaration varDeclaration = (GoVarDeclaration)resolved.getParent();
+                    if ( varDeclaration.getIdentifiersType() != null) {
+                        return new GoType[] {
+                            varDeclaration.getIdentifiersType()
+                        };
+                    }
+                }
+                return GoType.EMPTY_ARRAY;
+
+            default:
+                return GoType.EMPTY_ARRAY;
+        }
     }
 
     @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+    public boolean processDeclarations(@NotNull PsiScopeProcessor
+                                           processor,
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {

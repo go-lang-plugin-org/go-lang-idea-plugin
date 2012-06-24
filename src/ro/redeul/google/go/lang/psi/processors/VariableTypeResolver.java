@@ -43,7 +43,7 @@ public class VariableTypeResolver extends BaseScopeProcessor {
 
                 if (identifier.getName().equalsIgnoreCase(this.identifier.getName())) {
                     if ( expressions != null && expressions.length > i ) {
-                        type = expressions[i].getType();
+       //                 type = expressions[i].getType();
                     }
                     return false;
                 }

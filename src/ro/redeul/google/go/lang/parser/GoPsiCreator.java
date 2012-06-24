@@ -10,18 +10,12 @@ import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationsImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalAndExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalOrExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoRelationalExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoBuiltinCallExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoCallOrConvExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoIndexExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoLiteralExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoParenthesisedExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoUnaryExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoAdditiveExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalAndExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalOrExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoMultiplicativeExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoRelationalExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralBoolImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralFloatImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralFunctionImpl;
@@ -32,6 +26,12 @@ import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralStringImp
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeElementImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeValueImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoBuiltinCallExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoCallOrConvExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoIndexExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoLiteralExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoParenthesisedExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSliceExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoTypeAssertionExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
@@ -66,7 +66,6 @@ import ro.redeul.google.go.lang.psi.impl.types.GoTypeSliceImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeStructImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructAnonymousFieldImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructFieldImpl;
-
 import static ro.redeul.google.go.lang.psi.types.GoTypeChannel.ChannelType;
 
 public class GoPsiCreator implements GoElementTypes {

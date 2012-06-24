@@ -1,5 +1,6 @@
 package ro.redeul.google.go.psi;
 
+import ro.redeul.google.go.GoPsiTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
@@ -12,7 +13,6 @@ public class GoPsiSliceExpressionsTestCase extends GoPsiTestCase {
 
     public void testNormalSlice() throws Exception {
         GoFile file = get(parse("package main; func a() { a[i:j] }"));
-
 
         GoSliceExpression sliceExpression =
             getAs(GoSliceExpression.class,

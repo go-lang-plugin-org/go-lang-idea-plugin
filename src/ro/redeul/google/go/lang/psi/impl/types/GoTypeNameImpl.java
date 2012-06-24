@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl.types;
 
-import java.util.regex.Pattern;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
@@ -14,13 +12,16 @@ import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
+import ro.redeul.google.go.lang.psi.resolve.references.BuiltinTypeNameReference;
 import ro.redeul.google.go.lang.psi.resolve.references.TypeNameReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoTypes;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePredeclared;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.or;
 import static com.intellij.patterns.StandardPatterns.string;
 
 /**
@@ -31,13 +32,6 @@ import static com.intellij.patterns.StandardPatterns.string;
  */
 public class GoTypeNameImpl extends GoPsiPackagedElementBase
     implements GoTypeName {
-
-    static final Pattern PRIMITIVE_TYPES_PATTERN =
-        Pattern.compile("" +
-                            "bool|error|byte|rune|uintptr|string|char|" +
-                            "(int|uint)(8|16|32|64)?|" +
-                            "float(32|64)|" +
-                            "complex(64|128)");
 
     public GoTypeNameImpl(@NotNull ASTNode node) {
         super(node);
@@ -61,16 +55,15 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
         return findChildByClass(GoPackageReference.class);
     }
 
-    static final ElementPattern<PsiElement> NON_REFERENCES = or(
-        psiElement().withParent(GoTypeSpec.class),
-        psiElement().withText(
-            string().matches(PRIMITIVE_TYPES_PATTERN.pattern()))
-    );
+    static final ElementPattern<PsiElement> NON_REFERENCES =
+        psiElement()
+            .withText(
+                string().matches(GoTypes.PRIMITIVE_TYPES_PATTERN.pattern()));
 
     @Override
     public PsiReference getReference() {
         if (NON_REFERENCES.accepts(this))
-            return null;
+            return new BuiltinTypeNameReference(this);
 
         return new TypeNameReference(this);
     }
@@ -111,6 +104,43 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
         return null;
     }
 
+    @Override
+    public GoUnderlyingType getUnderlyingType() {
+
+        if (psiElement()
+            .withText(string().matches(GoTypes.PRIMITIVE_TYPES_PATTERN.pattern()))
+            .accepts(this))
+        {
+            return GoUnderlyingTypePredeclared.getForName(getText());
+        }
+
+        PsiReference reference = getReference();
+        if (reference == null ){
+            return GoUnderlyingType.Undefined;
+        }
+
+        PsiElement resolved = reference.resolve();
+        if (resolved == null) {
+            return GoUnderlyingType.Undefined;
+        }
+
+        if (resolved instanceof GoTypeSpec) {
+            GoTypeSpec spec = (GoTypeSpec)resolved;
+            return spec.getType().getUnderlyingType();
+        }
+
+        return GoUnderlyingType.Undefined;
+    }
+
+    @Override
+    public boolean isIdentical(GoType goType) {
+        if ( goType instanceof GoTypeName ) {
+            return getName().equals(goType.getName());
+        }
+
+        return false;
+    }
+
     @NotNull
     @Override
     public GoLiteralIdentifier getIdentifier() {
@@ -124,6 +154,6 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
 
     @Override
     public boolean isPrimitive() {
-        return PRIMITIVE_TYPES_PATTERN.matcher(getText()).matches();
+        return GoTypes.PRIMITIVE_TYPES_PATTERN.matcher(getText()).matches();
     }
 }

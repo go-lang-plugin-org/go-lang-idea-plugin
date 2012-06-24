@@ -17,8 +17,8 @@ public class GoSliceExpressionImpl extends GoExpressionBase
     }
 
     @Override
-    protected GoType resolveType() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    protected GoType[] resolveTypes() {
+        return null;
     }
 
     @Override
