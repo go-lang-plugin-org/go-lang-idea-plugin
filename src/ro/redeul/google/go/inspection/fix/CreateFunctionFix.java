@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -47,6 +48,10 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
         }
 
         GoFunctionDeclaration fd = findParentOfType(e, GoFunctionDeclaration.class);
+        while (fd instanceof GoLiteralFunction) {
+            fd = findParentOfType(fd.getParent(), GoFunctionDeclaration.class);
+        }
+
         final int insertPoint;
         if (fd != null) {
             insertPoint = fd.getTextRange().getEndOffset();
