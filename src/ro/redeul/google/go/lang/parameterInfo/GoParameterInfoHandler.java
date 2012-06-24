@@ -12,6 +12,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.inspection.InspectionUtil;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -113,7 +114,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement
         }
 
         GoLiteralIdentifier id = (GoLiteralIdentifier) literal;
-        PsiElement functionDeclaration = id.getReference().resolve();
+        PsiElement functionDeclaration = InspectionUtil.resolveIdentifier(id);
         if (!(functionDeclaration instanceof GoFunctionDeclaration)) {
             return null;
         }
