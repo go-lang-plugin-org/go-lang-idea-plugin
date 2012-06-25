@@ -14,6 +14,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
 import ro.redeul.google.go.inspection.ConstDeclarationInspection;
@@ -31,6 +32,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
+import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
@@ -149,6 +151,20 @@ public class GoAnnotator extends GoRecursiveElementVisitor implements Annotator 
 
         Annotation ann = annotationHolder.createInfoAnnotation(expression.getBaseExpression(), null);
         ann.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
+    }
+
+    @Override
+    public void visitIfStatement(GoIfStatement statement) {
+        super.visitIfStatement(statement);
+
+        if (statement.getExpression() == null) {
+            PsiElement element = statement.getFirstChild();
+            if (element == null) {
+                element = statement;
+            }
+            annotationHolder.createErrorAnnotation(element,
+                    GoBundle.message("error.missing.condition.in.if.statement"));
+        }
     }
 
     @Override
