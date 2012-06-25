@@ -29,6 +29,11 @@ public class GoCallOrConvExpressionImpl extends GoPsiElementBase
     }
 
     @Override
+    public GoType getTypeArgument() {
+        return findChildByClass(GoType.class);
+    }
+
+    @Override
     public GoExpr[] getArguments() {
 
         GoExpr []expressions = findChildrenByClass(GoExpr.class);
