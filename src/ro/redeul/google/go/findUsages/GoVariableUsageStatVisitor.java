@@ -29,6 +29,7 @@ import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
@@ -286,20 +287,14 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
     }
 
-    private GoPsiElementBase getMethodReceiverIdentifier(
+    private GoLiteralIdentifier getMethodReceiverIdentifier(
             GoMethodDeclaration md) {
-        GoPsiElement methodReceiver = md.getMethodReceiver();
+        GoMethodReceiver methodReceiver = md.getMethodReceiver();
         if (methodReceiver == null) {
             return null;
         }
 
-        ASTNode idNode = methodReceiver.getNode()
-                .findChildByType(
-                        GoElementTypes.IDENTIFIER);
-        if (idNode != null && idNode.getPsi() instanceof GoPsiElementBase) {
-            return (GoPsiElementBase) idNode.getPsi();
-        }
-        return null;
+        return methodReceiver.getIdentifier();
     }
 
     private void getGlobalVariables(GoFile file, HashMap<String, VariableUsage> variables) {
@@ -339,7 +334,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
         if (fd instanceof GoMethodDeclaration) {
             // Add method receiver to parameter list
-            GoPsiElementBase receiver = getMethodReceiverIdentifier((GoMethodDeclaration) fd);
+            GoLiteralIdentifier receiver = getMethodReceiverIdentifier((GoMethodDeclaration) fd);
             if (receiver != null) {
                 variables.put(receiver.getName(), new VariableUsage(receiver));
             }

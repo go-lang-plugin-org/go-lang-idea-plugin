@@ -11,6 +11,7 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.ui.LayeredIcon;
@@ -23,7 +24,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
@@ -33,6 +34,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isExportedName;
 
@@ -310,10 +312,47 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
             return PlatformIcons.FIELD_ICON;
         }
 
+        private String getTypeName() {
+            PsiElement parent = element.getParent();
+            GoType type = null;
+            GoLiteralIdentifier[] identifiers = GoLiteralIdentifier.EMPTY_ARRAY;
+            GoExpr[] expressions = GoExpr.EMPTY_ARRAY;
+            if (parent instanceof GoVarDeclaration) {
+                GoVarDeclaration vd = (GoVarDeclaration) parent;
+                type = vd.getIdentifiersType();
+                identifiers = vd.getIdentifiers();
+                expressions = vd.getExpressions();
+            } else if (parent instanceof GoConstDeclaration) {
+                GoConstDeclaration cd = (GoConstDeclaration) parent;
+                type = cd.getIdentifiersType();
+                identifiers = cd.getIdentifiers();
+                expressions = cd.getExpressions();
+            } else if (parent instanceof GoTypeStructField) {
+                type = ((GoTypeStructField) parent).getType();
+            }
+
+            // return type name if type is explicitly defined in declaration.
+            if (type != null) {
+                String name = type.getName();
+                return name == null ? type.getText() : name;
+            }
+
+            // otherwise show it's definition directly
+            if (identifiers.length == expressions.length) {
+                int start = element.getTextOffset();
+                for (int i = 0; i < expressions.length; i++) {
+                    if (identifiers[i].getTextOffset() == start) {
+                        return "= " + expressions[i].getText();
+                    }
+                }
+            }
+
+            return "";
+        }
+
         @Override
         public String getPresentationText() {
-            GoLiteral.Type type = ((GoLiteralIdentifier) element).getType();
-            return type == null ? element.getName() : element.getName() + " " + type.name();
+            return element.getName() + " " + getTypeName();
         }
     }
 

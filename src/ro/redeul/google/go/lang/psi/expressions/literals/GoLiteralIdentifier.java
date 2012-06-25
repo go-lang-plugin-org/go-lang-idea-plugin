@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface GoLiteralIdentifier extends GoLiteral<String>,
                                              PsiNameIdentifierOwner {
+    GoLiteralIdentifier[] EMPTY_ARRAY = new GoLiteralIdentifier[0];
 
     boolean isBlank();
 
