@@ -18,7 +18,6 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-
         skipNLS(builder);
 
         if (!ParserUtils.lookAhead(builder, kFUNC))
@@ -103,8 +102,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         }
 
         ParserUtils.skipNLS(builder);
-        ParserUtils.getToken(builder, oMUL);
-        parser.parseTypeName(builder);
+        parser.parseType(builder);
 
         ParserUtils.skipNLS(builder);
         receiverDeclarationMarker.done(METHOD_RECEIVER);

@@ -15,10 +15,11 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('q')
       PsiWhiteSpace(' ')
-      PsiElement(*)('*')
-      TypeNameImpl
-        LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('actionQueue')
+      TypePointerImpl
+        PsiElement(*)('*')
+        TypeNameImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('actionQueue')
     PsiElement())(')')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('Swap')

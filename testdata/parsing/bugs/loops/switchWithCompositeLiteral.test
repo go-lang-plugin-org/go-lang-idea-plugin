@@ -23,10 +23,11 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('p')
       PsiWhiteSpace(' ')
-      PsiElement(*)('*')
-      TypeNameImpl
-        LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('Package')
+      TypePointerImpl
+        PsiElement(*)('*')
+        TypeNameImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('Package')
     PsiElement())(')')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('gccMachine')

@@ -1,6 +1,6 @@
 package main
 func (p *Point) Length() float64 {}
-------
+-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -15,10 +15,11 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('p')
       PsiWhiteSpace(' ')
-      PsiElement(*)('*')
-      TypeNameImpl
-        LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('Point')
+      TypePointerImpl
+        PsiElement(*)('*')
+        TypeNameImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('Point')
     PsiElement())(')')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('Length')
