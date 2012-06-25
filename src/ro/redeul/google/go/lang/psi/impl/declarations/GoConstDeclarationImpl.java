@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoConstDeclarationImpl extends GoPsiElementBase
@@ -27,6 +28,11 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
     @Override
     public GoLiteralIdentifier[] getIdentifiers() {
         return findChildrenByClass(GoLiteralIdentifier.class);
+    }
+
+    @Override
+    public GoType getIdentifiersType() {
+        return findChildByClass(GoType.class);
     }
 
     @Override
