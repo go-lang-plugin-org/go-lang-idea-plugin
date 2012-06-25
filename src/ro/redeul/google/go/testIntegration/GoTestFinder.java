@@ -18,6 +18,9 @@ import static ro.redeul.google.go.testIntegration.TestUtil.getTestFileName;
 import static ro.redeul.google.go.testIntegration.TestUtil.isTestFile;
 
 public class GoTestFinder implements TestFinder {
+
+    public static final int TEST_SUFFIX_LENGTH = "_test.go".length();
+
     @Override
     public PsiElement findSourceElement(@NotNull PsiElement from) {
         return from.getContainingFile();
@@ -90,7 +93,7 @@ public class GoTestFinder implements TestFinder {
         }
 
         String path = file.getPath();
-        String sourceFileName = path.substring(0, path.length() - 8) + ".go";
+        String sourceFileName = path.substring(0, path.length() - TEST_SUFFIX_LENGTH) + ".go";
         VirtualFile sourceFile = file.getFileSystem().findFileByPath(sourceFileName);
         if (sourceFile != null) {
             PsiElement psiFile = getPsiFile(containingFile.getProject(), sourceFile);

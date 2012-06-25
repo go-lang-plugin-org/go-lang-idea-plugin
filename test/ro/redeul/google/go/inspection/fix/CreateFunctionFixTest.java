@@ -1,5 +1,6 @@
 package ro.redeul.google.go.inspection.fix;
 
+import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -14,12 +15,17 @@ public class CreateFunctionFixTest extends GoEditorAwareTestCase {
     public void testLiteralFunction() throws Exception{ doTest(); }
 
     @Override
-    protected void invoke(Project project, Editor editor, GoFile file) {
+    protected void invoke(final Project project, final Editor editor, final GoFile file) {
         PsiElement element = file.findElementAt(editor.getSelectionModel().getSelectionStart());
-        GoLiteralIdentifier identifier = findParentOfType(element, GoLiteralIdentifier.class);
+        final GoLiteralIdentifier identifier = findParentOfType(element, GoLiteralIdentifier.class);
         assertNotNull(identifier);
 
-        new CreateFunctionFix(identifier).invoke(project, file, editor, identifier, identifier);
+        CommandProcessor.getInstance().executeCommand(project, new Runnable() {
+            @Override
+            public void run() {
+                new CreateFunctionFix(identifier).invoke(project, file, editor, identifier, identifier);
+            }
+        }, "", null);
     }
 
     @Override
