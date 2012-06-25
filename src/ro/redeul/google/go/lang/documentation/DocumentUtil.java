@@ -1,5 +1,9 @@
 package ro.redeul.google.go.lang.documentation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
@@ -21,11 +25,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class DocumentUtil {
@@ -263,7 +262,7 @@ public class DocumentUtil {
             GoLiteralIdentifier[] ids = fp.getIdentifiers();
             GoType type = fp.getType();
             String variadic = fp.isVariadic() ? "..." : "";
-            String typeName = variadic + String.valueOf(type != null ? type.getName() : null);
+            String typeName = variadic + String.valueOf(type != null ? type.getText() : null);
             if (ids.length == 0) {
                 sb.append(typeName).append(", ");
                 continue;
