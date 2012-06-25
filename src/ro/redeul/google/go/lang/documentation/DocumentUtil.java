@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.documentation;
 
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -278,5 +279,11 @@ public class DocumentUtil {
         }
 
         return sb.delete(sb.length() - 2, sb.length()).toString();
+    }
+
+    public static void replaceElementWithText(Document document, PsiElement element, String text) {
+        int start = element.getTextOffset();
+        int end = start + element.getTextLength();
+        document.replaceString(start, end, text);
     }
 }

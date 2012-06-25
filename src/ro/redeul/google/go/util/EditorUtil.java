@@ -5,8 +5,10 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import com.intellij.openapi.editor.actionSystem.EditorActionManager;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +34,14 @@ public class EditorUtil {
         int start = doc.getLineStartOffset(startLine);
         int end = doc.getLineEndOffset(endLine);
         reformatPositions(file, start, end);
+    }
+
+    public static void reformatPositions(@NotNull PsiFile file, RangeMarker range) {
+        reformatPositions(file, range.getStartOffset(), range.getEndOffset());
+    }
+
+    public static void reformatPositions(@NotNull PsiFile file, TextRange range) {
+        reformatPositions(file, range.getStartOffset(), range.getEndOffset());
     }
 
     public static void reformatPositions(@NotNull PsiFile file, int start, int end) {

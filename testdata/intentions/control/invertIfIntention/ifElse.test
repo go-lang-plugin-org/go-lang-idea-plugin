@@ -1,0 +1,17 @@
+package main
+func Foo(a, b int) {
+    <caret>if a > b {
+        println("hi")
+    } else {
+        println("test")
+    }
+}
+-----
+package main
+func Foo(a, b int) {
+    if a <= b {
+        println("test")
+    } else {
+        println("hi")
+    }
+}

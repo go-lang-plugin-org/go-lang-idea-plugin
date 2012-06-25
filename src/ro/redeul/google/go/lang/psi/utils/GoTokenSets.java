@@ -33,6 +33,6 @@ public class GoTokenSets {
     );
 
     public static final TokenSet WHITESPACE_OR_COMMENTS = TokenSet.create(
-        wsNLS, wsWS, TokenType.WHITE_SPACE, GoElementTypes.mML_COMMENT
+        wsNLS, wsWS, TokenType.WHITE_SPACE, GoElementTypes.mML_COMMENT, GoElementTypes.mSL_COMMENT
     );
 }

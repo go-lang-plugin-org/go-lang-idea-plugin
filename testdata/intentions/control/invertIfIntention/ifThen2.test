@@ -1,0 +1,20 @@
+package main
+func Foo(a int) {
+    if a > 3 {
+        <caret>if b := a * 2; a > b {
+            println("hi")
+        }
+    }
+    println("test")
+}
+-----
+package main
+func Foo(a int) {
+    if a > 3 {
+        if b := a * 2; a <= b {
+        } else {
+            println("hi")
+        }
+    }
+    println("test")
+}

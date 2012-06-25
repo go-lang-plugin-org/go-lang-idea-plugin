@@ -1,0 +1,18 @@
+package main
+func Foo(a int) int {
+    <caret>if b := a * 2; a > b {
+        println("hi", b)
+    }
+    return 10 + a
+}
+-----
+package main
+func Foo(a int) int {
+    b := a * 2
+    if a <= b {
+        return 10 + a
+    }
+    println("hi", b)
+
+    return 10 + a
+}

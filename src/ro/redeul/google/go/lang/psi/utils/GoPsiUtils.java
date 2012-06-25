@@ -140,7 +140,7 @@ public class GoPsiUtils {
         return type.cast(node);
     }
 
-    private static boolean isWhiteSpaceOrComment(PsiElement node) {
+    public static boolean isWhiteSpaceOrComment(PsiElement node) {
         return isNodeOfType(node, GoTokenSets.WHITESPACE_OR_COMMENTS);
     }
 
