@@ -1,6 +1,5 @@
 package ro.redeul.google.go.lang.psi.types.struct;
 
-import com.intellij.psi.PsiNamedElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.types.GoType;
@@ -11,7 +10,7 @@ import ro.redeul.google.go.lang.psi.types.GoType;
  * Date: 5/29/11
  * Time: 12:26 PM
  */
-public interface GoTypeStructField extends GoPsiElement, PsiNamedElement {
+public interface GoTypeStructField extends GoPsiElement {
 
     boolean isBlank();
 

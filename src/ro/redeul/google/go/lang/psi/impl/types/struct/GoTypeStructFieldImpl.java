@@ -1,11 +1,10 @@
 package ro.redeul.google.go.lang.psi.impl.types.struct;
 
+import javax.swing.*;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -13,8 +12,6 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
-
-import javax.swing.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -26,17 +23,6 @@ public class GoTypeStructFieldImpl extends GoPsiElementBase implements GoTypeStr
 
     public GoTypeStructFieldImpl(@NotNull ASTNode node) {
         super(node);
-    }
-
-    @Override
-    public String getName() {
-//        return getIdentifiers().getText();
-        return "x";
-    }
-
-    @Override
-    public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
-        return null;
     }
 
     @Override
