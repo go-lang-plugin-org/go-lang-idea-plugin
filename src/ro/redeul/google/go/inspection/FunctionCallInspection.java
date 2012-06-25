@@ -4,9 +4,14 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
+import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
+import ro.redeul.google.go.lang.psi.types.GoTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 import static ro.redeul.google.go.inspection.InspectionUtil.UNKNOWN_COUNT;
@@ -30,9 +35,86 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             public void visitBuiltinCallExpression(GoBuiltinCallExpression expression) {
                 super.visitBuiltinCallExpression(expression);
 
+                GoPrimaryExpression baseExpression = expression.getBaseExpression();
+                if ("make".equals(baseExpression.getText())) {
+                    checkMakeCall(expression, result);
+                }
+
                 checkFunctionCallArguments(expression, result);
             }
         }.visitFile(file);
+    }
+
+    private static void checkMakeCall(GoBuiltinCallExpression expression, InspectionResult result) {
+        GoExpr[] arguments = expression.getArguments();
+        GoType type = expression.getTypeArgument();
+        if (type == null) {
+            result.addProblem(expression, GoBundle.message("error.incorrect.make.type"));
+            return;
+        }
+
+        if (type instanceof GoTypeSlice) {
+            checkMakeSliceCall(expression, arguments, result);
+        } else if (type instanceof GoTypeChannel) {
+            checkMakeChannelCall(arguments, result);
+        } else if (type instanceof GoTypeMap) {
+            checkMakeMapCall(arguments, result);
+        } else {
+            result.addProblem(expression, GoBundle.message("error.cannot.make.type", type.getText()));
+        }
+    }
+
+    private static void checkMakeSliceCall(GoBuiltinCallExpression expression,
+                                           GoExpr[] arguments, InspectionResult result) {
+        if (arguments.length > 2) {
+            result.addProblem(arguments[2], arguments[arguments.length - 1],
+                GoBundle.message("error.too.many.arguments.in.call", "make"));
+            return;
+        } else if (arguments.length == 0) {
+            String method = "make(" + expression.getTypeArgument().getText() + ")";
+            result.addProblem(expression, GoBundle.message("error.missing.argument", "len", method));
+            return;
+        }
+
+        // TODO: check len
+        GoExpr len = arguments[0];
+
+        if (arguments.length != 2) {
+            return;
+        }
+
+        // TODO: check capacity
+        GoExpr capacity = arguments[1];
+    }
+
+    private static void checkMakeMapCall(GoExpr[] arguments, InspectionResult result) {
+        if (arguments.length > 1) {
+            result.addProblem(arguments[1], arguments[arguments.length - 1],
+                GoBundle.message("error.too.many.arguments.in.call", "make"));
+            return;
+        }
+
+        if (arguments.length != 1) {
+            return;
+        }
+
+        // TODO: check space
+        GoExpr space = arguments[0];
+    }
+
+    private static void checkMakeChannelCall(GoExpr[] arguments, InspectionResult result) {
+        if (arguments.length > 1) {
+            result.addProblem(arguments[1], arguments[arguments.length - 1],
+                GoBundle.message("error.too.many.arguments.in.call", "make"));
+            return;
+        }
+
+        if (arguments.length != 1) {
+            return;
+        }
+
+        // TODO: check bufferSize
+        GoExpr bufferSize = arguments[0];
     }
 
     public static void checkFunctionCallArguments(GoCallOrConvExpression call, InspectionResult result) {

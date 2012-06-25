@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Time: 10:24:11 PM
  */
 public interface GoPsiElement extends PsiElement {
+    GoPsiElement[] EMPTY_ARRAY = new GoPsiElement[0];
 
     void accept(GoElementVisitor visitor);
 

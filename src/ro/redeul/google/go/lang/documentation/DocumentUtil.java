@@ -220,7 +220,7 @@ public class DocumentUtil {
             GoLiteralIdentifier[] ids = fp.getIdentifiers();
             GoType type = fp.getType();
             String variadic = fp.isVariadic() ? "..." : "";
-            String typeName = variadic + String.valueOf(type != null ? type.getName() : null);
+            String typeName = variadic + String.valueOf(type != null ? type.getText() : null);
             start = sb.length();
             if (ids.length == 0) {
                 sb.append(typeName).append(", ");
