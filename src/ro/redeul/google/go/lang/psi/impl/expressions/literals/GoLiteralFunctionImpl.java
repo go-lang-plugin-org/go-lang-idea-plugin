@@ -13,6 +13,9 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -88,5 +91,25 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
         }
 
         return processor.execute(this, state);
+    }
+
+    @Override
+    public GoUnderlyingType getUnderlyingType() {
+        return GoUnderlyingTypes.getFunction();
+    }
+
+    @Override
+    public boolean isIdentical(GoType goType) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public String getPackageName() {
+        return "";
+    }
+
+    @Override
+    public String getQualifiedName() {
+        return "";
     }
 }

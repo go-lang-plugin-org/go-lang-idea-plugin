@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinTypeNameReference;
@@ -72,8 +71,8 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
         visitor.visitTypeName(this);
     }
 
-    @Override
-    public GoPsiElement[] getMembers() {
+//    @Override
+//    public GoPsiElement[] getMembers() {
 //        GoTypeNameDeclaration declaration = resolve();
 //
 //        if (declaration != null && declaration.getTypeSpec() != null) {
@@ -85,11 +84,11 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
 //            }
 //        }
 
-        return new GoPsiElement[0];
-    }
+//        return new GoPsiElement[0];
+//    }
 
-    @Override
-    public GoType getMemberType(String name) {
+//    @Override
+//    public GoType getMemberType(String name) {
 //        GoTypeNameDeclaration declaration = resolve();
 //
 //        if (declaration != null && declaration.getTypeSpec() != null) {
@@ -101,8 +100,8 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
 //            }
 //        }
 //
-        return null;
-    }
+//        return null;
+//    }
 
     @Override
     public GoUnderlyingType getUnderlyingType() {

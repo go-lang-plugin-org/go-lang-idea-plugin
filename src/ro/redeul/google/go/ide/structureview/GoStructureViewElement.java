@@ -19,7 +19,6 @@ import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.documentation.DocumentUtil;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
@@ -35,7 +34,6 @@ import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
-
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isExportedName;
 
 /**
@@ -401,11 +399,13 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         List<PsiNamedElement> getMembers(GoTypeSpec typeSpec) {
             List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
             if (typeSpec.getType() != null ) {
-                for (GoPsiElement psi : typeSpec.getType().getMembers()) {
-                    if (psi instanceof PsiNamedElement) {
-                        children.add((PsiNamedElement) psi);
-                    }
-                }
+//            TODO: make sure we are only looking inside the types that actually
+//              have members
+//                for (GoPsiElement psi : typeSpec.getType().getMembers()) {
+//                    if (psi instanceof PsiNamedElement) {
+//                        children.add((PsiNamedElement) psi);
+//                    }
+//                }
 
                 PsiFile file = typeSpec.getContainingFile();
                 String name = typeSpec.getName();

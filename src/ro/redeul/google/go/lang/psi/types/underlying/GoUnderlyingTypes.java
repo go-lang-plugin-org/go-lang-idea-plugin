@@ -24,4 +24,8 @@ public class GoUnderlyingTypes {
     public static GoUnderlyingType getArray(GoUnderlyingType memberType, int size) {
         return new GoUnderlyingTypeArray(memberType, size);
     }
+
+    public static GoUnderlyingType getFunction() {
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
 }

@@ -14,10 +14,6 @@ public interface GoType extends GoPsiElement, GoPackagedElement {
 
     public static final GoType[] EMPTY_ARRAY = new GoType[0];
 
-    GoPsiElement[] getMembers();
-
-    GoType getMemberType(String name);
-
     GoUnderlyingType getUnderlyingType();
 
     boolean isIdentical(GoType goType);

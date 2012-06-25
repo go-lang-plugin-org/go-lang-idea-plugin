@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
@@ -67,6 +68,17 @@ public class CallOrConversionReference
                 .withParent(
                     psiElement(GoFunctionParameter.class)
                         .withChild(psiElement(GoTypeFunction.class))
+                ).accepts(element) ) {
+            return matchesVisiblePackageName(element, getElement().getName());
+        }
+
+        if (
+            psiElement(GoLiteralIdentifier.class)
+                .withParent(
+                    psiElement(GoShortVarDeclaration.class)
+                        .withChild(
+                            psiElement(GoLiteralExpression.class)
+                                .withChild(psiElement(GoTypeFunction.class)))
                 ).accepts(element) ) {
             return matchesVisiblePackageName(element, getElement().getName());
         }

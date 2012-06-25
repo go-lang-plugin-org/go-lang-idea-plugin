@@ -25,6 +25,7 @@ public abstract class GoExpressionBase extends GoPsiElementBase implements GoExp
         return getText();
     }
 
+    @NotNull
     @Override
     public GoType[] getType() {
         return resolveTypes();

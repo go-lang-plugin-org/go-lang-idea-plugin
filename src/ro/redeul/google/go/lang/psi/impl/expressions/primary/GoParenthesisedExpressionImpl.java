@@ -18,8 +18,9 @@ public class GoParenthesisedExpressionImpl extends GoPsiElementBase
         return findChildByClass(GoExpr.class);
     }
 
+    @NotNull
     @Override
     public GoType[] getType() {
-        return null;
+        return GoType.EMPTY_ARRAY;
     }
 }

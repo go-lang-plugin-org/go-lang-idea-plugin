@@ -2,13 +2,12 @@ package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypePointer;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePointer;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -30,20 +29,6 @@ public class GoTypePointerImpl extends GoPsiPackagedElementBase implements GoTyp
     @Override
     public GoType getTargetType() {
         return findChildByClass(GoType.class);
-    }
-
-    @Override
-    public GoPsiElement[] getMembers() {
-        GoType targetType = getTargetType();
-
-        return targetType != null ? getTargetType().getMembers() : new GoPsiElement[0];
-    }
-
-    @Override
-    public GoType getMemberType(String name) {
-        GoType targetType = getTargetType();
-
-        return targetType != null ? getTargetType().getMemberType(name) : null;
     }
 
     @Override

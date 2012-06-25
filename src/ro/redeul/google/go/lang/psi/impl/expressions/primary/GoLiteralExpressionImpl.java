@@ -9,6 +9,7 @@ import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
@@ -34,6 +35,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
         return findChildByClass(GoLiteral.class);
     }
 
+    @NotNull
     @Override
     public GoType[] getType() {
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
@@ -67,6 +69,11 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
             case InterpretedString:
                 return new GoType[]{
                     GoTypes.getBuiltin(GoTypes.Builtin.String, namesCache)
+                };
+            case Function:
+                GoLiteralFunction literalFunction = (GoLiteralFunction)getLiteral();
+                return new GoType[] {
+                    literalFunction
                 };
             case Identifier:
                 GoLiteralIdentifier identifier = (GoLiteralIdentifier) getLiteral();
