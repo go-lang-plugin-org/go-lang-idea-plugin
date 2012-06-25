@@ -24,7 +24,6 @@ import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
-import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -79,35 +78,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         visitor.visitLiteralIdentifier(this);
     }
 
-    //    @Override
-//    public PsiElement getElement() {
-//        return this;
-//    }
-//
-//    @Override
-//    public TextRange getRangeInElement() {
-//        return new TextRange(0, getTextLength());
-//    }
-
-//    @Override
-//    public PsiElement resolve() {
-//        VarOrConstResolver varOrConstResolver =
-//            new VarOrConstResolver(this);
-//
-//        PsiScopesUtil.treeWalkUp(
-//            varOrConstResolver,
-//            this, this.getContainingFile(),
-//            GoResolveStates.initial());
-//
-//        return varOrConstResolver.reference();
-//    }
-//
-//    @NotNull
-//    @Override
-//    public String getCanonicalText() {
-//        return getText();
-//    }
-
     @Override
     @NotNull
     public String getName() {
@@ -119,27 +89,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         throws IncorrectOperationException {
         return null;
     }
-
-//    @Override
-//    public PsiElement handleElementRename(String newElementName)
-//        throws IncorrectOperationException {
-//        return null;  //To change body of implemented methods use File | Settings | File Templates.
-//    }
-
-//    @Override
-//    public PsiElement bindToElement(@NotNull PsiElement element)
-//        throws IncorrectOperationException {
-//        if (isReferenceTo(element))
-//            return this;
-//
-//        throw new IncorrectOperationException(
-//            "Cannot bind to:" + element + " of class " + element.getClass());
-//    }
-//
-//    @Override
-//    public boolean isReferenceTo(PsiElement element) {
-//        return true;
-//    }
 
     static final ElementPattern<PsiElement> NO_REFERENCE =
         psiElement()

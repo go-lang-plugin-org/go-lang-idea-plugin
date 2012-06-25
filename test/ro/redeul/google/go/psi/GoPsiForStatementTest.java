@@ -5,6 +5,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import static ro.redeul.google.go.util.GoPsiTestUtils.castAs;
 import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
 import static ro.redeul.google.go.util.GoPsiTestUtils.get;
@@ -67,5 +68,74 @@ public class GoPsiForStatementTest extends GoPsiTestCase {
             );
 
         getAs(GoAdditiveExpression.class, forStmt.getCondition());
+    }
+
+    public void testForWithRangeKeyNotNullConditionAdditive() throws Exception {
+        GoFile file = get(parse("" +
+                                    "package main;\n" +
+                                    "func main() {\n" +
+                                    "    for i := range data {\n" +
+                                    "        println(i)\n" +
+                                    "    }\n" +
+                                    "}"));
+
+        GoForWithRangeStatement forStmt =
+            castAs(GoForWithRangeStatement.class, 0,
+                   get(
+                       childAt(0,
+                               file.getFunctions()
+                       ).getBlock()
+                   ).getStatements()
+            );
+
+        assertEquals("i", get(forStmt.getKey()).getText());
+        assertNull(forStmt.getValue());
+        assertEquals("data", get(forStmt.getRangeExpression()).getText());
+    }
+
+    public void testForWithRangeKeyValueNoRange() throws Exception {
+        GoFile file = get(parse("" +
+                                    "package main;\n" +
+                                    "func main() {\n" +
+                                    "    for key, value := range {\n" +
+                                    "        println(i)\n" +
+                                    "    }\n" +
+                                    "}"));
+
+        GoForWithRangeStatement forStmt =
+            castAs(GoForWithRangeStatement.class, 0,
+                   get(
+                       childAt(0,
+                               file.getFunctions()
+                       ).getBlock()
+                   ).getStatements()
+            );
+
+        assertEquals("key", get(forStmt.getKey()).getText());
+        assertEquals("value", get(forStmt.getValue()).getText());
+        assertNull(forStmt.getRangeExpression());
+    }
+
+    public void testForWithRange() throws Exception {
+        GoFile file = get(parse("" +
+                                    "package main;\n" +
+                                    "func main() {\n" +
+                                    "    for key, value := range data {\n" +
+                                    "        println(i)\n" +
+                                    "    }\n" +
+                                    "}"));
+
+        GoForWithRangeStatement forStmt =
+            castAs(GoForWithRangeStatement.class, 0,
+                   get(
+                       childAt(0,
+                               file.getFunctions()
+                       ).getBlock()
+                   ).getStatements()
+            );
+
+        assertEquals("key", get(forStmt.getKey()).getText());
+        assertEquals("value", get(forStmt.getValue()).getText());
+        assertEquals("data", get(forStmt.getRangeExpression()).getText());
     }
 }

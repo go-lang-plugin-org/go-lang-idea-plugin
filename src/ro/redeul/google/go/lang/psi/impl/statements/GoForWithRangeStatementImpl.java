@@ -5,10 +5,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.hasPrevSiblingOfType;
 
 public class GoForWithRangeStatementImpl extends GoForStatementImpl
     implements GoForWithRangeStatement
@@ -24,7 +26,18 @@ public class GoForWithRangeStatementImpl extends GoForStatementImpl
 
     @Override
     public GoExpr getValue() {
-        return findChildByClass(GoExpr.class, 1);
+        GoExpr[] expressions = findChildrenByClass(GoExpr.class);
+
+        if (expressions.length > 2) {
+            return expressions[1];
+        }
+
+        if (expressions.length == 2 &&
+            !hasPrevSiblingOfType(expressions[1], GoTokenTypes.kRANGE)) {
+            return expressions[1];
+        }
+
+        return null;
     }
 
     @Override
@@ -40,7 +53,8 @@ public class GoForWithRangeStatementImpl extends GoForStatementImpl
             return expressions[2];
         }
 
-        if (expressions.length == 2) {
+        if (expressions.length == 2 &&
+            hasPrevSiblingOfType(expressions[1], GoTokenTypes.kRANGE)) {
             return expressions[1];
         }
 
