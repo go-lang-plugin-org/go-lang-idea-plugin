@@ -1,9 +1,5 @@
 package main
 
-const /*begin*/N/*end.Unused global|RemoveVariableFix*/ = 3
-
-var /*begin*/v/*end.Unused global|RemoveVariableFix*/ = 2
-
 func foo(a, /*begin*/b/*end.Unused parameter*/ int) int {
     var s [10]int
     var i int

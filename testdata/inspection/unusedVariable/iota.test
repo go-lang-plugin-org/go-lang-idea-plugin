@@ -1,19 +1,5 @@
 package main
 
-const /*begin*/N/*end.Unused global|RemoveVariableFix*/ = iota
-
-const (
-	bit0, mask0 = 1 << iota, 1<<iota - 1  // bit0 == 1, mask0 == 0
-	bit1, mask1                           // bit1 == 2, mask1 == 1
-	_, _                                  // skips iota == 2
-	bit3, mask3                           // bit3 == 8, mask3 == 7
-)
-
-var /*begin*/v/*end.Unused global|RemoveVariableFix*/ = iota
-
-func foo(a, /*begin*/iota/*end.Unused parameter*/ int) int {
-    return a + 1
-}
 
 func main() {
     /*begin*/k/*end.Unused variable|RemoveVariableFix*/ := 5

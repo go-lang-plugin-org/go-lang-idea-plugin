@@ -1,12 +1,9 @@
 package ro.redeul.google.go.findUsages;
 
 import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.inspection.fix.ConvertToAssignmentFix;
 import ro.redeul.google.go.inspection.fix.DeleteStmtFix;
@@ -19,10 +16,10 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
@@ -38,16 +35,26 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isPredefinedConstant;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isIotaInConstantDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
+
+    private static final TokenSet NEW_SCOPE_STATEMENT = TokenSet.create(
+        GoElementTypes.BLOCK_STATEMENT,
+        GoElementTypes.IF_STATEMENT,
+        GoElementTypes.FOR_WITH_CLAUSES_STATEMENT,
+        GoElementTypes.FOR_WITH_CONDITION_STATEMENT,
+        GoElementTypes.FOR_WITH_RANGE_STATEMENT,
+        GoElementTypes.SWITCH_EXPR_STATEMENT,
+        GoElementTypes.SWITCH_TYPE_STATEMENT,
+        GoElementTypes.SELECT_STATEMENT
+    );
+
+
     private InspectionResult result;
     private Context ctx;
 
@@ -65,11 +72,9 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
             visitFunctionDeclaration(fd);
         }
 
-        for (VariableUsage v : ctx.popLastScopeLevel().values()) {
-            if (!v.isUsed()) {
-                ctx.unusedGlobalVariable(v);
-            }
-        }
+        // A global variable could be used in different files even if it's not exported.
+        // We cannot reliably check problems on global variables, so we don't check anymore.
+        ctx.popLastScopeLevel();
     }
 
     @Override
@@ -203,13 +208,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
             return false;
         }
 
-        IElementType tt = element.getNode().getElementType();
-        return
-                tt == GoElementTypes.IF_STATEMENT ||
-                        tt == GoElementTypes.FOR_WITH_CLAUSES_STATEMENT ||
-                        tt == GoElementTypes.FOR_WITH_CONDITION_STATEMENT ||
-                        tt == GoElementTypes.FOR_WITH_RANGE_STATEMENT ||
-                        tt == GoElementTypes.BLOCK_STATEMENT;
+        return isNodeOfType(element, NEW_SCOPE_STATEMENT);
     }
 
     private void visitExpressionAsIdentifier(GoExpr expr, boolean declaration) {
