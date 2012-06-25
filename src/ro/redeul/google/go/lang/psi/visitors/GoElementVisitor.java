@@ -38,6 +38,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.GoTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -196,5 +197,9 @@ public class GoElementVisitor  {
 
     public void visitMethodReceiver(GoMethodReceiver receiver) {
         visitElement(receiver);
+    }
+
+    public void visitStructType(GoTypeStruct type) {
+        visitElement(type);
     }
 }

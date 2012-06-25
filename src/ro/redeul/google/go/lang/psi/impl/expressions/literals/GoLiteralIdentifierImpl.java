@@ -252,6 +252,14 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     }
 
     @Override
+    @NotNull
+    public String getUnqualifiedName() {
+        String name = getName();
+        int pos = name.lastIndexOf('.');
+        return pos < 0 ? name : name.substring(pos + 1);
+    }
+
+    @Override
     public String getLocalPackageName() {
         if (isQualified()) {
             return findChildrenByType(GoTokenTypes.mIDENT).get(0).getText();

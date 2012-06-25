@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import java.util.*;
 
@@ -81,5 +82,10 @@ public class GoTypeStructImpl extends GoPsiPackagedElementBase implements GoType
         }
 
         return null;
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitStructType(this);
     }
 }

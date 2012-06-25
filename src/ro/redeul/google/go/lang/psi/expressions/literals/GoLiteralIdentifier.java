@@ -24,6 +24,8 @@ public interface GoLiteralIdentifier extends GoLiteral<String>,
 
     boolean isQualified();
 
+    String getUnqualifiedName();
+
     @Nullable
     String getLocalPackageName();
 }

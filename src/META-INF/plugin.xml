@@ -427,6 +427,10 @@
                          shortName="FunctionCall" displayName="Highlights incorrect function calls"
                          level="ERROR"
                          implementationClass="ro.redeul.google.go.inspection.FunctionCallInspection"/>
+        <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
+                         shortName="TypeStructDeclaration" displayName="Highlights incorrect struct declaration"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.TypeStructDeclarationInspection"/>
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
         <programRunner implementation="ro.redeul.google.go.runner.GoAppEngineApplicationRunner" />
