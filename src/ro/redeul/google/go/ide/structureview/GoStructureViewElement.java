@@ -11,6 +11,7 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.util.PlatformIcons;
@@ -26,10 +27,13 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
+import ro.redeul.google.go.lang.psi.types.GoTypeName;
+
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isExportedName;
 
 /**
@@ -361,6 +365,22 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
                 for (GoPsiElement psi : typeSpec.getType().getMembers()) {
                     if (psi instanceof PsiNamedElement) {
                         children.add((PsiNamedElement) psi);
+                    }
+                }
+
+                PsiFile file = typeSpec.getContainingFile();
+                String name = typeSpec.getName();
+                if (name != null && file instanceof GoFile) {
+                    for (GoMethodDeclaration md : ((GoFile) file).getMethods()) {
+                        GoMethodReceiver mr = md.getMethodReceiver();
+                        if (mr == null) {
+                            continue;
+                        }
+
+                        GoTypeName typeName = mr.getTypeName();
+                        if (typeName != null && name.equals(typeName.getName())) {
+                            children.add(md);
+                        }
                     }
                 }
             }
