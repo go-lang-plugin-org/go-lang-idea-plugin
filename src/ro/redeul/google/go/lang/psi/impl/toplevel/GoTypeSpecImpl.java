@@ -8,6 +8,8 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
@@ -39,7 +41,14 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
     }
 
     @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent,
+                                       @NotNull PsiElement place) {
+        if (!state.get(GoResolveStates.IsOriginalPackage) &&
+            ! GoNamesUtil.isExportedName(getName()))
+            return true;
+
         return processor.execute(this, state);
     }
 

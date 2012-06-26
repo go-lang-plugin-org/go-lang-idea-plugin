@@ -3,6 +3,8 @@ package ro.redeul.google.go.lang.psi.resolve;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -35,7 +37,12 @@ public class VarOrConstResolver extends
 
     @Override
     public void visitVarDeclaration(GoVarDeclaration declaration) {
-        checkIdentifiers(declaration.getIdentifiers());
+        boolean isOriginalPackage = getState().get(GoResolveStates.IsOriginalPackage);
+
+        for (GoLiteralIdentifier identifier : declaration.getIdentifiers()) {
+            if ( isOriginalPackage || GoNamesUtil.isExportedName(identifier.getName()) )
+                checkIdentifiers(identifier);
+        }
     }
 
     @Override
@@ -50,7 +57,12 @@ public class VarOrConstResolver extends
 
     @Override
     public void visitConstDeclaration(GoConstDeclaration declaration) {
-        checkIdentifiers(declaration.getIdentifiers());
+        boolean isOriginalPackage = getState().get(GoResolveStates.IsOriginalPackage);
+
+        for (GoLiteralIdentifier identifier : declaration.getIdentifiers()) {
+            if ( isOriginalPackage || GoNamesUtil.isExportedName(identifier.getName()) )
+                checkIdentifiers(identifier);
+        }
     }
 
     @Override

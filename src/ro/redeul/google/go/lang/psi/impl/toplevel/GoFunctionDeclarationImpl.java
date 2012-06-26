@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -79,6 +81,10 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
+
+        if (!state.get(GoResolveStates.IsOriginalPackage) &&
+            ! GoNamesUtil.isExportedName(getName()))
+            return true;
 
         if (!processor.execute(this, state))
             return false;

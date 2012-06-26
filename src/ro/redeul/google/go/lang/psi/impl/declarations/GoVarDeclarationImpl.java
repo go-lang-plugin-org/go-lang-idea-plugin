@@ -45,7 +45,10 @@ public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDecla
     }
 
     @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent,
+                                       @NotNull PsiElement place) {
         return  processor.execute(this, state);
     }
 }

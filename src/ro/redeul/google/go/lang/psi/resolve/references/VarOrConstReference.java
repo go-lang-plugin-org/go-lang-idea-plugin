@@ -1,8 +1,13 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.scope.util.PsiScopesUtil;
+import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -40,7 +45,35 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
     @NotNull
     @Override
     public Object[] getVariants() {
-        return new Object[0];
+
+        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+
+        VarOrConstResolver processor = new VarOrConstResolver(this) {
+            @Override
+            protected boolean addDeclaration(PsiElement declaration) {
+                String name = PsiUtilCore.getName(declaration);
+
+                String visiblePackageName =
+                    getState().get(GoResolveStates.VisiblePackageName);
+
+                if ( visiblePackageName != null ) {
+                    name = visiblePackageName + "." + name;
+                }
+                if (name == null) {
+                    return true;
+                }
+
+                variants.add(LookupElementBuilder.create(declaration, name));
+                return true;
+            }
+        };
+
+        PsiScopesUtil.treeWalkUp(
+            processor,
+            getElement().getParent().getParent(), getElement().getContainingFile(),
+            GoResolveStates.initial());
+
+        return variants.toArray();
     }
 
     @Override

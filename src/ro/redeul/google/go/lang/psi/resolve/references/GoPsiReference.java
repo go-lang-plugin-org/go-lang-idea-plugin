@@ -72,6 +72,12 @@ public abstract class GoPsiReference<GoPsi extends PsiNamedElement>
             elementName = currentPackageName + "." + elementName;
         }
 
+        // this is the case when we have get variants completion.
+        if (targetQualifiedName.endsWith("IntellijIdeaRulezzz")) {
+            targetQualifiedName = targetQualifiedName.replace("IntellijIdeaRulezzz", "");
+            return elementName.startsWith(targetQualifiedName);
+        }
+
         return elementName.equals(targetQualifiedName);
     }
 }

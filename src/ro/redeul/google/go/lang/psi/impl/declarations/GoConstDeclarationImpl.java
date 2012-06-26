@@ -54,5 +54,4 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
                                        @NotNull PsiElement place) {
         return processor.execute(this, state);
     }
-
 }
