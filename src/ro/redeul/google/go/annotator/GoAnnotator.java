@@ -178,7 +178,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         }
 
         // make iota a keyword
-        if (identifier.isIota()) {
+        if (identifier.isIota() || identifier.getText().equals("nil")) {
             annotationHolder.createInfoAnnotation(identifier, null)
                             .setTextAttributes(GoSyntaxHighlighter.KEYWORD);
             return;

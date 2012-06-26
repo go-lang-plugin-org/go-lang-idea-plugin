@@ -29,6 +29,7 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
+import static com.intellij.patterns.StandardPatterns.string;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.BUILTIN_CALL_EXPRESSION;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_CLAUSES_STATEMENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_RANGE_STATEMENT;
@@ -91,32 +92,36 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     }
 
     static final ElementPattern<PsiElement> NO_REFERENCE =
-        psiElement()
-            .withParent(
-                or(
-                    psiElement(GoFunctionDeclaration.class),
-                    psiElement(GoFunctionParameter.class),
-                    psiElement(GoMethodReceiver.class),
-                    psiElement(GoTypeStructField.class),
-                    psiElement(GoTypeName.class),
-                    psiElement(GoLiteralExpression.class)
-                        .insideStarting(
-                            or(
-                                psiElement(FOR_WITH_CLAUSES_STATEMENT),
-                                psiElement(FOR_WITH_RANGE_STATEMENT),
-                                psiElement(BUILTIN_CALL_EXPRESSION)
+        or(
+            psiElement(GoLiteralIdentifier.class)
+                .withText(string().matches("nil")),
+            psiElement()
+                .withParent(
+                    or(
+                        psiElement(GoFunctionDeclaration.class),
+                        psiElement(GoFunctionParameter.class),
+                        psiElement(GoMethodReceiver.class),
+                        psiElement(GoTypeStructField.class),
+                        psiElement(GoTypeName.class),
+                        psiElement(GoLiteralExpression.class)
+                            .insideStarting(
+                                or(
+                                    psiElement(FOR_WITH_CLAUSES_STATEMENT),
+                                    psiElement(FOR_WITH_RANGE_STATEMENT),
+                                    psiElement(BUILTIN_CALL_EXPRESSION)
+                                )
                             )
-                        )
+                    )
                 )
-            );
+        );
 
     @Override
     public PsiReference getReference() {
 
-        if ( NO_REFERENCE.accepts(this) )
+        if (NO_REFERENCE.accepts(this))
             return null;
 
-        if (CallOrConversionReference.MATCHER.accepts(this) )
+        if (CallOrConversionReference.MATCHER.accepts(this))
             return new CallOrConversionReference(this);
 
         if (VarOrConstReference.MATCHER.accepts(this))
@@ -125,27 +130,27 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         return null;
     }
 
-/*
-    @NotNull
-    @Override
-    public Object[] getVariants() {
+    /*
+        @NotNull
+        @Override
+        public Object[] getVariants() {
 
-        if (GoPsiUtils.isNodeOfType(getParent(),
-                                    GoTokenSets.NO_IDENTIFIER_COMPLETION_PARENTS)) {
-            return PsiReference.EMPTY_ARRAY;
+            if (GoPsiUtils.isNodeOfType(getParent(),
+                                        GoTokenSets.NO_IDENTIFIER_COMPLETION_PARENTS)) {
+                return PsiReference.EMPTY_ARRAY;
+            }
+
+            IdentifierVariantsCollector identifierVariantsCollector = new IdentifierVariantsCollector();
+
+            PsiScopesUtil.treeWalkUp(identifierVariantsCollector,
+                                     this.getOriginalElement(),
+                                     this.getContainingFile(),
+                                     GoResolveStates.initial());
+
+            return identifierVariantsCollector.references();
         }
 
-        IdentifierVariantsCollector identifierVariantsCollector = new IdentifierVariantsCollector();
-
-        PsiScopesUtil.treeWalkUp(identifierVariantsCollector,
-                                 this.getOriginalElement(),
-                                 this.getContainingFile(),
-                                 GoResolveStates.initial());
-
-        return identifierVariantsCollector.references();
-    }
-
-*/
+    */
     @Override
     public ItemPresentation getPresentation() {
         return new ItemPresentation() {
