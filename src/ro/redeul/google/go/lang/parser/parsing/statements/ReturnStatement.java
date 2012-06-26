@@ -18,11 +18,15 @@ public class ReturnStatement implements GoElementTypes {
             return null;
         }
 
+        if (wsNLS == builder.getTokenType() || oSEMI == builder.getTokenType()) {
+            marker.done(RETURN_STATEMENT);
+            return RETURN_STATEMENT;
+        }
+
         parser.tryParseExpressionList(builder);
 
         ParserUtils.getToken(builder, oSEMI);
         marker.done(RETURN_STATEMENT);
         return RETURN_STATEMENT;
-
     }
 }

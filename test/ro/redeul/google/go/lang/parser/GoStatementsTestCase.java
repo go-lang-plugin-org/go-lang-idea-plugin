@@ -18,6 +18,7 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testReturn_multiple2() throws Throwable { doTest(); }
     public void testReturn_multiple3() throws Throwable { doTest(); }
     public void testReturn_commentsAfterEnd() throws Throwable { doTest(); }
+    public void testReturn_expressionAfter() throws Throwable { doTest(); }
 
     public void testVar_var1() throws Throwable { doTest(); }
     public void testVar_var2() throws Throwable { doTest(); }

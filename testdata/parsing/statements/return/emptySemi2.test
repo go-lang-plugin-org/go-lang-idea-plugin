@@ -19,6 +19,6 @@ Go file
       PsiWhiteSpace(' ')
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
-        PsiElement(;)(';')
+      PsiElement(;)(';')
       PsiWhiteSpace(' ')
       PsiElement(})('}')

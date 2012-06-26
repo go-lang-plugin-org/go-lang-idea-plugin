@@ -1,5 +1,8 @@
 package main
-func main() { return ; }
+func main() {
+    return
+    method();
+}
 -----
 Go file
   PackageDeclaration(main)
@@ -16,10 +19,19 @@ Go file
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')
-      PsiWhiteSpace(' ')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
-      PsiWhiteSpace(' ')
+      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('    ')
+      ExpressionStmtImpl
+        CallOrConversionExpressionImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('method')
+          PsiElement(()('(')
+          PsiElement())(')')
       PsiElement(;)(';')
-      PsiWhiteSpace(' ')
+      PsiElement(WS_NEW_LINES)('\n')
       PsiElement(})('}')
