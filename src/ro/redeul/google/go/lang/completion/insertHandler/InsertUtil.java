@@ -10,4 +10,10 @@ class InsertUtil {
         context.getDocument().insertString(offset, "(\n)\n");
         pressEnterAtLineEnd(context.getEditor());
     }
+
+    public static void insertCurlyBraces(InsertionContext context) {
+        int offset = context.getTailOffset();
+        context.getDocument().insertString(offset, "{\n}\n");
+        pressEnterAtLineEnd(context.getEditor());
+    }
 }

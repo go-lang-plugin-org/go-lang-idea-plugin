@@ -16,6 +16,7 @@ import com.intellij.util.PlatformIcons;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.completion.insertHandler.ConstInsertHandler;
+import ro.redeul.google.go.lang.completion.insertHandler.CurlyBracesInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.ImportInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.LiteralFunctionInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.ReturnInsertHandler;
@@ -30,6 +31,7 @@ import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
+import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keywordLookup;
@@ -83,6 +85,7 @@ public class GoCompletionContributor extends CompletionContributor {
                 result.addElement(keywordLookup("const", new ConstInsertHandler()));
                 result.addElement(keywordLookup("var", new VarInsertHandler()));
                 result.addElement(keywordLookup("func"));
+                result.addElement(keywordLookup("type"));
                 result.addElement(keywordLookup("import", new ImportInsertHandler()));
             }
         };
@@ -127,6 +130,15 @@ public class GoCompletionContributor extends CompletionContributor {
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
                                       @NotNull CompletionResultSet result) {
             result.addElement(keywordLookup("func", new LiteralFunctionInsertHandler()));
+        }
+    };
+
+    CompletionProvider<CompletionParameters> typeDeclarationCompletionProvider = new CompletionProvider<CompletionParameters>() {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
+                                      @NotNull CompletionResultSet result) {
+            result.addElement(keywordLookup("interface", new CurlyBracesInsertHandler()));
+            result.addElement(keywordLookup("struct", new CurlyBracesInsertHandler()));
         }
     };
 
@@ -208,6 +220,14 @@ public class GoCompletionContributor extends CompletionContributor {
                     )
                 ),
                 goAndDeferStatementCompletionProvider);
+
+        extend(CompletionType.BASIC,
+                psiElement().withParent(
+                    psiElement(GoLiteralIdentifier.class).withParent(
+                        psiElement(GoTypeName.class)
+                    )
+                ),
+                typeDeclarationCompletionProvider);
     }
 
     @Override
