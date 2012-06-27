@@ -33,6 +33,7 @@ import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoTypes;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keywordLookup;
@@ -127,27 +128,35 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
 
-    CompletionProvider<CompletionParameters> goAndDeferStatementCompletionProvider = new CompletionProvider<CompletionParameters>() {
-        @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters,
-                                      ProcessingContext context,
-                                      @NotNull CompletionResultSet result) {
-            result.addElement(
-                keywordLookup("func", new LiteralFunctionInsertHandler()));
-        }
-    };
+    CompletionProvider<CompletionParameters> goAndDeferStatementCompletionProvider =
+        new CompletionProvider<CompletionParameters>() {
+            @Override
+            protected void addCompletions(@NotNull CompletionParameters params,
+                                          ProcessingContext context,
+                                          @NotNull CompletionResultSet result) {
+                result.addElement(
+                    keywordLookup("func", new LiteralFunctionInsertHandler()));
+            }
+        };
 
-    CompletionProvider<CompletionParameters> typeDeclarationCompletionProvider = new CompletionProvider<CompletionParameters>() {
-        @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters,
-                                      ProcessingContext context,
-                                      @NotNull CompletionResultSet result) {
-            result.addElement(
-                keywordLookup("interface", new CurlyBracesInsertHandler()));
-            result.addElement(
-                keywordLookup("struct", new CurlyBracesInsertHandler()));
-        }
-    };
+    CompletionProvider<CompletionParameters> typeDeclarationCompletionProvider =
+        new CompletionProvider<CompletionParameters>() {
+            @Override
+            protected void addCompletions(@NotNull CompletionParameters params,
+                                          ProcessingContext context,
+                                          @NotNull CompletionResultSet result) {
+                result.addElement(
+                    keywordLookup("interface", new CurlyBracesInsertHandler()));
+                result.addElement(
+                    keywordLookup("struct", new CurlyBracesInsertHandler()));
+
+                for (GoTypes.Builtin builtin : GoTypes.Builtin.values()) {
+                    result.addElement(
+                        keywordLookup(builtin.name().toLowerCase())
+                    );
+                }
+            }
+        };
 
     CompletionProvider<CompletionParameters> debuggingCompletionProvider = new CompletionProvider<CompletionParameters>() {
         @Override
@@ -170,15 +179,15 @@ public class GoCompletionContributor extends CompletionContributor {
 //               psiElement(),
 //               debuggingCompletionProvider);
 
-        extend(
-            CompletionType.BASIC,
-            psiElement().withParent(
-                psiElement(
-                    GoPackageDeclaration.class).withFirstNonWhitespaceChild(
-                    psiElement(PsiErrorElement.class)
-                )
-            ),
-            packageCompletionProvider);
+        extend(CompletionType.BASIC,
+               psiElement()
+                   .withParent(
+                       psiElement(GoPackageDeclaration.class)
+                           .withFirstNonWhitespaceChild(
+                               psiElement(PsiErrorElement.class)
+                           )
+                   ),
+               packageCompletionProvider);
 
         extend(CompletionType.BASIC,
                psiElement(GoTokenTypes.litSTRING)
