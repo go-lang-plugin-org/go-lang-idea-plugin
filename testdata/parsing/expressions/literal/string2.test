@@ -1,0 +1,46 @@
+package main
+var c = "as\\\n\"dfasdf
+
+func a() { j = i }
+-----
+Go file
+  PackageDeclaration(main)
+    PsiElement(KEYWORD_PACKAGE)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('main')
+  PsiElement(WS_NEW_LINES)('\n')
+  VarDeclarationsImpl
+    PsiElement(KEYWORD_VAR)('var')
+    PsiWhiteSpace(' ')
+    VarDeclarationImpl
+      LiteralIdentifierImpl
+        PsiElement(IDENTIFIER)('c')
+      PsiWhiteSpace(' ')
+      PsiElement(=)('=')
+      PsiWhiteSpace(' ')
+      LiteralExpressionImpl
+        LiteralStringImpl
+          PsiElement(LITERAL_STRING)('"as\\\n\"dfasdf')
+  PsiElement(WS_NEW_LINES)('\n\n')
+  FunctionDeclaration(a)
+    PsiElement(KEYWORD_FUNC)('func')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('a')
+    PsiElement(()('(')
+    PsiElement())(')')
+    PsiWhiteSpace(' ')
+    BlockStmtImpl
+      PsiElement({)('{')
+      PsiWhiteSpace(' ')
+      AssignStmt
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('j')
+        PsiWhiteSpace(' ')
+        PsiElement(=)('=')
+        PsiWhiteSpace(' ')
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('i')
+      PsiWhiteSpace(' ')
+      PsiElement(})('}')

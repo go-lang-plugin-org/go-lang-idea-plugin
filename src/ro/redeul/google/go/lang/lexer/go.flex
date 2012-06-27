@@ -234,7 +234,7 @@ mESCAPES = [abfnrtv]
     (
         [^\"\\\n\r] | "\\" ("\\" | {mSTR} | {mESCAPES} | [0-8xuU] )
     )*
-(EOF | [\r\n]+ | {mSTR})                  { return litSTRING; }
+{mSTR}?                                   { return litSTRING; }
 "{"                                       { return pLCURCLY; }
 "}"                                       { return pRCURLY; }
 

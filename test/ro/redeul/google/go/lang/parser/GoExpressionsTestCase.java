@@ -93,6 +93,10 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
         doTest();
     }
 
+    public void testLiteral_string2() throws Throwable {
+        doTest();
+    }
+
     public void testCompositeLiteral_error1() throws Throwable {
         doTest();
     }
