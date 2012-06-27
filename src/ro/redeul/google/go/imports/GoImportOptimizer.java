@@ -10,6 +10,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.services.GoCodeManager;
@@ -45,23 +46,29 @@ public class GoImportOptimizer implements ImportOptimizer {
         return new Runnable() {
             @Override
             public void run() {
-                Project project = goFile.getProject();
-
-                PsiDocumentManager manager = PsiDocumentManager.getInstance(project);
-                Document document = manager.getDocument(goFile);
-                if (document != null) {
-                    manager.commitDocument(document);
-                }
-
-                optimize(project, goFile);
+                optimize(goFile);
             }
         };
     }
 
-    private static void optimize(Project project, GoFile goFile) {
+    private static void optimize(GoFile goFile) {
+        Project project = goFile.getProject();
         GoCodeManager goCodeManager = GoCodeManager.getInstance(project);
         Set<GoImportDeclaration> unusedImports =
             new HashSet<GoImportDeclaration>(goCodeManager.findUnusedImports(goFile));
+
+        for (GoImportDeclaration id : unusedImports) {
+            GoLiteralString importPath = id.getImportPath();
+            if (importPath == null) {
+                return;
+            }
+
+            // refuse to optimize anything if there are some import whose path looks strange.
+            String path = importPath.getValue();
+            if (path == null || path.contains("\n") || path.contains(" ") || path.contains("\t")) {
+                return;
+            }
+        }
 
         for (GoImportDeclarations ids : goFile.getImportDeclarations()) {
             if (allImportsUnused(ids.getDeclarations(), unusedImports)) {

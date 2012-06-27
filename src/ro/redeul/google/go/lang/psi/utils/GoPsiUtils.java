@@ -248,6 +248,24 @@ public class GoPsiUtils {
         return null;
     }
 
+    public static PsiElement getNextSiblingIfItsWhiteSpaceOrComment(PsiElement element) {
+        while (element != null) {
+            ASTNode node = element.getNode();
+            if (node == null) {
+                return null;
+            }
+
+            IElementType type = node.getElementType();
+            if (type != GoElementTypes.wsNLS && type != GoElementTypes.wsWS && !(element instanceof PsiWhiteSpace) &&
+                !(element instanceof PsiComment)) {
+                return element;
+            }
+
+            element = element.getNextSibling();
+        }
+        return null;
+    }
+
     @NotNull
     public static GoFunctionParameter[] getParameters(PsiElement psiNode) {
 

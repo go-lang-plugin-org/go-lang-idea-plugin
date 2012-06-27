@@ -22,6 +22,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ui.UIUtil;
 import ro.redeul.google.go.inspection.fix.AddImportFix;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
@@ -30,6 +31,9 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.options.GoSettings;
 
 import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getNextSiblingIfItsWhiteSpaceOrComment;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 /**
  * This class search for all "Unresolved symbols" highlights, try to prompt user to import
@@ -96,7 +100,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             }
 
             GoLiteralIdentifier id = findElementOfClassAtRange(file, start, end, GoLiteralIdentifier.class);
-            if (id == null) {
+            if (!isPackageUsage(id)) {
                 continue;
             }
 
@@ -116,6 +120,25 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             }
         }
         return toImport;
+    }
+
+    private static boolean isPackageUsage(GoLiteralIdentifier id) {
+        if (id == null) {
+            return false;
+        }
+
+        PsiElement parent = id.getParent();
+        if (parent == null) {
+            return false;
+        }
+
+        PsiElement next = getNextSiblingIfItsWhiteSpaceOrComment(parent.getNextSibling());
+        if (!isNodeOfType(next, GoTokenTypes.oDOT)) {
+            return false;
+        }
+
+        PsiElement prev = getPrevSiblingIfItsWhiteSpaceOrComment(parent.getPrevSibling());
+        return !isNodeOfType(prev, GoTokenTypes.oDOT);
     }
 
     private List<String> getPotentialPackages(Collection<String> allPackages,
