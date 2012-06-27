@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.parser.parsing.declarations;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.types.Types;
@@ -43,19 +44,16 @@ public class TypeDeclaration implements GoElementTypes {
     private static boolean parseTypeSpecification(PsiBuilder builder,
                                                   GoParser parser) {
 
-        ParserUtils.skipNLS(builder);
-        PsiBuilder.Marker typeStatement = builder.mark();
-
-//        ParserUtils.getToken(builder, mIDENT, "identifier.expected");
-
-        if (ParserUtils.lookAhead(builder, mIDENT)) {
-            ParserUtils.eatElement(builder, TYPE_NAME_DECLARATION);
-        } else {
-            ParserUtils.wrapError(builder, "identifier.expected");
+        if (!ParserUtils.lookAhead(builder, mIDENT)){
+            builder.error("error.identifier.expected");
+            return false;
         }
 
+        PsiBuilder.Marker typeStatement = builder.mark();
+        ParserUtils.eatElement(builder, TYPE_NAME_DECLARATION);
+
         if (Types.parseTypeDeclaration(builder, parser) == null) {
-            builder.error("type.expected");
+            builder.error(GoBundle.message("error.type.expected"));
         }
 
         typeStatement.done(TYPE_DECLARATION);
