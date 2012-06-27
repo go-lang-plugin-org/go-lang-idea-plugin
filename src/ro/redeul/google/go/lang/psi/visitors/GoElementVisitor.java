@@ -14,6 +14,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.impl.types.GoTypeInterfaceImpl;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
@@ -200,6 +201,10 @@ public class GoElementVisitor  {
     }
 
     public void visitStructType(GoTypeStruct type) {
+        visitElement(type);
+    }
+
+    public void visitInterfaceType(GoTypeInterfaceImpl type) {
         visitElement(type);
     }
 }

@@ -9,7 +9,6 @@ import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 
 /**
@@ -65,12 +64,12 @@ public class VarOrConstResolver extends
         }
     }
 
-    @Override
-    public void visitMethodDeclaration(GoMethodDeclaration declaration) {
-        if (checkReference(declaration.getNameIdentifier()))
-            addDeclaration(declaration);
-    }
-
+//    @Override
+//    public void visitMethodDeclaration(GoMethodDeclaration declaration) {
+//        if (checkReference(declaration.getNameIdentifier()))
+//            addDeclaration(declaration);
+//    }
+//
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
         if (checkReference(declaration.getNameIdentifier()))

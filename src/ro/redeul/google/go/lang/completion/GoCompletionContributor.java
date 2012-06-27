@@ -23,8 +23,9 @@ import ro.redeul.google.go.lang.completion.insertHandler.ReturnInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.VarInsertHandler;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
@@ -64,9 +65,11 @@ public class GoCompletionContributor extends CompletionContributor {
                 ProcessingContext context,
                 @NotNull CompletionResultSet result) {
                 result.addElement(keywordLookup("for"));
-                result.addElement(keywordLookup("const", new ConstInsertHandler()));
+                result.addElement(
+                    keywordLookup("const", new ConstInsertHandler()));
                 result.addElement(keywordLookup("var", new VarInsertHandler()));
-                result.addElement(keywordLookup("return", new ReturnInsertHandler()));
+                result.addElement(
+                    keywordLookup("return", new ReturnInsertHandler()));
                 result.addElement(keywordLookup("if"));
                 result.addElement(keywordLookup("switch"));
                 result.addElement(keywordLookup("go"));
@@ -82,63 +85,67 @@ public class GoCompletionContributor extends CompletionContributor {
                 @NotNull CompletionParameters parameters,
                 ProcessingContext context,
                 @NotNull CompletionResultSet result) {
-                result.addElement(keywordLookup("const", new ConstInsertHandler()));
+                result.addElement(
+                    keywordLookup("const", new ConstInsertHandler()));
                 result.addElement(keywordLookup("var", new VarInsertHandler()));
                 result.addElement(keywordLookup("func"));
                 result.addElement(keywordLookup("type"));
-                result.addElement(keywordLookup("import", new ImportInsertHandler()));
+                result.addElement(
+                    keywordLookup("import", new ImportInsertHandler()));
             }
         };
 
     CompletionProvider<CompletionParameters> importPathCompletionProvider =
         new CompletionProvider<CompletionParameters>() {
             @Override
-            protected void addCompletions(
-                @NotNull CompletionParameters parameters,
-                ProcessingContext context,
-                @NotNull CompletionResultSet result) {
+            protected void addCompletions(@NotNull CompletionParameters params,
+                                          ProcessingContext context,
+                                          @NotNull CompletionResultSet result) {
 
-                Project project = parameters.getOriginalFile().getProject();
+                Project project = params.getOriginalFile().getProject();
 
-                GoNamesCache packageNamesCache = GoNamesCache.getInstance(project);
+                GoNamesCache packageNamesCache =
+                    GoNamesCache.getInstance(project);
+                Collection<String> goSdkPackages = packageNamesCache.getSdkPackages();
 
-                if (packageNamesCache != null) {
-                    Collection<String> goSdkPackages = packageNamesCache.getSdkPackages();
+                for (String goPackage : goSdkPackages) {
+                    result.addElement(
+                        LookupElementBuilder.create("\"" + goPackage + "\"")
+                                            .setIcon(PlatformIcons.PACKAGE_ICON)
+                                            .setTypeText("via sdk"));
+                }
 
-                    for (String goPackage : goSdkPackages) {
-                        result.addElement(LookupElementBuilder.create(goPackage)
-                                                              .setIcon(PlatformIcons.PACKAGE_ICON)
-                                                              .setTypeText(
-                                                                  "via sdk"));
-                    }
+                Collection<String> goProjectPackages = packageNamesCache.getProjectPackages();
 
-                    Collection<String> goProjectPackages = packageNamesCache.getProjectPackages();
-
-                    for (String goPackage : goProjectPackages) {
-                        result.addElement(LookupElementBuilder.create(goPackage)
-                                                              .setIcon(PlatformIcons.PACKAGE_ICON)
-                                                              .setBold()
-                                                              .setTypeText(
-                                                                  "via project"));
-                    }
+                for (String goPackage : goProjectPackages) {
+                    result.addElement(
+                        LookupElementBuilder.create("\"" + goPackage + "\"")
+                                            .setIcon(PlatformIcons.PACKAGE_ICON)
+                                            .setBold()
+                                            .setTypeText("via project"));
                 }
             }
         };
 
     CompletionProvider<CompletionParameters> goAndDeferStatementCompletionProvider = new CompletionProvider<CompletionParameters>() {
         @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
+        protected void addCompletions(@NotNull CompletionParameters parameters,
+                                      ProcessingContext context,
                                       @NotNull CompletionResultSet result) {
-            result.addElement(keywordLookup("func", new LiteralFunctionInsertHandler()));
+            result.addElement(
+                keywordLookup("func", new LiteralFunctionInsertHandler()));
         }
     };
 
     CompletionProvider<CompletionParameters> typeDeclarationCompletionProvider = new CompletionProvider<CompletionParameters>() {
         @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
+        protected void addCompletions(@NotNull CompletionParameters parameters,
+                                      ProcessingContext context,
                                       @NotNull CompletionResultSet result) {
-            result.addElement(keywordLookup("interface", new CurlyBracesInsertHandler()));
-            result.addElement(keywordLookup("struct", new CurlyBracesInsertHandler()));
+            result.addElement(
+                keywordLookup("interface", new CurlyBracesInsertHandler()));
+            result.addElement(
+                keywordLookup("struct", new CurlyBracesInsertHandler()));
         }
     };
 
@@ -174,9 +181,10 @@ public class GoCompletionContributor extends CompletionContributor {
             packageCompletionProvider);
 
         extend(CompletionType.BASIC,
-               psiElement(GoTokenTypes.litSTRING).withParent(
-                   GoImportDeclaration.class
-               ),
+               psiElement(GoTokenTypes.litSTRING)
+                   .withParent(
+                       psiElement(GoLiteralString.class)
+                           .withParent(GoImportDeclaration.class)),
                importPathCompletionProvider);
 
         extend(CompletionType.BASIC,
@@ -202,32 +210,32 @@ public class GoCompletionContributor extends CompletionContributor {
                topLevelKeywordsProvider);
 
         extend(CompletionType.BASIC,
-                psiElement().withParent(
-                    psiElement(GoLiteralIdentifier.class).withParent(
-                        psiElement(GoLiteralExpression.class).withParent(
-                            psiElement(GoGoStatement.class)
-                        )
-                    )
-                ),
-                goAndDeferStatementCompletionProvider);
+               psiElement().withParent(
+                   psiElement(GoLiteralIdentifier.class).withParent(
+                       psiElement(GoLiteralExpression.class).withParent(
+                           psiElement(GoGoStatement.class)
+                       )
+                   )
+               ),
+               goAndDeferStatementCompletionProvider);
 
         extend(CompletionType.BASIC,
-                psiElement().withParent(
-                    psiElement(GoLiteralIdentifier.class).withParent(
-                        psiElement(GoLiteralExpression.class).withParent(
-                            psiElement(GoDeferStatement.class)
-                        )
-                    )
-                ),
-                goAndDeferStatementCompletionProvider);
+               psiElement().withParent(
+                   psiElement(GoLiteralIdentifier.class).withParent(
+                       psiElement(GoLiteralExpression.class).withParent(
+                           psiElement(GoDeferStatement.class)
+                       )
+                   )
+               ),
+               goAndDeferStatementCompletionProvider);
 
         extend(CompletionType.BASIC,
-                psiElement().withParent(
-                    psiElement(GoLiteralIdentifier.class).withParent(
-                        psiElement(GoTypeName.class)
-                    )
-                ),
-                typeDeclarationCompletionProvider);
+               psiElement().withParent(
+                   psiElement(GoLiteralIdentifier.class).withParent(
+                       psiElement(GoTypeName.class)
+                   )
+               ),
+               typeDeclarationCompletionProvider);
     }
 
     @Override

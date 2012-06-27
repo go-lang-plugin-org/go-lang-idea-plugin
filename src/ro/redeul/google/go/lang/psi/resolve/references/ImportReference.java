@@ -1,5 +1,11 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiFile;
@@ -11,14 +17,22 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 public class ImportReference extends GoPsiReference<GoImportDeclaration> implements PsiPolyVariantReference {
     public ImportReference(GoImportDeclaration element) {
         super(element);
+    }
+
+    @Override
+    public TextRange getRangeInElement() {
+        GoLiteralString importPath = getElement().getImportPath();
+
+        if ( importPath == null )
+            return null;
+
+        return new TextRange(
+            importPath.getStartOffsetInParent(),
+            importPath.getStartOffsetInParent() + importPath.getTextLength()
+        );
     }
 
     @Override
@@ -34,7 +48,13 @@ public class ImportReference extends GoPsiReference<GoImportDeclaration> impleme
     @NotNull
     @Override
     public Object[] getVariants() {
-        return new Object[] {};
+//        return new Object[] {
+//            LookupElementBuilder.create("xx", "\"aaa\""),
+//            LookupElementBuilder.create("xx", "\"aab\""),
+//            LookupElementBuilder.create("xx", "\"aab\"")
+//        };
+        return new Object[]{};
+//        return null;
     }
 
     @Override

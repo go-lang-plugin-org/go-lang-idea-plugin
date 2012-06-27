@@ -19,7 +19,7 @@ public class GoIndexExpressionImpl extends GoExpressionBase
     @Override
     protected GoType[] resolveTypes() {
         // TODO: fix this
-        return null;
+        return GoType.EMPTY_ARRAY;
     }
 
     @Override

@@ -16,7 +16,7 @@ public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl
     @Override
     protected GoType[] resolveTypes() {
         GoExpr operand = getLeftOperand();
-        return operand != null ? operand.getType() : null;
+        return operand != null ? operand.getType() : GoType.EMPTY_ARRAY;
     }
 }
 

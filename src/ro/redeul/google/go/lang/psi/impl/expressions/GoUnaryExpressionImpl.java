@@ -18,7 +18,7 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return GoType.EMPTY_ARRAY;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

@@ -49,7 +49,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
             return new GoType[]{(GoType) psiElement};
         }
 
-        return null;
+        return GoType.EMPTY_ARRAY;
     }
 
     @Override

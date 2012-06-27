@@ -6,6 +6,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -31,5 +32,10 @@ public class GoTypeInterfaceImpl extends GoPsiPackagedElementBase implements GoT
 
         // TODO: implement this.
         return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitInterfaceType(this);
     }
 }
