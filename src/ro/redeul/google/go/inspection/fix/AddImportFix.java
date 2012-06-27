@@ -41,17 +41,12 @@ public class AddImportFix implements QuestionAction {
             return true;
         }
 
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-            @Override
-            public void run() {
-                if (pathsToImport.size() == 1) {
-                    addImport(file, editor, pathsToImport.get(0));
-                } else {
-                    JBPopupFactory popup = JBPopupFactory.getInstance();
-                    popup.createListPopup(new ChoosePackagePopupStep()).showInBestPositionFor(editor);
-                }
-            }
-        });
+        if (pathsToImport.size() == 1) {
+            addImport(file, editor, pathsToImport.get(0));
+        } else {
+            JBPopupFactory popup = JBPopupFactory.getInstance();
+            popup.createListPopup(new ChoosePackagePopupStep()).showInBestPositionFor(editor);
+        }
         return true;
     }
 

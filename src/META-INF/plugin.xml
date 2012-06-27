@@ -350,6 +350,11 @@
 
         <projectConfigurable instance="ro.redeul.google.go.ide.GoConfigurable"/>
 
+        <applicationService serviceInterface="ro.redeul.google.go.options.GoSettings"
+                            serviceImplementation="ro.redeul.google.go.options.GoSettings"/>
+        <exportable serviceInterface="ro.redeul.google.go.options.GoSettings"/>
+        <autoImportOptionsProvider instance="ro.redeul.google.go.imports.GoAutoImportOptionsProvider"/>
+
         <spellchecker.bundledDictionaryProvider implementation="ro.redeul.google.go.spellchecker.GoDictionaryProvider"/>
         <spellchecker.support language="Google Go" implementationClass="com.redeul.google.go.spellchecker.tokenizer.GoIdentifierTokenizerStrategy"/>
 

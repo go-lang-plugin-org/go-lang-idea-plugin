@@ -12,6 +12,7 @@ import com.intellij.codeInsight.daemon.impl.ShowAutoImportPass;
 import com.intellij.codeInsight.daemon.impl.VisibleHighlightingPassFactory;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.lang.annotation.HighlightSeverity;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.impl.DocumentMarkupModel;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
@@ -26,6 +27,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.options.GoSettings;
+
 import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
 
 /**
@@ -135,6 +138,15 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
     @Override
     public void doApplyInformationToEditor() {
         if (!editor.getContentComponent().hasFocus()) {
+            return;
+        }
+
+        GoSettings settings = GoSettings.getInstance();
+        if (settings.OPTIMIZE_IMPORTS_ON_THE_FLY) {
+            ApplicationManager.getApplication().runWriteAction(new GoImportOptimizer().processFile(file));
+        }
+
+        if (!settings.SHOW_IMPORT_POPUP) {
             return;
         }
 
