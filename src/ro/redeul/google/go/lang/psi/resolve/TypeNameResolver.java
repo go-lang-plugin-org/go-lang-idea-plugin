@@ -22,9 +22,4 @@ public class TypeNameResolver extends
             addDeclaration(type);
         }
     }
-
-    @Override
-    public String toString() {
-        return String.format("Typename resolver for: %s", getReference().getCanonicalText());
-    }
 }

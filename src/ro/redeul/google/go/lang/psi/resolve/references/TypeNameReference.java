@@ -1,14 +1,20 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.scope.util.PsiScopesUtil;
+import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static ro.redeul.google.go.util.LookupElementBuilderUtil.createLookupElementBuilder;
 
 public class TypeNameReference extends GoPsiReference<GoTypeName> {
     public static final ElementPattern<GoTypeName> MATCHER =
@@ -46,7 +52,37 @@ public class TypeNameReference extends GoPsiReference<GoTypeName> {
     @NotNull
     @Override
     public Object[] getVariants() {
-        return new Object[0];  //To change body of implemented methods use File | Settings | File Templates.
+
+        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+
+        TypeNameResolver processor =
+            new TypeNameResolver(this) {
+                @Override
+                protected boolean addDeclaration(PsiElement declaration) {
+                    String name = PsiUtilCore.getName(declaration);
+
+                    String visiblePackageName =
+                        getState().get(GoResolveStates.VisiblePackageName);
+
+                    if ( visiblePackageName != null ) {
+                        name = visiblePackageName + "." + name;
+                    }
+                    if (name == null) {
+                        return true;
+                    }
+
+                    variants.add(createLookupElementBuilder(declaration, name));
+                    return true;
+
+                }
+            };
+
+        PsiScopesUtil.treeWalkUp(
+            processor,
+            getElement(), getElement().getContainingFile(),
+            GoResolveStates.initial());
+
+        return variants.toArray();
     }
 
     @Override
