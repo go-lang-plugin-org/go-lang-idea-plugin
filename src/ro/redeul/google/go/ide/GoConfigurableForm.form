@@ -14,6 +14,9 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
+        <clientProperties>
+          <BorderFactoryClass class="java.lang.String" value="com.intellij.ui.IdeBorderFactory$BoldSmallWithIndent"/>
+        </clientProperties>
         <border type="etched" title-resource-bundle="ro/redeul/google/go/GoBundle" title-key="go.settings.build.title"/>
         <children>
           <component id="3a95b" class="javax.swing.JRadioButton" binding="internalBuildSystemRadioButton" default-binding="true">
@@ -45,6 +48,9 @@
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
+        <clientProperties>
+          <BorderFactoryClass class="java.lang.String" value="com.intellij.ui.IdeBorderFactory$BoldSmallWithIndent"/>
+        </clientProperties>
         <border type="etched" title="Type Completion"/>
         <children>
           <component id="ca3bc" class="javax.swing.JCheckBox" binding="enableVariablesCompletionCheckBox" default-binding="true">
@@ -68,6 +74,9 @@
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
+        <clientProperties>
+          <BorderFactoryClass class="java.lang.String" value="com.intellij.ui.IdeBorderFactory$BoldSmallWithIndent"/>
+        </clientProperties>
         <border type="etched" title-resource-bundle="ro/redeul/google/go/GoBundle" title-key="go.settings.feature.title"/>
         <children>
           <component id="17f8e" class="javax.swing.JCheckBox" binding="enableImportsOptimizer">
