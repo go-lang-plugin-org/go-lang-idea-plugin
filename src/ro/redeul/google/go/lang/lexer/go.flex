@@ -232,9 +232,9 @@ mESCAPES = [abfnrtv]
 "`" [^`]* "`"                             { return litSTRING; }
 {mSTR}
     (
-        [^\"\\] | "\\" ("\\" | {mSTR} | {mESCAPES} | [0-8xuU] )
+        [^\"\\\n\r] | "\\" ("\\" | {mSTR} | {mESCAPES} | [0-8xuU] )
     )*
-(EOF | {mSTR})                            { return litSTRING; }
+(EOF | [\r\n]+ | {mSTR})                  { return litSTRING; }
 "{"                                       { return pLCURCLY; }
 "}"                                       { return pRCURLY; }
 
