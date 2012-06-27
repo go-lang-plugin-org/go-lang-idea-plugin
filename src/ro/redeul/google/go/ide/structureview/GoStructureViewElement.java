@@ -1,7 +1,6 @@
 package ro.redeul.google.go.ide.structureview;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -20,20 +19,19 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.documentation.DocumentUtil;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
+import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
+
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isExportedName;
 
 /**
@@ -182,61 +180,25 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         }
 
         private List<GoLiteralIdentifier> getConstDeclarations(GoFile psiFile) {
-            GoConstDeclarations[] constDeclarations = psiFile.getConsts();
-            if (constDeclarations == null) {
-                return new ArrayList<GoLiteralIdentifier>();
-            }
-
-            List<GoLiteralIdentifier> consts = new ArrayList<GoLiteralIdentifier>();
-            for (GoConstDeclarations cds : constDeclarations) {
-                for (GoConstDeclaration cd : cds.getDeclarations()) {
-                    Collections.addAll(consts, cd.getIdentifiers());
-                }
-            }
-
+            List<GoLiteralIdentifier> consts = GoFileUtils.getConstIdentifiers(psiFile);
             Collections.sort(consts, NAMED_ELEMENT_COMPARATOR);
             return consts;
         }
 
         private List<GoLiteralIdentifier> getVariableDeclarations(GoFile psiFile) {
-            GoVarDeclarations[] varDeclarations = psiFile.getGlobalVariables();
-            if (varDeclarations == null) {
-                return new ArrayList<GoLiteralIdentifier>();
-            }
-
-            List<GoLiteralIdentifier> vars = new ArrayList<GoLiteralIdentifier>();
-            for (GoVarDeclarations vds : varDeclarations) {
-                for (GoVarDeclaration cd : vds.getDeclarations()) {
-                    Collections.addAll(vars, cd.getIdentifiers());
-                }
-            }
-
+            List<GoLiteralIdentifier> vars = GoFileUtils.getVariableIdentifiers(psiFile);
             Collections.sort(vars, NAMED_ELEMENT_COMPARATOR);
             return vars;
         }
 
         private List<GoFunctionDeclaration> getFunctionDeclarations(GoFile psiFile) {
-            GoFunctionDeclaration[] functionDeclarations = psiFile.getFunctions();
-            if (functionDeclarations == null) {
-                return new ArrayList<GoFunctionDeclaration>();
-            }
-
-            List<GoFunctionDeclaration> functions =
-                    new ArrayList<GoFunctionDeclaration>(Arrays.asList(functionDeclarations));
+            List<GoFunctionDeclaration> functions = GoFileUtils.getFunctionDeclarations(psiFile);
             Collections.sort(functions, NAMED_ELEMENT_COMPARATOR);
             return functions;
         }
 
         private List<GoTypeSpec> getTypeDeclarations(GoFile psiFile) {
-            GoTypeDeclaration[] typeDeclarations = psiFile.getTypeDeclarations();
-            if (typeDeclarations == null) {
-                return new ArrayList<GoTypeSpec>();
-            }
-
-            List<GoTypeSpec> specs = new ArrayList<GoTypeSpec>();
-            for (GoTypeDeclaration typeDec : typeDeclarations) {
-                Collections.addAll(specs, typeDec.getTypeSpecs());
-            }
+            List<GoTypeSpec> specs = GoFileUtils.getTypeSpecs(psiFile);
 
             Collections.sort(specs, new Comparator<GoTypeSpec>() {
                 @Override

@@ -27,11 +27,11 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
+import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 import java.util.ArrayList;
@@ -297,16 +297,12 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     private void getGlobalVariables(GoFile file, HashMap<String, VariableUsage> variables) {
-        for (GoConstDeclarations allConsts : file.getConsts()) {
-            for (GoConstDeclaration cd : allConsts.getDeclarations()) {
-                visitConstDeclaration(cd);
-            }
+        for (GoConstDeclaration cd : GoFileUtils.getConstDeclarations(file)) {
+            visitConstDeclaration(cd);
         }
 
-        for (GoVarDeclarations allVariables : file.getGlobalVariables()) {
-            for (GoVarDeclaration vd : allVariables.getDeclarations()) {
-                visitVarDeclaration(vd);
-            }
+        for (GoVarDeclaration vd : GoFileUtils.getVarDeclarations(file)) {
+            visitVarDeclaration(vd);
         }
 
         for (GoMethodDeclaration md : file.getMethods()) {
@@ -317,12 +313,10 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
             variables.put(fd.getFunctionName(), new VariableUsage(fd));
         }
 
-        for (GoTypeDeclaration types : file.getTypeDeclarations()) {
-            for (GoTypeSpec spec : types.getTypeSpecs()) {
-                GoType type = spec.getType();
-                if (type != null) {
-                    variables.put(type.getName(), new VariableUsage(type));
-                }
+        for (GoTypeSpec spec : GoFileUtils.getTypeSpecs(file)) {
+            GoType type = spec.getType();
+            if (type != null) {
+                variables.put(type.getName(), new VariableUsage(type));
             }
         }
     }
