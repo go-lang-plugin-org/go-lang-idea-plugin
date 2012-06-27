@@ -13,31 +13,36 @@ Go file
     PsiElement(()('(')
     PsiWhiteSpace(' ')
     ImportSpecImpl
-      PsiElement(LITERAL_STRING)('"container/vector"')
+      LiteralStringImpl
+        PsiElement(LITERAL_STRING)('"container/vector"')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
     ImportSpecImpl
       PackageReferenceImpl
         PsiElement(.)('.')
       PsiWhiteSpace(' ')
-      PsiElement(LITERAL_STRING)('"fmt"')
+      LiteralStringImpl
+        PsiElement(LITERAL_STRING)('"fmt"')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
     ImportSpecImpl
       PackageReferenceImpl
         PsiElement(IDENTIFIER)('_')
       PsiWhiteSpace(' ')
-      PsiElement(LITERAL_STRING)('"go/ast"')
+      LiteralStringImpl
+        PsiElement(LITERAL_STRING)('"go/ast"')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
     ImportSpecImpl
       PackageReferenceImpl
         PsiElement(IDENTIFIER)('P')
       PsiWhiteSpace(' ')
-      PsiElement(LITERAL_STRING)('"go/scanner"')
+      LiteralStringImpl
+        PsiElement(LITERAL_STRING)('"go/scanner"')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
     ImportSpecImpl
-      PsiElement(LITERAL_STRING)('"go/token"')
+      LiteralStringImpl
+        PsiElement(LITERAL_STRING)('"go/token"')
     PsiWhiteSpace(' ')
     PsiElement())(')')

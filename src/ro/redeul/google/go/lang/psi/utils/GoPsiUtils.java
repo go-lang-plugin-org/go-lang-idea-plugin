@@ -32,11 +32,17 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 
 public class GoPsiUtils {
 
-    public static String cleanupImportPath(String path) {
-        if (path == null) {
-            return null;
+    public static String getStringLiteralValue(String literalText) {
+        if (literalText == null ){
+            return "";
         }
-        return path.replaceAll("^\"", "").replaceAll("\"$", "");
+
+        if (literalText.startsWith("`")) {
+            return literalText.replaceAll("(?:^`)|(?:`$)", "").replaceAll("\\\\`","`");
+        }
+
+        // TODO: implemented proper rune translation to value here.
+        return literalText.replaceAll("(?:^\")|(?:\"$)", "");
     }
 
     public static GoFile[] findFilesForPackage(String importPath,

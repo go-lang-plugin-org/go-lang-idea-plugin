@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 public class GoTypes {
@@ -32,8 +31,7 @@ public class GoTypes {
         GoType type = cachedTypes.get(builtinType);
         if (type == null) {
             Collection<GoFile> files =
-                namesCache.getFilesByPackageName(
-                    GoPsiUtils.cleanupImportPath("builtin"));
+                namesCache.getFilesByPackageName("builtin");
 
 
             for (GoFile file : files) {

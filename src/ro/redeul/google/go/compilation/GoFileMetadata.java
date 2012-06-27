@@ -1,11 +1,12 @@
 package ro.redeul.google.go.compilation;
 
-import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -32,7 +33,11 @@ public class GoFileMetadata {
             GoImportDeclaration[] importSpecs = importDeclaration.getDeclarations();
 
             for (GoImportDeclaration importSpec : importSpecs) {
-                imports.add(importSpec.getImportPath());
+                GoLiteralString importPath = importSpec.getImportPath();
+
+                if ( importPath != null ) {
+                    imports.add(importPath.getValue());
+                }
             }
         }
     }

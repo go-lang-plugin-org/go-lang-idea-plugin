@@ -43,7 +43,8 @@ public class GoNamesCache {
     }
 
     public Collection<String> getSdkPackages() {
-        return getGoPackagesInScope(GlobalSearchScope.notScope(GlobalSearchScope.projectScope(project)));
+        return getGoPackagesInScope(GlobalSearchScope.notScope(
+            GlobalSearchScope.projectScope(project)));
     }
 
     public Collection<String> getAllPackages() {
@@ -54,13 +55,15 @@ public class GoNamesCache {
 
         StubIndex index = StubIndex.getInstance();
 
-        Collection<String> keys = index.getAllKeys(GoPackageImportPath.KEY, project);
+        Collection<String> keys = index.getAllKeys(GoPackageImportPath.KEY,
+                                                   project);
 
         Collection<String> packagesCollection = new ArrayList<String>();
 
         for (String key : keys) {
-            Collection<GoFile> files = index.get(GoPackageImportPath.KEY, key, project, scope);
-            if ( files != null && files.size() > 0 ) {
+            Collection<GoFile> files = index.get(GoPackageImportPath.KEY, key,
+                                                 project, scope);
+            if (files != null && files.size() > 0) {
                 packagesCollection.add(key);
             }
         }
@@ -68,25 +71,33 @@ public class GoNamesCache {
         return packagesCollection;
     }
 
+    public Collection<GoFile> getBuiltinPackageFiles() {
+        return getFilesByPackageName("builtin");
+    }
+
     public Collection<GoFile> getFilesByPackageName(String packageName) {
         StubIndex index = StubIndex.getInstance();
 
-        return index.get(GoPackageImportPath.KEY, packageName, project, GlobalSearchScope.allScope(project));
+        return index.get(GoPackageImportPath.KEY, packageName, project,
+                         GlobalSearchScope.allScope(project));
     }
 
     public Collection<GoFile> getFilesByPackageImportPath(String importPath) {
         StubIndex index = StubIndex.getInstance();
 
-        return index.get(GoPackageImportPath.KEY, importPath, project, GlobalSearchScope.allScope(project));
+        return index.get(GoPackageImportPath.KEY, importPath, project,
+                         GlobalSearchScope.allScope(project));
     }
 
 
     private GlobalSearchScope getSearchScope(boolean allScope) {
-        return allScope ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
+        return allScope ? GlobalSearchScope.allScope(
+            project) : GlobalSearchScope.projectScope(project);
     }
 
     @NotNull
-    public NavigationItem[] getTypesByName(@NotNull @NonNls String name, boolean includeNonProjectItems) {
+    public NavigationItem[] getTypesByName(@NotNull @NonNls String name,
+                                           boolean includeNonProjectItems) {
         if (GoSdkUtil.getGoogleGoSdkForProject(project) == null) {
             return new NavigationItem[0];
         }
@@ -94,7 +105,8 @@ public class GoNamesCache {
         StubIndex index = StubIndex.getInstance();
         GlobalSearchScope scope = getSearchScope(includeNonProjectItems);
         Collection<NavigationItem> items = new ArrayList<NavigationItem>();
-        for (GoTypeNameDeclaration type : index.get(GoTypeName.KEY, name, project, scope)) {
+        for (GoTypeNameDeclaration type : index.get(GoTypeName.KEY, name,
+                                                    project, scope)) {
             if (type instanceof NavigationItem) {
                 items.add((NavigationItem) type);
             }
@@ -120,7 +132,8 @@ public class GoNamesCache {
     }
 
     @NotNull
-    public NavigationItem[] getFunctionsByName(@NotNull @NonNls String name, boolean includeNonProjectItems) {
+    public NavigationItem[] getFunctionsByName(@NotNull @NonNls String name,
+                                               boolean includeNonProjectItems) {
         return new NavigationItem[0];
     }
 
@@ -133,7 +146,8 @@ public class GoNamesCache {
     }
 
     @NotNull
-    public NavigationItem[] getVariablesByName(@NotNull @NonNls String name, boolean includeNonProjectItems) {
+    public NavigationItem[] getVariablesByName(@NotNull @NonNls String name,
+                                               boolean includeNonProjectItems) {
         return new NavigationItem[0];
     }
 

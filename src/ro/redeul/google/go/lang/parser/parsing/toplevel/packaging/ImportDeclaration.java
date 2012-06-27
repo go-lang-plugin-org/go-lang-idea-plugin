@@ -8,7 +8,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.declarations.NestedDeclarationParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.cleanupImportPath;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findDefaultPackageName;
 
 /**
@@ -57,10 +57,14 @@ public class ImportDeclaration implements GoElementTypes {
             ParserUtils.eatElement(builder, PACKAGE_REFERENCE);
         }
 
+        PsiBuilder.Marker importPathMarker = builder.mark();
         String importPath = builder.getTokenText();
-        if (ParserUtils.getToken(builder, litSTRING, GoBundle.message("error.import.path.expected"))) {
+        if (!ParserUtils.getToken(builder, litSTRING, GoBundle.message("error.import.path.expected"))) {
+            importPathMarker.drop();
+        } else {
+            importPathMarker.done(LITERAL_STRING);
             if ( localPackageName == null) {
-                localPackageName = findDefaultPackageName(cleanupImportPath(importPath));
+                localPackageName = findDefaultPackageName(GoPsiUtils.getStringLiteralValue(importPath));
             }
         }
 

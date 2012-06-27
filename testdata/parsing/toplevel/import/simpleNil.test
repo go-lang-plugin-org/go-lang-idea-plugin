@@ -14,4 +14,5 @@ Go file
       PackageReferenceImpl
         PsiElement(IDENTIFIER)('_')
       PsiWhiteSpace(' ')
-      PsiElement(LITERAL_STRING)('"package"')
+      LiteralStringImpl
+        PsiElement(LITERAL_STRING)('"package"')

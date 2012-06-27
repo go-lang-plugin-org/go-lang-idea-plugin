@@ -11,11 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.services.GoCodeManager;
 import static ro.redeul.google.go.GoBundle.message;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.cleanupImportPath;
 
 public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
     @Nls
@@ -39,27 +39,30 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
             @Override
             public void visitImportDeclaration(GoImportDeclaration declaration) {
                 super.visitImportDeclaration(declaration);
-
                 checkImportPath(declaration, result);
             }
         }.visitFile(file);
     }
 
     private static void checkImportPath(GoImportDeclaration declaration, InspectionResult result) {
-        String importPath = cleanupImportPath(declaration.getImportPath());
-        if (importPath == null) {
-            return;
+        String importPathValue = null;
+        GoLiteralString importPath = declaration.getImportPath();
+        if ( importPath != null ) {
+            importPathValue = importPath.getValue();
         }
 
-        if (importPath.isEmpty()) {
+        if (importPathValue == null)
+            return;
+
+        if (importPathValue.isEmpty()) {
             result.addProblem(declaration, GoBundle.message("error.import.path.is.empty"));
         }
 
-        if (importPath.contains(" ") || importPath.contains("\t")) {
+        if (importPathValue.contains(" ") || importPathValue.contains("\t")) {
             result.addProblem(declaration, GoBundle.message("error.import.path.contains.space"));
         }
 
-        if (importPath.contains("\\")) {
+        if (importPathValue.contains("\\")) {
             result.addProblem(declaration, GoBundle.message("error.import.path.contains.backslash"));
         }
     }
@@ -83,7 +86,7 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
 
             result.addProblem(
                 unused,
-                message("warning.unused.import", unused.getImportPath()),
+                message("warning.unused.import", unused.getImportPath().getValue()),
                 ProblemHighlightType.LIKE_UNUSED_SYMBOL,
                 new RemoveImportFix(unused));
         }
@@ -94,16 +97,21 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
             return false;
         }
 
-        String importPath = cleanupImportPath(declaration.getImportPath());
-        if (importPath == null || importPath.isEmpty()) {
+        String importPathValue = null;
+        GoLiteralString importPath = declaration.getImportPath();
+        if ( importPath != null ) {
+            importPathValue = importPath.getValue();
+        }
+
+        if (importPathValue == null || importPathValue.isEmpty()) {
             return false;
         }
 
-        if (importPath.contains(" ") || importPath.contains("\t")) {
+        if (importPathValue.contains(" ") || importPathValue.contains("\t")) {
             return false;
         }
 
-        if (importPath.contains("\\")) {
+        if (importPathValue.contains("\\")) {
             return false;
         }
 

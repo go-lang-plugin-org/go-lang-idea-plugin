@@ -15,7 +15,8 @@ Go file
       PackageReferenceImpl
         PsiElement(IDENTIFIER)('a')
       PsiWhiteSpace(' ')
-      PsiElement(LITERAL_STRING)('"a"')
+      LiteralStringImpl
+        PsiElement(LITERAL_STRING)('"a"')
   PsiElement(WS_NEW_LINES)('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')

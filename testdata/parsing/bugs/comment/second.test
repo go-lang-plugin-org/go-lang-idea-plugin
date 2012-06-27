@@ -19,7 +19,8 @@ Go file
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')
     ImportSpecImpl
-      PsiElement(LITERAL_STRING)('"fmt"')
+      LiteralStringImpl
+        PsiElement(LITERAL_STRING)('"fmt"')
   PsiElement(WS_NEW_LINES)('\n\n')
   FunctionDeclaration(main)
     PsiElement(KEYWORD_FUNC)('func')

@@ -1,16 +1,15 @@
 package ro.redeul.google.go.codeInsight.navigation;
 
+import java.util.Collection;
+
 import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandlerBase;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
-
-import java.util.Collection;
-
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.cleanupImportPath;
 
 public class GotoPackageHandler extends GotoDeclarationHandlerBase {
     @Override
@@ -34,7 +33,11 @@ public class GotoPackageHandler extends GotoDeclarationHandlerBase {
     }
 
     private PsiElement getPackageDefinition(GoImportDeclaration id) {
-        String packageName = cleanupImportPath(id.getImportPath());
+        GoLiteralString importPath = id.getImportPath();
+        if ( importPath == null )
+            return null;
+
+        String packageName = importPath.getValue();
         GoNamesCache namesCache = GoNamesCache.getInstance(id.getProject());
 
         Collection<GoFile> files = namesCache.getFilesByPackageName(packageName);

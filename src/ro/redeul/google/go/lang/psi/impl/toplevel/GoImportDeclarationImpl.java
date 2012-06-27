@@ -7,12 +7,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
-import ro.redeul.google.go.lang.psi.resolve.GoResolveUtil;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -33,15 +32,18 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         return findChildByClass(GoPackageReference.class);
     }
 
-    public String getImportPath() {
-        PsiElement stringLiteral = findChildByType(GoTokenTypes.litSTRING);
-
-        return stringLiteral != null ? stringLiteral.getText() : "";
+    public GoLiteralString getImportPath() {
+        return findChildByClass(GoLiteralString.class);
     }
 
     @Override
     public String getPackageName() {
-        return GoResolveUtil.defaultPackageNameFromImport(getImportPath());
+        GoLiteralString importPath = getImportPath();
+
+        if ( importPath != null )
+            return GoPsiUtils.findDefaultPackageName(importPath.getValue());
+
+        return "";
     }
 
     @Override
@@ -77,10 +79,14 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
 
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
+        GoLiteralString importPath = getImportPath();
+        if ( importPath == null ) {
+            return true;
+        }
+
         // get the file included in the imported package name
         Collection<GoFile> files =
-            namesCache.getFilesByPackageName(
-                GoPsiUtils.cleanupImportPath(getImportPath()));
+            namesCache.getFilesByPackageName(importPath.getValue());
 
         for (GoFile file : files) {
             ResolveState newState =

@@ -2,8 +2,9 @@ package ro.redeul.google.go.lang.psi.resolve;
 
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findDefaultPackageName;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,9 +19,13 @@ public class GoResolveUtil {
         GoPackageReference importedPackageReference = importSpec.getPackageReference();
         GoPackageReference elementReference = qualifiedElement.getPackageReference();
 
+        GoLiteralString importPath = importSpec.getImportPath();
+        if (importPath == null )
+            return false;
+
         // import "a"; var x a.T;
-        if ( importedPackageReference == null && elementReference != null
-                && elementReference.getString().equals(defaultPackageNameFromImport(importSpec.getImportPath())) ) {
+        if (importedPackageReference == null && elementReference != null
+            && elementReference.getString().equals(findDefaultPackageName(importPath.getValue()))) {
             return true;
         }
 
@@ -35,10 +40,6 @@ public class GoResolveUtil {
         }
 
         return false;
-    }
-
-    public static String defaultPackageNameFromImport(String importPath) {
-        return GoPsiUtils.findDefaultPackageName(GoPsiUtils.cleanupImportPath(importPath));
     }
 
 }

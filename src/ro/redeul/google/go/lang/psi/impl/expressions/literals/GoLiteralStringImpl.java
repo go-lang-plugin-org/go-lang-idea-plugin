@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 public class GoLiteralStringImpl extends GoPsiElementBase
     implements GoLiteralString
@@ -15,7 +16,7 @@ public class GoLiteralStringImpl extends GoPsiElementBase
     @Override
     @NotNull
     public String getValue() {
-        return getText();
+        return GoPsiUtils.getStringLiteralValue(getText());
     }
 
     @Override

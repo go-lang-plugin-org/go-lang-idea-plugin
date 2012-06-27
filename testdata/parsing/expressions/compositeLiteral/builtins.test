@@ -12,7 +12,8 @@ Go file
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')
     ImportSpecImpl
-      PsiElement(LITERAL_STRING)('"ast"')
+      LiteralStringImpl
+        PsiElement(LITERAL_STRING)('"ast"')
   PsiElement(WS_NEW_LINES)('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')

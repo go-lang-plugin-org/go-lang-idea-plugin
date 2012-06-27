@@ -17,7 +17,8 @@ Go file
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('    ')
     ImportSpecImpl
-      PsiElement(LITERAL_STRING)('"fmt"')
+      LiteralStringImpl
+        PsiElement(LITERAL_STRING)('"fmt"')
     PsiElement(WS_NEW_LINES)('\n')
     PsiWhiteSpace('    ')
     PsiComment(SL_COMMENT)('// I "included"')

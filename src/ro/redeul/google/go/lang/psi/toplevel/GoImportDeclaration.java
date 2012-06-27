@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -17,7 +18,7 @@ public interface GoImportDeclaration extends GoPsiElement {
     GoPackageReference getPackageReference();
 
     @Nullable
-    String getImportPath();
+    GoLiteralString getImportPath();
 
     String getPackageName();
 

@@ -23,15 +23,20 @@ public class RemoveImportFixTest extends GoEditorAwareTestCase {
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {
         PsiElement element = file.findElementAt(editor.getSelectionModel().getSelectionStart());
-        if (!(element instanceof GoImportDeclaration)) {
+
+        while ( element != null && element.getStartOffsetInParent() == 0 ) {
             element = element.getParent();
         }
 
         if (element instanceof GoImportDeclarations) {
-            element = ((GoImportDeclarations) element).getDeclarations()[0];
+            element = ((GoImportDeclarations)element).getDeclarations()[0];
         }
 
-        assertTrue(element instanceof GoImportDeclaration);
+        while ( element != null && !(element instanceof GoImportDeclaration)) {
+            element = element.getParent();
+        }
+
+        assertNotNull(element);
         System.out.println(DebugUtil.psiToString(file, false, true));
         InspectionManager im = InspectionManager.getInstance(project);
         LocalQuickFix fix = null;

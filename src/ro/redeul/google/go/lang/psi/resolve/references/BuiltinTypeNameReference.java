@@ -10,7 +10,6 @@ import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 public class BuiltinTypeNameReference extends TypeNameReference {
@@ -27,14 +26,11 @@ public class BuiltinTypeNameReference extends TypeNameReference {
         GoNamesCache namesCache = GoNamesCache.getInstance(getElement().getProject());
 
         // get the file included in the imported package name
-        Collection<GoFile> files =
-            namesCache.getFilesByPackageName(
-                GoPsiUtils.cleanupImportPath("builtin"));
+        Collection<GoFile> files = namesCache.getBuiltinPackageFiles();
 
 
         for (GoFile file : files) {
-            ResolveState newState =
-                GoResolveStates.imported("builtin", "");
+            ResolveState newState = GoResolveStates.imported("builtin", "");
 
             if (!file.processDeclarations(processor, newState, null, getElement()))  {
                 break;
