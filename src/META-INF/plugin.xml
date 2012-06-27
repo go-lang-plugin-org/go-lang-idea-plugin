@@ -353,6 +353,7 @@
         <spellchecker.bundledDictionaryProvider implementation="ro.redeul.google.go.spellchecker.GoDictionaryProvider"/>
         <spellchecker.support language="Google Go" implementationClass="com.redeul.google.go.spellchecker.tokenizer.GoIdentifierTokenizerStrategy"/>
 
+        <quoteHandler fileType="Google Go" className="ro.redeul.google.go.codeInsight.editorActions.GoQuoteHandler"/>
 
         <lang.syntaxHighlighterFactory key="Google Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighterFactory"/>
 
