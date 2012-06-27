@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 
-public abstract class GoPsiReference<GoPsi extends PsiNamedElement>
+public abstract class GoPsiReference<GoPsi extends PsiElement>
     implements PsiReference {
 
     GoPsi element;
