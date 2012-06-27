@@ -16,5 +16,5 @@ Go file
       <empty list>
     PsiErrorElement:close.parenthesis.expected
       <empty list>
-    FunctionParameterList
+    FunctionParameterListImpl
       <empty list>

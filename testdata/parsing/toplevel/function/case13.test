@@ -12,7 +12,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('f')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('prefix')

@@ -24,7 +24,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('Swap')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('i')

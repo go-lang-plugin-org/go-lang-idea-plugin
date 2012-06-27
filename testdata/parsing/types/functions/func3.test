@@ -20,7 +20,7 @@ Go file
         PsiElement())(')')
         PsiWhiteSpace(' ')
         FunctionResult
-          FunctionParameterList
+          FunctionParameterListImpl
             FunctionParameterImpl
               TypeNameImpl
                 LiteralIdentifierImpl

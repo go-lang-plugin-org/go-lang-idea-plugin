@@ -182,26 +182,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     }
 
     @Override
-    public boolean isGlobal() {
-/*
-        PsiElement resolve = resolve();
-        if (resolve == null) {
-            return false;
-        }
-
-        PsiElement parent = resolve.getParent();
-        if (!(parent instanceof GoVarDeclaration) && !(parent instanceof GoConstDeclaration)) {
-            return false;
-        }
-
-        PsiElement grandpa = parent.getParent();
-        return grandpa != null && grandpa.getParent() instanceof GoFile;
-
-*/
-        return false;
-    }
-
-    @Override
     public boolean isQualified() {
         return findChildByType(GoTokenTypes.oDOT) != null;
     }

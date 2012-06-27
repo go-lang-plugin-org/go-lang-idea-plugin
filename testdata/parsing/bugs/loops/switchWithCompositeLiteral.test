@@ -35,7 +35,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeSliceImpl
             PsiElement([)('[')

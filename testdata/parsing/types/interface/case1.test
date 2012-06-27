@@ -40,7 +40,7 @@ Go file
         MethodDeclaration(Sum)
           PsiElement(IDENTIFIER)('Sum')
           PsiElement(()('(')
-          FunctionParameterList
+          FunctionParameterListImpl
             FunctionParameterImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('values')
@@ -54,7 +54,7 @@ Go file
           PsiElement())(')')
           PsiWhiteSpace(' ')
           FunctionResult
-            FunctionParameterList
+            FunctionParameterListImpl
               FunctionParameterImpl
                 TypeSliceImpl
                   PsiElement([)('[')

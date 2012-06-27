@@ -22,7 +22,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('Scale')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('factor')

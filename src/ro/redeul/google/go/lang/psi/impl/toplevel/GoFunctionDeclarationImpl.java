@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -58,7 +59,14 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
 
     @Override
     public GoFunctionParameter[] getParameters() {
-        return GoPsiUtils.getParameters(this);
+        GoFunctionParameterList parameterList =
+            findChildByClass(GoFunctionParameterList.class);
+
+        if ( parameterList == null ) {
+            return GoFunctionParameter.EMPTY_ARRAY;
+        }
+
+        return parameterList.getFunctionParameters();
     }
 
     @Override

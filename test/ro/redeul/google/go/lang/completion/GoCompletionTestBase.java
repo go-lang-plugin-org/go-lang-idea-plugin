@@ -18,7 +18,6 @@ public abstract class GoCompletionTestBase extends GoCodeInsightTestCase {
     protected void doBasicTest(String ... otherFiles) throws Exception {
         String testName = getTestName();
 
-
         String sourceFiles[] = new String[1 + otherFiles.length];
 
         sourceFiles[0] = testName + ".go";
@@ -48,7 +47,6 @@ public abstract class GoCompletionTestBase extends GoCodeInsightTestCase {
     public void doVariantsTest(String... variants) throws Throwable {
         fixture.configureByFile(getTestName(false) + ".go");
         fixture.complete(CompletionType.BASIC);
-
 
         assertOrderedEquals(fixture.getLookupElementStrings(), variants);
     }

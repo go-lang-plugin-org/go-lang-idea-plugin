@@ -466,7 +466,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('chcopy')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('q')
@@ -477,7 +477,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
@@ -709,7 +709,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('bitset')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('set')
@@ -729,7 +729,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
@@ -791,7 +791,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('setbit')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('set')
@@ -866,7 +866,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
@@ -911,7 +911,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('setunion')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('a')
@@ -929,7 +929,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
@@ -1095,7 +1095,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('prlook')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('p')
@@ -1319,7 +1319,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('isdigit')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('c')
@@ -1330,7 +1330,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
@@ -1374,7 +1374,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('isword')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('c')
@@ -1385,7 +1385,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
@@ -1478,7 +1478,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('mktemp')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('t')
@@ -1489,7 +1489,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
@@ -1520,7 +1520,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('aryeq')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('a')
@@ -1546,7 +1546,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
@@ -1702,7 +1702,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('putrune')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('f')
@@ -1818,7 +1818,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('getrune')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('f')
@@ -1833,7 +1833,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
@@ -2046,7 +2046,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('ungetrune')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('f')
@@ -2157,7 +2157,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('write')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('f')
@@ -2193,7 +2193,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
@@ -2229,7 +2229,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('open')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('s')
@@ -2240,7 +2240,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypePointerImpl
             PsiElement(*)('*')
@@ -2347,7 +2347,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('create')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('s')
@@ -2358,7 +2358,7 @@ Go file
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           TypePointerImpl
             PsiElement(*)('*')
@@ -2471,7 +2471,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('errorf')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('s')
@@ -2607,7 +2607,7 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('exit')
     PsiElement(()('(')
-    FunctionParameterList
+    FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('status')

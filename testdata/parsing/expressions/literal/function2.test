@@ -21,7 +21,7 @@ Go file
           LiteralFunctionImpl
             PsiElement(KEYWORD_FUNC)('func')
             PsiElement(()('(')
-            FunctionParameterList
+            FunctionParameterListImpl
               FunctionParameterImpl
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('x')
@@ -36,7 +36,7 @@ Go file
             PsiElement())(')')
             PsiWhiteSpace(' ')
             FunctionResult
-              FunctionParameterList
+              FunctionParameterListImpl
                 FunctionParameterImpl
                   TypeNameImpl
                     LiteralIdentifierImpl

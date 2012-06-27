@@ -65,13 +65,19 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     public void annotate(@NotNull PsiElement element,
                          @NotNull AnnotationHolder holder) {
         if (element instanceof GoPsiElement) {
-            goNamesCache = GoNamesCache.getInstance(element.getProject());
-            annotationHolder = holder;
-            inspectionManager = InspectionManager.getInstance(
-                element.getProject());
-            ((GoPsiElement) element).accept(this);
-            inspectionManager = null;
-            annotationHolder = null;
+            GoPsiElement goPsiElement = (GoPsiElement) element;
+
+            try {
+                goNamesCache = GoNamesCache.getInstance(element.getProject());
+                annotationHolder = holder;
+                inspectionManager =
+                    InspectionManager.getInstance(element.getProject());
+
+                goPsiElement.accept(this);
+            } finally {
+                inspectionManager = null;
+                annotationHolder = null;
+            }
         }
     }
 
@@ -149,11 +155,10 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
     @Override
     public void visitBuiltinCallExpression(GoBuiltinCallExpression expression) {
-        visitElement(expression);
+        super.visitBuiltinCallExpression(expression);
 
-        Annotation ann = annotationHolder.createInfoAnnotation(
-            expression.getBaseExpression(), null);
-        ann.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
+        annotationHolder.createInfoAnnotation(expression.getBaseExpression(), null)
+                        .setTextAttributes(GoSyntaxHighlighter.KEYWORD);
     }
 
     @Override
@@ -184,26 +189,30 @@ public class GoAnnotator extends GoRecursiveElementVisitor
             return;
         }
 
-        if (GoElementPatterns.CONST_DECLARATION.accepts(identifier)) {
+        if (GoElementPatterns.GLOBAL_CONST_DECL.accepts(identifier)) {
             annotationHolder
                 .createInfoAnnotation(identifier, null)
                 .setTextAttributes(GoSyntaxHighlighter.CONST);
+            return;
+        }
 
+        if (GoElementPatterns.GLOBAL_VAR_DECL.accepts(identifier)) {
+            annotationHolder
+                .createInfoAnnotation(identifier, null)
+                .setTextAttributes(GoSyntaxHighlighter.GLOBAL_VARIABLE);
             return;
         }
 
         if (GoElementPatterns.VAR_DECLARATION.accepts(identifier)) {
             annotationHolder
                 .createInfoAnnotation(identifier, null)
-                .setTextAttributes(GoSyntaxHighlighter.GLOBAL_VARIABLE);
-
+                .setTextAttributes(GoSyntaxHighlighter.VARIABLE);
             return;
         }
 
         PsiReference reference = identifier.getReference();
         if (reference == null)
             return;
-
 
         PsiElement def = reference.resolve();
         if (def != null) {
@@ -214,9 +223,8 @@ public class GoAnnotator extends GoRecursiveElementVisitor
             // if the identifier resolves to a const, set const highlight
             if (def.getParent() instanceof GoConstDeclaration) {
                 annotation.setTextAttributes(GoSyntaxHighlighter.CONST);
-            } else if (identifier.isGlobal()) {
-                annotation.setTextAttributes(
-                    GoSyntaxHighlighter.GLOBAL_VARIABLE);
+            } else if (GoElementPatterns.GLOBAL_VAR_DECL.accepts(def)) {
+                annotation.setTextAttributes(GoSyntaxHighlighter.GLOBAL_VARIABLE);
             } else if (def instanceof GoTypeSpec) {
                 annotation.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
             } else {
@@ -249,7 +257,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-        visitElement(declaration);
+        super.visitFunctionDeclaration(declaration);
 
         InspectionResult result = new InspectionResult(inspectionManager);
         FunctionDeclarationInspection.checkFunction(result, declaration);
@@ -258,7 +266,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
     @Override
     public void visitFunctionLiteral(GoLiteralFunction literal) {
-        visitElement(literal);
+        super.visitFunctionLiteral(literal);
 
         InspectionResult result = new InspectionResult(inspectionManager);
         FunctionDeclarationInspection.checkFunction(result, literal);
@@ -267,7 +275,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
     @Override
     public void visitConstDeclarations(GoConstDeclarations declarations) {
-        visitElement(declarations);
+        super.visitConstDeclarations(declarations);
 
         InspectionResult result = new InspectionResult(inspectionManager);
         ConstDeclarationInspection.checkConstDeclarations(declarations, result);
@@ -276,32 +284,31 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
     @Override
     public void visitConstDeclaration(GoConstDeclaration declaration) {
-        visitElement(declaration);
+        super.visitConstDeclaration(declaration);
 
         InspectionResult result = new InspectionResult(inspectionManager);
-        ConstDeclarationInspection
-            .checkConstDeclaration(declaration, result);
-
+        ConstDeclarationInspection.checkConstDeclaration(declaration, result);
         addProblems(result.getProblems());
     }
 
     @Override
     public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
-        visitVarDeclaration(declaration);
+        super.visitShortVarDeclaration(declaration);
     }
 
     @Override
     public void visitVarDeclaration(GoVarDeclaration declaration) {
-        visitElement(declaration);
+        super.visitVarDeclaration(declaration);
 
         InspectionResult result = new InspectionResult(inspectionManager);
         VarDeclarationInspection.checkVar(declaration, result);
         addProblems(result.getProblems());
     }
 
+
     @Override
     public void visitGoStatement(GoGoStatement statement) {
-        visitElement(statement);
+        super.visitGoStatement(statement);
 
         if (!isFunctionOrMethodCall(statement.getExpression())) {
             PsiElement lastChild = GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment(
@@ -317,7 +324,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
     @Override
     public void visitDeferStatement(GoDeferStatement statement) {
-        visitElement(statement);
+        super.visitDeferStatement(statement);
 
         if (!isFunctionOrMethodCall(statement.getExpression())) {
             PsiElement lastChild = GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment(

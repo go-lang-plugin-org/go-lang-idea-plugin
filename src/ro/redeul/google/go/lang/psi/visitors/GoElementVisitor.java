@@ -25,6 +25,7 @@ import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
@@ -40,6 +41,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.GoTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
 import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -206,5 +208,13 @@ public class GoElementVisitor  {
 
     public void visitInterfaceType(GoTypeInterfaceImpl type) {
         visitElement(type);
+    }
+
+    public void visitTypeStructField(GoTypeStructField field) {
+        visitElement(field);
+    }
+
+    public void visitFunctionParameterList(GoFunctionParameterList list) {
+        visitElement(list);
     }
 }

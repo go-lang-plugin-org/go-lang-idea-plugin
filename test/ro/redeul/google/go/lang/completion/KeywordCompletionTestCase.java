@@ -1,8 +1,8 @@
 package ro.redeul.google.go.lang.completion;
 
-import org.testng.annotations.Test;
-
 import java.io.File;
+
+import org.testng.annotations.Test;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,16 +16,16 @@ public abstract class KeywordCompletionTestCase extends GoCompletionTestBase {
     protected String getRelativeDataPath() {
         return super.getRelativeDataPath() + File.separator + "keywords";
     }
-    
-    @Test(enabled = false)
+
+    @Test()
     public void testPackageCase1() throws Throwable { doBasicTest(); }
 
-    @Test(enabled = false)
+    @Test()
     public void testPackageCase3() throws Throwable { doBasicTest(); }
 
-    @Test(enabled = false)
+    @Test()
     public void testImportCase1() throws Throwable { doBasicTest(); }
 
-    @Test(enabled = false)
+    @Test()
     public void testImportCase2() throws Throwable { doBasicTest(); }
 }

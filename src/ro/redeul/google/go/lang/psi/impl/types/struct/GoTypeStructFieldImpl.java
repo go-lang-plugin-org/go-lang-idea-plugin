@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -61,5 +62,10 @@ public class GoTypeStructFieldImpl extends GoPsiElementBase implements GoTypeStr
                 return GoIcons.GO_ICON_16x16;
             }
         };
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitTypeStructField(this);
     }
 }

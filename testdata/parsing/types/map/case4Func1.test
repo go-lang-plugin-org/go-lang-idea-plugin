@@ -36,7 +36,7 @@ Go file
             TypeFunctionImpl
               PsiElement(KEYWORD_FUNC)('func')
               PsiElement(()('(')
-              FunctionParameterList
+              FunctionParameterListImpl
                 FunctionParameterImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('w')
@@ -74,7 +74,7 @@ Go file
                         PsiElement(IDENTIFIER)('Queues')
               PsiElement())(')')
               FunctionResult
-                FunctionParameterList
+                FunctionParameterListImpl
                   FunctionParameterImpl
                     <empty list>
         PsiElement(WS_NEW_LINES)('\n')

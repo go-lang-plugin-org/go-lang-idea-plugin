@@ -15,7 +15,7 @@ Go file
     PsiElement())(')')
     FunctionResult
       PsiElement(()('(')
-      FunctionParameterList
+      FunctionParameterListImpl
         FunctionParameterImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('a')

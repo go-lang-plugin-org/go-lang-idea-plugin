@@ -64,12 +64,6 @@ public class VarOrConstResolver extends
         }
     }
 
-//    @Override
-//    public void visitMethodDeclaration(GoMethodDeclaration declaration) {
-//        if (checkReference(declaration.getNameIdentifier()))
-//            addDeclaration(declaration);
-//    }
-//
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
         if (checkReference(declaration.getNameIdentifier()))

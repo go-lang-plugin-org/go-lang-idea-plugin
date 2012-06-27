@@ -80,7 +80,7 @@ Go file
             PsiElement(()('(')
             PsiElement())(')')
             FunctionResult
-              FunctionParameterList
+              FunctionParameterListImpl
                 FunctionParameterImpl
                   <empty list>
         PsiElement(WS_NEW_LINES)('\n')
