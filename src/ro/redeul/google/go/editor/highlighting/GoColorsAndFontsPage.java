@@ -50,9 +50,6 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                 GoBundle.message("color." + GoSyntaxHighlighter.STRING_ID),
                 GoSyntaxHighlighter.STRING),
             new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.CONST_ID),
-                GoSyntaxHighlighter.STRING),
-            new AttributesDescriptor(
                 GoBundle.message("color." + GoSyntaxHighlighter.IDENTIFIER_ID),
                 GoSyntaxHighlighter.IDENTIFIER),
 
