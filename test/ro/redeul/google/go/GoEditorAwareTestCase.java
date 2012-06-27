@@ -8,13 +8,20 @@ import org.junit.Assert;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
 
+import java.io.File;
 import java.util.List;
 
 public abstract class GoEditorAwareTestCase extends GoLightCodeInsightFixtureTestCase {
 
     protected void doTest() throws Exception {
-        final List<String> data =
-            GoTestUtils.readInput(getTestDataPath() + getTestName(true) + ".test");
+        String baseName = getTestDataPath() + getTestName(true);
+        String fileName;
+        if (new File(baseName + ".test").exists()) {
+            fileName = baseName + ".test";
+        } else {
+            fileName = baseName + ".go";
+        }
+        final List<String> data = GoTestUtils.readInput(fileName);
 
         String expected = data.get(1).trim();
 

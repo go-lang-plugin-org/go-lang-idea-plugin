@@ -11,9 +11,13 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.services.GoCodeManager;
 
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import static ro.redeul.google.go.inspection.fix.FixUtil.removeWholeElement;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -49,13 +53,38 @@ public class GoImportOptimizer implements ImportOptimizer {
                     manager.commitDocument(document);
                 }
 
-                GoCodeManager goCodeManager = GoCodeManager.getInstance(project);
-
-                Collection<GoImportDeclaration> unusedImports = goCodeManager.findUnusedImports(goFile);
-                for (GoImportDeclaration imp : unusedImports) {
-                    new RemoveImportFix(imp).invoke(project, goFile, null, imp, imp);
-                }
+                optimize(project, goFile);
             }
         };
+    }
+
+    private static void optimize(Project project, GoFile goFile) {
+        GoCodeManager goCodeManager = GoCodeManager.getInstance(project);
+        Set<GoImportDeclaration> unusedImports =
+            new HashSet<GoImportDeclaration>(goCodeManager.findUnusedImports(goFile));
+
+        for (GoImportDeclarations ids : goFile.getImportDeclarations()) {
+            if (allImportsUnused(ids.getDeclarations(), unusedImports)) {
+                removeWholeElement(ids);
+            }
+        }
+
+        for (GoImportDeclaration imp : unusedImports) {
+            new RemoveImportFix(imp).invoke(project, goFile, null, imp, imp);
+        }
+    }
+
+    private static boolean allImportsUnused(GoImportDeclaration[] declarations,
+                                            Set<GoImportDeclaration> unusedImports) {
+        for (GoImportDeclaration declaration : declarations) {
+            if (!unusedImports.contains(declaration)) {
+                return false;
+            }
+        }
+
+        for (GoImportDeclaration declaration : declarations) {
+            unusedImports.remove(declaration);
+        }
+        return true;
     }
 }
