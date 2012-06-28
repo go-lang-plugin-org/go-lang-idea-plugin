@@ -12,7 +12,7 @@ import com.intellij.codeInsight.daemon.impl.ShowAutoImportPass;
 import com.intellij.codeInsight.daemon.impl.VisibleHighlightingPassFactory;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.lang.annotation.HighlightSeverity;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.impl.DocumentMarkupModel;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
@@ -22,18 +22,18 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ui.UIUtil;
 import ro.redeul.google.go.inspection.fix.AddImportFix;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.options.GoSettings;
 
 import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getNextSiblingIfItsWhiteSpaceOrComment;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 /**
  * This class search for all "Unresolved symbols" highlights, try to prompt user to import
@@ -128,17 +128,12 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         }
 
         PsiElement parent = id.getParent();
-        if (parent == null) {
+        if (!(parent instanceof GoLiteralExpression)) {
             return false;
         }
 
-        PsiElement next = getNextSiblingIfItsWhiteSpaceOrComment(parent.getNextSibling());
-        if (!isNodeOfType(next, GoTokenTypes.oDOT)) {
-            return false;
-        }
-
-        PsiElement prev = getPrevSiblingIfItsWhiteSpaceOrComment(parent.getPrevSibling());
-        return !isNodeOfType(prev, GoTokenTypes.oDOT);
+        boolean isTheFirstChild = parent.getStartOffsetInParent() == 0;
+        return isTheFirstChild && parent.getParent() instanceof GoSelectorExpression;
     }
 
     private List<String> getPotentialPackages(Collection<String> allPackages,
@@ -166,7 +161,15 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
         GoSettings settings = GoSettings.getInstance();
         if (settings.OPTIMIZE_IMPORTS_ON_THE_FLY) {
-            ApplicationManager.getApplication().runWriteAction(new GoImportOptimizer().processFile(file));
+            // if user is editing the import statement, don't optimize it.
+            if (!isUserEditingImports()) {
+                new WriteCommandAction.Simple(editor.getProject(), file) {
+                    @Override
+                    protected void run() throws Throwable {
+                        new GoImportOptimizer().processFile(file).run();
+                    }
+                }.execute();
+            }
         }
 
         if (!settings.SHOW_IMPORT_POPUP) {
@@ -199,6 +202,12 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                                              fix);
             }
         });
+    }
+
+    private boolean isUserEditingImports() {
+        int offset = editor.getCaretModel().getOffset();
+        PsiElement element = getPrevSiblingIfItsWhiteSpaceOrComment(file.findElementAt(offset));
+        return findParentOfType(element, GoImportDeclarations.class) != null;
     }
 
     private String getPromptMessage(List<String> packages) {
