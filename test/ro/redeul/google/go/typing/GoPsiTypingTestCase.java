@@ -74,4 +74,5 @@ public class GoPsiTypingTestCase extends GoFileBasedPsiTestCase
     public void testArrayTypes() throws Exception { doTest(); }
     public void testSliceTypes() throws Exception { doTest(); }
     public void testPointerTypes() throws Exception { doTest(); }
+    public void testBinaryExpressions() throws Exception { doTest(); }
 }

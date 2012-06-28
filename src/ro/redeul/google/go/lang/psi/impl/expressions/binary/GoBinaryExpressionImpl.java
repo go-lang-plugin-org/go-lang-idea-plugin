@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
+import ro.redeul.google.go.lang.psi.types.GoType;
 
 public abstract class GoBinaryExpressionImpl extends GoExpressionBase
     implements GoBinaryExpression {
@@ -34,5 +35,31 @@ public abstract class GoBinaryExpressionImpl extends GoExpressionBase
     public GoExpr getRightOperand() {
         GoExpr[] children = findChildrenByClass(GoExpr.class);
         return children.length <= 1 ? null : children[1];
+    }
+
+    @Override
+    protected GoType[] resolveTypes() {
+        GoExpr leftOperand = getLeftOperand();
+        GoExpr rightOperand = getRightOperand();
+
+        if ( leftOperand == null && rightOperand == null)
+            return GoType.EMPTY_ARRAY;
+
+        if ( leftOperand == null)
+            return rightOperand.getType();
+
+        if ( rightOperand == null )
+            return leftOperand.getType();
+
+        GoType[] leftTypes = leftOperand.getType();
+        GoType[] rightTypes = rightOperand.getType();
+
+        if (leftTypes.length == 1 && rightTypes.length == 1) {
+            if ( leftTypes[0].isIdentical(rightTypes[0]) ) {
+                return leftTypes;
+            }
+        }
+
+        return GoType.EMPTY_ARRAY;
     }
 }
