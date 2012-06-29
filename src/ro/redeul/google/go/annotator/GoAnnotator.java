@@ -293,7 +293,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
     @Override
     public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
-        super.visitShortVarDeclaration(declaration);
+        visitVarDeclaration(declaration);
     }
 
     @Override
