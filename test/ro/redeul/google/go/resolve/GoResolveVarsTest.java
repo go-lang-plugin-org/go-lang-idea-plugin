@@ -88,4 +88,8 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testResolveToFunction() throws Exception {
         doTest();
     }
+
+    public void testLocalConstDeclaration() throws Exception {
+        doTest();
+    }
 }

@@ -20,7 +20,7 @@ public class GoTokenSets {
     );
 
     public static final TokenSet GO_BLOCK_ENTRY_POINT_TYPES =
-        TokenSet.create(VAR_DECLARATIONS, SHORT_VAR_STATEMENT);
+        TokenSet.create(VAR_DECLARATIONS, CONST_DECLARATIONS, SHORT_VAR_STATEMENT);
 
     public static final TokenSet NO_IDENTIFIER_COMPLETION_PARENTS =
         TokenSet.create(VAR_DECLARATION, CONST_DECLARATION, SHORT_VAR_STATEMENT);
