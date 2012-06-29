@@ -1,5 +1,5 @@
 p
------
+/**-----
 Go file
   PackageDeclaration(p)
     PsiErrorElement:"package" keyword expected

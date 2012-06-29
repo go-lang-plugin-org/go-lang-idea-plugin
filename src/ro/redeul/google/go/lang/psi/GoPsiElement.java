@@ -17,6 +17,5 @@ public interface GoPsiElement extends PsiElement {
 
     void acceptChildren(GoElementVisitor visitor);
 
-//    GoPsiElement getParent();
 }
 

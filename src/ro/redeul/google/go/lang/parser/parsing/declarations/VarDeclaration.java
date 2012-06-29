@@ -6,6 +6,7 @@ import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
+import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -48,21 +49,23 @@ public class VarDeclaration extends ParserUtils implements GoElementTypes {
             builder.error("identifier.list.expected");
         }
 
-        boolean hasType = false;
-        ParserUtils.skipNLS(builder);
-        if (builder.getTokenType() != oASSIGN) {
-            hasType = true;
-            parser.parseType(builder);
-        }
-
-        if (!hasType || (builder.getTokenType() != oSEMI && builder.getTokenType() != wsNLS)) {
+        if (!ParserUtils.lookAhead(builder, GoTokenSets.LIKE_oSEMI) ) {
+            boolean hasType = false;
             ParserUtils.skipNLS(builder);
-            if (ParserUtils.getToken(builder, oASSIGN)) {
+            if (builder.getTokenType() != oASSIGN) {
+                hasType = true;
+                parser.parseType(builder);
+            }
+
+            if (!hasType || (builder.getTokenType() != oSEMI && builder.getTokenType() != wsNLS)) {
                 ParserUtils.skipNLS(builder);
-                parser.parseExpressionList(builder);
-            } else {
-                if (!hasType) {
-                    builder.error("assign.operator.expected");
+                if (ParserUtils.getToken(builder, oASSIGN)) {
+                    ParserUtils.skipNLS(builder);
+                    parser.parseExpressionList(builder);
+                } else {
+                    if (!hasType) {
+                        builder.error("assign.operator.expected");
+                    }
                 }
             }
         }

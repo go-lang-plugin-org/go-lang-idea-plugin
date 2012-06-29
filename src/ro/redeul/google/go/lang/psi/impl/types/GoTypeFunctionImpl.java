@@ -20,6 +20,6 @@ public class GoTypeFunctionImpl extends GoPsiPackagedElementBase
 
     @Override
     public boolean isIdentical(GoType goType) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 }

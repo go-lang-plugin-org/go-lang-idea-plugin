@@ -18,6 +18,7 @@ package ro.redeul.google.go.util;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.intellij.openapi.application.PluginPathManager;
@@ -123,21 +124,23 @@ public abstract class GoTestUtils {
         content = StringUtil.replace(content, "\r", ""); // for MACs
 
         // Adding input  before -----
-        while ((separatorIndex = content.indexOf("\n-----")) >= 0) {
-            input.add(content.substring(0, separatorIndex));
-            content = content.substring(separatorIndex + 1);
-            while (StringUtil.startsWithChar(content, '-')) {
-                content = content.substring(1);
-            }
-            if (StringUtil.startsWithChar(content, '\n')) {
-                content = content.substring(1);
-            }
-        }
-        // Result - after -----
-        if (content.endsWith("\n")) {
-            content = content.substring(0, content.length() - 1);
-        }
-        input.add(content);
+        String[] parts = content.split("\n(?:/\\*\\*)?-----[\r\n]+");
+        Collections.addAll(input, parts);
+//        while ((separatorIndex = content.indexOf("\n(/**)?-----")) >= 0) {
+//            input.add(content.substring(0, separatorIndex));
+//            content = content.substring(separatorIndex + 1);
+//            while (StringUtil.startsWithChar(content, '-')) {
+//                content = content.substring(1);
+//            }
+//            if (StringUtil.startsWithChar(content, '\n')) {
+//                content = content.substring(1);
+//            }
+//        }
+//        // Result - after -----
+//        if (content.endsWith("\n")) {
+//            content = content.substring(0, content.length() - 1);
+//        }
+//        input.add(content);
 
         Assert.assertTrue("No data found in source file", input.size() > 0);
         Assert.assertNotNull("Test output points to null", input.size() > 1);
@@ -146,7 +149,7 @@ public abstract class GoTestUtils {
     }
 
     public static void writeTestFile(String data, String parseTree, String fileName) throws IOException {
-        FileUtil.writeToFile(new File(fileName), (data + "\n-----\n" + parseTree).getBytes());
+        FileUtil.writeToFile(new File(fileName), (data + "\n/**-----\n" + parseTree).getBytes());
     }
 }
 

@@ -1,13 +1,13 @@
 package ro.redeul.google.go.lang.parser;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 import ro.redeul.google.go.util.GoTestUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 public abstract class GoParsingTestCase
     extends GoLightCodeInsightFixtureTestCase
@@ -18,24 +18,31 @@ public abstract class GoParsingTestCase
     }
 
     public void doTest() throws IOException {
-        doTest(getTestName(true).replaceAll("_+", File.separator) + ".test");
+        doTest(getTestName(true).replaceAll("_+", File.separator));
     }
 
     private void doTest(String fileName) throws IOException {
-        final List<String> list =
-            GoTestUtils.readInput(getTestDataPath() + "/" + fileName);
+
+        List<String> list = null;
+
+        try {
+            list = GoTestUtils.readInput(getTestDataPath() + "/" + fileName + ".go");
+        } catch (IOException e) {
+            list = GoTestUtils.readInput(getTestDataPath() + "/" + fileName + ".test");
+        }
 
         final String input = list.get(0);
         if ( list.size() != 2 || list.get(1).trim().length() == 0 ) {
-            dumpParsingTree(input, getTestDataPath() + "/" + fileName);
+            dumpParsingTree(input, getTestDataPath() + "/" + fileName + ".go");
         } else {
             checkParsing(input, list.get(1).trim());
         }
     }
 
     protected void dumpParsingTree(String input, String fileName) throws IOException {
-        final PsiFile psiFile = GoTestUtils.createPseudoPhysicalGoFile(
-            getProject(), input);
+        final PsiFile psiFile =
+            GoTestUtils.createPseudoPhysicalGoFile(getProject(), input);
+
         String psiTree = DebugUtil.psiToString(psiFile, false);
 
         GoTestUtils.writeTestFile(input, psiTree.trim(), fileName);
