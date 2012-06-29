@@ -1,22 +1,23 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.List;
+import java.util.Arrays;
 
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildrenOfType;
+import static ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral.Type.InterpretedString;
+import static ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral.Type.RawString;
 
 public class FmtUsageInspection extends AbstractWholeGoFileInspection {
 
@@ -40,77 +41,84 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
         new GoRecursiveElementVisitor() {
             @Override
-            public void visitElement(GoPsiElement element) {
-                super.visitElement(element);
-
-                if (element instanceof GoCallOrConvExpression) {
-                    List<GoExpr> parameters = findChildrenOfType(element, GoExpr.class);
-                    if (!parameters.isEmpty()) {
-                        checkFmtCall(result, parameters);
-                    }
-                }
+            public void visitCallOrConvExpression(GoCallOrConvExpression expression) {
+                checkFmtCall(result, expression);
             }
         }.visitFile(file);
     }
 
-    private static void checkFmtCall(InspectionResult result, List<GoExpr> parameters) {
-        GoExpr functionExpr = parameters.get(0);
-        if (functionExpr == null) {
+    private static void checkFmtCall(InspectionResult result, GoCallOrConvExpression call) {
+        GoPrimaryExpression callNameExpression = call.getBaseExpression();
+
+        if (callNameExpression == null)
+            return;
+
+        String methodCall = callNameExpression.getText();
+
+        GoExpr[]args = call.getArguments();
+
+        if ("fmt.Fprintf".equals(methodCall) && args.length > 1) {
+            checkFormat(result, call, Arrays.copyOfRange(args, 1, args.length), false);
             return;
         }
 
-        String function = functionExpr.getText();
-        if ("fmt.Fprintf".equals(function)) {
-            checkFormat(result, parameters.subList(1, parameters.size()), false);
+        if ("fmt.Printf".equals(methodCall) ||
+                "fmt.Errorf".equals(methodCall) ||
+                "fmt.Sprintf".equals(methodCall)) {
+            checkFormat(result, call, args, false);
             return;
         }
 
-        if ("fmt.Printf".equals(function) ||
-                "fmt.Errorf".equals(function) ||
-                "fmt.Sprintf".equals(function)) {
-            checkFormat(result, parameters, false);
+        if ( args.length > 1 &&
+            ("fmt.Fscanf".equals(methodCall) || "fmt.Sscanf".equals(methodCall)))
+        {
+            checkFormat(result, call, Arrays.copyOfRange(args, 1, args.length), true);
             return;
         }
 
-        if ("fmt.Fscanf".equals(function) || "fmt.Sscanf".equals(function)) {
-            checkFormat(result, parameters.subList(1, parameters.size()), true);
-            return;
-        }
-
-        if ("fmt.Scanf".equals(function)) {
-            checkFormat(result, parameters, true);
+        if ("fmt.Scanf".equals(methodCall)) {
+            checkFormat(result, call, args, true);
             return;
         }
     }
 
-    private static void checkFormat(InspectionResult result, List<GoExpr> parameters, boolean isScanning) {
-        if (parameters.size() < 2) {
+    private static void checkFormat(InspectionResult result,
+                                    GoCallOrConvExpression expression,
+                                    GoExpr[]args, boolean isScanning) {
+
+        if (args.length < 1) {
             return;
         }
 
-        GoExpr fmtExpr = parameters.get(1);
+        GoExpr fmtExpr = args[0];
         if (!(fmtExpr instanceof GoLiteralExpression)) {
             return;
         }
 
-        PsiElement parent = fmtExpr.getParent();
-        if (!(parent instanceof GoCallOrConvExpression)) {
+        GoLiteralExpression literalExpression = (GoLiteralExpression)fmtExpr;
+
+        if (literalExpression.getLiteral() == null)
             return;
-        }
 
-        GoLiteral fmtLiteral = ((GoLiteralExpression) fmtExpr).getLiteral();
-        if (fmtLiteral instanceof GoLiteralIdentifier) {
-            fmtLiteral = findConstDefinition((GoLiteralIdentifier) fmtLiteral);
-        }
+        GoLiteral literal = literalExpression.getLiteral();
 
-        if (!(fmtLiteral instanceof GoLiteralString)) {
-            return;
+        switch (literal.getType()) {
+            case Identifier:
+                literal = findConstDefinition((GoLiteralIdentifier)literal);
+                if (literal == null ||
+                    literal.getType() != InterpretedString &&
+                    literal.getType() != RawString)
+                   break;
+            case InterpretedString:
+            case RawString:
+                GoLiteralString stringLiteral = (GoLiteralString) literal;
+                Context ctx = new Context(expression, stringLiteral,
+                                          result,
+                                          Arrays.copyOfRange(args, 1, args.length),
+                                          isScanning);
+                checkFormat(stringLiteral.getValue(), ctx);
+                ctx.checkAllExtraParameters();
         }
-
-        Context ctx = new Context((GoCallOrConvExpression) parent, fmtLiteral, result,
-                parameters.subList(2, parameters.size()), isScanning);
-        checkFormat(fmtLiteral.getText(), ctx);
-        ctx.checkAllExtraParameters();
     }
 
     private static GoLiteralString findConstDefinition(GoLiteralIdentifier idToFind) {
@@ -251,14 +259,14 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         public final boolean isFmtLiteralString;
         public final GoLiteral fmtLiteral;
         public final InspectionResult result;
-        public final List<GoExpr> parameters;
+        public final GoExpr[] parameters;
         public final boolean isScanning;
         public int currentParameter = 0;
         public int startOffset = 0;
         public int endOffset = 0;
 
         private Context(GoCallOrConvExpression theCall, GoLiteral fmtLiteral,
-                        InspectionResult result, List<GoExpr> parameters, boolean isScanning) {
+                        InspectionResult result, GoExpr[] parameters, boolean isScanning) {
             this.fmtLiteral = fmtLiteral;
             this.theCall = theCall;
             this.isFmtLiteralString = fmtLiteral.getParent() instanceof GoCallOrConvExpression;
@@ -268,8 +276,8 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         }
 
         public GoExpr getNextParameter() {
-            if (currentParameter < parameters.size()) {
-                GoExpr param = parameters.get(currentParameter++);
+            if (currentParameter < parameters.length) {
+                GoExpr param = parameters[currentParameter++];
                 if (!isScanning) {
                     // TODO: param should be a pointer
                 }
@@ -281,8 +289,8 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         }
 
         public void checkAllExtraParameters() {
-            for (int i = currentParameter; i < parameters.size(); i++) {
-                extraParameter(parameters.get(i));
+            for (int i = currentParameter; i < parameters.length; i++) {
+                extraParameter(parameters[i]);
             }
         }
 
@@ -296,7 +304,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
 //                result.addProblem(theCall.getLastChild(), "Missing parameter", TYPE);
 //            }
 
-            result.addProblem(fmtLiteral, startOffset, endOffset + 1, "Missing parameter", TYPE);
+            result.addProblem(fmtLiteral, startOffset + 1, endOffset + 2, "Missing parameter", TYPE);
         }
 
         public void extraParameter(PsiElement expr) {

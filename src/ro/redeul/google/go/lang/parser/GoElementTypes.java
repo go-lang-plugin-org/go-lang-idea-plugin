@@ -84,7 +84,8 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType LITERAL_EXPRESSION =
         new GoElementTypeImpl("LiteralExpression");
 
-    GoElementType ADD_EXPRESSION = new GoElementTypeImpl("AdditiveExpression");
+    GoElementType ADD_EXPRESSION =
+        new GoElementTypeImpl("AdditiveExpression");
     GoElementType MUL_EXPRESSION =
         new GoElementTypeImpl("MultiplicativeExpression");
     GoElementType REL_EXPRESSION =
@@ -100,12 +101,16 @@ public interface GoElementTypes extends GoTokenTypes {
         new GoElementTypeImpl("CallOrConversionExpression");
     GoElementType INDEX_EXPRESSION =
         new GoElementTypeImpl("IndexExpression");
-    GoElementType SLICE_EXPRESSION = new GoElementTypeImpl("SliceExpression");
+    GoElementType SLICE_EXPRESSION =
+        new GoElementTypeImpl("SliceExpression");
     GoElementType TYPE_ASSERTION_EXPRESSION =
         new GoElementTypeImpl("TypeAssertionExpression");
 
-    GoElementType UNARY_OPERATOR = new GoElementTypeImpl("unary operator");
-    GoElementType UNARY_EXPRESSION = new GoElementTypeImpl("UnaryExpression");
+    GoElementType UNARY_EXPRESSION =
+        new GoElementTypeImpl("UnaryExpression");
+    GoElementType UNARY_OPERATOR =
+        new GoElementTypeImpl("unary operator");
+
     GoElementType PRIMARY_EXPRESSION =
         new GoElementTypeImpl("primary expression");
     GoElementType SELECTOR_EXPRESSION =
@@ -113,6 +118,8 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType BUILTIN_CALL_EXPRESSION =
         new GoElementTypeImpl("BuiltInCallExpression");
 
+    GoElementType EXPRESSION_LIST =
+        new GoElementTypeImpl("ExpressionList");
 
     GoElementType TYPE_PARENTHESIZED =
         new GoElementTypeImpl("TypeParenthesized");
@@ -256,7 +263,7 @@ public interface GoElementTypes extends GoTokenTypes {
         litFLOAT
     );
 
-    public final TokenSet EXPRESSIONS = TokenSet.create(
+    public final TokenSet EXPRESSION_SETS = TokenSet.create(
         PARENTHESISED_EXPRESSION,
         ADD_EXPRESSION, MUL_EXPRESSION, REL_EXPRESSION, COM_EXPRESSION,
         LOG_AND_EXPRESSION, LOG_OR_EXPRESSION,

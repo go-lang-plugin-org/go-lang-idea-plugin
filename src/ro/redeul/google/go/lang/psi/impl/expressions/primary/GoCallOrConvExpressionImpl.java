@@ -1,14 +1,18 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoCallOrConvExpressionImpl extends GoExpressionBase
@@ -36,6 +40,13 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
 
     @Override
     public GoExpr[] getArguments() {
+
+        PsiElement list = findChildByType(GoElementTypes.EXPRESSION_LIST);
+        if ( list != null ) {
+            List<GoExpr> arguments =
+                GoPsiUtils.findChildrenOfType(list, GoExpr.class);
+            return arguments.toArray(new GoExpr[arguments.size()]);
+        }
 
         GoExpr []expressions = findChildrenByClass(GoExpr.class);
 

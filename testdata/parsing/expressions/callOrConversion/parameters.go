@@ -1,6 +1,6 @@
 package main
-var e = f(3.1415, true)
------
+var e = v('a', "b")
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -19,14 +19,15 @@ Go file
       CallOrConversionExpressionImpl
         LiteralExpressionImpl
           LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('f')
+            PsiElement(IDENTIFIER)('v')
         PsiElement(()('(')
-        LiteralExpressionImpl
-          LiteralFloatImpl
-            PsiElement(LITERAL_FLOAT)('3.1415')
-        PsiElement(,)(',')
-        PsiWhiteSpace(' ')
-        LiteralExpressionImpl
-          LiteralBoolImpl
-            PsiElement(IDENTIFIER)('true')
+        ExpressionList
+          LiteralExpressionImpl
+            LiteralCharImpl
+              PsiElement(LITERAL_CHAR)(''a'')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          LiteralExpressionImpl
+            LiteralStringImpl
+              PsiElement(LITERAL_STRING)('"b"')
         PsiElement())(')')

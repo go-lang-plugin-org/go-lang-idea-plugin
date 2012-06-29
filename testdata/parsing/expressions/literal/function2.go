@@ -1,6 +1,7 @@
 package main
-var f = func(x, y int) int { }(1, 2)
------
+var f = func(x, y int) int { return 0 }(1, 2)
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -45,14 +46,23 @@ Go file
             BlockStmtImpl
               PsiElement({)('{')
               PsiWhiteSpace(' ')
+              ReturnStmtImpl
+                PsiElement(KEYWORD_RETURN)('return')
+                PsiWhiteSpace(' ')
+                LiteralExpressionImpl
+                  LiteralIntegerImpl
+                    PsiElement(LITERAL_INT)('0')
+              PsiWhiteSpace(' ')
               PsiElement(})('}')
         PsiElement(()('(')
-        LiteralExpressionImpl
-          LiteralIntegerImpl
-            PsiElement(LITERAL_INT)('1')
-        PsiElement(,)(',')
-        PsiWhiteSpace(' ')
-        LiteralExpressionImpl
-          LiteralIntegerImpl
-            PsiElement(LITERAL_INT)('2')
+        ExpressionList
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('1')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('2')
         PsiElement())(')')
+  PsiElement(WS_NEW_LINES)('\n')
