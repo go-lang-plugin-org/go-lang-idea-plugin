@@ -92,4 +92,8 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testLocalConstDeclaration() throws Exception {
         doTest();
     }
+
+    public void testChainedSelector() throws Exception {
+        doTest();
+    }
 }

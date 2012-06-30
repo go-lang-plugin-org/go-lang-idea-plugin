@@ -36,6 +36,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
+import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
 import ro.redeul.google.go.lang.psi.types.GoTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.GoTypePointer;
@@ -207,6 +208,10 @@ public class GoElementVisitor  {
     }
 
     public void visitInterfaceType(GoTypeInterfaceImpl type) {
+        visitElement(type);
+    }
+
+    public void visitFunctionType(GoTypeFunction type) {
         visitElement(type);
     }
 

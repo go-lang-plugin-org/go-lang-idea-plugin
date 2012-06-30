@@ -4,7 +4,6 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
@@ -15,6 +14,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.CALL_OR_CONVERSION_EXPRESSION;
 
 public class CallOrConversionReference
     extends GoPsiReference<GoLiteralIdentifier> {
@@ -23,8 +23,8 @@ public class CallOrConversionReference
         psiElement(GoLiteralIdentifier.class)
             .withParent(
                 psiElement(GoLiteralExpression.class)
-                    .insideStarting(psiElement(
-                        GoElementTypes.CALL_OR_CONVERSION_EXPRESSION)));
+                    .withParent(psiElement(CALL_OR_CONVERSION_EXPRESSION))
+                    .atStartOf(psiElement(CALL_OR_CONVERSION_EXPRESSION)));
 
     public CallOrConversionReference(GoLiteralIdentifier identifier) {
         super(identifier);

@@ -6,6 +6,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoTypeFunctionImpl extends GoPsiPackagedElementBase
     implements GoTypeFunction {
@@ -21,5 +22,10 @@ public class GoTypeFunctionImpl extends GoPsiPackagedElementBase
     @Override
     public boolean isIdentical(GoType goType) {
         return false;
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitFunctionType(this);
     }
 }

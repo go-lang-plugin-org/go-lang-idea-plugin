@@ -32,7 +32,6 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
 import static com.intellij.patterns.StandardPatterns.string;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.BUILTIN_CALL_EXPRESSION;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_CLAUSES_STATEMENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_RANGE_STATEMENT;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
@@ -111,8 +110,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
                             .insideStarting(
                                 or(
                                     psiElement(FOR_WITH_CLAUSES_STATEMENT),
-                                    psiElement(FOR_WITH_RANGE_STATEMENT),
-                                    psiElement(BUILTIN_CALL_EXPRESSION)
+                                    psiElement(FOR_WITH_RANGE_STATEMENT)
+//                                    psiElement(BUILTIN_CALL_EXPRESSION)
                                 )
                             )
                     )
