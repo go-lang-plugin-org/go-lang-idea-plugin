@@ -54,6 +54,14 @@ public class GoSdkUtil {
     private static Pattern RE_APP_ENGINE_API_VERSIONS_MATCHER =
         Pattern.compile("^api_versions: \\[([^\\]]+)\\]$", Pattern.MULTILINE);
 
+    private static Pattern RE_OS_MATCHER =
+        Pattern.compile(".*^GOOS=\"(darwin|freebsd|linux|windows)\"$.*",
+                        Pattern.DOTALL | Pattern.MULTILINE);
+
+    private static Pattern RE_ARCH_MATCHER =
+        Pattern.compile(".*^GOARCH=\"(386|amd64|arm)\"$.*",
+                        Pattern.DOTALL | Pattern.MULTILINE);
+
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static GoSdkData testGoogleGoSdk(String path) {
 
@@ -145,11 +153,43 @@ public class GoSdkUtil {
 
         sdkData.GO_HOME_PATH = String.format("%s/goroot", path);
 
+        GeneralCommandLine command = new GeneralCommandLine();
+        command.setExePath(sdkData.GO_HOME_PATH + "/bin/go");
+        command.addParameter("env");
+        command.setWorkDirectory(sdkData.GO_HOME_PATH + "/bin");
+
         sdkData.TARGET_ARCH = GoTargetArch._amd64;
         sdkData.TARGET_OS = GoTargetOs.Linux;
 
         try {
-            String fileContent = VfsUtil.loadText(VfsUtil.findFileByURL(new URL(VfsUtil.pathToUrl(String.format("%s/VERSION", path)))));
+            ProcessOutput output = new CapturingProcessHandler(
+                command.createProcess(),
+                Charset.defaultCharset(),
+                command.getCommandLineString()).runProcess();
+
+            if (output.getExitCode() != 0) {
+                LOG.error("Go command exited with invalid exit code: " + output.getExitCode());
+                return null;
+            }
+
+            String outputString = output.getStdout();
+
+            Matcher matcher = RE_OS_MATCHER.matcher(outputString);
+            if (matcher.matches()) {
+                sdkData.TARGET_OS = GoTargetOs.fromString(matcher.group(1));
+            }
+
+            matcher = RE_ARCH_MATCHER.matcher(outputString);
+            if (matcher.matches()) {
+                sdkData.TARGET_ARCH = GoTargetArch.fromString(matcher.group(1));
+            }
+        } catch (ExecutionException e) {
+            LOG.error("Exception while executing the process:", e);
+        }
+
+        try {
+            String fileContent =
+                VfsUtil.loadText(VfsUtil.findFileByURL(new URL(VfsUtil.pathToUrl(String.format("%s/VERSION", path)))));
 
             Matcher matcher = RE_APP_ENGINE_VERSION_MATCHER.matcher(fileContent);
 
@@ -165,6 +205,8 @@ public class GoSdkUtil {
             matcher = RE_APP_ENGINE_API_VERSIONS_MATCHER.matcher(fileContent);
             if (!matcher.find())
                 return null;
+
+            sdkData.API_VERSIONS = matcher.group(1);
 
         } catch (IOException e) {
             return null;

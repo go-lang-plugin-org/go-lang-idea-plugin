@@ -21,6 +21,7 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
 
     public String VERSION_MAJOR = "";
     public String VERSION_MINOR = "";
+    public String API_VERSIONS = "";
 
     public GoAppEngineSdkData() {
     }
@@ -31,6 +32,7 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
         this.TARGET_ARCH = TARGET_ARCH;
         this.VERSION_MAJOR = VERSION_MAJOR;
         this.VERSION_MINOR = VERSION_MINOR;
+        this.API_VERSIONS = "";
     }
 
     @SuppressWarnings({"CloneDoesntCallSuperClone"})

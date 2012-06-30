@@ -1,10 +1,14 @@
 package ro.redeul.google.go.config.ui;
 
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.projectRoots.*;
-import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
-
 import javax.swing.*;
+
+import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.projectRoots.AdditionalDataConfigurable;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkAdditionalData;
+import com.intellij.openapi.projectRoots.SdkModel;
+import com.intellij.openapi.projectRoots.SdkModificator;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -63,6 +67,7 @@ public class GoAppEngineSdkConfigurable implements AdditionalDataConfigurable {
         ));
 
         labelTimestamp.setText(sdkData.VERSION_MINOR);
+        labelAppLevel.setText(sdkData.API_VERSIONS);
     }
 
     @Override
