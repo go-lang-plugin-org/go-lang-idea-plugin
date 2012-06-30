@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,6 +15,9 @@ import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.LocalSearchScope;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -27,7 +31,10 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
+import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 public class GoPsiUtils {
@@ -335,4 +342,27 @@ public class GoPsiUtils {
         return node != null && node.getNode().getElementType() == type;
     }
 
+    public static SearchScope getLocalElementSearchScope(GoPsiElement element) {
+        GoStatement statement = findParentOfType(element, GoStatement.class);
+        if (statement == null) {
+            return new LocalSearchScope(element);
+        }
+
+        return new LocalSearchScope(statement.getParent());
+    }
+
+    public static SearchScope getGlobalElementSearchScope(GoPsiElement element, String name) {
+        if (GoNamesUtil.isExportedName(name)) {
+            return GlobalSearchScope.projectScope(element.getProject());
+        }
+
+        return getPackageSearchScope(element);
+    }
+
+    public static SearchScope getPackageSearchScope(GoPsiElement element) {
+        GoNamesCache namesCache = GoNamesCache.getInstance(element.getProject());
+        String packageName = ((GoFile) element.getContainingFile()).getPackageName();
+        Collection<GoFile> files = namesCache.getFilesByPackageName(packageName);
+        return new LocalSearchScope(files.toArray(new PsiElement[files.size()]));
+    }
 }

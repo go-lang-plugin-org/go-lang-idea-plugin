@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,8 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -121,5 +124,11 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     @Override
     public PsiElement getNameIdentifier() {
         return findChildByType(GoTokenTypes.mIDENT);
+    }
+
+    @NotNull
+    @Override
+    public SearchScope getUseScope() {
+        return getGlobalElementSearchScope(this, getName());
     }
 }
