@@ -12,7 +12,6 @@ import com.intellij.codeInsight.daemon.impl.ShowAutoImportPass;
 import com.intellij.codeInsight.daemon.impl.VisibleHighlightingPassFactory;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.lang.annotation.HighlightSeverity;
-import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.impl.DocumentMarkupModel;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
@@ -163,12 +162,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         if (settings.OPTIMIZE_IMPORTS_ON_THE_FLY) {
             // if user is editing the import statement, don't optimize it.
             if (!isUserEditingImports()) {
-                new WriteCommandAction.Simple(editor.getProject(), file) {
-                    @Override
-                    protected void run() throws Throwable {
-                        new GoImportOptimizer().processFile(file).run();
-                    }
-                }.execute();
+                GoImportOptimizer.optimize(file);
             }
         }
 

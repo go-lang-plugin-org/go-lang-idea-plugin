@@ -1,11 +1,10 @@
 package ro.redeul.google.go.imports;
 
 import com.intellij.lang.ImportOptimizer;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.EmptyRunnable;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
@@ -51,10 +50,10 @@ public class GoImportOptimizer implements ImportOptimizer {
         };
     }
 
-    private static void optimize(GoFile goFile) {
-        Project project = goFile.getProject();
+    public static void optimize(final GoFile goFile) {
+        final Project project = goFile.getProject();
         GoCodeManager goCodeManager = GoCodeManager.getInstance(project);
-        Set<GoImportDeclaration> unusedImports =
+        final Set<GoImportDeclaration> unusedImports =
             new HashSet<GoImportDeclaration>(goCodeManager.findUnusedImports(goFile));
 
         for (GoImportDeclaration id : unusedImports) {
@@ -70,15 +69,24 @@ public class GoImportOptimizer implements ImportOptimizer {
             }
         }
 
-        for (GoImportDeclarations ids : goFile.getImportDeclarations()) {
-            if (allImportsUnused(ids.getDeclarations(), unusedImports)) {
-                removeWholeElement(ids);
-            }
+        if (unusedImports.isEmpty()) {
+            return;
         }
 
-        for (GoImportDeclaration imp : unusedImports) {
-            new RemoveImportFix(imp).invoke(project, goFile, null, imp, imp);
-        }
+        new WriteCommandAction.Simple(goFile.getProject(), goFile) {
+            @Override
+            protected void run() throws Throwable {
+                for (GoImportDeclarations ids : goFile.getImportDeclarations()) {
+                    if (allImportsUnused(ids.getDeclarations(), unusedImports)) {
+                        removeWholeElement(ids);
+                    }
+                }
+
+                for (GoImportDeclaration imp : unusedImports) {
+                    new RemoveImportFix(imp).invoke(project, goFile, null, imp, imp);
+                }
+            }
+        }.execute();
     }
 
     private static boolean allImportsUnused(GoImportDeclaration[] declarations,
