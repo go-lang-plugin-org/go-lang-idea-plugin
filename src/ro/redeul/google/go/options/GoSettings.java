@@ -21,7 +21,7 @@ import ro.redeul.google.go.GoBundle;
 )
 public class GoSettings implements PersistentStateComponent<GoSettings>, ExportableComponent {
     public boolean SHOW_IMPORT_POPUP = true;
-    public boolean OPTIMIZE_IMPORTS_ON_THE_FLY = false;
+    public boolean OPTIMIZE_IMPORTS_ON_THE_FLY = true;
 
     public static GoSettings getInstance() {
         return ServiceManager.getService(GoSettings.class);
