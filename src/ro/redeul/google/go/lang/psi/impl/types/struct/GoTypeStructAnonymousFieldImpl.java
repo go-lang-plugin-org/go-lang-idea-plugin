@@ -21,4 +21,14 @@ public class GoTypeStructAnonymousFieldImpl extends GoPsiElementBase implements 
     public GoTypeName getType() {
         return findChildByClass(GoTypeName.class);
     }
+
+    @Override
+    public String getFieldName() {
+        return getType().getName();
+    }
+
+    @Override
+    public String getName() {
+        return super.getName();    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

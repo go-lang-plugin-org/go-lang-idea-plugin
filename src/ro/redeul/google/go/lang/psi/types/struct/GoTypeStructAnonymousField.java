@@ -13,4 +13,5 @@ public interface GoTypeStructAnonymousField extends GoPsiElement {
 
     GoTypeName getType();
 
+    String getFieldName();
 }

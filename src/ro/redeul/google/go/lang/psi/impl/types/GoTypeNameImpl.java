@@ -42,7 +42,7 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
         GoLiteralIdentifier identifier = findChildByClass(
             GoLiteralIdentifier.class);
 
-        return identifier != null ? identifier.getText() : getText();
+        return identifier != null ? identifier.getUnqualifiedName() : getText();
     }
 
     public PsiElement setName(@NonNls String name)
