@@ -2,10 +2,10 @@ package ro.redeul.google.go.lang.psi.resolve.references;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 
@@ -19,12 +19,16 @@ public abstract class GoPsiReference<GoPsi extends PsiElement>
     }
 
     @Override
+    @Nullable
     public GoPsi getElement() {
         return element;
     }
 
     @Override
     public TextRange getRangeInElement() {
+        if ( element == null )
+            return new TextRange(0, 0);
+
         return new TextRange(0, element.getTextLength());
     }
 
