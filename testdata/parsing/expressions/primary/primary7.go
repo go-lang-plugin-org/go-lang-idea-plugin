@@ -1,6 +1,7 @@
 package main
-var e = a[b.c]
------
+var e = Math.sin
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -16,15 +17,11 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      IndexExpressionImpl
+      SelectorExpression
         LiteralExpressionImpl
           LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('a')
-        PsiElement([)('[')
-        SelectorExpression
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('b')
-          PsiElement(.)('.')
-          PsiElement(IDENTIFIER)('c')
-        PsiElement(])(']')
+            PsiElement(IDENTIFIER)('Math')
+        PsiElement(.)('.')
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('sin')
+  PsiElement(WS_NEW_LINES)('\n')

@@ -1,6 +1,7 @@
 package main
 func (p Point) Length() float64 {}
-------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -34,3 +35,4 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiElement(})('}')
+  PsiElement(WS_NEW_LINES)('\n')

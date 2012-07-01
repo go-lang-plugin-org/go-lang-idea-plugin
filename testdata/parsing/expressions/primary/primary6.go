@@ -1,6 +1,7 @@
 package main
 var e = obj.color
------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -21,4 +22,6 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('obj')
         PsiElement(.)('.')
-        PsiElement(IDENTIFIER)('color')
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('color')
+  PsiElement(WS_NEW_LINES)('\n')

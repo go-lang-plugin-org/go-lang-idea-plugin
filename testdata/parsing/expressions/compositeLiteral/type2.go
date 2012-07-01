@@ -3,7 +3,8 @@ var e = LoggedUserInfo{
                 Email:    email,
                 LastTime: datastore.SecondsToTime(time.Seconds()),
         }
------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -54,7 +55,8 @@ Go file
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('datastore')
                   PsiElement(.)('.')
-                  PsiElement(IDENTIFIER)('SecondsToTime')
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('SecondsToTime')
                 PsiElement(()('(')
                 CallOrConversionExpressionImpl
                   SelectorExpression
@@ -62,7 +64,8 @@ Go file
                       LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('time')
                     PsiElement(.)('.')
-                    PsiElement(IDENTIFIER)('Seconds')
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('Seconds')
                   PsiElement(()('(')
                   PsiElement())(')')
                 PsiElement())(')')
@@ -70,3 +73,4 @@ Go file
             PsiElement(WS_NEW_LINES)('\n')
             PsiWhiteSpace('        ')
             PsiElement(})('}')
+  PsiElement(WS_NEW_LINES)('\n')

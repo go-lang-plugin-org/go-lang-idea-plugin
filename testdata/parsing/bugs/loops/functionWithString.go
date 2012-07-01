@@ -1,43 +1,3 @@
-/*
-Derived from Inferno's utils/iyacc/yacc.c
-http://code.google.com/p/inferno-os/source/browse/utils/iyacc/yacc.c
-
-This copyright NOTICE applies to all files in this directory and
-subdirectories, unless another copyright notice appears in a given
-file or subdirectory.  If you take substantial code from this software to use in
-other programs, you must somehow include with it an appropriate
-copyright notice that includes the copyright notice and the other
-notices below.  It is fine (and often tidier) to do that in a separate
-file such as NOTICE, LICENCE or COPYING.
-
-	Copyright © 1994-1999 Lucent Technologies Inc.  All rights reserved.
-	Portions Copyright © 1995-1997 C H Forsyth (forsyth@terzarima.net)
-	Portions Copyright © 1997-1999 Vita Nuova Limited
-	Portions Copyright © 2000-2007 Vita Nuova Holdings Limited (www.vitanuova.com)
-	Portions Copyright © 2004,2006 Bruce Ellis
-	Portions Copyright © 2005-2007 C H Forsyth (forsyth@terzarima.net)
-	Revisions Copyright © 2000-2007 Lucent Technologies Inc. and others
-	Portions Copyright © 2009 The Go Authors.  All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
-
 package main
 
 //
@@ -449,8 +409,6 @@ $$default:
 
 /**-----
 Go file
-  PsiComment(ML_COMMENT)('/*\nDerived from Inferno's utils/iyacc/yacc.c\nhttp://code.google.com/p/inferno-os/source/browse/utils/iyacc/yacc.c\n\nThis copyright NOTICE applies to all files in this directory and\nsubdirectories, unless another copyright notice appears in a given\nfile or subdirectory.  If you take substantial code from this software to use in\nother programs, you must somehow include with it an appropriate\ncopyright notice that includes the copyright notice and the other\nnotices below.  It is fine (and often tidier) to do that in a separate\nfile such as NOTICE, LICENCE or COPYING.\n\n\tCopyright © 1994-1999 Lucent Technologies Inc.  All rights reserved.\n\tPortions Copyright © 1995-1997 C H Forsyth (forsyth@terzarima.net)\n\tPortions Copyright © 1997-1999 Vita Nuova Limited\n\tPortions Copyright © 2000-2007 Vita Nuova Holdings Limited (www.vitanuova.com)\n\tPortions Copyright © 2004,2006 Bruce Ellis\n\tPortions Copyright © 2005-2007 C H Forsyth (forsyth@terzarima.net)\n\tRevisions Copyright © 2000-2007 Lucent Technologies Inc. and others\n\tPortions Copyright © 2009 The Go Authors.  All rights reserved.\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the "Software"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n*/')
-  PsiElement(WS_NEW_LINES)('\n\n')
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
@@ -679,7 +637,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('fmt')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('Fprintf')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('Fprintf')
           PsiElement(()('(')
           ExpressionList
             LiteralExpressionImpl
@@ -1136,7 +1095,8 @@ Go file
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('fmt')
                 PsiElement(.)('.')
-                PsiElement(IDENTIFIER)('Fprintf')
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('Fprintf')
               PsiElement(()('(')
               ExpressionList
                 LiteralExpressionImpl
@@ -1164,7 +1124,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('fmt')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('Fprintf')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('Fprintf')
           PsiElement(()('(')
           ExpressionList
             LiteralExpressionImpl
@@ -1251,7 +1212,8 @@ Go file
                       LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('fmt')
                     PsiElement(.)('.')
-                    PsiElement(IDENTIFIER)('Fprintf')
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('Fprintf')
                   PsiElement(()('(')
                   ExpressionList
                     LiteralExpressionImpl
@@ -1289,7 +1251,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('fmt')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('Fprintf')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('Fprintf')
           PsiElement(()('(')
           ExpressionList
             LiteralExpressionImpl
@@ -1802,7 +1765,8 @@ Go file
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('f')
                 PsiElement(.)('.')
-                PsiElement(IDENTIFIER)('WriteByte')
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('WriteByte')
               PsiElement(()('(')
               IndexExpressionImpl
                 LiteralExpressionImpl
@@ -1964,7 +1928,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('f')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('ReadRune')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('ReadRune')
           PsiElement(()('(')
           PsiElement())(')')
       PsiElement(WS_NEW_LINES)('\n')
@@ -2278,7 +2243,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('os')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('Open')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('Open')
           PsiElement(()('(')
           LiteralExpressionImpl
             LiteralIdentifierImpl
@@ -2342,7 +2308,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('bufio')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('NewReader')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('NewReader')
           PsiElement(()('(')
           LiteralExpressionImpl
             LiteralIdentifierImpl
@@ -2397,7 +2364,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('os')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('Create')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('Create')
           PsiElement(()('(')
           LiteralExpressionImpl
             LiteralIdentifierImpl
@@ -2461,7 +2429,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('bufio')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('NewWriter')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('NewWriter')
           PsiElement(()('(')
           LiteralExpressionImpl
             LiteralIdentifierImpl
@@ -2520,7 +2489,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('fmt')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('Fprintf')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('Fprintf')
           PsiElement(()('(')
           ExpressionList
             LiteralExpressionImpl
@@ -2547,7 +2517,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('fmt')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('Fprintf')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('Fprintf')
           PsiElement(()('(')
           ExpressionList
             LiteralExpressionImpl
@@ -2658,7 +2629,8 @@ Go file
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('ftable')
                 PsiElement(.)('.')
-                PsiElement(IDENTIFIER)('Flush')
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('Flush')
               PsiElement(()('(')
               PsiElement())(')')
           PsiElement(WS_NEW_LINES)('\n')
@@ -2703,7 +2675,8 @@ Go file
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('foutput')
                 PsiElement(.)('.')
-                PsiElement(IDENTIFIER)('Flush')
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('Flush')
               PsiElement(()('(')
               PsiElement())(')')
           PsiElement(WS_NEW_LINES)('\n')
@@ -2748,7 +2721,8 @@ Go file
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('stderr')
                 PsiElement(.)('.')
-                PsiElement(IDENTIFIER)('Flush')
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('Flush')
               PsiElement(()('(')
               PsiElement())(')')
           PsiElement(WS_NEW_LINES)('\n')
@@ -2775,7 +2749,8 @@ Go file
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('os')
             PsiElement(.)('.')
-            PsiElement(IDENTIFIER)('Exit')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('Exit')
           PsiElement(()('(')
           LiteralExpressionImpl
             LiteralIdentifierImpl

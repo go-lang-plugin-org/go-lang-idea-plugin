@@ -6,7 +6,8 @@ type T struct {
 	A *[]int
 	F func()
 }
-------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -79,9 +80,6 @@ Go file
             PsiElement(KEYWORD_FUNC)('func')
             PsiElement(()('(')
             PsiElement())(')')
-            FunctionResult
-              FunctionParameterListImpl
-                FunctionParameterImpl
-                  <empty list>
         PsiElement(WS_NEW_LINES)('\n')
         PsiElement(})('}')
+  PsiElement(WS_NEW_LINES)('\n')

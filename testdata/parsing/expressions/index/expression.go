@@ -1,6 +1,7 @@
 package main
-var e = a.b.c
------
+var e = a[b.c]
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -16,12 +17,17 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      SelectorExpression
+      IndexExpressionImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('a')
+        PsiElement([)('[')
         SelectorExpression
           LiteralExpressionImpl
             LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('a')
+              PsiElement(IDENTIFIER)('b')
           PsiElement(.)('.')
-          PsiElement(IDENTIFIER)('b')
-        PsiElement(.)('.')
-        PsiElement(IDENTIFIER)('c')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('c')
+        PsiElement(])(']')
+  PsiElement(WS_NEW_LINES)('\n')

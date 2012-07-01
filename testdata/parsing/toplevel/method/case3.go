@@ -1,6 +1,7 @@
 package main
 func (p Point) Scale(factor float64) {}
-------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -35,3 +36,4 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiElement(})('}')
+  PsiElement(WS_NEW_LINES)('\n')

@@ -1,6 +1,7 @@
 package main
 var e = a.b
------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -21,4 +22,6 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('a')
         PsiElement(.)('.')
-        PsiElement(IDENTIFIER)('b')
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('b')
+  PsiElement(WS_NEW_LINES)('\n')

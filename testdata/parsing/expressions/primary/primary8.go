@@ -1,6 +1,7 @@
 package main
 var e = f.p[i].x()
------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -24,13 +25,16 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('f')
               PsiElement(.)('.')
-              PsiElement(IDENTIFIER)('p')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('p')
             PsiElement([)('[')
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('i')
             PsiElement(])(']')
           PsiElement(.)('.')
-          PsiElement(IDENTIFIER)('x')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('x')
         PsiElement(()('(')
         PsiElement())(')')
+  PsiElement(WS_NEW_LINES)('\n')

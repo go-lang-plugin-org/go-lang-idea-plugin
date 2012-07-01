@@ -1,5 +1,6 @@
 package main;type Lock interface {Lock(); Unlock() }
------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -21,10 +22,6 @@ Go file
           PsiElement(IDENTIFIER)('Lock')
           PsiElement(()('(')
           PsiElement())(')')
-          FunctionResult
-            FunctionParameterListImpl
-              FunctionParameterImpl
-                <empty list>
         MethodDeclaration()
           TypeNameImpl
             PsiErrorElement:identifier.expected
@@ -34,9 +31,6 @@ Go file
           PsiElement(IDENTIFIER)('Unlock')
           PsiElement(()('(')
           PsiElement())(')')
-          PsiWhiteSpace(' ')
-          FunctionResult
-            FunctionParameterListImpl
-              FunctionParameterImpl
-                <empty list>
+        PsiWhiteSpace(' ')
         PsiElement(})('}')
+  PsiElement(WS_NEW_LINES)('\n')

@@ -3,7 +3,8 @@ type ITest interface {
     io.Writer
     Sum(values []int) []byte
 }
------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -64,3 +65,4 @@ Go file
                       PsiElement(IDENTIFIER)('byte')
         PsiElement(WS_NEW_LINES)('\n')
         PsiElement(})('}')
+  PsiElement(WS_NEW_LINES)('\n')

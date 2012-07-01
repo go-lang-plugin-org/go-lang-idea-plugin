@@ -1,9 +1,13 @@
 package main
 type myHandler struct {
-handlers map[string]func(w http.ResponseWriter, r *http.Request, queues *yqs.Queues)
+handlers map[string]func(
+    w http.ResponseWriter,
+    r *http.Request,
+    queues *yqs.Queues) (int)
 templates map[string]*template.Template
 }
------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -36,6 +40,8 @@ Go file
             TypeFunctionImpl
               PsiElement(KEYWORD_FUNC)('func')
               PsiElement(()('(')
+              PsiElement(WS_NEW_LINES)('\n')
+              PsiWhiteSpace('    ')
               FunctionParameterListImpl
                 FunctionParameterImpl
                   LiteralIdentifierImpl
@@ -47,7 +53,8 @@ Go file
                       PsiElement(.)('.')
                       PsiElement(IDENTIFIER)('ResponseWriter')
                 PsiElement(,)(',')
-                PsiWhiteSpace(' ')
+                PsiElement(WS_NEW_LINES)('\n')
+                PsiWhiteSpace('    ')
                 FunctionParameterImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('r')
@@ -60,7 +67,8 @@ Go file
                         PsiElement(.)('.')
                         PsiElement(IDENTIFIER)('Request')
                 PsiElement(,)(',')
-                PsiWhiteSpace(' ')
+                PsiElement(WS_NEW_LINES)('\n')
+                PsiWhiteSpace('    ')
                 FunctionParameterImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('queues')
@@ -73,10 +81,15 @@ Go file
                         PsiElement(.)('.')
                         PsiElement(IDENTIFIER)('Queues')
               PsiElement())(')')
+              PsiWhiteSpace(' ')
               FunctionResult
+                PsiElement(()('(')
                 FunctionParameterListImpl
                   FunctionParameterImpl
-                    <empty list>
+                    TypeNameImpl
+                      LiteralIdentifierImpl
+                        PsiElement(IDENTIFIER)('int')
+                PsiElement())(')')
         PsiElement(WS_NEW_LINES)('\n')
         TypeStructFieldImpl
           LiteralIdentifierImpl
@@ -98,3 +111,4 @@ Go file
                   PsiElement(IDENTIFIER)('Template')
         PsiElement(WS_NEW_LINES)('\n')
         PsiElement(})('}')
+  PsiElement(WS_NEW_LINES)('\n')

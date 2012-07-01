@@ -4,7 +4,8 @@ type T interface {
 	Write(b Buffer) bool
 	Close()
 }
------
+
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -70,9 +71,6 @@ Go file
           PsiElement(IDENTIFIER)('Close')
           PsiElement(()('(')
           PsiElement())(')')
-          FunctionResult
-            FunctionParameterListImpl
-              FunctionParameterImpl
-                <empty list>
         PsiElement(WS_NEW_LINES)('\n')
         PsiElement(})('}')
+  PsiElement(WS_NEW_LINES)('\n')
