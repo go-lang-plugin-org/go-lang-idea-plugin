@@ -18,6 +18,11 @@ public class GoIndexExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
+//        GoType[] baseTypes = getBaseExpression().getType();
+//
+//        GoType baseType = baseTypes[0];
+//
+//        int a = 10;
         // TODO: fix this
         return GoType.EMPTY_ARRAY;
     }

@@ -28,4 +28,8 @@ public class GoUnderlyingTypes {
     public static GoUnderlyingType getFunction() {
         return null;  //To change body of created methods use File | Settings | File Templates.
     }
+
+    public static GoUnderlyingType getInterface() {
+        return new GoUnderlyingTypeInterface();
+    }
 }

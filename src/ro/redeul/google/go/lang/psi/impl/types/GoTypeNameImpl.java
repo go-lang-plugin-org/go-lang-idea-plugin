@@ -155,4 +155,9 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
     public boolean isPrimitive() {
         return GoTypes.PRIMITIVE_TYPES_PATTERN.matcher(getText()).matches();
     }
+
+    @Override
+    public String getPresentationTailText() {
+        return getText();
+    }
 }

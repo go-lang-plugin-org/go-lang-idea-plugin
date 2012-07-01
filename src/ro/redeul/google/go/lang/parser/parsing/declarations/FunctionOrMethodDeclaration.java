@@ -64,18 +64,22 @@ public class FunctionOrMethodDeclaration extends ParserUtils
             parseSignature(builder, parser);
             result.done(FUNCTION_RESULT);
 
-        } else if (!builder.eof() && builder.getTokenType() != pLCURCLY) {
-            PsiBuilder.Marker result = builder.mark();
-            parser.parseType(builder);
-
-            result.done(FUNCTION_PARAMETER);
-            result = result.precede();
-
-            result.done(FUNCTION_PARAMETER_LIST);
-            result = result.precede();
-
-            result.done(FUNCTION_RESULT);
+            return true;
         }
+
+        PsiBuilder.Marker result = builder.mark();
+        if ( parser.parseType(builder) == null )  {
+            result.drop();
+            return true;
+        }
+
+        result.done(FUNCTION_PARAMETER);
+        result = result.precede();
+
+        result.done(FUNCTION_PARAMETER_LIST);
+        result = result.precede();
+
+        result.done(FUNCTION_RESULT);
 
         return true;
     }

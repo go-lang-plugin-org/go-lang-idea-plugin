@@ -9,7 +9,19 @@ package ro.redeul.google.go.lang.psi.types;
  */
 public interface GoTypeChannel extends GoType {
     enum ChannelType {
-        Bidirectional, Sending, Receiving
+        Bidirectional,
+        Sending,
+        Receiving;
+
+        public static String getText(ChannelType channelType) {
+            switch (channelType) {
+                case Bidirectional: return "chan";
+                case Sending: return "chan<-";
+                case Receiving: return "<-chan";
+            }
+
+            return "";
+        }
     }
 
     ChannelType getChannelType();

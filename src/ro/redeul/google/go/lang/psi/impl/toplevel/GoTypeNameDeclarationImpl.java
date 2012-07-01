@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import javax.swing.*;
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -18,6 +19,7 @@ import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.util.LookupElementUtil;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -54,6 +56,11 @@ public class GoTypeNameDeclarationImpl
     }
 
     @Override
+    public LookupElementBuilder getCompletionPresentation() {
+        return LookupElementUtil.createLookupElement(this);
+    }
+
+    @Override
     public String toString() {
         return "TypeNameDeclaration(" + getName() + ")";
     }
@@ -87,5 +94,20 @@ public class GoTypeNameDeclarationImpl
     @Override
     public GoTypeSpec getTypeSpec() {
         return (GoTypeSpec) getParent();
+    }
+
+    @Override
+    public String getPresentationText() {
+        return "";
+    }
+
+    @Override
+    public String getPresentationTailText() {
+        return "";
+    }
+
+    @Override
+    public String getPresentationTypeText() {
+        return "";
     }
 }

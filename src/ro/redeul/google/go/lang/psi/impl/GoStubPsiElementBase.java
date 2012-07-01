@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.impl;
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
@@ -47,5 +48,10 @@ public abstract class GoStubPsiElementBase<T extends StubElement> extends StubBa
 
             child = child.getNextSibling();
         }
+    }
+
+    @Override
+    public LookupElementBuilder getCompletionPresentation() {
+        return null;
     }
 }

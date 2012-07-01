@@ -7,5 +7,8 @@ package ro.redeul.google.go.lang.psi.toplevel;
  * Time: 2:33:21 PM
  */
 public interface GoMethodDeclaration extends GoFunctionDeclaration {
+
+    public static GoMethodDeclaration[] EMPTY_ARRAY = new GoMethodDeclaration[0];
+
     GoMethodReceiver getMethodReceiver();
 }

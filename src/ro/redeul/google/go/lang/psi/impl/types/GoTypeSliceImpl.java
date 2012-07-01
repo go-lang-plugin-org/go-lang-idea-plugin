@@ -43,4 +43,10 @@ public class GoTypeSliceImpl extends GoPsiPackagedElementBase implements GoTypeS
 
         return getElementType().isIdentical(otherTypeSlice.getElementType());
     }
+
+    @NotNull
+    @Override
+    public String getPresentationTailText() {
+        return String.format("[]%s", getElementType().getPresentationTailText());
+    }
 }

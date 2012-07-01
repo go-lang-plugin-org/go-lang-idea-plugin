@@ -9,12 +9,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static ro.redeul.google.go.util.LookupElementBuilderUtil.createLookupElementBuilder;
+import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class TypeNameReference extends GoPsiReference<GoTypeName> {
     public static final ElementPattern<GoTypeName> MATCHER =
@@ -71,7 +72,7 @@ public class TypeNameReference extends GoPsiReference<GoTypeName> {
                         return true;
                     }
 
-                    variants.add(createLookupElementBuilder(declaration, name));
+                    variants.add(createLookupElement((GoPsiElement)declaration, name));
                     return true;
 
                 }

@@ -19,7 +19,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
 
 /**
@@ -131,4 +130,70 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     public SearchScope getUseScope() {
         return getGlobalElementSearchScope(this, getName());
     }
+
+    @NotNull
+    @Override
+    public String getPresentationText() {
+        return getName();
+    }
+
+    @Override
+    public String getPresentationTailText() {
+        StringBuilder presentationText = new StringBuilder();
+
+        presentationText.append("(");
+        GoFunctionParameter[] parameters = getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            GoFunctionParameter parameter = parameters[i];
+            presentationText.append(parameter.getPresentationTailText());
+            if ( i < parameters.length - 1) {
+                presentationText.append(",");
+            }
+        }
+
+        presentationText.append(")");
+
+        GoFunctionParameter[] results = getResults();
+
+        if (results.length == 0)
+            return presentationText.toString();
+
+        presentationText.append(" (");
+        for (int i = 0; i < results.length; i++) {
+            GoFunctionParameter parameter = results[i];
+            presentationText.append(parameter.getPresentationTailText());
+            if ( i < results.length - 1) {
+                presentationText.append(",");
+            }
+        }
+
+        presentationText.append(")");
+
+        return presentationText.toString();
+    }
+
+    @Override
+    public String getPresentationTypeText() {
+        return "";
+    }
+
+    //    @Override
+//    public LookupElementBuilder getCompletionPresentation() {
+//
+//        StringBuilder presentationText = new StringBuilder();
+//
+//        if ( getName() != null ) {
+//            presentationText.append(getName()).append("(");
+//        }
+//
+//        for (GoFunctionParameter parameter : getParameters()) {
+//            for (GoLiteralIdentifier identifier : parameter.getIdentifiers()) {
+//                presentationText.append(identifier.getName()).append(", ");
+//            }
+//
+//            presentationText.append(parameter.getType().toString()).append(", ");
+//        }
+//
+//        return LookupElementUtil.createLookupElement(this);
+//    }
 }

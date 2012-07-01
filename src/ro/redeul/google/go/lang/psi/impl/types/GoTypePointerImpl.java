@@ -45,4 +45,9 @@ public class GoTypePointerImpl extends GoPsiPackagedElementBase implements GoTyp
 
         return otherTypePointer.isIdentical(goType);
     }
+
+    @Override
+    public String getPresentationTailText() {
+        return String.format("*%s", getTargetType().getPresentationTailText());
+    }
 }

@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.impl;
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
@@ -31,6 +32,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.util.GoUtil;
+import ro.redeul.google.go.util.LookupElementUtil;
 
 public class GoFileImpl extends PsiFileBase implements GoFile {
 
@@ -230,5 +232,25 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         }
 
         return true;
+    }
+
+    @Override
+    final public LookupElementBuilder getCompletionPresentation() {
+        return LookupElementUtil.createLookupElement(this);
+    }
+
+    @Override
+    public String getPresentationText() {
+        return "";
+    }
+
+    @Override
+    public String getPresentationTailText() {
+        return "";
+    }
+
+    @Override
+    public String getPresentationTypeText() {
+        return "";
     }
 }

@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi;
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -17,5 +18,12 @@ public interface GoPsiElement extends PsiElement {
 
     void acceptChildren(GoElementVisitor visitor);
 
+    LookupElementBuilder getCompletionPresentation();
+
+    String getPresentationText();
+
+    String getPresentationTailText();
+
+    String getPresentationTypeText();
 }
 

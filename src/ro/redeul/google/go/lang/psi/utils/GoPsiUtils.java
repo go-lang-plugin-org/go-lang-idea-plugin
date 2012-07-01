@@ -14,6 +14,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
@@ -38,6 +39,19 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 public class GoPsiUtils {
+
+    public static <T extends PsiElement> T resolveSafely(PsiElement element, Class<T> expectedType) {
+        PsiReference reference = element.getReference();
+
+        if (reference == null)
+            return null;
+
+        PsiElement resolved = reference.resolve();
+        if (resolved == null || !(expectedType.isAssignableFrom(resolved.getClass())))
+            return null;
+
+        return expectedType.cast(resolved);
+    }
 
     public static String getStringLiteralValue(String literalText) {
         if (literalText == null ){

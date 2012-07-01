@@ -29,4 +29,9 @@ public class GoTypeParenthesizedImpl extends GoPsiPackagedElementBase
         // TODO: implement this
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public String getPresentationTailText() {
+        return String.format("(%s)", getInnerType().getPresentationTailText());
+    }
 }

@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.completion;
 import java.util.Collection;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionInitializationContext;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
@@ -68,7 +67,8 @@ public class GoCompletionContributor extends CompletionContributor {
                 result.addElement(keywordLookup("for"));
                 result.addElement(
                     keywordLookup("const", new ConstInsertHandler()));
-                result.addElement(keywordLookup("var", new VarInsertHandler()));
+                result.addElement(
+                    keywordLookup("var", new VarInsertHandler()));
                 result.addElement(
                     keywordLookup("return", new ReturnInsertHandler()));
                 result.addElement(keywordLookup("if"));
@@ -88,9 +88,12 @@ public class GoCompletionContributor extends CompletionContributor {
                 @NotNull CompletionResultSet result) {
                 result.addElement(
                     keywordLookup("const", new ConstInsertHandler()));
-                result.addElement(keywordLookup("var", new VarInsertHandler()));
-                result.addElement(keywordLookup("func"));
-                result.addElement(keywordLookup("type"));
+                result.addElement(
+                    keywordLookup("var", new VarInsertHandler()));
+                result.addElement(
+                    keywordLookup("func"));
+                result.addElement(
+                    keywordLookup("type"));
                 result.addElement(
                     keywordLookup("import", new ImportInsertHandler()));
             }
@@ -245,34 +248,5 @@ public class GoCompletionContributor extends CompletionContributor {
                    )
                ),
                typeDeclarationCompletionProvider);
-    }
-
-    @Override
-    public void fillCompletionVariants(CompletionParameters parameters,
-                                       CompletionResultSet result) {
-        super.fillCompletionVariants(parameters,
-                                     result);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void beforeCompletion(
-        @NotNull CompletionInitializationContext context) {
-        super.beforeCompletion(context);
-//        if (context.getCompletionType() != CompletionType.SMART) return;
-//    PsiElement lastElement = context.getFile().findElementAt(context.getStartOffset() - 1);
-//    if (lastElement != null && lastElement.getText().equals("(")) {
-//      final PsiElement parent = lastElement.getParent();
-//      if (parent instanceof GrTypeCastExpression) {
-//        context.setFileCopyPatcher(new FileCopyPatcher() {
-//            @Override
-//            public void patchFileCopy(@NotNull PsiFile fileCopy, @NotNull Document document, @NotNull OffsetMap map) {
-//
-//            }
-//        });
-//      }
-//      else if (parent instanceof GrParenthesizedExpression) {
-//        context.setFileCopyPatcher(new DummyIdentifierPatcher("xxx)yyy ")); // to handle type cast
-//      }
-//    }
     }
 }

@@ -1,6 +1,5 @@
 package ro.redeul.google.go.lang.psi.expressions.primary;
 
-import com.intellij.psi.PsiReference;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
@@ -10,7 +9,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
  * Date: 5/19/11
  * Time: 10:56 PM
  */
-public interface GoSelectorExpression extends GoPrimaryExpression, PsiReference {
+public interface GoSelectorExpression extends GoPrimaryExpression {
 
     GoPrimaryExpression getBaseExpression();
 

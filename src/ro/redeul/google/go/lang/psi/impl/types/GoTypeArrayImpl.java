@@ -46,4 +46,10 @@ public class GoTypeArrayImpl extends GoPsiPackagedElementBase implements GoTypeA
         // TODO: added check to the length here.
         return getElementType().isIdentical(otherTypeArray.getElementType());
     }
+
+    @NotNull
+    @Override
+    public String getPresentationText() {
+        return String.format("[]%s", getElementType().getPresentationText());
+    }
 }

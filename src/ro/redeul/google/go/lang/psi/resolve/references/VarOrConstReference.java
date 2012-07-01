@@ -9,12 +9,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.VarOrConstResolver;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static ro.redeul.google.go.util.LookupElementBuilderUtil.createLookupElementBuilder;
+import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
 
@@ -64,7 +65,7 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
                     return true;
                 }
 
-                variants.add(createLookupElementBuilder(declaration, name));
+                variants.add(createLookupElement((GoPsiElement)declaration, name));
                 return true;
             }
         };

@@ -262,7 +262,7 @@ public class PrimaryExpression implements GoElementTypes {
         ParserUtils.skipNLS(builder);
 
         if (mIDENT == builder.getTokenType()) {
-            ParserUtils.getToken(builder, mIDENT);
+            ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
             rollBackMarker.drop();
             mark.done(SELECTOR_EXPRESSION);
             return true;

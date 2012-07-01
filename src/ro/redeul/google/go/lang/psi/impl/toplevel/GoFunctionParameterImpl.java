@@ -58,5 +58,30 @@ public class GoFunctionParameterImpl extends GoPsiElementBase implements GoFunct
         return isVariadic() ? "FunctionParameterVariadicImpl" : "FunctionParameterImpl";
     }
 
+    @NotNull
+    @Override
+    public String getPresentationTailText() {
+        StringBuilder presentationText = new StringBuilder();
 
+        GoLiteralIdentifier[] identifiers = getIdentifiers();
+        for (int i = 0; i < identifiers.length; i++) {
+            GoLiteralIdentifier identifier = identifiers[i];
+
+            presentationText.append(identifier.getName());
+            if (i < identifiers.length - 1) {
+                presentationText.append(",");
+            }
+            presentationText.append(" ");
+        }
+
+        if (isVariadic()) {
+            presentationText.append("...");
+        }
+
+        if (getType() != null) {
+            presentationText.append(getType().getPresentationTailText());
+        }
+
+        return presentationText.toString();
+    }
 }

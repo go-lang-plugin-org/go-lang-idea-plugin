@@ -50,4 +50,9 @@ public class GoTypeChannelImpl extends GoPsiPackagedElementBase implements GoTyp
         return this.getChannelType() == otherChannel.getChannelType() &&
                     this.getElementType().isIdentical(otherChannel.getElementType());
     }
+
+    @Override
+    public String getPresentationTailText() {
+        return ChannelType.getText(getChannelType()) + getElementType().getPresentationTailText();    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

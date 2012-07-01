@@ -1,7 +1,6 @@
 package ro.redeul.google.go.util;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.psi.PsiElement;
 import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.completion.insertHandler.FunctionInsertHandler;
@@ -22,24 +21,27 @@ import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
 import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public class LookupElementBuilderUtil extends GoElementVisitor {
+public class LookupElementUtil extends GoElementVisitor {
 
     private LookupElementBuilder lookupElement;
 
-    public LookupElementBuilderUtil(LookupElementBuilder lookupElement) {
+    public LookupElementUtil(LookupElementBuilder lookupElement) {
         this.lookupElement = lookupElement;
     }
 
-    public static LookupElementBuilder createLookupElementBuilder(
-        PsiElement element, String name) {
+    public static LookupElementBuilder createLookupElement(GoPsiElement element) {
+        return createLookupElement(element, element.getPresentationText());
+    }
 
-        LookupElementBuilderUtil visitor =
-            new LookupElementBuilderUtil(
-                LookupElementBuilder.create(element, name));
+    public static LookupElementBuilder createLookupElement(GoPsiElement element, String text) {
 
-        if (element instanceof GoPsiElement) {
-            ((GoPsiElement) element).accept(visitor);
-        }
+        LookupElementBuilder lookup = LookupElementBuilder.create(element, text);
+
+        lookup = lookup.setTailText(element.getPresentationTailText());
+        lookup = lookup.setTypeText(element.getPresentationTypeText());
+
+        LookupElementUtil visitor = new LookupElementUtil(lookup);
+        element.accept(visitor);
 
         return visitor.getLookupElement();
     }

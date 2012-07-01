@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.impl;
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
@@ -7,8 +8,10 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.util.LookupElementUtil;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -47,6 +50,30 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
             child = child.getNextSibling();
         }
+    }
+
+    @NotNull
+    @Override
+    public String getPresentationText() {
+        String name = getName();
+
+        return name != null ? name : "";
+    }
+
+    @Nullable
+    @Override
+    public String getPresentationTailText() {
+        return "";
+    }
+
+    @Override
+    public String getPresentationTypeText() {
+        return "";
+    }
+
+    @Override
+    final public LookupElementBuilder getCompletionPresentation() {
+        return LookupElementUtil.createLookupElement(this);
     }
 
     protected <GoPsi extends GoPsiElement> GoPsi findChildByClass(
