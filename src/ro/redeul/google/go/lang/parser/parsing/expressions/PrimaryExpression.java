@@ -256,32 +256,31 @@ public class PrimaryExpression implements GoElementTypes {
     private static boolean parseSelectorOrTypeAssertion(PsiBuilder builder,
                                                         GoParser parser,
                                                         PsiBuilder.Marker mark) {
-        PsiBuilder.Marker rollBackMarker = builder.mark();
+        if (ParserUtils.lookAheadSkipNLS(builder, oDOT, pLPAREN, kTYPE, pRPAREN)) {
+            return false;
+        }
 
         ParserUtils.getToken(builder, oDOT);
         ParserUtils.skipNLS(builder);
 
-        if (mIDENT == builder.getTokenType()) {
-            ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
-            rollBackMarker.drop();
-            mark.done(SELECTOR_EXPRESSION);
+        if (ParserUtils.lookAheadSkipNLS(builder, pLPAREN))  {
+            ParserUtils.skipNLS(builder);
+            ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
+
+            ParserUtils.skipNLS(builder);
+            parser.parseType(builder);
+            ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");
+            mark.done(TYPE_ASSERTION_EXPRESSION);
             return true;
         }
 
-        ParserUtils.skipNLS(builder);
-        ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
-
-        ParserUtils.skipNLS(builder);
-        if (kTYPE == builder.getTokenType()) {
-            rollBackMarker.rollbackTo();
-            return false;
+        if (ParserUtils.lookAhead(builder, mIDENT)) {
+            ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
+        } else {
+            builder.error(GoBundle.message("error.identifier.expected"));
         }
 
-        parser.parseType(builder);
-
-        ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");
-        rollBackMarker.drop();
-        mark.done(TYPE_ASSERTION_EXPRESSION);
+        mark.done(SELECTOR_EXPRESSION);
         return true;
     }
 

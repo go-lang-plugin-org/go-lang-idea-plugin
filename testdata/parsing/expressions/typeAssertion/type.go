@@ -1,6 +1,6 @@
 package main
 var e = x.(type)
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')

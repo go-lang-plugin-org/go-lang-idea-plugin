@@ -61,6 +61,10 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
         doTest();
     }
 
+    public void testSelector_incomplete() throws Throwable {
+        doTest();
+    }
+
     public void testParenthesised_basic() throws Throwable {
         doTest();
     }

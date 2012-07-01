@@ -51,12 +51,12 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     }
 
     @Override
-    @Nullable
     public GoPrimaryExpression getBaseExpression() {
         return findChildByClass(GoPrimaryExpression.class);
     }
 
     @Override
+    @Nullable
     public GoLiteralIdentifier getIdentifier() {
         return findChildByClass(GoLiteralIdentifier.class);
     }

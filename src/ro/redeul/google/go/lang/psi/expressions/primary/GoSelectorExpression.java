@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.expressions.primary;
 
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
@@ -13,5 +14,6 @@ public interface GoSelectorExpression extends GoPrimaryExpression {
 
     GoPrimaryExpression getBaseExpression();
 
+    @Nullable
     GoLiteralIdentifier getIdentifier();
 }
