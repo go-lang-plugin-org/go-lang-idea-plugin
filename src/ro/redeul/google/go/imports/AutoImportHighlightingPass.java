@@ -17,10 +17,12 @@ import com.intellij.openapi.editor.impl.DocumentMarkupModel;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ui.UIUtil;
 import ro.redeul.google.go.inspection.fix.AddImportFix;
+import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -160,8 +162,9 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
         GoSettings settings = GoSettings.getInstance();
         if (settings.OPTIMIZE_IMPORTS_ON_THE_FLY) {
-            // if user is editing the import statement, don't optimize it.
-            if (!isUserEditingImports()) {
+            // if user is editing the import statement, or there is any errors in the document,
+            // don't optimize it.
+            if (!isUserEditingImports() && !containsAnyErrorsInDocument()) {
                 GoImportOptimizer.optimize(file);
             }
         }
@@ -196,6 +199,39 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                                              fix);
             }
         });
+    }
+
+    private boolean containsAnyErrorsInDocument() {
+        Project project = editor.getProject();
+        if (project == null) {
+            return false;
+        }
+
+        for (RangeHighlighter highlighter : getAllHighlighters(project)) {
+            Object errorStripeTooltip = highlighter.getErrorStripeTooltip();
+            if (!(errorStripeTooltip instanceof HighlightInfo)) {
+                continue;
+            }
+            HighlightInfo info = (HighlightInfo) errorStripeTooltip;
+            if (info.getSeverity() == HighlightSeverity.ERROR &&
+                    !containsRemoveImportFix(info)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean containsRemoveImportFix(HighlightInfo info) {
+        if (info.quickFixActionRanges == null) {
+            return false;
+        }
+
+        for (Pair<HighlightInfo.IntentionActionDescriptor, TextRange> pair : info.quickFixActionRanges) {
+            if (pair.getFirst().getAction() instanceof RemoveImportFix) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isUserEditingImports() {
