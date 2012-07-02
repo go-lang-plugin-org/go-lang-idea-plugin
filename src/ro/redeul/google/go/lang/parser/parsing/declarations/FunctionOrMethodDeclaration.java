@@ -132,40 +132,6 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
             parseParameterDeclaration(builder, parser);
 
-/*
-            // we parse either a literal or a type
-            PsiBuilder.Marker parameterSignature = builder.mark();
-//            int identifiers = parser.parseIdentifierList(builder, false);
-
-            if ( ParserUtils.getToken(builder, mIDENT) ) {
-
-            }
-
-            boolean isVariadic = false;
-            PsiBuilder.Marker parameterSignature = builder.mark();
-            int identifiers = parser.parseIdentifierList(builder, false);
-
-            ParserUtils.skipNLS(builder);
-            if (builder.getTokenType() == oTRIPLE_DOT) {
-                ParserUtils.advance(builder);
-                isVariadic = true;
-                ParserUtils.skipNLS(builder);
-                parser.parseType(builder);
-            }
-
-            if (identifiers == 1 && (ParserUtils.lookAhead(builder, oCOMMA) || ParserUtils.lookAhead(builder, pRPAREN))) {
-                parameterSignature.drop();
-                parameterSignature = builder.mark();
-                parser.parseTypeName(builder);
-                isVariadic = false;
-            } else {
-                parser.parseType(builder);
-            }
-
-            parameterSignature.done(
-                isVariadic ? FUNCTION_PARAMETER_VARIADIC : FUNCTION_PARAMETER);
-
-*/
             ParserUtils.skipNLS(builder);
             if (builder.getTokenType() == oCOMMA) {
                 ParserUtils.advance(builder);
@@ -204,6 +170,11 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
         if (ParserUtils.getToken(builder, oTRIPLE_DOT)) {
             parameterType = FUNCTION_PARAMETER_VARIADIC;
+        }
+
+        if (ParserUtils.lookAhead(builder, oDOT, mIDENT) && identifiers == 1) {
+            mark.rollbackTo();
+            mark = builder.mark();
         }
 
         parser.parseType(builder);
