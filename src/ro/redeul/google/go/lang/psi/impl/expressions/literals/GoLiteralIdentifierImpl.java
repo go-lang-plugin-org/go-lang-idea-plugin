@@ -21,6 +21,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
+import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -32,7 +33,6 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
 import static com.intellij.patterns.StandardPatterns.string;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.BUILTIN_CALL_EXPRESSION;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_CLAUSES_STATEMENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_RANGE_STATEMENT;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
@@ -111,14 +111,14 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
                             .withParent(
                                 or(
                                     psiElement(FOR_WITH_CLAUSES_STATEMENT),
-                                    psiElement(FOR_WITH_RANGE_STATEMENT),
-                                    psiElement(BUILTIN_CALL_EXPRESSION)
+                                    psiElement(FOR_WITH_RANGE_STATEMENT)
+//                                    psiElement(BUILTIN_CALL_EXPRESSION)
                                 ))
                             .atStartOf(
                                 or(
                                     psiElement(FOR_WITH_CLAUSES_STATEMENT),
-                                    psiElement(FOR_WITH_RANGE_STATEMENT),
-                                    psiElement(BUILTIN_CALL_EXPRESSION)
+                                    psiElement(FOR_WITH_RANGE_STATEMENT)
+//                                    psiElement(BUILTIN_CALL_EXPRESSION)
                                 )
                             )
                     )
@@ -131,6 +131,9 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         if (NO_REFERENCE.accepts(this))
             return null;
 
+        if (BuiltinCallOrConversionReference.MATCHER.accepts(this))
+            return new BuiltinCallOrConversionReference(this);
+
         if (CallOrConversionReference.MATCHER.accepts(this))
             return new CallOrConversionReference(this);
 
@@ -140,27 +143,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         return null;
     }
 
-    /*
-        @NotNull
-        @Override
-        public Object[] getVariants() {
-
-            if (GoPsiUtils.isNodeOfType(getParent(),
-                                        GoTokenSets.NO_IDENTIFIER_COMPLETION_PARENTS)) {
-                return PsiReference.EMPTY_ARRAY;
-            }
-
-            IdentifierVariantsCollector identifierVariantsCollector = new IdentifierVariantsCollector();
-
-            PsiScopesUtil.treeWalkUp(identifierVariantsCollector,
-                                     this.getOriginalElement(),
-                                     this.getContainingFile(),
-                                     GoResolveStates.initial());
-
-            return identifierVariantsCollector.references();
-        }
-
-    */
     @Override
     public ItemPresentation getPresentation() {
         return new ItemPresentation() {

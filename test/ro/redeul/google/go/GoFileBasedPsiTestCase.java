@@ -54,7 +54,7 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
         VirtualFile builtin =
             LocalFileSystem.getInstance()
                            .findFileByPath(
-                               getTestDataPath() + "builtin.go");
+                               getTestDataPath() + "/builtin.go");
 
         if (builtin != null) {
             parseFile(builtin,

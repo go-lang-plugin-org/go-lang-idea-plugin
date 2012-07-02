@@ -2,20 +2,30 @@ package ro.redeul.google.go.lang.psi.resolve.references;
 
 import java.util.Collection;
 
+import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
-import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
-public class BuiltinTypeNameReference extends TypeNameReference {
+public class BuiltinCallOrConversionReference extends CallOrConversionReference {
 
-    public BuiltinTypeNameReference(GoTypeName element) {
-        super(element);
+    public static ElementPattern<GoLiteralIdentifier> MATCHER =
+        psiElement(GoLiteralIdentifier.class)
+            .withParent(
+                psiElement(GoLiteralExpression.class)
+                    .withParent(psiElement(GoBuiltinCallExpression.class))
+                    .atStartOf(psiElement(GoBuiltinCallExpression.class)));
+
+    public BuiltinCallOrConversionReference(GoLiteralIdentifier identifier) {
+        super(identifier);
     }
 
     @Override
@@ -23,9 +33,10 @@ public class BuiltinTypeNameReference extends TypeNameReference {
 
         PsiElement element = getElement();
         if (element == null)
-           return null;
+            return null;
 
-        TypeNameResolver processor = new TypeNameResolver(this);
+        MethodOrTypeNameResolver processor =
+            new MethodOrTypeNameResolver(this);
 
         GoNamesCache namesCache = GoNamesCache.getInstance(element.getProject());
 
@@ -42,21 +53,6 @@ public class BuiltinTypeNameReference extends TypeNameReference {
         }
 
         return processor.getDeclaration();
-    }
-
-    @Override
-    public boolean isReferenceTo(PsiElement element) {
-        GoTypeName typeElement = getElement();
-
-        if (typeElement == null)
-            return false;
-
-        if (element instanceof GoTypeNameDeclaration) {
-            GoTypeNameDeclaration nameDeclaration = (GoTypeNameDeclaration)element;
-            return typeElement.getText().equals(nameDeclaration.getName());
-        }
-
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @NotNull

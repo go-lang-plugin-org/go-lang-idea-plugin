@@ -47,7 +47,8 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        if (!state.get(GoResolveStates.IsOriginalPackage) &&
+        if (! "builtin".equals(state.get(GoResolveStates.PackageName)) &&
+            ! state.get(GoResolveStates.IsOriginalPackage) &&
             ! GoNamesUtil.isExportedName(getName()))
             return true;
 

@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
@@ -14,7 +15,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.CALL_OR_CONVERSION_EXPRESSION;
 
 public class CallOrConversionReference
     extends GoPsiReference<GoLiteralIdentifier> {
@@ -23,8 +23,8 @@ public class CallOrConversionReference
         psiElement(GoLiteralIdentifier.class)
             .withParent(
                 psiElement(GoLiteralExpression.class)
-                    .withParent(psiElement(CALL_OR_CONVERSION_EXPRESSION))
-                    .atStartOf(psiElement(CALL_OR_CONVERSION_EXPRESSION)));
+                    .withParent(psiElement(GoCallOrConvExpression.class))
+                    .atStartOf(psiElement(GoCallOrConvExpression.class)));
 
     public CallOrConversionReference(GoLiteralIdentifier identifier) {
         super(identifier);
@@ -32,13 +32,16 @@ public class CallOrConversionReference
 
     @Override
     public PsiElement resolve() {
+        GoLiteralIdentifier identifier = getElement();
+        if ( identifier == null )
+            return null;
 
         MethodOrTypeNameResolver processor =
             new MethodOrTypeNameResolver(this);
 
         PsiScopesUtil.treeWalkUp(
             processor,
-            getElement(), getElement().getContainingFile(),
+            identifier, identifier.getContainingFile(),
             GoResolveStates.initial());
 
         return processor.getDeclaration();
@@ -46,8 +49,13 @@ public class CallOrConversionReference
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
+
+        GoLiteralIdentifier literalElement = getElement();
+        if (literalElement == null)
+            return false;
+
         if (element instanceof GoTypeNameDeclaration) {
-            return matchesVisiblePackageName(element, getElement().getName());
+            return matchesVisiblePackageName(element, literalElement.getName());
         }
 
         if (element instanceof GoFunctionDeclaration) {
@@ -56,10 +64,9 @@ public class CallOrConversionReference
 
             if (funcDeclaration.getNameIdentifier() != null) {
                 return matchesVisiblePackageName(
-                    funcDeclaration.getUserData(
-                        GoResolveStates.VisiblePackageName),
+                    funcDeclaration.getUserData(GoResolveStates.VisiblePackageName),
                     funcDeclaration.getNameIdentifier(),
-                    getElement().getName());
+                    literalElement.getName());
             }
         }
 
@@ -69,7 +76,7 @@ public class CallOrConversionReference
                     psiElement(GoFunctionParameter.class)
                         .withChild(psiElement(GoTypeFunction.class))
                 ).accepts(element) ) {
-            return matchesVisiblePackageName(element, getElement().getName());
+            return matchesVisiblePackageName(element, literalElement.getName());
         }
 
         if (
@@ -80,7 +87,7 @@ public class CallOrConversionReference
                             psiElement(GoLiteralExpression.class)
                                 .withChild(psiElement(GoTypeFunction.class)))
                 ).accepts(element) ) {
-            return matchesVisiblePackageName(element, getElement().getName());
+            return matchesVisiblePackageName(element, literalElement.getName());
         }
 
         return false;
