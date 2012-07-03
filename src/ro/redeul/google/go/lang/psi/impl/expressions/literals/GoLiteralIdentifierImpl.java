@@ -98,7 +98,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     static final ElementPattern<PsiElement> NO_REFERENCE =
         or(
             psiElement(GoLiteralIdentifier.class)
-                .withText(string().matches("nil")),
+                .withText(string().matches("nil|print|println")),
             psiElement()
                 .withParent(
                     or(

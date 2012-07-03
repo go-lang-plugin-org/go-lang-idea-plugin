@@ -39,8 +39,8 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
     @Override
     @NotNull
     public String getName() {
-        GoLiteralIdentifier identifier = findChildByClass(
-            GoLiteralIdentifier.class);
+        GoLiteralIdentifier identifier =
+            findChildByClass(GoLiteralIdentifier.class);
 
         return identifier != null ? identifier.getUnqualifiedName() : getText();
     }
