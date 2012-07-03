@@ -1,5 +1,8 @@
 package ro.redeul.google.go.inspection;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.Nls;
@@ -15,12 +18,8 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-public class TypeStructDeclarationInspection extends AbstractWholeGoFileInspection {
+public class TypeStructDeclarationInspection
+    extends AbstractWholeGoFileInspection {
     @Nls
     @NotNull
     @Override
@@ -84,13 +83,16 @@ public class TypeStructDeclarationInspection extends AbstractWholeGoFileInspecti
         Set<String> fields = new HashSet<String>();
         for (GoTypeStructField field : struct.getFields()) {
             if (typeContainsStruct(field.getType(), struct)) {
-                result.addProblem(field, GoBundle.message("error.invalid.recursive.type", struct.getName()));
+                result.addProblem(field, GoBundle.message(
+                    "error.invalid.recursive.type", struct.getName()));
             }
 
             for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                 String name = identifier.getUnqualifiedName();
                 if (fields.contains(name)) {
-                    result.addProblem(identifier, GoBundle.message("error.duplicate.field", name));
+                    result.addProblem(identifier,
+                                      GoBundle.message("error.duplicate.field",
+                                                       name));
                 } else {
                     fields.add(name);
                 }
@@ -98,16 +100,21 @@ public class TypeStructDeclarationInspection extends AbstractWholeGoFileInspecti
         }
 
         for (GoTypeStructAnonymousField field : struct.getAnonymousFields()) {
-            GoTypeName type = field.getType();
-            if (type != null) {
+            GoType type = field.getType();
+
+            if (type instanceof GoTypeName) {
+                GoTypeName typeName = (GoTypeName) type;
+
                 if (typeContainsStruct(type, struct)) {
-                    result.addProblem(field, GoBundle.message("error.invalid.recursive.type", struct.getName()));
+                    result.addProblem(field, GoBundle.message(
+                        "error.invalid.recursive.type", struct.getName()));
                 }
 
-                GoLiteralIdentifier identifier = type.getIdentifier();
+                GoLiteralIdentifier identifier = typeName.getIdentifier();
                 String name = identifier.getUnqualifiedName();
                 if (fields.contains(name)) {
-                    result.addProblem(identifier, GoBundle.message("error.duplicate.field", name));
+                    result.addProblem(identifier, GoBundle.message(
+                        "error.duplicate.field", name));
                 } else {
                     fields.add(name);
                 }

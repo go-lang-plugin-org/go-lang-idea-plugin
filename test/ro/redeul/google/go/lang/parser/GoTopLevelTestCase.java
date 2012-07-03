@@ -71,6 +71,8 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     public void testType_case1() throws Throwable { doTest(); }
     public void testType_case2() throws Throwable { doTest(); }
     public void testType_case3() throws Throwable { doTest(); }
+    public void testType_struct() throws Throwable { doTest(); }
+    public void testType_structAnonymousPointer() throws Throwable { doTest(); }
 
     public void testFunction_case1() throws Throwable { doTest(); }
     public void testFunction_case2() throws Throwable { doTest(); }

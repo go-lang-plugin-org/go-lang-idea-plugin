@@ -64,6 +64,10 @@ public class StructType implements GoElementTypes {
             isAnonymous = true;
         }
 
+        if ( identifiersCount == 0 && ParserUtils.lookAhead(builder, oMUL, mIDENT) ) {
+            isAnonymous = true;
+        }
+
         parser.parseType(builder);
 
         if ( builder.getTokenType() == litSTRING ) {

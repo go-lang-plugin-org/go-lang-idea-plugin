@@ -3,7 +3,7 @@ type (
 	Point int
 	Polar Point
 )
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')

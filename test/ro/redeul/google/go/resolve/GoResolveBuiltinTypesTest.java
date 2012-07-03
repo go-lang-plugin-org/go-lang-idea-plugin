@@ -48,9 +48,4 @@ public class GoResolveBuiltinTypesTest extends GoPsiResolveTestCase {
     public void testParameterType() throws Exception {
         doTest();
     }
-
-    public void testMethodName() throws Exception {
-        doTest();
-    }
-
 }

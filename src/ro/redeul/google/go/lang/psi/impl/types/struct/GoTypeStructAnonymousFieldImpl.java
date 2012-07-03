@@ -3,7 +3,9 @@ package ro.redeul.google.go.lang.psi.impl.types.struct;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoTypePointer;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 
 /**
@@ -18,13 +20,22 @@ public class GoTypeStructAnonymousFieldImpl extends GoPsiElementBase implements 
         super(node);
     }
 
-    public GoTypeName getType() {
-        return findChildByClass(GoTypeName.class);
+    public GoType getType() {
+        return findChildByClass(GoType.class);
     }
 
     @Override
     public String getFieldName() {
-        return getType().getName();
+        GoType type = getType();
+        if ( type instanceof GoTypeName) {
+            return ((GoTypeName)type).getName();
+        }
+
+        if (type instanceof GoTypePointer) {
+            return ((GoTypePointer)type).getTargetType().getName();
+        }
+
+        return "";
     }
 
     @Override

@@ -10,6 +10,8 @@ func pow(x, n, lim float64) float64 {
     return lim
 }
 
+func f() {}
+
 func main() {
-    println(pow(2, 2, 10))
+    f(pow(2, 2, 10))
 }
