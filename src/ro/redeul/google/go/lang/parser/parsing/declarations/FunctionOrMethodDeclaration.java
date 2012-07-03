@@ -46,9 +46,10 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         skipNLS(builder);
         parseCompleteMethodSignature(builder, parser);
 
-        skipNLS(builder);
-
-        parser.parseBody(builder);
+        if (!ParserUtils.lookAhead(builder, wsNLS) ) {
+            skipNLS(builder);
+            parser.parseBody(builder);
+        }
 
         marker.done(nodeType);
         return nodeType;
