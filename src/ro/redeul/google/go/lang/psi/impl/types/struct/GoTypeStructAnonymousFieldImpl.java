@@ -7,6 +7,7 @@ import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.GoTypePointer;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -40,6 +41,21 @@ public class GoTypeStructAnonymousFieldImpl extends GoPsiElementBase implements 
 
     @Override
     public String getName() {
-        return super.getName();    //To change body of overridden methods use File | Settings | File Templates.
+        return getFieldName();
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitTypeStructAnonymousField(this);
+    }
+
+    @Override
+    public String getPresentationTypeText() {
+        return getType().getText();
+    }
+
+    @Override
+    public String getPresentationTailText() {
+        return " (anonymous)";
     }
 }

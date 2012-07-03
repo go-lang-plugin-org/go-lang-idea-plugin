@@ -32,4 +32,8 @@ public class GoUnderlyingTypes {
     public static GoUnderlyingType getInterface() {
         return new GoUnderlyingTypeInterface();
     }
+
+    public static GoUnderlyingType getStruct() {
+        return new GoUnderlyingTypeStruct();
+    }
 }

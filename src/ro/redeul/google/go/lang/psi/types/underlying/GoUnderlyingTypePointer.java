@@ -8,6 +8,10 @@ public class GoUnderlyingTypePointer implements GoUnderlyingType {
         this.baseType = baseType;
     }
 
+    public GoUnderlyingType getBaseType() {
+        return baseType;
+    }
+
     @Override
     public boolean isIdentical(GoUnderlyingType other) {
         if (other instanceof GoUnderlyingTypePointer) {

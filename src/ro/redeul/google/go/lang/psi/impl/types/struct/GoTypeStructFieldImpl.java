@@ -68,4 +68,9 @@ public class GoTypeStructFieldImpl extends GoPsiElementBase implements GoTypeStr
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeStructField(this);
     }
+
+    @Override
+    public String getPresentationTypeText() {
+        return getType().getText();
+    }
 }

@@ -42,6 +42,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.GoTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
 import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
 /**
@@ -221,5 +222,9 @@ public class GoElementVisitor  {
 
     public void visitFunctionParameterList(GoFunctionParameterList list) {
         visitElement(list);
+    }
+
+    public void visitTypeStructAnonymousField(GoTypeStructAnonymousField field) {
+        visitElement(field);
     }
 }

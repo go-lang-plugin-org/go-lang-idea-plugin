@@ -11,10 +11,13 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.resolve.references.InterfaceMethodReference;
+import ro.redeul.google.go.lang.psi.resolve.references.StructFieldsReference;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeInterface;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePointer;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeStruct;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
@@ -103,28 +106,44 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
     @Override
     public PsiReference getReference() {
+
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public PsiReference[] getReferences() {
         GoPrimaryExpression baseExpression = getBaseExpression();
 
         if (baseExpression == null) {
-            return null;
+            return PsiReference.EMPTY_ARRAY;
         }
 
         GoType []baseTypes = baseExpression.getType();
         if (baseTypes.length == 0) {
-            return null;
+            return PsiReference.EMPTY_ARRAY;
         }
 
         GoType type = baseTypes[0];
 
         GoUnderlyingType x = type.getUnderlyingType();
 
-        if ( x instanceof GoUnderlyingTypeInterface )
-            return new InterfaceMethodReference(this);
+        if ( x instanceof GoUnderlyingTypeInterface)
+            return new PsiReference[] { new InterfaceMethodReference(this) };
 
+        if ( x instanceof GoUnderlyingTypePointer)
+            x = ((GoUnderlyingTypePointer)x).getBaseType();
+
+        if ( x instanceof GoUnderlyingTypeStruct)
+            return new PsiReference[] {
+                new StructFieldsReference(this),
+//                new MethodsReference(this)
+            };
 
 //        if ( type instanceof GoTypeStruct) {
 //            return new StructFieldReference(this);
 
-        return null;
+        return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.
     }
 }
+

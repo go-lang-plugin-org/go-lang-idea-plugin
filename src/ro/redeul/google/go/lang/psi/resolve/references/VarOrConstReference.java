@@ -15,7 +15,6 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.VarOrConstResolver;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
 
@@ -65,7 +64,7 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
                     return true;
                 }
 
-                variants.add(createLookupElement((GoPsiElement)declaration, name));
+                variants.add(((GoPsiElement)declaration).getCompletionPresentation());
                 return true;
             }
         };

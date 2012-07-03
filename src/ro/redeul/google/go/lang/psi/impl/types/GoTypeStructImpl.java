@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
@@ -88,7 +89,7 @@ public class GoTypeStructImpl extends GoPsiPackagedElementBase implements GoType
 
     @Override
     public GoUnderlyingType getUnderlyingType() {
-        return GoUnderlyingType.Undefined;
+        return GoUnderlyingTypes.getStruct();
     }
 
     @Override
@@ -96,4 +97,6 @@ public class GoTypeStructImpl extends GoPsiPackagedElementBase implements GoType
         // TODO: implement this
         return false;
     }
+
+
 }

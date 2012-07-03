@@ -76,6 +76,11 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
         return LookupElementUtil.createLookupElement(this);
     }
 
+    @Override
+    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
+        return LookupElementUtil.createLookupElement(this, child);
+    }
+
     protected <GoPsi extends GoPsiElement> GoPsi findChildByClass(
         Class<GoPsi> psiType, int pos) {
         GoPsi children[] = findChildrenByClass(psiType);

@@ -15,7 +15,6 @@ import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class TypeNameReference extends GoPsiReference<GoTypeName> {
     public static final ElementPattern<GoTypeName> MATCHER =
@@ -72,7 +71,8 @@ public class TypeNameReference extends GoPsiReference<GoTypeName> {
                         return true;
                     }
 
-                    variants.add(createLookupElement((GoPsiElement)declaration, name));
+                    GoPsiElement goDeclaration = (GoPsiElement) declaration;
+                    variants.add(goDeclaration.getCompletionPresentation());
                     return true;
 
                 }

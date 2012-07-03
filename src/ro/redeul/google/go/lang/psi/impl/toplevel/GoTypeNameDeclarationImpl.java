@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoStubPsiElementBase;
 import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
@@ -58,6 +59,11 @@ public class GoTypeNameDeclarationImpl
     @Override
     public LookupElementBuilder getCompletionPresentation() {
         return LookupElementUtil.createLookupElement(this);
+    }
+
+    @Override
+    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
+        return LookupElementUtil.createLookupElement(this, child);
     }
 
     @Override

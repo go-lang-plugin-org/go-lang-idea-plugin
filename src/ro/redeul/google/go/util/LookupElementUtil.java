@@ -19,6 +19,8 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.GoTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
 import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class LookupElementUtil extends GoElementVisitor {
@@ -30,12 +32,16 @@ public class LookupElementUtil extends GoElementVisitor {
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element) {
-        return createLookupElement(element, element.getPresentationText());
+        return createLookupElement(element, element.getPresentationText(), element);
     }
 
-    public static LookupElementBuilder createLookupElement(GoPsiElement element, String text) {
+    public static LookupElementBuilder createLookupElement(GoPsiElement element, GoPsiElement child) {
+        return createLookupElement(element, child.getPresentationText(), child);
+    }
 
-        LookupElementBuilder lookup = LookupElementBuilder.create(element, text);
+    public static LookupElementBuilder createLookupElement(GoPsiElement element, String text, GoPsiElement child) {
+
+        LookupElementBuilder lookup = LookupElementBuilder.create(child, text);
 
         lookup = lookup.setTailText(element.getPresentationTailText());
         lookup = lookup.setTypeText(element.getPresentationTypeText());
@@ -118,6 +124,16 @@ public class LookupElementUtil extends GoElementVisitor {
     @Override
     public void visitConstDeclaration(GoConstDeclaration declaration) {
         lookupElement = lookupElement.setIcon(GoIcons.CONST_ICON);
+    }
+
+    @Override
+    public void visitTypeStructField(GoTypeStructField field) {
+        lookupElement = lookupElement.setIcon(PlatformIcons.FIELD_ICON);
+    }
+
+    @Override
+    public void visitTypeStructAnonymousField(GoTypeStructAnonymousField field) {
+        lookupElement = lookupElement.setIcon(PlatformIcons.FIELD_ICON);
     }
 
     public LookupElementBuilder getLookupElement() {

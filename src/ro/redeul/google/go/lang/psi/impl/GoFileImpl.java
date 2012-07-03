@@ -240,6 +240,11 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     }
 
     @Override
+    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
+        return LookupElementUtil.createLookupElement(this);
+    }
+
+    @Override
     public String getPresentationText() {
         return "";
     }

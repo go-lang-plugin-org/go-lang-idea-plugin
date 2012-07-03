@@ -13,6 +13,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -89,6 +90,24 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                     if ( varDeclaration.getIdentifiersType() != null) {
                         return new GoType[] {
                             varDeclaration.getIdentifiersType()
+                        };
+                    }
+                }
+
+                if (resolved != null && resolved.getParent() instanceof GoFunctionParameter) {
+                    GoFunctionParameter functionParameter = (GoFunctionParameter)resolved.getParent();
+                    if ( functionParameter.getType() != null) {
+                        return new GoType[] {
+                            functionParameter.getType()
+                        };
+                    }
+                }
+
+                if (resolved != null && resolved.getParent() instanceof GoFunctionParameter) {
+                    GoFunctionParameter functionParameter = (GoFunctionParameter)resolved.getParent();
+                    if ( functionParameter.getType() != null) {
+                        return new GoType[] {
+                            functionParameter.getType()
                         };
                     }
                 }

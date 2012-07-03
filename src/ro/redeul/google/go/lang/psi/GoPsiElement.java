@@ -20,6 +20,8 @@ public interface GoPsiElement extends PsiElement {
 
     LookupElementBuilder getCompletionPresentation();
 
+    LookupElementBuilder getCompletionPresentation(GoPsiElement child);
+
     String getPresentationText();
 
     String getPresentationTailText();
