@@ -38,9 +38,9 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                 GoPrimaryExpression baseExpression = expression.getBaseExpression();
                 if ("make".equals(baseExpression.getText())) {
                     checkMakeCall(expression, result);
+                } else {
+                    checkFunctionCallArguments(expression, result);
                 }
-
-                checkFunctionCallArguments(expression, result);
             }
         }.visitFile(file);
     }
