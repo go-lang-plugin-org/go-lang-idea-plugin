@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageImportPath;
+import ro.redeul.google.go.lang.psi.stubs.index.GoPackageName;
 import ro.redeul.google.go.lang.psi.stubs.index.GoTypeName;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -78,7 +79,7 @@ public class GoNamesCache {
     public Collection<GoFile> getFilesByPackageName(String packageName) {
         StubIndex index = StubIndex.getInstance();
 
-        return index.get(GoPackageImportPath.KEY, packageName, project,
+        return index.get(GoPackageName.KEY, packageName, project,
                          GlobalSearchScope.allScope(project));
     }
 

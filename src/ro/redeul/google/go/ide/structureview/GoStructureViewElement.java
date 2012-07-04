@@ -1,6 +1,7 @@
 package ro.redeul.google.go.ide.structureview;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -10,6 +11,7 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
@@ -29,8 +31,11 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isExportedName;
 
@@ -96,7 +101,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
 
     @Override
     public Icon getIcon(boolean open) {
-        if (isExportedName(info.getName())) {
+        if (info.getName() == null || isExportedName(info.getName())) {
             return info.getBaseIcon();
         }
 
@@ -110,12 +115,14 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
             return new MethodInfo(element);
         } else if (element instanceof GoFunctionDeclaration) {
             return new FunctionInfo(element);
-        } else if (element instanceof GoLiteralIdentifier) {
+        } else if (element instanceof GoLiteralIdentifier || element instanceof GoTypeName) {
             return new LiteralIdentifierInfo(element);
         } else if (element instanceof GoTypeSpec) {
             GoType type = ((GoTypeSpec) element).getType();
             if (type instanceof GoTypeInterface) {
                 return new InterfaceInfo(element);
+            } else if (type instanceof GoTypeStruct) {
+                return new StructInfo(element);
             }
             return new TypeInfo(element);
         }
@@ -273,6 +280,11 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         }
 
         private String getTypeName() {
+            if (element instanceof GoTypeName) {
+                GoTypeName typeName = (GoTypeName) element;
+                return typeName.getQualifiedName();
+            }
+
             PsiElement parent = element.getParent();
             GoType type = null;
             GoLiteralIdentifier[] identifiers = GoLiteralIdentifier.EMPTY_ARRAY;
@@ -359,35 +371,121 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         }
 
         List<PsiNamedElement> getMembers(GoTypeSpec typeSpec) {
-            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
-            if (typeSpec.getType() != null ) {
-//            TODO: make sure we are only looking inside the types that actually
-//              have members
-//                for (GoPsiElement psi : typeSpec.getType().getMembers()) {
-//                    if (psi instanceof PsiNamedElement) {
-//                        children.add((PsiNamedElement) psi);
-//                    }
-//                }
+            return Collections.emptyList();
+        }
 
-                PsiFile file = typeSpec.getContainingFile();
-                String name = typeSpec.getName();
-                if (name != null && file instanceof GoFile) {
-                    for (GoMethodDeclaration md : ((GoFile) file).getMethods()) {
-                        GoMethodReceiver mr = md.getMethodReceiver();
-                        if (mr == null) {
-                            continue;
-                        }
-
-                        GoTypeName typeName = mr.getTypeName();
-                        if (typeName != null && name.equals(typeName.getName())) {
-                            children.add(md);
-                        }
-                    }
-                }
+        @Override
+        String getPresentationText() {
+            GoType type = ((GoTypeSpec) element).getType();
+            if (type != null) {
+                return getName() + " " + type.getText();
             }
+            return getName();
+        }
+    }
+
+    private static class StructInfo extends TypeInfo {
+        private StructInfo(PsiNamedElement element) {
+            super(element);
+        }
+
+        @Override
+        List<PsiNamedElement> getMembers(GoTypeSpec typeSpec) {
+            GoType type = typeSpec.getType();
+            if (!(type instanceof GoTypeStruct)) {
+                return Collections.emptyList();
+            }
+            GoTypeStruct struct = (GoTypeStruct) type;
+
+            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
+            getNamedFields(struct, children);
+            getAnonymousFields(struct, children);
+            getMethods(typeSpec, children);
 
             Collections.sort(children, NAMED_ELEMENT_COMPARATOR);
             return children;
+        }
+
+        private void getMethods(GoTypeSpec typeSpec, List<PsiNamedElement> children) {
+            PsiFile file = typeSpec.getContainingFile();
+            String name = typeSpec.getName();
+            if (name == null || !(file instanceof GoFile)) {
+                return;
+            }
+
+            for (GoFile f : getAllSamePackageFiles((GoFile) file)) {
+                getMethodsInFile(children, name, f);
+            }
+        }
+
+        private Collection<GoFile> getAllSamePackageFiles(GoFile goFile) {
+            String path = getFilePath(goFile);
+            if (path.isEmpty()) {
+                return Collections.singleton(goFile);
+            }
+
+            List<GoFile> files = new ArrayList<GoFile>();
+            String packageName = goFile.getPackageName();
+            GoNamesCache namesCache = GoNamesCache.getInstance(goFile.getProject());
+            for (GoFile file : namesCache.getFilesByPackageName(packageName)) {
+                if (path.equals(getFilePath(file))) {
+                    files.add(file);
+                }
+            }
+
+            if (files.isEmpty()) {
+                files.add(goFile);
+            }
+            return files;
+        }
+
+        private String getFilePath(GoFile file) {
+            VirtualFile vf = file.getVirtualFile();
+            if (vf == null) {
+                return "";
+            }
+
+            VirtualFile parent = vf.getParent();
+            if (parent == null) {
+                return "";
+            }
+
+            return parent.getPath();
+        }
+
+        private void getMethodsInFile(List<PsiNamedElement> children, String name, GoFile file) {
+            for (GoMethodDeclaration md : file.getMethods()) {
+                GoMethodReceiver mr = md.getMethodReceiver();
+                if (mr == null) {
+                    continue;
+                }
+
+                GoTypeName typeName = mr.getTypeName();
+                if (typeName != null && name.equals(typeName.getName())) {
+                    children.add(md);
+                }
+            }
+        }
+
+        private void getAnonymousFields(GoTypeStruct struct, List<PsiNamedElement> children) {
+            for (GoTypeStructAnonymousField field : struct.getAnonymousFields()) {
+                children.add(field.getType());
+            }
+        }
+
+        private void getNamedFields(GoTypeStruct struct, List<PsiNamedElement> children) {
+            for (GoTypeStructField field : struct.getFields()) {
+                for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
+                    if (!identifier.isBlank()) {
+                        children.add(identifier);
+                    }
+                }
+            }
+        }
+
+        @Override
+        String getPresentationText() {
+            return getName();
         }
     }
 
@@ -399,6 +497,24 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         @Override
         public Icon getBaseIcon() {
             return PlatformIcons.INTERFACE_ICON;
+        }
+
+        @Override
+        List<PsiNamedElement> getMembers(GoTypeSpec typeSpec) {
+            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
+            GoType type = typeSpec.getType();
+            if (!(type instanceof GoTypeInterface)) {
+                return Collections.emptyList();
+            }
+            GoTypeInterface ti = (GoTypeInterface) type;
+            Collections.addAll(children, ti.getMethodDeclarations());
+            Collections.sort(children, NAMED_ELEMENT_COMPARATOR);
+            return children;
+        }
+
+        @Override
+        String getPresentationText() {
+            return getName();
         }
     }
 

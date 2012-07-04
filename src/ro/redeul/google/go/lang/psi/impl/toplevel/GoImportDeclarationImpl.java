@@ -88,7 +88,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
 
         // get the file included in the imported package name
         Collection<GoFile> files =
-            namesCache.getFilesByPackageName(importPath.getValue());
+            namesCache.getFilesByPackageImportPath(importPath.getValue());
 
         for (GoFile file : files) {
             ResolveState newState =
