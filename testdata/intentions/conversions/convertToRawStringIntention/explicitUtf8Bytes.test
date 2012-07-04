@@ -1,0 +1,9 @@
+package main
+func main() {
+    println(<caret>"\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e")
+}
+-----
+package main
+func main() {
+    println(`日本語`)
+}

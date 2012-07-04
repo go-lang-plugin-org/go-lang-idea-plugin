@@ -1,5 +1,6 @@
 package ro.redeul.google.go.intentions;
 
+import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -50,7 +51,18 @@ public abstract class Intention implements IntentionAction {
             return;
         }
 
-        processIntention(element, project, editor);
+        try {
+            processIntention(element, project, editor);
+        } catch (IntentionExecutionException e) {
+            HintManager hintManager = HintManager.getInstance();
+            if (e.getStartOffset() >= 0 && e.getLength() > 0) {
+                int start = element.getTextOffset() + e.getStartOffset();
+                int end = start + e.getLength();
+                editor.getCaretModel().moveToOffset(end);
+                editor.getSelectionModel().setSelection(start, end);
+            }
+            hintManager.showErrorHint(editor, e.getMessage());
+        }
     }
 
     protected abstract void processIntention(@NotNull PsiElement element, Project project, Editor editor)
