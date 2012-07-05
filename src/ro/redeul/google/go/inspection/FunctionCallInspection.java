@@ -36,13 +36,33 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                 super.visitBuiltinCallExpression(expression);
 
                 GoPrimaryExpression baseExpression = expression.getBaseExpression();
-                if ("make".equals(baseExpression.getText())) {
+                String expressionText = baseExpression.getText();
+                if ("make".equals(expressionText)) {
                     checkMakeCall(expression, result);
+                } else if ("new".equals(expressionText)) {
+                    checkNewCall(expression, result);
                 } else {
                     checkFunctionCallArguments(expression, result);
                 }
             }
         }.visitFile(file);
+    }
+
+    private static void checkNewCall(GoBuiltinCallExpression expression, InspectionResult result) {
+        GoExpr[] arguments = expression.getArguments();
+        GoType type = expression.getTypeArgument();
+        if (type == null) {
+            if (arguments.length == 0) {
+                result.addProblem(expression, GoBundle.message("error.missing.argument", "type", "new"));
+            } else {
+                result.addProblem(expression, GoBundle.message("error.expression.is.not.a.type", arguments[0].getText()));
+            }
+            return;
+        }
+
+        if (arguments.length != 0) {
+            result.addProblem(expression, GoBundle.message("error.too.many.arguments.in.call", "new"));
+        }
     }
 
     private static void checkMakeCall(GoBuiltinCallExpression expression, InspectionResult result) {
