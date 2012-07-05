@@ -7,13 +7,12 @@ import com.intellij.formatting.Spacing;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
-import ro.redeul.google.go.formatter.GoBlockGenerator;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoAssignBlock extends GoBlock {
+class GoAssignBlock extends GoBlock {
     private final Alignment assignAlignment;
 
     public GoAssignBlock(ASTNode node, Alignment assignAlignment, Indent indent, CommonCodeStyleSettings settings) {

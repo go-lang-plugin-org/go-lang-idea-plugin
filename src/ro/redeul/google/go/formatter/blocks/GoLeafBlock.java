@@ -10,7 +10,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import org.jetbrains.annotations.Nullable;
 
-public class GoLeafBlock extends GoBlock {
+class GoLeafBlock extends GoBlock {
     public GoLeafBlock(ASTNode node, Alignment alignment, Indent indent,
                        Wrap wrap, CommonCodeStyleSettings settings) {
         super(node, alignment, indent, wrap, settings);

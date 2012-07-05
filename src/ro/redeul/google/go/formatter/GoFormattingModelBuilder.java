@@ -16,6 +16,7 @@ import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.impl.source.tree.TreeUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoLanguage;
+import ro.redeul.google.go.formatter.blocks.GoBlockGenerator;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>

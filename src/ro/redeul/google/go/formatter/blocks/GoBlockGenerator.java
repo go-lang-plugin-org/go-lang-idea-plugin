@@ -1,4 +1,4 @@
-package ro.redeul.google.go.formatter;
+package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
@@ -9,12 +9,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
-import ro.redeul.google.go.formatter.blocks.GoAssignListBlock;
-import ro.redeul.google.go.formatter.blocks.GoBlock;
-import ro.redeul.google.go.formatter.blocks.GoFileBlock;
-import ro.redeul.google.go.formatter.blocks.GoLeafBlock;
-import ro.redeul.google.go.formatter.blocks.GoPackageBlock;
-import ro.redeul.google.go.formatter.blocks.GoTypeStructBlock;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;

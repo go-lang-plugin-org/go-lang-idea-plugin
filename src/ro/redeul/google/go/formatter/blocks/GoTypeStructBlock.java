@@ -4,11 +4,9 @@ import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Spacing;
-import com.intellij.formatting.Wrap;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
-import ro.redeul.google.go.formatter.GoBlockGenerator;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 
@@ -17,7 +15,7 @@ import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
-public class GoTypeStructBlock extends GoBlock {
+class GoTypeStructBlock extends GoBlock {
     public GoTypeStructBlock(ASTNode node, Alignment alignment, Indent indent, CommonCodeStyleSettings settings) {
         super(node, alignment, indent, null, settings);
     }

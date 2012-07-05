@@ -14,7 +14,7 @@ import com.intellij.psi.tree.TokenSet;
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
  *         Date: 6/3/12
  */
-public class GoFileBlock extends GoBlock {
+class GoFileBlock extends GoBlock {
     private static final TokenSet NEED_NEW_LINE_TOKENS = TokenSet.create(
         PACKAGE_DECLARATION,
         IMPORT_DECLARATIONS,

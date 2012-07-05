@@ -6,12 +6,11 @@ import com.intellij.formatting.Indent;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
-import ro.redeul.google.go.formatter.GoBlockGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoTypeStructFieldBlock extends GoBlock {
+class GoTypeStructFieldBlock extends GoBlock {
     private static final TokenSet FIELD_TYPE_SET = TokenSet.create(
         TYPE_SLICE,
         TYPE_NAME,

@@ -23,7 +23,6 @@ import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
-import ro.redeul.google.go.formatter.GoBlockGenerator;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -34,7 +33,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
  *         Date: Sep 27, 2010
  */
-public class GoBlock implements Block, GoElementTypes {
+class GoBlock implements Block, GoElementTypes {
 
     final protected ASTNode myNode;
     final protected Alignment myAlignment;

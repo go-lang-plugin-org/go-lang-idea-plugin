@@ -9,7 +9,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 
-public class GoPackageBlock extends GoBlock {
+class GoPackageBlock extends GoBlock {
 
 
     public GoPackageBlock(ASTNode node, Alignment alignment, Indent indent,

@@ -8,7 +8,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import ro.redeul.google.go.formatter.GoBlockGenerator;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
-public class GoAssignListBlock extends GoBlock {
+class GoAssignListBlock extends GoBlock {
     /**
      * Those statements might contain assignments which need to align to the assign mark.
      * e.g.
