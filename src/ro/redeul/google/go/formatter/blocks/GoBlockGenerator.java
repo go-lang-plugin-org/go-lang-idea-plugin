@@ -8,11 +8,13 @@ import com.intellij.formatting.WrapType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 
 /**
@@ -50,23 +52,38 @@ public class GoBlockGenerator {
         if (psi instanceof GoPackageDeclaration)
             return generatePackageBlock(node, styleSettings);
 
-        if (node.getElementType() == GoTokenTypes.kPACKAGE ||
-            node.getElementType() == GoTokenTypes.oSEMI) {
+        if (psi instanceof GoBinaryExpression) {
+            return new GoBinaryExpressionBlock(node, alignment, NO_WRAP, styleSettings);
+        }
+
+        IElementType elementType = node.getElementType();
+        if (elementType == GoTokenTypes.pLPAREN) {
+            return new GoLeafBlock(node, null, indent, NO_WRAP, styleSettings);
+        } else if (elementType == GoTokenTypes.kPACKAGE ||
+            elementType == GoTokenTypes.oSEMI) {
             return new GoLeafBlock(node,
                                    null,
                                    Indent.getAbsoluteNoneIndent(),
                                    Wrap.createWrap(WrapType.NONE, false),
                                    styleSettings);
-        } else if (GoTokenTypeSets.COMMENTS.contains(node.getElementType())) {
+        } else if (GoTokenTypeSets.COMMENTS.contains(elementType)) {
             return new GoLeafBlock(node,
                                     alignment,
                                     indent,
                                     Wrap.createWrap(WrapType.NONE, false),
                                     styleSettings);
-        } else if (ALIGN_LIST_BLOCK_STATEMENTS.contains(node.getElementType())) {
+        } else if (ALIGN_LIST_BLOCK_STATEMENTS.contains(elementType)) {
             return new GoAssignListBlock(node, alignment, indent, styleSettings);
-        } else if (node.getElementType() == GoElementTypes.TYPE_STRUCT) {
+        } else if (elementType == GoElementTypes.TYPE_STRUCT) {
             return new GoTypeStructBlock(node, alignment, indent, styleSettings);
+        } else if (elementType == GoElementTypes.EXPRESSION_LIST) {
+            return new GoExpressionListBlock(node, alignment, styleSettings);
+        } else if (elementType == GoElementTypes.UNARY_EXPRESSION) {
+            return new GoUnaryExpressionBlock(node, alignment, indent, NO_WRAP, styleSettings);
+        } else if (GoElementTypes.FUNCTION_CALL_SETS.contains(elementType)) {
+            return new GoCallOrConvExpressionBlock(node, alignment, indent, NO_WRAP, styleSettings);
+        } else if (elementType == GoElementTypes.PARENTHESISED_EXPRESSION) {
+            return new GoParenthesisedExpressionBlock(node, alignment, indent, styleSettings);
         }
 
         return new GoBlock(node, alignment, indent, NO_WRAP, styleSettings);

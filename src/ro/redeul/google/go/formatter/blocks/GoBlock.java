@@ -26,6 +26,7 @@ import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
@@ -49,8 +50,12 @@ class GoBlock implements Block, GoElementTypes {
     protected List<Block> mySubBlocks = null;
 
     protected static final Spacing BASIC_SPACING = Spacing.createSpacing(1, 1, 0, false, 0);
+    protected static final Spacing BASIC_SPACING_KEEP_LINE_BREAKS = Spacing.createSpacing(1, 1, 0, true, 0);
     protected static final Spacing EMPTY_SPACING = Spacing.createSpacing(0, 0, 0, false, 0);
+    protected static final Spacing EMPTY_SPACING_KEEP_LINE_BREAKS = Spacing.createSpacing(0, 0, 0, true, 0);
     protected static final Spacing LINE_SPACING = Spacing.createSpacing(0, 0, 2, false, 0);
+
+    protected static final Indent NORMAL_INDENT_TO_CHILDREN = Indent.getIndent(Indent.Type.NORMAL, false, true);
 
     /**
      * Those statements might contain comments which need to align together
@@ -101,6 +106,12 @@ class GoBlock implements Block, GoElementTypes {
         mSL_COMMENT
         );
 
+    private static final TokenSet BASIC_SPACE_KEYWORDS_SET = TokenSet.create(
+            kCASE, kCHAN, kCONST, kDEFER, kELSE, kFOR, kFUNC, kGO,
+            kGOTO, kIF, kIMPORT, kRANGE, kRETURN, kSELECT, kSTRUCT,
+            kSWITCH, kTYPE, kVAR
+        );
+
     public GoBlock(ASTNode node, Alignment alignment, Indent indent, Wrap wrap,
                    CommonCodeStyleSettings settings) {
         myNode = node;
@@ -144,19 +155,8 @@ class GoBlock implements Block, GoElementTypes {
                 continue;
             }
 
-            IElementType type = child.getElementType();
-            Block childBlock;
-            if (getIndentedElements().contains(type)) {
-                childBlock =
-                    GoBlockGenerator.generateBlock(
-                        child, Indent.getNormalIndent(), mySettings);
-            } else {
-                childBlock =
-                    GoBlockGenerator.generateBlock(
-                        child, mySettings);
-            }
-
-            children.add(childBlock);
+            Indent indent = getChildIndent(child.getPsi());
+            children.add(GoBlockGenerator.generateBlock(child, indent, mySettings));
         }
 
         return children;
@@ -196,14 +196,48 @@ class GoBlock implements Block, GoElementTypes {
     }
 
     public Spacing getSpacing(Block child1, Block child2) {
-        return null;
+        if (!(child1 instanceof GoBlock) || !(child2 instanceof GoBlock)) {
+            return null;
+        }
+
+        return getGoBlockSpacing((GoBlock) child1, (GoBlock) child2);
     }
 
+    protected Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
+        IElementType child1Type = child1.getNode().getElementType();
+        IElementType child2Type = child2.getNode().getElementType();
+        // there should be a space after ","
+        if (child1Type == oCOMMA) {
+            return BASIC_SPACING_KEEP_LINE_BREAKS;
+        }
+
+        // there should be a space before and after "=" and ":="
+        if (child1Type == oASSIGN || child1Type == oVAR_ASSIGN ||
+            child2Type == oASSIGN || child2Type == oVAR_ASSIGN) {
+            return BASIC_SPACING_KEEP_LINE_BREAKS;
+        }
+
+        // there should be a space after ";" where there is statement after ";"
+        if (child1Type == oSEMI && inTheSameLine(child1, child2)) {
+            return BASIC_SPACING;
+        }
+
+        // there should be a space before any block statement
+        if (child2.getNode().getPsi() instanceof GoBlockStatement) {
+            return BASIC_SPACING;
+        }
+
+        // there should be a space after those keywords
+        if (BASIC_SPACE_KEYWORDS_SET.contains(child1Type)) {
+            return BASIC_SPACING;
+        }
+        return null;
+    }
 
     @Override
     @NotNull
     public ChildAttributes getChildAttributes(int newChildIndex) {
-        return new ChildAttributes(getChildIndent(), getFirstChildAlignment());
+        return new ChildAttributes(getChildIndent(null), getFirstChildAlignment());
     }
 
     @Nullable
@@ -218,8 +252,17 @@ class GoBlock implements Block, GoElementTypes {
     }
 
     @Nullable
-    protected Indent getChildIndent() {
-        return Indent.getNormalIndent();
+    protected Indent getChildIndent(@Nullable PsiElement child) {
+        if (child == null) {
+            return Indent.getNormalIndent();
+        }
+
+        ASTNode node = child.getNode();
+        if (node == null || getIndentedElements().contains(node.getElementType())) {
+            return Indent.getNormalIndent();
+        }
+
+        return Indent.getNoneIndent();
     }
 
     @Override

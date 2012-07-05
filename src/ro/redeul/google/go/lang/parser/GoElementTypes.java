@@ -290,5 +290,11 @@ public interface GoElementTypes extends GoTokenTypes {
     public final TokenSet RELATIONAL_OPS = TokenSet.create(
         oEQ, oNOT_EQ, oLESS, oLESS_OR_EQUAL, oGREATER, oGREATER_OR_EQUAL
     );
+
+    public final TokenSet FUNCTION_CALL_SETS = TokenSet.create(
+            CALL_OR_CONVERSION_EXPRESSION,
+            BUILTIN_CALL_EXPRESSION
+    );
+
     GoElementType METHOD_EXPRESSION = new GoElementTypeImpl("MethodExpression");
 }

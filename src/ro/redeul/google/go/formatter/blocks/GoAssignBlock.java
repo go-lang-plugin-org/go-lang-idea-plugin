@@ -37,12 +37,8 @@ class GoAssignBlock extends GoBlock {
     }
 
     @Override
-    public Spacing getSpacing(Block child1, Block child2) {
-        if (!(child1 instanceof GoBlock) || !(child2 instanceof GoBlock)) {
-            return null;
-        }
-
-        IElementType type2 = ((GoBlock) child2).getNode().getElementType();
+    protected Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
+        IElementType type2 = child2.getNode().getElementType();
         if (type2 == GoElementTypes.oASSIGN) {
             return BASIC_SPACING;
         }

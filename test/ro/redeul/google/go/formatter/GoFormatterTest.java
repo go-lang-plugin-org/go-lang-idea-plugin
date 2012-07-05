@@ -11,6 +11,7 @@ public class GoFormatterTest extends GoEditorAwareTestCase {
     public void testTopLevel() throws Exception { doTest(); }
     public void testAssignment() throws Exception { doTest(); }
     public void testType() throws Exception { doTest(); }
+    public void testFunctionCall() throws Exception { doTest(); }
 
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {

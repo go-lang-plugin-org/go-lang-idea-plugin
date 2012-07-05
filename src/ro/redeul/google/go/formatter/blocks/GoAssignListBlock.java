@@ -92,10 +92,10 @@ class GoAssignListBlock extends GoBlock {
     }
 
     @Override
-    public Spacing getSpacing(Block child1, Block child2) {
+    protected Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
         // put only 1 space between assign block and the same line comment block
         if (child1 instanceof GoAssignBlock && isCommentBlock(child2) &&
-            inTheSameLine((GoBlock) child1, (GoBlock) child2)) {
+            inTheSameLine(child1, child2)) {
             return BASIC_SPACING;
         }
 
