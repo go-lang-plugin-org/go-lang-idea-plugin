@@ -34,6 +34,9 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
     }
 
     protected boolean checkReference(PsiElement element) {
+        if ( element == null )
+            return false;
+
         try {
             element.putUserData(VisiblePackageName,
                                 getState().get(VisiblePackageName));

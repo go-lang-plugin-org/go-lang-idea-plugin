@@ -71,7 +71,7 @@ public class GoParser extends ParserUtils implements PsiParser {
         resetFlag(ParsingFlag.AllowCompositeLiteral, true);
         resetFlag(ParsingFlag.ParseIota, false);
         resetFlag(ParsingFlag.WrapCompositeInExpression, true);
-        resetFlag(ParsingFlag.Debug, true);
+        resetFlag(ParsingFlag.Debug, debugging);
         packageNames.clear();
 
         PsiBuilder.Marker rootMarker = builder.mark();
