@@ -14,9 +14,12 @@ import ro.redeul.google.go.inspection.fix.RemoveFunctionResultFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
+import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -147,7 +150,22 @@ public class FunctionDeclarationInspection
         }
 
         lastChild = getPrevSiblingIfItsWhiteSpaceOrComment(lastChild.getPrevSibling());
-        return isNodeOfType(lastChild, GoElementTypes.RETURN_STATEMENT);
+        return isNodeOfType(lastChild, GoElementTypes.RETURN_STATEMENT) ||
+               isPanicCall(lastChild);
+    }
+
+    private static boolean isPanicCall(PsiElement element) {
+        if (!(element instanceof GoExpressionStatement)) {
+            return false;
+        }
+
+        PsiElement call = element.getFirstChild();
+        if (!(call instanceof GoBuiltinCallExpression)) {
+            return false;
+        }
+
+        GoPrimaryExpression expression = ((GoBuiltinCallExpression) call).getBaseExpression();
+        return expression != null && "panic".equals(expression.getText());
     }
 
     private static List<String> getParameterNames(GoFunctionParameter[] parameters) {
