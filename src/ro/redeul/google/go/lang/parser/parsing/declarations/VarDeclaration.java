@@ -40,26 +40,28 @@ public class VarDeclaration extends ParserUtils implements GoElementTypes {
     static TokenSet localImportTokens = TokenSet.create(mIDENT, oDOT);
 
     private static boolean parseVarSpecification(PsiBuilder builder,
-                                              GoParser parser) {
+                                                 GoParser parser) {
 
-        PsiBuilder.Marker varStatementSpecification = builder.mark();
-        if (parser.parseIdentifierList(builder, false) == 0) {
-            builder.error("identifier.list.expected");
-        }
+        PsiBuilder.Marker varSpec = builder.mark();
+        if (parser.parseIdentifierList(builder, false) != 0) {
+            if (!ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS)) {
 
-        if (!ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) ) {
-
-            if ( ParserUtils.getToken(builder, oASSIGN)) {
-                parser.parseExpressionList(builder);
-            } else {
-                parser.parseType(builder);
-                if ( ParserUtils.getToken(builder, oASSIGN)) {
+                if (ParserUtils.getToken(builder, oASSIGN)) {
                     parser.parseExpressionList(builder);
+                } else {
+                    parser.parseType(builder);
+                    if (ParserUtils.getToken(builder, oASSIGN)) {
+                        parser.parseExpressionList(builder);
+                    }
                 }
             }
+
+            varSpec.done(VAR_DECLARATION);
+            return true;
         }
 
-        varStatementSpecification.done(VAR_DECLARATION);
-        return true;
+        varSpec.drop();
+        builder.error("identifier.list.expected");
+        return false;
     }
 }
