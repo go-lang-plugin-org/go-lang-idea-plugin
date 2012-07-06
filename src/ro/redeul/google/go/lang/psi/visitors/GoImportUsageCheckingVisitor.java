@@ -2,9 +2,9 @@ package ro.redeul.google.go.lang.psi.visitors;
 
 import java.util.Map;
 
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 
@@ -27,8 +27,16 @@ public class GoImportUsageCheckingVisitor extends GoRecursiveElementVisitor {
     public void visitLiteralExpression(GoLiteralExpression expression) {
         GoLiteral literal = expression.getLiteral();
 
-        if ( literal != null && literal.getType() == GoLiteral.Type.Identifier ) {
-            checkQualifiedIdentifier((GoLiteralIdentifier) literal);
+        if (literal == null)
+            return;
+
+        switch (literal.getType()) {
+            case Identifier:
+                checkQualifiedIdentifier((GoLiteralIdentifier)literal);
+                break;
+            case Composite:
+            case Function:
+                visitElement(expression);
         }
     }
 

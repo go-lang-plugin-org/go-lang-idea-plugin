@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComp
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY;
 
 public class GoLiteralCompositeElementImpl extends GoPsiElementBase
@@ -55,5 +56,10 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
     @Override
     public GoLiteralCompositeValue getLiteralValue() {
         return findChildByClass(GoLiteralCompositeValue.class);
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitLiteralCompositeElement(this);
     }
 }

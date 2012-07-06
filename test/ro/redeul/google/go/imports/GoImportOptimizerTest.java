@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 public class GoImportOptimizerTest extends GoEditorAwareTestCase {
     public void testSimple() throws Exception { doTest(); }
     public void testRemoveWholeStatement() throws Exception { doTest(); }
+    public void testNestedLiterals() throws Exception { doTest(); }
 
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {

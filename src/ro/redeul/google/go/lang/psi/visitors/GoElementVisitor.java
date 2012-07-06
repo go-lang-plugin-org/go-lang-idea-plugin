@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
+import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
@@ -226,5 +227,9 @@ public class GoElementVisitor  {
 
     public void visitTypeStructAnonymousField(GoTypeStructAnonymousField field) {
         visitElement(field);
+    }
+
+    public void visitLiteralCompositeElement(GoLiteralCompositeElement element) {
+        visitElement(element);
     }
 }
