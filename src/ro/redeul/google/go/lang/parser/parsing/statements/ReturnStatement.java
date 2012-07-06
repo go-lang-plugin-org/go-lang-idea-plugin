@@ -20,7 +20,13 @@ public class ReturnStatement implements GoElementTypes {
         }
 
         if (!ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS)) {
-            parser.tryParseExpressionList(builder);
+            PsiBuilder.Marker listMarker = builder.mark();
+
+            if ( parser.tryParseExpressionList(builder) > 1) {
+                listMarker.done(EXPRESSION_LIST);
+            } else {
+                listMarker.drop();
+            }
         }
 
         marker.done(RETURN_STATEMENT);

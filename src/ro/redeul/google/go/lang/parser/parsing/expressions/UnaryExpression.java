@@ -7,17 +7,13 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mtoader
  * Date: Jul 25, 2010
  * Time: 2:18:28 AM
- * To change this template use File | Settings | File Templates.
  */
 public class UnaryExpression implements GoElementTypes {
 
     public static boolean parse(PsiBuilder builder, GoParser parser) {
-
-        ParserUtils.skipNLS(builder);
 
         PsiBuilder.Marker mark = builder.mark();
 

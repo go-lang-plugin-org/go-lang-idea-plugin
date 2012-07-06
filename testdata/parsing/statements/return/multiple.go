@@ -1,6 +1,6 @@
 package main
-func main() { return ; }
------
+func main() { return 1, 2 }
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -19,7 +19,15 @@ Go file
       PsiWhiteSpace(' ')
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
-      PsiWhiteSpace(' ')
-      PsiElement(;)(';')
+        PsiWhiteSpace(' ')
+        ExpressionList
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('1')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          LiteralExpressionImpl
+            LiteralIntegerImpl
+              PsiElement(LITERAL_INT)('2')
       PsiWhiteSpace(' ')
       PsiElement(})('}')

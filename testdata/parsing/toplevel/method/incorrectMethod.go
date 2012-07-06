@@ -14,7 +14,7 @@ Go file
     PsiElement(()('(')
     MethodReceiverImpl
       <empty list>
-    PsiErrorElement:close.parenthesis.expected
+    PsiErrorElement:')' expected
       <empty list>
-    FunctionParameterListImpl
+    PsiErrorElement:Method name expected
       <empty list>

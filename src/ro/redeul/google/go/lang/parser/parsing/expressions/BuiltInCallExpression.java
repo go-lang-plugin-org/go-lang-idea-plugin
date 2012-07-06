@@ -9,11 +9,9 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mtoader
  * Date: Aug 16, 2010
  * Time: 7:53:26 AM
- * To change this template use File | Settings | File Templates.
  */
 public class BuiltInCallExpression implements GoElementTypes {
 
@@ -94,7 +92,12 @@ public class BuiltInCallExpression implements GoElementTypes {
         }
 
         if (builder.getTokenType() != pRPAREN) {
-            parser.parseExpressionList(builder);
+            PsiBuilder.Marker expressionList = builder.mark();
+            if (parser.parseExpressionList(builder) > 1) {
+                expressionList.done(GoElementTypes.EXPRESSION_LIST);
+            } else {
+                expressionList.drop();
+            }
         }
 
         ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");

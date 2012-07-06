@@ -1,9 +1,6 @@
 package main
-func main() {
-return 1,2
-// adfa
-}
------
+func main() { return }
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -19,18 +16,8 @@ Go file
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')
-      PsiWhiteSpace('\n')
+      PsiWhiteSpace(' ')
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
-        PsiWhiteSpace(' ')
-        LiteralExpressionImpl
-          LiteralIntegerImpl
-            PsiElement(LITERAL_INT)('1')
-        PsiElement(,)(',')
-        LiteralExpressionImpl
-          LiteralIntegerImpl
-            PsiElement(LITERAL_INT)('2')
-      PsiWhiteSpace('\n')
-      PsiComment(SL_COMMENT)('// adfa')
-      PsiWhiteSpace('\n')
+      PsiWhiteSpace(' ')
       PsiElement(})('}')

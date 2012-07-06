@@ -3,7 +3,7 @@ func f() {
     for key, val = range m { }
     // asdfa
 }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')

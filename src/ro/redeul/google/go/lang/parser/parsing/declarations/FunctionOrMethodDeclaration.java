@@ -37,11 +37,12 @@ public class FunctionOrMethodDeclaration extends ParserUtils
             LOG.debug("Method: " + builder.getTokenText());
         }
 
-        getToken(builder, mIDENT, GoBundle.message("error.method.name.expected"));
+        if (getToken(builder, mIDENT,
+                     GoBundle.message("error.method.name.expected"))) {
+            parseCompleteMethodSignature(builder, parser);
+        }
 
-        parseCompleteMethodSignature(builder, parser);
-
-        if (ParserUtils.lookAhead(builder, pLCURCLY) ) {
+        if (ParserUtils.lookAhead(builder, pLCURCLY)) {
             parser.parseBody(builder);
         }
         marker.done(nodeType);
@@ -62,7 +63,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         }
 
         PsiBuilder.Marker result = builder.mark();
-        if ( parser.parseType(builder) == null )  {
+        if (parser.parseType(builder) == null) {
             result.drop();
             return true;
         }
@@ -92,45 +93,33 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
         PsiBuilder.Marker receiverDeclarationMarker = builder.mark();
 
-        if (ParserUtils.lookAhead(builder, mIDENT,
-                                  mIDENT) || ParserUtils.lookAhead(builder,
-                                                                   mIDENT,
-                                                                   oMUL)) {
+        if (ParserUtils.lookAhead(builder, mIDENT, mIDENT) ||
+            ParserUtils.lookAhead(builder, mIDENT, oMUL)) {
             ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
         }
 
-        ParserUtils.skipNLS(builder);
         parser.parseType(builder);
-
-        ParserUtils.skipNLS(builder);
         receiverDeclarationMarker.done(METHOD_RECEIVER);
-        ParserUtils.getToken(builder, pRPAREN, "close.parenthesis.expected");
+        ParserUtils.getToken(builder, pRPAREN,
+                             GoBundle.message("error.closing.para.expected"));
     }
 
     public static boolean parseSignature(PsiBuilder builder, GoParser parser) {
 
         ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
 
-        ParserUtils.skipNLS(builder);
-
-        if ( ParserUtils.getToken(builder, pRPAREN) )
+        if (ParserUtils.getToken(builder, pRPAREN))
             return true;
-
-//        if (tryParameterListAsAnonymousTypes(builder, parser))
-//            return true;
 
         PsiBuilder.Marker signature = builder.mark();
 
-        while (!builder.eof() && !ParserUtils.lookAheadSkipNLS(builder, pRPAREN)) {
+        while (!builder.eof() && !ParserUtils.lookAheadSkipNLS(builder,
+                                                               pRPAREN)) {
             int pos = builder.getCurrentOffset();
 
             parseParameterDeclaration(builder, parser);
 
-            ParserUtils.skipNLS(builder);
-            if (builder.getTokenType() == oCOMMA) {
-                ParserUtils.advance(builder);
-                ParserUtils.skipNLS(builder);
-            }
+            ParserUtils.getToken(builder, oCOMMA);
 
             if (pos == builder.getCurrentOffset()) {
                 ParserUtils.wrapError(builder, "unexpected.char");
@@ -138,10 +127,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         }
 
         signature.done(FUNCTION_PARAMETER_LIST);
-
-        ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, pRPAREN, "close.parenthesis.expected");
-
 
         return true;
     }
@@ -154,7 +140,9 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
         int identifiers = parser.parseIdentifierList(builder, false);
 
-        if (ParserUtils.lookAheadSkipNLS(builder, pRPAREN) || ParserUtils.lookAheadSkipNLS(builder, oCOMMA)) {
+        if (ParserUtils.lookAheadSkipNLS(builder,
+                                         pRPAREN) || ParserUtils.lookAheadSkipNLS(
+            builder, oCOMMA)) {
             mark.rollbackTo();
             mark = builder.mark();
             parser.parseType(builder);
@@ -181,6 +169,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
         int parameterCount = 0;
         boolean isVariadic = false;
+
         // first try to parse as a list of types
         while (!builder.eof()) {
             PsiBuilder.Marker argument = builder.mark();
@@ -189,36 +178,30 @@ public class FunctionOrMethodDeclaration extends ParserUtils
                 isVariadic = true;
             }
 
-            ParserUtils.skipNLS(builder);
             if (parser.parseType(builder) != null) {
-                argument.done(isVariadic ? FUNCTION_PARAMETER_VARIADIC : FUNCTION_PARAMETER);
+                argument.done(isVariadic
+                                  ? FUNCTION_PARAMETER_VARIADIC
+                                  : FUNCTION_PARAMETER);
                 parameterCount++;
             } else {
                 argument.drop();
             }
 
-            ParserUtils.skipNLS(builder);
-            if (builder.getTokenType() == oCOMMA) {
-                builder.advanceLexer();
-                ParserUtils.skipNLS(builder);
-            } else {
+            if (!ParserUtils.getToken(builder, oCOMMA))
                 break;
-            }
         }
 
-        if (builder.getTokenType() == pRPAREN) {
-            if (parameterCount > 0) {
-                signature.done(FUNCTION_PARAMETER_LIST);
-            } else {
-                signature.drop();
-            }
-
-            ParserUtils.advance(builder);
-            return true;
+        if (!ParserUtils.getToken(builder, pRPAREN)) {
+            signature.rollbackTo();
+            return false;
         }
 
-        signature.rollbackTo();
-        return false;
+        if (parameterCount > 0) {
+            signature.done(FUNCTION_PARAMETER_LIST);
+        } else {
+            signature.drop();
+        }
+
+        return true;
     }
-
 }

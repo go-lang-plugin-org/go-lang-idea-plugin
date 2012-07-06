@@ -25,9 +25,9 @@ public class GoPsiBlockTest extends GoPsiTestCase {
         GoBlockStatement block =
             get(
                 childAt(0,
-                            file.getFunctions()
-                    ).getBlock()
-                );
+                        file.getFunctions()
+                ).getBlock()
+            );
 
         castAs(GoShortVarDeclaration.class, 0, block.getStatements());
         castAs(GoExpressionStatement.class, 1, block.getStatements());
@@ -36,6 +36,7 @@ public class GoPsiBlockTest extends GoPsiTestCase {
     public void testReturnWithExpressions() throws Exception {
 
         GoFile file = get(parse("" +
+                                    "package main\n" +
                                     "func Ok4() (int, int) {\n" +
                                     "    return int(1), 1\n" +
                                     "}"));

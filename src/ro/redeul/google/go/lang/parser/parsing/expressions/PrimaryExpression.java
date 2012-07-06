@@ -107,8 +107,10 @@ public class PrimaryExpression implements GoElementTypes {
             if (parseLiteralIdentifier(builder, parser)) {
                 // package? '.' ident '{' -> CompositeLiteral
                 if (builder.getTokenType() == pLCURCLY) {
-                    if (parseLiteralComposite(builder, parser, mark)) {
-                        return true;
+                    if ( parser.isSet(GoParser.ParsingFlag.AllowCompositeLiteral)) {
+                        if (parseLiteralComposite(builder, parser, mark)) {
+                            return true;
+                        }
                     }
                 }
 
@@ -262,10 +264,8 @@ public class PrimaryExpression implements GoElementTypes {
         ParserUtils.skipNLS(builder);
 
         if (ParserUtils.lookAheadSkipNLS(builder, pLPAREN))  {
-            ParserUtils.skipNLS(builder);
             ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
 
-            ParserUtils.skipNLS(builder);
             parser.parseType(builder);
             ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");
             mark.done(TYPE_ASSERTION_EXPRESSION);
@@ -319,8 +319,8 @@ public class PrimaryExpression implements GoElementTypes {
     private static boolean parseLiteralComposite(PsiBuilder builder,
                                                  GoParser parser,
                                                  PsiBuilder.Marker mark) {
-        if (!parser.isSet(AllowCompositeLiteral))
-            return false;
+//        if (!parser.isSet(AllowCompositeLiteral))
+//            return false;
 
 //        boolean wrapCompositeInExpression =
 //            parser.resetFlag(WrapCompositeInExpression, false);

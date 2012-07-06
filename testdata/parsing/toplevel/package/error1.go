@@ -3,4 +3,6 @@ p
 Go file
   PackageDeclaration()
     PsiErrorElement:"package" keyword expected
-      PsiElement(IDENTIFIER)('p')
+      <empty list>
+  PsiErrorElement:';' or newline expected
+    PsiElement(IDENTIFIER)('p')

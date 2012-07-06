@@ -1,6 +1,6 @@
 package main
-func main() { return }
------
+func main() { return ; }
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -19,5 +19,7 @@ Go file
       PsiWhiteSpace(' ')
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
+      PsiWhiteSpace(' ')
+      PsiElement(;)(';')
       PsiWhiteSpace(' ')
       PsiElement(})('}')

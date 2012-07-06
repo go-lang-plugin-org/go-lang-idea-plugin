@@ -97,6 +97,7 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     public void testFunction_anonymousVariadic() throws Throwable { doTest(); }
     public void testFunction_anonymousReturnType() throws Throwable { doTest(); }
     public void testFunction_qualifiedReturn() throws Throwable { doTest(); }
+    public void testFunction_invalidFunction() throws Throwable { doTest(); }
 
     public void testMethod_case1() throws Throwable { doTest(); }
     public void testMethod_case2() throws Throwable { doTest(); }
