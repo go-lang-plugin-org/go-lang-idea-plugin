@@ -11,7 +11,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
@@ -23,7 +23,7 @@ Go file
         PsiElement(KEYWORD_INTERFACE)('interface')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiWhiteSpace('\t')
         MethodDeclaration(Read)
           PsiElement(IDENTIFIER)('Read')
@@ -44,7 +44,7 @@ Go file
                 TypeNameImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('bool')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiWhiteSpace('\t')
         MethodDeclaration(Write)
           PsiElement(IDENTIFIER)('Write')
@@ -65,12 +65,12 @@ Go file
                 TypeNameImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('bool')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiWhiteSpace('\t')
         MethodDeclaration(Close)
           PsiElement(IDENTIFIER)('Close')
           PsiElement(()('(')
           PsiElement())(')')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiElement(})('}')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')

@@ -7,7 +7,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
@@ -30,4 +30,4 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('c')
         PsiElement(])(']')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')

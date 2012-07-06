@@ -7,7 +7,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   ImportDeclarationsImpl
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')
@@ -17,7 +17,7 @@ Go file
       PsiWhiteSpace(' ')
       LiteralStringImpl
         PsiElement(LITERAL_STRING)('"math"')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')

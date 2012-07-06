@@ -138,4 +138,27 @@ public class GoPsiForStatementTest extends GoPsiTestCase {
         assertEquals("value", get(forStmt.getValue()).getText());
         assertEquals("data", get(forStmt.getRangeExpression()).getText());
     }
+
+    public void testForWithRange2() throws Exception {
+        GoFile file = get(parse("" +
+                                    "package main;\n" +
+                                    "func main() {\n" +
+                                    "    for key, value = range data {\n" +
+                                    "        println(i)\n" +
+                                    "    }\n" +
+                                    "}"));
+
+        GoForWithRangeStatement forStmt =
+            castAs(GoForWithRangeStatement.class, 0,
+                   get(
+                       childAt(0,
+                               file.getFunctions()
+                       ).getBlock()
+                   ).getStatements()
+            );
+
+        assertEquals("key", get(forStmt.getKey()).getText());
+        assertEquals("value", get(forStmt.getValue()).getText());
+        assertEquals("data", get(forStmt.getRangeExpression()).getText());
+    }
 }

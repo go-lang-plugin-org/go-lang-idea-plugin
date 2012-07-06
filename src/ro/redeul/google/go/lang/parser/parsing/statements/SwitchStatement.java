@@ -10,11 +10,9 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowCompositeLiteral;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mtoader
  * Date: Jul 25, 2010
  * Time: 8:01:22 PM
- * To change this template use File | Settings | File Templates.
  */
 public class SwitchStatement implements GoElementTypes {
 
@@ -33,72 +31,49 @@ public class SwitchStatement implements GoElementTypes {
         boolean isTypeSwitch = false;
         boolean simpleStatementParsed = false;
 
-        ParserUtils.skipNLS(builder);
+        PsiBuilder.Marker mark = builder.mark();
 
-        if (ParserUtils.getToken(builder, oSEMI)) {
-            simpleStatementParsed = true;
+        IElementType statementType = parser.parseStatementSimple(builder);
+        if ( statementType != null && ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS)) {
+            ParserUtils.endStatement(builder);
+            mark.drop();
+        } else {
+            mark.rollbackTo();
         }
 
-        if (tryParseTypeSwitchGuard(builder, parser)) {
-            isTypeSwitch = true;
-        } else if (!simpleStatementParsed) {
-            parser.tryParseSimpleStmt(builder);
-            ParserUtils.getToken(builder, oSEMI);
+        isTypeSwitch = tryParseTypeSwitchGuard(builder, parser);
+
+        if ( !isTypeSwitch ) {
+            parser.parseExpression(builder);
         }
 
-        ParserUtils.skipNLS(builder);
-        if (builder.getTokenType() != pLCURCLY) {
-            if (!isTypeSwitch) {
-                if (tryParseTypeSwitchGuard(builder, parser)) {
-                    isTypeSwitch = true;
-                } else {
-                    parser.parseExpression(builder);
-                }
-            }
-        }
-
-        ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, pLCURCLY, "open.curly.expected");
 
         while (!builder.eof() && builder.getTokenType() != pRCURLY) {
 
-            ParserUtils.skipNLS(builder);
-
             PsiBuilder.Marker caseMark = builder.mark();
 
             int position = builder.getCurrentOffset();
-            if (builder.getTokenType() == kCASE) {
-                ParserUtils.advance(builder);
+            if (ParserUtils.getToken(builder, kCASE)) {
                 if (isTypeSwitch) {
                     parser.parseTypeList(builder);
                 } else {
                     parser.parseExpressionList(builder);
                 }
+
                 ParserUtils.getToken(builder, oCOLON, "colon.expected");
-            } else if (builder.getTokenType() == kDEFAULT) {
-                ParserUtils.advance(builder);
+            } else if (ParserUtils.getToken(builder, kDEFAULT)) {
                 ParserUtils.getToken(builder, oCOLON, "colon.expected");
             } else {
                 ParserUtils.wrapError(builder, GoBundle.message("case.of.default.keyword.expected"));
             }
 
             parser.resetFlag(AllowCompositeLiteral, true);
-            ParserUtils.skipNLS(builder);
-            while (builder.getTokenType() != kCASE && builder.getTokenType() != kDEFAULT && builder
-                .getTokenType() != pRCURLY) {
-                if (parser.parseStatement(builder) == null) {
-                    break;
-                }
-                ParserUtils.skipNLS(builder);
+            while (!builder.eof() && !ParserUtils.lookAhead(builder, pRCURLY) && parser.parseStatement(builder) != null) {
+                ParserUtils.endStatement(builder);
             }
 
             caseMark.done(isTypeSwitch ? SWITCH_TYPE_CASE : SWITCH_EXPR_CASE);
-
-            ParserUtils.skipNLS(builder);
-
-            if (builder.getCurrentOffset() == position) {
-                builder.advanceLexer();
-            }
         }
 
         ParserUtils.getToken(builder, pRCURLY, "closed.curly.expected");
@@ -106,7 +81,6 @@ public class SwitchStatement implements GoElementTypes {
         marker.done(switchType);
 
         parser.resetFlag(AllowCompositeLiteral, allowCompositeLiteral);
-        ParserUtils.skipNLS(builder);
         return switchType;
     }
 

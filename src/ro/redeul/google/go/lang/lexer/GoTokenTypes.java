@@ -70,6 +70,7 @@ public interface GoTokenTypes {
     IElementType pRPAREN = new GoElementTypeImpl(")");
 
     IElementType oSEMI = new GoElementTypeImpl(";");
+    IElementType oSEMI_SYNTHETIC = new GoElementTypeImpl("; (synthetic)");
 
     IElementType oTRIPLE_DOT = new GoElementTypeImpl("...");
     IElementType oDOT = new GoElementTypeImpl(".");

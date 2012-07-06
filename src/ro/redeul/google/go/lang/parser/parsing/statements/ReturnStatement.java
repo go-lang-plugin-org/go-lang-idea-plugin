@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
+import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -18,14 +19,10 @@ public class ReturnStatement implements GoElementTypes {
             return null;
         }
 
-        if (wsNLS == builder.getTokenType() || oSEMI == builder.getTokenType()) {
-            marker.done(RETURN_STATEMENT);
-            return RETURN_STATEMENT;
+        if (!ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS)) {
+            parser.tryParseExpressionList(builder);
         }
 
-        parser.tryParseExpressionList(builder);
-
-        ParserUtils.getToken(builder, oSEMI);
         marker.done(RETURN_STATEMENT);
         return RETURN_STATEMENT;
     }

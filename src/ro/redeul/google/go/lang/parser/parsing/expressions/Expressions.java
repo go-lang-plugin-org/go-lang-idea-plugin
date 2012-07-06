@@ -27,13 +27,10 @@ public class Expressions implements GoElementTypes {
 
             ParserUtils.getToken(builder, oTRIPLE_DOT);
 
-            if ( !ParserUtils.lookAheadSkipNLS(builder, oCOMMA))
+            if ( !ParserUtils.lookAhead(builder, oCOMMA))
                 break;
 
-            ParserUtils.skipNLS(builder);
             ParserUtils.getToken(builder, oCOMMA);
-            ParserUtils.skipNLS(builder);
-
         } while ( ! builder.eof() );
 
         parser.unsetFlag(GoParser.ParsingFlag.WrapCompositeInExpression);

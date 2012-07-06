@@ -9,7 +9,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   FunctionDeclaration(f)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
@@ -19,7 +19,7 @@ Go file
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       ForWithRangeStmtImpl
         PsiElement(KEYWORD_FOR)('for')
@@ -45,8 +45,8 @@ Go file
           PsiElement({)('{')
           PsiWhiteSpace(' ')
           PsiElement(})('}')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       PsiComment(SL_COMMENT)('// asdfa')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiElement(})('}')

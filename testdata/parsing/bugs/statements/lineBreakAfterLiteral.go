@@ -10,7 +10,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n\n')
+  PsiWhiteSpace('\n\n')
   FunctionDeclaration(main)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
@@ -20,7 +20,7 @@ Go file
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       VarDeclarationsImpl
         PsiElement(KEYWORD_VAR)('var')
@@ -28,7 +28,7 @@ Go file
         VarDeclarationImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('a')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       ShortVarStmtImpl
         LiteralIdentifierImpl
@@ -39,5 +39,5 @@ Go file
         LiteralExpressionImpl
           LiteralIntegerImpl
             PsiElement(LITERAL_INT)('5')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiElement(})('}')

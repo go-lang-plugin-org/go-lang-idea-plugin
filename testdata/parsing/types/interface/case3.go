@@ -6,7 +6,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-    PsiElement(;)(';')
+  PsiElement(;)(';')
   TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
@@ -22,10 +22,7 @@ Go file
           PsiElement(IDENTIFIER)('Lock')
           PsiElement(()('(')
           PsiElement())(')')
-        MethodDeclaration()
-          TypeNameImpl
-            PsiErrorElement:identifier.expected
-              PsiElement(;)(';')
+        PsiElement(;)(';')
         PsiWhiteSpace(' ')
         MethodDeclaration(Unlock)
           PsiElement(IDENTIFIER)('Unlock')
@@ -33,4 +30,4 @@ Go file
           PsiElement())(')')
         PsiWhiteSpace(' ')
         PsiElement(})('}')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')

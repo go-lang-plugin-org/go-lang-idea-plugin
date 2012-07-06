@@ -10,7 +10,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
@@ -27,7 +27,7 @@ Go file
               PsiElement(IDENTIFIER)('LoggedUserInfo')
           LiteralCompositeValueImpl
             PsiElement({)('{')
-            PsiElement(WS_NEW_LINES)('\n')
+            PsiWhiteSpace('\n')
             PsiWhiteSpace('                ')
             LiteralCompositeElementImpl
               CompositeLiteralElementKey
@@ -40,7 +40,7 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('email')
             PsiElement(,)(',')
-            PsiElement(WS_NEW_LINES)('\n')
+            PsiWhiteSpace('\n')
             PsiWhiteSpace('                ')
             LiteralCompositeElementImpl
               CompositeLiteralElementKey
@@ -70,7 +70,7 @@ Go file
                   PsiElement())(')')
                 PsiElement())(')')
             PsiElement(,)(',')
-            PsiElement(WS_NEW_LINES)('\n')
+            PsiWhiteSpace('\n')
             PsiWhiteSpace('        ')
             PsiElement(})('}')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')

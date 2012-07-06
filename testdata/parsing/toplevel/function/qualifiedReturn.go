@@ -9,14 +9,14 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n\n')
+  PsiWhiteSpace('\n\n')
   ImportDeclarationsImpl
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')
     ImportSpecImpl
       LiteralStringImpl
         PsiElement(LITERAL_STRING)('"hash"')
-  PsiElement(WS_NEW_LINES)('\n\n')
+  PsiWhiteSpace('\n\n')
   FunctionDeclaration(NewHash)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')

@@ -9,18 +9,18 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   ImportDeclarationsImpl
     PsiElement(KEYWORD_IMPORT)('import')
     PsiWhiteSpace(' ')
     PsiElement(()('(')
-    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('\n')
     PsiWhiteSpace('    ')
     ImportSpecImpl
       LiteralStringImpl
         PsiElement(LITERAL_STRING)('"fmt"')
-    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('\n')
     PsiWhiteSpace('    ')
     PsiComment(SL_COMMENT)('// I "included"')
-    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('\n')
     PsiElement())(')')

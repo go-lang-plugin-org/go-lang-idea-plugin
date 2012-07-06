@@ -13,7 +13,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
@@ -25,7 +25,7 @@ Go file
         PsiElement(KEYWORD_STRUCT)('struct')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         TypeStructFieldImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('handlers')
@@ -40,7 +40,7 @@ Go file
             TypeFunctionImpl
               PsiElement(KEYWORD_FUNC)('func')
               PsiElement(()('(')
-              PsiElement(WS_NEW_LINES)('\n')
+              PsiWhiteSpace('\n')
               PsiWhiteSpace('    ')
               FunctionParameterListImpl
                 FunctionParameterImpl
@@ -53,7 +53,7 @@ Go file
                       PsiElement(.)('.')
                       PsiElement(IDENTIFIER)('ResponseWriter')
                 PsiElement(,)(',')
-                PsiElement(WS_NEW_LINES)('\n')
+                PsiWhiteSpace('\n')
                 PsiWhiteSpace('    ')
                 FunctionParameterImpl
                   LiteralIdentifierImpl
@@ -67,7 +67,7 @@ Go file
                         PsiElement(.)('.')
                         PsiElement(IDENTIFIER)('Request')
                 PsiElement(,)(',')
-                PsiElement(WS_NEW_LINES)('\n')
+                PsiWhiteSpace('\n')
                 PsiWhiteSpace('    ')
                 FunctionParameterImpl
                   LiteralIdentifierImpl
@@ -90,7 +90,7 @@ Go file
                       LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('int')
                 PsiElement())(')')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         TypeStructFieldImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('templates')
@@ -109,6 +109,6 @@ Go file
                   PsiElement(IDENTIFIER)('template')
                   PsiElement(.)('.')
                   PsiElement(IDENTIFIER)('Template')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiElement(})('}')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')

@@ -10,7 +10,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   FunctionDeclaration(main)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
@@ -20,7 +20,7 @@ Go file
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
@@ -43,8 +43,8 @@ Go file
         PsiWhiteSpace(' ')
         BlockStmtImpl
           PsiElement({)('{')
-          PsiElement(WS_NEW_LINES)('\n\n')
+          PsiWhiteSpace('\n\n')
           PsiWhiteSpace('    ')
           PsiElement(})('}')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiElement(})('}')

@@ -8,7 +8,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
@@ -71,7 +71,7 @@ Go file
       LiteralExpressionImpl
         LiteralStringImpl
           PsiElement(LITERAL_STRING)('`\n\n\n`')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   FunctionDeclaration(a)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')

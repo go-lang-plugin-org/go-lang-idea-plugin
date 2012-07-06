@@ -30,8 +30,8 @@ public class ImportDeclaration implements GoElementTypes {
 
         NestedDeclarationParser.parseNestedOrBasicDeclaration(
             builder, parser, new NestedDeclarationParser.DeclarationParser() {
-            public void parse(PsiBuilder builder, GoParser parser) {
-                parseImportStatement(builder, parser);
+            public boolean parse(PsiBuilder builder, GoParser parser) {
+                return parseImportStatement(builder, parser);
             }
         });
 

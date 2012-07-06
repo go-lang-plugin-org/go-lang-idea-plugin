@@ -18,15 +18,12 @@ public class CompilationUnit implements GoElementTypes {
 
     public static void parse(PsiBuilder builder, GoParser parser) {
 
-        ParserUtils.skipNLS(builder);
-
         PackageDeclaration.parse(builder, parser);
+        ParserUtils.endStatement(builder);
 
-
-        ParserUtils.skipNLS(builder);
         while (ParserUtils.lookAhead(builder, kIMPORT)) {
             ImportDeclaration.parse(builder, parser);
-            ParserUtils.skipNLS(builder);
+            ParserUtils.endStatement(builder);
         }
 
         parser.parseTopLevelDeclarations(builder);

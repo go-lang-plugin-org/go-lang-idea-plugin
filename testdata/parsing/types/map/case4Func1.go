@@ -10,7 +10,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
@@ -22,7 +22,7 @@ Go file
         PsiElement(KEYWORD_STRUCT)('struct')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         TypeStructFieldImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('handlers')
@@ -74,7 +74,7 @@ Go file
                         PsiElement(.)('.')
                         PsiElement(IDENTIFIER)('Queues')
               PsiElement())(')')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         TypeStructFieldImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('templates')
@@ -93,6 +93,6 @@ Go file
                   PsiElement(IDENTIFIER)('template')
                   PsiElement(.)('.')
                   PsiElement(IDENTIFIER)('Template')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiElement(})('}')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')

@@ -2,15 +2,13 @@ package main
 type TreeNode struct {
 	*TreeNode
 }
-
-
 /**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
@@ -22,7 +20,7 @@ Go file
         PsiElement(KEYWORD_STRUCT)('struct')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiWhiteSpace('\t')
         TypeStructFieldAnonymousImpl
           TypePointerImpl
@@ -30,6 +28,5 @@ Go file
             TypeNameImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('TreeNode')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiElement(})('}')
-  PsiElement(WS_NEW_LINES)('\n\n')

@@ -7,7 +7,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   MethodDeclaration(Scale)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
@@ -37,5 +37,5 @@ Go file
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiElement(})('}')

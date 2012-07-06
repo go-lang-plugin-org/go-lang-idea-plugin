@@ -6,4 +6,4 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiErrorElement:Identifier expected
       <empty list>
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')

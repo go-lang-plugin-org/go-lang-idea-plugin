@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.parser.parsing.statements;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -25,20 +24,16 @@ public class BlockStatement implements GoElementTypes {
         PsiBuilder.Marker block = builder.mark();
 
         ParserUtils.getToken(builder, pLCURCLY);
-        ParserUtils.skipNLS(builder);
         while ( !builder.eof() && builder.getTokenType() != pRCURLY ) {
-            ParserUtils.skipNLS(builder);
 
             IElementType statementType = parser.parseStatement(builder);
             if ( statementType == null || statementType == EMPTY_STATEMENT) {
 
-                PsiBuilder.Marker marker = builder.mark();
                 ParserUtils.waitNext(builder, TokenSet.create(wsNLS, oSEMI, pRCURLY));
-                marker.error(GoBundle.message("error.statement.expected"));
+//                marker.error(GoBundle.message("error.statement.expected"));
             }
 
-            ParserUtils.getToken(builder, oSEMI);
-            ParserUtils.skipNLS(builder);
+            ParserUtils.endStatement(builder);
         }
 
         ParserUtils.getToken(builder, pRCURLY, "right.curly.expected");

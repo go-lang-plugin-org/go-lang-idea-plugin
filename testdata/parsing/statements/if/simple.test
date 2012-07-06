@@ -11,7 +11,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   FunctionDeclaration(f)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
@@ -21,7 +21,7 @@ Go file
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       SwitchExprStmt
         PsiElement(KEYWORD_SWITCH)('switch')
@@ -30,7 +30,7 @@ Go file
           PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
         SwitchExprCase
           PsiElement(KEYWORD_CASE)('case')
@@ -38,15 +38,15 @@ Go file
           LiteralExpressionImpl
             PsiElement(IDENTIFIER)('a')
           PsiElement(:)(':')
-          PsiElement(WS_NEW_LINES)('\n')
+          PsiWhiteSpace('\n')
           PsiWhiteSpace('             ')
           ReturnStmtImpl
             PsiElement(KEYWORD_RETURN)('return')
             PsiWhiteSpace(' ')
             LiteralExpressionImpl
               PsiElement(LITERAL_INT)('1')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiWhiteSpace('    ')
         PsiElement(})('}')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
       PsiElement(})('}')

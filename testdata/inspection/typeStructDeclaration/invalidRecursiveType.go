@@ -1,3 +1,4 @@
+package main
 
 type T1 struct {
     /*begin*/T1/*end.Invalid recursive type T1*/

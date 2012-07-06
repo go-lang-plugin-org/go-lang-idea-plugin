@@ -8,7 +8,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   ConstDeclarationsImpl
     PsiElement(KEYWORD_CONST)('const')
     PsiWhiteSpace(' ')
@@ -18,7 +18,7 @@ Go file
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('a')
       PsiElement(,)(',')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiWhiteSpace(' ')
       LiteralIdentifierImpl
         PsiElement(IDENTIFIER)('b')
@@ -32,6 +32,6 @@ Go file
       LiteralExpressionImpl
         LiteralIntegerImpl
           PsiElement(LITERAL_INT)('2')
-    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('\n')
     PsiWhiteSpace(' ')
     PsiElement())(')')

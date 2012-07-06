@@ -6,12 +6,12 @@ func main() {}
 -----
 Go file
   PsiComment(ML_COMMENT)('/*\n * ELF constants and data structures\n */')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   PackageDeclaration(elf)
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('elf')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   FunctionDeclaration(main)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')

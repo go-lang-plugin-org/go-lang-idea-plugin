@@ -25,8 +25,7 @@ public class ContinueStatement implements GoElementTypes {
 
         ParserUtils.getToken(builder, mIDENT);
         marker.done(CONTINUE_STATEMENT);
-
+        ParserUtils.endStatement(builder);
         return CONTINUE_STATEMENT;
-
     }
 }

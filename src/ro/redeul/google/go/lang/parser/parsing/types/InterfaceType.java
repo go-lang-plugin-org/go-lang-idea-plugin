@@ -16,7 +16,6 @@ public class InterfaceType implements GoElementTypes {
         PsiBuilder.Marker type = builder.mark();
         ParserUtils.getToken(builder, kINTERFACE);
 
-        ParserUtils.skipNLS(builder);
         parseInterfaceBlock(builder, parser);
 
         type.done(TYPE_INTERFACE);
@@ -27,46 +26,29 @@ public class InterfaceType implements GoElementTypes {
                                             GoParser parser) {
         ParserUtils.getToken(builder, pLCURCLY, "left.curly.expected");
 
-        while (!builder.eof()) {
-            ParserUtils.skipNLS(builder);
+        while (!builder.eof() && ! ParserUtils.lookAhead(builder, pRCURLY) ) {
 
-            if (builder.getTokenType() == pRCURLY)
+            if ( ! parseMethodSpec(builder, parser) )
                 break;
 
-            parseMethodSpec(builder, parser);
+            ParserUtils.endStatement(builder);
         }
-        ParserUtils.skipNLS(builder);
 
         ParserUtils.getToken(builder, pRCURLY, "right.curly.expected");
     }
 
-    private static void parseMethodSpec(PsiBuilder builder, GoParser parser) {
-        ParserUtils.skipNLS(builder);
+    private static boolean parseMethodSpec(PsiBuilder builder, GoParser parser) {
 
-        PsiBuilder.Marker methodSpec = builder.mark();
 
-        IElementType type = METHOD_DECLARATION;
         if (ParserUtils.lookAhead(builder, mIDENT, pLPAREN)) {
+            PsiBuilder.Marker methodSpec = builder.mark();
             ParserUtils.getToken(builder, mIDENT,
                                  GoBundle.message("error.method.name.expected"));
             parser.parseFunctionSignature(builder);
-        } else {
-            parser.parseTypeName(builder);
-
+            methodSpec.done(METHOD_DECLARATION);
+            return true;
         }
 
-//        if (builder.getTokenType() == pLPAREN) {
-//            parser.parseMethodSignature(builder);
-//        } else if (builder.getTokenType() != wsNLS) {
-//            parser.parseType(builder);
-//        }
-//
-//        if (builder.getTokenType() != wsNLS && builder.getTokenType() != oSEMI) {
-//            builder.error("newline.or.semicolon.expected");
-//        } else if (builder.getTokenType() == oSEMI) {
-//            ParserUtils.advance(builder);
-//        }
-//
-        methodSpec.done(type);
+        return parser.parseTypeName(builder);
     }
 }

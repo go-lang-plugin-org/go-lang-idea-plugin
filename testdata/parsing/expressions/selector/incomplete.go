@@ -9,8 +9,8 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-    PsiElement(;)(';')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiElement(;)(';')
+  PsiWhiteSpace('\n')
   FunctionDeclaration(main)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
@@ -20,7 +20,7 @@ Go file
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')
-      PsiElement(WS_NEW_LINES)('\n')
+      PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       ExpressionStmtImpl
         SelectorExpression
@@ -28,8 +28,8 @@ Go file
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('x')
           PsiElement(.)('.')
-          PsiElement(WS_NEW_LINES)('\n')
           PsiErrorElement:Identifier expected
             <empty list>
+      PsiWhiteSpace('\n')
       PsiElement(})('}')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')

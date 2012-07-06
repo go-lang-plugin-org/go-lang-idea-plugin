@@ -4,6 +4,8 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 /**
@@ -27,12 +29,16 @@ public abstract class ParserUtils {
      */
     public static boolean getToken(PsiBuilder builder, IElementType elem,
                                    String errorMsg) {
+        PsiBuilder.Marker errorMarker = builder.mark();
         if (elem.equals(builder.getTokenType())) {
             builder.advanceLexer();
+            errorMarker.drop();
             return true;
         } else {
-            if (errorMsg != null)
-                builder.error(errorMsg);
+            if (errorMsg != null) {
+                builder.advanceLexer();
+                errorMarker.error(errorMsg);
+            }
             return false;
         }
     }
@@ -65,8 +71,9 @@ public abstract class ParserUtils {
      */
     public static boolean getToken(PsiBuilder builder, TokenSet tokenSet) {
         if (tokenSet.contains(builder.getTokenType())) {
-            return getToken(builder, builder.getTokenType(), null);
+            return getToken(builder, builder.getTokenType());
         }
+
         return false;
     }
 
@@ -75,15 +82,24 @@ public abstract class ParserUtils {
      *
      * @param builder  the builder
      * @param tokenSet the token set accepted
-     * @param msg      error message if nto applicable
+     * @param errorMsg error message if nto applicable
      * @return true/false (the operation result
      */
     public static boolean getToken(PsiBuilder builder, TokenSet tokenSet,
-                                   String msg) {
+                                   String errorMsg) {
+
+        PsiBuilder.Marker mark = builder.mark();
         if (tokenSet.contains(builder.getTokenType())) {
-            return getToken(builder, builder.getTokenType(), msg);
+            builder.advanceLexer();
+            mark.drop();
+            return true;
+        } else {
+            if (errorMsg != null) {
+                builder.advanceLexer();
+                mark.error(errorMsg);
+            }
+            return false;
         }
-        return false;
     }
 
     /**
@@ -93,6 +109,7 @@ public abstract class ParserUtils {
      * @param elems   Array of need elements in order
      * @return true if following sequence is like a given
      */
+
     public static boolean lookAhead(PsiBuilder builder, IElementType... elems) {
         PsiBuilder.Marker rb = builder.mark();
 
@@ -354,5 +371,13 @@ public abstract class ParserUtils {
         }
 
         return false;
+    }
+
+    public static void endStatement(PsiBuilder builder) {
+        if (!builder.eof() && !ParserUtils.lookAhead(builder,
+                                                     GoTokenTypeSets.EOS_CAN_SKIP_SEMI)) {
+            getToken(builder, GoTokenTypeSets.EOS,
+                     GoBundle.message("error.semicolon.or.newline.expected"));
+        }
     }
 }

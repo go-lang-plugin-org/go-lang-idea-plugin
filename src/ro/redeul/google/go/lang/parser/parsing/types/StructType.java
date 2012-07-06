@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.parser.parsing.types;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
+import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -25,21 +26,9 @@ public class StructType implements GoElementTypes {
 
         ParserUtils.getToken(builder, pLCURCLY, "left.curly.expected");
 
-        do {
-            parseFieldDeclaration(builder, parser);
-
-            if ( builder.getTokenType() != oSEMI  &&
-                 builder.getTokenType() != pRCURLY &&
-                 builder.getTokenType() != wsNLS )
-            {
-                ParserUtils.wrapError(builder, "semicolon.or.newline.or.closed.curly.expected");
-            }
-            else
-            {
-                ParserUtils.getToken(builder, oSEMI);
-                ParserUtils.skipNLS(builder);
-            }
-        } while ( ! builder.eof() && builder.getTokenType() != pRCURLY);
+        while ( ! builder.eof() && ! ParserUtils.lookAhead(builder, pRCURLY) && parseFieldDeclaration(builder, parser)) {
+            ParserUtils.endStatement(builder);
+        }
 
         ParserUtils.getToken(builder, pRCURLY);
         marker.done(TYPE_STRUCT);
@@ -58,7 +47,10 @@ public class StructType implements GoElementTypes {
 
         int identifiersCount = parser.parseIdentifierList(builder, false);
 
-        if ( identifiersCount == 1 && (builder.getTokenType() == wsNLS || builder.getTokenType() == litSTRING || builder.getTokenType() == oDOT) ) {
+        if ( identifiersCount == 1 &&
+            (ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) ||
+                ParserUtils.lookAhead(builder, GoTokenTypeSets.litSTRING) ||
+                ParserUtils.lookAhead(builder, GoTokenTypeSets.oDOT))) {
             fieldDeclaration.rollbackTo();
             fieldDeclaration = builder.mark();
             isAnonymous = true;
@@ -74,8 +66,8 @@ public class StructType implements GoElementTypes {
             ParserUtils.eatElement(builder, IDENTIFIER);
         }
 
-        fieldDeclaration.done(isAnonymous ? TYPE_STRUCT_FIELD_ANONYMOUS : TYPE_STRUCT_FIELD );
-
+        fieldDeclaration.done(
+            isAnonymous ? TYPE_STRUCT_FIELD_ANONYMOUS : TYPE_STRUCT_FIELD);
         return true;
     }
 

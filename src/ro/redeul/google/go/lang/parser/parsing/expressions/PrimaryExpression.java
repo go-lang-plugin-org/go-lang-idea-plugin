@@ -27,8 +27,6 @@ public class PrimaryExpression implements GoElementTypes {
      */
     public static boolean parse(PsiBuilder builder, GoParser parser) {
 
-        ParserUtils.skipNLS(builder);
-
         int position = builder.getCurrentOffset();
         PsiBuilder.Marker mark = builder.mark();
 
@@ -256,7 +254,7 @@ public class PrimaryExpression implements GoElementTypes {
     private static boolean parseSelectorOrTypeAssertion(PsiBuilder builder,
                                                         GoParser parser,
                                                         PsiBuilder.Marker mark) {
-        if (ParserUtils.lookAheadSkipNLS(builder, oDOT, pLPAREN, kTYPE, pRPAREN)) {
+        if (ParserUtils.lookAhead(builder, oDOT, pLPAREN, kTYPE, pRPAREN)) {
             return false;
         }
 

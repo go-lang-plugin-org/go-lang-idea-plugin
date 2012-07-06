@@ -7,7 +7,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   FunctionDeclaration(main)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
@@ -21,7 +21,7 @@ Go file
       LabeledStmt
         PsiElement(IDENTIFIER)('L')
         PsiElement(:)(':')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         ReturnStmtImpl
           PsiElement(KEYWORD_RETURN)('return')
           PsiWhiteSpace(' ')

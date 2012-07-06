@@ -26,6 +26,7 @@ public class BreakStatement implements GoElementTypes {
         ParserUtils.getToken(builder, mIDENT);
 
         marker.done(BREAK_STATEMENT);
+        ParserUtils.endStatement(builder);
         return BREAK_STATEMENT;
     }
 }

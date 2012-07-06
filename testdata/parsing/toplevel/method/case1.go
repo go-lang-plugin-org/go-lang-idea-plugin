@@ -6,7 +6,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   MethodDeclaration(Length)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')

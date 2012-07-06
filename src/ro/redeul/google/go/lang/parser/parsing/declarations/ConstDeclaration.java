@@ -26,8 +26,8 @@ public class ConstDeclaration implements GoElementTypes {
 
         NestedDeclarationParser.parseNestedOrBasicDeclaration(
             builder, parser, new NestedDeclarationParser.DeclarationParser() {
-            public void parse(PsiBuilder builder, GoParser parser) {
-                parseConstSpecification(builder, parser);
+            public boolean parse(PsiBuilder builder, GoParser parser) {
+                return parseConstSpecification(builder, parser);
             }
         });
 
@@ -49,19 +49,10 @@ public class ConstDeclaration implements GoElementTypes {
             parser.parseType(builder);
         }
 
-        if (ParserUtils.lookAhead(builder, oASSIGN)) {
-            ParserUtils.getToken(builder, oASSIGN);
-
+        if (ParserUtils.getToken(builder, oASSIGN)) {
             boolean parseIota = parser.resetFlag(ParseIota, true);
             parser.parseExpressionList(builder);
             parser.resetFlag(ParseIota, parseIota);
-        }
-
-        if (!builder.eof() &&
-            builder.getTokenType() != oSEMI &&
-            builder.getTokenType() != pRPAREN &&
-            builder.getTokenType() != wsNLS) {
-            builder.error("semicolon.or.newline.or.right.parenthesis.expected");
         }
 
         initializer.done(CONST_DECLARATION);

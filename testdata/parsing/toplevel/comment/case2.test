@@ -3,7 +3,7 @@
 -----
 Go file
   PsiComment(SL_COMMENT)('// sdafad')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   PsiComment(SL_COMMENT)('// sdafad')
   PackageDeclaration()
     PsiErrorElement:"package" keyword expected

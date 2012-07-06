@@ -1,16 +1,15 @@
 package main
 type ITest interface {
-    io.Writer
+    Writer
     Sum(values []int) []byte
 }
-
 /**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   TypeDeclarationsImpl
     PsiElement(KEYWORD_TYPE)('type')
     PsiWhiteSpace(' ')
@@ -22,21 +21,12 @@ Go file
         PsiElement(KEYWORD_INTERFACE)('interface')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiWhiteSpace('    ')
-        MethodDeclaration()
-          TypeNameImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('io')
-        MethodDeclaration()
-          TypeNameImpl
-            PsiErrorElement:identifier.expected
-              PsiElement(.)('.')
-        MethodDeclaration()
-          TypeNameImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('Writer')
-        PsiElement(WS_NEW_LINES)('\n')
+        TypeNameImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('Writer')
+        PsiWhiteSpace('\n')
         PsiWhiteSpace('    ')
         MethodDeclaration(Sum)
           PsiElement(IDENTIFIER)('Sum')
@@ -63,6 +53,5 @@ Go file
                   TypeNameImpl
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('byte')
-        PsiElement(WS_NEW_LINES)('\n')
+        PsiWhiteSpace('\n')
         PsiElement(})('}')
-  PsiElement(WS_NEW_LINES)('\n')

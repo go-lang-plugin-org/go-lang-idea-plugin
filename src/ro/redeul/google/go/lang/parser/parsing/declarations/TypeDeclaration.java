@@ -30,8 +30,8 @@ public class TypeDeclaration implements GoElementTypes {
         NestedDeclarationParser.parseNestedOrBasicDeclaration(
             builder, parser,
             new NestedDeclarationParser.DeclarationParser() {
-                public void parse(PsiBuilder builder, GoParser parser) {
-                    parseTypeSpecification(builder, parser);
+                public boolean parse(PsiBuilder builder, GoParser parser) {
+                    return parseTypeSpecification(builder, parser);
                 }
             });
 
@@ -57,8 +57,6 @@ public class TypeDeclaration implements GoElementTypes {
         }
 
         typeStatement.done(TYPE_DECLARATION);
-
         return true;
     }
-
 }

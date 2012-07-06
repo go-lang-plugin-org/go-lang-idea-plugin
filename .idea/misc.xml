@@ -42,6 +42,7 @@
       <property name="caretWidth" class="java.lang.Integer" />
     </properties>
   </component>
+  <component name="CppTools.Loader" reportImplicitCastToBool="false" reportNameReferencedOnce="false" version="3" currentProject="$PROJECT_DIR$/mock-sdks/go/default/src/pkg/fmt/Makefile" compilerSelect="AUTO" />
   <component name="DBNavigator.Project.ConnectionManager">
     <connections />
   </component>

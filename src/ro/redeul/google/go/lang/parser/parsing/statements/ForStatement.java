@@ -2,7 +2,9 @@ package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.lexer.GoElementType;
+import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -18,8 +20,6 @@ public class ForStatement implements GoElementTypes {
         PsiBuilder.Marker marker = builder.mark();
         ParserUtils.getToken(builder, kFOR);
 
-        ParserUtils.skipNLS(builder);
-
         boolean allowComposite;
         allowComposite = parser.resetFlag(AllowCompositeLiteral, false);
 
@@ -31,10 +31,11 @@ public class ForStatement implements GoElementTypes {
         parser.resetFlag(AllowCompositeLiteral, allowComposite);
 
         parser.parseBody(builder);
-
         marker.done(forType);
         return forType;
     }
+
+    static TokenSet RANGE_LOOKAHEAD = TokenSet.create(oCOMMA, oASSIGN, oVAR_ASSIGN);
 
     private static GoElementType parseConditionOrForClauseOrRangeClause(
         PsiBuilder builder, GoParser parser)
@@ -43,29 +44,31 @@ public class ForStatement implements GoElementTypes {
 
         IElementType statementType = parser.parseStatementSimple(builder);
 
-        if (statementType != null && ParserUtils.lookAhead(builder, oSEMI)) {
-            clause.drop();
-            ParserUtils.getToken(builder, oSEMI);
-
-            ParserUtils.skipNLS(builder);
-            parser.parseExpression(builder);
-            ParserUtils.getToken(builder, oSEMI, "semicolon.expected");
-
-            ParserUtils.skipNLS(builder);
-            parser.parseStatementSimple(builder);
-
-            return FOR_WITH_CLAUSES_STATEMENT;
-        }
-
         if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder, pLCURCLY)) {
             clause.rollbackTo();
             parser.parseExpression(builder);
             return FOR_WITH_CONDITION_STATEMENT;
         }
 
-        clause.rollbackTo();
-        tryParseRangeClause(builder, parser);
-        return FOR_WITH_RANGE_STATEMENT;
+        if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder, RANGE_LOOKAHEAD)) {
+            clause.rollbackTo();
+            tryParseRangeClause(builder, parser);
+            return FOR_WITH_RANGE_STATEMENT;
+        }
+
+        if ( statementType == null ) {
+            if (tryParseRangeClause(builder, parser)) {
+                clause.drop();
+                return FOR_WITH_RANGE_STATEMENT;
+            }
+        }
+
+        clause.drop();
+        ParserUtils.getToken(builder, GoTokenTypeSets.EOS, "semicolon.expected");
+        parser.parseExpression(builder);
+        ParserUtils.getToken(builder, GoTokenTypeSets.EOS, "semicolon.expected");
+        parser.parseStatementSimple(builder);
+        return FOR_WITH_CLAUSES_STATEMENT;
     }
 
     private static boolean tryParseRangeClause(PsiBuilder builder, GoParser parser) {
@@ -74,9 +77,7 @@ public class ForStatement implements GoElementTypes {
         parser.parseExpressionList(builder);
 
         if ( builder.getTokenType() == oVAR_ASSIGN || builder.getTokenType() == oASSIGN ) {
-
             ParserUtils.advance(builder);
-            ParserUtils.skipNLS(builder);
 
             if ( builder.getTokenType() == kRANGE ) {
                 ParserUtils.getToken(builder, kRANGE);

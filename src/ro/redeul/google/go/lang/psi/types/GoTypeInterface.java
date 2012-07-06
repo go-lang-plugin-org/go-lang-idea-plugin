@@ -11,4 +11,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 public interface GoTypeInterface extends GoType, GoMethodSetHolder {
 
     GoMethodDeclaration[] getMethodDeclarations();
+
+    GoTypeName[] getTypeNames();
 }

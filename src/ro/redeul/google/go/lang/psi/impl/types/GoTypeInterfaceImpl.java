@@ -6,6 +6,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
+import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -51,6 +52,12 @@ public class GoTypeInterfaceImpl extends GoPsiPackagedElementBase implements GoT
     public GoMethodDeclaration[] getMethodDeclarations() {
         return findChildrenByClass(GoMethodDeclaration.class);
     }
+
+    @Override
+    public GoTypeName[] getTypeNames() {
+        return findChildrenByClass(GoTypeName.class);
+    }
+
 
     @Override
     public String getPresentationTailText() {

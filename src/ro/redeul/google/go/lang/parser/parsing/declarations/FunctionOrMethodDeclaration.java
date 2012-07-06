@@ -18,7 +18,6 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-        skipNLS(builder);
 
         if (!ParserUtils.lookAhead(builder, kFUNC))
             return null;
@@ -27,7 +26,6 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
         ParserUtils.getToken(builder, kFUNC);
         // parse the receiver description
-        skipNLS(builder);
         IElementType nodeType = FUNCTION_DECLARATION;
         if (lookAhead(builder, pLPAREN)) {
             parseReceiverDeclaration(builder, parser);
@@ -35,22 +33,17 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         }
 
         // expecting method name
-        skipNLS(builder);
         if (parser.isSet(GoParser.ParsingFlag.Debug)) {
             LOG.debug("Method: " + builder.getTokenText());
         }
 
-        getToken(builder, mIDENT,
-                 GoBundle.message("error.method.name.expected"));
+        getToken(builder, mIDENT, GoBundle.message("error.method.name.expected"));
 
-        skipNLS(builder);
         parseCompleteMethodSignature(builder, parser);
 
-        if (!ParserUtils.lookAhead(builder, wsNLS) ) {
-            skipNLS(builder);
+        if (ParserUtils.lookAhead(builder, pLCURCLY) ) {
             parser.parseBody(builder);
         }
-
         marker.done(nodeType);
         return nodeType;
     }

@@ -6,7 +6,7 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
@@ -19,9 +19,11 @@ Go file
       LiteralExpressionImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('x')
-    PsiErrorElement:semicolon.or.newline.right.parenthesis.expected
-      PsiElement(.)('.')
-      PsiElement(()('(')
-      PsiElement(KEYWORD_TYPE)('type')
+  PsiErrorElement:';' or newline expected
+    PsiElement(.)('.')
+  PsiErrorElement:unknown.token
+    PsiElement(()('(')
+  PsiErrorElement:';' or newline expected
+    PsiElement(KEYWORD_TYPE)('type')
   PsiErrorElement:unknown.token
     PsiElement())(')')

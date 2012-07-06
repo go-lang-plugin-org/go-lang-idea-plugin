@@ -95,7 +95,7 @@ public class GoParser extends ParserUtils implements PsiParser {
                 ParserUtils.wrapError(builder, "unknown.token");
             }
 
-            ParserUtils.skipNLS(builder);
+            ParserUtils.endStatement(builder);
         }
 
         return true;

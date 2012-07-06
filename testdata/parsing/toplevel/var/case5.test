@@ -9,12 +9,12 @@ Go file
     PsiElement(KEYWORD_PACKAGE)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
-  PsiElement(WS_NEW_LINES)('\n')
+  PsiWhiteSpace('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     PsiElement(()('(')
-    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('\n')
     PsiWhiteSpace('\t')
     VarDeclarationImpl
       LiteralIdentifierImpl
@@ -23,7 +23,7 @@ Go file
       TypeNameImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('int')
-    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('\n')
     PsiWhiteSpace('\t')
     VarDeclarationImpl
       LiteralIdentifierImpl
@@ -52,5 +52,5 @@ Go file
       LiteralExpressionImpl
         LiteralStringImpl
           PsiElement(LITERAL_STRING)('"bar"')
-    PsiElement(WS_NEW_LINES)('\n')
+    PsiWhiteSpace('\n')
     PsiElement())(')')

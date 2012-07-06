@@ -100,6 +100,7 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testFor_case13() throws Throwable { doTest(); }
     public void testFor_case14() throws Throwable { doTest(); }
     public void testFor_case15() throws Throwable { doTest(); }
+    public void testFor_case16() throws Throwable { doTest(); }
     public void testFor_commentsAfterEnd() throws Throwable { doTest(); }
 
 }

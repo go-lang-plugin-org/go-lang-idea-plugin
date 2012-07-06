@@ -1,9 +1,6 @@
 p
 /**-----
 Go file
-  PackageDeclaration(p)
+  PackageDeclaration()
     PsiErrorElement:"package" keyword expected
-      <empty list>
-    PsiElement(IDENTIFIER)('p')
-    PsiErrorElement:semicolon.or.newline.expected
-      <empty list>
+      PsiElement(IDENTIFIER)('p')

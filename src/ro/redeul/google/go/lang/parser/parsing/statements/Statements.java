@@ -97,6 +97,10 @@ public class Statements implements GoElementTypes {
             oBIT_CLEAR_ASSIGN
     );
 
+    static TokenSet INC_DEC_OPERATORS = TokenSet.create(
+        oMINUS_MINUS, oPLUS_PLUS
+    );
+
     public static boolean tryParseSimple(PsiBuilder builder, GoParser parser) {
         PsiBuilder.Marker rememberMarker = builder.mark();
 
@@ -126,20 +130,25 @@ public class Statements implements GoElementTypes {
 
         int expressionCount = parser.parseExpressionList(builder);
 
-        if ( ASSIGN_OPERATORS.contains(builder.getTokenType()) ) {
-            ParserUtils.getToken(builder, builder.getTokenType());
-
-            ParserUtils.skipNLS(builder);
-
-            parser.parseExpressionList(builder);
-
-            mark.done(ASSIGN_STATEMENT);
-            return ASSIGN_STATEMENT;
+        if ( expressionCount == 0 && ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) ) {
+            mark.done(EMPTY_STATEMENT);
+            return EMPTY_STATEMENT;
         }
 
-        if ( oMINUS_MINUS == builder.getTokenType() || oPLUS_PLUS == builder.getTokenType() ) {
+        if ( ASSIGN_OPERATORS.contains(builder.getTokenType()) ) {
+            PsiBuilder.Marker marker = builder.mark();
             ParserUtils.getToken(builder, builder.getTokenType());
+            if ( parser.parseExpressionList(builder) != 0) {
+                mark.done(ASSIGN_STATEMENT);
+                marker.drop();
+                return ASSIGN_STATEMENT;
+            } else {
+                marker.rollbackTo();
+            }
+        }
 
+        if ( INC_DEC_OPERATORS.contains(builder.getTokenType())) {
+            ParserUtils.getToken(builder, builder.getTokenType());
             mark.done(INC_DEC_STATEMENT);
             return INC_DEC_STATEMENT;
         }
@@ -151,7 +160,12 @@ public class Statements implements GoElementTypes {
 //            return SHORT_VAR_STATEMENT;
 //        }
 
-        if  (oVAR_ASSIGN == builder.getTokenType() ) {
+        if  (ParserUtils.lookAhead(builder, oVAR_ASSIGN, kRANGE)) {
+            mark.rollbackTo();
+            return null;
+        }
+
+        if (ParserUtils.lookAhead(builder, oVAR_ASSIGN)) {
             mark.rollbackTo();
             mark = builder.mark();
             parser.parseIdentifierList(builder, false);
@@ -160,15 +174,16 @@ public class Statements implements GoElementTypes {
                 return null;
             }
 
-            ParserUtils.skipNLS(builder);
+            if ( parser.parseExpressionList(builder) == 0 ) {
+                mark.rollbackTo();
+                return null;
+            }
 
-            parser.parseExpressionList(builder);
             mark.done(SHORT_VAR_STATEMENT);
             return SHORT_VAR_STATEMENT;
         }
 
-        if ( expressionCount == 0 &&
-             (ParserUtils.lookAheadSkipNLS(builder, oSEMI) || ParserUtils.lookAheadSkipNLS(builder, pLCURCLY))) {
+        if ( expressionCount == 0 && ParserUtils.lookAhead(builder, pLCURCLY)) {
             mark.done(EMPTY_STATEMENT);
             return EMPTY_STATEMENT;
         }

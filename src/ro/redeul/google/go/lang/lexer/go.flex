@@ -142,6 +142,7 @@ mESCAPES = [abfnrtv]
 
 
 // %state IN_COMMENT
+%state MAYBE_SEMI
 
 %%
 
@@ -219,30 +220,30 @@ mESCAPES = [abfnrtv]
 "..."                                     { return oTRIPLE_DOT; }
 "."                                       { return oDOT; }
 
-"'" . "'"                                               { return litCHAR; }
-"'" \n "'"                                              { return litCHAR; }
-"'\\" [abfnrtv\\\'] "'"                                 { return litCHAR; }
-"'\\" {mOCT_DIGIT} {mOCT_DIGIT} {mOCT_DIGIT} "'"        { return litCHAR; }
-"'\\x" {mHEX_DIGIT} {mHEX_DIGIT} "'"                    { return litCHAR; }
+"'" . "'"                                               { yybegin(MAYBE_SEMI); return litCHAR; }
+"'" \n "'"                                              { yybegin(MAYBE_SEMI); return litCHAR; }
+"'\\" [abfnrtv\\\'] "'"                                 { yybegin(MAYBE_SEMI); return litCHAR; }
+"'\\" {mOCT_DIGIT} {mOCT_DIGIT} {mOCT_DIGIT} "'"        { yybegin(MAYBE_SEMI); return litCHAR; }
+"'\\x" {mHEX_DIGIT} {mHEX_DIGIT} "'"                    { yybegin(MAYBE_SEMI); return litCHAR; }
 "'\\u" {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} "'"
-                                                        { return litCHAR; }
+                                                        { yybegin(MAYBE_SEMI); return litCHAR; }
 "'\\U" {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} "'"
-                                                        { return litCHAR; }
+                                                        { yybegin(MAYBE_SEMI); return litCHAR; }
 
-"`" [^`]* "`"                             { return litSTRING; }
+"`" [^`]* "`"                             { yybegin(MAYBE_SEMI); return litSTRING; }
 {mSTR}
     (
         [^\"\\\n\r] | "\\" ("\\" | {mSTR} | {mESCAPES} | [0-8xuU] )
     )*
-{mSTR}?                                   { return litSTRING; }
+{mSTR}?                                   { yybegin(MAYBE_SEMI); return litSTRING; }
 "{"                                       { return pLCURCLY; }
-"}"                                       { return pRCURLY; }
+"}"                                       { yybegin(MAYBE_SEMI); return pRCURLY; }
 
 "["                                       { return pLBRACK; }
-"]"                                       { return pRBRACK; }
+"]"                                       { yybegin(MAYBE_SEMI); return pRBRACK; }
 
 "("                                       { return pLPAREN; }
-")"                                       { return pRPAREN; }
+")"                                       { yybegin(MAYBE_SEMI); return pRPAREN; }
 
 ":"                                       { return oCOLON; }
 ";"                                       { return oSEMI; }
@@ -254,11 +255,11 @@ mESCAPES = [abfnrtv]
 "!="                                      { return oNOT_EQ; }
 "!"                                       { return oNOT; }
 
-"++"                                      { return oPLUS_PLUS; }
+"++"                                      { yybegin(MAYBE_SEMI); return oPLUS_PLUS; }
 "+="                                      { return oPLUS_ASSIGN; }
 "+"                                       { return oPLUS; }
 
-"--"                                      { return oMINUS_MINUS; }
+"--"                                      { yybegin(MAYBE_SEMI); return oMINUS_MINUS; }
 "-="                                      { return oMINUS_ASSIGN; }
 "-"                                       { return oMINUS; }
 
@@ -299,7 +300,11 @@ mESCAPES = [abfnrtv]
 ":="                                      { return oVAR_ASSIGN; }
 
 
-"break"                                   { return( kBREAK );  }
+"break"                                   { yybegin(MAYBE_SEMI); return( kBREAK );  }
+"fallthrough"                             { yybegin(MAYBE_SEMI); return( kFALLTHROUGH ); }
+"return"                                  { yybegin(MAYBE_SEMI); return kRETURN ;  }
+"continue"                                { yybegin(MAYBE_SEMI); return kCONTINUE ;  }
+
 "default"                                 { return( kDEFAULT );  }
 "package"                                 { return( kPACKAGE );  }
 "func"                                    { return( kFUNC );  }
@@ -318,26 +323,33 @@ mESCAPES = [abfnrtv]
 "goto"                                    {  return( kGOTO );  }
 "switch"                                  {  return( kSWITCH );  }
 "const"                                   {  return( kCONST ); }
-"fallthrough"                             {  return( kFALLTHROUGH ); }
 
 "if"                                      {  return kIF ;  }
 "for"                                     {  return kFOR ;  }
-"return"                                  {  return kRETURN ;  }
 "import"                                  {  return kIMPORT ;  }
-"continue"                                {  return kCONTINUE ;  }
 
 "range"                                   {  return kRANGE;  }
 "type"                                    {  return kTYPE;  }
 "var"                                     {  return kVAR;  }
 
-{mIDENT}                                  {  return mIDENT; }
+{mIDENT}                                  {  yybegin(MAYBE_SEMI); return mIDENT; }
 
-{mNUM_FLOAT}"i"                           {  return litFLOAT_I; }
-{mNUM_FLOAT}                              {  return litFLOAT; }
-{mDIGIT}+"i"                              {  return litDECIMAL_I; }
-{mNUM_OCT}                                {  return litOCT; }
-{mNUM_HEX}                                {  return litHEX; }
-{mNUM_INT}                                {  return litINT; }
+{mNUM_FLOAT}"i"                           {  yybegin(MAYBE_SEMI); return litFLOAT_I; }
+{mNUM_FLOAT}                              {  yybegin(MAYBE_SEMI); return litFLOAT; }
+{mDIGIT}+"i"                              {  yybegin(MAYBE_SEMI); return litDECIMAL_I; }
+{mNUM_OCT}                                {  yybegin(MAYBE_SEMI); return litOCT; }
+{mNUM_HEX}                                {  yybegin(MAYBE_SEMI); return litHEX; }
+{mNUM_INT}                                {  yybegin(MAYBE_SEMI); return litINT; }
 
 .                                         {  return mWRONG; }
+}
+
+<MAYBE_SEMI> {
+{mWS}               { return wsWS; }
+{mNL}               { yybegin(YYINITIAL); yypushback(yytext().length()); return oSEMI_SYNTHETIC; }
+{mSL_COMMENT}       { return mSL_COMMENT; }
+"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
+                    { return mML_COMMENT; }
+
+.           { yybegin(YYINITIAL); yypushback(yytext().length()); }
 }
