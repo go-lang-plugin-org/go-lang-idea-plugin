@@ -1,5 +1,4 @@
 package main;type Lock interface {Lock(); Unlock() }
-
 /**-----
 Go file
   PackageDeclaration(main)
@@ -19,15 +18,16 @@ Go file
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         MethodDeclaration(Lock)
-          PsiElement(IDENTIFIER)('Lock')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('Lock')
           PsiElement(()('(')
           PsiElement())(')')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         MethodDeclaration(Unlock)
-          PsiElement(IDENTIFIER)('Unlock')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('Unlock')
           PsiElement(()('(')
           PsiElement())(')')
         PsiWhiteSpace(' ')
         PsiElement(})('}')
-  PsiWhiteSpace('\n')

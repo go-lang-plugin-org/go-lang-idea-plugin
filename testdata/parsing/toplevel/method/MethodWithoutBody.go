@@ -24,7 +24,8 @@ Go file
   FunctionDeclaration(panic)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('panic')
+    LiteralIdentifierImpl
+      PsiElement(IDENTIFIER)('panic')
     PsiElement(()('(')
     FunctionParameterListImpl
       FunctionParameterImpl

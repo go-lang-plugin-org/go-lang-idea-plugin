@@ -1,6 +1,6 @@
 package main
 func (q *actionQueue) Swap(i, j int)      { (*q)[i], (*q)[j] = (*q)[j], (*q)[i] }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -22,7 +22,8 @@ Go file
             PsiElement(IDENTIFIER)('actionQueue')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('Swap')
+    LiteralIdentifierImpl
+      PsiElement(IDENTIFIER)('Swap')
     PsiElement(()('(')
     FunctionParameterListImpl
       FunctionParameterImpl

@@ -44,7 +44,7 @@ public class CallOrConversionReference
             identifier, identifier.getContainingFile(),
             GoResolveStates.initial());
 
-        return processor.getDeclaration();
+        return processor.getChildDeclaration();
     }
 
     @Override

@@ -8,8 +8,8 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
@@ -35,9 +35,8 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     }
 
     public String getFunctionName() {
-        PsiElement identifier = findChildByType(GoTokenTypes.mIDENT);
-
-        return identifier != null ? identifier.getText() : "";
+        GoLiteralIdentifier nameIdentifier = getNameIdentifier();
+        return nameIdentifier != null ? nameIdentifier.getName() : "";
     }
 
     @Override
@@ -122,8 +121,8 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     }
 
     @Override
-    public PsiElement getNameIdentifier() {
-        return findChildByType(GoTokenTypes.mIDENT);
+    public GoLiteralIdentifier getNameIdentifier() {
+        return findChildByClass(GoLiteralIdentifier.class);
     }
 
     @NotNull

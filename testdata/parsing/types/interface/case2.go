@@ -4,7 +4,6 @@ type T interface {
 	Write(b Buffer) bool
 	Close()
 }
-
 /**-----
 Go file
   PackageDeclaration(main)
@@ -26,7 +25,8 @@ Go file
         PsiWhiteSpace('\n')
         PsiWhiteSpace('\t')
         MethodDeclaration(Read)
-          PsiElement(IDENTIFIER)('Read')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('Read')
           PsiElement(()('(')
           FunctionParameterListImpl
             FunctionParameterImpl
@@ -47,7 +47,8 @@ Go file
         PsiWhiteSpace('\n')
         PsiWhiteSpace('\t')
         MethodDeclaration(Write)
-          PsiElement(IDENTIFIER)('Write')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('Write')
           PsiElement(()('(')
           FunctionParameterListImpl
             FunctionParameterImpl
@@ -68,9 +69,9 @@ Go file
         PsiWhiteSpace('\n')
         PsiWhiteSpace('\t')
         MethodDeclaration(Close)
-          PsiElement(IDENTIFIER)('Close')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('Close')
           PsiElement(()('(')
           PsiElement())(')')
         PsiWhiteSpace('\n')
         PsiElement(})('}')
-  PsiWhiteSpace('\n')

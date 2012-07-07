@@ -18,7 +18,6 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-
         if (!ParserUtils.lookAhead(builder, kFUNC))
             return null;
 
@@ -37,9 +36,11 @@ public class FunctionOrMethodDeclaration extends ParserUtils
             LOG.debug("Method: " + builder.getTokenText());
         }
 
-        if (getToken(builder, mIDENT,
-                     GoBundle.message("error.method.name.expected"))) {
+        if (ParserUtils.lookAhead(builder, mIDENT)) {
+            ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
             parseCompleteMethodSignature(builder, parser);
+        } else {
+            builder.error(GoBundle.message("error.method.name.expected"));
         }
 
         if (ParserUtils.lookAhead(builder, pLCURCLY)) {

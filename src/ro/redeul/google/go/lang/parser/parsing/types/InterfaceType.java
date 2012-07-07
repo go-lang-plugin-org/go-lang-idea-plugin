@@ -2,7 +2,6 @@ package ro.redeul.google.go.lang.parser.parsing.types;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
-import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -39,11 +38,9 @@ public class InterfaceType implements GoElementTypes {
 
     private static boolean parseMethodSpec(PsiBuilder builder, GoParser parser) {
 
-
         if (ParserUtils.lookAhead(builder, mIDENT, pLPAREN)) {
             PsiBuilder.Marker methodSpec = builder.mark();
-            ParserUtils.getToken(builder, mIDENT,
-                                 GoBundle.message("error.method.name.expected"));
+            ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
             parser.parseFunctionSignature(builder);
             methodSpec.done(METHOD_DECLARATION);
             return true;

@@ -20,7 +20,8 @@ Go file
   FunctionDeclaration(main)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('main')
+    LiteralIdentifierImpl
+      PsiElement(IDENTIFIER)('main')
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')

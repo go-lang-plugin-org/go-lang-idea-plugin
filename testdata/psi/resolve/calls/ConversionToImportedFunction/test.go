@@ -1,5 +1,5 @@
 package test
 
-/*def*/func Func() {
+func /*def*/Func() {
 
 }

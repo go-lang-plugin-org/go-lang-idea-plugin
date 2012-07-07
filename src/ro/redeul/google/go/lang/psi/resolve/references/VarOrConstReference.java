@@ -14,6 +14,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.VarOrConstResolver;
+import ro.redeul.google.go.util.LookupElementUtil;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
 public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
@@ -51,7 +52,7 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
 
         VarOrConstResolver processor = new VarOrConstResolver(this) {
             @Override
-            protected boolean addDeclaration(PsiElement declaration) {
+            protected boolean addDeclaration(PsiElement declaration, PsiElement childDeclaration) {
                 String name = PsiUtilCore.getName(declaration);
 
                 String visiblePackageName =
@@ -64,7 +65,9 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
                     return true;
                 }
 
-                variants.add(((GoPsiElement)declaration).getCompletionPresentation());
+                GoPsiElement goPsi = (GoPsiElement) declaration;
+                GoPsiElement goChildPsi = (GoPsiElement) childDeclaration;
+                variants.add(LookupElementUtil.createLookupElement(goPsi, goChildPsi));
                 return true;
             }
         };

@@ -1,6 +1,6 @@
 package main
 
-/*def*/func f() {
+func /*def*/f() {
 }
 
 func main() {

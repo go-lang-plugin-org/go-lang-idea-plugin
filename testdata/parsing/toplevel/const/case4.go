@@ -1,6 +1,6 @@
 package main
 const a = -1
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')

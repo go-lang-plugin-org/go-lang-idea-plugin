@@ -1,6 +1,5 @@
 package main
 func (p Point) Length() float64 {}
-
 /**-----
 Go file
   PackageDeclaration(main)
@@ -21,7 +20,8 @@ Go file
           PsiElement(IDENTIFIER)('Point')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('Length')
+    LiteralIdentifierImpl
+      PsiElement(IDENTIFIER)('Length')
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
@@ -35,4 +35,3 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiElement(})('}')
-  PsiWhiteSpace('\n')

@@ -3,6 +3,7 @@ package ro.redeul.google.go.inspection;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import ro.redeul.google.go.GoBundle;
@@ -15,14 +16,21 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoTypeAssertionExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-
+import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfClass;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class InspectionUtil {
+
+    static ElementPattern functionDeclarationPattern =
+        psiElement(GoLiteralIdentifier.class)
+            .withParent(
+                psiElement(GoFunctionDeclaration.class));
+
     public static TextRange getProblemRange(ProblemDescriptor pd) {
         int start = pd.getStartElement().getTextOffset();
-        int end = pd.getEndElement().getTextOffset() + pd.getEndElement().getTextLength();
+        int end = pd.getEndElement().getTextOffset() + pd.getEndElement()
+                                                         .getTextLength();
         return new TextRange(start, end);
     }
 
@@ -32,7 +40,8 @@ public class InspectionUtil {
         if (call instanceof GoLiteralExpression) {
             return 1;
         } else if (call instanceof GoTypeAssertionExpression) {
-            return getTypeAssertionResultCount((GoTypeAssertionExpression) call);
+            return getTypeAssertionResultCount(
+                (GoTypeAssertionExpression) call);
         } else if (call instanceof GoCallOrConvExpression) {
             return getFunctionResultCount((GoCallOrConvExpression) call);
         }
@@ -68,9 +77,11 @@ public class InspectionUtil {
             return UNKNOWN_COUNT;
         }
 
-        PsiElement resolve = resolveIdentifier(id);
-        if (resolve instanceof GoFunctionDeclaration) {
-            return getFunctionResultCount((GoFunctionDeclaration) resolve);
+        PsiElement definition = resolveIdentifier(id);
+
+        if (functionDeclarationPattern.accepts(definition)) {
+            return getFunctionResultCount(
+                (GoFunctionDeclaration) definition.getParent());
         }
 
         return UNKNOWN_COUNT;
@@ -96,22 +107,28 @@ public class InspectionUtil {
             return UNKNOWN_COUNT;
         }
 
-        PsiElement resolve = resolveIdentifier(id);
-        if (resolve instanceof GoFunctionDeclaration) {
+        PsiElement definition = resolveIdentifier(id);
+
+        if (functionDeclarationPattern.accepts(definition)) {
+            GoFunctionDeclaration function = (GoFunctionDeclaration) definition.getParent();
+
             int count = 0;
-            for (GoFunctionParameter p : ((GoFunctionDeclaration) resolve).getParameters()) {
+            for (GoFunctionParameter p : function.getParameters()) {
                 count += Math.max(p.getIdentifiers().length, 1);
                 if (p.isVariadic()) {
                     return UNKNOWN_COUNT;
                 }
             }
             return count;
+
         }
+
         return UNKNOWN_COUNT;
     }
 
     public static GoLiteralIdentifier getFunctionIdentifier(GoCallOrConvExpression call) {
-        GoLiteralExpression literal = findChildOfClass(call, GoLiteralExpression.class);
+        GoLiteralExpression literal = findChildOfClass(call,
+                                                       GoLiteralExpression.class);
         if (literal == null) {
             return null;
         }
@@ -127,15 +144,18 @@ public class InspectionUtil {
             if (count != UNKNOWN_COUNT && count != 1) {
                 String text = expr.getText();
                 if (expr instanceof GoCallOrConvExpression) {
-                    GoLiteralIdentifier id = getFunctionIdentifier((GoCallOrConvExpression) expr);
+                    GoLiteralIdentifier id = getFunctionIdentifier(
+                        (GoCallOrConvExpression) expr);
                     if (id == null) {
                         continue;
                     }
                     text = id.getText();
                 }
 
-                String msg = GoBundle.message("error.multiple.value.in.single.value.context", text);
-                result.addProblem(expr, msg, ProblemHighlightType.GENERIC_ERROR);
+                String msg = GoBundle.message(
+                    "error.multiple.value.in.single.value.context", text);
+                result.addProblem(expr, msg,
+                                  ProblemHighlightType.GENERIC_ERROR);
             }
         }
     }

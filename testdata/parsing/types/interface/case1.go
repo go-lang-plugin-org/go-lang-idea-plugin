@@ -29,7 +29,8 @@ Go file
         PsiWhiteSpace('\n')
         PsiWhiteSpace('    ')
         MethodDeclaration(Sum)
-          PsiElement(IDENTIFIER)('Sum')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('Sum')
           PsiElement(()('(')
           FunctionParameterListImpl
             FunctionParameterImpl

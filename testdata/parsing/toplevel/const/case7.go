@@ -10,7 +10,7 @@ const (
       ET_LOPROC Type = 0xff00 /* First processor-specific. */
       ET_HIPROC Type = 0xffff /* Last processor-specific. */
 )
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')

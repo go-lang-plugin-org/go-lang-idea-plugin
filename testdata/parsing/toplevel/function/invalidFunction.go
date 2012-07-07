@@ -13,7 +13,8 @@ Go file
   FunctionDeclaration(foo)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('foo')
+    LiteralIdentifierImpl
+      PsiElement(IDENTIFIER)('foo')
     PsiElement(()('(')
     FunctionParameterListImpl
       FunctionParameterImpl

@@ -7,5 +7,6 @@ println("Hello world!", CC + 1)
 GoIdentifier
 -----
 CC
+main
 println
 CC

@@ -15,6 +15,7 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
     implements PsiScopeProcessor {
 
     private PsiElement declaration;
+    private PsiElement childDeclaration;
     private Reference reference;
     private ResolveState state;
 
@@ -55,8 +56,17 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
      * @param declaration add new declaration
      * @return false if we want to stop processing
      */
-    protected boolean addDeclaration(PsiElement declaration) {
+    final boolean addDeclaration(PsiElement declaration) {
+        return addDeclaration(declaration, declaration);
+    }
+
+    /**
+     * @param declaration add new declaration
+     * @return false if we want to stop processing
+     */
+    protected boolean addDeclaration(PsiElement declaration, PsiElement child) {
         this.declaration = declaration;
+        this.childDeclaration = child;
         return true;
     }
 
@@ -78,4 +88,7 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
                             @Nullable Object associated) {
     }
 
+    public PsiElement getChildDeclaration() {
+        return childDeclaration;
+    }
 }

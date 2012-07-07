@@ -1,6 +1,6 @@
 package main
 func foo(...interface{}) {}
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -10,7 +10,8 @@ Go file
   FunctionDeclaration(foo)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('foo')
+    LiteralIdentifierImpl
+      PsiElement(IDENTIFIER)('foo')
     PsiElement(()('(')
     FunctionParameterListImpl
       FunctionParameterVariadicImpl

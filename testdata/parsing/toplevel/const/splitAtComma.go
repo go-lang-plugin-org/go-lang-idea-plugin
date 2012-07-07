@@ -2,7 +2,7 @@ package main
 const ( a,
  b = 1,2
  )
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')

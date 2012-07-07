@@ -1,7 +1,7 @@
 package main
 func (p *Point) Scale(factor float64) {
 }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -23,7 +23,8 @@ Go file
             PsiElement(IDENTIFIER)('Point')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('Scale')
+    LiteralIdentifierImpl
+      PsiElement(IDENTIFIER)('Scale')
     PsiElement(()('(')
     FunctionParameterListImpl
       FunctionParameterImpl

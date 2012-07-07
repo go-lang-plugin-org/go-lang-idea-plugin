@@ -1,6 +1,6 @@
 package main
 
-/*def*/func F(n int) int {
+func /*def*/F(n int) int {
     if n <= 1 {
         return 1
     }

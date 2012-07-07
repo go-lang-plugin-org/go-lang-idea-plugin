@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class TypeNameReference extends GoPsiReference<GoTypeName> {
     public static final ElementPattern<GoTypeName> MATCHER =
@@ -41,9 +42,10 @@ public class TypeNameReference extends GoPsiReference<GoTypeName> {
     public boolean isReferenceTo(PsiElement element) {
         if (element instanceof GoTypeNameDeclaration) {
             GoTypeNameDeclaration typeNameDecl
-                = (GoTypeNameDeclaration)element;
+                = (GoTypeNameDeclaration) element;
 
-            return matchesVisiblePackageName(typeNameDecl, getElement().getName());
+            return matchesVisiblePackageName(typeNameDecl,
+                                             getElement().getName());
         }
 
         return false;
@@ -58,13 +60,13 @@ public class TypeNameReference extends GoPsiReference<GoTypeName> {
         TypeNameResolver processor =
             new TypeNameResolver(this) {
                 @Override
-                protected boolean addDeclaration(PsiElement declaration) {
+                protected boolean addDeclaration(PsiElement declaration, PsiElement childDeclaration) {
                     String name = PsiUtilCore.getName(declaration);
 
                     String visiblePackageName =
                         getState().get(GoResolveStates.VisiblePackageName);
 
-                    if ( visiblePackageName != null ) {
+                    if (visiblePackageName != null) {
                         name = visiblePackageName + "." + name;
                     }
                     if (name == null) {
@@ -72,7 +74,12 @@ public class TypeNameReference extends GoPsiReference<GoTypeName> {
                     }
 
                     GoPsiElement goDeclaration = (GoPsiElement) declaration;
-                    variants.add(goDeclaration.getCompletionPresentation());
+                    GoPsiElement goChildDeclaration = (GoPsiElement) childDeclaration;
+
+                    variants.add(
+                        createLookupElement(
+                            goDeclaration,
+                            goChildDeclaration));
                     return true;
 
                 }

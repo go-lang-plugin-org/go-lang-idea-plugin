@@ -67,7 +67,7 @@ public class VarOrConstResolver extends
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
         if (checkReference(declaration.getNameIdentifier()))
-            addDeclaration(declaration);
+            addDeclaration(declaration, declaration.getNameIdentifier());
     }
 
     protected void checkIdentifiers(GoLiteralIdentifier ... identifiers) {

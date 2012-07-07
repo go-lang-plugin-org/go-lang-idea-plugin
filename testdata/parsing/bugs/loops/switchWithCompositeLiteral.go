@@ -30,7 +30,8 @@ Go file
             PsiElement(IDENTIFIER)('Package')
     PsiElement())(')')
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('gccMachine')
+    LiteralIdentifierImpl
+      PsiElement(IDENTIFIER)('gccMachine')
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')

@@ -20,7 +20,8 @@ Go file
   FunctionDeclaration(NewHash)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('NewHash')
+    LiteralIdentifierImpl
+      PsiElement(IDENTIFIER)('NewHash')
     PsiElement(()('(')
     PsiElement())(')')
     PsiWhiteSpace(' ')
