@@ -1,16 +1,21 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.literals.composite;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY;
 
 public class GoLiteralCompositeElementImpl extends GoPsiElementBase
@@ -58,8 +63,30 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
         return findChildByClass(GoLiteralCompositeValue.class);
     }
 
+    ElementPattern pattern =
+        psiElement(GoLiteralCompositeElement.class)
+            .withParent(
+                psiElement(GoLiteralCompositeValue.class)
+                    .withParent(psiElement(GoLiteralComposite.class))
+            );
+
+    @Override
+    public GoType getElementType() {
+        if (pattern.accepts(this)) {
+            return ((GoLiteralComposite)getParent().getParent()).getLiteralType();
+        }
+
+        return null;
+    }
+
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitLiteralCompositeElement(this);
+    }
+
+
+    @Override
+    public PsiReference getReference() {
+        return null;
     }
 }

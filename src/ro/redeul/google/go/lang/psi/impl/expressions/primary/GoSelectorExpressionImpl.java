@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.resolve.references.InterfaceMethodReference;
-import ro.redeul.google.go.lang.psi.resolve.references.StructFieldsReference;
+import ro.redeul.google.go.lang.psi.resolve.references.SelectorOfStructFieldReference;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
@@ -136,7 +136,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
         if ( x instanceof GoUnderlyingTypeStruct)
             return new PsiReference[] {
-                new StructFieldsReference(this),
+                new SelectorOfStructFieldReference(this),
 //                new MethodsReference(this)
             };
 
