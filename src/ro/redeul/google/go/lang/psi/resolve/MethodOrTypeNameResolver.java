@@ -7,7 +7,6 @@ import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
 
@@ -19,12 +18,6 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<CallOrConve
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-        if  ( checkReference(declaration) )
-            addDeclaration(declaration, declaration.getNameIdentifier());
-    }
-
-    @Override
-    public void visitMethodDeclaration(GoMethodDeclaration declaration) {
         if  ( checkReference(declaration) )
             addDeclaration(declaration, declaration.getNameIdentifier());
     }

@@ -67,7 +67,7 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
 
                 GoPsiElement goPsi = (GoPsiElement) declaration;
                 GoPsiElement goChildPsi = (GoPsiElement) childDeclaration;
-                variants.add(LookupElementUtil.createLookupElement(goPsi, goChildPsi));
+                variants.add(LookupElementUtil.createLookupElement(goPsi, name, goChildPsi));
                 return true;
             }
         };

@@ -261,12 +261,12 @@ public class PrimaryExpression implements GoElementTypes {
         }
 
         ParserUtils.getToken(builder, oDOT);
-        ParserUtils.skipNLS(builder);
 
-        if (ParserUtils.lookAheadSkipNLS(builder, pLPAREN))  {
+        if (ParserUtils.lookAhead(builder, pLPAREN))  {
             ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
 
             parser.parseType(builder);
+
             ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");
             mark.done(TYPE_ASSERTION_EXPRESSION);
             return true;
@@ -425,8 +425,12 @@ public class PrimaryExpression implements GoElementTypes {
         if (parser.isPackageName(identifier) &&
             ParserUtils.lookAhead(builder, oDOT)) {
             ParserUtils.getToken(builder, oDOT);
-            ParserUtils.getToken(builder, mIDENT,
-                                 GoBundle.message("identifier.expected"));
+            if (ParserUtils.lookAhead(builder, mIDENT)) {
+                ParserUtils.getToken(builder, mIDENT);
+            } else {
+                builder.error(GoBundle.message("identifier.expected"));
+            }
+
         }
 
         mark.done(GoElementTypes.LITERAL_IDENTIFIER);

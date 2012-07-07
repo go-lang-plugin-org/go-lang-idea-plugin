@@ -1,9 +1,15 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.scope.util.PsiScopesUtil;
+import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -15,6 +21,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class CallOrConversionReference
     extends GoPsiReference<GoLiteralIdentifier> {
@@ -96,7 +103,42 @@ public class CallOrConversionReference
     @NotNull
     @Override
     public Object[] getVariants() {
-        return new Object[0];  //To change body of implemented methods use File | Settings | File Templates.
+
+        GoLiteralIdentifier identifier = getElement();
+        if ( identifier == null )
+            return EMPTY_ARRAY;
+
+        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+
+        MethodOrTypeNameResolver processor =
+            new MethodOrTypeNameResolver(this) {
+                @Override
+                protected boolean addDeclaration(PsiElement declaration, PsiElement child) {
+                    String name = PsiUtilCore.getName(child);
+
+                    String visiblePackageName =
+                        getState().get(GoResolveStates.VisiblePackageName);
+
+                    if ( visiblePackageName != null ) {
+                        name = visiblePackageName + "." + name;
+                    }
+                    if (name == null) {
+                        return true;
+                    }
+
+                    GoPsiElement goPsi = (GoPsiElement) declaration;
+                    GoPsiElement goChildPsi = (GoPsiElement) child;
+                    variants.add(createLookupElement(goPsi, name, goChildPsi));
+                    return true;
+                }
+            };
+
+        PsiScopesUtil.treeWalkUp(
+            processor,
+            identifier, identifier.getContainingFile(),
+            GoResolveStates.initial());
+
+        return variants.toArray();
     }
 
     @Override
