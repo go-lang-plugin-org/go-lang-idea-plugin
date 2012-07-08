@@ -2,9 +2,10 @@ package main
 
 type T int
 
-func (t T) /*def*/f() {
+func (t T) /*def*/F() {
 }
 
 func main() {
-    /*ref*/f()
+    var x T
+    x./*ref*/F()
 }
