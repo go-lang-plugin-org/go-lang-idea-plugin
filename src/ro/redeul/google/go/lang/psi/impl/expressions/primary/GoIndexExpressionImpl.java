@@ -7,6 +7,9 @@ import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoTypeArray;
+import ro.redeul.google.go.lang.psi.types.GoTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoIndexExpressionImpl extends GoExpressionBase
@@ -18,23 +21,40 @@ public class GoIndexExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-//        GoType[] baseTypes = getBaseExpression().getType();
-//
-//        GoType baseType = baseTypes[0];
-//
-//        int a = 10;
-        // TODO: fix this
+        GoType[] baseTypes = getBaseExpression().getType();
+
+        if (baseTypes.length != 1)
+            return GoType.EMPTY_ARRAY;
+
+        GoType baseType = baseTypes[0];
+        if (baseType instanceof GoTypeSlice) {
+            GoTypeSlice slice = (GoTypeSlice) baseType;
+            return new GoType[] { slice.getElementType() };
+        }
+
+        if (baseType instanceof GoTypeArray) {
+            GoTypeArray array = (GoTypeArray) baseType;
+            return new GoType[] { array.getElementType() };
+        }
+
+        if (baseType instanceof GoTypeMap) {
+            GoTypeMap map = (GoTypeMap) baseType;
+            return new GoType[] { map.getElementType() };
+        }
+
+        // TODO: implement the case when the base has type string.
+
         return GoType.EMPTY_ARRAY;
     }
 
     @Override
     public GoExpr getIndex() {
-        return findChildByClass(GoExpr.class, 0);
+        return findChildByClass(GoExpr.class, 1);
     }
 
     @Override
     public GoPrimaryExpression getBaseExpression() {
-        return findChildByClass(GoPrimaryExpression.class, 1);
+        return findChildByClass(GoPrimaryExpression.class, 0);
     }
 
     @Override

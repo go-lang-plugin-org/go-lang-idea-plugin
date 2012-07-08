@@ -41,12 +41,12 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 public class GoPsiUtils {
 
     public static <T extends PsiElement> T resolveSafely(PsiElement element, Class<T> expectedType) {
-        PsiReference reference = element.getReference();
-
-        if (reference == null)
+        PsiReference []references = element.getReferences();
+        if ( references.length < 1 || references[0] == null ) {
             return null;
+        }
 
-        PsiElement resolved = reference.resolve();
+        PsiElement resolved = references[0].resolve();
         if (resolved == null || !(expectedType.isAssignableFrom(resolved.getClass())))
             return null;
 

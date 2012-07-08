@@ -18,7 +18,7 @@ public class GoSliceExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-        return GoType.EMPTY_ARRAY;
+        return getBaseExpression().getType();
     }
 
     @Override

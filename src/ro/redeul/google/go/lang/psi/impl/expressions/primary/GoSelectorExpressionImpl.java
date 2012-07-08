@@ -19,6 +19,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeInterface;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePointer;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeStruct;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -43,13 +44,13 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
     @Override
     protected GoType[] resolveTypes() {
+        GoLiteralIdentifier structFieldName = resolveSafely(this, GoLiteralIdentifier.class);
 
-//        PsiElement psiElement = resolve();
+        if ( structFieldName != null && structFieldName.getParent() instanceof GoTypeStructField ) {
+            GoTypeStructField structField = (GoTypeStructField)structFieldName.getParent();
+            return new GoType[] { structField.getType() };
+        }
 
-//        if (psiElement != null && psiElement instanceof GoType) {
-//            return new GoType[]{(GoType) psiElement};
-//        }
-//
         return GoType.EMPTY_ARRAY;
     }
 
@@ -102,12 +103,6 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
                 .setBold()
                 .setTailText(String.format(" (defined by: %s)", ownerType.getQualifiedName()))
                 .setTypeText("<field>", ownerType != type);
-    }
-
-    @Override
-    public PsiReference getReference() {
-
-        return null;
     }
 
     @NotNull

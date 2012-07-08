@@ -21,6 +21,6 @@ public class GoParenthesisedExpressionImpl extends GoPsiElementBase
     @NotNull
     @Override
     public GoType[] getType() {
-        return GoType.EMPTY_ARRAY;
+        return getInnerExpression().getType();
     }
 }

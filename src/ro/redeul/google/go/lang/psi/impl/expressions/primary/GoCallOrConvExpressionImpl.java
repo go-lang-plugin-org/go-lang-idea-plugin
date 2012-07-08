@@ -24,7 +24,9 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-        // TODO: implement
+        GoType []types = getBaseExpression().getType();
+
+        // TODO: implement resolving of types that are calls.
         return super.resolveTypes();
     }
 
