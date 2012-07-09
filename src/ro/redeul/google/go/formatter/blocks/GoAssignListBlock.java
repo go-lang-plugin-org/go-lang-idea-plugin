@@ -102,6 +102,6 @@ class GoAssignListBlock extends GoBlock {
             return BASIC_SPACING;
         }
 
-        return null;
+        return super.getGoBlockSpacing(child1, child2);
     }
 }
