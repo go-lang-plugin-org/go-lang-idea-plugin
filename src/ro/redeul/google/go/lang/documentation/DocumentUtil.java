@@ -25,6 +25,8 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoType;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class DocumentUtil {
@@ -36,7 +38,7 @@ public class DocumentUtil {
             if (isNodeOfType(element, GoElementTypes.COMMENTS)) {
                 foundNewLine = false;
                 comments.add(getCommentText(element));
-            } else if (isNodeOfType(element, GoElementTypes.wsNLS)) {
+            } else if (isNewLineNode(element)) {
                 if (foundNewLine || StringUtil.countChars(element.getText(), '\n') > 1) {
                     break;
                 }
@@ -57,7 +59,7 @@ public class DocumentUtil {
             if (isNodeOfType(element, GoElementTypes.COMMENTS)) {
                 foundNewLine = false;
                 comments.add(getCommentText(element));
-            } else if (isNodeOfType(element, GoElementTypes.wsNLS)) {
+            } else if (isNewLineNode(element)) {
                 if (foundNewLine || StringUtil.countChars(element.getText(), '\n') > 1) {
                     break;
                 }
@@ -80,6 +82,10 @@ public class DocumentUtil {
     }
 
     public static String getTypeDocument(GoTypeNameDeclaration type) {
+        if (type == null) {
+            return "";
+        }
+
         PsiFile file = type.getContainingFile();
         if (!(file instanceof GoFile)) {
             return "";
@@ -108,6 +114,10 @@ public class DocumentUtil {
     }
 
     public static String getVarDocument(GoLiteralIdentifier id) {
+        if (id == null) {
+            return "";
+        }
+
         PsiElement original = id.getOriginalElement();
         if (!(original instanceof GoLiteralIdentifier)) {
             return "";
@@ -139,6 +149,10 @@ public class DocumentUtil {
     }
 
     public static String getConstDocument(GoLiteralIdentifier id) {
+        if (id == null) {
+            return "";
+        }
+
         PsiElement original = id.getOriginalElement();
         if (!(original instanceof GoLiteralIdentifier)) {
             return "";

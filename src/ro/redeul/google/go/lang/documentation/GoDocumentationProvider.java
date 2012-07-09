@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getConstDocument;
@@ -64,23 +65,24 @@ public class GoDocumentationProvider implements CodeDocumentationProvider,
             return "";
         }
 
-        if (element instanceof GoTypeNameDeclaration) {
+        GoLiteralIdentifier identifier = null;
+        if (element instanceof GoLiteralIdentifier) {
+            identifier = (GoLiteralIdentifier) element;
+            element = element.getParent();
+        }
+
+        if (element instanceof GoTypeSpec) {
+            return getTypeDocument(((GoTypeSpec) element).getTypeNameDeclaration());
+        } else if (element instanceof GoTypeNameDeclaration) {
             return getTypeDocument((GoTypeNameDeclaration) element);
         } else if (element instanceof GoMethodDeclaration) {
             return getMethodDocument((GoMethodDeclaration) element);
         } else if (element instanceof GoFunctionDeclaration) {
             return getFunctionDocument((GoFunctionDeclaration) element);
-        } else if (element instanceof GoLiteralIdentifier) {
-            PsiElement parent = element.getParent();
-            if (((GoLiteralIdentifier) element).isBlank()) {
-                return "";
-            }
-
-            if (parent instanceof GoConstDeclaration) {
-                return getConstDocument((GoLiteralIdentifier) element);
-            } else if (parent instanceof GoVarDeclaration) {
-                return getVarDocument((GoLiteralIdentifier) element);
-            }
+        } else if (element instanceof GoConstDeclaration) {
+            return getConstDocument(identifier);
+        } else if (element instanceof GoVarDeclaration) {
+            return getVarDocument(identifier);
         }
         return "";
     }
