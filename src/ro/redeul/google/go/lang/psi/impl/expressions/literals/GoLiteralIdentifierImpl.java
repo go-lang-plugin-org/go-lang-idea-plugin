@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
+import java.util.List;
 import javax.swing.*;
 
 import com.intellij.lang.ASTNode;
@@ -35,6 +36,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
 import static com.intellij.patterns.StandardPatterns.string;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypes.mIDENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_CLAUSES_STATEMENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_RANGE_STATEMENT;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
@@ -88,7 +90,11 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     @Override
     @NotNull
     public String getName() {
-        return getText();
+        if ( isQualified() ) {
+            return getLocalPackageName() + "." + getUnqualifiedName();
+        }
+
+        return getUnqualifiedName();
     }
 
     @Override
@@ -186,9 +192,12 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     @Override
     @NotNull
     public String getUnqualifiedName() {
-        String name = getName();
-        int pos = name.lastIndexOf('.');
-        return pos < 0 ? name : name.substring(pos + 1);
+
+        List<PsiElement> tokens = findChildrenByType(mIDENT);
+        if (tokens.size() == 2 )
+            return tokens.get(1).getText();
+
+        return tokens.size() > 0 ? tokens.get(0).getText() : "";
     }
 
     @Override

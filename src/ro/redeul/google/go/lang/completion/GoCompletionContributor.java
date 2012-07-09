@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.completion;
 import java.util.Collection;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionInitializationContext;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
@@ -248,5 +249,13 @@ public class GoCompletionContributor extends CompletionContributor {
                    )
                ),
                typeDeclarationCompletionProvider);
+    }
+
+    @Override
+    public void beforeCompletion(@NotNull CompletionInitializationContext context) {
+        int a = context.getIdentifierEndOffset();
+        super.beforeCompletion(context);
+        int b = context.getIdentifierEndOffset();
+        int c = 10;
     }
 }
