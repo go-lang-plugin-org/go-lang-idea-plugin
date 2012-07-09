@@ -9,14 +9,13 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
 import static ro.redeul.google.go.editor.TemplateUtil.createTemplate;
 import static ro.redeul.google.go.editor.TemplateUtil.getTemplateVariableExpression;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
 
 public class AddMissingExpressionFix implements LocalQuickFix {
     @NotNull
@@ -84,7 +83,7 @@ public class AddMissingExpressionFix implements LocalQuickFix {
 
     private static int getConstEndOffset(GoConstDeclaration cd) {
         PsiElement child = cd.getLastChild();
-        while (child != null && isNodeOfType(child, GoElementTypes.wsNLS)) {
+        while (child != null && isNewLineNode(child)) {
             child = child.getPrevSibling();
         }
 

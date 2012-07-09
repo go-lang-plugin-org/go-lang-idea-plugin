@@ -92,7 +92,7 @@ public class RemoveDeclarationParenthesesIntention extends Intention {
             sb.append("\n");
         }
         PsiElement[] statements = GoPsiElementFactory.createStatements((GoFile) file, sb.toString());
-        if (statements.length > 0 && isNodeOfType(statements[0], GoElementTypes.wsNLS)) {
+        if (statements.length > 0 && isNewLineNode(statements[0])) {
             space.replace(statements[0]);
         }
     }

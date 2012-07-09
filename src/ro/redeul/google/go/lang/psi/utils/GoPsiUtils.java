@@ -229,17 +229,6 @@ public class GoPsiUtils {
         return children;
     }
 
-    /**
-     * Check whether element is the predeclared identifier "iota" in a const declaration
-     *
-     * @param element the element to check
-     * @return true if the element is a valid use of "iota" in const declaration
-     */
-    public static boolean isIotaInConstantDeclaration(PsiElement element) {
-        return element instanceof GoLiteralIdentifier && ((GoLiteralIdentifier) element)
-            .isIota();
-    }
-
     public static boolean isEnclosedByParenthesis(PsiElement element) {
         if (element == null) {
             return false;
@@ -262,9 +251,7 @@ public class GoPsiUtils {
                 return null;
             }
 
-            IElementType type = node.getElementType();
-            if (type != GoElementTypes.wsNLS && type != GoElementTypes.wsWS && !(element instanceof PsiWhiteSpace) &&
-                !(element instanceof PsiComment)) {
+            if (!isWhiteSpaceOrComment(node.getPsi())) {
                 return element;
             }
 
@@ -280,9 +267,7 @@ public class GoPsiUtils {
                 return null;
             }
 
-            IElementType type = node.getElementType();
-            if (type != GoElementTypes.wsNLS && type != GoElementTypes.wsWS && !(element instanceof PsiWhiteSpace) &&
-                !(element instanceof PsiComment)) {
+            if (!isWhiteSpaceOrComment(node.getPsi())) {
                 return element;
             }
 
