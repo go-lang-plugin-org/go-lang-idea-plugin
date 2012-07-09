@@ -61,7 +61,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     public String getPackageImportPath() {
 
         if (isApplicationPart()) {
-            return null;
+            return "main";
         }
 
         // look in the current project to find the current package import path.
