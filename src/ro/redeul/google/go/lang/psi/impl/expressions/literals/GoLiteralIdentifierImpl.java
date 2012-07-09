@@ -133,6 +133,21 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
                 )
         );
 
+//    @NotNull
+//    @Override
+//    public PsiReference[] getReferences() {
+//        if (NO_REFERENCE.accepts(this))
+//            return PsiReference.EMPTY_ARRAY;
+//
+//        return new PsiReference[] {
+//            new BuiltinCallOrConversionReference(this),
+//            new CallOrConversionReference(this),
+//            new VarOrConstReference(this)
+//        }
+//
+//        return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.
+//    }
+//
     @Override
     public PsiReference getReference() {
 

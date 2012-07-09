@@ -1,6 +1,6 @@
 package main
 
-/*def*/func P() {
+/*def*/func Pff() {
     println("hi")
 }
 
@@ -9,5 +9,5 @@ func F(func()) {
 }
 
 func main() {
-    F(/*ref*/P)    // <-- second place
+    F(/*ref*/Pff)    // <-- second place
 }
