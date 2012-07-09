@@ -71,7 +71,7 @@ public interface GoTokenTypeSets extends GoTokenTypes {
         pRBRACK,
         pLPAREN,
         pRPAREN,
-        pLCURCLY,
+        pLCURLY,
         pRCURLY
     );
 

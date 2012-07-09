@@ -24,13 +24,10 @@ public class MapType implements GoElementTypes {
 
         ParserUtils.getToken(builder, kMAP);
 
-        ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, pLBRACK, "left.bracket.expected");
 
-        ParserUtils.skipNLS(builder);
         parser.parseType(builder);
 
-        ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, pRBRACK, "right.bracket.expected");
 
         parser.parseType(builder);

@@ -81,7 +81,6 @@ public class Types implements GoElementTypes {
         ParserUtils.getToken(builder, mIDENT);
 
         if (ParserUtils.getToken(builder, oDOT)) {
-            ParserUtils.skipNLS(builder);
             ParserUtils.getToken(builder, mIDENT, GoBundle.message("error.identifier.expected"));
         }
 
@@ -95,8 +94,6 @@ public class Types implements GoElementTypes {
      * typeName := [ "*" ] identifier .
      */
     public static boolean parseTypeName(PsiBuilder builder, GoParser parser) {
-
-        ParserUtils.skipNLS(builder);
 
         PsiBuilder.Marker typeNameMarker = builder.mark();
         PsiBuilder.Marker identifier = builder.mark();

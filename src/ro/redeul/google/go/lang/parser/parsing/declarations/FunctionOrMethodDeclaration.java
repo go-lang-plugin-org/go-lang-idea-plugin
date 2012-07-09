@@ -43,7 +43,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
             builder.error(GoBundle.message("error.method.name.expected"));
         }
 
-        if (ParserUtils.lookAhead(builder, pLCURCLY)) {
+        if (ParserUtils.lookAhead(builder, pLCURLY)) {
             parser.parseBody(builder);
         }
         marker.done(nodeType);
@@ -114,8 +114,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
         PsiBuilder.Marker signature = builder.mark();
 
-        while (!builder.eof() && !ParserUtils.lookAheadSkipNLS(builder,
-                                                               pRPAREN)) {
+        while (!builder.eof() && !ParserUtils.lookAhead(builder, pRPAREN)) {
             int pos = builder.getCurrentOffset();
 
             parseParameterDeclaration(builder, parser);
@@ -141,9 +140,8 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
         int identifiers = parser.parseIdentifierList(builder, false);
 
-        if (ParserUtils.lookAheadSkipNLS(builder,
-                                         pRPAREN) || ParserUtils.lookAheadSkipNLS(
-            builder, oCOMMA)) {
+        if (ParserUtils.lookAhead(builder, pRPAREN) ||
+            ParserUtils.lookAhead(builder, oCOMMA)) {
             mark.rollbackTo();
             mark = builder.mark();
             parser.parseType(builder);

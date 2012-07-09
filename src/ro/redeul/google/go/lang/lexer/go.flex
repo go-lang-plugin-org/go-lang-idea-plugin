@@ -236,7 +236,7 @@ mESCAPES = [abfnrtv]
         [^\"\\\n\r] | "\\" ("\\" | {mSTR} | {mESCAPES} | [0-8xuU] )
     )*
 {mSTR}?                                   { yybegin(MAYBE_SEMI); return litSTRING; }
-"{"                                       { return pLCURCLY; }
+"{"                                       { return pLCURLY; }
 "}"                                       { yybegin(MAYBE_SEMI); return pRCURLY; }
 
 "["                                       { return pLBRACK; }

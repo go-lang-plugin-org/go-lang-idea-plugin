@@ -103,8 +103,6 @@ public class GoParser extends ParserUtils implements PsiParser {
 
     private IElementType parseTopLevelDeclaration(PsiBuilder builder) {
 
-        ParserUtils.skipNLS(builder);
-
         if (lookAhead(builder, GoTokenTypes.kFUNC))
             return FunctionOrMethodDeclaration.parse(builder, this);
 

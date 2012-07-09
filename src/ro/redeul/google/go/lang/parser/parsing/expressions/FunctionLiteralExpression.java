@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.parser.parsing.expressions;
 import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
-import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,7 +24,6 @@ public class FunctionLiteralExpression implements GoElementTypes {
 
         parser.parseType(builder);
 
-        ParserUtils.skipNLS(builder);
         parser.parseBody(builder);
 
         mark.done(LITERAL_FUNCTION);

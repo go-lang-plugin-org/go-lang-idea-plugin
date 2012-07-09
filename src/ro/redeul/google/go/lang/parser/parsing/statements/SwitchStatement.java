@@ -47,7 +47,7 @@ public class SwitchStatement implements GoElementTypes {
             parser.parseExpression(builder);
         }
 
-        ParserUtils.getToken(builder, pLCURCLY, "open.curly.expected");
+        ParserUtils.getToken(builder, pLCURLY, "open.curly.expected");
 
         while (!builder.eof() && builder.getTokenType() != pRCURLY) {
 

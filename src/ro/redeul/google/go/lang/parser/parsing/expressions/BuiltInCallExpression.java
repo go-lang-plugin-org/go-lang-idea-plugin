@@ -87,7 +87,6 @@ public class BuiltInCallExpression implements GoElementTypes {
             parser.parseType(builder);
             if (oCOMMA == builder.getTokenType()) {
                 builder.advanceLexer();
-                ParserUtils.skipNLS(builder);
             }
         }
 

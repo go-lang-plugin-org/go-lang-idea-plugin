@@ -21,7 +21,6 @@ public class IdentifierList implements GoElementTypes {
 
         int length = 0;
 
-        ParserUtils.skipNLS(builder);
         PsiBuilder.Marker list = null;
         if ( markList ) {
             list = builder.mark();
@@ -38,12 +37,11 @@ public class IdentifierList implements GoElementTypes {
             ParserUtils.eatElement(builder, GoElementTypes.LITERAL_IDENTIFIER);
 
             length++;
-            if (!ParserUtils.lookAheadSkipNLS(builder, oCOMMA, mIDENT)) {
+            if (!ParserUtils.lookAhead(builder, oCOMMA, mIDENT)) {
                 break;
             }
-            ParserUtils.skipNLS(builder);
+
             ParserUtils.getToken(builder, oCOMMA);
-            ParserUtils.skipNLS(builder);
         }
 
         if (markList ) {

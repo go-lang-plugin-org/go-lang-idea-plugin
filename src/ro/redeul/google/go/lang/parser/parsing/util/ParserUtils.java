@@ -129,33 +129,6 @@ public abstract class ParserUtils {
     /**
      * Checks, that following element sequence is like given
      *
-     * @param builder Given PsiBuilder
-     * @param elems   Array of need elements in order
-     * @return true if following sequence is like a given
-     */
-    public static boolean lookAheadSkipNLS(PsiBuilder builder,
-                                           IElementType... elems) {
-        PsiBuilder.Marker rb = builder.mark();
-
-        int i = 0;
-        while (
-            !builder.eof() && i < elems.length &&
-                (builder.getTokenType() == GoElementTypes.wsNLS ||
-                    elems[i].equals(builder.getTokenType()))) {
-            if (builder.getTokenType() != GoElementTypes.wsNLS) {
-                i++;
-            }
-
-            builder.advanceLexer();
-        }
-
-        rb.rollbackTo();
-        return i == elems.length;
-    }
-
-    /**
-     * Checks, that following element sequence is like given
-     *
      * @param builder   Given PsiBuilder
      * @param tokenSets Array of need elements in order
      * @return true if following sequence is like a given
@@ -331,12 +304,6 @@ public abstract class ParserUtils {
 
     public static void advance(PsiBuilder builder) {
         advance(builder, 1);
-    }
-
-    public static void skipNLS(PsiBuilder builder) {
-        while (builder.getTokenType() == GoElementTypes.wsNLS) {
-            builder.advanceLexer();
-        }
     }
 
     public static void skipComments(PsiBuilder builder) {

@@ -16,12 +16,9 @@ public class SelectStatement implements GoElementTypes {
         PsiBuilder.Marker marker = builder.mark();
         ParserUtils.getToken(builder, kSELECT);
 
-        ParserUtils.skipNLS(builder);
-        ParserUtils.getToken(builder, pLCURCLY, "open.curly.expected");
-        ParserUtils.skipNLS(builder);
+        ParserUtils.getToken(builder, pLCURLY, "open.curly.expected");
 
         while ( !builder.eof() && builder.getTokenType() != pRCURLY) {
-            ParserUtils.skipNLS(builder);
 
             PsiBuilder.Marker caseMark = builder.mark();
 
@@ -41,13 +38,11 @@ public class SelectStatement implements GoElementTypes {
                 ParserUtils.wrapError(builder, "case.of.default.keyword.expected");
             }
 
-            ParserUtils.skipNLS(builder);
             if ( validCase ) {
                 while (builder.getTokenType() != kCASE && builder.getTokenType() != kDEFAULT && builder.getTokenType() != pRCURLY) {
                     if (parser.parseStatement(builder) == null) {
                         break;
                     }
-                    ParserUtils.skipNLS(builder);
                 }
 
                 caseMark.done(SELECT_CASE);
@@ -55,29 +50,22 @@ public class SelectStatement implements GoElementTypes {
                 caseMark.drop();
             }
 
-            ParserUtils.skipNLS(builder);
-
             if (builder.getCurrentOffset() == position) {
                 builder.advanceLexer();
             }
-
         }
 
         ParserUtils.getToken(builder, pRCURLY, "closed.curly.expected");
         marker.done(SELECT_STATEMENT);
-        ParserUtils.skipNLS(builder);
         return SELECT_STATEMENT;
     }
 
     private static void parseSendOrRecvExpression(PsiBuilder builder, GoParser parser) {
-        ParserUtils.skipNLS(builder);
-
         if ( oSEND_CHANNEL == builder.getTokenType() ) {
 
             PsiBuilder.Marker marker = builder.mark();
             builder.advanceLexer();
 
-            ParserUtils.skipNLS(builder);
             parser.parseExpression(builder);
             marker.done(SELECT_CASE_RECV_EXPRESSION);
             return;
@@ -88,7 +76,6 @@ public class SelectStatement implements GoElementTypes {
         parser.parseExpression(builder);
         if ( oSEND_CHANNEL == builder.getTokenType() ) {
             builder.advanceLexer();
-            ParserUtils.skipNLS(builder);
             parser.parseExpression(builder);
             mark.done(SELECT_CASE_SEND_EXPRESSION);
             return;
@@ -97,10 +84,8 @@ public class SelectStatement implements GoElementTypes {
         if ( oASSIGN == builder.getTokenType() || oVAR_ASSIGN == builder.getTokenType() ) {
             builder.advanceLexer();
 
-            ParserUtils.skipNLS(builder);
             ParserUtils.getToken(builder, oSEND_CHANNEL, "send.channel.operator.expected");
 
-            ParserUtils.skipNLS(builder);
             parser.parseExpression(builder);
 
             mark.done(SELECT_CASE_RECV_EXPRESSION);
@@ -118,5 +103,4 @@ public class SelectStatement implements GoElementTypes {
 
         mark.done(SELECT_CASE_SEND_EXPRESSION);
     }
-
 }

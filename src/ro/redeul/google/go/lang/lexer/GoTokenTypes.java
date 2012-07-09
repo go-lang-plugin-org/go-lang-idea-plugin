@@ -3,11 +3,9 @@ package ro.redeul.google.go.lang.lexer;
 import com.intellij.psi.tree.IElementType;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mtoader
  * Date: Jul 24, 2010
  * Time: 2:30:09 AM
- * To change this template use File | Settings | File Templates.
  */
 public interface GoTokenTypes {
 
@@ -62,7 +60,7 @@ public interface GoTokenTypes {
 
     IElementType mIDENT = new GoElementTypeImpl("IDENTIFIER");
 
-    IElementType pLCURCLY = new GoElementTypeImpl("{");
+    IElementType pLCURLY = new GoElementTypeImpl("{");
     IElementType pRCURLY = new GoElementTypeImpl("}");
     IElementType pLBRACK = new GoElementTypeImpl("[");
     IElementType pRBRACK = new GoElementTypeImpl("]");

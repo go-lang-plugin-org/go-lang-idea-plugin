@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.parser.parsing.expressions;
 
 import com.intellij.lang.PsiBuilder;
+import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -21,9 +22,8 @@ public class Expressions implements GoElementTypes {
                 count++;
             }
 
-            if ( builder.getTokenType() == wsNLS || builder.getTokenType() == oSEMI ) {
+            if ( ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) )
                 break;
-            }
 
             ParserUtils.getToken(builder, oTRIPLE_DOT);
 
@@ -40,22 +40,4 @@ public class Expressions implements GoElementTypes {
     public static boolean parsePrimary(PsiBuilder builder, GoParser parser) {
         return PrimaryExpression.parse(builder, parser);
     }
-
-//    private static boolean parseBuiltInCall(PsiBuilder builder) {
-//        PsiBuilder.Marker mark = builder.mark();
-//
-//        ParserUtils.eatElement(builder, IDENTIFIER);
-//
-//        ParserUtils.getToken(builder, IDENTIFIER);
-//
-//        BUILTIN_FUNCTION
-//    }
-//
-//    private static Set<String> builtInCalls = new HashSet<String>(Arrays.asList(
-//        "cap", "close", "closed", "cmplx", "copy", "imag", "len", "make", "new", "panic", "print", "println", "real"
-//    ));
-//
-//    private static boolean isBuiltInCall(String text) {
-//        return builtInCalls.contains(text);
-//    }
 }

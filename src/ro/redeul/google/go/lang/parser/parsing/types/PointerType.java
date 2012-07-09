@@ -22,7 +22,6 @@ public class PointerType implements GoElementTypes {
         PsiBuilder.Marker pointerType = builder.mark();
         ParserUtils.getToken(builder, oMUL);
 
-        ParserUtils.skipNLS(builder);
         parser.parseType(builder);
 
         pointerType.done(TYPE_POINTER);

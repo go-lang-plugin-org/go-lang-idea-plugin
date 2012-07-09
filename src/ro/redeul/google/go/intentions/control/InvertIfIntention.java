@@ -148,7 +148,7 @@ public class InvertIfIntention extends Intention {
     private int blockLeftCurlyPosition(GoBlockStatement block) {
         PsiElement child = block.getFirstChild();
         while (child != null) {
-            if (isNodeOfType(child, GoElementTypes.pLCURCLY)) {
+            if (isNodeOfType(child, GoElementTypes.pLCURLY)) {
                 return child.getTextOffset();
             }
             child = child.getPrevSibling();

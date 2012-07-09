@@ -23,7 +23,7 @@ public class InterfaceType implements GoElementTypes {
 
     private static void parseInterfaceBlock(PsiBuilder builder,
                                             GoParser parser) {
-        ParserUtils.getToken(builder, pLCURCLY, "left.curly.expected");
+        ParserUtils.getToken(builder, pLCURLY, "left.curly.expected");
 
         while (!builder.eof() && ! ParserUtils.lookAhead(builder, pRCURLY) ) {
 

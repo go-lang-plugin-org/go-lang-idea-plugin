@@ -6,10 +6,10 @@ import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
-import ro.redeul.google.go.lang.parser.parsing.declarations.FunctionOrMethodDeclaration;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowCompositeLiteral;
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.ParseIota;
+import static ro.redeul.google.go.lang.parser.parsing.declarations.FunctionOrMethodDeclaration.parseCompleteMethodSignature;
 
 public class PrimaryExpression implements GoElementTypes {
 
@@ -106,7 +106,7 @@ public class PrimaryExpression implements GoElementTypes {
 
             if (parseLiteralIdentifier(builder, parser)) {
                 // package? '.' ident '{' -> CompositeLiteral
-                if (builder.getTokenType() == pLCURCLY) {
+                if (builder.getTokenType() == pLCURLY) {
                     if ( parser.isSet(GoParser.ParsingFlag.AllowCompositeLiteral)) {
                         if (parseLiteralComposite(builder, parser, mark)) {
                             return true;
@@ -120,7 +120,7 @@ public class PrimaryExpression implements GoElementTypes {
         }
 
         if (parser.parseType(builder) != null) {
-            if (builder.getTokenType() == pLCURCLY) {
+            if (builder.getTokenType() == pLCURLY) {
                 if (parseLiteralComposite(builder, parser, mark)) {
                     return true;
                 }
@@ -193,10 +193,8 @@ public class PrimaryExpression implements GoElementTypes {
             return false;
         }
 
-        FunctionOrMethodDeclaration.parseCompleteMethodSignature(builder,
-                                                                 parser);
+        parseCompleteMethodSignature(builder, parser);
 
-        ParserUtils.skipNLS(builder);
         parser.parseBody(builder);
 
         mark.done(LITERAL_FUNCTION);
@@ -210,10 +208,8 @@ public class PrimaryExpression implements GoElementTypes {
                                              PsiBuilder.Marker mark) {
 
         ParserUtils.getToken(builder, pLBRACK);
-        ParserUtils.skipNLS(builder);
 
         parser.parseExpression(builder);
-        ParserUtils.skipNLS(builder);
 
         boolean isSlice = false;
         if (builder.getTokenType() == oCOLON) {
@@ -221,7 +217,6 @@ public class PrimaryExpression implements GoElementTypes {
             isSlice = true;
 
             parser.parseExpression(builder);
-            ParserUtils.skipNLS(builder);
         }
 
         ParserUtils.getToken(builder, pRBRACK, "right.bracket.expected");
@@ -353,21 +348,18 @@ public class PrimaryExpression implements GoElementTypes {
 
         PsiBuilder.Marker literalValue = builder.mark();
 
-        ParserUtils.getToken(builder, pLCURCLY);
-        ParserUtils.skipNLS(builder);
+        ParserUtils.getToken(builder, pLCURLY);
 
         while (!builder.eof() && builder.getTokenType() != pRCURLY) {
 
             parseCompositeLiteralValueElement(builder, parser);
 
-            ParserUtils.skipNLS(builder);
             if ( ! ParserUtils.getToken(builder, oCOMMA) )
                 break;
-            ParserUtils.skipNLS(builder);
+
         }
 
-        ParserUtils.getToken(builder, pRCURLY,
-                             "closed.parenthesis.expected");
+        ParserUtils.getToken(builder, pRCURLY, GoBundle.message("error.closing.para.expected"));
 
         literalValue.done(LITERAL_COMPOSITE_VALUE);
     }
@@ -377,7 +369,7 @@ public class PrimaryExpression implements GoElementTypes {
 
         PsiBuilder.Marker valueElement = builder.mark();
 
-        if ( ParserUtils.lookAhead(builder, pLCURCLY) ) {
+        if ( ParserUtils.lookAhead(builder, pLCURLY) ) {
             parseCompositeLiteralValue(builder, parser);
         } else {
             if (!parser.parseExpression(builder)) {
@@ -389,10 +381,9 @@ public class PrimaryExpression implements GoElementTypes {
                 valueElement = valueElement.precede();
 
                 ParserUtils.getToken(builder, oCOLON);
-                ParserUtils.skipNLS(builder);
             }
 
-            if (ParserUtils.lookAhead(builder, pLCURCLY)) {
+            if (ParserUtils.lookAhead(builder, pLCURLY)) {
                 parseCompositeLiteralValue(builder, parser);
             } else {
                 parser.parseExpression(builder);
@@ -446,9 +437,7 @@ public class PrimaryExpression implements GoElementTypes {
 
         PsiBuilder.Marker mark2 = builder.mark();
 
-        ParserUtils.skipNLS(builder);
-
-        if (pLCURCLY == builder.getTokenType()) {
+        if (pLCURLY == builder.getTokenType()) {
             parser.parseBody(builder);
 
             mark2.drop();

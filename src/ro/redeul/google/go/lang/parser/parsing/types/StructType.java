@@ -24,7 +24,7 @@ public class StructType implements GoElementTypes {
 
         ParserUtils.getToken(builder, kSTRUCT);
 
-        ParserUtils.getToken(builder, pLCURCLY, "left.curly.expected");
+        ParserUtils.getToken(builder, pLCURLY, "left.curly.expected");
 
         while ( ! builder.eof() && ! ParserUtils.lookAhead(builder, pRCURLY) && parseFieldDeclaration(builder, parser)) {
             ParserUtils.endStatement(builder);
@@ -37,9 +37,8 @@ public class StructType implements GoElementTypes {
 
     private static boolean parseFieldDeclaration(PsiBuilder builder, GoParser parser) {
 
-        if ( builder.getTokenType() == wsNLS || builder.getTokenType() == pRCURLY || builder.getTokenType() == oSEMI || builder.eof()) {
+        if ( builder.eof() || ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) )
             return true;
-        }
 
         boolean isAnonymous = false;
 

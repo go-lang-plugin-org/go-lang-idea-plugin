@@ -29,7 +29,8 @@ public class IfStatement implements GoElementTypes {
         boolean allowComposite = parser.resetFlag(AllowCompositeLiteral, false);
 
         IElementType statementType = parser.parseStatementSimple(builder);
-        if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder, pLCURCLY)) {
+        if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder,
+                                                                           pLCURLY)) {
             mark.rollbackTo();
         } else {
             mark.drop();
@@ -41,7 +42,7 @@ public class IfStatement implements GoElementTypes {
 
         parser.parseBody(builder);
 
-        if (ParserUtils.lookAheadSkipNLS(builder, kELSE)) {
+        if (ParserUtils.lookAhead(builder, kELSE)) {
             if (builder.getTokenType() == kELSE) {
                 ParserUtils.getToken(builder, kELSE);
                 Statements.parse(builder, parser);

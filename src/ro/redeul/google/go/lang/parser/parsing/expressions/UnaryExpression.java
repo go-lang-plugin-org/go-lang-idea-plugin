@@ -28,11 +28,9 @@ public class UnaryExpression implements GoElementTypes {
             PsiBuilder.Marker marker = builder.mark();
             ParserUtils.getToken(builder, builder.getTokenType());
 
-            ParserUtils.skipNLS(builder);
             if ( kCHAN == builder.getTokenType() ) {
                 ParserUtils.advance(builder);
 
-                ParserUtils.skipNLS(builder);
                 parser.parseType(builder);
 
                 marker.error("chan.type.should.not.be.here");

@@ -31,19 +31,16 @@ public class ChanType implements GoElementTypes {
 
             type = ChannelType.Bidirectional;
 
-            ParserUtils.skipNLS(builder);
             if ( ParserUtils.getToken(builder, oSEND_CHANNEL) ) {
                 type = ChannelType.Sending;
             }
         } else {
             ParserUtils.getToken(builder, oSEND_CHANNEL);
 
-            ParserUtils.skipNLS(builder);
             ParserUtils.getToken(builder, kCHAN, "chan.keyword.expected");
             type = ChannelType.Receiving;
         }
 
-        ParserUtils.skipNLS(builder);
         parser.parseType(builder);
 
 

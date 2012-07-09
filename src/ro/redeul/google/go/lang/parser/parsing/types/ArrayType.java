@@ -26,7 +26,6 @@ public class ArrayType implements GoElementTypes
             return null;
         }
 
-        ParserUtils.skipNLS(builder);
         if ( oTRIPLE_DOT == builder.getTokenType() ) {
             ParserUtils.getToken(builder, oTRIPLE_DOT);
         } else  if ( ! parser.parseExpression(builder) ) {
@@ -39,7 +38,6 @@ public class ArrayType implements GoElementTypes
         }
 
         parser.parseType(builder);
-
         marker.done(TYPE_ARRAY);
         return TYPE_ARRAY;
     }

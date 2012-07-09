@@ -60,7 +60,7 @@ public class Statements implements GoElementTypes {
             return GotoStatement.parse(builder, parser);
         }
 
-        if ( builder.getTokenType() == pLCURCLY ) {
+        if ( builder.getTokenType() == pLCURLY) {
             return parser.parseBody(builder);
         }
 
@@ -80,7 +80,7 @@ public class Statements implements GoElementTypes {
             return ForStatement.parse(builder, parser);
         }
 
-        if ( ParserUtils.lookAhead(builder, TokenSet.create(oSEMI, pLCURCLY, pRCURLY)) ) {
+        if ( ParserUtils.lookAhead(builder, TokenSet.create(oSEMI, pLCURLY, pRCURLY)) ) {
             builder.mark().done(EMPTY_STATEMENT);
             ParserUtils.getToken(builder, oSEMI);
             return EMPTY_STATEMENT;
@@ -183,7 +183,7 @@ public class Statements implements GoElementTypes {
             return SHORT_VAR_STATEMENT;
         }
 
-        if ( expressionCount == 0 && ParserUtils.lookAhead(builder, pLCURCLY)) {
+        if ( expressionCount == 0 && ParserUtils.lookAhead(builder, pLCURLY)) {
             mark.done(EMPTY_STATEMENT);
             return EMPTY_STATEMENT;
         }

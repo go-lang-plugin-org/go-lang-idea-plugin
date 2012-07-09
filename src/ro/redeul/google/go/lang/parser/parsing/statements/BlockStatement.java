@@ -8,28 +8,26 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mtoader
  * Date: Jul 25, 2010
  * Time: 7:44:49 PM
- * To change this template use File | Settings | File Templates.
  */
 public class BlockStatement implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-        if ( ! ParserUtils.lookAhead(builder, pLCURCLY) )
+        if ( ! ParserUtils.lookAhead(builder, pLCURLY) )
             return null;
 
         PsiBuilder.Marker block = builder.mark();
 
-        ParserUtils.getToken(builder, pLCURCLY);
+        ParserUtils.getToken(builder, pLCURLY);
         while ( !builder.eof() && builder.getTokenType() != pRCURLY ) {
 
             IElementType statementType = parser.parseStatement(builder);
             if ( statementType == null || statementType == EMPTY_STATEMENT) {
 
-                ParserUtils.waitNext(builder, TokenSet.create(wsNLS, oSEMI, pRCURLY));
+                ParserUtils.waitNext(builder, TokenSet.create(oSEMI, oSEMI_SYNTHETIC, pRCURLY));
 //                marker.error(GoBundle.message("error.statement.expected"));
             }
 

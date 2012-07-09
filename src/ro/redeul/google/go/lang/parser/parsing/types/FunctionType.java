@@ -22,8 +22,6 @@ public class FunctionType implements GoElementTypes {
 
         ParserUtils.getToken(builder, kFUNC);
 
-        ParserUtils.skipNLS(builder);
-
         parser.parseFunctionSignature(builder);
 
         marker.done(TYPE_FUNCTION);

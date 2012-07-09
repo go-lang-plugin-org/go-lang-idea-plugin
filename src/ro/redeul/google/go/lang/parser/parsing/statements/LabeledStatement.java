@@ -26,7 +26,6 @@ public class LabeledStatement implements GoElementTypes {
         ParserUtils.getToken(builder, mIDENT);
         ParserUtils.getToken(builder, oCOLON);
 
-        ParserUtils.skipNLS(builder);
         parser.parseStatement(builder);
         marker.done(LABELED_STATEMENT);
         return LABELED_STATEMENT;

@@ -1,7 +1,6 @@
 package ro.redeul.google.go.editor.actions;
 
 import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegate;
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
@@ -50,7 +49,7 @@ public class GoEnterHandler extends EnterHandlerDelegateAdapter {
               iterator.retreat();
             }
 
-            if (iterator.getTokenType() == GoTokenTypes.pLCURCLY ) {
+            if (iterator.getTokenType() == GoTokenTypes.pLCURLY) {
                 PsiDocumentManager.getInstance(file.getProject()).commitDocument(editor.getDocument());
                 CodeStyleManager.getInstance(file.getProject()).adjustLineIndent(file, editor.getCaretModel().getOffset());
                 return Result.DefaultForceIndent;

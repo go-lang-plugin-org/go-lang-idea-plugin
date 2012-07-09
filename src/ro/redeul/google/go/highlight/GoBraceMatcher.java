@@ -6,7 +6,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 
 /**
@@ -21,7 +20,7 @@ public class GoBraceMatcher implements PairedBraceMatcher {
     private static final BracePair[] PAIRS = {
         new BracePair(GoTokenTypes.pLPAREN, GoTokenTypes.pRPAREN, true),
         new BracePair(GoTokenTypes.pLBRACK, GoTokenTypes.pRBRACK, false),
-        new BracePair(GoTokenTypes.pLCURCLY, GoTokenTypes.pRCURLY, true),
+        new BracePair(GoTokenTypes.pLCURLY, GoTokenTypes.pRCURLY, true),
 
 //        new BracePair(GroovyDocTokenTypes.mGDOC_INLINE_TAG_START, GroovyDocTokenTypes.mGDOC_INLINE_TAG_END, true),
 //        new BracePair(GroovyDocTokenTypes.mGDOC_TAG_VALUE_LPAREN, GroovyDocTokenTypes.mGDOC_TAG_VALUE_RPAREN, false),

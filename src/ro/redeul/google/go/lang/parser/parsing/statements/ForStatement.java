@@ -24,7 +24,7 @@ public class ForStatement implements GoElementTypes {
         allowComposite = parser.resetFlag(AllowCompositeLiteral, false);
 
         GoElementType forType = FOR_WITH_CONDITION_STATEMENT;
-        if ( builder.getTokenType() != pLCURCLY ) {
+        if ( builder.getTokenType() != pLCURLY) {
             forType = parseConditionOrForClauseOrRangeClause(builder, parser);
         }
 
@@ -44,7 +44,8 @@ public class ForStatement implements GoElementTypes {
 
         IElementType statementType = parser.parseStatementSimple(builder);
 
-        if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder, pLCURCLY)) {
+        if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder,
+                                                                           pLCURLY)) {
             clause.rollbackTo();
             parser.parseExpression(builder);
             return FOR_WITH_CONDITION_STATEMENT;

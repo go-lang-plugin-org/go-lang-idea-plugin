@@ -20,10 +20,8 @@ public class ParenthesizedExpression implements GoElementTypes {
 
         ParserUtils.getToken(builder, pLPAREN);
 
-        ParserUtils.skipNLS(builder);
         parser.parseExpression(builder);
 
-        ParserUtils.skipNLS(builder);
         ParserUtils.getToken(builder, pRPAREN, "right.parenthesis.expected");
         expression.done(PARENTHESISED_EXPRESSION);
 

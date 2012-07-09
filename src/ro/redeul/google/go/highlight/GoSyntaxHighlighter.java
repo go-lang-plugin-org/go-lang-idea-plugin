@@ -1,5 +1,9 @@
 package ro.redeul.google.go.highlight;
 
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -11,12 +15,14 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoLexer;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-
-import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.*;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.BAD_TOKENS;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.BLOCK_COMMENTS;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.IDENTIFIERS;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.KEYWORDS;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.LINE_COMMENTS;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.NUMBERS;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.OPERATORS;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.STRINGS;
 
 public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoTokenTypes {
 
@@ -155,11 +161,10 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase implements GoToke
         fillMap(ATTRIBUTES, STRINGS, STRING);
         fillMap(ATTRIBUTES, TokenSet.create(pLPAREN, pRPAREN), BRACKET);
         fillMap(ATTRIBUTES, TokenSet.create(pLBRACK, pRBRACK), BRACKET);
-        fillMap(ATTRIBUTES, TokenSet.create(pLCURCLY, pRCURLY), BRACKET);
+        fillMap(ATTRIBUTES, TokenSet.create(pLCURLY, pRCURLY), BRACKET);
         fillMap(ATTRIBUTES, OPERATORS, OPERATOR);
         fillMap(ATTRIBUTES, IDENTIFIERS, IDENTIFIER);
         fillMap(ATTRIBUTES, BAD_TOKENS, CodeInsightColors.ERRORS_ATTRIBUTES);
-        fillMap(ATTRIBUTES, TokenSet.create(wsNLS, wsWS), DEFAULT);
     }
 
     @NotNull

@@ -9,11 +9,9 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mtoader
  * Date: Jul 28, 2010
  * Time: 3:02:31 AM
- * To change this template use File | Settings | File Templates.
  */
 public class BinaryExpression implements GoElementTypes {
 
@@ -42,8 +40,6 @@ public class BinaryExpression implements GoElementTypes {
 
     private static boolean parse(PsiBuilder builder, GoParser parser, int level) {
 
-        ParserUtils.skipNLS(builder);
-
         PsiBuilder.Marker marker = builder.mark();
         if ( ! UnaryExpression.parse(builder, parser) ) {
             marker.rollbackTo();
@@ -59,8 +55,6 @@ public class BinaryExpression implements GoElementTypes {
             for ( int i = level; i < precedence.length; i++ ) {
                 if ( precedence[i].operators.contains(builder.getTokenType()) ) {
                     ParserUtils.getToken(builder, builder.getTokenType());
-                    ParserUtils.skipNLS(builder);
-
                     parse(builder, parser, i + 1);
 
                     marker.done(precedence[i].elementType);
