@@ -4,7 +4,10 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public class FunctionInsertHandler implements InsertHandler<LookupElement> {
     @Override
@@ -23,12 +26,11 @@ public class FunctionInsertHandler implements InsertHandler<LookupElement> {
     }
 
     private static boolean isFunctionWithoutParameters(Object object) {
-        if (object instanceof GoFunctionDeclaration) {
-            GoFunctionDeclaration declaration = (GoFunctionDeclaration) object;
-            if (declaration.getParameters().length == 0) {
-                return true;
-            }
+        if (!(object instanceof PsiElement)) {
+            return false;
         }
-        return false;
+
+        GoFunctionDeclaration declaration = findParentOfType((PsiElement) object, GoFunctionDeclaration.class);
+        return declaration != null && declaration.getParameters().length == 0;
     }
 }
