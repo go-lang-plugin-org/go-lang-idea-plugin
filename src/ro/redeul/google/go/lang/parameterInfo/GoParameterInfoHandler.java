@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.parameterInfo;
 
-import java.util.List;
-
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.lang.parameterInfo.CreateParameterInfoContext;
 import com.intellij.lang.parameterInfo.ParameterInfoContext;
@@ -12,20 +10,25 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.inspection.InspectionUtil;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+
+import java.util.List;
+
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionParameterRangeInText;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionPresentationText;
+import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.resolveToFunctionDeclaration;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildrenOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
 
 public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement, GoParameterInfoHandler.ParameterInfo> {
     @Override
@@ -103,29 +106,18 @@ public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement
     private ParameterInfo findAnchorElement(int offset, PsiFile file) {
         PsiElement element = file.findElementAt(offset);
         GoCallOrConvExpression call = findFunctionCallParent(element, offset);
-        if (call == null) {
+        GoFunctionDeclaration func = resolveToFunctionDeclaration(call);
+        if (func == null) {
             return null;
         }
 
-        List<GoExpr> exprs = findChildrenOfType(call, GoExpr.class);
-        GoLiteral literal = ((GoLiteralExpression) exprs.get(0)).getLiteral();
-        if (!(literal instanceof GoLiteralIdentifier)) {
-            return null;
-        }
-
-        GoLiteralIdentifier id = (GoLiteralIdentifier) literal;
-        PsiElement functionDeclaration = InspectionUtil.resolveIdentifier(id);
-        if (!(functionDeclaration instanceof GoFunctionDeclaration)) {
-            return null;
-        }
-
-        GoFunctionDeclaration func = (GoFunctionDeclaration) functionDeclaration;
         GoFunctionParameter[] parameters = func.getParameters();
         if (parameters == null || parameters.length == 0) {
             return null;
         }
 
-        List<PsiElement> commas = findChildrenOfType(call, GoElementTypes.oCOMMA);
+        PsiElement expressionList = findChildOfType(call, GoElementTypes.EXPRESSION_LIST);
+        List<PsiElement> commas = findChildrenOfType(expressionList, GoElementTypes.oCOMMA);
         int currentIndex = commas.size();
         for (int i = 0; i < commas.size(); i++) {
             if (offset < commas.get(i).getTextRange().getEndOffset()) {
@@ -134,7 +126,9 @@ public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement
             }
         }
 
-        if (id.getTextRange().contains(offset)) {
+        if (!isWhiteSpaceNode(element) &&
+            !isNodeOfType(element, GoTokenTypes.pRPAREN) &&
+            !expressionList.getTextRange().contains(offset)) {
             currentIndex = -1;
         }
 

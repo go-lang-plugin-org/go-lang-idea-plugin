@@ -11,7 +11,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.GoBundle;
@@ -20,18 +19,15 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
-import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.editor.TemplateUtil.createTemplate;
 import static ro.redeul.google.go.editor.TemplateUtil.getTemplateVariableExpression;
 import static ro.redeul.google.go.editor.TemplateUtil.runTemplate;
 import static ro.redeul.google.go.editor.TemplateUtil.setTemplateVariableValues;
-import static ro.redeul.google.go.inspection.InspectionUtil.getFunctionIdentifier;
-import static ro.redeul.google.go.inspection.InspectionUtil.resolveIdentifier;
+import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.resolveToFunctionDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
@@ -129,31 +125,6 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
         TemplateManager.getInstance(editor.getProject())
                        .startTemplate(editor, "", template);
         return true;
-    }
-
-    private GoFunctionDeclaration resolveToFunctionDeclaration(PsiElement element) {
-        if (!(element instanceof GoCallOrConvExpression)) {
-            return null;
-        }
-
-        GoCallOrConvExpression callExpr = (GoCallOrConvExpression) element;
-        GoLiteralIdentifier id = getFunctionIdentifier(callExpr);
-        if (id == null) {
-            return null;
-        }
-
-        PsiElement definition = resolveIdentifier(id);
-
-        ElementPattern pattern =
-            psiElement(GoLiteralIdentifier.class)
-                .withParent(
-                    psiElement(GoFunctionDeclaration.class));
-
-        if (pattern.accepts(definition)) {
-            return (GoFunctionDeclaration) definition.getParent();
-        }
-
-        return null;
     }
 
     private List<String> getFunctionResultNames(GoFunctionDeclaration function) {

@@ -17,7 +17,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import static ro.redeul.google.go.inspection.InspectionUtil.UNKNOWN_COUNT;
 import static ro.redeul.google.go.inspection.InspectionUtil.checkExpressionShouldReturnOneResult;
 import static ro.redeul.google.go.inspection.InspectionUtil.getExpressionResultCount;
-import static ro.redeul.google.go.inspection.InspectionUtil.getFunctionIdentifier;
+import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.getCallFunctionIdentifier;
 import static ro.redeul.google.go.inspection.InspectionUtil.getFunctionParameterCount;
 
 public class FunctionCallInspection extends AbstractWholeGoFileInspection {
@@ -162,7 +162,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         }
 
         String name = "";
-        GoLiteralIdentifier id = getFunctionIdentifier(call);
+        GoLiteralIdentifier id = getCallFunctionIdentifier(call);
         if (id != null) {
             name = id.getName();
         }
