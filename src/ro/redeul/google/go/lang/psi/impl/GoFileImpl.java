@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl;
 
+import java.util.Collection;
+
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.diagnostic.Logger;
@@ -25,12 +27,14 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.util.GoUtil;
 import ro.redeul.google.go.util.LookupElementUtil;
 
@@ -229,6 +233,21 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
                 return false;
 
             child = child.getPrevSibling();
+        }
+
+        if (state.get(GoResolveStates.IsOriginalFile)) {
+            ResolveState newState = state.put(GoResolveStates.IsOriginalFile, false);
+
+            GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
+
+            Collection<GoFile> goFiles =
+                namesCache.getFilesByPackageImportPath(getPackageImportPath());
+            for (GoFile goFile : goFiles) {
+                if ( goFile != this ) {
+                    if (!goFile.processDeclarations(processor, newState, null, place))
+                        return false;
+                }
+            }
         }
 
         return true;
