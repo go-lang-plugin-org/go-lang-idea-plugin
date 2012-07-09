@@ -26,8 +26,14 @@ public class StructType implements GoElementTypes {
 
         ParserUtils.getToken(builder, pLCURLY, "left.curly.expected");
 
-        while ( ! builder.eof() && ! ParserUtils.lookAhead(builder, pRCURLY) && parseFieldDeclaration(builder, parser)) {
-            ParserUtils.endStatement(builder);
+        while ( ! builder.eof() && ! ParserUtils.lookAhead(builder, pRCURLY) ) {
+
+            if ( ! parseFieldDeclaration(builder, parser) )
+                break;
+
+            if ( ! ParserUtils.endStatement(builder) ) {
+                break;
+            }
         }
 
         ParserUtils.getToken(builder, pRCURLY);

@@ -340,11 +340,14 @@ public abstract class ParserUtils {
         return false;
     }
 
-    public static void endStatement(PsiBuilder builder) {
+    public static boolean endStatement(PsiBuilder builder) {
         if (!builder.eof() && !ParserUtils.lookAhead(builder,
                                                      GoTokenTypeSets.EOS_CAN_SKIP_SEMI)) {
-            getToken(builder, GoTokenTypeSets.EOS,
+            return getToken(builder, GoTokenTypeSets.EOS,
                      GoBundle.message("error.semicolon.or.newline.expected"));
         }
+
+        return true;
+
     }
 }
