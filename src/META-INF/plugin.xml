@@ -466,6 +466,8 @@
 
         <todoIndexer filetype="Google Go" implementationClass="ro.redeul.google.go.highlight.GoToDoIndexer"/>
 
+        <exceptionFilter implementation="ro.redeul.google.go.ide.exception.GoExceptionFilterFactory"/>
+
         <intentionAction>
             <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
             <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
