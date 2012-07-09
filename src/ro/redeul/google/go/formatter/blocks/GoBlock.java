@@ -28,7 +28,8 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
@@ -42,10 +43,6 @@ class GoBlock implements Block, GoElementTypes {
     final protected Wrap myWrap;
     final protected CommonCodeStyleSettings mySettings;
     private Boolean myIncomplete;
-
-    final static TokenSet GO_BLOCK_ELEMENTS =
-        TokenSet.not(
-            TokenSet.create(GoTokenTypes.wsWS, TokenType.WHITE_SPACE));
 
     protected List<Block> mySubBlocks = null;
 
@@ -151,7 +148,7 @@ class GoBlock implements Block, GoElementTypes {
         List<Block> children = new ArrayList<Block>();
 
         for (ASTNode child : getGoChildren()) {
-            if (child.getTextRange().getLength() == 0 || child.getElementType() == GoElementTypes.wsNLS) {
+            if (child.getTextRange().getLength() == 0 || isWhiteSpaceNode(child.getPsi())) {
                 continue;
             }
 
@@ -187,7 +184,7 @@ class GoBlock implements Block, GoElementTypes {
         ASTNode node = block1.getNode();
         int end = block2.getNode().getStartOffset();
         while ((node = node.getTreeNext()) != null && node.getStartOffset() < end) {
-            if (node.getElementType() == GoElementTypes.wsNLS) {
+            if (isNewLineNode(node.getPsi())) {
                 return false;
             }
         }
@@ -292,7 +289,7 @@ class GoBlock implements Block, GoElementTypes {
             return childList.toArray(new ASTNode[childList.size()]);
         }
 
-        return myNode.getChildren(GO_BLOCK_ELEMENTS);
+        return myNode.getChildren(null);
     }
 
     private static void addChildNodes(PsiElement elem,

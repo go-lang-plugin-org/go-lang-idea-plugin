@@ -2,13 +2,12 @@ package ro.redeul.google.go.inspection.fix;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
 
 public class FixUtil {
     public static void removeWholeElement(PsiElement element) {
@@ -18,7 +17,7 @@ public class FixUtil {
         }
 
         PsiElement next = element.getNextSibling();
-        if (next != null && isNodeOfType(next, GoTokenTypes.wsNLS)) {
+        if (next != null && isNewLineNode(next)) {
             next.delete();
         }
 

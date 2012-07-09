@@ -12,6 +12,8 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
+
 class GoAssignBlock extends GoBlock {
     private final Alignment assignAlignment;
 
@@ -26,6 +28,10 @@ class GoAssignBlock extends GoBlock {
         for (ASTNode child : getGoChildren()) {
             Block block;
             Indent indent = Indent.getNormalIndent();
+            if (isWhiteSpaceNode(child.getPsi())) {
+                continue;
+            }
+
             if (child.getElementType() == GoElementTypes.oASSIGN) {
                 block = GoBlockGenerator.generateBlock(child, indent, assignAlignment, mySettings);
             } else {

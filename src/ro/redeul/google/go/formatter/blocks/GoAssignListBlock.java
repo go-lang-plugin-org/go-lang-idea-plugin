@@ -8,12 +8,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
 
 class GoAssignListBlock extends GoBlock {
     /**
@@ -52,10 +53,12 @@ class GoAssignListBlock extends GoBlock {
             }
 
             IElementType type = child.getElementType();
-            if (type == GoTokenTypes.wsNLS) {
-                newLinesAfterLastAssign += child.getTextLength();
-                newLinesAfterLastComment += child.getTextLength();
-                assignInCurrentLine = false;
+            if (isWhiteSpaceNode(child.getPsi())) {
+                if (isNewLineNode(child.getPsi())) {
+                    newLinesAfterLastAssign += child.getTextLength();
+                    newLinesAfterLastComment += child.getTextLength();
+                    assignInCurrentLine = false;
+                }
                 continue;
             } else if (ALIGN_ASSIGNMENT_STATEMENTS.contains(type)) {
                 assignInCurrentLine = true;

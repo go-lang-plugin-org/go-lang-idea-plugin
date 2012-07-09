@@ -16,7 +16,9 @@ import ro.redeul.google.go.lang.psi.GoPsiElementFactory;
 
 import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.getRightParenthesis;
 import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.hasOnlyOneDeclaration;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
 
 public class RemoveDeclarationParenthesesIntention extends Intention {
     @Override
@@ -48,14 +50,13 @@ public class RemoveDeclarationParenthesesIntention extends Intention {
         if (leftEnd == null) {
             return;
         }
-        leftEnd = leftEnd.getPrevSibling();
 
         Document document = editor.getDocument();
         int leftLine = document.getLineNumber(leftStart.getTextOffset());
         int rightLine = document.getLineNumber(rightEnd.getTextOffset());
 
         element.deleteChildRange(rightStart, rightEnd);
-        element.deleteChildRange(leftStart, leftEnd);
+        element.getNode().removeRange(leftStart.getNode(), leftEnd.getNode());
 
         // if parentheses are not in the same line, delete line ending white space and new line
         if (leftLine != rightLine) {
@@ -70,7 +71,7 @@ public class RemoveDeclarationParenthesesIntention extends Intention {
             space = space.getNextSibling();
         }
 
-        if (space == null || !isNodeOfType(space, GoElementTypes.wsNLS)) {
+        if (space == null || !isNewLineNode(space)) {
             return;
         }
 
@@ -97,19 +98,18 @@ public class RemoveDeclarationParenthesesIntention extends Intention {
     }
 
     private PsiElement getNextNonWhitespaceSibling(PsiElement start) {
-        PsiElement end = start;
-        while ((end = end.getNextSibling()) != null) {
-            if (!isNodeOfType(end, GoTokenTypeSets.WHITESPACES) && !isNodeOfType(end, GoElementTypes.wsNLS)) {
+        while ((start = start.getNextSibling()) != null) {
+            if (!isWhiteSpaceNode(start)) {
                 break;
             }
         }
-        return end;
+        return start;
     }
 
     private PsiElement getPrevNonWhitespaceSibling(PsiElement start) {
         PsiElement end = start;
         while ((end = end.getPrevSibling()) != null) {
-            if (!isNodeOfType(end, GoTokenTypeSets.WHITESPACES) && !isNodeOfType(end, GoElementTypes.wsNLS)) {
+            if (!isWhiteSpaceNode(end)) {
                 break;
             }
         }

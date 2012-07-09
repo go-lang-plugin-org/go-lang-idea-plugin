@@ -7,13 +7,14 @@ import com.intellij.formatting.Spacing;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
 
 class GoTypeStructBlock extends GoBlock {
     public GoTypeStructBlock(ASTNode node, Alignment alignment, Indent indent, CommonCodeStyleSettings settings) {
@@ -39,10 +40,12 @@ class GoTypeStructBlock extends GoBlock {
             }
 
             IElementType type = child.getElementType();
-            if (type == GoTokenTypes.wsNLS) {
-                newLinesAfterLastField += child.getTextLength();
-                newLinesAfterLastComment += child.getTextLength();
-                fieldInCurrentLine = false;
+            if (isWhiteSpaceNode(child.getPsi())){
+                if (isNewLineNode(child.getPsi())) {
+                    newLinesAfterLastField += child.getTextLength();
+                    newLinesAfterLastComment += child.getTextLength();
+                    fieldInCurrentLine = false;
+                }
                 continue;
             } else if (type == GoElementTypes.TYPE_STRUCT_FIELD) {
                 fieldInCurrentLine = true;

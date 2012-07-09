@@ -167,6 +167,10 @@ public class GoPsiUtils {
         return type.cast(node);
     }
 
+    public static boolean isNewLineNode(PsiElement node) {
+        return isWhiteSpaceNode(node) && node.getText().contains("\n");
+    }
+
     public static boolean isWhiteSpaceOrComment(PsiElement node) {
         return isNodeOfType(node, GoTokenSets.WHITESPACE_OR_COMMENTS);
     }

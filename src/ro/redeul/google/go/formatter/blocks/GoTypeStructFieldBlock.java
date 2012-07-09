@@ -10,6 +10,8 @@ import com.intellij.psi.tree.TokenSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
+
 class GoTypeStructFieldBlock extends GoBlock {
     private static final TokenSet FIELD_TYPE_SET = TokenSet.create(
         TYPE_SLICE,
@@ -31,6 +33,10 @@ class GoTypeStructFieldBlock extends GoBlock {
     protected List<Block> buildChildren() {
         List<Block> children = new ArrayList<Block>();
         for (ASTNode child : getGoChildren()) {
+            if (isNewLineNode(child.getPsi())) {
+                continue;
+            }
+
             Block block;
             Indent indent = Indent.getNormalIndent();
             if (FIELD_TYPE_SET.contains(child.getElementType())) {
