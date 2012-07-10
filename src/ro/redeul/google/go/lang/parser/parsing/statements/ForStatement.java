@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.parser.parsing.statements;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.lexer.GoElementType;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
@@ -65,10 +66,16 @@ public class ForStatement implements GoElementTypes {
         }
 
         clause.drop();
-        ParserUtils.getToken(builder, GoTokenTypeSets.EOS, "semicolon.expected");
-        parser.parseExpression(builder);
-        ParserUtils.getToken(builder, GoTokenTypeSets.EOS, "semicolon.expected");
-        parser.parseStatementSimple(builder);
+        if (ParserUtils.getToken(builder, GoTokenTypeSets.EOS) ) {
+            parser.parseExpression(builder);
+            if (ParserUtils.getToken(builder, GoTokenTypeSets.EOS)) {
+                parser.parseStatementSimple(builder);
+            } else {
+                builder.error(GoBundle.message("error.semicolon.or.newline.expected"));
+            }
+        } else {
+            builder.error(GoBundle.message("error.semicolon.or.newline.expected"));
+        }
         return FOR_WITH_CLAUSES_STATEMENT;
     }
 
