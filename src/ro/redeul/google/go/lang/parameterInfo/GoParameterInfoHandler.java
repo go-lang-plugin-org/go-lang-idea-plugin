@@ -16,7 +16,6 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 
 import java.util.List;
 
@@ -106,11 +105,6 @@ public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement
         GoCallOrConvExpression call = findFunctionCallParent(element, offset);
         GoFunctionDeclaration func = resolveToFunctionDeclaration(call);
         if (func == null) {
-            return null;
-        }
-
-        GoFunctionParameter[] parameters = func.getParameters();
-        if (parameters == null || parameters.length == 0) {
             return null;
         }
 
