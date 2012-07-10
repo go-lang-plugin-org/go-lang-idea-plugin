@@ -13,9 +13,9 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
         return super.getTestDataRelativePath() + "calls/";
     }
 
-    public void testCallToLocalMethod() throws Exception {
-        doTest();
-    }
+//    public void testCallToLocalMethod() throws Exception {
+//        doTest();
+//    }
 
     public void testCallToLocalFunction() throws Exception {
         doTest();
