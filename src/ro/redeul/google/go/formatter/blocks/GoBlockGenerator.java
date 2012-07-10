@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 
 /**
@@ -54,6 +55,10 @@ public class GoBlockGenerator {
 
         if (psi instanceof GoBinaryExpression) {
             return new GoBinaryExpressionBlock(node, alignment, NO_WRAP, styleSettings);
+        }
+
+        if (psi instanceof GoFunctionDeclaration) {
+            return new GoFunctionDeclarationBlock(node, alignment, indent, styleSettings);
         }
 
         IElementType elementType = node.getElementType();

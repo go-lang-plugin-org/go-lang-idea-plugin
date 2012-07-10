@@ -30,6 +30,14 @@ fmt.Println(
 fmt.Println(
 
 )
+
+func  (  )  {
+println()
+}()
+
+go    func   (  )  {
+println()
+}  (  )
 }
 -----
 package main
@@ -62,4 +70,12 @@ func main() {
     )
 
     fmt.Println()
+
+    func() {
+        println()
+    }()
+
+    go func() {
+        println()
+    }()
 }

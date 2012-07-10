@@ -104,7 +104,7 @@ class GoBlock implements Block, GoElementTypes {
         );
 
     private static final TokenSet BASIC_SPACE_KEYWORDS_SET = TokenSet.create(
-            kCASE, kCHAN, kCONST, kDEFER, kELSE, kFOR, kFUNC, kGO,
+            kCASE, kCHAN, kCONST, kDEFER, kELSE, kFOR, kGO,
             kGOTO, kIF, kIMPORT, kRANGE, kRETURN, kSELECT, kSTRUCT,
             kSWITCH, kTYPE, kVAR
         );
@@ -226,6 +226,17 @@ class GoBlock implements Block, GoElementTypes {
 
         // there should be a space after those keywords
         if (BASIC_SPACE_KEYWORDS_SET.contains(child1Type)) {
+            return BASIC_SPACING;
+        }
+
+        if (child1Type == kFUNC) {
+            // for function declarations, there should be exactly one space after "func"
+            // for literal functions, there should be no space after "func"
+            ASTNode parent = child1.getNode().getTreeParent();
+            if (parent != null && parent.getElementType() == LITERAL_FUNCTION) {
+                return EMPTY_SPACING;
+            }
+
             return BASIC_SPACING;
         }
         return null;
