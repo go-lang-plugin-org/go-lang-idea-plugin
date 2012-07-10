@@ -37,6 +37,10 @@ public class GoResolveBuiltinTypesTest extends GoPsiResolveTestCase {
         doTest();
     }
 
+    public void testBuiltinConversion() throws Exception {
+        doTest();
+    }
+
     public void testVarBuiltinType() throws Exception {
         doTest();
     }
