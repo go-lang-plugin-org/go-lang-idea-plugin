@@ -12,7 +12,6 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
@@ -29,8 +28,9 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
+import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
+import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
@@ -42,8 +42,10 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.inspection.InspectionUtil.getProblemRange;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isFunctionOrMethodCall;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -154,14 +156,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     }
 
     @Override
-    public void visitBuiltinCallExpression(GoBuiltinCallExpression expression) {
-        super.visitBuiltinCallExpression(expression);
-
-        annotationHolder.createInfoAnnotation(expression.getBaseExpression(), null)
-                        .setTextAttributes(GoSyntaxHighlighter.KEYWORD);
-    }
-
-    @Override
     public void visitIfStatement(GoIfStatement statement) {
         super.visitIfStatement(statement);
 
@@ -210,27 +204,43 @@ public class GoAnnotator extends GoRecursiveElementVisitor
             return;
         }
 
-        PsiReference reference = identifier.getReference();
-        if (reference == null)
-            return;
+        PsiElement definition = resolveSafely(identifier, PsiElement.class);
 
-        PsiElement def = reference.resolve();
-        if (def != null) {
-            Annotation annotation;
-            annotation = annotationHolder.createInfoAnnotation(identifier,
-                                                               null);
 
-            // if the identifier resolves to a const, set const highlight
-            if (def.getParent() instanceof GoConstDeclaration) {
-                annotation.setTextAttributes(GoSyntaxHighlighter.CONST);
-            } else if (GoElementPatterns.GLOBAL_VAR_DECL.accepts(def)) {
-                annotation.setTextAttributes(GoSyntaxHighlighter.GLOBAL_VARIABLE);
-            } else if (def instanceof GoTypeSpec) {
-                annotation.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
-            } else {
-                annotation.setTextAttributes(GoSyntaxHighlighter.VARIABLE);
+        if (BuiltinCallOrConversionReference.MATCHER.accepts(identifier) ) {
+            if (definition == null || psiElement(GoFunctionDeclaration.class).accepts(definition)) {
+                annotationHolder.createInfoAnnotation(identifier, null)
+                                .setTextAttributes(GoSyntaxHighlighter.KEYWORD);
+                return;
             }
         }
+
+        if (definition == null)
+            return;
+
+        if (CallOrConversionReference.MATCHER.accepts(identifier) ) {
+            return;
+        }
+
+        Annotation annotation =
+            annotationHolder.createInfoAnnotation(identifier, null);
+
+        if (psiElement().withParent(GoConstDeclaration.class).accepts(definition)) {
+            annotation.setTextAttributes(GoSyntaxHighlighter.CONST);
+            return;
+        }
+
+        if (GoElementPatterns.GLOBAL_VAR_DECL.accepts(definition)) {
+            annotation.setTextAttributes(GoSyntaxHighlighter.GLOBAL_VARIABLE);
+            return;
+        }
+
+        if (psiElement(GoTypeSpec.class).accepts(definition)) {
+            annotation.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
+            return;
+        }
+
+        annotation.setTextAttributes(GoSyntaxHighlighter.VARIABLE);
     }
 
     @Override
@@ -304,7 +314,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         VarDeclarationInspection.checkVar(declaration, result);
         addProblems(result.getProblems());
     }
-
 
     @Override
     public void visitGoStatement(GoGoStatement statement) {

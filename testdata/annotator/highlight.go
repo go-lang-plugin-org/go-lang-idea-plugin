@@ -38,5 +38,5 @@ func main() {
     /*begin*/println/*end.go.keyword*/(/*begin*/CA/*end.go.const*/, /*begin*/CB/*end.go.const*/)
 
     /*begin*/t/*end.go.variable*/ := /*begin*/T/*end.go.type.name*/{/*begin*/a/*end.go.variable*/: 5}
-    fmt.Printf("%#v %#v\n", /*begin*/t/*end.go.variable*/, /*begin*/k/*end.go.variable*/)
+    Foo("%#v %#v\n", /*begin*/t/*end.go.variable*/, /*begin*/k/*end.go.variable*/)
 }
