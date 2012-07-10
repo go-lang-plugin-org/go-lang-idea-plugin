@@ -19,6 +19,7 @@ import static ro.redeul.google.go.inspection.InspectionUtil.checkExpressionShoul
 import static ro.redeul.google.go.inspection.InspectionUtil.getExpressionResultCount;
 import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.getCallFunctionIdentifier;
 import static ro.redeul.google.go.inspection.InspectionUtil.getFunctionParameterCount;
+import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 public class FunctionCallInspection extends AbstractWholeGoFileInspection {
     @Override
@@ -73,11 +74,12 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             return;
         }
 
-        if (type instanceof GoTypeSlice) {
+        GoType finalType = resolveToFinalType(type);
+        if (finalType instanceof GoTypeSlice) {
             checkMakeSliceCall(expression, arguments, result);
-        } else if (type instanceof GoTypeChannel) {
+        } else if (finalType instanceof GoTypeChannel) {
             checkMakeChannelCall(arguments, result);
-        } else if (type instanceof GoTypeMap) {
+        } else if (finalType instanceof GoTypeMap) {
             checkMakeMapCall(arguments, result);
         } else {
             result.addProblem(expression, GoBundle.message("error.cannot.make.type", type.getText()));
