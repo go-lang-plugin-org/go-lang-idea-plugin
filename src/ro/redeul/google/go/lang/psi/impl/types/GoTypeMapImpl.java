@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeMap;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.childAt;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -22,11 +23,11 @@ public class GoTypeMapImpl extends GoPsiPackagedElementBase implements GoTypeMap
     }
 
     public GoType getKeyType() {
-        return findChildrenByClass(GoType.class)[0];
+        return childAt(0, findChildrenByClass(GoType.class));
     }
 
     public GoType getElementType() {
-        return findChildrenByClass(GoType.class)[1];
+        return childAt(1, findChildrenByClass(GoType.class));
     }
 
     @Override

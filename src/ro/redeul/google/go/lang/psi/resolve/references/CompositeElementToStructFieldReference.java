@@ -44,12 +44,19 @@ public class CompositeElementToStructFieldReference
         type.accept(new GoElementVisitor() {
             @Override
             public void visitTypeName(GoTypeName typeName) {
-                GoTypeSpec typeSpec = GoPsiUtils.resolveSafely(typeName,
+                GoTypeSpec typeSpec =
+                    GoPsiUtils.resolveSafely(typeName,
                                                                GoTypeSpec.class);
                 if (typeSpec != null) {
-                    if (typeSpec.getType() instanceof GoTypeStruct)
-                        struct[0] = (GoTypeStruct) typeSpec.getType();
+                    if (typeSpec.getType() != null) {
+                        typeSpec.getType().accept(this);
+                    }
                 }
+            }
+
+            @Override
+            public void visitStructType(GoTypeStruct type) {
+                struct[0] = type;
             }
         });
 

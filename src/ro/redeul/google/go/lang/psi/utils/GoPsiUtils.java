@@ -11,11 +11,10 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiComment;
+import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
@@ -31,7 +30,6 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -39,6 +37,34 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 public class GoPsiUtils {
+
+    public static <Psi extends PsiElement> Psi childAt(int i, Psi[] array) {
+        if (array == null || array.length <= i)
+            return null;
+        return array[i];
+    }
+
+    public static <B extends PsiElement, D extends B> D castAs(Class<D> type,
+                                                               int i, B[] array) {
+        if (array == null || array.length <= i)
+            return null;
+
+        return !type.isInstance(array[i]) ? null : type.cast(array[i]);
+    }
+
+    public static <Psi extends PsiElement> Psi get(Psi node) {
+        return node != null ? node : node;
+    }
+
+    public static <
+        B extends PsiElement,
+        D extends B> D getAs(Class<D> type, B node) {
+        if ( node == null || !type.isInstance(node) )
+            return null;
+
+        return type.cast(node);
+    }
+
 
     public static <T extends PsiElement> T resolveSafely(PsiElement element, Class<T> expectedType) {
         PsiReference []references = element.getReferences();
@@ -48,6 +74,19 @@ public class GoPsiUtils {
 
         PsiElement resolved = references[0].resolve();
         if (resolved == null || !(expectedType.isAssignableFrom(resolved.getClass())))
+            return null;
+
+        return expectedType.cast(resolved);
+    }
+
+    public static <T extends PsiElement> T resolveSafely(PsiElement element, ElementPattern pattern, Class<T> expectedType) {
+        PsiReference []references = element.getReferences();
+        if ( references.length < 1 || references[0] == null ) {
+            return null;
+        }
+
+        PsiElement resolved = references[0].resolve();
+        if (resolved == null || !(pattern.accepts(resolved)) || !expectedType.isInstance(resolved))
             return null;
 
         return expectedType.cast(resolved);
