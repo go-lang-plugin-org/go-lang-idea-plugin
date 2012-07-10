@@ -185,10 +185,12 @@ public class GoPsiUtils {
             return null;
         }
 
-        for (PsiElement element : node.getChildren()) {
-            if (isNodeOfType(element, type)) {
-                return element;
+        PsiElement child = node.getFirstChild();
+        while (child != null) {
+            if (isNodeOfType(child, type)) {
+                return child;
             }
+            child = child.getNextSibling();
         }
 
         return null;

@@ -10,7 +10,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -23,12 +22,11 @@ import java.util.List;
 
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionParameterRangeInText;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionPresentationText;
+import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.getCallParenthesesTextRange;
 import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.resolveToFunctionDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildrenOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
 
 public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement, GoParameterInfoHandler.ParameterInfo> {
     @Override
@@ -126,9 +124,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement
             }
         }
 
-        if (!isWhiteSpaceNode(element) &&
-            !isNodeOfType(element, GoTokenTypes.pRPAREN) &&
-            !expressionList.getTextRange().contains(offset)) {
+        if (!getCallParenthesesTextRange(call).contains(offset)) {
             currentIndex = -1;
         }
 
