@@ -33,7 +33,7 @@ public class GoSmartEnterProcessor extends SmartEnterProcessor {
         if (isWhiteSpaceNode(atCaret)) {
             PsiElement previous = GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment(atCaret);
             if (previous != null) {
-                atCaret = previous;
+                atCaret = psiFile.findElementAt(previous.getTextRange().getEndOffset() - 1);
             } else if (atCaret != null && atCaret.getParent() != null) {
                 atCaret = atCaret.getParent();
             }

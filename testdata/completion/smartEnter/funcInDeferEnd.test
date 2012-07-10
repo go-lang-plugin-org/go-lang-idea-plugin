@@ -1,0 +1,13 @@
+package main
+
+func Foo() {
+    defer func()<caret>
+}
+-----
+package main
+
+func Foo() {
+    defer func() {
+        <caret>
+    }()
+}

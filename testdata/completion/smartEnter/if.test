@@ -1,0 +1,13 @@
+package main
+
+func Foo() {
+    if a > b<caret>
+}
+-----
+package main
+
+func Foo() {
+    if a > b {
+        <caret>
+    }
+}

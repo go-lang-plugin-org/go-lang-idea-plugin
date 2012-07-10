@@ -1,0 +1,9 @@
+package main
+
+func Foo(a int<caret>)
+-----
+package main
+
+func Foo(a int) {
+    <caret>
+}

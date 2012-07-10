@@ -1,0 +1,9 @@
+package main
+
+func Foo(<caret>)
+-----
+package main
+
+func Foo() {
+    <caret>
+}

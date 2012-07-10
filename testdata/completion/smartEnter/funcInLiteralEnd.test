@@ -1,0 +1,13 @@
+package main
+
+func Foo() {
+    f := func()<caret>
+}
+-----
+package main
+
+func Foo() {
+    f := func() {
+        <caret>
+    }
+}

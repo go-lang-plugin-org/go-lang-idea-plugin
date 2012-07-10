@@ -11,7 +11,7 @@ import static ro.redeul.google.go.util.EditorUtil.pressEnterAtLineEnd;
 import static ro.redeul.google.go.util.EditorUtil.reformatLines;
 
 class FixerUtil {
-    public static void addEmptyBlockAtTheEndOfElement(Editor editor, PsiElement element) {
+    public static void addEmptyBlockAtTheEndOfElement(Editor editor, PsiElement element, String content) {
         Document doc = editor.getDocument();
         PsiElement lastChild = GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment(element.getLastChild());
         if (lastChild instanceof PsiErrorElement) {
@@ -21,10 +21,15 @@ class FixerUtil {
         if (lastChild != null) {
             int offset = lastChild.getTextRange().getEndOffset();
             int line = doc.getLineNumber(offset);
-            doc.insertString(offset, " {\n}");
+            doc.insertString(offset, content);
             reformatLines(lastChild.getContainingFile(), editor, line, line + 1);
+            editor.getCaretModel().moveToOffset(offset);
             pressEnterAtLineEnd(editor);
         }
+    }
+
+    public static void addEmptyBlockAtTheEndOfElement(Editor editor, PsiElement element) {
+        addEmptyBlockAtTheEndOfElement(editor, element, " {\n}");
     }
 
     public static boolean elementHasBlockChild(PsiElement element) {
