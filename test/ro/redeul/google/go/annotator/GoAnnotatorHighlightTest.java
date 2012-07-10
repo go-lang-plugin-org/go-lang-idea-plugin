@@ -1,5 +1,16 @@
 package ro.redeul.google.go.annotator;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.intellij.codeInsight.daemon.impl.AnnotationHolderImpl;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationSession;
@@ -15,19 +26,9 @@ import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class GoAnnotatorHighlightTest extends GoLightCodeInsightFixtureTestCase {
     public void testHighlight() throws Exception { doTest(); }
+    public void testHighlightConsts() throws Exception { doTest(); }
 
     @Override
     protected String getTestDataRelativePath() {
@@ -35,6 +36,7 @@ public class GoAnnotatorHighlightTest extends GoLightCodeInsightFixtureTestCase 
     }
 
     private void doTest() throws Exception {
+        myFixture.addFileToProject("builtin.go", "package builtin\ntype byte byte\n");
         List<String> data;
         data = readInput(getTestDataPath() + getTestName(true) + ".go");
         String expected = data.get(1).trim();

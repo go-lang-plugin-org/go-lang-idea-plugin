@@ -213,6 +213,12 @@ public class GoAnnotator extends GoRecursiveElementVisitor
                                 .setTextAttributes(GoSyntaxHighlighter.KEYWORD);
                 return;
             }
+
+            if (psiElement(GoTypeSpec.class).accepts(definition)) {
+                annotationHolder.createInfoAnnotation(identifier, null)
+                                .setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
+                return;
+            }
         }
 
         if (definition == null)
