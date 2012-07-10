@@ -27,7 +27,7 @@ public class GoIdentifierUtils {
 
         // If the identifier is not definition identifier of function, try to resolve it.
         if (!isFunctionDeclarationIdentifier(identifier)) {
-            identifier = resolveIdentifier((GoLiteralIdentifier) identifier);
+            identifier = GoPsiUtils.resolveSafely(identifier, PsiElement.class);
         }
 
         if (identifier == null || !isFunctionDeclarationIdentifier(identifier)) {
@@ -36,15 +36,5 @@ public class GoIdentifierUtils {
 
         PsiElement parent = identifier.getParent();
         return parent instanceof GoFunctionDeclaration ? (GoFunctionDeclaration) parent : null;
-    }
-
-    @Nullable
-    public static PsiElement resolveIdentifier(@Nullable GoLiteralIdentifier id) {
-        if (id == null) {
-            return null;
-        }
-
-        PsiReference reference = id.getReference();
-        return reference == null ? null : reference.resolve();
     }
 }

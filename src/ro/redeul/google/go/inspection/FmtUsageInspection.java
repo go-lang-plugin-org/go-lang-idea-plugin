@@ -15,7 +15,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.utils.GoIdentifierUtils;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import static ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral.Type.InterpretedString;
 import static ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral.Type.RawString;
@@ -128,7 +128,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
             return null;
         }
 
-        PsiElement resolve = GoIdentifierUtils.resolveIdentifier(idToFind);
+        PsiElement resolve = GoPsiUtils.resolveSafely(idToFind, PsiElement.class);
         if (resolve == null) {
             return null;
         }
