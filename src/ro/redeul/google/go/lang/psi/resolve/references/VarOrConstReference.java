@@ -36,7 +36,7 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
             getElement().getParent().getParent(), getElement().getContainingFile(),
             GoResolveStates.initial());
 
-        return processor.getDeclaration();
+        return processor.getChildDeclaration();
     }
 
     @Override

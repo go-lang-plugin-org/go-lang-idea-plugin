@@ -1,6 +1,6 @@
 package main
 
-/*def*/func Pff() {
+func /*def*/Pff() {
     println("hi")
 }
 
