@@ -7,12 +7,16 @@ import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.CreateFunctionFix;
+import ro.redeul.google.go.inspection.fix.CreateLocalVariableFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import static ro.redeul.google.go.GoBundle.message;
 import static ro.redeul.google.go.inspection.fix.CreateFunctionFix.isExternalFunctionNameIdentifier;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
     @Nls
@@ -50,6 +54,10 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                     LocalQuickFix[] fixes;
                     if (isExternalFunctionNameIdentifier(element)) {
                         fixes = new LocalQuickFix[]{new CreateFunctionFix(element)};
+                    } else if (element instanceof GoLiteralIdentifier &&
+                               findParentOfType(element, GoSelectorExpression.class) == null &&
+                               findParentOfType(element, GoFunctionDeclaration.class) != null) {
+                        fixes = new LocalQuickFix[]{new CreateLocalVariableFix(element)};
                     } else {
                         fixes = LocalQuickFix.EMPTY_ARRAY;
                     }

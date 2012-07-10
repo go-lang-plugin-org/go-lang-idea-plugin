@@ -1,0 +1,11 @@
+package main
+
+func main() {
+    <caret>test
+}
+-----
+package main
+
+func main() {
+    test := value<caret>
+}
