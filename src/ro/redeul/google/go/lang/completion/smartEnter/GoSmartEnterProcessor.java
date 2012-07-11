@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.completion.smartEnter.fixers.ForFixer;
 import ro.redeul.google.go.lang.completion.smartEnter.fixers.FunctionFixer;
 import ro.redeul.google.go.lang.completion.smartEnter.fixers.IfFixer;
 import ro.redeul.google.go.lang.completion.smartEnter.fixers.SmartEnterFixer;
@@ -18,6 +19,7 @@ public class GoSmartEnterProcessor extends SmartEnterProcessor {
     private static final SmartEnterFixer[] FIXERS = new SmartEnterFixer[]{
             new FunctionFixer(),
             new IfFixer(),
+            new ForFixer(),
     };
 
     @Override

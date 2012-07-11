@@ -297,4 +297,10 @@ public interface GoElementTypes extends GoTokenTypes {
     );
 
     GoElementType METHOD_EXPRESSION = new GoElementTypeImpl("MethodExpression");
+
+    public final TokenSet FOR_STATEMENT = TokenSet.create(
+            FOR_WITH_CLAUSES_STATEMENT,
+            FOR_WITH_CONDITION_STATEMENT,
+            FOR_WITH_RANGE_STATEMENT
+    );
 }

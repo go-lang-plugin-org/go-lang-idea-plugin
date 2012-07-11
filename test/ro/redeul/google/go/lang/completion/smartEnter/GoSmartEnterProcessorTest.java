@@ -22,6 +22,10 @@ public class GoSmartEnterProcessorTest extends GoEditorAwareTestCase {
 
     public void testIf() throws Exception { doTest(); }
 
+    public void testForClause() throws Exception { doTest(); }
+    public void testForCondition() throws Exception { doTest(); }
+    public void testForRange() throws Exception { doTest(); }
+
     @Override
     protected void invoke(final Project project, final Editor editor, final GoFile file) {
         CommandProcessor.getInstance().executeCommand(project, new Runnable() {

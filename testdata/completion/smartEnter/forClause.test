@@ -1,0 +1,13 @@
+package main
+
+func Foo() {
+    for i := 0; i < 10; i++<caret>
+}
+-----
+package main
+
+func Foo() {
+    for i := 0; i < 10; i++ {
+        <caret>
+    }
+}

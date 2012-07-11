@@ -1,0 +1,13 @@
+package main
+
+func Foo() {
+    for a > b<caret>
+}
+-----
+package main
+
+func Foo() {
+    for a > b {
+        <caret>
+    }
+}
