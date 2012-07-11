@@ -25,6 +25,7 @@ func main() {
 t := &T{}
 t.Print()
 println(5, Foo())
+    exit : println("exit")
 }
 
 func Foo() int{
@@ -71,6 +72,8 @@ func main() {
     t := &T{}
     t.Print()
     println(5, Foo())
+exit:
+    println("exit")
 }
 
 func Foo() int {

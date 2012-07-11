@@ -14,7 +14,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
@@ -23,7 +22,6 @@ import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
@@ -46,6 +44,7 @@ class GoBlock implements Block, GoElementTypes {
 
     protected List<Block> mySubBlocks = null;
 
+    protected static final Spacing ONE_LINE_SPACING = Spacing.createSpacing(0, 0, 1, false, 0);
     protected static final Spacing BASIC_SPACING = Spacing.createSpacing(1, 1, 0, false, 0);
     protected static final Spacing BASIC_SPACING_KEEP_LINE_BREAKS = Spacing.createSpacing(1, 1, 0, true, 0);
     protected static final Spacing EMPTY_SPACING = Spacing.createSpacing(0, 0, 0, false, 0);

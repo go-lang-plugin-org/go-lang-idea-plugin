@@ -89,6 +89,8 @@ public class GoBlockGenerator {
             return new GoCallOrConvExpressionBlock(node, alignment, indent, NO_WRAP, styleSettings);
         } else if (elementType == GoElementTypes.PARENTHESISED_EXPRESSION) {
             return new GoParenthesisedExpressionBlock(node, alignment, indent, styleSettings);
+        } else if (elementType == GoElementTypes.LABELED_STATEMENT) {
+            return new GoLabeledStatmentBlock(node, styleSettings);
         }
 
         return new GoBlock(node, alignment, indent, NO_WRAP, styleSettings);
