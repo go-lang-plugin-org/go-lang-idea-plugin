@@ -7,8 +7,10 @@ import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.CreateFunctionFix;
+import ro.redeul.google.go.inspection.fix.CreateGlobalVariableFix;
 import ro.redeul.google.go.inspection.fix.CreateLocalVariableFix;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -54,10 +56,11 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                     LocalQuickFix[] fixes;
                     if (isExternalFunctionNameIdentifier(element)) {
                         fixes = new LocalQuickFix[]{new CreateFunctionFix(element)};
-                    } else if (element instanceof GoLiteralIdentifier &&
-                               findParentOfType(element, GoSelectorExpression.class) == null &&
-                               findParentOfType(element, GoFunctionDeclaration.class) != null) {
-                        fixes = new LocalQuickFix[]{new CreateLocalVariableFix(element)};
+                    } else if (isLocalVariableIdentifier(element)) {
+                        fixes = new LocalQuickFix[]{new CreateLocalVariableFix(element),
+                                new CreateGlobalVariableFix(element)};
+                    } else if (isGlobalVariableIdentifier(element)) {
+                        fixes = new LocalQuickFix[]{new CreateGlobalVariableFix(element)};
                     } else {
                         fixes = LocalQuickFix.EMPTY_ARRAY;
                     }
@@ -69,5 +72,18 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                 }
             }
         }.visitElement(file);
+    }
+
+    private static boolean isGlobalVariableIdentifier(PsiNamedElement element) {
+        return element instanceof GoLiteralIdentifier &&
+               findParentOfType(element, GoSelectorExpression.class) == null &&
+               findParentOfType(element, GoFunctionDeclaration.class) == null &&
+               findParentOfType(element, GoVarDeclarations.class) != null;
+    }
+
+    private static boolean isLocalVariableIdentifier(PsiNamedElement element) {
+        return element instanceof GoLiteralIdentifier &&
+               findParentOfType(element, GoSelectorExpression.class) == null &&
+               findParentOfType(element, GoFunctionDeclaration.class) != null;
     }
 }

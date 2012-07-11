@@ -3,7 +3,7 @@ package main
 func main() {
     arr := nil
     for j, _ := range arr {
-        /*begin*/pow/*end.Unresolved symbol: 'pow'|CreateLocalVariableFix*/[j] = 1<<10
+        /*begin*/pow/*end.Unresolved symbol: 'pow'|CreateLocalVariableFix|CreateGlobalVariableFix*/[j] = 1<<10
     }
-    /*begin*/j/*end.Unresolved symbol: 'j'|CreateLocalVariableFix*/
+    /*begin*/j/*end.Unresolved symbol: 'j'|CreateLocalVariableFix|CreateGlobalVariableFix*/
 }

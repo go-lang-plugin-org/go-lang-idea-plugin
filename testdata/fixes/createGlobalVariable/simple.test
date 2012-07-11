@@ -1,0 +1,15 @@
+package main
+
+func main() {
+    println(/*begin*/Foo/*end*/)
+}
+-----
+package main
+
+var (
+    Foo = value
+)
+
+func main() {
+    println(Foo<caret>)
+}

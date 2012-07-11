@@ -1,0 +1,22 @@
+package main
+
+var (
+    va = 5
+    vb = 3
+)
+
+func main() {
+    println(/*begin*/Foo/*end*/, va, vb)
+}
+-----
+package main
+
+var (
+    va = 5
+    vb = 3
+    Foo = value
+)
+
+func main() {
+    println(Foo<caret>, va, vb)
+}

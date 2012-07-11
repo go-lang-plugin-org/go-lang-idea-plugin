@@ -1,0 +1,19 @@
+package main
+
+import "fmt"
+
+func main() {
+    println(/*begin*/Foo/*end*/)
+}
+-----
+package main
+
+import "fmt"
+
+var (
+    Foo = value
+)
+
+func main() {
+    println(Foo<caret>)
+}
