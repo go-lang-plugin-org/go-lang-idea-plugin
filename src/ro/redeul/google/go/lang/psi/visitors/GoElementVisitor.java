@@ -22,6 +22,7 @@ import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
+import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -231,5 +232,9 @@ public class GoElementVisitor  {
 
     public void visitLiteralCompositeElement(GoLiteralCompositeElement element) {
         visitElement(element);
+    }
+
+    public void visitLabeledStatement(GoLabeledStatement statement) {
+        visitElement(statement);
     }
 }

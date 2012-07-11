@@ -18,8 +18,9 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace(' ')
-      LabeledStmt
-        PsiElement(IDENTIFIER)('L')
+      LabeledStmtImpl
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('L')
         PsiElement(:)(':')
         PsiWhiteSpace(' ')
         ReturnStmtImpl

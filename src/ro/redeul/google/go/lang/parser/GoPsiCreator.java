@@ -42,6 +42,7 @@ import ro.redeul.google.go.lang.psi.impl.statements.GoForWithConditionStatementI
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithRangeStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoGoStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoIfStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoLabeledStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoReturnStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoShortVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionDeclarationImpl;
@@ -272,6 +273,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(IF_STATEMENT))
             return new GoIfStatementImpl(node);
+
+        if (elementType.equals(LABELED_STATEMENT))
+            return new GoLabeledStatementImpl(node);
 
         if (elementType.equals(GO_STATEMENT))
             return new GoGoStatementImpl(node);

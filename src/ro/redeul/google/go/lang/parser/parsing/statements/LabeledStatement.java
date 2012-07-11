@@ -23,7 +23,7 @@ public class LabeledStatement implements GoElementTypes {
             return null;
         }
 
-        ParserUtils.getToken(builder, mIDENT);
+        ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
         ParserUtils.getToken(builder, oCOLON);
 
         parser.parseStatement(builder);
