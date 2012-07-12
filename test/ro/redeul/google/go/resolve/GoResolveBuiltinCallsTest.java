@@ -1,7 +1,9 @@
 package ro.redeul.google.go.resolve;
 
 import com.intellij.psi.PsiElement;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.util.GoPsiTestUtils.getAs;
 
 /**
@@ -30,7 +32,11 @@ public class GoResolveBuiltinCallsTest extends GoPsiResolveTestCase {
             resolvedDefinition = resolvedDefinition.getParent();
         }
 
-        getAs(GoFunctionDeclaration.class, resolvedDefinition);
+        assertTrue("It resolved to the name of a function",
+                   psiElement(GoLiteralIdentifier.class)
+                       .withParent(GoFunctionDeclaration.class)
+                       .accepts(resolvedDefinition)
+        );
     }
 
     public void testMethodName() throws Exception {

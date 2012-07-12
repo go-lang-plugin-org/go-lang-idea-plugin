@@ -14,8 +14,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.VarOrConstResolver;
-import ro.redeul.google.go.util.LookupElementUtil;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
 
@@ -67,7 +67,8 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
 
                 GoPsiElement goPsi = (GoPsiElement) declaration;
                 GoPsiElement goChildPsi = (GoPsiElement) childDeclaration;
-                variants.add(LookupElementUtil.createLookupElement(goPsi, name, goChildPsi));
+                variants.add(createLookupElement(goPsi, name, goChildPsi).setTypeText(
+                    "cuc3", true));
                 return true;
             }
         };

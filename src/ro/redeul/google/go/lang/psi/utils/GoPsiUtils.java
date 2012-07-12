@@ -68,28 +68,30 @@ public class GoPsiUtils {
 
     public static <T extends PsiElement> T resolveSafely(PsiElement element, Class<T> expectedType) {
         PsiReference []references = element.getReferences();
-        if ( references.length < 1 || references[0] == null ) {
-            return null;
+
+        for (PsiReference reference : references) {
+            PsiElement resolved = reference.resolve();
+            if (resolved != null && expectedType.isAssignableFrom(resolved.getClass()))
+                return expectedType.cast(resolved);
         }
 
-        PsiElement resolved = references[0].resolve();
-        if (resolved == null || !(expectedType.isAssignableFrom(resolved.getClass())))
-            return null;
-
-        return expectedType.cast(resolved);
+        return null;
     }
 
-    public static <T extends PsiElement> T resolveSafely(PsiElement element, ElementPattern pattern, Class<T> expectedType) {
+    public static <T extends PsiElement> T resolveSafely(PsiElement element,
+                                                         ElementPattern pattern,
+                                                         Class<T> expectedType)
+    {
         PsiReference []references = element.getReferences();
-        if ( references.length < 1 || references[0] == null ) {
-            return null;
+
+        for (PsiReference reference : references) {
+            PsiElement resolved = reference.resolve();
+            if (resolved != null && pattern.accepts(resolved) &&
+                expectedType.isAssignableFrom(resolved.getClass()))
+                return expectedType.cast(resolved);
         }
 
-        PsiElement resolved = references[0].resolve();
-        if (resolved == null || !(pattern.accepts(resolved)) || !expectedType.isInstance(resolved))
-            return null;
-
-        return expectedType.cast(resolved);
+        return null;
     }
 
     public static String getStringLiteralValue(String literalText) {

@@ -83,7 +83,7 @@ public class GoNamesCache {
                          GlobalSearchScope.allScope(project));
     }
 
-    public Collection<GoFile> getFilesByPackageImportPath(String importPath) {
+    public Collection<GoFile> getFilesByPackageImportPath(@NotNull String importPath) {
         StubIndex index = StubIndex.getInstance();
 
         return index.get(GoPackageImportPath.KEY, importPath, project,

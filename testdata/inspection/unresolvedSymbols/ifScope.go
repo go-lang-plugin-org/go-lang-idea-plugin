@@ -1,6 +1,4 @@
-package main
-
-import "math"
+package if_scope
 
 func pow(x, n, lim float64) float64 {
     if v := x; v < lim {

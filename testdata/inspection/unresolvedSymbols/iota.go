@@ -1,4 +1,4 @@
-package main
+package unresolved_symbols_iota
 
 const N = iota
 

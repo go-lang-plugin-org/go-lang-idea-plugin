@@ -1,11 +1,8 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
 import java.util.List;
-import javax.swing.*;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -15,9 +12,7 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -148,51 +143,83 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 //        return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.
 //    }
 //
+//    @Override
+//    public PsiReference getReference() {
+//
+//        if (NO_REFERENCE.accepts(this))
+//            return null;
+//
+//        if (BuiltinCallOrConversionReference.MATCHER.accepts(this))
+//            return new BuiltinCallOrConversionReference(this);
+//
+//        if (CallOrConversionReference.MATCHER.accepts(this))
+//            return new CallOrConversionReference(this);
+//
+//        if (CompositeElementToStructFieldReference.MATCHER.accepts(this))
+//            return new CompositeElementToStructFieldReference((GoLiteralCompositeElement)getParent().getParent().getParent());
+//
+//        if (VarOrConstReference.MATCHER.accepts(this))
+//            return new VarOrConstReference(this);
+//
+//        return null;
+//    }
+//
+    @NotNull
     @Override
-    public PsiReference getReference() {
+    public PsiReference[] getReferences() {
 
         if (NO_REFERENCE.accepts(this))
-            return null;
+            return PsiReference.EMPTY_ARRAY;
 
         if (BuiltinCallOrConversionReference.MATCHER.accepts(this))
-            return new BuiltinCallOrConversionReference(this);
+            return new PsiReference[] {
+                new BuiltinCallOrConversionReference(this)
+            };
 
         if (CallOrConversionReference.MATCHER.accepts(this))
-            return new CallOrConversionReference(this);
+            return new PsiReference[] {
+                new CallOrConversionReference(this)
+            };
 
         if (CompositeElementToStructFieldReference.MATCHER.accepts(this))
-            return new CompositeElementToStructFieldReference((GoLiteralCompositeElement)getParent().getParent().getParent());
+            return new PsiReference[] {
+                new CompositeElementToStructFieldReference((GoLiteralCompositeElement)getParent().getParent().getParent())
+            };
 
         if (VarOrConstReference.MATCHER.accepts(this))
-            return new VarOrConstReference(this);
+            return new PsiReference[] {
+                new BuiltinCallOrConversionReference(this),
+                new CallOrConversionReference(this),
+                new VarOrConstReference(this)
+            };
 
-        return null;
+        return PsiReference.EMPTY_ARRAY;
     }
 
-    @Override
-    public ItemPresentation getPresentation() {
-        return new ItemPresentation() {
-            public String getPresentableText() {
-                return getName();
-            }
-
-            public TextAttributesKey getTextAttributesKey() {
-                return null;
-            }
-
-            public String getLocationString() {
-                return String.format(" %s (%s)",
-                                     ((GoFile) getContainingFile()).getPackage()
-                                                                   .getPackageName(),
-                                     getContainingFile().getVirtualFile()
-                                         .getPath());
-            }
-
-            public Icon getIcon(boolean open) {
-                return GoIcons.GO_ICON_16x16;
-            }
-        };
-    }
+//    @Override
+//    public ItemPresentation getPresentation() {
+//        return new ItemPresentation() {
+//            public String getPresentableText() {
+//                return getName();
+//            }
+//
+//            public TextAttributesKey getTextAttributesKey() {
+//                return null;
+//            }
+//
+//            public String getLocationString() {
+//                return String.format(" %s (%s)",
+//                                     ((GoFile) getContainingFile()).getPackage()
+//                                                                   .getPackageName(),
+//                                     getContainingFile().getVirtualFile()
+//                                         .getPath());
+//            }
+//
+//            public Icon getIcon(boolean open) {
+//                return GoIcons.GO_ICON_16x16;
+//            }
+//        };
+//    }
 
     @Override
     public PsiElement getNameIdentifier() {

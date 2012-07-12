@@ -19,7 +19,6 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.components.GoSdkParsingHelper;
@@ -57,7 +56,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     }
 
     @Override
-    @Nullable
+    @NotNull
     public String getPackageImportPath() {
 
         if (isApplicationPart()) {
@@ -83,21 +82,20 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
         if (!projectFileIndex.isInSource(
             virtualFile) || projectFileIndex.isLibraryClassFile(virtualFile)) {
-            return null;
+            return "";
         }
 
         VirtualFile sourceRoot = projectFileIndex.getSourceRootForFile(
             virtualFile);
         if (sourceRoot == null) {
-            return null;
+            return "";
         }
 
         String path = VfsUtil.getRelativePath(virtualFile.getParent(),
                                               sourceRoot, '/');
 
-        if (path == null || path.equals("")) {
-            path = getPackageName();
-        }
+        if ( path == null || path.equals(""))
+           path = getPackageName();
 
         if (path != null && !path.endsWith(getPackageName())) {
             path = path + "/" + getPackageName();
@@ -108,10 +106,6 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         if (makefileTarget != null) {
             path = makefileTarget;
         }
-
-        LOG.debug(String.format("%s -> %s",
-                                VfsUtil.getRelativePath(virtualFile, sourceRoot,
-                                                        '/'), path));
 
         return path;
     }
@@ -243,7 +237,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
             Collection<GoFile> goFiles =
                 namesCache.getFilesByPackageImportPath(getPackageImportPath());
             for (GoFile goFile : goFiles) {
-                if ( goFile != this ) {
+                if ( ! goFile.getOriginalFile().equals(this.getOriginalFile())) {
                     if (!goFile.processDeclarations(processor, newState, null, place))
                         return false;
                 }

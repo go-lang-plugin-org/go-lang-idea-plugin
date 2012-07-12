@@ -80,6 +80,12 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
         fail("no test files found in \"" + vFile + "\"");
     }
 
+    @Override
+    protected void tearDown() throws Exception {
+        removeContentRoots();
+        super.tearDown();
+    }
+
     private void doSingleFileTest(VirtualFile vFile, VirtualFile vModuleDir)
         throws Exception {
         parseFile(vFile, vFile.getParent(), vModuleDir);

@@ -12,7 +12,8 @@ import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public class GoIfStatementImpl extends GoPsiElementBase implements GoIfStatement {
+public class GoIfStatementImpl extends GoPsiElementBase
+    implements GoIfStatement {
     public GoIfStatementImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -47,11 +48,13 @@ public class GoIfStatementImpl extends GoPsiElementBase implements GoIfStatement
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        if ( lastParent == null )
+        if (lastParent == null)
             return true;
 
-        if ( getSimpleStatement() != null ) {
-            return processor.execute(getSimpleStatement(), state);
+        GoSimpleStatement statement = getSimpleStatement();
+        if (statement != null) {
+            if (!statement.processDeclarations(processor, state, null, place))
+                return false;
         }
 
         return true;

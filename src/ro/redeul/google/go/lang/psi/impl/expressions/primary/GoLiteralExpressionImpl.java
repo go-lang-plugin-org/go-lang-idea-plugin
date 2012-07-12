@@ -16,6 +16,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypes;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
@@ -78,14 +79,13 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                 };
             case Identifier:
                 GoLiteralIdentifier identifier = (GoLiteralIdentifier) getLiteral();
-                PsiReference reference = identifier.getReference();
-                if (reference == null) {
+
+                PsiElement resolved = GoPsiUtils.resolveSafely(identifier, PsiElement.class);
+                if (resolved == null) {
                     return GoType.EMPTY_ARRAY;
                 }
 
-                PsiElement resolved = reference.resolve();
-
-                if (resolved != null && resolved.getParent() instanceof GoVarDeclaration) {
+                if (resolved.getParent() instanceof GoVarDeclaration) {
                     GoVarDeclaration varDeclaration = (GoVarDeclaration)resolved.getParent();
                     if ( varDeclaration.getIdentifiersType() != null) {
                         return new GoType[] {
@@ -94,7 +94,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                     }
                 }
 
-                if (resolved != null && resolved.getParent() instanceof GoFunctionParameter) {
+                if (resolved.getParent() instanceof GoFunctionParameter) {
                     GoFunctionParameter functionParameter = (GoFunctionParameter)resolved.getParent();
                     if ( functionParameter.getType() != null) {
                         return new GoType[] {
@@ -103,7 +103,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                     }
                 }
 
-                if (resolved != null && resolved.getParent() instanceof GoFunctionParameter) {
+                if (resolved.getParent() instanceof GoFunctionParameter) {
                     GoFunctionParameter functionParameter = (GoFunctionParameter)resolved.getParent();
                     if ( functionParameter.getType() != null) {
                         return new GoType[] {

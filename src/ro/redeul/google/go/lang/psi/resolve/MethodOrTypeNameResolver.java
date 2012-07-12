@@ -3,11 +3,13 @@ package ro.redeul.google.go.lang.psi.resolve;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
 
 public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<CallOrConversionReference>
@@ -24,6 +26,12 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<CallOrConve
 
     @Override
     public void visitTypeSpec(GoTypeSpec type) {
+
+        if ("builtin".equals(getState().get(GoResolveStates.PackageName))) {
+            if ( ! type.getName().equals(type.getType().getText()))
+                return;
+        }
+
         if ( checkReference(type.getTypeNameDeclaration()) )
             addDeclaration(type);
     }
@@ -44,7 +52,8 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<CallOrConve
             GoLiteralIdentifier identifier = identifiers[i];
             if (expressions.length > i) {
                 GoExpr expr = expressions[i];
-                if (expr.getType().length == 1 && (expr.getType()[0] instanceof GoTypeFunction)) {
+                GoType[] exprTypes = expr.getType();
+                if (exprTypes.length == 1 && (exprTypes[0] instanceof GoTypeFunction)) {
                     if ( checkReference(identifier) ) {
                         if ( ! addDeclaration(identifier) ) {
                             return;
