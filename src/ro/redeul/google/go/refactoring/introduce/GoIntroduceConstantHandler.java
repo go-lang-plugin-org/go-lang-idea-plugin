@@ -24,7 +24,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isEnclosedByParenthe
 
 public class GoIntroduceConstantHandler extends GoIntroduceVariableHandlerBase {
     @Override
-    protected boolean isValidExpression(GoExpr expr) {
+    protected boolean isExpressionValid(GoExpr expr) {
         return expr != null && isConstantExpression(expr);
     }
 

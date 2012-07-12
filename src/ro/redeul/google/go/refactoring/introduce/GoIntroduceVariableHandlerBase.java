@@ -40,7 +40,7 @@ public abstract class GoIntroduceVariableHandlerBase extends GoIntroduceHandlerB
     protected synchronized void doIntroduce(Project project, Editor editor, GoFile file, int start, int end)
             throws GoRefactoringException {
         final GoExpr e = CodeInsightUtilBase.findElementInRange(file, start, end, GoExpr.class, GoLanguage.INSTANCE);
-        if (!isValidExpression(e)) {
+        if (!isExpressionValid(e)) {
             throw new GoRefactoringException(GoBundle.message("error.invalid.expression"));
         }
 
@@ -148,7 +148,6 @@ public abstract class GoIntroduceVariableHandlerBase extends GoIntroduceHandlerB
         }
     }
 
-    protected abstract boolean isValidExpression(GoExpr expr);
     protected abstract void introduceAllOccurrence(GoExpr current, GoExpr[] occurrences) throws GoRefactoringException;
     protected abstract void introduceCurrentOccurrence(GoExpr current) throws GoRefactoringException;
 }

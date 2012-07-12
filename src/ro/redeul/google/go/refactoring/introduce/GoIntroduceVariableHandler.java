@@ -28,7 +28,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public class GoIntroduceVariableHandler extends GoIntroduceVariableHandlerBase {
     @Override
-    protected boolean isValidExpression(GoExpr expr) {
+    protected boolean isExpressionValid(GoExpr expr) {
         return expr != null;
     }
 

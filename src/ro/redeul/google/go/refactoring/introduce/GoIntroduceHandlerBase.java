@@ -97,7 +97,7 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
     protected abstract void doIntroduce(Project project, Editor editor, GoFile file, int start, int end) throws GoRefactoringException;
 
     protected boolean isExpressionValid(GoExpr expression) {
-        return true;
+        return expression != null;
     }
 
     @Override
