@@ -1,106 +1,65 @@
 package ro.redeul.google.go.refactoring.introduce;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TemplateImpl;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import ro.redeul.google.go.GoBundle;
-import ro.redeul.google.go.GoLanguage;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.editor.TemplateUtil;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static ro.redeul.google.go.editor.TemplateUtil.createTemplate;
 import static ro.redeul.google.go.editor.TemplateUtil.getTemplateVariableExpression;
 import static ro.redeul.google.go.editor.TemplateUtil.runTemplate;
 import static ro.redeul.google.go.editor.TemplateUtil.setTemplateVariableValues;
 import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.resolveToFunctionDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
-public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
-    private static final String VARIABLE = "____INTRODUCE_VARIABLE____";
-
+public class GoIntroduceVariableHandler extends GoIntroduceVariableHandlerBase {
     @Override
-    protected void doIntroduce(Project project, Editor editor, GoFile file, int start, int end)
-        throws GoRefactoringException {
-        GoExpr e = CodeInsightUtilBase.findElementInRange(file, start, end,
-                                                          GoExpr.class,
-                                                          GoLanguage.INSTANCE);
-        if (e == null) {
-            throw new GoRefactoringException("It's not a valid expression!");
-        }
+    protected boolean isValidExpression(GoExpr expr) {
+        return expr != null;
+    }
 
-        if (isNodeOfType(e.getParent(),
-                         GoElementTypes.PARENTHESISED_EXPRESSION)) {
-            // If there is a pair of parenthesis enclosed the expression, include the parenthesis.
-            e = (GoExpr) e.getParent();
-            start = e.getTextOffset();
-            end = start + e.getTextLength();
-        }
-
+    protected void introduceCurrentOccurrence(GoExpr e) throws GoRefactoringException {
+        int start = e.getTextOffset();
+        int end = start + e.getTextLength();
         GoStatement stmt = findParentOfType(e, GoStatement.class);
-        if (stmt == null) {
-            return;
-        }
-
-        // Remove redundant parenthesis around declaration.
-        boolean needToRemoveParenthesis = isNodeOfType(e,
-                                                       GoElementTypes.PARENTHESISED_EXPRESSION);
-
-        PsiDocumentManager manager = PsiDocumentManager.getInstance(project);
-        Document document = manager.getDocument(file);
-        if (document == null) {
-            return;
-        }
-
-        int lineStart = document.getLineStartOffset(
-            document.getLineNumber(stmt.getTextOffset()));
-        String declaration = e.getText().trim();
-        if (needToRemoveParenthesis) {
-            declaration = declaration.substring(1, declaration.length() - 1);
-        }
+        int lineStart = document.getLineStartOffset(document.getLineNumber(stmt.getTextOffset()));
+        String declaration = getExpressionDeclaration(e);
 
         RangeMarker range = document.createRangeMarker(lineStart, end);
         editor.getCaretModel().moveToOffset(end);
 
         String originalText = document.getText(new TextRange(lineStart, start));
-        String indent = findIndent(originalText);
         String text;
         if (expressionIsTheWholeStatement(e, stmt)) {
-            if (introduceExpressionStatement(editor, e, declaration)) {
+            if (introduceExpressionStatement(e, declaration)) {
                 return;
             }
-            text = String.format(indent + "$%s$ := %s", VARIABLE, declaration);
+            text = String.format("$%s$ := %s", VARIABLE, declaration);
         } else {
-            text = String.format(indent + "$%s$ := %s\n%s$%s$", VARIABLE,
-                                 declaration, originalText, VARIABLE);
+            text = String.format("$%s$ := %s\n%s$%s$", VARIABLE, declaration, originalText, VARIABLE);
         }
         document.replaceString(lineStart, end, text);
         runTemplate(editor, TextRange.create(range), VARIABLE, "value");
     }
 
-    private boolean expressionIsTheWholeStatement(PsiElement element, GoStatement stmt) {
-        return element.getTextRange().equals(stmt.getTextRange());
-    }
-
     // If it's possible to analyse the result information (like result count or even result names)
     // of the expression, we introduce variables according to the information, and return true.
     // otherwise, return false.
-    private boolean introduceExpressionStatement(Editor editor, PsiElement element, String declaration)
+    private boolean introduceExpressionStatement(PsiElement element, String declaration)
         throws GoRefactoringException {
         GoFunctionDeclaration function = resolveToFunctionDeclaration(element);
         if (function == null) {
@@ -122,8 +81,7 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
 
         TemplateImpl template = createTemplate(text);
         setTemplateVariableValues(template, resultNames);
-        TemplateManager.getInstance(editor.getProject())
-                       .startTemplate(editor, "", template);
+        TemplateManager.getInstance(project).startTemplate(editor, template);
         return true;
     }
 
@@ -149,5 +107,65 @@ public class GoIntroduceVariableHandler extends GoIntroduceHandlerBase {
             }
         }
         return parameterNames;
+    }
+
+    protected void introduceAllOccurrence(GoExpr current, GoExpr[] occurrences) throws GoRefactoringException {
+        RangeMarker[] exprRangeMarkers = new RangeMarker[occurrences.length];
+        GoStatement[] statements = new GoStatement[occurrences.length];
+        for (int i = 0; i < occurrences.length; i++) {
+            statements[i] = findParentOfType(occurrences[i], GoStatement.class);
+            if (statements[i] == null) {
+                throw new GoRefactoringException("Cannot find corresponding statement");
+            }
+            exprRangeMarkers[i] = document.createRangeMarker(occurrences[i].getTextRange());
+        }
+
+        int insertionPoint = findInsertionPoint(statements);
+
+        String variable = "$" + VARIABLE + "$";
+        String decl = String.format("%s := %s\n", variable, getExpressionDeclaration(current));
+        document.insertString(insertionPoint,  decl);
+
+        for (RangeMarker marker : exprRangeMarkers) {
+            document.replaceString(marker.getStartOffset(), marker.getEndOffset(), variable);
+        }
+
+        int endOffset = getMergedRange(exprRangeMarkers).getEndOffset();
+        TextRange range = new TextRange(insertionPoint, endOffset);
+        TemplateUtil.runTemplate(editor, range, VARIABLE, "value");
+    }
+
+    private TextRange getMergedRange(RangeMarker[] markers) {
+        TextRange result = new TextRange(markers[0].getStartOffset(), markers[0].getEndOffset());
+        for (RangeMarker marker : markers) {
+            TextRange range = new TextRange(marker.getStartOffset(), marker.getEndOffset());
+            result = result.union(range);
+        }
+        return result;
+    }
+
+    private int findInsertionPoint(GoStatement[] statements) throws GoRefactoringException {
+        PsiElement parent = PsiTreeUtil.findCommonParent(statements);
+        if (parent != null && !(parent instanceof GoBlockStatement)) {
+            parent = parent.getParent();
+        }
+
+        if (!(parent instanceof GoBlockStatement)) {
+            throw new GoRefactoringException("Unknown case");
+        }
+
+        int minOffset = statements[0].getTextOffset();
+        for (GoStatement statement : statements) {
+            minOffset = Math.min(minOffset, statement.getTextOffset());
+        }
+
+        int insertionPoint = 0;
+        for (GoStatement statement : ((GoBlockStatement) parent).getStatements()) {
+            if (statement.getTextOffset() > minOffset) {
+                break;
+            }
+            insertionPoint = statement.getTextOffset();
+        }
+        return insertionPoint;
     }
 }

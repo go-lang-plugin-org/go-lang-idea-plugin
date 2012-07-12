@@ -1,0 +1,26 @@
+package main
+func main() {
+    if true {
+        a := 1
+        println(/*begin*/a + 2/*end*/)
+        println(a + 2)
+    } else {
+        a := 1
+        println(a + 2)
+        println(a + 2)
+    }
+}
+-----
+package main
+func main() {
+    if true {
+        a := 1
+        value := a + 2
+        println(value)
+        println(value<caret>)
+    } else {
+        a := 1
+        println(a + 2)
+        println(a + 2)
+    }
+}

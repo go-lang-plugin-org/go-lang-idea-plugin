@@ -10,7 +10,7 @@ import java.util.List;
 public class TemplateUtil {
     public static TemplateImpl createTemplate(String text) {
         TemplateImpl template = new TemplateImpl("", text, "");
-        template.setToIndent(false);
+        template.setToReformat(true);
         return template;
     }
 

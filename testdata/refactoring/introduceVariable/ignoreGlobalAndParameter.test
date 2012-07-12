@@ -1,0 +1,26 @@
+package main
+
+var a = 5
+
+func Foo(b int) {
+    println(/*begin*/a + b + 2/*end*/)
+    println(a + b + 2)
+    if true {
+        println(a + b + 2)
+        println(a + b + 2)
+    }
+}
+-----
+package main
+
+var a = 5
+
+func Foo(b int) {
+    value := a + b + 2
+    println(value)
+    println(value)
+    if true {
+        println(value)
+        println(value<caret>)
+    }
+}

@@ -1,0 +1,28 @@
+package main
+
+const a = 5
+
+func main() {
+    println(/*begin*/a + a/*end*/)
+    println(a + a)
+}
+
+func Foo() {
+    println(a + a)
+}
+-----
+package main
+
+const (
+    a     = 5
+    VALUE = a + a
+)
+
+func main() {
+    println(VALUE)
+    println(VALUE)
+}
+
+func Foo() {
+    println(VALUE<caret>)
+}

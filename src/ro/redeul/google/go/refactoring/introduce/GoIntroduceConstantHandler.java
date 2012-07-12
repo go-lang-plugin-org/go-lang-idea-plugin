@@ -1,70 +1,61 @@
 package ro.redeul.google.go.refactoring.introduce;
 
-import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiDocumentManager;
-import ro.redeul.google.go.GoLanguage;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
+import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
-import static ro.redeul.google.go.editor.TemplateUtil.runTemplate;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isEnclosedByParenthesis;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GoIntroduceConstantHandler extends GoIntroduceHandlerBase {
-    private static final String VARIABLE = "____INTRODUCE_CONSTANT____";
+import static ro.redeul.google.go.editor.TemplateUtil.runTemplate;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isEnclosedByParenthesis;
+
+public class GoIntroduceConstantHandler extends GoIntroduceVariableHandlerBase {
+    @Override
+    protected boolean isValidExpression(GoExpr expr) {
+        return expr != null && isConstantExpression(expr);
+    }
 
     @Override
-    protected void doIntroduce(Project project, Editor editor, GoFile file, int start, int end) throws GoRefactoringException {
-        GoExpr e = CodeInsightUtilBase.findElementInRange(file, start, end, GoExpr.class, GoLanguage.INSTANCE);
-        if (e == null) {
-            throw new GoRefactoringException("It's not a valid expression!");
+    protected GoPsiElement getDefaultVisitStartElement() {
+        return file;
+    }
+
+    @Override
+    protected void introduceAllOccurrence(GoExpr current, GoExpr[] occurrences) throws GoRefactoringException {
+        RangeMarker[] exprMarkers = new RangeMarker[occurrences.length];
+        for (int i = 0; i < occurrences.length; i++) {
+            exprMarkers[i] = document.createRangeMarker(occurrences[i].getTextRange());
         }
 
-        if (isNodeOfType(e.getParent(), GoElementTypes.PARENTHESISED_EXPRESSION)) {
-            // If there is a pair of parenthesis enclosed the expression, include the parenthesis.
-            e = (GoExpr) e.getParent();
-            start = e.getTextOffset();
-            end = start + e.getTextLength();
-        }
-
-        // Remove redundant parenthesis around declaration.
-        boolean needToRemoveParenthesis = isNodeOfType(e, GoElementTypes.PARENTHESISED_EXPRESSION);
-
-        PsiDocumentManager manager = PsiDocumentManager.getInstance(project);
-        Document document = manager.getDocument(file);
-        if (document == null) {
-            return;
-        }
-
-        String declaration = e.getText().trim();
-        if (needToRemoveParenthesis) {
-            declaration = declaration.substring(1, declaration.length() - 1);
-        }
-
-        RangeMarker exprMarker = document.createRangeMarker(start, end);
-        editor.getCaretModel().moveToOffset(end);
-
+        String declaration = getExpressionDeclaration(current);
         GoConstDeclarations[] allConstDeclarations = file.getConsts();
         if (allConstDeclarations.length > 0) {
             GoConstDeclarations declarations = allConstDeclarations[allConstDeclarations.length - 1];
-            appendConstToLastDeclaration(editor, exprMarker, declaration, declarations);
+            appendConstToLastDeclaration(exprMarkers, declaration, declarations);
         } else {
-            appendConstToLastImportOrPackage(editor, exprMarker, file, declaration);
+            appendConstToLastImportOrPackage(exprMarkers, declaration);
         }
     }
 
-    private void appendConstToLastImportOrPackage(Editor editor, RangeMarker exprMarker, GoFile file, String declaration) {
+    @Override
+    protected void introduceCurrentOccurrence(GoExpr current) throws GoRefactoringException {
+        introduceAllOccurrence(current, new GoExpr[]{current});
+    }
+
+    private void appendConstToLastImportOrPackage(RangeMarker[] exprMarkers, String declaration) {
         GoPsiElement lastElement;
         GoImportDeclarations[] imports = file.getImportDeclarations();
         if (imports.length != 0) {
@@ -75,10 +66,11 @@ public class GoIntroduceConstantHandler extends GoIntroduceHandlerBase {
 
         int offset = lastElement.getTextRange().getEndOffset();
         String stmt = "\n\nconst $" + VARIABLE + "$ = " + declaration;
-        startRenaming(editor, exprMarker, offset, 0, stmt);
+        startRenaming(editor, exprMarkers, offset, 0, stmt);
     }
 
-    private void appendConstToLastDeclaration(Editor editor, RangeMarker exprMarker, String declaration, GoConstDeclarations declarations) {
+    private void appendConstToLastDeclaration(RangeMarker[] exprMarkers, String declaration,
+                                              GoConstDeclarations declarations) {
         int offset;
         int originalLength;
         String stmt;
@@ -88,28 +80,57 @@ public class GoIntroduceConstantHandler extends GoIntroduceHandlerBase {
             offset = lastConst.getTextOffset();
             originalLength = lastConst.getTextLength();
             StringBuilder sb = new StringBuilder("(\n");
-            sb.append("    ").append(lastConst.getText()).append("\n");
-            sb.append("    $").append(VARIABLE).append("$ = ").append(declaration).append("\n");
+            sb.append(lastConst.getText()).append("\n");
+            sb.append("$").append(VARIABLE).append("$ = ").append(declaration).append("\n");
             sb.append(")");
             stmt = sb.toString();
         } else {
             offset = lastConst.getTextOffset() + lastConst.getTextLength();
             originalLength = 0;
-            stmt = "\n    $" + VARIABLE + "$ = " + declaration;
+            stmt = "\n$" + VARIABLE + "$ = " + declaration;
         }
 
-        startRenaming(editor, exprMarker, offset, originalLength, stmt);
+        startRenaming(editor, exprMarkers, offset, originalLength, stmt);
     }
 
-    private void startRenaming(Editor editor, RangeMarker exprMarker, int offset, int originalLength, String stmt) {
+    private void startRenaming(Editor editor, RangeMarker[] exprMarkers, int offset, int originalLength, String stmt) {
         Document document = editor.getDocument();
+        RangeMarker declRange = document.createRangeMarker(offset, offset + originalLength);
         document.replaceString(offset, offset + originalLength, stmt);
-        RangeMarker defMarker = document.createRangeMarker(offset, offset + stmt.length());
-        // replace expression with const
-        document.replaceString(exprMarker.getStartOffset(), exprMarker.getEndOffset(), '$' + VARIABLE + '$');
+        for (RangeMarker exprMarker : exprMarkers) {
+            // replace expression with const
+            document.replaceString(exprMarker.getStartOffset(), exprMarker.getEndOffset(), '$' + VARIABLE + '$');
+        }
 
-        int start = Math.min(defMarker.getStartOffset(), exprMarker.getStartOffset());
-        int end = Math.max(defMarker.getEndOffset(), exprMarker.getEndOffset());
-        runTemplate(editor, new TextRange(start, end), VARIABLE, "VALUE");
+        TextRange range = new TextRange(declRange.getStartOffset(), declRange.getEndOffset());
+        for (RangeMarker exprMarker : exprMarkers) {
+            range = range.union(new TextRange(exprMarker.getStartOffset(), exprMarker.getEndOffset()));
+        }
+
+        runTemplate(editor, range, VARIABLE, "VALUE");
+    }
+
+    private static boolean isConstantExpression(GoExpr expr) {
+        final AtomicBoolean stopped = new AtomicBoolean(false);
+        new GoRecursiveElementVisitor() {
+            @Override
+            public void visitElement(GoPsiElement element) {
+                if (!stopped.get()) {
+                    super.visitElement(element);
+                }
+            }
+
+            @Override
+            public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
+                PsiElement resolve = GoPsiUtils.resolveSafely(identifier, PsiElement.class);
+                GoConstDeclarations declarations = findParentOfType(resolve, GoConstDeclarations.class);
+                if (declarations == null || !(declarations.getParent() instanceof GoFile)) {
+                    stopped.set(true);
+                    return;
+                }
+            }
+        }.visitElement(expr);
+
+        return !stopped.get();
     }
 }

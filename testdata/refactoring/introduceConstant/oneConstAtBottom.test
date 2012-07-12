@@ -1,18 +1,18 @@
 package main
 
-const N = 5
-
 func main() {
     println(/*begin*/1 + 2/*end*/)
 }
+
+const N = 5
 -----
 package main
+
+func main() {
+    println(VALUE)
+}
 
 const (
     N     = 5
     VALUE = 1 + 2
-)
-
-func main() {
-    println(VALUE<caret>)
-}
+)<caret>

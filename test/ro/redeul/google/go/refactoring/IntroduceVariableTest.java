@@ -11,6 +11,9 @@ public class IntroduceVariableTest
     }
 
     public void testSimple() throws Exception { doTest(); }
+    public void testMultiOccurrences() throws Exception { doTest(); }
+    public void testIgnoreGlobalAndParameter() throws Exception { doTest(); }
+    public void testRespectIdentifierScope() throws Exception { doTest(); }
     public void testParenthesis1() throws Exception { doTest(); }
     public void testParenthesis2() throws Exception { doTest(); }
     public void testParenthesis3() throws Exception { doTest(); }

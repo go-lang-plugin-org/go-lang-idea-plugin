@@ -9,7 +9,7 @@ func main() {
 package main
 
 const (
-    A, B = 1, 2
+    A, B  = 1, 2
     VALUE = 1 + 2
 )
 

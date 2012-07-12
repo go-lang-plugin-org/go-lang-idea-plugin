@@ -1,9 +1,6 @@
 package ro.redeul.google.go.refactoring.introduce;
 
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.AccessToken;
-import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
@@ -90,18 +87,11 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
     }
 
     private void introduce(final Project project, final Editor editor, final GoFile file, final int start, final int end) {
-        CommandProcessor.getInstance().executeCommand(project, new Runnable() {
-            public void run() {
-                AccessToken accessToken = WriteAction.start();
-                try {
-                    doIntroduce(project, editor, file, start, end);
-                } catch (GoRefactoringException e) {
-                    CommonRefactoringUtil.showErrorHint(project, editor, e.getMessage(), "Refactoring error!", null);
-                } finally {
-                    accessToken.finish();
-                }
-            }
-        }, "Introduce", null);
+        try {
+            doIntroduce(project, editor, file, start, end);
+        } catch (GoRefactoringException e) {
+            CommonRefactoringUtil.showErrorHint(project, editor, e.getMessage(), "Refactoring error!", null);
+        }
     }
 
     protected abstract void doIntroduce(Project project, Editor editor, GoFile file, int start, int end) throws GoRefactoringException;
@@ -135,14 +125,5 @@ public abstract class GoIntroduceHandlerBase implements RefactoringActionHandler
             expressionRanges.add(expression.getTextRange());
         }
         return expressions;
-    }
-
-    protected static String findIndent(String s) {
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) != ' ' && s.charAt(i) != '\t') {
-                return s.substring(0, i);
-            }
-        }
-        return s;
     }
 }
