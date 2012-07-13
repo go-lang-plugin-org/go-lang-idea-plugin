@@ -78,6 +78,8 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testLabeled_case2() throws Throwable { doTest(); }
     public void testLabeled_case3() throws Throwable { doTest(); }
 
+    public void testGoto_goto1() throws Throwable { doTest(); }
+
     public void testSelect_empty() throws Throwable { doTest(); }
     public void testSelect_case1() throws Throwable { doTest(); }
     public void testSelect_case2() throws Throwable { doTest(); }

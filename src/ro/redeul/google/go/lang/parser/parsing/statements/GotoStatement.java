@@ -29,8 +29,6 @@ public class GotoStatement implements GoElementTypes {
         } else {
             labelMarker.done(IDENTIFIER);
         }
-
-        ParserUtils.getToken(builder, oSEMI, "semicolon.expected");
         marker.done(GOTO_STATEMENT);
         return GOTO_STATEMENT;
     }
