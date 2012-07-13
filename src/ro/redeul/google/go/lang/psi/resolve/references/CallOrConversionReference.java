@@ -128,7 +128,7 @@ public class CallOrConversionReference
 
                     GoPsiElement goPsi = (GoPsiElement) declaration;
                     GoPsiElement goChildPsi = (GoPsiElement) child;
-                    variants.add(createLookupElement(goPsi, name, goChildPsi).setTypeText("cuc2", true));
+                    variants.add(createLookupElement(goPsi, name, goChildPsi));
                     return true;
                 }
             };
