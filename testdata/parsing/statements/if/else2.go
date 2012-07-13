@@ -1,10 +1,8 @@
 package main
 func main() {
-    if ; e {
-        return 1
-    } else if a; a { }
+    if e; e { } else { a = 10 }
 }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -26,8 +24,10 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        EmptyStmt
-          <empty list>
+        ExpressionStmtImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('e')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpressionImpl
@@ -36,36 +36,25 @@ Go file
         PsiWhiteSpace(' ')
         BlockStmtImpl
           PsiElement({)('{')
-          PsiWhiteSpace('\n')
-          PsiWhiteSpace('        ')
-          ReturnStmtImpl
-            PsiElement(KEYWORD_RETURN)('return')
-            PsiWhiteSpace(' ')
-            LiteralExpressionImpl
-              LiteralIntegerImpl
-                PsiElement(LITERAL_INT)('1')
-          PsiWhiteSpace('\n')
-          PsiWhiteSpace('    ')
+          PsiWhiteSpace(' ')
           PsiElement(})('}')
         PsiWhiteSpace(' ')
         PsiElement(KEYWORD_ELSE)('else')
         PsiWhiteSpace(' ')
-        IfStmtImpl
-          PsiElement(KEYWORD_IF)('if')
+        BlockStmtImpl
+          PsiElement({)('{')
           PsiWhiteSpace(' ')
-          ExpressionStmtImpl
+          AssignStmt
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('a')
-          PsiElement(;)(';')
-          PsiWhiteSpace(' ')
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('a')
-          PsiWhiteSpace(' ')
-          BlockStmtImpl
-            PsiElement({)('{')
             PsiWhiteSpace(' ')
-            PsiElement(})('}')
+            PsiElement(=)('=')
+            PsiWhiteSpace(' ')
+            LiteralExpressionImpl
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('10')
+          PsiWhiteSpace(' ')
+          PsiElement(})('}')
       PsiWhiteSpace('\n')
       PsiElement(})('}')

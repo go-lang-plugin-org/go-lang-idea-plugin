@@ -1,8 +1,10 @@
 package main
 func main() {
-    if e; e { } else a = 10
+    if ; e {
+        return 1
+    } else if a; a { }
 }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -24,10 +26,8 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        ExpressionStmtImpl
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('e')
+        EmptyStmt
+          <empty list>
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpressionImpl
@@ -36,20 +36,36 @@ Go file
         PsiWhiteSpace(' ')
         BlockStmtImpl
           PsiElement({)('{')
-          PsiWhiteSpace(' ')
+          PsiWhiteSpace('\n')
+          PsiWhiteSpace('        ')
+          ReturnStmtImpl
+            PsiElement(KEYWORD_RETURN)('return')
+            PsiWhiteSpace(' ')
+            LiteralExpressionImpl
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('1')
+          PsiWhiteSpace('\n')
+          PsiWhiteSpace('    ')
           PsiElement(})('}')
         PsiWhiteSpace(' ')
         PsiElement(KEYWORD_ELSE)('else')
         PsiWhiteSpace(' ')
-        AssignStmt
+        IfStmtImpl
+          PsiElement(KEYWORD_IF)('if')
+          PsiWhiteSpace(' ')
+          ExpressionStmtImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('a')
+          PsiElement(;)(';')
+          PsiWhiteSpace(' ')
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
-          PsiElement(=)('=')
-          PsiWhiteSpace(' ')
-          LiteralExpressionImpl
-            LiteralIntegerImpl
-              PsiElement(LITERAL_INT)('10')
+          BlockStmtImpl
+            PsiElement({)('{')
+            PsiWhiteSpace(' ')
+            PsiElement(})('}')
       PsiWhiteSpace('\n')
       PsiElement(})('}')

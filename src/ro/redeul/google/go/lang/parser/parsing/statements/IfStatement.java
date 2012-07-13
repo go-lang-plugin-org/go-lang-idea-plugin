@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -22,7 +23,6 @@ public class IfStatement implements GoElementTypes {
         PsiBuilder.Marker marker = builder.mark();
 
         ParserUtils.getToken(builder, kIF);
-
 
         PsiBuilder.Marker mark = builder.mark();
 
@@ -45,7 +45,13 @@ public class IfStatement implements GoElementTypes {
         if (ParserUtils.lookAhead(builder, kELSE)) {
             if (builder.getTokenType() == kELSE) {
                 ParserUtils.getToken(builder, kELSE);
-                Statements.parse(builder, parser);
+                if (ParserUtils.lookAhead(builder, kIF))
+                    IfStatement.parse(builder, parser);
+                else if (ParserUtils.lookAhead(builder, pLCURLY))
+                    BlockStatement.parse(builder, parser);
+                else {
+                    builder.error(GoBundle.message("error.block.of.if.statement.expected"));
+                }
             }
         }
 

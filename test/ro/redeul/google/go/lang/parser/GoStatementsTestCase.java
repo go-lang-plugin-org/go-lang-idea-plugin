@@ -73,6 +73,7 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testIf_elseIf1() throws Throwable { doTest(); }
 
     public void testIf_commentsAfter() throws Throwable { doTest(); }
+    public void testIf_incomplete() throws Throwable { doTest(); }
 
     public void testLabeled_case1() throws Throwable { doTest(); }
     public void testLabeled_case2() throws Throwable { doTest(); }
