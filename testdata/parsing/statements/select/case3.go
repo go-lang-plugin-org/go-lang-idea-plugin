@@ -40,11 +40,12 @@ Go file
             PsiWhiteSpace(' ')
             PsiElement(=)('=')
             PsiWhiteSpace(' ')
-            PsiElement(<-)('<-')
-            PsiWhiteSpace(' ')
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('b')
+            UnaryExpressionImpl
+              PsiElement(<-)('<-')
+              PsiWhiteSpace(' ')
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('b')
           PsiElement(:)(':')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('            ')

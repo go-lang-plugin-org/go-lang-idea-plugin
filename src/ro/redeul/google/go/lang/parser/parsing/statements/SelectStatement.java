@@ -27,7 +27,6 @@ public class SelectStatement implements GoElementTypes {
             if (builder.getTokenType() == kCASE) {
                 ParserUtils.advance(builder);
                 parseSendOrRecvExpression(builder, parser);
-
                 ParserUtils.getToken(builder, oCOLON, "colon.expected");
                 validCase = true;
             } else if (builder.getTokenType() == kDEFAULT) {
@@ -43,6 +42,8 @@ public class SelectStatement implements GoElementTypes {
                     if (parser.parseStatement(builder) == null) {
                         break;
                     }
+
+                    ParserUtils.endStatement(builder);
                 }
 
                 caseMark.done(SELECT_CASE);
@@ -73,7 +74,8 @@ public class SelectStatement implements GoElementTypes {
 
         PsiBuilder.Marker mark = builder.mark();
 
-        parser.parseExpression(builder);
+        parser.parseExpressionList(builder);
+
         if ( oSEND_CHANNEL == builder.getTokenType() ) {
             builder.advanceLexer();
             parser.parseExpression(builder);
@@ -83,8 +85,6 @@ public class SelectStatement implements GoElementTypes {
 
         if ( oASSIGN == builder.getTokenType() || oVAR_ASSIGN == builder.getTokenType() ) {
             builder.advanceLexer();
-
-            ParserUtils.getToken(builder, oSEND_CHANNEL, "send.channel.operator.expected");
 
             parser.parseExpression(builder);
 
