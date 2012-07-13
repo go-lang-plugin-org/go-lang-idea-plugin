@@ -28,6 +28,7 @@ public class GoTypesTestCase extends GoParsingTestCase {
     public void testChannel_bidi() throws Throwable { doTest(); }
     public void testChannel_send() throws Throwable { doTest(); }
     public void testChannel_recv() throws Throwable { doTest(); }
+    public void testChannel_invalid() throws Throwable { doTest(); }
 
     public void testMap_case1() throws Throwable { doTest(); }
     public void testMap_case2() throws Throwable { doTest(); }

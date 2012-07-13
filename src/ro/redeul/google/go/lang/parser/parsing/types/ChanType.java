@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.parser.parsing.types;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -41,8 +42,9 @@ public class ChanType implements GoElementTypes {
             type = ChannelType.Receiving;
         }
 
-        parser.parseType(builder);
-
+        if ( parser.parseType(builder) == null ) {
+            builder.error(GoBundle.message("error.channel.type.expected"));
+        }
 
         marker.done(type.elementType);
         return type.elementType;
