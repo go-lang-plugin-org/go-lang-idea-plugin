@@ -38,6 +38,10 @@ println()
 go    func   (  )  {
 println()
 }  (  )
+
+{
+a:=5
+}
 }
 -----
 package main
@@ -78,4 +82,8 @@ func main() {
     go func() {
         println()
     }()
+
+    {
+        a := 5
+    }
 }

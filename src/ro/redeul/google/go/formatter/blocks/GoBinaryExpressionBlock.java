@@ -1,7 +1,6 @@
 package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Spacing;
 import com.intellij.formatting.Wrap;
@@ -38,6 +37,6 @@ class GoBinaryExpressionBlock extends GoBlock {
 
     @Override
     protected Indent getChildIndent(@Nullable PsiElement child) {
-        return Indent.getNoneIndent();
+        return null;
     }
 }

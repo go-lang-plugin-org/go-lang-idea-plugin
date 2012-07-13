@@ -45,6 +45,7 @@ class GoBlock implements Block, GoElementTypes {
     protected List<Block> mySubBlocks = null;
 
     protected static final Spacing ONE_LINE_SPACING = Spacing.createSpacing(0, 0, 1, false, 0);
+    protected static final Spacing ONE_LINE_SPACING_KEEP_LINE_BREAKS = Spacing.createSpacing(0, 0, 1, true, 1);
     protected static final Spacing BASIC_SPACING = Spacing.createSpacing(1, 1, 0, false, 0);
     protected static final Spacing BASIC_SPACING_KEEP_LINE_BREAKS = Spacing.createSpacing(1, 1, 0, true, 0);
     protected static final Spacing EMPTY_SPACING = Spacing.createSpacing(0, 0, 0, false, 0);
@@ -220,7 +221,7 @@ class GoBlock implements Block, GoElementTypes {
 
         // there should be a space before any block statement
         if (child2.getNode().getPsi() instanceof GoBlockStatement) {
-            return BASIC_SPACING;
+            return BASIC_SPACING_KEEP_LINE_BREAKS;
         }
 
         // there should be a space after those keywords

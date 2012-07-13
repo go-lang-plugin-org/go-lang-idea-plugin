@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
+import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 
@@ -47,6 +48,9 @@ public class GoBlockGenerator {
 
     public static Block generateBlock(ASTNode node, Indent indent, Alignment alignment, CommonCodeStyleSettings styleSettings) {
         PsiElement psi = node.getPsi();
+        if (psi instanceof GoBlockStatement)
+            return new GoBlockStatementBlock(node, indent, styleSettings);
+
         if (psi instanceof GoFile)
             return generateGoFileBlock(node, styleSettings);
 

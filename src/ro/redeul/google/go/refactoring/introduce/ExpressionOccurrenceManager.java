@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ro.redeul.google.go.lang.parser.GoElementTypes.CONST_DECLARATION;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.SHORT_VAR_STATEMENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.VAR_DECLARATION;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
@@ -33,7 +34,8 @@ class ExpressionOccurrenceManager {
         }
     };
 
-    private static final TokenSet VAR_DECL_TYPE = TokenSet.create(VAR_DECLARATION, CONST_DECLARATION);
+    private static final TokenSet VAR_DECL_TYPE =
+            TokenSet.create(VAR_DECLARATION, CONST_DECLARATION, SHORT_VAR_STATEMENT);
 
     private final List<GoExpr> occurrences = new ArrayList<GoExpr>();
     private final GoExpr expr;
