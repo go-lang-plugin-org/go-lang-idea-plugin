@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
 import com.intellij.patterns.ElementPattern;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
@@ -31,6 +32,12 @@ public class CompositeElementToStructFieldReference
         super(element.getKey());
 
         this.element = element;
+    }
+
+    @NotNull
+    @Override
+    public String getCanonicalText() {
+        return getElement().getCanonicalName();
     }
 
     @Override

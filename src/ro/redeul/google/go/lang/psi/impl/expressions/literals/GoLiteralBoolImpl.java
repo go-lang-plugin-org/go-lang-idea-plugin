@@ -18,6 +18,7 @@ public class GoLiteralBoolImpl extends GoPsiElementBase
         return Type.Bool;
     }
 
+    @NotNull
     @Override
     public Boolean getValue() {
         return null;

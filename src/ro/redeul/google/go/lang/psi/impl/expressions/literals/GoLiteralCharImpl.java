@@ -12,6 +12,7 @@ public class GoLiteralCharImpl extends GoPsiElementBase
         super(node);
     }
 
+    @NotNull
     @Override
     public Character getValue() {
         return null;

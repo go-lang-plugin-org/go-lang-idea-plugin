@@ -20,6 +20,7 @@ public class GoLiteralCompositeImpl extends GoPsiElementBase
         return findChildByClass(GoType.class);
     }
 
+    @NotNull
     @Override
     public GoLiteralCompositeValue getValue() {
         return findChildByClass(GoLiteralCompositeValue.class);

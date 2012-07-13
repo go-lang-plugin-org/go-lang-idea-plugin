@@ -12,6 +12,7 @@ public class GoLiteralIntegerImpl extends GoPsiElementBase
         super(node);
     }
 
+    @NotNull
     @Override
     public Integer getValue() {
         return null;

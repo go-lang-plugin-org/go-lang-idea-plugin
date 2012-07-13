@@ -59,10 +59,6 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     @NotNull
     public String getPackageImportPath() {
 
-        if (isApplicationPart()) {
-            return "main";
-        }
-
         // look in the current project to find the current package import path.
         VirtualFile virtualFile = getCurrentOrIndexedVirtualFile();
 
@@ -80,13 +76,17 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(
             getProject()).getFileIndex();
 
-        if (!projectFileIndex.isInSource(
-            virtualFile) || projectFileIndex.isLibraryClassFile(virtualFile)) {
+        if (virtualFile == null ) {
+            int a = 10;
+        }
+        if (!projectFileIndex.isInSource(virtualFile) ||
+            projectFileIndex.isLibraryClassFile(virtualFile)) {
             return "";
         }
 
-        VirtualFile sourceRoot = projectFileIndex.getSourceRootForFile(
-            virtualFile);
+        VirtualFile sourceRoot =
+            projectFileIndex.getSourceRootForFile(virtualFile);
+
         if (sourceRoot == null) {
             return "";
         }
@@ -101,8 +101,9 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
             path = path + "/" + getPackageName();
         }
 
-        String makefileTarget = GoUtil.getTargetFromMakefile(
-            virtualFile.getParent().findChild("Makefile"));
+        String makefileTarget =
+            GoUtil.getTargetFromMakefile( virtualFile.getParent().findChild("Makefile"));
+
         if (makefileTarget != null) {
             path = makefileTarget;
         }
@@ -171,6 +172,9 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     private VirtualFile getCurrentOrIndexedVirtualFile() {
         VirtualFile virtualFile = getVirtualFile();
 
+        if (virtualFile == null) {
+            virtualFile = getOriginalFile().getVirtualFile();
+        }
         // if the GoFile Psi tree was built from a memory data check to see
         // if it was built from an indexed copy
         if (virtualFile == null) {

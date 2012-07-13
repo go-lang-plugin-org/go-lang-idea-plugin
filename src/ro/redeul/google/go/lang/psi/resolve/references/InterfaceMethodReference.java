@@ -69,6 +69,12 @@ public class InterfaceMethodReference extends GoPsiReference<GoLiteralIdentifier
 
     @NotNull
     @Override
+    public String getCanonicalText() {
+        return getElement().getCanonicalName();
+    }
+
+    @NotNull
+    @Override
     public Object[] getVariants() {
         GoMethodDeclaration[] methods = type.getMethodDeclarations();
 

@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
@@ -20,6 +21,12 @@ public class SelectorOfStructFieldReference
         super(expression.getIdentifier());
 
         selectorExpression = expression;
+    }
+
+    @NotNull
+    @Override
+    public String getCanonicalText() {
+        return getElement().getCanonicalName();
     }
 
     @Override

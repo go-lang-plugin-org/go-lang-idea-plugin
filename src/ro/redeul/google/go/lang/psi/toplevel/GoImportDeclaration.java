@@ -17,7 +17,7 @@ public interface GoImportDeclaration extends GoPsiElement {
     @Nullable
     GoPackageReference getPackageReference();
 
-    @Nullable
+    @NotNull
     GoLiteralString getImportPath();
 
     String getPackageName();

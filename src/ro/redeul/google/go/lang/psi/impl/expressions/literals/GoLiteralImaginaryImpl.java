@@ -12,6 +12,7 @@ public class GoLiteralImaginaryImpl extends GoPsiElementBase
         super(node);
     }
 
+    @NotNull
     @Override
     public Number getValue() {
         return null;

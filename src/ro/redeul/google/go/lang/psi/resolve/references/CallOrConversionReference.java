@@ -37,6 +37,12 @@ public class CallOrConversionReference
         super(identifier);
     }
 
+    @NotNull
+    @Override
+    public String getCanonicalText() {
+        return getElement().getCanonicalName();
+    }
+
     @Override
     public PsiElement resolve() {
         GoLiteralIdentifier identifier = getElement();
@@ -60,6 +66,8 @@ public class CallOrConversionReference
         GoLiteralIdentifier literalElement = getElement();
         if (literalElement == null)
             return false;
+
+        String str = getCanonicalText();
 
         if (element instanceof GoTypeNameDeclaration) {
             return matchesVisiblePackageName(element, literalElement.getName());

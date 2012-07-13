@@ -18,6 +18,7 @@ public class GoLiteralFloatImpl extends GoPsiElementBase
         super(node);
     }
 
+    @NotNull
     @Override
     public Float getValue() {
         return null;

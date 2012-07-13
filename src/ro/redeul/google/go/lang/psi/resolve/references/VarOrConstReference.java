@@ -39,6 +39,12 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
         return processor.getChildDeclaration();
     }
 
+    @NotNull
+    @Override
+    public String getCanonicalText() {
+        return getElement().getCanonicalName();
+    }
+
     @Override
     public boolean isReferenceTo(PsiElement element) {
         return matchesVisiblePackageName(element, getElement().getName());

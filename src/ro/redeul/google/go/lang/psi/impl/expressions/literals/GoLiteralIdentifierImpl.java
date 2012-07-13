@@ -5,6 +5,7 @@ import java.util.List;
 import com.intellij.lang.ASTNode;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -13,6 +14,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -24,6 +26,8 @@ import ro.redeul.google.go.lang.psi.resolve.references.CompositeElementToStructF
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -68,6 +72,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         return isIota;
     }
 
+    @NotNull
     @Override
     public String getValue() {
         return getText();
@@ -249,6 +254,33 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         }
 
         return null;
+    }
+
+    @NotNull
+    @Override
+    public String getCanonicalName() {
+        if ( ! isQualified() )
+            return getUnqualifiedName();
+
+        String packageName = getLocalPackageName();
+
+        PsiFile file = getContainingFile();
+        if (file == null || !(file instanceof GoFile)) {
+            return getUnqualifiedName();
+        }
+        GoFile goFile = (GoFile)file;
+
+        GoImportDeclarations[]goImportDeclarations = goFile.getImportDeclarations();
+        for (GoImportDeclarations importDeclarations : goImportDeclarations) {
+            for (GoImportDeclaration importDeclaration : importDeclarations.getDeclarations()) {
+                if (importDeclaration.getVisiblePackageName().equals(packageName))
+                    return String.format("%s:%s",
+                                         importDeclaration.getImportPath().getValue(),
+                                         getUnqualifiedName());
+            }
+        }
+
+        return getName();
     }
 
     @Override

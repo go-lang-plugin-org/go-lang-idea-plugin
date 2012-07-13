@@ -35,6 +35,12 @@ public class ImportReference extends GoPsiReference<GoImportDeclaration> impleme
         );
     }
 
+    @NotNull
+    @Override
+    public String getCanonicalText() {
+        return getElement().getImportPath().getValue();
+    }
+
     @Override
     public PsiElement resolve() {
         return null;

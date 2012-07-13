@@ -5,7 +5,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 
@@ -14,12 +13,12 @@ public abstract class GoPsiReference<GoPsi extends PsiElement>
 
     GoPsi element;
 
-    protected GoPsiReference(GoPsi element) {
+    protected GoPsiReference(@NotNull GoPsi element) {
         this.element = element;
     }
 
     @Override
-    @Nullable
+    @NotNull
     public GoPsi getElement() {
         return element;
     }
@@ -30,12 +29,6 @@ public abstract class GoPsiReference<GoPsi extends PsiElement>
             return new TextRange(0, 0);
 
         return new TextRange(0, element.getTextLength());
-    }
-
-    @NotNull
-    @Override
-    public String getCanonicalText() {
-        return element.getText();
     }
 
     @Override

@@ -36,10 +36,7 @@ public class BuiltinCallOrConversionReference extends CallOrConversionReference 
 
     @Override
     public PsiElement resolve() {
-
         PsiElement element = getElement();
-        if (element == null)
-            return null;
 
         MethodOrTypeNameResolver processor =
             new MethodOrTypeNameResolver(this);
@@ -61,6 +58,12 @@ public class BuiltinCallOrConversionReference extends CallOrConversionReference 
 
     @NotNull
     @Override
+    public String getCanonicalText() {
+        return getElement().getCanonicalName();
+    }
+
+    @NotNull
+    @Override
     public Object[] getVariants() {
 
         PsiElement element = getElement();
@@ -78,7 +81,7 @@ public class BuiltinCallOrConversionReference extends CallOrConversionReference 
 
                 GoPsiElement goPsi = (GoPsiElement) declaration;
                 GoPsiElement goChildPsi = (GoPsiElement) child;
-                variants.add(createLookupElement(goPsi, name, goChildPsi));
+                variants.add(createLookupElement(goPsi, name, goChildPsi).setTypeText("builtin", true));
                 return true;
             }
         };
@@ -90,7 +93,6 @@ public class BuiltinCallOrConversionReference extends CallOrConversionReference 
 
         for (GoFile file : files) {
             ResolveState newState = GoResolveStates.imported("builtin", "");
-
             if (!file.processDeclarations(processor, newState, null, element))  {
                 break;
             }

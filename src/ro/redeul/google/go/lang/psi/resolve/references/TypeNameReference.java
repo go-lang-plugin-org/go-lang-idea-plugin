@@ -38,6 +38,12 @@ public class TypeNameReference extends GoPsiReference<GoTypeName> {
         return processor.getDeclaration();
     }
 
+    @NotNull
+    @Override
+    public String getCanonicalText() {
+        return getElement().getIdentifier().getCanonicalName();
+    }
+
     @Override
     public boolean isReferenceTo(PsiElement element) {
         if (element instanceof GoTypeNameDeclaration) {
