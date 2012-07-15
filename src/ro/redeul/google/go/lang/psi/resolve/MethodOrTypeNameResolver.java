@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.psi.resolve;
 
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
@@ -28,8 +27,12 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<CallOrConve
     public void visitTypeSpec(GoTypeSpec type) {
 
         if ("builtin".equals(getState().get(GoResolveStates.PackageName))) {
-            if ( ! type.getName().equals(type.getType().getText()))
-                return;
+            String typeName = type.getName();
+            GoType typeDeclaration = type.getType();
+            if ( typeName != null && typeDeclaration != null ) {
+                if ( ! typeName.equals(typeDeclaration.getText()))
+                    return;
+            }
         }
 
         if ( checkReference(type.getTypeNameDeclaration()) )
@@ -43,21 +46,19 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<CallOrConve
     }
 
     @Override
-    public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
+    public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
+        if ( ! (identifier.getParent() instanceof GoShortVarDeclaration) )
+            return;
 
-        GoLiteralIdentifier identifiers[] = declaration.getIdentifiers();
-        GoExpr expressions[] = declaration.getExpressions();
+        GoShortVarDeclaration varDeclaration = (GoShortVarDeclaration) identifier.getParent();
 
-        for (int i = 0; i < identifiers.length; i++) {
-            GoLiteralIdentifier identifier = identifiers[i];
-            if (expressions.length > i) {
-                GoExpr expr = expressions[i];
-                GoType[] exprTypes = expr.getType();
-                if (exprTypes.length == 1 && (exprTypes[0] instanceof GoTypeFunction)) {
-                    if ( checkReference(identifier) ) {
-                        if ( ! addDeclaration(identifier) ) {
-                            return;
-                        }
+        GoLiteralIdentifier ids[] = varDeclaration.getIdentifiers();
+
+        for (GoLiteralIdentifier id : ids) {
+            if (id.isEquivalentTo(identifier)) {
+                if (checkReference(identifier)) {
+                    if (!addDeclaration(identifier)) {
+                        return;
                     }
                 }
             }
@@ -72,7 +73,7 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<CallOrConve
 
     @Override
     public void visitFunctionParameter(GoFunctionParameter parameter) {
-        if ( parameter.getType() instanceof GoTypeFunction) {
+            if ( parameter.getType() instanceof GoTypeFunction) {
             for (GoLiteralIdentifier identifier : parameter.getIdentifiers()) {
                 if (checkReference(identifier)) {
                     if ( !addDeclaration(identifier) ) {

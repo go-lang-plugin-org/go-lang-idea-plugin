@@ -52,6 +52,10 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
     public void testFunctionInSamePackageDifferentFile() throws Exception {
         doTest();
     }
+
+    public void testCallToFunctionVariable() throws Exception {
+        doTest();
+    }
 //    public void testConversionToLocallyImportedType() throws Exception {
 //        doTest();
 //    }

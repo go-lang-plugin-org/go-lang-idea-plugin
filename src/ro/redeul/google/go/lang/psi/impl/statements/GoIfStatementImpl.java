@@ -52,7 +52,7 @@ public class GoIfStatementImpl extends GoPsiElementBase
             return true;
 
         GoSimpleStatement statement = getSimpleStatement();
-        if (statement != null) {
+        if (statement != null && lastParent != statement) {
             if (!statement.processDeclarations(processor, state, null, place))
                 return false;
         }

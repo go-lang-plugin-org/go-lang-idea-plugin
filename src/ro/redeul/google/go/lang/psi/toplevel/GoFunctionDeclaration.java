@@ -1,9 +1,9 @@
 package ro.redeul.google.go.lang.psi.toplevel;
 
 import com.intellij.psi.PsiNameIdentifierOwner;
-import com.intellij.psi.PsiNamedElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
+import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -11,7 +11,8 @@ import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
  * Date: Aug 26, 2010
  * Time: 2:32:15 PM
  */
-public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOwner {
+public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOwner,
+                                               GoTypeFunction {
 
     String getFunctionName();
 

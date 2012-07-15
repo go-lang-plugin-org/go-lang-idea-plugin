@@ -9,6 +9,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
@@ -17,6 +18,10 @@ import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
+import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
@@ -29,6 +34,34 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSear
  */
 public class GoFunctionDeclarationImpl extends GoPsiElementBase
     implements GoFunctionDeclaration {
+
+    @Override
+    public GoUnderlyingType getUnderlyingType() {
+        return GoUnderlyingTypes.getFunction(this);
+    }
+
+    @Override
+    public boolean isIdentical(GoType goType) {
+        if ( !(goType instanceof GoTypeFunction))
+            return false;
+
+        // TODO: implement equality here
+        return false;
+    }
+
+    @Override
+    public String getPackageName() {
+       return ((GoFile)getContainingFile()).getPackageName();
+    }
+
+    @Override
+    public String getQualifiedName() {
+        String packageName = getPackageName();
+        if ( packageName == null || packageName.trim().equals("") )
+            return getName();
+
+        return String.format("%s.%s", packageName, getName());
+    }
 
     public GoFunctionDeclarationImpl(@NotNull ASTNode node) {
         super(node);

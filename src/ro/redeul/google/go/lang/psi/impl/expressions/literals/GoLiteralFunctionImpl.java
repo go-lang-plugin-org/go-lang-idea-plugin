@@ -96,7 +96,7 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
 
     @Override
     public GoUnderlyingType getUnderlyingType() {
-        return GoUnderlyingTypes.getFunction();
+        return GoUnderlyingTypes.getFunction(this);
     }
 
     @Override

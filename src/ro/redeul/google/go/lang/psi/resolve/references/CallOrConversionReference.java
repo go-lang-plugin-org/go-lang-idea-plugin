@@ -19,7 +19,9 @@ import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeFunction;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
@@ -45,16 +47,12 @@ public class CallOrConversionReference
 
     @Override
     public PsiElement resolve() {
-        GoLiteralIdentifier identifier = getElement();
-        if ( identifier == null )
-            return null;
-
         MethodOrTypeNameResolver processor =
             new MethodOrTypeNameResolver(this);
 
         PsiScopesUtil.treeWalkUp(
             processor,
-            identifier, identifier.getContainingFile(),
+            getElement(), getElement().getContainingFile(),
             GoResolveStates.initial());
 
         return processor.getChildDeclaration();
@@ -62,15 +60,11 @@ public class CallOrConversionReference
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-
-        GoLiteralIdentifier literalElement = getElement();
-        if (literalElement == null)
-            return false;
-
+        GoLiteralIdentifier identifier = getElement();
         String str = getCanonicalText();
 
         if (element instanceof GoTypeNameDeclaration) {
-            return matchesVisiblePackageName(element, literalElement.getName());
+            return matchesVisiblePackageName(element, identifier.getName());
         }
 
         if (element instanceof GoFunctionDeclaration) {
@@ -79,9 +73,10 @@ public class CallOrConversionReference
 
             if (funcDeclaration.getNameIdentifier() != null) {
                 return matchesVisiblePackageName(
-                    funcDeclaration.getUserData(GoResolveStates.VisiblePackageName),
+                    funcDeclaration.getUserData(
+                        GoResolveStates.VisiblePackageName),
                     funcDeclaration.getNameIdentifier(),
-                    literalElement.getName());
+                    identifier.getName());
             }
         }
 
@@ -91,22 +86,26 @@ public class CallOrConversionReference
                     psiElement(GoFunctionParameter.class)
                         .withChild(psiElement(GoTypeFunction.class))
                 ).accepts(element) ) {
-            return matchesVisiblePackageName(element, literalElement.getName());
+            return matchesVisiblePackageName(element, identifier.getName());
         }
 
-        if (
-            psiElement(GoLiteralIdentifier.class)
-                .withParent(
-                    psiElement(GoShortVarDeclaration.class)
-                        .withChild(
-                            psiElement(GoLiteralExpression.class)
-                                .withChild(psiElement(GoTypeFunction.class)))
-                ).accepts(element) ) {
-            return matchesVisiblePackageName(element, literalElement.getName());
+        if ( IDENT_IN_SHORT_VAR.accepts(element) ) {
+            GoShortVarDeclaration shortVars = (GoShortVarDeclaration) element.getParent();
+
+            GoType identifierType =
+                shortVars.getIdentifierType((GoLiteralIdentifier) element);
+
+            if  (identifierType != null &&
+                identifierType.getUnderlyingType() instanceof GoUnderlyingTypeFunction )
+                return matchesVisiblePackageName(element, identifier.getName());
         }
 
         return false;
     }
+
+    static ElementPattern IDENT_IN_SHORT_VAR =
+        psiElement(GoLiteralIdentifier.class)
+            .withParent(psiElement(GoShortVarDeclaration.class));
 
     @NotNull
     @Override

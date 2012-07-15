@@ -50,8 +50,9 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
             }
 
             private void tryToResolveReference(PsiNamedElement element) {
-                if (element.getReferences().length != 0
-                    && resolveSafely(element, PsiElement.class) == null) {
+                if (element.getReferences().length > 0 &&
+                        resolveSafely(element, PsiElement.class) == null) {
+
                     LocalQuickFix[] fixes;
                     if (isExternalFunctionNameIdentifier(element)) {
                         fixes = new LocalQuickFix[]{new CreateFunctionFix(element)};

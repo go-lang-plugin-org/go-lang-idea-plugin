@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.types.underlying;
 
+import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
 import ro.redeul.google.go.lang.psi.types.GoTypes;
 
 public class GoUnderlyingTypes {
@@ -25,8 +26,8 @@ public class GoUnderlyingTypes {
         return new GoUnderlyingTypeArray(memberType, size);
     }
 
-    public static GoUnderlyingType getFunction() {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+    public static GoUnderlyingType getFunction(GoTypeFunction functionType) {
+        return new GoUnderlyingTypeFunction(functionType);
     }
 
     public static GoUnderlyingType getInterface() {
