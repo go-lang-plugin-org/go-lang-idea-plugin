@@ -45,6 +45,11 @@ import ro.redeul.google.go.lang.psi.impl.statements.GoIfStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoLabeledStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoReturnStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoShortVarDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchExpressionClauseImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchExpressionStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchTypeClauseImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchTypeGuardImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchTypeStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionParameterImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoFunctionParameterListImpl;
@@ -273,6 +278,21 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(IF_STATEMENT))
             return new GoIfStatementImpl(node);
+
+        if (elementType.equals(SWITCH_EXPR_STATEMENT))
+            return new GoSwitchExpressionStatementImpl(node);
+
+        if (elementType.equals(SWITCH_EXPR_CASE))
+            return new GoSwitchExpressionClauseImpl(node);
+
+        if (elementType.equals(SWITCH_TYPE_STATEMENT))
+            return new GoSwitchTypeStatementImpl(node);
+
+        if (elementType.equals(SWITCH_TYPE_GUARD))
+            return new GoSwitchTypeGuardImpl(node);
+
+        if (elementType.equals(SWITCH_TYPE_CASE))
+            return new GoSwitchTypeClauseImpl(node);
 
         if (elementType.equals(LABELED_STATEMENT))
             return new GoLabeledStatementImpl(node);

@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.patterns;
 
 import com.intellij.patterns.ElementPattern;
+import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
@@ -9,6 +10,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
@@ -41,4 +43,13 @@ public class GoElementPatterns {
                     psiElement(GoFunctionParameter.class)
                 )
             );
+
+
+    public static final ElementPattern<? extends PsiElement> BLOCK_DECLARATIONS =
+        or(
+            psiElement(GoShortVarDeclaration.class),
+            psiElement(GoVarDeclarations.class),
+            psiElement(GoTypeDeclaration.class),
+            psiElement(GoConstDeclarations.class)
+        );
 }
