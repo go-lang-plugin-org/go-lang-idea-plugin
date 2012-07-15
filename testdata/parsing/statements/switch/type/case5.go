@@ -24,7 +24,7 @@ Go file
       PsiElement({)('{')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      SwitchTypeStmt
+      SwitchTypeStmtImpl
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
         IncDecStmt
@@ -34,7 +34,7 @@ Go file
           PsiElement(++)('++')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        SwitchTypeGuard
+        SwitchTypeGuardImpl
           PsiElement(IDENTIFIER)('i')
           PsiWhiteSpace(' ')
           PsiElement(:=)(':=')
@@ -56,7 +56,7 @@ Go file
         PsiElement({)('{')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
-        SwitchTypeCase
+        SwitchTypeCaseImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           TypeNameImpl

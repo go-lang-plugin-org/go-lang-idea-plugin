@@ -24,10 +24,10 @@ Go file
       PsiElement({)('{')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      SwitchTypeStmt
+      SwitchTypeStmtImpl
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
-        SwitchTypeGuard
+        SwitchTypeGuardImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('x')
@@ -39,7 +39,7 @@ Go file
         PsiElement({)('{')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
-        SwitchTypeCase
+        SwitchTypeCaseImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           TypeNameImpl

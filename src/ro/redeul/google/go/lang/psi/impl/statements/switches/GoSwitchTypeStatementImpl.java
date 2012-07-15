@@ -23,14 +23,15 @@ public class GoSwitchTypeStatementImpl extends GoPsiElementBase
         return findChildByClass(GoSimpleStatement.class);
     }
 
+    @NotNull
     @Override
-    public GoSwitchTypeGuard getTypeSwitchGuard() {
+    public GoSwitchTypeGuard getTypeGuard() {
         return findChildByClass(GoSwitchTypeGuard.class);
     }
 
     @NotNull
     @Override
-    public GoSwitchTypeClause[] getCaseClauses() {
+    public GoSwitchTypeClause[] getClauses() {
         return findChildrenByClass(GoSwitchTypeClause.class);
     }
 }

@@ -24,7 +24,7 @@ Go file
       PsiElement({)('{')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      SwitchExprStmt
+      SwitchExprStmtImpl
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
         AssignStmt
@@ -46,7 +46,7 @@ Go file
         PsiElement({)('{')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
-        SwitchExprCase
+        SwitchExprCaseImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           LiteralExpressionImpl

@@ -1,16 +1,20 @@
 package ro.redeul.google.go.lang.psi.impl.statements.switches;
 
+import java.util.List;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;
 import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 public class GoSwitchTypeClauseImpl extends GoPsiElementBase
     implements GoSwitchTypeClause {
@@ -27,6 +31,13 @@ public class GoSwitchTypeClauseImpl extends GoPsiElementBase
     @NotNull
     @Override
     public GoType[] getTypes() {
+        PsiElement list = findChildByType(GoElementTypes.TYPE_LIST);
+        if ( list != null ) {
+            List<GoType> arguments =
+                GoPsiUtils.findChildrenOfType(list, GoType.class);
+            return arguments.toArray(new GoType[arguments.size()]);
+        }
+
         return findChildrenByClass(GoType.class);
     }
 

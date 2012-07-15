@@ -96,4 +96,12 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testChainedSelector() throws Exception {
         doTest();
     }
+
+    public void testVarInSwitchExpr() throws Exception {
+        doTest();
+    }
+
+    public void testVarInSwitchType() throws Exception {
+        doTest();
+    }
 }

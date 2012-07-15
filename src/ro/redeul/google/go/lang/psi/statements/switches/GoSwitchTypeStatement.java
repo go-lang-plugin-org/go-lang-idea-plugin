@@ -10,9 +10,9 @@ public interface GoSwitchTypeStatement extends GoStatement {
     @Nullable
     GoSimpleStatement getSimpleStatement();
 
-    @Nullable
-    GoSwitchTypeGuard getTypeSwitchGuard();
+    @NotNull
+    GoSwitchTypeGuard getTypeGuard();
 
     @NotNull
-    GoSwitchTypeClause[] getCaseClauses();
+    GoSwitchTypeClause[] getClauses();
 }
