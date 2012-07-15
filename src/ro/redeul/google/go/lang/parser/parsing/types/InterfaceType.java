@@ -46,6 +46,10 @@ public class InterfaceType implements GoElementTypes {
             return true;
         }
 
-        return parser.parseTypeName(builder);
+        if ( ParserUtils.lookAhead(builder, mIDENT) ) {
+            return parser.parseTypeName(builder);
+        }
+
+        return false;
     }
 }
