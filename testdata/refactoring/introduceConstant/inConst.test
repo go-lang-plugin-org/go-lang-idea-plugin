@@ -1,0 +1,10 @@
+package main
+
+const N = /*begin*/5 + 1/*end*/
+-----
+package main
+
+const (
+    N     = VALUE
+    VALUE = 5 + 1
+)

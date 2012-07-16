@@ -15,6 +15,8 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.SmartPointerManager;
+import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
@@ -410,5 +412,10 @@ public class GoPsiUtils {
         String packageName = ((GoFile) element.getContainingFile()).getPackageName();
         Collection<GoFile> files = namesCache.getFilesByPackageName(packageName);
         return new LocalSearchScope(files.toArray(new PsiElement[files.size()]));
+    }
+
+    public static <T extends PsiElement> SmartPsiElementPointer<T> createSmartElementPointer(T element) {
+        SmartPointerManager manager = SmartPointerManager.getInstance(element.getProject());
+        return manager.createSmartPsiElementPointer(element);
     }
 }

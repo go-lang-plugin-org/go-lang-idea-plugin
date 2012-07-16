@@ -5,6 +5,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.SmartPsiElementPointer;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -19,8 +21,10 @@ import ro.redeul.google.go.refactoring.GoRefactoringException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ro.redeul.google.go.editor.TemplateUtil.runTemplate;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.createSmartElementPointer;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isEnclosedByParenthesis;
+import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class GoIntroduceConstantHandler extends GoIntroduceVariableHandlerBase {
     @Override
@@ -66,43 +70,63 @@ public class GoIntroduceConstantHandler extends GoIntroduceVariableHandlerBase {
 
         int offset = lastElement.getTextRange().getEndOffset();
         String stmt = "\n\nconst $" + VARIABLE + "$ = " + declaration;
-        startRenaming(editor, exprMarkers, offset, 0, stmt);
+        startRenaming(editor, exprMarkers, offset, stmt, null);
     }
 
     private void appendConstToLastDeclaration(RangeMarker[] exprMarkers, String declaration,
                                               GoConstDeclarations declarations) {
-        int offset;
-        int originalLength;
-        String stmt;
+        RangeMarker originalRange = document.createRangeMarker(declarations.getTextRange());
         GoConstDeclaration[] consts = declarations.getDeclarations();
         GoConstDeclaration lastConst = consts[consts.length - 1];
         if (consts.length == 1 && !isEnclosedByParenthesis(consts[0])) {
-            offset = lastConst.getTextOffset();
-            originalLength = lastConst.getTextLength();
-            StringBuilder sb = new StringBuilder("(\n");
-            sb.append(lastConst.getText()).append("\n");
-            sb.append("$").append(VARIABLE).append("$ = ").append(declaration).append("\n");
-            sb.append(")");
-            stmt = sb.toString();
-        } else {
-            offset = lastConst.getTextOffset() + lastConst.getTextLength();
-            originalLength = 0;
-            stmt = "\n$" + VARIABLE + "$ = " + declaration;
+            SmartPsiElementPointer<GoConstDeclarations> declPointer = createSmartElementPointer(declarations);
+            SmartPsiElementPointer<GoConstDeclaration> lastConstPointer = createSmartElementPointer(lastConst);
+            addParentheses(declarations);
+            lastConst = lastConstPointer.getElement();
+            declarations = declPointer.getElement();
+            if (lastConst == null || declarations == null) {
+                return;
+            }
+
+            originalRange = document.createRangeMarker(declarations.getTextRange());
         }
 
-        startRenaming(editor, exprMarkers, offset, originalLength, stmt);
+        int offset = lastConst.getTextOffset() + lastConst.getTextLength();
+        String stmt = "\n$" + VARIABLE + "$ = " + declaration;
+
+        startRenaming(editor, exprMarkers, offset, stmt, originalRange);
     }
 
-    private void startRenaming(Editor editor, RangeMarker[] exprMarkers, int offset, int originalLength, String stmt) {
+    private void addParentheses(GoConstDeclarations declarations) {
+        GoConstDeclaration[] consts = declarations.getDeclarations();
+        if (consts.length == 0) {
+            return;
+        }
+
         Document document = editor.getDocument();
-        RangeMarker declRange = document.createRangeMarker(offset, offset + originalLength);
-        document.replaceString(offset, offset + originalLength, stmt);
+        RangeMarker marker = document.createRangeMarker(declarations.getTextRange());
+
+        document.insertString(consts[consts.length - 1].getTextRange().getEndOffset(), "\n)");
+        document.insertString(consts[0].getTextOffset(), "(\n");
+        reformatPositions(declarations.getContainingFile(), marker);
+    }
+
+    private void startRenaming(Editor editor, RangeMarker[] exprMarkers, int offset, String stmt,
+                               @Nullable RangeMarker originalStatementRange) {
+        Document document = editor.getDocument();
+        RangeMarker insertPoint = document.createRangeMarker(offset, offset);
         for (RangeMarker exprMarker : exprMarkers) {
             // replace expression with const
             document.replaceString(exprMarker.getStartOffset(), exprMarker.getEndOffset(), '$' + VARIABLE + '$');
         }
 
-        TextRange range = new TextRange(declRange.getStartOffset(), declRange.getEndOffset());
+        document.replaceString(insertPoint.getStartOffset(), insertPoint.getEndOffset(), stmt);
+        TextRange range;
+        if (originalStatementRange != null) {
+            range = TextRange.create(originalStatementRange);
+        } else {
+            range = new TextRange(insertPoint.getStartOffset(), insertPoint.getEndOffset() + stmt.length());
+        }
         for (RangeMarker exprMarker : exprMarkers) {
             range = range.union(new TextRange(exprMarker.getStartOffset(), exprMarker.getEndOffset()));
         }

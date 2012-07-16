@@ -12,6 +12,7 @@ public class IntroduceConstantTest
 
     public void testSimple() throws Exception { doTest(); }
     public void testOneConst() throws Exception { doTest(); }
+    public void testInConst() throws Exception { doTest(); }
     public void testOneConstAtBottom() throws Exception { doTest(); }
     public void testOneConstWithParenthesis() throws Exception { doTest(); }
     public void testWholeFileReplace() throws Exception { doTest(); }

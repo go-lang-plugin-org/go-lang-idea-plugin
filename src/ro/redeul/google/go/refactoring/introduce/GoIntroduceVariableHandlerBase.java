@@ -25,7 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class GoIntroduceVariableHandlerBase extends GoIntroduceHandlerBase {
+abstract class GoIntroduceVariableHandlerBase extends GoIntroduceHandlerBase {
     protected static final String VARIABLE = "____INTRODUCE_VARIABLE____";
     protected Project project;
     protected Document document;

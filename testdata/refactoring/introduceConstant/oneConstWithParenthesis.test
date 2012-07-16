@@ -11,7 +11,7 @@ func main() {
 package main
 
 const (
-    N = 5
+    N     = 5
     VALUE = 1 + 2
 )
 
