@@ -11,9 +11,11 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 public class GoCallOrConvExpressionImpl extends GoExpressionBase
     implements GoCallOrConvExpression
@@ -24,10 +26,18 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-  //      GoType []types = getBaseExpression().getType();
+        PsiElement myself = resolveSafely(getBaseExpression(), PsiElement.class);
+        if (myself == null)
+            return GoType.EMPTY_ARRAY;
 
-        // TODO: implement resolving of types that are calls.
-        return super.resolveTypes();
+        if (myself.getParent() instanceof GoMethodDeclaration )
+        {
+            GoMethodDeclaration declaration = (GoMethodDeclaration)myself.getParent();
+
+            return declaration.getReturnType();
+        }
+
+        return GoType.EMPTY_ARRAY;
     }
 
     @Override

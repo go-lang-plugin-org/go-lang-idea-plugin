@@ -460,7 +460,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
                     continue;
                 }
 
-                GoTypeName typeName = mr.getTypeName();
+                GoType typeName = mr.getType();
                 if (typeName != null && name.equals(typeName.getName())) {
                     children.add(md);
                 }

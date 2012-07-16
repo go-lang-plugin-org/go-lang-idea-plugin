@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.toplevel;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
+import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
 
 /**
@@ -24,4 +25,6 @@ public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOw
     GoFunctionParameter[] getParameters();
 
     GoFunctionParameter[] getResults();
+
+    GoType[] getReturnType();
 }

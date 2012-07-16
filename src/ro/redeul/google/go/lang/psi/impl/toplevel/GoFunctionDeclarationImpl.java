@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
@@ -108,6 +111,27 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
         PsiElement result = findChildByType(GoElementTypes.FUNCTION_RESULT);
 
         return GoPsiUtils.getParameters(result);
+    }
+
+    @Override
+    public GoType[] getReturnType() {
+
+        List<GoType> types = new ArrayList<GoType>();
+
+        GoFunctionParameter[] results = getResults();
+        for (GoFunctionParameter result : results) {
+            GoLiteralIdentifier identifiers[] = result.getIdentifiers();
+
+            if (identifiers.length == 0 && result.getType() != null) {
+                types.add(result.getType());
+            } else {
+                for (GoLiteralIdentifier identifier : identifiers) {
+                    types.add(result.getType());
+                }
+            }
+        }
+
+        return types.toArray(new GoType[types.size()]);
     }
 
     public String toString() {

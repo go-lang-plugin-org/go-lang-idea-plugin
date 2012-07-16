@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
@@ -9,6 +12,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -112,5 +116,25 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
     @Override
     public String getQualifiedName() {
         return "";
+    }
+
+    @Override
+    public GoType[] getReturnType() {
+        List<GoType> types = new ArrayList<GoType>();
+
+        GoFunctionParameter[] results = getResults();
+        for (GoFunctionParameter result : results) {
+            GoLiteralIdentifier identifiers[] = result.getIdentifiers();
+
+            if (identifiers.length == 0 && result.getType() != null) {
+                types.add(result.getType());
+            } else {
+                for (GoLiteralIdentifier identifier : identifiers) {
+                    types.add(result.getType());
+                }
+            }
+        }
+
+        return types.toArray(new GoType[types.size()]);
     }
 }

@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,8 +12,10 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.resolve.references.InterfaceMethodReference;
+import ro.redeul.google.go.lang.psi.resolve.references.MethodReference;
 import ro.redeul.google.go.lang.psi.resolve.references.SelectorOfStructFieldReference;
 import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeInterface;
@@ -44,10 +47,10 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
     @Override
     protected GoType[] resolveTypes() {
-        GoLiteralIdentifier structFieldName = resolveSafely(this, GoLiteralIdentifier.class);
+        PsiElement target = resolveSafely(this, PsiElement.class);
 
-        if ( structFieldName != null && structFieldName.getParent() instanceof GoTypeStructField ) {
-            GoTypeStructField structField = (GoTypeStructField)structFieldName.getParent();
+        if ( target != null && target.getParent() instanceof GoTypeStructField ) {
+            GoTypeStructField structField = (GoTypeStructField)target.getParent();
             return new GoType[] { structField.getType() };
         }
 
@@ -132,8 +135,15 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
         if ( x instanceof GoUnderlyingTypeStruct)
             return new PsiReference[] {
                 new SelectorOfStructFieldReference(this),
-//                new MethodsReference(this)
+                new MethodReference(this)
             };
+
+        if ( type instanceof GoTypeName ) {
+            return new PsiReference[] {
+                new MethodReference(this)
+            };
+        }
+
 
 //        if ( type instanceof GoTypeStruct) {
 //            return new StructFieldReference(this);

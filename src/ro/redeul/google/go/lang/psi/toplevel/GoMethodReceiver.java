@@ -2,7 +2,7 @@ package ro.redeul.google.go.lang.psi.toplevel;
 
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoType;
 
 public interface GoMethodReceiver extends GoPsiElement {
 
@@ -10,6 +10,6 @@ public interface GoMethodReceiver extends GoPsiElement {
 
     boolean isReference();
 
-    GoTypeName getTypeName();
+    GoType getType();
 
 }
