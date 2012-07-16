@@ -1,0 +1,16 @@
+package main
+
+func Foo(a int) {
+    <caret>switch x := a*2; x {
+    default: println("c")
+    }
+}
+-----
+package main
+
+func Foo(a int) {
+    if x := a*2; false {
+    } else {
+        println("c")
+    }
+}

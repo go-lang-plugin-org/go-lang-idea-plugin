@@ -1,0 +1,13 @@
+package main
+
+func Foo(a int) {
+    <caret>switch {
+    }
+}
+-----
+package main
+
+func Foo(a int) {
+    if false {
+    }
+}

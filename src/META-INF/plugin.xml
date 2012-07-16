@@ -506,6 +506,12 @@
 
         <intentionAction>
             <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.conversions</categoryKey>
+            <className>ro.redeul.google.go.intentions.conversions.ConvertSwitchToIfIntention</className>
+        </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
             <categoryKey>intention.category.go/intention.category.statements</categoryKey>
             <className>ro.redeul.google.go.intentions.statements.MoveSimpleStatementOutIntention</className>
         </intentionAction>

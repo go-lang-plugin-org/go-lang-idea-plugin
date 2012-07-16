@@ -37,6 +37,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoTypeAssertionExpr
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoDeferStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoExpressionStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoFallthroughStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithClausesStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithConditionStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoForWithRangeStatementImpl;
@@ -73,6 +74,7 @@ import ro.redeul.google.go.lang.psi.impl.types.GoTypeSliceImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeStructImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructAnonymousFieldImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructFieldImpl;
+
 import static ro.redeul.google.go.lang.psi.types.GoTypeChannel.ChannelType;
 
 public class GoPsiCreator implements GoElementTypes {
@@ -302,6 +304,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(DEFER_STATEMENT))
             return new GoDeferStatementImpl(node);
+
+        if (elementType.equals(FALLTHROUGH_STATEMENT))
+            return new GoFallthroughStatementImpl(node);
 
         if (elementType.equals(wsNLS))
             return (PsiElement) ASTFactory.whitespace(node.getText());

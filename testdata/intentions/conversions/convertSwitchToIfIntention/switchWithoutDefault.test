@@ -1,0 +1,18 @@
+package main
+
+func Foo(a int) {
+    <caret>switch x := a*2; x {
+    case 0, 1, 2: println("a")
+    case 3: println("b")
+    }
+}
+-----
+package main
+
+func Foo(a int) {
+    if x := a*2; x == 0 || x == 1 || x == 2 {
+        println("a")
+    } else if x == 3 {
+        println("b")
+    }
+}

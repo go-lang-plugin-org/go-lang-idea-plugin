@@ -1,0 +1,6 @@
+
+switch x := a*2; x {
+case 0, 1, 2: println("a")
+case 3: println("b")
+default: println("c")
+}
