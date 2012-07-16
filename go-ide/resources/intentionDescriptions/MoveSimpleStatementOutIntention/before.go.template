@@ -1,0 +1,6 @@
+
+func Foo() {
+    if <spot>a := f()</spot>; a > 5 {
+        println(a)
+    }
+}

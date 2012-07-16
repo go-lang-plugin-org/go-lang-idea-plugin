@@ -66,7 +66,7 @@ public abstract class Intention implements IntentionAction {
     }
 
     protected abstract void processIntention(@NotNull PsiElement element, Project project, Editor editor)
-            throws IncorrectOperationException;
+            throws IntentionExecutionException;
 
     @Override
     public boolean startInWriteAction() {

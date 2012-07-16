@@ -1,0 +1,18 @@
+package main
+
+func main() {
+    switch <caret>x := f(); {
+    case x < 0: println("a")
+    default: println("b")
+    }
+}
+-----
+package main
+
+func main() {
+    x := f()
+    switch <caret>{
+    case x < 0: println("a")
+    default: println("b")
+    }
+}

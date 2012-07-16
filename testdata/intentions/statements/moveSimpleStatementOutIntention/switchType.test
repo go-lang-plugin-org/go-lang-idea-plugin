@@ -1,0 +1,18 @@
+package main
+
+func main() {
+    switch <caret>x := f(); x.(T) {
+    case nil: println("nil")
+    default: println("b")
+    }
+}
+-----
+package main
+
+func main() {
+    x := f()
+    switch <caret>x.(T) {
+    case nil: println("nil")
+    default: println("b")
+    }
+}
