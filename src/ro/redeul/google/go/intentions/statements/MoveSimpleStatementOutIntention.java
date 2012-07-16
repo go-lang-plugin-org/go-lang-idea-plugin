@@ -76,6 +76,10 @@ public class MoveSimpleStatementOutIntention extends Intention {
 
     private static boolean isInForClauseStatement(PsiElement element) {
         GoForWithClausesStatement forStatement = findParentOfType(element, GoForWithClausesStatement.class);
+        if (forStatement == null) {
+            return false;
+        }
+
         GoStatement statement = forStatement.getInitialStatement();
         return statement != null && statement.getTextRange().contains(element.getTextRange());
     }
