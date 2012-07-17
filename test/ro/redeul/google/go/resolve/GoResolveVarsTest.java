@@ -104,4 +104,12 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testVarInSwitchType() throws Exception {
         doTest();
     }
+
+    public void testMultipleGlobalVars() throws Exception {
+        doTest();
+    }
+
+    public void testMultipleGlobalConsts() throws Exception {
+        doTest();
+    }
 }
