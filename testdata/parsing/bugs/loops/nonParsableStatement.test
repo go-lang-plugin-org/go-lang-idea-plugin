@@ -21,7 +21,9 @@ Go file
       PsiElement({)('{')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      PsiElement([)('[')
-      PsiElement(])(']')
+      ExpressionStmtImpl
+        TypeSliceImpl
+          PsiElement([)('[')
+          PsiElement(])(']')
       PsiWhiteSpace('\n')
       PsiElement(})('}')

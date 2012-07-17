@@ -45,7 +45,7 @@ Go file
           PsiElement(:)(':')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('            ')
-          FallthroughStmt
+          FallthroughStmtImpl
             PsiElement(KEYWORD_FALLTHROUGH)('fallthrough')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
