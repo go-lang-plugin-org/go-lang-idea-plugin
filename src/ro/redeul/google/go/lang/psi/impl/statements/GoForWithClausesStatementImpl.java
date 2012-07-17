@@ -7,6 +7,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
+import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -19,8 +20,8 @@ public class GoForWithClausesStatementImpl
     }
 
     @Override
-    public GoStatement getInitialStatement() {
-        return findChildByClass(GoStatement.class, 0);
+    public GoSimpleStatement getInitialStatement() {
+        return findChildByClass(GoSimpleStatement.class, 0);
     }
 
     @Override
@@ -29,8 +30,8 @@ public class GoForWithClausesStatementImpl
     }
 
     @Override
-    public GoStatement getPostStatement() {
-        return findChildByClass(GoStatement.class, 1);
+    public GoSimpleStatement getPostStatement() {
+        return findChildByClass(GoSimpleStatement.class, 1);
     }
 
     @Override
