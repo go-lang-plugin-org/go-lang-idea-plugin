@@ -7,11 +7,9 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mtoader
  * Date: Jul 25, 2010
  * Time: 8:07:21 PM
- * To change this template use File | Settings | File Templates.
  */
 public class BreakStatement implements GoElementTypes {
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
@@ -26,7 +24,6 @@ public class BreakStatement implements GoElementTypes {
         ParserUtils.getToken(builder, mIDENT);
 
         marker.done(BREAK_STATEMENT);
-        ParserUtils.endStatement(builder);
         return BREAK_STATEMENT;
     }
 }

@@ -47,6 +47,7 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testSwitch_expr_case10() throws Throwable { doTest(); }
     public void testSwitch_expr_case11() throws Throwable { doTest(); }
     public void testSwitch_expr_commentsAfterEnd() throws Throwable { doTest(); }
+    public void testSwitch_expr_withBreak() throws Throwable { doTest(); }
 
     public void testSwitch_type_case1() throws Throwable { doTest(); }
     public void testSwitch_type_case2() throws Throwable { doTest(); }
