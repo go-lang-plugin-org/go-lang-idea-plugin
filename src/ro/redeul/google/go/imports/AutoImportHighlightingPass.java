@@ -23,6 +23,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.ui.UIUtil;
 import ro.redeul.google.go.inspection.fix.AddImportFix;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -35,6 +36,8 @@ import ro.redeul.google.go.options.GoSettings;
 import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
 
 /**
  * This class search for all "Unresolved symbols" highlights, try to prompt user to import
@@ -154,6 +157,41 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                                                true).getAllHighlighters();
     }
 
+    private boolean couldDoAutoImport() {
+        // If user is editing the import statement don't optimize it.
+        if (isUserEditingImports()) {
+            return false;
+        }
+
+        // If there is any errors in the document don't optimize it.
+        if (containsAnyErrorsInDocument()) {
+            return false;
+        }
+
+        // If caret is after a dot, don't optimize it
+        if (isCaretOnWhiteSpaceAndAfterDot()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * For code like this:
+     *   a.<caret>
+     *   fmt.Println()
+     *
+     *   From syntax definition, "fmt" is only a member field of "a", instead of an usage of package "fmt".
+     *   import of "fmt" could be removed incorrectly because of this.
+     *   So suppress auto import when caret is on a whitespace and after a dot
+     */
+    private boolean isCaretOnWhiteSpaceAndAfterDot() {
+        int offset = editor.getCaretModel().getOffset();
+        PsiElement caretElement = file.findElementAt(offset);
+        return caretElement != null && isWhiteSpaceNode(caretElement) &&
+               isNodeOfType(getPrevSiblingIfItsWhiteSpaceOrComment(caretElement), GoTokenTypes.oDOT);
+    }
+
     @Override
     public void doApplyInformationToEditor() {
         if (!editor.getContentComponent().hasFocus()) {
@@ -161,12 +199,9 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         }
 
         GoSettings settings = GoSettings.getInstance();
-        if (settings.OPTIMIZE_IMPORTS_ON_THE_FLY) {
-            // if user is editing the import statement, or there is any errors in the document,
-            // don't optimize it.
-            if (!isUserEditingImports() && !containsAnyErrorsInDocument()) {
-                GoImportOptimizer.optimize(file);
-            }
+        if (settings.OPTIMIZE_IMPORTS_ON_THE_FLY &&
+            couldDoAutoImport()) {
+            GoImportOptimizer.optimize(file);
         }
 
         if (!settings.SHOW_IMPORT_POPUP) {
