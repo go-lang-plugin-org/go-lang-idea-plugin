@@ -1,0 +1,16 @@
+package main
+func Foo(a, b int) {
+    <caret>if ta := a; ta > b {
+        if a2 := a*2; a2 > b {
+            println("test")
+        }
+    }
+}
+-----
+package main
+func Foo(a, b int) {
+    ta := a
+    if a2 := a*2; ta > b && a2 > b {
+        println("test")
+    }
+}

@@ -1,0 +1,15 @@
+package main
+func Foo(a, b int) {
+    <caret>if a > b {
+        if a*2 > b {
+            println("test")
+        }
+    }
+}
+-----
+package main
+func Foo(a, b int) {
+    if a > b && a*2 > b {
+        println("test")
+    }
+}

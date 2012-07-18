@@ -168,7 +168,7 @@ public class MoveSimpleStatementOutIntention extends Intention {
         reformatPositions(statement.getContainingFile(), range);
     }
 
-    private static void moveSimpleStatementOut(Editor editor, GoIfStatement ifStatement) {
+    public static void moveSimpleStatementOut(Editor editor, GoIfStatement ifStatement) {
         GoSimpleStatement simpleStatement = ifStatement.getSimpleStatement();
         GoExpr condition = ifStatement.getExpression();
         if (simpleStatement == null || condition == null) {

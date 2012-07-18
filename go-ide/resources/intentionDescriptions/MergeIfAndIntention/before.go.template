@@ -1,0 +1,6 @@
+
+if foo() > 3 {
+    if <spot>bar() > 5</spot> {
+        println("hi")
+    }
+}
