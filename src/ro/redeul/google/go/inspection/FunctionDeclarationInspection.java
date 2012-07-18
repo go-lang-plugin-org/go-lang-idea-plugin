@@ -210,17 +210,15 @@ public class FunctionDeclarationInspection
             GoExpr[] expressions = statement.getExpressions();
             int returnCount = expressions.length;
             if (returnCount == 1) {
-                int count = getExpressionResultCount(expressions[0]);
-                if (count != UNKNOWN_COUNT) {
-                    returnCount = count;
-                }
+                returnCount = getExpressionResultCount(expressions[0]);
             } else {
                 checkExpressionShouldReturnOneResult(expressions, result);
             }
 
             // when a method specifies named return parameters it's ok to have
             // an empty return statement.
-            if (returnCount == 0 && hasNamedReturns ) {
+            if (returnCount == UNKNOWN_COUNT ||
+                returnCount == 0 && hasNamedReturns ) {
                 return;
             }
 

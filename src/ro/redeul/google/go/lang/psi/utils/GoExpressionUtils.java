@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 import static ro.redeul.google.go.lang.psi.utils.GoIdentifierUtils.getFunctionDeclaration;
@@ -23,13 +24,16 @@ public class GoExpressionUtils {
         }
 
         GoPrimaryExpression baseExpression = call.getBaseExpression();
-        if (!(baseExpression instanceof GoLiteralExpression)) {
-            return null;
+        if (baseExpression instanceof GoLiteralExpression) {
+            GoLiteralExpression literal = (GoLiteralExpression) baseExpression;
+            PsiElement child = literal.getLiteral();
+            return child instanceof GoLiteralIdentifier ? (GoLiteralIdentifier) child : null;
         }
 
-        GoLiteralExpression literal = (GoLiteralExpression) baseExpression;
-        PsiElement child = literal.getLiteral();
-        return child instanceof GoLiteralIdentifier ? (GoLiteralIdentifier) child : null;
+        if (baseExpression instanceof GoSelectorExpression) {
+            return ((GoSelectorExpression) baseExpression).getIdentifier();
+        }
+        return null;
 
     }
 

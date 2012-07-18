@@ -1,5 +1,9 @@
 package main
 
+import (
+    "io"
+)
+
 func Ok1() (n int) {
     return
 }
@@ -22,6 +26,9 @@ func Ok4() (int, int) {
     return Ok3()
 }
 
+func Ok5(w io.Writer) (n int, err error) {
+    return w.Write(nil)
+}
 
 func NotEnough1() int {
     /*begin*/return/*end.Not enough arguments to return*/
