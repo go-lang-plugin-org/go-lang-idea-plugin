@@ -1,9 +1,8 @@
 package main
 func main() {
-    break a
-    // adf
+    break ;
 }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -22,12 +21,9 @@ Go file
       PsiElement({)('{')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      BreakStmt
+      BreakStmtImpl
         PsiElement(KEYWORD_BREAK)('break')
-        PsiWhiteSpace(' ')
-        PsiElement(IDENTIFIER)('a')
-      PsiWhiteSpace('\n')
-      PsiWhiteSpace('    ')
-      PsiComment(SL_COMMENT)('// adf')
+      PsiWhiteSpace(' ')
+      PsiElement(;)(';')
       PsiWhiteSpace('\n')
       PsiElement(})('}')

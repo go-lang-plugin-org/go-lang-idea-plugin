@@ -208,7 +208,7 @@ public interface GoElementTypes extends GoTokenTypes {
 
     GoElementType BREAK_STATEMENT = new GoElementTypeImpl("BreakStmt");
     GoElementType CONTINUE_STATEMENT = new GoElementTypeImpl("ContinueStmt");
-    GoElementType GOTO_STATEMENT = new GoElementTypeImpl("Goto statement");
+    GoElementType GOTO_STATEMENT = new GoElementTypeImpl("GotoStmt");
     GoElementType FALLTHROUGH_STATEMENT =
         new GoElementTypeImpl("FallthroughStmt");
 

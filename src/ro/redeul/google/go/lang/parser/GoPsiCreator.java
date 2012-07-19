@@ -35,6 +35,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressio
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSliceExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoTypeAssertionExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoBreakStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoDeferStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoExpressionStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.GoFallthroughStatementImpl;
@@ -307,6 +308,15 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(FALLTHROUGH_STATEMENT))
             return new GoFallthroughStatementImpl(node);
+
+        if (elementType.equals(BREAK_STATEMENT))
+            return new GoBreakStatementImpl(node);
+
+        if (elementType.equals(CONTINUE_STATEMENT))
+            return new GoBreakStatementImpl(node);
+
+        if (elementType.equals(GOTO_STATEMENT))
+            return new GoBreakStatementImpl(node);
 
         if (elementType.equals(wsNLS))
             return (PsiElement) ASTFactory.whitespace(node.getText());

@@ -50,7 +50,7 @@ Go file
           PsiElement(:)(':')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('            ')
-          BreakStmt
+          BreakStmtImpl
             PsiElement(KEYWORD_BREAK)('break')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('    ')

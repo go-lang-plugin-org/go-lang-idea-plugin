@@ -1,8 +1,8 @@
 package main
 func main() {
-    break ;
+    continue
 }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -21,9 +21,7 @@ Go file
       PsiElement({)('{')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      BreakStmt
-        PsiElement(KEYWORD_BREAK)('break')
-      PsiWhiteSpace(' ')
-      PsiElement(;)(';')
+      ContinueStmtImpl
+        PsiElement(KEYWORD_CONTINUE)('continue')
       PsiWhiteSpace('\n')
       PsiElement(})('}')

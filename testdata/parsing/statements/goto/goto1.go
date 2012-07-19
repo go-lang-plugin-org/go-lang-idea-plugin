@@ -26,10 +26,10 @@ Go file
       PsiElement({)('{')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      Goto statement
+      GotoStmtImpl
         PsiElement(KEYWORD_GOTO)('goto')
         PsiWhiteSpace(' ')
-        Identifier
+        LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('exit')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')

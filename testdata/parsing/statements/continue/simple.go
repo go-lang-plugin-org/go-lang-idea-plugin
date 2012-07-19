@@ -1,9 +1,8 @@
 package main
 func main() {
-    continue a
-    //
+    continue a;
 }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -22,12 +21,11 @@ Go file
       PsiElement({)('{')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      ContinueStmt
+      ContinueStmtImpl
         PsiElement(KEYWORD_CONTINUE)('continue')
         PsiWhiteSpace(' ')
-        PsiElement(IDENTIFIER)('a')
-      PsiWhiteSpace('\n')
-      PsiWhiteSpace('    ')
-      PsiComment(SL_COMMENT)('//')
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('a')
+      PsiElement(;)(';')
       PsiWhiteSpace('\n')
       PsiElement(})('}')

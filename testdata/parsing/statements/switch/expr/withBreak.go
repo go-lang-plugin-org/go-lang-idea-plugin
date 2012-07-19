@@ -66,10 +66,11 @@ Go file
             PsiElement(:)(':')
             PsiWhiteSpace('\n')
             PsiWhiteSpace('    ')
-            BreakStmt
+            BreakStmtImpl
               PsiElement(KEYWORD_BREAK)('break')
               PsiWhiteSpace(' ')
-              PsiElement(IDENTIFIER)('Test')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('Test')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('    ')
           SwitchExprCaseImpl
