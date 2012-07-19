@@ -81,6 +81,18 @@ public class DocumentUtil {
         return text.substring(2, text.length() - 2);
     }
 
+    public static String getTailingOrHeaderDocument(PsiElement element) {
+        if (element == null) {
+            return "";
+        }
+
+        String text = getTailingDocumentOfElement(element);
+        if (text.isEmpty()) {
+            text = getHeaderDocumentOfElement(element);
+        }
+        return text;
+    }
+
     public static String getTypeDocument(GoTypeNameDeclaration type) {
         if (type == null) {
             return "";
@@ -133,10 +145,7 @@ public class DocumentUtil {
             return "";
         }
 
-        String doc = getTailingDocumentOfElement(parent);
-        if (doc.isEmpty()) {
-            doc = getHeaderDocumentOfElement(parent);
-        }
+        String doc = getTailingOrHeaderDocument(parent);
 
         if (doc.isEmpty() && ((GoVarDeclarations) grandpa).getDeclarations().length == 1) {
             doc = getTailingDocumentOfElement(grandpa);
@@ -168,10 +177,7 @@ public class DocumentUtil {
             return "";
         }
 
-        String doc = getTailingDocumentOfElement(parent);
-        if (doc.isEmpty()) {
-            doc = getHeaderDocumentOfElement(parent);
-        }
+        String doc = getTailingOrHeaderDocument(parent);
 
         if (doc.isEmpty() && ((GoConstDeclarations) grandpa).getDeclarations().length == 1) {
             doc = getTailingDocumentOfElement(grandpa);

@@ -12,18 +12,23 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getConstDocument;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionDocument;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionQuickNavigationInfo;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getMethodDocument;
+import static ro.redeul.google.go.lang.documentation.DocumentUtil.getTailingOrHeaderDocument;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getTypeDocument;
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getVarDocument;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 /**
  * Documentation provider for Go.
@@ -71,7 +76,20 @@ public class GoDocumentationProvider implements CodeDocumentationProvider,
             element = element.getParent();
         }
 
-        if (element instanceof GoTypeSpec) {
+        if (element instanceof GoSelectorExpression) {
+            element = resolveSafely(element, PsiElement.class);
+            if (element instanceof GoLiteralIdentifier) {
+                identifier = (GoLiteralIdentifier) element;
+                element = element.getParent();
+            }
+        }
+
+
+        if (element instanceof GoTypeStructAnonymousField) {
+            return getTailingOrHeaderDocument(element);
+        } else if (element instanceof GoTypeStructField) {
+            return getTailingOrHeaderDocument(element);
+        } else if (element instanceof GoTypeSpec) {
             return getTypeDocument(((GoTypeSpec) element).getTypeNameDeclaration());
         } else if (element instanceof GoTypeNameDeclaration) {
             return getTypeDocument((GoTypeNameDeclaration) element);
