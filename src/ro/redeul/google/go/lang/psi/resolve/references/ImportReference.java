@@ -17,17 +17,20 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-public class ImportReference extends GoPsiReference<GoImportDeclaration> implements PsiPolyVariantReference {
+public class ImportReference extends GoPsiReference<GoImportDeclaration, ImportReference> implements PsiPolyVariantReference {
+
     public ImportReference(GoImportDeclaration element) {
-        super(element);
+        super(element, null);
+    }
+
+    @Override
+    protected ImportReference self() {
+        return this;
     }
 
     @Override
     public TextRange getRangeInElement() {
         GoLiteralString importPath = getElement().getImportPath();
-
-        if ( importPath == null )
-            return null;
 
         return new TextRange(
             importPath.getStartOffsetInParent(),

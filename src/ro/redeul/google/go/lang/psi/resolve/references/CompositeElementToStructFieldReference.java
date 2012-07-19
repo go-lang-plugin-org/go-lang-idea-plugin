@@ -14,8 +14,7 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
-public class CompositeElementToStructFieldReference
-    extends AbstractStructFieldsReference {
+public class CompositeElementToStructFieldReference extends AbstractStructFieldsReference {
 
     public static final ElementPattern<GoLiteralIdentifier> MATCHER =
         psiElement(GoLiteralIdentifier.class)
@@ -32,6 +31,11 @@ public class CompositeElementToStructFieldReference
         super(element.getKey());
 
         this.element = element;
+    }
+
+    @Override
+    protected AbstractStructFieldsReference self() {
+        return this;
     }
 
     @NotNull
@@ -52,8 +56,8 @@ public class CompositeElementToStructFieldReference
             @Override
             public void visitTypeName(GoTypeName typeName) {
                 GoTypeSpec typeSpec =
-                    GoPsiUtils.resolveSafely(typeName,
-                                                               GoTypeSpec.class);
+                    GoPsiUtils.resolveSafely(typeName, GoTypeSpec.class);
+
                 if (typeSpec != null) {
                     if (typeSpec.getType() != null) {
                         typeSpec.getType().accept(this);

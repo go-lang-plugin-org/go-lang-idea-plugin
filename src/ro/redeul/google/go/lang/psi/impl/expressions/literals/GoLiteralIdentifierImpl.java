@@ -90,7 +90,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     @Override
     @NotNull
     public String getName() {
-        if ( isQualified() ) {
+        if (isQualified()) {
             return getLocalPackageName() + "." + getUnqualifiedName();
         }
 
@@ -133,7 +133,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
                 )
         );
 
-//    @NotNull
+    //    @NotNull
 //    @Override
 //    public PsiReference[] getReferences() {
 //        if (NO_REFERENCE.accepts(this))
@@ -169,36 +169,58 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 //        return null;
 //    }
 //
+    PsiReference references[] = null;
+
     @NotNull
     @Override
     public PsiReference[] getReferences() {
 
-        if (NO_REFERENCE.accepts(this))
-            return PsiReference.EMPTY_ARRAY;
+        if (references != null)
+            return references;
 
-        if (BuiltinCallOrConversionReference.MATCHER.accepts(this))
-            return new PsiReference[] {
+        if (NO_REFERENCE.accepts(this)) {
+            references = PsiReference.EMPTY_ARRAY;
+            return references;
+        }
+
+        if (BuiltinCallOrConversionReference.MATCHER.accepts(this)) {
+            references = new PsiReference[]{
                 new BuiltinCallOrConversionReference(this)
             };
 
-        if (CallOrConversionReference.MATCHER.accepts(this))
-            return new PsiReference[] {
+            return references;
+        }
+
+        if (CallOrConversionReference.MATCHER.accepts(this)) {
+            references = new PsiReference[]{
                 new CallOrConversionReference(this)
             };
 
-        if (CompositeElementToStructFieldReference.MATCHER.accepts(this))
-            return new PsiReference[] {
-                new CompositeElementToStructFieldReference((GoLiteralCompositeElement)getParent().getParent().getParent())
+            return references;
+        }
+
+        if (CompositeElementToStructFieldReference.MATCHER.accepts(this)) {
+            references = new PsiReference[]{
+                new CompositeElementToStructFieldReference(
+                    (GoLiteralCompositeElement)
+                        getParent().getParent().getParent())
             };
 
-        if (VarOrConstReference.MATCHER.accepts(this))
-            return new PsiReference[] {
-                new BuiltinCallOrConversionReference(this),
-                new CallOrConversionReference(this),
-                new VarOrConstReference(this)
-            };
+            return references;
+        }
 
-        return PsiReference.EMPTY_ARRAY;
+        if (VarOrConstReference.MATCHER.accepts(this)) {
+            references = new PsiReference[]{
+                            new BuiltinCallOrConversionReference(this),
+                            new CallOrConversionReference(this),
+                            new VarOrConstReference(this)
+                        };
+
+            return references;
+        }
+
+        references = PsiReference.EMPTY_ARRAY;
+        return references;
     }
 
 //    @Override
@@ -241,7 +263,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     public String getUnqualifiedName() {
 
         List<PsiElement> tokens = findChildrenByType(mIDENT);
-        if (tokens.size() == 2 )
+        if (tokens.size() == 2)
             return tokens.get(1).getText();
 
         return tokens.size() > 0 ? tokens.get(0).getText() : "";
@@ -259,7 +281,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     @NotNull
     @Override
     public String getCanonicalName() {
-        if ( ! isQualified() )
+        if (!isQualified())
             return getUnqualifiedName();
 
         String packageName = getLocalPackageName();
@@ -268,14 +290,16 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         if (file == null || !(file instanceof GoFile)) {
             return getUnqualifiedName();
         }
-        GoFile goFile = (GoFile)file;
+        GoFile goFile = (GoFile) file;
 
-        GoImportDeclarations[]goImportDeclarations = goFile.getImportDeclarations();
+        GoImportDeclarations[] goImportDeclarations = goFile.getImportDeclarations();
         for (GoImportDeclarations importDeclarations : goImportDeclarations) {
             for (GoImportDeclaration importDeclaration : importDeclarations.getDeclarations()) {
-                if (importDeclaration.getVisiblePackageName().equals(packageName))
+                if (importDeclaration.getVisiblePackageName()
+                                     .equals(packageName))
                     return String.format("%s:%s",
-                                         importDeclaration.getImportPath().getValue(),
+                                         importDeclaration.getImportPath()
+                                                          .getValue(),
                                          getUnqualifiedName());
             }
         }

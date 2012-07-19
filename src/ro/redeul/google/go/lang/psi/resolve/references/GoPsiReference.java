@@ -3,18 +3,26 @@ package ro.redeul.google.go.lang.psi.resolve.references;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 
-public abstract class GoPsiReference<GoPsi extends PsiElement>
+public abstract class GoPsiReference<
+    GoPsi extends PsiElement,
+    Reference extends GoPsiReference<GoPsi, Reference>
+    >
     implements PsiReference {
 
     GoPsi element;
+    ResolveCache.AbstractResolver<Reference, PsiElement> resolver;
 
-    protected GoPsiReference(@NotNull GoPsi element) {
+    protected abstract Reference self();
+
+    protected GoPsiReference(@NotNull GoPsi element, @NotNull ResolveCache.AbstractResolver<Reference, PsiElement> resolver) {
         this.element = element;
+        this.resolver = resolver;
     }
 
     @Override
@@ -25,11 +33,20 @@ public abstract class GoPsiReference<GoPsi extends PsiElement>
 
     @Override
     public TextRange getRangeInElement() {
-        if ( element == null )
+        if (element == null)
             return new TextRange(0, 0);
 
         return new TextRange(0, element.getTextLength());
     }
+
+    @Override
+    public PsiElement resolve() {
+        return
+            ResolveCache
+                .getInstance(getElement().getProject())
+                .resolveWithCaching(self(), resolver, false, false);
+    }
+
 
     @Override
     public PsiElement handleElementRename(String newElementName)
@@ -46,8 +63,7 @@ public abstract class GoPsiReference<GoPsi extends PsiElement>
     }
 
     protected boolean matchesVisiblePackageName(PsiElement element,
-                                                String targetQualifiedName)
-    {
+                                                String targetQualifiedName) {
         String visiblePackageName =
             element.getUserData(GoResolveStates.VisiblePackageName);
 
@@ -71,7 +87,8 @@ public abstract class GoPsiReference<GoPsi extends PsiElement>
 
         // this is the case when we have get variants completion.
         if (targetQualifiedName.endsWith("IntellijIdeaRulezzz")) {
-            targetQualifiedName = targetQualifiedName.replace("IntellijIdeaRulezzz", "");
+            targetQualifiedName = targetQualifiedName.replace(
+                "IntellijIdeaRulezzz", "");
             return elementName.startsWith(targetQualifiedName);
         }
 

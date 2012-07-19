@@ -8,6 +8,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -21,7 +22,7 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
-public class BuiltinCallOrConversionReference extends CallOrConversionReference {
+public class BuiltinCallOrConversionReference extends AbstractCallOrConversionReference<BuiltinCallOrConversionReference> {
 
     public static ElementPattern<GoLiteralIdentifier> MATCHER =
         psiElement(GoLiteralIdentifier.class)
@@ -31,29 +32,44 @@ public class BuiltinCallOrConversionReference extends CallOrConversionReference 
                     .atStartOf(psiElement(GoBuiltinCallExpression.class)));
 
     public BuiltinCallOrConversionReference(GoLiteralIdentifier identifier) {
-        super(identifier);
+        super(identifier, RESOLVER);
     }
 
     @Override
-    public PsiElement resolve() {
-        PsiElement element = getElement();
+    protected BuiltinCallOrConversionReference self() {
+        return this;
+    }
 
-        MethodOrTypeNameResolver processor =
-            new MethodOrTypeNameResolver(this);
+    private static final ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, PsiElement> RESOLVER =
+        new ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, PsiElement>() {
+            @Override
+            public PsiElement resolve(BuiltinCallOrConversionReference psiReference, boolean incompleteCode) {
+                PsiElement element = psiReference.getElement();
 
-        GoNamesCache namesCache = GoNamesCache.getInstance(element.getProject());
+                MethodOrTypeNameResolver processor =
+                    new MethodOrTypeNameResolver(psiReference);
 
-        // get the file included in the imported package name
-        Collection<GoFile> files = namesCache.getBuiltinPackageFiles();
+                GoNamesCache namesCache = GoNamesCache.getInstance(element.getProject());
 
-        for (GoFile file : files) {
-            ResolveState newState = GoResolveStates.imported("builtin", "");
-            if (!file.processDeclarations(processor, newState, null, element))  {
-                break;
+                // get the file included in the imported package name
+                Collection<GoFile> files = namesCache.getBuiltinPackageFiles();
+
+                for (GoFile file : files) {
+                    ResolveState newState = GoResolveStates.imported("builtin", "");
+                    if (!file.processDeclarations(processor, newState, null, element))  {
+                        break;
+                    }
+                }
+
+                return processor.getChildDeclaration();
             }
-        }
 
-        return processor.getChildDeclaration();
+        };
+
+    @Override
+    public PsiElement resolve() {
+        return ResolveCache.getInstance(getElement().getProject())
+                    .resolveWithCaching(this, RESOLVER, false, false);
     }
 
     @NotNull
@@ -67,9 +83,6 @@ public class BuiltinCallOrConversionReference extends CallOrConversionReference 
     public Object[] getVariants() {
 
         PsiElement element = getElement();
-
-        if (element == null)
-            return PsiElement.EMPTY_ARRAY;
 
         final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
 

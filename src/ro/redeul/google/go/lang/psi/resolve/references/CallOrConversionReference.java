@@ -4,116 +4,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
-import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeFunction;
-import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
-public class CallOrConversionReference
-    extends GoPsiReference<GoLiteralIdentifier> {
-
-    public static ElementPattern<GoLiteralIdentifier> MATCHER =
-        psiElement(GoLiteralIdentifier.class)
-            .withParent(
-                psiElement(GoLiteralExpression.class)
-                    .withParent(psiElement(GoCallOrConvExpression.class))
-                    .atStartOf(psiElement(GoCallOrConvExpression.class)));
+public class CallOrConversionReference extends AbstractCallOrConversionReference<CallOrConversionReference> {
 
     public CallOrConversionReference(GoLiteralIdentifier identifier) {
-        super(identifier);
+        super(identifier, RESOLVER);
     }
 
-    @NotNull
-    @Override
-    public String getCanonicalText() {
-        return getElement().getCanonicalName();
-    }
+    private static final ResolveCache.AbstractResolver<CallOrConversionReference, PsiElement> RESOLVER =
+        new ResolveCache.AbstractResolver<CallOrConversionReference, PsiElement>() {
+            @Override
+            public PsiElement resolve(CallOrConversionReference psiReference, boolean incompleteCode) {
+                MethodOrTypeNameResolver processor =
+                    new MethodOrTypeNameResolver(psiReference);
 
-    @Override
-    public PsiElement resolve() {
-        MethodOrTypeNameResolver processor =
-            new MethodOrTypeNameResolver(this);
+                PsiElement element = psiReference.getElement();
+                PsiScopesUtil.treeWalkUp(
+                    processor,
+                    element, element.getContainingFile(),
+                    GoResolveStates.initial());
 
-        PsiScopesUtil.treeWalkUp(
-            processor,
-            getElement(), getElement().getContainingFile(),
-            GoResolveStates.initial());
-
-        return processor.getChildDeclaration();
-    }
-
-    @Override
-    public boolean isReferenceTo(PsiElement element) {
-        GoLiteralIdentifier identifier = getElement();
-        String str = getCanonicalText();
-
-        if (element instanceof GoTypeNameDeclaration) {
-            return matchesVisiblePackageName(element, identifier.getName());
-        }
-
-        if (element instanceof GoFunctionDeclaration) {
-            GoFunctionDeclaration funcDeclaration =
-                (GoFunctionDeclaration) element;
-
-            if (funcDeclaration.getNameIdentifier() != null) {
-                return matchesVisiblePackageName(
-                    funcDeclaration.getUserData(
-                        GoResolveStates.VisiblePackageName),
-                    funcDeclaration.getNameIdentifier(),
-                    identifier.getName());
+                return processor.getChildDeclaration();
             }
-        }
 
-        if (
-            psiElement(GoLiteralIdentifier.class)
-                .withParent(
-                    psiElement(GoFunctionParameter.class)
-                        .withChild(psiElement(GoTypeFunction.class))
-                ).accepts(element) ) {
-            return matchesVisiblePackageName(element, identifier.getName());
-        }
+        };
 
-        if ( IDENT_IN_SHORT_VAR.accepts(element) ) {
-            GoShortVarDeclaration shortVars = (GoShortVarDeclaration) element.getParent();
-
-            GoType identifierType =
-                shortVars.getIdentifierType((GoLiteralIdentifier) element);
-
-            if  (identifierType != null &&
-                identifierType.getUnderlyingType() instanceof GoUnderlyingTypeFunction )
-                return matchesVisiblePackageName(element, identifier.getName());
-        }
-
-        return false;
+    @Override
+    protected CallOrConversionReference self() {
+        return this;
     }
-
-    static ElementPattern IDENT_IN_SHORT_VAR =
-        psiElement(GoLiteralIdentifier.class)
-            .withParent(psiElement(GoShortVarDeclaration.class));
 
     @NotNull
     @Override
     public Object[] getVariants() {
 
         GoLiteralIdentifier identifier = getElement();
-        if ( identifier == null )
-            return EMPTY_ARRAY;
 
         final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
 
@@ -146,10 +81,5 @@ public class CallOrConversionReference
             GoResolveStates.initial());
 
         return variants.toArray();
-    }
-
-    @Override
-    public boolean isSoft() {
-        return false;
     }
 }

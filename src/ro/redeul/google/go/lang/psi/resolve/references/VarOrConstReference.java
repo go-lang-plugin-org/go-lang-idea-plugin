@@ -6,6 +6,7 @@ import java.util.List;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
@@ -17,26 +18,36 @@ import ro.redeul.google.go.lang.psi.resolve.VarOrConstResolver;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
-public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier> {
+public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier, VarOrConstReference> {
 
     public static final ElementPattern<GoLiteralIdentifier> MATCHER =
         psiElement(GoLiteralIdentifier.class)
             .withParent(psiElement(GoLiteralExpression.class));
 
+
+    private static ResolveCache.AbstractResolver<VarOrConstReference, PsiElement> RESOLVER =
+        new ResolveCache.AbstractResolver<VarOrConstReference, PsiElement>() {
+            @Override
+            public PsiElement resolve(VarOrConstReference reference, boolean incompleteCode) {
+                VarOrConstResolver processor = new VarOrConstResolver(reference);
+
+                PsiScopesUtil.treeWalkUp(
+                    processor,
+                    reference.getElement().getParent().getParent(),
+                    reference.getElement().getContainingFile(),
+                    GoResolveStates.initial());
+
+                return processor.getChildDeclaration();
+            }
+        };
+
     public VarOrConstReference(GoLiteralIdentifier element) {
-        super(element);
+        super(element, RESOLVER);
     }
 
     @Override
-    public PsiElement resolve() {
-        VarOrConstResolver processor = new VarOrConstResolver(this);
-
-        PsiScopesUtil.treeWalkUp(
-            processor,
-            getElement().getParent().getParent(), getElement().getContainingFile(),
-            GoResolveStates.initial());
-
-        return processor.getChildDeclaration();
+    protected VarOrConstReference self() {
+        return this;
     }
 
     @NotNull

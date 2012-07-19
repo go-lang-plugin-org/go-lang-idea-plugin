@@ -5,48 +5,59 @@ import java.util.List;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
-/**
- * // TODO: Explain yourself.
- */
-public abstract class AbstractStructFieldsReference extends GoPsiReference<GoLiteralIdentifier> {
+public abstract class AbstractStructFieldsReference
+        extends GoPsiReference<GoLiteralIdentifier, AbstractStructFieldsReference> {
 
     public AbstractStructFieldsReference(GoLiteralIdentifier identifier) {
-        super(identifier);
+        super(identifier, RESOLVER);
     }
 
     protected abstract GoTypeStruct resolveTypeDefinition();
 
+    private static final ResolveCache.AbstractResolver<AbstractStructFieldsReference, PsiElement> RESOLVER =
+        new ResolveCache.AbstractResolver<AbstractStructFieldsReference, PsiElement>() {
+            @Override
+            public PsiElement resolve(AbstractStructFieldsReference psiReference, boolean incompleteCode) {
+                GoTypeStruct typeStruct = psiReference.resolveTypeDefinition();
+
+                if ( typeStruct == null )
+                    return null;
+
+                GoLiteralIdentifier element = psiReference.getElement();
+
+                for (GoTypeStructField field : typeStruct.getFields()) {
+                    for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
+                        if (identifier.getUnqualifiedName().equals(element.getUnqualifiedName()))
+                            return identifier;
+                    }
+                }
+
+                for (GoTypeStructAnonymousField field : typeStruct.getAnonymousFields()) {
+                    if (field.getFieldName().equals(element.getUnqualifiedName()))
+                        return field;
+                }
+
+                return null;
+            }
+        };
+
     @Override
     public PsiElement resolve() {
-        GoTypeStruct typeStruct = resolveTypeDefinition();
+        return ResolveCache.getInstance(getElement().getProject())
+                           .resolveWithCaching(this, RESOLVER, false, false);
 
-        if ( typeStruct == null )
-            return null;
-
-        for (GoTypeStructField field : typeStruct.getFields()) {
-            for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
-                if (identifier.getUnqualifiedName().equals(getElement().getUnqualifiedName()))
-                    return identifier;
-            }
-        }
-
-        for (GoTypeStructAnonymousField field : typeStruct.getAnonymousFields()) {
-            if (field.getFieldName().equals(getElement().getUnqualifiedName()))
-                return field;
-        }
-
-        return null;
     }
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @NotNull

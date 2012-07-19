@@ -9,6 +9,7 @@ import java.util.List;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
@@ -26,9 +27,39 @@ import ro.redeul.google.go.util.LookupElementUtil;
 /**
  * // TODO: mtoader ! Please explain yourself.
  */
-public class MethodReference extends GoPsiReference<GoSelectorExpression> {
+public class MethodReference extends GoPsiReference<GoSelectorExpression, MethodReference> {
 
     GoTypeName baseTypeName;
+
+    private static ResolveCache.AbstractResolver<MethodReference, PsiElement> RESOLVER =
+        new ResolveCache.AbstractResolver<MethodReference, PsiElement>() {
+            @Override
+            public PsiElement resolve(MethodReference methodReference, boolean incompleteCode) {
+                GoTypeName baseTypeName = methodReference.resolveBaseExpressionType();
+
+                if (baseTypeName == null)
+                    return null;
+
+                MethodResolver processor = new MethodResolver(methodReference);
+
+                PsiScopesUtil.treeWalkUp(
+                    processor,
+                    methodReference.getElement().getContainingFile().getLastChild(),
+                    methodReference.getElement().getContainingFile(),
+                    GoResolveStates.initial());
+
+                return processor.getChildDeclaration();
+            }
+        };
+
+    public MethodReference(@NotNull GoSelectorExpression element) {
+        super(element, RESOLVER);
+    }
+
+    @Override
+    protected MethodReference self() {
+        return this;
+    }
 
     @Override
     public TextRange getRangeInElement() {
@@ -38,27 +69,6 @@ public class MethodReference extends GoPsiReference<GoSelectorExpression> {
 
         return new TextRange(identifier.getStartOffsetInParent(),
                              identifier.getStartOffsetInParent() + identifier.getTextLength());
-    }
-
-    public MethodReference(@NotNull GoSelectorExpression element) {
-        super(element);
-    }
-
-    @Override
-    public PsiElement resolve() {
-        baseTypeName = resolveBaseExpressionType();
-        if (baseTypeName == null)
-            return null;
-
-        MethodResolver processor = new MethodResolver(this);
-
-        PsiScopesUtil.treeWalkUp(
-            processor,
-            getElement().getContainingFile().getLastChild(),
-            getElement().getContainingFile(),
-            GoResolveStates.initial());
-
-        return processor.getChildDeclaration();
     }
 
     @NotNull
@@ -89,7 +99,8 @@ public class MethodReference extends GoPsiReference<GoSelectorExpression> {
 
         GoTypeName methodTypeName = (GoTypeName)receiverType;
 
-        if (baseTypeName.getName().equals(methodTypeName.getName()))
+        if (baseTypeName != null && baseTypeName.getName() != null &&
+            baseTypeName.getName().equals(methodTypeName.getName()))
             return true;
 
         return false;  //To change body of implemented methods use File | Settings | File Templates.

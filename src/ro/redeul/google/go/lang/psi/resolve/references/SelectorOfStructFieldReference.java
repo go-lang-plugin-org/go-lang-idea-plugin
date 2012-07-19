@@ -9,11 +9,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
-public class SelectorOfStructFieldReference
-    extends AbstractStructFieldsReference {
+public class SelectorOfStructFieldReference extends AbstractStructFieldsReference {
 
     GoSelectorExpression selectorExpression;
 
@@ -21,6 +17,11 @@ public class SelectorOfStructFieldReference
         super(expression.getIdentifier());
 
         selectorExpression = expression;
+    }
+
+    @Override
+    protected AbstractStructFieldsReference self() {
+        return this;
     }
 
     @NotNull

@@ -6,6 +6,7 @@ import java.util.List;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
@@ -17,25 +18,33 @@ import ro.redeul.google.go.lang.psi.types.GoTypeName;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
-public class TypeNameReference extends GoPsiReference<GoTypeName> {
+public class TypeNameReference extends GoPsiReference<GoTypeName, TypeNameReference> {
     public static final ElementPattern<GoTypeName> MATCHER =
         psiElement(GoTypeName.class);
 
+    private static ResolveCache.AbstractResolver<TypeNameReference, PsiElement> RESOLVER =
+        new ResolveCache.AbstractResolver<TypeNameReference, PsiElement>() {
+            @Override
+            public PsiElement resolve(TypeNameReference reference, boolean incompleteCode) {
+                TypeNameResolver processor = new TypeNameResolver(reference);
+
+                PsiScopesUtil.treeWalkUp(
+                    processor,
+                    reference.getElement(),
+                    reference.getElement().getContainingFile(),
+                    GoResolveStates.initial());
+
+                return processor.getDeclaration();
+            }
+        };
+
     public TypeNameReference(GoTypeName element) {
-        super(element);
+        super(element, RESOLVER);
     }
 
     @Override
-    public PsiElement resolve() {
-        TypeNameResolver processor =
-            new TypeNameResolver(this);
-
-        PsiScopesUtil.treeWalkUp(
-            processor,
-            getElement(), getElement().getContainingFile(),
-            GoResolveStates.initial());
-
-        return processor.getDeclaration();
+    protected TypeNameReference self() {
+        return this;
     }
 
     @NotNull

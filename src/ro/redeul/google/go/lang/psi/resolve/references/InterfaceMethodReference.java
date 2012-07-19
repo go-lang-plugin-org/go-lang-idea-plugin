@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.resolve.references;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
@@ -11,18 +12,53 @@ import ro.redeul.google.go.lang.psi.types.GoType;
 import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
-public class InterfaceMethodReference extends GoPsiReference<GoLiteralIdentifier> {
+public class InterfaceMethodReference extends GoPsiReference<GoLiteralIdentifier, InterfaceMethodReference> {
 
     GoTypeInterface type;
     GoSelectorExpression selector;
 
+    private static ResolveCache.AbstractResolver<InterfaceMethodReference, PsiElement> RESOLVER =
+        new ResolveCache.AbstractResolver<InterfaceMethodReference, PsiElement>() {
+            @Override
+            public PsiElement resolve(InterfaceMethodReference interfaceMethodReference, boolean incompleteCode) {
+                GoSelectorExpression selector = interfaceMethodReference.selector;
+                GoLiteralIdentifier identifier = selector.getIdentifier();
+
+                if (identifier == null) {
+                    return null;
+                }
+
+                String name = identifier.getName();
+
+                if (name == null) {
+                    return null;
+                }
+
+                GoTypeInterface type = interfaceMethodReference.type;
+                for (GoMethodDeclaration declaration : type.getMethodDeclarations()) {
+                    if (name.equals(declaration.getFunctionName())) {
+                        return declaration;
+                    }
+                }
+
+                return null;
+
+            }
+        };
+
+
     public InterfaceMethodReference(GoSelectorExpression element) {
-        super(element.getIdentifier());
+        super(element.getIdentifier(), RESOLVER);
 
         selector = element;
         type = findTypeInterfaceDeclaration();
     }
 
+
+    @Override
+    protected InterfaceMethodReference self() {
+        return this;
+    }
 
     private GoTypeInterface findTypeInterfaceDeclaration() {
         GoType type = selector.getBaseExpression().getType()[0];
@@ -37,29 +73,6 @@ public class InterfaceMethodReference extends GoPsiReference<GoLiteralIdentifier
             return null;
 
         return (GoTypeInterface)type;
-    }
-
-    @Override
-    public PsiElement resolve() {
-        GoLiteralIdentifier identifier = selector.getIdentifier();
-
-        if ( identifier == null ) {
-            return null;
-        }
-
-        String name = identifier.getName();
-
-        if (name == null) {
-            return null;
-        }
-
-        for (GoMethodDeclaration declaration : type.getMethodDeclarations()) {
-            if (name.equals(declaration.getFunctionName())) {
-                return declaration;
-            }
-        }
-
-        return null;
     }
 
     @Override
