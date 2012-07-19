@@ -18,6 +18,7 @@ import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionClause;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionStatement;
+import ro.redeul.google.go.util.expression.FlipBooleanExpression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,11 +111,12 @@ public class ConvertSwitchToIfIntention extends Intention {
             String ss = simpleStatement == null ? "" : simpleStatement.getText();
             GoExpr expression = se.getExpression();
             boolean expressionIsTrue = expression == null || "true".equals(expression.getText());
-            String es = expressionIsTrue ? "" : expression.getText();
+            boolean expressionIsFalse = expression != null && "false".equals(expression.getText());
+            String es = expressionIsTrue || expressionIsFalse ? "" : expression.getText();
             CaseElement defaultCase = null;
             List<CaseElement> cases = new ArrayList<CaseElement>();
             for (GoSwitchExpressionClause clause : se.getClauses()) {
-                CaseElement c = CaseElement.create(document, clause);
+                CaseElement c = CaseElement.create(document, clause, expressionIsFalse);
                 if (clause.isDefault()) {
                     defaultCase = c;
                 } else if (c != null) {
@@ -149,10 +151,10 @@ public class ConvertSwitchToIfIntention extends Intention {
             return sb.toString();
         }
 
-        private static CaseElement create(Document document, GoSwitchExpressionClause clause) {
+        private static CaseElement create(Document document, GoSwitchExpressionClause clause, boolean flipExpression) {
             List<String> expressions = new ArrayList<String>();
             for (GoExpr expr : clause.getExpressions()) {
-                expressions.add(expr.getText());
+                expressions.add(flipExpression ? FlipBooleanExpression.flip(expr) : expr.getText());
             }
             PsiElement colon = findChildOfType(clause, GoTokenTypes.oCOLON);
             if (colon == null) {

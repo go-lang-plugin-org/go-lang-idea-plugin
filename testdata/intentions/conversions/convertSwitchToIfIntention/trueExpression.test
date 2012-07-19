@@ -1,0 +1,23 @@
+package main
+
+func Foo(a int) {
+    x := a*2
+    <caret>switch true {
+    case x > 0: println("a")
+    case a < 3: println("b")
+    default: println("c")
+    }
+}
+-----
+package main
+
+func Foo(a int) {
+    x := a*2
+    if x > 0 {
+        println("a")
+    } else if a < 3 {
+        println("b")
+    } else {
+        println("c")
+    }
+}
