@@ -355,6 +355,8 @@
         <exportable serviceInterface="ro.redeul.google.go.options.GoSettings"/>
         <autoImportOptionsProvider instance="ro.redeul.google.go.imports.GoAutoImportOptionsProvider"/>
 
+        <typedHandler implementation="ro.redeul.google.go.codeInsight.editorActions.ColonTypedHandler"/>
+
         <spellchecker.bundledDictionaryProvider implementation="ro.redeul.google.go.spellchecker.GoDictionaryProvider"/>
         <spellchecker.support language="Google Go" implementationClass="com.redeul.google.go.spellchecker.tokenizer.GoIdentifierTokenizerStrategy"/>
 
