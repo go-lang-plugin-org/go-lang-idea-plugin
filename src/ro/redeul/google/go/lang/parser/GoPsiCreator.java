@@ -34,19 +34,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoParenthesisedExpr
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSliceExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoTypeAssertionExpressionImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoBlockStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoBreakStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoDeferStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoExpressionStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoFallthroughStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoForWithClausesStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoForWithConditionStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoForWithRangeStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoGoStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoIfStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoLabeledStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoReturnStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoShortVarDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.*;
 import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchExpressionClauseImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchExpressionStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchTypeClauseImpl;
@@ -313,10 +301,10 @@ public class GoPsiCreator implements GoElementTypes {
             return new GoBreakStatementImpl(node);
 
         if (elementType.equals(CONTINUE_STATEMENT))
-            return new GoBreakStatementImpl(node);
+            return new GoContinueStatementImpl(node);
 
         if (elementType.equals(GOTO_STATEMENT))
-            return new GoBreakStatementImpl(node);
+            return new GoGotoStatementImpl(node);
 
         if (elementType.equals(wsNLS))
             return (PsiElement) ASTFactory.whitespace(node.getText());

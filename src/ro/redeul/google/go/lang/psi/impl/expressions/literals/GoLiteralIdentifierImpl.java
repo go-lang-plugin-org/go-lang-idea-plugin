@@ -9,11 +9,13 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
@@ -23,6 +25,7 @@ import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CompositeElementToStructFieldReference;
+import ro.redeul.google.go.lang.psi.resolve.references.LabelReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -38,8 +41,10 @@ import static com.intellij.patterns.StandardPatterns.string;
 import static ro.redeul.google.go.lang.lexer.GoTokenTypes.mIDENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_CLAUSES_STATEMENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_RANGE_STATEMENT;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getLocalElementSearchScope;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -174,7 +179,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     @NotNull
     @Override
     public PsiReference[] getReferences() {
-
         if (references != null)
             return references;
 
@@ -196,6 +200,13 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
                 new CallOrConversionReference(this)
             };
 
+            return references;
+        }
+
+        if (LabelReference.MATCHER.accepts(this)) {
+            references = new PsiReference[] {
+                    new LabelReference(this),
+            };
             return references;
         }
 
@@ -321,6 +332,11 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         if (GoElementPatterns.GLOBAL_CONST_DECL.accepts(this) ||
             GoElementPatterns.GLOBAL_VAR_DECL.accepts(this)) {
             return getGlobalElementSearchScope(this, getName());
+        }
+
+        if (isNodeOfType(getParent(), GoElementTypes.LABELED_STATEMENT) ||
+            LabelReference.MATCHER.accepts(this)) {
+            return new LocalSearchScope(findParentOfType(this, GoFunctionDeclaration.class));
         }
 
         return getLocalElementSearchScope(this);

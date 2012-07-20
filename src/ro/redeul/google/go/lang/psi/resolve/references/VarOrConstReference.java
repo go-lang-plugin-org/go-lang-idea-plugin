@@ -15,6 +15,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.VarOrConstResolver;
+import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
+
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
@@ -58,6 +60,11 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier, Var
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
+        // Variable shouldn't reference to a label
+        if (element != null && element.getParent() instanceof GoLabeledStatement) {
+            return false;
+        }
+
         return matchesVisiblePackageName(element, getElement().getName());
     }
 

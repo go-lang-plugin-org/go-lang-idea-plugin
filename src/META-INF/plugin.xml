@@ -438,6 +438,10 @@
                          shortName="TypeStructDeclaration" displayName="Highlights incorrect struct declaration"
                          level="ERROR"
                          implementationClass="ro.redeul.google.go.inspection.TypeStructDeclarationInspection"/>
+        <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
+                         shortName="LabelUsage" displayName="Highlights incorrect label usage"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.LabelUsageInspection"/>
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
         <programRunner implementation="ro.redeul.google.go.runner.GoAppEngineApplicationRunner" />

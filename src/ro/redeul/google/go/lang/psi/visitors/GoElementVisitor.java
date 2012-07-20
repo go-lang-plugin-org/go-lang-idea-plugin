@@ -15,12 +15,18 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.impl.statements.GoBreakStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoContinueStatementImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.GoGotoStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoTypeInterfaceImpl;
+import ro.redeul.google.go.lang.psi.statements.GoBreakStatement;
+import ro.redeul.google.go.lang.psi.statements.GoContinueStatement;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
+import ro.redeul.google.go.lang.psi.statements.GoGotoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
@@ -235,6 +241,18 @@ public class GoElementVisitor  {
     }
 
     public void visitLabeledStatement(GoLabeledStatement statement) {
+        visitElement(statement);
+    }
+
+    public void visitBreakStatement(GoBreakStatement statement) {
+        visitElement(statement);
+    }
+
+    public void visitContinueStatement(GoContinueStatement statement) {
+        visitElement(statement);
+    }
+
+    public void visitGotoStatement(GoGotoStatement statement) {
         visitElement(statement);
     }
 }

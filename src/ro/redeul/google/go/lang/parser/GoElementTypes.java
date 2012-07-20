@@ -303,4 +303,9 @@ public interface GoElementTypes extends GoTokenTypes {
             FOR_WITH_CONDITION_STATEMENT,
             FOR_WITH_RANGE_STATEMENT
     );
+
+    public final TokenSet SWITCH_STATEMENT = TokenSet.create(
+            SWITCH_EXPR_STATEMENT,
+            SWITCH_TYPE_STATEMENT
+    );
 }
