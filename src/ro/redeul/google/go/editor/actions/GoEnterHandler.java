@@ -1,20 +1,16 @@
 package ro.redeul.google.go.editor.actions;
 
-import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter;
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.openapi.editor.ex.EditorEx;
-import com.intellij.openapi.editor.highlighter.EditorHighlighter;
-import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiDocumentManager;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.GoFile;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -30,29 +26,14 @@ public class GoEnterHandler extends EnterHandlerDelegateAdapter {
                                   @NotNull Ref<Integer> caretAdvance,
                                   @NotNull DataContext dataContext,
                                   EditorActionHandler originalHandler) {
-        String text = editor.getDocument().getText();
-
-        if (StringUtil.isEmpty(text)) {
-          return Result.Continue;
-        }
-
-        final int caret = editor.getCaretModel().getOffset();
-        final EditorHighlighter highlighter = ((EditorEx)editor).getHighlighter();
-
-        if (caret >= 1 && caret < text.length() &&
-            CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER)
-        {
-            HighlighterIterator iterator = highlighter.createIterator(caret);
-
-            iterator.retreat();
-            while (!iterator.atEnd() && GoTokenTypes.wsNLS == iterator.getTokenType() && GoTokenTypes.wsWS == iterator.getTokenType() ) {
-              iterator.retreat();
-            }
-
-            if (iterator.getTokenType() == GoTokenTypes.pLCURLY) {
-                PsiDocumentManager.getInstance(file.getProject()).commitDocument(editor.getDocument());
-                CodeStyleManager.getInstance(file.getProject()).adjustLineIndent(file, editor.getCaretModel().getOffset());
-                return Result.DefaultForceIndent;
+        Integer offset = caretOffset.get();
+        if (offset != null && file instanceof GoFile) {
+            Document document = editor.getDocument();
+            int start = document.getLineStartOffset(document.getLineNumber(offset));
+            // If previous line ends with ':', adjust its indent.
+            if (document.getText(new TextRange(start, offset)).trim().endsWith(":")) {
+                CodeStyleManager.getInstance(file.getProject()).adjustLineIndent(file, start);
+                caretOffset.set(editor.getCaretModel().getOffset());
             }
         }
 
