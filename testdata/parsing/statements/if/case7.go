@@ -1,9 +1,10 @@
 package main
 func main() {
-    if e1, e2 *= 2, 3; e1 {
+    if e += 2; e {
+
     }
 }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -25,35 +26,27 @@ Go file
       IfStmtImpl
         PsiElement(KEYWORD_IF)('if')
         PsiWhiteSpace(' ')
-        AssignStmt
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('e1')
-          PsiElement(,)(',')
+        AssignStmtImpl
+          ExpressionListImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('e')
           PsiWhiteSpace(' ')
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('e2')
+          PsiElement(+=)('+=')
           PsiWhiteSpace(' ')
-          PsiElement(*=)('*=')
-          PsiWhiteSpace(' ')
-          LiteralExpressionImpl
-            LiteralIntegerImpl
-              PsiElement(LITERAL_INT)('2')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
-          LiteralExpressionImpl
-            LiteralIntegerImpl
-              PsiElement(LITERAL_INT)('3')
+          ExpressionListImpl
+            LiteralExpressionImpl
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('2')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpressionImpl
           LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('e1')
+            PsiElement(IDENTIFIER)('e')
         PsiWhiteSpace(' ')
         BlockStmtImpl
           PsiElement({)('{')
-          PsiWhiteSpace('\n')
+          PsiWhiteSpace('\n\n')
           PsiWhiteSpace('    ')
           PsiElement(})('}')
       PsiWhiteSpace('\n')

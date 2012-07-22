@@ -406,7 +406,6 @@ $$default:
 	goto $$stack /* stack new state and value */
 }
 `
-
 /**-----
 Go file
   PackageDeclaration(main)
@@ -483,16 +482,18 @@ Go file
       ForWithClausesStmtImpl
         PsiElement(KEYWORD_FOR)('for')
         PsiWhiteSpace(' ')
-        AssignStmt
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('i')
+        AssignStmtImpl
+          ExpressionListImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('i')
           PsiWhiteSpace(' ')
           PsiElement(=)('=')
           PsiWhiteSpace(' ')
-          LiteralExpressionImpl
-            LiteralIntegerImpl
-              PsiElement(LITERAL_INT)('0')
+          ExpressionListImpl
+            LiteralExpressionImpl
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('0')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         RelationalExpressionImpl
@@ -547,45 +548,49 @@ Go file
               PsiElement({)('{')
               PsiWhiteSpace('\n')
               PsiWhiteSpace('\t\t\t')
-              AssignStmt
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('s')
+              AssignStmtImpl
+                ExpressionListImpl
+                  LiteralExpressionImpl
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('s')
                 PsiWhiteSpace(' ')
                 PsiElement(+=)('+=')
                 PsiWhiteSpace(' ')
-                AdditiveExpressionImpl
-                  SliceExpressionImpl
+                ExpressionListImpl
+                  AdditiveExpressionImpl
+                    SliceExpressionImpl
+                      LiteralExpressionImpl
+                        LiteralIdentifierImpl
+                          PsiElement(IDENTIFIER)('q')
+                      PsiElement([)('[')
+                      LiteralExpressionImpl
+                        LiteralIdentifierImpl
+                          PsiElement(IDENTIFIER)('j')
+                      PsiElement(:)(':')
+                      LiteralExpressionImpl
+                        LiteralIdentifierImpl
+                          PsiElement(IDENTIFIER)('i')
+                      PsiElement(])(']')
+                    PsiWhiteSpace(' ')
+                    PsiElement(+)('+')
+                    PsiWhiteSpace(' ')
                     LiteralExpressionImpl
-                      LiteralIdentifierImpl
-                        PsiElement(IDENTIFIER)('q')
-                    PsiElement([)('[')
-                    LiteralExpressionImpl
-                      LiteralIdentifierImpl
-                        PsiElement(IDENTIFIER)('j')
-                    PsiElement(:)(':')
-                    LiteralExpressionImpl
-                      LiteralIdentifierImpl
-                        PsiElement(IDENTIFIER)('i')
-                    PsiElement(])(']')
-                  PsiWhiteSpace(' ')
-                  PsiElement(+)('+')
-                  PsiWhiteSpace(' ')
-                  LiteralExpressionImpl
-                    LiteralStringImpl
-                      PsiElement(LITERAL_STRING)('"\\"')
+                      LiteralStringImpl
+                        PsiElement(LITERAL_STRING)('"\\"')
               PsiWhiteSpace('\n')
               PsiWhiteSpace('\t\t\t')
-              AssignStmt
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('j')
+              AssignStmtImpl
+                ExpressionListImpl
+                  LiteralExpressionImpl
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('j')
                 PsiWhiteSpace(' ')
                 PsiElement(=)('=')
                 PsiWhiteSpace(' ')
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('i')
+                ExpressionListImpl
+                  LiteralExpressionImpl
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('i')
               PsiWhiteSpace('\n')
               PsiWhiteSpace('\t\t')
               PsiElement(})('}')
@@ -642,7 +647,7 @@ Go file
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Fprintf')
           PsiElement(()('(')
-          ExpressionList
+          ExpressionListImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('stderr')
@@ -778,48 +783,50 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace(' ')
-      AssignStmt
-        IndexExpressionImpl
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('set')
-          PsiElement([)('[')
-          MultiplicativeExpressionImpl
+      AssignStmtImpl
+        ExpressionListImpl
+          IndexExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('bit')
-            PsiElement(>>)('>>')
-            LiteralExpressionImpl
-              LiteralIntegerImpl
-                PsiElement(LITERAL_INT)('5')
-          PsiElement(])(']')
+                PsiElement(IDENTIFIER)('set')
+            PsiElement([)('[')
+            MultiplicativeExpressionImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('bit')
+              PsiElement(>>)('>>')
+              LiteralExpressionImpl
+                LiteralIntegerImpl
+                  PsiElement(LITERAL_INT)('5')
+            PsiElement(])(']')
         PsiWhiteSpace(' ')
         PsiElement(|=)('|=')
         PsiWhiteSpace(' ')
-        ParenthesisedExpressionImpl
-          PsiElement(()('(')
-          MultiplicativeExpressionImpl
-            LiteralExpressionImpl
-              LiteralIntegerImpl
-                PsiElement(LITERAL_INT)('1')
-            PsiWhiteSpace(' ')
-            PsiElement(<<)('<<')
-            PsiWhiteSpace(' ')
-            BuiltInCallExpressionImpl
+        ExpressionListImpl
+          ParenthesisedExpressionImpl
+            PsiElement(()('(')
+            MultiplicativeExpressionImpl
               LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('uint')
-              PsiElement(()('(')
-              MultiplicativeExpressionImpl
+                LiteralIntegerImpl
+                  PsiElement(LITERAL_INT)('1')
+              PsiWhiteSpace(' ')
+              PsiElement(<<)('<<')
+              PsiWhiteSpace(' ')
+              BuiltInCallExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('bit')
-                PsiElement(&)('&')
-                LiteralExpressionImpl
-                  LiteralIntegerImpl
-                    PsiElement(LITERAL_INT)('31')
-              PsiElement())(')')
-          PsiElement())(')')
+                    PsiElement(IDENTIFIER)('uint')
+                PsiElement(()('(')
+                MultiplicativeExpressionImpl
+                  LiteralExpressionImpl
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('bit')
+                  PsiElement(&)('&')
+                  LiteralExpressionImpl
+                    LiteralIntegerImpl
+                      PsiElement(LITERAL_INT)('31')
+                PsiElement())(')')
+            PsiElement())(')')
       PsiWhiteSpace(' ')
       PsiElement(})('}')
   PsiWhiteSpace('\n\n')
@@ -994,22 +1001,24 @@ Go file
                 PsiElement(])(']')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t\t')
-          AssignStmt
-            IndexExpressionImpl
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('a')
-              PsiElement([)('[')
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('i')
-              PsiElement(])(']')
+          AssignStmtImpl
+            ExpressionListImpl
+              IndexExpressionImpl
+                LiteralExpressionImpl
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('a')
+                PsiElement([)('[')
+                LiteralExpressionImpl
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('i')
+                PsiElement(])(']')
             PsiWhiteSpace(' ')
             PsiElement(=)('=')
             PsiWhiteSpace(' ')
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('y')
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('y')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t\t')
           IfStmtImpl
@@ -1030,16 +1039,18 @@ Go file
               PsiElement({)('{')
               PsiWhiteSpace('\n')
               PsiWhiteSpace('\t\t\t')
-              AssignStmt
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('sub')
+              AssignStmtImpl
+                ExpressionListImpl
+                  LiteralExpressionImpl
+                    LiteralIdentifierImpl
+                      PsiElement(IDENTIFIER)('sub')
                 PsiWhiteSpace(' ')
                 PsiElement(=)('=')
                 PsiWhiteSpace(' ')
-                LiteralExpressionImpl
-                  LiteralIntegerImpl
-                    PsiElement(LITERAL_INT)('1')
+                ExpressionListImpl
+                  LiteralExpressionImpl
+                    LiteralIntegerImpl
+                      PsiElement(LITERAL_INT)('1')
               PsiWhiteSpace('\n')
               PsiWhiteSpace('\t\t')
               PsiElement(})('}')
@@ -1105,7 +1116,7 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('Fprintf')
               PsiElement(()('(')
-              ExpressionList
+              ExpressionListImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('foutput')
@@ -1134,7 +1145,7 @@ Go file
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Fprintf')
           PsiElement(()('(')
-          ExpressionList
+          ExpressionListImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('foutput')
@@ -1191,7 +1202,7 @@ Go file
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('bitset')
                 PsiElement(()('(')
-                ExpressionList
+                ExpressionListImpl
                   LiteralExpressionImpl
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('p')
@@ -1222,7 +1233,7 @@ Go file
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('Fprintf')
                   PsiElement(()('(')
-                  ExpressionList
+                  ExpressionListImpl
                     LiteralExpressionImpl
                       LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('foutput')
@@ -1261,7 +1272,7 @@ Go file
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Fprintf')
           PsiElement(()('(')
-          ExpressionList
+          ExpressionListImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('foutput')
@@ -1886,28 +1897,32 @@ Go file
               PsiElement(})('}')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t\t')
-          AssignStmt
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('r')
+          AssignStmtImpl
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('r')
             PsiWhiteSpace(' ')
             PsiElement(=)('=')
             PsiWhiteSpace(' ')
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('peekrune')
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('peekrune')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t\t')
-          AssignStmt
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('peekrune')
+          AssignStmtImpl
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('peekrune')
             PsiWhiteSpace(' ')
             PsiElement(=)('=')
             PsiWhiteSpace(' ')
-            LiteralExpressionImpl
-              LiteralIntegerImpl
-                PsiElement(LITERAL_INT)('0')
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIntegerImpl
+                  PsiElement(LITERAL_INT)('0')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t\t')
           ReturnStmtImpl
@@ -2000,7 +2015,7 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('errorf')
               PsiElement(()('(')
-              ExpressionList
+              ExpressionListImpl
                 LiteralExpressionImpl
                   LiteralStringImpl
                     PsiElement(LITERAL_STRING)('"read error: %v"')
@@ -2126,16 +2141,18 @@ Go file
           PsiElement(})('}')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('\t')
-      AssignStmt
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('peekrune')
+      AssignStmtImpl
+        ExpressionListImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('peekrune')
         PsiWhiteSpace(' ')
         PsiElement(=)('=')
         PsiWhiteSpace(' ')
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('c')
+        ExpressionListImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('c')
       PsiWhiteSpace('\n')
       PsiElement(})('}')
   PsiWhiteSpace('\n\n')
@@ -2292,7 +2309,7 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('errorf')
               PsiElement(()('(')
-              ExpressionList
+              ExpressionListImpl
                 LiteralExpressionImpl
                   LiteralStringImpl
                     PsiElement(LITERAL_STRING)('"error opening %v: %v"')
@@ -2414,7 +2431,7 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('errorf')
               PsiElement(()('(')
-              ExpressionList
+              ExpressionListImpl
                 LiteralExpressionImpl
                   LiteralStringImpl
                     PsiElement(LITERAL_STRING)('"error creating %v: %v"')
@@ -2510,7 +2527,7 @@ Go file
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Fprintf')
           PsiElement(()('(')
-          ExpressionList
+          ExpressionListImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('stderr')
@@ -2538,7 +2555,7 @@ Go file
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Fprintf')
           PsiElement(()('(')
-          ExpressionList
+          ExpressionListImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('stderr')
@@ -2654,16 +2671,18 @@ Go file
               PsiElement())(')')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t\t')
-          AssignStmt
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('ftable')
+          AssignStmtImpl
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('ftable')
             PsiWhiteSpace(' ')
             PsiElement(=)('=')
             PsiWhiteSpace(' ')
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('nil')
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('nil')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
@@ -2700,16 +2719,18 @@ Go file
               PsiElement())(')')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t\t')
-          AssignStmt
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('foutput')
+          AssignStmtImpl
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('foutput')
             PsiWhiteSpace(' ')
             PsiElement(=)('=')
             PsiWhiteSpace(' ')
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('nil')
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('nil')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
@@ -2746,16 +2767,18 @@ Go file
               PsiElement())(')')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t\t')
-          AssignStmt
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('stderr')
+          AssignStmtImpl
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('stderr')
             PsiWhiteSpace(' ')
             PsiElement(=)('=')
             PsiWhiteSpace(' ')
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('nil')
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('nil')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('\t')
           PsiElement(})('}')
@@ -2803,4 +2826,3 @@ Go file
       LiteralExpressionImpl
         LiteralStringImpl
           PsiElement(LITERAL_STRING)('`\n/*\tparser for yacc output\t*/\n\nvar $$Debug = 0\n\ntype $$Lexer interface {\n\tLex(lval *$$SymType) int\n\tError(s string)\n}\n\nconst $$Flag = -1000\n\nfunc $$Tokname(c int) string {\n\tif c > 0 && c <= len($$Toknames) {\n\t\tif $$Toknames[c-1] != "" {\n\t\t\treturn $$Toknames[c-1]\n\t\t}\n\t}\n\treturn fmt.Sprintf("tok-%v", c)\n}\n\nfunc $$Statname(s int) string {\n\tif s >= 0 && s < len($$Statenames) {\n\t\tif $$Statenames[s] != "" {\n\t\t\treturn $$Statenames[s]\n\t\t}\n\t}\n\treturn fmt.Sprintf("state-%v", s)\n}\n\nfunc $$lex1(lex $$Lexer, lval *$$SymType) int {\n\tc := 0\n\tchar := lex.Lex(lval)\n\tif char <= 0 {\n\t\tc = $$Tok1[0]\n\t\tgoto out\n\t}\n\tif char < len($$Tok1) {\n\t\tc = $$Tok1[char]\n\t\tgoto out\n\t}\n\tif char >= $$Private {\n\t\tif char < $$Private+len($$Tok2) {\n\t\t\tc = $$Tok2[char-$$Private]\n\t\t\tgoto out\n\t\t}\n\t}\n\tfor i := 0; i < len($$Tok3); i += 2 {\n\t\tc = $$Tok3[i+0]\n\t\tif c == char {\n\t\t\tc = $$Tok3[i+1]\n\t\t\tgoto out\n\t\t}\n\t}\n\nout:\n\tif c == 0 {\n\t\tc = $$Tok2[1] /* unknown char */\n\t}\n\tif $$Debug >= 3 {\n\t\tfmt.Printf("lex %U %s\n", uint(char), $$Tokname(c))\n\t}\n\treturn c\n}\n\nfunc $$Parse($$lex $$Lexer) int {\n\tvar $$n int\n\tvar $$lval $$SymType\n\tvar $$VAL $$SymType\n\t$$S := make([]$$SymType, $$MaxDepth)\n\n\tNerrs := 0   /* number of errors */\n\tErrflag := 0 /* error recovery flag */\n\t$$state := 0\n\t$$char := -1\n\t$$p := -1\n\tgoto $$stack\n\nret0:\n\treturn 0\n\nret1:\n\treturn 1\n\n$$stack:\n\t/* put a state and value onto the stack */\n\tif $$Debug >= 4 {\n\t\tfmt.Printf("char %v in %v\n", $$Tokname($$char), $$Statname($$state))\n\t}\n\n\t$$p++\n\tif $$p >= len($$S) {\n\t\tnyys := make([]$$SymType, len($$S)*2)\n\t\tcopy(nyys, $$S)\n\t\t$$S = nyys\n\t}\n\t$$S[$$p] = $$VAL\n\t$$S[$$p].yys = $$state\n\n$$newstate:\n\t$$n = $$Pact[$$state]\n\tif $$n <= $$Flag {\n\t\tgoto $$default /* simple state */\n\t}\n\tif $$char < 0 {\n\t\t$$char = $$lex1($$lex, &$$lval)\n\t}\n\t$$n += $$char\n\tif $$n < 0 || $$n >= $$Last {\n\t\tgoto $$default\n\t}\n\t$$n = $$Act[$$n]\n\tif $$Chk[$$n] == $$char { /* valid shift */\n\t\t$$char = -1\n\t\t$$VAL = $$lval\n\t\t$$state = $$n\n\t\tif Errflag > 0 {\n\t\t\tErrflag--\n\t\t}\n\t\tgoto $$stack\n\t}\n\n$$default:\n\t/* default state action */\n\t$$n = $$Def[$$state]\n\tif $$n == -2 {\n\t\tif $$char < 0 {\n\t\t\t$$char = $$lex1($$lex, &$$lval)\n\t\t}\n\n\t\t/* look through exception table */\n\t\txi := 0\n\t\tfor {\n\t\t\tif $$Exca[xi+0] == -1 && $$Exca[xi+1] == $$state {\n\t\t\t\tbreak\n\t\t\t}\n\t\t\txi += 2\n\t\t}\n\t\tfor xi += 2; ; xi += 2 {\n\t\t\t$$n = $$Exca[xi+0]\n\t\t\tif $$n < 0 || $$n == $$char {\n\t\t\t\tbreak\n\t\t\t}\n\t\t}\n\t\t$$n = $$Exca[xi+1]\n\t\tif $$n < 0 {\n\t\t\tgoto ret0\n\t\t}\n\t}\n\tif $$n == 0 {\n\t\t/* error ... attempt to resume parsing */\n\t\tswitch Errflag {\n\t\tcase 0: /* brand new error */\n\t\t\t$$lex.Error("syntax error")\n\t\t\tNerrs++\n\t\t\tif $$Debug >= 1 {\n\t\t\t\tfmt.Printf("%s", $$Statname($$state))\n\t\t\t\tfmt.Printf("saw %s\n", $$Tokname($$char))\n\t\t\t}\n\t\t\tfallthrough\n\n\t\tcase 1, 2: /* incompletely recovered error ... try again */\n\t\t\tErrflag = 3\n\n\t\t\t/* find a state where "error" is a legal shift action */\n\t\t\tfor $$p >= 0 {\n\t\t\t\t$$n = $$Pact[$$S[$$p].yys] + $$ErrCode\n\t\t\t\tif $$n >= 0 && $$n < $$Last {\n\t\t\t\t\t$$state = $$Act[$$n] /* simulate a shift of "error" */\n\t\t\t\t\tif $$Chk[$$state] == $$ErrCode {\n\t\t\t\t\t\tgoto $$stack\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\t/* the current p has no shift on "error", pop stack */\n\t\t\t\tif $$Debug >= 2 {\n\t\t\t\t\tfmt.Printf("error recovery pops state %d\n", $$S[$$p].yys)\n\t\t\t\t}\n\t\t\t\t$$p--\n\t\t\t}\n\t\t\t/* there is no state on the stack with an error shift ... abort */\n\t\t\tgoto ret1\n\n\t\tcase 3: /* no shift yet; clobber input char */\n\t\t\tif $$Debug >= 2 {\n\t\t\t\tfmt.Printf("error recovery discards %s\n", $$Tokname($$char))\n\t\t\t}\n\t\t\tif $$char == $$EofCode {\n\t\t\t\tgoto ret1\n\t\t\t}\n\t\t\t$$char = -1\n\t\t\tgoto $$newstate /* try again in the same state */\n\t\t}\n\t}\n\n\t/* reduction by production $$n */\n\tif $$Debug >= 2 {\n\t\tfmt.Printf("reduce %v in:\n\t%v\n", $$n, $$Statname($$state))\n\t}\n\n\t$$nt := $$n\n\t$$pt := $$p\n\t_ = $$pt // guard against "declared and not used"\n\n\t$$p -= $$R2[$$n]\n\t$$VAL = $$S[$$p+1]\n\n\t/* consult goto table to find next state */\n\t$$n = $$R1[$$n]\n\t$$g := $$Pgo[$$n]\n\t$$j := $$g + $$S[$$p].yys + 1\n\n\tif $$j >= $$Last {\n\t\t$$state = $$Act[$$g]\n\t} else {\n\t\t$$state = $$Act[$$j]\n\t\tif $$Chk[$$state] != -$$n {\n\t\t\t$$state = $$Act[$$g]\n\t\t}\n\t}\n\t// dummy call; replaced with literal code\n\t$$run()\n\tgoto $$stack /* stack new state and value */\n}\n`')
-  PsiWhiteSpace('\n')

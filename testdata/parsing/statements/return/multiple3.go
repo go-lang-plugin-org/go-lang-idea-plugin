@@ -23,7 +23,7 @@ Go file
       ReturnStmtImpl
         PsiElement(KEYWORD_RETURN)('return')
         PsiWhiteSpace(' ')
-        ExpressionList
+        ExpressionListImpl
           LiteralExpressionImpl
             LiteralIntegerImpl
               PsiElement(LITERAL_INT)('1')

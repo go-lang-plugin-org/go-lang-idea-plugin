@@ -21,7 +21,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('f')
         PsiElement(()('(')
-        ExpressionList
+        ExpressionListImpl
           LiteralExpressionImpl
             LiteralFloatImpl
               PsiElement(LITERAL_FLOAT)('3.1415')

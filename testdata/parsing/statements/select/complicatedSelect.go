@@ -128,7 +128,7 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('print')
               PsiElement(()('(')
-              ExpressionList
+              ExpressionListImpl
                 LiteralExpressionImpl
                   LiteralStringImpl
                     PsiElement(LITERAL_STRING)('"received "')
@@ -168,7 +168,7 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('print')
               PsiElement(()('(')
-              ExpressionList
+              ExpressionListImpl
                 LiteralExpressionImpl
                   LiteralStringImpl
                     PsiElement(LITERAL_STRING)('"sent "')
@@ -230,7 +230,7 @@ Go file
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('print')
                   PsiElement(()('(')
-                  ExpressionList
+                  ExpressionListImpl
                     LiteralExpressionImpl
                       LiteralStringImpl
                         PsiElement(LITERAL_STRING)('"received "')

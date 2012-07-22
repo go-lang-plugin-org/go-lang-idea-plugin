@@ -96,7 +96,7 @@ Go file
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('println')
               PsiElement(()('(')
-              ExpressionList
+              ExpressionListImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('i')

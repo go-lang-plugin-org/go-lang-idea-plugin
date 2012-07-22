@@ -44,16 +44,18 @@ Go file
         BlockStmtImpl
           PsiElement({)('{')
           PsiWhiteSpace(' ')
-          AssignStmt
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('a')
+          AssignStmtImpl
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('a')
             PsiWhiteSpace(' ')
             PsiElement(=)('=')
             PsiWhiteSpace(' ')
-            LiteralExpressionImpl
-              LiteralIntegerImpl
-                PsiElement(LITERAL_INT)('10')
+            ExpressionListImpl
+              LiteralExpressionImpl
+                LiteralIntegerImpl
+                  PsiElement(LITERAL_INT)('10')
           PsiWhiteSpace(' ')
           PsiElement(})('}')
       PsiWhiteSpace('\n')

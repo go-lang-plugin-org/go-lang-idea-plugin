@@ -1,7 +1,7 @@
 package main
 import a "a"
 var x = a.A()
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')

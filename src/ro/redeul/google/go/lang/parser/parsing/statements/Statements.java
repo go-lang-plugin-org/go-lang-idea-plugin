@@ -136,13 +136,19 @@ public class Statements implements GoElementTypes {
         }
 
         if ( ASSIGN_OPERATORS.contains(builder.getTokenType()) ) {
+            mark.done(EXPRESSION_LIST);
+            mark = mark.precede();
             PsiBuilder.Marker marker = builder.mark();
             ParserUtils.getToken(builder, builder.getTokenType());
+
+            PsiBuilder.Marker rightSideExpressions = builder.mark();
             if ( parser.parseExpressionList(builder) != 0) {
+                rightSideExpressions.done(EXPRESSION_LIST);
                 mark.done(ASSIGN_STATEMENT);
                 marker.drop();
                 return ASSIGN_STATEMENT;
             } else {
+                rightSideExpressions.drop();
                 marker.rollbackTo();
             }
         }

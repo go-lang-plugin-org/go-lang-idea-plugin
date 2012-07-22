@@ -109,4 +109,8 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testFor_rangeLiteral() throws Throwable { doTest(); }
     public void testFor_incomplete() throws Throwable { doTest(); }
 
+    public void testAssignment_simple() throws Throwable { doTest(); }
+    public void testAssignment_double() throws Throwable { doTest(); }
+    public void testAssignment_opAssign() throws Throwable { doTest(); }
+    public void testAssignment_functionWithMultipleResults() throws Throwable { doTest(); }
 }

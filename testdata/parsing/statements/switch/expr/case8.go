@@ -27,26 +27,28 @@ Go file
       SwitchExprStmtImpl
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
-        AssignStmt
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('e1')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
-          LiteralExpressionImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('e2')
+        AssignStmtImpl
+          ExpressionListImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('e1')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('e2')
           PsiWhiteSpace(' ')
           PsiElement(*=)('*=')
           PsiWhiteSpace(' ')
-          LiteralExpressionImpl
-            LiteralIntegerImpl
-              PsiElement(LITERAL_INT)('2')
-          PsiElement(,)(',')
-          PsiWhiteSpace(' ')
-          LiteralExpressionImpl
-            LiteralIntegerImpl
-              PsiElement(LITERAL_INT)('3')
+          ExpressionListImpl
+            LiteralExpressionImpl
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('2')
+            PsiElement(,)(',')
+            PsiWhiteSpace(' ')
+            LiteralExpressionImpl
+              LiteralIntegerImpl
+                PsiElement(LITERAL_INT)('3')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         LiteralExpressionImpl

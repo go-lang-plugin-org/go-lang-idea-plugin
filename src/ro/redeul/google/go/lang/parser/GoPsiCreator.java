@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationsImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionListImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoUnaryExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoAdditiveExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalAndExpressionImpl;
@@ -225,6 +226,9 @@ public class GoPsiCreator implements GoElementTypes {
         if (elementType.equals(LITERAL_FUNCTION))
             return new GoLiteralFunctionImpl(node);
 
+        if (elementType.equals(EXPRESSION_LIST))
+            return new GoExpressionListImpl(node);
+
         if (elementType.equals(ADD_EXPRESSION))
             return new GoAdditiveExpressionImpl(node);
 
@@ -266,6 +270,9 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(BUILTIN_CALL_EXPRESSION))
             return new GoBuiltinCallExpressionImpl(node);
+
+        if (elementType.equals(ASSIGN_STATEMENT))
+            return new GoAssignmentStatementImpl(node);
 
         if (elementType.equals(IF_STATEMENT))
             return new GoIfStatementImpl(node);

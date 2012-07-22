@@ -1,5 +1,7 @@
 package main
-func main() { return 1, 2 }
+func main() {
+    x, y = y, x
+}
 /**-----
 Go file
   PackageDeclaration(main)
@@ -17,18 +19,29 @@ Go file
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')
-      PsiWhiteSpace(' ')
-      ReturnStmtImpl
-        PsiElement(KEYWORD_RETURN)('return')
-        PsiWhiteSpace(' ')
+      PsiWhiteSpace('\n')
+      PsiWhiteSpace('    ')
+      AssignStmtImpl
         ExpressionListImpl
           LiteralExpressionImpl
-            LiteralIntegerImpl
-              PsiElement(LITERAL_INT)('1')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('x')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           LiteralExpressionImpl
-            LiteralIntegerImpl
-              PsiElement(LITERAL_INT)('2')
-      PsiWhiteSpace(' ')
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('y')
+        PsiWhiteSpace(' ')
+        PsiElement(=)('=')
+        PsiWhiteSpace(' ')
+        ExpressionListImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('y')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('x')
+      PsiWhiteSpace('\n')
       PsiElement(})('}')

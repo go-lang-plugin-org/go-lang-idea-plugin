@@ -21,7 +21,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('v')
         PsiElement(()('(')
-        ExpressionList
+        ExpressionListImpl
           LiteralExpressionImpl
             LiteralCharImpl
               PsiElement(LITERAL_CHAR)(''a'')

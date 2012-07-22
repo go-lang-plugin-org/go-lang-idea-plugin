@@ -55,7 +55,7 @@ Go file
               PsiWhiteSpace(' ')
               PsiElement(})('}')
         PsiElement(()('(')
-        ExpressionList
+        ExpressionListImpl
           LiteralExpressionImpl
             LiteralIntegerImpl
               PsiElement(LITERAL_INT)('1')
