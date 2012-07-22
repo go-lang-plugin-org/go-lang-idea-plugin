@@ -10,12 +10,10 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class GoFileUtils {

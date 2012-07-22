@@ -14,9 +14,9 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinTypeNameReference;
 import ro.redeul.google.go.lang.psi.resolve.references.TypeNameReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.types.GoTypes;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePredeclared;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -29,10 +29,10 @@ import static com.intellij.patterns.StandardPatterns.string;
  * Date: Aug 30, 2010
  * Time: 7:12:16 PM
  */
-public class GoTypeNameImpl extends GoPsiPackagedElementBase
-    implements GoTypeName {
+public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
+    implements GoPsiTypeName {
 
-    public GoTypeNameImpl(@NotNull ASTNode node) {
+    public GoPsiTypeNameImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -71,38 +71,6 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
         visitor.visitTypeName(this);
     }
 
-//    @Override
-//    public GoPsiElement[] getMembers() {
-//        GoTypeNameDeclaration declaration = resolve();
-//
-//        if (declaration != null && declaration.getTypeSpec() != null) {
-//
-//            GoType declarationType = declaration.getTypeSpec().getType();
-//
-//            if (declarationType != null) {
-//                return declarationType.getMembers();
-//            }
-//        }
-
-//        return new GoPsiElement[0];
-//    }
-
-//    @Override
-//    public GoType getMemberType(String name) {
-//        GoTypeNameDeclaration declaration = resolve();
-//
-//        if (declaration != null && declaration.getTypeSpec() != null) {
-//
-//            GoType declarationType = declaration.getTypeSpec().getType();
-//
-//            if (declarationType != null) {
-//                return declarationType.getMemberType(name);
-//            }
-//        }
-//
-//        return null;
-//    }
-
     @Override
     public GoUnderlyingType getUnderlyingType() {
 
@@ -132,8 +100,8 @@ public class GoTypeNameImpl extends GoPsiPackagedElementBase
     }
 
     @Override
-    public boolean isIdentical(GoType goType) {
-        if ( goType instanceof GoTypeName ) {
+    public boolean isIdentical(GoPsiType goType) {
+        if ( goType instanceof GoPsiTypeName) {
             return getName().equals(goType.getName());
         }
 

@@ -3,7 +3,7 @@ package ro.redeul.google.go.psi;
 import ro.redeul.google.go.GoPsiTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoTypeAssertionExpression;
-import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import static ro.redeul.google.go.util.GoPsiTestUtils.castAs;
 import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
 import static ro.redeul.google.go.util.GoPsiTestUtils.get;
@@ -50,7 +50,7 @@ public class GoPsiTypeAssertionsTest extends GoPsiTestCase {
         assertEquals("[]int", get(typeAssertion.getAssertedType()).getText());
         assertEquals("int",
                      get(
-                         getAs(GoTypeSlice.class,
+                         getAs(GoPsiTypeSlice.class,
                                typeAssertion.getAssertedType()
                          ).getElementType()
                      ).getText());

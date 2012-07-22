@@ -3,20 +3,20 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeParenthesized;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeParenthesized;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 
-public class GoTypeParenthesizedImpl extends GoPsiPackagedElementBase
-    implements GoTypeParenthesized
+public class GoPsiTypeParenthesizedImpl extends GoPsiPackagedElementBase
+    implements GoPsiTypeParenthesized
 {
-    public GoTypeParenthesizedImpl(@NotNull ASTNode node) {
+    public GoPsiTypeParenthesizedImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     @Override
-    public GoType getInnerType() {
-        return findChildByClass(GoType.class);
+    public GoPsiType getInnerType() {
+        return findChildByClass(GoPsiType.class);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class GoTypeParenthesizedImpl extends GoPsiPackagedElementBase
     }
 
     @Override
-    public boolean isIdentical(GoType goType) {
+    public boolean isIdentical(GoPsiType goType) {
         // TODO: implement this
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }

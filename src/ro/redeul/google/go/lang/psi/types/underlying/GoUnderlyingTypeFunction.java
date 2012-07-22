@@ -1,13 +1,13 @@
 package ro.redeul.google.go.lang.psi.types.underlying;
 
-import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 
 public class GoUnderlyingTypeFunction implements GoUnderlyingType {
 
 
-    private GoTypeFunction functionType;
+    private GoPsiTypeFunction functionType;
 
-    public GoUnderlyingTypeFunction(GoTypeFunction functionType) {
+    public GoUnderlyingTypeFunction(GoPsiTypeFunction functionType) {
         this.functionType = functionType;
     }
 

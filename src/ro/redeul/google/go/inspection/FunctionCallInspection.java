@@ -8,10 +8,10 @@ import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
-import ro.redeul.google.go.lang.psi.types.GoTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 import static ro.redeul.google.go.inspection.InspectionUtil.UNKNOWN_COUNT;
@@ -51,7 +51,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
 
     private static void checkNewCall(GoBuiltinCallExpression expression, InspectionResult result) {
         GoExpr[] arguments = expression.getArguments();
-        GoType type = expression.getTypeArgument();
+        GoPsiType type = expression.getTypeArgument();
         if (type == null) {
             if (arguments.length == 0) {
                 result.addProblem(expression, GoBundle.message("error.missing.argument", "type", "new"));
@@ -68,18 +68,18 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
 
     private static void checkMakeCall(GoBuiltinCallExpression expression, InspectionResult result) {
         GoExpr[] arguments = expression.getArguments();
-        GoType type = expression.getTypeArgument();
+        GoPsiType type = expression.getTypeArgument();
         if (type == null) {
             result.addProblem(expression, GoBundle.message("error.incorrect.make.type"));
             return;
         }
 
-        GoType finalType = resolveToFinalType(type);
-        if (finalType instanceof GoTypeSlice) {
+        GoPsiType finalType = resolveToFinalType(type);
+        if (finalType instanceof GoPsiTypeSlice) {
             checkMakeSliceCall(expression, arguments, result);
-        } else if (finalType instanceof GoTypeChannel) {
+        } else if (finalType instanceof GoPsiTypeChannel) {
             checkMakeChannelCall(arguments, result);
-        } else if (finalType instanceof GoTypeMap) {
+        } else if (finalType instanceof GoPsiTypeMap) {
             checkMakeMapCall(arguments, result);
         } else {
             result.addProblem(expression, GoBundle.message("error.cannot.make.type", type.getText()));

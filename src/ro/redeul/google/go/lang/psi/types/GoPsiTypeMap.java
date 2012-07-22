@@ -6,9 +6,9 @@ package ro.redeul.google.go.lang.psi.types;
  * Date: Sep 2, 2010
  * Time: 12:52:20 PM
  */
-public interface GoTypeMap extends GoType {
+public interface GoPsiTypeMap extends GoPsiType {
 
-    GoType getKeyType();
+    GoPsiType getKeyType();
 
-    GoType getElementType();
+    GoPsiType getElementType();
 }

@@ -12,9 +12,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
@@ -28,8 +26,8 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
@@ -239,7 +237,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     private boolean isType(GoLiteralIdentifier id) {
         PsiElement parent = id.getParent();
         return isNodeOfType(parent, GoElementTypes.BASE_TYPE_NAME) ||
-                isNodeOfType(parent, GoElementTypes.REFERENCE_BASE_TYPE_NAME) || parent instanceof GoTypeName;
+                isNodeOfType(parent, GoElementTypes.REFERENCE_BASE_TYPE_NAME) || parent instanceof GoPsiTypeName;
     }
 
     private boolean isTypeField(GoLiteralIdentifier id) {
@@ -316,7 +314,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
 
         for (GoTypeSpec spec : GoFileUtils.getTypeSpecs(file)) {
-            GoType type = spec.getType();
+            GoPsiType type = spec.getType();
             if (type != null) {
                 variables.put(type.getName(), new VariableUsage(type));
             }
@@ -393,7 +391,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
         public void unusedGlobalVariable(VariableUsage variableUsage) {
             if (variableUsage.element instanceof GoFunctionDeclaration ||
-                variableUsage.element instanceof GoType) {
+                variableUsage.element instanceof GoPsiType) {
                 return;
             }
 

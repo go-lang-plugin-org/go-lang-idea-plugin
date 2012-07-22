@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -33,8 +33,8 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
         return findChildByClass(GoTypeNameDeclaration.class);
     }
 
-    public GoType getType() {
-        return findChildByClass(GoType.class);
+    public GoPsiType getType() {
+        return findChildByClass(GoPsiType.class);
     }
 
     @Override

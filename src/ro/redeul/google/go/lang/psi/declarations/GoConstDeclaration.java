@@ -3,7 +3,7 @@ package ro.redeul.google.go.lang.psi.declarations;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
 public interface GoConstDeclaration extends GoPsiElement {
 
@@ -11,7 +11,7 @@ public interface GoConstDeclaration extends GoPsiElement {
 
     GoLiteralIdentifier[] getIdentifiers();
 
-    public GoType getIdentifiersType();
+    public GoPsiType getIdentifiersType();
 
     GoExpr[] getExpressions();
 

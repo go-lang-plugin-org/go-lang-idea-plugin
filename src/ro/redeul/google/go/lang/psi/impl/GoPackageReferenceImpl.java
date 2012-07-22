@@ -8,7 +8,6 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.processors.ImportedPackagesCollectorProcessor;
 
 /**
@@ -18,8 +17,6 @@ import ro.redeul.google.go.lang.psi.processors.ImportedPackagesCollectorProcesso
  * Time: 10:41:21 PM
  */
 public class GoPackageReferenceImpl extends GoPsiElementBase implements GoPackageReference {
-
-    // WARN: Why is this a GoType implementation ?!
 
     public GoPackageReferenceImpl(@NotNull ASTNode node) {
         super(node);

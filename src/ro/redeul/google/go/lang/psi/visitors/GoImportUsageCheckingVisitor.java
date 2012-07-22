@@ -6,7 +6,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -47,7 +47,7 @@ public class GoImportUsageCheckingVisitor extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitTypeName(GoTypeName typeName) {
+    public void visitTypeName(GoPsiTypeName typeName) {
         checkQualifiedIdentifier(typeName.getIdentifier());
     }
 }

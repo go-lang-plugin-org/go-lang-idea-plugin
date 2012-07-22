@@ -17,6 +17,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -40,10 +41,10 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
         return this;
     }
 
-    private static final ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, PsiElement> RESOLVER =
-        new ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, PsiElement>() {
+    private static final ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, GoResolveResult> RESOLVER =
+        new ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, GoResolveResult>() {
             @Override
-            public PsiElement resolve(BuiltinCallOrConversionReference psiReference, boolean incompleteCode) {
+            public GoResolveResult resolve(BuiltinCallOrConversionReference psiReference, boolean incompleteCode) {
                 PsiElement element = psiReference.getElement();
 
                 MethodOrTypeNameResolver processor =
@@ -61,16 +62,16 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
                     }
                 }
 
-                return processor.getChildDeclaration();
+                return new GoResolveResult(processor.getChildDeclaration());
             }
 
         };
 
-    @Override
-    public PsiElement resolve() {
-        return ResolveCache.getInstance(getElement().getProject())
-                    .resolveWithCaching(this, RESOLVER, false, false);
-    }
+//    @Override
+//    public PsiElement resolve() {
+//        return ResolveCache.getInstance(getElement().getProject())
+//                    .resolveWithCaching(this, RESOLVER, false, false);
+//    }
 
     @NotNull
     @Override

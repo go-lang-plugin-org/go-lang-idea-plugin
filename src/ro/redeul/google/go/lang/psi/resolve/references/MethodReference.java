@@ -1,6 +1,3 @@
-/*
-* Copyright 2012 Midokura Europe SARL
-*/
 package ro.redeul.google.go.lang.psi.resolve.references;
 
 import java.util.ArrayList;
@@ -17,24 +14,25 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.MethodResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.types.GoTypePointer;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.util.LookupElementUtil;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
-public class MethodReference extends GoPsiReference<GoSelectorExpression, MethodReference> {
+public class MethodReference
+    extends GoPsiReference<GoSelectorExpression, MethodReference> {
 
     GoTypeName baseTypeName;
 
-    private static ResolveCache.AbstractResolver<MethodReference, PsiElement> RESOLVER =
-        new ResolveCache.AbstractResolver<MethodReference, PsiElement>() {
+    private static ResolveCache.AbstractResolver<MethodReference, GoResolveResult> RESOLVER =
+        new ResolveCache.AbstractResolver<MethodReference, GoResolveResult>() {
             @Override
-            public PsiElement resolve(MethodReference methodReference, boolean incompleteCode) {
+            public GoResolveResult resolve(MethodReference methodReference, boolean incompleteCode) {
                 GoTypeName baseTypeName = methodReference.resolveBaseExpressionType();
 
                 if (baseTypeName == null)
@@ -42,13 +40,18 @@ public class MethodReference extends GoPsiReference<GoSelectorExpression, Method
 
                 MethodResolver processor = new MethodResolver(methodReference);
 
+                GoSelectorExpression element = methodReference.getElement();
+
                 PsiScopesUtil.treeWalkUp(
                     processor,
-                    methodReference.getElement().getContainingFile().getLastChild(),
-                    methodReference.getElement().getContainingFile(),
+                    element.getContainingFile().getLastChild(),
+                    element.getContainingFile(),
                     GoResolveStates.initial());
 
-                return processor.getChildDeclaration();
+                PsiElement declaration = processor.getChildDeclaration();
+                return declaration != null
+                    ? new GoResolveResult(declaration)
+                    : GoResolveResult.NULL;
             }
         };
 
@@ -64,7 +67,7 @@ public class MethodReference extends GoPsiReference<GoSelectorExpression, Method
     @Override
     public TextRange getRangeInElement() {
         GoLiteralIdentifier identifier = getElement().getIdentifier();
-        if ( identifier == null )
+        if (identifier == null)
             return null;
 
         return new TextRange(identifier.getStartOffsetInParent(),
@@ -83,21 +86,21 @@ public class MethodReference extends GoPsiReference<GoSelectorExpression, Method
         if (!(element instanceof GoMethodDeclaration))
             return false;
 
-        GoMethodDeclaration declaration = (GoMethodDeclaration)element;
+        GoMethodDeclaration declaration = (GoMethodDeclaration) element;
 
-        GoType receiverType = declaration.getMethodReceiver().getType();
+        GoPsiType receiverType = declaration.getMethodReceiver().getType();
 
         if (receiverType == null)
             return false;
 
-        if (receiverType instanceof GoTypePointer) {
-            receiverType = ((GoTypePointer)receiverType).getTargetType();
+        if (receiverType instanceof GoPsiTypePointer) {
+            receiverType = ((GoPsiTypePointer) receiverType).getTargetType();
         }
 
-        if ( !(receiverType instanceof GoTypeName))
+        if (!(receiverType instanceof GoPsiTypeName))
             return false;
 
-        GoTypeName methodTypeName = (GoTypeName)receiverType;
+        GoPsiTypeName methodTypeName = (GoPsiTypeName) receiverType;
 
         if (baseTypeName != null && baseTypeName.getName() != null &&
             baseTypeName.getName().equals(methodTypeName.getName()))
@@ -122,8 +125,8 @@ public class MethodReference extends GoPsiReference<GoSelectorExpression, Method
                 String name = PsiUtilCore.getName(declaration);
 
                 variants.add(LookupElementUtil.createLookupElement(
-                    (GoPsiElement)declaration, name,
-                    (GoPsiElement)child));
+                    (GoPsiElement) declaration, name,
+                    (GoPsiElement) child));
                 return true;
             }
         };
@@ -138,16 +141,16 @@ public class MethodReference extends GoPsiReference<GoSelectorExpression, Method
     }
 
     private GoTypeName resolveBaseExpressionType() {
-        GoType []types = getElement().getBaseExpression().getType();
+        GoType[] types = getElement().getBaseExpression().getType();
 
         if (types.length != 1)
             return null;
 
         GoType type = types[0];
-        if ( !(type instanceof GoTypeName) )
+        if (!(type instanceof GoTypeName))
             return null;
 
-        return (GoTypeName)type;
+        return (GoTypeName) type;
     }
 
     public boolean isSoft() {

@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**

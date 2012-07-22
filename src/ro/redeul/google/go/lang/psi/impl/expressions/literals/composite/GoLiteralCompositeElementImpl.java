@@ -13,11 +13,11 @@ import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComp
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeArray;
-import ro.redeul.google.go.lang.psi.types.GoTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -87,9 +87,9 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
                         psiElement(GoLiteralCompositeElement.class)));
 
     @Override
-    public GoType getElementType() {
+    public GoPsiType getElementType() {
 
-        GoType parentType = null;
+        GoPsiType parentType = null;
         if (patternCompositeParent.accepts(this)) {
             GoLiteralComposite literalComposite =
                 (GoLiteralComposite) getParent().getParent();
@@ -121,21 +121,21 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
         }
 
 
-        while (parentType instanceof GoTypeName) {
+        while (parentType instanceof GoPsiTypeName) {
             GoTypeSpec typeSpec = resolveSafely(parentType, GoTypeSpec.class);
             parentType = typeSpec.getType();
         }
 
-        if (parentType instanceof GoTypeArray) {
-            return ((GoTypeArray) parentType).getElementType();
+        if (parentType instanceof GoPsiTypeArray) {
+            return ((GoPsiTypeArray) parentType).getElementType();
         }
 
-        if (parentType instanceof GoTypeSlice) {
-            return ((GoTypeSlice) parentType).getElementType();
+        if (parentType instanceof GoPsiTypeSlice) {
+            return ((GoPsiTypeSlice) parentType).getElementType();
         }
 
-        if (parentType instanceof GoTypeMap) {
-            return ((GoTypeMap) parentType).getElementType();
+        if (parentType instanceof GoPsiTypeMap) {
+            return ((GoPsiTypeMap) parentType).getElementType();
         }
 
         return parentType;

@@ -11,9 +11,9 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
@@ -31,7 +31,7 @@ public class TypeStructDeclarationInspection
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
         new GoRecursiveElementVisitor() {
             @Override
-            public void visitStructType(GoTypeStruct type) {
+            public void visitStructType(GoPsiTypeStruct type) {
                 super.visitStructType(type);
 
                 checkFields(type, result);
@@ -40,8 +40,8 @@ public class TypeStructDeclarationInspection
     }
 
     // returns true if the definition of "type" contains usage of "struct"
-    private static boolean typeContainsStruct(GoType type, GoTypeStruct struct) {
-        if (!(type instanceof GoTypeName)) {
+    private static boolean typeContainsStruct(GoPsiType type, GoPsiTypeStruct struct) {
+        if (!(type instanceof GoPsiTypeName)) {
             return false;
         }
 
@@ -55,8 +55,8 @@ public class TypeStructDeclarationInspection
             return false;
         }
 
-        GoType typeDefinition = ((GoTypeSpec) resolve).getType();
-        if (!(typeDefinition instanceof GoTypeStruct)) {
+        GoPsiType typeDefinition = ((GoTypeSpec) resolve).getType();
+        if (!(typeDefinition instanceof GoPsiTypeStruct)) {
             return false;
         }
 
@@ -64,7 +64,7 @@ public class TypeStructDeclarationInspection
             return true;
         }
 
-        GoTypeStruct newStruct = (GoTypeStruct) typeDefinition;
+        GoPsiTypeStruct newStruct = (GoPsiTypeStruct) typeDefinition;
         for (GoTypeStructField field : newStruct.getFields()) {
             if (typeContainsStruct(field.getType(), struct)) {
                 return true;
@@ -79,7 +79,7 @@ public class TypeStructDeclarationInspection
         return false;
     }
 
-    private static void checkFields(GoTypeStruct struct, InspectionResult result) {
+    private static void checkFields(GoPsiTypeStruct struct, InspectionResult result) {
         Set<String> fields = new HashSet<String>();
         for (GoTypeStructField field : struct.getFields()) {
             if (typeContainsStruct(field.getType(), struct)) {
@@ -100,10 +100,10 @@ public class TypeStructDeclarationInspection
         }
 
         for (GoTypeStructAnonymousField field : struct.getAnonymousFields()) {
-            GoType type = field.getType();
+            GoPsiType type = field.getType();
 
-            if (type instanceof GoTypeName) {
-                GoTypeName typeName = (GoTypeName) type;
+            if (type instanceof GoPsiTypeName) {
+                GoPsiTypeName typeName = (GoPsiTypeName) type;
 
                 if (typeContainsStruct(type, struct)) {
                     result.addProblem(field, GoBundle.message(

@@ -51,20 +51,20 @@ import ro.redeul.google.go.lang.psi.impl.toplevel.GoPackageDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeNameDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeSpecImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeArrayImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeChannelImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeFunctionImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeInterfaceImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeMapImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeNameImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeParenthesizedImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypePointerImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeSliceImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeStructImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeArrayImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeChannelImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeFunctionImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeInterfaceImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeMapImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeNameImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeParenthesizedImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypePointerImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeSliceImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeStructImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructAnonymousFieldImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructFieldImpl;
 
-import static ro.redeul.google.go.lang.psi.types.GoTypeChannel.ChannelType;
+import static ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel.ChannelType;
 
 public class GoPsiCreator implements GoElementTypes {
 
@@ -118,25 +118,25 @@ public class GoPsiCreator implements GoElementTypes {
             return new GoMethodReceiverImpl(node);
 
         if (elementType.equals(TYPE_PARENTHESIZED))
-            return new GoTypeParenthesizedImpl(node);
+            return new GoPsiTypeParenthesizedImpl(node);
 
         if (elementType.equals(TYPE_NAME))
-            return new GoTypeNameImpl(node);
+            return new GoPsiTypeNameImpl(node);
 
         if (elementType.equals(TYPE_ARRAY))
-            return new GoTypeArrayImpl(node);
+            return new GoPsiTypeArrayImpl(node);
 
         if (elementType.equals(TYPE_SLICE))
-            return new GoTypeSliceImpl(node);
+            return new GoPsiTypeSliceImpl(node);
 
         if (elementType.equals(TYPE_MAP))
-            return new GoTypeMapImpl(node);
+            return new GoPsiTypeMapImpl(node);
 
         if (elementType.equals(TYPE_POINTER))
-            return new GoTypePointerImpl(node);
+            return new GoPsiTypePointerImpl(node);
 
         if (elementType.equals(TYPE_STRUCT))
-            return new GoTypeStructImpl(node);
+            return new GoPsiTypeStructImpl(node);
 
         if (elementType.equals(TYPE_STRUCT_FIELD))
             return new GoTypeStructFieldImpl(node);
@@ -145,10 +145,10 @@ public class GoPsiCreator implements GoElementTypes {
             return new GoTypeStructAnonymousFieldImpl(node);
 
         if (elementType.equals(TYPE_INTERFACE))
-            return new GoTypeInterfaceImpl(node);
+            return new GoPsiTypeInterfaceImpl(node);
 
         if (elementType.equals(TYPE_FUNCTION))
-            return new GoTypeFunctionImpl(node);
+            return new GoPsiTypeFunctionImpl(node);
 
         if (elementType.equals(FUNCTION_PARAMETER_LIST))
             return new GoFunctionParameterListImpl(node);
@@ -160,13 +160,13 @@ public class GoPsiCreator implements GoElementTypes {
             return new GoFunctionParameterImpl(node);
 
         if (elementType.equals(TYPE_CHAN_BIDIRECTIONAL))
-            return new GoTypeChannelImpl(node, ChannelType.Bidirectional);
+            return new GoPsiTypeChannelImpl(node, ChannelType.Bidirectional);
 
         if (elementType.equals(TYPE_CHAN_SENDING))
-            return new GoTypeChannelImpl(node, ChannelType.Sending);
+            return new GoPsiTypeChannelImpl(node, ChannelType.Sending);
 
         if (elementType.equals(TYPE_CHAN_RECEIVING))
-            return new GoTypeChannelImpl(node, ChannelType.Receiving);
+            return new GoPsiTypeChannelImpl(node, ChannelType.Receiving);
 
         if (elementType.equals(BLOCK_STATEMENT))
             return new GoBlockStatementImpl(node);

@@ -14,13 +14,15 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.resolve.references.InterfaceMethodReference;
 import ro.redeul.google.go.lang.psi.resolve.references.MethodReference;
 import ro.redeul.google.go.lang.psi.resolve.references.SelectorOfStructFieldReference;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeInterface;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePointer;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeStruct;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
@@ -51,7 +53,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
         if ( target != null && target.getParent() instanceof GoTypeStructField ) {
             GoTypeStructField structField = (GoTypeStructField)target.getParent();
-            return new GoType[] { structField.getType() };
+            return new GoType[] { GoTypes.fromPsiType(structField.getType()) };
         }
 
         return GoType.EMPTY_ARRAY;
@@ -68,7 +70,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
         return findChildByClass(GoLiteralIdentifier.class);
     }
 
-    private Object[] convertToPresentation(GoType type, GoPsiElement[] members) {
+    private Object[] convertToPresentation(GoPsiType type, GoPsiElement[] members) {
 
         Object[] presentations = new Object[members.length];
 
@@ -86,16 +88,16 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
         return presentations;
     }
 
-    private LookupElementBuilder getFieldPresentation(GoType type, GoLiteralIdentifier id) {
+    private LookupElementBuilder getFieldPresentation(GoPsiType type, GoLiteralIdentifier id) {
 
         String name = id.getName();
 
         LookupElementBuilder builder = LookupElementBuilder.create(id, name);
 
-        GoType ownerType = null;
+        GoPsiType ownerType = null;
         if (id.getParent() != null && id.getParent() instanceof GoTypeStructField) {
             GoTypeStructField structField = (GoTypeStructField) id.getParent();
-            ownerType = (GoType) structField.getParent();
+            ownerType = (GoPsiType) structField.getParent();
         }
 
         if (ownerType == null) {
@@ -117,7 +119,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
             return PsiReference.EMPTY_ARRAY;
         }
 
-        GoType []baseTypes = baseExpression.getType();
+        GoType[]baseTypes = baseExpression.getType();
         if (baseTypes.length == 0) {
             return PsiReference.EMPTY_ARRAY;
         }
@@ -138,14 +140,14 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
                 new MethodReference(this)
             };
 
-        if ( type instanceof GoTypeName ) {
+        if ( type instanceof GoPsiTypeName) {
             return new PsiReference[] {
                 new MethodReference(this)
             };
         }
 
 
-//        if ( type instanceof GoTypeStruct) {
+//        if ( type instanceof GoPsiTypeStruct) {
 //            return new StructFieldReference(this);
 
         return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.

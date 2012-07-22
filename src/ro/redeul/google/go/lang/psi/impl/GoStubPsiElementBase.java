@@ -9,6 +9,7 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.IncorrectOperationException;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -31,11 +32,14 @@ public abstract class GoStubPsiElementBase<T extends StubElement> extends StubBa
         getParent().deleteChildRange(this, this);
     }
 
-    // @Override
-    // public abstract PsiElement getParent();
-
     public void accept(GoElementVisitor visitor) {
         visitor.visitElement(this);
+    }
+
+    @Override
+    public <T> T accept(GoElementVisitorWithData<T> visitor) {
+        accept((GoElementVisitor)visitor);
+        return visitor.getData();
     }
 
     @Override

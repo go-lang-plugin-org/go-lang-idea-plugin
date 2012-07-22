@@ -2,7 +2,6 @@ package ro.redeul.google.go.lang.psi;
 
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
-import ro.redeul.google.go.lang.psi.types.GoType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

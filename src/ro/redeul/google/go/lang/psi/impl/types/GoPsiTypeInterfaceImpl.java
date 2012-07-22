@@ -4,9 +4,9 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -17,9 +17,10 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: 5/29/11
  * Time: 2:14 PM
  */
-public class GoTypeInterfaceImpl extends GoPsiPackagedElementBase implements GoTypeInterface {
+public class GoPsiTypeInterfaceImpl extends GoPsiPackagedElementBase implements
+                                                                  GoPsiTypeInterface {
 
-    public GoTypeInterfaceImpl(@NotNull ASTNode node) {
+    public GoPsiTypeInterfaceImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -29,8 +30,8 @@ public class GoTypeInterfaceImpl extends GoPsiPackagedElementBase implements GoT
     }
 
     @Override
-    public boolean isIdentical(GoType goType) {
-        if ( !(goType instanceof GoTypeInterface))
+    public boolean isIdentical(GoPsiType goType) {
+        if ( !(goType instanceof GoPsiTypeInterface))
             return false;
 
         // TODO: implement this.
@@ -54,8 +55,8 @@ public class GoTypeInterfaceImpl extends GoPsiPackagedElementBase implements GoT
     }
 
     @Override
-    public GoTypeName[] getTypeNames() {
-        return findChildrenByClass(GoTypeName.class);
+    public GoPsiTypeName[] getTypeNames() {
+        return findChildrenByClass(GoPsiTypeName.class);
     }
 
 

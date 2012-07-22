@@ -32,8 +32,8 @@ import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.types.GoTypes;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keywordLookup;
@@ -245,7 +245,7 @@ public class GoCompletionContributor extends CompletionContributor {
         extend(CompletionType.BASIC,
                psiElement().withParent(
                    psiElement(GoLiteralIdentifier.class).withParent(
-                       psiElement(GoTypeName.class)
+                       psiElement(GoPsiTypeName.class)
                    )
                ),
                typeDeclarationCompletionProvider);

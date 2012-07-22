@@ -3,8 +3,8 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypePointer;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePointer;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -15,9 +15,10 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: 5/26/11
  * Time: 11:53 PM
  */
-public class GoTypePointerImpl extends GoPsiPackagedElementBase implements GoTypePointer {
+public class GoPsiTypePointerImpl extends GoPsiPackagedElementBase implements
+                                                                GoPsiTypePointer {
 
-    public GoTypePointerImpl(@NotNull ASTNode node) {
+    public GoPsiTypePointerImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -27,8 +28,8 @@ public class GoTypePointerImpl extends GoPsiPackagedElementBase implements GoTyp
     }
 
     @Override
-    public GoType getTargetType() {
-        return findChildByClass(GoType.class);
+    public GoPsiType getTargetType() {
+        return findChildByClass(GoPsiType.class);
     }
 
     @Override
@@ -37,11 +38,11 @@ public class GoTypePointerImpl extends GoPsiPackagedElementBase implements GoTyp
     }
 
     @Override
-    public boolean isIdentical(GoType goType) {
-        if (!(goType instanceof GoTypePointer))
+    public boolean isIdentical(GoPsiType goType) {
+        if (!(goType instanceof GoPsiTypePointer))
             return false;
 
-        GoTypePointer otherTypePointer = (GoTypePointer) goType;
+        GoPsiTypePointer otherTypePointer = (GoPsiTypePointer) goType;
 
         return otherTypePointer.isIdentical(goType);
     }

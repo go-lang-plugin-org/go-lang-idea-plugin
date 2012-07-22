@@ -17,7 +17,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
@@ -128,7 +128,7 @@ public class GoDocumentationProvider implements CodeDocumentationProvider,
     @Override
     public boolean hasDocumentationFor(PsiElement element,
                                        PsiElement originalElement) {
-        if ( element instanceof GoFunctionDeclaration || element instanceof GoTypeName) {
+        if ( element instanceof GoFunctionDeclaration || element instanceof GoPsiTypeName) {
             return true;
         }
 

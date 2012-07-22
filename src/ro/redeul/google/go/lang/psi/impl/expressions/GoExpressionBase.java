@@ -4,7 +4,8 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
@@ -15,7 +16,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  */
 public abstract class GoExpressionBase extends GoPsiElementBase implements GoExpr {
 
-    GoType type;
+    GoPsiType type;
 
     protected GoExpressionBase(@NotNull ASTNode node) {
         super(node);

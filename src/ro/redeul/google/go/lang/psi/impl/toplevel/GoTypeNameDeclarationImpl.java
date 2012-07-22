@@ -10,7 +10,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -47,7 +46,7 @@ public class GoTypeNameDeclarationImpl
         return getText();
     }
 
-    public PsiElement setName(@NonNls String name) throws IncorrectOperationException {
+    public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
         return null;
     }
 

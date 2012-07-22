@@ -6,9 +6,9 @@ package ro.redeul.google.go.lang.psi.types;
  * Date: Aug 30, 2010
  * Time: 9:07:04 PM
  */
-public interface GoTypeArray extends GoType {
+public interface GoPsiTypeArray extends GoPsiType {
 
 //    GoExpression getArrayLength();
 
-    GoType getElementType();
+    GoPsiType getElementType();
 }

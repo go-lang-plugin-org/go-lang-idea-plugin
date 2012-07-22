@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 
 public class GoParenthesisedExpressionImpl extends GoPsiElementBase
     implements GoParenthesisedExpression {

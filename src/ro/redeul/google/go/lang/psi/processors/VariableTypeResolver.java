@@ -7,7 +7,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -17,7 +17,7 @@ import ro.redeul.google.go.lang.psi.types.GoType;
  */
 public class VariableTypeResolver extends BaseScopeProcessor {
 
-    private GoType type;
+    private GoPsiType type;
     private GoLiteralIdentifier identifier;
 
     public VariableTypeResolver(GoLiteralIdentifier identifier) {
@@ -67,7 +67,7 @@ public class VariableTypeResolver extends BaseScopeProcessor {
         return true;
     }
 
-    public GoType getResolvedType() {
+    public GoPsiType getResolvedType() {
         return type;
     }
 }

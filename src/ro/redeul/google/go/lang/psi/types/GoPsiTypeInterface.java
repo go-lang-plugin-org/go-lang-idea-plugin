@@ -8,9 +8,9 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
  * Date: 5/29/11
  * Time: 2:14 PM
  */
-public interface GoTypeInterface extends GoType, GoMethodSetHolder {
+public interface GoPsiTypeInterface extends GoPsiType, GoMethodSetHolder {
 
     GoMethodDeclaration[] getMethodDeclarations();
 
-    GoTypeName[] getTypeNames();
+    GoPsiTypeName[] getTypeNames();
 }

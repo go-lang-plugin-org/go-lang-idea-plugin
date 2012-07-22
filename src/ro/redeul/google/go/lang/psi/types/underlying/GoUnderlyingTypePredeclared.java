@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.types.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 
 public class GoUnderlyingTypePredeclared implements GoUnderlyingType {
 

@@ -10,11 +10,11 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
  * Date: Aug 30, 2010
  * Time: 8:58:40 PM
  */
-public interface GoType extends GoPsiElement, GoPackagedElement {
+public interface GoPsiType extends GoPsiElement, GoPackagedElement {
 
-    public static final GoType[] EMPTY_ARRAY = new GoType[0];
+    public static final GoPsiType[] EMPTY_ARRAY = new GoPsiType[0];
 
     GoUnderlyingType getUnderlyingType();
 
-    boolean isIdentical(GoType goType);
+    boolean isIdentical(GoPsiType goType);
 }

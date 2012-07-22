@@ -5,14 +5,14 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
 public interface GoVarDeclaration extends GoPsiElement, GoStatement {
 
     GoLiteralIdentifier[] getIdentifiers();
 
     @Nullable
-    GoType getIdentifiersType();
+    GoPsiType getIdentifiersType();
 
     GoExpr[] getExpressions();
 

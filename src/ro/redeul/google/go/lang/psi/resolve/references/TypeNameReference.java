@@ -12,20 +12,22 @@ import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
-public class TypeNameReference extends GoPsiReference<GoTypeName, TypeNameReference> {
-    public static final ElementPattern<GoTypeName> MATCHER =
-        psiElement(GoTypeName.class);
+public class TypeNameReference
+    extends GoPsiReference<GoPsiTypeName, TypeNameReference> {
+    public static final ElementPattern<GoPsiTypeName> MATCHER =
+        psiElement(GoPsiTypeName.class);
 
-    private static ResolveCache.AbstractResolver<TypeNameReference, PsiElement> RESOLVER =
-        new ResolveCache.AbstractResolver<TypeNameReference, PsiElement>() {
+    private static ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult> RESOLVER =
+        new ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult>() {
             @Override
-            public PsiElement resolve(TypeNameReference reference, boolean incompleteCode) {
+            public GoResolveResult resolve(TypeNameReference reference, boolean incompleteCode) {
                 TypeNameResolver processor = new TypeNameResolver(reference);
 
                 PsiScopesUtil.treeWalkUp(
@@ -34,11 +36,16 @@ public class TypeNameReference extends GoPsiReference<GoTypeName, TypeNameRefere
                     reference.getElement().getContainingFile(),
                     GoResolveStates.initial());
 
-                return processor.getDeclaration();
+                PsiElement declaration = processor.getDeclaration();
+
+                return
+                    declaration != null
+                        ? new GoResolveResult(declaration)
+                        : GoResolveResult.NULL;
             }
         };
 
-    public TypeNameReference(GoTypeName element) {
+    public TypeNameReference(GoPsiTypeName element) {
         super(element, RESOLVER);
     }
 

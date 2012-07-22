@@ -7,9 +7,9 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
@@ -45,16 +45,16 @@ public class CompositeElementToStructFieldReference extends AbstractStructFields
     }
 
     @Override
-    protected GoTypeStruct resolveTypeDefinition() {
-        GoType type = this.element.getElementType();
+    protected GoPsiTypeStruct resolveTypeDefinition() {
+        GoPsiType type = this.element.getElementType();
 
         if (type == null)
             return null;
 
-        final GoTypeStruct[] struct = new GoTypeStruct[1];
+        final GoPsiTypeStruct[] struct = new GoPsiTypeStruct[1];
         type.accept(new GoElementVisitor() {
             @Override
-            public void visitTypeName(GoTypeName typeName) {
+            public void visitTypeName(GoPsiTypeName typeName) {
                 GoTypeSpec typeSpec =
                     GoPsiUtils.resolveSafely(typeName, GoTypeSpec.class);
 
@@ -66,7 +66,7 @@ public class CompositeElementToStructFieldReference extends AbstractStructFields
             }
 
             @Override
-            public void visitStructType(GoTypeStruct type) {
+            public void visitStructType(GoPsiTypeStruct type) {
                 struct[0] = type;
             }
         });

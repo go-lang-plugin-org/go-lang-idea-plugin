@@ -8,7 +8,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralInteger;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import static ro.redeul.google.go.util.GoPsiTestUtils.castAs;
 import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
 import static ro.redeul.google.go.util.GoPsiTestUtils.get;
@@ -84,7 +84,7 @@ public class GoPsiCompositeLiteralsTest extends GoPsiTestCase {
                   ).getLiteral());
 
         assertEquals("Line",
-                     getAs(GoTypeName.class,
+                     getAs(GoPsiTypeName.class,
                            composite.getLiteralType()
                      ).getName());
 

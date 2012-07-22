@@ -8,7 +8,7 @@ import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class NamedTypeVariantsCollector extends BaseScopeProcessor {
         }
 
         if ( isCandidate ) {
-            boolean isInterface = typeSpec.getType() instanceof GoTypeInterface;
+            boolean isInterface = typeSpec.getType() instanceof GoPsiTypeInterface;
             Icon icon = isInterface ? PlatformIcons.INTERFACE_ICON : PlatformIcons.CLASS_ICON;
 
             String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);

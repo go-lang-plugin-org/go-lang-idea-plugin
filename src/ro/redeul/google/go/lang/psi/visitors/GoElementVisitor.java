@@ -42,14 +42,14 @@ import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoTypeArray;
-import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
-import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
-import ro.redeul.google.go.lang.psi.types.GoTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.types.GoTypePointer;
-import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
-import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
@@ -68,7 +68,7 @@ public class GoElementVisitor  {
         visitElement(file);
     }
 
-    public void visitTypeName(GoTypeName typeName) {
+    public void visitTypeName(GoPsiTypeName typeName) {
         visitElement(typeName);
     }
 
@@ -100,23 +100,23 @@ public class GoElementVisitor  {
         visitElement(type);
     }
 
-    public void visitArrayType(GoTypeArray type) {
+    public void visitArrayType(GoPsiTypeArray type) {
         visitElement(type);
     }
 
-    public void visitSliceType(GoTypeSlice type) {
+    public void visitSliceType(GoPsiTypeSlice type) {
         visitElement(type);
     }
 
-    public void visitMapType(GoTypeMap type) {
+    public void visitMapType(GoPsiTypeMap type) {
         visitElement(type);
     }
 
-    public void visitChannelType(GoTypeChannel type) {
+    public void visitChannelType(GoPsiTypeChannel type) {
         visitElement(type);
     }
 
-    public void visitPointerType(GoTypePointer type) {
+    public void visitPointerType(GoPsiTypePointer type) {
         visitElement(type);
     }
 
@@ -212,15 +212,15 @@ public class GoElementVisitor  {
         visitElement(receiver);
     }
 
-    public void visitStructType(GoTypeStruct type) {
+    public void visitStructType(GoPsiTypeStruct type) {
         visitElement(type);
     }
 
-    public void visitInterfaceType(GoTypeInterfaceImpl type) {
+    public void visitInterfaceType(GoPsiTypeInterfaceImpl type) {
         visitElement(type);
     }
 
-    public void visitFunctionType(GoTypeFunction type) {
+    public void visitFunctionType(GoPsiTypeFunction type) {
         visitElement(type);
     }
 

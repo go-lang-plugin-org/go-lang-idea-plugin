@@ -12,8 +12,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
  * Date: Aug 30, 2010
  * Time: 7:11:26 PM
  */
-public interface GoTypeName extends GoPsiElement, PsiNamedElement,
-                                    GoQualifiedNameElement, GoType
+public interface GoPsiTypeName extends GoPsiElement, PsiNamedElement,
+                                    GoQualifiedNameElement, GoPsiType
 {
     @NotNull
     GoLiteralIdentifier getIdentifier();

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.util.LookupElementUtil;
 
 /**
@@ -39,6 +40,12 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitElement(this);
+    }
+
+    @Override
+    public <T> T accept(GoElementVisitorWithData<T> visitor) {
+        accept((GoElementVisitor)visitor);
+        return visitor.getData();
     }
 
     public void acceptChildren(GoElementVisitor visitor) {

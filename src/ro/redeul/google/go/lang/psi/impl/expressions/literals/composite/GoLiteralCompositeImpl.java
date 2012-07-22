@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoLiteralCompositeImpl extends GoPsiElementBase
@@ -16,8 +16,8 @@ public class GoLiteralCompositeImpl extends GoPsiElementBase
     }
 
     @Override
-    public GoType getLiteralType() {
-        return findChildByClass(GoType.class);
+    public GoPsiType getLiteralType() {
+        return findChildByClass(GoPsiType.class);
     }
 
     @NotNull

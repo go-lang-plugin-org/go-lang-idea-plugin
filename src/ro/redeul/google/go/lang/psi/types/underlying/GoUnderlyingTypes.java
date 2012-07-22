@@ -1,11 +1,11 @@
 package ro.redeul.google.go.lang.psi.types.underlying;
 
-import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
-import ro.redeul.google.go.lang.psi.types.GoTypes;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 
 public class GoUnderlyingTypes {
 
-    public static GoUnderlyingType getMap(GoUnderlyingType keyType,
+    public static GoUnderlyingTypeMap getMap(GoUnderlyingType keyType,
                                           GoUnderlyingType elementType) {
         return new GoUnderlyingTypeMap(keyType, elementType);
     }
@@ -14,19 +14,19 @@ public class GoUnderlyingTypes {
         return GoUnderlyingTypePredeclared.getForType(type);
     }
 
-    public static GoUnderlyingType getPointer(GoUnderlyingType target) {
+    public static GoUnderlyingTypePointer getPointer(GoUnderlyingType target) {
         return new GoUnderlyingTypePointer(target);
     }
 
-    public static GoUnderlyingType getSlice(GoUnderlyingType memberType) {
+    public static GoUnderlyingTypeSlice getSlice(GoUnderlyingType memberType) {
         return new GoUnderlyingTypeSlice(memberType);
     }
 
-    public static GoUnderlyingType getArray(GoUnderlyingType memberType, int size) {
+    public static GoUnderlyingTypeArray getArray(GoUnderlyingType memberType, int size) {
         return new GoUnderlyingTypeArray(memberType, size);
     }
 
-    public static GoUnderlyingType getFunction(GoTypeFunction functionType) {
+    public static GoUnderlyingTypeFunction getFunction(GoPsiTypeFunction functionType) {
         return new GoUnderlyingTypeFunction(functionType);
     }
 
@@ -34,7 +34,7 @@ public class GoUnderlyingTypes {
         return new GoUnderlyingTypeInterface();
     }
 
-    public static GoUnderlyingType getStruct() {
+    public static GoUnderlyingTypeStruct getStruct() {
         return new GoUnderlyingTypeStruct();
     }
 }

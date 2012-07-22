@@ -3,8 +3,8 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -14,11 +14,12 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: Sep 2, 2010
  * Time: 1:22:29 PM
  */
-public class GoTypeChannelImpl extends GoPsiPackagedElementBase implements GoTypeChannel {
+public class GoPsiTypeChannelImpl extends GoPsiPackagedElementBase implements
+                                                                GoPsiTypeChannel {
 
     private ChannelType channelType;
 
-    public GoTypeChannelImpl(@NotNull ASTNode node, ChannelType channelType) {
+    public GoPsiTypeChannelImpl(@NotNull ASTNode node, ChannelType channelType) {
         super(node);
         this.channelType = channelType;
     }
@@ -27,8 +28,8 @@ public class GoTypeChannelImpl extends GoPsiPackagedElementBase implements GoTyp
         return channelType;
     }
 
-    public GoType getElementType() {
-        return findChildByClass(GoType.class);
+    public GoPsiType getElementType() {
+        return findChildByClass(GoPsiType.class);
     }
 
     @Override
@@ -42,11 +43,11 @@ public class GoTypeChannelImpl extends GoPsiPackagedElementBase implements GoTyp
     }
 
     @Override
-    public boolean isIdentical(GoType goType) {
-        if (!(goType instanceof GoTypeChannel))
+    public boolean isIdentical(GoPsiType goType) {
+        if (!(goType instanceof GoPsiTypeChannel))
             return false;
 
-        GoTypeChannel otherChannel = (GoTypeChannel) goType;
+        GoPsiTypeChannel otherChannel = (GoPsiTypeChannel) goType;
         return this.getChannelType() == otherChannel.getChannelType() &&
                     this.getElementType().isIdentical(otherChannel.getElementType());
     }

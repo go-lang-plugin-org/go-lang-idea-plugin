@@ -3,8 +3,8 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeSlice;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -15,13 +15,14 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: Sep 2, 2010
  * Time: 12:50:44 PM
  */
-public class GoTypeSliceImpl extends GoPsiPackagedElementBase implements GoTypeSlice {
-    public GoTypeSliceImpl(@NotNull ASTNode node) {
+public class GoPsiTypeSliceImpl extends GoPsiPackagedElementBase implements
+                                                              GoPsiTypeSlice {
+    public GoPsiTypeSliceImpl(@NotNull ASTNode node) {
         super(node);
     }
 
-    public GoType getElementType() {
-        return findChildByClass(GoType.class);
+    public GoPsiType getElementType() {
+        return findChildByClass(GoPsiType.class);
     }
 
     @Override
@@ -35,11 +36,11 @@ public class GoTypeSliceImpl extends GoPsiPackagedElementBase implements GoTypeS
     }
 
     @Override
-    public boolean isIdentical(GoType goType) {
-        if (!(goType instanceof GoTypeSlice))
+    public boolean isIdentical(GoPsiType goType) {
+        if (!(goType instanceof GoPsiTypeSlice))
             return false;
 
-        GoTypeSlice otherTypeSlice = (GoTypeSlice)goType;
+        GoPsiTypeSlice otherTypeSlice = (GoPsiTypeSlice)goType;
 
         return getElementType().isIdentical(otherTypeSlice.getElementType());
     }

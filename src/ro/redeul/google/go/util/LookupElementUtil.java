@@ -8,17 +8,17 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeInterfaceImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeInterfaceImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoTypeArray;
-import ro.redeul.google.go.lang.psi.types.GoTypeChannel;
-import ro.redeul.google.go.lang.psi.types.GoTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.types.GoTypePointer;
-import ro.redeul.google.go.lang.psi.types.GoTypeSlice;
-import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -63,42 +63,42 @@ public class LookupElementUtil extends GoElementVisitor {
     }
 
     @Override
-    public void visitInterfaceType(GoTypeInterfaceImpl type) {
+    public void visitInterfaceType(GoPsiTypeInterfaceImpl type) {
         lookupElement = lookupElement.setIcon(PlatformIcons.INTERFACE_ICON);
     }
 
     @Override
-    public void visitArrayType(GoTypeArray type) {
+    public void visitArrayType(GoPsiTypeArray type) {
         lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
-    public void visitSliceType(GoTypeSlice type) {
+    public void visitSliceType(GoPsiTypeSlice type) {
         lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
-    public void visitChannelType(GoTypeChannel type) {
+    public void visitChannelType(GoPsiTypeChannel type) {
         lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
-    public void visitStructType(GoTypeStruct type) {
+    public void visitStructType(GoPsiTypeStruct type) {
         lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
-    public void visitMapType(GoTypeMap type) {
+    public void visitMapType(GoPsiTypeMap type) {
         lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
-    public void visitPointerType(GoTypePointer type) {
+    public void visitPointerType(GoPsiTypePointer type) {
         lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
-    public void visitTypeName(GoTypeName typeName) {
+    public void visitTypeName(GoPsiTypeName typeName) {
         lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
     }
 

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
@@ -21,10 +22,10 @@ public class CallOrConversionReference extends AbstractCallOrConversionReference
         super(identifier, RESOLVER);
     }
 
-    private static final ResolveCache.AbstractResolver<CallOrConversionReference, PsiElement> RESOLVER =
-        new ResolveCache.AbstractResolver<CallOrConversionReference, PsiElement>() {
+    private static final ResolveCache.AbstractResolver<CallOrConversionReference, GoResolveResult> RESOLVER =
+        new ResolveCache.AbstractResolver<CallOrConversionReference, GoResolveResult>() {
             @Override
-            public PsiElement resolve(CallOrConversionReference psiReference, boolean incompleteCode) {
+            public GoResolveResult resolve(CallOrConversionReference psiReference, boolean incompleteCode) {
                 MethodOrTypeNameResolver processor =
                     new MethodOrTypeNameResolver(psiReference);
 
@@ -34,9 +35,9 @@ public class CallOrConversionReference extends AbstractCallOrConversionReference
                     element, element.getContainingFile(),
                     GoResolveStates.initial());
 
-                return processor.getChildDeclaration();
+                PsiElement declaration = processor.getChildDeclaration();
+                return declaration != null ? new GoResolveResult(declaration) : GoResolveResult.NULL;
             }
-
         };
 
     @Override

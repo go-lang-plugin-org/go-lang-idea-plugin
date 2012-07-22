@@ -8,7 +8,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
@@ -19,13 +20,14 @@ public abstract class AbstractStructFieldsReference
         super(identifier, RESOLVER);
     }
 
-    protected abstract GoTypeStruct resolveTypeDefinition();
+    protected abstract GoPsiTypeStruct resolveTypeDefinition();
 
-    private static final ResolveCache.AbstractResolver<AbstractStructFieldsReference, PsiElement> RESOLVER =
-        new ResolveCache.AbstractResolver<AbstractStructFieldsReference, PsiElement>() {
+    private static final ResolveCache.AbstractResolver<AbstractStructFieldsReference, GoResolveResult> RESOLVER =
+        new ResolveCache.AbstractResolver<AbstractStructFieldsReference, GoResolveResult>() {
             @Override
-            public PsiElement resolve(AbstractStructFieldsReference psiReference, boolean incompleteCode) {
-                GoTypeStruct typeStruct = psiReference.resolveTypeDefinition();
+            public GoResolveResult resolve(AbstractStructFieldsReference psiReference, boolean incompleteCode) {
+
+                GoPsiTypeStruct typeStruct = psiReference.resolveTypeDefinition();
 
                 if ( typeStruct == null )
                     return null;
@@ -35,25 +37,25 @@ public abstract class AbstractStructFieldsReference
                 for (GoTypeStructField field : typeStruct.getFields()) {
                     for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                         if (identifier.getUnqualifiedName().equals(element.getUnqualifiedName()))
-                            return identifier;
+                            return new GoResolveResult(identifier);
                     }
                 }
 
                 for (GoTypeStructAnonymousField field : typeStruct.getAnonymousFields()) {
                     if (field.getFieldName().equals(element.getUnqualifiedName()))
-                        return field;
+                        return new GoResolveResult(field);
                 }
 
-                return null;
+                return GoResolveResult.NULL;
             }
         };
 
-    @Override
-    public PsiElement resolve() {
-        return ResolveCache.getInstance(getElement().getProject())
-                           .resolveWithCaching(this, RESOLVER, false, false);
-
-    }
+//    @Override
+//    public PsiElement resolve() {
+//        return ResolveCache.getInstance(getElement().getProject())
+//                           .resolveWithCaching(this, RESOLVER, false, false);
+//
+//    }
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
@@ -63,7 +65,7 @@ public abstract class AbstractStructFieldsReference
     @NotNull
     @Override
     public Object[] getVariants() {
-        GoTypeStruct typeStruct = resolveTypeDefinition();
+        GoPsiTypeStruct typeStruct = resolveTypeDefinition();
 
         List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
 

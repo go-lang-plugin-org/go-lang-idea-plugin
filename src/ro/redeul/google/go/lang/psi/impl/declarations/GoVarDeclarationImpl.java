@@ -9,7 +9,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDeclaration {
@@ -24,8 +24,8 @@ public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDecla
     }
 
     @Override
-    public GoType getIdentifiersType() {
-        return findChildByClass(GoType.class);
+    public GoPsiType getIdentifiersType() {
+        return findChildByClass(GoPsiType.class);
     }
 
     @Override

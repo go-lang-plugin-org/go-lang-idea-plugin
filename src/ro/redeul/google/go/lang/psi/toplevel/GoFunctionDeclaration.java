@@ -3,8 +3,8 @@ package ro.redeul.google.go.lang.psi.toplevel;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
  * Time: 2:32:15 PM
  */
 public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOwner,
-                                               GoTypeFunction {
+                                               GoPsiTypeFunction {
 
     String getFunctionName();
 
@@ -26,5 +26,5 @@ public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOw
 
     GoFunctionParameter[] getResults();
 
-    GoType[] getReturnType();
+    GoPsiType[] getReturnType();
 }

@@ -21,8 +21,8 @@ import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -44,8 +44,8 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     }
 
     @Override
-    public boolean isIdentical(GoType goType) {
-        if ( !(goType instanceof GoTypeFunction))
+    public boolean isIdentical(GoPsiType goType) {
+        if ( !(goType instanceof GoPsiTypeFunction))
             return false;
 
         // TODO: implement equality here
@@ -114,9 +114,9 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     }
 
     @Override
-    public GoType[] getReturnType() {
+    public GoPsiType[] getReturnType() {
 
-        List<GoType> types = new ArrayList<GoType>();
+        List<GoPsiType> types = new ArrayList<GoPsiType>();
 
         GoFunctionParameter[] results = getResults();
         for (GoFunctionParameter result : results) {
@@ -131,7 +131,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
             }
         }
 
-        return types.toArray(new GoType[types.size()]);
+        return types.toArray(new GoPsiType[types.size()]);
     }
 
     public String toString() {

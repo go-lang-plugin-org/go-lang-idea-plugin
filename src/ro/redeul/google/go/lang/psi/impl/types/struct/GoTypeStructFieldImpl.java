@@ -10,7 +10,7 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -39,8 +39,8 @@ public class GoTypeStructFieldImpl extends GoPsiElementBase implements GoTypeStr
     }
 
     @Override
-    public GoType getType() {
-        return findChildByClass(GoType.class);
+    public GoPsiType getType() {
+        return findChildByClass(GoPsiType.class);
     }
 
     @Override

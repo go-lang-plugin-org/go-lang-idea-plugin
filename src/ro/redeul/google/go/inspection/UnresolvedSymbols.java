@@ -14,7 +14,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import static ro.redeul.google.go.GoBundle.message;
 import static ro.redeul.google.go.inspection.fix.CreateFunctionFix.isExternalFunctionNameIdentifier;
@@ -43,7 +43,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
             }
 
             @Override
-            public void visitTypeName(GoTypeName typeName) {
+            public void visitTypeName(GoPsiTypeName typeName) {
                 if (!typeName.isPrimitive()) {
                     tryToResolveReference(typeName);
                 }

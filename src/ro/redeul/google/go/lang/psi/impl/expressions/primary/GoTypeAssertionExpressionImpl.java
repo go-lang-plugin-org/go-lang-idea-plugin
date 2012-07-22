@@ -5,8 +5,9 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoTypeAssertionExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypes;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 public class GoTypeAssertionExpressionImpl extends GoExpressionBase
@@ -19,7 +20,7 @@ public class GoTypeAssertionExpressionImpl extends GoExpressionBase
     protected GoType[] resolveTypes() {
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
         return new GoType[]{
-            getAssertedType(),
+            GoTypes.fromPsiType(getAssertedType()),
             GoTypes.getBuiltin(GoTypes.Builtin.Bool, namesCache)
         };
     }
@@ -30,7 +31,7 @@ public class GoTypeAssertionExpressionImpl extends GoExpressionBase
     }
 
     @Override
-    public GoType getAssertedType() {
-        return findChildByClass(GoType.class);
+    public GoPsiType getAssertedType() {
+        return findChildByClass(GoPsiType.class);
     }
 }

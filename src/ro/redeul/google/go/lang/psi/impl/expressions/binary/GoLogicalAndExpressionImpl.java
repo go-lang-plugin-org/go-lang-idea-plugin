@@ -4,7 +4,7 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalAndExpression;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 
 public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl
     implements GoLogicalAndExpression

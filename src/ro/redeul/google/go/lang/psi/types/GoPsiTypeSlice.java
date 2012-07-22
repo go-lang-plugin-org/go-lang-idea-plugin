@@ -6,8 +6,8 @@ package ro.redeul.google.go.lang.psi.types;
  * Date: Sep 2, 2010
  * Time: 12:50:07 PM
  */
-public interface GoTypeSlice extends GoType {
+public interface GoPsiTypeSlice extends GoPsiType {
 
-    GoType getElementType();
+    GoPsiType getElementType();
 
 }

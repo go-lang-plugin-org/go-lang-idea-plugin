@@ -14,24 +14,27 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.VarOrConstResolver;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
-public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier, VarOrConstReference> {
+public class VarOrConstReference
+    extends GoPsiReference<GoLiteralIdentifier, VarOrConstReference> {
 
     public static final ElementPattern<GoLiteralIdentifier> MATCHER =
         psiElement(GoLiteralIdentifier.class)
             .withParent(psiElement(GoLiteralExpression.class));
 
 
-    private static ResolveCache.AbstractResolver<VarOrConstReference, PsiElement> RESOLVER =
-        new ResolveCache.AbstractResolver<VarOrConstReference, PsiElement>() {
+    private static ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult> RESOLVER =
+        new ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult>() {
             @Override
-            public PsiElement resolve(VarOrConstReference reference, boolean incompleteCode) {
-                VarOrConstResolver processor = new VarOrConstResolver(reference);
+            public GoResolveResult resolve(VarOrConstReference reference, boolean incompleteCode) {
+                VarOrConstResolver processor = new VarOrConstResolver(
+                    reference);
 
                 PsiScopesUtil.treeWalkUp(
                     processor,
@@ -39,7 +42,11 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier, Var
                     reference.getElement().getContainingFile(),
                     GoResolveStates.initial());
 
-                return processor.getChildDeclaration();
+                PsiElement declaration = processor.getChildDeclaration();
+
+                return declaration != null
+                    ? new GoResolveResult(declaration)
+                    : GoResolveResult.NULL;
             }
         };
 
@@ -82,7 +89,7 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier, Var
                 String visiblePackageName =
                     getState().get(GoResolveStates.VisiblePackageName);
 
-                if ( visiblePackageName != null ) {
+                if (visiblePackageName != null) {
                     name = visiblePackageName + "." + name;
                 }
                 if (name == null) {
@@ -98,7 +105,8 @@ public class VarOrConstReference extends GoPsiReference<GoLiteralIdentifier, Var
 
         PsiScopesUtil.treeWalkUp(
             processor,
-            getElement().getParent().getParent(), getElement().getContainingFile(),
+            getElement().getParent().getParent(),
+            getElement().getContainingFile(),
             GoResolveStates.initial());
 
         return variants.toArray();

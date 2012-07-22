@@ -3,8 +3,8 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -16,18 +16,19 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.childAt;
  * Date: Sep 2, 2010
  * Time: 12:53:17 PM
  */
-public class GoTypeMapImpl extends GoPsiPackagedElementBase implements GoTypeMap {
+public class GoPsiTypeMapImpl extends GoPsiPackagedElementBase implements
+                                                            GoPsiTypeMap {
 
-    public GoTypeMapImpl(@NotNull ASTNode node) {
+    public GoPsiTypeMapImpl(@NotNull ASTNode node) {
         super(node);
     }
 
-    public GoType getKeyType() {
-        return childAt(0, findChildrenByClass(GoType.class));
+    public GoPsiType getKeyType() {
+        return childAt(0, findChildrenByClass(GoPsiType.class));
     }
 
-    public GoType getElementType() {
-        return childAt(1, findChildrenByClass(GoType.class));
+    public GoPsiType getElementType() {
+        return childAt(1, findChildrenByClass(GoPsiType.class));
     }
 
     @Override
@@ -42,7 +43,7 @@ public class GoTypeMapImpl extends GoPsiPackagedElementBase implements GoTypeMap
     }
 
     @Override
-    public boolean isIdentical(GoType goType) {
+    public boolean isIdentical(GoPsiType goType) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

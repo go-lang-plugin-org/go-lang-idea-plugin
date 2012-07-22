@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
 public interface GoLiteralCompositeElement extends GoPsiElement {
 
@@ -21,5 +21,5 @@ public interface GoLiteralCompositeElement extends GoPsiElement {
     GoLiteralCompositeValue getLiteralValue();
 
     @Nullable
-    GoType getElementType();
+    GoPsiType getElementType();
 }

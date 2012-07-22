@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -8,6 +10,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 
 public abstract class GoPsiReference<
     GoPsi extends PsiElement,
@@ -15,14 +18,20 @@ public abstract class GoPsiReference<
     >
     implements PsiReference {
 
+    public static AtomicInteger counts = new AtomicInteger(0);
+
     GoPsi element;
-    ResolveCache.AbstractResolver<Reference, PsiElement> resolver;
+    ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver;
 
     protected abstract Reference self();
 
-    protected GoPsiReference(@NotNull GoPsi element, @NotNull ResolveCache.AbstractResolver<Reference, PsiElement> resolver) {
+    protected GoPsiReference(@NotNull GoPsi element, @NotNull ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
         this.element = element;
         this.resolver = resolver;
+    }
+
+    protected GoPsiReference(@NotNull GoPsi element) {
+        this.element = element;
     }
 
     @Override
@@ -41,10 +50,17 @@ public abstract class GoPsiReference<
 
     @Override
     public PsiElement resolve() {
-        return
-            ResolveCache
+        if (resolver != null) {
+            GoResolveResult result = ResolveCache
                 .getInstance(getElement().getProject())
                 .resolveWithCaching(self(), resolver, false, false);
+
+            return result != null && result.isValidResult()
+                ? result.getElement()
+                : null;
+        }
+
+        return null;
     }
 
 

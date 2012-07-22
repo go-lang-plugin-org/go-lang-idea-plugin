@@ -6,10 +6,10 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 
 public abstract class GoBinaryExpressionImpl extends GoExpressionBase
     implements GoBinaryExpression {

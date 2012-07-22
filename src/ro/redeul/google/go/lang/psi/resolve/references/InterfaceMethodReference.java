@@ -6,43 +6,41 @@ import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 
 public class InterfaceMethodReference extends GoPsiReference<GoLiteralIdentifier, InterfaceMethodReference> {
 
-    GoTypeInterface type;
+    GoPsiTypeInterface type;
     GoSelectorExpression selector;
 
-    private static ResolveCache.AbstractResolver<InterfaceMethodReference, PsiElement> RESOLVER =
-        new ResolveCache.AbstractResolver<InterfaceMethodReference, PsiElement>() {
+    private static ResolveCache.AbstractResolver<InterfaceMethodReference, GoResolveResult> RESOLVER =
+        new ResolveCache.AbstractResolver<InterfaceMethodReference, GoResolveResult>() {
             @Override
-            public PsiElement resolve(InterfaceMethodReference interfaceMethodReference, boolean incompleteCode) {
+            public GoResolveResult resolve(InterfaceMethodReference interfaceMethodReference, boolean incompleteCode) {
                 GoSelectorExpression selector = interfaceMethodReference.selector;
                 GoLiteralIdentifier identifier = selector.getIdentifier();
 
                 if (identifier == null) {
-                    return null;
+                    return GoResolveResult.NULL;
                 }
 
                 String name = identifier.getName();
 
                 if (name == null) {
-                    return null;
+                    return GoResolveResult.NULL;
                 }
 
-                GoTypeInterface type = interfaceMethodReference.type;
+                GoPsiTypeInterface type = interfaceMethodReference.type;
                 for (GoMethodDeclaration declaration : type.getMethodDeclarations()) {
                     if (name.equals(declaration.getFunctionName())) {
-                        return declaration;
+                        return new GoResolveResult(declaration);
                     }
                 }
 
-                return null;
-
+                return GoResolveResult.NULL;
             }
         };
 
@@ -60,19 +58,20 @@ public class InterfaceMethodReference extends GoPsiReference<GoLiteralIdentifier
         return this;
     }
 
-    private GoTypeInterface findTypeInterfaceDeclaration() {
+    private GoPsiTypeInterface findTypeInterfaceDeclaration() {
         GoType type = selector.getBaseExpression().getType()[0];
-        while ( type != null && ! (type instanceof GoTypeInterface) ) {
-            GoTypeSpec typeSpec = GoPsiUtils.resolveSafely(type, GoTypeSpec.class);
-            if ( typeSpec != null ) {
-                type = typeSpec.getType();
-            }
+        while ( type != null && ! (type instanceof GoPsiTypeInterface) ) {
+            // TODO: fixed compilation here
+//            GoTypeSpec typeSpec = GoPsiUtils.resolveSafely(type, GoTypeSpec.class);
+//            if ( typeSpec != null ) {
+//                type = typeSpec.getType();
+//            }
         }
 
         if ( type == null )
             return null;
 
-        return (GoTypeInterface)type;
+        return (GoPsiTypeInterface)type;
     }
 
     @Override

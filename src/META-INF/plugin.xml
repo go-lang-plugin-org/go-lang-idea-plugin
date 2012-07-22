@@ -418,10 +418,10 @@
 
         <colorSettingsPage implementation="ro.redeul.google.go.editor.highlighting.GoColorsAndFontsPage"/>
 
-        <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
-                         shortName="UnresolvedSymbols" displayName="Highlights unresolved symbols"
-                         level="ERROR"
-                         implementationClass="ro.redeul.google.go.inspection.UnresolvedSymbols"/>
+        <!--<localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"-->
+                         <!--shortName="UnresolvedSymbols" displayName="Highlights unresolved symbols"-->
+                         <!--level="ERROR"-->
+                         <!--implementationClass="ro.redeul.google.go.inspection.UnresolvedSymbols"/>-->
         <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
                          shortName="ImportDeclaration" displayName="Highlights incorrect import declarations"
                          level="ERROR"
@@ -430,10 +430,10 @@
                          shortName="FmtUsage" displayName="Highlights incorrect fmt parameters"
                          level="WARNING"
                          implementationClass="ro.redeul.google.go.inspection.FmtUsageInspection"/>
-        <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
-                         shortName="FunctionCall" displayName="Highlights incorrect function calls"
-                         level="ERROR"
-                         implementationClass="ro.redeul.google.go.inspection.FunctionCallInspection"/>
+        <!--<localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"-->
+                         <!--shortName="FunctionCall" displayName="Highlights incorrect function calls"-->
+                         <!--level="ERROR"-->
+                         <!--implementationClass="ro.redeul.google.go.inspection.FunctionCallInspection"/>-->
         <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
                          shortName="TypeStructDeclaration" displayName="Highlights incorrect struct declaration"
                          level="ERROR"
@@ -461,6 +461,8 @@
         <projectService serviceInterface="ro.redeul.google.go.services.GoCodeManager"
                         serviceImplementation="ro.redeul.google.go.services.GoCodeManager"/>
 
+        <projectService serviceInterface="ro.redeul.google.go.services.GoPsiManager"
+                        serviceImplementation="ro.redeul.google.go.services.GoPsiManager"/>
 
         <!-- wizards -->
         <wizardMode implementation="ro.redeul.google.go.wizards.GoApplicationWizard"/>

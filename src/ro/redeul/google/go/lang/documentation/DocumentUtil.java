@@ -24,7 +24,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
@@ -238,7 +238,7 @@ public class DocumentUtil {
         StringBuilder sb = new StringBuilder();
         for (GoFunctionParameter fp : parameters) {
             GoLiteralIdentifier[] ids = fp.getIdentifiers();
-            GoType type = fp.getType();
+            GoPsiType type = fp.getType();
             String variadic = fp.isVariadic() ? "..." : "";
             String typeName = variadic + String.valueOf(type != null ? type.getText() : null);
             start = sb.length();
@@ -280,7 +280,7 @@ public class DocumentUtil {
         StringBuilder sb = new StringBuilder();
         for (GoFunctionParameter fp : parameters) {
             GoLiteralIdentifier[] ids = fp.getIdentifiers();
-            GoType type = fp.getType();
+            GoPsiType type = fp.getType();
             String variadic = fp.isVariadic() ? "..." : "";
             String typeName = variadic + String.valueOf(type != null ? type.getText() : null);
             if (ids.length == 0) {

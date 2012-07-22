@@ -2,7 +2,7 @@ package ro.redeul.google.go.lang.psi.toplevel;
 
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
 public interface GoFunctionParameter extends GoPsiElement {
 
@@ -13,5 +13,5 @@ public interface GoFunctionParameter extends GoPsiElement {
 
     GoLiteralIdentifier[] getIdentifiers();
 
-    GoType getType();
+    GoPsiType getType();
 }

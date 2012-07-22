@@ -7,7 +7,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import ro.redeul.google.go.GoFileBasedPsiTestCase;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 
 public class GoPsiTypingTestCase extends GoFileBasedPsiTestCase
 {
@@ -57,11 +58,12 @@ public class GoPsiTypingTestCase extends GoFileBasedPsiTestCase
             baseTypes = expressionTypes;
         }
 
-        assertNotSame(GoType.EMPTY_ARRAY, baseTypes);
+        assertNotSame(GoPsiType.EMPTY_ARRAY, baseTypes);
 
         for (GoType[] expressionsType : expressionsTypes) {
             for (int i = 0; i < baseTypes.length; i++) {
                 GoType baseType = baseTypes[i];
+
                 assertNotNull(baseTypes[i]);
                 assertNotNull(expressionsType[i]);
                 assertTrue("We should have the same type",

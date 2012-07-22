@@ -28,10 +28,10 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeInterface;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
@@ -115,13 +115,13 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
             return new MethodInfo(element);
         } else if (element instanceof GoFunctionDeclaration) {
             return new FunctionInfo(element);
-        } else if (element instanceof GoLiteralIdentifier || element instanceof GoTypeName) {
+        } else if (element instanceof GoLiteralIdentifier || element instanceof GoPsiTypeName) {
             return new LiteralIdentifierInfo(element);
         } else if (element instanceof GoTypeSpec) {
-            GoType type = ((GoTypeSpec) element).getType();
-            if (type instanceof GoTypeInterface) {
+            GoPsiType type = ((GoTypeSpec) element).getType();
+            if (type instanceof GoPsiTypeInterface) {
                 return new InterfaceInfo(element);
-            } else if (type instanceof GoTypeStruct) {
+            } else if (type instanceof GoPsiTypeStruct) {
                 return new StructInfo(element);
             }
             return new TypeInfo(element);
@@ -210,8 +210,8 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
             Collections.sort(specs, new Comparator<GoTypeSpec>() {
                 @Override
                 public int compare(GoTypeSpec lhs, GoTypeSpec rhs) {
-                    boolean lhsInterface = lhs instanceof GoTypeInterface;
-                    boolean rhsInterface = rhs instanceof GoTypeInterface;
+                    boolean lhsInterface = lhs instanceof GoPsiTypeInterface;
+                    boolean rhsInterface = rhs instanceof GoPsiTypeInterface;
                     if (lhsInterface != rhsInterface) {
                         return lhsInterface ? -1 : 1;
                     }
@@ -280,13 +280,13 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         }
 
         private String getTypeName() {
-            if (element instanceof GoTypeName) {
-                GoTypeName typeName = (GoTypeName) element;
+            if (element instanceof GoPsiTypeName) {
+                GoPsiTypeName typeName = (GoPsiTypeName) element;
                 return typeName.getQualifiedName();
             }
 
             PsiElement parent = element.getParent();
-            GoType type = null;
+            GoPsiType type = null;
             GoLiteralIdentifier[] identifiers = GoLiteralIdentifier.EMPTY_ARRAY;
             GoExpr[] expressions = GoExpr.EMPTY_ARRAY;
             if (parent instanceof GoVarDeclaration) {
@@ -376,7 +376,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
 
         @Override
         String getPresentationText() {
-            GoType type = ((GoTypeSpec) element).getType();
+            GoPsiType type = ((GoTypeSpec) element).getType();
             if (type != null) {
                 return getName() + " " + type.getText();
             }
@@ -391,11 +391,11 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
 
         @Override
         List<PsiNamedElement> getMembers(GoTypeSpec typeSpec) {
-            GoType type = typeSpec.getType();
-            if (!(type instanceof GoTypeStruct)) {
+            GoPsiType type = typeSpec.getType();
+            if (!(type instanceof GoPsiTypeStruct)) {
                 return Collections.emptyList();
             }
-            GoTypeStruct struct = (GoTypeStruct) type;
+            GoPsiTypeStruct struct = (GoPsiTypeStruct) type;
 
             List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
             getNamedFields(struct, children);
@@ -460,20 +460,20 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
                     continue;
                 }
 
-                GoType typeName = mr.getType();
+                GoPsiType typeName = mr.getType();
                 if (typeName != null && name.equals(typeName.getName())) {
                     children.add(md);
                 }
             }
         }
 
-        private void getAnonymousFields(GoTypeStruct struct, List<PsiNamedElement> children) {
+        private void getAnonymousFields(GoPsiTypeStruct struct, List<PsiNamedElement> children) {
             for (GoTypeStructAnonymousField field : struct.getAnonymousFields()) {
                 children.add(field.getType());
             }
         }
 
-        private void getNamedFields(GoTypeStruct struct, List<PsiNamedElement> children) {
+        private void getNamedFields(GoPsiTypeStruct struct, List<PsiNamedElement> children) {
             for (GoTypeStructField field : struct.getFields()) {
                 for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                     if (!identifier.isBlank()) {
@@ -502,11 +502,11 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         @Override
         List<PsiNamedElement> getMembers(GoTypeSpec typeSpec) {
             List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
-            GoType type = typeSpec.getType();
-            if (!(type instanceof GoTypeInterface)) {
+            GoPsiType type = typeSpec.getType();
+            if (!(type instanceof GoPsiTypeInterface)) {
                 return Collections.emptyList();
             }
-            GoTypeInterface ti = (GoTypeInterface) type;
+            GoPsiTypeInterface ti = (GoPsiTypeInterface) type;
             Collections.addAll(children, ti.getMethodDeclarations());
             Collections.sort(children, NAMED_ELEMENT_COMPARATOR);
             return children;

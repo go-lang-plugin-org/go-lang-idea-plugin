@@ -8,13 +8,14 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeFunction;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public abstract class AbstractCallOrConversionReference<Reference extends AbstractCallOrConversionReference<Reference>>
@@ -28,7 +29,8 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
                     .atStartOf(psiElement(GoCallOrConvExpression.class)));
 
 
-    protected AbstractCallOrConversionReference(GoLiteralIdentifier identifier, ResolveCache.AbstractResolver<Reference, PsiElement> resolver) {
+    protected AbstractCallOrConversionReference(GoLiteralIdentifier identifier,
+                                                ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
         super(identifier, resolver);
     }
 
@@ -64,7 +66,7 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
             psiElement(GoLiteralIdentifier.class)
                 .withParent(
                     psiElement(GoFunctionParameter.class)
-                        .withChild(psiElement(GoTypeFunction.class))
+                        .withChild(psiElement(GoPsiTypeFunction.class))
                 ).accepts(element) ) {
             return matchesVisiblePackageName(element, identifier.getName());
         }

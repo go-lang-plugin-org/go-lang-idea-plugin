@@ -2,8 +2,8 @@ package ro.redeul.google.go.lang.psi.utils;
 
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 
 public class GoTypeUtils {
     // When trying to resolve the final type, what if user defined a recursive type?
@@ -16,27 +16,27 @@ public class GoTypeUtils {
      *  <li>type is null</li>
      *  <li>type is primitive</li>
      *  <li>type is pointer</li>
-     *  <li>type is not a GoTypeName</li>
+     *  <li>type is not a GoPsiTypeName</li>
      *  <li>resolving level is too deep</li>
      * </ul>
      * @param type type to resolve
      * @return null if resolving level is too deep, otherwise return the last resolved type.
      */
     @Nullable
-    public static GoType resolveToFinalType(@Nullable GoType type) {
+    public static GoPsiType resolveToFinalType(@Nullable GoPsiType type) {
         return resolveToFinalType(type, 0);
     }
 
-    private static GoType resolveToFinalType(GoType type, int level) {
+    private static GoPsiType resolveToFinalType(GoPsiType type, int level) {
         if (level > MAX_TYPE_RESOLVING_LEVEL) {
             return null;
         }
 
-        if (!(type instanceof GoTypeName)) {
+        if (!(type instanceof GoPsiTypeName)) {
             return type;
         }
 
-        GoTypeName typeName = (GoTypeName) type;
+        GoPsiTypeName typeName = (GoPsiTypeName) type;
         if (typeName.isReference() || typeName.isPrimitive()) {
             return type;
         }

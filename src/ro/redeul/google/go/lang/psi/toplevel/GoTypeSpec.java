@@ -3,7 +3,7 @@ package ro.redeul.google.go.lang.psi.toplevel;
 import com.intellij.psi.PsiNamedElement;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -15,5 +15,5 @@ public interface GoTypeSpec extends GoPsiElement, PsiNamedElement {
 
     @Nullable GoTypeNameDeclaration getTypeNameDeclaration();
 
-    GoType getType();
+    GoPsiType getType();
 }

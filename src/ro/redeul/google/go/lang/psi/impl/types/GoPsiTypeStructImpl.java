@@ -3,8 +3,8 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
@@ -17,9 +17,10 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: 5/27/11
  * Time: 12:17 AM
  */
-public class GoTypeStructImpl extends GoPsiPackagedElementBase implements GoTypeStruct {
+public class GoPsiTypeStructImpl extends GoPsiPackagedElementBase implements
+                                                                  GoPsiTypeStruct {
 
-    public GoTypeStructImpl(@NotNull ASTNode node) {
+    public GoPsiTypeStructImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -93,7 +94,7 @@ public class GoTypeStructImpl extends GoPsiPackagedElementBase implements GoType
     }
 
     @Override
-    public boolean isIdentical(GoType goType) {
+    public boolean isIdentical(GoPsiType goType) {
         // TODO: implement this
         return false;
     }

@@ -1,7 +1,7 @@
 package ro.redeul.google.go.lang.psi.types.struct;
 
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.psi.types.GoType;
  */
 public interface GoTypeStructAnonymousField extends GoPsiElement {
 
-    GoType getType();
+    GoPsiType getType();
 
     String getFieldName();
 }

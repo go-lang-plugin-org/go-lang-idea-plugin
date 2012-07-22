@@ -3,7 +3,7 @@ package ro.redeul.google.go.psi;
 import ro.redeul.google.go.GoPsiTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import static ro.redeul.google.go.util.GoPsiTestUtils.castAs;
 import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
 import static ro.redeul.google.go.util.GoPsiTestUtils.get;
@@ -27,7 +27,7 @@ public class GoPsiBuiltinCallExpressionTest extends GoPsiTestCase {
                  ).getExpressions()
             );
 
-        assertEquals("int", getAs(GoTypeName.class, builtin.getTypeArgument()).getText());
+        assertEquals("int", getAs(GoPsiTypeName.class, builtin.getTypeArgument()).getText());
         assertEquals("new", get(builtin.getBaseExpression()).getText());
     }
 
@@ -46,7 +46,7 @@ public class GoPsiBuiltinCallExpressionTest extends GoPsiTestCase {
                  ).getExpressions()
             );
 
-        assertEquals("int", getAs(GoTypeName.class, builtin.getTypeArgument()).getText());
+        assertEquals("int", getAs(GoPsiTypeName.class, builtin.getTypeArgument()).getText());
         assertEquals(builtin.getArguments().length, 1);
     }
 }

@@ -32,7 +32,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
@@ -119,7 +119,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
                         psiElement(GoFunctionParameter.class),
                         psiElement(GoMethodReceiver.class),
                         psiElement(GoTypeStructField.class),
-                        psiElement(GoTypeName.class),
+                        psiElement(GoPsiTypeName.class),
                         psiElement(GoLiteralExpression.class)
                             .withParent(
                                 or(

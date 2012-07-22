@@ -3,14 +3,14 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public class GoTypeFunctionImpl extends GoPsiPackagedElementBase
-    implements GoTypeFunction {
-    public GoTypeFunctionImpl(@NotNull ASTNode node) {
+public class GoPsiTypeFunctionImpl extends GoPsiPackagedElementBase
+    implements GoPsiTypeFunction {
+    public GoPsiTypeFunctionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -20,7 +20,7 @@ public class GoTypeFunctionImpl extends GoPsiPackagedElementBase
     }
 
     @Override
-    public boolean isIdentical(GoType goType) {
+    public boolean isIdentical(GoPsiType goType) {
         return false;
     }
 

@@ -2,9 +2,9 @@ package ro.redeul.google.go.psi;
 
 import ro.redeul.google.go.GoPsiTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
-import ro.redeul.google.go.lang.psi.types.GoTypePointer;
-import ro.redeul.google.go.lang.psi.types.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
 import static ro.redeul.google.go.util.GoPsiTestUtils.get;
@@ -21,8 +21,8 @@ public class GoPsiTypesTest extends GoPsiTestCase {
                       "    io.Reader\n" +
                       "}"));
 
-        GoTypeStruct structType =
-            getAs(GoTypeStruct.class,
+        GoPsiTypeStruct structType =
+            getAs(GoPsiTypeStruct.class,
                   childAt(0,
                           childAt(0,
                                   file.getTypeDeclarations()
@@ -40,7 +40,7 @@ public class GoPsiTypesTest extends GoPsiTestCase {
 
         assertEquals("Reader", anonymousField.getFieldName());
 
-        getAs(GoTypeName.class, anonymousField.getType());
+        getAs(GoPsiTypeName.class, anonymousField.getType());
     }
 
     public void testAnonymousPointer() throws Exception {
@@ -51,8 +51,8 @@ public class GoPsiTypesTest extends GoPsiTestCase {
                       "    *io.Reader\n" +
                       "}"));
 
-        GoTypeStruct structType =
-            getAs(GoTypeStruct.class,
+        GoPsiTypeStruct structType =
+            getAs(GoPsiTypeStruct.class,
                   childAt(0,
                           childAt(0,
                                   file.getTypeDeclarations()
@@ -66,8 +66,8 @@ public class GoPsiTypesTest extends GoPsiTestCase {
         GoTypeStructAnonymousField field =
             childAt(0, structType.getAnonymousFields());
 
-        GoTypePointer typePointer =
-            getAs(GoTypePointer.class, field.getType());
+        GoPsiTypePointer typePointer =
+            getAs(GoPsiTypePointer.class, field.getType());
 
         assertEquals("Reader", field.getFieldName());
     }

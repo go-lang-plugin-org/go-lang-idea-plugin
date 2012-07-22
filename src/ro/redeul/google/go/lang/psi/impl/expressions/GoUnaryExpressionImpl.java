@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
-import ro.redeul.google.go.lang.psi.types.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 
 public class GoUnaryExpressionImpl extends GoExpressionBase
@@ -18,7 +18,7 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-        return GoType.EMPTY_ARRAY;  //To change body of implemented methods use File | Settings | File Templates.
+        return getExpression().getType();
     }
 
     @Override

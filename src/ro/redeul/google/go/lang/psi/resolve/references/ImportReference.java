@@ -20,7 +20,7 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 public class ImportReference extends GoPsiReference<GoImportDeclaration, ImportReference> implements PsiPolyVariantReference {
 
     public ImportReference(GoImportDeclaration element) {
-        super(element, null);
+        super(element);
     }
 
     @Override

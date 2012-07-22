@@ -8,8 +8,8 @@ import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoType;
-import ro.redeul.google.go.lang.psi.types.GoTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 
 public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<AbstractCallOrConversionReference>
 {
@@ -28,7 +28,7 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<AbstractCal
 
         if ("builtin".equals(getState().get(GoResolveStates.PackageName))) {
             String typeName = type.getName();
-            GoType typeDeclaration = type.getType();
+            GoPsiType typeDeclaration = type.getType();
             if ( typeName != null && typeDeclaration != null ) {
                 if ( ! typeName.equals(typeDeclaration.getText()))
                     return;
@@ -68,12 +68,12 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<AbstractCal
     private boolean checkVarDeclaration(GoLiteralIdentifier identifier,
                                         GoShortVarDeclaration declaration) {
         declaration.getIdentifiersType();
-        return false;  //To change body of created methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override
     public void visitFunctionParameter(GoFunctionParameter parameter) {
-            if ( parameter.getType() instanceof GoTypeFunction) {
+            if ( parameter.getType() instanceof GoPsiTypeFunction) {
             for (GoLiteralIdentifier identifier : parameter.getIdentifiers()) {
                 if (checkReference(identifier)) {
                     if ( !addDeclaration(identifier) ) {

@@ -7,7 +7,7 @@ package ro.redeul.google.go.lang.psi.types;
  * Time: 1:20:40 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface GoTypeChannel extends GoType {
+public interface GoPsiTypeChannel extends GoPsiType {
     enum ChannelType {
         Bidirectional,
         Sending,
@@ -26,5 +26,5 @@ public interface GoTypeChannel extends GoType {
 
     ChannelType getChannelType();
 
-    GoType getElementType();
+    GoPsiType getElementType();
 }

@@ -9,7 +9,7 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
  * Date: 5/27/11
  * Time: 12:18 AM
  */
-public interface GoTypeStruct extends GoType {
+public interface GoPsiTypeStruct extends GoPsiType {
 
     GoTypeStructField[] getFields();
 

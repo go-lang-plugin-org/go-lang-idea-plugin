@@ -9,12 +9,12 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.types.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 public class BuiltinTypeNameReference extends TypeNameReference {
 
-    public BuiltinTypeNameReference(GoTypeName element) {
+    public BuiltinTypeNameReference(GoPsiTypeName element) {
         super(element);
     }
 
@@ -46,7 +46,7 @@ public class BuiltinTypeNameReference extends TypeNameReference {
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        GoTypeName typeElement = getElement();
+        GoPsiTypeName typeElement = getElement();
 
         if (typeElement == null)
             return false;
