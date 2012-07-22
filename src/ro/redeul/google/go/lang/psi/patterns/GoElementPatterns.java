@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
@@ -50,6 +51,7 @@ public class GoElementPatterns {
             psiElement(GoShortVarDeclaration.class),
             psiElement(GoVarDeclarations.class),
             psiElement(GoTypeDeclaration.class),
-            psiElement(GoConstDeclarations.class)
+            psiElement(GoConstDeclarations.class),
+            psiElement(GoLabeledStatement.class)
         );
 }

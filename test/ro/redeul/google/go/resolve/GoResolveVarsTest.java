@@ -112,4 +112,8 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testMultipleGlobalConsts() throws Exception {
         doTest();
     }
+
+    public void testDeclarationInsideLabeledStatement() throws Exception {
+        doTest();
+    }
 }

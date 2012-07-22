@@ -15,10 +15,6 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.impl.statements.GoBreakStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoContinueStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.statements.GoGotoStatementImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoTypeInterfaceImpl;
 import ro.redeul.google.go.lang.psi.statements.GoBreakStatement;
 import ro.redeul.google.go.lang.psi.statements.GoContinueStatement;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
@@ -45,6 +41,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
@@ -216,7 +213,7 @@ public class GoElementVisitor  {
         visitElement(type);
     }
 
-    public void visitInterfaceType(GoPsiTypeInterfaceImpl type) {
+    public void visitInterfaceType(GoPsiTypeInterface type) {
         visitElement(type);
     }
 

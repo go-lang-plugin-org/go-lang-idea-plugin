@@ -8,12 +8,12 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeInterfaceImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
@@ -63,7 +63,7 @@ public class LookupElementUtil extends GoElementVisitor {
     }
 
     @Override
-    public void visitInterfaceType(GoPsiTypeInterfaceImpl type) {
+    public void visitInterfaceType(GoPsiTypeInterface type) {
         lookupElement = lookupElement.setIcon(PlatformIcons.INTERFACE_ICON);
     }
 

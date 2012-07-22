@@ -2,10 +2,8 @@ package ro.redeul.google.go.lang.psi.impl.statements;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.SearchScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -37,8 +35,17 @@ public class GoLabeledStatementImpl extends GoPsiElementBase implements GoLabele
     }
 
     @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
-                                       PsiElement lastParent, @NotNull PsiElement place) {
-        return processor.execute(this, state);
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent,
+                                       @NotNull PsiElement place) {
+        GoStatement statement = getStatement();
+
+        if ( statement != null ) {
+            return statement.processDeclarations(processor, state,
+                                                 lastParent, place);
+        }
+
+        return true;
     }
 }
