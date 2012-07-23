@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 
 class GoExpressionListBlock extends GoBlock {
-    public GoExpressionListBlock(ASTNode node, Alignment alignment, CommonCodeStyleSettings settings) {
-        super(node, alignment, NORMAL_INDENT_TO_CHILDREN, null, settings);
+    public GoExpressionListBlock(ASTNode node, Alignment alignment, Indent indent, CommonCodeStyleSettings settings) {
+        super(node, alignment, indent, null, settings);
     }
 
     @Override
