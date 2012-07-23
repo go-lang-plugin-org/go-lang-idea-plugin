@@ -11,6 +11,8 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoAssignmentStatement;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
 import static ro.redeul.google.go.lang.lexer.GoTokenTypes.*;
 
 public class GoAssignmentStatementImpl extends GoPsiElementBase
@@ -69,5 +71,10 @@ public class GoAssignmentStatementImpl extends GoPsiElementBase
             return Op.Null;
 
         return operatorsMap.get(element.getNode().getElementType());
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitAssignment(this);
     }
 }
