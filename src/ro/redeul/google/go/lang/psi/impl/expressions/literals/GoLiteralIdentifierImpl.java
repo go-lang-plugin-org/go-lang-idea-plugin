@@ -210,11 +210,26 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             return references;
         }
 
-        if (CompositeElementToStructFieldReference.MATCHER.accepts(this)) {
-            references = new PsiReference[]{
+        if (CompositeElementToStructFieldReference.MATCHER_KEY.accepts(this)) {
+            references = new PsiReference[] {
                 new CompositeElementToStructFieldReference(
                     (GoLiteralCompositeElement)
                         getParent().getParent().getParent())
+            };
+
+            return references;
+        }
+
+        if (CompositeElementToStructFieldReference.MATCHER_ELEMENT.accepts(this)) {
+
+            references = new PsiReference[] {
+                new CompositeElementToStructFieldReference(
+                    (GoLiteralCompositeElement) getParent().getParent(),
+                    this),
+
+                new BuiltinCallOrConversionReference(this),
+                new CallOrConversionReference(this),
+                new VarOrConstReference(this)
             };
 
             return references;

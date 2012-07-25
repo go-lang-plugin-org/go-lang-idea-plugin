@@ -66,7 +66,7 @@ public class GoPsiTypingTestCase extends GoFileBasedPsiTestCase
 
                 assertNotNull(baseTypes[i]);
                 assertNotNull(expressionsType[i]);
-                assertTrue("We should have the same type",
+                assertTrue("We should have the same underlying type",
                             baseTypes[i].getUnderlyingType().isIdentical(expressionsType[i].getUnderlyingType()));
             }
         }

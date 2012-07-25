@@ -7,18 +7,27 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
  * // TODO: mtoader ! Please explain yourself.
  */
 public abstract class GoTypePsiBacked<
-    Type extends GoPsiType,
+    PsiType extends GoPsiType,
     UnderlyingType extends GoUnderlyingType
     > implements GoType {
 
     UnderlyingType underlyingType;
+    PsiType psiType;
 
-    protected GoTypePsiBacked(Type type) {
+    protected GoTypePsiBacked(PsiType psiType) {
+        this.psiType = psiType;
+    }
+
+    public PsiType getPsiType() {
+        return psiType;
     }
 
     @Override
     public GoUnderlyingType getUnderlyingType() {
-        return underlyingType;
+        return
+            underlyingType != null
+                ? underlyingType
+                : GoUnderlyingType.Undefined;
     }
 
     public void setUnderlyingType(UnderlyingType underlyingType) {

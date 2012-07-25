@@ -24,7 +24,7 @@ Go file
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       ExpressionStmtImpl
-        SelectorExpression
+        SelectorExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('x')

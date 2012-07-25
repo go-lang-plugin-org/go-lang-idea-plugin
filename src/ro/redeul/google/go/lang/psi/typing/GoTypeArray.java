@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeArray;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
@@ -9,17 +8,29 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
  * // TODO: mtoader Implement this
  */
 public class GoTypeArray extends GoTypePsiBacked<GoPsiTypeArray, GoUnderlyingTypeArray> implements GoType {
+
+    GoType elementType;
+
     public GoTypeArray(GoPsiTypeArray type) {
         super(type);
-        setUnderlyingType(GoUnderlyingTypes.getArray(GoUnderlyingType.Undefined, 1));
+
+        elementType = GoTypes.fromPsiType(type.getElementType());
+
+        setUnderlyingType(GoUnderlyingTypes.getArray(elementType.getUnderlyingType(), 1));
     }
 
     @Override
     public boolean isIdentical(GoType type) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        if ( !(type instanceof GoTypeArray) ) {
+            return false;
+        }
+
+        GoTypeArray otherArray = (GoTypeArray)type;
+
+        return elementType.isIdentical(otherArray.getElementType());
     }
 
     public GoType getElementType() {
-        return GoType.Unknown;
+        return elementType;
     }
 }

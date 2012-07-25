@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeSlice;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
@@ -10,19 +9,26 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
  */
 public class GoTypeSlice extends GoTypePsiBacked<GoPsiTypeSlice, GoUnderlyingTypeSlice> implements GoType {
 
+    GoType elementType;
+
     public GoTypeSlice(GoPsiTypeSlice type) {
         super(type);
-        setUnderlyingType(
-            GoUnderlyingTypes.getSlice(GoUnderlyingType.Undefined)
-        );
+
+        elementType = GoTypes.fromPsiType(type.getElementType());
+
+        setUnderlyingType(GoUnderlyingTypes.getSlice(elementType.getUnderlyingType()));
     }
 
     @Override
     public boolean isIdentical(GoType type) {
-        return false;
+        if ( !(type instanceof GoTypeSlice) )
+            return false;
+
+        GoTypeSlice otherSlice = (GoTypeSlice)type;
+        return elementType.isIdentical(otherSlice.getElementType());
     }
 
     public GoType getElementType() {
-        return GoType.Unknown;
+        return elementType;
     }
 }

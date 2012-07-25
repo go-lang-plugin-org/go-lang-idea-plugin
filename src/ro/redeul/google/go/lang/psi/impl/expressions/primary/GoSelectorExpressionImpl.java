@@ -4,6 +4,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -24,6 +25,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeStruct;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.services.GoPsiManager;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 /**
@@ -32,31 +34,45 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
  * Date: 5/19/11
  * Time: 10:58 PM
  */
-public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSelectorExpression {
+public class GoSelectorExpressionImpl extends GoExpressionBase
+    implements GoSelectorExpression {
 
     public GoSelectorExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
-    public String toString() {
-        return "SelectorExpression";
-    }
-
     public void accept(GoElementVisitor visitor) {
-        // TODO: implement this properly
-        visitor.visitElement(this);
+        visitor.visitSelectorExpression(this);
     }
 
     @Override
     protected GoType[] resolveTypes() {
-        PsiElement target = resolveSafely(this, PsiElement.class);
+        return
+            GoPsiManager.getInstance(getProject()).getType(
+                this,
+                new Function<GoSelectorExpression, GoType[]>() {
+                    @Override
+                    public GoType[] fun(GoSelectorExpression expression) {
+                        PsiElement target =
+                            resolveSafely(GoSelectorExpressionImpl.this,
+                                          PsiElement.class);
 
-        if ( target != null && target.getParent() instanceof GoTypeStructField ) {
-            GoTypeStructField structField = (GoTypeStructField)target.getParent();
-            return new GoType[] { GoTypes.fromPsiType(structField.getType()) };
-        }
+                        if (target != null &&
+                            target.getParent() instanceof GoTypeStructField) {
 
-        return GoType.EMPTY_ARRAY;
+                            GoTypeStructField structField =
+                                (GoTypeStructField) target.getParent();
+
+                            return new GoType[]{
+                                GoTypes
+                                    .fromPsiType(
+                                        structField
+                                            .getType())};
+                        }
+
+                        return GoType.EMPTY_ARRAY;
+                    }
+                });
     }
 
     @Override
@@ -74,12 +90,14 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
         Object[] presentations = new Object[members.length];
 
-        for (int i = 0, membersLength = members.length; i < membersLength; i++) {
+        for (int i = 0, membersLength = members.length; i < membersLength;
+             i++) {
 
             GoPsiElement member = members[i];
 
             if (member instanceof GoLiteralIdentifier) {
-                presentations[i] = getFieldPresentation(type, (GoLiteralIdentifier) member);
+                presentations[i] = getFieldPresentation(type,
+                                                        (GoLiteralIdentifier) member);
             } else {
                 presentations[i] = member;
             }
@@ -105,9 +123,10 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
         }
 
         return builder
-                .setBold()
-                .setTailText(String.format(" (defined by: %s)", ownerType.getQualifiedName()))
-                .setTypeText("<field>", ownerType != type);
+            .setBold()
+            .setTailText(String.format(" (defined by: %s)",
+                                       ownerType.getQualifiedName()))
+            .setTypeText("<field>", ownerType != type);
     }
 
     @NotNull
@@ -119,7 +138,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
             return PsiReference.EMPTY_ARRAY;
         }
 
-        GoType[]baseTypes = baseExpression.getType();
+        GoType[] baseTypes = baseExpression.getType();
         if (baseTypes.length == 0) {
             return PsiReference.EMPTY_ARRAY;
         }
@@ -128,20 +147,20 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
         GoUnderlyingType x = type.getUnderlyingType();
 
-        if ( x instanceof GoUnderlyingTypeInterface)
-            return new PsiReference[] { new InterfaceMethodReference(this) };
+        if (x instanceof GoUnderlyingTypeInterface)
+            return new PsiReference[]{new InterfaceMethodReference(this)};
 
-        if ( x instanceof GoUnderlyingTypePointer)
-            x = ((GoUnderlyingTypePointer)x).getBaseType();
+        if (x instanceof GoUnderlyingTypePointer)
+            x = ((GoUnderlyingTypePointer) x).getBaseType();
 
-        if ( x instanceof GoUnderlyingTypeStruct)
-            return new PsiReference[] {
+        if (x instanceof GoUnderlyingTypeStruct)
+            return new PsiReference[]{
                 new SelectorOfStructFieldReference(this),
                 new MethodReference(this)
             };
 
-        if ( type instanceof GoPsiTypeName) {
-            return new PsiReference[] {
+        if (type instanceof GoPsiTypeName) {
+            return new PsiReference[]{
                 new MethodReference(this)
             };
         }

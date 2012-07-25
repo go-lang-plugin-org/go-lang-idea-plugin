@@ -50,7 +50,7 @@ Go file
               PsiElement(:)(':')
               PsiWhiteSpace(' ')
               CallOrConversionExpressionImpl
-                SelectorExpression
+                SelectorExpressionImpl
                   LiteralExpressionImpl
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('datastore')
@@ -59,7 +59,7 @@ Go file
                     PsiElement(IDENTIFIER)('SecondsToTime')
                 PsiElement(()('(')
                 CallOrConversionExpressionImpl
-                  SelectorExpression
+                  SelectorExpressionImpl
                     LiteralExpressionImpl
                       LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('time')

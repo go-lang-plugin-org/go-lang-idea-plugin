@@ -639,7 +639,7 @@ Go file
       PsiWhiteSpace('\t')
       ExpressionStmtImpl
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('fmt')
@@ -1108,7 +1108,7 @@ Go file
           PsiWhiteSpace('\t\t')
           ExpressionStmtImpl
             CallOrConversionExpressionImpl
-              SelectorExpression
+              SelectorExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('fmt')
@@ -1137,7 +1137,7 @@ Go file
       PsiWhiteSpace('\t')
       ExpressionStmtImpl
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('fmt')
@@ -1225,7 +1225,7 @@ Go file
               PsiWhiteSpace('\t\t\t')
               ExpressionStmtImpl
                 CallOrConversionExpressionImpl
-                  SelectorExpression
+                  SelectorExpressionImpl
                     LiteralExpressionImpl
                       LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('fmt')
@@ -1264,7 +1264,7 @@ Go file
       PsiWhiteSpace('\t')
       ExpressionStmtImpl
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('fmt')
@@ -1783,7 +1783,7 @@ Go file
           PsiWhiteSpace('\t\t')
           ExpressionStmtImpl
             CallOrConversionExpressionImpl
-              SelectorExpression
+              SelectorExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('f')
@@ -1951,7 +1951,7 @@ Go file
         PsiElement(:=)(':=')
         PsiWhiteSpace(' ')
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('f')
@@ -2271,7 +2271,7 @@ Go file
         PsiElement(:=)(':=')
         PsiWhiteSpace(' ')
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('os')
@@ -2336,7 +2336,7 @@ Go file
         PsiElement(KEYWORD_RETURN)('return')
         PsiWhiteSpace(' ')
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('bufio')
@@ -2393,7 +2393,7 @@ Go file
         PsiElement(:=)(':=')
         PsiWhiteSpace(' ')
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('os')
@@ -2458,7 +2458,7 @@ Go file
         PsiElement(KEYWORD_RETURN)('return')
         PsiWhiteSpace(' ')
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('bufio')
@@ -2519,7 +2519,7 @@ Go file
       PsiWhiteSpace('\t')
       ExpressionStmtImpl
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('fmt')
@@ -2547,7 +2547,7 @@ Go file
       PsiWhiteSpace('\t')
       ExpressionStmtImpl
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('fmt')
@@ -2660,7 +2660,7 @@ Go file
           PsiWhiteSpace('\t\t')
           ExpressionStmtImpl
             CallOrConversionExpressionImpl
-              SelectorExpression
+              SelectorExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('ftable')
@@ -2708,7 +2708,7 @@ Go file
           PsiWhiteSpace('\t\t')
           ExpressionStmtImpl
             CallOrConversionExpressionImpl
-              SelectorExpression
+              SelectorExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('foutput')
@@ -2756,7 +2756,7 @@ Go file
           PsiWhiteSpace('\t\t')
           ExpressionStmtImpl
             CallOrConversionExpressionImpl
-              SelectorExpression
+              SelectorExpressionImpl
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('stderr')
@@ -2786,7 +2786,7 @@ Go file
       PsiWhiteSpace('\t')
       ExpressionStmtImpl
         CallOrConversionExpressionImpl
-          SelectorExpression
+          SelectorExpressionImpl
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('os')

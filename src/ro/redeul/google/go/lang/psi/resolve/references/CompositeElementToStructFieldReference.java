@@ -10,26 +10,43 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
-public class CompositeElementToStructFieldReference extends AbstractStructFieldsReference {
+public class CompositeElementToStructFieldReference
+    extends AbstractStructFieldsReference {
 
-    public static final ElementPattern<GoLiteralIdentifier> MATCHER =
+    public static final ElementPattern<GoLiteralIdentifier> MATCHER_KEY =
         psiElement(GoLiteralIdentifier.class)
             .withParent(
                 psiElement(GoLiteralExpression.class)
                     .withParent(
                         psiElement(GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY)
                             .withParent(
-                                psiElement(GoLiteralCompositeElement.class))));
+                                psiElement(
+                                    GoLiteralCompositeElement.class))));
+
+    public static final ElementPattern<GoLiteralIdentifier> MATCHER_ELEMENT =
+        psiElement(GoLiteralIdentifier.class)
+            .withParent(
+                psiElement(GoLiteralExpression.class)
+                    .withParent(
+                        psiElement(
+                            GoLiteralCompositeElement.class)));
+
 
     GoLiteralCompositeElement element;
 
     public CompositeElementToStructFieldReference(GoLiteralCompositeElement element) {
-        super(element.getKey());
+        this(element, element.getKey());
+    }
 
+    public CompositeElementToStructFieldReference(GoLiteralCompositeElement element, GoLiteralIdentifier identifier) {
+        super(identifier);
         this.element = element;
     }
 
@@ -45,14 +62,13 @@ public class CompositeElementToStructFieldReference extends AbstractStructFields
     }
 
     @Override
-    protected GoPsiTypeStruct resolveTypeDefinition() {
+    protected GoTypeStruct resolveTypeDefinition() {
         GoPsiType type = this.element.getElementType();
 
         if (type == null)
             return null;
 
-        final GoPsiTypeStruct[] struct = new GoPsiTypeStruct[1];
-        type.accept(new GoElementVisitor() {
+        return type.accept(new GoElementVisitorWithData<GoTypeStruct>() {
             @Override
             public void visitTypeName(GoPsiTypeName typeName) {
                 GoTypeSpec typeSpec =
@@ -65,12 +81,12 @@ public class CompositeElementToStructFieldReference extends AbstractStructFields
                 }
             }
 
-            @Override
             public void visitStructType(GoPsiTypeStruct type) {
-                struct[0] = type;
+                GoType goType = GoTypes.fromPsiType(type);
+                if (goType instanceof GoTypeStruct) {
+                    data = (GoTypeStruct) goType;
+                }
             }
         });
-
-        return struct[0];
     }
 }

@@ -22,7 +22,7 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('a')
         PsiElement([)('[')
-        SelectorExpression
+        SelectorExpressionImpl
           LiteralExpressionImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('b')

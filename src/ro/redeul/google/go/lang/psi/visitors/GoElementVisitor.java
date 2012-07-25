@@ -15,7 +15,20 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.statements.*;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.statements.GoAssignmentStatement;
+import ro.redeul.google.go.lang.psi.statements.GoBreakStatement;
+import ro.redeul.google.go.lang.psi.statements.GoContinueStatement;
+import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
+import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
+import ro.redeul.google.go.lang.psi.statements.GoForWithConditionStatement;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
+import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
+import ro.redeul.google.go.lang.psi.statements.GoGotoStatement;
+import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
+import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
+import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
@@ -238,6 +251,10 @@ public class GoElementVisitor  {
         visitElement(statement);
     }
 
+    public void visitSelectorExpression(GoSelectorExpression expression) {
+        visitElement(expression);
+    }
+
     public void visitGotoStatement(GoGotoStatement statement) {
         visitElement(statement);
     }
@@ -245,4 +262,5 @@ public class GoElementVisitor  {
     public void visitAssignment(GoAssignmentStatement statement) {
         visitElement(statement);
     }
+
 }

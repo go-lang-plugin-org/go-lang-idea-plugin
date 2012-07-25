@@ -3,8 +3,8 @@ package ro.redeul.google.go.lang.psi.resolve.references;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
 
@@ -30,7 +30,7 @@ public class SelectorOfStructFieldReference extends AbstractStructFieldsReferenc
     }
 
     @Override
-    protected GoPsiTypeStruct resolveTypeDefinition() {
+    protected GoTypeStruct resolveTypeDefinition() {
         GoPrimaryExpression baseExpression = selectorExpression.getBaseExpression();
         if (baseExpression == null)
             return null;
@@ -42,21 +42,18 @@ public class SelectorOfStructFieldReference extends AbstractStructFieldsReferenc
         GoType type = types[0];
 
         while (type != null && !(type instanceof GoTypeStruct)) {
-            if (type instanceof GoTypePointer)
+            if (type instanceof GoTypePointer) {
                 type = ((GoTypePointer)type).getTargetType();
-
-//            GoTypeSpec typeSpec =
-//                GoPsiUtils.resolveSafely(type.getPsiType(), GoTypeSpec.class);
-
-//            if (typeSpec != null) {
-    // TODO: fix compilation here
-//                type = typeSpec.getType();
-//            }
+            } else if ( type instanceof GoTypeName ) {
+                type = ((GoTypeName) type).getDefinition();
+            } else {
+                type = null;
+            }
         }
 
         if (type == null)
             return null;
 
-        return (GoPsiTypeStruct) type;
+        return (GoTypeStruct) type;
     }
 }

@@ -17,7 +17,7 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      SelectorExpression
+      SelectorExpressionImpl
         LiteralExpressionImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('a')
