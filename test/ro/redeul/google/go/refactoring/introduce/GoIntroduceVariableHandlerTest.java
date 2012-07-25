@@ -1,15 +1,8 @@
-package ro.redeul.google.go.refactoring;
+package ro.redeul.google.go.refactoring.introduce;
 
-import ro.redeul.google.go.refactoring.introduce.GoIntroduceVariableHandler;
+import ro.redeul.google.go.refactoring.GoRefactoringTestCase;
 
-public class IntroduceVariableTest
-    extends GoRefactoringTestCase<GoIntroduceVariableHandler> {
-
-    @Override
-    protected GoIntroduceVariableHandler createHandler() {
-        return new GoIntroduceVariableHandler();
-    }
-
+public class GoIntroduceVariableHandlerTest extends GoRefactoringTestCase {
     public void testSimple() throws Exception { doTest(); }
     public void testMultiOccurrences() throws Exception { doTest(); }
     public void testIgnoreGlobalAndParameter() throws Exception { doTest(); }

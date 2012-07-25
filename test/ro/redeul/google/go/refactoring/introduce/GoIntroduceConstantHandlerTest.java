@@ -1,15 +1,8 @@
-package ro.redeul.google.go.refactoring;
+package ro.redeul.google.go.refactoring.introduce;
 
-import ro.redeul.google.go.refactoring.introduce.GoIntroduceConstantHandler;
+import ro.redeul.google.go.refactoring.GoRefactoringTestCase;
 
-public class IntroduceConstantTest
-    extends GoRefactoringTestCase<GoIntroduceConstantHandler> {
-
-    @Override
-    protected GoIntroduceConstantHandler createHandler() {
-        return new GoIntroduceConstantHandler();
-    }
-
+public class GoIntroduceConstantHandlerTest extends GoRefactoringTestCase {
     public void testSimple() throws Exception { doTest(); }
     public void testOneConst() throws Exception { doTest(); }
     public void testInConst() throws Exception { doTest(); }
