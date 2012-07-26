@@ -30,6 +30,7 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
@@ -396,7 +397,16 @@ public class GoPsiUtils {
             return new LocalSearchScope(element);
         }
 
-        return new LocalSearchScope(statement.getParent());
+        PsiElement scope = statement.getParent();
+        if (scope instanceof GoVarDeclarations) {
+            scope = scope.getParent();
+        }
+
+        if (scope == null) {
+            scope = element;
+        }
+
+        return new LocalSearchScope(scope);
     }
 
     public static SearchScope getGlobalElementSearchScope(GoPsiElement element, String name) {
