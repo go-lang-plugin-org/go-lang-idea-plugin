@@ -21,22 +21,10 @@ public class GoAssignmentStatementImpl extends GoPsiElementBase
     private static Map<IElementType, Op> operatorsMap =
         new HashMap<IElementType, Op>() {
             {
-                put(oPLUS, Op.Plus);
-                put(oMINUS, Op.Minus);
-                put(oBIT_OR, Op.BitOr);
-                put(oBIT_XOR, Op.BitXor);
                 put(oPLUS_ASSIGN, Op.PlusEq);
                 put(oMINUS_ASSIGN, Op.MinusEq);
                 put(oBIT_OR_ASSIGN, Op.BitOrEq);
                 put(oBIT_XOR_ASSIGN, Op.BitXorEq);
-
-                put(oMUL, Op.Mul);
-                put(oQUOTIENT, Op.Quotient);
-                put(oREMAINDER, Op.Remainder);
-                put(oSHIFT_LEFT, Op.ShiftLeft);
-                put(oSHIFT_RIGHT, Op.ShiftRight);
-                put(oBIT_AND, Op.BitAnd);
-                put(oBIT_CLEAR, Op.BitClear);
 
                 put(oMUL_ASSIGN, Op.MulEq);
                 put(oQUOTIENT_ASSIGN, Op.QuotientEq);
@@ -45,6 +33,8 @@ public class GoAssignmentStatementImpl extends GoPsiElementBase
                 put(oSHIFT_RIGHT_ASSIGN, Op.ShiftRightEq);
                 put(oBIT_AND_ASSIGN, Op.BitAndEq);
                 put(oBIT_CLEAR_ASSIGN, Op.BitClearEq);
+
+                put(oASSIGN, Op.Assign);
             }
         };
 
@@ -70,7 +60,9 @@ public class GoAssignmentStatementImpl extends GoPsiElementBase
         if (element == null)
             return Op.Null;
 
-        return operatorsMap.get(element.getNode().getElementType());
+        Op op = operatorsMap.get(element.getNode().getElementType());
+
+        return op != null ? op : Op.Null;
     }
 
     @Override

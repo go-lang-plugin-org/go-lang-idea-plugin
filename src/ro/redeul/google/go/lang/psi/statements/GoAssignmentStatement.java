@@ -7,10 +7,10 @@ public interface GoAssignmentStatement extends GoStatement {
     enum Op {
         Null,
 
-        Plus, Minus, BitOr, BitXor,
+        Assign,
+
         PlusEq, MinusEq, BitOrEq, BitXorEq,
 
-        Mul, Quotient, Remainder, ShiftLeft, ShiftRight, BitAnd, BitClear,
         MulEq, QuotientEq, RemainderEq, ShiftLeftEq, ShiftRightEq, BitAndEq, BitClearEq
     }
 
