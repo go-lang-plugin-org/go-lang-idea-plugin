@@ -372,6 +372,7 @@
         <lang.syntaxHighlighterFactory key="Google Go" implementationClass="ro.redeul.google.go.highlight.GoSyntaxHighlighterFactory"/>
 
         <highlightUsagesHandlerFactory implementation="ro.redeul.google.go.highlight.HighlightExitPointsHandlerFactory"/>
+        <readWriteAccessDetector implementation="ro.redeul.google.go.highlight.GoReadWriteAccessDetector"/>
 
         <lang.parserDefinition language="Google Go" implementationClass="ro.redeul.google.go.lang.parser.GoParserDefinition"/>
         <lang.braceMatcher language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoBraceMatcher"/>

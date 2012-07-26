@@ -14,26 +14,35 @@ import java.util.List;
 public abstract class GoEditorAwareTestCase extends GoLightCodeInsightFixtureTestCase {
 
     protected void doTest() throws Exception {
-        String baseName = getTestDataPath() + getTestName(true);
-        String fileName;
-        if (new File(baseName + ".test").exists()) {
-            fileName = baseName + ".test";
-        } else {
-            fileName = baseName + ".go";
-        }
-        final List<String> data = GoTestUtils.readInput(fileName);
-
+        List<String> data = GoTestUtils.readInput(getTestFileName());
         String expected = data.get(1).trim();
-
         Assert.assertEquals(expected,
                             processFile(data.get(0),
                                         expected.contains( GoTestUtils.MARKER_CARET) ).trim());
     }
 
     private String processFile(String fileText, boolean addCaretMarker) {
-        String result;
+        final GoFile goFile = createGoFile(fileText);
+        final Editor myEditor = myFixture.getEditor();
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            @Override
+            public void run() {
+                invoke(getProject(), myEditor, goFile);
+                PostprocessReformattingAspect.getInstance(getProject()).doPostponedFormatting();
+            }
+        });
 
-        final GoFile goFile;
+        String result = myEditor.getDocument().getText();
+        if (!addCaretMarker) {
+            return result;
+        }
+
+        int caretOffset = myEditor.getCaretModel().getOffset();
+        return result.substring(0, caretOffset) + GoTestUtils.MARKER_CARET + result.substring(caretOffset);
+    }
+
+    private GoFile createGoFile(String fileText) {
+        GoFile goFile;
         int startOffset = fileText.indexOf(GoTestUtils.MARKER_BEGIN);
         if (startOffset != -1) {
             fileText = GoTestUtils.removeBeginMarker(fileText);
@@ -45,24 +54,7 @@ public abstract class GoEditorAwareTestCase extends GoLightCodeInsightFixtureTes
         } else {
             goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
         }
-
-        final Editor myEditor = myFixture.getEditor();
-
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-            @Override
-            public void run() {
-                invoke(getProject(), myEditor, goFile);
-                PostprocessReformattingAspect.getInstance(getProject()).doPostponedFormatting();
-            }
-        });
-
-        result = myEditor.getDocument().getText();
-        if (!addCaretMarker) {
-            return result;
-        }
-
-        int caretOffset = myEditor.getCaretModel().getOffset();
-        return result.substring(0, caretOffset) + GoTestUtils.MARKER_CARET + result.substring(caretOffset);
+        return goFile;
     }
 
     protected abstract void invoke(Project project, Editor editor, GoFile file);
