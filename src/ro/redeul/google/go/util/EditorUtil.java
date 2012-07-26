@@ -9,6 +9,7 @@ import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import com.intellij.openapi.editor.actionSystem.EditorActionManager;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import org.jetbrains.annotations.NotNull;
@@ -40,8 +41,9 @@ public class EditorUtil {
         reformatPositions(file, range.getStartOffset(), range.getEndOffset());
     }
 
-    public static void reformatPositions(@NotNull PsiFile file, TextRange range) {
-        reformatPositions(file, range.getStartOffset(), range.getEndOffset());
+    public static void reformatPositions(@NotNull PsiElement element) {
+        TextRange range = element.getTextRange();
+        reformatPositions(element.getContainingFile(), range.getStartOffset(), range.getEndOffset());
     }
 
     public static void reformatPositions(@NotNull PsiFile file, int start, int end) {

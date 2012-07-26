@@ -1,0 +1,28 @@
+package main
+
+type A struct {
+    value int
+}
+
+func (a *A) Print() {
+    println(a.value)
+}
+
+func main() {
+    a := &A{value:5}
+    <caret>a.Print()
+}
+-----
+package main
+
+type A struct {
+    value int
+}
+
+func (a *A) Print() {
+    println(a.value)
+}
+
+func main() {
+    (&A{value:5}).Print()
+}

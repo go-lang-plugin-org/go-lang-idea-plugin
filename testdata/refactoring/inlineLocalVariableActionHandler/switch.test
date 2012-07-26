@@ -1,0 +1,15 @@
+package main
+func main() {
+    switch a := 5 + 2; {
+    default:
+        println("true", <caret>a)
+    }
+}
+-----
+package main
+func main() {
+    switch {
+    default:
+        println("true", 5 + 2)
+    }
+}

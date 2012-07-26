@@ -47,15 +47,36 @@
         <![CDATA[
          <h3>0.7.1 changes:</h3>
             <ul>
-                <li>[feature] Refactoring: Introduce variable</li>
-                <li>[feature] Refactoring: Introduce constant</li>
-                <li>[feature] Refactoring: Inplace variable/function rename</li>
-                <li>[feature] Inspection: Unused imports</li>
-                <li>[feature] Inspection: Unused variables</li>
-                <li>[feature] Inspection: Unused constants</li>
-                <li>[feature] Inspection: Unused parameters</li>
+                <li>[feature] Refactoring: Introduce variable.</li>
+                <li>[feature] Refactoring: Introduce constant.</li>
+                <li>[feature] Refactoring: Inline local variable.</li>
+                <li>[feature] Refactoring: Inplace variable/function rename.</li>
+                <li>[feature] Optimize import on the fly.</li>
+                <li>[feature] Inspection: Unused imports.</li>
+                <li>[feature] Inspection: Unused variables.</li>
+                <li>[feature] Inspection: Unused constants.</li>
+                <li>[feature] Inspection: Unused parameters.</li>
+                <li>[feature] Inspection: fmt parameter inspection.</li>
+                <li>[feature] Inspection: Function call inspection.</li>
+                <li>[feature] Inspection: Import inspection.</li>
+                <li>[feature] Inspection: Unresolved symbol inspection.</li>
+                <li>[feature] Intention: Invert if condition.</li>
+                <li>[feature] Intention: Merge nested 'if's.</li>
+                <li>[feature] Intention: Split into 2 'if's.</li>
+                <li>[feature] Intention: Convert switch statement to if chain.</li>
+                <li>[feature] Intention: Convert between interpreted string and raw string.</li>
+                <li>[feature] Intention: Add/Remove parentheses.</li>
+                <li>[feature] Intention: Move simple statement out.</li>
+                <li>[feature] Documentation for functions, methods, variable, constants and types.</li>
+                <li>[feature] Function parameter information.</li>
+                <li>[feature] Ctrl+Shift+T to jump between source file and test file.</li>
+                <li>[feature] Navigation from stack trace in output panel.</li>
+                <li>[feature] Ctrl+Shift+Enter to add curly brackets for "func", "if" and "for" statements.</li>
                 <li>[enhancement] code folding improvement.</li>
                 <li>[enhancement] Code formatter.</li>
+                <li>[enhancement] File structure view.</li>
+                <li>[enhancement] TODO's are shown in todo panel.</li>
+                <li>[enhancement] Live templates: "sout", "souf", "soutm" and "soutp".</li>
                 <li>[bugfix] Force the .go file to map to the proper file type.</li>
                 <li>[bugfixes] Various parsing inconsistencies</li>
                 <li>[enhancement] completion/resolution of struct members (expression/composite literals).</li>
@@ -380,6 +401,8 @@
         <lang.commenter language="Google Go" implementationClass="ro.redeul.google.go.highlight.GoCommenter"/>
         <lang.findUsagesProvider language="Google Go" implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
         <lang.refactoringSupport language="Google Go" implementationClass="ro.redeul.google.go.refactoring.GoRefactoringSupportProvider"/>
+
+        <inlineActionHandler implementation="ro.redeul.google.go.refactoring.inline.InlineLocalVariableActionHandler"/>
 
         <lang.formatter language="Google Go" implementationClass="ro.redeul.google.go.formatter.GoFormattingModelBuilder" />
         <lang.psiStructureViewFactory language="Google Go" implementationClass="ro.redeul.google.go.ide.structureview.GoStructureView"/>

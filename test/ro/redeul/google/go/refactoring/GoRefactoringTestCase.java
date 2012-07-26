@@ -6,12 +6,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringActionHandler;
 import ro.redeul.google.go.GoEditorAwareTestCase;
-import ro.redeul.google.go.intentions.Intention;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.refactoring.introduce.GoIntroduceHandlerBase;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 public abstract class GoRefactoringTestCase extends GoEditorAwareTestCase {
 
@@ -37,6 +36,10 @@ public abstract class GoRefactoringTestCase extends GoEditorAwareTestCase {
         } else if (handler instanceof InlineActionHandler) {
             PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
             element = findParentOfType(element, GoLiteralIdentifier.class);
+            PsiElement resolve = resolveSafely(element, PsiElement.class);
+            if (resolve != null) {
+                element = resolve;
+            }
             if (element == null) {
                 throw new RuntimeException("Caret should on literal identifier");
             }

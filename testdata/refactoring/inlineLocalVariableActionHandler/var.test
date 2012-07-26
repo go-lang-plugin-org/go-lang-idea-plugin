@@ -1,0 +1,22 @@
+package main
+func main() {
+    var a = 5
+    println(<caret>a)
+    if true {
+        var a = 3
+        println(a)
+    } else {
+        println(a)
+    }
+}
+-----
+package main
+func main() {
+    println(5)
+    if true {
+        var a = 3
+        println(a)
+    } else {
+        println(5)
+    }
+}
