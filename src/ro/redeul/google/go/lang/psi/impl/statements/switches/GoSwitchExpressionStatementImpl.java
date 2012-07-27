@@ -1,6 +1,9 @@
 package ro.redeul.google.go.lang.psi.impl.statements.switches;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -32,5 +35,17 @@ public class GoSwitchExpressionStatementImpl extends GoPsiElementBase
     @Override
     public GoSwitchExpressionClause[] getClauses() {
         return findChildrenByClass(GoSwitchExpressionClause.class);
+    }
+
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent,
+                                       @NotNull PsiElement place) {
+        GoSimpleStatement initStatement = getSimpleStatement();
+        if (lastParent == null || initStatement == null || lastParent == initStatement )
+            return true;
+
+        return initStatement.processDeclarations(processor, state, null, place);
     }
 }

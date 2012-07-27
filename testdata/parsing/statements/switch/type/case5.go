@@ -35,7 +35,8 @@ Go file
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
         SwitchTypeGuardImpl
-          PsiElement(IDENTIFIER)('i')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('i')
           PsiWhiteSpace(' ')
           PsiElement(:=)(':=')
           PsiWhiteSpace(' ')

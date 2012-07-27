@@ -1,6 +1,9 @@
 package ro.redeul.google.go.lang.psi.impl.statements.switches;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
@@ -26,6 +29,7 @@ public class GoSwitchTypeStatementImpl extends GoPsiElementBase
     @NotNull
     @Override
     public GoSwitchTypeGuard getTypeGuard() {
+        //noinspection ConstantConditions
         return findChildByClass(GoSwitchTypeGuard.class);
     }
 
@@ -34,4 +38,26 @@ public class GoSwitchTypeStatementImpl extends GoPsiElementBase
     public GoSwitchTypeClause[] getClauses() {
         return findChildrenByClass(GoSwitchTypeClause.class);
     }
+
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent,
+                                       @NotNull PsiElement place) {
+        if (lastParent == null )
+            return true;
+
+        GoSwitchTypeGuard typeGuard = getTypeGuard();
+        if ( lastParent != typeGuard ) {
+            if (!typeGuard.processDeclarations(processor, state, null, place))
+                return false;
+        }
+
+        GoSimpleStatement initStatement = getSimpleStatement();
+        if ( initStatement != null && lastParent != initStatement)
+            return initStatement.processDeclarations(processor, state, null, place);
+
+        return true;
+    }
+
 }

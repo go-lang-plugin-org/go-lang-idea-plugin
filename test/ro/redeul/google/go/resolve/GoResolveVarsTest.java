@@ -101,7 +101,19 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
+    public void testVarInSwitchExprInitialization() throws Exception {
+        doTest();
+    }
+
     public void testVarInSwitchType() throws Exception {
+        doTest();
+    }
+
+    public void testVarInSwitchTypeInitialization() throws Exception {
+        doTest();
+    }
+
+    public void testVarInSwitchTypeWithNamedSwitchGuard() throws Exception {
         doTest();
     }
 

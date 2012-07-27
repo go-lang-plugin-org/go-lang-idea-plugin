@@ -74,12 +74,9 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
             return importPath;
         }
 
-        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(
-            getProject()).getFileIndex();
+        ProjectFileIndex projectFileIndex =
+            ProjectRootManager.getInstance(getProject()).getFileIndex();
 
-        if (virtualFile == null ) {
-            int a = 10;
-        }
         if (!projectFileIndex.isInSource(virtualFile) ||
             projectFileIndex.isLibraryClassFile(virtualFile)) {
             return "";

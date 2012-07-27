@@ -28,7 +28,8 @@ Go file
         PsiElement(KEYWORD_SWITCH)('switch')
         PsiWhiteSpace(' ')
         SwitchTypeGuardImpl
-          PsiElement(IDENTIFIER)('i')
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('i')
           PsiWhiteSpace(' ')
           PsiElement(:=)(':=')
           PsiWhiteSpace(' ')

@@ -1,4 +1,4 @@
-package test2
+package main
 
 const (
     a = /*ref*/b

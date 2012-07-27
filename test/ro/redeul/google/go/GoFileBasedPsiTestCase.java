@@ -3,10 +3,6 @@ package ro.redeul.google.go;
 import java.io.File;
 import java.io.IOException;
 
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.roots.ContentEntry;
-import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -17,24 +13,6 @@ import com.intellij.util.FilteringProcessor;
 import com.intellij.util.Processor;
 
 public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
-    protected void removeContentRoots() {
-        new WriteCommandAction.Simple(myModule.getProject()) {
-            @Override
-            protected void run() throws Throwable {
-                ModuleRootManager instance =
-                    ModuleRootManager.getInstance(myModule);
-
-                ModifiableRootModel modifiableModel = instance.getModifiableModel();
-
-                ContentEntry[] entries = instance.getContentEntries();
-                for (ContentEntry entry : entries) {
-                    modifiableModel.removeContentEntry(entry);
-                }
-                modifiableModel.commit();
-            }
-        }.execute().throwException();
-    }
-
     protected void doTest() throws Exception {
         final String fullPath =
             (getTestDataPath() + getTestName(false))
@@ -53,37 +31,27 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
 
         VirtualFile builtin =
             LocalFileSystem.getInstance()
-                           .findFileByPath(
-                               getTestDataPath() + "/builtin.go");
+                           .findFileByPath(getTestDataPath() + "/builtin.go");
 
         if (builtin != null) {
             parseFile(builtin,
                       LocalFileSystem.getInstance()
-                                     .findFileByPath(
-                                         getTestDataPath()),
+                                     .findFileByPath(getTestDataPath()),
                       vModuleDir);
         }
 
         if (vFile != null) {
             doSingleFileTest(vFile, vModuleDir);
-            removeContentRoots();
             return;
         }
 
         vFile = LocalFileSystem.getInstance().findFileByPath(fullPath);
         if (vFile != null && vFile.isDirectory()) {
             doDirectoryTest(vFile, vModuleDir);
-            removeContentRoots();
             return;
         }
 
         fail("no test files found in \"" + vFile + "\"");
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        removeContentRoots();
-        super.tearDown();
     }
 
     private void doSingleFileTest(VirtualFile vFile, VirtualFile vModuleDir)
@@ -124,13 +92,13 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
 
         String folder = VfsUtil.getRelativePath(file.getParent(), root, '/');
 
-        VirtualFile folderFile = root.findFileByRelativePath(folder);
+        VirtualFile folderFile = file.getParent();
         try {
             String fileContent =
                 StringUtil.convertLineSeparators(VfsUtil.loadText(file));
 
-            PsiFile psiFile = createFile(myModule, folderFile, file.getName(),
-                                         fileContent);
+            PsiFile psiFile =
+                createFile(myModule, vModuleRoot, file.getName(), fileContent);
 
             postProcessFilePsi(psiFile, fileContent);
         } catch (Exception e) {

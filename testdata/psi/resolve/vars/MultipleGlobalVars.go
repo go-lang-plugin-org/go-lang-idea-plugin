@@ -1,4 +1,4 @@
-package test2
+package main
 
 var (
     bb = /*ref*/cc

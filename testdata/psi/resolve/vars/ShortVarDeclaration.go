@@ -1,4 +1,4 @@
-package short_var_declaration
+package main
 
 func main() {
     /*def*/x := 10

@@ -29,6 +29,7 @@ import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
@@ -263,4 +264,7 @@ public class GoElementVisitor  {
         visitElement(statement);
     }
 
+    public void visitSwitchTypeGuard(GoSwitchTypeGuard typeGuard) {
+        visitElement(typeGuard);
+    }
 }

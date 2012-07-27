@@ -7,6 +7,7 @@ import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
@@ -68,6 +69,12 @@ public class VarOrConstResolver extends
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
         if (checkReference(declaration.getNameIdentifier()))
             addDeclaration(declaration, declaration.getNameIdentifier());
+    }
+
+    @Override
+    public void visitSwitchTypeGuard(GoSwitchTypeGuard typeGuard) {
+        if (checkReference(typeGuard.getIdentifier()))
+            addDeclaration(typeGuard, typeGuard.getIdentifier());
     }
 
     protected void checkIdentifiers(GoLiteralIdentifier ... identifiers) {
