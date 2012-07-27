@@ -9,11 +9,9 @@ import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mtoader
  * Date: Jul 24, 2010
  * Time: 10:29:46 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GoPackageDeclarationImpl extends GoPsiElementBase implements GoPackageDeclaration {
 

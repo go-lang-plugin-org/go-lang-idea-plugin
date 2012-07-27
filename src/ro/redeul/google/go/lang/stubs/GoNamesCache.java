@@ -84,10 +84,14 @@ public class GoNamesCache {
     }
 
     public Collection<GoFile> getFilesByPackageImportPath(@NotNull String importPath) {
+        return getFilesByPackageImportPath(importPath, GlobalSearchScope.allScope(project));
+    }
+
+    public Collection<GoFile> getFilesByPackageImportPath(@NotNull String importPath,
+                                                          @NotNull GlobalSearchScope scope) {
         StubIndex index = StubIndex.getInstance();
 
-        return index.get(GoPackageImportPath.KEY, importPath, project,
-                         GlobalSearchScope.allScope(project));
+        return index.get(GoPackageImportPath.KEY, importPath, project, scope);
     }
 
 

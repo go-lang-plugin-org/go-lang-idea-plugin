@@ -11,9 +11,11 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.search.GlobalSearchScopes;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
@@ -92,15 +94,16 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         String path = VfsUtil.getRelativePath(virtualFile.getParent(),
                                               sourceRoot, '/');
 
-        if ( path == null || path.equals(""))
-           path = getPackageName();
+        if (path == null || path.equals(""))
+            path = getPackageName();
 
         if (path != null && !path.endsWith(getPackageName())) {
             path = path + "/" + getPackageName();
         }
 
         String makefileTarget =
-            GoUtil.getTargetFromMakefile( virtualFile.getParent().findChild("Makefile"));
+            GoUtil.getTargetFromMakefile(
+                virtualFile.getParent().findChild("Makefile"));
 
         if (makefileTarget != null) {
             path = makefileTarget;
@@ -192,7 +195,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
     @Override
     public <T> T accept(GoElementVisitorWithData<T> visitor) {
-        accept((GoElementVisitor)visitor);
+        accept((GoElementVisitor) visitor);
         return visitor.getData();
     }
 
@@ -222,7 +225,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        if ( lastParent == this )
+        if (lastParent == this)
             return false;
 
         String myPackageName = getPackage().getPackageName();
@@ -238,15 +241,27 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         }
 
         if (state.get(GoResolveStates.IsOriginalFile)) {
-            ResolveState newState = state.put(GoResolveStates.IsOriginalFile, false);
+            ResolveState newState = state.put(GoResolveStates.IsOriginalFile,
+                                              false);
 
             GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
-            Collection<GoFile> goFiles =
-                namesCache.getFilesByPackageImportPath(getPackageImportPath());
+            PsiDirectory parentDirectory = getParent();
+            Collection<GoFile> goFiles = null;
+            if (isApplicationPart() && parentDirectory != null) {
+                goFiles = namesCache.getFilesByPackageImportPath(
+                    getPackageImportPath(),
+                    GlobalSearchScopes.directoryScope(parentDirectory, false));
+            } else {
+                goFiles = namesCache.getFilesByPackageImportPath(
+                    getPackageImportPath()
+                );
+            }
+
             for (GoFile goFile : goFiles) {
-                if ( ! goFile.getOriginalFile().equals(this.getOriginalFile())) {
-                    if (!goFile.processDeclarations(processor, newState, null, place))
+                if (!goFile.getOriginalFile().equals(this.getOriginalFile())) {
+                    if (!goFile.processDeclarations(processor, newState, null,
+                                                    place))
                         return false;
                 }
             }

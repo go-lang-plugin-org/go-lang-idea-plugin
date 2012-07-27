@@ -128,4 +128,8 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testDeclarationInsideLabeledStatement() throws Exception {
         doTest();
     }
+
+    public void testMultipleApplications() throws Exception {
+        doTest();
+    }
 }
