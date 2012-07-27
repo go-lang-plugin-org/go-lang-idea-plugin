@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
@@ -65,11 +66,20 @@ public class GoTypes {
         return psiType.accept(new GoTypeMakerVisitor());
     }
 
-    public static GoType[] fromPsiType(GoPsiType[] type) {
-        return new GoType[] { GoType.Unknown };
+    public static GoType[] fromPsiType(GoPsiType[] psiTypes) {
+        GoType types[] = new GoType[psiTypes.length];
+        for (int i = 0; i < types.length; i++) {
+            types[i] = fromPsiType(psiTypes[i]);
+        }
+
+        return types;
     }
 
     private static class GoTypeMakerVisitor extends GoElementVisitorWithData<GoType> {
+        private GoTypeMakerVisitor() {
+            data = GoType.Unknown;
+        }
+
         @Override
         public void visitArrayType(GoPsiTypeArray psiType) {
             data = new GoTypeArray(psiType);
@@ -98,6 +108,11 @@ public class GoTypes {
         @Override
         public void visitFunctionType(GoPsiTypeFunction type) {
             data = new GoTypeFunction(type);
+        }
+
+        @Override
+        public void visitInterfaceType(GoPsiTypeInterface type) {
+            data = new GoTypeInterface(type);
         }
 
         @Override

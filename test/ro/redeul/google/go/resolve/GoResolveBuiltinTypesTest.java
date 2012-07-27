@@ -21,7 +21,6 @@ public class GoResolveBuiltinTypesTest extends GoPsiResolveTestCase {
     protected void assertTest() {
         assertNotNull("Source position is not at a reference", ref);
 
-
         PsiElement resolvedDefinition = ref.resolve();
         assertNotNull("The resolving should have been been a success",
                       resolvedDefinition);

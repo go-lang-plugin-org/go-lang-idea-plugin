@@ -28,14 +28,12 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-        PsiElement myself = resolveSafely(getBaseExpression(), PsiElement.class);
-        if (myself == null)
+        PsiElement reference = resolveSafely(getBaseExpression(), PsiElement.class);
+        if (reference == null)
             return GoType.EMPTY_ARRAY;
 
-        if (myself.getParent() instanceof GoMethodDeclaration )
-        {
-            GoMethodDeclaration declaration = (GoMethodDeclaration)myself.getParent();
-
+        if (reference instanceof GoMethodDeclaration ) {
+            GoMethodDeclaration declaration = (GoMethodDeclaration)reference;
             return GoTypes.fromPsiType(declaration.getReturnType());
         }
 

@@ -53,7 +53,7 @@ public abstract class GoPsiReference<
         if (resolver != null) {
             GoResolveResult result = ResolveCache
                 .getInstance(getElement().getProject())
-                .resolveWithCaching(self(), resolver, false, false);
+                .resolveWithCaching(self(), resolver, true, false);
 
             return result != null && result.isValidResult()
                 ? result.getElement()

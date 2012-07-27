@@ -77,7 +77,7 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
                 new Processor<VirtualFile>() {
                     @Override
                     public boolean process(VirtualFile virtualFile) {
-                        parseFile(virtualFile, vFile, vModuleDir);
+                        parseFile(virtualFile, vFile.getParent(), vModuleDir);
                         return true;
                     }
                 }
@@ -90,15 +90,14 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
     protected void parseFile(VirtualFile file, VirtualFile root,
                              VirtualFile vModuleRoot) {
 
-        String folder = VfsUtil.getRelativePath(file.getParent(), root, '/');
+        String relativePath = VfsUtil.getRelativePath(file.getParent(), root, '/');
 
-        VirtualFile folderFile = file.getParent();
         try {
             String fileContent =
                 StringUtil.convertLineSeparators(VfsUtil.loadText(file));
 
             PsiFile psiFile =
-                createFile(myModule, vModuleRoot, file.getName(), fileContent);
+                createFile(myModule, VfsUtil.createDirectoryIfMissing(vModuleRoot, relativePath), file.getName(), fileContent);
 
             postProcessFilePsi(psiFile, fileContent);
         } catch (Exception e) {

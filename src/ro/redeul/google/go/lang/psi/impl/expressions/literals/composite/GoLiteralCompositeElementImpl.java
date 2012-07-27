@@ -121,9 +121,10 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
         }
 
 
-        while (parentType instanceof GoPsiTypeName) {
+        while (parentType != null && parentType instanceof GoPsiTypeName) {
             GoTypeSpec typeSpec = resolveSafely(parentType, GoTypeSpec.class);
-            parentType = typeSpec.getType();
+            if (typeSpec != null)
+                parentType = typeSpec.getType();
         }
 
         if (parentType instanceof GoPsiTypeArray) {

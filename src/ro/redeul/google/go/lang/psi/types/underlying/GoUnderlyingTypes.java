@@ -30,7 +30,7 @@ public class GoUnderlyingTypes {
         return new GoUnderlyingTypeFunction(functionType);
     }
 
-    public static GoUnderlyingType getInterface() {
+    public static GoUnderlyingTypeInterface getInterface() {
         return new GoUnderlyingTypeInterface();
     }
 
