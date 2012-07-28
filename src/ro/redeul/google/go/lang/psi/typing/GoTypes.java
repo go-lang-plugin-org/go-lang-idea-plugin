@@ -13,6 +13,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
@@ -28,6 +29,18 @@ public class GoTypes {
                             "(int|uint)(8|16|32|64)?|" +
                             "float(32|64)|" +
                             "complex(64|128)");
+
+    public static <T extends GoType> T resolveTo(GoType type, Class<T> targetType) {
+        while ( type != null && type != GoType.Unknown && ! targetType.isAssignableFrom(type.getClass()) ) {
+            if ( type instanceof GoTypeName ) {
+                type = ((GoTypeName)type).getDefinition();
+            } else {
+                type = GoType.Unknown;
+            }
+        }
+
+        return targetType.cast(type);
+    }
 
     public enum Builtin {
         Bool, Byte, Complex64, Complex128, Error, Float32, Float64,
@@ -88,6 +101,11 @@ public class GoTypes {
         @Override
         public void visitTypeName(GoPsiTypeName psiTypeName) {
             data = new GoTypeName(psiTypeName);
+        }
+
+        @Override
+        public void visitMapType(GoPsiTypeMap type) {
+            data = new GoTypeMap(type);
         }
 
         @Override

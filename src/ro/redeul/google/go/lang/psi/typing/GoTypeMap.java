@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeMap;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
@@ -12,11 +11,19 @@ public class GoTypeMap
     extends GoTypePsiBacked<GoPsiTypeMap, GoUnderlyingTypeMap>
     implements GoType {
 
+    GoType keyType;
+    GoType elementType;
+
     public GoTypeMap(GoPsiTypeMap type) {
         super(type);
+
+        keyType = GoTypes.fromPsiType(type.getKeyType());
+        elementType = GoTypes.fromPsiType(type.getElementType());
+
         setUnderlyingType(
-            GoUnderlyingTypes.getMap(GoUnderlyingType.Undefined,
-                                     GoUnderlyingType.Undefined));
+            GoUnderlyingTypes.getMap(keyType.getUnderlyingType(),
+                                     elementType.getUnderlyingType()));
+
     }
 
     @Override
@@ -24,7 +31,11 @@ public class GoTypeMap
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    public GoType getKeyType() {
+        return keyType;
+    }
+
     public GoType getElementType() {
-        return GoType.Unknown;
+        return elementType;
     }
 }
