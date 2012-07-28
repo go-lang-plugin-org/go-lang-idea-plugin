@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
@@ -14,11 +15,11 @@ public abstract class GoParsingTestCase
 {
     @Override
     protected String getTestDataRelativePath() {
-        return "parsing/";
+        return "parsing" + File.separator;
     }
 
     public void doTest() throws IOException {
-        doTest(getTestName(true).replaceAll("_+", File.separator));
+        doTest(getTestName(true).replaceAll("_+", Matcher.quoteReplacement(File.separator)));
     }
 
     private void doTest(String fileName) throws IOException {
@@ -26,14 +27,14 @@ public abstract class GoParsingTestCase
         List<String> list = null;
 
         try {
-            list = GoTestUtils.readInput(getTestDataPath() + "/" + fileName + ".go");
+            list = GoTestUtils.readInput(getTestDataPath() + File.separator + fileName + ".go");
         } catch (IOException e) {
-            list = GoTestUtils.readInput(getTestDataPath() + "/" + fileName + ".test");
+            list = GoTestUtils.readInput(getTestDataPath() + File.separator + fileName + ".test");
         }
 
         final String input = list.get(0);
         if ( list.size() != 2 || list.get(1).trim().length() == 0 ) {
-            dumpParsingTree(input, getTestDataPath() + "/" + fileName + ".go");
+            dumpParsingTree(input, getTestDataPath() + File.separator + fileName + ".go");
         } else {
             checkParsing(input, list.get(1).trim());
         }
