@@ -16,13 +16,13 @@ import ro.redeul.google.go.lang.psi.resolve.references.InterfaceMethodReference;
 import ro.redeul.google.go.lang.psi.resolve.references.MethodReference;
 import ro.redeul.google.go.lang.psi.resolve.references.SelectorOfStructFieldReference;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeInterface;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePointer;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeStruct;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.services.GoPsiManager;
@@ -64,10 +64,8 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
                                 (GoTypeStructField) target.getParent();
 
                             return new GoType[]{
-                                GoTypes
-                                    .fromPsiType(
-                                        structField
-                                            .getType())};
+                                GoTypes.fromPsiType(structField.getType())
+                            };
                         }
 
                         return GoType.EMPTY_ARRAY;
@@ -159,7 +157,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
                 new MethodReference(this)
             };
 
-        if (type instanceof GoPsiTypeName) {
+        if (type instanceof GoTypeName) {
             return new PsiReference[]{
                 new MethodReference(this)
             };

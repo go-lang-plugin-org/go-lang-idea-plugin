@@ -103,8 +103,18 @@ public class MethodReference
         GoPsiTypeName methodTypeName = (GoPsiTypeName) receiverType;
 
         if (baseTypeName != null && baseTypeName.getName() != null &&
-            baseTypeName.getName().equals(methodTypeName.getName()))
-            return true;
+            baseTypeName.getName().equals(methodTypeName.getName())) {
+
+            String methodName = declaration.getFunctionName();
+            GoLiteralIdentifier identifier = getElement().getIdentifier();
+            if (identifier != null ) {
+                String referenceName = identifier.getUnqualifiedName();
+
+                return referenceName.endsWith("IntellijIdeaRulezzz") ||
+                            referenceName.equals(methodName);
+
+            }
+        }
 
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -113,7 +123,7 @@ public class MethodReference
     @NotNull
     @Override
     public Object[] getVariants() {
-        baseTypeName = resolveBaseExpressionType();
+        GoTypeName baseTypName = resolveBaseExpressionType();
         if (baseTypeName == null)
             return LookupElementBuilder.EMPTY_ARRAY;
 
@@ -143,14 +153,15 @@ public class MethodReference
     private GoTypeName resolveBaseExpressionType() {
         GoType[] types = getElement().getBaseExpression().getType();
 
-        if (types.length != 1)
+        if (types.length < 1)
             return null;
 
         GoType type = types[0];
         if (!(type instanceof GoTypeName))
             return null;
 
-        return (GoTypeName) type;
+        baseTypeName = (GoTypeName) type;
+        return baseTypeName;
     }
 
     public boolean isSoft() {

@@ -32,6 +32,11 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
         if (reference == null)
             return GoType.EMPTY_ARRAY;
 
+        if (reference.getParent() instanceof GoMethodDeclaration ) {
+            GoMethodDeclaration declaration = (GoMethodDeclaration)reference.getParent();
+            return GoTypes.fromPsiType(declaration.getReturnType());
+        }
+
         if (reference instanceof GoMethodDeclaration ) {
             GoMethodDeclaration declaration = (GoMethodDeclaration)reference;
             return GoTypes.fromPsiType(declaration.getReturnType());
