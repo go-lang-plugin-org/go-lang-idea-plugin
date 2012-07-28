@@ -45,6 +45,8 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.statements.*;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionStatement;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
@@ -154,6 +156,9 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
             applyRemoveVariableFix(ctx);
         } else if (parent instanceof GoIfStatement) {
             deleteIfSimpleStatement(ctx.editor.getDocument(), (GoIfStatement) parent);
+        } else if (parent instanceof GoSwitchExpressionStatement ||
+            parent instanceof GoSwitchTypeStatement) {
+            deleteSwitchSimpleStatement(ctx.editor.getDocument(), (GoStatement) parent);
         } else {
             applyRemoveVariableFix(ctx);
         }
@@ -293,6 +298,40 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
         int start = simpleStatement.getTextOffset();
         int end = ifStatement.getExpression().getTextOffset();
         document.deleteString(start, end);
+    }
+
+    private void deleteSwitchSimpleStatement(Document document, GoStatement statement)
+        throws GoRefactoringException {
+        GoSimpleStatement simpleStatement;
+        if (statement instanceof GoSwitchExpressionStatement) {
+            simpleStatement = ((GoSwitchExpressionStatement) statement).getSimpleStatement();
+        } else {
+            simpleStatement = ((GoSwitchTypeStatement) statement).getSimpleStatement();
+        }
+
+        if (simpleStatement == null) {
+            unknownCase();
+            return;
+        }
+
+        PsiElement endElement;
+        if (statement instanceof GoSwitchExpressionStatement) {
+            endElement = ((GoSwitchExpressionStatement) statement).getExpression();
+        } else {
+            endElement = ((GoSwitchTypeStatement) statement).getTypeGuard();
+        }
+
+        if (endElement == null) {
+            endElement = findChildOfType(statement, GoTokenTypes.pLCURLY);
+        }
+
+        if (endElement == null) {
+            unknownCase();
+            return;
+        }
+
+        int start = simpleStatement.getTextOffset();
+        document.deleteString(start, endElement.getTextOffset());
     }
 
     private void unknownCase() throws GoRefactoringException {

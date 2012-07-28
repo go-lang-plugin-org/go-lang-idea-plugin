@@ -12,7 +12,6 @@ public class InlineLocalVariableActionHandlerTest extends GoRefactoringTestCase 
     public void testPrecedence1() throws Exception { doTest(); }
     public void testPrecedence2() throws Exception { doTest(); }
     public void testPrecedence3() throws Exception { doTest(); }
-
-    // TODO: add switch support after resolving in switch statement works.
-//    public void testSwitch() throws Exception { doTest(); }
+    public void testSwitchExpression() throws Exception { doTest(); }
+    public void testSwitchType() throws Exception { doTest(); }
 }

@@ -224,6 +224,14 @@ class GoBlock implements Block, GoElementTypes {
             return BASIC_SPACING_KEEP_LINE_BREAKS;
         }
 
+        // there should be no space after "type" in type guard: p.(type)
+        if (child1Type == kTYPE) {
+            ASTNode parent = child1.getNode().getTreeParent();
+            if (parent != null && parent.getElementType() == SWITCH_TYPE_GUARD) {
+                return EMPTY_SPACING;
+            }
+        }
+
         // there should be a space after those keywords
         if (BASIC_SPACE_KEYWORDS_SET.contains(child1Type)) {
             return BASIC_SPACING;
