@@ -16,9 +16,9 @@ import ro.redeul.google.go.lang.psi.resolve.references.TypeNameReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePredeclared;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.string;
@@ -54,15 +54,23 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
         return findChildByClass(GoPackageReference.class);
     }
 
-    static final ElementPattern<PsiElement> NON_REFERENCES =
+    static final ElementPattern<PsiElement> PRIMITIVE_TYPES =
         psiElement()
             .withText(
                 string().matches(GoTypes.PRIMITIVE_TYPES_PATTERN.pattern()));
 
+    static final ElementPattern<PsiElement> NIL_TYPE =
+        psiElement()
+            .withText(string().matches("nil"));
+
     @Override
     public PsiReference getReference() {
-        if (NON_REFERENCES.accepts(this))
+
+        if (PRIMITIVE_TYPES.accepts(this))
             return new BuiltinTypeNameReference(this);
+
+        if (NIL_TYPE.accepts(this))
+            return null;
 
         return new TypeNameReference(this);
     }
@@ -74,10 +82,7 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
     @Override
     public GoUnderlyingType getUnderlyingType() {
 
-        if (psiElement()
-            .withText(string().matches(GoTypes.PRIMITIVE_TYPES_PATTERN.pattern()))
-            .accepts(this))
-        {
+        if (PRIMITIVE_TYPES.accepts(this)) {
             return GoUnderlyingTypePredeclared.getForName(getText());
         }
 
