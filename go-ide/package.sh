@@ -9,25 +9,25 @@
 # Every variable below (except for SOURCE_PATH_IDEA_BUILT) can be overridden in this fashion.
 #
 
-SOURCE_PATH_GO=${SOURCE_PATH_GO:-${HOME}/Tools/google-go/release/}
-SOURCE_PATH_GO_WIN=${SOURCE_PATH_GO_WIN:-${HOME}/Tools/google-go/gowin32_release.r59.zip}
+SOURCE_PATH_GO=${SOURCE_PATH_GO:-${HOME}/Work/Personal/go/}
+SOURCE_PATH_GO_WIN=${SOURCE_PATH_GO_WIN:-${HOME}/Work/Personal/go1.0.2.windows-amd64.zip}
 
-SOURCE_PATH_IDEA=${SOURCE_PATH_IDEA:-${HOME}/Work/IntellijIdea/idea/}
+SOURCE_PATH_IDEA=${SOURCE_PATH_IDEA:-${HOME}/Work/Personal/idea/}
 SOURCE_PATH_IDEA_BUILT=idea_community_not_built
 SOURCE_PATH_GO_PLUGIN=${SOURCE_PATH_GO_PLUGIN:-`pwd`/..}
 
 SKIP_GO_SDK_BUILD=${SKIP_GO_SDK_BUILD:-false}
 SKIP_IDEA_BUILD=${SKIP_IDEA_BUILD:-false}
 
-RELEASE_TAG_GO=${RELEASE_TAG_GO:-release.r59}
-RELEASE_TAG_IDEA=${RELEASE_TAG_IDEA:-idea/108.857}
+RELEASE_TAG_GO=${RELEASE_TAG_GO:-go1.0.2}
+RELEASE_TAG_IDEA=${RELEASE_TAG_IDEA:-idea/117.804}
 
-GO_IDE_VERSION=${GO_IDE_VERSION:-1.0.0}
+GO_IDE_VERSION=${GO_IDE_VERSION:-1.5.0}
 
-FOLDER_DIST=${FOLDER_DIST:-${SOURCE_PATH_GO_PLUGIN}/dist}
+FOLDER_DIST=${FOLDER_DIST:-${SOURCE_PATH_GO_PLUGIN}/../dist}
 
 # linux | darwin | windows
-TARGET_HOST=${TARGET_HOST:-linux}
+TARGET_HOST=${TARGET_HOST:-darwin}
 
 function validate_go_sdk_location {
 
@@ -43,7 +43,7 @@ function validate_go_sdk_location {
 
     pushd "${SOURCE_PATH_GO}" >/dev/null
     ACTUAL_RELEASE_TAG_GO=`hg identify -t`
-    if [ "release ${RELEASE_TAG_GO}" != "${ACTUAL_RELEASE_TAG_GO}" ]; then
+    if [ "${RELEASE_TAG_GO} release" != "${ACTUAL_RELEASE_TAG_GO}" ]; then
         echo "Error: Go Source code is at the wrong tag: ${ACTUAL_RELEASE_TAG_GO}."
         echo -e " Try this:"
         echo -e "\tpushd '${SOURCE_PATH_GO}' && hg pull && hg update --clean ${RELEASE_TAG_GO} && popd"
@@ -88,7 +88,7 @@ function build_go_sdk() {
 
     pushd "${SOURCE_PATH_GO}/src" >/dev/null
 
-    ./clean.bash
+#    ./clean.bash
     rm -rf "${SOURCE_PATH_GO}"/pkg/* "${SOURCE_PATH_GO}"/bin/*
     GOHOSTARCH=$1 ./all.bash
     popd >/dev/null
@@ -171,7 +171,7 @@ function extract_idea_community_build() {
         fi
 
         unzip "${SOURCE_PATH_IDEA}/out/artifacts/ideaIC-${IDEA_BUILD_VERSION}.mac.zip"
-        mv "${FOLDER_DIST}/Community Edition-IC-${IDEA_BUILD_VERSION}.app" "${SOURCE_PATH_IDEA_BUILT}"
+        mv "${FOLDER_DIST}/IntelliJ IDEA 11 CE.app" "${SOURCE_PATH_IDEA_BUILT}"
     elif [ "${TARGET_HOST}" == "windows" ]; then
         mkdir ${SOURCE_PATH_IDEA_BUILT}
         pushd ${SOURCE_PATH_IDEA_BUILT} >/dev/null
@@ -186,15 +186,16 @@ function extract_idea_community_build() {
 function assemble_distribution() {
     echo
     echo
-    echo "Assembling distribution for arch $1"
+    echo "Assembling distribution for arch $1 (dist: ${FOLDER_DIST})"
     echo
     pushd "${SOURCE_PATH_GO_PLUGIN}" >/dev/null
 
     ant \
-        -Dgo.ide.target.package=${SOURCE_PATH_GO_PLUGIN}/dist/goide-${TARGET_HOST}_$1.zip \
+        -Ddist=${FOLDER_DIST} \
+        -Dgo.ide.target.package=${FOLDER_DIST}/goide-${TARGET_HOST}_$1.zip \
         -Didea.community.build=${SOURCE_PATH_IDEA_BUILT} \
         -Dtarget.platform=${TARGET_HOST} \
-        -Dgo.sdk.build=${SOURCE_PATH_GO_PLUGIN}/dist/go-sdk-${TARGET_HOST}_$1 \
+        -Dgo.sdk.build=${FOLDER_DIST}/go-sdk-${TARGET_HOST}_$1 \
         -Dgo.plugin=${SOURCE_PATH_GO_PLUGIN}/dist/ro.redeul.google.go.jar \
         -f build-distribution.xml
 

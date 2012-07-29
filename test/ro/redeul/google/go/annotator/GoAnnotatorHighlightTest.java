@@ -36,7 +36,7 @@ public class GoAnnotatorHighlightTest extends GoLightCodeInsightFixtureTestCase 
     }
 
     private void doTest() throws Exception {
-        myFixture.addFileToProject("builtin.go", "package builtin\ntype byte byte\n");
+        myFixture.addFileToProject("builtin.go", "package builtin\ntype byte byte\ntype int int\n");
         List<String> data;
         data = readInput(getTestDataPath() + getTestName(true) + ".go");
         String expected = data.get(1).trim();

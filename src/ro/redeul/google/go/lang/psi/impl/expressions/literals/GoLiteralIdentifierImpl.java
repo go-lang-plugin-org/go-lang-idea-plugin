@@ -22,8 +22,6 @@ import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComp
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
-import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
-import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CompositeElementToStructFieldReference;
 import ro.redeul.google.go.lang.psi.resolve.references.LabelReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
@@ -111,7 +109,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     static final ElementPattern<PsiElement> NO_REFERENCE =
         or(
             psiElement(GoLiteralIdentifier.class)
-                .withText(string().matches("nil|print|println")),
+                .withText(string().matches("nil")),
             psiElement()
                 .withParent(
                     or(
@@ -174,79 +172,47 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 //        return null;
 //    }
 //
-    PsiReference references[] = null;
 
     @NotNull
     @Override
     public PsiReference[] getReferences() {
-        if (references != null)
-            return references;
+//        if (references != null)
+//            return references;
 
-        if (NO_REFERENCE.accepts(this)) {
-            references = PsiReference.EMPTY_ARRAY;
-            return references;
-        }
+        if (NO_REFERENCE.accepts(this))
+            return refs(PsiReference.EMPTY_ARRAY);
 
-        if (BuiltinCallOrConversionReference.MATCHER.accepts(this)) {
-            references = new PsiReference[]{
-                new BuiltinCallOrConversionReference(this)
-            };
+//        if (BuiltinCallOrConversionReference.MATCHER.accepts(this))
+//            return refs(new BuiltinCallOrConversionReference(this));
 
-            return references;
-        }
+        if (LabelReference.MATCHER.accepts(this))
+            return refs(new LabelReference(this));
 
-        if (CallOrConversionReference.MATCHER.accepts(this)) {
-            references = new PsiReference[]{
-                new CallOrConversionReference(this)
-            };
-
-            return references;
-        }
-
-        if (LabelReference.MATCHER.accepts(this)) {
-            references = new PsiReference[] {
-                    new LabelReference(this),
-            };
-            return references;
-        }
-
-        if (CompositeElementToStructFieldReference.MATCHER_KEY.accepts(this)) {
-            references = new PsiReference[] {
+        if (CompositeElementToStructFieldReference.MATCHER_KEY.accepts(this))
+            return refs(
                 new CompositeElementToStructFieldReference(
                     (GoLiteralCompositeElement)
-                        getParent().getParent().getParent())
-            };
+                        getParent().getParent().getParent()));
 
-            return references;
-        }
-
-        if (CompositeElementToStructFieldReference.MATCHER_ELEMENT.accepts(this)) {
-
-            references = new PsiReference[] {
+        if (CompositeElementToStructFieldReference.MATCHER_ELEMENT.accepts(this))
+            return refs(
                 new CompositeElementToStructFieldReference(
                     (GoLiteralCompositeElement) getParent().getParent(),
                     this),
 
-                new BuiltinCallOrConversionReference(this),
-                new CallOrConversionReference(this),
+//                new BuiltinCallOrConversionReference(this),
+//                new CallOrConversionReference(this),
                 new VarOrConstReference(this)
-            };
+            );
 
-            return references;
-        }
+        if (VarOrConstReference.MATCHER.accepts(this))
+            return refs(
+//                new BuiltinCallOrConversionReference(this),
+//                new CallOrConversionReference(this),
+                new VarOrConstReference(this)
+            );
 
-        if (VarOrConstReference.MATCHER.accepts(this)) {
-            references = new PsiReference[]{
-                            new BuiltinCallOrConversionReference(this),
-                            new CallOrConversionReference(this),
-                            new VarOrConstReference(this)
-                        };
-
-            return references;
-        }
-
-        references = PsiReference.EMPTY_ARRAY;
-        return references;
+        return refs(PsiReference.EMPTY_ARRAY);
     }
 
 //    @Override
@@ -351,7 +317,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
         if (isNodeOfType(getParent(), GoElementTypes.LABELED_STATEMENT) ||
             LabelReference.MATCHER.accepts(this)) {
-            return new LocalSearchScope(findParentOfType(this, GoFunctionDeclaration.class));
+            return new LocalSearchScope(
+                findParentOfType(this, GoFunctionDeclaration.class));
         }
 
         return getLocalElementSearchScope(this);

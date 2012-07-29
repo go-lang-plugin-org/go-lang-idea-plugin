@@ -4,6 +4,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.IElementType;
@@ -22,6 +23,13 @@ import ro.redeul.google.go.util.LookupElementUtil;
  */
 public class GoPsiElementBase extends ASTWrapperPsiElement
     implements GoPsiElement {
+
+
+    PsiReference references[];
+    protected PsiReference[] refs(PsiReference ... references) {
+        this.references = references;
+        return this.references;
+    }
 
     public GoPsiElementBase(@NotNull ASTNode node) {
         super(node);

@@ -10,7 +10,7 @@ import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
@@ -18,8 +18,8 @@ import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class CallOrConversionReference extends AbstractCallOrConversionReference<CallOrConversionReference> {
 
-    public CallOrConversionReference(GoLiteralIdentifier identifier) {
-        super(identifier, RESOLVER);
+    public CallOrConversionReference(GoLiteralExpression expression) {
+        super(expression, RESOLVER);
     }
 
     private static final ResolveCache.AbstractResolver<CallOrConversionReference, GoResolveResult> RESOLVER =
@@ -29,10 +29,10 @@ public class CallOrConversionReference extends AbstractCallOrConversionReference
                 MethodOrTypeNameResolver processor =
                     new MethodOrTypeNameResolver(psiReference);
 
-                PsiElement element = psiReference.getElement();
+                GoLiteralExpression expression = psiReference.getElement();
                 PsiScopesUtil.treeWalkUp(
                     processor,
-                    element, element.getContainingFile(),
+                    expression, expression.getContainingFile(),
                     GoResolveStates.initial());
 
                 PsiElement declaration = processor.getChildDeclaration();
@@ -49,7 +49,7 @@ public class CallOrConversionReference extends AbstractCallOrConversionReference
     @Override
     public Object[] getVariants() {
 
-        GoLiteralIdentifier identifier = getElement();
+        GoLiteralExpression expression = getElement();
 
         final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
 
@@ -78,7 +78,7 @@ public class CallOrConversionReference extends AbstractCallOrConversionReference
 
         PsiScopesUtil.treeWalkUp(
             processor,
-            identifier, identifier.getContainingFile(),
+            expression, expression.getContainingFile(),
             GoResolveStates.initial());
 
         return variants.toArray();

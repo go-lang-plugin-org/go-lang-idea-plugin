@@ -43,8 +43,8 @@
         <replaceregexp
                 file="${idea.community.build}/Contents/Info.plist"
                 byline="false"
-                match="(&lt;key&gt;idea.platform.prefix&lt;/key&gt;[\r\n \t]+&lt;string&gt;)Idea(&lt;/string&gt;)"
-                replace="\1GoIde\2"
+                match="(&lt;key&gt;idea.popup.weight&lt;/key&gt;[\r\n \t]+&lt;string&gt;[^&lt;]+&lt;/string&gt;)"
+                replace="\1${line.separator}${line.separator}        &lt;key&gt;idea.platform.prefix&lt;/key&gt;${line.separator}        &lt;string&gt;GoIde&lt;/string&gt;"
                 />
 
         <replaceregexp
@@ -72,21 +72,21 @@
                 file="${idea.community.build}/Contents/Info.plist"
                 byline="false"
                 match="(&lt;key&gt;CFBundleGetInfoString&lt;/key&gt;[\r\n \t]+&lt;string&gt;)[^&lt;]+(&lt;/string&gt;)"
-                replace="\1GoIde 1.0.0, build 0.4.2\2"
+                replace="\1GoIde 1.5.0, build 0.9.0\2"
                 />
 
         <replaceregexp
                 file="${idea.community.build}/Contents/Info.plist"
                 byline="false"
                 match="(&lt;key&gt;CFBundleShortVersionString&lt;/key&gt;[\r\n \t]+&lt;string&gt;)[^&lt;]+(&lt;/string&gt;)"
-                replace="\11.0.0\2"
+                replace="\11.5.0\2"
                 />
 
         <replaceregexp
                 file="${idea.community.build}/Contents/Info.plist"
                 byline="false"
                 match="(&lt;key&gt;CFBundleVersion&lt;/key&gt;[\r\n \t]+&lt;string&gt;)[^&lt;]+(&lt;/string&gt;)"
-                replace="\11.0.0 (0.4.2)\2"
+                replace="\11.5.0 (0.9.0)\2"
                 />
     </target>
 

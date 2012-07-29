@@ -21,7 +21,7 @@ public abstract class GoBinaryExpressionImpl extends GoExpressionBase
     @Override
     public IElementType getOperator() {
         PsiElement child = findChildByFilter(GoElementTypes.BINARY_OPS);
-        return child != null ? child.getNode().getElementType(): null;
+        return child != null ? child.getNode().getElementType() : null;
     }
 
     @Override
@@ -42,24 +42,34 @@ public abstract class GoBinaryExpressionImpl extends GoExpressionBase
         GoExpr leftOperand = getLeftOperand();
         GoExpr rightOperand = getRightOperand();
 
-        if ( leftOperand == null && rightOperand == null)
+        if (leftOperand == null && rightOperand == null)
             return GoType.EMPTY_ARRAY;
 
-        if ( leftOperand == null)
+        if (leftOperand == null)
             return rightOperand.getType();
 
-        if ( rightOperand == null )
+        if (rightOperand == null)
             return leftOperand.getType();
 
         GoType[] leftTypes = leftOperand.getType();
         GoType[] rightTypes = rightOperand.getType();
 
         if (leftTypes.length == 1 && rightTypes.length == 1) {
-            if ( leftTypes[0].isIdentical(rightTypes[0]) ) {
+            if (leftTypes[0].isIdentical(rightTypes[0])) {
                 return leftTypes;
             }
         }
 
         return GoType.EMPTY_ARRAY;
+    }
+
+    @Override
+    public boolean isConstantExpression() {
+        GoExpr leftOperand = getLeftOperand();
+        GoExpr rightOperand = getRightOperand();
+
+        return
+            leftOperand != null && leftOperand.isConstantExpression() &&
+                rightOperand != null && rightOperand.isConstantExpression();
     }
 }

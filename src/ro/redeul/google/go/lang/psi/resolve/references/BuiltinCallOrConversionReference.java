@@ -13,7 +13,6 @@ import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
@@ -25,14 +24,12 @@ import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class BuiltinCallOrConversionReference extends AbstractCallOrConversionReference<BuiltinCallOrConversionReference> {
 
-    public static ElementPattern<GoLiteralIdentifier> MATCHER =
-        psiElement(GoLiteralIdentifier.class)
-            .withParent(
+    public static ElementPattern<GoLiteralExpression> MATCHER =
                 psiElement(GoLiteralExpression.class)
                     .withParent(psiElement(GoBuiltinCallExpression.class))
-                    .atStartOf(psiElement(GoBuiltinCallExpression.class)));
+                    .atStartOf(psiElement(GoBuiltinCallExpression.class));
 
-    public BuiltinCallOrConversionReference(GoLiteralIdentifier identifier) {
+    public BuiltinCallOrConversionReference(GoLiteralExpression identifier) {
         super(identifier, RESOLVER);
     }
 
@@ -73,11 +70,6 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
 //                    .resolveWithCaching(this, RESOLVER, false, false);
 //    }
 
-    @NotNull
-    @Override
-    public String getCanonicalText() {
-        return getElement().getCanonicalName();
-    }
 
     @NotNull
     @Override

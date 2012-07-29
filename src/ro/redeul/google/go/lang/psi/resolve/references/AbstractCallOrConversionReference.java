@@ -4,6 +4,7 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -19,17 +20,15 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public abstract class AbstractCallOrConversionReference<Reference extends AbstractCallOrConversionReference<Reference>>
-    extends GoPsiReference<GoLiteralIdentifier, Reference> {
+    extends GoPsiReference<GoLiteralExpression, Reference> {
 
-    public static ElementPattern<GoLiteralIdentifier> MATCHER =
-        psiElement(GoLiteralIdentifier.class)
-            .withParent(
-                psiElement(GoLiteralExpression.class)
-                    .withParent(psiElement(GoCallOrConvExpression.class))
-                    .atStartOf(psiElement(GoCallOrConvExpression.class)));
+    public static ElementPattern<GoLiteralExpression> MATCHER =
+        psiElement(GoLiteralExpression.class)
+            .withParent(psiElement(GoCallOrConvExpression.class))
+            .atStartOf(psiElement(GoCallOrConvExpression.class));
 
 
-    protected AbstractCallOrConversionReference(GoLiteralIdentifier identifier,
+    protected AbstractCallOrConversionReference(GoLiteralExpression identifier,
                                                 ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
         super(identifier, resolver);
     }
@@ -37,16 +36,23 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
     @NotNull
     @Override
     public String getCanonicalText() {
-        return getElement().getCanonicalName();
+        GoLiteral literal = getElement().getLiteral();
+
+        if (literal != null && literal.getType() == GoLiteral.Type.Identifier) {
+            GoLiteralIdentifier identifier = (GoLiteralIdentifier) literal;
+            return identifier.getName();
+        }
+
+        return getElement().getText();
     }
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        GoLiteralIdentifier identifier = getElement();
-        String str = getCanonicalText();
+        String myName = getCanonicalText();
 
         if (element instanceof GoTypeNameDeclaration) {
-            return matchesVisiblePackageName(element, identifier.getName());
+            GoTypeNameDeclaration typeNameDeclaration = (GoTypeNameDeclaration)element;
+            return matchesVisiblePackageName(typeNameDeclaration, myName);
         }
 
         if (element instanceof GoFunctionDeclaration) {
@@ -55,10 +61,8 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
 
             if (funcDeclaration.getNameIdentifier() != null) {
                 return matchesVisiblePackageName(
-                    funcDeclaration.getUserData(
-                        GoResolveStates.VisiblePackageName),
-                    funcDeclaration.getNameIdentifier(),
-                    identifier.getName());
+                    funcDeclaration.getUserData(GoResolveStates.VisiblePackageName),
+                    funcDeclaration.getNameIdentifier(), myName);
             }
         }
 
@@ -67,19 +71,19 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
                 .withParent(
                     psiElement(GoFunctionParameter.class)
                         .withChild(psiElement(GoPsiTypeFunction.class))
-                ).accepts(element) ) {
-            return matchesVisiblePackageName(element, identifier.getName());
+                ).accepts(element)) {
+            return matchesVisiblePackageName(element, myName);
         }
 
-        if ( IDENT_IN_SHORT_VAR.accepts(element) ) {
+        if (IDENT_IN_SHORT_VAR.accepts(element)) {
             GoShortVarDeclaration shortVars = (GoShortVarDeclaration) element.getParent();
 
             GoType identifierType =
                 shortVars.getIdentifierType((GoLiteralIdentifier) element);
 
-            if  (identifierType != null &&
-                identifierType.getUnderlyingType() instanceof GoUnderlyingTypeFunction )
-                return matchesVisiblePackageName(element, identifier.getName());
+            if (identifierType != null &&
+                identifierType.getUnderlyingType() instanceof GoUnderlyingTypeFunction)
+                return matchesVisiblePackageName(element, myName);
         }
 
         return false;

@@ -34,4 +34,9 @@ public class GoTypeAssertionExpressionImpl extends GoExpressionBase
     public GoPsiType getAssertedType() {
         return findChildByClass(GoPsiType.class);
     }
+
+    @Override
+    public boolean isConstantExpression() {
+        return false;
+    }
 }

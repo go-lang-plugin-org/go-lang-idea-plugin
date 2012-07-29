@@ -47,4 +47,9 @@ public class GoSliceExpressionImpl extends GoExpressionBase
 
         return null;
     }
+
+    @Override
+    public boolean isConstantExpression() {
+        return false;
+    }
 }
