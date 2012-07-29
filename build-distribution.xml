@@ -1,4 +1,5 @@
-<project name="Idea Google Go language scripted build file" default="assemble" basedir=".">
+<project name="Idea Google Go language scripted build file" default="assemble"
+         basedir=".">
 
     <!-- set global properties for this build -->
     <property name="work" location="build"/>
@@ -6,12 +7,15 @@
 
     <property name="go.plugin" value="${dist}/ro.redeul.google.go.jar"/>
 
-    <property name="idea.community.build" location="${dist}/idea-IC-107.SNAPSHOT/"/>
-    <property name="go.sdk.build" location="${user.home}/Tools/google-go/release/"/>
+    <property name="idea.community.build"
+              location="${dist}/idea-IC-107.SNAPSHOT/"/>
+    <property name="go.sdk.build"
+              location="${user.home}/Tools/google-go/release/"/>
 
     <property name="target.platform" value="current"/>
 
-    <property name="go.ide.target.package" value="${dist}/go-ide-${target.platform}.zip"/>
+    <property name="go.ide.target.package"
+              value="${dist}/go-ide-${target.platform}.zip"/>
 
     <target name="init">
         <!-- Create the time stamp -->
@@ -21,11 +25,12 @@
 
         <echo message="Assembling Go-Ide into archive: ${go.ide.target.package}"/>
         <condition property="is.darwin">
-            <equals arg1="${target.platform}" arg2="darwin" />
+            <equals arg1="${target.platform}" arg2="darwin"/>
         </condition>
     </target>
 
-    <target name="resources" depends="init" description="Builds the GoIde resources jar">
+    <target name="resources" depends="init"
+            description="Builds the GoIde resources jar">
         <echo message="Using Idea Community build from: ${idea.community.build}"/>
 
         <jar destfile="${dist}/goide-resources.jar">
@@ -39,7 +44,7 @@
         </jar>
     </target>
 
-    <target name="fix.Info.plist" depends="init" if="is.darwin" >
+    <target name="fix.Info.plist" depends="init" if="is.darwin">
         <replaceregexp
                 file="${idea.community.build}/Contents/Info.plist"
                 byline="false"
@@ -90,10 +95,12 @@
                 />
     </target>
 
-    <target name="assemble" depends="clean,init,resources,fix.Info.plist" description="compile the source">
+    <target name="assemble" depends="clean,init,resources,fix.Info.plist"
+            description="compile the source">
 
         <concat destfile="${work}/idea.properties" force="true">
-            <fileset dir="${idea.community.build}/bin" includes="idea.properties"/>
+            <fileset dir="${idea.community.build}/bin"
+                     includes="idea.properties"/>
             <footer trimleading="yes">idea.platform.prefix=GoIde</footer>
         </concat>
 
@@ -103,33 +110,42 @@
                 match="^(?:# )?idea.(config|system|plugins|log).path=([^/]+)/\.[^/]+/(config|system)"
                 replace="idea.\1.path=\2/.GoIde1/\3"/>
 
-        <fixcrlf srcdir="${idea.community.build}/bin" includes="*.bat" eol="dos" />
+        <fixcrlf srcdir="${idea.community.build}/bin" includes="*.bat"
+                 eol="dos"/>
 
-        <zip file="${go.ide.target.package}" preserve0permissions="true" >
+        <zip file="${go.ide.target.package}" preserve0permissions="true">
 
             <zipfileset dir="${idea.community.build}" prefix="go-ide"
                         includes="**/*"
                         excludes="bin/*.sh,bin/fsnotifier*,bin/idea.properties,bin/*.exe"/>
 
-            <zipfileset file="${work}/idea.properties" prefix="go-ide/bin" />
+            <zipfileset file="${work}/idea.properties" prefix="go-ide/bin"/>
 
-            <zipfileset dir="${idea.community.build}" prefix="go-ide" includes="bin/*.sh,bin/fsnotifier*,bin/*.exe" filemode="755"/>
+            <zipfileset dir="${idea.community.build}" prefix="go-ide"
+                        includes="bin/*.sh,bin/fsnotifier*,bin/*.exe"
+                        filemode="755"/>
 
-            <zipfileset file="${go.plugin}" prefix="go-ide/plugins/ro.redeul.google.go/lib/"/>
+            <zipfileset file="${go.plugin}"
+                        prefix="go-ide/plugins/ro.redeul.google.go/lib/"/>
 
-            <zipfileset file="${dist}/goide-resources.jar" prefix="go-ide/lib/"/>
+            <zipfileset file="${dist}/goide-resources.jar"
+                        prefix="go-ide/lib/"/>
 
-            <zipfileset dir="${go.sdk.build}" prefix="go-ide/bundled/go-sdk" includes="bin/**/*" filemode="755"/>
+            <zipfileset dir="${go.sdk.build}" includes="bin/**/*" filemode="755"
+                        prefix="go-ide/bundled/go-sdk"/>
+
             <zipfileset dir="${go.sdk.build}"
-                        prefix="go-ide/bundled/go-sdk"
                         includes="doc/**/*,include/**/*,src/**/*,*"
                         excludes="**/*.o,**/*.a,**/*.so"
-                    />
+                        prefix="go-ide/bundled/go-sdk"/>
 
-            <zipfileset dir="${go.sdk.build}"
-                        prefix="go-ide/bundled/go-sdk"
-                        includes="pkg/**/*"
-                    />
+            <zipfileset dir="${go.sdk.build}" includes="pkg/**/*"
+                        excludes="pkg/tool/*"
+                        prefix="go-ide/bundled/go-sdk"/>
+
+            <zipfileset dir="${go.sdk.build}" includes="pkg/tool/*"
+                        filemode="755"
+                        prefix="go-ide/bundled/go-sdk"/>
         </zip>
 
     </target>
