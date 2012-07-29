@@ -1,7 +1,7 @@
 <component>
-  <version codename="Up Quark" major="1" minor="0.0" eap="false" update-channel="GOIDE1"/>
-  
-  <build number="GOIDE-1.40" date="20110807"/>
+  <version codename="Strange Quark" major="1" minor="5.0" eap="false" update-channel="GOIDE1"/>
+
+  <build number="GOIDE-1.50" date="20120108"/>
   <install-over minbuild="0" maxbuild="0" version="1.0"/>
   <logo url="/goide/logo.png" textcolor="919191"/>
   <about url="/goide/about.png"/>
