@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import ro.redeul.google.go.GoPsiTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -61,7 +61,7 @@ public class GoElementVisitorTest extends GoPsiTestCase {
             builder.append(element.getText()).append("\n");
         }
 
-        org.testng.Assert.assertEquals(builder.toString().trim(), list.get(2));
+        Assert.assertEquals(builder.toString().trim(), list.get(2));
     }
 
     private GoRecursiveCollectorVisitor visitorForElementType(String elemType) {
