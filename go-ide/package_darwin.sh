@@ -22,5 +22,5 @@ function createDmg()
     SRC_FOLDER="${DIST_FOLDER}/darwin_$1" IMAGE_FILE=${DIST_FOLDER}/goide_osx_$1.dmg ./make_dmg.sh
 }
 
-createDmg 386
+#createDmg 386
 createDmg amd64

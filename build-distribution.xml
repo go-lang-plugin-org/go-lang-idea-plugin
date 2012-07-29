@@ -95,9 +95,7 @@
                 />
     </target>
 
-    <target name="assemble" depends="clean,init,resources,fix.Info.plist"
-            description="compile the source">
-
+    <target name="fix.idea.properties" depends="init" unless="is.darwin">
         <concat destfile="${work}/idea.properties" force="true">
             <fileset dir="${idea.community.build}/bin"
                      includes="idea.properties"/>
@@ -109,6 +107,10 @@
                 byline="true"
                 match="^(?:# )?idea.(config|system|plugins|log).path=([^/]+)/\.[^/]+/(config|system)"
                 replace="idea.\1.path=\2/.GoIde1/\3"/>
+    </target>
+
+    <target name="assemble" depends="clean,init,resources,fix.idea.properties,fix.Info.plist"
+            description="compile the source">
 
         <fixcrlf srcdir="${idea.community.build}/bin" includes="*.bat"
                  eol="dos"/>

@@ -2,7 +2,7 @@
 #
 # Author: Alexandre Normand (https://github.com/alexandre-normand)
 # Date: July 30th, 2011
-# 
+#
 # Making the dmg file
 
 DMG_TEMP_NAME=${DMG_TEMP_NAME:-goIdeTemp.dmg}
@@ -12,7 +12,7 @@ IMAGE_FILE=${IMAGE_FILE:-$FOLDER_DIST/goide-mac.dmg}
 
 echo "Cleaning out old $IMAGE_FILE"
 test -f "$IMAGE_FILE" && rm -f "$IMAGE_FILE"
-echo "Adding symlink Applications to $SRC_FOLDER..."
+echo "Adding symlink Applications to $SRC_FOLDER ..."
 ln -fs /Applications $SRC_FOLDER
 
 echo "Creating disk image..."
@@ -54,4 +54,4 @@ hdiutil detach "${DEV_NAME}"
 # compress image
 echo "Compressing disk image..."
 hdiutil convert "${DMG_TEMP_NAME}" -format UDZO -imagekey zlib-level=9 -o "$IMAGE_FILE"
-rm -f "${DMG_TEMP_NAME}"
+#rm -f "${DMG_TEMP_NAME}"
