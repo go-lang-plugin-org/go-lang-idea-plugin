@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.testFramework.UsefulTestCase;
-import org.testng.Assert;
+import org.junit.Assert;
 import ro.redeul.google.go.lang.GoCodeInsightTestCase;
 
 public abstract class GoCompletionTestBase extends GoCodeInsightTestCase {
