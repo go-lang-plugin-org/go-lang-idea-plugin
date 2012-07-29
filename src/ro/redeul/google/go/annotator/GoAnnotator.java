@@ -48,7 +48,6 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.inspection.InspectionUtil.getProblemRange;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isFunctionOrMethodCall;
@@ -64,7 +63,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     implements Annotator {
 
     private AnnotationHolder annotationHolder;
-    private GoNamesCache goNamesCache;
     private InspectionManager inspectionManager;
 
     public GoAnnotator() {
@@ -77,7 +75,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
             GoPsiElement goPsiElement = (GoPsiElement) element;
 
             try {
-                goNamesCache = GoNamesCache.getInstance(element.getProject());
                 annotationHolder = holder;
                 inspectionManager =
                     InspectionManager.getInstance(element.getProject());
