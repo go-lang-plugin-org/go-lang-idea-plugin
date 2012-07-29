@@ -8,12 +8,15 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
+import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
+import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.typing.GoType;
@@ -50,8 +53,8 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
             if (literal == null)
                 return GoType.EMPTY_ARRAY;
 
-            GoNamesCache namesCache = GoNamesCache.getInstance(
-                expression.getProject());
+            GoNamesCache namesCache =
+                GoNamesCache.getInstance(expression.getProject());
 
             switch (literal.getType()) {
                 case Bool:
@@ -146,6 +149,43 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
     }
 
     @Override
+    public boolean isConstantExpression() {
+        GoLiteral literal = getLiteral();
+        if (literal == null)
+            return true;
+
+        switch (literal.getType()) {
+            case Bool:
+            case Char:
+            case Float:
+            case ImaginaryFloat:
+            case ImaginaryInt:
+            case Int:
+            case InterpretedString:
+            case RawString:
+                return true;
+            case Identifier:
+                GoLiteralIdentifier identifier = (GoLiteralIdentifier) literal;
+
+                if ( identifier.isIota() ){
+                    return true;
+                }
+
+                PsiElement resolved =
+                    GoPsiUtils.resolveSafely(identifier, PsiElement.class);
+
+                if (resolved == null)
+                    return false;
+
+                if (resolved.getParent() instanceof GoConstDeclaration )
+                    return true;
+
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
@@ -156,8 +196,20 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                                              lastParent, place);
     }
 
+    @NotNull
     @Override
-    public PsiReference getReference() {
-        return null;
+    public PsiReference[] getReferences() {
+
+        if (BuiltinCallOrConversionReference.MATCHER.accepts(this)) {
+            if (getLiteral().getText().matches("print|println"))
+                return refs(PsiReference.EMPTY_ARRAY);
+
+            return refs(new BuiltinCallOrConversionReference(this));
+        }
+
+        if (CallOrConversionReference.MATCHER.accepts(this))
+            return refs(new CallOrConversionReference(this));
+
+        return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

@@ -39,6 +39,11 @@ public abstract class GoExpressionBase extends GoPsiElementBase implements GoExp
         return resolveTypes();
     }
 
+    @Override
+    public boolean isConstantExpression() {
+        return false;
+    }
+
     protected GoType[] resolveTypes() {
         return GoType.EMPTY_ARRAY;
     }

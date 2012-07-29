@@ -23,4 +23,9 @@ public class GoParenthesisedExpressionImpl extends GoPsiElementBase
     public GoType[] getType() {
         return getInnerExpression().getType();
     }
+
+    @Override
+    public boolean isConstantExpression() {
+        return getInnerExpression().isConstantExpression();
+    }
 }

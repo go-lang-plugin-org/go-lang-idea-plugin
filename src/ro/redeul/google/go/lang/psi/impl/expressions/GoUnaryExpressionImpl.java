@@ -57,4 +57,9 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
     public GoExpr getExpression() {
         return findChildByClass(GoExpr.class);
     }
+
+    @Override
+    public boolean isConstantExpression() {
+        return getExpression().isConstantExpression();
+    }
 }

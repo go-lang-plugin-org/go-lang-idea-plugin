@@ -169,5 +169,10 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
 
         return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.
     }
+
+    @Override
+    public boolean isConstantExpression() {
+        return false;
+    }
 }
 

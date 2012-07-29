@@ -1,9 +1,6 @@
 package main
 
-import (
-    "fmt"
-    "io"
-)
+import "io"
 
 var (
     /*begin*/a/*end.go.global.variable*/, /*begin*/b/*end.go.global.variable*/ = 5, 6
@@ -23,7 +20,7 @@ type /*begin*/IT/*end.go.type.name*/ interface {
 }
 
 func Foo(/*begin*/a/*end.go.variable*/, /*begin*/b/*end.go.variable*/ /*begin*/int/*end.go.type.name*/, /*begin*/c/*end.go.variable*/ /*begin*/float64/*end.go.type.name*/) (/*begin*/m/*end.go.variable*/ /*begin*/int/*end.go.type.name*/, /*begin*/n/*end.go.variable*/ interface{}) {
-    if /*begin*/a/*end.go.variable*/ < /*begin*/int/*end.go.keyword*/(/*begin*/c/*end.go.variable*/) {
+    if /*begin*/a/*end.go.variable*/ < /*begin*/int/*end.go.type.name*/(/*begin*/c/*end.go.variable*/) {
         /*begin*/m/*end.go.variable*/ = 1
         /*begin*/n/*end.go.variable*/ = 2
         return

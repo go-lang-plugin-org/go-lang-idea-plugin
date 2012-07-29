@@ -24,15 +24,15 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 public class LabelReference
     extends GoPsiReference<GoLiteralIdentifier, LabelReference> {
 
-    public static ElementPattern<GoLiteralIdentifier> MATCHER = psiElement(
-        GoLiteralIdentifier.class)
-        .withParent(
-            or(
-                psiElement(GOTO_STATEMENT),
-                psiElement(BREAK_STATEMENT),
-                psiElement(CONTINUE_STATEMENT)
-            )
-        );
+    public static ElementPattern<GoLiteralIdentifier> MATCHER =
+        psiElement(GoLiteralIdentifier.class)
+            .withParent(
+                or(
+                    psiElement(GOTO_STATEMENT),
+                    psiElement(BREAK_STATEMENT),
+                    psiElement(CONTINUE_STATEMENT)
+                )
+            );
 
     private static ResolveCache.AbstractResolver<LabelReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<LabelReference, GoResolveResult>() {

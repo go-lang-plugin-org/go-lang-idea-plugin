@@ -22,6 +22,7 @@
             <li>Refactorings: Introduce variable/constant</li>
             <li>Inspections: Unused imports/variables/constants/parameters/symbols</li>
             <li>Inspections: Validate the format param for the fmt.Print suite of functions</li>
+            <li>Inspections: Detect non constant expression used in constant declarations</li>
             <li>Intentions: Invert if condition/Merge nested 'if's/Split into 2 'if's/Convert switch statement to if chain.</li>
             <li>Intentions: Convert between interpreted string and raw string.</li>
             <li>Intention: Add/Remove parentheses.</li>
@@ -82,6 +83,7 @@
                 <li>[enhancement] File structure view.</li>
                 <li>[enhancement] TODO's are shown in todo panel.</li>
                 <li>[enhancement] Live templates: "sout", "souf", "soutm" and "soutp".</li>
+                <li>[feature] Inspection: Detect non constant expression used in constant declarations</li>
                 <li>[bugfix] Force the .go file to map to the proper file type.</li>
                 <li>[bugfixes] Various parsing inconsistencies</li>
                 <li>[enhancement] completion/resolution of struct members (expression/composite literals).</li>
@@ -480,6 +482,11 @@
                          shortName="LabelUsage" displayName="Highlights incorrect label usage"
                          level="ERROR"
                          implementationClass="ro.redeul.google.go.inspection.LabelUsageInspection"/>
+        <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
+                         shortName="ConstantExpressionsInConstDeclarations"
+                         displayName="Highlights non constant expressions used in constant definitions"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.ConstantExpressionsInConstDeclarationsInspection"/>
 
         <programRunner implementation="ro.redeul.google.go.runner.GoApplicationRunner" />
         <programRunner implementation="ro.redeul.google.go.runner.GoAppEngineApplicationRunner" />

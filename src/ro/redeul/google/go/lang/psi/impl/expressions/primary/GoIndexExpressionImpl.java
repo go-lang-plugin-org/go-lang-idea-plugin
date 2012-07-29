@@ -83,4 +83,9 @@ public class GoIndexExpressionImpl extends GoExpressionBase
     public void accept(GoElementVisitor visitor) {
         visitor.visitIndexExpression(this);
     }
+
+    @Override
+    public boolean isConstantExpression() {
+        return false;
+    }
 }

@@ -13,4 +13,6 @@ public interface GoExpr extends GoPsiElement {
 
     @NotNull
     GoType[] getType();
+
+    boolean isConstantExpression();
 }

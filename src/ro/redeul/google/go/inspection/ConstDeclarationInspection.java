@@ -42,7 +42,7 @@ public class ConstDeclarationInspection extends AbstractWholeGoFileInspection {
         if (isMissingFirstExpressionDeclaration(constDecls)) {
             result.addProblem(constDecls.getDeclarations()[0],
                               GoBundle.message(
-                                  "error.missing.first.const.expresson"),
+                                  "error.missing.first.const.expression"),
                               ProblemHighlightType.ERROR,
                               new AddMissingExpressionFix(),
                               new DeleteStmtFix()

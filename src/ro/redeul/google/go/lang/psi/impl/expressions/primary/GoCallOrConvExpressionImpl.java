@@ -1,21 +1,20 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import java.util.Arrays;
-import java.util.List;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
@@ -58,11 +57,9 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
     @Override
     public GoExpr[] getArguments() {
 
-        PsiElement list = findChildByType(GoElementTypes.EXPRESSION_LIST);
+        GoExpressionList list = findChildByClass(GoExpressionList.class);
         if ( list != null ) {
-            List<GoExpr> arguments =
-                GoPsiUtils.findChildrenOfType(list, GoExpr.class);
-            return arguments.toArray(new GoExpr[arguments.size()]);
+            return list.getExpressions();
         }
 
         GoExpr []expressions = findChildrenByClass(GoExpr.class);
@@ -77,5 +74,17 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitCallOrConvExpression(this);
+    }
+
+    @Override
+    public boolean isConstantExpression() {
+        PsiElement reference = resolveSafely(getBaseExpression(), PsiElement.class);
+
+        if (reference instanceof GoTypeSpec) {
+            GoExpr[] arguments = getArguments();
+            return arguments.length == 1 && arguments[0].isConstantExpression();
+        }
+
+        return false;
     }
 }
