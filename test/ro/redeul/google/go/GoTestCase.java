@@ -17,8 +17,8 @@ import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.junit.After;
+import org.junit.Before;
 import ro.redeul.google.go.config.facet.GoFacet;
 import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
@@ -36,7 +36,7 @@ public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> ext
         IdeaTestCase.initPlatformPrefix();
     }
 
-    @BeforeMethod
+    @Before
     public void before(Method method) throws Throwable {
         this.currentRunningTestMethod = method;
 
@@ -66,7 +66,7 @@ public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> ext
         return ModuleFixtureBuilder.class;
     }
 
-    @AfterMethod
+    @After
     public void after(Method method) throws Exception {
         this.fixture.tearDown();
         this.currentRunningTestMethod = null;

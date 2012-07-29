@@ -10,15 +10,6 @@
       <sourceFolder url="file://$MODULE_DIR$/go-ide/resources" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/idea-home" />
     </content>
-    <orderEntry type="module-library" scope="TEST">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/testng-5.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

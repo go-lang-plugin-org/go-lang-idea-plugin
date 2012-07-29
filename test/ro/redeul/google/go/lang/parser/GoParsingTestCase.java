@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
+import org.junit.Assert;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 import ro.redeul.google.go.util.GoTestUtils;
 
@@ -53,6 +54,6 @@ public abstract class GoParsingTestCase
         final PsiFile psiFile = GoTestUtils.createPseudoPhysicalGoFile(
             getProject(), input);
         String psiTree = DebugUtil.psiToString(psiFile, false);
-        org.testng.Assert.assertEquals(psiTree.trim(), output.trim());
+        Assert.assertEquals(psiTree.trim(), output.trim());
     }
 }
