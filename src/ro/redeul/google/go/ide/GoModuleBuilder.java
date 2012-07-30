@@ -5,11 +5,8 @@ import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
 import com.intellij.ide.util.projectWizard.SourcePathsBuilder;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
@@ -64,5 +61,9 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
     @Override
     public boolean isSuitableSdk(Sdk sdk) {
         return sdk.getSdkType() == GoSdkType.getInstance();
+    }
+
+    public void inheritSdk() {
+        //To change body of created methods use File | Settings | File Templates.
     }
 }

@@ -1,5 +1,7 @@
 package ro.redeul.google.go.wizards;
 
+import java.util.List;
+
 import com.intellij.ide.util.newProjectWizard.ProjectNameStep;
 import com.intellij.ide.util.newProjectWizard.StepSequence;
 import com.intellij.ide.util.newProjectWizard.modes.WizardMode;
@@ -13,9 +15,6 @@ import com.intellij.openapi.util.Computable;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.ide.GoModuleBuilder;
-
-import javax.swing.*;
-import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -63,12 +62,8 @@ public class GoApplicationWizard extends WizardMode {
             @Override
             public Boolean compute() {
                 List<Sdk> sdkList = ProjectJdkTable.getInstance().getSdksOfType(GoSdkType.getInstance());
-                if ( sdkList != null && sdkList.size() == 1 ) {
-                    goModuleBuilder.setModuleJdk(sdkList.get(0));
-                    return false;
-                }
+                return !(sdkList != null && sdkList.size() == 1);
 
-                return true;
             }
         }, null, ""));
 
