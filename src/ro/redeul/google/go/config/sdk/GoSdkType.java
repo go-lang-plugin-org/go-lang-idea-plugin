@@ -1,9 +1,17 @@
 package ro.redeul.google.go.config.sdk;
 
+import javax.swing.*;
+import static java.lang.String.format;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
-import com.intellij.openapi.projectRoots.*;
+import com.intellij.openapi.projectRoots.AdditionalDataConfigurable;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkAdditionalData;
+import com.intellij.openapi.projectRoots.SdkModel;
+import com.intellij.openapi.projectRoots.SdkModificator;
+import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.xmlb.XmlSerializer;
@@ -13,9 +21,6 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.ui.GoSdkConfigurable;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.GoUtil;
-
-import javax.swing.*;
-import static java.lang.String.format;
 
 public class GoSdkType extends SdkType {
 
@@ -105,8 +110,16 @@ public class GoSdkType extends SdkType {
     }
 
     @Override
+    public String getVersionString(Sdk sdk) {
+        return getVersionString(sdk.getHomePath());
+    }
+
+    @Override
     public String getVersionString(String sdkHome) {
-        return sdkData != null ? sdkData.VERSION_MINOR : super.getVersionString(sdkHome);
+        if (!isValidSdkHome(sdkHome))
+            return super.getVersionString(sdkHome);
+
+        return sdkData.VERSION_MINOR;
     }
 
     @Override
@@ -177,11 +190,6 @@ public class GoSdkType extends SdkType {
     @Override
     public String getPresentableName() {
         return "Go Sdk";
-    }
-
-    @Override
-    public String getVersionString(Sdk sdk) {
-        return sdk.getVersionString();
     }
 
     @Override
