@@ -11,6 +11,7 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiErrorElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.ProcessingContext;
@@ -31,6 +32,7 @@ import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
@@ -161,6 +163,25 @@ public class GoCompletionContributor extends CompletionContributor {
                 }
             }
         };
+
+    CompletionProvider<CompletionParameters> localImportsCompletion = new CompletionProvider<CompletionParameters>() {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters,
+                                      ProcessingContext context,
+                                      @NotNull CompletionResultSet result) {
+            PsiFile originalFile = parameters.getOriginalFile();
+            if (!(originalFile instanceof GoFile))
+                return;
+
+            GoFile file = (GoFile) originalFile;
+
+            for (GoImportDeclarations importDecls : file.getImportDeclarations()) {
+                for (GoImportDeclaration importDecl : importDecls.getDeclarations()) {
+                    result.addElement(LookupElementBuilder.create(importDecl.getVisiblePackageName() + "."));
+                }
+            }
+        }
+    };
 
     CompletionProvider<CompletionParameters> debuggingCompletionProvider = new CompletionProvider<CompletionParameters>() {
         @Override

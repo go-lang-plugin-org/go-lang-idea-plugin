@@ -67,7 +67,7 @@ public class TypeNameReference
                 = (GoTypeNameDeclaration) element;
 
             return matchesVisiblePackageName(typeNameDecl,
-                                             getElement().getName());
+                                             getElement().getIdentifier().getName());
         }
 
         return false;
@@ -101,6 +101,7 @@ public class TypeNameReference
                     variants.add(
                         createLookupElement(
                             goDeclaration,
+                            name,
                             goChildDeclaration));
                     return true;
 
