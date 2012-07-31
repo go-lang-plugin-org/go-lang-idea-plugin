@@ -1,5 +1,16 @@
 package ro.redeul.google.go.compilation;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.make.MakeUtil;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -39,9 +50,6 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkTool;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.GoUtil;
-
-import java.io.File;
-import java.util.*;
 
 public class GoCompiler implements TranslatingCompiler {
 
@@ -337,9 +345,12 @@ public class GoCompiler implements TranslatingCompiler {
 
         String outputBinary = targetFile + "." + getTargetExtension(sdk);
 
-        GeneralCommandLine command = new GeneralCommandLine();
+        GoSdkData sdkData = goSdkData(sdk);
 
-        command.setExePath(getCompilerBinary(sdk));
+        GeneralCommandLine command = new GeneralCommandLine();
+        command.setExePath(getGoToolBinary(sdk));
+        command.addParameter("tool");
+        command.addParameter(GoSdkUtil.getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH));
         command.addParameter("-I");
         command.addParameter(baseOutputPath);
         command.addParameter("-o");
@@ -377,7 +388,9 @@ public class GoCompiler implements TranslatingCompiler {
         String outputApplication = targetFile.getAbsolutePath();
 
         GeneralCommandLine linkCommand = new GeneralCommandLine();
-        linkCommand.setExePath(getLinkerBinary(sdk));
+        linkCommand.setExePath(getGoToolBinary(sdk));
+        linkCommand.addParameter("tool");
+        linkCommand.addParameter(GoSdkUtil.getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH));
         linkCommand.addParameter("-L");
         linkCommand.addParameter(baseOutputPath);
         linkCommand.addParameter("-o");
@@ -419,9 +432,12 @@ public class GoCompiler implements TranslatingCompiler {
 
         String outputBinary = baseOutputPath + File.separator + target + "." + getTargetExtension(sdk);
 
-        GeneralCommandLine command = new GeneralCommandLine();
+        GoSdkData sdkData = goSdkData(sdk);
 
-        command.setExePath(getCompilerBinary(sdk));
+        GeneralCommandLine command = new GeneralCommandLine();
+        command.setExePath(getGoToolBinary(sdk));
+        command.addParameter("tool");
+        command.addParameter(GoSdkUtil.getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH));
         command.addParameter("-I");
         command.addParameter(baseOutputPath);
         command.addParameter("-o");
@@ -456,7 +472,9 @@ public class GoCompiler implements TranslatingCompiler {
         sink.add(outputFolder.getAbsolutePath(), outputItems, VirtualFile.EMPTY_ARRAY);
 
         GeneralCommandLine libraryPackCommand = new GeneralCommandLine();
-        libraryPackCommand.setExePath(getPackerBinary(sdk));
+        libraryPackCommand.setExePath(getGoToolBinary(sdk));
+        libraryPackCommand.addParameter("tool");
+        libraryPackCommand.addParameter(GoSdkUtil.getToolName(sdkData.TARGET_OS, sdkData.TARGET_ARCH, GoSdkTool.GoArchivePacker));
         libraryPackCommand.addParameter("grc");
         libraryPackCommand.addParameter(libraryFile.getPath());
         libraryPackCommand.addParameter(outputBinary);
@@ -613,20 +631,9 @@ public class GoCompiler implements TranslatingCompiler {
         return baseOutputPath;
     }
 
-
-    private String getCompilerBinary(Sdk sdk) {
+    private String getGoToolBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.GO_BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoCompiler);
-    }
-
-    private String getPackerBinary(Sdk sdk) {
-        GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.GO_BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoArchivePacker);
-    }
-
-    private String getLinkerBinary(Sdk sdk) {
-        GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.GO_BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoLinker);
+        return goSdkData.GO_BIN_PATH + "/go";
     }
 
     private String getTargetExtension(Sdk sdk) {

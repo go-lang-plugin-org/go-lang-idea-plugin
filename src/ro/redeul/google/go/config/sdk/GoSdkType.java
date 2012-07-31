@@ -20,7 +20,6 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.ui.GoSdkConfigurable;
 import ro.redeul.google.go.sdk.GoSdkUtil;
-import ro.redeul.google.go.util.GoUtil;
 
 public class GoSdkType extends SdkType {
 
@@ -44,7 +43,7 @@ public class GoSdkType extends SdkType {
 
     @Override
     public String suggestHomePath() {
-        return GoUtil.resolvePotentialGoogleGoHomePath();
+        return GoSdkUtil.resolvePotentialGoogleGoHomePath();
     }
 
     @Override
@@ -165,12 +164,7 @@ public class GoSdkType extends SdkType {
             }
         });
 
-        sdkModificator.setVersionString(
-            format("%s%s",
-                   sdkData.VERSION_MAJOR,
-                   sdkData.VERSION_MINOR == null
-                       ? ""
-                       : " " + sdkData.VERSION_MINOR));
+        sdkModificator.setVersionString(sdkData.VERSION_MAJOR);
         sdkModificator.setSdkAdditionalData(sdkData);
         sdkModificator.commitChanges();
     }

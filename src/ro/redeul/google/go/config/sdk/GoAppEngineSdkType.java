@@ -19,7 +19,6 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.ui.GoAppEngineSdkConfigurable;
 import ro.redeul.google.go.sdk.GoSdkUtil;
-import ro.redeul.google.go.util.GoUtil;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -45,7 +44,7 @@ public class GoAppEngineSdkType extends SdkType {
 
     @Override
     public String suggestHomePath() {
-        return GoUtil.resolvePotentialGoogleGoAppEngineHomePath();
+        return GoSdkUtil.resolvePotentialGoogleGoAppEngineHomePath();
     }
 
     @Override

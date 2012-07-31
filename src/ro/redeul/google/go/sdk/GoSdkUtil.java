@@ -1,10 +1,11 @@
 package ro.redeul.google.go.sdk;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,14 +17,19 @@ import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ModuleRootModel;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.SystemProperties;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.config.sdk.GoTargetArch;
@@ -34,15 +40,13 @@ public class GoSdkUtil {
 
     public static final String PACKAGES = "src/pkg";
 
-    private static final Logger LOG = Logger.getInstance("ro.redeul.google.go.sdk.GoSdkUtil");
+    private static final Logger LOG = Logger.getInstance(
+        "ro.redeul.google.go.sdk.GoSdkUtil");
     private static final String TEST_SDK_PATH = "go.test.sdk.home";
 
     private static final String DEFAULT_MOCK_PATH = "go/default";
 
-    // 8g version release.r59 9305
-    // 6g version go1
-    private static Pattern RE_VERSION_MATCHER =
-        Pattern.compile("([^ ]+) version ([^ ]+)( (.+))*$");
+    public static final String ENV_GO_ROOT = "GOROOT";
 
     // release: "xx"
     private static Pattern RE_APP_ENGINE_VERSION_MATCHER =
@@ -58,91 +62,133 @@ public class GoSdkUtil {
         Pattern.compile(".*^GOOS=\"(darwin|freebsd|linux|windows)\"$.*",
                         Pattern.DOTALL | Pattern.MULTILINE);
 
+    private static Pattern RE_HOSTOS_MATCHER =
+        Pattern.compile(".*^GOHOSTOS=\"(darwin|freebsd|linux|windows)\"$.*",
+                        Pattern.DOTALL | Pattern.MULTILINE);
+
     private static Pattern RE_ARCH_MATCHER =
         Pattern.compile(".*^GOARCH=\"(386|amd64|arm)\"$.*",
+                        Pattern.DOTALL | Pattern.MULTILINE);
+
+    private static Pattern RE_HOSTARCH_MATCHER =
+        Pattern.compile(".*^GOHOSTARCH=\"(386|amd64|arm)\"$.*",
+                        Pattern.DOTALL | Pattern.MULTILINE);
+
+    private static Pattern RE_ROOT_MATCHER =
+        Pattern.compile(".*^GOROOT=\"([^\"]+)\"$.*",
+                        Pattern.DOTALL | Pattern.MULTILINE);
+
+    private static Pattern RE_BIN_MATCHER =
+        Pattern.compile(".*^GOBIN=\"([^\"]+)\"$.*",
                         Pattern.DOTALL | Pattern.MULTILINE);
 
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static GoSdkData testGoogleGoSdk(String path) {
 
-        if (!checkFolderExists(path) || !checkFolderExists(path, "src") || !checkFolderExists(path, "pkg")) {
+        if (!checkFolderExists(path)) {
             return null;
         }
 
-        File pkgFolder = new File(path, "pkg");
-
-        File targets[] = pkgFolder.listFiles(new FileFilter() {
-            public boolean accept(File pathName) {
-                return pathName.isDirectory() && !pathName.getName().matches("\\.{1,2}");
-            }
-        });
-
-        // At least a directory with package
-        boolean pkgExists = false;
-        boolean toolsExists = false;
-        String pkgName = "";
-        for (File t : targets) {
-            if (t.getName().matches("(windows|linux|darwin|freebsd)_(386|amd64|arm)")) {
-                pkgExists = true;
-                pkgName = t.getName();
-            }
+        if (!checkFolderExists(path, "src") || !checkFolderExists(path,
+                                                                  "pkg")) {
+            return null;
         }
 
-        String[] target = pkgName.split("_");
+        String binariesPath = path + "/bin";
 
-        GoTargetOs targetOs = GoTargetOs.fromString(target[0]);
-        GoTargetArch targetArch = GoTargetArch.fromString(target[1]);
+        GoSdkData data = findHostOsAndArch(binariesPath, new GoSdkData());
 
-        String compilerName = getCompilerName(targetOs, targetArch);
+        data = findVersion(binariesPath, data);
 
-        String binariesPath = System.getenv("GOBIN");
-        if (binariesPath == null) {
-            // new go packaging
-            binariesPath = path + "/pkg/tool/" + pkgName;
+        data.GO_BIN_PATH = binariesPath;
+        return data;
+    }
 
-            // old
-            if (!(new File(binariesPath).isDirectory())) {
-                binariesPath = path + "/bin";
-                if (!(new File(binariesPath).isDirectory())) {
-                    binariesPath = "/usr/bin";
-                }
-            }
-        }
-
-        GeneralCommandLine command = new GeneralCommandLine();
-        command.setExePath(binariesPath + "/" + compilerName);
-        command.addParameter("-V");
-        command.setWorkDirectory(binariesPath);
+    private static GoSdkData findVersion(String binariesPath, GoSdkData data) {
+        if (data == null)
+            return null;
 
         try {
+            GeneralCommandLine command = new GeneralCommandLine();
+            command.setExePath(binariesPath + "/go");
+            command.addParameter("tool");
+            command.addParameter("dist");
+            command.addParameter("version");
+            command.setWorkDirectory(binariesPath);
+
             ProcessOutput output = new CapturingProcessHandler(
-                    command.createProcess(),
-                    Charset.defaultCharset(),
-                    command.getCommandLineString()).runProcess();
+                command.createProcess(),
+                Charset.defaultCharset(),
+                command.getCommandLineString()).runProcess();
 
             if (output.getExitCode() != 0) {
-                LOG.error("Go compiler exited with invalid exit code: " + output.getExitCode());
+                LOG.error(
+                    "Go compiler exited with invalid exit code: " + output.getExitCode());
                 return null;
             }
 
-            String outputString = output.getStdout().replaceAll("[\r\n]+", "");
-
-            Matcher matcher = RE_VERSION_MATCHER.matcher(outputString);
-            if (matcher.matches()) {
-                return new GoSdkData(path, binariesPath, targetOs, targetArch, matcher.group(2), matcher.group(3));
-            }
-
-            return null;
+            data.VERSION_MAJOR = output.getStdout().trim();
+            return data;
         } catch (ExecutionException e) {
             LOG.error("Exception while executing the process:", e);
             return null;
         }
     }
 
+    private static GoSdkData findHostOsAndArch(String binariesPath, GoSdkData data) {
+
+        if (data == null)
+            return data;
+
+        try {
+            GeneralCommandLine command = new GeneralCommandLine();
+            command.setExePath(binariesPath + "/go");
+            command.addParameter("tool");
+            command.addParameter("dist");
+            command.addParameter("env");
+            command.setWorkDirectory(binariesPath);
+
+            ProcessOutput output = new CapturingProcessHandler(
+                command.createProcess(),
+                Charset.defaultCharset(),
+                command.getCommandLineString()).runProcess();
+
+            if (output.getExitCode() != 0) {
+                LOG.error(
+                    "Go compiler exited with invalid exit code: " + output.getExitCode());
+                return null;
+            }
+
+            String outputString = output.getStdout();
+
+            Matcher matcher;
+            matcher = RE_HOSTOS_MATCHER.matcher(outputString);
+            if (matcher.matches()) {
+                data.TARGET_OS = GoTargetOs.fromString(matcher.group(1));
+            }
+
+            matcher = RE_HOSTARCH_MATCHER.matcher(outputString);
+            if (matcher.matches()) {
+                data.TARGET_ARCH = GoTargetArch.fromString(matcher.group(1));
+            }
+        } catch (ExecutionException e) {
+            LOG.error("Exception while executing the process:", e);
+            return null;
+        }
+
+        if (data.TARGET_ARCH != null && data.TARGET_OS != null)
+            return data;
+
+        return null;
+    }
+
     public static GoAppEngineSdkData testGoAppEngineSdk(String path) {
 
-        if (!checkFolderExists(path) || !checkFileExists(path, "dev_appserver.py")
-                || !checkFolderExists(path, "goroot") || !checkFolderExists(path, "goroot", "pkg"))
+        if (!checkFolderExists(path) || !checkFileExists(path,
+                                                         "dev_appserver.py")
+            || !checkFolderExists(path, "goroot") || !checkFolderExists(path,
+                                                                        "goroot",
+                                                                        "pkg"))
             return null;
 
         if (!checkFileExists(path, "VERSION"))
@@ -168,7 +214,8 @@ public class GoSdkUtil {
                 command.getCommandLineString()).runProcess();
 
             if (output.getExitCode() != 0) {
-                LOG.error("Go command exited with invalid exit code: " + output.getExitCode());
+                LOG.error(
+                    "Go command exited with invalid exit code: " + output.getExitCode());
                 return null;
             }
 
@@ -189,9 +236,11 @@ public class GoSdkUtil {
 
         try {
             String fileContent =
-                VfsUtil.loadText(VfsUtil.findFileByURL(new URL(VfsUtil.pathToUrl(String.format("%s/VERSION", path)))));
+                VfsUtil.loadText(VfsUtil.findFileByURL(new URL(
+                    VfsUtil.pathToUrl(String.format("%s/VERSION", path)))));
 
-            Matcher matcher = RE_APP_ENGINE_VERSION_MATCHER.matcher(fileContent);
+            Matcher matcher = RE_APP_ENGINE_VERSION_MATCHER.matcher(
+                fileContent);
 
             if (!matcher.find())
                 return null;
@@ -253,7 +302,7 @@ public class GoSdkUtil {
         String sdkPath = PathManager.getHomePath() + "/" + DEFAULT_MOCK_PATH;
 
         String testSdkHome = System.getProperty(TEST_SDK_PATH);
-        String goRoot = GoUtil.resolvePotentialGoogleGoHomePath();
+        String goRoot = resolvePotentialGoogleGoHomePath();
 
         // Use the test sdk path before anything else, if available
         if (testSdkHome != null) {
@@ -268,9 +317,20 @@ public class GoSdkUtil {
     public static GoSdkData getMockGoogleSdk(String path) {
         GoSdkData sdkData = testGoogleGoSdk(path);
         if (sdkData != null) {
-            new File(sdkData.GO_BIN_PATH, getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
-            new File(sdkData.GO_BIN_PATH, getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
-            new File(sdkData.GO_BIN_PATH, getArchivePackerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)).setExecutable(true);
+            new File(
+                sdkData.GO_BIN_PATH,
+                getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
+            ).setExecutable(true);
+
+            new File(
+                sdkData.GO_BIN_PATH,
+                getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
+            ).setExecutable(true);
+
+            new File(
+                sdkData.GO_BIN_PATH,
+                getArchivePackerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
+            ).setExecutable(true);
         }
 
         return sdkData;
@@ -312,7 +372,8 @@ public class GoSdkUtil {
         if (!moduleRootModel.isSdkInherited()) {
             sdk = moduleRootModel.getSdk();
         } else {
-            sdk = ProjectRootManager.getInstance(module.getProject()).getProjectSdk();
+            sdk = ProjectRootManager.getInstance(module.getProject())
+                                    .getProjectSdk();
         }
 
         if (GoSdkType.isInstance(sdk)) {
@@ -334,14 +395,18 @@ public class GoSdkUtil {
     }
 
     public static Sdk getGoogleGoSdkForFile(PsiFile file) {
-        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(file.getProject()).getFileIndex();
-        Module module = projectFileIndex.getModuleForFile(file.getVirtualFile());
+        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(
+            file.getProject()).getFileIndex();
+        Module module = projectFileIndex.getModuleForFile(
+            file.getVirtualFile());
 
         return getGoogleGoSdkForModule(module);
     }
 
     public static String getTool(GoSdkData goSdkData, GoSdkTool tool) {
-        return String.format("%s/%s", goSdkData.GO_BIN_PATH, getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, tool));
+        return String.format("%s/%s", goSdkData.GO_BIN_PATH,
+                             getToolName(goSdkData.TARGET_OS,
+                                         goSdkData.TARGET_ARCH, tool));
     }
 
     public static String getToolName(GoTargetOs os, GoTargetArch arch, GoSdkTool tool) {
@@ -354,7 +419,7 @@ public class GoSdkUtil {
             case GoLinker:
                 return binariesDesignation + "l";
             case GoArchivePacker:
-                return "gopack";
+                return "pack";
             case GoMake:
                 return "gomake";
             case GoFmt:
@@ -363,5 +428,100 @@ public class GoSdkUtil {
 
         return "";
     }
+
+    public static String resolvePotentialGoogleGoAppEngineHomePath() {
+
+        if ( ! isSdkRegistered(PathManager.getHomePath() + "/bundled/go-appengine-sdk", GoAppEngineSdkType
+            .getInstance()) ) {
+            return PathManager.getHomePath() + "/bundled/go-appengine-sdk";
+        }
+
+        String path = System.getenv("PATH");
+        if ( path == null ) {
+            return null;
+        }
+
+        String []parts = path.split("[:;]+");
+        for (String part : parts) {
+            if ( ! isSdkRegistered(part, GoAppEngineSdkType.getInstance()) ) {
+                return part;
+            }
+        }
+
+        return SystemProperties.getUserHome();
+    }
+
+
+    public static String resolvePotentialGoogleGoHomePath() {
+
+        if ( ! isSdkRegistered(PathManager.getHomePath() + "/bundled/go-sdk", GoSdkType.getInstance()) ) {
+            return PathManager.getHomePath() + "/bundled/go-sdk";
+        }
+
+        String goRoot = System.getenv(ENV_GO_ROOT);
+        if ( goRoot != null && !isSdkRegistered(goRoot, GoSdkType.getInstance()) ) {
+            return goRoot;
+        }
+
+        String command = "go";
+        if ( GoUtil.testPathExists("/usr/lib/go") ) {
+            command = "/usr/lib/go";
+        }
+
+        String path = System.getenv("PATH");
+        GeneralCommandLine goCommandLine = new GeneralCommandLine();
+
+        goCommandLine.setExePath(command);
+        goCommandLine.addParameter("tool");
+        goCommandLine.addParameter("dist");
+        goCommandLine.addParameter("env");
+
+        try {
+            ProcessOutput output = new CapturingProcessHandler(
+                goCommandLine.createProcess(),
+                Charset.defaultCharset(),
+                goCommandLine.getCommandLineString()).runProcess();
+
+            if (output.getExitCode() == 0) {
+                String outputString = output.getStdout();
+
+                Matcher matcher = RE_ROOT_MATCHER.matcher(outputString);
+                if (matcher.matches()) {
+                    return matcher.group(1);
+                }
+            }
+        } catch (ExecutionException e) {
+            int a = 10;
+        }
+
+        return SystemProperties.getUserHome();
+    }
+
+    private static boolean isSdkRegistered(String homePath, SdkType sdkType) {
+
+        VirtualFile homePathAsVirtualFile;
+        try {
+            homePathAsVirtualFile = VfsUtil.findFileByURL(new URL(VfsUtil.pathToUrl(homePath)));
+        } catch (MalformedURLException e) {
+            return true;
+        }
+
+        if ( homePathAsVirtualFile == null || ! homePathAsVirtualFile.isDirectory() ) {
+            return true;
+        }
+
+        ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
+
+        List<Sdk> registeredSdks = jdkTable.getSdksOfType(sdkType);
+
+        for (Sdk registeredSdk : registeredSdks) {
+            if ( homePathAsVirtualFile.equals(registeredSdk.getHomeDirectory()) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
 }

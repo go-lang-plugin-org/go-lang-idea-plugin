@@ -1,25 +1,15 @@
 package ro.redeul.google.go.util;
 
-import com.intellij.ide.Bootstrap;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.projectRoots.ProjectJdkTable;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkType;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.SystemProperties;
-import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
-import ro.redeul.google.go.config.sdk.GoSdkType;
-
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.intellij.ide.Bootstrap;
+import com.intellij.openapi.vfs.VirtualFile;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -28,8 +18,6 @@ import java.util.regex.Pattern;
  * Time: 4:18:54 AM
  */
 public class GoUtil {
-    public static final String ENV_GO_ROOT = "GOROOT";
-
 
     /**
      * Gets the idea home directory.
@@ -58,72 +46,7 @@ public class GoUtil {
         }
     }
 
-    public static String resolvePotentialGoogleGoAppEngineHomePath() {
-
-        if ( ! isSdkRegistered(PathManager.getHomePath() + "/bundled/go-appengine-sdk", GoAppEngineSdkType.getInstance()) ) {
-            return PathManager.getHomePath() + "/bundled/go-appengine-sdk";
-        }
-
-        String path = System.getenv("PATH");
-        if ( path == null ) {
-            return null;
-        }
-
-        String []parts = path.split("[:;]+");
-        for (String part : parts) {
-            if ( ! isSdkRegistered(part, GoAppEngineSdkType.getInstance()) ) {
-                return part;
-            }
-        }
-
-        return SystemProperties.getUserHome();
-    }
-
-    public static String resolvePotentialGoogleGoHomePath() {
-
-        if ( ! isSdkRegistered(PathManager.getHomePath() + "/bundled/go-sdk", GoSdkType.getInstance()) ) {
-            return PathManager.getHomePath() + "/bundled/go-sdk";
-        }
-
-        String goRoot = System.getenv(ENV_GO_ROOT);
-        if ( goRoot != null && ! isSdkRegistered(goRoot, GoSdkType.getInstance()) ) {
-            return goRoot;
-        }
-
-        if ( testPathExists("/usr/lib/go") ) {
-            return "/usr/lib/go";
-        }
-
-        return SystemProperties.getUserHome();
-    }
-
-    private static boolean isSdkRegistered(String homePath, SdkType sdkType) {
-
-        VirtualFile homePathAsVirtualFile;
-        try {
-            homePathAsVirtualFile = VfsUtil.findFileByURL(new URL(VfsUtil.pathToUrl(homePath)));
-        } catch (MalformedURLException e) {
-            return true;
-        }
-
-        if ( homePathAsVirtualFile == null || ! homePathAsVirtualFile.isDirectory() ) {
-            return true;
-        }
-
-        ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
-
-        List<Sdk> registeredSdks = jdkTable.getSdksOfType(sdkType);
-
-        for (Sdk registeredSdk : registeredSdks) {
-            if ( homePathAsVirtualFile.equals(registeredSdk.getHomeDirectory()) ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static boolean testPathExists(String goRoot) {
+    public static boolean testPathExists(String goRoot) {
         return goRoot != null && goRoot.trim().length() > 0 && new File(goRoot).isDirectory();
     }
 
