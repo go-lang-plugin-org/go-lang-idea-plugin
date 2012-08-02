@@ -16,6 +16,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -138,8 +139,12 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                 if (VfsUtil.isAncestor(sourceRoot, file, true)) {
                     String relativePath = VfsUtil.getRelativePath(file.getParent(), sourceRoot, File.separatorChar);
 
-                    return CompilerPaths.getModuleOutputPath(module, false) + "/go-bins/" + relativePath + "/" +
-                            file.getNameWithoutExtension();
+                    String compiledFileName = CompilerPaths.getModuleOutputPath(module, false)
+                                                + "/go-bins/" + relativePath + "/" + file.getNameWithoutExtension();
+                    if (SystemInfo.isWindows) {
+                        compiledFileName += ".exe";
+                    }
+                    return compiledFileName;
                 }
             }
         }
