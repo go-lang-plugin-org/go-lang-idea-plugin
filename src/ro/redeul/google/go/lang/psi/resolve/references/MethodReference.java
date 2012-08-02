@@ -22,6 +22,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
+import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.util.LookupElementUtil;
 
 public class MethodReference
@@ -157,6 +158,9 @@ public class MethodReference
             return null;
 
         GoType type = types[0];
+        if ( type instanceof GoTypePointer)
+            type = ((GoTypePointer) type).getTargetType();
+
         if (!(type instanceof GoTypeName))
             return null;
 

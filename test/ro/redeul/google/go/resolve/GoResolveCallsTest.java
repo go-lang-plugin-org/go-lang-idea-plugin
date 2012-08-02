@@ -13,6 +13,10 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
         return super.getTestDataRelativePath() + "calls/";
     }
 
+    public void testCallToLocalMethodByPointer() throws Exception {
+        doTest();
+    }
+
     public void testCallToLocalMethod() throws Exception {
         doTest();
     }
