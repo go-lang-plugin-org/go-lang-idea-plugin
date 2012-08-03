@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
@@ -357,12 +358,16 @@ public class PrimaryExpression implements GoElementTypes {
 
             parseCompositeLiteralValueElement(builder, parser);
 
+            if ( ParserUtils.lookAhead(builder, GoTokenTypes.oSEMI_SYNTHETIC) ) {
+                builder.error(GoBundle.message("error.comma.expected.before.newline"));
+                ParserUtils.getToken(builder, GoTokenTypes.oSEMI_SYNTHETIC);
+            }
+
             if ( ! ParserUtils.getToken(builder, oCOMMA) )
                 break;
-
         }
 
-        ParserUtils.getToken(builder, pRCURLY, GoBundle.message("error.closing.para.expected"));
+        ParserUtils.getToken(builder, pRCURLY, GoBundle.message("error.closing.curly.expected"));
 
         literalValue.done(LITERAL_COMPOSITE_VALUE);
     }

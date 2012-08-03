@@ -105,6 +105,10 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
         doTest();
     }
 
+    public void testCompositeLiteral_noCommaBeforeNewline() throws Throwable {
+        doTest();
+    }
+
     public void testCompositeLiteral_builtins() throws Throwable {
         doTest();
     }
