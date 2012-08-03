@@ -41,7 +41,7 @@ public class Types implements GoElementTypes {
             }
         }
 
-        if ( ParserUtils.lookAhead(builder, kSTRUCT) ) {
+        if ( ParserUtils.lookAhead(builder, kSTRUCT, pLCURLY) ) {
             return StructType.parse(builder, parser);
         }
 

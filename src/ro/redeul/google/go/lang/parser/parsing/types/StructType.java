@@ -17,14 +17,13 @@ public class StructType implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-        if (!ParserUtils.lookAhead(builder, kSTRUCT))
+        if (!ParserUtils.lookAhead(builder, kSTRUCT, pLCURLY))
             return null;
 
         PsiBuilder.Marker marker = builder.mark();
 
         ParserUtils.getToken(builder, kSTRUCT);
-
-        ParserUtils.getToken(builder, pLCURLY, "left.curly.expected");
+        ParserUtils.getToken(builder, pLCURLY);
 
         while ( ! builder.eof() && ! ParserUtils.lookAhead(builder, pRCURLY) ) {
 
@@ -65,7 +64,11 @@ public class StructType implements GoElementTypes {
             isAnonymous = true;
         }
 
-        parser.parseType(builder);
+        if ( parser.parseType(builder) == null ) {
+            fieldDeclaration.rollbackTo();
+            return false;
+        }
+//        parser.parseType(builder);
 
         if ( builder.getTokenType() == litSTRING ) {
             ParserUtils.eatElement(builder, IDENTIFIER);
