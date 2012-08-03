@@ -17,6 +17,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.typing.GoType;
@@ -101,6 +102,17 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                                                                    PsiElement.class);
                     if (resolved == null) {
                         return GoType.EMPTY_ARRAY;
+                    }
+
+                    if (resolved.getParent() instanceof GoShortVarDeclaration) {
+                        GoShortVarDeclaration shortVarDeclaration = (GoShortVarDeclaration) resolved.getParent();
+
+                        GoType identifierType = shortVarDeclaration.getIdentifierType((GoLiteralIdentifier)resolved);
+
+                        if (identifierType == null)
+                            return GoType.EMPTY_ARRAY;
+
+                        return new GoType[]{identifierType};
                     }
 
                     if (resolved.getParent() instanceof GoVarDeclaration) {
