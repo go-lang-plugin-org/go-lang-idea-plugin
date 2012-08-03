@@ -24,6 +24,7 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
 
     public static ElementPattern<GoLiteralExpression> MATCHER =
         psiElement(GoLiteralExpression.class)
+            .withChild(psiElement(GoLiteralIdentifier.class))
             .withParent(psiElement(GoCallOrConvExpression.class))
             .atStartOf(psiElement(GoCallOrConvExpression.class));
 
