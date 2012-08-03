@@ -31,6 +31,9 @@ public class ImportReference extends GoPsiReference<GoImportDeclaration, ImportR
     @Override
     public TextRange getRangeInElement() {
         GoLiteralString importPath = getElement().getImportPath();
+        if (importPath == null) {
+            return TextRange.EMPTY_RANGE;
+        }
 
         return new TextRange(
             importPath.getStartOffsetInParent(),
