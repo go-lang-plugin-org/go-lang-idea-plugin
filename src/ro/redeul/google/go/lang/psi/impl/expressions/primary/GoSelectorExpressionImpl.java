@@ -151,7 +151,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
         if (x instanceof GoUnderlyingTypeInterface)
             return new PsiReference[]{new InterfaceMethodReference(this)};
 
-        if (x instanceof GoUnderlyingTypeStruct)
+        if (x instanceof GoUnderlyingTypeStruct && getIdentifier() != null)
             return new PsiReference[]{
                 new SelectorOfStructFieldReference(this),
                 new MethodReference(this)

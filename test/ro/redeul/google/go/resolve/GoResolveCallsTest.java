@@ -29,6 +29,10 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
+    public void testCallToLocalMethodViaShortVarDeclaration() throws Exception {
+        doTest();
+    }
+
     public void testCallToLocalMethodViaSlice() throws Exception {
         doTest();
     }
