@@ -101,6 +101,7 @@ public class GoSdkUtil {
         data = findVersion(binariesPath, data);
 
         data.GO_BIN_PATH = binariesPath;
+	data.version = GoSdkData.LATEST_VERSION;
         return data;
     }
 

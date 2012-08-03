@@ -7,15 +7,18 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.AbstractProjectComponent;
+import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkModificator;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
-public class ProjectSdkValidator  extends AbstractProjectComponent {
+public class ProjectSdkValidator extends AbstractProjectComponent {
     public ProjectSdkValidator(Project project) {
         super(project);
     }
@@ -30,21 +33,52 @@ public class ProjectSdkValidator  extends AbstractProjectComponent {
         for (Sdk sdk : sdkList) {
             GoSdkData sdkData = (GoSdkData) sdk.getSdkAdditionalData();
 
-            if (sdkData == null || sdkData.TARGET_ARCH == null || sdkData.TARGET_OS == null)  {
+            boolean needsUpgrade = sdkData == null;
+            try {
+                if (!needsUpgrade) {
+                    sdkData.checkValid();
+                }
+            } catch (ConfigurationException ex) {
+                needsUpgrade = true;
+            }
+
+            if (!needsUpgrade)
+                continue;
+
+            needsUpgrade = false;
+            GoSdkData data = GoSdkUtil.testGoogleGoSdk(sdk.getHomePath());
+
+            if (data == null)
+                needsUpgrade = true;
+
+            try {
+                if (data != null) {
+                    data.checkValid();
+                }
+            } catch (ConfigurationException ex) {
+                needsUpgrade = true;
+            }
+
+            if (needsUpgrade) {
                 Notifications.Bus.notify(
                     new Notification("GoLang SDK validator", "Corrupt Go SDK",
                                      getContent("Go", sdk.getName()),
                                      NotificationType.WARNING), myProject);
             }
+
+            SdkModificator sdkModificator = sdk.getSdkModificator();
+            sdkModificator.setSdkAdditionalData(data);
+            sdkModificator.commitChanges();
         }
 
         sdkList.clear();
-        sdkList.addAll(jdkTable.getSdksOfType(GoAppEngineSdkType.getInstance()));
+        sdkList.addAll(
+            jdkTable.getSdksOfType(GoAppEngineSdkType.getInstance()));
 
         for (Sdk sdk : sdkList) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
 
-            if (sdkData == null || sdkData.TARGET_ARCH == null || sdkData.TARGET_OS == null)  {
+            if (sdkData == null || sdkData.TARGET_ARCH == null || sdkData.TARGET_OS == null) {
                 Notifications.Bus.notify(
                     new Notification("GoLang SDK validator", "Corrupt Go SDK",
                                      getContent("Go App Engine", sdk.getName()),
@@ -58,6 +92,6 @@ public class ProjectSdkValidator  extends AbstractProjectComponent {
     private String getContent(String type, String name) {
         return
             "<html>The attached " + type + " SDK named: <em>" + name + "</em> seems to be corrupt." +
-            "<br/>Please update it by going to the project sdk editor remove it and add it again.</html>";
+                "<br/>Please update it by going to the project sdk editor remove it and add it again.</html>";
     }
 }

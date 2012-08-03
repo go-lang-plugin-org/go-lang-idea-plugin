@@ -14,6 +14,8 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
  */
 public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<GoSdkData> {
 
+    public final static int LATEST_VERSION = 1;
+
     public String GO_HOME_PATH = "";
     public String GO_BIN_PATH = "";
 
@@ -22,6 +24,8 @@ public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<Go
 
     public String VERSION_MAJOR = "";
     public String VERSION_MINOR = "";
+
+    public int version = 0;
 
     public GoSdkData() {
     }
@@ -41,8 +45,15 @@ public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<Go
         return super.clone();
     }
 
-    public void checkValid(SdkModel sdkModel) throws ConfigurationException {
+    public void checkValid() throws ConfigurationException {
+	if (version != GoSdkData.LATEST_VERSION) {
+	    throw new ConfigurationException("SDK configuration needs to be upgraded");
+	}
+    }
 
+    @Override
+    public void checkValid(SdkModel sdkModel) throws ConfigurationException {
+	checkValid();
     }
 
     public GoSdkData getState() {
