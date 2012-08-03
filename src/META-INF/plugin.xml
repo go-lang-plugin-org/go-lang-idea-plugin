@@ -331,6 +331,10 @@
     <idea-version since-build="111.000" />
 
     <category>Custom Languages</category>
+    <resource-bundle>ro.redeul.google.go.GoBundle</resource-bundle>
+
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.platform</depends>
 
     <application-components>
         <component>
