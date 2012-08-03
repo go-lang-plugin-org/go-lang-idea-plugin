@@ -192,7 +192,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             return refs(
                 new CompositeElementToStructFieldReference(
                     (GoLiteralCompositeElement)
-                        getParent().getParent().getParent()));
+                        getParent().getParent().getParent()),
+                new VarOrConstReference(this));
 
         if (CompositeElementToStructFieldReference.MATCHER_ELEMENT.accepts(this))
             return refs(
