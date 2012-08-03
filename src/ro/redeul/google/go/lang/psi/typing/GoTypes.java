@@ -76,6 +76,9 @@ public class GoTypes {
     }
 
     public static GoType fromPsiType(GoPsiType psiType) {
+        if ( psiType == null)
+            return GoType.Unknown;
+
         return psiType.accept(new GoTypeMakerVisitor());
     }
 

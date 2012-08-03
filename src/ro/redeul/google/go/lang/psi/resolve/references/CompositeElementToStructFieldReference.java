@@ -6,15 +6,8 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
 public class CompositeElementToStructFieldReference
@@ -63,30 +56,34 @@ public class CompositeElementToStructFieldReference
 
     @Override
     protected GoTypeStruct resolveTypeDefinition() {
-        GoPsiType type = this.element.getElementType();
+        GoType type = this.element.getElementType();
 
         if (type == null)
             return null;
 
-        return type.accept(new GoElementVisitorWithData<GoTypeStruct>() {
-            @Override
-            public void visitTypeName(GoPsiTypeName typeName) {
-                GoTypeSpec typeSpec =
-                    GoPsiUtils.resolveSafely(typeName, GoTypeSpec.class);
+        if (type instanceof GoTypeStruct)
+            return (GoTypeStruct) type;
 
-                if (typeSpec != null) {
-                    if (typeSpec.getType() != null) {
-                        typeSpec.getType().accept(this);
-                    }
-                }
-            }
-
-            public void visitStructType(GoPsiTypeStruct type) {
-                GoType goType = GoTypes.fromPsiType(type);
-                if (goType instanceof GoTypeStruct) {
-                    data = (GoTypeStruct) goType;
-                }
-            }
-        });
+        return null;
+//        return type.accept(new GoElementVisitorWithData<GoTypeStruct>() {
+//            @Override
+//            public void visitTypeName(GoPsiTypeName typeName) {
+//                GoTypeSpec typeSpec =
+//                    GoPsiUtils.resolveSafely(typeName, GoTypeSpec.class);
+//
+//                if (typeSpec != null) {
+//                    if (typeSpec.getType() != null) {
+//                        typeSpec.getType().accept(this);
+//                    }
+//                }
+//            }
+//
+//            public void visitStructType(GoPsiTypeStruct type) {
+//                GoType goType = GoTypes.fromPsiType(type);
+//                if (goType instanceof GoTypeStruct) {
+//                    data = (GoTypeStruct) goType;
+//                }
+//            }
+//        });
     }
 }
