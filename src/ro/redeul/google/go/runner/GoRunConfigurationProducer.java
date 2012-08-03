@@ -83,7 +83,7 @@ public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
             return null;
         }
 
-        applicationConfiguration.scriptName = scriptFile.getName();
+        applicationConfiguration.scriptName = scriptFile.getCanonicalPath();
         applicationConfiguration.setModule(module);
 
         return settings;

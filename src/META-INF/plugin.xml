@@ -57,6 +57,7 @@
                 <li>[bugfixes] Enhanced resolution of methods.</li>
                 <li>[bugfix] NPE fixes when handling invalid import declarations (@catalinc).</li>
                 <li>[bugfix] Fix running of applications on windows (@catalinc).</li>
+                <li>[bugfix] Fix running of applications in child folders.</li>
             </ul>
          <h3>0.9.4 changes:</h3>
             <ul>

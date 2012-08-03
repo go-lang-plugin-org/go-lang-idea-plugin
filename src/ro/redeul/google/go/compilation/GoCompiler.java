@@ -529,7 +529,7 @@ public class GoCompiler implements TranslatingCompiler {
             imports.addAll(file.getSecond().getImports());
 
             if ( targetType == TargetType.Application && file.getSecond().isMain() ) {
-                targetName = VfsUtil.getRelativePath(sourceRoot, file.getFirst(), '/');
+                targetName = VfsUtil.getRelativePath(file.getFirst().getParent(), sourceRoot, '/');
                 targetName = targetName != null
                         ? targetName + "/" + file.getFirst().getNameWithoutExtension()
                         : file.getFirst().getNameWithoutExtension();
