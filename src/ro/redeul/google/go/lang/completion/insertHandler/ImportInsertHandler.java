@@ -1,14 +1,23 @@
 package ro.redeul.google.go.lang.completion.insertHandler;
 
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.lookup.LookupElement;
-
-public class ImportInsertHandler implements InsertHandler<LookupElement> {
+public class ImportInsertHandler extends KeywordInsertionHandler {
     @Override
-    public void handleInsert(InsertionContext context, LookupElement item) {
-        int offset = context.getTailOffset();
-        context.getDocument().insertString(offset, "(\n    \"\"\n)\n");
-        context.getEditor().getCaretModel().moveToOffset(offset + 7);
+    protected String getInsertionText() {
+        return super.getInsertionText() + "(\n\"\"\n)\n";
+    }
+
+    @Override
+    protected boolean shouldPressEnter() {
+        return false;
+    }
+
+    @Override
+    protected int nextCaretPosition() {
+        return super.getInsertionText().length() + 3;
+    }
+
+    @Override
+    protected boolean shouldReformat() {
+        return true;
     }
 }

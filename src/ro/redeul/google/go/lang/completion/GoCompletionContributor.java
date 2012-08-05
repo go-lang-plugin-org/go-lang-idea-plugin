@@ -8,6 +8,7 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiErrorElement;
@@ -59,7 +60,7 @@ public class GoCompletionContributor extends CompletionContributor {
                 @NotNull CompletionParameters parameters,
                 ProcessingContext context,
                 @NotNull CompletionResultSet result) {
-                result.addElement(keyword("package"));
+                result.addElement(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE.applyPolicy(keyword("package")));
             }
         };
 

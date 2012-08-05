@@ -4,28 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.intellij.codeInsight.completion.CompletionType;
-import org.junit.Ignore;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 
 public abstract class GoCompletionTestCase
     extends GoLightCodeInsightFixtureTestCase {
-
-//    protected String getTestDataPath() {
-//        return GoTestUtils.getTestDataPath() + getTestDataRelativePath();
-//    }
-
-//    @Override
-//    protected void invoke(Project project, Editor editor, GoFile file) {
-//        myFixture.configureByFile()
-//    }
 
     protected String getTestDataRelativePath() {
         return "psi/completion/";
     }
 
 
-    @Ignore
-    public void xtestBasicStatements() throws Throwable {
+    protected void doTestVariants() {
         myFixture.configureByFile(getTestName(false) + ".go");
         myFixture.completeBasic();
         String fileText = myFixture.getFile().getText();

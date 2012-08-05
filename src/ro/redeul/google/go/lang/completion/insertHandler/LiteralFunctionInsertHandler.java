@@ -14,7 +14,7 @@ public class LiteralFunctionInsertHandler implements InsertHandler<LookupElement
     public void handleInsert(InsertionContext context, LookupElement item) {
         int offset = context.getTailOffset();
         Document doc = context.getDocument();
-        doc.insertString(offset, "(){\n}()\n");
+        doc.insertString(offset, "(){\n}()");
         Editor editor = context.getEditor();
 
         int line = doc.getLineNumber(offset);

@@ -29,7 +29,15 @@ public class GoStatementsCompletionTestCase extends GoCompletionTestCase {
         doTest();
     }
 
+    public void testGoFunc() {
+        doTest();
+    }
+
     public void testDefer() {
+        doTest();
+    }
+
+    public void testDeferFunc() {
         doTest();
     }
 

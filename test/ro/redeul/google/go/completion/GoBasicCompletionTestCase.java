@@ -24,4 +24,12 @@ public class GoBasicCompletionTestCase extends GoCompletionTestCase {
     public void testPackage() {
         doTest();
     }
+
+    public void testPackageInside() {
+        doTest();
+    }
+
+    public void testImportDeclaration() {
+        doTest();
+    }
 }
