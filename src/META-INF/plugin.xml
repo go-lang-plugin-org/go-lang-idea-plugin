@@ -46,6 +46,7 @@
             <li>Go App engine credentials safe storage</li>
             <li>Added go application wizard</li>
             <li>Makefile based build system (bring your own Makefile). Experimental. Configured in project settings.</li>
+            <li>Always use tabs instead of spaces (but configurable if desired).</li>
         </ul>
     ]]>
     </description>
@@ -55,7 +56,9 @@
             <ul>
                 <li>[enhancement] Allow resolving of composite literal keys to match constants or vars.</li>
                 <li>[enhancement] Don't mark function literals as unresolved.</li>
+                <li>[features] Use tabs instead of spaces to layour the go source code.</li>
                 <li>[bugfix] Fix an infinite loop when parsing an incomplete struct type.</li>
+                <li>[bugfix] Don't barf when a go module is created without source folders.</li>
             </ul>
          <h3>0.9.5 changes:</h3>
             <ul>
@@ -427,6 +430,9 @@
                             serviceImplementation="ro.redeul.google.go.options.GoSettings"/>
         <exportable serviceInterface="ro.redeul.google.go.options.GoSettings"/>
         <autoImportOptionsProvider instance="ro.redeul.google.go.imports.GoAutoImportOptionsProvider"/>
+
+        <langCodeStyleSettingsProvider implementation="ro.redeul.google.go.ide.GoLanguageCodeStyleSettingsProvider"/>
+        <codeStyleSettingsProvider implementation="ro.redeul.google.go.ide.GoCodeStyleSettingsProvider"/>
 
         <spellchecker.bundledDictionaryProvider implementation="ro.redeul.google.go.spellchecker.GoDictionaryProvider"/>
         <spellchecker.support language="Google Go" implementationClass="com.redeul.google.go.spellchecker.tokenizer.GoIdentifierTokenizerStrategy"/>

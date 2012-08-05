@@ -1,5 +1,7 @@
 package ro.redeul.google.go.actions;
 
+import java.util.Properties;
+
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor;
@@ -11,8 +13,6 @@ import com.intellij.psi.PsiFileFactory;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
-
-import java.util.Properties;
 
 public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
 

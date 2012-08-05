@@ -2,7 +2,7 @@
 package ${PACKAGE_NAME}
 
 import (
-    "testing"
+	"testing"
 )
 
 func TestStub(t *testing.T) {
