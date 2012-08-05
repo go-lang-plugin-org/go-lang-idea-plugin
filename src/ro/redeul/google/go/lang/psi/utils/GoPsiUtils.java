@@ -168,8 +168,9 @@ public class GoPsiUtils {
     }
 
     public static String findDefaultPackageName(String importPath) {
-        return importPath != null ? importPath.replaceAll("(?:[a-zA-Z\\.]+/)+",
-                                                          "") : null;
+        return importPath != null
+            ? importPath.replaceAll("(?:[a-zA-Z\\.]+/)+", "") .toLowerCase()
+            : null;
     }
 
     public static boolean isNodeOfType(PsiElement node, TokenSet tokenSet) {
