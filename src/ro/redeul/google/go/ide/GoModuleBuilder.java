@@ -32,7 +32,7 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
         VirtualFile sourceRoots[] = moduleRootManager.getSourceRoots();
 
-        if (sourceRoots.length > 1 ) {
+        if (sourceRoots.length != 1 ) {
             return;
         }
 
