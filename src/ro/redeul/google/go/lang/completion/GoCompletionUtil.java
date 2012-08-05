@@ -26,6 +26,7 @@ import com.intellij.util.Function;
 import com.intellij.util.Processor;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.lang.completion.insertHandler.KeywordInsertionHandler;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -170,12 +171,15 @@ public class GoCompletionUtil {
         return elements;
     }
 
-    public static LookupElement keywordLookup(String keyword) {
-        return keywordLookup(keyword, null);
+    public static LookupElement keyword(String keyword) {
+        return keyword(keyword, new KeywordInsertionHandler());
     }
 
-    public static LookupElement keywordLookup(String keyword, @Nullable InsertHandler<LookupElement> handler) {
-        return LookupElementBuilder.create(keyword + " ").setBold().setTypeText("keyword").setInsertHandler(handler);
+    public static LookupElement keyword(String keyword, @Nullable InsertHandler<LookupElement> handler) {
+        return LookupElementBuilder.create(keyword)
+                                   .setBold()
+                                   .setTypeText("keyword")
+                                   .setInsertHandler(handler);
     }
 
 

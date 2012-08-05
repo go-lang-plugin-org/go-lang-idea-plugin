@@ -9,6 +9,7 @@ import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.lang.completion.GoCompletionContributor;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 
@@ -25,7 +26,8 @@ public abstract class GoPsiReference<
 
     protected abstract Reference self();
 
-    protected GoPsiReference(@NotNull GoPsi element, @NotNull ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
+    protected GoPsiReference(@NotNull GoPsi element,
+                             @NotNull ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
         this.element = element;
         this.resolver = resolver;
     }
@@ -102,9 +104,11 @@ public abstract class GoPsiReference<
         }
 
         // this is the case when we have get variants completion.
-        if (targetQualifiedName.endsWith("IntellijIdeaRulezzz")) {
-            targetQualifiedName = targetQualifiedName.replace(
-                "IntellijIdeaRulezzz", "");
+        if (targetQualifiedName.contains(GoCompletionContributor.DUMMY_IDENTIFIER)) {
+            int completionPosition = targetQualifiedName.indexOf(GoCompletionContributor.DUMMY_IDENTIFIER);
+
+            targetQualifiedName = targetQualifiedName.substring(0, completionPosition);
+
             return elementName.startsWith(targetQualifiedName);
         }
 

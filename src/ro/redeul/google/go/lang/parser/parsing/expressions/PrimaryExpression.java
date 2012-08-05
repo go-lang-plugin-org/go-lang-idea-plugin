@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.lang.completion.GoCompletionContributor;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
@@ -420,6 +421,10 @@ public class PrimaryExpression implements GoElementTypes {
 
         if (!ParserUtils.getToken(builder, mIDENT))
             return false;
+
+        if ( identifier != null) {
+            identifier = identifier.replaceAll(GoCompletionContributor.DUMMY_IDENTIFIER, "");
+        }
 
         if (parser.isPackageName(identifier) &&
             ParserUtils.lookAhead(builder, oDOT)) {

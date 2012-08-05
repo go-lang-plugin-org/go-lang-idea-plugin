@@ -38,7 +38,8 @@ public class CompositeElementToStructFieldReference
         this(element, element.getKey());
     }
 
-    public CompositeElementToStructFieldReference(GoLiteralCompositeElement element, GoLiteralIdentifier identifier) {
+    public CompositeElementToStructFieldReference(GoLiteralCompositeElement element,
+                                                  GoLiteralIdentifier identifier) {
         super(identifier);
         this.element = element;
     }
@@ -65,25 +66,5 @@ public class CompositeElementToStructFieldReference
             return (GoTypeStruct) type;
 
         return null;
-//        return type.accept(new GoElementVisitorWithData<GoTypeStruct>() {
-//            @Override
-//            public void visitTypeName(GoPsiTypeName typeName) {
-//                GoTypeSpec typeSpec =
-//                    GoPsiUtils.resolveSafely(typeName, GoTypeSpec.class);
-//
-//                if (typeSpec != null) {
-//                    if (typeSpec.getType() != null) {
-//                        typeSpec.getType().accept(this);
-//                    }
-//                }
-//            }
-//
-//            public void visitStructType(GoPsiTypeStruct type) {
-//                GoType goType = GoTypes.fromPsiType(type);
-//                if (goType instanceof GoTypeStruct) {
-//                    data = (GoTypeStruct) goType;
-//                }
-//            }
-//        });
     }
 }

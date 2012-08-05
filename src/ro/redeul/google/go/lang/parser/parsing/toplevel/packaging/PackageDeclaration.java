@@ -17,10 +17,8 @@ public class PackageDeclaration implements GoElementTypes {
 
         PsiBuilder.Marker packageDeclaration = builder.mark();
 
-        if (ParserUtils.getToken(builder, kPACKAGE)) {
+        if (ParserUtils.getToken(builder, kPACKAGE, GoBundle.message("error.package.keyword.expected"))) {
             ParserUtils.getToken(builder, mIDENT, GoBundle.message("identifier.expected"));
-        } else {
-            builder.error(GoBundle.message("error.package.keyword.expected"));
         }
 
         packageDeclaration.done(PACKAGE_DECLARATION);

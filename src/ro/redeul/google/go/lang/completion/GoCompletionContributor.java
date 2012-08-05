@@ -16,8 +16,10 @@ import com.intellij.psi.impl.DebugUtil;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.completion.insertHandler.BlockWithCursorBeforeInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.ConstInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.CurlyBracesInsertHandler;
+import ro.redeul.google.go.lang.completion.insertHandler.IfInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.ImportInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.LiteralFunctionInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.ReturnInsertHandler;
@@ -38,7 +40,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keywordLookup;
+import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keyword;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -48,6 +50,7 @@ import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keywordLookup
  */
 public class GoCompletionContributor extends CompletionContributor {
 
+    public static final String DUMMY_IDENTIFIER = CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED;
 
     CompletionProvider<CompletionParameters> packageCompletionProvider =
         new CompletionProvider<CompletionParameters>() {
@@ -56,7 +59,7 @@ public class GoCompletionContributor extends CompletionContributor {
                 @NotNull CompletionParameters parameters,
                 ProcessingContext context,
                 @NotNull CompletionResultSet result) {
-                result.addElement(keywordLookup("package"));
+                result.addElement(keyword("package"));
             }
         };
 
@@ -67,18 +70,23 @@ public class GoCompletionContributor extends CompletionContributor {
                 @NotNull CompletionParameters parameters,
                 ProcessingContext context,
                 @NotNull CompletionResultSet result) {
-                result.addElement(keywordLookup("for"));
                 result.addElement(
-                    keywordLookup("const", new ConstInsertHandler()));
+                    keyword("for", new BlockWithCursorBeforeInsertHandler()));
                 result.addElement(
-                    keywordLookup("var", new VarInsertHandler()));
+                    keyword("const", new ConstInsertHandler()));
                 result.addElement(
-                    keywordLookup("return", new ReturnInsertHandler()));
-                result.addElement(keywordLookup("if"));
-                result.addElement(keywordLookup("switch"));
-                result.addElement(keywordLookup("go"));
-                result.addElement(keywordLookup("select"));
-                result.addElement(keywordLookup("defer"));
+                    keyword("var", new VarInsertHandler()));
+                result.addElement(
+                    keyword("return", new ReturnInsertHandler()));
+                result.addElement(
+                    keyword("if", new IfInsertHandler()));
+                result.addElement(
+                    keyword("switch", new BlockWithCursorBeforeInsertHandler()));
+                result.addElement(keyword("go"));
+                result.addElement(
+                    keyword("select", new CurlyBracesInsertHandler()));
+                result.addElement(
+                    keyword("defer"));
             }
         };
 
@@ -89,16 +97,11 @@ public class GoCompletionContributor extends CompletionContributor {
                 @NotNull CompletionParameters parameters,
                 ProcessingContext context,
                 @NotNull CompletionResultSet result) {
-                result.addElement(
-                    keywordLookup("const", new ConstInsertHandler()));
-                result.addElement(
-                    keywordLookup("var", new VarInsertHandler()));
-                result.addElement(
-                    keywordLookup("func"));
-                result.addElement(
-                    keywordLookup("type"));
-                result.addElement(
-                    keywordLookup("import", new ImportInsertHandler()));
+                result.addElement(keyword("const", new ConstInsertHandler()));
+                result.addElement(keyword("var", new VarInsertHandler()));
+                result.addElement(keyword("func"));
+                result.addElement(keyword("type"));
+                result.addElement(keyword("import", new ImportInsertHandler()));
             }
         };
 
@@ -141,7 +144,7 @@ public class GoCompletionContributor extends CompletionContributor {
                                           ProcessingContext context,
                                           @NotNull CompletionResultSet result) {
                 result.addElement(
-                    keywordLookup("func", new LiteralFunctionInsertHandler()));
+                    keyword("func", new LiteralFunctionInsertHandler()));
             }
         };
 
@@ -152,51 +155,53 @@ public class GoCompletionContributor extends CompletionContributor {
                                           ProcessingContext context,
                                           @NotNull CompletionResultSet result) {
                 result.addElement(
-                    keywordLookup("interface", new CurlyBracesInsertHandler()));
+                    keyword("interface", new CurlyBracesInsertHandler()));
                 result.addElement(
-                    keywordLookup("struct", new CurlyBracesInsertHandler()));
+                    keyword("struct", new CurlyBracesInsertHandler()));
 
                 for (GoTypes.Builtin builtin : GoTypes.Builtin.values()) {
-                    result.addElement(
-                        keywordLookup(builtin.name().toLowerCase())
-                    );
+                    result.addElement(keyword(builtin.name().toLowerCase()));
                 }
             }
         };
 
-    CompletionProvider<CompletionParameters> localImportsCompletion = new CompletionProvider<CompletionParameters>() {
-        @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters,
-                                      ProcessingContext context,
-                                      @NotNull CompletionResultSet result) {
-            PsiFile originalFile = parameters.getOriginalFile();
-            if (!(originalFile instanceof GoFile))
-                return;
+    CompletionProvider<CompletionParameters> localImportsCompletion =
+        new CompletionProvider<CompletionParameters>() {
+            @Override
+            protected void addCompletions(@NotNull CompletionParameters parameters,
+                                          ProcessingContext context,
+                                          @NotNull CompletionResultSet result) {
+                PsiFile originalFile = parameters.getOriginalFile();
+                if (!(originalFile instanceof GoFile))
+                    return;
 
-            GoFile file = (GoFile) originalFile;
+                GoFile file = (GoFile) originalFile;
 
-            for (GoImportDeclarations importDecls : file.getImportDeclarations()) {
-                for (GoImportDeclaration importDecl : importDecls.getDeclarations()) {
-                    result.addElement(LookupElementBuilder.create(importDecl.getVisiblePackageName() + "."));
+                for (GoImportDeclarations imports : file.getImportDeclarations()) {
+                    for (GoImportDeclaration importDecl : imports.getDeclarations()) {
+                        result.addElement(LookupElementBuilder.create(
+                            importDecl.getVisiblePackageName() + "."));
+                    }
                 }
             }
-        }
-    };
+        };
 
-    CompletionProvider<CompletionParameters> debuggingCompletionProvider = new CompletionProvider<CompletionParameters>() {
-        @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters,
-                                      ProcessingContext context,
-                                      @NotNull CompletionResultSet result) {
-            String originalFile = DebugUtil.psiToString(
-                parameters.getOriginalFile(), false);
-            String currentFile = DebugUtil.psiToString(
-                parameters.getPosition().getContainingFile(), false);
+    CompletionProvider<CompletionParameters> debuggingCompletionProvider =
+        new CompletionProvider<CompletionParameters>() {
+            @Override
+            protected void addCompletions(@NotNull CompletionParameters parameters,
+                                          ProcessingContext context,
+                                          @NotNull CompletionResultSet result) {
+                String originalFile =
+                    DebugUtil.psiToString(parameters.getOriginalFile(), false);
+                String currentFile =
+                    DebugUtil.psiToString(
+                        parameters.getPosition().getContainingFile(), false);
 
-            System.out.println(currentFile);
-            int a = 10;
-        }
-    };
+                System.out.println(currentFile);
+                int a = 10;
+            }
+        };
 
     public GoCompletionContributor() {
 
@@ -207,9 +212,12 @@ public class GoCompletionContributor extends CompletionContributor {
         extend(CompletionType.BASIC,
                psiElement()
                    .withParent(
-                       psiElement(GoPackageDeclaration.class)
-                           .withFirstNonWhitespaceChild(
-                               psiElement(PsiErrorElement.class)
+                       psiElement(PsiErrorElement.class)
+                           .withParent(
+                               psiElement(GoPackageDeclaration.class)
+                                   .withFirstNonWhitespaceChild(
+                                       psiElement(PsiErrorElement.class)
+                                   )
                            )
                    ),
                packageCompletionProvider);
@@ -274,9 +282,6 @@ public class GoCompletionContributor extends CompletionContributor {
 
     @Override
     public void beforeCompletion(@NotNull CompletionInitializationContext context) {
-        int a = context.getIdentifierEndOffset();
-        super.beforeCompletion(context);
-        int b = context.getIdentifierEndOffset();
-        int c = 10;
+        context.setDummyIdentifier(DUMMY_IDENTIFIER);
     }
 }

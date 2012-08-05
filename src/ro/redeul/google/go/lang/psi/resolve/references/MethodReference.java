@@ -24,6 +24,7 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.util.LookupElementUtil;
+import static ro.redeul.google.go.lang.completion.GoCompletionContributor.DUMMY_IDENTIFIER;
 
 public class MethodReference
     extends GoPsiReference<GoSelectorExpression, MethodReference> {
@@ -111,9 +112,8 @@ public class MethodReference
             if (identifier != null ) {
                 String referenceName = identifier.getUnqualifiedName();
 
-                return referenceName.endsWith("IntellijIdeaRulezzz") ||
-                            referenceName.equals(methodName);
-
+                return referenceName.contains(DUMMY_IDENTIFIER) ||
+                    referenceName.equals(methodName);
             }
         }
 

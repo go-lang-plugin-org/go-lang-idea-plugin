@@ -1,5 +1,7 @@
 package ro.redeul.google.go;
 
+import java.util.List;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -7,9 +9,6 @@ import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import org.junit.Assert;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
-
-import java.io.File;
-import java.util.List;
 
 public abstract class GoEditorAwareTestCase extends GoLightCodeInsightFixtureTestCase {
 

@@ -1,14 +1,24 @@
 package ro.redeul.google.go.lang.completion.insertHandler;
 
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.lookup.LookupElement;
+public class VarInsertHandler extends KeywordInsertionHandler {
 
-import static ro.redeul.google.go.lang.completion.insertHandler.InsertUtil.insertParenthesis;
-
-public class VarInsertHandler implements InsertHandler<LookupElement> {
     @Override
-    public void handleInsert(InsertionContext context, LookupElement item) {
-        insertParenthesis(context);
+    protected String getInsertionText() {
+        return super.getInsertionText() + "(\n)";
+    }
+
+    @Override
+    protected int nextCaretPosition() {
+        return super.getInsertionText().length() + 1;
+    }
+
+    @Override
+    protected boolean shouldPressEnter() {
+        return true;
+    }
+
+    @Override
+    protected boolean shouldReformat() {
+        return true;
     }
 }
