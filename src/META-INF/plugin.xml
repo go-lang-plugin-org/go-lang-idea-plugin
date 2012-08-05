@@ -56,7 +56,8 @@
             <ul>
                 <li>[enhancement] Allow resolving of composite literal keys to match constants or vars.</li>
                 <li>[enhancement] Don't mark function literals as unresolved.</li>
-                <li>[features] Use tabs instead of spaces to layour the go source code.</li>
+                <li>[features] Use tabs instead of spaces to layout the go source code.</li>
+                <li>[bugfix] Always treat the lasts part of the path (when used as package name) as lowercase.</li>
                 <li>[bugfix] Fix an infinite loop when parsing an incomplete struct type.</li>
                 <li>[bugfix] Don't barf when a go module is created without source folders.</li>
             </ul>
