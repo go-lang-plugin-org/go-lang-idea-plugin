@@ -22,7 +22,7 @@ import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class VarOrConstReference
-    extends GoPsiReference<GoLiteralIdentifier, VarOrConstReference> {
+    extends GoPsiReference.Single<GoLiteralIdentifier, VarOrConstReference> {
 
     public static final ElementPattern<GoLiteralIdentifier> MATCHER =
         psiElement(GoLiteralIdentifier.class)

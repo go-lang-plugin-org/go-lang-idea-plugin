@@ -14,7 +14,8 @@ import ro.redeul.google.go.lang.psi.typing.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 
-public class InterfaceMethodReference extends GoPsiReference<GoSelectorExpression, InterfaceMethodReference> {
+public class InterfaceMethodReference extends
+                                      GoPsiReference.Single<GoSelectorExpression, InterfaceMethodReference> {
 
     GoTypeInterface type;
     GoSelectorExpression selector;

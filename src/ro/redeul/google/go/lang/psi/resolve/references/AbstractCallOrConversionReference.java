@@ -20,7 +20,7 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public abstract class AbstractCallOrConversionReference<Reference extends AbstractCallOrConversionReference<Reference>>
-    extends GoPsiReference<GoLiteralExpression, Reference> {
+    extends GoPsiReference.Single<GoLiteralExpression, Reference> {
 
     public static ElementPattern<GoLiteralExpression> MATCHER =
         psiElement(GoLiteralExpression.class)

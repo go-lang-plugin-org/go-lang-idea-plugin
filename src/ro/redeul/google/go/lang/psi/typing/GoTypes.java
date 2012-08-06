@@ -11,6 +11,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
@@ -97,13 +98,18 @@ public class GoTypes {
         }
 
         @Override
+        public void visitChannelType(GoPsiTypeChannel psiType) {
+            data = new GoTypeChannel(psiType);
+        }
+
+        @Override
         public void visitArrayType(GoPsiTypeArray psiType) {
             data = new GoTypeArray(psiType);
         }
 
         @Override
-        public void visitTypeName(GoPsiTypeName psiTypeName) {
-            data = new GoTypeName(psiTypeName);
+        public void visitTypeName(GoPsiTypeName psiType) {
+            data = new GoTypeName(psiType);
         }
 
         @Override

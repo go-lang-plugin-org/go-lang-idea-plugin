@@ -132,4 +132,8 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testMultipleApplications() throws Exception {
         doTest();
     }
+
+    public void testStructFieldViaChannel() throws Exception {
+        doTest();
+    }
 }

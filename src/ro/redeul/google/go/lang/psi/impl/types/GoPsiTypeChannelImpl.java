@@ -6,6 +6,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeChannel;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
@@ -17,14 +18,14 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 public class GoPsiTypeChannelImpl extends GoPsiPackagedElementBase implements
                                                                 GoPsiTypeChannel {
 
-    private ChannelType channelType;
+    private GoTypeChannel.ChannelType channelType;
 
-    public GoPsiTypeChannelImpl(@NotNull ASTNode node, ChannelType channelType) {
+    public GoPsiTypeChannelImpl(@NotNull ASTNode node, GoTypeChannel.ChannelType channelType) {
         super(node);
         this.channelType = channelType;
     }
 
-    public ChannelType getChannelType() {
+    public GoTypeChannel.ChannelType getChannelType() {
         return channelType;
     }
 
@@ -54,6 +55,6 @@ public class GoPsiTypeChannelImpl extends GoPsiPackagedElementBase implements
 
     @Override
     public String getPresentationTailText() {
-        return ChannelType.getText(getChannelType()) + getElementType().getPresentationTailText();    //To change body of overridden methods use File | Settings | File Templates.
+        return GoTypeChannel.ChannelType.getText(getChannelType()) + getElementType().getPresentationTailText();    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

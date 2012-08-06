@@ -8,7 +8,11 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeChannel;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import static ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression.Op.Channel;
 
 public class GoUnaryExpressionImpl extends GoExpressionBase
     implements GoUnaryExpression {
@@ -18,7 +22,21 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-        return getExpression().getType();
+        switch (getUnaryOp()) {
+            case Channel:
+                GoType[] basic = getExpression().getType();
+                if ( basic.length == 1 && basic[0] instanceof GoTypeChannel ){
+                    GoTypeChannel channelType = (GoTypeChannel) basic[0];
+                    return new GoType[] {
+                        channelType.getElementType(),
+                        GoTypes.getBuiltin(GoTypes.Builtin.Bool,
+                                           GoNamesCache.getInstance(getProject()))
+                    };
+                }
+                return GoType.EMPTY_ARRAY;
+            default:
+                return getExpression().getType();
+        }
     }
 
     @Override
@@ -48,7 +66,7 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
             return Op.Address;
 
         if (elementType == GoTokenTypes.oSEND_CHANNEL)
-            return Op.Channel;
+            return Channel;
 
         return Op.None;
     }

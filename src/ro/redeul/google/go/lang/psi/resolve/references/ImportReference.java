@@ -17,7 +17,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-public class ImportReference extends GoPsiReference<GoImportDeclaration, ImportReference> implements PsiPolyVariantReference {
+public class ImportReference extends GoPsiReference.Single<GoImportDeclaration, ImportReference>
+    implements PsiPolyVariantReference {
 
     public ImportReference(GoImportDeclaration element) {
         super(element);

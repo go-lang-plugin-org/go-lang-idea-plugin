@@ -27,7 +27,7 @@ import ro.redeul.google.go.util.LookupElementUtil;
 import static ro.redeul.google.go.lang.completion.GoCompletionContributor.DUMMY_IDENTIFIER;
 
 public class MethodReference
-    extends GoPsiReference<GoSelectorExpression, MethodReference> {
+    extends GoPsiReference.Single<GoSelectorExpression, MethodReference> {
 
     GoTypeName baseTypeName;
 

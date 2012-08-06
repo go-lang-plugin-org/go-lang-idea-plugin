@@ -22,7 +22,7 @@ import static ro.redeul.google.go.lang.parser.GoElementTypes.GOTO_STATEMENT;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public class LabelReference
-    extends GoPsiReference<GoLiteralIdentifier, LabelReference> {
+    extends GoPsiReference.Single<GoLiteralIdentifier, LabelReference> {
 
     public static ElementPattern<GoLiteralIdentifier> MATCHER =
         psiElement(GoLiteralIdentifier.class)

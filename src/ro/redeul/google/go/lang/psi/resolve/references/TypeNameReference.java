@@ -20,7 +20,7 @@ import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class TypeNameReference
-    extends GoPsiReference<GoPsiTypeName, TypeNameReference> {
+    extends GoPsiReference.Single<GoPsiTypeName, TypeNameReference> {
     public static final ElementPattern<GoPsiTypeName> MATCHER =
         psiElement(GoPsiTypeName.class);
 

@@ -22,7 +22,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComp
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
-import ro.redeul.google.go.lang.psi.resolve.references.CompositeElementToStructFieldReference;
+import ro.redeul.google.go.lang.psi.resolve.references.CompositeElementOfStructFieldReference;
 import ro.redeul.google.go.lang.psi.resolve.references.LabelReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -163,8 +163,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 //        if (CallOrConversionReference.MATCHER.accepts(this))
 //            return new CallOrConversionReference(this);
 //
-//        if (CompositeElementToStructFieldReference.MATCHER.accepts(this))
-//            return new CompositeElementToStructFieldReference((GoLiteralCompositeElement)getParent().getParent().getParent());
+//        if (CompositeElementOfStructFieldReference.MATCHER.accepts(this))
+//            return new CompositeElementOfStructFieldReference((GoLiteralCompositeElement)getParent().getParent().getParent());
 //
 //        if (VarOrConstReference.MATCHER.accepts(this))
 //            return new VarOrConstReference(this);
@@ -188,16 +188,16 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         if (LabelReference.MATCHER.accepts(this))
             return refs(new LabelReference(this));
 
-        if (CompositeElementToStructFieldReference.MATCHER_KEY.accepts(this))
+        if (CompositeElementOfStructFieldReference.MATCHER_KEY.accepts(this))
             return refs(
-                new CompositeElementToStructFieldReference(
+                new CompositeElementOfStructFieldReference(
                     (GoLiteralCompositeElement)
                         getParent().getParent().getParent()),
                 new VarOrConstReference(this));
 
-        if (CompositeElementToStructFieldReference.MATCHER_ELEMENT.accepts(this))
+        if (CompositeElementOfStructFieldReference.MATCHER_ELEMENT.accepts(this))
             return refs(
-                new CompositeElementToStructFieldReference(
+                new CompositeElementOfStructFieldReference(
                     (GoLiteralCompositeElement) getParent().getParent(),
                     this),
 

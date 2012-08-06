@@ -15,25 +15,29 @@ import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 
 public abstract class GoPsiReference<
     GoPsi extends PsiElement,
-    Reference extends GoPsiReference<GoPsi, Reference>
+    GoPsiRefElement extends PsiElement,
+    Reference extends GoPsiReference<GoPsi, GoPsiRefElement, Reference>
     >
     implements PsiReference {
 
     public static AtomicInteger counts = new AtomicInteger(0);
 
     GoPsi element;
+    GoPsiRefElement reference;
     ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver;
 
     protected abstract Reference self();
 
     protected GoPsiReference(@NotNull GoPsi element,
+                             @NotNull GoPsiRefElement reference,
                              @NotNull ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
-        this.element = element;
+        this(element, reference);
         this.resolver = resolver;
     }
 
-    protected GoPsiReference(@NotNull GoPsi element) {
+    protected GoPsiReference(@NotNull GoPsi element, @NotNull GoPsiRefElement reference) {
         this.element = element;
+        this.reference = reference;
     }
 
     @Override
@@ -42,12 +46,17 @@ public abstract class GoPsiReference<
         return element;
     }
 
+    @NotNull
+    public GoPsiRefElement getReferenceElement() {
+        return reference;
+    }
+
     @Override
     public TextRange getRangeInElement() {
-        if (element == null)
+        if (reference == null)
             return new TextRange(0, 0);
 
-        return new TextRange(0, element.getTextLength());
+        return reference.getTextRange().shiftRight(-element.getTextOffset());
     }
 
     @Override
@@ -113,5 +122,19 @@ public abstract class GoPsiReference<
         }
 
         return elementName.equals(targetQualifiedName);
+    }
+
+    public abstract static class Single<
+        GoPsi extends PsiElement,
+        Reference extends Single<GoPsi, Reference>
+    > extends GoPsiReference<GoPsi, GoPsi, Reference> {
+
+        protected Single(@NotNull GoPsi element, @NotNull ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
+            super(element, element, resolver);
+        }
+
+        protected Single(@NotNull GoPsi element) {
+            super(element, element);
+        }
     }
 }

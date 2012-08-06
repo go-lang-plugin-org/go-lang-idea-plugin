@@ -65,7 +65,7 @@ import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeStructImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructAnonymousFieldImpl;
 import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructFieldImpl;
 
-import static ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel.ChannelType;
+import static ro.redeul.google.go.lang.psi.typing.GoTypeChannel.ChannelType;
 
 public class GoPsiCreator implements GoElementTypes {
 

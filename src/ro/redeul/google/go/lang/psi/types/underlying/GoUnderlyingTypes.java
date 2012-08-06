@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.types.underlying;
 
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
+import ro.redeul.google.go.lang.psi.typing.GoTypeChannel;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 
 public class GoUnderlyingTypes {
@@ -36,5 +37,9 @@ public class GoUnderlyingTypes {
 
     public static GoUnderlyingTypeStruct getStruct() {
         return new GoUnderlyingTypeStruct();
+    }
+
+    public static GoUnderlyingTypeChannel getChannel(GoTypeChannel.ChannelType channelType, GoUnderlyingType elementType) {
+        return new GoUnderlyingTypeChannel(channelType, elementType);
     }
 }
