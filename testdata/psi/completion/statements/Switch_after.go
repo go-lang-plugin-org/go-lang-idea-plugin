@@ -1,7 +1,7 @@
 package main
 
 func main() {
-    switch <caret>{
+	switch <caret>{
 
-    }
+	}
 }

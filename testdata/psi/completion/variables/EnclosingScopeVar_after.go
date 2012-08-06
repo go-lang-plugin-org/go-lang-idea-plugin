@@ -1,9 +1,9 @@
 package main
 
 func main() {
-    var xyz
+	var xyz
 
-    for {
-        xy<caret>
-    }
+	for {
+		xyz
+	}
 }

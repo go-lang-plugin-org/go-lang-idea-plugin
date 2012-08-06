@@ -1,7 +1,7 @@
 package main
 
 func main() {
-    var (
-        <caret>
-    )
+	var (
+		<caret>
+	)
 }

@@ -1,7 +1,7 @@
 package main
 
 func main() {
-    go func() {
-        <caret>
-    }()
+	go func() {
+		<caret>
+	}()
 }

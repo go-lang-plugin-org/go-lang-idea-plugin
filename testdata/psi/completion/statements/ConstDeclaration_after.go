@@ -1,7 +1,7 @@
 package main
 
 func main() {
-    const (
-        <caret>
-    )
+	const (
+		<caret>
+	)
 }

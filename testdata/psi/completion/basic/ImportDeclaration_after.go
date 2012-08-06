@@ -1,7 +1,7 @@
 package main
 
 import (
-    "<caret>"
+	"<caret>"
 )
 
 func

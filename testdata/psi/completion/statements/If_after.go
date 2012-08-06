@@ -1,7 +1,7 @@
 package main
 
 func main() {
-    if <caret>_ {
+	if <caret>_ {
 
-    }
+	}
 }
