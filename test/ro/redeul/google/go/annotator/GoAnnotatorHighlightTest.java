@@ -29,6 +29,8 @@ import ro.redeul.google.go.util.GoTestUtils;
 public class GoAnnotatorHighlightTest extends GoLightCodeInsightFixtureTestCase {
     public void testHighlight() throws Exception { doTest(); }
     public void testHighlightConsts() throws Exception { doTest(); }
+    public void testNpeOnCallOrConversion() throws Exception { doTest(); }
+
 
     @Override
     protected String getTestDataRelativePath() {

@@ -176,12 +176,14 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
     @Override
     public void visitCallOrConvExpression(GoCallOrConvExpression expression) {
-        PsiElement definition = resolveSafely(expression.getBaseExpression(), PsiElement.class);
+        if ( expression.getTypeArgument() == null ) {
+            PsiElement definition = resolveSafely(expression.getBaseExpression(), PsiElement.class);
 
-        if (psiElement(GoTypeSpec.class).accepts(definition)) {
-            annotationHolder.createInfoAnnotation(expression.getBaseExpression(), null)
-                            .setTextAttributes( GoSyntaxHighlighter.TYPE_NAME);
-            return;
+            if (psiElement(GoTypeSpec.class).accepts(definition)) {
+                annotationHolder.createInfoAnnotation(expression.getBaseExpression(), null)
+                                .setTextAttributes( GoSyntaxHighlighter.TYPE_NAME);
+                return;
+            }
         }
 
         for (GoExpr argumentExpression : expression.getArguments()) {
