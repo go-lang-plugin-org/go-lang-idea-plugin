@@ -136,4 +136,8 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testStructFieldViaChannel() throws Exception {
         doTest();
     }
+
+    public void testAnonymousFunctionInvocation() throws Exception {
+        doTest();
+    }
 }

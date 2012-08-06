@@ -48,4 +48,8 @@ public class GoResolveTypesTest extends GoPsiResolveTestCase {
     public void testResolveTypeNameInTypeSpec() throws Exception {
         doTest();
     }
+
+    public void testCompositeLiteralFromImportedPackage() throws Exception {
+        doTest();
+    }
 }
