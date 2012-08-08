@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import com.intellij.util.Function;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
@@ -21,6 +23,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.services.GoPsiManager;
 
 public class GoTypes {
 
@@ -76,11 +79,18 @@ public class GoTypes {
         return cachedTypes.get(builtinType);
     }
 
-    public static GoType fromPsiType(GoPsiType psiType) {
+    public static GoType fromPsiType(final GoPsiType psiType) {
         if ( psiType == null)
             return GoType.Unknown;
 
-        return psiType.accept(new GoTypeMakerVisitor());
+        return GoPsiManager.getInstance(psiType.getProject()).getType(psiType, new Function<GoPsiElement, GoType[]>() {
+            @Override
+            public GoType[] fun(GoPsiElement goPsiElement) {
+                return new GoType[] {
+                    psiType.accept(new GoTypeMakerVisitor())
+                };
+            }
+        })[0];
     }
 
     public static GoType[] fromPsiType(GoPsiType[] psiTypes) {

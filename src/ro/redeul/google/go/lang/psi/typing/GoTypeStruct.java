@@ -16,6 +16,9 @@ public class GoTypeStruct extends GoTypePsiBacked<GoPsiTypeStruct, GoUnderlyingT
 
     @Override
     public boolean isIdentical(GoType type) {
+        if (!(type instanceof GoTypeStruct))
+            return false;
+
         return false;
     }
 }

@@ -1,7 +1,11 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
@@ -20,25 +24,25 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
+import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.util.LookupElementUtil;
 import static ro.redeul.google.go.lang.completion.GoCompletionContributor.DUMMY_IDENTIFIER;
 
 public class MethodReference
     extends GoPsiReference.Single<GoSelectorExpression, MethodReference> {
 
-    GoTypeName baseTypeName;
+    Set<GoTypeName> receiverTypes;
 
     private static ResolveCache.AbstractResolver<MethodReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<MethodReference, GoResolveResult>() {
             @Override
             public GoResolveResult resolve(MethodReference methodReference, boolean incompleteCode) {
-                GoTypeName baseTypeName = methodReference.resolveBaseExpressionType();
-
-                if (baseTypeName == null)
-                    return null;
+                Set<GoTypeName> receiverTypes = methodReference.resolveBaseReceiverTypes();
 
                 MethodResolver processor = new MethodResolver(methodReference);
 
@@ -51,6 +55,7 @@ public class MethodReference
                     GoResolveStates.initial());
 
                 PsiElement declaration = processor.getChildDeclaration();
+
                 return declaration != null
                     ? new GoResolveResult(declaration)
                     : GoResolveResult.NULL;
@@ -104,16 +109,18 @@ public class MethodReference
 
         GoPsiTypeName methodTypeName = (GoPsiTypeName) receiverType;
 
-        if (baseTypeName != null && baseTypeName.getName() != null &&
-            baseTypeName.getName().equals(methodTypeName.getName())) {
+        Set<GoTypeName> receiverTypes = resolveBaseReceiverTypes();
 
-            String methodName = declaration.getFunctionName();
-            GoLiteralIdentifier identifier = getElement().getIdentifier();
-            if (identifier != null ) {
-                String referenceName = identifier.getUnqualifiedName();
+        for (GoTypeName type : receiverTypes) {
+            if ( type.getName().equals(methodTypeName.getName())) {
+                String methodName = declaration.getFunctionName();
+                GoLiteralIdentifier identifier = getElement().getIdentifier();
+                if (identifier != null ) {
+                    String referenceName = identifier.getUnqualifiedName();
 
-                return referenceName.contains(DUMMY_IDENTIFIER) ||
-                    referenceName.equals(methodName);
+                    return referenceName.contains(DUMMY_IDENTIFIER) ||
+                        referenceName.equals(methodName);
+                }
             }
         }
 
@@ -124,8 +131,8 @@ public class MethodReference
     @NotNull
     @Override
     public Object[] getVariants() {
-        GoTypeName baseTypName = resolveBaseExpressionType();
-        if (baseTypeName == null)
+        Set<GoTypeName> resolverTypeNames = resolveBaseReceiverTypes();
+        if (resolverTypeNames.size() == 0)
             return LookupElementBuilder.EMPTY_ARRAY;
 
         final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
@@ -151,21 +158,56 @@ public class MethodReference
         return variants.toArray(new LookupElementBuilder[variants.size()]);
     }
 
-    private GoTypeName resolveBaseExpressionType() {
+    @NotNull
+    private Set<GoTypeName> resolveBaseReceiverTypes() {
+        if ( receiverTypes != null )
+            return receiverTypes;
+
+        receiverTypes = new HashSet<GoTypeName>();
+
         GoType[] types = getElement().getBaseExpression().getType();
 
         if (types.length < 1)
-            return null;
+            return receiverTypes;
 
         GoType type = types[0];
-        if ( type instanceof GoTypePointer)
+        if (type instanceof GoTypePointer)
             type = ((GoTypePointer) type).getTargetType();
 
         if (!(type instanceof GoTypeName))
-            return null;
+            return receiverTypes;
 
-        baseTypeName = (GoTypeName) type;
-        return baseTypeName;
+        GoTypeName typeName = (GoTypeName) type;
+
+        Queue<GoTypeName> typeNamesToExplore = new LinkedList<GoTypeName>();
+        typeNamesToExplore.offer(typeName);
+
+        while ( ! typeNamesToExplore.isEmpty() ) {
+            GoTypeName currentTypeName = typeNamesToExplore.poll();
+
+            receiverTypes.add(currentTypeName);
+
+            if ( !(currentTypeName.getDefinition() instanceof GoTypeStruct) )
+                continue;
+
+            GoTypeStruct typeStruct = (GoTypeStruct) currentTypeName.getDefinition();
+            for (GoTypeStructAnonymousField field : typeStruct.getPsiType().getAnonymousFields()) {
+                if ( field.getType() == null)
+                    continue;
+
+                GoType embeddedType = GoTypes.fromPsiType(field.getType());
+                if (embeddedType == null || !(embeddedType instanceof GoTypeName))
+                    continue;
+
+                GoTypeName embeddedTypeName = (GoTypeName) embeddedType;
+                if (! receiverTypes.contains(embeddedTypeName) )
+                    typeNamesToExplore.offer(embeddedTypeName);
+
+                receiverTypes.add(embeddedTypeName);
+            }
+        }
+
+        return receiverTypes;
     }
 
     public boolean isSoft() {

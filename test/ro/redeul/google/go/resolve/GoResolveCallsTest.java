@@ -108,6 +108,15 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
     public void testCallToFunctionVariable() throws Exception {
         doTest();
     }
+
+    public void testDirectlyInheritedMethodSet() throws Exception {
+        doTest();
+    }
+
+    public void testGrandParentDirectlyInheritedMethodSet() throws Exception {
+        doTest();
+    }
+
 //    public void testConversionToLocallyImportedType() throws Exception {
 //        doTest();
 //    }

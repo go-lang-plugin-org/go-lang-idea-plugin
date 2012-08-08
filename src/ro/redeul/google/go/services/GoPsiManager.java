@@ -2,11 +2,16 @@ package ro.redeul.google.go.services;
 
 import java.util.concurrent.ConcurrentMap;
 
+import com.intellij.ProjectTopics;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootEvent;
+import com.intellij.openapi.roots.ModuleRootListener;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.impl.PsiManagerEx;
 import com.intellij.util.ConcurrencyUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ConcurrentWeakHashMap;
@@ -34,6 +39,26 @@ public class GoPsiManager {
 
     public GoPsiManager(Project project) {
         this.project = project;
+
+        ((PsiManagerEx) PsiManager.getInstance(project)).registerRunnableToRunOnAnyChange(new Runnable() {
+            public void run() {
+                myCalculatedTypes.clear();
+            }
+        });
+        ((PsiManagerEx)PsiManager.getInstance(project)).registerRunnableToRunOnChange(new Runnable() {
+            public void run() {
+                myCalculatedTypes.clear();
+            }
+        });
+
+        project.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootListener() {
+            public void beforeRootsChange(ModuleRootEvent event) {
+            }
+
+            public void rootsChanged(ModuleRootEvent event) {
+                myCalculatedTypes.clear();
+            }
+        });
     }
 
     public static GoPsiManager getInstance(Project project) {
