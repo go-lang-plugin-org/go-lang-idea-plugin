@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -96,16 +97,16 @@ public class GoSdkUtil {
 
         String binariesPath = path + "/bin";
 
-        GoSdkData data = findHostOsAndArch(binariesPath, new GoSdkData());
+        GoSdkData data = findHostOsAndArch(path, binariesPath, new GoSdkData());
 
-        data = findVersion(binariesPath, data);
+        data = findVersion(path, binariesPath, data);
 
         data.GO_BIN_PATH = binariesPath;
 	data.version = GoSdkData.LATEST_VERSION;
         return data;
     }
 
-    private static GoSdkData findVersion(String binariesPath, GoSdkData data) {
+    private static GoSdkData findVersion(final String path, String binariesPath, GoSdkData data) {
         if (data == null)
             return null;
 
@@ -116,6 +117,9 @@ public class GoSdkUtil {
             command.addParameter("dist");
             command.addParameter("version");
             command.setWorkDirectory(binariesPath);
+            command.setEnvParams(new HashMap<String, String>() {{
+                put("GOROOT", path);
+            }});
 
             ProcessOutput output = new CapturingProcessHandler(
                 command.createProcess(),
@@ -136,7 +140,7 @@ public class GoSdkUtil {
         }
     }
 
-    private static GoSdkData findHostOsAndArch(String binariesPath, GoSdkData data) {
+    private static GoSdkData findHostOsAndArch(final String path, String binariesPath, GoSdkData data) {
 
         if (data == null)
             return data;
@@ -148,6 +152,9 @@ public class GoSdkUtil {
             command.addParameter("dist");
             command.addParameter("env");
             command.setWorkDirectory(binariesPath);
+            command.setEnvParams(new HashMap<String, String>() {{
+                put("GOROOT", path);
+            }});
 
             ProcessOutput output = new CapturingProcessHandler(
                 command.createProcess(),
