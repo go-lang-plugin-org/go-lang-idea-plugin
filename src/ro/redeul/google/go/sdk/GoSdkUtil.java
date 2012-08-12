@@ -156,7 +156,7 @@ public class GoSdkUtil {
 
             if (output.getExitCode() != 0) {
                 LOG.error(
-                    "Go compiler exited with invalid exit code: " + output.getExitCode());
+                    binariesPath  + "/go tool dist env command exited with invalid exit code: " + output.getExitCode());
                 return null;
             }
 

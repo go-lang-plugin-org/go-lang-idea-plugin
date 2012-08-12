@@ -1,7 +1,11 @@
 package ro.redeul.google.go.ide;
 
-import com.intellij.openapi.compiler.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import javax.swing.*;
+
 import com.intellij.openapi.compiler.Compiler;
+import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
@@ -12,14 +16,11 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.compilation.GoCompiler;
 import ro.redeul.google.go.compilation.GoMakefileCompiler;
-
-import javax.swing.*;
-import java.util.Arrays;
-import java.util.HashSet;
+import ro.redeul.google.go.options.GoSettings;
 
 public class GoConfigurable implements SearchableConfigurable {
 
-    GoConfigurableForm goConfigurableForm;
+    GoConfigurableForm form;
 
     Project project;
 
@@ -57,23 +58,28 @@ public class GoConfigurable implements SearchableConfigurable {
 
     @Override
     public JComponent createComponent() {
-        goConfigurableForm = new GoConfigurableForm();
-        return goConfigurableForm.componentPanel;
+        form = new GoConfigurableForm();
+        form.enableShowHide();
+        return form.componentPanel;
     }
 
     @Override
     public boolean isModified() {
-        return goConfigurableForm != null && goConfigurableForm.isModified(getProjectSettings().getState());
+        return form != null &&
+            form.isModified(getProjectSettings().getState(),
+                            GoSettings.getInstance().getState());
     }
 
     @Override
     public void apply() throws ConfigurationException {
-        GoProjectSettings.GoProjectSettingsBean bean = new GoProjectSettings.GoProjectSettingsBean();
+        GoProjectSettings.GoProjectSettingsBean projectSettings = new GoProjectSettings.GoProjectSettingsBean();
+        GoSettings settings = GoSettings.getInstance().getState();
 
-        if ( goConfigurableForm != null ) {
-            goConfigurableForm.apply(bean);
-            getProjectSettings().loadState(bean);
-            applyCompilerSettings(bean);
+        if ( form != null ) {
+            form.apply(projectSettings, settings);
+            GoSettings.getInstance().loadState(settings);
+            getProjectSettings().loadState(projectSettings);
+            applyCompilerSettings(projectSettings);
         }
     }
 
@@ -112,14 +118,14 @@ public class GoConfigurable implements SearchableConfigurable {
 
     @Override
     public void reset() {
-        if ( goConfigurableForm != null ) {
-            goConfigurableForm.reset(getProjectSettings().getState());
+        if ( form != null ) {
+            form.reset(getProjectSettings().getState(), GoSettings.getInstance().getState());
         }
     }
 
     @Override
     public void disposeUIResources() {
-        goConfigurableForm.componentPanel = null;
-        goConfigurableForm = null;
+        form.componentPanel = null;
+        form = null;
     }
 }

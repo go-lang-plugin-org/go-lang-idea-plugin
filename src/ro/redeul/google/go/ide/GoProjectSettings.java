@@ -44,5 +44,4 @@ public class GoProjectSettings implements PersistentStateComponent<GoProjectSett
     public static GoProjectSettings getInstance(Project project) {
         return ServiceManager.getService(project, GoProjectSettings.class);
     }
-
 }
