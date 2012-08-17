@@ -55,8 +55,11 @@
          <h3>0.9.7 changes:</h3>
             <ul>
                 <li>[bugfix] Properly transfer the types via a channel expression.</li>
+                <li>[bugfix] Don't highlight functional variables as unused.</li>
+                <li>[enhancement] Show the file methods inside the structure view.</li>
                 <li>[enhancement] Use the complete method set for inherited structs.</li>
                 <li>[enhancement] Automatic management of imports setting should be duplicated into the Go Settings dialog.</li>
+                <li>[enhancement] Force GOROOT to the go folder when detecting SDK.</li>
             </ul>
          <h3>0.9.6 changes:</h3>
             <ul>

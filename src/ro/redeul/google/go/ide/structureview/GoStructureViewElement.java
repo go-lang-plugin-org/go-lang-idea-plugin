@@ -183,6 +183,11 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
             for (GoFunctionDeclaration fd : getFunctionDeclarations(psiFile)) {
                 children.add(new GoStructureViewElement(fd));
             }
+
+            for (GoFunctionDeclaration fd : getMethodDeclarations(psiFile)) {
+                children.add(new GoStructureViewElement(fd));
+            }
+
             return children.toArray(new TreeElement[children.size()]);
         }
 
@@ -200,6 +205,12 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
 
         private List<GoFunctionDeclaration> getFunctionDeclarations(GoFile psiFile) {
             List<GoFunctionDeclaration> functions = GoFileUtils.getFunctionDeclarations(psiFile);
+            Collections.sort(functions, NAMED_ELEMENT_COMPARATOR);
+            return functions;
+        }
+
+        private List<GoMethodDeclaration> getMethodDeclarations(GoFile psiFile) {
+            List<GoMethodDeclaration> functions = GoFileUtils.getMethodDeclarations(psiFile);
             Collections.sort(functions, NAMED_ELEMENT_COMPARATOR);
             return functions;
         }
