@@ -11,15 +11,15 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 
-public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<AbstractCallOrConversionReference>
-{
+public class MethodOrTypeNameResolver
+    extends GoPsiReferenceResolver<AbstractCallOrConversionReference> {
     public MethodOrTypeNameResolver(AbstractCallOrConversionReference reference) {
         super(reference);
     }
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-        if  ( checkReference(declaration) )
+        if (checkReference(declaration))
             addDeclaration(declaration, declaration.getNameIdentifier());
     }
 
@@ -29,13 +29,13 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<AbstractCal
         if ("builtin".equals(getState().get(GoResolveStates.PackageName))) {
             String typeName = type.getName();
             GoPsiType typeDeclaration = type.getType();
-            if ( typeName != null && typeDeclaration != null ) {
-                if ( ! typeName.equals(typeDeclaration.getText()))
+            if (typeName != null && typeDeclaration != null) {
+                if (!typeName.equals(typeDeclaration.getText()))
                     return;
             }
         }
 
-        if ( checkReference(type.getTypeNameDeclaration()) )
+        if (checkReference(type.getTypeNameDeclaration()))
             addDeclaration(type);
     }
 
@@ -47,10 +47,11 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<AbstractCal
 
     @Override
     public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
-        if ( ! (identifier.getParent() instanceof GoShortVarDeclaration) )
+        if (!(identifier.getParent() instanceof GoShortVarDeclaration))
             return;
 
-        GoShortVarDeclaration varDeclaration = (GoShortVarDeclaration) identifier.getParent();
+        GoShortVarDeclaration varDeclaration = (GoShortVarDeclaration) identifier
+            .getParent();
 
         GoLiteralIdentifier ids[] = varDeclaration.getIdentifiers();
 
@@ -73,10 +74,10 @@ public class MethodOrTypeNameResolver extends GoPsiReferenceResolver<AbstractCal
 
     @Override
     public void visitFunctionParameter(GoFunctionParameter parameter) {
-            if ( parameter.getType() instanceof GoPsiTypeFunction) {
+        if (parameter.getType() instanceof GoPsiTypeFunction) {
             for (GoLiteralIdentifier identifier : parameter.getIdentifiers()) {
                 if (checkReference(identifier)) {
-                    if ( !addDeclaration(identifier) ) {
+                    if (!addDeclaration(identifier)) {
                         return;
                     }
                 }

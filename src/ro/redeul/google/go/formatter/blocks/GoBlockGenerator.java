@@ -85,6 +85,8 @@ public class GoBlockGenerator {
             return new GoAssignListBlock(node, alignment, indent, styleSettings);
         } else if (elementType == GoElementTypes.TYPE_STRUCT) {
             return new GoTypeStructBlock(node, alignment, indent, styleSettings);
+//        } else if (elementType == GoElementTypes.TYPE_INTERFACE) {
+//            return new GoTypeInterfaceBlock(node, alignment, indent, styleSettings);
         } else if (elementType == GoElementTypes.EXPRESSION_LIST) {
             return new GoExpressionListBlock(node, alignment, indent, styleSettings);
         } else if (elementType == GoElementTypes.UNARY_EXPRESSION) {

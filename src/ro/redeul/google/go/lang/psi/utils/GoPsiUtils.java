@@ -97,6 +97,19 @@ public class GoPsiUtils {
         return null;
     }
 
+    public static boolean hasHardReferences(PsiElement element) {
+
+        PsiReference []references = element.getReferences();
+
+        for (PsiReference reference : references) {
+            if ( ! reference.isSoft())
+                return true;
+        }
+
+        return false;
+    }
+
+
     public static String getStringLiteralValue(String literalText) {
         if (literalText == null ){
             return "";

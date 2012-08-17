@@ -96,6 +96,6 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
 
     @Override
     public boolean isSoft() {
-        return false;
+        return true;
     }
 }

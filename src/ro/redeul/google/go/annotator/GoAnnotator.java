@@ -15,7 +15,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
-import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
+import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor2;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
 import ro.redeul.google.go.inspection.ConstDeclarationInspection;
 import ro.redeul.google.go.inspection.FunctionDeclarationInspection;
@@ -266,7 +266,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         visitElement(file);
 
         InspectionResult result = new InspectionResult(inspectionManager);
-        new GoVariableUsageStatVisitor(result).visitFile(file);
+        new GoVariableUsageStatVisitor2(result).visitFile(file);
         addProblems(result.getProblems());
     }
 

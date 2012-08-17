@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
@@ -38,7 +38,10 @@ public class InterfaceMethodReference extends
                 }
 
                 GoTypeInterface type = interfaceMethodReference.type;
-                for (GoMethodDeclaration declaration : type.getPsiType().getMethodDeclarations()) {
+                GoFunctionDeclaration[] functionDeclarations =
+                    type.getPsiType().getFunctionDeclarations();
+
+                for (GoFunctionDeclaration declaration : functionDeclarations) {
                     if (name.equals(declaration.getFunctionName())) {
                         return new GoResolveResult(declaration);
                     }
@@ -104,7 +107,7 @@ public class InterfaceMethodReference extends
     @NotNull
     @Override
     public Object[] getVariants() {
-        GoMethodDeclaration[] methods = type.getPsiType().getMethodDeclarations();
+        GoFunctionDeclaration[] methods = type.getPsiType().getFunctionDeclarations();
 
         LookupElementBuilder variants[] = new LookupElementBuilder[methods.length];
         for (int i = 0; i < methods.length; i++) {

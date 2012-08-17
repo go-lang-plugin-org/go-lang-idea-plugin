@@ -17,6 +17,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
+import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -220,7 +221,8 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
         }
 
         if (CallOrConversionReference.MATCHER.accepts(this))
-            return refs(new CallOrConversionReference(this));
+            return refs(new CallOrConversionReference(this),
+                        new VarOrConstReference((GoLiteralIdentifier)this.getLiteral()));
 
         return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.
     }

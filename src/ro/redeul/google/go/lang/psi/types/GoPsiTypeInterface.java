@@ -1,6 +1,6 @@
 package ro.redeul.google.go.lang.psi.types;
 
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -10,7 +10,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
  */
 public interface GoPsiTypeInterface extends GoPsiType, GoMethodSetHolder {
 
-    GoMethodDeclaration[] getMethodDeclarations();
+    GoFunctionDeclaration[] getFunctionDeclarations();
 
     GoPsiTypeName[] getTypeNames();
 }

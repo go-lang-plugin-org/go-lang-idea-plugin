@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
@@ -36,8 +37,8 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
             return GoTypes.fromPsiType(declaration.getReturnType());
         }
 
-        if (reference instanceof GoMethodDeclaration ) {
-            GoMethodDeclaration declaration = (GoMethodDeclaration)reference;
+        if (reference instanceof GoFunctionDeclaration) {
+            GoFunctionDeclaration declaration = (GoFunctionDeclaration)reference;
             return GoTypes.fromPsiType(declaration.getReturnType());
         }
 

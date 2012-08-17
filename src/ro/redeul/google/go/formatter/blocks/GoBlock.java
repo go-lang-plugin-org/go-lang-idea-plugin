@@ -88,6 +88,7 @@ class GoBlock implements Block, GoElementTypes {
         INC_DEC_STATEMENT,
         LITERAL_COMPOSITE_ELEMENT,
         METHOD_DECLARATION,
+        FUNCTION_DECLARATION,
         RETURN_STATEMENT,
         SELECT_STATEMENT,
         SHORT_VAR_STATEMENT,

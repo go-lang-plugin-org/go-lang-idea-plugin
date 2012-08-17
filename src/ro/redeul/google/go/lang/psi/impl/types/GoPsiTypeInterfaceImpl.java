@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
@@ -50,8 +51,8 @@ public class GoPsiTypeInterfaceImpl extends GoPsiPackagedElementBase implements
     }
 
     @Override
-    public GoMethodDeclaration[] getMethodDeclarations() {
-        return findChildrenByClass(GoMethodDeclaration.class);
+    public GoFunctionDeclaration[] getFunctionDeclarations() {
+        return findChildrenByClass(GoFunctionDeclaration.class);
     }
 
     @Override

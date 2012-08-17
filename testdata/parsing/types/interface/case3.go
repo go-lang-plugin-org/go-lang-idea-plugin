@@ -17,14 +17,14 @@ Go file
         PsiElement(KEYWORD_INTERFACE)('interface')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
-        MethodDeclaration(Lock)
+        FunctionDeclaration(Lock)
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('Lock')
           PsiElement(()('(')
           PsiElement())(')')
         PsiElement(;)(';')
         PsiWhiteSpace(' ')
-        MethodDeclaration(Unlock)
+        FunctionDeclaration(Unlock)
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('Unlock')
           PsiElement(()('(')

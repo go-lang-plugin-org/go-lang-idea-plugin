@@ -24,7 +24,7 @@ Go file
         PsiElement({)('{')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('\t')
-        MethodDeclaration(Read)
+        FunctionDeclaration(Read)
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('Read')
           PsiElement(()('(')
@@ -46,7 +46,7 @@ Go file
                     PsiElement(IDENTIFIER)('bool')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('\t')
-        MethodDeclaration(Write)
+        FunctionDeclaration(Write)
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('Write')
           PsiElement(()('(')
@@ -68,7 +68,7 @@ Go file
                     PsiElement(IDENTIFIER)('bool')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('\t')
-        MethodDeclaration(Close)
+        FunctionDeclaration(Close)
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('Close')
           PsiElement(()('(')

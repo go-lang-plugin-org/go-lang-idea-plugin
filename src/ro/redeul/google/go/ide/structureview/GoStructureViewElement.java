@@ -507,7 +507,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
                 return Collections.emptyList();
             }
             GoPsiTypeInterface ti = (GoPsiTypeInterface) type;
-            Collections.addAll(children, ti.getMethodDeclarations());
+            Collections.addAll(children, ti.getFunctionDeclarations());
             Collections.sort(children, NAMED_ELEMENT_COMPARATOR);
             return children;
         }
@@ -530,7 +530,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
 
         @Override
         String getPresentationText() {
-            return "Unkown element - " + element.getName();
+            return "Unknown element - " + element.getName();
         }
     }
 }
