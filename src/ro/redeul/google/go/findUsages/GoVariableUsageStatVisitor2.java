@@ -183,11 +183,7 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
     public void visitMethodDeclaration(GoMethodDeclaration declaration) {
         declaration.getMethodReceiver().accept(this);
 
-        for (GoFunctionParameter parameter : declaration.getParameters()) {
-            parameter.accept(this);
-        }
-
-        declaration.getBlock().accept(this);
+        visitFunctionDeclaration(declaration);
     }
 
     @Override
