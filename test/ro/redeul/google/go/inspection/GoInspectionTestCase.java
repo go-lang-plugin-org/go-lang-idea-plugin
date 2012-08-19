@@ -24,10 +24,11 @@ public abstract class GoInspectionTestCase
 
     protected AbstractWholeGoFileInspection createInspection() {
         try {
-            String inspectionName = getClass().getName()
-                .replaceAll("Test$", "");
-            return (AbstractWholeGoFileInspection) Class.forName(inspectionName)
-                                                        .newInstance();
+            String inspectionName =
+                getClass().getName().replaceAll("Test$", "");
+
+            return (AbstractWholeGoFileInspection)
+                Class.forName(inspectionName).newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

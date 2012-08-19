@@ -27,6 +27,7 @@
             <li>Intentions: Convert between interpreted string and raw string.</li>
             <li>Intention: Add/Remove parentheses.</li>
             <li>Intention: Move simple statement out.</li>
+            <li>Inspection: Validate that the package names in files are correct with respect of the folder name.</li>
             <li>Documentation for functions, methods, variable, constants and types.</li>
             <li>Function parameter information.</li>
             <li>Ctrl+Shift+T to jump between source file and test file.</li>
@@ -60,6 +61,7 @@
                 <li>[enhancement] Use the complete method set for inherited structs.</li>
                 <li>[enhancement] Automatic management of imports setting should be duplicated into the Go Settings dialog.</li>
                 <li>[enhancement] Force GOROOT to the go folder when detecting SDK.</li>
+                <li>[feature] Inspection/quickfixes for package names in files with respect to the expected go tools compatible structure.</li>
             </ul>
          <h3>0.9.6 changes:</h3>
             <ul>
@@ -518,6 +520,10 @@
                          shortName="ImportDeclaration" displayName="Highlights incorrect import declarations"
                          level="ERROR"
                          implementationClass="ro.redeul.google.go.inspection.ImportDeclarationInspection"/>
+        <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
+                         shortName="InvalidPackageName" displayName="Highlights invalid package name"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.InvalidPackageNameInspection"/>
         <localInspection groupName="Google Go" language="Google Go" enabledByDefault="true"
                          shortName="FmtUsage" displayName="Highlights incorrect fmt parameters"
                          level="WARNING"
