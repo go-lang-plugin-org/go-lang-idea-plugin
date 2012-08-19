@@ -2,6 +2,8 @@ package ro.redeul.google.go;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
@@ -64,6 +66,8 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
     private void doDirectoryTest(final VirtualFile vFile,
                                  final VirtualFile vModuleDir)
         throws IOException {
+        files.clear();
+
         VfsUtil.processFilesRecursively(
             vFile,
             new FilteringProcessor<VirtualFile>(
@@ -84,8 +88,14 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
             )
         );
 
+        for (Map.Entry<PsiFile, String> fileEntry : files.entrySet()) {
+            postProcessFilePsi(fileEntry.getKey(), fileEntry.getValue());
+        }
+
         assertTest();
     }
+
+    private Map<PsiFile, String> files = new HashMap<PsiFile, String>();
 
     protected void parseFile(VirtualFile file, VirtualFile root,
                              VirtualFile vModuleRoot) {
@@ -99,7 +109,7 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
             PsiFile psiFile =
                 createFile(myModule, VfsUtil.createDirectoryIfMissing(vModuleRoot, relativePath), file.getName(), fileContent);
 
-            postProcessFilePsi(psiFile, fileContent);
+            files.put(psiFile, fileContent);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());

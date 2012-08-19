@@ -37,8 +37,8 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
             return GoTypes.fromPsiType(declaration.getReturnType());
         }
 
-        if (reference instanceof GoFunctionDeclaration) {
-            GoFunctionDeclaration declaration = (GoFunctionDeclaration)reference;
+        if (reference.getParent() instanceof GoFunctionDeclaration) {
+            GoFunctionDeclaration declaration = (GoFunctionDeclaration)reference.getParent();
             return GoTypes.fromPsiType(declaration.getReturnType());
         }
 
