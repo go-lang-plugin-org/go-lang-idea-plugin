@@ -32,4 +32,8 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
     public void testAnonymousFunction() throws Exception {
         doTest();
     }
+
+    public void testAnonymousFunctionWithCall() throws Exception {
+        doTest();
+    }
 }

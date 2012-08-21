@@ -1,12 +1,12 @@
 package ro.redeul.google.go;
 
+import java.lang.ref.Reference;
+import java.util.ResourceBundle;
+
 import com.intellij.CommonBundle;
 import com.intellij.reference.SoftReference;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
-
-import java.lang.ref.Reference;
-import java.util.ResourceBundle;
 
 public class GoBundle {
     private static Reference<ResourceBundle> ourBundle;
@@ -14,7 +14,9 @@ public class GoBundle {
     @NonNls
     private static final String BUNDLE = "ro.redeul.google.go.GoBundle";
 
-    public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
+    public static String message(
+        @PropertyKey(resourceBundle = BUNDLE) String key,
+        Object ... params) {
         return CommonBundle.message(getBundle(), key, params);
     }
 
