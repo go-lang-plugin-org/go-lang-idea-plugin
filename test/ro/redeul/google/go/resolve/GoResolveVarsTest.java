@@ -140,4 +140,8 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testAnonymousFunctionInvocation() throws Exception {
         doTest();
     }
+
+    public void testShortAssignToReturnVar() throws Exception {
+        doTest();
+    }
 }

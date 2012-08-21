@@ -33,8 +33,8 @@ public class VarOrConstReference
         new ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult>() {
             @Override
             public GoResolveResult resolve(VarOrConstReference reference, boolean incompleteCode) {
-                VarOrConstResolver processor = new VarOrConstResolver(
-                    reference);
+                VarOrConstResolver processor =
+                    new VarOrConstResolver(reference);
 
                 PsiScopesUtil.treeWalkUp(
                     processor,

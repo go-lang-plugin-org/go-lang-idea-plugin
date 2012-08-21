@@ -3,6 +3,8 @@ package main
 // simple variable
 var /*begin*/va/*end.Unused global*/ int = 3
 
+var ExportedVariable int = 10
+
 // variable with parenthesis
 var (
     /*begin*/vb/*end.Unused global*/ int = 2

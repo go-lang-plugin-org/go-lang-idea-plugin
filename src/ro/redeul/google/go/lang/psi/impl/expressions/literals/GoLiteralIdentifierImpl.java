@@ -22,6 +22,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.resolve.references.CompositeElementOfStructFieldReference;
+import ro.redeul.google.go.lang.psi.resolve.references.GoReturnVariableReference;
 import ro.redeul.google.go.lang.psi.resolve.references.LabelReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -184,31 +185,24 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 //        if (BuiltinCallOrConversionReference.MATCHER.accepts(this))
 //            return refs(new BuiltinCallOrConversionReference(this));
 
+        if (GoReturnVariableReference.MATCHER.accepts(this))
+            return refs(new GoReturnVariableReference(this));
+
         if (LabelReference.MATCHER.accepts(this))
             return refs(new LabelReference(this));
 
         if (CompositeElementOfStructFieldReference.MATCHER_KEY.accepts(this))
             return refs(
                 new CompositeElementOfStructFieldReference(this, this),
-//                    (GoLiteralCompositeElement)
-//                        getParent().getParent().getParent()),
                 new VarOrConstReference(this));
 
         if (CompositeElementOfStructFieldReference.MATCHER_ELEMENT.accepts(this))
             return refs(
-//                new CompositeElementOfStructFieldReference(this, this),
-//                    (GoLiteralCompositeElement) getParent().getParent(),
-//                    this),
-
-//                new BuiltinCallOrConversionReference(this),
-//                new CallOrConversionReference(this),
                 new VarOrConstReference(this)
             );
 
         if (VarOrConstReference.MATCHER.accepts(this))
             return refs(
-//                new BuiltinCallOrConversionReference(this),
-//                new CallOrConversionReference(this),
                 new VarOrConstReference(this)
             );
 

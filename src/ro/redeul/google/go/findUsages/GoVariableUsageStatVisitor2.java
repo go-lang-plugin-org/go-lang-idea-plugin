@@ -115,7 +115,17 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
 
     @Override
     public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
-        Collections.addAll(declarations, declaration.getIdentifiers());
+        GoLiteralIdentifier[] identifiers = declaration.getIdentifiers();
+
+        for (GoLiteralIdentifier identifier : identifiers) {
+            GoLiteralIdentifier definition = resolveSafely(identifier, GoLiteralIdentifier.class);
+            if (definition == null) {
+                declarations.add(identifier);
+            } else {
+                usages.add(definition);
+            }
+        }
+
         for (GoExpr goExpr : declaration.getExpressions()) {
             goExpr.accept(this);
         }

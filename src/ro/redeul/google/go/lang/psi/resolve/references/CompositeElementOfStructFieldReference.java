@@ -51,7 +51,7 @@ public class CompositeElementOfStructFieldReference
                 GoTypeStruct typeStruct = psiReference.resolveTypeDefinition();
 
                 if ( typeStruct == null || typeStruct.getPsiType() == null)
-                    return null;
+                    return GoResolveResult.NULL;
 
                 GoLiteralIdentifier element = psiReference.getReferenceElement();
 
