@@ -36,4 +36,16 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
     public void testAnonymousFunctionWithCall() throws Exception {
         doTest();
     }
+
+    public void testUnusedConst() throws Exception {
+        doTest();
+    }
+
+    public void testReturnVariable() throws Exception {
+        doTest();
+    }
+
+    public void testCompositeExpressionKey() throws Exception {
+        doTest();
+    }
 }

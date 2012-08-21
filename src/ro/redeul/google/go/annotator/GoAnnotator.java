@@ -35,7 +35,6 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
@@ -50,6 +49,7 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.inspection.InspectionUtil.getProblemRange;
+import static ro.redeul.google.go.lang.psi.patterns.GoElementPatterns.GLOBAL_VAR_DECL;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isFunctionOrMethodCall;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
@@ -248,7 +248,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
             return;
         }
 
-        if (GoElementPatterns.GLOBAL_VAR_DECL.accepts(definition)) {
+        if (GLOBAL_VAR_DECL.accepts(definition)) {
             annotation.setTextAttributes(GoSyntaxHighlighter.GLOBAL_VARIABLE);
             return;
         }

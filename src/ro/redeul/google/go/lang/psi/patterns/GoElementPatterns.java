@@ -26,6 +26,10 @@ public class GoElementPatterns {
                         psiElement(GoConstDeclarations.class)
                             .withParent(psiElement(GoFile.class))));
 
+    public static final ElementPattern<GoLiteralIdentifier> CONST_DECLARATION =
+        psiElement(GoLiteralIdentifier.class)
+            .withParent(GoConstDeclaration.class);
+
     public static final ElementPattern<GoLiteralIdentifier> GLOBAL_VAR_DECL =
         psiElement(GoLiteralIdentifier.class)
             .withParent(
@@ -45,6 +49,9 @@ public class GoElementPatterns {
                 )
             );
 
+    public static final ElementPattern<GoLiteralIdentifier> PARAMETER_DECLARATION =
+        psiElement(GoLiteralIdentifier.class)
+            .withParent(GoFunctionParameter.class);
 
     public static final ElementPattern<? extends PsiElement> BLOCK_DECLARATIONS =
         or(
@@ -54,4 +61,5 @@ public class GoElementPatterns {
             psiElement(GoConstDeclarations.class),
             psiElement(GoLabeledStatement.class)
         );
+
 }

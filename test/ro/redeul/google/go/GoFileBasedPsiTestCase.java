@@ -58,7 +58,13 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
 
     private void doSingleFileTest(VirtualFile vFile, VirtualFile vModuleDir)
         throws Exception {
+        files.clear();
+
         parseFile(vFile, vFile.getParent(), vModuleDir);
+
+        for (Map.Entry<PsiFile, String> fileEntry : files.entrySet()) {
+            postProcessFilePsi(fileEntry.getKey(), fileEntry.getValue());
+        }
 
         assertTest();
     }

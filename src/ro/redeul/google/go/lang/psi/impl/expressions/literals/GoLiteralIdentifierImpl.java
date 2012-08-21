@@ -18,7 +18,6 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
@@ -190,16 +189,16 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
         if (CompositeElementOfStructFieldReference.MATCHER_KEY.accepts(this))
             return refs(
-                new CompositeElementOfStructFieldReference(
-                    (GoLiteralCompositeElement)
-                        getParent().getParent().getParent()),
+                new CompositeElementOfStructFieldReference(this, this),
+//                    (GoLiteralCompositeElement)
+//                        getParent().getParent().getParent()),
                 new VarOrConstReference(this));
 
         if (CompositeElementOfStructFieldReference.MATCHER_ELEMENT.accepts(this))
             return refs(
-                new CompositeElementOfStructFieldReference(
-                    (GoLiteralCompositeElement) getParent().getParent(),
-                    this),
+//                new CompositeElementOfStructFieldReference(this, this),
+//                    (GoLiteralCompositeElement) getParent().getParent(),
+//                    this),
 
 //                new BuiltinCallOrConversionReference(this),
 //                new CallOrConversionReference(this),

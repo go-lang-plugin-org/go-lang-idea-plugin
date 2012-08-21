@@ -1,6 +1,6 @@
 package main
 
-func foo(a, /*begin*/b/*end.Unused parameter*/ int) int {
+func foo(a, /*begin*/b/*end.Unused parameter 'b'*/ int) int {
     var s [10]int
     var i int
 
@@ -12,7 +12,7 @@ func foo(a, /*begin*/b/*end.Unused parameter*/ int) int {
 }
 
 func main() {
-    /*begin*/k/*end.Unused variable|RemoveVariableFix*/ := 5
+    /*begin*/k/*end.Unused variable 'k'|RemoveVariableFix*/ := 5
     s := make([]int, 10)
     j := 3
     s[j] = 3

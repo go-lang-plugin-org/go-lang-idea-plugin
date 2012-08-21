@@ -56,4 +56,8 @@ public class GoResolveCompositeTest extends GoPsiResolveTestCase {
     public void testKeyAsConstantExpression() throws Exception {
         doTest();
     }
+
+    public void testExpressionKey() throws Exception {
+        doTest();
+    }
 }

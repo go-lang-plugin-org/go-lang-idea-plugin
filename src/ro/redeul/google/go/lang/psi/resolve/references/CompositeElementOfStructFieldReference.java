@@ -4,6 +4,7 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -15,7 +16,7 @@ import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
 public class CompositeElementOfStructFieldReference
-    extends AbstractStructFieldsReference<GoLiteralCompositeElement, CompositeElementOfStructFieldReference> {
+    extends AbstractStructFieldsReference<GoLiteralIdentifier, CompositeElementOfStructFieldReference> {
 
     public static final ElementPattern<GoLiteralIdentifier> MATCHER_KEY =
         psiElement(GoLiteralIdentifier.class)
@@ -24,8 +25,7 @@ public class CompositeElementOfStructFieldReference
                     .withParent(
                         psiElement(GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY)
                             .withParent(
-                                psiElement(
-                                    GoLiteralCompositeElement.class))));
+                                psiElement(GoLiteralCompositeElement.class))));
 
     public static final ElementPattern<GoLiteralIdentifier> MATCHER_ELEMENT =
         psiElement(GoLiteralIdentifier.class)
@@ -38,11 +38,7 @@ public class CompositeElementOfStructFieldReference
 
     GoLiteralCompositeElement element;
 
-    public CompositeElementOfStructFieldReference(GoLiteralCompositeElement element) {
-        this(element, element.getKey());
-    }
-
-    public CompositeElementOfStructFieldReference(GoLiteralCompositeElement element,
+    public CompositeElementOfStructFieldReference(GoLiteralIdentifier element,
                                                   GoLiteralIdentifier identifier) {
         super(element, identifier, RESOLVER);
     }
@@ -88,7 +84,15 @@ public class CompositeElementOfStructFieldReference
 
     @Override
     protected GoTypeStruct resolveTypeDefinition() {
-        GoType type = getElement().getElementType();
+        GoPsiElement parent = getElement();
+        while (parent != null && !(parent instanceof GoLiteralCompositeElement)) {
+            parent = (GoPsiElement) parent.getParent();
+        }
+
+        if (parent == null)
+            return null;
+
+        GoType type = ((GoLiteralCompositeElement)parent).getElementType();
 
         if (type == null)
             return null;

@@ -14,6 +14,7 @@ public class GoNamesUtil {
 
     private static Pattern RE_PUBLIC_NAME = Pattern.compile("^\\p{Lu}.*$");
     private static final Set<String> PREDEFINED_CONSTANT = new HashSet<String>();
+
     static {
         PREDEFINED_CONSTANT.add("true");
         PREDEFINED_CONSTANT.add("false");
