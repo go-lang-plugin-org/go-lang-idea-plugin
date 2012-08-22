@@ -494,6 +494,7 @@
         <!--<compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>-->
 
         <configurationType implementation="ro.redeul.google.go.runner.GoRunConfigurationType"/>
+        <configurationType implementation="ro.redeul.google.go.runner.GoTestConfigurationType"/>
         <configurationType implementation="ro.redeul.google.go.runner.GoAppEngineRunConfigurationType"/>
         <configurationProducer implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>
 
