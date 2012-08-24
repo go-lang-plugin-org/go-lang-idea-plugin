@@ -3,7 +3,9 @@ package ro.redeul.google.go.runner;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 
+import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.CommandLineState;
@@ -21,6 +23,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.SystemInfo;
@@ -31,7 +34,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.runner.ui.GoTestConfigurationEditorForm;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -94,20 +99,32 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
             @NotNull
             @Override
             protected OSProcessHandler startProcess() throws ExecutionException {
-
                 GeneralCommandLine commandLine = new GeneralCommandLine();
-//
-//                String compiledFileName = getCompiledFileName(getModule(), scriptName);
-//                if (!new File(compiledFileName).exists()) {
-//                    throw new CantRunException("Cannot find target. Is main function defined in main package?");
-//                }
-//
-//                commandLine.setExePath(compiledFileName);
-//                if (scriptArguments != null && scriptArguments.trim().length() > 0) {
-//                    commandLine.getParametersList().addParametersString(scriptArguments);
-//                }
-//                commandLine.setWorkDirectory(workDir);
-//
+
+                Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(getProject());
+                if ( sdk == null ) {
+                    throw new CantRunException("No Go Sdk defined for this project");
+                }
+
+                final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
+                if ( sdkData == null ) {
+                    throw new CantRunException("No Go Sdk defined for this project");
+                }
+
+                commandLine.setExePath(sdkData.GO_BIN_PATH + "/go");
+                commandLine.addParameter("test");
+                commandLine.addParameter("-v");
+                if (useShortRun)
+                    commandLine.addParameter("-short");
+
+                if (filteredTests != null && !filteredTests.isEmpty())
+                    commandLine.addParameter("-run=" + filteredTests.trim());
+
+                commandLine.addParameter(packageName);
+                commandLine.setEnvParams(new HashMap<String, String>() {{
+                    put("GOPATH", getProject().getBaseDir().getCanonicalPath() + ":" + sdkData.GO_HOME_PATH);
+                }});
+
                 return GoApplicationProcessHandler.runCommandLine(commandLine);
             }
         };

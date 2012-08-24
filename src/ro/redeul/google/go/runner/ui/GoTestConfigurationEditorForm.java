@@ -19,13 +19,12 @@ import ro.redeul.google.go.runner.GoTestConfiguration;
 public class GoTestConfigurationEditorForm
     extends SettingsEditor<GoTestConfiguration> {
 
-    private JRadioButton allTestsRadioButton;
-    private JRadioButton filterTestsRadioButton;
-    private JCheckBox requireShortRunningTimeCheckBox;
-    private JTextField testsRegexp;
-    private JComboBox modules;
+    private JRadioButton allTests;
+    private JRadioButton someTests;
+    private JCheckBox useShort;
     private JPanel panel;
     private JComboBox packages;
+    private JTextField testsFilter;
     private ButtonGroup testsGroup;
 
     private Project project;
@@ -33,7 +32,7 @@ public class GoTestConfigurationEditorForm
     public GoTestConfigurationEditorForm(final Project project) {
         this.project = project;
 
-        filterTestsRadioButton.addChangeListener(new ChangeListener() {
+        someTests.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 updateTestsFilterField();
@@ -41,29 +40,34 @@ public class GoTestConfigurationEditorForm
         });
 
         Vector<String> myPackages = new Vector<String>();
-        Collection<String> allPackages = GoNamesCache.getInstance(project)
-                                                     .getAllPackages();
+        Collection<String> allPackages =
+            GoNamesCache.getInstance(project).getProjectPackages();
+
         for (String packageName : allPackages) {
             myPackages.add(packageName);
         }
+
         packages.setModel(new DefaultComboBoxModel(myPackages));
     }
 
     @Override
     protected void resetEditorFrom(GoTestConfiguration s) {
         if (s.filteredTests == null || s.filteredTests.isEmpty()) {
-            allTestsRadioButton.setSelected(true);
+            allTests.setSelected(true);
             updateTestsFilterField();
         } else {
-            filterTestsRadioButton.setSelected(true);
-            testsRegexp.setText(s.filteredTests);
+            someTests.setSelected(true);
+            testsFilter.setText(s.filteredTests);
             updateTestsFilterField();
         }
+
+        packages.getModel().setSelectedItem(s.packageName);
+        useShort.setSelected(s.useShortRun);
     }
 
     private void updateTestsFilterField() {
-        testsRegexp.setEnabled(filterTestsRadioButton.isSelected());
-        testsRegexp.setEditable(filterTestsRadioButton.isSelected());
+        testsFilter.setEnabled(someTests.isSelected());
+        testsFilter.setEditable(someTests.isSelected());
     }
 
     @Override
@@ -71,11 +75,8 @@ public class GoTestConfigurationEditorForm
         throws ConfigurationException {
         Object selectedItem = packages.getSelectedItem();
         s.packageName = selectedItem != null ? selectedItem.toString() : "";
-        s.filteredTests =
-            filterTestsRadioButton.isSelected()
-                ? testsRegexp.getText() : "";
-
-        s.useShortRun = this.requireShortRunningTimeCheckBox.isSelected();
+        s.filteredTests = someTests.isSelected() ? testsFilter.getText() : "";
+        s.useShortRun = this.useShort.isSelected();
     }
 
     @NotNull
@@ -87,5 +88,9 @@ public class GoTestConfigurationEditorForm
     @Override
     protected void disposeEditor() {
         panel.setVisible(false);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }

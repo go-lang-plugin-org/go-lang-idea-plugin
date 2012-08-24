@@ -40,19 +40,19 @@ public class GoNamesCache {
     }
 
     public Collection<String> getProjectPackages() {
-        return getGoPackagesInScope(GlobalSearchScope.projectScope(project));
+        return getPackagesInScope(GlobalSearchScope.projectScope(project));
     }
 
     public Collection<String> getSdkPackages() {
-        return getGoPackagesInScope(GlobalSearchScope.notScope(
+        return getPackagesInScope(GlobalSearchScope.notScope(
             GlobalSearchScope.projectScope(project)));
     }
 
     public Collection<String> getAllPackages() {
-        return getGoPackagesInScope(GlobalSearchScope.allScope(project));
+        return getPackagesInScope(GlobalSearchScope.allScope(project));
     }
 
-    private Collection<String> getGoPackagesInScope(GlobalSearchScope scope) {
+    public Collection<String> getPackagesInScope(GlobalSearchScope scope) {
 
         StubIndex index = StubIndex.getInstance();
 
