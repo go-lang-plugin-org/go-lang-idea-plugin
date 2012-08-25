@@ -1,6 +1,3 @@
-/*
-* Copyright 2012 Midokura Europe SARL
-*/
 package ro.redeul.google.go.runner.ui;
 
 import java.util.Collection;
@@ -19,12 +16,13 @@ import ro.redeul.google.go.runner.GoTestConfiguration;
 public class GoTestConfigurationEditorForm
     extends SettingsEditor<GoTestConfiguration> {
 
-    private JRadioButton allTests;
-    private JRadioButton someTests;
+    private JCheckBox filter;
     private JCheckBox useShort;
     private JPanel panel;
     private JComboBox packages;
     private JTextField testsFilter;
+    private JRadioButton benchmark;
+    private JRadioButton test;
     private ButtonGroup testsGroup;
 
     private Project project;
@@ -32,7 +30,7 @@ public class GoTestConfigurationEditorForm
     public GoTestConfigurationEditorForm(final Project project) {
         this.project = project;
 
-        someTests.addChangeListener(new ChangeListener() {
+        filter.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 updateTestsFilterField();
@@ -52,12 +50,20 @@ public class GoTestConfigurationEditorForm
 
     @Override
     protected void resetEditorFrom(GoTestConfiguration s) {
-        if (s.filteredTests == null || s.filteredTests.isEmpty()) {
-            allTests.setSelected(true);
+        switch (s.executeWhat) {
+            case Test:
+                test.setSelected(true);
+                break;
+            case Benchmark:
+                benchmark.setSelected(true);
+                break;
+        }
+
+        if (s.filter == null || s.filter.isEmpty()) {
             updateTestsFilterField();
         } else {
-            someTests.setSelected(true);
-            testsFilter.setText(s.filteredTests);
+            filter.setSelected(true);
+            testsFilter.setText(s.filter);
             updateTestsFilterField();
         }
 
@@ -66,8 +72,8 @@ public class GoTestConfigurationEditorForm
     }
 
     private void updateTestsFilterField() {
-        testsFilter.setEnabled(someTests.isSelected());
-        testsFilter.setEditable(someTests.isSelected());
+        testsFilter.setEnabled(filter.isSelected());
+        testsFilter.setEditable(filter.isSelected());
     }
 
     @Override
@@ -75,7 +81,8 @@ public class GoTestConfigurationEditorForm
         throws ConfigurationException {
         Object selectedItem = packages.getSelectedItem();
         s.packageName = selectedItem != null ? selectedItem.toString() : "";
-        s.filteredTests = someTests.isSelected() ? testsFilter.getText() : "";
+        s.filter = filter.isSelected() ? testsFilter.getText() : "";
+        s.executeWhat = test.isSelected() ? GoTestConfiguration.Type.Test : GoTestConfiguration.Type.Benchmark;
         s.useShortRun = this.useShort.isSelected();
     }
 

@@ -46,8 +46,13 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
  */
 public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration> {
 
+    public enum Type {
+        Test, Benchmark
+    }
+
     public String packageName;
-    public String filteredTests;
+    public String filter;
+    public Type executeWhat;
     public boolean useShortRun;
 
     public GoTestConfiguration(String name, Project project, GoTestConfigurationType configurationType) {
@@ -117,8 +122,18 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
                 if (useShortRun)
                     commandLine.addParameter("-short");
 
-                if (filteredTests != null && !filteredTests.isEmpty())
-                    commandLine.addParameter("-run=" + filteredTests.trim());
+                switch (executeWhat) {
+                    case Test:
+                        if (filter != null && !filter.isEmpty())
+                            commandLine.addParameter("-run=" + filter.trim());
+                    case Benchmark:
+                        String benchmarkName = ".*";
+
+                        if (filter != null && !filter.isEmpty())
+                            benchmarkName = filter.trim();
+
+                        commandLine.addParameter("-bench=" + benchmarkName);
+                }
 
                 commandLine.addParameter(packageName);
                 commandLine.setEnvParams(new HashMap<String, String>() {{

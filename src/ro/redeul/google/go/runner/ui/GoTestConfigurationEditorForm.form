@@ -15,7 +15,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="a088e" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="a088e" layout-manager="GridLayoutManager" row-count="4" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Configuration"/>
@@ -23,50 +23,58 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="bdb01" class="javax.swing.JRadioButton" binding="allTests">
+              <component id="bdb01" class="javax.swing.JRadioButton" binding="test">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="All tests"/>
+                  <text value="Test"/>
                 </properties>
               </component>
               <component id="748e2" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Package name:"/>
                 </properties>
               </component>
+              <component id="5574b" class="javax.swing.JCheckBox" binding="filter">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Filter (by regexp):"/>
+                </properties>
+              </component>
+              <component id="11907" class="javax.swing.JCheckBox" binding="useShort">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Ask for short run time (-test.short)"/>
+                </properties>
+              </component>
               <component id="ae119" class="javax.swing.JComboBox" binding="packages">
                 <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
               </component>
-              <component id="8114" class="javax.swing.JRadioButton" binding="someTests">
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Some tests (regexp):"/>
-                </properties>
-              </component>
               <component id="f2be5" class="javax.swing.JTextField" binding="testsFilter">
                 <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
                 </constraints>
                 <properties/>
               </component>
-              <component id="11907" class="javax.swing.JCheckBox" binding="useShort">
+              <component id="f3c9c" class="javax.swing.JRadioButton" binding="benchmark">
                 <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Ask for short run time (-test.short)"/>
+                  <text value="Benchmark"/>
                 </properties>
               </component>
             </children>
@@ -76,10 +84,9 @@
     </children>
   </grid>
   <buttonGroups>
-    <group name="testsGroup" bound="true">
+    <group name="buttonGroup">
       <member id="bdb01"/>
-      <member id="bdb01"/>
-      <member id="8114"/>
+      <member id="f3c9c"/>
     </group>
   </buttonGroups>
 </form>
