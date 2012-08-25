@@ -40,7 +40,8 @@ public class GoConfigurableForm {
         });
     }
 
-    public boolean isModified(GoProjectSettings.GoProjectSettingsBean settingsBean, GoSettings goSettings) {
+    public boolean isModified(GoProjectSettings.GoProjectSettingsBean settingsBean,
+                              GoSettings goSettings) {
 
         if (goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY != enableOnTheFlyImportOptimization.isSelected()) {
             return true;

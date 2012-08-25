@@ -2,6 +2,7 @@ package ro.redeul.google.go.options;
 
 import java.io.File;
 
+import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.ExportableComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -22,6 +23,11 @@ import ro.redeul.google.go.GoBundle;
 public class GoSettings implements PersistentStateComponent<GoSettings>, ExportableComponent {
     public boolean SHOW_IMPORT_POPUP = true;
     public boolean OPTIMIZE_IMPORTS_ON_THE_FLY = true;
+
+    public GoSettings() {
+        CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
+        OPTIMIZE_IMPORTS_ON_THE_FLY = codeInsightSettings.OPTIMIZE_IMPORTS_ON_THE_FLY;
+    }
 
     public static GoSettings getInstance() {
         return ServiceManager.getService(GoSettings.class);
