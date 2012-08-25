@@ -83,7 +83,8 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
                 result.addProblem(declaration,
                                   GoBundle.message("error.constant.not.used",
                                                    declaration.getText()),
-                                  ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+                                  ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                                  new RemoveVariableFix());
             } else {
                 result.addProblem(declaration,
                                   GoBundle.message("error.variable.not.used",

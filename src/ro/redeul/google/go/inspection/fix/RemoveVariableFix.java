@@ -22,7 +22,7 @@ public class RemoveVariableFix implements LocalQuickFix {
     @NotNull
     @Override
     public String getFamilyName() {
-        return "Variable";
+        return "Go Unused Symbols";
     }
 
     @Override
