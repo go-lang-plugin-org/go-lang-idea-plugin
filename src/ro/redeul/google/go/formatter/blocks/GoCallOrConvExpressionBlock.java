@@ -35,6 +35,11 @@ class GoCallOrConvExpressionBlock extends GoBlock {
             child1Type == pLPAREN && child2Type != pRPAREN) {
             return EMPTY_SPACING_KEEP_LINE_BREAKS;
         }
+
+        if (child1Type == oCOMMA) {
+            return BASIC_SPACING_KEEP_LINE_BREAKS;
+        }
+
         return EMPTY_SPACING;
     }
 }

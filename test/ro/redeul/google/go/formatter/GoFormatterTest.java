@@ -13,6 +13,7 @@ public class GoFormatterTest extends GoEditorAwareTestCase {
     public void testType() throws Exception { doTest(); }
     public void testFunctionCall() throws Exception { doTest(); }
     public void testInterfaceType() throws Exception { doTest(); }
+    public void testCallParameters() throws Exception { doTest(); }
 
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {
