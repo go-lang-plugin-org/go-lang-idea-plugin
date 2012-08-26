@@ -108,6 +108,15 @@ public abstract class GoPsiReference<
         if (currentPackageName == null)
             currentPackageName = "";
 
+        if ( matchesPackageName(currentPackageName, targetQualifiedName, elementName)) {
+            return true;
+        }
+
+        return matchesPackageName(currentPackageName.toLowerCase(),
+                                  targetQualifiedName, elementName);
+    }
+
+    private boolean matchesPackageName(String currentPackageName, String targetQualifiedName, String elementName) {
         if (targetQualifiedName.contains(".")) {
             elementName = currentPackageName + "." + elementName;
         }

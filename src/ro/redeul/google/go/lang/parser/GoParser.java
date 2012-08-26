@@ -182,6 +182,14 @@ public class GoParser extends ParserUtils implements PsiParser {
     }
 
     public boolean isPackageName(String name) {
-        return packageNames.contains(name);
+        if ( packageNames.contains(name) )
+            return true;
+
+        for (String packageName : packageNames) {
+            if (packageName.toLowerCase().equals(name))
+                return true;
+        }
+
+        return false;
     }
 }

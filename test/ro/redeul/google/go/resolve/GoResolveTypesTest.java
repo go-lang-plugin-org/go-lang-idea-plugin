@@ -52,4 +52,12 @@ public class GoResolveTypesTest extends GoPsiResolveTestCase {
     public void testCompositeLiteralFromImportedPackage() throws Exception {
         doTest();
     }
+
+    public void testFromMixedCaseImportedPackage() throws Exception {
+        doTest();
+    }
+
+    public void testFromLowerCasePackageInMixedCaseFolder() throws Exception {
+        doTest();
+    }
 }
