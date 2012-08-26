@@ -55,6 +55,9 @@
         <![CDATA[
          <h3>0.9.10 changes:</h3>
             <ul>
+                <li>[bugfix] Tweaked the default package name for imports.</li>
+                <li>[bugfix] Properly parse anonymous functiona parameters having a qualified type</li>
+                <li>[bugfix] Add a space after ',' inside calls when reformatting</li>
             </ul>
          <h3>0.9.9 changes:</h3>
             <ul>
