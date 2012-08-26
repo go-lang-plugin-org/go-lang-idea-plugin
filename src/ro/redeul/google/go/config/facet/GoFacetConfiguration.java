@@ -1,5 +1,7 @@
 package ro.redeul.google.go.config.facet;
 
+import java.util.List;
+
 import com.intellij.facet.FacetConfiguration;
 import com.intellij.facet.ui.FacetEditorContext;
 import com.intellij.facet.ui.FacetEditorTab;
@@ -19,8 +21,7 @@ import com.intellij.openapi.util.WriteExternalException;
 import org.jdom.Element;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.config.ui.GoFacetTab;
-
-import java.util.List;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 /**
  * Created by IntelliJ IDEA.
@@ -40,7 +41,7 @@ public class GoFacetConfiguration implements FacetConfiguration, PersistentState
 
     public FacetEditorTab[] createEditorTabs(FacetEditorContext editorContext, FacetValidatorsManager validatorsManager) {
 
-        List<Sdk> libraries = ProjectJdkTable.getInstance().getSdksOfType(GoSdkType.getInstance());
+        List<Sdk> libraries = GoSdkUtil.getSdkOfType(GoSdkType.getInstance());
 
         return new FacetEditorTab[]{new GoFacetTab(this, libraries)};
     }

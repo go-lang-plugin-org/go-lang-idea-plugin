@@ -1,27 +1,24 @@
 package ro.redeul.google.go.config.ui;
 
-import com.intellij.facet.ui.FacetEditorTab;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.projectRoots.ProjectJdkTable;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.ui.ProjectJdksEditor;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.ui.ComboboxWithBrowseButton;
-import org.jetbrains.annotations.Nls;
-import ro.redeul.google.go.config.facet.GoFacetConfiguration;
-import ro.redeul.google.go.config.sdk.GoSdkType;
-
-import javax.swing.*;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
+
+import com.intellij.facet.ui.FacetEditorTab;
+import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.ui.ProjectJdksEditor;
+import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.ui.ComboboxWithBrowseButton;
+import org.jetbrains.annotations.Nls;
+import ro.redeul.google.go.config.facet.GoFacetConfiguration;
+import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,7 +39,7 @@ public class GoFacetTab extends FacetEditorTab {
         final DefaultComboBoxModel model = new DefaultComboBoxModel(SDKs.toArray());
 
         goSdks.getComboBox().setModel(model);
-        
+
         goSdks.getComboBox().setRenderer(new BasicComboBoxRenderer() {
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -57,7 +54,7 @@ public class GoFacetTab extends FacetEditorTab {
         if ( facetConfiguration.getSdk() != null ) {
             goSdks.getComboBox().setSelectedItem(facetConfiguration.getSdk());
         }
-        
+
         goSdks.getComboBox().addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 setModified();
@@ -71,7 +68,7 @@ public class GoFacetTab extends FacetEditorTab {
                 if ( editor.getExitCode() == DialogWrapper.OK_EXIT_CODE ) {
                     model.removeAllElements();
 
-                    List<Sdk> libraries = ProjectJdkTable.getInstance().getSdksOfType(GoSdkType.getInstance());
+                    List<Sdk> libraries = GoSdkUtil.getSdkOfType(GoSdkType.getInstance());
                     for (Sdk library : libraries) {
                         model.addElement(library);
                     }
@@ -108,7 +105,7 @@ public class GoFacetTab extends FacetEditorTab {
     public void disposeUIResources() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
-    
+
     public void apply() throws ConfigurationException {
         facetConfiguration.setGoSdkName(((Sdk)goSdks.getComboBox().getSelectedItem()).getName());
         modified = false;

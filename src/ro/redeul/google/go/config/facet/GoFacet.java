@@ -1,14 +1,14 @@
 package ro.redeul.google.go.config.facet;
 
+import java.util.List;
+
 import com.intellij.facet.Facet;
 import com.intellij.facet.FacetType;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkType;
-
-import java.util.List;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,7 +28,7 @@ public class GoFacet extends Facet<GoFacetConfiguration> {
 
     public Sdk getGoSdk() {
 
-        List<Sdk> sdks = ProjectJdkTable.getInstance().getSdksOfType(GoSdkType.getInstance());
+        List<Sdk> sdks = GoSdkUtil.getSdkOfType(GoSdkType.getInstance());
 
         for (Sdk sdk : sdks) {
             if ( sdk.getName().equals(getConfiguration().SDK_NAME) ) {

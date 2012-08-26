@@ -30,6 +30,7 @@ import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.GoUtil;
 
 /**
@@ -80,8 +81,9 @@ public class GoSdkParsingHelper implements ApplicationComponent {
         ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
         List<Sdk> sdkList = new ArrayList<Sdk>();
 
-        sdkList.addAll(jdkTable.getSdksOfType(GoSdkType.getInstance()));
-        sdkList.addAll(jdkTable.getSdksOfType(GoAppEngineSdkType.getInstance()));
+
+        sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
+        sdkList.addAll(GoSdkUtil.getSdkOfType(GoAppEngineSdkType.getInstance(), jdkTable));
 
         Sdk ownerSdk = null;
 

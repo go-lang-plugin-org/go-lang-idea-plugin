@@ -8,13 +8,13 @@ import com.intellij.ide.util.newProjectWizard.modes.WizardMode;
 import com.intellij.ide.util.projectWizard.ProjectBuilder;
 import com.intellij.ide.util.projectWizard.ProjectWizardStepFactory;
 import com.intellij.ide.util.projectWizard.WizardContext;
-import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import com.intellij.openapi.util.Computable;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.ide.GoModuleBuilder;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -61,7 +61,7 @@ public class GoApplicationWizard extends WizardMode {
         sequence.addCommonStep(factory.createProjectJdkStep(context, GoSdkType.getInstance(), goModuleBuilder, new Computable<Boolean>() {
             @Override
             public Boolean compute() {
-                List<Sdk> sdkList = ProjectJdkTable.getInstance().getSdksOfType(GoSdkType.getInstance());
+                List<Sdk> sdkList = GoSdkUtil.getSdkOfType(GoSdkType.getInstance());
                 return !(sdkList != null && sdkList.size() == 1);
 
             }

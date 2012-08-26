@@ -28,7 +28,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
         ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
         List<Sdk> sdkList = new ArrayList<Sdk>();
 
-        sdkList.addAll(jdkTable.getSdksOfType(GoSdkType.getInstance()));
+        sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
 
         for (Sdk sdk : sdkList) {
             GoSdkData sdkData = (GoSdkData) sdk.getSdkAdditionalData();
@@ -72,8 +72,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
         }
 
         sdkList.clear();
-        sdkList.addAll(
-            jdkTable.getSdksOfType(GoAppEngineSdkType.getInstance()));
+        sdkList.addAll(GoSdkUtil.getSdkOfType(GoAppEngineSdkType.getInstance(), jdkTable));
 
         for (Sdk sdk : sdkList) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();

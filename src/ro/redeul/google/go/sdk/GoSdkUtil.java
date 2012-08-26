@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -518,9 +519,7 @@ public class GoSdkUtil {
             return true;
         }
 
-        ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
-
-        List<Sdk> registeredSdks = jdkTable.getSdksOfType(sdkType);
+        List<Sdk> registeredSdks = GoSdkUtil.getSdkOfType(sdkType);
 
         for (Sdk registeredSdk : registeredSdks) {
             if ( homePathAsVirtualFile.equals(registeredSdk.getHomeDirectory()) ) {
@@ -531,5 +530,22 @@ public class GoSdkUtil {
         return false;
     }
 
+
+    public static List<Sdk> getSdkOfType(SdkType sdkType) {
+        return getSdkOfType(sdkType, ProjectJdkTable.getInstance());
+    }
+
+    public static List<Sdk> getSdkOfType(SdkType sdkType, ProjectJdkTable table) {
+        Sdk[] sdks = table.getAllJdks();
+
+        List<Sdk> goSdks = new LinkedList<Sdk>();
+        for (Sdk sdk : sdks) {
+            if (sdk.getSdkType() == sdkType) {
+                goSdks.add(sdk);
+            }
+        }
+
+        return goSdks;
+    }
 
 }
