@@ -1,6 +1,6 @@
 package main
 func f(a, b int, z float) bool
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')

@@ -1,6 +1,6 @@
 package main
-func f() int {}
------
+func f(x int) {}
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -13,14 +13,15 @@ Go file
     LiteralIdentifierImpl
       PsiElement(IDENTIFIER)('f')
     PsiElement(()('(')
+    FunctionParameterListImpl
+      FunctionParameterImpl
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('x')
+        PsiWhiteSpace(' ')
+        TypeNameImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('int')
     PsiElement())(')')
-    PsiWhiteSpace(' ')
-    FunctionResult
-      FunctionParameterListImpl
-        FunctionParameterImpl
-          TypeNameImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('int')
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')

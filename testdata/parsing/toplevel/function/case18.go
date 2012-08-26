@@ -1,6 +1,6 @@
 package main
 func f(n int) func(p *T) {}
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')

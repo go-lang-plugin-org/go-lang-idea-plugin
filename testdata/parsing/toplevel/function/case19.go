@@ -1,6 +1,6 @@
 package main
 func foo(a ...interface{}) {}
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')

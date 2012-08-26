@@ -141,7 +141,8 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         int identifiers = parser.parseIdentifierList(builder, false);
 
         if (ParserUtils.lookAhead(builder, pRPAREN) ||
-            ParserUtils.lookAhead(builder, oCOMMA)) {
+            ParserUtils.lookAhead(builder, oCOMMA) ||
+            ParserUtils.lookAhead(builder, oDOT, mIDENT)) {
             mark.rollbackTo();
             mark = builder.mark();
             parser.parseType(builder);

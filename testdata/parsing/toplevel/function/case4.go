@@ -1,6 +1,6 @@
 package main
-func f(a, b int, z float) (bool)
------
+func f(prefix string, values ...int)
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -16,31 +16,19 @@ Go file
     FunctionParameterListImpl
       FunctionParameterImpl
         LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('a')
-        PsiElement(,)(',')
+          PsiElement(IDENTIFIER)('prefix')
         PsiWhiteSpace(' ')
+        TypeNameImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('string')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      FunctionParameterVariadicImpl
         LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('b')
+          PsiElement(IDENTIFIER)('values')
         PsiWhiteSpace(' ')
+        PsiElement(...)('...')
         TypeNameImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('int')
-      PsiElement(,)(',')
-      PsiWhiteSpace(' ')
-      FunctionParameterImpl
-        LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('z')
-        PsiWhiteSpace(' ')
-        TypeNameImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('float')
     PsiElement())(')')
-    PsiWhiteSpace(' ')
-    FunctionResult
-      PsiElement(()('(')
-      FunctionParameterListImpl
-        FunctionParameterImpl
-          TypeNameImpl
-            LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('bool')
-      PsiElement())(')')

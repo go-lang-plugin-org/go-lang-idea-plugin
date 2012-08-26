@@ -1,6 +1,6 @@
 package main
-func f(a, b int, z float) (bool) {}
------
+func f(a, b int, z float, opt ...interface{}) (success bool) {}
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -34,12 +34,26 @@ Go file
         TypeNameImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('float')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      FunctionParameterVariadicImpl
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('opt')
+        PsiWhiteSpace(' ')
+        PsiElement(...)('...')
+        TypeInterfaceImpl
+          PsiElement(KEYWORD_INTERFACE)('interface')
+          PsiElement({)('{')
+          PsiElement(})('}')
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
       PsiElement(()('(')
       FunctionParameterListImpl
         FunctionParameterImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('success')
+          PsiWhiteSpace(' ')
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('bool')

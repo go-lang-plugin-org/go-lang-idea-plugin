@@ -1,6 +1,6 @@
 package main
-func f(a, b int, z float) bool {}
------
+func f(int, int, float) (float, *[]int)
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -15,34 +15,39 @@ Go file
     PsiElement(()('(')
     FunctionParameterListImpl
       FunctionParameterImpl
-        LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('a')
-        PsiElement(,)(',')
-        PsiWhiteSpace(' ')
-        LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('b')
-        PsiWhiteSpace(' ')
         TypeNameImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('int')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       FunctionParameterImpl
-        LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('z')
-        PsiWhiteSpace(' ')
+        TypeNameImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('int')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      FunctionParameterImpl
         TypeNameImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('float')
     PsiElement())(')')
     PsiWhiteSpace(' ')
     FunctionResult
+      PsiElement(()('(')
       FunctionParameterListImpl
         FunctionParameterImpl
           TypeNameImpl
             LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('bool')
-    PsiWhiteSpace(' ')
-    BlockStmtImpl
-      PsiElement({)('{')
-      PsiElement(})('}')
+              PsiElement(IDENTIFIER)('float')
+        PsiElement(,)(',')
+        PsiWhiteSpace(' ')
+        FunctionParameterImpl
+          TypePointerImpl
+            PsiElement(*)('*')
+            TypeSliceImpl
+              PsiElement([)('[')
+              PsiElement(])(']')
+              TypeNameImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('int')
+      PsiElement())(')')
