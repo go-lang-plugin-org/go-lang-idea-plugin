@@ -40,10 +40,18 @@ public class InspectionResult {
     }
 
     public void addProblem(PsiElement start, PsiElement end, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {
-        problems.add(manager.createProblemDescriptor(start, end, msg, type, true, fixes));
+        TextRange startTextRange = start.getTextRange();
+        TextRange endTextRange = end.getTextRange();
+        if (startTextRange.getStartOffset() < endTextRange.getEndOffset()) {
+            problems.add(manager.createProblemDescriptor(start, end, msg, type, true, fixes));
+        }
     }
 
     public void addProblem(PsiElement element, int start, int end, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {
-        problems.add(manager.createProblemDescriptor(element, new TextRange(start, end), msg, type, true, fixes));
+        if (start < end) {
+            problems.add(manager.createProblemDescriptor(element,
+                                                         new TextRange(start, end),
+                                                         msg, type, true, fixes));
+        }
     }
 }
