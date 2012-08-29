@@ -241,8 +241,8 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         }
 
         if (state.get(GoResolveStates.IsOriginalFile)) {
-            ResolveState newState = state.put(GoResolveStates.IsOriginalFile,
-                                              false);
+            ResolveState newState =
+                state.put(GoResolveStates.IsOriginalFile, false);
 
             GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 

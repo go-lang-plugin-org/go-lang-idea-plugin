@@ -60,4 +60,8 @@ public class GoResolveTypesTest extends GoPsiResolveTestCase {
     public void testFromLowerCasePackageInMixedCaseFolder() throws Exception {
         doTest();
     }
+
+    public void testDontResolveIfImportedInAnotherFileSamePackage() throws Exception {
+        doTest();
+    }
 }
