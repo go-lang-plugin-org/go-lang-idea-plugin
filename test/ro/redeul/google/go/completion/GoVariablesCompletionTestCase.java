@@ -20,4 +20,8 @@ public class GoVariablesCompletionTestCase extends GoCompletionTestCase{
     public void testStructFieldViaChannelExpression() {
         doTestVariants();
     }
+
+    public void testMethodReference() {
+        doTestVariants();
+    }
 }
