@@ -1,6 +1,5 @@
 package ro.redeul.google.go.runner;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,21 +16,16 @@ import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.openapi.compiler.CompilerPaths;
 import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.xmlb.XmlSerializer;
+import com.intellij.util.xmlb.annotations.Transient;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
@@ -73,13 +67,20 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     }
 
     @Override
+    @Transient
+    public void setModule(Module module) {
+        super.setModule(module);
+    }
+
+    @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
         super.checkConfiguration();
 
-//        if (scriptName == null || scriptName.length() == 0)
-//            throw new RuntimeConfigurationException("Please select the file to run.");
-//        if (getModule() == null)
-//            throw new RuntimeConfigurationException("Please select the module.");
+        if (getModule() == null)
+            throw new RuntimeConfigurationException("A module is required");
+
+        if (packageName == null || packageName.isEmpty())
+            throw new RuntimeConfigurationException("A package is required");
     }
 
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
@@ -89,11 +90,13 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     public void readExternal(final Element element) throws InvalidDataException {
         PathMacroManager.getInstance(getProject()).expandPaths(element);
         XmlSerializer.deserializeInto(this, element);
+        readModule(element);
     }
 
     public void writeExternal(final Element element) throws WriteExternalException {
         super.writeExternal(element);
         XmlSerializer.serializeInto(this, element);
+        writeModule(element);
         PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
     }
 
@@ -114,6 +117,10 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
                 final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
                 if ( sdkData == null ) {
                     throw new CantRunException("No Go Sdk defined for this project");
+                }
+
+                if ( getModule() == null ) {
+                    throw new CantRunException("No module selected for this test configuration");
                 }
 
                 commandLine.setExePath(sdkData.GO_BIN_PATH + "/go");
@@ -137,7 +144,7 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
 
                 commandLine.addParameter(packageName);
                 commandLine.setEnvParams(new HashMap<String, String>() {{
-                    put("GOPATH", getProject().getBaseDir().getCanonicalPath() + ":" + sdkData.GO_HOME_PATH);
+                    put("GOPATH", getModule().getModuleFile().getParent().getCanonicalPath() + ":" + sdkData.GO_HOME_PATH);
                 }});
 
                 return GoApplicationProcessHandler.runCommandLine(commandLine);
@@ -146,39 +153,6 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
 
         state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject()));
         return state;
-    }
-
-    private String getCompiledFileName(Module module, String scriptName) {
-
-        VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
-        VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(new File(scriptName));
-
-        if (file == null) {
-            for (VirtualFile sourceRoot : sourceRoots) {
-                file = sourceRoot.findChild(scriptName);
-                if (file != null) {
-                    break;
-                }
-            }
-        }
-
-        if (file != null) {
-            for (VirtualFile sourceRoot : sourceRoots) {
-
-                if (VfsUtil.isAncestor(sourceRoot, file, true)) {
-                    String relativePath = VfsUtil.getRelativePath(file.getParent(), sourceRoot, File.separatorChar);
-
-                    String compiledFileName = CompilerPaths.getModuleOutputPath(module, false)
-                                                + "/go-bins/" + relativePath + "/" + file.getNameWithoutExtension();
-                    if (SystemInfo.isWindows) {
-                        compiledFileName += ".exe";
-                    }
-                    return compiledFileName;
-                }
-            }
-        }
-
-        return scriptName;
     }
 
     public Module getModule() {

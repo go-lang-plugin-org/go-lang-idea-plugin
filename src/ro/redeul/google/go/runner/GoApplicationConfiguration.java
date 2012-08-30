@@ -24,13 +24,14 @@ import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathUtil;
+import com.intellij.util.xmlb.XmlSerializer;
+import com.intellij.util.xmlb.annotations.Transient;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.runner.ui.GoRunConfigurationEditorForm;
@@ -77,20 +78,22 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
         return new GoRunConfigurationEditorForm(getProject());
     }
 
+    @Override
+    @Transient
+    public void setModule(Module module) {
+        super.setModule(module);
+    }
+
     public void readExternal(final Element element) throws InvalidDataException {
         PathMacroManager.getInstance(getProject()).expandPaths(element);
         super.readExternal(element);
-        scriptName = JDOMExternalizerUtil.readField(element, "scriptName");
-        scriptArguments = JDOMExternalizerUtil.readField(element, "scriptArguments");
-        workDir = JDOMExternalizerUtil.readField(element, "workDir");
+        XmlSerializer.deserializeInto(this, element);
         readModule(element);
     }
 
     public void writeExternal(final Element element) throws WriteExternalException {
         super.writeExternal(element);
-        JDOMExternalizerUtil.writeField(element, "scriptName", scriptName);
-        JDOMExternalizerUtil.writeField(element, "scriptArguments",scriptArguments);
-        JDOMExternalizerUtil.writeField(element, "workDir", workDir);
+        XmlSerializer.serializeInto(this, element);
         writeModule(element);
         PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
     }

@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
@@ -23,8 +24,10 @@ public class GoTestConfigurationEditorForm
     private JTextField testsFilter;
     private JRadioButton benchmark;
     private JRadioButton test;
+    private JComboBox modules;
     private ButtonGroup testsGroup;
 
+    private ConfigurationModuleSelector moduleSelector;
     private Project project;
 
     public GoTestConfigurationEditorForm(final Project project) {
@@ -69,6 +72,7 @@ public class GoTestConfigurationEditorForm
 
         packages.getModel().setSelectedItem(s.packageName);
         useShort.setSelected(s.useShortRun);
+        moduleSelector.reset(s);
     }
 
     private void updateTestsFilterField() {
@@ -84,11 +88,13 @@ public class GoTestConfigurationEditorForm
         s.filter = filter.isSelected() ? testsFilter.getText() : "";
         s.executeWhat = test.isSelected() ? GoTestConfiguration.Type.Test : GoTestConfiguration.Type.Benchmark;
         s.useShortRun = this.useShort.isSelected();
+        moduleSelector.applyTo(s);
     }
 
     @NotNull
     @Override
     protected JComponent createEditor() {
+        moduleSelector = new ConfigurationModuleSelector(project, modules);
         return panel;
     }
 

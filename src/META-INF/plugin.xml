@@ -58,7 +58,8 @@
                 <li>[bugfix] Tweaked the default package name for imports.</li>
                 <li>[bugfix] Properly parse anonymous functiona parameters having a qualified type</li>
                 <li>[bugfix] Add a space after ',' inside calls when reformatting</li>
-                <li>[bugfix] Make the InvalidPackageName inspection better</li>
+                <li>[bugfix] Make the InvalidPackageName inspection better.</li>
+                <li>[enhancement] The Test Run Configuration now is module scoped.</li>
             </ul>
          <h3>0.9.9 changes:</h3>
             <ul>

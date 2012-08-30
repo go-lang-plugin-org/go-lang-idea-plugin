@@ -130,6 +130,7 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
         }
 
         testConfiguration.packageName = goFile.getPackageImportPath();
+        testConfiguration.setModule(module);
         testConfiguration.useShortRun = false;
 
         return settings;
