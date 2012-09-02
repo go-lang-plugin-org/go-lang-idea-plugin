@@ -548,4 +548,7 @@ public class GoSdkUtil {
         return goSdks;
     }
 
+    public static String prependToGoPath(String prependedPath) {
+        return String.format("%s:%s", prependedPath, System.getProperty("GOPATH", ""));
+    }
 }

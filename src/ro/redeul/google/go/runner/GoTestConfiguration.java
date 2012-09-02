@@ -24,6 +24,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.xmlb.XmlSerializer;
 import com.intellij.util.xmlb.annotations.Transient;
 import org.jdom.Element;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.runner.ui.GoTestConfigurationEditorForm;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+import static ro.redeul.google.go.sdk.GoSdkUtil.prependToGoPath;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -119,8 +121,13 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
                     throw new CantRunException("No Go Sdk defined for this project");
                 }
 
-                if ( getModule() == null ) {
+                if ( getModule() == null || getModule().getModuleFile() == null ) {
                     throw new CantRunException("No module selected for this test configuration");
+                }
+
+                final VirtualFile moduleFile = getModule().getModuleFile();
+                if ( moduleFile == null || moduleFile.getParent() == null) {
+                    throw new CantRunException("The module does not have a valid parent folder");
                 }
 
                 commandLine.setExePath(sdkData.GO_BIN_PATH + "/go");
@@ -144,7 +151,7 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
 
                 commandLine.addParameter(packageName);
                 commandLine.setEnvParams(new HashMap<String, String>() {{
-                    put("GOPATH", getModule().getModuleFile().getParent().getCanonicalPath() + ":" + sdkData.GO_HOME_PATH);
+                    put("GOPATH", prependToGoPath(moduleFile.getParent().getCanonicalPath()));
                 }});
 
                 return GoApplicationProcessHandler.runCommandLine(commandLine);
