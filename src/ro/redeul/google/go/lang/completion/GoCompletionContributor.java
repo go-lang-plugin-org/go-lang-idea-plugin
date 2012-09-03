@@ -44,6 +44,7 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.getImportedPackagesNames;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keyword;
+import static ro.redeul.google.go.lang.completion.GoCompletionUtil.packageElement;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -91,8 +92,24 @@ public class GoCompletionContributor extends CompletionContributor {
                 result.addElement(
                     keyword("defer"));
 
-                for (LookupElement element : getImportedPackagesNames(parameters.getOriginalFile())) {
+                PsiFile originalFile = parameters.getOriginalFile();
+                for (LookupElement element : getImportedPackagesNames(originalFile)) {
                     result.addElement(element);
+                }
+
+                // For second basic completion, add all package names to auto completion list.
+                if (parameters.getCompletionType() == CompletionType.BASIC &&
+                    parameters.getInvocationCount() > 1) {
+                    addAllPackageNames(result, originalFile.getProject());
+                }
+            }
+
+            private void addAllPackageNames(CompletionResultSet result, Project project) {
+                for (String pkg : GoNamesCache.getInstance(project).getAllPackages()) {
+                    if (pkg.contains("/")) {
+                        pkg = pkg.substring(pkg.lastIndexOf('/') + 1);
+                    }
+                    result.addElement(packageElement(pkg));
                 }
             }
         };
