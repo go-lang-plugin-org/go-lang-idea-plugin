@@ -13,6 +13,8 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
@@ -74,6 +76,23 @@ public class GoFileUtils {
         }
 
         return vars;
+    }
+
+    public static List<GoImportDeclaration> getImportDeclarations(@Nullable GoFile psiFile) {
+        if (psiFile == null) {
+            return Collections.emptyList();
+        }
+
+        GoImportDeclarations[] importDeclarations = psiFile.getImportDeclarations();
+        if (importDeclarations == null) {
+            return Collections.emptyList();
+        }
+
+        List<GoImportDeclaration> declarations = new ArrayList<GoImportDeclaration>();
+        for (GoImportDeclarations ids : importDeclarations) {
+            Collections.addAll(declarations, ids.getDeclarations());
+        }
+        return declarations;
     }
 
     public static List<GoVarDeclaration> getVarDeclarations(@Nullable GoFile psiFile) {

@@ -9,6 +9,7 @@ import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiErrorElement;
@@ -41,6 +42,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static ro.redeul.google.go.lang.completion.GoCompletionUtil.getImportedPackagesNames;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keyword;
 
 /**
@@ -88,6 +90,10 @@ public class GoCompletionContributor extends CompletionContributor {
                     keyword("select", new CurlyBracesInsertHandler()));
                 result.addElement(
                     keyword("defer"));
+
+                for (LookupElement element : getImportedPackagesNames(parameters.getOriginalFile())) {
+                    result.addElement(element);
+                }
             }
         };
 

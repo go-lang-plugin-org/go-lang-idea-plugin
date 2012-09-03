@@ -23,11 +23,14 @@ import com.intellij.psi.PsiManager;
 import com.intellij.util.AdapterProcessor;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Function;
+import com.intellij.util.PlatformIcons;
 import com.intellij.util.Processor;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.completion.insertHandler.KeywordInsertionHandler;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 /**
@@ -182,6 +185,11 @@ public class GoCompletionUtil {
                                    .setInsertHandler(handler);
     }
 
+    public static LookupElement packageElement(String packageName) {
+        return LookupElementBuilder.create(packageName)
+                                   .setIcon(PlatformIcons.PACKAGE_ICON)
+                                   .setTypeText("package");
+    }
 
     public static LookupElement[] getImportedPackagesNames(PsiFile file) {
 
@@ -191,6 +199,11 @@ public class GoCompletionUtil {
 
         GoFile goFile = (GoFile) file;
 
-        return new LookupElement[0];  //To change body of created methods use File | Settings | File Templates.
+        List<LookupElement> elements = new ArrayList<LookupElement>();
+        for (GoImportDeclaration importDeclaration : GoFileUtils.getImportDeclarations(goFile)) {
+            elements.add(packageElement(importDeclaration.getVisiblePackageName()));
+        }
+
+        return elements.toArray(new LookupElement[elements.size()]);
     }
 }
