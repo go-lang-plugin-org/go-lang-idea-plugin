@@ -41,6 +41,7 @@ import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
@@ -281,6 +282,15 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         Annotation ann = annotationHolder.createInfoAnnotation(declaration,
                                                                null);
         ann.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
+    }
+
+    @Override
+    public void visitMethodDeclaration(GoMethodDeclaration declaration) {
+        super.visitMethodDeclaration(declaration);
+
+        InspectionResult result = new InspectionResult(inspectionManager);
+        FunctionDeclarationInspection.checkFunction(result, declaration);
+        addProblems(result.getProblems());
     }
 
     @Override
