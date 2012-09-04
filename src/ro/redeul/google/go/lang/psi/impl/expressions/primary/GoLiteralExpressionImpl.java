@@ -13,15 +13,16 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
-import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -106,26 +107,15 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                         return GoType.EMPTY_ARRAY;
                     }
 
-                    if (resolved.getParent() instanceof GoShortVarDeclaration) {
-                        GoShortVarDeclaration shortVarDeclaration = (GoShortVarDeclaration) resolved.getParent();
-
-                        GoType identifierType = shortVarDeclaration.getIdentifierType((GoLiteralIdentifier)resolved);
+                    if (resolved.getParent() instanceof GoVarDeclaration) {
+                        GoVarDeclaration varDeclaration = (GoVarDeclaration) resolved
+                            .getParent();
+                        GoType identifierType = varDeclaration.getIdentifierType((GoLiteralIdentifier)resolved);
 
                         if (identifierType == null)
                             return GoType.EMPTY_ARRAY;
 
                         return new GoType[]{identifierType};
-                    }
-
-                    if (resolved.getParent() instanceof GoVarDeclaration) {
-                        GoVarDeclaration varDeclaration = (GoVarDeclaration) resolved
-                            .getParent();
-                        if (varDeclaration.getIdentifiersType() != null) {
-                            return new GoType[]{
-                                GoTypes.fromPsiType(
-                                    varDeclaration.getIdentifiersType())
-                            };
-                        }
                     }
 
                     if (resolved.getParent() instanceof GoFunctionParameter) {
@@ -157,6 +147,15 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                         };
                     }
                     return GoType.EMPTY_ARRAY;
+                case Composite:
+                    GoLiteralComposite composite = (GoLiteralComposite) literal;
+                    GoPsiType literalType = composite.getLiteralType();
+                    if (literalType == null) {
+                        return GoType.EMPTY_ARRAY;
+                    }
+                    return new GoType[]{
+                        GoTypes.fromPsiType(literalType)
+                    };
 
                 default:
                     return GoType.EMPTY_ARRAY;

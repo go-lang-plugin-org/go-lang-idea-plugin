@@ -55,23 +55,4 @@ public class GoShortVarDeclarationImpl extends GoVarDeclarationImpl
 
         return true;
     }
-
-    @Override
-    public GoType getIdentifierType(GoLiteralIdentifier identifier) {
-        GoLiteralIdentifier[] identifiers = getIdentifiers();
-        GoExpr[] expressions = getExpressions();
-
-        List<GoType> types = new ArrayList<GoType>();
-        for (GoExpr expression : expressions) {
-            Collections.addAll(types, expression.getType());
-        }
-
-        for (int i = 0; i < identifiers.length; i++) {
-            GoLiteralIdentifier ident = identifiers[i];
-            if (ident.isEquivalentTo(identifier) && types.size() > i)
-                return types.get(i);
-        }
-
-        return null;
-    }
 }

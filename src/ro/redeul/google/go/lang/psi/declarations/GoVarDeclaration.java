@@ -6,6 +6,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 
 public interface GoVarDeclaration extends GoPsiElement, GoStatement {
 
@@ -13,6 +14,9 @@ public interface GoVarDeclaration extends GoPsiElement, GoStatement {
 
     @Nullable
     GoPsiType getIdentifiersType();
+
+    @Nullable
+    GoType getIdentifierType(GoLiteralIdentifier identifier);
 
     GoExpr[] getExpressions();
 

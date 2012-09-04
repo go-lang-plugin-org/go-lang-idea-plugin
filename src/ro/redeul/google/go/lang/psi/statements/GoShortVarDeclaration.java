@@ -11,7 +11,4 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
  * Time: 11:23 PM
  */
 public interface GoShortVarDeclaration extends GoVarDeclaration, GoSimpleStatement {
-
-    GoType getIdentifierType(GoLiteralIdentifier identifier);
-
 }
