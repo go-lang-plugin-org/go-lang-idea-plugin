@@ -1,19 +1,13 @@
 package ro.redeul.google.go.lang.psi.impl.statements;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
-import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
@@ -32,11 +26,6 @@ public class GoShortVarDeclarationImpl extends GoVarDeclarationImpl
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitShortVarDeclaration(this);
-    }
-
-    @Override
-    public boolean mayRedeclareVariable() {
-        return true;
     }
 
     @Override
