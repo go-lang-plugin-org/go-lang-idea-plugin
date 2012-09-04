@@ -31,6 +31,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -406,27 +407,33 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
             if (!(type instanceof GoPsiTypeStruct)) {
                 return Collections.emptyList();
             }
-            GoPsiTypeStruct struct = (GoPsiTypeStruct) type;
 
-            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
-            getNamedFields(struct, children);
-            getAnonymousFields(struct, children);
-            getMethods(typeSpec, children);
-
-            Collections.sort(children, NAMED_ELEMENT_COMPARATOR);
-            return children;
+            List<PsiNamedElement> members = new ArrayList<PsiNamedElement>();
+            members.addAll(getMethods(typeSpec));
+            members.addAll(getFields((GoPsiTypeStruct) type));
+            return members;
         }
 
-        private void getMethods(GoTypeSpec typeSpec, List<PsiNamedElement> children) {
+        private List<PsiNamedElement> getFields(GoPsiTypeStruct struct) {
+            List<PsiNamedElement> fields = getNamedFields(struct);
+            fields.addAll(getAnonymousFields(struct));
+            Collections.sort(fields, NAMED_ELEMENT_COMPARATOR);
+            return fields;
+        }
+
+        private List<PsiNamedElement> getMethods(GoTypeSpec typeSpec) {
             PsiFile file = typeSpec.getContainingFile();
             String name = typeSpec.getName();
             if (name == null || !(file instanceof GoFile)) {
-                return;
+                return Collections.emptyList();
             }
 
+            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
             for (GoFile f : getAllSamePackageFiles((GoFile) file)) {
                 getMethodsInFile(children, name, f);
             }
+            Collections.sort(children, NAMED_ELEMENT_COMPARATOR);
+            return children;
         }
 
         private Collection<GoFile> getAllSamePackageFiles(GoFile goFile) {
@@ -471,20 +478,27 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
                     continue;
                 }
 
-                GoPsiType typeName = mr.getType();
-                if (typeName != null && name.equals(typeName.getName())) {
+                GoPsiType type = mr.getType();
+                if (type instanceof GoPsiTypePointer) {
+                    type = ((GoPsiTypePointer) type).getTargetType();
+                }
+
+                if (type != null && name.equals(type.getName())) {
                     children.add(md);
                 }
             }
         }
 
-        private void getAnonymousFields(GoPsiTypeStruct struct, List<PsiNamedElement> children) {
+        private List<PsiNamedElement> getAnonymousFields(GoPsiTypeStruct struct) {
+            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
             for (GoTypeStructAnonymousField field : struct.getAnonymousFields()) {
                 children.add(field.getType());
             }
+            return children;
         }
 
-        private void getNamedFields(GoPsiTypeStruct struct, List<PsiNamedElement> children) {
+        private List<PsiNamedElement> getNamedFields(GoPsiTypeStruct struct) {
+            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
             for (GoTypeStructField field : struct.getFields()) {
                 for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                     if (!identifier.isBlank()) {
@@ -492,6 +506,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
                     }
                 }
             }
+            return children;
         }
 
         @Override
