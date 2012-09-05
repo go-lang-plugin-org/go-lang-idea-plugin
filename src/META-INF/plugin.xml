@@ -55,6 +55,7 @@
         <![CDATA[
          <h3>0.9.11 changes:</h3>
             <ul>
+		<li>[bugfix] NPE in certain cases when creating a test configuration.</li>
             </ul>
          <h3>0.9.10 changes:</h3>
             <ul>
