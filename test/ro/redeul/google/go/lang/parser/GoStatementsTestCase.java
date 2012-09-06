@@ -114,6 +114,6 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testAssignment_opAssign() throws Throwable { doTest(); }
     public void testAssignment_functionWithMultipleResults() throws Throwable { doTest(); }
 
-    public void testGo_AnonymousFunction() throws Throwable { doTest(); }
+    public void testGo_anonymousFunction() throws Throwable { doTest(); }
 
 }
