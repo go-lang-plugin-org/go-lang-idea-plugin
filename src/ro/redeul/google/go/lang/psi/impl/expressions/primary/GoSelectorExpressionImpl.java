@@ -16,6 +16,7 @@ import ro.redeul.google.go.lang.psi.resolve.references.InterfaceMethodReference;
 import ro.redeul.google.go.lang.psi.resolve.references.MethodReference;
 import ro.redeul.google.go.lang.psi.resolve.references.SelectorOfStructFieldReference;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeInterface;
@@ -62,6 +63,15 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
 
                             GoTypeStructField structField =
                                 (GoTypeStructField) target.getParent();
+
+                            return new GoType[]{
+                                GoTypes.fromPsiType(structField.getType())
+                            };
+                        }
+
+                        if (target instanceof GoTypeStructAnonymousField) {
+                            GoTypeStructAnonymousField structField =
+                                (GoTypeStructAnonymousField) target;
 
                             return new GoType[]{
                                 GoTypes.fromPsiType(structField.getType())
