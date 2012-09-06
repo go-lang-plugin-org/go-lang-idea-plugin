@@ -55,3 +55,10 @@ func NotEnough3(a int) (int, int) {
     }
     /*begin*/return 3, 4, 5/*end.Too many arguments to return*/
 }
+
+func TooMany1(a, b int) {
+    if a > 0 {
+        /*begin*/return a + b/*end.Too many arguments to return*/
+    }
+    /*begin*/return a/*end.Too many arguments to return*/
+}
