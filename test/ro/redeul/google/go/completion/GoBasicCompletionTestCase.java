@@ -32,4 +32,8 @@ public class GoBasicCompletionTestCase extends GoCompletionTestCase {
     public void testImportDeclaration() {
         doTest();
     }
+
+    public void testImportedPackages() {
+        doTestVariants();
+    }
 }

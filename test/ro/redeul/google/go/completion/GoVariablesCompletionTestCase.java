@@ -24,4 +24,12 @@ public class GoVariablesCompletionTestCase extends GoCompletionTestCase{
     public void testMethodReference() {
         doTestVariants();
     }
+
+    public void testShortVar() {
+        doTestVariants();
+    }
+
+    public void testVarWithoutType() {
+        doTestVariants();
+    }
 }
