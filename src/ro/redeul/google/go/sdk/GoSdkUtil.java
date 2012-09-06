@@ -102,6 +102,7 @@ public class GoSdkUtil {
 
         data = findVersion(path, binariesPath, data);
 
+        data.GO_HOME_PATH = path;
         data.GO_BIN_PATH = binariesPath;
 	data.version = GoSdkData.LATEST_VERSION;
         return data;
@@ -549,6 +550,6 @@ public class GoSdkUtil {
     }
 
     public static String prependToGoPath(String prependedPath) {
-        return String.format("%s:%s", prependedPath, System.getProperty("GOPATH", ""));
+        return String.format("%s%s%s", prependedPath, File.pathSeparator, System.getProperty("GOPATH", ""));
     }
 }

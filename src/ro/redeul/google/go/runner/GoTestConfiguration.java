@@ -1,5 +1,6 @@
 package ro.redeul.google.go.runner;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -140,6 +141,7 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
                     case Test:
                         if (filter != null && !filter.isEmpty())
                             commandLine.addParameter("-run=" + filter.trim());
+                        break;
                     case Benchmark:
                         String benchmarkName = ".*";
 
@@ -147,14 +149,23 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
                             benchmarkName = filter.trim();
 
                         commandLine.addParameter("-bench=" + benchmarkName);
+                        break;
                 }
 
                 commandLine.addParameter(packageName);
                 commandLine.setEnvParams(new HashMap<String, String>() {{
                     put("GOPATH", prependToGoPath(moduleFile.getParent().getCanonicalPath()));
+                    put("GOROOT", getSdkHomePath(sdkData));
                 }});
 
                 return GoApplicationProcessHandler.runCommandLine(commandLine);
+            }
+
+            private String getSdkHomePath(GoSdkData sdkData) {
+                if (sdkData.GO_HOME_PATH.isEmpty()) {
+                    return new File(sdkData.GO_BIN_PATH).getParent();
+                }
+                return sdkData.GO_HOME_PATH;
             }
         };
 
