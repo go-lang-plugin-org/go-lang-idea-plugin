@@ -36,4 +36,12 @@ public class GoBasicCompletionTestCase extends GoCompletionTestCase {
     public void testImportedPackages() {
         doTestVariants();
     }
+
+    public void testReturnCompletion() {
+        doTest();
+    }
+
+    public void testReturnCompletionWithOneResult() {
+        doTest();
+    }
 }

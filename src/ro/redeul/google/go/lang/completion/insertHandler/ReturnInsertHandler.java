@@ -27,11 +27,10 @@ public class ReturnInsertHandler implements InsertHandler<LookupElement> {
 
         int count = getFunctionResultCount(function);
         if (count == 0) {
-            context.getDocument().deleteString(offset - 1, offset);
             return;
         }
 
-        TemplateImpl template = createTemplate(getTemplateVariableExpression(count, ", "));
+        TemplateImpl template = createTemplate(" " + getTemplateVariableExpression(count, ", "));
         for (int i = 0; i < count; i++) {
             String defaultValue = String.format("\"v%d\"", i);
             template.addVariable("v" + i, defaultValue, defaultValue, true);
