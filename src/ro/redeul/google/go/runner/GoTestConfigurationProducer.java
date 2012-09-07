@@ -8,6 +8,7 @@ import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.junit.RuntimeConfigurationProducer;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiDirectory;
@@ -19,6 +20,9 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
+
+import java.io.File;
+
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.collection;
 import static com.intellij.patterns.StandardPatterns.string;
@@ -114,26 +118,45 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
 
         this.element = element;
 
+        String dottedPackagePath = goFile.getPackageImportPath().replace('/', '.');
         if (element instanceof GoFile) {
-            testConfiguration.setName(goFile.getPackageImportPath());
+            testConfiguration.setName(dottedPackagePath);
             testConfiguration.executeWhat = GoTestConfiguration.Type.Test;
         } else if (FUNCTION_TEST.accepts(element)) {
             String name = ((GoFunctionDeclaration) element).getName();
-            testConfiguration.setName(name);
+            testConfiguration.setName(dottedPackagePath + "." + name);
             testConfiguration.executeWhat = GoTestConfiguration.Type.Test;
             testConfiguration.filter = "^" + name +"$";
         } else if (FUNCTION_BENCHMARK.accepts(element)) {
             String name = ((GoFunctionDeclaration) element).getName();
-            testConfiguration.setName(name);
+            testConfiguration.setName(dottedPackagePath + "." + name);
             testConfiguration.executeWhat = GoTestConfiguration.Type.Benchmark;
             testConfiguration.filter = "^" + name +"$";
         }
 
         testConfiguration.packageName = goFile.getPackageImportPath();
+        testConfiguration.packageDir = getGoFileDirRelativePath(goFile);
         testConfiguration.setModule(module);
         testConfiguration.useShortRun = false;
 
         return settings;
+    }
+
+    private String getGoFileDirRelativePath(GoFile goFile) {
+        VirtualFile vf = goFile.getVirtualFile();
+        if (vf == null) {
+            return "";
+        }
+
+        vf = vf.getParent();
+        String basePath = goFile.getProject().getBasePath();
+        if (basePath == null || basePath.isEmpty()) {
+            return "";
+        }
+
+        String filePath = vf.getPath();
+        String relativePath = FileUtil.getRelativePath(basePath, filePath, File.separatorChar);
+        return relativePath.replace(File.separatorChar, '/');
     }
 
     private GoFile locationToFile(Location location) {

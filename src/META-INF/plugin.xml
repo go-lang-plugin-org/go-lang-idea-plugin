@@ -56,6 +56,7 @@
          <h3>0.9.11 changes:</h3>
             <ul>
 		<li>[bugfix] NPE in certain cases when creating a test configuration.</li>
+		<li>[feature] Graphical test runner panel.</li>
             </ul>
          <h3>0.9.10 changes:</h3>
             <ul>
@@ -486,6 +487,9 @@
                                   implementationClass="ro.redeul.google.go.lang.completion.smartEnter.GoSmartEnterProcessor"/>
         <codeInsight.parameterInfo language="Google Go"
                                    implementationClass="ro.redeul.google.go.lang.parameterInfo.GoParameterInfoHandler"/>
+
+        <!-- SM Test runner tests locations -->
+        <testSrcLocator implementation="ro.redeul.google.go.runner.GoTestLocationProvider"/>
 
         <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
 
