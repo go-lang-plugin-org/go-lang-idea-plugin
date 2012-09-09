@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.CreateFunctionFix;
 import ro.redeul.google.go.inspection.fix.CreateGlobalVariableFix;
 import ro.redeul.google.go.inspection.fix.CreateLocalVariableFix;
+import ro.redeul.google.go.inspection.fix.CreateTypeFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -74,6 +75,8 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                                 new CreateGlobalVariableFix(element)};
                     } else if (isGlobalVariableIdentifier(element)) {
                         fixes = new LocalQuickFix[]{new CreateGlobalVariableFix(element)};
+                    } else if (isUnqualifiedTypeName(element)) {
+                        fixes = new LocalQuickFix[]{new CreateTypeFix(element)};
                     } else {
                         fixes = LocalQuickFix.EMPTY_ARRAY;
                     }
@@ -85,6 +88,11 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                 }
             }
         }.visitElement(file);
+    }
+
+    private static boolean isUnqualifiedTypeName(PsiElement element) {
+        return element instanceof GoPsiTypeName &&
+                !((GoPsiTypeName) element).getIdentifier().isQualified();
     }
 
     private static boolean isGlobalVariableIdentifier(PsiElement element) {

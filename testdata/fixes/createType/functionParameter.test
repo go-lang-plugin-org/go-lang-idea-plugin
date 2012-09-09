@@ -1,0 +1,11 @@
+package main
+
+func foo(a <caret>INT) {
+}
+-----
+package main
+
+type INT <caret>
+
+func foo(a INT) {
+}

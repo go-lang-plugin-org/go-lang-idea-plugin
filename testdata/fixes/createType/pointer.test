@@ -1,0 +1,13 @@
+package main
+
+func main() {
+    var a *<caret>INT
+}
+-----
+package main
+
+type INT <caret>
+
+func main() {
+    var a *INT
+}
