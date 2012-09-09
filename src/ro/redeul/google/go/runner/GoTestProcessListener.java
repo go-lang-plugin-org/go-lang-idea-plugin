@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
  *
  * The output header of a benchmark is always:
  * BenchmarkXxx
+ * or:
+ * BenchmarkXxx-CpuNum
+ * When multiple CPUs are used
  *
  * If the benchmark failed, you can always find string
  * --- FAIL: BenchmarkXxx
@@ -31,7 +34,7 @@ class GoTestProcessListener extends ProcessAdapter {
     private static final String BENCHMARK_START_HEADER = "Benchmark";
     private static final String BENCHMARK_FAILED_STRING = "--- FAIL: ";
 
-    private static final Pattern BENCHMARK_IDENTIFIER = Pattern.compile("^(Benchmark\\p{L}[\\p{L}\\p{Digit}]*)\t.*\n?");
+    private static final Pattern BENCHMARK_IDENTIFIER = Pattern.compile("^(Benchmark\\p{L}[\\p{L}\\p{Digit}]*)(-\\d+)?\t.*\n?");
 
     private final GoTestReporter reporter;
 
