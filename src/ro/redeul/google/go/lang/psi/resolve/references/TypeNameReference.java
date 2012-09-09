@@ -15,16 +15,32 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
+
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.or;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.getImportedPackagesNames;
+import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class TypeNameReference
     extends GoPsiReference.Single<GoPsiTypeName, TypeNameReference> {
     public static final ElementPattern<GoPsiTypeName> MATCHER =
         psiElement(GoPsiTypeName.class);
+
+    private static final ElementPattern<GoPsiTypeName> TYPE_IN_METHOD_RECEIVER =
+            psiElement(GoPsiTypeName.class).withParent(
+                    or(
+                            psiElement(GoMethodReceiver.class),
+                            psiElement(GoPsiTypePointer.class).withParent(psiElement(GoMethodReceiver.class))
+                    )
+            );
 
     private static ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult>() {
@@ -81,12 +97,18 @@ public class TypeNameReference
 
         final List<LookupElement> variants = new ArrayList<LookupElement>();
 
+        // According to the spec, method receiver type "T" could not be an interface or a pointer.
+        final boolean rejectInterfaceAndPointer = TYPE_IN_METHOD_RECEIVER.accepts(getElement());
         Collections.addAll(variants, getImportedPackagesNames(getElement().getContainingFile()));
 
         TypeNameResolver processor =
             new TypeNameResolver(this) {
                 @Override
                 protected boolean addDeclaration(PsiElement declaration, PsiElement childDeclaration) {
+                    if (rejectInterfaceAndPointer && isInterfaceOrPointer(declaration)) {
+                        return true;
+                    }
+
                     String name = PsiUtilCore.getName(declaration);
 
                     String visiblePackageName =
@@ -118,6 +140,18 @@ public class TypeNameReference
             GoResolveStates.initial());
 
         return variants.toArray();
+    }
+
+    private static boolean isInterfaceOrPointer(PsiElement declaration) {
+        if (declaration instanceof GoTypeSpec) {
+            GoTypeSpec typeSpec = (GoTypeSpec) declaration;
+            GoPsiType finalType = resolveToFinalType(typeSpec.getType());
+            if (finalType instanceof GoPsiTypeInterface ||
+                    finalType instanceof GoPsiTypePointer) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

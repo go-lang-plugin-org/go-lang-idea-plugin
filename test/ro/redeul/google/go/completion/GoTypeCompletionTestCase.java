@@ -12,4 +12,8 @@ public class GoTypeCompletionTestCase extends GoCompletionTestCase {
     public void testAlsoListImportedPackages() {
         doTestVariants();
     }
+
+    public void testMethodReceiver() {
+        doTestVariants();
+    }
 }
