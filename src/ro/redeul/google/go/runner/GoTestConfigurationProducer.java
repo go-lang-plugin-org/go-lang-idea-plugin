@@ -14,12 +14,16 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
+import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
+import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 
 import java.io.File;
 
@@ -121,7 +125,13 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
         String dottedPackagePath = goFile.getPackageImportPath().replace('/', '.');
         if (element instanceof GoFile) {
             testConfiguration.setName(dottedPackagePath);
-            testConfiguration.executeWhat = GoTestConfiguration.Type.Test;
+            // If there is any tests in current package, run in test mode.
+            // Otherwise run in benchmark mode.
+            if (fileDirContainsTestsOfSamePackage(project, (GoFile) element)) {
+                testConfiguration.executeWhat = GoTestConfiguration.Type.Test;
+            } else {
+                testConfiguration.executeWhat = GoTestConfiguration.Type.Benchmark;
+            }
         } else if (FUNCTION_TEST.accepts(element)) {
             String name = ((GoFunctionDeclaration) element).getName();
             testConfiguration.setName(dottedPackagePath + "." + name);
@@ -140,6 +150,53 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
         testConfiguration.useShortRun = false;
 
         return settings;
+    }
+
+    private static boolean fileDirContainsTestsOfSamePackage(Project project, GoFile file) {
+        VirtualFile virtualFile = file.getVirtualFile();
+        if (virtualFile == null) {
+            return false;
+        }
+
+        VirtualFile dir = virtualFile.getParent();
+        if (dir == null || !dir.isDirectory()) {
+            return false;
+        }
+
+        String packageName = getPackageName(file);
+        if (packageName.isEmpty()) {
+            return false;
+        }
+
+        for (VirtualFile child : dir.getChildren()) {
+            if (child.getFileType() == GoFileType.INSTANCE &&
+                    child.getNameWithoutExtension().endsWith("_test")) {
+                GoFile childGoFile = (GoFile) PsiManager.getInstance(project).findFile(child);
+                if (packageName.equals(getPackageName(childGoFile)) &&
+                        fileContainsTest(childGoFile)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean fileContainsTest(GoFile file) {
+        for (GoFunctionDeclaration func : GoFileUtils.getFunctionDeclarations(file)) {
+            if (FUNCTION_TEST.accepts(func)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String getPackageName(GoFile file) {
+        if (file == null) {
+            return "";
+        }
+
+        GoPackageDeclaration pkg = file.getPackage();
+        return pkg == null ? "" : pkg.getPackageName();
     }
 
     private String getGoFileDirRelativePath(GoFile goFile) {
