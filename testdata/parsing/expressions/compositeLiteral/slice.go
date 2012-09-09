@@ -1,6 +1,6 @@
 package main
 var e = []string{"Sat", "Sun"}
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -36,4 +36,4 @@ Go file
               LiteralExpressionImpl
                 LiteralStringImpl
                   PsiElement(LITERAL_STRING)('"Sun"')
-            PsiElement(})('}')
+	    PsiElement(})('}')

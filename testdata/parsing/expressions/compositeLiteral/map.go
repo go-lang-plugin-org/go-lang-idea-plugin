@@ -1,6 +1,6 @@
 package main
 var e = map[string]int{"key1":1, "key2":2}
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -50,4 +50,4 @@ Go file
               LiteralExpressionImpl
                 LiteralIntegerImpl
                   PsiElement(LITERAL_INT)('2')
-            PsiElement(})('}')
+	    PsiElement(})('}')

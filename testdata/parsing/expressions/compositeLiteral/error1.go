@@ -1,6 +1,6 @@
 package main
 var e = struct{a int; b int}{var}
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -43,4 +43,4 @@ Go file
             LiteralCompositeElementImpl
               PsiErrorElement:expression.expected
                 PsiElement(KEYWORD_VAR)('var')
-            PsiElement(})('}')
+	    PsiElement(})('}')

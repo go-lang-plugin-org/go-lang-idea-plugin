@@ -1,6 +1,6 @@
 package main
-var e = v()
------
+var e = 1 + 2
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -12,13 +12,17 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('e')
+	PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CallOrConversionExpressionImpl
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('v')
-        PsiElement(()('(')
-        PsiElement())(')')
+      AdditiveExpressionImpl
+	LiteralExpressionImpl
+	  LiteralIntegerImpl
+	    PsiElement(LITERAL_INT)('1')
+	PsiWhiteSpace(' ')
+	PsiElement(+)('+')
+	PsiWhiteSpace(' ')
+	LiteralExpressionImpl
+	  LiteralIntegerImpl
+	    PsiElement(LITERAL_INT)('2')

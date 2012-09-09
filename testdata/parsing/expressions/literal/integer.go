@@ -1,6 +1,6 @@
 package main
 var t1, t2, t3, t4 = 1, 0600, 0xBadFace, 170141183460469231731687303715884105727
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -12,37 +12,37 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('t1')
+	PsiElement(IDENTIFIER)('t1')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('t2')
+	PsiElement(IDENTIFIER)('t2')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('t3')
+	PsiElement(IDENTIFIER)('t3')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('t4')
+	PsiElement(IDENTIFIER)('t4')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       LiteralExpressionImpl
-        LiteralIntegerImpl
-          PsiElement(LITERAL_INT)('1')
+	LiteralIntegerImpl
+	  PsiElement(LITERAL_INT)('1')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       LiteralExpressionImpl
-        LiteralIntegerImpl
-          PsiElement(LITERAL_OCT)('0600')
+	LiteralIntegerImpl
+	  PsiElement(LITERAL_OCT)('0600')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       LiteralExpressionImpl
-        LiteralIntegerImpl
-          PsiElement(LITERAL_HEX)('0xBadFace')
+	LiteralIntegerImpl
+	  PsiElement(LITERAL_HEX)('0xBadFace')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       LiteralExpressionImpl
-        LiteralIntegerImpl
-          PsiElement(LITERAL_INT)('170141183460469231731687303715884105727')
+	LiteralIntegerImpl
+	  PsiElement(LITERAL_INT)('170141183460469231731687303715884105727')

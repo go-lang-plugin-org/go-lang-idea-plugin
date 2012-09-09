@@ -1,6 +1,6 @@
 package main
-var e = make
------
+var e = a[1]
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -12,10 +12,16 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('e')
+	PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LiteralExpressionImpl
-        LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('make')
+      IndexExpressionImpl
+	LiteralExpressionImpl
+	  LiteralIdentifierImpl
+	    PsiElement(IDENTIFIER)('a')
+	PsiElement([)('[')
+	LiteralExpressionImpl
+	  LiteralIntegerImpl
+	    PsiElement(LITERAL_INT)('1')
+	PsiElement(])(']')

@@ -1,6 +1,6 @@
 package main
 var e = Line{origin, Point{y: -4, z: 12.3}}
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -62,4 +62,4 @@ Go file
                         LiteralFloatImpl
                           PsiElement(LITERAL_FLOAT)('12.3')
                     PsiElement(})('}')
-            PsiElement(})('}')
+	    PsiElement(})('}')

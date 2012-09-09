@@ -3,7 +3,6 @@ var e = LoggedUserInfo{
                 Email:    email,
                 LastTime: datastore.SecondsToTime(time.Seconds()),
         }
-
 /**-----
 Go file
   PackageDeclaration(main)
@@ -73,4 +72,3 @@ Go file
             PsiWhiteSpace('\n')
             PsiWhiteSpace('        ')
             PsiElement(})('}')
-  PsiWhiteSpace('\n')

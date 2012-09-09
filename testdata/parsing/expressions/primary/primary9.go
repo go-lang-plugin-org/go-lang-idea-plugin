@@ -1,6 +1,6 @@
 package main
-var t = 6.67428e-11
------
+var e = interface{}(nil)
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -12,10 +12,17 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('t')
+	PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LiteralExpressionImpl
-        LiteralFloatImpl
-          PsiElement(LITERAL_FLOAT)('6.67428e-11')
+      CallOrConversionExpressionImpl
+	TypeInterfaceImpl
+	  PsiElement(KEYWORD_INTERFACE)('interface')
+	  PsiElement({)('{')
+	  PsiElement(})('}')
+	PsiElement(()('(')
+	LiteralExpressionImpl
+	  LiteralIdentifierImpl
+	    PsiElement(IDENTIFIER)('nil')
+	PsiElement())(')')

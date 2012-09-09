@@ -1,6 +1,5 @@
 package main
 var e = f.p[i].x()
-
 /**-----
 Go file
   PackageDeclaration(main)
@@ -37,4 +36,3 @@ Go file
             PsiElement(IDENTIFIER)('x')
         PsiElement(()('(')
         PsiElement())(')')
-  PsiWhiteSpace('\n')

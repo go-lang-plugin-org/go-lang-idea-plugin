@@ -1,7 +1,6 @@
 package main
 var e = Type{1:10
 }
-
 /**-----
 Go file
   PackageDeclaration(main)
@@ -38,4 +37,3 @@ Go file
               <empty list>
             PsiWhiteSpace('\n')
             PsiElement(})('}')
-  PsiWhiteSpace('\n')

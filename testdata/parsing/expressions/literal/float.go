@@ -1,6 +1,6 @@
 package main
-var e = a && b
------
+var t = 6.67428e-11
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -12,17 +12,10 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('e')
+	PsiElement(IDENTIFIER)('t')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LogicalAndExpressionImpl
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('a')
-        PsiWhiteSpace(' ')
-        PsiElement(&&)('&&')
-        PsiWhiteSpace(' ')
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('b')
+      LiteralExpressionImpl
+	LiteralFloatImpl
+	  PsiElement(LITERAL_FLOAT)('6.67428e-11')

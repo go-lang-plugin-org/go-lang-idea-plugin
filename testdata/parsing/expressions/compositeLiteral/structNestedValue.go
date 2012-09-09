@@ -1,6 +1,6 @@
 package main
 var e = struct{a, b int}{{1, 2}}
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -49,4 +49,4 @@ Go file
                     LiteralIntegerImpl
                       PsiElement(LITERAL_INT)('2')
                 PsiElement(})('}')
-            PsiElement(})('}')
+	    PsiElement(})('}')

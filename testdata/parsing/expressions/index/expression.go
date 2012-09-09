@@ -1,6 +1,5 @@
 package main
 var e = a[b.c]
-
 /**-----
 Go file
   PackageDeclaration(main)
@@ -30,4 +29,3 @@ Go file
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('c')
         PsiElement(])(']')
-  PsiWhiteSpace('\n')

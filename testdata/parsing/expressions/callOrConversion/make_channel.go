@@ -1,6 +1,6 @@
 package main
-var e = (a)
------
+var e = make(chan int)
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -11,14 +11,18 @@ Go file
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
-      LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('e')
+      Identifiers
+	PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      ParenthesisedExpressionImpl
-        PsiElement(()('(')
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('a')
-        PsiElement())(')')
+      BuiltInCallExpressionImpl
+	LiteralExpressionImpl
+	  PsiElement(IDENTIFIER)('make')
+	PsiElement(()('(')
+	TypeChanBidiImpl
+	  PsiElement(KEYWORD_CHAN)('chan')
+	  PsiWhiteSpace(' ')
+	  TypeNameImpl
+	    PsiElement(IDENTIFIER)('int')
+	PsiElement())(')')

@@ -1,5 +1,5 @@
 package main
-var e = obj.color
+var e = a[a:b]
 /**-----
 Go file
   PackageDeclaration(main)
@@ -12,14 +12,20 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('e')
+	PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      SelectorExpressionImpl
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('obj')
-        PsiElement(.)('.')
-        LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('color')
+      SliceExpressionImpl
+	LiteralExpressionImpl
+	  LiteralIdentifierImpl
+	    PsiElement(IDENTIFIER)('a')
+	PsiElement([)('[')
+	LiteralExpressionImpl
+	  LiteralIdentifierImpl
+	    PsiElement(IDENTIFIER)('a')
+	PsiElement(:)(':')
+	LiteralExpressionImpl
+	  LiteralIdentifierImpl
+	    PsiElement(IDENTIFIER)('b')
+	PsiElement(])(']')

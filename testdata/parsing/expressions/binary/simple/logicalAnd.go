@@ -1,5 +1,5 @@
 package main
-var e = obj.color
+var e = a && b
 /**-----
 Go file
   PackageDeclaration(main)
@@ -12,14 +12,17 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('e')
+	PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      SelectorExpressionImpl
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('obj')
-        PsiElement(.)('.')
-        LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('color')
+      LogicalAndExpressionImpl
+	LiteralExpressionImpl
+	  LiteralIdentifierImpl
+	    PsiElement(IDENTIFIER)('a')
+	PsiWhiteSpace(' ')
+	PsiElement(&&)('&&')
+	PsiWhiteSpace(' ')
+	LiteralExpressionImpl
+	  LiteralIdentifierImpl
+	    PsiElement(IDENTIFIER)('b')

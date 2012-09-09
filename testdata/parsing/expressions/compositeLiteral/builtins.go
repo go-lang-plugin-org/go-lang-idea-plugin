@@ -1,7 +1,7 @@
 package main
 import "ast"
 var e = &ast.ArrayType{lbrack, len, elt}
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -51,4 +51,4 @@ Go file
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('elt')
-              PsiElement(})('}')
+	      PsiElement(})('}')

@@ -1,5 +1,5 @@
 package main
-var e = a <- b
+var e = v('a')
 -----
 Go file
   PackageDeclaration(main)
@@ -12,17 +12,16 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-        PsiElement(IDENTIFIER)('e')
+	PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CommunicationExpression
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('a')
-        PsiWhiteSpace(' ')
-        PsiElement(<-)('<-')
-        PsiWhiteSpace(' ')
-        LiteralExpressionImpl
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('b')
+      CallOrConversionExpressionImpl
+	LiteralExpressionImpl
+	  LiteralIdentifierImpl
+	    PsiElement(IDENTIFIER)('v')
+	PsiElement(()('(')
+	LiteralExpressionImpl
+	  LiteralCharImpl
+	    PsiElement(LITERAL_CHAR)(''a'')
+	PsiElement())(')')

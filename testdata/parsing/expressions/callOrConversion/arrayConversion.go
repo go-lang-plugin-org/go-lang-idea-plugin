@@ -3,7 +3,6 @@ package main
 func main() {
 	resp := []byte("dafadf")
 }
-
 /**-----
 Go file
   PackageDeclaration(main)
@@ -43,4 +42,3 @@ Go file
           PsiElement())(')')
       PsiWhiteSpace('\n')
       PsiElement(})('}')
-  PsiWhiteSpace('\n')
