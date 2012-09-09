@@ -101,4 +101,19 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     public Module getModule() {
         return getConfigurationModule().getModule();
     }
+
+    @Override
+    public boolean isGeneratedName() {
+        return true;
+    }
+
+    @Override
+    public String suggestedName() {
+        String name = getName();
+        int pos = name.lastIndexOf('.');
+        if (pos == -1) {
+            return name;
+        }
+        return name.substring(pos + 1);
+    }
 }

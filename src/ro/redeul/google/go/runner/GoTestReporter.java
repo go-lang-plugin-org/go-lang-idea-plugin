@@ -92,6 +92,10 @@ class GoTestReporter {
         }
     }
 
+    public String getTestCaseName() {
+        return testCaseName;
+    }
+
     private void report(ServiceMessageBuilder builder) {
         handler.notifyTextAvailable(builder.toString() + '\n', ProcessOutputTypes.STDOUT);
     }
