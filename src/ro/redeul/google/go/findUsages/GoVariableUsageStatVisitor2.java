@@ -68,8 +68,24 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
                 if (ident.isIota() || ident.isBlank())
                     continue;
 
-                if ((GLOBAL_CONST_DECL.accepts(ident) || GLOBAL_VAR_DECL.accepts(ident))
-                    && GoNamesUtil.isExportedName(ident.getName())) {
+		if (GLOBAL_CONST_DECL.accepts(ident) || GLOBAL_VAR_DECL.accepts(ident)){
+		    if (GoNamesUtil.isExportedName(ident.getName())) {
+			continue;
+		    }
+
+		    if (GLOBAL_CONST_DECL.accepts(ident)) {
+			result.addProblem(declaration,
+					  GoBundle.message("error.constant.not.used",
+							   declaration.getText()),
+					  ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+					  new RemoveVariableFix());
+		    } else {
+			result.addProblem(declaration,
+					  GoBundle.message("error.variable.not.used",
+							   declaration.getText()),
+					  ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+					  new RemoveVariableFix());
+		    }
                     continue;
                 }
             }
@@ -83,13 +99,13 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
                 result.addProblem(declaration,
                                   GoBundle.message("error.constant.not.used",
                                                    declaration.getText()),
-                                  ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+				  ProblemHighlightType.ERROR,
                                   new RemoveVariableFix());
             } else {
                 result.addProblem(declaration,
                                   GoBundle.message("error.variable.not.used",
                                                    declaration.getText()),
-                                  ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+				  ProblemHighlightType.ERROR,
                                   new RemoveVariableFix());
             }
         }
