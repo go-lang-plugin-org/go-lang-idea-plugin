@@ -1,9 +1,10 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
@@ -17,6 +18,7 @@ import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static ro.redeul.google.go.lang.completion.GoCompletionUtil.getImportedPackagesNames;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class TypeNameReference
@@ -77,7 +79,9 @@ public class TypeNameReference
     @Override
     public Object[] getVariants() {
 
-        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+        final List<LookupElement> variants = new ArrayList<LookupElement>();
+
+        Collections.addAll(variants, getImportedPackagesNames(getElement().getContainingFile()));
 
         TypeNameResolver processor =
             new TypeNameResolver(this) {
