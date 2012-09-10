@@ -62,4 +62,4 @@ Go file
                         LiteralFloatImpl
                           PsiElement(LITERAL_FLOAT)('12.3')
                     PsiElement(})('}')
-	    PsiElement(})('}')
+            PsiElement(})('}')

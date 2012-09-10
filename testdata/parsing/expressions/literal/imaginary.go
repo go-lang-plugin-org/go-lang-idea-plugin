@@ -12,19 +12,19 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-	PsiElement(IDENTIFIER)('t1')
+        PsiElement(IDENTIFIER)('t1')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       LiteralIdentifierImpl
-	PsiElement(IDENTIFIER)('t2')
+        PsiElement(IDENTIFIER)('t2')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       LiteralExpressionImpl
-	LiteralImaginaryImpl
-	  PsiElement(LITERAL_IMAGINARY_FLOAT)('6.67428e-11i')
+        LiteralImaginaryImpl
+          PsiElement(LITERAL_IMAGINARY_FLOAT)('6.67428e-11i')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
       LiteralExpressionImpl
-	LiteralImaginaryImpl
-	  PsiElement(LITERAL_IMAGINARY_INTEGER)('3i')
+        LiteralImaginaryImpl
+          PsiElement(LITERAL_IMAGINARY_INTEGER)('3i')

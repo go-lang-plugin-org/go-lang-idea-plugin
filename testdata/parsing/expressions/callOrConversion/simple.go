@@ -12,13 +12,13 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-	PsiElement(IDENTIFIER)('e')
+        PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CallOrConversionExpressionImpl
-	LiteralExpressionImpl
-	  LiteralIdentifierImpl
-	    PsiElement(IDENTIFIER)('v')
-	PsiElement(()('(')
-	PsiElement())(')')
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('v')
+        PsiElement(()('(')
+        PsiElement())(')')

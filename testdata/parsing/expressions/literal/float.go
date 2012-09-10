@@ -12,10 +12,10 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-	PsiElement(IDENTIFIER)('t')
+        PsiElement(IDENTIFIER)('t')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       LiteralExpressionImpl
-	LiteralFloatImpl
-	  PsiElement(LITERAL_FLOAT)('6.67428e-11')
+        LiteralFloatImpl
+          PsiElement(LITERAL_FLOAT)('6.67428e-11')

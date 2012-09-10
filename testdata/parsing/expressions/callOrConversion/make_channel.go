@@ -12,17 +12,17 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       Identifiers
-	PsiElement(IDENTIFIER)('e')
+        PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       BuiltInCallExpressionImpl
-	LiteralExpressionImpl
-	  PsiElement(IDENTIFIER)('make')
-	PsiElement(()('(')
-	TypeChanBidiImpl
-	  PsiElement(KEYWORD_CHAN)('chan')
-	  PsiWhiteSpace(' ')
-	  TypeNameImpl
-	    PsiElement(IDENTIFIER)('int')
-	PsiElement())(')')
+        LiteralExpressionImpl
+          PsiElement(IDENTIFIER)('make')
+        PsiElement(()('(')
+        TypeChanBidiImpl
+          PsiElement(KEYWORD_CHAN)('chan')
+          PsiWhiteSpace(' ')
+          TypeNameImpl
+            PsiElement(IDENTIFIER)('int')
+        PsiElement())(')')

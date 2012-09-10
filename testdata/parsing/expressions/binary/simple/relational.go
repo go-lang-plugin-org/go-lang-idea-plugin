@@ -12,17 +12,17 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-	PsiElement(IDENTIFIER)('e')
+        PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       RelationalExpressionImpl
-	LiteralExpressionImpl
-	  LiteralIntegerImpl
-	    PsiElement(LITERAL_INT)('1')
-	PsiWhiteSpace(' ')
-	PsiElement(==)('==')
-	PsiWhiteSpace(' ')
-	LiteralExpressionImpl
-	  LiteralIntegerImpl
-	    PsiElement(LITERAL_INT)('2')
+        LiteralExpressionImpl
+          LiteralIntegerImpl
+            PsiElement(LITERAL_INT)('1')
+        PsiWhiteSpace(' ')
+        PsiElement(==)('==')
+        PsiWhiteSpace(' ')
+        LiteralExpressionImpl
+          LiteralIntegerImpl
+            PsiElement(LITERAL_INT)('2')

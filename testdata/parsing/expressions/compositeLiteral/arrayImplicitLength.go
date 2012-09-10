@@ -37,4 +37,4 @@ Go file
               LiteralExpressionImpl
                 LiteralStringImpl
                   PsiElement(LITERAL_STRING)('"str2"')
-	    PsiElement(})('}')
+            PsiElement(})('}')

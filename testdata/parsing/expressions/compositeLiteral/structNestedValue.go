@@ -49,4 +49,4 @@ Go file
                     LiteralIntegerImpl
                       PsiElement(LITERAL_INT)('2')
                 PsiElement(})('}')
-	    PsiElement(})('}')
+            PsiElement(})('}')

@@ -12,20 +12,20 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-	PsiElement(IDENTIFIER)('e')
+        PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       ParenthesisedExpressionImpl
-	PsiElement(()('(')
-	AdditiveExpressionImpl
-	  LiteralExpressionImpl
-	    LiteralIdentifierImpl
-	      PsiElement(IDENTIFIER)('s')
-	  PsiWhiteSpace(' ')
-	  PsiElement(+)('+')
-	  PsiWhiteSpace(' ')
-	  LiteralExpressionImpl
-	    LiteralStringImpl
-	      PsiElement(LITERAL_STRING)('".txt"')
-	PsiElement())(')')
+        PsiElement(()('(')
+        AdditiveExpressionImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('s')
+          PsiWhiteSpace(' ')
+          PsiElement(+)('+')
+          PsiWhiteSpace(' ')
+          LiteralExpressionImpl
+            LiteralStringImpl
+              PsiElement(LITERAL_STRING)('".txt"')
+        PsiElement())(')')

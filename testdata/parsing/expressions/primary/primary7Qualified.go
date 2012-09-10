@@ -13,22 +13,22 @@ Go file
     PsiWhiteSpace(' ')
     ImportSpecImpl
       PackageReferenceImpl
-	PsiElement(IDENTIFIER)('M')
+        PsiElement(IDENTIFIER)('M')
       PsiWhiteSpace(' ')
       LiteralStringImpl
-	PsiElement(LITERAL_STRING)('"math"')
+        PsiElement(LITERAL_STRING)('"math"')
   PsiWhiteSpace('\n')
   VarDeclarationsImpl
     PsiElement(KEYWORD_VAR)('var')
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-	PsiElement(IDENTIFIER)('e')
+        PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       LiteralExpressionImpl
-	LiteralIdentifierImpl
-	  PsiElement(IDENTIFIER)('M')
-	  PsiElement(.)('.')
-	  PsiElement(IDENTIFIER)('sin')
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('M')
+          PsiElement(.)('.')
+          PsiElement(IDENTIFIER)('sin')

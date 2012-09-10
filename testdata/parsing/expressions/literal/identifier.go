@@ -12,10 +12,10 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-	PsiElement(IDENTIFIER)('t')
+        PsiElement(IDENTIFIER)('t')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       LiteralExpressionImpl
-	LiteralIdentifierImpl
-	  PsiElement(IDENTIFIER)('a')
+        LiteralIdentifierImpl
+          PsiElement(IDENTIFIER)('a')

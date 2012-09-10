@@ -43,4 +43,4 @@ Go file
             LiteralCompositeElementImpl
               PsiErrorElement:expression.expected
                 PsiElement(KEYWORD_VAR)('var')
-	    PsiElement(})('}')
+            PsiElement(})('}')

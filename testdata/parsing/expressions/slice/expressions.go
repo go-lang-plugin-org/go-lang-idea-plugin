@@ -12,20 +12,20 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-	PsiElement(IDENTIFIER)('e')
+        PsiElement(IDENTIFIER)('e')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       SliceExpressionImpl
-	LiteralExpressionImpl
-	  LiteralIdentifierImpl
-	    PsiElement(IDENTIFIER)('a')
-	PsiElement([)('[')
-	LiteralExpressionImpl
-	  LiteralIdentifierImpl
-	    PsiElement(IDENTIFIER)('a')
-	PsiElement(:)(':')
-	LiteralExpressionImpl
-	  LiteralIdentifierImpl
-	    PsiElement(IDENTIFIER)('b')
-	PsiElement(])(']')
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('a')
+        PsiElement([)('[')
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('a')
+        PsiElement(:)(':')
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('b')
+        PsiElement(])(']')

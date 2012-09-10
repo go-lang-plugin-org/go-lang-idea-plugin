@@ -12,36 +12,36 @@ Go file
     PsiWhiteSpace(' ')
     VarDeclarationImpl
       LiteralIdentifierImpl
-	PsiElement(IDENTIFIER)('f')
+        PsiElement(IDENTIFIER)('f')
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       LiteralExpressionImpl
-	LiteralFunctionImpl
-	  PsiElement(KEYWORD_FUNC)('func')
-	  PsiElement(()('(')
-	  FunctionParameterListImpl
-	    FunctionParameterImpl
-	      LiteralIdentifierImpl
-		PsiElement(IDENTIFIER)('x')
-	      PsiElement(,)(',')
-	      PsiWhiteSpace(' ')
-	      LiteralIdentifierImpl
-		PsiElement(IDENTIFIER)('y')
-	      PsiWhiteSpace(' ')
-	      TypeNameImpl
-		LiteralIdentifierImpl
-		  PsiElement(IDENTIFIER)('int')
-	  PsiElement())(')')
-	  PsiWhiteSpace(' ')
-	  FunctionResult
-	    FunctionParameterListImpl
-	      FunctionParameterImpl
-		TypeNameImpl
-		  LiteralIdentifierImpl
-		    PsiElement(IDENTIFIER)('int')
-	  PsiWhiteSpace(' ')
-	  BlockStmtImpl
-	    PsiElement({)('{')
-	    PsiWhiteSpace(' ')
-	    PsiElement(})('}')
+        LiteralFunctionImpl
+          PsiElement(KEYWORD_FUNC)('func')
+          PsiElement(()('(')
+          FunctionParameterListImpl
+            FunctionParameterImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('x')
+              PsiElement(,)(',')
+              PsiWhiteSpace(' ')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('y')
+              PsiWhiteSpace(' ')
+              TypeNameImpl
+                LiteralIdentifierImpl
+                  PsiElement(IDENTIFIER)('int')
+          PsiElement())(')')
+          PsiWhiteSpace(' ')
+          FunctionResult
+            FunctionParameterListImpl
+              FunctionParameterImpl
+                TypeNameImpl
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('int')
+          PsiWhiteSpace(' ')
+          BlockStmtImpl
+            PsiElement({)('{')
+            PsiWhiteSpace(' ')
+            PsiElement(})('}')

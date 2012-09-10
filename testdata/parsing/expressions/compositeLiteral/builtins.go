@@ -51,4 +51,4 @@ Go file
                 LiteralExpressionImpl
                   LiteralIdentifierImpl
                     PsiElement(IDENTIFIER)('elt')
-	      PsiElement(})('}')
+              PsiElement(})('}')
