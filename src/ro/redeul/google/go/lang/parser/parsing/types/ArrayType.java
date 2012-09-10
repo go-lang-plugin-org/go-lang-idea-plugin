@@ -7,11 +7,9 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mtoader
  * Date: Jul 25, 2010
  * Time: 2:50:25 AM
- * To change this template use File | Settings | File Templates.
  */
 public class ArrayType implements GoElementTypes
 {
@@ -37,7 +35,12 @@ public class ArrayType implements GoElementTypes
             builder.error("right.bracket.expected");
         }
 
-        parser.parseType(builder);
+        if ( parser.parseType(builder) == null ) {
+            marker.drop();
+            builder.error("type declaration expected");
+            return null;
+        }
+
         marker.done(TYPE_ARRAY);
         return TYPE_ARRAY;
     }

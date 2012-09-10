@@ -119,7 +119,10 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
             parseParameterDeclaration(builder, parser);
 
-            ParserUtils.getToken(builder, oCOMMA);
+            if (!builder.eof() && !ParserUtils.lookAhead(builder, pRPAREN)) {
+                ParserUtils.getToken(builder, oCOMMA,
+                                     GoBundle.message("error.comma.expected"));
+            }
 
             if (pos == builder.getCurrentOffset()) {
                 ParserUtils.wrapError(builder, "unexpected.char");

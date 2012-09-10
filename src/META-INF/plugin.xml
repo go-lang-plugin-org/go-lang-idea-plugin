@@ -56,6 +56,7 @@
          <h3>0.9.11 changes:</h3>
             <ul>
                 <li>[bugfix] NPE in certain cases when creating a test configuration.</li>
+                <li>[bugfix] Fix wrong parsing of method/function parameter declarations.</li>
                 <li>[enhancement] In structure view, put all struct methods on the top of struct fields.</li>
                 <li>[enhancement] Add auto completion for anonymous fields of structs.</li>
                 <li>[enhancement] Add auto completion for variables declared in short var declaration and normal var declaration without explicit type.</li>

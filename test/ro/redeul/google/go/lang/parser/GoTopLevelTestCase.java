@@ -106,5 +106,8 @@ public class GoTopLevelTestCase extends GoParsingTestCase {
     public void testMethod_case4() throws Throwable { doTest(); }
     public void testMethod_incorrectMethod() throws Throwable { doTest(); }
     public void testMethod_MethodWithoutBody() throws Throwable { doTest(); }
+    public void testMethod_invalidParameterTypeDeclaration() throws Throwable { doTest(); }
+    public void testMethod_invalidParameterTypeDeclarationWithArray() throws Throwable { doTest(); }
+    public void testMethod_missingCommaBetweenParameters() throws Throwable { doTest(); }
 
 }

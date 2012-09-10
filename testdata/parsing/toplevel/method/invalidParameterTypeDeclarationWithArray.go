@@ -1,8 +1,7 @@
 package main
 
-func foo(a int
-) {
-}
+func a(a int, [10]) {}
+
 /**-----
 Go file
   PackageDeclaration(main)
@@ -10,11 +9,11 @@ Go file
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('main')
   PsiWhiteSpace('\n\n')
-  FunctionDeclaration(foo)
+  FunctionDeclaration(a)
     PsiElement(KEYWORD_FUNC)('func')
     PsiWhiteSpace(' ')
     LiteralIdentifierImpl
-      PsiElement(IDENTIFIER)('foo')
+      PsiElement(IDENTIFIER)('a')
     PsiElement(()('(')
     FunctionParameterListImpl
       FunctionParameterImpl
@@ -24,12 +23,19 @@ Go file
         TypeNameImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('int')
-      PsiErrorElement:',' expected
-        <empty list>
-    PsiWhiteSpace('\n')
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      FunctionParameterImpl
+        PsiElement([)('[')
+        LiteralExpressionImpl
+          LiteralIntegerImpl
+            PsiElement(LITERAL_INT)('10')
+        PsiElement(])(']')
+        PsiErrorElement:type declaration expected
+          <empty list>
     PsiElement())(')')
     PsiWhiteSpace(' ')
     BlockStmtImpl
       PsiElement({)('{')
-      PsiWhiteSpace('\n')
       PsiElement(})('}')
+  PsiWhiteSpace('\n')
