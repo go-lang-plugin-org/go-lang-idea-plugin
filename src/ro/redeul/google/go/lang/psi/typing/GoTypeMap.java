@@ -4,9 +4,6 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeMap;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
 public class GoTypeMap
     extends GoTypePsiBacked<GoPsiTypeMap, GoUnderlyingTypeMap>
     implements GoType {
@@ -29,6 +26,11 @@ public class GoTypeMap
     @Override
     public boolean isIdentical(GoType type) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitTypeMap(this);
     }
 
     public GoType getKeyType() {

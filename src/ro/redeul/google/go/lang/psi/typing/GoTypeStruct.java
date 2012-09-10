@@ -21,4 +21,9 @@ public class GoTypeStruct extends GoTypePsiBacked<GoPsiTypeStruct, GoUnderlyingT
 
         return false;
     }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitTypeStruct(this);
+    }
 }

@@ -244,4 +244,8 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
     public void testBuiltin_literals() throws Throwable {
         doTest();
     }
+
+    public void testReferences_reference1() throws Throwable {
+        doTest();
+    }
 }

@@ -28,6 +28,11 @@ public class GoTypeSlice extends GoTypePsiBacked<GoPsiTypeSlice, GoUnderlyingTyp
         return elementType.isIdentical(otherSlice.getElementType());
     }
 
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitTypeSlice(this);
+    }
+
     public GoType getElementType() {
         return elementType;
     }

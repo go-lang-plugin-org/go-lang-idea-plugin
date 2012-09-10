@@ -4,9 +4,6 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeArray;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
-/**
- * // TODO: mtoader Implement this
- */
 public class GoTypeArray extends GoTypePsiBacked<GoPsiTypeArray, GoUnderlyingTypeArray> implements GoType {
 
     GoType elementType;
@@ -32,5 +29,10 @@ public class GoTypeArray extends GoTypePsiBacked<GoPsiTypeArray, GoUnderlyingTyp
 
     public GoType getElementType() {
         return elementType;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitTypeArray(this);
     }
 }

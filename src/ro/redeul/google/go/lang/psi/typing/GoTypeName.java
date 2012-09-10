@@ -7,9 +7,6 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePredeclared;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
 public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName, GoUnderlyingType> implements GoType {
 
     private static final Logger LOG = Logger.getInstance(GoTypeName.class);
@@ -38,6 +35,11 @@ public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName, GoUnderlyingType>
     @Override
     public boolean isIdentical(GoType type) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitTypeName(this);
     }
 
     public String getName() {

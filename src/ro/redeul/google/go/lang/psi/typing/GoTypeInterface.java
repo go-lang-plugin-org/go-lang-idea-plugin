@@ -18,4 +18,8 @@ public class GoTypeInterface
         return false;
     }
 
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitTypeInterface(this);
+    }
 }

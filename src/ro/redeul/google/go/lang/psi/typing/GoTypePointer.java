@@ -23,6 +23,11 @@ public class GoTypePointer extends GoTypePsiBacked<GoPsiTypePointer, GoUnderlyin
     }
 
     @Override
+    public void accept(Visitor visitor) {
+        visitor.visitTypePointer(this);
+    }
+
+    @Override
     public boolean isIdentical(GoType type) {
         return false;
     }

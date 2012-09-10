@@ -9,7 +9,16 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
+import ro.redeul.google.go.lang.psi.typing.GoTypeChannel;
+import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
+import ro.redeul.google.go.lang.psi.typing.GoTypeName;
+import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
+import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.hasPrevSiblingOfType;
 
 public class GoForWithRangeStatementImpl extends GoForStatementImpl
@@ -59,6 +68,145 @@ public class GoForWithRangeStatementImpl extends GoForStatementImpl
         }
 
         return null;
+    }
+
+    @Override
+    public GoType[] getKeyType() {
+        GoExpr rangeExpression = getRangeExpression();
+        if (rangeExpression == null ) {
+            return GoType.EMPTY_ARRAY;
+        }
+
+        GoType[] rangeType = rangeExpression.getType();
+        if (rangeType.length == 0) {
+            return GoType.EMPTY_ARRAY;
+        }
+
+        ;
+
+        return
+            new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+                @Override
+                protected void visitTypeArray(GoTypeArray array) {
+                    setData(new GoType[] {
+                        GoTypes.getBuiltin(
+                            GoTypes.Builtin.Int,
+                                           GoNamesCache.getInstance(getProject()))
+                    });
+                }
+
+                @Override
+                public void visitTypePointer(GoTypePointer pointer) {
+                    setData(
+                        new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY){
+                            @Override
+                            protected void visitTypeArray(GoTypeArray array) {
+                                setData(new GoType[] {
+                                    GoTypes.getBuiltin(
+                                        GoTypes.Builtin.Int,
+                                        GoNamesCache.getInstance(getProject()))
+                                });
+                            }
+
+                            @Override
+                            public void visitTypeSlice(GoTypeSlice slice) {
+                                setData(new GoType[]{
+                                    GoTypes.getBuiltin(
+                                        GoTypes.Builtin.Int,
+                                        GoNamesCache.getInstance(getProject()))
+                                });
+                            }
+                        }.visit(pointer.getTargetType())
+                    );
+                }
+
+                @Override
+                public void visitTypeSlice(GoTypeSlice slice) {
+                    setData(new GoType[] {
+                        GoTypes.getBuiltin(
+                            GoTypes.Builtin.Int,
+                            GoNamesCache.getInstance(getProject()))
+                    });
+                }
+
+                @Override
+                public void visitTypeName(GoTypeName name) {
+                    if (name.getName().equals("string")) {
+                        setData(new GoType[] {
+                            GoTypes.getBuiltin(
+                                GoTypes.Builtin.Int,
+                                GoNamesCache.getInstance(getProject()))
+                        });
+                    }
+                }
+
+                @Override
+                public void visitTypeMap(GoTypeMap map) {
+                    setData(new GoType[] {map.getKeyType()});
+                }
+
+                @Override
+                public void visitTypeChannel(GoTypeChannel channel) {
+                    setData(new GoType[] {channel.getElementType()});
+                }
+            }.visit(rangeType[0]);
+    }
+
+    @Override
+    public GoType[] getValueType() {
+        GoExpr rangeExpression = getRangeExpression();
+        if (rangeExpression == null ) {
+            return GoType.EMPTY_ARRAY;
+        }
+
+        GoType[] rangeType = rangeExpression.getType();
+        if (rangeType.length == 0) {
+            return GoType.EMPTY_ARRAY;
+        }
+
+        return
+            new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+                @Override
+                protected void visitTypeArray(GoTypeArray array) {
+                    setData(new GoType[] {array.getElementType()});
+                }
+
+                @Override
+                public void visitTypeSlice(GoTypeSlice slice) {
+                    setData(new GoType[] {slice.getElementType()});
+                }
+
+                @Override
+                public void visitTypePointer(GoTypePointer pointer) {
+                    setData(new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+                        @Override
+                        protected void visitTypeArray(GoTypeArray array) {
+                            setData(new GoType[] {array.getElementType()});
+                        }
+
+                        @Override
+                        public void visitTypeSlice(GoTypeSlice slice) {
+                            setData(new GoType[] {slice.getElementType()});
+                        }
+                    }.visit(pointer.getTargetType()));
+                }
+
+                @Override
+                public void visitTypeName(GoTypeName name) {
+                    if (name.getName().equals("string")) {
+                        setData(new GoType[] {
+                            GoTypes.getBuiltin(
+                                GoTypes.Builtin.Rune,
+                                GoNamesCache.getInstance(getProject()))
+                        });
+                    }
+                }
+
+                @Override
+                public void visitTypeMap(GoTypeMap map) {
+                    setData(new GoType[] {map.getElementType()});
+                }
+            }.visit(rangeType[0]);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.statements;
 
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 
 public interface GoForWithRangeStatement extends GoForStatement {
 
@@ -11,4 +12,8 @@ public interface GoForWithRangeStatement extends GoForStatement {
     boolean isDeclaration();
 
     GoExpr getRangeExpression();
+
+    GoType[] getKeyType();
+
+    GoType[] getValueType();
 }

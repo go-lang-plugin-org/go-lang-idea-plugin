@@ -44,4 +44,29 @@ public class GoStatementsCompletionTestCase extends GoCompletionTestCase {
     public void testSelect() {
         doTest();
     }
+
+    public void testFieldsViaForRangeWithArray() {
+        doTestVariants();
+    }
+
+    public void testFieldsViaForRangeWithArrayPointer() {
+        doTestVariants();
+    }
+
+    public void testFieldsViaForRangeWithSlice() {
+        doTestVariants();
+    }
+
+    public void testMapKeyViaForRange() {
+        doTestVariants();
+    }
+
+    public void testMapValueViaForRange() {
+        doTestVariants();
+    }
+
+    public void testChannelTypeViaForRange() {
+        doTestVariants();
+    }
+
 }

@@ -8,6 +8,8 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -47,6 +49,15 @@ public class GoElementPatterns {
                     psiElement(GoTypeStructField.class),
                     psiElement(GoFunctionParameter.class)
                 )
+            );
+
+    public static final ElementPattern<GoLiteralIdentifier> VAR_IN_FOR_RANGE =
+        psiElement(GoLiteralIdentifier.class)
+            .withParent(
+                psiElement(GoLiteralExpression.class)
+                    .withParent(
+                        psiElement(GoForWithRangeStatement.class)
+                    )
             );
 
     public static final ElementPattern<GoLiteralIdentifier> PARAMETER_DECLARATION =

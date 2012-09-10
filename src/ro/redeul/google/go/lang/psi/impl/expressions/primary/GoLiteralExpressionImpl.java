@@ -16,9 +16,11 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
+import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
@@ -140,11 +142,23 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                     }
 
                     if (resolved.getParent() instanceof GoFunctionDeclaration) {
-                        GoFunctionDeclaration functionDeclaration = (GoFunctionDeclaration) resolved
-                            .getParent();
+                        GoFunctionDeclaration functionDeclaration =
+                            (GoFunctionDeclaration) resolved.getParent();
+
                         return new GoType[]{
                             GoTypes.fromPsiType(functionDeclaration)
                         };
+                    }
+
+                    if (GoElementPatterns.VAR_IN_FOR_RANGE.accepts(resolved)) {
+                        GoForWithRangeStatement statement =
+                            (GoForWithRangeStatement) resolved.getParent().getParent();
+
+                        if (statement.getKey() == resolved.getParent()) {
+                            return statement.getKeyType();
+                        } else if (statement.getValue() == resolved.getParent()) {
+                            return statement.getValueType();
+                        }
                     }
                     return GoType.EMPTY_ARRAY;
                 case Composite:

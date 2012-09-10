@@ -4,9 +4,6 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeFunction;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
 public class GoTypeFunction
     extends GoTypePsiBacked<GoPsiTypeFunction, GoUnderlyingTypeFunction>
     implements GoType {
@@ -19,5 +16,10 @@ public class GoTypeFunction
     @Override
     public boolean isIdentical(GoType type) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitTypeFunction(this);
     }
 }

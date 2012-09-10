@@ -20,4 +20,5 @@ public class GoStructCompletionTestCase extends GoCompletionTestCase{
     public void testMembersOfAnonymousField() {
         doTestVariants();
     }
+
 }

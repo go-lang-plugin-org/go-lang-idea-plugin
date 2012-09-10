@@ -75,7 +75,7 @@ public class MethodReference
     public TextRange getRangeInElement() {
         GoLiteralIdentifier identifier = getElement().getIdentifier();
         if (identifier == null)
-            return null;
+            return TextRange.EMPTY_RANGE;
 
         return new TextRange(identifier.getStartOffsetInParent(),
                              identifier.getStartOffsetInParent() + identifier.getTextLength());

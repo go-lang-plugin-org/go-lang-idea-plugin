@@ -24,6 +24,11 @@ public class GoTypeChannel extends GoTypePsiBacked<GoPsiTypeChannel, GoUnderlyin
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitTypeChannel(this);
+    }
+
     public GoType getElementType() {
         return elementType;
     }
