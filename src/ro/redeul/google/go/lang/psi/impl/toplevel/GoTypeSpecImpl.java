@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.SearchScope;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.resolve.references.TypeSpecReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
@@ -63,6 +65,12 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
     @Override
     public String getName() {
         return getTypeNameDeclaration().getName();
+    }
+
+    @Override
+    @NotNull
+    public PsiReference[] getReferences() {
+        return refs(new TypeSpecReference(this));
     }
 
     @NotNull

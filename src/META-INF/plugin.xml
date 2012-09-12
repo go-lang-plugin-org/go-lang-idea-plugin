@@ -59,6 +59,7 @@
                 <li>[bugfix] Fix wrong parsing of method/function parameter declarations.</li>
                 <li>[enhancement] In structure view, put all struct methods on the top of struct fields.</li>
                 <li>[enhancement] Add auto completion for anonymous fields of structs.</li>
+                <li>[enhancement] Support find usage of types.</li>
                 <li>[enhancement] Add auto completion for variables declared in short var declaration and normal var declaration without explicit type.</li>
                 <li>[enhancement] List all imported package names in basic completion, and all imported and unimported package names in second basic completion.</li>
                 <li>[feature] Add graphical test runner panel to show results of tests and benchmarks.</li>

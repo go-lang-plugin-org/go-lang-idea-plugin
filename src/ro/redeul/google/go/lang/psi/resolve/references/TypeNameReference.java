@@ -80,11 +80,11 @@ public class TypeNameReference
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
+        if (element instanceof GoTypeSpec) {
+            element = ((GoTypeSpec) element).getTypeNameDeclaration();
+        }
         if (element instanceof GoTypeNameDeclaration) {
-            GoTypeNameDeclaration typeNameDecl
-                = (GoTypeNameDeclaration) element;
-
-            return matchesVisiblePackageName(typeNameDecl,
+            return matchesVisiblePackageName(element,
                                              getElement().getIdentifier().getName());
         }
 
