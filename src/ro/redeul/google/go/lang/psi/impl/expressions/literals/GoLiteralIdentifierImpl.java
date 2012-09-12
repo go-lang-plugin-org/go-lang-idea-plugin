@@ -18,6 +18,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
@@ -31,6 +32,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
@@ -43,6 +45,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getLocalElementSearchScope;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -191,10 +194,19 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         if (LabelReference.MATCHER.accepts(this))
             return refs(new LabelReference(this));
 
-        if (CompositeElementOfStructFieldReference.MATCHER_KEY.accepts(this))
+        if (CompositeElementOfStructFieldReference.MATCHER_KEY.accepts(this)) {
+            GoLiteralComposite composite = findParentOfType(this, GoLiteralComposite.class);
+            if (resolveToFinalType(composite.getLiteralType()) instanceof GoPsiTypeStruct) {
+                return refs(
+                    new CompositeElementOfStructFieldReference(this, this)
+                );
+            }
+
             return refs(
                 new CompositeElementOfStructFieldReference(this, this),
-                new VarOrConstReference(this));
+                new VarOrConstReference(this)
+            );
+        }
 
         if (CompositeElementOfStructFieldReference.MATCHER_ELEMENT.accepts(this))
             return refs(
