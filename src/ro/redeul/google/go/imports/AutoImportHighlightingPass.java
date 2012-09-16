@@ -30,6 +30,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.options.GoSettings;
 
@@ -132,12 +133,15 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         }
 
         PsiElement parent = id.getParent();
-        if (!(parent instanceof GoLiteralExpression)) {
-            return false;
+        if (parent instanceof GoLiteralExpression) {
+            // package usage in expression
+            boolean isTheFirstChild = parent.getStartOffsetInParent() == 0;
+            return isTheFirstChild && parent.getParent() instanceof GoSelectorExpression;
+        } else if (parent instanceof GoPsiTypeName) {
+            // package usage in type name
+            return id.isQualified();
         }
-
-        boolean isTheFirstChild = parent.getStartOffsetInParent() == 0;
-        return isTheFirstChild && parent.getParent() instanceof GoSelectorExpression;
+        return false;
     }
 
     public static List<String> getPackagesByName(Collection<String> allPackages,
@@ -227,8 +231,16 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                 AddImportFix fix = new AddImportFix(data.sdkPackages,
                                                     data.projectPackages, file,
                                                     editor);
-                int start = data.element.getTextOffset();
-                int end = data.element.getTextRange().getEndOffset();
+                GoLiteralIdentifier identifier = data.identifier;
+                int start = identifier.getTextOffset();
+                int end = identifier.getTextRange().getEndOffset();
+                if (identifier.isQualified()) {
+                    String localPackageName = identifier.getLocalPackageName();
+                    if (localPackageName != null) {
+                        end = start + localPackageName.length();
+                    }
+                }
+
                 HintManager.getInstance()
                            .showQuestionHint(editor, importMessage, start, end,
                                              fix);
@@ -282,13 +294,13 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
     }
 
     private static final class Data {
-        public final PsiElement element;
+        public final GoLiteralIdentifier identifier;
         public final List<String> sdkPackages;
         public final List<String> projectPackages;
 
-        private Data(PsiElement element, List<String> sdkPackages,
+        private Data(GoLiteralIdentifier identifier, List<String> sdkPackages,
                      List<String> projectPackages) {
-            this.element = element;
+            this.identifier = identifier;
             this.sdkPackages = sdkPackages;
             this.projectPackages = projectPackages;
         }
