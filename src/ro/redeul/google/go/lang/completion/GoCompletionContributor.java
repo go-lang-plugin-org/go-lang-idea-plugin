@@ -12,6 +12,8 @@ import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
+import com.intellij.patterns.ElementPattern;
+import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
@@ -61,6 +63,24 @@ import static ro.redeul.google.go.lang.completion.GoCompletionUtil.packageElemen
 public class GoCompletionContributor extends CompletionContributor {
 
     public static final String DUMMY_IDENTIFIER = CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED;
+
+    public static final PsiElementPattern.Capture<PsiElement> TYPE_DECLARATION =
+            psiElement().withParent(
+                    psiElement(GoLiteralIdentifier.class).withParent(
+                            psiElement(GoPsiTypeName.class)
+                    )
+            );
+
+    public static final ElementPattern<? extends PsiElement> BLOCK_STATEMENT =
+            psiElement().withParent(
+                    psiElement(GoLiteralIdentifier.class).withParent(
+                            psiElement(GoLiteralExpression.class).withParent(
+                                    psiElement(GoExpressionStatement.class).withParent(
+                                            GoBlockStatement.class
+                                    )
+                            )
+                    )
+            );
 
     CompletionProvider<CompletionParameters> packageCompletionProvider =
         new CompletionProvider<CompletionParameters>() {
@@ -252,15 +272,7 @@ public class GoCompletionContributor extends CompletionContributor {
                importPathCompletionProvider);
 
         extend(CompletionType.BASIC,
-               psiElement().withParent(
-                   psiElement(GoLiteralIdentifier.class).withParent(
-                       psiElement(GoLiteralExpression.class).withParent(
-                           psiElement(GoExpressionStatement.class).withParent(
-                               GoBlockStatement.class
-                           )
-                       )
-                   )
-               ),
+               BLOCK_STATEMENT,
                blockStatementsCompletionProvider);
 
         extend(CompletionType.BASIC,
@@ -287,11 +299,7 @@ public class GoCompletionContributor extends CompletionContributor {
                goAndDeferStatementCompletionProvider);
 
         extend(CompletionType.BASIC,
-               psiElement().withParent(
-                   psiElement(GoLiteralIdentifier.class).withParent(
-                       psiElement(GoPsiTypeName.class)
-                   )
-               ),
+               TYPE_DECLARATION,
                typeDeclarationCompletionProvider);
     }
 
@@ -300,7 +308,7 @@ public class GoCompletionContributor extends CompletionContributor {
         context.setDummyIdentifier(DUMMY_IDENTIFIER);
     }
 
-    private static void addPackageAutoCompletion(CompletionParameters parameters, CompletionResultSet result) {
+    public static void addPackageAutoCompletion(CompletionParameters parameters, CompletionResultSet result) {
         PsiFile originalFile = parameters.getOriginalFile();
         for (LookupElement element : getImportedPackagesNames(originalFile)) {
             result.addElement(element);
@@ -313,7 +321,7 @@ public class GoCompletionContributor extends CompletionContributor {
         }
     }
 
-    private static void addAllPackageNames(CompletionResultSet result, Project project) {
+    public static void addAllPackageNames(CompletionResultSet result, Project project) {
         for (String pkg : GoNamesCache.getInstance(project).getAllPackages()) {
             if (pkg.contains("/")) {
                 pkg = pkg.substring(pkg.lastIndexOf('/') + 1);

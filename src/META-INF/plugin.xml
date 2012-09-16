@@ -501,7 +501,11 @@
         <annotator language="Google Go" implementationClass="ro.redeul.google.go.annotator.GoAnnotator"/>
 
         <completion.contributor language="Google Go"
-                                implementationClass="ro.redeul.google.go.lang.completion.GoCompletionContributor"/>
+                                implementationClass="ro.redeul.google.go.lang.completion.GoCompletionContributor"
+                                id="goBasicCompletion"/>
+        <completion.contributor language="Google Go"
+                                implementationClass="ro.redeul.google.go.lang.completion.GoNoVariantsDelegator"
+                                id="goNoVariantsDelegator" order="before goBasicCompletion" />
 
         <gotoClassContributor implementation="ro.redeul.google.go.ide.contributor.GoGoToClassContributor" />
         <gotoSymbolContributor implementation="ro.redeul.google.go.ide.contributor.GoGoToSymbolContributor" />
