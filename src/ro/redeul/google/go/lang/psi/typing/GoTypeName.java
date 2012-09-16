@@ -6,6 +6,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePredeclared;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
 
 public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName, GoUnderlyingType> implements GoType {
 
@@ -23,7 +24,7 @@ public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName, GoUnderlyingType>
         if ( type.isPrimitive() ) {
             setUnderlyingType(GoUnderlyingTypePredeclared.getForName(name));
         } else {
-            GoTypeSpec spec = resolveSafely(type, GoTypeSpec.class);
+            GoTypeSpec spec = resolveTypeSpec(type);
             if ( spec != null && spec.getType() != null) {
                 definition = GoTypes.fromPsiType(spec.getType());
                 if ( definition != null && definition.getUnderlyingType() != null )

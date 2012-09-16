@@ -2,17 +2,18 @@ package ro.redeul.google.go.lang.psi.resolve.references;
 
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 
-public class TypeSpecReference
-        extends GoPsiReference.Single<GoTypeSpec, TypeSpecReference> {
+public class TypeNameDeclarationReference
+        extends GoPsiReference.Single<GoTypeNameDeclaration, TypeNameDeclarationReference> {
 
-    public TypeSpecReference(@NotNull GoTypeSpec element) {
+    public TypeNameDeclarationReference(@NotNull GoTypeNameDeclaration element) {
         super(element);
     }
 
     @Override
-    protected TypeSpecReference self() {
+    protected TypeNameDeclarationReference self() {
         return this;
     }
 
@@ -26,7 +27,7 @@ public class TypeSpecReference
     public boolean isReferenceTo(PsiElement element) {
         if (element instanceof GoTypeSpec) {
             return matchesVisiblePackageName(element,
-                    getElement().getTypeNameDeclaration().getName());
+                    getElement().getName());
         }
         return false;
     }

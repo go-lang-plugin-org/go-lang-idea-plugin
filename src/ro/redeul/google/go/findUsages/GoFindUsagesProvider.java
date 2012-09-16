@@ -12,7 +12,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,7 +33,7 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
     }
 
     public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
-        return psiElement instanceof GoTypeSpec ||
+        return psiElement instanceof GoTypeNameDeclaration ||
                 psiElement instanceof GoFunctionDeclaration ||
                 psiElement instanceof GoLiteralIdentifier;
     }
@@ -44,7 +44,7 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
 
     @NotNull
     public String getType(@NotNull PsiElement element) {
-        if (element instanceof GoTypeSpec) return "type";
+        if (element instanceof GoTypeNameDeclaration) return "type";
         if (element instanceof GoFunctionDeclaration) return "function";
         if (element instanceof GoLiteralIdentifier) return "variable";
 //        if (element instanceof PsiMethod) return "method";

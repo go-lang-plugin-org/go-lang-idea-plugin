@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
@@ -60,6 +61,11 @@ public class LookupElementUtil extends GoElementVisitor {
     @Override
     public void visitTypeSpec(GoTypeSpec type) {
         type.getType().accept(this);
+    }
+
+    @Override
+    public void visitTypeNameDeclaration(GoTypeNameDeclaration declaration) {
+        visitTypeSpec(declaration.getTypeSpec());
     }
 
     @Override

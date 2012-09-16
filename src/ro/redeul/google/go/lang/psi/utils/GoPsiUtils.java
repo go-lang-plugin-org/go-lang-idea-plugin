@@ -36,6 +36,9 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -95,6 +98,16 @@ public class GoPsiUtils {
         }
 
         return null;
+    }
+
+    @Nullable
+    public static GoTypeSpec resolveTypeSpec(@Nullable GoPsiTypeName type) {
+        if (type == null) {
+            return null;
+        }
+
+        GoTypeNameDeclaration nameDeclaration = resolveSafely(type, GoTypeNameDeclaration.class);
+        return nameDeclaration != null ? nameDeclaration.getTypeSpec() : null;
     }
 
     public static boolean hasHardReferences(PsiElement element) {

@@ -25,6 +25,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
 
 public class GoLiteralCompositeElementImpl extends GoPsiElementBase
     implements GoLiteralCompositeElement {
@@ -124,7 +125,7 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
 
         while (parentType != null && parentType instanceof GoTypeName) {
             GoTypeName goTypeName = (GoTypeName) parentType;
-            GoTypeSpec typeSpec = resolveSafely(goTypeName.getPsiType(), GoTypeSpec.class);
+            GoTypeSpec typeSpec = resolveTypeSpec(goTypeName.getPsiType());
 
             if (typeSpec != null)
                 parentType = GoTypes.fromPsiType(typeSpec.getType());

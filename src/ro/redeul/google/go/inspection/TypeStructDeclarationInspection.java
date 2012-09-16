@@ -18,6 +18,8 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
+
 public class TypeStructDeclarationInspection
     extends AbstractWholeGoFileInspection {
     @Nls
@@ -45,17 +47,12 @@ public class TypeStructDeclarationInspection
             return false;
         }
 
-        PsiReference reference = type.getReference();
-        if (reference == null) {
+        GoTypeSpec resolve = resolveTypeSpec((GoPsiTypeName) type);
+        if (resolve == null) {
             return false;
         }
 
-        PsiElement resolve = reference.resolve();
-        if (!(resolve instanceof GoTypeSpec)) {
-            return false;
-        }
-
-        GoPsiType typeDefinition = ((GoTypeSpec) resolve).getType();
+        GoPsiType typeDefinition = resolve.getType();
         if (!(typeDefinition instanceof GoPsiTypeStruct)) {
             return false;
         }

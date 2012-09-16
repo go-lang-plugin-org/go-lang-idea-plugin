@@ -18,7 +18,7 @@ public class TypeNameResolver extends GoPsiReferenceResolver<TypeNameReference> 
     @Override
     public void visitTypeSpec(GoTypeSpec type) {
         if (checkReference(type.getTypeNameDeclaration())){
-            addDeclaration(type);
+            addDeclaration(type.getTypeNameDeclaration());
         }
     }
 }

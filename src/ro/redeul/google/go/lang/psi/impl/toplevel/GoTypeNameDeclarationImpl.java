@@ -7,6 +7,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.StubBasedPsiElement;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.IncorrectOperationException;
@@ -15,6 +16,7 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoStubPsiElementBase;
+import ro.redeul.google.go.lang.psi.resolve.references.TypeNameDeclarationReference;
 import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
@@ -114,5 +116,11 @@ public class GoTypeNameDeclarationImpl
     @Override
     public String getPresentationTypeText() {
         return "";
+    }
+
+    @NotNull
+    @Override
+    public PsiReference[] getReferences() {
+        return new PsiReference[]{(new TypeNameDeclarationReference(this))};
     }
 }

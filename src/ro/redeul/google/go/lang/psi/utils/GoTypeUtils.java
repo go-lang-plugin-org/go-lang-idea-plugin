@@ -41,7 +41,7 @@ public class GoTypeUtils {
             return type;
         }
 
-        GoTypeSpec typeSpec = GoPsiUtils.resolveSafely(type, GoTypeSpec.class);
+        GoTypeSpec typeSpec = GoPsiUtils.resolveTypeSpec(typeName);
         if (typeSpec != null) {
             return resolveToFinalType(typeSpec.getType(), level + 1);
         }

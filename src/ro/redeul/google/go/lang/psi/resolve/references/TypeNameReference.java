@@ -143,8 +143,8 @@ public class TypeNameReference
     }
 
     private static boolean isInterfaceOrPointer(PsiElement declaration) {
-        if (declaration instanceof GoTypeSpec) {
-            GoTypeSpec typeSpec = (GoTypeSpec) declaration;
+        if (declaration instanceof GoTypeNameDeclaration) {
+            GoTypeSpec typeSpec = ((GoTypeNameDeclaration) declaration).getTypeSpec();
             GoPsiType finalType = resolveToFinalType(typeSpec.getType());
             if (finalType instanceof GoPsiTypeInterface ||
                     finalType instanceof GoPsiTypePointer) {
