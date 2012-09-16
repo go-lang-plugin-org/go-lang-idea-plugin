@@ -12,6 +12,7 @@ import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
@@ -23,6 +24,8 @@ import ro.redeul.google.go.lang.completion.insertHandler.ConstInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.CurlyBracesInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.IfInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.ImportInsertHandler;
+import ro.redeul.google.go.lang.completion.insertHandler.InlineCurlyBracesInsertHandler;
+import ro.redeul.google.go.lang.completion.insertHandler.KeywordInsertionHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.LiteralFunctionInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.ReturnInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.VarInsertHandler;
@@ -38,10 +41,13 @@ import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.or;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.getImportedPackagesNames;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keyword;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.packageElement;
@@ -92,25 +98,7 @@ public class GoCompletionContributor extends CompletionContributor {
                 result.addElement(
                     keyword("defer"));
 
-                PsiFile originalFile = parameters.getOriginalFile();
-                for (LookupElement element : getImportedPackagesNames(originalFile)) {
-                    result.addElement(element);
-                }
-
-                // For second basic completion, add all package names to auto completion list.
-                if (parameters.getCompletionType() == CompletionType.BASIC &&
-                    parameters.getInvocationCount() > 1) {
-                    addAllPackageNames(result, originalFile.getProject());
-                }
-            }
-
-            private void addAllPackageNames(CompletionResultSet result, Project project) {
-                for (String pkg : GoNamesCache.getInstance(project).getAllPackages()) {
-                    if (pkg.contains("/")) {
-                        pkg = pkg.substring(pkg.lastIndexOf('/') + 1);
-                    }
-                    result.addElement(packageElement(pkg));
-                }
+                addPackageAutoCompletion(parameters, result);
             }
         };
 
@@ -179,12 +167,22 @@ public class GoCompletionContributor extends CompletionContributor {
                                           ProcessingContext context,
                                           @NotNull CompletionResultSet result) {
                 result.addElement(
-                    keyword("interface", new CurlyBracesInsertHandler()));
+                    keyword("interface", createInterfaceInsertionHandler(params)));
                 result.addElement(
                     keyword("struct", new CurlyBracesInsertHandler()));
 
                 for (GoTypes.Builtin builtin : GoTypes.Builtin.values()) {
-                    result.addElement(keyword(builtin.name().toLowerCase()));
+                    result.addElement(keyword(builtin.name().toLowerCase(), null));
+                }
+
+                addPackageAutoCompletion(params, result);
+            }
+
+            private KeywordInsertionHandler createInterfaceInsertionHandler(CompletionParameters params) {
+                if (isTypeNameInDeclaration(params.getPosition())) {
+                    return new CurlyBracesInsertHandler();
+                } else {
+                    return new InlineCurlyBracesInsertHandler();
                 }
             }
         };
@@ -279,17 +277,10 @@ public class GoCompletionContributor extends CompletionContributor {
                psiElement().withParent(
                    psiElement(GoLiteralIdentifier.class).withParent(
                        psiElement(GoLiteralExpression.class).withParent(
-                           psiElement(GoGoStatement.class)
-                       )
-                   )
-               ),
-               goAndDeferStatementCompletionProvider);
-
-        extend(CompletionType.BASIC,
-               psiElement().withParent(
-                   psiElement(GoLiteralIdentifier.class).withParent(
-                       psiElement(GoLiteralExpression.class).withParent(
-                           psiElement(GoDeferStatement.class)
+                           or(
+                               psiElement(GoDeferStatement.class),
+                               psiElement(GoGoStatement.class)
+                           )
                        )
                    )
                ),
@@ -307,5 +298,33 @@ public class GoCompletionContributor extends CompletionContributor {
     @Override
     public void beforeCompletion(@NotNull CompletionInitializationContext context) {
         context.setDummyIdentifier(DUMMY_IDENTIFIER);
+    }
+
+    private static void addPackageAutoCompletion(CompletionParameters parameters, CompletionResultSet result) {
+        PsiFile originalFile = parameters.getOriginalFile();
+        for (LookupElement element : getImportedPackagesNames(originalFile)) {
+            result.addElement(element);
+        }
+
+        // For second basic completion, add all package names to auto completion list.
+        if (parameters.getCompletionType() == CompletionType.BASIC &&
+                parameters.getInvocationCount() > 1) {
+            addAllPackageNames(result, originalFile.getProject());
+        }
+    }
+
+    private static void addAllPackageNames(CompletionResultSet result, Project project) {
+        for (String pkg : GoNamesCache.getInstance(project).getAllPackages()) {
+            if (pkg.contains("/")) {
+                pkg = pkg.substring(pkg.lastIndexOf('/') + 1);
+            }
+            result.addElement(packageElement(pkg));
+        }
+    }
+
+    private static boolean isTypeNameInDeclaration(PsiElement element) {
+        GoPsiTypeName typeName = GoPsiUtils.findParentOfType(element, GoPsiTypeName.class);
+        return typeName != null && typeName.getParent() instanceof GoTypeSpec;
+
     }
 }

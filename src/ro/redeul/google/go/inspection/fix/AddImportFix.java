@@ -2,6 +2,7 @@ package ro.redeul.google.go.inspection.fix;
 
 import com.intellij.codeInsight.hint.QuestionAction;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -54,7 +55,12 @@ public class AddImportFix implements QuestionAction {
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
-                doAddImport(file, editor, pathToImport);
+                CommandProcessor.getInstance().executeCommand(file.getProject(), new Runnable() {
+                    @Override
+                    public void run() {
+                        doAddImport(file, editor, pathToImport);
+                    }
+                }, null, null);
             }
         });
     }

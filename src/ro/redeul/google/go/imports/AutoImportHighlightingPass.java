@@ -110,10 +110,10 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
             // packages exist
             String expectedPackage = id.isQualified() ? id.getLocalPackageName() : id.getText();
-            List<String> sdkPackages = getPotentialPackages(
-                namesCache.getSdkPackages(), expectedPackage);
-            List<String> projectPackages = getPotentialPackages(
-                namesCache.getProjectPackages(), expectedPackage);
+            List<String> sdkPackages = getPackagesByName(
+                    namesCache.getSdkPackages(), expectedPackage);
+            List<String> projectPackages = getPackagesByName(
+                    namesCache.getProjectPackages(), expectedPackage);
             if (imported.contains(expectedPackage) || sdkPackages.size() == 0 && projectPackages.size() == 0) {
                 continue;
             }
@@ -140,12 +140,12 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         return isTheFirstChild && parent.getParent() instanceof GoSelectorExpression;
     }
 
-    private List<String> getPotentialPackages(Collection<String> allPackages,
-                                              String expectedPackage) {
+    public static List<String> getPackagesByName(Collection<String> allPackages,
+                                                 String expectedName) {
         List<String> packageFiles = new ArrayList<String>();
         for (String p : allPackages) {
-            if (expectedPackage.equals(p) || p.endsWith(
-                "/" + expectedPackage)) {
+            if (expectedName.equals(p) || p.endsWith(
+                "/" + expectedName)) {
                 packageFiles.add(p);
             }
         }

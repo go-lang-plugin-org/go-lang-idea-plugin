@@ -27,6 +27,7 @@ import com.intellij.util.PlatformIcons;
 import com.intellij.util.Processor;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.lang.completion.insertHandler.AutoImportInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.KeywordInsertionHandler;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
@@ -188,6 +189,7 @@ public class GoCompletionUtil {
     public static LookupElement packageElement(String packageName) {
         return LookupElementBuilder.create(packageName)
                                    .setIcon(PlatformIcons.PACKAGE_ICON)
+                                   .setInsertHandler(new AutoImportInsertHandler())
                                    .setTypeText("package");
     }
 

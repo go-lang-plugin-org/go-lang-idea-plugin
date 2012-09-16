@@ -8,4 +8,12 @@ public class GoFunctionsCompletionTestCase extends GoCompletionTestCase{
     public void testLocalFunctionVariants() {
         doTestVariants();
     }
+
+    public void testFunctionParameterType() {
+        doTest();
+    }
+
+    public void testInterfaceFunctionParameterType() {
+        doTest();
+    }
 }
