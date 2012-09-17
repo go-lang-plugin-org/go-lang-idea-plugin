@@ -20,6 +20,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
+import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -150,6 +151,9 @@ public class FunctionDeclarationInspection
         }
 
         lastChild = getPrevSiblingIfItsWhiteSpaceOrComment(lastChild.getPrevSibling());
+        while (lastChild instanceof GoLabeledStatement) {
+            lastChild = ((GoLabeledStatement) lastChild).getStatement();
+        }
         return isNodeOfType(lastChild, GoElementTypes.RETURN_STATEMENT) ||
                isPanicCall(lastChild);
     }

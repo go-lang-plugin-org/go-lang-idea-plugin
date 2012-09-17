@@ -57,11 +57,12 @@
             <ul>
                 <li>[bugfix] NPE in certain cases when creating a test configuration.</li>
                 <li>[bugfix] Fix wrong parsing of method/function parameter declarations.</li>
+                <li>[bugfix] Don't report error for package "C" usage.</li>
                 <li>[enhancement] In structure view, put all struct methods on the top of struct fields.</li>
                 <li>[enhancement] Add auto completion for anonymous fields of structs.</li>
                 <li>[enhancement] Support find usage of types.</li>
                 <li>[enhancement] Add auto completion for variables declared in short var declaration and normal var declaration without explicit type.</li>
-                <li>[enhancement] List all imported package names in basic completion, and all imported and unimported package names in second basic completion.</li>
+                <li>[enhancement] List all imported package names in basic completion, and all imported and unimported package names in second basic completion or no auto completion items are available.</li>
                 <li>[feature] Add graphical test runner panel to show results of tests and benchmarks.</li>
                 <li>[enhancement] Properly propagate the type of vars declared in a for range statement.</li>
             </ul>
