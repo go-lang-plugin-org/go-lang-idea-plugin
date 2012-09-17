@@ -3,6 +3,7 @@ package ro.redeul.google.go.inspection;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.CreateFunctionFix;
@@ -18,6 +19,7 @@ import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionRe
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import static ro.redeul.google.go.GoBundle.message;
@@ -65,7 +67,8 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
             private void tryToResolveReference(PsiElement element, String name) {
                 if (GoPsiUtils.hasHardReferences(element) &&
-                        resolveSafely(element, PsiElement.class) == null) {
+                        resolveSafely(element, PsiElement.class) == null &&
+                        !isCgoUsage(element)) {
 
                     LocalQuickFix[] fixes;
                     if (isExternalFunctionNameIdentifier(element)) {
@@ -88,6 +91,32 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                 }
             }
         }.visitElement(file);
+    }
+
+    private boolean isCgoUsage(PsiElement element) {
+        PsiFile file = element.getContainingFile();
+        if (!(file instanceof GoFile)) {
+            return false;
+        }
+
+        if (element instanceof GoPsiTypeName) {
+            element = ((GoPsiTypeName) element).getIdentifier();
+        }
+
+        if (element instanceof GoLiteralExpression) {
+            element = ((GoLiteralExpression) element).getLiteral();
+        }
+
+        if (!(element instanceof GoLiteralIdentifier)) {
+            return false;
+        }
+
+        GoLiteralIdentifier identifier = (GoLiteralIdentifier) element;
+        if (!"C".equals(identifier.getLocalPackageName())) {
+            return false;
+        }
+
+        return GoFileUtils.isPackageNameImported((GoFile) file, "C");
     }
 
     private static boolean isUnqualifiedTypeName(PsiElement element) {

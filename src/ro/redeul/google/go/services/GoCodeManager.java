@@ -39,8 +39,9 @@ public class GoCodeManager {
 
         for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
             for (GoImportDeclaration declaration : importDeclarations.getDeclarations()) {
-                if ( ! declaration.getVisiblePackageName().equals("") ) {
-                    imports.put(declaration.getVisiblePackageName(), declaration);
+                String visiblePackageName = declaration.getVisiblePackageName();
+                if (!"".equals(visiblePackageName) && !"C".equals(visiblePackageName)) {
+                    imports.put(visiblePackageName, declaration);
                 }
             }
         }

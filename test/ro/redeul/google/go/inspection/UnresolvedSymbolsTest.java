@@ -7,4 +7,5 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
     public void testForWithRange() throws Exception{ doTest(); }
     public void testIota() throws Exception{ doTest(); }
     public void testUndefinedTypeInMethodReceiver() throws Exception { doTest(); }
+    public void testCgo() throws Exception { doTest(); }
 }
