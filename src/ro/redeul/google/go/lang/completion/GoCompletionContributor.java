@@ -1,6 +1,13 @@
 package ro.redeul.google.go.lang.completion;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionInitializationContext;
@@ -310,24 +317,57 @@ public class GoCompletionContributor extends CompletionContributor {
 
     public static void addPackageAutoCompletion(CompletionParameters parameters, CompletionResultSet result) {
         PsiFile originalFile = parameters.getOriginalFile();
+        Set<String> importedPackages = new HashSet<String>();
         for (LookupElement element : getImportedPackagesNames(originalFile)) {
             result.addElement(element);
+            importedPackages.add(element.getLookupString());
         }
 
         // For second basic completion, add all package names to auto completion list.
         if (parameters.getCompletionType() == CompletionType.BASIC &&
                 parameters.getInvocationCount() > 1) {
-            addAllPackageNames(result, originalFile.getProject());
+            addAllPackageNames(result, originalFile.getProject(), importedPackages);
         }
     }
 
     public static void addAllPackageNames(CompletionResultSet result, Project project) {
-        for (String pkg : GoNamesCache.getInstance(project).getAllPackages()) {
-            if (pkg.contains("/")) {
-                pkg = pkg.substring(pkg.lastIndexOf('/') + 1);
-            }
-            result.addElement(packageElement(pkg));
+        addAllPackageNames(result, project, Collections.<String>emptySet());
+    }
+
+    public static void addAllPackageNames(CompletionResultSet result, Project project, Set<String> importedPackages) {
+        Map<String, List<String>> packageMap = getPackageNameToImportPathMapping(project, importedPackages);
+        for (Map.Entry<String, List<String>> e : packageMap.entrySet()) {
+            String tailText = getPackageTailText(e.getValue());
+            result.addElement(packageElement(e.getKey(), tailText));
         }
+    }
+
+    private static String getPackageTailText(List<String> packages) {
+        int size = packages.size();
+        if (size > 1) {
+            return size + " variants...";
+        } else {
+            return packages.get(0);
+        }
+    }
+
+    private static Map<String, List<String>> getPackageNameToImportPathMapping(Project project, Set<String> importedPackages) {
+        Map<String, List<String>> packageMap = new HashMap<String, List<String>>();
+        for (String pkg : GoNamesCache.getInstance(project).getAllPackages()) {
+            String visibleName = pkg;
+            if (visibleName.contains("/")) {
+                visibleName = visibleName.substring(visibleName.lastIndexOf('/') + 1);
+            }
+            if (!importedPackages.contains(visibleName)) {
+                List<String> packages = packageMap.get(visibleName);
+                if (packages == null) {
+                    packages = new ArrayList<String>();
+                    packageMap.put(visibleName, packages);
+                }
+                packages.add(pkg);
+            }
+        }
+        return packageMap;
     }
 
     private static boolean isTypeNameInDeclaration(PsiElement element) {

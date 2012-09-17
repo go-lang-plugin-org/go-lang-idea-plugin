@@ -95,6 +95,15 @@ public class GoFileUtils {
         return declarations;
     }
 
+    public static boolean isPackageNameImported(GoFile file, String packageName) {
+        for (GoImportDeclaration id : getImportDeclarations(file)) {
+            if (id.getVisiblePackageName().equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static List<GoVarDeclaration> getVarDeclarations(@Nullable GoFile psiFile) {
         if (psiFile == null) {
             return Collections.emptyList();

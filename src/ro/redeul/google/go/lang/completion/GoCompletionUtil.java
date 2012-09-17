@@ -30,6 +30,7 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.completion.insertHandler.AutoImportInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.KeywordInsertionHandler;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -187,8 +188,13 @@ public class GoCompletionUtil {
     }
 
     public static LookupElement packageElement(String packageName) {
+        return packageElement(packageName, packageName);
+    }
+
+    public static LookupElement packageElement(String packageName, String tailText) {
         return LookupElementBuilder.create(packageName)
                                    .setIcon(PlatformIcons.PACKAGE_ICON)
+                                   .setTailText(" (" + tailText + ")", true)
                                    .setInsertHandler(new AutoImportInsertHandler())
                                    .setTypeText("package");
     }
@@ -203,7 +209,9 @@ public class GoCompletionUtil {
 
         List<LookupElement> elements = new ArrayList<LookupElement>();
         for (GoImportDeclaration importDeclaration : GoFileUtils.getImportDeclarations(goFile)) {
-            elements.add(packageElement(importDeclaration.getVisiblePackageName()));
+            String visiblePackageName = importDeclaration.getVisiblePackageName();
+            String importPath = importDeclaration.getImportPath().getValue();
+            elements.add(packageElement(visiblePackageName, importPath));
         }
 
         return elements.toArray(new LookupElement[elements.size()]);

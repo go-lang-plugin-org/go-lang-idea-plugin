@@ -35,6 +35,7 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.options.GoSettings;
 
 import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
+import static ro.redeul.google.go.lang.psi.utils.GoFileUtils.isPackageNameImported;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
@@ -177,7 +178,27 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             return false;
         }
 
+        // if caret is on a package name, don't optimize it.
+        if (isCaretOnPackageName()) {
+            return false;
+        }
         return true;
+    }
+
+    private boolean isCaretOnPackageName() {
+        int offset = editor.getCaretModel().getOffset();
+        PsiElement caretElement = file.findElementAt(offset);
+        if (isElementAPackageName(file.findElementAt(offset))) {
+            return true;
+        }
+
+        return offset > 0 && isElementAPackageName(file.findElementAt(offset - 1));
+    }
+
+    private boolean isElementAPackageName(PsiElement element) {
+        return element != null &&
+                !isWhiteSpaceNode(element) &&
+                isPackageNameImported(file, element.getText());
     }
 
     /**
