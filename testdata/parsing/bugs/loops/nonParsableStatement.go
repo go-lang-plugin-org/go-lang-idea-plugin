@@ -22,9 +22,9 @@ Go file
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       ExpressionStmtImpl
-	PsiElement([)('[')
-	PsiElement(])(']')
-	PsiErrorElement:type declaration expected
-	  <empty list>
+        PsiElement([)('[')
+        PsiElement(])(']')
+        PsiErrorElement:type declaration expected
+          <empty list>
       PsiWhiteSpace('\n')
       PsiElement(})('}')
