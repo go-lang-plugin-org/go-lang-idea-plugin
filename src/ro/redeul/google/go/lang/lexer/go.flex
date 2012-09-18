@@ -230,7 +230,7 @@ mESCAPES = [abfnrtv]
 "'\\U" {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} {mHEX_DIGIT} "'"
                                                         { yybegin(MAYBE_SEMI); return litCHAR; }
 
-"`" [^`]* "`"                             { yybegin(MAYBE_SEMI); return litSTRING; }
+"`" [^`]* "`"?                            { yybegin(MAYBE_SEMI); return litSTRING; }
 {mSTR}
     (
         [^\"\\\n\r] | "\\" ("\\" | {mSTR} | {mESCAPES} | [0-8xuU] )
