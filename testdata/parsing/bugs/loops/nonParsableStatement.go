@@ -2,7 +2,7 @@ package main
 func main() {
     []
 }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -22,8 +22,9 @@ Go file
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       ExpressionStmtImpl
-        TypeSliceImpl
-          PsiElement([)('[')
-          PsiElement(])(']')
+	PsiElement([)('[')
+	PsiElement(])(']')
+	PsiErrorElement:type declaration expected
+	  <empty list>
       PsiWhiteSpace('\n')
       PsiElement(})('}')

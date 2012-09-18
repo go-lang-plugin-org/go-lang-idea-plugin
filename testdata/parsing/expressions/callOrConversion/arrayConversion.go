@@ -1,7 +1,7 @@
 package main
 
 func main() {
-        resp := []byte("dafadf")
+    resp := []byte("dafadf")
 }
 /**-----
 Go file
@@ -21,7 +21,7 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace('\n')
-      PsiWhiteSpace('\t')
+      PsiWhiteSpace('    ')
       ShortVarStmtImpl
         LiteralIdentifierImpl
           PsiElement(IDENTIFIER)('resp')
