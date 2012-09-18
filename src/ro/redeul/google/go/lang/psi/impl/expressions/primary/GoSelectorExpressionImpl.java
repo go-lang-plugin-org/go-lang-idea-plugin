@@ -20,6 +20,7 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeInterface;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePointer;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeStruct;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
@@ -166,6 +167,13 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
                 new SelectorOfStructFieldReference(this),
                 new MethodReference(this)
             };
+
+        if (x instanceof GoUnderlyingTypePointer) {
+            return new PsiReference[]{
+                new SelectorOfStructFieldReference(this),
+                new MethodReference(this)
+            };
+        }
 
         if (type instanceof GoTypeName) {
             return new PsiReference[]{

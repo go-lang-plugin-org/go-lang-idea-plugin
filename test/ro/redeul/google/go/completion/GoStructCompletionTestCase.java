@@ -21,4 +21,7 @@ public class GoStructCompletionTestCase extends GoCompletionTestCase{
         doTestVariants();
     }
 
+    public void testMemberOfTypePointerCompletion() {
+        doTestVariants();
+    }
 }
