@@ -1,9 +1,20 @@
 package ro.redeul.google.go.completion;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.AdapterProcessor;
+import com.intellij.util.CommonProcessors;
+import com.intellij.util.FilteringProcessor;
+import com.intellij.util.Function;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 
 public abstract class GoCompletionTestCase
@@ -13,9 +24,47 @@ public abstract class GoCompletionTestCase
         return "psi/completion/";
     }
 
-
     protected void doTestVariants() {
-        myFixture.configureByFile(getTestName(false) + ".go");
+
+        final VirtualFile testRoot =
+            LocalFileSystem.getInstance()
+                           .findFileByPath(getTestDataPath() + File.separator + getTestName(false));
+
+        if (testRoot != null && testRoot.isDirectory()) {
+
+            List<String> files = new LinkedList<String>();
+
+            VfsUtil.processFilesRecursively(
+                testRoot,
+                new FilteringProcessor<VirtualFile>(
+                    new Condition<VirtualFile>() {
+                        @Override
+                        public boolean value(VirtualFile file) {
+                            return !file.isDirectory() && !file.getName()
+                                       .equals(getTestName(false) + ".go");
+                        }
+                    },
+                    new AdapterProcessor<VirtualFile, String>(
+                        new CommonProcessors.CollectProcessor<String>(files),
+                        new Function<VirtualFile, String>() {
+                            @Override
+                            public String fun(VirtualFile virtualFile) {
+                                return VfsUtil.getRelativePath(virtualFile,
+                                                               testRoot.getParent(),
+                                                               File.separatorChar);
+                            }
+                        }
+                    )
+                ));
+
+            files.add(getTestName(false) + File.separator + getTestName(false) + ".go");
+
+            Collections.reverse(files);
+            myFixture.configureByFiles(files.toArray(new String[files.size()]));
+        } else {
+            myFixture.configureByFile(getTestName(false) + ".go");
+        }
+
         myFixture.completeBasic();
         String fileText = myFixture.getFile().getText();
 
