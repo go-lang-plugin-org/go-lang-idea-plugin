@@ -23,7 +23,7 @@ import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import static ro.redeul.google.go.GoBundle.message;
-import static ro.redeul.google.go.inspection.fix.CreateFunctionFix.isExternalFunctionNameIdentifier;
+import static ro.redeul.google.go.inspection.fix.CreateFunctionFix.isFunctionNameIdentifier;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
@@ -71,7 +71,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                         !isCgoUsage(element)) {
 
                     LocalQuickFix[] fixes;
-                    if (isExternalFunctionNameIdentifier(element)) {
+                    if (isFunctionNameIdentifier(element)) {
                         fixes = new LocalQuickFix[]{new CreateFunctionFix(element)};
                     } else if (isLocalVariableIdentifier(element)) {
                         fixes = new LocalQuickFix[]{new CreateLocalVariableFix(element),

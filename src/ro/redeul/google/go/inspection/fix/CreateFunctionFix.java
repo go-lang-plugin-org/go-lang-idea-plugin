@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -43,7 +44,7 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
                        @Nullable("is null when called from inspection") final Editor editor,
                        @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
         final PsiElement e = startElement;
-        if (!e.getContainingFile().equals(file) || !isExternalFunctionNameIdentifier(e)) {
+        if (!e.getContainingFile().equals(file) || !isFunctionNameIdentifier(e)) {
             return;
         }
 
@@ -75,17 +76,15 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
         });
     }
 
-    public static boolean isExternalFunctionNameIdentifier(PsiElement e) {
-
-        if (!psiIsA(e, GoLiteralIdentifier.class))
-            return false;
-
-        GoLiteralIdentifier identifier = (GoLiteralIdentifier)e;
-        if (identifier.isQualified())
-            return false;
-
-        e = e.getParent();
+    public static boolean isFunctionNameIdentifier(PsiElement e) {
         if (!psiIsA(e, GoLiteralExpression.class))
+            return false;
+
+        GoLiteral literal = ((GoLiteralExpression) e).getLiteral();
+        if (!(literal instanceof GoLiteralIdentifier))
+            return false;
+
+        if (((GoLiteralIdentifier) literal).isQualified())
             return false;
 
         if (!psiIsA(e.getParent(), GoCallOrConvExpression.class))
