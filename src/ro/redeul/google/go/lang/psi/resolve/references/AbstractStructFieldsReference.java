@@ -35,7 +35,7 @@ public abstract class AbstractStructFieldsReference
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        return false;
+        return getElement().getManager().areElementsEquivalent(resolve(), element);
     }
 
     @NotNull
