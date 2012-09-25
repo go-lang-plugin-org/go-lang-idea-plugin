@@ -231,7 +231,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
 
     @Override
     public String getPresentationTypeText() {
-        return "";
+        return "func";
     }
 
     //    @Override

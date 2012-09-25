@@ -21,10 +21,12 @@ func main() {
 	var x Embedding
 	x.<caret>
 }
-// missing are emPointerA
-// missing are emPointerB
 /**---
 a
 b
+emA
+emB
 Embedded
 EmbeddedPointer
+emPointerA
+emPointerB

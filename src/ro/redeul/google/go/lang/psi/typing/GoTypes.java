@@ -157,4 +157,25 @@ public class GoTypes {
            visitFunctionType(declaration);
         }
     }
+
+    public static GoTypeStruct resolveToStruct(GoPsiType type) {
+        return resolveToStruct(fromPsiType(type));
+    }
+
+    public static GoTypeStruct resolveToStruct(GoType type) {
+        while (type != null && !(type instanceof GoTypeStruct)) {
+            if (type instanceof GoTypePointer) {
+                type = ((GoTypePointer) type).getTargetType();
+            } else if (type instanceof GoTypeName) {
+                type = ((GoTypeName) type).getDefinition();
+            } else {
+                type = null;
+            }
+        }
+
+        if (type == null)
+            return null;
+
+        return (GoTypeStruct) type;
+    }
 }

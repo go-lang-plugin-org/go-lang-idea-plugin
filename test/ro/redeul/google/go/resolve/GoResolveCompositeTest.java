@@ -60,4 +60,20 @@ public class GoResolveCompositeTest extends GoPsiResolveTestCase {
     public void testExpressionKey() throws Exception {
         doTest();
     }
+
+    public void testPromotedAnonymousField1() throws Exception {
+        doTest();
+    }
+
+    public void testPromotedAnonymousField2() throws Exception {
+        doTest();
+    }
+
+    public void testPromotedAnonymousField3() throws Exception {
+        doTest();
+    }
+
+    public void testPromotedAnonymousField4() throws Exception {
+        doTest();
+    }
 }

@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.types;
 
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 
@@ -12,6 +13,9 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 public interface GoPsiTypeStruct extends GoPsiType {
 
     GoTypeStructField[] getFields();
+
+    @NotNull
+    GoStructPromotedFields getPromotedFields();
 
     GoTypeStructAnonymousField[] getAnonymousFields();
 }

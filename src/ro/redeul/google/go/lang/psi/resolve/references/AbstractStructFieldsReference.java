@@ -10,9 +10,13 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
+import ro.redeul.google.go.lang.psi.types.GoStructPromotedFields;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public abstract class AbstractStructFieldsReference
     <
@@ -44,17 +48,28 @@ public abstract class AbstractStructFieldsReference
 
         List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
 
-        for (GoTypeStructField field : typeStruct.getPsiType().getFields()) {
+        GoPsiTypeStruct psiType = typeStruct.getPsiType();
+        for (GoTypeStructField field : psiType.getFields()) {
             for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                 variants.add(field.getCompletionPresentation(identifier));
             }
         }
 
-        for (GoTypeStructAnonymousField field : typeStruct.getPsiType()
-                                                          .getAnonymousFields()) {
+        for (GoTypeStructAnonymousField field : psiType.getAnonymousFields()) {
             variants.add(field.getCompletionPresentation());
         }
 
+        GoStructPromotedFields promotedFields = psiType.getPromotedFields();
+        for (GoLiteralIdentifier identifier : promotedFields.getNamedFields()) {
+            GoTypeStructField field = findParentOfType(identifier, GoTypeStructField.class);
+            if (field != null) {
+                variants.add(field.getCompletionPresentation(identifier));
+            }
+        }
+
+        for (GoTypeStructAnonymousField field : promotedFields.getAnonymousFields()) {
+            variants.add(field.getCompletionPresentation());
+        }
         return variants.toArray(new LookupElementBuilder[variants.size()]);
     }
 

@@ -3,8 +3,10 @@ package ro.redeul.google.go.lang.psi.impl.types;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
+import ro.redeul.google.go.lang.psi.impl.types.struct.PromotedFieldsDiscover;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
+import ro.redeul.google.go.lang.psi.types.GoStructPromotedFields;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
@@ -33,6 +35,13 @@ public class GoPsiTypeStructImpl extends GoPsiPackagedElementBase implements
     public GoTypeStructField[] getFields() {
         return findChildrenByClass(GoTypeStructField.class);
     }
+
+    @NotNull
+    @Override
+    public GoStructPromotedFields getPromotedFields() {
+        return new PromotedFieldsDiscover(this).getPromotedFields();
+    }
+
 
     @Override
     public GoTypeStructAnonymousField[] getAnonymousFields() {
