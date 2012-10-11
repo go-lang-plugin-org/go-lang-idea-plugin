@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.visitors;
 
+import java.util.HashSet;
 import java.util.Map;
 
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
@@ -43,7 +44,7 @@ public class GoImportUsageCheckingVisitor extends GoRecursiveElementVisitor {
     private void checkQualifiedIdentifier(GoLiteralIdentifier identifier) {
         if ( identifier != null && identifier.isQualified() ) {
             if ( imports.remove(identifier.getLocalPackageName()) == null ) {
-                for (String s : imports.keySet()) {
+                for (String s : new HashSet<String>(imports.keySet())) {
                     if (s.toLowerCase()
                          .equals(identifier.getLocalPackageName()))  {
                         imports.remove(s);
