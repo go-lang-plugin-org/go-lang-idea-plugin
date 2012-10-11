@@ -15,4 +15,5 @@ public interface GoTypeNameDeclaration extends GoPsiElement, PsiNamedElement {
 
     GoTypeSpec getTypeSpec();
 
+    String getCanonicalName();
 }

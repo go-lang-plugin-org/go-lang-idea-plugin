@@ -104,6 +104,11 @@ public class GoTypeNameDeclarationImpl
     }
 
     @Override
+    public String getCanonicalName() {
+        return ((GoFile)getContainingFile()).getPackageImportPath() + ":" + getName();
+    }
+
+    @Override
     public String getPresentationText() {
         return "";
     }

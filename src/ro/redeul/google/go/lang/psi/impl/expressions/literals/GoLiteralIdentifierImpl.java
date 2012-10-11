@@ -283,6 +283,9 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             return getUnqualifiedName();
 
         String packageName = getLocalPackageName();
+        if (packageName == null) {
+            packageName = "";
+        }
 
         PsiFile file = getContainingFile();
         if (file == null || !(file instanceof GoFile)) {
@@ -293,8 +296,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         GoImportDeclarations[] goImportDeclarations = goFile.getImportDeclarations();
         for (GoImportDeclarations importDeclarations : goImportDeclarations) {
             for (GoImportDeclaration importDeclaration : importDeclarations.getDeclarations()) {
-                if (importDeclaration.getVisiblePackageName()
-                                     .equals(packageName))
+                if (importDeclaration.getVisiblePackageName().toLowerCase()
+                                     .equals(packageName.toLowerCase()))
                     return String.format("%s:%s",
                                          importDeclaration.getImportPath()
                                                           .getValue(),
