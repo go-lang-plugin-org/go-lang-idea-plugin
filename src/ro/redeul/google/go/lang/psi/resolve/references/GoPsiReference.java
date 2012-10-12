@@ -98,7 +98,7 @@ public abstract class GoPsiReference<
                                          targetQualifiedName);
     }
 
-    protected boolean matchesVisiblePackageName(String currentPackageName,
+    public boolean matchesVisiblePackageName(String currentPackageName,
                                                 PsiElement element,
                                                 String targetQualifiedName) {
         String visiblePackageName =

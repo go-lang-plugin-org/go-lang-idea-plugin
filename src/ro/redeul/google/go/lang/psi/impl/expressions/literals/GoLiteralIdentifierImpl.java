@@ -23,8 +23,8 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.resolve.references.CompositeElementOfStructFieldReference;
-import ro.redeul.google.go.lang.psi.resolve.references.GoReturnVariableReference;
 import ro.redeul.google.go.lang.psi.resolve.references.LabelReference;
+import ro.redeul.google.go.lang.psi.resolve.references.ShortVarDeclarationReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -188,9 +188,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 //        if (BuiltinCallOrConversionReference.MATCHER.accepts(this))
 //            return refs(new BuiltinCallOrConversionReference(this));
 
-        if (GoReturnVariableReference.MATCHER.accepts(this))
-            return refs(new GoReturnVariableReference(this));
-
         if (LabelReference.MATCHER.accepts(this))
             return refs(new LabelReference(this));
 
@@ -212,6 +209,10 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             return refs(
                 new VarOrConstReference(this)
             );
+
+        if (ShortVarDeclarationReference.MATCHER.accepts(this)) {
+            return refs(new ShortVarDeclarationReference(this));
+        }
 
         if (VarOrConstReference.MATCHER.accepts(this))
             return refs(

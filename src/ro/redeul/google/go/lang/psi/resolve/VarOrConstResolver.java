@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.resolve;
 
+import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -84,5 +85,24 @@ public class VarOrConstResolver extends
                     return;
             }
         }
+    }
+
+    @Override
+    protected boolean checkReference(PsiElement element) {
+        if (getDeclaration() != null) {
+            return false;
+        }
+
+        if (!(element instanceof GoLiteralIdentifier)) {
+            return false;
+        }
+
+        if (ShortVarDeclarationResolver.resolve((GoLiteralIdentifier) element) != null) {
+            return false;
+        }
+
+        String currentPackageName = getState().get(GoResolveStates.VisiblePackageName);
+        VarOrConstReference reference = getReference();
+        return reference.matchesVisiblePackageName(currentPackageName, element, reference.getElement().getName());
     }
 }

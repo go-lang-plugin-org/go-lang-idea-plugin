@@ -61,6 +61,10 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
+    public void testShortVarRedeclaration() throws Exception {
+        doTest();
+    }
+
     public void testShortVarDeclarationFromBlock() throws Exception {
         doTest();
     }

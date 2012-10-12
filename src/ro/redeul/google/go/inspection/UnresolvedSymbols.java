@@ -11,12 +11,15 @@ import ro.redeul.google.go.inspection.fix.CreateGlobalVariableFix;
 import ro.redeul.google.go.inspection.fix.CreateLocalVariableFix;
 import ro.redeul.google.go.inspection.fix.CreateTypeFix;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
@@ -41,6 +44,18 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                                boolean isOnTheFly) {
 
         new GoRecursiveElementVisitor() {
+            @Override
+            public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
+                visitVarDeclaration(declaration);
+            }
+
+            @Override
+            public void visitVarDeclaration(GoVarDeclaration declaration) {
+                for (GoExpr expr : declaration.getExpressions()) {
+                    visitElement(expr);
+                }
+            }
+
             @Override
             public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
                 if (!identifier.isIota() && !identifier.isBlank()) {

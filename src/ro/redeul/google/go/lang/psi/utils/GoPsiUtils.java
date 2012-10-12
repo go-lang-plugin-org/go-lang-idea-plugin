@@ -35,6 +35,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
@@ -421,6 +422,10 @@ public class GoPsiUtils {
     public static SearchScope getLocalElementSearchScope(GoPsiElement element) {
         GoStatement statement = findParentOfType(element, GoStatement.class);
         if (statement == null) {
+            GoFunctionDeclaration functionDeclaration = findParentOfType(element, GoFunctionDeclaration.class);
+            if (functionDeclaration != null) {
+                return new LocalSearchScope(functionDeclaration);
+            }
             return new LocalSearchScope(element);
         }
 
