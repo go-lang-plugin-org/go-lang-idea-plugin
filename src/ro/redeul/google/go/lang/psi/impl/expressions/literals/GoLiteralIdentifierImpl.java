@@ -321,7 +321,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     @Override
     public SearchScope getUseScope() {
         if (GoElementPatterns.GLOBAL_CONST_DECL.accepts(this) ||
-            GoElementPatterns.GLOBAL_VAR_DECL.accepts(this)) {
+            GoElementPatterns.GLOBAL_VAR_DECL.accepts(this) ||
+            GoElementPatterns.METHOD_DECLARATION.accepts(this)) {
             return getGlobalElementSearchScope(this, getName());
         }
 

@@ -8,6 +8,8 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import ro.redeul.google.go.GoFileBasedPsiTestCase;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -28,6 +30,7 @@ public class GoUsageTest extends GoFileBasedPsiTestCase {
     public void testFunctionParameter() throws Exception { doTest(); }
     public void testFunctionResult() throws Exception { doTest(); }
     public void testMethodReceiver() throws Exception { doTest(); }
+    public void testMethod() throws Exception { doTest(); }
 
     private PsiElement def = null;
     private final Set<PsiElement> refSet = new HashSet<PsiElement>();
@@ -79,6 +82,10 @@ public class GoUsageTest extends GoFileBasedPsiTestCase {
             PsiElement refElement = reference.getElement();
             int offset = refElement.getTextOffset();
             if (expectedElements.remove(offset) == null) {
+                if (isReferenceToIdentifierOfSelector(expectedElements, refElement)) {
+                    continue;
+                }
+
                 fail(getElementInfo(refElement) + " unexpected reference!");
             }
         }
@@ -92,6 +99,19 @@ public class GoUsageTest extends GoFileBasedPsiTestCase {
             sb.append(getElementInfo(psiElement)).append("\n");
         }
         fail(sb.toString());
+    }
+
+    private boolean isReferenceToIdentifierOfSelector(Map<Integer, PsiElement> expectedElements,
+                                                      PsiElement refElement) {
+        if (refElement instanceof GoSelectorExpression) {
+            GoLiteralIdentifier identifier = ((GoSelectorExpression) refElement).getIdentifier();
+            if (identifier != null) {
+                if (expectedElements.remove(identifier.getTextOffset()) != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private Collection<PsiReference> findReferenceOf(PsiElement element) {

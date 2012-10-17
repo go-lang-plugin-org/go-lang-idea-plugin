@@ -13,6 +13,7 @@ import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
@@ -39,6 +40,10 @@ public class GoElementPatterns {
                     .withParent(
                         psiElement(GoVarDeclarations.class)
                             .withParent(psiElement(GoFile.class))));
+
+    public static final ElementPattern<GoLiteralIdentifier> METHOD_DECLARATION =
+        psiElement(GoLiteralIdentifier.class)
+            .withParent(GoMethodDeclaration.class);
 
     public static final ElementPattern<GoLiteralIdentifier> VAR_DECLARATION =
         psiElement(GoLiteralIdentifier.class)

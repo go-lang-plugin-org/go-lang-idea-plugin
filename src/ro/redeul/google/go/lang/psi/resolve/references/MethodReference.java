@@ -89,42 +89,7 @@ public class MethodReference
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-
-        if (!(element instanceof GoMethodDeclaration))
-            return false;
-
-        GoMethodDeclaration declaration = (GoMethodDeclaration) element;
-
-        GoPsiType receiverType = declaration.getMethodReceiver().getType();
-
-        if (receiverType == null)
-            return false;
-
-        if (receiverType instanceof GoPsiTypePointer) {
-            receiverType = ((GoPsiTypePointer) receiverType).getTargetType();
-        }
-
-        if (!(receiverType instanceof GoPsiTypeName))
-            return false;
-
-        GoPsiTypeName methodTypeName = (GoPsiTypeName) receiverType;
-
-        Set<GoTypeName> receiverTypes = resolveBaseReceiverTypes();
-
-        for (GoTypeName type : receiverTypes) {
-            if ( type.getName().equals(methodTypeName.getName())) {
-                String methodName = declaration.getFunctionName();
-                GoLiteralIdentifier identifier = getElement().getIdentifier();
-                if (identifier != null ) {
-                    String referenceName = identifier.getUnqualifiedName();
-
-                    return referenceName.contains(DUMMY_IDENTIFIER) ||
-                        referenceName.equals(methodName);
-                }
-            }
-        }
-
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return getElement().getManager().areElementsEquivalent(resolve(), element);
     }
 
 
@@ -159,7 +124,7 @@ public class MethodReference
     }
 
     @NotNull
-    private Set<GoTypeName> resolveBaseReceiverTypes() {
+    public Set<GoTypeName> resolveBaseReceiverTypes() {
         if ( receiverTypes != null )
             return receiverTypes;
 
