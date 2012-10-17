@@ -31,6 +31,7 @@ public class GoUsageTest extends GoFileBasedPsiTestCase {
     public void testFunctionResult() throws Exception { doTest(); }
     public void testMethodReceiver() throws Exception { doTest(); }
     public void testMethod() throws Exception { doTest(); }
+    public void testFunction() throws Exception { doTest(); }
 
     private PsiElement def = null;
     private final Set<PsiElement> refSet = new HashSet<PsiElement>();

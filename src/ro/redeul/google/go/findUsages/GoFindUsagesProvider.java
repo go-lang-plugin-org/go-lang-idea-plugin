@@ -34,7 +34,6 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
 
     public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
         return psiElement instanceof GoTypeNameDeclaration ||
-                psiElement instanceof GoFunctionDeclaration ||
                 psiElement instanceof GoLiteralIdentifier;
     }
 
@@ -45,7 +44,6 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
     @NotNull
     public String getType(@NotNull PsiElement element) {
         if (element instanceof GoTypeNameDeclaration) return "type";
-        if (element instanceof GoFunctionDeclaration) return "function";
         if (element instanceof GoLiteralIdentifier) return "variable";
 //        if (element instanceof PsiMethod) return "method";
 //        if (element instanceof PsiField) return "field";

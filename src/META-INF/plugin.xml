@@ -61,7 +61,7 @@
                 <li>[enhancement] List all promoted fields in auto completion list.</li>
                 <li>[enhancement] In structure view, put all struct methods on the top of struct fields.</li>
                 <li>[enhancement] Add auto completion for anonymous fields of structs.</li>
-                <li>[enhancement] Support find usage of types, struct fields, function parameters, function results, method receiver and methods.</li>
+                <li>[enhancement] Support find usage of types, struct fields, function parameters, function results, method receiver, functions and methods.</li>
                 <li>[enhancement] Add auto completion for variables declared in short var declaration and normal var declaration without explicit type.</li>
                 <li>[enhancement] List all imported package names in basic completion, and all imported and unimported package names in second basic completion or no auto completion items are available.</li>
                 <li>[feature] Add graphical test runner panel to show results of tests and benchmarks.</li>

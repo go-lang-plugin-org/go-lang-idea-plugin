@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
@@ -44,6 +45,10 @@ public class GoElementPatterns {
     public static final ElementPattern<GoLiteralIdentifier> METHOD_DECLARATION =
         psiElement(GoLiteralIdentifier.class)
             .withParent(GoMethodDeclaration.class);
+
+    public static final ElementPattern<GoLiteralIdentifier> FUNCTION_DECLARATION =
+            psiElement(GoLiteralIdentifier.class)
+                    .withParent(GoFunctionDeclaration.class);
 
     public static final ElementPattern<GoLiteralIdentifier> VAR_DECLARATION =
         psiElement(GoLiteralIdentifier.class)
