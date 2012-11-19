@@ -122,7 +122,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
             return mappings.get(relativePath);
         }
 
-        return null;
+        return relativePath;
     }
 
     private String getPackageImportPathFromProject(Project project, ProjectFileIndex projectIndex, VirtualFile virtualFile) {

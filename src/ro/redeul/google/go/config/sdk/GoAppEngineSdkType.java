@@ -173,7 +173,6 @@ public class GoAppEngineSdkType extends SdkType {
         return GoIcons.GO_ICON_16x16;
     }
 
-    @Override
     public Icon getIconForExpandedTreeNode() {
         return GoIcons.GO_ICON_16x16;
     }

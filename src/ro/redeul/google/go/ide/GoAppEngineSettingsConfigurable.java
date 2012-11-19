@@ -1,12 +1,12 @@
 package ro.redeul.google.go.ide;
 
+import javax.swing.*;
+
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
-
-import javax.swing.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -35,7 +35,6 @@ public class GoAppEngineSettingsConfigurable implements SearchableConfigurable  
         return "Go App engine settings";
     }
 
-    @Override
     public Icon getIcon() {
         return GoIcons.GO_ICON_16x16;
     }

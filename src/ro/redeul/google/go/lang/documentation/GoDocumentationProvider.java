@@ -5,9 +5,12 @@ import java.util.List;
 import com.intellij.lang.documentation.CodeDocumentationProvider;
 import com.intellij.lang.documentation.ExternalDocumentationProvider;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
@@ -143,5 +146,10 @@ public class GoDocumentationProvider implements CodeDocumentationProvider,
     @Override
     public void promptToConfigureDocumentation(PsiElement element) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Nullable
+    public Pair<PsiElement, PsiComment> parseContext(@NotNull PsiElement startPoint) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

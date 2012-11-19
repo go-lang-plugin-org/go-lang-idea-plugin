@@ -46,14 +46,14 @@ public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<Go
     }
 
     public void checkValid() throws ConfigurationException {
-	if (version != GoSdkData.LATEST_VERSION) {
-	    throw new ConfigurationException("SDK configuration needs to be upgraded");
-	}
+        if (version != GoSdkData.LATEST_VERSION) {
+            throw new ConfigurationException(
+                "SDK configuration needs to be upgraded");
+        }
     }
 
-    @Override
     public void checkValid(SdkModel sdkModel) throws ConfigurationException {
-	checkValid();
+        checkValid();
     }
 
     public GoSdkData getState() {

@@ -41,7 +41,6 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
         return super.clone();
     }
 
-    @Override
     public void checkValid(SdkModel sdkModel) throws ConfigurationException {
         //
     }

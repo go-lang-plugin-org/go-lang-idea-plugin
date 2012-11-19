@@ -3,7 +3,7 @@
     <module name="google-go-language" />
     <option name="VM_PARAMETERS" value="-Xmx1024m -XX:MaxPermSize=256m" />
     <option name="PROGRAM_PARAMETERS" value="" />
-    <log_file path="$USER_HOME$/Library/Caches/IntelliJIdea11/plugins-sandbox/system/log/idea.log" checked="true" skipped="true" show_all="false" alias="IDEA LOG" />
+    <log_file path="$USER_HOME$/Library/Caches/IntelliJIdea12/plugins-sandbox/system/log/idea.log" checked="true" skipped="true" show_all="false" alias="IDEA LOG" />
     <RunnerSettings RunnerId="Debug">
       <option name="DEBUG_PORT" value="60790" />
       <option name="TRANSPORT" value="0" />

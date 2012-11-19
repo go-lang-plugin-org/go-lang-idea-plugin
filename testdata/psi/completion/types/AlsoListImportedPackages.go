@@ -9,3 +9,4 @@ func main() {
 float32
 float64
 fmt
+interface

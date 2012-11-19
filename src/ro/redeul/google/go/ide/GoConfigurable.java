@@ -45,7 +45,6 @@ public class GoConfigurable implements SearchableConfigurable {
         return "Go Settings";
     }
 
-    @Override
     public Icon getIcon() {
         return GoIcons.GO_ICON_16x16;
     }

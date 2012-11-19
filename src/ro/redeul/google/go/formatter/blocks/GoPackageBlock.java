@@ -19,8 +19,11 @@ class GoPackageBlock extends GoBlock {
 
     @Override
     public Spacing getSpacing(Block child1, Block child2) {
-        if ( ((GoBlock)child1).getNode().getElementType() == GoTokenTypes.kPACKAGE )  {
-            return BASIC_SPACING;
+        if ( child1 != null && child1 instanceof GoBlock ) {
+            GoBlock block1 = (GoBlock) child1;
+            if ( block1.getNode() != null && block1.getNode().getElementType() == GoTokenTypes.kPACKAGE) {
+                return BASIC_SPACING;
+            }
         }
 
         return EMPTY_SPACING;

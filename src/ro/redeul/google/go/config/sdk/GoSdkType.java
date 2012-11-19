@@ -86,7 +86,6 @@ public class GoSdkType extends SdkType {
         return GoIcons.GO_ICON_16x16;
     }
 
-    @Override
     public Icon getIconForExpandedTreeNode() {
         return GoIcons.GO_ICON_16x16;
     }
@@ -158,8 +157,8 @@ public class GoSdkType extends SdkType {
         final SdkModificator sdkModificator = sdk.getSdkModificator();
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             public void run() {
-                sdkModificator.addRoot(librariesRoot, OrderRootType.CLASSES);
                 sdkModificator.addRoot(sourcesRoot, OrderRootType.CLASSES);
+                sdkModificator.addRoot(librariesRoot, OrderRootType.CLASSES);
                 sdkModificator.addRoot(sourcesRoot, OrderRootType.SOURCES);
             }
         });
