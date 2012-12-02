@@ -81,4 +81,4 @@ on GitHub: <http://github.com/mtoader/google-go-lang-idea-plugin/issues>
 ## Contributing
 
 If you want to contribute to this effort you should read the following page:
-[how to contribute](contributing.md).
+[how to contribute](https://github.com/mtoader/google-go-lang-idea-plugin/blob/master/contributing.md).
