@@ -7,6 +7,7 @@ import javax.swing.*;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
+import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
@@ -64,7 +65,8 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                 GoBundle.message("color." + GoSyntaxHighlighter.VARIABLE_ID),
                 GoSyntaxHighlighter.VARIABLE),
             new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.GLOBAL_VARIABLE_ID),
+                GoBundle.message(
+                    "color." + GoSyntaxHighlighter.GLOBAL_VARIABLE_ID),
                 GoSyntaxHighlighter.GLOBAL_VARIABLE),
         };
 
@@ -91,7 +93,8 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     @NotNull
     public SyntaxHighlighter getHighlighter() {
         final SyntaxHighlighter highlighter =
-            SyntaxHighlighter.PROVIDER.create(GoFileType.INSTANCE, null, null);
+            SyntaxHighlighterFactory.getSyntaxHighlighter(
+                GoFileType.INSTANCE, null, null);
 
         assert highlighter != null;
         return highlighter;

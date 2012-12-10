@@ -11,6 +11,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
 
@@ -58,7 +59,7 @@ public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
         }
 
         final PsiFileFactory factory = PsiFileFactory.getInstance(directory.getProject());
-        final PsiFile file = factory.createFileFromText(fileName, text);
+        final PsiFile file = factory.createFileFromText(fileName, GoFileType.INSTANCE, text);
 
         return (GoFile) directory.add(file);
     }

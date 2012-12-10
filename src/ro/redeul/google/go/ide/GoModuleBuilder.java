@@ -7,6 +7,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -50,8 +51,8 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
         throws ConfigurationException {
         super.setupRootModel(modifiableRootModel);
 
-        modifiableRootModel.inheritSdk();
-        modifiableRootModel.commit();
+//        modifiableRootModel.inheritSdk();
+//        modifiableRootModel.commit();
 
 //        ProjectRootManager projectRootManager = ProjectRootManager.getInstance(modifiableRootModel.getProject());
 //        projectRootManager.setProjectSdk(getModuleJdk());
@@ -67,4 +68,10 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
     public boolean isSuitableSdk(Sdk sdk) {
         return sdk.getSdkType() == GoSdkType.getInstance();
     }
+
+    @Override
+    public boolean isSuitableSdkType(SdkTypeId sdkType) {
+        return sdkType instanceof GoSdkType;
+    }
+
 }

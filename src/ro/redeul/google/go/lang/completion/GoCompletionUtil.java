@@ -30,7 +30,6 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.completion.insertHandler.AutoImportInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.KeywordInsertionHandler;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -79,7 +78,10 @@ public class GoCompletionUtil {
             VfsUtil.processFilesRecursively(root, processor);
 
             for (VirtualFile child : processor.getResults()) {
-                completions.add(VfsUtil.getRelativePath(child, root, '/').replaceAll(".a$", ""));
+                String relativePath = VfsUtil.getRelativePath(child, root, '/');
+                if (relativePath != null) {
+                    completions.add(relativePath.replaceAll(".a$", ""));
+                }
             }
         }
 
@@ -163,11 +165,20 @@ public class GoCompletionUtil {
             LookupElementBuilder elementBuilder = null;
 
             if ( importPath.startsWith("./") ) {
-                elementBuilder = LookupElementBuilder.create(localPackage).setBold().setTypeText("via project");
+                elementBuilder = LookupElementBuilder.create(localPackage)
+                                                     .bold()
+                                                     .withTypeText(
+                                                         "via project");
             } else if ( importPath.startsWith(".") ) {
-                elementBuilder = LookupElementBuilder.create("/" + localPackage).setBold().setTypeText("via project");
+                elementBuilder = LookupElementBuilder.create("/" + localPackage)
+                                                     .bold()
+                                                     .withTypeText(
+                                                         "via project");
             } else {
-                elementBuilder = LookupElementBuilder.create("./" + localPackage).setBold().setTypeText("via project");
+                elementBuilder = LookupElementBuilder.create("./" + localPackage)
+                                                     .bold()
+                                                     .withTypeText(
+                                                         "via project");
             }
 
             elements.add(elementBuilder);
@@ -182,9 +193,9 @@ public class GoCompletionUtil {
 
     public static LookupElement keyword(String keyword, @Nullable InsertHandler<LookupElement> handler) {
         return LookupElementBuilder.create(keyword)
-                                   .setBold()
-                                   .setTypeText("keyword")
-                                   .setInsertHandler(handler);
+                                   .bold()
+                                   .withTypeText("keyword")
+                                   .withInsertHandler(handler);
     }
 
     public static LookupElement packageElement(String packageName) {
@@ -193,10 +204,11 @@ public class GoCompletionUtil {
 
     public static LookupElement packageElement(String packageName, String tailText) {
         return LookupElementBuilder.create(packageName)
-                                   .setIcon(PlatformIcons.PACKAGE_ICON)
-                                   .setTailText(" (" + tailText + ")", true)
-                                   .setInsertHandler(new AutoImportInsertHandler())
-                                   .setTypeText("package");
+                                   .withIcon(PlatformIcons.PACKAGE_ICON)
+                                   .withTypeText(" (" + tailText + ")", true)
+                                   .withInsertHandler(
+                                       new AutoImportInsertHandler())
+                                   .withTypeText("package");
     }
 
     public static LookupElement[] getImportedPackagesNames(PsiFile file) {

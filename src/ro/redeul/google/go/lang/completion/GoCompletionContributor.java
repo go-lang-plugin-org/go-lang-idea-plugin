@@ -160,8 +160,8 @@ public class GoCompletionContributor extends CompletionContributor {
                 for (String goPackage : goSdkPackages) {
                     result.addElement(
                         LookupElementBuilder.create("\"" + goPackage + "\"")
-                                            .setIcon(PlatformIcons.PACKAGE_ICON)
-                                            .setTypeText("via sdk"));
+                                            .withIcon(PlatformIcons.PACKAGE_ICON)
+                                            .withTypeText("via sdk"));
                 }
 
                 Collection<String> goProjectPackages = packageNamesCache.getProjectPackages();
@@ -169,9 +169,9 @@ public class GoCompletionContributor extends CompletionContributor {
                 for (String goPackage : goProjectPackages) {
                     result.addElement(
                         LookupElementBuilder.create("\"" + goPackage + "\"")
-                                            .setIcon(PlatformIcons.PACKAGE_ICON)
-                                            .setBold()
-                                            .setTypeText("via project"));
+                                            .withIcon(PlatformIcons.PACKAGE_ICON)
+                                            .bold()
+                                            .withTypeText("via project"));
                 }
             }
         };

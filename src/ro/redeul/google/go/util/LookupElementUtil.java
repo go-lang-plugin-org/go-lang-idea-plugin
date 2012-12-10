@@ -33,7 +33,8 @@ public class LookupElementUtil extends GoElementVisitor {
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element) {
-        return createLookupElement(element, element.getPresentationText(), element);
+        return createLookupElement(element, element.getPresentationText(),
+                                   element);
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element, GoPsiElement child) {
@@ -42,10 +43,10 @@ public class LookupElementUtil extends GoElementVisitor {
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element, String text, GoPsiElement child) {
 
-        LookupElementBuilder lookup = LookupElementBuilder.create(child, text);
-
-        lookup = lookup.setTailText(element.getPresentationTailText());
-        lookup = lookup.setTypeText(element.getPresentationTypeText());
+        LookupElementBuilder lookup =
+            LookupElementBuilder.create(child, text)
+                                .withTailText(element.getPresentationTailText())
+                                .withTypeText( element.getPresentationTypeText());
 
         LookupElementUtil visitor = new LookupElementUtil(lookup);
         element.accept(visitor);
@@ -70,76 +71,76 @@ public class LookupElementUtil extends GoElementVisitor {
 
     @Override
     public void visitInterfaceType(GoPsiTypeInterface type) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.INTERFACE_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.INTERFACE_ICON);
     }
 
     @Override
     public void visitArrayType(GoPsiTypeArray type) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
     public void visitSliceType(GoPsiTypeSlice type) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
     public void visitChannelType(GoPsiTypeChannel type) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
     public void visitStructType(GoPsiTypeStruct type) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
     public void visitMapType(GoPsiTypeMap type) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
     public void visitPointerType(GoPsiTypePointer type) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
     public void visitTypeName(GoPsiTypeName typeName) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.CLASS_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.CLASS_ICON);
     }
 
     @Override
     public void visitMethodDeclaration(GoMethodDeclaration declaration) {
         lookupElement = lookupElement
-            .setInsertHandler(new FunctionInsertHandler())
-            .setIcon(PlatformIcons.METHOD_ICON);
+            .withInsertHandler(new FunctionInsertHandler())
+            .withIcon(PlatformIcons.METHOD_ICON);
     }
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
         lookupElement = lookupElement
-            .setInsertHandler(new FunctionInsertHandler())
-            .setIcon(PlatformIcons.FUNCTION_ICON);
+            .withInsertHandler(new FunctionInsertHandler())
+            .withIcon(PlatformIcons.FUNCTION_ICON);
     }
 
     @Override
     public void visitVarDeclaration(GoVarDeclaration declaration) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.VARIABLE_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.VARIABLE_ICON);
     }
 
     @Override
     public void visitConstDeclaration(GoConstDeclaration declaration) {
-        lookupElement = lookupElement.setIcon(GoIcons.CONST_ICON);
+        lookupElement = lookupElement.withIcon(GoIcons.CONST_ICON);
     }
 
     @Override
     public void visitTypeStructField(GoTypeStructField field) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.FIELD_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.FIELD_ICON);
     }
 
     @Override
     public void visitTypeStructAnonymousField(GoTypeStructAnonymousField field) {
-        lookupElement = lookupElement.setIcon(PlatformIcons.FIELD_ICON);
+        lookupElement = lookupElement.withIcon(PlatformIcons.FIELD_ICON);
     }
 
     public LookupElementBuilder getLookupElement() {

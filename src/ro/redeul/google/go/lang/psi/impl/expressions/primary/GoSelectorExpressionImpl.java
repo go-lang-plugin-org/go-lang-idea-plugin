@@ -99,14 +99,16 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
 
         Object[] presentations = new Object[members.length];
 
-        for (int i = 0, membersLength = members.length; i < membersLength;
-             i++) {
-
+        for (int i = 0, numMembers = members.length; i < numMembers; i++) {
             GoPsiElement member = members[i];
 
             if (member instanceof GoLiteralIdentifier) {
-                presentations[i] = getFieldPresentation(type,
-                                                        (GoLiteralIdentifier) member);
+                LookupElementBuilder presentation =
+                    getFieldPresentation(type, (GoLiteralIdentifier) member);
+
+                if (presentation != null )
+                    presentations[i] = presentation;
+
             } else {
                 presentations[i] = member;
             }
@@ -115,9 +117,12 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
         return presentations;
     }
 
+    @Nullable
     private LookupElementBuilder getFieldPresentation(GoPsiType type, GoLiteralIdentifier id) {
 
         String name = id.getName();
+        if (name == null)
+            return null;
 
         LookupElementBuilder builder = LookupElementBuilder.create(id, name);
 
@@ -132,10 +137,10 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
         }
 
         return builder
-            .setBold()
-            .setTailText(String.format(" (defined by: %s)",
-                                       ownerType.getQualifiedName()))
-            .setTypeText("<field>", ownerType != type);
+            .bold()
+            .withTailText(String.format(" (defined by: %s)",
+                                        ownerType.getQualifiedName()))
+            .withTypeText("<field>", ownerType != type);
     }
 
     @NotNull
@@ -154,7 +159,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
 
         GoType type = baseTypes[0];
 
-        if ( type instanceof GoTypePointer )
+        if (type instanceof GoTypePointer)
             type = ((GoTypePointer) type).getTargetType();
 
         GoUnderlyingType x = type.getUnderlyingType();

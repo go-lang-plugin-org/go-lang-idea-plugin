@@ -1,5 +1,9 @@
 package ro.redeul.google.go.ide;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.*;
+
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.ProjectWizardStepFactory;
 import com.intellij.ide.util.projectWizard.WizardContext;
@@ -14,12 +18,8 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
+ * Author: Mihai Claudiu Toader <mtoader@gmail.com>
  * <p/>
  * Date: 1/2/11
  * Time: 10:34 AM

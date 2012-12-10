@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.*;
 
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -22,8 +23,6 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-
-import javax.swing.Icon;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -129,8 +128,11 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
 
         if (!names.contains(presentableText)) {
             String type = isImported ? state.get(GoResolveStates.PackageName) : "<current>";
-            variants.add(LookupElementBuilder.create(target, lookupString).setIcon(icon).setTypeText(type)
-                    .setPresentableText(presentableText).setInsertHandler(insertHandler));
+            variants.add(LookupElementBuilder.create(target, lookupString)
+                                             .withIcon(icon)
+                                             .withTypeText(type)
+                                             .withPresentableText(presentableText)
+                                             .withInsertHandler(insertHandler));
             names.add(presentableText);
         }
     }
@@ -141,9 +143,9 @@ public class IdentifierVariantsCollector extends BaseScopeProcessor{
         for (String builtInType : builtInFunctions) {
             variants.add(
                     LookupElementBuilder.create(builtInType)
-                            .setTypeText("builtin", true)
-                            .setInsertHandler(functionInsertHandler)
-                            .setBold()
+                            .withTypeText("builtin", true)
+                            .withInsertHandler(functionInsertHandler)
+                            .bold()
             );
         }
 

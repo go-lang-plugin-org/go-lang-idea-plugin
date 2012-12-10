@@ -1,5 +1,9 @@
 package ro.redeul.google.go.lang.psi.processors;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.*;
+
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
@@ -9,10 +13,6 @@ import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -77,13 +77,23 @@ public class NamedTypeVariantsCollector extends BaseScopeProcessor {
                 typeName = String.format("%s.%s", visiblePackageName, typeName);
             }
 
-            variants.add(LookupElementBuilder.create(typeNameDeclaration, typeName).setIcon(icon).setTypeText(typeText));
+            LookupElementBuilder lookupElement =
+                LookupElementBuilder.create(typeNameDeclaration, typeName)
+                                    .withIcon(icon)
+                                    .withTypeText(typeText);
+
+            variants.add(lookupElement);
         }
     }
 
     public Object[] references() {
         for (String builtInType : builtInTypes) {
-            variants.add(LookupElementBuilder.create(builtInType).setTypeText("builtin", true).setBold());
+            LookupElementBuilder lookupElement =
+                LookupElementBuilder.create(builtInType)
+                                    .withTypeText("builtin", true)
+                                    .bold();
+
+            variants.add(lookupElement);
         }
 
         return variants.toArray(new Object[variants.size()]);

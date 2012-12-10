@@ -87,7 +87,7 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
 
                 GoPsiElement goPsi = (GoPsiElement) declaration;
                 GoPsiElement goChildPsi = (GoPsiElement) child;
-                variants.add(createLookupElement(goPsi, name, goChildPsi).setTypeText("builtin", true));
+                variants.add(createLookupElement(goPsi, name, goChildPsi).withTypeText("builtin", true));
                 return true;
             }
         };

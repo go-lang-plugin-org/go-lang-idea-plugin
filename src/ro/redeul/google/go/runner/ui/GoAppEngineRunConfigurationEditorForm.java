@@ -1,5 +1,9 @@
 package ro.redeul.google.go.runner.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.ConfigurationException;
@@ -11,17 +15,14 @@ import com.intellij.ui.RawCommandLineEditor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.runner.GoAppEngineApplicationConfiguration;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 /**
  * Created by IntelliJ IDEA.
  * User: jhonny
  * Date: Aug 19, 2010
  * Time: 3:00:32 PM
  */
-public class GoAppEngineRunConfigurationEditorForm extends SettingsEditor<GoAppEngineApplicationConfiguration> {
+public class GoAppEngineRunConfigurationEditorForm
+    extends SettingsEditor<GoAppEngineApplicationConfiguration> {
 
     private DefaultComboBoxModel modulesModel;
 
@@ -40,22 +41,24 @@ public class GoAppEngineRunConfigurationEditorForm extends SettingsEditor<GoAppE
     }
 
     @Override
-    protected void applyEditorTo(GoAppEngineApplicationConfiguration configuration) throws ConfigurationException {
+    protected void applyEditorTo(GoAppEngineApplicationConfiguration configuration)
+        throws ConfigurationException {
         configuration.sdkDirectory = sdkDirectory.getText();
         configuration.email = email.getText();
-        configuration.password= new String (password.getPassword());
+        configuration.password = new String(password.getPassword());
         configuration.scriptArguments = appArguments.getText();
     }
 
     public GoAppEngineRunConfigurationEditorForm(final Project project) {
-
         sdkDirectory.getButton().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                VirtualFile[] files = FileChooser.chooseFiles(
+                    FileChooserDescriptorFactory.createSingleFolderDescriptor(),
+                    project,
+                    null);
 
-                VirtualFile[] files = FileChooser.chooseFiles(project,FileChooserDescriptorFactory.createSingleFolderDescriptor(),null);
-
-                if(files.length == 1){
-                    sdkDirectory.setText( files[0].getPath() );
+                if (files.length == 1) {
+                    sdkDirectory.setText(files[0].getPath());
                 }
             }
         });
