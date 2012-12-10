@@ -150,8 +150,6 @@ public class GoSdkUtil {
         try {
             GeneralCommandLine command = new GeneralCommandLine();
             command.setExePath(binariesPath + "/go");
-            command.addParameter("tool");
-            command.addParameter("dist");
             command.addParameter("env");
             command.setWorkDirectory(binariesPath);
             command.setEnvParams(new HashMap<String, String>() {{
@@ -165,7 +163,7 @@ public class GoSdkUtil {
 
             if (output.getExitCode() != 0) {
                 LOG.error(
-                    binariesPath  + "/go tool dist env command exited with invalid exit code: " + output.getExitCode());
+                    binariesPath  + "/go env command exited with invalid exit code: " + output.getExitCode());
                 return null;
             }
 
