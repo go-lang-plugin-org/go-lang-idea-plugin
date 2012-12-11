@@ -6,7 +6,6 @@ import com.intellij.ide.util.projectWizard.SourcePathsBuilder;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -15,7 +14,6 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.actions.GoTemplatesFactory;
-import ro.redeul.google.go.config.sdk.GoSdkType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -57,10 +55,5 @@ public class GoAppEngineModuleBuilder extends JavaModuleBuilder implements Sourc
     @Override
     public ModuleType getModuleType() {
         return GoAppEngineModuleType.getInstance();
-    }
-
-    @Override
-    public boolean isSuitableSdk(Sdk sdk) {
-        return sdk.getSdkType() == GoSdkType.getInstance();
     }
 }
