@@ -15,7 +15,7 @@
         </constraints>
         <properties/>
         <clientProperties>
-          <BorderFactoryClass class="java.lang.String" value="com.intellij.ui.IdeBorderFactory$BoldSmallWithIndent"/>
+          <BorderFactoryClass class="java.lang.String" value="com.intellij.ui.IdeBorderFactory$PlainSmallWithIndent"/>
         </clientProperties>
         <border type="etched" title-resource-bundle="ro/redeul/google/go/GoBundle" title-key="go.settings.build.title"/>
         <children>
@@ -54,7 +54,7 @@
         </constraints>
         <properties/>
         <clientProperties>
-          <BorderFactoryClass class="java.lang.String" value="com.intellij.ui.IdeBorderFactory$BoldSmallWithIndent"/>
+          <BorderFactoryClass class="java.lang.String" value="com.intellij.ui.IdeBorderFactory$PlainSmallWithIndent"/>
         </clientProperties>
         <border type="etched" title-resource-bundle="ro/redeul/google/go/GoBundle" title-key="go.settings.feature.title"/>
         <children>

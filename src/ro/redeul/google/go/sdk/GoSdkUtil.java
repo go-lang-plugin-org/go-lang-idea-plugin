@@ -87,14 +87,14 @@ public class GoSdkUtil {
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static GoSdkData testGoogleGoSdk(String path) {
 
-        if (!checkFolderExists(path)) {
+        if (!checkFolderExists(path))
             return null;
-        }
 
-        if (!checkFolderExists(path, "src") || !checkFolderExists(path,
-                                                                  "pkg")) {
+        if (!checkFileExists(path, "src"))
             return null;
-        }
+
+        if (!checkFolderExists(path, "pkg"))
+            return null;
 
         String binariesPath = path + "/bin";
 
@@ -104,7 +104,7 @@ public class GoSdkUtil {
 
         data.GO_HOME_PATH = path;
         data.GO_BIN_PATH = binariesPath;
-	data.version = GoSdkData.LATEST_VERSION;
+        data.version = GoSdkData.LATEST_VERSION;
         return data;
     }
 
@@ -163,7 +163,8 @@ public class GoSdkUtil {
 
             if (output.getExitCode() != 0) {
                 LOG.error(
-                    binariesPath  + "/go env command exited with invalid exit code: " + output.getExitCode());
+                    binariesPath + "/go env command exited with invalid exit code: " + output
+                        .getExitCode());
                 return null;
             }
 
@@ -439,19 +440,21 @@ public class GoSdkUtil {
 
     public static String resolvePotentialGoogleGoAppEngineHomePath() {
 
-        if ( ! isSdkRegistered(PathManager.getHomePath() + "/bundled/go-appengine-sdk", GoAppEngineSdkType
-            .getInstance()) ) {
+        if (!isSdkRegistered(
+            PathManager.getHomePath() + "/bundled/go-appengine-sdk",
+            GoAppEngineSdkType
+                .getInstance())) {
             return PathManager.getHomePath() + "/bundled/go-appengine-sdk";
         }
 
         String path = System.getenv("PATH");
-        if ( path == null ) {
+        if (path == null) {
             return null;
         }
 
-        String []parts = path.split("[:;]+");
+        String[] parts = path.split("[:;]+");
         for (String part : parts) {
-            if ( ! isSdkRegistered(part, GoAppEngineSdkType.getInstance()) ) {
+            if (!isSdkRegistered(part, GoAppEngineSdkType.getInstance())) {
                 return part;
             }
         }
@@ -462,17 +465,19 @@ public class GoSdkUtil {
 
     public static String resolvePotentialGoogleGoHomePath() {
 
-        if ( ! isSdkRegistered(PathManager.getHomePath() + "/bundled/go-sdk", GoSdkType.getInstance()) ) {
+        if (!isSdkRegistered(PathManager.getHomePath() + "/bundled/go-sdk",
+                             GoSdkType.getInstance())) {
             return PathManager.getHomePath() + "/bundled/go-sdk";
         }
 
         String goRoot = System.getenv(ENV_GO_ROOT);
-        if ( goRoot != null && !isSdkRegistered(goRoot, GoSdkType.getInstance()) ) {
+        if (goRoot != null && !isSdkRegistered(goRoot,
+                                               GoSdkType.getInstance())) {
             return goRoot;
         }
 
         String command = "go";
-        if ( GoUtil.testPathExists("/usr/lib/go") ) {
+        if (GoUtil.testPathExists("/usr/lib/go")) {
             command = "/usr/lib/go";
         }
 
@@ -509,19 +514,21 @@ public class GoSdkUtil {
 
         VirtualFile homePathAsVirtualFile;
         try {
-            homePathAsVirtualFile = VfsUtil.findFileByURL(new URL(VfsUtil.pathToUrl(homePath)));
+            homePathAsVirtualFile = VfsUtil.findFileByURL(
+                new URL(VfsUtil.pathToUrl(homePath)));
         } catch (MalformedURLException e) {
             return true;
         }
 
-        if ( homePathAsVirtualFile == null || ! homePathAsVirtualFile.isDirectory() ) {
+        if (homePathAsVirtualFile == null || !homePathAsVirtualFile.isDirectory()) {
             return true;
         }
 
         List<Sdk> registeredSdks = GoSdkUtil.getSdkOfType(sdkType);
 
         for (Sdk registeredSdk : registeredSdks) {
-            if ( homePathAsVirtualFile.equals(registeredSdk.getHomeDirectory()) ) {
+            if (homePathAsVirtualFile.equals(
+                registeredSdk.getHomeDirectory())) {
                 return true;
             }
         }
@@ -548,6 +555,7 @@ public class GoSdkUtil {
     }
 
     public static String prependToGoPath(String prependedPath) {
-        return String.format("%s%s%s", prependedPath, File.pathSeparator, System.getProperty("GOPATH", ""));
+        return String.format("%s%s%s", prependedPath, File.pathSeparator,
+                             System.getProperty("GOPATH", ""));
     }
 }
