@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.String.format;
+
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.CapturingProcessHandler;
@@ -61,28 +63,23 @@ public class GoSdkUtil {
         Pattern.compile("^api_versions: \\[([^\\]]+)\\]$", Pattern.MULTILINE);
 
     private static Pattern RE_OS_MATCHER =
-        Pattern.compile(".*^GOOS=\"(darwin|freebsd|linux|windows)\"$.*",
-                        Pattern.DOTALL | Pattern.MULTILINE);
-
-    private static Pattern RE_HOSTOS_MATCHER =
-        Pattern.compile(".*^GOHOSTOS=\"(darwin|freebsd|linux|windows)\"$.*",
-                        Pattern.DOTALL | Pattern.MULTILINE);
+        Pattern.compile("^(?:set )?GOOS=\"(darwin|freebsd|linux|windows)\"$",
+                        Pattern.MULTILINE);
 
     private static Pattern RE_ARCH_MATCHER =
-        Pattern.compile(".*^GOARCH=\"(386|amd64|arm)\"$.*",
-                        Pattern.DOTALL | Pattern.MULTILINE);
+        Pattern.compile("^(?:set )?GOARCH=\"?(386|amd64|arm)\"?$",
+                        Pattern.MULTILINE);
+
+    private static Pattern RE_HOSTOS_MATCHER =
+        Pattern.compile("^(?:set )?GOHOSTOS=\"?(darwin|freebsd|linux|windows)\"?$",
+                        Pattern.MULTILINE);
 
     private static Pattern RE_HOSTARCH_MATCHER =
-        Pattern.compile(".*^GOHOSTARCH=\"(386|amd64|arm)\"$.*",
-                        Pattern.DOTALL | Pattern.MULTILINE);
+        Pattern.compile("^(?:set )?GOHOSTARCH=\"?(386|amd64|arm)\"?$",
+                        Pattern.MULTILINE);
 
     private static Pattern RE_ROOT_MATCHER =
-        Pattern.compile(".*^GOROOT=\"([^\"]+)\"$.*",
-                        Pattern.DOTALL | Pattern.MULTILINE);
-
-    private static Pattern RE_BIN_MATCHER =
-        Pattern.compile(".*^GOBIN=\"([^\"]+)\"$.*",
-                        Pattern.DOTALL | Pattern.MULTILINE);
+        Pattern.compile("^(?:set )?GOROOT=(.+)$", Pattern.MULTILINE);
 
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static GoSdkData testGoogleGoSdk(String path) {
@@ -90,7 +87,7 @@ public class GoSdkUtil {
         if (!checkFolderExists(path))
             return null;
 
-        if (!checkFileExists(path, "src"))
+        if (!checkFolderExists(path, "src"))
             return null;
 
         if (!checkFolderExists(path, "pkg"))
@@ -102,21 +99,23 @@ public class GoSdkUtil {
 
         data = findVersion(path, binariesPath, data);
 
-        data.GO_HOME_PATH = path;
-        data.GO_BIN_PATH = binariesPath;
-        data.version = GoSdkData.LATEST_VERSION;
+        if (data != null ) {
+            data.GO_HOME_PATH = path;
+            data.GO_BIN_PATH = binariesPath;
+            data.version = GoSdkData.LATEST_VERSION;
+        }
+
         return data;
     }
 
     private static GoSdkData findVersion(final String path, String binariesPath, GoSdkData data) {
+
         if (data == null)
             return null;
 
         try {
             GeneralCommandLine command = new GeneralCommandLine();
             command.setExePath(binariesPath + "/go");
-            command.addParameter("tool");
-            command.addParameter("dist");
             command.addParameter("version");
             command.setWorkDirectory(binariesPath);
             command.setEnvParams(new HashMap<String, String>() {{
@@ -129,14 +128,14 @@ public class GoSdkUtil {
                 command.getCommandLineString()).runProcess();
 
             if (output.getExitCode() != 0) {
-                LOG.error(
-                    "Go compiler exited with invalid exit code: " + output.getExitCode());
+                LOG.error("Go compiler exited with invalid exit code: " +
+                              output.getExitCode());
                 return null;
             }
 
-            data.VERSION_MAJOR = output.getStdout().trim();
+            data.VERSION_MAJOR = output.getStdout().replaceAll("go version", "").trim();
             return data;
-        } catch (ExecutionException e) {
+        } catch (Exception e) {
             LOG.error("Exception while executing the process:", e);
             return null;
         }
@@ -163,8 +162,9 @@ public class GoSdkUtil {
 
             if (output.getExitCode() != 0) {
                 LOG.error(
-                    binariesPath + "/go env command exited with invalid exit code: " + output
-                        .getExitCode());
+                    format(
+                        "%s/go env command exited with invalid exit code: %d",
+                        binariesPath, output.getExitCode()));
                 return null;
             }
 
@@ -172,12 +172,12 @@ public class GoSdkUtil {
 
             Matcher matcher;
             matcher = RE_HOSTOS_MATCHER.matcher(outputString);
-            if (matcher.matches()) {
+            if (matcher.find()) {
                 data.TARGET_OS = GoTargetOs.fromString(matcher.group(1));
             }
 
             matcher = RE_HOSTARCH_MATCHER.matcher(outputString);
-            if (matcher.matches()) {
+            if (matcher.find()) {
                 data.TARGET_ARCH = GoTargetArch.fromString(matcher.group(1));
             }
         } catch (ExecutionException e) {
@@ -206,7 +206,7 @@ public class GoSdkUtil {
 
         GoAppEngineSdkData sdkData = new GoAppEngineSdkData();
 
-        sdkData.GO_HOME_PATH = String.format("%s/goroot", path);
+        sdkData.GO_HOME_PATH = format("%s/goroot", path);
 
         GeneralCommandLine command = new GeneralCommandLine();
         command.setExePath(sdkData.GO_HOME_PATH + "/bin/go");
@@ -223,20 +223,20 @@ public class GoSdkUtil {
                 command.getCommandLineString()).runProcess();
 
             if (output.getExitCode() != 0) {
-                LOG.error(
-                    "Go command exited with invalid exit code: " + output.getExitCode());
+                LOG.error("Go command exited with invalid exit code: " +
+                              output.getExitCode());
                 return null;
             }
 
             String outputString = output.getStdout();
 
             Matcher matcher = RE_OS_MATCHER.matcher(outputString);
-            if (matcher.matches()) {
+            if (matcher.find()) {
                 sdkData.TARGET_OS = GoTargetOs.fromString(matcher.group(1));
             }
 
             matcher = RE_ARCH_MATCHER.matcher(outputString);
-            if (matcher.matches()) {
+            if (matcher.find()) {
                 sdkData.TARGET_ARCH = GoTargetArch.fromString(matcher.group(1));
             }
         } catch (ExecutionException e) {
@@ -246,7 +246,7 @@ public class GoSdkUtil {
         try {
             String fileContent =
                 VfsUtil.loadText(VfsUtil.findFileByURL(new URL(
-                    VfsUtil.pathToUrl(String.format("%s/VERSION", path)))));
+                    VfsUtil.pathToUrl(format("%s/VERSION", path)))));
 
             Matcher matcher = RE_APP_ENGINE_VERSION_MATCHER.matcher(
                 fileContent);
@@ -413,9 +413,9 @@ public class GoSdkUtil {
     }
 
     public static String getTool(GoSdkData goSdkData, GoSdkTool tool) {
-        return String.format("%s/%s", goSdkData.GO_BIN_PATH,
-                             getToolName(goSdkData.TARGET_OS,
-                                         goSdkData.TARGET_ARCH, tool));
+        return format("%s/%s", goSdkData.GO_BIN_PATH,
+                      getToolName(goSdkData.TARGET_OS,
+                                  goSdkData.TARGET_ARCH, tool));
     }
 
     public static String getToolName(GoTargetOs os, GoTargetArch arch, GoSdkTool tool) {
@@ -485,8 +485,6 @@ public class GoSdkUtil {
         GeneralCommandLine goCommandLine = new GeneralCommandLine();
 
         goCommandLine.setExePath(command);
-        goCommandLine.addParameter("tool");
-        goCommandLine.addParameter("dist");
         goCommandLine.addParameter("env");
 
         try {
@@ -499,12 +497,12 @@ public class GoSdkUtil {
                 String outputString = output.getStdout();
 
                 Matcher matcher = RE_ROOT_MATCHER.matcher(outputString);
-                if (matcher.matches()) {
+                if (matcher.find()) {
                     return matcher.group(1);
                 }
             }
         } catch (ExecutionException e) {
-            int a = 10;
+            //
         }
 
         return SystemProperties.getUserHome();
@@ -555,7 +553,7 @@ public class GoSdkUtil {
     }
 
     public static String prependToGoPath(String prependedPath) {
-        return String.format("%s%s%s", prependedPath, File.pathSeparator,
-                             System.getProperty("GOPATH", ""));
+        return format("%s%s%s", prependedPath, File.pathSeparator,
+                      System.getProperty("GOPATH", ""));
     }
 }
