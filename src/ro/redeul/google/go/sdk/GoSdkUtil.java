@@ -79,7 +79,7 @@ public class GoSdkUtil {
                         Pattern.MULTILINE);
 
     private static Pattern RE_ROOT_MATCHER =
-        Pattern.compile("^(?:set )?GOROOT=(.+)$", Pattern.MULTILINE);
+        Pattern.compile("^(?:set )?GOROOT=\"?(.+)\"?$", Pattern.MULTILINE);
 
     @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static GoSdkData testGoogleGoSdk(String path) {
@@ -477,8 +477,10 @@ public class GoSdkUtil {
         }
 
         String command = "go";
-        if (GoUtil.testPathExists("/usr/lib/go")) {
-            command = "/usr/lib/go";
+        if (GoUtil.testGoHomeFolder("/usr/lib/go")) {
+            command = "/usr/lib/go/bin/go";
+        } else if (GoUtil.testGoHomeFolder("/usr/local/go")) {
+            command = "/usr/local/go/bin/go";
         }
 
         String path = System.getenv("PATH");

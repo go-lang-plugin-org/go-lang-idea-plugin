@@ -57,6 +57,7 @@
             <ul>
                 <li>[bugfix] Guard against a NPE when looking at old Go App Engine SDK's.</li>
                 <li>[bugfix] Properly scan for a sdk in windows with go 1.0.3.</li>
+                <li>[bugfix] Properly scan for a sdk in osx with go installed from golang.org / brew / compiled by hand.</li>
             </ul>
          <h3>0.9.12 changes:</h3>
             <ul>

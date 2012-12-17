@@ -46,11 +46,13 @@ public class GoUtil {
         }
     }
 
-    public static boolean testPathExists(String goRoot) {
-        return goRoot != null && goRoot.trim().length() > 0 && new File(goRoot).isDirectory();
+    public static boolean testGoHomeFolder(String goRoot) {
+        return goRoot != null
+            && goRoot.trim().length() > 0 && new File(goRoot).isDirectory();
     }
 
-    private final static Pattern RE_PACKAGE_TARGET = Pattern.compile("^TARG=([^\\s]+)\\s*$", Pattern.MULTILINE);
+    private final static Pattern RE_PACKAGE_TARGET =
+        Pattern.compile("^TARG=([^\\s]+)\\s*$", Pattern.MULTILINE);
 
     /**
      * Returns a string if there is a TARG=xxx specified in the provided makefile and null if there is no such file.
