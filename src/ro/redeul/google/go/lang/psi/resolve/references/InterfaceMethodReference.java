@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -7,8 +10,10 @@ import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.impl.types.interfaces.MethodSetDiscover;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.types.interfaces.GoTypeInterfaceMethodSet;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
@@ -23,25 +28,24 @@ public class InterfaceMethodReference extends
     private static ResolveCache.AbstractResolver<InterfaceMethodReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<InterfaceMethodReference, GoResolveResult>() {
             @Override
-            public GoResolveResult resolve(InterfaceMethodReference interfaceMethodReference, boolean incompleteCode) {
-                GoSelectorExpression selector = interfaceMethodReference.selector;
-                GoLiteralIdentifier identifier = selector.getIdentifier();
+            public GoResolveResult resolve(InterfaceMethodReference intfMethodRef,
+                                           boolean incompleteCode) {
+                GoSelectorExpression selector = intfMethodRef.selector;
 
-                if (identifier == null) {
+                GoLiteralIdentifier identifier = selector.getIdentifier();
+                if (identifier == null)
                     return GoResolveResult.NULL;
-                }
 
                 String name = identifier.getName();
-
-                if (name == null) {
+                if (name == null)
                     return GoResolveResult.NULL;
-                }
 
-                GoTypeInterface type = interfaceMethodReference.type;
-                GoFunctionDeclaration[] functionDeclarations =
-                    type.getPsiType().getFunctionDeclarations();
+                GoTypeInterface type = intfMethodRef.type;
 
-                for (GoFunctionDeclaration declaration : functionDeclarations) {
+                GoTypeInterfaceMethodSet methodSet =
+                    new MethodSetDiscover(type.getPsiType()).getMethodSet();
+
+                for (GoFunctionDeclaration declaration : methodSet.getMethods()) {
                     if (name.equals(declaration.getFunctionName())) {
                         return new GoResolveResult(declaration.getNameIdentifier());
                     }
@@ -76,6 +80,7 @@ public class InterfaceMethodReference extends
 
     private GoTypeInterface findTypeInterfaceDeclaration() {
         GoType type = selector.getBaseExpression().getType()[0];
+
         while ( type != null && ! (type instanceof GoTypeInterface) ) {
             if ( type instanceof GoTypeName) {
                 type = ((GoTypeName) type).getDefinition();
@@ -107,14 +112,16 @@ public class InterfaceMethodReference extends
     @NotNull
     @Override
     public Object[] getVariants() {
-        GoFunctionDeclaration[] methods = type.getPsiType().getFunctionDeclarations();
 
-        LookupElementBuilder variants[] = new LookupElementBuilder[methods.length];
-        for (int i = 0; i < methods.length; i++) {
-            variants[i] = methods[i].getCompletionPresentation();
+        GoTypeInterfaceMethodSet methodSet =
+            new MethodSetDiscover(type.getPsiType()).getMethodSet();
+
+        List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+        for (GoFunctionDeclaration functionDeclaration : methodSet.getMethods()) {
+            variants.add(functionDeclaration.getCompletionPresentation());
         }
 
-        return variants;
+        return variants.toArray();
     }
 
     @Override

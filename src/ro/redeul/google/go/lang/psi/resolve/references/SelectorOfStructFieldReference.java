@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
@@ -9,17 +8,11 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
-import ro.redeul.google.go.lang.psi.types.GoStructPromotedFields;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.typing.GoTypes.resolveToStruct;
 
@@ -81,7 +74,7 @@ public class SelectorOfStructFieldReference
             return GoResolveResult.NULL;
         }
 
-        GoStructPromotedFields promotedFields = type.getPromotedFields();
+        GoTypeStructPromotedFields promotedFields = type.getPromotedFields();
         for (GoLiteralIdentifier identifier : promotedFields.getNamedFields()) {
             if (unqualifiedName.equals(identifier.getUnqualifiedName())) {
                 return new GoResolveResult(identifier);

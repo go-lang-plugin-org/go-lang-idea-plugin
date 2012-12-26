@@ -120,6 +120,10 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
     public void testCallToMethodViaShortVar() throws Exception {
         doTest();
     }
+
+    public void testCallToEmbeddedInterfaceMethod() throws Exception {
+        doTest();
+    }
 //    public void testConversionToLocallyImportedType() throws Exception {
 //        doTest();
 //    }

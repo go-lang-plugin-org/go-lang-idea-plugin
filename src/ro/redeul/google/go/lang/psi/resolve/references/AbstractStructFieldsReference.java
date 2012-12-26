@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
-import ro.redeul.google.go.lang.psi.types.GoStructPromotedFields;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
@@ -59,7 +59,7 @@ public abstract class AbstractStructFieldsReference
             variants.add(field.getCompletionPresentation());
         }
 
-        GoStructPromotedFields promotedFields = psiType.getPromotedFields();
+        GoTypeStructPromotedFields promotedFields = psiType.getPromotedFields();
         for (GoLiteralIdentifier identifier : promotedFields.getNamedFields()) {
             GoTypeStructField field = findParentOfType(identifier, GoTypeStructField.class);
             if (field != null) {

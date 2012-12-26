@@ -1,13 +1,12 @@
-package ro.redeul.google.go.lang.psi.types;
+package ro.redeul.google.go.lang.psi.types.struct;
 
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 
-public class GoStructPromotedFields {
+public class GoTypeStructPromotedFields {
     private final GoLiteralIdentifier[] namedFields;
     private final GoTypeStructAnonymousField[] anonymousFields;
 
-    public GoStructPromotedFields(GoLiteralIdentifier[] namedFields, GoTypeStructAnonymousField[] anonymousFields) {
+    public GoTypeStructPromotedFields(GoLiteralIdentifier[] namedFields, GoTypeStructAnonymousField[] anonymousFields) {
         this.namedFields = namedFields;
         this.anonymousFields = anonymousFields;
     }

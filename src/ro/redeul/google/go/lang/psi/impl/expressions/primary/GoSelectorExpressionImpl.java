@@ -30,12 +30,6 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.services.GoPsiManager;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: 5/19/11
- * Time: 10:58 PM
- */
 public class GoSelectorExpressionImpl extends GoExpressionBase
     implements GoSelectorExpression {
 
@@ -49,8 +43,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-        return
-            GoPsiManager.getInstance(getProject()).getType(
+        return GoPsiManager.getInstance(getProject()).getType(
                 this,
                 new Function<GoSelectorExpression, GoType[]>() {
                     @Override
@@ -106,7 +99,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
                 LookupElementBuilder presentation =
                     getFieldPresentation(type, (GoLiteralIdentifier) member);
 
-                if (presentation != null )
+                if (presentation != null)
                     presentations[i] = presentation;
 
             } else {

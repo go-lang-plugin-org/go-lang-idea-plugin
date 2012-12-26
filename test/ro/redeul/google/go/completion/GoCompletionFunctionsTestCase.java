@@ -1,6 +1,6 @@
 package ro.redeul.google.go.completion;
 
-public class GoFunctionsCompletionTestCase extends GoCompletionTestCase{
+public class GoCompletionFunctionsTestCase extends GoCompletionTestCase{
     protected String getTestDataRelativePath() {
         return super.getTestDataRelativePath() + "functions";
     }

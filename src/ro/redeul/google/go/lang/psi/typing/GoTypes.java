@@ -46,6 +46,10 @@ public class GoTypes {
         return targetType.cast(type);
     }
 
+    public static GoTypeInterface resolveToInterface(GoPsiTypeName typeName) {
+        return resolveTo(fromPsiType(typeName), GoTypeInterface.class);
+    }
+
     public enum Builtin {
         Bool, Byte, Complex64, Complex128, Error, Float32, Float64,
         Int, Int8, Int16, Int32, Int64, Rune, String,
