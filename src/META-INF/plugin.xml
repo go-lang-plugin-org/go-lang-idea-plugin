@@ -55,7 +55,8 @@
         <![CDATA[
          <h3>0.9.14 changes:</h3>
             <ul>
-                <li></li>
+                <li>[feature] Basic support for completion of the whole method set for an interface.</li>
+                <li>[feature] Handle new when doing type inference</li>
             </ul>
          <h3>0.9.13 changes:</h3>
             <ul>

@@ -9,9 +9,8 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 public abstract class GoTypePsiBacked<
     PsiType extends GoPsiType,
     UnderlyingType extends GoUnderlyingType
-    > implements GoType {
+    > extends GoAbstractType<UnderlyingType> {
 
-    UnderlyingType underlyingType;
     PsiType psiType;
 
     protected GoTypePsiBacked(PsiType psiType) {
@@ -22,15 +21,4 @@ public abstract class GoTypePsiBacked<
         return psiType;
     }
 
-    @Override
-    public GoUnderlyingType getUnderlyingType() {
-        return
-            underlyingType != null
-                ? underlyingType
-                : GoUnderlyingType.Undefined;
-    }
-
-    public void setUnderlyingType(UnderlyingType underlyingType) {
-        this.underlyingType = underlyingType;
-    }
 }

@@ -50,6 +50,10 @@ public class GoTypes {
         return resolveTo(fromPsiType(typeName), GoTypeInterface.class);
     }
 
+    public static GoType makePointer(GoPsiType argumentType) {
+        return new GoTypePointer(fromPsiType(argumentType));
+    }
+
     public enum Builtin {
         Bool, Byte, Complex64, Complex128, Error, Float32, Float64,
         Int, Int8, Int16, Int32, Int64, Rune, String,

@@ -1,5 +1,7 @@
 package ro.redeul.google.go;
 
+import java.io.File;
+
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
@@ -7,14 +9,13 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 
-import java.io.File;
-
 public abstract class GoLightCodeInsightFixtureTestCase
     extends LightCodeInsightFixtureTestCase {
 
+    protected static String testDataRoot = "testdata/";
     @Override
     protected String getBasePath() {
-        return "testdata/" + getTestDataRelativePath();
+        return testDataRoot + getTestDataRelativePath();
     }
 
     protected abstract String getTestDataRelativePath();

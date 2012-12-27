@@ -26,22 +26,27 @@ public abstract class GoCompletionTestCase
 
     protected void doTestVariants() {
 
+        LocalFileSystem fileSystem = LocalFileSystem.getInstance();
         final VirtualFile testRoot =
-            LocalFileSystem.getInstance()
-                           .findFileByPath(getTestDataPath() + File.separator + getTestName(false));
+            fileSystem.findFileByPath(
+                getTestDataPath() + File.separator + getTestName(false));
+
+        List<String> files = new LinkedList<String>();
+
+        if (fileSystem.findFileByPath(getTestDataPath() + File.separator + "builtin.go") != null) {
+            files.add("builtin.go");
+        }
 
         if (testRoot != null && testRoot.isDirectory()) {
-
-            List<String> files = new LinkedList<String>();
-
             VfsUtil.processFilesRecursively(
                 testRoot,
                 new FilteringProcessor<VirtualFile>(
                     new Condition<VirtualFile>() {
                         @Override
                         public boolean value(VirtualFile file) {
-                            return !file.isDirectory() && !file.getName()
-                                       .equals(getTestName(false) + ".go");
+                            return !file.isDirectory() &&
+                                !file.getName().equals(
+                                    getTestName(false) + ".go");
                         }
                     },
                     new AdapterProcessor<VirtualFile, String>(
@@ -58,13 +63,12 @@ public abstract class GoCompletionTestCase
                 ));
 
             files.add(getTestName(false) + File.separator + getTestName(false) + ".go");
-
-            Collections.reverse(files);
-            myFixture.configureByFiles(files.toArray(new String[files.size()]));
         } else {
-            myFixture.configureByFile(getTestName(false) + ".go");
+            files.add(getTestName(false) + ".go");
         }
 
+        Collections.reverse(files);
+        myFixture.configureByFiles(files.toArray(new String[files.size()]));
         myFixture.completeBasic();
         String fileText = myFixture.getFile().getText();
 
@@ -74,7 +78,7 @@ public abstract class GoCompletionTestCase
             String[] parts = fileText.substring(dataPos + 6).split("[\r\n]+");
             for (String part : parts) {
                 part = part.trim();
-                if ( ! part.isEmpty() ) {
+                if (!part.isEmpty()) {
                     expected.add(part);
                 }
             }

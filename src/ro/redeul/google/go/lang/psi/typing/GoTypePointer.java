@@ -7,15 +7,17 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 /**
  * // TODO: mtoader ! Implement this.
  */
-public class GoTypePointer extends GoTypePsiBacked<GoPsiTypePointer, GoUnderlyingTypePointer> implements GoType {
+public class GoTypePointer extends GoAbstractType<GoUnderlyingTypePointer> implements GoType {
 
     GoType targetType;
 
-    public GoTypePointer(GoPsiTypePointer type) {
-        super(type);
-        targetType = GoTypes.fromPsiType(type.getTargetType());
-
+    public GoTypePointer(GoType targetType) {
+        this.targetType = targetType;
         setUnderlyingType(GoUnderlyingTypes.getPointer(targetType.getUnderlyingType()));
+    }
+
+    public GoTypePointer(GoPsiTypePointer type) {
+        this(GoTypes.fromPsiType(type.getTargetType()));
     }
 
     public GoType getTargetType() {
