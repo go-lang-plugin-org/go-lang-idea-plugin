@@ -11,4 +11,16 @@ public class GoGeneralCompletionTestCase extends GoCompletionTestCase{
     public void testHandleNewBuiltinFunction() {
         doTestVariants();
     }
+
+    public void testHandleComplexBuiltinFunction() {
+        doTestVariants();
+    }
+
+    public void testHandleRealBuiltinFunction() {
+        doTestVariants();
+    }
+
+    public void testHandleMakeBuiltinFunction() {
+        doTestVariants();
+    }
 }

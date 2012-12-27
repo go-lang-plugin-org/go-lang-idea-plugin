@@ -14,8 +14,15 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.string;
+import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.Complex128;
+import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.Complex64;
+import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.Float32;
+import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.Float64;
+import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.Int;
+import static ro.redeul.google.go.lang.psi.typing.GoTypes.getBuiltin;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 /**
@@ -66,19 +73,62 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
     }
 
     private GoType[] processBuiltinFunction(GoFunctionDeclaration declaration) {
+
+        GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
+
         String functionName = declaration.getFunctionName();
+        GoExpr[] args = getArguments();
+        GoPsiType typeArg = getTypeArgument();
+
         if (functionName.equals("new")) {
+            if (typeArg != null)
+                return new GoType[]{
+                    GoTypes.makePointer(typeArg)
+                };
+        } else if (functionName.matches("^(len|cap|copy)$")) {
+            return new GoType[]{
+                getBuiltin(Int, namesCache)
+            };
+        } else if (functionName.equals("complex")) {
+            if (args.length > 0) {
+                if (args[0].hasType(Float32))
+                    return new GoType[]{
+                        getBuiltin(Complex64, namesCache)
+                    };
 
-            GoPsiType typeArgument = getTypeArgument();
-            if (typeArgument == null)
-                return GoType.EMPTY_ARRAY;
+                if (args[0].hasType(Float64))
+                    return new GoType[]{
+                        getBuiltin(Complex128, namesCache)
+                    };
+            }
+        } else if (functionName.matches("^(real|imag)$")) {
+            if (args.length > 0) {
+                if (args[0].hasType(Complex128))
+                    return new GoType[]{
+                        getBuiltin(Float64, namesCache)
+                    };
 
-            return new GoType[]{GoTypes.makePointer(typeArgument)};
+                if (args[0].hasType(Complex64))
+                    return new GoType[]{
+                        getBuiltin(Float32, namesCache)
+                    };
+            }
+        } else if (functionName.equals("make")) {
+            if (typeArg != null)
+                return new GoType[]{
+                    GoTypes.fromPsiType(typeArg)
+                };
+        } else if (functionName.equals("append")) {
+            if (args.length > 1) {
+                GoType[] types = args[0].getType();
+                if (types.length > 1) {
+                    return new GoType[]{types[0]};
+                }
+            }
         }
 
         return GoType.EMPTY_ARRAY;
     }
-
 
     @Override
     public void accept(GoElementVisitor visitor) {
