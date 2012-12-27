@@ -27,6 +27,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
@@ -39,6 +40,7 @@ import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isExportedName;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 /**
  * User: jhonny
@@ -185,7 +187,17 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
                 children.add(new GoStructureViewElement(fd));
             }
 
-            for (GoFunctionDeclaration fd : getMethodDeclarations(psiFile)) {
+            for (GoMethodDeclaration fd : getMethodDeclarations(psiFile)) {
+                GoPsiType type = fd.getMethodReceiver().getType();
+                if ( type instanceof GoPsiTypePointer ) {
+                    type = ((GoPsiTypePointer)type).getTargetType();
+                }
+
+                GoTypeNameDeclaration myTypeDeclaration = resolveSafely(type, GoTypeNameDeclaration.class);
+
+                if ( myTypeDeclaration != null && myTypeDeclaration.getContainingFile().equals(psiFile) )
+                    continue;
+
                 children.add(new GoStructureViewElement(fd));
             }
 

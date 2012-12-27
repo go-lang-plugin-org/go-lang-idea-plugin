@@ -56,7 +56,8 @@
          <h3>0.9.14 changes:</h3>
             <ul>
                 <li>[feature] Basic support for completion of the whole method set for an interface.</li>
-                <li>[feature] Handle new when doing type inference</li>
+                <li>[feature] Handle builtin function calls when doing type inference</li>
+                <li>[bugfix] Don't show methods for local types twice in strucure view.</li>
             </ul>
          <h3>0.9.13 changes:</h3>
             <ul>
