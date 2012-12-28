@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.completion.insertHandler.BlockWithCursorBeforeInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.ConstInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.CurlyBracesInsertHandler;
+import ro.redeul.google.go.lang.completion.insertHandler.FunctionInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.IfInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.ImportInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.InlineCurlyBracesInsertHandler;
@@ -56,7 +57,9 @@ import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.not;
 import static com.intellij.patterns.StandardPatterns.or;
+import static ro.redeul.google.go.lang.completion.GoCompletionUtil.builtinFunc;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.getImportedPackagesNames;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keyword;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.packageElement;
@@ -70,6 +73,15 @@ import static ro.redeul.google.go.lang.completion.GoCompletionUtil.packageElemen
 public class GoCompletionContributor extends CompletionContributor {
 
     public static final String DUMMY_IDENTIFIER = CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED;
+
+    static String [] BULTINS_WITH_RETURN = {
+        "new", "make", "len", "cap", "append", "copy", "complex",
+        "real", "imag", "recover"
+    };
+
+    static String [] BULTINS_WITHOUT_RETURN = {
+        "delete", "panic", "print", "println"
+    };
 
     public static final PsiElementPattern.Capture<PsiElement> TYPE_DECLARATION =
             psiElement().withParent(
@@ -124,6 +136,16 @@ public class GoCompletionContributor extends CompletionContributor {
                     keyword("select", new CurlyBracesInsertHandler()));
                 result.addElement(
                     keyword("defer"));
+
+                for (String builtin : BULTINS_WITHOUT_RETURN) {
+                    result.addElement(
+                        builtinFunc(builtin, new FunctionInsertHandler()));
+                }
+
+                for (String builtin : BULTINS_WITH_RETURN) {
+                    result.addElement(
+                        builtinFunc(builtin, new FunctionInsertHandler()));
+                }
 
                 addPackageAutoCompletion(parameters, result);
             }
@@ -184,6 +206,20 @@ public class GoCompletionContributor extends CompletionContributor {
                                           @NotNull CompletionResultSet result) {
                 result.addElement(
                     keyword("func", new LiteralFunctionInsertHandler()));
+            }
+        };
+
+    CompletionProvider<CompletionParameters> builtinFunctionsCompletionProvider =
+        new CompletionProvider<CompletionParameters>() {
+            @Override
+            protected void addCompletions(@NotNull CompletionParameters parameters,
+                                          ProcessingContext context,
+                                          @NotNull CompletionResultSet result) {
+
+                for (String builtinFunction : BULTINS_WITH_RETURN) {
+                    result.addElement(
+                        builtinFunc(builtinFunction, new FunctionInsertHandler()));
+                }
             }
         };
 
@@ -304,6 +340,15 @@ public class GoCompletionContributor extends CompletionContributor {
                    )
                ),
                goAndDeferStatementCompletionProvider);
+
+        extend(CompletionType.BASIC,
+               psiElement().withParent(
+                   psiElement(GoLiteralIdentifier.class).withParent(
+                       psiElement(GoLiteralExpression.class).withParent(
+                           not(psiElement(GoExpressionStatement.class)))
+                   )
+               ),
+               builtinFunctionsCompletionProvider);
 
         extend(CompletionType.BASIC,
                TYPE_DECLARATION,

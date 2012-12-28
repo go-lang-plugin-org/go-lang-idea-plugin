@@ -68,5 +68,4 @@ public class GoStatementsCompletionTestCase extends GoCompletionTestCase {
     public void testChannelTypeViaForRange() {
         doTestVariants();
     }
-
 }

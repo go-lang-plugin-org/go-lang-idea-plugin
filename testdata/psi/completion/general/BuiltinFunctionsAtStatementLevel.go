@@ -1,0 +1,29 @@
+package main
+func main() {
+	<caret>
+}
+/**---
+main
+append
+cap
+complex
+const
+copy
+defer
+delete
+for
+go
+if
+imag
+len
+make
+new
+panic
+print
+println
+real
+recover
+return
+select
+switch
+var

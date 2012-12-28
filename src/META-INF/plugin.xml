@@ -58,6 +58,7 @@
                 <li>[feature] Basic support for completion of the whole method set for an interface.</li>
                 <li>[feature] Handle builtin function calls when doing type inference</li>
                 <li>[bugfix] Don't show methods for local types twice in strucure view.</li>
+                <li>[feature] Add the builtins to the list of methods that we want to be able to autocomplete.</li>
             </ul>
          <h3>0.9.13 changes:</h3>
             <ul>

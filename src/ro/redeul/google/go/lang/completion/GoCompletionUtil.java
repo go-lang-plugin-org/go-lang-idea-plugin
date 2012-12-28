@@ -198,6 +198,14 @@ public class GoCompletionUtil {
                                    .withInsertHandler(handler);
     }
 
+    public static LookupElement builtinFunc(String name, @Nullable InsertHandler<LookupElement> handler) {
+        return LookupElementBuilder.create(name)
+                                   .bold()
+                                   .withTypeText("builtin")
+                                   .withPresentableText(String.format("%s()", name))
+                                   .withInsertHandler(handler);
+    }
+
     public static LookupElement packageElement(String packageName) {
         return packageElement(packageName, packageName);
     }
