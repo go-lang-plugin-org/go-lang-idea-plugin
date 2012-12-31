@@ -177,12 +177,15 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
     @Override
     public void visitCallOrConvExpression(GoCallOrConvExpression expression) {
-        if ( expression.getTypeArgument() == null ) {
-            PsiElement definition = resolveSafely(expression.getBaseExpression(), PsiElement.class);
+        if (expression.getTypeArgument() == null) {
+            PsiElement definition = resolveSafely(
+                expression.getBaseExpression(), PsiElement.class);
 
             if (psiElement(GoTypeSpec.class).accepts(definition)) {
-                annotationHolder.createInfoAnnotation(expression.getBaseExpression(), null)
-                                .setTextAttributes( GoSyntaxHighlighter.TYPE_NAME);
+                annotationHolder.createInfoAnnotation(
+                    expression.getBaseExpression(), null)
+                                .setTextAttributes(
+                                    GoSyntaxHighlighter.TYPE_NAME);
                 return;
             }
         }
@@ -192,20 +195,21 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         }
     }
 
-
     @Override
     public void visitBuiltinCallExpression(GoBuiltinCallExpression expression) {
         PsiElement definition = resolveSafely(expression.getBaseExpression(),
                                               PsiElement.class);
 
-        if (definition == null || psiElement(GoFunctionDeclaration.class).accepts(definition)) {
+        if (definition == null || psiElement(GoLiteralIdentifier.class).accepts(
+            definition)) {
             annotationHolder.createInfoAnnotation(expression.getBaseExpression(), null)
                             .setTextAttributes(GoSyntaxHighlighter.KEYWORD);
         }
 
         if (psiElement(GoTypeSpec.class).accepts(definition)) {
-            annotationHolder.createInfoAnnotation(expression.getBaseExpression(), null)
-                            .setTextAttributes( GoSyntaxHighlighter.TYPE_NAME);
+            annotationHolder.createInfoAnnotation(
+                expression.getBaseExpression(), null)
+                            .setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
         }
 
         for (GoExpr argumentExpression : expression.getArguments()) {
@@ -229,11 +233,20 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         }
 
         // make iota a keyword
-        if (identifier.isIota() || identifier.getText().equals("nil")) {
+        if (identifier.isIota() || identifier.getText().matches(
+            "nil|true|false")) {
             annotationHolder.createInfoAnnotation(identifier, null)
                             .setTextAttributes(GoSyntaxHighlighter.KEYWORD);
             return;
         }
+
+        if (psiElement(GoLiteralIdentifier.class)
+            .withParent(
+                psiElement(GoLiteralExpression.class)
+                    .withParent(
+                        psiElement(GoCallOrConvExpression.class)))
+            .accepts(identifier))
+            return;
 
         PsiElement definition = resolveSafely(identifier, PsiElement.class);
 
@@ -291,6 +304,13 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         InspectionResult result = new InspectionResult(inspectionManager);
         FunctionDeclarationInspection.checkFunction(result, declaration);
         addProblems(result.getProblems());
+
+        PsiElement nameIdentifier = declaration.getNameIdentifier();
+        if (nameIdentifier != null) {
+            Annotation ann = annotationHolder.createInfoAnnotation(
+                nameIdentifier, null);
+            ann.setTextAttributes(GoSyntaxHighlighter.METHOD_DECLARATION);
+        }
     }
 
     @Override
@@ -300,6 +320,13 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         InspectionResult result = new InspectionResult(inspectionManager);
         FunctionDeclarationInspection.checkFunction(result, declaration);
         addProblems(result.getProblems());
+
+        PsiElement nameIdentifier = declaration.getNameIdentifier();
+        if (nameIdentifier != null) {
+            Annotation ann = annotationHolder.createInfoAnnotation(
+                nameIdentifier, null);
+            ann.setTextAttributes(GoSyntaxHighlighter.METHOD_DECLARATION);
+        }
     }
 
     @Override

@@ -92,6 +92,7 @@ public interface GoTokenTypeSets extends GoTokenTypes {
         kIMPORT,
         kBREAK,
         kCASE,
+        kCHAN,
         kCONST,
         kCONTINUE,
         kDEFAULT,

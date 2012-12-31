@@ -12,10 +12,34 @@ import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
+import static ro.redeul.google.go.GoBundle.message;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.BLOCK_COMMENT;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.BLOCK_COMMENT_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.BRACKET;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.BRACKETS_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.CONST;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.CONST_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.GLOBAL_VARIABLE;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.GLOBAL_VARIABLE_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.IDENTIFIER;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.IDENTIFIER_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.KEYWORD;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.KEYWORD_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.LINE_COMMENT;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.LINE_COMMENT_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.NUMBER;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.NUMBER_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.OPERATOR;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.OPERATOR_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.STRING;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.STRING_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.TYPE_NAME;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.TYPE_NAME_ID;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.VARIABLE;
+import static ro.redeul.google.go.highlight.GoSyntaxHighlighter.VARIABLE_ID;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
@@ -25,49 +49,20 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
 
     private static final AttributesDescriptor[] ATTRIBUTES_DESCRIPTORS =
         new AttributesDescriptor[]{
-            new AttributesDescriptor(GoBundle.message(
-                "color." + GoSyntaxHighlighter.DEFAULT_SETTINGS_ID),
-                                     GoSyntaxHighlighter.DEFAULT),
-            new AttributesDescriptor(GoBundle.message(
-                "color." + GoSyntaxHighlighter.LINE_COMMENT_ID),
-                                     GoSyntaxHighlighter.LINE_COMMENT),
-            new AttributesDescriptor(GoBundle.message(
-                "color." + GoSyntaxHighlighter.BLOCK_COMMENT_ID),
-                                     GoSyntaxHighlighter.BLOCK_COMMENT),
-            new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.KEYWORD_ID),
-                GoSyntaxHighlighter.KEYWORD),
-            new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.BRACKETS_ID),
-                GoSyntaxHighlighter.BRACKET),
-            new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.OPERATOR_ID),
-                GoSyntaxHighlighter.OPERATOR),
-//                    new AttributesDescriptor(GoBundle.message("color." + GoSyntaxHighlighter.BRACKETS_ID), GoSyntaxHighlighter.BRACKET),
-            new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.NUMBER_ID),
-                GoSyntaxHighlighter.NUMBER),
-            new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.STRING_ID),
-                GoSyntaxHighlighter.STRING),
-            new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.IDENTIFIER_ID),
-                GoSyntaxHighlighter.IDENTIFIER),
+            new AttributesDescriptor(message("color." + LINE_COMMENT_ID), LINE_COMMENT),
+            new AttributesDescriptor(message("color." + BLOCK_COMMENT_ID), BLOCK_COMMENT),
+            new AttributesDescriptor(message("color." + KEYWORD_ID), KEYWORD),
+            new AttributesDescriptor(message("color." + BRACKETS_ID), BRACKET),
+            new AttributesDescriptor(message("color." + OPERATOR_ID), OPERATOR),
+            new AttributesDescriptor(message("color." + NUMBER_ID), NUMBER),
+            new AttributesDescriptor(message("color." + STRING_ID), STRING),
+            new AttributesDescriptor(message("color." + IDENTIFIER_ID), IDENTIFIER),
 
             // psi
-            new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.TYPE_NAME_ID),
-                GoSyntaxHighlighter.TYPE_NAME),
-            new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.CONST_ID),
-                GoSyntaxHighlighter.CONST),
-            new AttributesDescriptor(
-                GoBundle.message("color." + GoSyntaxHighlighter.VARIABLE_ID),
-                GoSyntaxHighlighter.VARIABLE),
-            new AttributesDescriptor(
-                GoBundle.message(
-                    "color." + GoSyntaxHighlighter.GLOBAL_VARIABLE_ID),
-                GoSyntaxHighlighter.GLOBAL_VARIABLE),
+            new AttributesDescriptor(message("color." + TYPE_NAME_ID), TYPE_NAME),
+            new AttributesDescriptor(message("color." + CONST_ID), CONST),
+            new AttributesDescriptor(message("color." + VARIABLE_ID), VARIABLE),
+            new AttributesDescriptor(message("color." + GLOBAL_VARIABLE_ID), GLOBAL_VARIABLE),
         };
 
 
@@ -107,16 +102,22 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                 " * Comment\n" +
                 " */\n" +
                 "package main\n" +
-                "import fmt \"fmt\"\n" +
+                "import (\n" +
+                "   fmt \"fmt\"\n" +
+                "   <unused.import>\"unusedImport\"</unused.import>\n" +
+                ")\n" +
+                "\n" +
                 "type <typeName>T</typeName> <typeName>int</typeName>\n" +
                 "type (\n" +
                 "   <typeName>T1</typeName> []<typeName>T</typeName>\n" +
                 ")\n" +
                 "const <const>CONST_VALUE</const> = 10\n\n" +
-                "var <globalVariable>globalValue</globalVariable> = 5" +
+                "var <globalVariable>globalValue</globalVariable> = 5\n" +
+                "\n" +
                 "// line comment \n" +
-                "func(<variable>t</variable>* <typeName>T1</typeName>) function1(<variable>a</variable>, <variable>b</variable> <typeName>int</typeName>, <variable>c</variable> <typeName>T</typeName>) (<typeName>string</typeName>) {\n" +
+                "func (<variable>t</variable>* <typeName>T1</typeName>) <method.declaration>function1</method.declaration>(<unused.parameter>a</unused.parameter> <typeName>int</typeName>, <variable>c</variable> <typeName>T</typeName>) (<typeName>string</typeName>) {\n" +
                 "   x := 'a'\n" +
+                "   <unused.variable>y</unused.variable> := 1\n" +
                 "   var <variable>x</variable> <typeName>T1</typeName> = 10.10 + <globalVariable>globalValue</globalVariable> + <const>CONST_VALUE</const>\n" +
                 "   fmt.Printf(<variable>x</variable>);\n" +
                 "   return <variable>x</variable>\n" +
@@ -127,10 +128,14 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
         final Map<String, TextAttributesKey> map = new HashMap<String, TextAttributesKey>();
 
-        map.put("variable", GoSyntaxHighlighter.VARIABLE);
-        map.put("globalVariable", GoSyntaxHighlighter.GLOBAL_VARIABLE);
-        map.put("typeName", GoSyntaxHighlighter.TYPE_NAME);
-        map.put("const", GoSyntaxHighlighter.CONST);
+        map.put("unused.parameter", CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES);
+        map.put("unused.import", CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES);
+        map.put("unused.variable", CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES);
+        map.put("method.declaration", GoSyntaxHighlighter.METHOD_DECLARATION);
+        map.put("variable", VARIABLE);
+        map.put("globalVariable", GLOBAL_VARIABLE);
+        map.put("typeName", TYPE_NAME);
+        map.put("const", CONST);
         map.put("error", CodeInsightColors.ERRORS_ATTRIBUTES);
 
         return map;

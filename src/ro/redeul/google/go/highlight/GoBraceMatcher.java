@@ -8,13 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 
-/**
- * Created by IntelliJ IDEA.
- * User: mtoader
- * Date: Jul 30, 2010
- * Time: 11:21:35 PM
- * To change this template use File | Settings | File Templates.
- */
 public class GoBraceMatcher implements PairedBraceMatcher {
 
     private static final BracePair[] PAIRS = {
