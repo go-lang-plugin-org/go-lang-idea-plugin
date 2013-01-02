@@ -12,6 +12,10 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 
 class GoBinaryExpressionBlock extends GoBlock {
+    public enum Mode {
+        Normal, Compact
+    }
+
     private static final TokenSet EMPTY_SPACE_TOKENS = TokenSet.create(
             oMUL, oQUOTIENT, oREMAINDER,
             oSHIFT_LEFT, oSHIFT_RIGHT
@@ -32,7 +36,7 @@ class GoBinaryExpressionBlock extends GoBlock {
 
     @Override
     protected Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
-        return isCommentBlock(child1) || isCommentBlock(child2) ? null : spacing;
+        return isCommentBlock(child1) || isCommentBlock(child2) ? BASIC_SPACING_KEEP_LINE_BREAKS : spacing;
     }
 
     @Override

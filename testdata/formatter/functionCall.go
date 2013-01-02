@@ -22,7 +22,7 @@ fmt.Println(1,
 fmt.Println(
 1,
 2,
-(1+     // space before comment shouldn't be removed
+(1+     // space before comment should be removed
 2*-  3),
 3,
 )
@@ -30,6 +30,8 @@ fmt.Println(
 fmt.Println(
 
 )
+
+make([]*X,0,n)
 
 func  (  )  {
 println()
@@ -68,12 +70,14 @@ func main() {
     fmt.Println(
         1,
         2,
-        (1 +     // space before comment shouldn't be removed
+        (1 + // space before comment should be removed
             2*-3),
         3,
     )
 
     fmt.Println()
+
+    make([]*X, 0, n)
 
     func() {
         println()

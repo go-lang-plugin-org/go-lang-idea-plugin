@@ -97,6 +97,11 @@ public class GoBlockGenerator {
             return new GoParenthesisedExpressionBlock(node, alignment, indent, styleSettings);
         } else if (elementType == GoElementTypes.LABELED_STATEMENT) {
             return new GoLabeledStatmentBlock(node, styleSettings);
+        } else if (elementType == GoElementTypes.FUNCTION_PARAMETER_LIST) {
+            return new GoFunctionParameterListBlock(node, indent,
+                                                    styleSettings);
+        } else if (elementType == GoElementTypes.FUNCTION_PARAMETER) {
+            return new GoFunctionParameterBlock(node, indent, styleSettings);
         }
 
         return new GoBlock(node, alignment, indent, NO_WRAP, styleSettings);

@@ -148,13 +148,15 @@ class GoBlock implements Block, GoElementTypes {
     protected List<Block> buildChildren() {
         List<Block> children = new ArrayList<Block>();
 
+        ASTNode prevChild = null;
         for (ASTNode child : getGoChildren()) {
             if (child.getTextRange().getLength() == 0 || isWhiteSpaceNode(child.getPsi())) {
                 continue;
             }
 
-            Indent indent = getChildIndent(child.getPsi());
+            Indent indent = getChildIndent(prevChild != null ? prevChild.getPsi() : null, child.getPsi());
             children.add(GoBlockGenerator.generateBlock(child, indent, mySettings));
+            prevChild = child;
         }
 
         return children;
@@ -182,10 +184,13 @@ class GoBlock implements Block, GoElementTypes {
     }
 
     protected static boolean inTheSameLine(GoBlock block1, GoBlock block2) {
-        ASTNode node = block1.getNode();
-        int end = block2.getNode().getStartOffset();
-        while ((node = node.getTreeNext()) != null && node.getStartOffset() < end) {
-            if (isNewLineNode(node.getPsi())) {
+        return inTheSameLine(block1.getNode(), block2.getNode());
+    }
+
+    protected static boolean inTheSameLine(ASTNode node1, ASTNode node2) {
+        int end = node2.getStartOffset();
+        while ((node1 = node1.getTreeNext()) != null && node1.getStartOffset() < end) {
+            if (isNewLineNode(node1.getPsi())) {
                 return false;
             }
         }
@@ -266,6 +271,12 @@ class GoBlock implements Block, GoElementTypes {
             }
         }
         return null;
+    }
+
+
+    @Nullable
+    protected Indent getChildIndent(@Nullable PsiElement prevChild, @Nullable PsiElement child) {
+        return getChildIndent(child);
     }
 
     @Nullable

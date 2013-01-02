@@ -5,6 +5,7 @@ import com.intellij.formatting.Indent;
 import com.intellij.formatting.Spacing;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 public class GoFunctionDeclarationBlock extends GoBlock {
@@ -15,11 +16,14 @@ public class GoFunctionDeclarationBlock extends GoBlock {
 
     @Override
     protected Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
-        if (child1.getNode().getElementType() == GoElementTypes.pRPAREN) {
+        IElementType child1ElementType = child1.getNode().getElementType();
+        IElementType child2ElementType = child2.getNode().getElementType();
+
+        if (child1ElementType == GoElementTypes.pRPAREN) {
             return BASIC_SPACING;
         }
 
-        if (child1.getNode().getElementType() == GoElementTypes.FUNCTION_RESULT) {
+        if (child1ElementType == GoElementTypes.FUNCTION_RESULT) {
             return BASIC_SPACING;
         }
 

@@ -15,6 +15,8 @@ public class GoFormatterTest extends GoEditorAwareTestCase {
     public void testInterfaceType() throws Exception { doTest(); }
     public void testCallParameters() throws Exception { doTest(); }
 
+    public void testFunctionDeclaration() throws Exception { doTest(); }
+
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {
         reformatPositions(file, 0, file.getTextLength());

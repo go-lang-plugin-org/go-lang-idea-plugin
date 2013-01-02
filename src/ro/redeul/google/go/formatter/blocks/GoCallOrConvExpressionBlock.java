@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
@@ -30,16 +31,13 @@ class GoCallOrConvExpressionBlock extends GoBlock {
     protected Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
         IElementType child1Type = child1.getNode().getElementType();
         IElementType child2Type = child2.getNode().getElementType();
-        if (child2Type == EXPRESSION_LIST ||
-            child1Type == EXPRESSION_LIST ||
-            child1Type == pLPAREN && child2Type != pRPAREN) {
-            return EMPTY_SPACING_KEEP_LINE_BREAKS;
-        }
-
         if (child1Type == oCOMMA) {
             return BASIC_SPACING_KEEP_LINE_BREAKS;
         }
 
-        return EMPTY_SPACING;
+        if (child1Type == GoTokenTypes.pLPAREN && child2Type == GoTokenTypes.pRPAREN)
+            return GoBlock.EMPTY_SPACING;
+
+        return EMPTY_SPACING_KEEP_LINE_BREAKS;
     }
 }
