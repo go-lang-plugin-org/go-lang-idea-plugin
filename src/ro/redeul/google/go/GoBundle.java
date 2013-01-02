@@ -15,8 +15,7 @@ public class GoBundle {
     private static final String BUNDLE = "ro.redeul.google.go.GoBundle";
 
     public static String message(
-        @PropertyKey(resourceBundle = BUNDLE) String key,
-        Object ... params) {
+        @PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
         return CommonBundle.message(getBundle(), key, params);
     }
 
