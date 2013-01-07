@@ -54,6 +54,6 @@ public abstract class GoParsingTestCase
         final PsiFile psiFile = GoTestUtils.createPseudoPhysicalGoFile(
             getProject(), input);
         String psiTree = DebugUtil.psiToString(psiFile, false);
-        Assert.assertEquals(psiTree.trim(), output.trim());
+        Assert.assertEquals(output.trim(), psiTree.trim());
     }
 }

@@ -189,6 +189,13 @@ public class Statements implements GoElementTypes {
             return SHORT_VAR_STATEMENT;
         }
 
+        if (ParserUtils.lookAhead(builder, oSEND_CHANNEL)) {
+            ParserUtils.getToken(builder, oSEND_CHANNEL);
+            parser.parseExpression(builder);
+            mark.done(SEND_STATEMENT);
+            return SEND_STATEMENT;
+        }
+
         if ( expressionCount == 0 && ParserUtils.lookAhead(builder, pLCURLY)) {
             mark.done(EMPTY_STATEMENT);
             return EMPTY_STATEMENT;

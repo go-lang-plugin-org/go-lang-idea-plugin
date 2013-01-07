@@ -1,6 +1,6 @@
 package main
 func main() { select {} }
------
+/**-----
 Go file
   PackageDeclaration(main)
     PsiElement(KEYWORD_PACKAGE)('package')
@@ -18,7 +18,7 @@ Go file
     BlockStmtImpl
       PsiElement({)('{')
       PsiWhiteSpace(' ')
-      SelectStmt
+      SelectStmtImpl
         PsiElement(KEYWORD_SELECT)('select')
         PsiWhiteSpace(' ')
         PsiElement({)('{')

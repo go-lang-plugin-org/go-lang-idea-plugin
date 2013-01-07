@@ -24,14 +24,16 @@ public class SelectStatement implements GoElementTypes {
 
             boolean validCase = false;
             int position = builder.getCurrentOffset();
+            IElementType clauseType = null;
             if (builder.getTokenType() == kCASE) {
                 ParserUtils.advance(builder);
-                parseSendOrRecvExpression(builder, parser);
+                clauseType = parseSendOrRecvExpression(builder, parser);
                 ParserUtils.getToken(builder, oCOLON, "colon.expected");
                 validCase = true;
             } else if (builder.getTokenType() == kDEFAULT) {
                 ParserUtils.advance(builder);
                 ParserUtils.getToken(builder, oCOLON, "colon.expected");
+                clauseType = SELECT_COMM_CLAUSE_DEFAULT;
                 validCase = true;
             } else if ( builder.getTokenType() != pRCURLY ) {
                 ParserUtils.wrapError(builder, "case.of.default.keyword.expected");
@@ -46,7 +48,7 @@ public class SelectStatement implements GoElementTypes {
                     ParserUtils.endStatement(builder);
                 }
 
-                caseMark.done(SELECT_CASE);
+                caseMark.done(clauseType);
             } else {
                 caseMark.drop();
             }
@@ -61,46 +63,46 @@ public class SelectStatement implements GoElementTypes {
         return SELECT_STATEMENT;
     }
 
-    private static void parseSendOrRecvExpression(PsiBuilder builder, GoParser parser) {
+    private static IElementType parseSendOrRecvExpression(PsiBuilder builder, GoParser parser) {
+
+        // case |<-a:
         if ( oSEND_CHANNEL == builder.getTokenType() ) {
-
-            PsiBuilder.Marker marker = builder.mark();
-            builder.advanceLexer();
-
             parser.parseExpression(builder);
-            marker.done(SELECT_CASE_RECV_EXPRESSION);
-            return;
+            return SELECT_COMM_CLAUSE_RECV;
         }
 
         PsiBuilder.Marker mark = builder.mark();
 
-        parser.parseExpressionList(builder);
+        int exprCount = parser.parseExpressionList(builder);
 
+        // case a |<- <expr>:
         if ( oSEND_CHANNEL == builder.getTokenType() ) {
             builder.advanceLexer();
             parser.parseExpression(builder);
-            mark.done(SELECT_CASE_SEND_EXPRESSION);
-            return;
+            mark.done(SEND_STATEMENT);
+            return SELECT_COMM_CLAUSE_SEND;
         }
 
-        if ( oASSIGN == builder.getTokenType() || oVAR_ASSIGN == builder.getTokenType() ) {
+        // case a(, b)? |(= | :=) <expr>:
+        if ( (exprCount == 1 || exprCount == 2) &&
+            (oASSIGN == builder.getTokenType() || oVAR_ASSIGN == builder.getTokenType())) {
             builder.advanceLexer();
-
             parser.parseExpression(builder);
-
             mark.done(SELECT_CASE_RECV_EXPRESSION);
-            return;
+            return SELECT_COMM_CLAUSE_RECV;
         }
 
-        if ( oCOLON == builder.getTokenType() ) {
-            mark.done(SELECT_CASE_SEND_EXPRESSION);
-            return;
+        // case expr:
+        if ( exprCount == 1 && oCOLON == builder.getTokenType() ) {
+            mark.drop();
+            return SELECT_COMM_CLAUSE_RECV;
         }
 
         builder.error("assign.or.varassign.or.send.channel.operator.expected");
 
         parser.parseExpression(builder);
 
-        mark.done(SELECT_CASE_SEND_EXPRESSION);
+        mark.done(SELECT_CASE_RECV_EXPRESSION);
+        return SELECT_COMM_CLAUSE_RECV;
     }
 }

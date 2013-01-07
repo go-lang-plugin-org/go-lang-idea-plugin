@@ -98,13 +98,13 @@ Go file
               PsiElement(IDENTIFIER)('int')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      SelectStmt
+      SelectStmtImpl
         PsiElement(KEYWORD_SELECT)('select')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
-        SelectCase
+        SelectCommClauseRecvImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           SelectCaseRecvExpr
@@ -145,20 +145,19 @@ Go file
               PsiElement())(')')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
-        SelectCase
+        SelectCommClauseSendImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
-          SelectCaseSendExpr
-            CommunicationExpression
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('c2')
-              PsiWhiteSpace(' ')
-              PsiElement(<-)('<-')
-              PsiWhiteSpace(' ')
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('i2')
+          SendStmtImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('c2')
+            PsiWhiteSpace(' ')
+            PsiElement(<-)('<-')
+            PsiWhiteSpace(' ')
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('i2')
           PsiElement(:)(':')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('            ')
@@ -185,7 +184,7 @@ Go file
               PsiElement())(')')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
-        SelectCase
+        SelectCommClauseRecvImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           SelectCaseRecvExpr
@@ -270,7 +269,7 @@ Go file
               PsiElement(})('}')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
-        SelectCase
+        SelectCommClauseDefaultImpl
           PsiElement(KEYWORD_DEFAULT)('default')
           PsiElement(:)(':')
           PsiWhiteSpace('\n')
@@ -299,45 +298,43 @@ Go file
           PsiComment(SL_COMMENT)('// send random sequence of bits to c')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('        ')
-          SelectStmt
+          SelectStmtImpl
             PsiElement(KEYWORD_SELECT)('select')
             PsiWhiteSpace(' ')
             PsiElement({)('{')
             PsiWhiteSpace('\n')
             PsiWhiteSpace('            ')
-            SelectCase
+            SelectCommClauseSendImpl
               PsiElement(KEYWORD_CASE)('case')
               PsiWhiteSpace(' ')
-              SelectCaseSendExpr
-                CommunicationExpression
-                  LiteralExpressionImpl
-                    LiteralIdentifierImpl
-                      PsiElement(IDENTIFIER)('c')
-                  PsiWhiteSpace(' ')
-                  PsiElement(<-)('<-')
-                  PsiWhiteSpace(' ')
-                  LiteralExpressionImpl
-                    LiteralIntegerImpl
-                      PsiElement(LITERAL_INT)('0')
+              SendStmtImpl
+                LiteralExpressionImpl
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('c')
+                PsiWhiteSpace(' ')
+                PsiElement(<-)('<-')
+                PsiWhiteSpace(' ')
+                LiteralExpressionImpl
+                  LiteralIntegerImpl
+                    PsiElement(LITERAL_INT)('0')
               PsiElement(:)(':')
             PsiWhiteSpace(' ')
             PsiComment(SL_COMMENT)('// note: no statement, no fallthrough, no folding of cases')
             PsiWhiteSpace('\n')
             PsiWhiteSpace('            ')
-            SelectCase
+            SelectCommClauseSendImpl
               PsiElement(KEYWORD_CASE)('case')
               PsiWhiteSpace(' ')
-              SelectCaseSendExpr
-                CommunicationExpression
-                  LiteralExpressionImpl
-                    LiteralIdentifierImpl
-                      PsiElement(IDENTIFIER)('c')
-                  PsiWhiteSpace(' ')
-                  PsiElement(<-)('<-')
-                  PsiWhiteSpace(' ')
-                  LiteralExpressionImpl
-                    LiteralIntegerImpl
-                      PsiElement(LITERAL_INT)('1')
+              SendStmtImpl
+                LiteralExpressionImpl
+                  LiteralIdentifierImpl
+                    PsiElement(IDENTIFIER)('c')
+                PsiWhiteSpace(' ')
+                PsiElement(<-)('<-')
+                PsiWhiteSpace(' ')
+                LiteralExpressionImpl
+                  LiteralIntegerImpl
+                    PsiElement(LITERAL_INT)('1')
               PsiElement(:)(':')
             PsiWhiteSpace('\n')
             PsiWhiteSpace('        ')
@@ -347,7 +344,7 @@ Go file
           PsiElement(})('}')
       PsiWhiteSpace('\n\n')
       PsiWhiteSpace('    ')
-      SelectStmt
+      SelectStmtImpl
         PsiElement(KEYWORD_SELECT)('select')
         PsiWhiteSpace(' ')
         PsiElement({)('{')

@@ -24,26 +24,25 @@ Go file
       PsiElement({)('{')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      SelectStmt
+      SelectStmtImpl
         PsiElement(KEYWORD_SELECT)('select')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
-        SelectCase
+        SelectCommClauseSendImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
-          SelectCaseSendExpr
-            CommunicationExpression
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('a')
-              PsiWhiteSpace(' ')
-              PsiElement(<-)('<-')
-              PsiWhiteSpace(' ')
-              LiteralExpressionImpl
-                LiteralIdentifierImpl
-                  PsiElement(IDENTIFIER)('b')
+          SendStmtImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('a')
+            PsiWhiteSpace(' ')
+            PsiElement(<-)('<-')
+            PsiWhiteSpace(' ')
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('b')
           PsiElement(:)(':')
           PsiWhiteSpace('\n')
           PsiWhiteSpace('            ')

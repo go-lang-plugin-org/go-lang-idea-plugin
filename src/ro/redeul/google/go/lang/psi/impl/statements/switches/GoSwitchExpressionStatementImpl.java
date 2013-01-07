@@ -11,9 +11,6 @@ import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionClause;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionStatement;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
 public class GoSwitchExpressionStatementImpl extends GoPsiElementBase
     implements GoSwitchExpressionStatement {
 

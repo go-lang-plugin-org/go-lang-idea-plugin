@@ -24,13 +24,13 @@ Go file
       PsiElement({)('{')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
-      SelectStmt
+      SelectStmtImpl
         PsiElement(KEYWORD_SELECT)('select')
         PsiWhiteSpace(' ')
         PsiElement({)('{')
         PsiWhiteSpace('\n')
         PsiWhiteSpace('        ')
-        SelectCase
+        SelectCommClauseRecvImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
           SelectCaseRecvExpr

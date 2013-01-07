@@ -36,6 +36,10 @@ import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressio
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSliceExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoTypeAssertionExpressionImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.*;
+import ro.redeul.google.go.lang.psi.impl.statements.select.GoSelectCommClauseDefaultImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.select.GoSelectCommClauseRecvImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.select.GoSelectCommClauseSendImpl;
+import ro.redeul.google.go.lang.psi.impl.statements.select.GoSelectStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchExpressionClauseImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchExpressionStatementImpl;
 import ro.redeul.google.go.lang.psi.impl.statements.switches.GoSwitchTypeClauseImpl;
@@ -312,6 +316,21 @@ public class GoPsiCreator implements GoElementTypes {
 
         if (elementType.equals(GOTO_STATEMENT))
             return new GoGotoStatementImpl(node);
+
+        if (elementType.equals(SELECT_STATEMENT))
+            return new GoSelectStatementImpl(node);
+
+        if (elementType.equals(SELECT_COMM_CLAUSE_SEND))
+            return new GoSelectCommClauseSendImpl(node);
+
+        if (elementType.equals(SELECT_COMM_CLAUSE_RECV))
+            return new GoSelectCommClauseRecvImpl(node);
+
+        if (elementType.equals(SELECT_COMM_CLAUSE_DEFAULT))
+            return new GoSelectCommClauseDefaultImpl(node);
+
+        if (elementType.equals(SEND_STATEMENT))
+            return new GoSendStatementImpl(node);
 
         if (elementType.equals(wsNLS))
             return (PsiElement) ASTFactory.whitespace(node.getText());

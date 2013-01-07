@@ -199,8 +199,14 @@ public interface GoElementTypes extends GoTokenTypes {
 
     GoElementType SELECT_STATEMENT =
         new GoElementTypeImpl("SelectStmt");
-    GoElementType SELECT_CASE =
-        new GoElementTypeImpl("SelectCase");
+
+    GoElementType SELECT_COMM_CLAUSE_RECV =
+        new GoElementTypeImpl("SelectCommClauseRecv");
+    GoElementType SELECT_COMM_CLAUSE_SEND =
+        new GoElementTypeImpl("SelectCommClauseSend");
+    GoElementType SELECT_COMM_CLAUSE_DEFAULT =
+        new GoElementTypeImpl("SelectCommClauseDefault");
+
     GoElementType SELECT_CASE_RECV_EXPRESSION =
         new GoElementTypeImpl("SelectCaseRecvExpr");
     GoElementType SELECT_CASE_SEND_EXPRESSION =
@@ -214,9 +220,9 @@ public interface GoElementTypes extends GoTokenTypes {
 
     GoElementType ASSIGN_STATEMENT = new GoElementTypeImpl("AssignStmt");
     GoElementType SHORT_VAR_STATEMENT = new GoElementTypeImpl("ShortVarStmt");
+    GoElementType SEND_STATEMENT = new GoElementTypeImpl("SendStmt");
     GoElementType INC_DEC_STATEMENT = new GoElementTypeImpl("IncDecStmt");
-    GoElementType EXPRESSION_STATEMENT =
-        new GoElementTypeImpl("ExpressionStmt");
+    GoElementType EXPRESSION_STATEMENT = new GoElementTypeImpl("ExpressionStmt");
 
     GoElementType RETURN_STATEMENT = new GoElementTypeImpl("ReturnStmt");
     GoElementType GO_STATEMENT = new GoElementTypeImpl("GoStmt");

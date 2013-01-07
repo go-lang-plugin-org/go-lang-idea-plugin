@@ -43,7 +43,9 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
         GoElementTypes.SWITCH_TYPE_STATEMENT,
         GoElementTypes.SWITCH_EXPR_CASE,
         GoElementTypes.SELECT_STATEMENT,
-        GoElementTypes.SELECT_CASE
+        GoElementTypes.SELECT_COMM_CLAUSE_RECV,
+        GoElementTypes.SELECT_COMM_CLAUSE_SEND,
+        GoElementTypes.SELECT_COMM_CLAUSE_DEFAULT
     );
 
     private InspectionResult result;
