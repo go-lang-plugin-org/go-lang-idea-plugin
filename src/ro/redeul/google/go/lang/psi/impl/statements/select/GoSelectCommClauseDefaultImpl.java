@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoSelectCommClauseDefaultImpl extends GoPsiElementBase
     implements GoSelectCommClauseDefault {
@@ -24,5 +25,10 @@ public class GoSelectCommClauseDefaultImpl extends GoPsiElementBase
     @Override
     public boolean isDefault() {
         return true;
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitSelectCommClauseDefault(this);
     }
 }

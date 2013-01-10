@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoSendStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseSend;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * // TODO: mtoader ! Please explain yourself.
@@ -33,5 +34,10 @@ public class GoSelectCommClauseSendImpl extends GoPsiElementBase
     @Override
     public boolean isDefault() {
         return false;
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitSelectCommClauseSend(this);
     }
 }

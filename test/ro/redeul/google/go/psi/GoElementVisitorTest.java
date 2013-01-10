@@ -10,6 +10,9 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
+import ro.redeul.google.go.lang.psi.statements.GoSendStatement;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.util.GoTestUtils;
 
@@ -32,12 +35,20 @@ public class GoElementVisitorTest extends GoPsiTestCase {
         doTest();
     }
 
-//    public void testSliceExpressions() throws Throwable {
-//        doTest();
-//    }
+    public void testSliceExpressions() throws Throwable {
+        doTest();
+    }
+
+    public void testSelectStatement() throws Throwable {
+        doTest();
+    }
+
+    public void testSendStatement() throws Throwable {
+        doTest();
+    }
 
     public void doTest() throws IOException {
-        doTest(getTestName(true).replace('$', '/') + ".test");
+        doTest(getTestName(true).replace('$', '/') + ".go");
     }
 
     private void doTest(String fileName) throws IOException {
@@ -61,7 +72,7 @@ public class GoElementVisitorTest extends GoPsiTestCase {
             builder.append(element.getText()).append("\n");
         }
 
-        Assert.assertEquals(builder.toString().trim(), list.get(2));
+        Assert.assertEquals(list.get(2).trim(), builder.toString().trim());
     }
 
     private GoRecursiveCollectorVisitor visitorForElementType(String elemType) {
@@ -81,6 +92,33 @@ public class GoElementVisitorTest extends GoPsiTestCase {
                 @Override
                 public void visitIndexExpression(GoIndexExpression expression) {
                     elements.add(expression);
+                }
+            };
+        }
+
+        if (elemType.equals("GoSliceExpression")) {
+            return new GoRecursiveCollectorVisitor() {
+                @Override
+                public void visitSliceExpression(GoSliceExpression expression) {
+                    elements.add(expression);
+                }
+            };
+        }
+
+        if (elemType.equals("GoSelectStatement")) {
+            return new GoRecursiveCollectorVisitor() {
+                @Override
+                public void visitSelectStatement(GoSelectStatement statement) {
+                    elements.add(statement);
+                }
+            };
+        }
+
+        if (elemType.equals("GoSendStatement")) {
+            return new GoRecursiveCollectorVisitor() {
+                @Override
+                public void visitSendStatement(GoSendStatement statement) {
+                    elements.add(statement);
                 }
             };
         }

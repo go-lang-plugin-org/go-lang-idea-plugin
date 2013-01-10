@@ -11,6 +11,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * // TODO: mtoader ! Please explain yourself.
@@ -52,5 +53,10 @@ public class GoSelectCommClauseRecvImpl extends GoPsiElementBase
     @Override
     public boolean isDefault() {
         return false;
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitSelectCommClauseRecv(this);
     }
 }

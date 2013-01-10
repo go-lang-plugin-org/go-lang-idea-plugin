@@ -124,7 +124,7 @@ public abstract class GoTestUtils {
         content = StringUtil.replace(content, "\r", ""); // for MACs
 
         // Adding input  before -----
-        String[] parts = content.split("\n(?:/\\*\\*)?-----[\r\n]+");
+        String[] parts = content.split("\n(?:/\\*\\*)?-{3,10}[\r\n]+");
         Collections.addAll(input, parts);
 //        while ((separatorIndex = content.indexOf("\n(/**)?-----")) >= 0) {
 //            input.add(content.substring(0, separatorIndex));

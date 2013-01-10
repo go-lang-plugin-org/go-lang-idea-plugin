@@ -8,12 +8,19 @@ import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.hasPrevSiblingOfType;
 
 public class GoSliceExpressionImpl extends GoExpressionBase
     implements GoSliceExpression {
+
     public GoSliceExpressionImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitSliceExpression(this);
     }
 
     @Override

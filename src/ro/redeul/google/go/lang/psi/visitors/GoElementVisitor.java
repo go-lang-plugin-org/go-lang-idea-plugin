@@ -16,6 +16,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
 import ro.redeul.google.go.lang.psi.statements.GoAssignmentStatement;
 import ro.redeul.google.go.lang.psi.statements.GoBreakStatement;
 import ro.redeul.google.go.lang.psi.statements.GoContinueStatement;
@@ -28,7 +29,12 @@ import ro.redeul.google.go.lang.psi.statements.GoGotoStatement;
 import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
+import ro.redeul.google.go.lang.psi.statements.GoSendStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseSend;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -266,5 +272,29 @@ public class GoElementVisitor  {
 
     public void visitSwitchTypeGuard(GoSwitchTypeGuard typeGuard) {
         visitElement(typeGuard);
+    }
+
+    public void visitSelectStatement(GoSelectStatement statement) {
+        visitElement(statement);
+    }
+
+    public void visitSelectCommClauseDefault(GoSelectCommClauseDefault commClause) {
+        visitElement(commClause);
+    }
+
+    public void visitSelectCommClauseRecv(GoSelectCommClauseRecv commClause) {
+        visitElement(commClause);
+    }
+
+    public void visitSelectCommClauseSend(GoSelectCommClauseSend commClause) {
+        visitElement(commClause);
+    }
+
+    public void visitSliceExpression(GoSliceExpression expression) {
+        visitElement(expression);
+    }
+
+    public void visitSendStatement(GoSendStatement statement) {
+        visitElement(statement);
     }
 }

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoSendStatement;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * // TODO: mtoader ! Please explain yourself.
@@ -28,5 +29,10 @@ public class GoSendStatementImpl extends GoPsiElementBase implements GoSendState
     @Override
     public GoExpr getValueExpr() {
         return null;
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitSendStatement(this);
     }
 }

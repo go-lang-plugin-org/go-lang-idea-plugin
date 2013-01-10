@@ -2,7 +2,7 @@ package main
 func main() {
     a[i:j]
 }
------
+/**---
 GoSliceExpression
------
+/**---
 a[i:j]
