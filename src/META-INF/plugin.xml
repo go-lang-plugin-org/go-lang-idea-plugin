@@ -65,6 +65,7 @@
                 <li>[bugfix] Fixed some formatting edge cases.</li>
                 <li>[bugfix] Resolving to variables declared in a select communication clause works.</li>
                 <li>[feature] make/len/cap/true/false/nil are also highlighted as keywords.</li>
+                <li>[bugfix] module relative imports are working properly inside the IDE.</li>
             </ul>
          <h3>0.9.13 changes:</h3>
             <ul>
