@@ -122,30 +122,29 @@ Go file
                             PsiElement(IDENTIFIER)('questions')
                     PsiWhiteSpace('\n')
                     PsiWhiteSpace('            ')
-                    ExpressionStmtImpl
-                      CommunicationExpression
-                        LiteralExpressionImpl
-                          LiteralIdentifierImpl
-                            PsiElement(IDENTIFIER)('answers')
-                        PsiWhiteSpace(' ')
-                        PsiElement(<-)('<-')
-                        LiteralExpressionImpl
-                          LiteralCompositeImpl
-                            TypeNameImpl
-                              LiteralIdentifierImpl
-                                PsiElement(IDENTIFIER)('cartesian')
-                            LiteralCompositeValueImpl
-                              PsiElement({)('{')
-                              LiteralCompositeElementImpl
-                                LiteralExpressionImpl
-                                  LiteralIdentifierImpl
-                                    PsiElement(IDENTIFIER)('x')
-                              PsiElement(,)(',')
-                              LiteralCompositeElementImpl
-                                LiteralExpressionImpl
-                                  LiteralIdentifierImpl
-                                    PsiElement(IDENTIFIER)('y')
-                              PsiElement(})('}')
+                    SendStmtImpl
+                      LiteralExpressionImpl
+                        LiteralIdentifierImpl
+                          PsiElement(IDENTIFIER)('answers')
+                      PsiWhiteSpace(' ')
+                      PsiElement(<-)('<-')
+                      LiteralExpressionImpl
+                        LiteralCompositeImpl
+                          TypeNameImpl
+                            LiteralIdentifierImpl
+                              PsiElement(IDENTIFIER)('cartesian')
+                          LiteralCompositeValueImpl
+                            PsiElement({)('{')
+                            LiteralCompositeElementImpl
+                              LiteralExpressionImpl
+                                LiteralIdentifierImpl
+                                  PsiElement(IDENTIFIER)('x')
+                            PsiElement(,)(',')
+                            LiteralCompositeElementImpl
+                              LiteralExpressionImpl
+                                LiteralIdentifierImpl
+                                  PsiElement(IDENTIFIER)('y')
+                            PsiElement(})('}')
                     PsiWhiteSpace('\n')
                     PsiWhiteSpace('        ')
                     PsiElement(})('}')
