@@ -202,16 +202,17 @@ public interface GoElementTypes extends GoTokenTypes {
 
     GoElementType SELECT_COMM_CLAUSE_RECV =
         new GoElementTypeImpl("SelectCommClauseRecv");
+    GoElementType SELECT_COMM_CLAUSE_RECV_EXPR =
+        new GoElementTypeImpl("SelectCommClauseRecvExpr");
+
     GoElementType SELECT_COMM_CLAUSE_SEND =
         new GoElementTypeImpl("SelectCommClauseSend");
     GoElementType SELECT_COMM_CLAUSE_DEFAULT =
         new GoElementTypeImpl("SelectCommClauseDefault");
 
-    GoElementType SELECT_CASE_RECV_EXPRESSION =
-        new GoElementTypeImpl("SelectCaseRecvExpr");
-    GoElementType SELECT_CASE_SEND_EXPRESSION =
-        new GoElementTypeImpl("SelectCaseSendExpr");
-
+//    GoElementType SELECT_CASE_SEND_EXPRESSION =
+//        new GoElementTypeImpl("SelectCaseSendExpr");
+//
     GoElementType BREAK_STATEMENT = new GoElementTypeImpl("BreakStmt");
     GoElementType CONTINUE_STATEMENT = new GoElementTypeImpl("ContinueStmt");
     GoElementType GOTO_STATEMENT = new GoElementTypeImpl("GotoStmt");

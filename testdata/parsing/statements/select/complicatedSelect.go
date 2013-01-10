@@ -107,13 +107,13 @@ Go file
         SelectCommClauseRecvImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
-          SelectCaseRecvExpr
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('i1')
-            PsiWhiteSpace(' ')
-            PsiElement(=)('=')
-            PsiWhiteSpace(' ')
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('i1')
+          PsiWhiteSpace(' ')
+          PsiElement(=)('=')
+          PsiWhiteSpace(' ')
+          SelectCommClauseRecvExpr
             UnaryExpressionImpl
               PsiElement(<-)('<-')
               LiteralExpressionImpl
@@ -187,18 +187,18 @@ Go file
         SelectCommClauseRecvImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
-          SelectCaseRecvExpr
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('i3')
-            PsiElement(,)(',')
-            PsiWhiteSpace(' ')
-            LiteralExpressionImpl
-              LiteralIdentifierImpl
-                PsiElement(IDENTIFIER)('ok')
-            PsiWhiteSpace(' ')
-            PsiElement(:=)(':=')
-            PsiWhiteSpace(' ')
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('i3')
+          PsiElement(,)(',')
+          PsiWhiteSpace(' ')
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('ok')
+          PsiWhiteSpace(' ')
+          PsiElement(:=)(':=')
+          PsiWhiteSpace(' ')
+          SelectCommClauseRecvExpr
             ParenthesisedExpressionImpl
               PsiElement(()('(')
               UnaryExpressionImpl

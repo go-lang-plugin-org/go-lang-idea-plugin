@@ -87,8 +87,10 @@ public class SelectStatement implements GoElementTypes {
         if ( (exprCount == 1 || exprCount == 2) &&
             (oASSIGN == builder.getTokenType() || oVAR_ASSIGN == builder.getTokenType())) {
             builder.advanceLexer();
+            mark.drop();
+            mark = builder.mark();
             parser.parseExpression(builder);
-            mark.done(SELECT_CASE_RECV_EXPRESSION);
+            mark.done(SELECT_COMM_CLAUSE_RECV_EXPR);
             return SELECT_COMM_CLAUSE_RECV;
         }
 
@@ -102,7 +104,7 @@ public class SelectStatement implements GoElementTypes {
 
         parser.parseExpression(builder);
 
-        mark.done(SELECT_CASE_RECV_EXPRESSION);
+        mark.done(SELECT_COMM_CLAUSE_RECV_EXPR);
         return SELECT_COMM_CLAUSE_RECV;
     }
 }
