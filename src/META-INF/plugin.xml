@@ -63,6 +63,7 @@
                 <li>[feature] Add the builtins to the list of methods that we want to be able to autocomplete.</li>
                 <li>[bugfix] Make sure that by default go looks good on both dark and clear themes.</li>
                 <li>[bugfix] Fixed some formatting edge cases.</li>
+                <li>[bugfix] Resolving to variables declared in a select communication clause works.</li>
                 <li>[feature] make/len/cap/true/false/nil are also highlighted as keywords.</li>
             </ul>
          <h3>0.9.13 changes:</h3>

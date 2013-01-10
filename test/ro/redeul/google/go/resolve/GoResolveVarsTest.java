@@ -148,4 +148,8 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testShortAssignToReturnVar() throws Exception {
         doTest();
     }
+
+    public void testShortVarDeclarationFromSelectClause() throws Exception {
+        doTest();
+    }
 }
