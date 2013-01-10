@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
@@ -13,6 +14,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.SmartPointerManager;
@@ -33,6 +35,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -459,5 +462,34 @@ public class GoPsiUtils {
     public static <T extends PsiElement> SmartPsiElementPointer<T> createSmartElementPointer(T element) {
         SmartPointerManager manager = SmartPointerManager.getInstance(element.getProject());
         return manager.createSmartPsiElementPointer(element);
+    }
+
+    @Nullable
+    public static GoFile getContainingGoFile(GoPsiElementBase goPsiElement) {
+        PsiFile file = goPsiElement.getContainingFile();
+
+        return  (file != null && psiIsA(file, GoFile.class)) ? (GoFile) file : null;
+    }
+
+    static Pattern relativeImportPathRegex = Pattern.compile("^\\.\\.?/.*");
+
+    public static String getAbsoluteImportPath(String value, GoFile goFile) {
+        if ( value == null || goFile == null)
+            return value;
+
+        if ( ! relativeImportPathRegex.matcher(value).matches() ) {
+            return value;
+        }
+
+        String fileImportPath = goFile.getPackageImportPath();
+
+        value = value.replaceFirst("^(\\./)+", "");
+        while ( value.startsWith("../") && !fileImportPath.isEmpty()) {
+            value = value.substring(3);
+            fileImportPath = fileImportPath.replaceFirst("(?:(?:^[^/]+)|(?:/[^/]+))$", "");
+            value = value.replace("^(\\./)+", "");
+        }
+
+        return fileImportPath.isEmpty() ? value : fileImportPath + "/" + value;
     }
 }

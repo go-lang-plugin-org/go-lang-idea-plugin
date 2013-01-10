@@ -5,12 +5,17 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.application.WriteAction;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.FilteringProcessor;
 import com.intellij.util.Processor;
 
@@ -69,13 +74,48 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
         assertTest();
     }
 
-    private void doDirectoryTest(final VirtualFile vFile,
-                                 final VirtualFile vModuleDir)
+
+    protected PsiFile createFile(final Module module, final VirtualFile vDir, final String fileName, final String text)
+        throws IOException {
+        return new WriteAction<PsiFile>() {
+            @Override
+            protected void run(Result<PsiFile> result) throws Throwable {
+                if (!ModuleRootManager.getInstance(module)
+                                      .getFileIndex()
+                                      .isInSourceContent(vDir)) {
+                    addSourceContentToRoots(module, vDir);
+                }
+
+                final VirtualFile vFile = vDir.createChildData(vDir, fileName);
+                VfsUtil.saveText(vFile, text);
+                assertNotNull(vFile);
+                final PsiFile file = myPsiManager.findFile(vFile);
+                assertNotNull(file);
+                result.setResult(file);
+            }
+        }.execute().getResultObject();
+    }
+
+    protected void addSourceContentToRoots(final Module module, final VirtualFile vDir) {
+        new WriteAction<Void>() {
+            @Override
+            protected void run(Result<Void> result) throws Throwable {
+                PsiTestUtil.addSourceContentToRoots(module, vDir);
+            }
+        }.execute();
+    }
+
+    private void doDirectoryTest(final VirtualFile file,
+                                 VirtualFile moduleDir)
         throws IOException {
         files.clear();
 
+        VfsUtil.createDirectoryIfMissing(moduleDir, file.getName());
+        final VirtualFile vModuleDir = moduleDir.findOrCreateChildData(getProject(), file.getName());
+        addSourceContentToRoots(myModule, vModuleDir);
+
         VfsUtil.processFilesRecursively(
-            vFile,
+            file,
             new FilteringProcessor<VirtualFile>(
                 new Condition<VirtualFile>() {
                     @Override
@@ -87,7 +127,7 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
                 new Processor<VirtualFile>() {
                     @Override
                     public boolean process(VirtualFile virtualFile) {
-                        parseFile(virtualFile, vFile.getParent(), vModuleDir);
+                        parseFile(virtualFile, file, vModuleDir);
                         return true;
                     }
                 }
@@ -106,14 +146,18 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
     protected void parseFile(VirtualFile file, VirtualFile root,
                              VirtualFile vModuleRoot) {
 
-        String relativePath = VfsUtil.getRelativePath(file.getParent(), root, '/');
+        String relativePath = VfsUtil.getRelativePath(file.getParent(), root,
+                                                      '/');
 
         try {
             String fileContent =
                 StringUtil.convertLineSeparators(VfsUtil.loadText(file));
 
             PsiFile psiFile =
-                createFile(myModule, VfsUtil.createDirectoryIfMissing(vModuleRoot, relativePath), file.getName(), fileContent);
+                createFile(myModule,
+                           VfsUtil.createDirectoryIfMissing(vModuleRoot,
+                                                            relativePath),
+                           file.getName(), fileContent);
 
             files.put(psiFile, fileContent);
         } catch (Exception e) {

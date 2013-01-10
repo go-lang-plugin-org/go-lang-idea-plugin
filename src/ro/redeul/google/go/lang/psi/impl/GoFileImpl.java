@@ -97,7 +97,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         if (path == null || path.equals(""))
             path = getPackageName();
 
-        if (path != null && !path.endsWith(getPackageName()) && !path.toLowerCase().endsWith(getPackageName())) {
+        if (path != null && !isApplicationPart() && !path.endsWith(getPackageName()) && !path.toLowerCase().endsWith(getPackageName())) {
             path = path + "/" + getPackageName();
         }
 
@@ -108,6 +108,9 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         if (makefileTarget != null) {
             path = makefileTarget;
         }
+
+        if (path == null)
+            path = "";
 
         return path;
     }

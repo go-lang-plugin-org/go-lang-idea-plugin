@@ -18,6 +18,8 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAbsoluteImportPath;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getContainingGoFile;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -34,6 +36,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         return findChildByClass(GoPackageReference.class);
     }
 
+    @NotNull
     public GoLiteralString getImportPath() {
         return findChildByClass(GoLiteralString.class);
     }
@@ -82,13 +85,14 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
         GoLiteralString importPath = getImportPath();
-        if ( importPath == null ) {
-            return true;
-        }
+
+        GoFile goFile = getContainingGoFile(this);
+
+        String importPathValue = getAbsoluteImportPath(importPath.getValue(), goFile);
 
         // get the file included in the imported package name
         Collection<GoFile> files =
-            namesCache.getFilesByPackageImportPath(importPath.getValue());
+            namesCache.getFilesByPackageImportPath(importPathValue);
 
         for (GoFile file : files) {
             ResolveState newState =
