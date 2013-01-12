@@ -13,6 +13,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -71,6 +72,18 @@ public class GoSelectCommClauseRecvImpl extends GoPsiElementBase
 
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+
+        PsiElement node = lastParent != null ? lastParent.getPrevSibling() : null;
+
+        while ( node != null ) {
+            if ( GoElementPatterns.BLOCK_DECLARATIONS.accepts(node)) {
+                if ( ! node.processDeclarations(processor, state, null, place) ) {
+                    return false;
+                }
+            }
+            node = node.getPrevSibling();
+        }
+
         if ( isDeclaration() ) {
             GoExpr[] variables = getVariables();
             for (int i = variables.length - 1; i >= 0; i--) {

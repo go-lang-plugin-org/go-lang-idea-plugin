@@ -152,4 +152,16 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testShortVarDeclarationFromSelectClause() throws Exception {
         doTest();
     }
+
+    public void testVarDeclarationInSelectCommClauseRecv() throws Exception {
+        doTest();
+    }
+
+    public void testVarDeclarationInSelectCommClauseSend() throws Exception {
+        doTest();
+    }
+
+    public void testVarDeclarationInSelectCommClauseDefault() throws Exception {
+        doTest();
+    }
 }
