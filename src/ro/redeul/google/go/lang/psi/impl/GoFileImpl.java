@@ -236,7 +236,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         PsiElement child = this.getLastChild();
 
         while (child != null) {
-            if (child != lastParent &&
+            if (!(child instanceof GoImportDeclarations) &&
                 !child.processDeclarations(processor, state, null, place))
                 return false;
 
@@ -247,26 +247,30 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
             ResolveState newState =
                 state.put(GoResolveStates.IsOriginalFile, false);
 
-            GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
+            GoNamesCache names = GoNamesCache.getInstance(getProject());
 
             PsiDirectory parentDirectory = getParent();
-            Collection<GoFile> goFiles = null;
+            Collection<GoFile> goFiles;
+
             if (isApplicationPart() && parentDirectory != null) {
-                goFiles = namesCache.getFilesByPackageImportPath(
-                    getPackageImportPath(),
-                    GlobalSearchScopes.directoryScope(parentDirectory, false));
+                goFiles =
+                    names.getFilesByPackageImportPath(
+                        getPackageImportPath(),
+                        GlobalSearchScopes.directoryScope(parentDirectory, false));
             } else {
-                goFiles = namesCache.getFilesByPackageImportPath(
-                    getPackageImportPath()
-                );
+                goFiles = names.getFilesByPackageImportPath(getPackageImportPath());
             }
 
             for (GoFile goFile : goFiles) {
                 if (!goFile.getOriginalFile().equals(this.getOriginalFile())) {
-                    if (!goFile.processDeclarations(processor, newState, null,
-                                                    place))
+                    if (!goFile.processDeclarations(processor, newState, null, place))
                         return false;
                 }
+            }
+
+            for (GoImportDeclarations importDeclarations : getImportDeclarations()) {
+                if (!importDeclarations.processDeclarations(processor, state, null, place))
+                    return false;
             }
         }
 

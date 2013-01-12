@@ -164,4 +164,8 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testVarDeclarationInSelectCommClauseDefault() throws Exception {
         doTest();
     }
+
+    public void testLocalPackageDefinitionsShouldBeResolvedFirst() throws Exception {
+        doTest();
+    }
 }
