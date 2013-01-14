@@ -41,12 +41,13 @@ public class GoCompilerLoader extends AbstractProjectComponent {
     public void projectOpened() {
         myConfiguration = CompilerWorkspaceConfiguration.getInstance(myProject);
 
-
         ModuleManager moduleManager = ModuleManager.getInstance(myProject);
         for (Module module : moduleManager.getModules()) {
             if (ModuleType.get(module) == GoModuleType.getInstance())
                 myProjectUsesGo = true;
         }
+
+	myProjectUsesGo = false;
 
         if (myProjectUsesGo) {
             myPreviousExternalCompilerSetting = myConfiguration.USE_COMPILE_SERVER;

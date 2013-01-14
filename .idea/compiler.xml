@@ -25,6 +25,7 @@
       <entry name="/**/?*.go" />
       <entry name="?*.template" />
       <entry name="?*.dic" />
+      <entry name="META-INF/**/*" />
     </wildcardResourcePatterns>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="false">

@@ -566,7 +566,8 @@
         <codeInsight.parameterInfo language="Google Go"
                                    implementationClass="ro.redeul.google.go.lang.parameterInfo.GoParameterInfoHandler"/>
 
-        <compileServer.plugin/>
+	<compileServer.plugin classpath="golang-jps-plugin.jar"/>
+
         <!-- SM Test runner tests locations -->
         <testSrcLocator
                 implementation="ro.redeul.google.go.runner.GoTestLocationProvider"/>
