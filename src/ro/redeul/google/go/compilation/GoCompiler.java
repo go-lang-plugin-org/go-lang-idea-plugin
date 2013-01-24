@@ -716,7 +716,7 @@ public class GoCompiler implements TranslatingCompiler {
 
     private String getGoToolBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.GO_BIN_PATH + "/go";
+        return goSdkData.GO_BIN_PATH;
     }
 
     private String getTargetExtension(Sdk sdk) {

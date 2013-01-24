@@ -79,9 +79,8 @@ public class GoSdkUtil {
                         Pattern.MULTILINE);
 
     private static Pattern RE_ROOT_MATCHER =
-        Pattern.compile("^(?:set )?GOROOT=\"?(.+)\"?$", Pattern.MULTILINE);
+        Pattern.compile("^(?:set )?GOROOT=\"?([^\"]+)\"?$", Pattern.MULTILINE);
 
-    @SuppressWarnings({"SynchronizationOnLocalVariableOrMethodParameter"})
     public static GoSdkData testGoogleGoSdk(String path) {
 
         if (!checkFolderExists(path))
@@ -93,31 +92,34 @@ public class GoSdkUtil {
         if (!checkFolderExists(path, "pkg"))
             return null;
 
-        String binariesPath = path + "/bin";
+        String goCommand = path + "/bin/go";
+        if ( ! checkFileExists(path, goCommand) ) {
+            goCommand = "/usr/bin/go";
+        }
 
-        GoSdkData data = findHostOsAndArch(path, binariesPath, new GoSdkData());
+        GoSdkData data = findHostOsAndArch(path, goCommand, new GoSdkData());
 
-        data = findVersion(path, binariesPath, data);
+        data = findVersion(path, goCommand, data);
 
         if (data != null ) {
             data.GO_HOME_PATH = path;
-            data.GO_BIN_PATH = binariesPath;
+            data.GO_BIN_PATH = goCommand;
             data.version = GoSdkData.LATEST_VERSION;
         }
 
         return data;
     }
 
-    private static GoSdkData findVersion(final String path, String binariesPath, GoSdkData data) {
+    private static GoSdkData findVersion(final String path, String goCommand, GoSdkData data) {
 
         if (data == null)
             return null;
 
         try {
             GeneralCommandLine command = new GeneralCommandLine();
-            command.setExePath(binariesPath + "/go");
+            command.setExePath(goCommand);
             command.addParameter("version");
-            command.setWorkDirectory(binariesPath);
+            command.setWorkDirectory(path);
             command.setEnvParams(new HashMap<String, String>() {{
                 put("GOROOT", path);
             }});
@@ -141,16 +143,16 @@ public class GoSdkUtil {
         }
     }
 
-    private static GoSdkData findHostOsAndArch(final String path, String binariesPath, GoSdkData data) {
+    private static GoSdkData findHostOsAndArch(final String path, String goCommand, GoSdkData data) {
 
         if (data == null)
             return data;
 
         try {
             GeneralCommandLine command = new GeneralCommandLine();
-            command.setExePath(binariesPath + "/go");
+            command.setExePath(goCommand);
             command.addParameter("env");
-            command.setWorkDirectory(binariesPath);
+            command.setWorkDirectory(path);
             command.setEnvParams(new HashMap<String, String>() {{
                 put("GOROOT", path);
             }});
@@ -163,8 +165,8 @@ public class GoSdkUtil {
             if (output.getExitCode() != 0) {
                 LOG.error(
                     format(
-                        "%s/go env command exited with invalid exit code: %d",
-                        binariesPath, output.getExitCode()));
+                        "%s env command exited with invalid exit code: %d",
+                        goCommand, output.getExitCode()));
                 return null;
             }
 
@@ -275,6 +277,10 @@ public class GoSdkUtil {
 
     private static boolean checkFileExists(String path, String child) {
         return checkFileExists(new File(path, child));
+    }
+
+    private static boolean checkFileExists(String path) {
+        return checkFileExists(new File(path));
     }
 
     private static boolean checkFileExists(File file) {
@@ -412,12 +418,6 @@ public class GoSdkUtil {
         return getGoogleGoSdkForModule(module);
     }
 
-    public static String getTool(GoSdkData goSdkData, GoSdkTool tool) {
-        return format("%s/%s", goSdkData.GO_BIN_PATH,
-                      getToolName(goSdkData.TARGET_OS,
-                                  goSdkData.TARGET_ARCH, tool));
-    }
-
     public static String getToolName(GoTargetOs os, GoTargetArch arch, GoSdkTool tool) {
 
         String binariesDesignation = getBinariesDesignation(os, arch);
@@ -477,9 +477,11 @@ public class GoSdkUtil {
         }
 
         String command = "go";
-        if (GoUtil.testGoHomeFolder("/usr/lib/go")) {
+        if (GoUtil.testGoHomeFolder("/usr/lib/go") &&
+            new File("/usr/lib/go/bin/go").canExecute() ) {
             command = "/usr/lib/go/bin/go";
-        } else if (GoUtil.testGoHomeFolder("/usr/local/go")) {
+        } else if (GoUtil.testGoHomeFolder("/usr/local/go") &&
+            new File("/usr/local/go/bin/go").canExecute() ) {
             command = "/usr/local/go/bin/go";
         }
 
@@ -488,6 +490,8 @@ public class GoSdkUtil {
 
         goCommandLine.setExePath(command);
         goCommandLine.addParameter("env");
+
+        LOG.info("command: " + command);
 
         try {
             ProcessOutput output = new CapturingProcessHandler(
@@ -498,8 +502,10 @@ public class GoSdkUtil {
             if (output.getExitCode() == 0) {
                 String outputString = output.getStdout();
 
+                LOG.info("Output:\n" + outputString);
                 Matcher matcher = RE_ROOT_MATCHER.matcher(outputString);
                 if (matcher.find()) {
+                    LOG.info("Matched: " + matcher.group(1));
                     return matcher.group(1);
                 }
             }

@@ -68,6 +68,7 @@
                 <li>[bugfix] module relative imports are working properly inside the IDE.</li>
                 <li>[bugfix] resolve should work inside select statement clauses.</li>
                 <li>[bugfix] resolve should target the local package names first.</li>
+                <li>[bugfix] Properly detect a go sdk installed via standard deb package in ubuntu.</li>
             </ul>
          <h3>0.9.13 changes:</h3>
             <ul>

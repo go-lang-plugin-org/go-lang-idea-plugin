@@ -1,5 +1,8 @@
 package ro.redeul.google.go.runner;
 
+import java.io.File;
+import java.util.HashMap;
+
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.DefaultExecutionResult;
 import com.intellij.execution.ExecutionException;
@@ -19,10 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.runner.ui.properties.GoTestConsoleProperties;
 import ro.redeul.google.go.sdk.GoSdkUtil;
-
-import java.io.File;
-import java.util.HashMap;
-
 import static com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil.createAndAttachConsole;
 import static ro.redeul.google.go.sdk.GoSdkUtil.prependToGoPath;
 
@@ -59,7 +58,7 @@ class GoCommandLineState extends CommandLineState {
             throw new CantRunException("The module does not have a valid parent folder");
         }
 
-        commandLine.setExePath(sdkData.GO_BIN_PATH + "/go");
+        commandLine.setExePath(sdkData.GO_BIN_PATH);
         commandLine.addParameter("test");
         commandLine.addParameter("-v");
         if (cfg.useShortRun)
