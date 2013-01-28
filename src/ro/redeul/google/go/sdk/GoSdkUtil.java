@@ -93,7 +93,7 @@ public class GoSdkUtil {
             return null;
 
         String goCommand = path + "/bin/go";
-        if ( ! checkFileExists(path, goCommand) ) {
+        if ( ! checkFileExists(goCommand) ) {
             goCommand = "/usr/bin/go";
         }
 

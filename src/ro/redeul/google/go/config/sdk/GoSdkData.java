@@ -14,7 +14,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
  */
 public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<GoSdkData> {
 
-    public final static int LATEST_VERSION = 1;
+    public final static int LATEST_VERSION = 2;
 
     public String GO_HOME_PATH = "";
     public String GO_BIN_PATH = "";
