@@ -9,10 +9,10 @@ import org.jetbrains.jps.model.JpsElementFactory;
 import org.jetbrains.jps.model.JpsElementTypeWithDefaultProperties;
 import org.jetbrains.jps.model.module.JpsModuleType;
 
-public class GoModuleType extends JpsModuleType<JpsDummyElement>
+public class JpsGoModuleType extends JpsModuleType<JpsDummyElement>
     implements JpsElementTypeWithDefaultProperties<JpsDummyElement> {
 
-    public static final GoModuleType INSTANCE = new GoModuleType();
+    public static final JpsGoModuleType INSTANCE = new JpsGoModuleType();
 
     @NotNull
     @Override

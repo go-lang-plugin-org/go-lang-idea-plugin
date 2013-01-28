@@ -13,10 +13,11 @@ import org.jetbrains.jps.model.serialization.module.JpsModulePropertiesSerialize
 /**
  * // TODO: mtoader ! Please explain yourself.
  */
-public class GoModulePropertiesSerializer extends JpsModulePropertiesSerializer<JpsDummyElement> {
+public class JpsGoModuleTypePropertiesSerializer
+    extends JpsModulePropertiesSerializer<JpsDummyElement> {
 
-    public GoModulePropertiesSerializer() {
-	super(GoModuleType.INSTANCE, "GO_MODULE", "NewModuleRootManager");
+    public JpsGoModuleTypePropertiesSerializer() {
+	super(JpsGoModuleType.INSTANCE, "GO_MODULE", "NewModuleRootManager");
     }
 
     @Override

@@ -17,10 +17,19 @@ import org.jetbrains.jps.incremental.CompileContext;
 import org.jetbrains.jps.incremental.ModuleBuildTarget;
 import org.jetbrains.jps.incremental.ModuleLevelBuilder;
 import org.jetbrains.jps.incremental.ProjectBuildException;
+import org.jetbrains.jps.incremental.messages.BuildMessage;
+import org.jetbrains.jps.incremental.messages.CompilerMessage;
+import org.jetbrains.jps.model.library.JpsTypedLibrary;
+import org.jetbrains.jps.model.library.sdk.JpsSdk;
+import org.jetbrains.jps.model.library.sdk.JpsSdkReference;
 import org.jetbrains.jps.model.module.JpsModule;
-import ro.redeul.idea.golang.jps.model.GoModuleType;
+import ro.redeul.idea.golang.jps.model.JpsGoModuleType;
+import ro.redeul.idea.golang.jps.model.JpsGoSdkType;
+import ro.redeul.idea.golang.jps.model.JpsGoSdkTypeProperties;
 
 public class GoLangBuilder extends ModuleLevelBuilder {
+
+    public static final String BUILDER_NAME = "golang.org builder";
 
     private static final Logger LOG =
 	Logger.getInstance(
@@ -39,20 +48,48 @@ public class GoLangBuilder extends ModuleLevelBuilder {
 	Set<JpsModule> goModules = new HashSet<JpsModule>();
 
 	for (JpsModule module : modules) {
-	    if ( module.getModuleType() == GoModuleType.INSTANCE) {
+	    if (module.getModuleType() == JpsGoModuleType.INSTANCE) {
 		goModules.add(module);
 	    }
 	}
 
-	if ( goModules.size() == 0 )
+	if (goModules.size() == 0)
 	    return ExitCode.NOTHING_DONE;
 
-	context.getProjectDescriptor().getProjectJavaSdks()
+	JpsSdkReference<JpsGoSdkTypeProperties> goSdkPropertiesRef =
+	    context.getProjectDescriptor()
+		   .getProject()
+		   .getSdkReferencesTable()
+		   .getSdkReference(JpsGoSdkType.INSTANCE);
+
+	if (goSdkPropertiesRef == null) {
+	    reportError(context,
+			"Project JDK is not specified or not of type go sdk");
+	    throw new ProjectBuildException();
+	}
+	JpsTypedLibrary<JpsSdk<JpsGoSdkTypeProperties>> sdkJpsTypedLibrary =
+	    goSdkPropertiesRef.resolve();
+
+	if ( sdkJpsTypedLibrary == null ) {
+	    reportError(context, "Project JDK is not specified or not of type go sdk");
+	    throw new ProjectBuildException();
+	}
+
+	JpsGoSdkTypeProperties properties = sdkJpsTypedLibrary.getProperties().getSdkProperties();
+
+	String binPath = properties.getGoBinPath();
+
+	return ExitCode.ABORT;
     }
 
     @NotNull
     @Override
     public String getPresentableName() {
 	return "golang module builder";
+    }
+
+    private void reportError(CompileContext context, final String text) {
+	context.processMessage(
+	    new CompilerMessage(BUILDER_NAME, BuildMessage.Kind.ERROR, text));
     }
 }
