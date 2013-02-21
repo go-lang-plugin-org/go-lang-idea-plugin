@@ -63,7 +63,7 @@ public class GoSdkUtil {
         Pattern.compile("^api_versions: \\[([^\\]]+)\\]$", Pattern.MULTILINE);
 
     private static Pattern RE_OS_MATCHER =
-        Pattern.compile("^(?:set )?GOOS=\"(darwin|freebsd|linux|windows)\"$",
+        Pattern.compile("^(?:set )?GOOS=\"?(darwin|freebsd|linux|windows)\"?$",
                         Pattern.MULTILINE);
 
     private static Pattern RE_ARCH_MATCHER =
@@ -94,7 +94,11 @@ public class GoSdkUtil {
 
         String goCommand = path + "/bin/go";
         if ( ! checkFileExists(goCommand) ) {
-            goCommand = "/usr/bin/go";
+            // Perhaps we're on Windows?
+            goCommand = path + "/bin/go.exe";
+            if ( ! checkFileExists(goCommand) ) {
+                goCommand = "/usr/bin/go";
+            }
         }
 
         GoSdkData data = findHostOsAndArch(path, goCommand, new GoSdkData());
@@ -247,8 +251,8 @@ public class GoSdkUtil {
 
         try {
             String fileContent =
-                VfsUtil.loadText(VfsUtil.findFileByURL(new URL(
-                    VfsUtil.pathToUrl(format("%s/VERSION", path)))));
+                VfsUtil.loadText(VfsUtil.findFileByIoFile(
+                        new File(format("%s/VERSION", path)), true));
 
             Matcher matcher = RE_APP_ENGINE_VERSION_MATCHER.matcher(
                 fileContent);
