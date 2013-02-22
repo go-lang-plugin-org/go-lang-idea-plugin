@@ -45,7 +45,12 @@ public class GoAppEngineRunningState extends CommandLineState {
         if (scriptArguments != null && scriptArguments.trim().length() > 0) {
             commandLine.addParameter(scriptArguments);
         }
-        commandLine.setExePath(sdkDirectory + "/dev_appserver.py");
+        if (workDir.contains("\\")) { // we are on Windows...
+            commandLine.setExePath("python.exe");
+            commandLine.addParameter(sdkDirectory + "/dev_appserver.py");
+        } else {
+            commandLine.setExePath(sdkDirectory + "/dev_appserver.py");
+        }
         commandLine.addParameter(".");
         commandLine.setWorkDirectory(workDir);
 
