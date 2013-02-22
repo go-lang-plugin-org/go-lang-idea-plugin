@@ -131,6 +131,10 @@ public class PrimaryExpression implements GoElementTypes {
                         mark.rollbackTo();
                         return parseMethodExpression(builder, parser);
                     }
+                    if (ParserUtils.getToken(builder,pRPAREN)){
+                        mark.done(LITERAL_EXPRESSION);
+                        return true;
+                    }
                 }
             }
         }
