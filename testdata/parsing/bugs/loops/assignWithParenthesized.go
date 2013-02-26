@@ -45,13 +45,11 @@ Go file
       AssignStmtImpl
         ExpressionListImpl
           IndexExpressionImpl
-            ParenthesisedExpressionImpl
+            LiteralExpressionImpl
               PsiElement(()('(')
-              UnaryExpressionImpl
-                PsiElement(*)('*')
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('q')
+              PsiElement(*)('*')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('q')
               PsiElement())(')')
             PsiElement([)('[')
             LiteralExpressionImpl
@@ -61,13 +59,11 @@ Go file
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           IndexExpressionImpl
-            ParenthesisedExpressionImpl
+            LiteralExpressionImpl
               PsiElement(()('(')
-              UnaryExpressionImpl
-                PsiElement(*)('*')
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('q')
+              PsiElement(*)('*')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('q')
               PsiElement())(')')
             PsiElement([)('[')
             LiteralExpressionImpl
@@ -79,13 +75,11 @@ Go file
         PsiWhiteSpace(' ')
         ExpressionListImpl
           IndexExpressionImpl
-            ParenthesisedExpressionImpl
+            LiteralExpressionImpl
               PsiElement(()('(')
-              UnaryExpressionImpl
-                PsiElement(*)('*')
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('q')
+              PsiElement(*)('*')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('q')
               PsiElement())(')')
             PsiElement([)('[')
             LiteralExpressionImpl
@@ -95,13 +89,11 @@ Go file
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           IndexExpressionImpl
-            ParenthesisedExpressionImpl
+            LiteralExpressionImpl
               PsiElement(()('(')
-              UnaryExpressionImpl
-                PsiElement(*)('*')
-                LiteralExpressionImpl
-                  LiteralIdentifierImpl
-                    PsiElement(IDENTIFIER)('q')
+              PsiElement(*)('*')
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('q')
               PsiElement())(')')
             PsiElement([)('[')
             LiteralExpressionImpl
