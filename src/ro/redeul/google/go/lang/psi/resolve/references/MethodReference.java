@@ -157,10 +157,14 @@ public class MethodReference
 
             GoTypeStruct typeStruct = (GoTypeStruct) currentTypeName.getDefinition();
             for (GoTypeStructAnonymousField field : typeStruct.getPsiType().getAnonymousFields()) {
-                if ( field.getType() == null)
+                GoPsiType psiType = field.getType();
+                if ( psiType == null)
                     continue;
+                if ( psiType instanceof GoPsiTypePointer) {
+                    psiType = ((GoPsiTypePointer) psiType).getTargetType();
+                }
 
-                GoType embeddedType = GoTypes.fromPsiType(field.getType());
+                GoType embeddedType = GoTypes.fromPsiType(psiType);
                 if (embeddedType == null || !(embeddedType instanceof GoTypeName))
                     continue;
 

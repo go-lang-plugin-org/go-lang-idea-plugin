@@ -32,4 +32,8 @@ public class GoStructCompletionTestCase extends GoCompletionTestCase{
     public void testRecursiveFields() {
         doTestVariants();
     }
+
+    public void testMethodsOfTypePointerCompletion(){
+        doTestVariants();
+    }
 }

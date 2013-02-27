@@ -189,6 +189,10 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
 
             for (GoMethodDeclaration fd : getMethodDeclarations(psiFile)) {
                 GoPsiType type = fd.getMethodReceiver().getType();
+
+                if (type == null)
+                    continue;
+
                 if ( type instanceof GoPsiTypePointer ) {
                     type = ((GoPsiTypePointer)type).getTargetType();
                 }

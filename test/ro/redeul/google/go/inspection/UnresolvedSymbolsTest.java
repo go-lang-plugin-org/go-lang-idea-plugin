@@ -9,4 +9,5 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
     public void testUndefinedTypeInMethodReceiver() throws Exception { doTest(); }
     public void testCgo() throws Exception { doTest(); }
     public void testCreateFunction() throws Exception { doTest(); }
+    public void testConversionToPointerType() throws Exception { doTest(); }
 }
