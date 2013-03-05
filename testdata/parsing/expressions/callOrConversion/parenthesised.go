@@ -17,11 +17,13 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CallOrConversionExpressionImpl
-        LiteralExpressionImpl
+        TypeParenthesizedImpl
           PsiElement(()('(')
-          PsiElement(*)('*')
-          LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('v')
+          TypePointerImpl
+            PsiElement(*)('*')
+            TypeNameImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('v')
           PsiElement())(')')
         PsiElement(()('(')
         LiteralExpressionImpl
