@@ -73,6 +73,10 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
         doTest();
     }
 
+    public void testParenthesised_indirection() throws Throwable {
+        doTest();
+    }
+
     public void testLiteral_QualifiedIdentifier() throws Throwable {
         doTest();
     }
