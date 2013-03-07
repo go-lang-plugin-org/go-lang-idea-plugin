@@ -131,10 +131,6 @@ public class PrimaryExpression implements GoElementTypes {
                         mark.rollbackTo();
                         return parseMethodExpression(builder, parser);
                     }
-                    if (ParserUtils.getToken(builder,pRPAREN)){
-                        mark.done(LITERAL_EXPRESSION);
-                        return true;
-                    }
                 }
             }
         }
@@ -146,9 +142,11 @@ public class PrimaryExpression implements GoElementTypes {
                 parser.resetFlag(AllowCompositeLiteral, true);
             if (parser.parseExpression(builder)) {
                 if (ParserUtils.getToken(builder, pRPAREN)) {
-                    parser.resetFlag(AllowCompositeLiteral, allowComposite);
-                    mark.done(GoElementTypes.PARENTHESISED_EXPRESSION);
-                    return true;
+                    if (!ParserUtils.lookAhead(builder, pLPAREN)) {
+                        parser.resetFlag(AllowCompositeLiteral, allowComposite);
+                        mark.done(GoElementTypes.PARENTHESISED_EXPRESSION);
+                        return true;
+                    }
                 }
             }
             parser.resetFlag(AllowCompositeLiteral, allowComposite);

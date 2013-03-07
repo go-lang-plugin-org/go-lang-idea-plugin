@@ -1,5 +1,5 @@
 package main
-var e = (*v)('a')
+var e = (*v)['a']
 /**-----
 Go file
   PackageDeclaration(main)
@@ -16,17 +16,17 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      CallOrConversionExpressionImpl
-        TypeParenthesizedImpl
+      IndexExpressionImpl
+        ParenthesisedExpressionImpl
           PsiElement(()('(')
-          TypePointerImpl
+          UnaryExpressionImpl
             PsiElement(*)('*')
-            TypeNameImpl
+            LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('v')
           PsiElement())(')')
-        PsiElement(()('(')
+        PsiElement([)('[')
         LiteralExpressionImpl
           LiteralCharImpl
             PsiElement(LITERAL_CHAR)(''a'')
-        PsiElement())(')')
+        PsiElement(])(']')
