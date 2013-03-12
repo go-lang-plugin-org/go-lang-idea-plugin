@@ -7,6 +7,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
+import ro.redeul.google.go.lang.psi.resolve.VarOrConstResolver;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -36,12 +37,13 @@ public class GoShortVarDeclarationImpl extends GoVarDeclarationImpl
         if (lastParent != null)
             return true;
 
-        GoLiteralIdentifier identifiers[] = getIdentifiers();
-        for (GoLiteralIdentifier identifier : identifiers) {
-            if (!processor.execute(identifier, state))
-                return false;
+        if (processor instanceof VarOrConstResolver){
+            GoLiteralIdentifier identifiers[] = getIdentifiers();
+            for (GoLiteralIdentifier identifier : identifiers) {
+                if (!processor.execute(identifier, state))
+                    return false;
+            }
         }
-
         return true;
     }
 }
