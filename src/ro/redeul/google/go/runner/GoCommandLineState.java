@@ -74,7 +74,9 @@ class GoCommandLineState extends CommandLineState {
 
                 if (cfg.filter != null && !cfg.filter.isEmpty())
                     benchmarkName = cfg.filter.trim();
-
+                if (!cfg.testBeforeBenchmark) {
+                    commandLine.addParameter("-run=NONE");
+                }
                 commandLine.addParameter("-bench=" + benchmarkName);
                 break;
         }

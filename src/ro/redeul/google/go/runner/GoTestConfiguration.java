@@ -41,6 +41,7 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     public String filter;
     public Type executeWhat = Type.Test;
     public boolean useShortRun;
+    public boolean testBeforeBenchmark;
 
     public GoTestConfiguration(String name, Project project, GoTestConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project),

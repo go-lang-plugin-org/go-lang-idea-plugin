@@ -96,6 +96,14 @@
                   <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
               </hspacer>
+              <component id="e5a06" class="javax.swing.JCheckBox" binding="runTestBeforeBenchmark">
+                <constraints>
+                  <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Run test before benchmark"/>
+                </properties>
+              </component>
             </children>
           </grid>
         </children>
