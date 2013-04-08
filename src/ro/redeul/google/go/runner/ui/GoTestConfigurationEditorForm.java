@@ -19,6 +19,7 @@ public class GoTestConfigurationEditorForm
 
     private JCheckBox filter;
     private JCheckBox useShort;
+    private JCheckBox runTestBeforeBenchmark;
     private JPanel panel;
     private JComboBox packages;
     private JTextField testsFilter;
@@ -61,7 +62,7 @@ public class GoTestConfigurationEditorForm
                 benchmark.setSelected(true);
                 break;
         }
-
+        runTestBeforeBenchmark.setSelected(s.testBeforeBenchmark);
         if (s.filter == null || s.filter.isEmpty()) {
             updateTestsFilterField();
         } else {
@@ -88,6 +89,7 @@ public class GoTestConfigurationEditorForm
         s.filter = filter.isSelected() ? testsFilter.getText() : "";
         s.executeWhat = test.isSelected() ? GoTestConfiguration.Type.Test : GoTestConfiguration.Type.Benchmark;
         s.useShortRun = this.useShort.isSelected();
+        s.testBeforeBenchmark = runTestBeforeBenchmark.isSelected();
         moduleSelector.applyTo(s);
     }
 
