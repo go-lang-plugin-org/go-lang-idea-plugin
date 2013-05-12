@@ -2,7 +2,6 @@ package ro.redeul.google.go.actions;
 
 import java.util.Properties;
 
-import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor;
@@ -49,7 +48,7 @@ public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
 
         Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties());
 
-        JavaTemplateUtil.setPackageNameAttribute(properties, directory);
+        properties.setProperty("PACKAGE_NAME", directory.getName());
         properties.setProperty("NAME", name);
 
         String text;
