@@ -2,6 +2,7 @@ package ro.redeul.google.go.actions;
 
 import java.util.Properties;
 
+import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor;
@@ -42,13 +43,14 @@ public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
         return group;
     }
 
-    public static GoFile createFromTemplate(PsiDirectory directory, String packageName, String fileName, Template template) {
+    public static GoFile createFromTemplate(PsiDirectory directory, String name, String fileName, Template template) {
 
         final FileTemplate fileTemplate = FileTemplateManager.getInstance().getInternalTemplate(template.getFile());
 
         Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties());
 
-        properties.setProperty("PACKAGE_NAME", packageName);
+        JavaTemplateUtil.setPackageNameAttribute(properties, directory);
+        properties.setProperty("NAME", name);
 
         String text;
         try {
