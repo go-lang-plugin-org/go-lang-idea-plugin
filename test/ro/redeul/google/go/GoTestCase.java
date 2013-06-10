@@ -6,7 +6,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
-import com.intellij.openapi.projectRoots.impl.JavaSdkImpl;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.text.StringUtil;
@@ -120,17 +119,6 @@ public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> ext
     protected DefaultLightProjectDescriptor getProjectDescriptor() {
 
         return new DefaultLightProjectDescriptor() {
-
-            Sdk sdk;
-
-            @Override
-            public Sdk getSdk() {
-                if ( sdk == null ) {
-                    sdk = JavaSdkImpl.getMockJdk17("java 1.5");
-                }
-
-                return sdk;
-            }
 
             @Override            
             public void configureModule(Module module, ModifiableRootModel model, ContentEntry contentEntry) {
