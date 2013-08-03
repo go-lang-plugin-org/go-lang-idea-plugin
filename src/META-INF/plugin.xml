@@ -737,122 +737,75 @@
                 implementation="ro.redeul.google.go.ide.exception.GoExceptionFilterFactory"/>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.control.flow
-            </categoryKey>
-            <className>ro.redeul.google.go.intentions.control.SplitIfIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
+            <className>ro.redeul.google.go.intentions.control.SplitIfIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.control.flow
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.control.InvertIfIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
+            <className>ro.redeul.google.go.intentions.control.InvertIfIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.control.flow
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.control.MergeIfAndIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
+            <className>ro.redeul.google.go.intentions.control.MergeIfAndIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.conversions
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.conversions.ConvertIntegerToHexIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.conversions</categoryKey>
+            <className>ro.redeul.google.go.intentions.conversions.ConvertIntegerToHexIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.conversions
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.conversions.ConvertIntegerToOctalIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.conversions</categoryKey>
+            <className>ro.redeul.google.go.intentions.conversions.ConvertIntegerToOctalIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.conversions
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.conversions.ConvertIntegerToDecimalIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.conversions</categoryKey>
+            <className>ro.redeul.google.go.intentions.conversions.ConvertIntegerToDecimalIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.conversions
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.conversions.ConvertToRawStringIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.conversions</categoryKey>
+            <className>ro.redeul.google.go.intentions.conversions.ConvertToRawStringIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.conversions
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.conversions.ConvertSwitchToIfIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.conversions</categoryKey>
+            <className>ro.redeul.google.go.intentions.conversions.ConvertSwitchToIfIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.statements
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.statements.MoveSimpleStatementOutIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.statements</categoryKey>
+            <className>ro.redeul.google.go.intentions.statements.MoveSimpleStatementOutIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.conversions
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.conversions.ConvertToInterpretedStringIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.conversions</categoryKey>
+            <className>ro.redeul.google.go.intentions.conversions.ConvertToInterpretedStringIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.parentheses
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.parenthesis.RemoveDeclarationParenthesesIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.parentheses</categoryKey>
+            <className>ro.redeul.google.go.intentions.parenthesis.RemoveDeclarationParenthesesIntention</className>
         </intentionAction>
 
         <intentionAction>
-            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle
-            </bundleName>
-            <categoryKey>intention.category.go/intention.category.parentheses
-            </categoryKey>
-            <className>
-                ro.redeul.google.go.intentions.parenthesis.AddDeclarationParenthesesIntention
-            </className>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.parentheses</categoryKey>
+            <className>ro.redeul.google.go.intentions.parenthesis.AddDeclarationParenthesesIntention</className>
         </intentionAction>
     </extensions>
 
