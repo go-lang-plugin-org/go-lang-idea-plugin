@@ -437,20 +437,39 @@ public class GoCompletionContributor extends CompletionContributor {
         // For second basic completion, add all package names to auto completion list.
         if (parameters.getCompletionType() == CompletionType.BASIC &&
                 parameters.getInvocationCount() > 1) {
-            addAllPackageNames(result, originalFile.getProject(), importedPackages);
+            addAllPackageNames(result, originalFile, importedPackages);
         }
     }
 
-    public static void addAllPackageNames(CompletionResultSet result, Project project) {
-        addAllPackageNames(result, project, Collections.<String>emptySet());
+    public static void addAllPackageNames(CompletionResultSet result, PsiFile file) {
+        addAllPackageNames(result, file, Collections.<String>emptySet());
     }
 
-    public static void addAllPackageNames(CompletionResultSet result, Project project, Set<String> importedPackages) {
-        Map<String, List<String>> packageMap = getPackageNameToImportPathMapping(project, importedPackages);
+    public static void addAllPackageNames(CompletionResultSet result, PsiFile file, Set<String> importedPackages) {
+        String currentPackageName = getFilePackageName(file);
+
+        Map<String, List<String>> packageMap = getPackageNameToImportPathMapping(file.getProject(), importedPackages);
         for (Map.Entry<String, List<String>> e : packageMap.entrySet()) {
+            String packageName = e.getKey();
+
+            // Don't add builtin or current package to code completion list.
+            if ("builtin".equals(packageName) || currentPackageName.equals(packageName)) {
+                continue;
+            }
+
             String tailText = getPackageTailText(e.getValue());
-            result.addElement(packageElement(e.getKey(), tailText));
+            result.addElement(packageElement(packageName, tailText));
         }
+    }
+
+    private static String getFilePackageName(PsiFile file) {
+        if (file instanceof GoFile) {
+            GoPackageDeclaration currentPackage = ((GoFile) file).getPackage();
+            if (currentPackage != null) {
+                return currentPackage.getPackageName();
+            }
+        }
+        return "";
     }
 
     private static String getPackageTailText(List<String> packages) {

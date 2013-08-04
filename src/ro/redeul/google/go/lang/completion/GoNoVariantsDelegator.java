@@ -24,7 +24,7 @@ public class GoNoVariantsDelegator extends CompletionContributor {
     private void delegate(CompletionParameters parameters, CompletionResultSet result) {
         if (parameters.getCompletionType() == CompletionType.BASIC) {
             if (VALID_PACKAGE_NAME_POSITION.accepts(parameters.getPosition())) {
-                addAllPackageNames(result, parameters.getOriginalFile().getProject());
+                addAllPackageNames(result, parameters.getOriginalFile());
             }
         }
     }
