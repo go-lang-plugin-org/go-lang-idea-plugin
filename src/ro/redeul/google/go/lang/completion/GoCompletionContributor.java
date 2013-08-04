@@ -1,14 +1,5 @@
 package ro.redeul.google.go.lang.completion;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionInitializationContext;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -41,13 +32,20 @@ import ro.redeul.google.go.lang.completion.insertHandler.ReturnInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.VarInsertHandler;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.statements.GoAssignmentStatement;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
+import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
+import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
@@ -56,6 +54,16 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.not;
 import static com.intellij.patterns.StandardPatterns.or;
@@ -74,21 +82,37 @@ public class GoCompletionContributor extends CompletionContributor {
 
     public static final String DUMMY_IDENTIFIER = CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED;
 
-    static String [] BULTINS_WITH_RETURN = {
+    private static final  String [] BULTINS_WITH_RETURN = {
         "new", "make", "len", "cap", "append", "copy", "complex",
         "real", "imag", "recover"
     };
 
-    static String [] BULTINS_WITHOUT_RETURN = {
+    private static final  String [] BULTINS_WITHOUT_RETURN = {
         "delete", "panic", "print", "println"
     };
 
-    public static final PsiElementPattern.Capture<PsiElement> TYPE_DECLARATION =
-            psiElement().withParent(
-                    psiElement(GoLiteralIdentifier.class).withParent(
-                            psiElement(GoPsiTypeName.class)
+    // Check whether a PsiElement is a valid position for a type name.
+    public static final PsiElementPattern.Capture<PsiElement> TYPE_DECLARATION = psiElement().withParent(
+            psiElement(GoLiteralIdentifier.class).withParent(
+                    or(psiElement(GoPsiTypeName.class),             // where type name is expected
+                            psiElement(GoLiteralExpression.class).withParent(
+                                    or(psiElement(GoExpr.class),                            // in an expression
+                                            psiElement(GoExpressionList.class).withParent(
+                                                    // in method invocation parameter or assignment
+                                                    or(psiElement(GoCallOrConvExpression.class),
+                                                            psiElement(GoAssignmentStatement.class)
+                                                    )
+                                            ),
+                                            // in return statement
+                                            psiElement(GoReturnStatement.class),
+
+                                            // in variable declaration statement
+                                            psiElement(GoVarDeclaration.class)
+                                    )
+                            )
                     )
-            );
+            )
+    );
 
     public static final ElementPattern<? extends PsiElement> BLOCK_STATEMENT =
             psiElement().withParent(
@@ -100,6 +124,37 @@ public class GoCompletionContributor extends CompletionContributor {
                             )
                     )
             );
+
+    // Check whether a PsiElement is a valid position for a qualified identifier (identifier with package name).
+    public static final PsiElementPattern.Capture<PsiElement> VALID_PACKAGE_NAME_POSITION = psiElement().withParent(
+            psiElement(GoLiteralIdentifier.class).withParent(
+                    or(psiElement(GoPsiTypeName.class),             // where type name is expected
+                            psiElement(GoLiteralExpression.class).withParent(
+                                    or(psiElement(GoExpr.class),                            // in an expression
+                                            psiElement(GoExpressionList.class).withParent(
+                                                    // in method invocation parameter or assignment
+                                                    or(psiElement(GoCallOrConvExpression.class),
+                                                            psiElement(GoAssignmentStatement.class)
+                                                    )
+                                            ),
+                                            // in statements, like return, go, defer, etc
+                                            psiElement(GoStatement.class)
+                                    )
+                            )
+                    )
+            )
+    );
+
+    public static final PsiElementPattern.Capture<PsiElement> GO_OR_DEFER_STATEMENT = psiElement().withParent(
+            psiElement(GoLiteralIdentifier.class).withParent(
+                    psiElement(GoLiteralExpression.class).withParent(
+                            or(
+                                    psiElement(GoDeferStatement.class),
+                                    psiElement(GoGoStatement.class)
+                            )
+                    )
+            )
+    );
 
     CompletionProvider<CompletionParameters> packageCompletionProvider =
         new CompletionProvider<CompletionParameters>() {
@@ -237,8 +292,6 @@ public class GoCompletionContributor extends CompletionContributor {
                 for (GoTypes.Builtin builtin : GoTypes.Builtin.values()) {
                     result.addElement(keyword(builtin.name().toLowerCase(), null));
                 }
-
-                addPackageAutoCompletion(params, result);
             }
 
             private KeywordInsertionHandler createInterfaceInsertionHandler(CompletionParameters params) {
@@ -249,6 +302,17 @@ public class GoCompletionContributor extends CompletionContributor {
                 }
             }
         };
+
+    CompletionProvider<CompletionParameters> packageNameCompletionProvider =
+            new CompletionProvider<CompletionParameters>() {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters params,
+                                      ProcessingContext context,
+                                      @NotNull CompletionResultSet result) {
+            addPackageAutoCompletion(params, result);
+        }
+    };
+
 
     CompletionProvider<CompletionParameters> localImportsCompletion =
         new CompletionProvider<CompletionParameters>() {
@@ -329,30 +393,32 @@ public class GoCompletionContributor extends CompletionContributor {
                topLevelKeywordsProvider);
 
         extend(CompletionType.BASIC,
-               psiElement().withParent(
-                   psiElement(GoLiteralIdentifier.class).withParent(
-                       psiElement(GoLiteralExpression.class).withParent(
-                           or(
-                               psiElement(GoDeferStatement.class),
-                               psiElement(GoGoStatement.class)
-                           )
-                       )
-                   )
-               ),
-               goAndDeferStatementCompletionProvider);
+                GO_OR_DEFER_STATEMENT,
+                goAndDeferStatementCompletionProvider);
 
         extend(CompletionType.BASIC,
                psiElement().withParent(
                    psiElement(GoLiteralIdentifier.class).withParent(
                        psiElement(GoLiteralExpression.class).withParent(
-                           not(psiElement(GoExpressionStatement.class)))
+                           not(or(
+                               psiElement(GoExpressionStatement.class),
+
+                               // No builtin function is appropriate for go/defer statement.
+                               psiElement(GoGoStatement.class),
+                               psiElement(GoDeferStatement.class)
+                           ))
+                       )
                    )
                ),
                builtinFunctionsCompletionProvider);
 
         extend(CompletionType.BASIC,
-               TYPE_DECLARATION,
-               typeDeclarationCompletionProvider);
+                TYPE_DECLARATION,
+                typeDeclarationCompletionProvider);
+
+        extend(CompletionType.BASIC,
+                VALID_PACKAGE_NAME_POSITION,
+                packageNameCompletionProvider);
     }
 
     @Override

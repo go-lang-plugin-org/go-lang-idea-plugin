@@ -1,12 +1,12 @@
 package ro.redeul.google.go.lang.parser.parsing.expressions;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.google.common.collect.ImmutableSet;
 import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
+
+import java.util.Set;
 
 /**
  * User: mtoader
@@ -15,49 +15,49 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class BuiltInCallExpression implements GoElementTypes {
 
-    static Set<String> hasTypeParameter = new HashSet<String>() {{
-        add("new");
-        add("make");
-    }};
+    private static final Set<String> hasTypeParameter = ImmutableSet.of(
+        "new",
+        "make"
+    );
 
-    static Set<String> noTypeParameter = new HashSet<String>() {{
-        add("append");
-        add("cap");
-        add("close");
-        add("complex");
-        add("copy");
-        add("delete");
-        add("imag");
-        add("len");
-        add("panic");
-        add("print");
-        add("println");
-        add("real");
-        add("recover");
-    }};
+    private static final  Set<String> noTypeParameter = ImmutableSet.of(
+        "append",
+        "cap",
+        "close",
+        "complex",
+        "copy",
+        "delete",
+        "imag",
+        "len",
+        "panic",
+        "print",
+        "println",
+        "real",
+        "recover"
+    );
 
-    static Set<String> defaultConversions = new HashSet<String>() {{
-        add("uint8");
-        add("uint16");
-        add("uint32");
-        add("uint64");
-        add("int8");
-        add("int16");
-        add("int32");
-        add("int64");
-        add("float32");
-        add("float64");
-        add("complex64");
-        add("complex128");
-        add("byte");
-        add("rune");
-        add("uint");
-        add("int");
-        add("uintptr");
-        add("string");
-        add("error");
-        add("bool");
-    }};
+    private static final  Set<String> defaultConversions = ImmutableSet.of(
+        "uint8",
+        "uint16",
+        "uint32",
+        "uint64",
+        "int8",
+        "int16",
+        "int32",
+        "int64",
+        "float32",
+        "float64",
+        "complex64",
+        "complex128",
+        "byte",
+        "rune",
+        "uint",
+        "int",
+        "uintptr",
+        "string",
+        "error",
+        "bool"
+    );
 
 
     public static boolean isBuiltInCall(String methodCall) {

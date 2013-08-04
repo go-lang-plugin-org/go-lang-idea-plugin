@@ -1,12 +1,7 @@
 package ro.redeul.google.go.completion;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -17,6 +12,13 @@ import com.intellij.util.FilteringProcessor;
 import com.intellij.util.Function;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 public abstract class GoCompletionTestCase
     extends GoLightCodeInsightFixtureTestCase {
 
@@ -24,8 +26,12 @@ public abstract class GoCompletionTestCase
         return "psi/completion/";
     }
 
-    protected void doTestVariants() {
+    private boolean testDataFileExists(String fileName) {
+        String absName = getTestDataPath() + File.separator + fileName;
+        return LocalFileSystem.getInstance().findFileByPath(absName) != null;
+    }
 
+    protected void doTestVariants(String... additionalFiles) {
         LocalFileSystem fileSystem = LocalFileSystem.getInstance();
         final VirtualFile testRoot =
             fileSystem.findFileByPath(
@@ -33,7 +39,13 @@ public abstract class GoCompletionTestCase
 
         List<String> files = new LinkedList<String>();
 
-        if (fileSystem.findFileByPath(getTestDataPath() + File.separator + "builtin.go") != null) {
+        for (String file : additionalFiles) {
+            if (testDataFileExists(file)) {
+                files.add(file);
+            }
+        }
+
+        if (testDataFileExists("builtin.go")) {
             files.add("builtin.go");
         }
 
@@ -69,7 +81,8 @@ public abstract class GoCompletionTestCase
 
         Collections.reverse(files);
         myFixture.configureByFiles(files.toArray(new String[files.size()]));
-        myFixture.completeBasic();
+        LookupElement[] lookupElements = myFixture.completeBasic();
+        System.out.println("lookupElements = " + Arrays.toString(lookupElements));
         String fileText = myFixture.getFile().getText();
 
         List<String> expected = new ArrayList<String>(10);
@@ -87,8 +100,17 @@ public abstract class GoCompletionTestCase
         assertOrderedEquals(myFixture.getLookupElementStrings(), expected);
     }
 
-    protected void doTest() {
-        myFixture.configureByFile(getTestName(false) + ".go");
+    protected void doTest(String... additionalFiles) {
+        List<String> files = new ArrayList<String>();
+        for (String file : additionalFiles) {
+            if (testDataFileExists(file)) {
+                files.add(file);
+            }
+        }
+        files.add(getTestName(false) + ".go");
+        Collections.reverse(files);
+
+        myFixture.configureByFiles(files.toArray(new String[files.size()]));
         myFixture.complete(CompletionType.BASIC);
         myFixture.checkResultByFile(getTestName(false) + "_after.go", true);
     }

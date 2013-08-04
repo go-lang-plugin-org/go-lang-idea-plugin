@@ -4,10 +4,8 @@ import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.psi.PsiElement;
 
-import static ro.redeul.google.go.lang.completion.GoCompletionContributor.BLOCK_STATEMENT;
-import static ro.redeul.google.go.lang.completion.GoCompletionContributor.TYPE_DECLARATION;
+import static ro.redeul.google.go.lang.completion.GoCompletionContributor.VALID_PACKAGE_NAME_POSITION;
 import static ro.redeul.google.go.lang.completion.GoCompletionContributor.addAllPackageNames;
 
 public class GoNoVariantsDelegator extends CompletionContributor {
@@ -18,21 +16,16 @@ public class GoNoVariantsDelegator extends CompletionContributor {
             result.restartCompletionWhenNothingMatches();
         }
 
-        if (empty) {
+        if (empty || parameters.getInvocationCount() > 0) {
             delegate(parameters, result);
         }
     }
 
     private void delegate(CompletionParameters parameters, CompletionResultSet result) {
         if (parameters.getCompletionType() == CompletionType.BASIC) {
-            if (packageNamePossible(parameters.getPosition())) {
+            if (VALID_PACKAGE_NAME_POSITION.accepts(parameters.getPosition())) {
                 addAllPackageNames(result, parameters.getOriginalFile().getProject());
             }
         }
-    }
-
-    private boolean packageNamePossible(PsiElement position) {
-        return TYPE_DECLARATION.accepts(position) ||
-                BLOCK_STATEMENT.accepts(position);
     }
 }
