@@ -34,6 +34,7 @@ import com.intellij.util.xmlb.XmlSerializer;
 import com.intellij.util.xmlb.annotations.Transient;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.runner.ui.GoRunConfigurationEditorForm;
 
 /**
@@ -151,9 +152,14 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
                 if (VfsUtil.isAncestor(sourceRoot, file, true)) {
                     String relativePath = VfsUtil.getRelativePath(file.getParent(), sourceRoot, File.separatorChar);
-
-                    String compiledFileName = CompilerPaths.getModuleOutputPath(module, false)
+                    GoProjectSettings setting = GoProjectSettings.getInstance(module.getProject());
+                    String compiledFileName;
+                    if (setting.getState().BUILD_SYSTEM_TYPE == GoProjectSettings.BuildSystemType.Install) {
+                        compiledFileName = module.getProject().getBasePath() + "/bin/" + relativePath;
+                    }else{
+                        compiledFileName = CompilerPaths.getModuleOutputPath(module, false)
                                                 + "/go-bins/" + relativePath + "/" + file.getNameWithoutExtension();
+                    }
                     if (SystemInfo.isWindows) {
                         compiledFileName += ".exe";
                     }

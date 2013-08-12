@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.compilation.GoInstallCompiler;
 import ro.redeul.google.go.compilation.GoCompiler;
 import ro.redeul.google.go.compilation.GoMakefileCompiler;
 import ro.redeul.google.go.options.GoSettings;
@@ -93,6 +94,10 @@ public class GoConfigurable implements SearchableConfigurable {
         for (Compiler compiler : compilers) {
             compilerManager.removeCompiler(compiler);
         }
+        compilers = compilerManager.getCompilers(GoInstallCompiler.class);
+        for (Compiler compiler : compilers) {
+            compilerManager.removeCompiler(compiler);
+        }
 
         switch (bean.BUILD_SYSTEM_TYPE) {
         case Internal:
@@ -108,6 +113,11 @@ public class GoConfigurable implements SearchableConfigurable {
                     new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
                     new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
             break;
+        case Install:
+            compilerManager.addTranslatingCompiler(
+                    new GoInstallCompiler(project),
+                    new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
+                    new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
         }
     }
 

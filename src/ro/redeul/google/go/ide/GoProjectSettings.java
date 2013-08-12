@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoProjectSettings implements PersistentStateComponent<GoProjectSettings.GoProjectSettingsBean> {
 
     public enum BuildSystemType {
-        Internal, Makefile
+        Internal, Makefile, Install
     }
 
     public static class GoProjectSettingsBean {

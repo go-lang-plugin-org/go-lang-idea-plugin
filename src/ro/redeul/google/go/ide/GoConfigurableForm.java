@@ -21,6 +21,7 @@ public class GoConfigurableForm {
     private JRadioButton makefileBasedRadioButton;
     private JCheckBox enableImportsOptimizer;
     private JCheckBox enableOnTheFlyImportOptimization;
+    private JRadioButton goInstallRadioButton;
 
     public void enableShowHide(){
         componentPanel.addComponentListener(new ComponentAdapter() {
@@ -56,6 +57,8 @@ public class GoConfigurableForm {
                 return !internalBuildSystemRadioButton.isSelected();
             case Makefile:
                 return !makefileBasedRadioButton.isSelected();
+            case Install:
+                return !goInstallRadioButton.isSelected();
         }
 
         return false;
@@ -66,6 +69,8 @@ public class GoConfigurableForm {
             settingsBean.BUILD_SYSTEM_TYPE = GoProjectSettings.BuildSystemType.Internal;
         } else if ( makefileBasedRadioButton.isSelected() ) {
             settingsBean.BUILD_SYSTEM_TYPE = GoProjectSettings.BuildSystemType.Makefile;
+        } else if ( goInstallRadioButton.isSelected() ) {
+            settingsBean.BUILD_SYSTEM_TYPE = GoProjectSettings.BuildSystemType.Install;
         }
 
         settingsBean.enableOptimizeImports = enableImportsOptimizer.isSelected();
@@ -79,6 +84,9 @@ public class GoConfigurableForm {
                 break;
             case Makefile:
                 makefileBasedRadioButton.setSelected(true);
+                break;
+            case Install:
+                goInstallRadioButton.setSelected(true);
                 break;
         }
 

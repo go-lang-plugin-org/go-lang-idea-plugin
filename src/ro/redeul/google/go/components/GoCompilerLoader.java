@@ -13,6 +13,7 @@ import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.compilation.GoInstallCompiler;
 import ro.redeul.google.go.compilation.GoCompiler;
 import ro.redeul.google.go.compilation.GoMakefileCompiler;
 import ro.redeul.google.go.ide.GoModuleType;
@@ -66,6 +67,11 @@ public class GoCompilerLoader extends AbstractProjectComponent {
             getCompilerManager().removeCompiler(compiler);
         }
 
+        for (GoInstallCompiler compiler : getCompilerManager().getCompilers(
+                GoInstallCompiler.class)) {
+            getCompilerManager().removeCompiler(compiler);
+        }
+
         compilerManager.addCompilableFileType(GoFileType.INSTANCE);
 
         switch (GoProjectSettings.getInstance(myProject)
@@ -79,6 +85,11 @@ public class GoCompilerLoader extends AbstractProjectComponent {
                     new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
                     new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
                 break;
+            case Install:
+                compilerManager.addTranslatingCompiler(
+                        new GoInstallCompiler(myProject),
+                        new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
+                        new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
         }
     }
 

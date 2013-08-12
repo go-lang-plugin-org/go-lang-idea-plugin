@@ -16,7 +16,8 @@ public class GoCompilerFactory implements CompilerFactory {
     public Compiler[] createCompilers(CompilerManager compilerManager) {
         return new Compiler[]{
             new GoCompiler(myProject),
-            new GoMakefileCompiler(myProject)
+            new GoMakefileCompiler(myProject),
+            new GoInstallCompiler(myProject)
         };
     }
 }
