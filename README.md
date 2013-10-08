@@ -78,6 +78,9 @@ on GitHub: <http://github.com/mtoader/google-go-lang-idea-plugin/issues>
     +  gofmt integration
     +  simple Structure View for Go files.
 
++ [dlsniper](https://github.com/dlsniper)
+    +  Cardea support
+
 ## Contributing
 
 If you want to contribute to this effort you should read the following page:
