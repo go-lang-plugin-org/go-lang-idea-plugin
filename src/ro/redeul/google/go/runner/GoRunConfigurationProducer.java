@@ -94,7 +94,6 @@ public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
         return -1;
     }
 
-    @Override
     protected RunnerAndConfigurationSettings findExistingByElement(Location location,
                                                                    @NotNull RunnerAndConfigurationSettings[] existingConfigurations,
                                                                    ConfigurationContext context) {

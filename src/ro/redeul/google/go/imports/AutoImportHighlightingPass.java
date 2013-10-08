@@ -101,7 +101,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             // if this a "Unresolved symbol" error
             HighlightInfo info = (HighlightInfo) errorStripeTooltip;
             if (info.getSeverity() != HighlightSeverity.ERROR ||
-                !info.description.contains("Unresolved symbol")) {
+                !info.getDescription().contains("Unresolved symbol")) {
                 continue;
             }
 
