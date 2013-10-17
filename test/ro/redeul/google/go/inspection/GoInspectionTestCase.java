@@ -10,6 +10,7 @@ import java.util.List;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.QuickFix;
 import com.intellij.codeInspection.ex.ProblemDescriptorImpl;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
@@ -107,10 +108,12 @@ public abstract class GoInspectionTestCase
             @Override
             public int compare(ProblemDescriptor o1, ProblemDescriptor o2) {
                 return o1.getStartElement()
-                         .getTextOffset() - o2.getStartElement()
-                                              .getTextOffset();
+                        .getTextOffset() - o2.getStartElement()
+                        .getTextOffset();
             }
         });
+
+        Logger logger = Logger.getInstance("intellijjjj");
 
         StringBuilder sb = new StringBuilder();
         for (ProblemDescriptor pd : problems) {
@@ -125,8 +128,20 @@ public abstract class GoInspectionTestCase
                 range = new TextRange(start, end);
             }
             String text = document.getText(range);
-            sb.append(text).append(" => ").append(pd.getDescriptionTemplate());
-            for (QuickFix fix : pd.getFixes()) {
+
+            sb.append(text
+                    .replaceAll("\"?.*(, )?/\\*begin\\*/([^\\*/]*)/\\*end\\.[^\\*/]*\\*/(\\\\n)?\"?", "$2")
+                    ).append(" => ").append(pd.getDescriptionTemplate());
+
+            QuickFix[] fixes = pd.getFixes();
+
+            if (fixes == null || fixes.length == 0) {
+                sb.append("\n");
+
+                continue;
+            }
+
+            for (QuickFix fix : fixes) {
                 sb.append("|").append(fix.getClass().getSimpleName());
             }
             sb.append("\n");

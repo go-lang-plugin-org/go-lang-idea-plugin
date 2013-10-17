@@ -75,7 +75,7 @@ public class GoAnnotatorHighlightTest extends GoLightCodeInsightFixtureTestCase 
             }
 
             TextAttributesKey tak = annotation.getTextAttributes();
-            if (tak == null || !keys.contains(tak)) {
+            if (!keys.contains(tak)) {
                 continue;
             }
 

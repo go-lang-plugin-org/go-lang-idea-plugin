@@ -44,6 +44,10 @@ public class GoBundledSdkDetector implements ApplicationComponent {
         LOG.debug("Bundled Go SDK path exists: " + homePath);
 
         for (Sdk sdk : goSdks) {
+            if (sdk.getHomePath() == null) {
+                continue;
+            }
+
             if ( homePath.startsWith(sdk.getHomePath()) ) {
                 LOG.debug("Bundled Go SDK at registered already with name: " + sdk.getName());
                 return;

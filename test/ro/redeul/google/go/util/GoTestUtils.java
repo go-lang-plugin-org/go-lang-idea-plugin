@@ -115,7 +115,7 @@ public abstract class GoTestUtils {
 
 
     public static List<String> readInput(String filePath) throws IOException {
-        String content = new String(FileUtil.loadFileText(new File(filePath)));
+        String content = new String(FileUtil.loadFileText(new File(filePath).getAbsoluteFile()));
         Assert.assertNotNull(content);
 
         List<String> input = new ArrayList<String>();

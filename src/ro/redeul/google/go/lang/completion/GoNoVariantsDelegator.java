@@ -11,17 +11,6 @@ import static ro.redeul.google.go.lang.completion.GoCompletionContributor.addAll
 public class GoNoVariantsDelegator extends CompletionContributor {
     @Override
     public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
-        boolean empty = result.runRemainingContributors(parameters, true).isEmpty();
-        if (!empty && parameters.getInvocationCount() == 0) {
-            result.restartCompletionWhenNothingMatches();
-        }
-
-        if (empty || parameters.getInvocationCount() > 0) {
-            delegate(parameters, result);
-        }
-    }
-
-    private void delegate(CompletionParameters parameters, CompletionResultSet result) {
         if (parameters.getCompletionType() == CompletionType.BASIC) {
             if (VALID_PACKAGE_NAME_POSITION.accepts(parameters.getPosition())) {
                 addAllPackageNames(result, parameters.getOriginalFile());
