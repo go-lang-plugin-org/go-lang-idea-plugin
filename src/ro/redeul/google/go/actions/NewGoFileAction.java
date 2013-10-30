@@ -16,6 +16,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.facet.GoFacetType;
@@ -31,7 +32,7 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<GoFile>
     public NewGoFileAction() {
         super(GoBundle.message("new.go.file"),
               GoBundle.message("new.go.file.description"),
-              GoIcons.GO_ICON_16x16, true);
+              GoIcons.GO_ICON_16x16, JavaModuleSourceRootTypes.SOURCES);
     }
 
     @Override

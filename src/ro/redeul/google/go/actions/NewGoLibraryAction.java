@@ -14,6 +14,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.facet.GoFacetType;
@@ -31,7 +32,7 @@ import java.util.Set;
 public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> implements DumbAware {
 
     public NewGoLibraryAction() {
-        super(GoBundle.message("new.go.lib"), GoBundle.message("new.go.lib.description"), GoIcons.GO_ICON_16x16, true);
+        super(GoBundle.message("new.go.lib"), GoBundle.message("new.go.lib.description"), GoIcons.GO_ICON_16x16, JavaModuleSourceRootTypes.SOURCES);
     }
 
     @Override

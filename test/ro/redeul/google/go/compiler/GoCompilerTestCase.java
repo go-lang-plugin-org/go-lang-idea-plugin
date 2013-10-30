@@ -255,14 +255,16 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
 
         final ExecutionEnvironment environment = new ExecutionEnvironment(
             configuration,
-            getProject(), null, null, null);
+                extension,
+                getProject(),
+                null);
 
         final DefaultProgramRunner runner = ProgramRunner.PROGRAM_RUNNER_EP.findExtension(DefaultProgramRunner.class);
         final StringBuffer sb = new StringBuffer();
         final Semaphore semaphore = new Semaphore();
 
         semaphore.down();
-        runner.execute(extension, environment, new ProgramRunner.Callback() {
+        runner.execute(environment, new ProgramRunner.Callback() {
             public void processStarted(final RunContentDescriptor descriptor) {
                 Disposer.register(getProject(), new Disposable() {
                     public void dispose() {

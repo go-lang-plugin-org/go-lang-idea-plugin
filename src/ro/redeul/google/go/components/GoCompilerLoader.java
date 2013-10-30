@@ -49,11 +49,6 @@ public class GoCompilerLoader extends AbstractProjectComponent {
                 myProjectUsesGo = true;
         }
 
-        if (myProjectUsesGo) {
-            myPreviousExternalCompilerSetting = myConfiguration.USE_COMPILE_SERVER;
-            myConfiguration.USE_COMPILE_SERVER = false;
-        }
-
         CompilerManager compilerManager =
             CompilerManager.getInstance(myProject);
 
@@ -95,12 +90,5 @@ public class GoCompilerLoader extends AbstractProjectComponent {
 
     private CompilerManager getCompilerManager() {
         return CompilerManager.getInstance(myProject);
-    }
-
-    @Override
-    public void projectClosed() {
-        if (myProjectUsesGo) {
-            myConfiguration.USE_COMPILE_SERVER = myPreviousExternalCompilerSetting;
-        }
     }
 }

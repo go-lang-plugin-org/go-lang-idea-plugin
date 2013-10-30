@@ -9,5 +9,5 @@ func main() {
 /**---
 fmt
 for
-defer
 if
+defer

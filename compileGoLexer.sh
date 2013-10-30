@@ -1,6 +1,9 @@
 #!/bin/sh
 
-IDEA_HOME=/Users/mtoader/Work/Personal/idea/
+if [ -z "$IDEA_HOME" ]; then
+    IDEA_HOME=/Users/mtoader/Work/Personal/idea/
+fi
+
 ${IDEA_HOME}/tools/lexer/jflex-1.4/bin/jflex \
     --table \
     --skel ${IDEA_HOME}/tools/lexer/idea-flex.skeleton \

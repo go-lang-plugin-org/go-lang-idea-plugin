@@ -31,7 +31,6 @@ public class GoAppEngineApplicationRunner extends DefaultProgramRunner {
         return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof GoAppEngineApplicationConfiguration;
     }
 
-    @Override
     protected RunContentDescriptor doExecute(Project project, Executor executor, RunProfileState state, RunContentDescriptor contentToReuse, ExecutionEnvironment env) throws ExecutionException {
         FileDocumentManager.getInstance().saveAllDocuments();
 

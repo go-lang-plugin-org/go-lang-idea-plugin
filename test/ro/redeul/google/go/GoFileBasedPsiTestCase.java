@@ -22,8 +22,8 @@ import com.intellij.util.Processor;
 public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
     protected void doTest() throws Exception {
         final String fullPath =
-            (getTestDataPath() + getTestName(false))
-                .replace(File.separatorChar, '/');
+                new File((getTestDataPath() + getTestName(false))
+                .replace(File.separatorChar, '/')).getCanonicalPath();
 
         VirtualFile vFile;
 

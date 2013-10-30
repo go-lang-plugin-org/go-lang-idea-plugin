@@ -285,10 +285,16 @@
     <option name="LOCALE" />
     <option name="OPEN_IN_BROWSER" value="true" />
   </component>
+  <component name="LogFilterConfiguratble">
+    <option name="enabled" value="false" />
+  </component>
+  <component name="ProjectKey">
+    <option name="state" value="git@github.com:dlsniper/google-go-lang-idea-plugin.git" />
+  </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA IU-129.354" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA IU-132.556" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ResourceManagerContainer">
