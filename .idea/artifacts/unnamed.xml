@@ -3,7 +3,7 @@
     <output-path>$USER_HOME$/Library/Caches/IntelliJIdea12/plugins-sandbox/plugins</output-path>
     <root id="root">
       <element id="directory" name="golang-jps-plugin">
-	<element id="module-output" name="golang-jps-plugin" />
+        <element id="module-output" name="golang-jps-plugin" />
       </element>
     </root>
   </artifact>

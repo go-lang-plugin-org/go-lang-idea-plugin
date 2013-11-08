@@ -14,6 +14,6 @@ public class GoLangBuilderService extends BuilderService {
     @NotNull
     @Override
     public List<? extends ModuleLevelBuilder> createModuleLevelBuilders() {
-	return Arrays.asList(new GoLangBuilder());
+        return Arrays.asList(new GoLangBuilder());
     }
 }

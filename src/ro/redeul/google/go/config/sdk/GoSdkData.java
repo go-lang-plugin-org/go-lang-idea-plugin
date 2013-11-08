@@ -6,12 +6,6 @@ import com.intellij.openapi.projectRoots.SdkAdditionalData;
 import com.intellij.openapi.projectRoots.SdkModel;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Aug 19, 2010
- * Time: 8:07:05 AM
- */
 public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<GoSdkData> {
 
     public final static int LATEST_VERSION = 2;
