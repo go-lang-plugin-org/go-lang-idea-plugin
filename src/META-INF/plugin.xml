@@ -2,7 +2,7 @@
              url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>golang.org support plugin</name>
-    <version>0.9.15</version>
+    <version>0.9.16</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com
     </vendor>
     <description>
@@ -55,6 +55,12 @@
     </description>
     <change-notes>
         <![CDATA[
+         <h3>0.9.16 changes:</h3>
+            <ul>
+                <li>More Cardea (IntelliJ IDEA 13) support</li>
+                <li>Fixed live templates and compilation against latest EAP</li>
+            </ul>
+         </h3
          <h3>0.9.15 changes:</h3>
             <ul>
                 <li>Cardea (IntelliJ IDEA 13) support</li>
@@ -403,7 +409,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="132.556"/>
+    <idea-version since-build="132.947"/>
 
     <category>Custom Languages</category>
     <resource-bundle>ro.redeul.google.go.GoBundle</resource-bundle>
@@ -624,11 +630,8 @@
         <configurationProducer
                 implementation="ro.redeul.google.go.runner.GoTestConfigurationProducer"/>
 
-        <customLiveTemplate
-                implementation="ro.redeul.google.go.editor.GoCustomLiveTemplate"/>
-
         <liveTemplateContext
-                implementation="ro.redeul.google.go.template.GoTemplateContextType$Generic"/>
+                implementation="ro.redeul.google.go.template.GoTemplateContextType$File"/>
         <liveTemplateContext
                 implementation="ro.redeul.google.go.template.GoTemplateContextType$Function"/>
 

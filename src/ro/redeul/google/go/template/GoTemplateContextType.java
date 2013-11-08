@@ -6,9 +6,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiUtilBase;
+import com.intellij.util.ReflectionCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
@@ -31,20 +33,22 @@ public abstract class GoTemplateContextType extends TemplateContextType {
 
     protected abstract boolean isInContext(PsiElement element);
 
-    public static class Generic extends GoTemplateContextType {
-        protected Generic() {
-            super("GO", "Go", EverywhereContextType.class);
+    public static class File extends GoTemplateContextType {
+        protected File() {
+            super("GO", "Go file", EverywhereContextType.class);
         }
 
         @Override
         protected boolean isInContext(PsiElement element) {
-            return true;
+            return element != null && element.getParent() != null &&
+                    element.getParent().getParent() != null &&
+                    ReflectionCache.isInstance(element.getParent().getParent(), GoFile.class);
         }
     }
 
     public static class Function extends GoTemplateContextType {
         protected Function() {
-            super("GO_FUNCTION", "Go function", Generic.class);
+            super("GO_FUNCTION", "Go function", EverywhereContextType.class);
         }
 
         @Override
