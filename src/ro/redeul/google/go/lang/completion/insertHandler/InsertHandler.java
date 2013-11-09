@@ -5,7 +5,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import static ro.redeul.google.go.util.EditorUtil.pressEnter;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
-public abstract class InsertHandler<T extends LookupElement>
+abstract class InsertHandler<T extends LookupElement>
     implements com.intellij.codeInsight.completion.InsertHandler<T> {
 
     @Override
@@ -30,11 +30,11 @@ public abstract class InsertHandler<T extends LookupElement>
 
     protected abstract boolean shouldPressEnter();
 
-    protected int nextCaretPosition() {
+    int nextCaretPosition() {
         return 1;
     }
 
-    protected boolean shouldReformat() {
+    boolean shouldReformat() {
         return false;
     }
 }

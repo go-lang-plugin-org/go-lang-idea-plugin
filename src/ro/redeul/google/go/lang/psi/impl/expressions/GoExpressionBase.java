@@ -58,10 +58,8 @@ public abstract class GoExpressionBase extends GoPsiElementBase implements GoExp
     public boolean hasType(GoType type) {
         GoType[] myTypes = getType();
 
-        if ( myTypes.length == 0 )
-            return false;
+        return myTypes.length != 0 && myTypes[0] != null && myTypes[0].isIdentical(type);
 
-        return myTypes[0] != null && myTypes[0].isIdentical(type);
     }
 
     protected GoType[] resolveTypes() {

@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.parser.parsing.toplevel.packaging;
 
 import com.intellij.lang.PsiBuilder;
-import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
@@ -19,10 +18,10 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findDefaultPackageNa
  */
 public class ImportDeclaration implements GoElementTypes {
 
-    public static IElementType parse(PsiBuilder builder, GoParser parser) {
+    public static void parse(PsiBuilder builder, GoParser parser) {
 
         if (!ParserUtils.lookAhead(builder, kIMPORT))
-            return null;
+            return;
 
         PsiBuilder.Marker marker = builder.mark();
 
@@ -36,10 +35,9 @@ public class ImportDeclaration implements GoElementTypes {
         });
 
         marker.done(IMPORT_DECLARATIONS);
-        return IMPORT_DECLARATIONS;
     }
 
-    static TokenSet localImportTokens = TokenSet.create(mIDENT, oDOT, litSTRING);
+    private static final TokenSet localImportTokens = TokenSet.create(mIDENT, oDOT, litSTRING);
 
     private static boolean parseImportStatement(PsiBuilder builder, GoParser parser) {
 

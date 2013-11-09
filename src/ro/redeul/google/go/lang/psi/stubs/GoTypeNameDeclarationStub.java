@@ -16,8 +16,8 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
  */
 public class GoTypeNameDeclarationStub extends StubBase<GoTypeNameDeclaration> implements NamedStub<GoTypeNameDeclaration> {
 
-    private StringRef myPackage;
-    private StringRef myName;
+    private final StringRef myPackage;
+    private final StringRef myName;
 
     public GoTypeNameDeclarationStub(StubElement parent, final IStubElementType elementType,
                                      final String myName, final String myPackage)

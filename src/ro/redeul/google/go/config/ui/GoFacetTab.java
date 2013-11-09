@@ -31,7 +31,7 @@ public class GoFacetTab extends FacetEditorTab {
     private JPanel rootPanel;
     private ComboboxWithBrowseButton goSdks;
 
-    private GoFacetConfiguration facetConfiguration;
+    private final GoFacetConfiguration facetConfiguration;
     private boolean modified;
 
     public GoFacetTab(GoFacetConfiguration facetConfiguration, List<Sdk> SDKs) {

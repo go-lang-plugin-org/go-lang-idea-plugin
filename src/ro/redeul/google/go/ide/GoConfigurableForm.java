@@ -4,7 +4,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
 
-import com.intellij.openapi.options.ConfigurationException;
 import ro.redeul.google.go.options.GoSettings;
 
 /**
@@ -64,7 +63,7 @@ public class GoConfigurableForm {
         return false;
     }
 
-    public void apply(GoProjectSettings.GoProjectSettingsBean settingsBean, GoSettings goSettings) throws ConfigurationException {
+    public void apply(GoProjectSettings.GoProjectSettingsBean settingsBean, GoSettings goSettings) {
         if ( internalBuildSystemRadioButton.isSelected() ) {
             settingsBean.BUILD_SYSTEM_TYPE = GoProjectSettings.BuildSystemType.Internal;
         } else if ( makefileBasedRadioButton.isSelected() ) {

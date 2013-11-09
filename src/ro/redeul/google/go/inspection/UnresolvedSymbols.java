@@ -40,8 +40,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
     @Override
     protected void doCheckFile(@NotNull GoFile file,
-                               @NotNull final InspectionResult result,
-                               boolean isOnTheFly) {
+                               @NotNull final InspectionResult result) {
 
         new GoRecursiveElementVisitor() {
             @Override
@@ -127,11 +126,8 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
         }
 
         GoLiteralIdentifier identifier = (GoLiteralIdentifier) element;
-        if (!"C".equals(identifier.getLocalPackageName())) {
-            return false;
-        }
+        return "C".equals(identifier.getLocalPackageName()) && GoFileUtils.isPackageNameImported((GoFile) file, "C");
 
-        return GoFileUtils.isPackageNameImported((GoFile) file, "C");
     }
 
     private static boolean isUnqualifiedTypeName(PsiElement element) {

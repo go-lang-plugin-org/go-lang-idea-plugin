@@ -49,7 +49,7 @@ public abstract class GoInspectionTestCase
 
     protected void detectProblems(GoFile file, InspectionResult result)
         throws IllegalAccessException, InstantiationException {
-        createInspection().doCheckFile(file, result, true);
+        createInspection().doCheckFile(file, result);
     }
 
     protected void doTest() throws Exception {

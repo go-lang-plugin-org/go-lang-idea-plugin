@@ -51,7 +51,7 @@ public class CallOrConversionReference extends AbstractCallOrConversionReference
 
         GoLiteralExpression expression = getElement();
 
-        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+        final List<LookupElementBuilder> variants = new ArrayList<>();
 
         MethodOrTypeNameResolver processor =
             new MethodOrTypeNameResolver(this) {

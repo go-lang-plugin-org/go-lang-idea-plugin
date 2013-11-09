@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowCompositeLiteral;
 
-public class ForStatement implements GoElementTypes {
+class ForStatement implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
@@ -36,7 +36,7 @@ public class ForStatement implements GoElementTypes {
         return forType;
     }
 
-    static TokenSet RANGE_LOOKAHEAD = TokenSet.create(oCOMMA, oASSIGN, oVAR_ASSIGN);
+    private static final TokenSet RANGE_LOOKAHEAD = TokenSet.create(oCOMMA, oASSIGN, oVAR_ASSIGN);
 
     private static GoElementType parseConditionOrForClauseOrRangeClause(
         PsiBuilder builder, GoParser parser)

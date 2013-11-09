@@ -150,7 +150,6 @@ public class GoIntroduceConstantHandler extends GoIntroduceVariableHandlerBase {
                 GoConstDeclarations declarations = findParentOfType(resolve, GoConstDeclarations.class);
                 if (declarations == null || !(declarations.getParent() instanceof GoFile)) {
                     stopped.set(true);
-                    return;
                 }
             }
         }.visitElement(expr);

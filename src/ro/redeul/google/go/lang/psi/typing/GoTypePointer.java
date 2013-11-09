@@ -9,7 +9,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
  */
 public class GoTypePointer extends GoAbstractType<GoUnderlyingTypePointer> implements GoType {
 
-    GoType targetType;
+    private final GoType targetType;
 
     public GoTypePointer(GoType targetType) {
         this.targetType = targetType;

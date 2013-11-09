@@ -35,7 +35,7 @@ import java.util.List;
  * Date: Mar 30, 2010
  * Time: 9:29:43 PM
  */
-public class NoOpBlock implements Block {
+class NoOpBlock implements Block {
     private final ASTNode astNode;
 
     public NoOpBlock(ASTNode astNode) {

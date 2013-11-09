@@ -6,7 +6,7 @@ import ro.redeul.google.go.GoFileType;
 
 public class GoElementTypeImpl extends GoElementType {
 
-    private String debugName;
+    private final String debugName;
 
     public GoElementTypeImpl(@NotNull @NonNls String debugName) {
         super(debugName, GoFileType.INSTANCE.getLanguage());

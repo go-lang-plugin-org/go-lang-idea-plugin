@@ -13,7 +13,7 @@ import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.*;
  * Date: Jul 24, 2010
  * Time: 9:38:55 PM
  */
-public class ConstDeclaration implements GoElementTypes {
+class ConstDeclaration implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 

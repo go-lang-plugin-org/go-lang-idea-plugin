@@ -10,19 +10,19 @@ import com.intellij.openapi.compiler.CompilerMessageCategory;
  * Date: 11-05-28
  * Time: 8:45 PM
  */
-public class CompilerMessage {
+class CompilerMessage {
 
-    private CompilerMessageCategory category;
-    private String message;
-    private String fileName;
-    private int row;
+    private final CompilerMessageCategory category;
+    private final String message;
+    private final String fileName;
+    private final int row;
     private int column = -1;
 
     /**
      * Constructor
      * {@inheritDoc}
      */
-    protected CompilerMessage(CompilerMessageCategory category, String message, String fileName, int row, int column) {
+    CompilerMessage(CompilerMessageCategory category, String message, String fileName, int row, int column) {
         this.category = category;
         this.message = message;
         this.fileName = fileName;
@@ -52,14 +52,6 @@ public class CompilerMessage {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("CompilerMessage");
-        sb.append("{category=").append(category);
-        sb.append(", message='").append(message).append('\'');
-        sb.append(", fileName='").append(fileName).append('\'');
-        sb.append(", row=").append(row);
-        sb.append(", column=").append(column);
-        sb.append('}');
-        return sb.toString();
+        return "CompilerMessage" + "{category=" + category + ", message='" + message + '\'' + ", fileName='" + fileName + '\'' + ", row=" + row + ", column=" + column + '}';
     }
 }

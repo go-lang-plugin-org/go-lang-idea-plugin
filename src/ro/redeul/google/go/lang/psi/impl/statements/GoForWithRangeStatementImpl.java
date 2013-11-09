@@ -82,8 +82,6 @@ public class GoForWithRangeStatementImpl extends GoForStatementImpl
             return GoType.EMPTY_ARRAY;
         }
 
-        ;
-
         return
             new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
                 @Override

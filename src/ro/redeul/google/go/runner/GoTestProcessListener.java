@@ -61,8 +61,6 @@ class GoTestProcessListener extends ProcessAdapter {
 
         if (outputType == ProcessOutputTypes.STDOUT) {
             standardOutputAvailable(text);
-        } else if (outputType == ProcessOutputTypes.STDERR) {
-            standardErrorAvailable(text);
         }
     }
 
@@ -88,8 +86,5 @@ class GoTestProcessListener extends ProcessAdapter {
                 text.contains(BENCHMARK_FAILED_STRING + testCaseName)) {
             reporter.testCaseFailed();
         }
-    }
-
-    private void standardErrorAvailable(String text) {
     }
 }

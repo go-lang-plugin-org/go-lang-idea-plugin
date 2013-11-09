@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class GoElementType extends IElementType {
 
-    public GoElementType(@NotNull @NonNls String debugName, @Nullable Language language) {
+    GoElementType(@NotNull @NonNls String debugName, @Nullable Language language) {
         super(debugName, language);
     }
 

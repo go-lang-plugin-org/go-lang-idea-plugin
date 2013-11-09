@@ -20,8 +20,7 @@ public class ConstDeclarationInspection extends AbstractWholeGoFileInspection {
 
     @Override
     protected void doCheckFile(@NotNull GoFile file,
-                               @NotNull final InspectionResult result,
-                               boolean isOnTheFly) {
+                               @NotNull final InspectionResult result) {
 
         new GoRecursiveElementVisitor() {
             @Override

@@ -24,9 +24,8 @@ public class GoUtil {
      * Note: Copied over from IDEA Main class but the home directory doesn't seem to be properly made available to
      * plugins.
      * @return The idea home directory
-     * @throws IOException If error when building the path
      */
-    private static File getIdeaHomeDir() throws IOException {
+    private static File getIdeaHomeDir() {
         URL url = Bootstrap.class.getResource("");
         if (url == null || !"jar".equals(url.getProtocol())) return null;
 

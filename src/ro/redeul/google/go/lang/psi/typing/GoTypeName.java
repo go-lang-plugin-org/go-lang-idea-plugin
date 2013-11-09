@@ -11,8 +11,8 @@ public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName, GoUnderlyingType>
 
     private static final Logger LOG = Logger.getInstance(GoTypeName.class);
 
-    String name;
-    GoType definition;
+    private final String name;
+    private GoType definition;
 
     public GoTypeName(GoPsiTypeName type) {
         super(type);

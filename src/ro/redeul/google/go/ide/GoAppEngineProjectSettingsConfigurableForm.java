@@ -15,7 +15,7 @@ public class GoAppEngineProjectSettingsConfigurableForm {
     private JTextField textEmail;
     private JTextField textPassword;
 
-    GoAppEngineSettings appEngineSettings = GoAppEngineSettings.getInstance();
+    private final GoAppEngineSettings appEngineSettings = GoAppEngineSettings.getInstance();
 
     public void reset() {
         textEmail.setText(appEngineSettings.getEmail());

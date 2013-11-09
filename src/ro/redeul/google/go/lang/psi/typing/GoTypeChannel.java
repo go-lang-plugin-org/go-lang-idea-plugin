@@ -6,8 +6,8 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
 public class GoTypeChannel extends GoTypePsiBacked<GoPsiTypeChannel, GoUnderlyingTypeChannel> implements GoType {
 
-    GoType elementType;
-    ChannelType channelType;
+    private final GoType elementType;
+    private final ChannelType channelType;
 
     public GoTypeChannel(GoPsiTypeChannel psiType) {
         super(psiType);

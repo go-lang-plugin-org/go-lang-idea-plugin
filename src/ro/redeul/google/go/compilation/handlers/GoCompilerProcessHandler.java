@@ -14,7 +14,7 @@ import com.intellij.execution.process.ProcessTerminatedListener;
  */
 public class GoCompilerProcessHandler extends OSProcessHandler {
 
-    public GoCompilerProcessHandler(Process process, String commandLine) {
+    private GoCompilerProcessHandler(Process process, String commandLine) {
         super(process, commandLine);
     }
 

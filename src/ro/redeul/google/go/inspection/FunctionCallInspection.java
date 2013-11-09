@@ -23,7 +23,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 public class FunctionCallInspection extends AbstractWholeGoFileInspection {
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
             @Override
             public void visitCallOrConvExpression(GoCallOrConvExpression expression) {
@@ -38,12 +38,16 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
 
                 GoPrimaryExpression baseExpression = expression.getBaseExpression();
                 String expressionText = baseExpression.getText();
-                if ("make".equals(expressionText)) {
-                    checkMakeCall(expression, result);
-                } else if ("new".equals(expressionText)) {
-                    checkNewCall(expression, result);
-                } else {
-                    checkFunctionCallArguments(expression, result);
+                switch (expressionText) {
+                    case "make":
+                        checkMakeCall(expression, result);
+                        break;
+                    case "new":
+                        checkNewCall(expression, result);
+                        break;
+                    default:
+                        checkFunctionCallArguments(expression, result);
+                        break;
                 }
             }
         }.visitFile(file);
@@ -139,7 +143,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         GoExpr bufferSize = arguments[0];
     }
 
-    public static void checkFunctionCallArguments(GoCallOrConvExpression call, InspectionResult result) {
+    private static void checkFunctionCallArguments(GoCallOrConvExpression call, InspectionResult result) {
         if (call == null) {
             return;
         }

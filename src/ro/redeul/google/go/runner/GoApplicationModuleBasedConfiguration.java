@@ -9,7 +9,7 @@ import com.intellij.openapi.project.Project;
  * Date: Aug 27, 2010
  * Time: 11:02:54 AM
  */
-public class GoApplicationModuleBasedConfiguration extends RunConfigurationModule {
+class GoApplicationModuleBasedConfiguration extends RunConfigurationModule {
     public GoApplicationModuleBasedConfiguration(Project project) {
         super(project);
     }

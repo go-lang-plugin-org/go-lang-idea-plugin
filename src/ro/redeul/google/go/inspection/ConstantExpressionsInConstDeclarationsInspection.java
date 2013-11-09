@@ -12,7 +12,7 @@ public class ConstantExpressionsInConstDeclarationsInspection
     extends AbstractWholeGoFileInspection{
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
             new GoRecursiveElementVisitor() {
                 @Override
                 public void visitConstDeclaration(GoConstDeclaration declaration) {

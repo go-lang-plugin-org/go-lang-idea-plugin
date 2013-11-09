@@ -8,8 +8,8 @@ public class GoTypeMap
     extends GoTypePsiBacked<GoPsiTypeMap, GoUnderlyingTypeMap>
     implements GoType {
 
-    GoType keyType;
-    GoType elementType;
+    private final GoType keyType;
+    private final GoType elementType;
 
     public GoTypeMap(GoPsiTypeMap type) {
         super(type);
@@ -18,8 +18,8 @@ public class GoTypeMap
         elementType = GoTypes.fromPsiType(type.getElementType());
 
         setUnderlyingType(
-            GoUnderlyingTypes.getMap(keyType.getUnderlyingType(),
-                                     elementType.getUnderlyingType()));
+            GoUnderlyingTypes.getMap(
+            ));
 
     }
 

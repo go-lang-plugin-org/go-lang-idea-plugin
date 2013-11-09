@@ -36,7 +36,7 @@ public class FunctionDeclarationInspection
     extends AbstractWholeGoFileInspection
 {
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
 
         new GoRecursiveElementVisitor() {
             @Override
@@ -65,7 +65,7 @@ public class FunctionDeclarationInspection
         hasVariadicProblems(ctx);
     }
 
-    public static void hasResultButNoReturnAtTheEnd(Context ctx) {
+    private static void hasResultButNoReturnAtTheEnd(Context ctx) {
         if (hasResult(ctx) && hasBody(ctx) && !hasReturnAtTheEnd(ctx)) {
             LocalQuickFix fix1 = new AddReturnStmtFix(ctx.function);
             LocalQuickFix fix2 = new RemoveFunctionResultFix(ctx.function);
@@ -74,8 +74,8 @@ public class FunctionDeclarationInspection
         }
     }
 
-    public static void hasDuplicateArgument(Context ctx) {
-        Set<String> parameters = new HashSet<String>();
+    private static void hasDuplicateArgument(Context ctx) {
+        Set<String> parameters = new HashSet<>();
         for (GoFunctionParameter fp : ctx.function.getParameters()) {
             for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 if (id.isBlank()) {
@@ -92,8 +92,8 @@ public class FunctionDeclarationInspection
         }
     }
 
-    public static void hasRedeclaredParameterInResultList(Context ctx) {
-        Set<String> parameters = new HashSet<String>(getParameterNames(ctx.function.getParameters()));
+    private static void hasRedeclaredParameterInResultList(Context ctx) {
+        Set<String> parameters = new HashSet<>(getParameterNames(ctx.function.getParameters()));
 
         for (GoFunctionParameter fp : ctx.function.getResults()) {
             for (GoLiteralIdentifier id : fp.getIdentifiers()) {
@@ -105,11 +105,11 @@ public class FunctionDeclarationInspection
         }
     }
 
-    public static void hasReturnParameterCountMismatch(InspectionResult result, GoFunctionDeclaration function) {
+    private static void hasReturnParameterCountMismatch(InspectionResult result, GoFunctionDeclaration function) {
         new ReturnVisitor(result, function).visitFunctionDeclaration(function);
     }
 
-    public static void hasVariadicProblems(Context ctx) {
+    private static void hasVariadicProblems(Context ctx) {
         // cannot use variadic in output argument list
         for (GoFunctionParameter parameter : ctx.function.getResults()) {
             if (parameter.isVariadic()) {
@@ -173,7 +173,7 @@ public class FunctionDeclarationInspection
     }
 
     private static List<String> getParameterNames(GoFunctionParameter[] parameters) {
-        List<String> parameterNames = new ArrayList<String>();
+        List<String> parameterNames = new ArrayList<>();
         for (GoFunctionParameter fp : parameters) {
             for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 if (!id.isBlank()) {
@@ -189,7 +189,7 @@ public class FunctionDeclarationInspection
      * list with function's result list
      */
     private static class ReturnVisitor extends GoRecursiveElementVisitor {
-        private InspectionResult result;
+        private final InspectionResult result;
         int expectedResCount;
         boolean hasNamedReturns;
 

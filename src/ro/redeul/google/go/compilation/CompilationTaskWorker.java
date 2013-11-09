@@ -25,7 +25,7 @@ import java.util.Map;
  * Date: 11-05-28
  * Time: 8:45 PM
  */
-public class CompilationTaskWorker {
+class CompilationTaskWorker {
 
     private static final Logger LOG = Logger.getInstance("#ro.redeul.google.go.compilation.CompilationTaskWorker");
 
@@ -35,7 +35,7 @@ public class CompilationTaskWorker {
         this.outputParser = outputParser;
     }
 
-    protected ProcessOutput executeTask(GeneralCommandLine command, String path, CompileContext context) {
+    ProcessOutput executeTask(GeneralCommandLine command, String path, CompileContext context) {
 
         if (LOG.isDebugEnabled()) {
             @NonNls final StringBuilder buf = StringBuilderSpinAllocator.alloc();
@@ -73,8 +73,8 @@ public class CompilationTaskWorker {
 
             if (output.getExitCode() != 0) {
 
-                processErrors(path, context, output.getStderrLines(), outputParser);
-                processErrors(path, context, output.getStdoutLines(), outputParser);
+                processErrors(context, output.getStderrLines(), outputParser);
+                processErrors(context, output.getStdoutLines(), outputParser);
 
                 context.addMessage(CompilerMessageCategory.WARNING, "process exited with code: " + output.getExitCode(), null, -1, -1);
             }
@@ -86,7 +86,7 @@ public class CompilationTaskWorker {
         }
     }
 
-    private void processErrors(String path, CompileContext context, List<String> outputLines, ProcessUtil.StreamParser<List<CompilerMessage>> outputStreamParser) {
+    private void processErrors(CompileContext context, List<String> outputLines, ProcessUtil.StreamParser<List<CompilerMessage>> outputStreamParser) {
         if (!outputLines.isEmpty()) {
             for (String line : outputLines) {
                 List<CompilerMessage> compilerMessages = outputStreamParser.parseStream(line);
@@ -99,7 +99,7 @@ public class CompilationTaskWorker {
         }
     }
 
-    protected static String generateFileUrl(String workingDirectory, String filename) {
+    static String generateFileUrl(String workingDirectory, String filename) {
         // Using this method instead of File.toURI().toUrl() because it doesn't use the two slashes after ':'
         // and IDEA doesn't recognises this as a valid URL (even though it seems to be spec compliant)
 

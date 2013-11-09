@@ -8,8 +8,6 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.AdditionalDataConfigurable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkAdditionalData;
-import com.intellij.openapi.projectRoots.SdkModel;
-import com.intellij.openapi.projectRoots.SdkModificator;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 
 /**
@@ -25,13 +23,9 @@ public class GoAppEngineSdkConfigurable implements AdditionalDataConfigurable {
     private JLabel labelAppLevel;
     private JPanel component;
 
-    private SdkModel model;
-    private SdkModificator modifier;
     private Sdk sdk;
 
-    public GoAppEngineSdkConfigurable(final SdkModel model, final SdkModificator modifier) {
-        this.model = model;
-        this.modifier = modifier;
+    public GoAppEngineSdkConfigurable() {
     }
 
     @Override

@@ -24,7 +24,7 @@ import java.util.List;
 public class GoFoldingBuilder implements FoldingBuilder, DumbAware, GoElementTypes {
     @NotNull
     public FoldingDescriptor[] buildFoldRegions(@NotNull ASTNode node, @NotNull Document document) {
-        List<FoldingDescriptor> descriptors = new ArrayList<FoldingDescriptor>();
+        List<FoldingDescriptor> descriptors = new ArrayList<>();
         appendDescriptors(node.getPsi(), document, descriptors);
         return descriptors.toArray(new FoldingDescriptor[descriptors.size()]);
     }

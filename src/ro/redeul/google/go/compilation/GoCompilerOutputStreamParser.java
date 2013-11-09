@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 class GoCompilerOutputStreamParser implements ProcessUtil.StreamParser<List<CompilerMessage>> {
 
     private final static Pattern pattern = Pattern.compile("([^:]+):(\\d+): ((?:(?:.)|(?:\\n(?!/)))+)", Pattern.UNIX_LINES);
-    private String basePath;
+    private final String basePath;
 
     public GoCompilerOutputStreamParser(String basePath) {
         this.basePath = basePath;
@@ -25,7 +25,7 @@ class GoCompilerOutputStreamParser implements ProcessUtil.StreamParser<List<Comp
 
     public List<CompilerMessage> parseStream(String data) {
 
-        List<CompilerMessage> messages = new ArrayList<CompilerMessage>();
+        List<CompilerMessage> messages = new ArrayList<>();
 
         Matcher matcher = pattern.matcher(data);
 

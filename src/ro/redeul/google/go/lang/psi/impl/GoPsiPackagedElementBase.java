@@ -15,7 +15,7 @@ import ro.redeul.google.go.lang.psi.GoPackagedElement;
  * Time: 11:06 PM
  */
 public class GoPsiPackagedElementBase extends GoPsiElementBase implements GoPackagedElement {
-    public GoPsiPackagedElementBase(@NotNull ASTNode node) {
+    protected GoPsiPackagedElementBase(@NotNull ASTNode node) {
         super(node);
     }
 

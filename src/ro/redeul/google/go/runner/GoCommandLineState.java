@@ -26,7 +26,7 @@ import static com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil
 import static ro.redeul.google.go.sdk.GoSdkUtil.prependToGoPath;
 
 class GoCommandLineState extends CommandLineState {
-    private GoTestConsoleProperties consoleProperties;
+    private final GoTestConsoleProperties consoleProperties;
 
     public GoCommandLineState(GoTestConsoleProperties consoleProperties, ExecutionEnvironment env) {
         super(env);

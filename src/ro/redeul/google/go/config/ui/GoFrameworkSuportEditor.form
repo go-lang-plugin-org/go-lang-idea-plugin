@@ -38,21 +38,26 @@
             <properties/>
             <border type="line" title="Description" title-justification="1"/>
             <children>
-              <component id="c8c8" class="javax.swing.JTextPane" default-binding="true">
+              <scrollpane id="d6fb9">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="50"/>
-                  </grid>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties>
-                  <background swing-color="Panel.background"/>
-                  <contentType value="text/html" noi18n="true"/>
-                  <editable value="false"/>
-                  <enabled value="true"/>
-                  <font swing-font="Panel.font"/>
-                  <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.sdk.framework.instructions"/>
-                </properties>
-              </component>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="c8c8" class="javax.swing.JTextPane" default-binding="true">
+                    <constraints/>
+                    <properties>
+                      <background swing-color="Panel.background"/>
+                      <contentType value="text/html" noi18n="true"/>
+                      <editable value="false"/>
+                      <enabled value="true"/>
+                      <font swing-font="Panel.font"/>
+                      <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.sdk.framework.instructions"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
             </children>
           </grid>
         </children>

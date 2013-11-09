@@ -50,35 +50,35 @@ public class GoSdkUtil {
 
     private static final String DEFAULT_MOCK_PATH = "go/default";
 
-    public static final String ENV_GO_ROOT = "GOROOT";
+    private static final String ENV_GO_ROOT = "GOROOT";
 
     // release: "xx"
-    private static Pattern RE_APP_ENGINE_VERSION_MATCHER =
+    private static final Pattern RE_APP_ENGINE_VERSION_MATCHER =
         Pattern.compile("^release: \"([^\"]+)\"$", Pattern.MULTILINE);
 
-    private static Pattern RE_APP_ENGINE_TIMESTAMP_MATCHER =
+    private static final Pattern RE_APP_ENGINE_TIMESTAMP_MATCHER =
         Pattern.compile("^timestamp: ([0-9]+)$", Pattern.MULTILINE);
 
-    private static Pattern RE_APP_ENGINE_API_VERSIONS_MATCHER =
+    private static final Pattern RE_APP_ENGINE_API_VERSIONS_MATCHER =
         Pattern.compile("^api_versions: \\[([^\\]]+)\\]$", Pattern.MULTILINE);
 
-    private static Pattern RE_OS_MATCHER =
+    private static final Pattern RE_OS_MATCHER =
         Pattern.compile("^(?:set )?GOOS=\"?(darwin|freebsd|linux|windows)\"?$",
                         Pattern.MULTILINE);
 
-    private static Pattern RE_ARCH_MATCHER =
+    private static final Pattern RE_ARCH_MATCHER =
         Pattern.compile("^(?:set )?GOARCH=\"?(386|amd64|arm)\"?$",
                         Pattern.MULTILINE);
 
-    private static Pattern RE_HOSTOS_MATCHER =
+    private static final Pattern RE_HOSTOS_MATCHER =
         Pattern.compile("^(?:set )?GOHOSTOS=\"?(darwin|freebsd|linux|windows)\"?$",
                         Pattern.MULTILINE);
 
-    private static Pattern RE_HOSTARCH_MATCHER =
+    private static final Pattern RE_HOSTARCH_MATCHER =
         Pattern.compile("^(?:set )?GOHOSTARCH=\"?(386|amd64|arm)\"?$",
                         Pattern.MULTILINE);
 
-    private static Pattern RE_ROOT_MATCHER =
+    private static final Pattern RE_ROOT_MATCHER =
         Pattern.compile("^(?:set )?GOROOT=\"?([^\"]+)\"?$", Pattern.MULTILINE);
 
     public static GoSdkData testGoogleGoSdk(String path) {
@@ -333,41 +333,41 @@ public class GoSdkUtil {
         return getMockGoogleSdk(sdkPath);
     }
 
-    public static GoSdkData getMockGoogleSdk(String path) {
+    private static GoSdkData getMockGoogleSdk(String path) {
         GoSdkData sdkData = testGoogleGoSdk(path);
         if (sdkData != null) {
             new File(
                 sdkData.GO_BIN_PATH,
-                getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
+                getCompilerName(sdkData.TARGET_ARCH)
             ).setExecutable(true);
 
             new File(
                 sdkData.GO_BIN_PATH,
-                getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
+                getLinkerName(sdkData.TARGET_ARCH)
             ).setExecutable(true);
 
             new File(
                 sdkData.GO_BIN_PATH,
-                getArchivePackerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
+                getArchivePackerName()
             ).setExecutable(true);
         }
 
         return sdkData;
     }
 
-    private static String getArchivePackerName(GoTargetOs os, GoTargetArch arch) {
+    private static String getArchivePackerName() {
         return "gopack";
     }
 
-    public static String getCompilerName(GoTargetOs os, GoTargetArch arch) {
-        return getBinariesDesignation(os, arch) + "g";
+    public static String getCompilerName(GoTargetArch arch) {
+        return getBinariesDesignation(arch) + "g";
     }
 
-    public static String getLinkerName(GoTargetOs os, GoTargetArch arch) {
-        return getBinariesDesignation(os, arch) + "l";
+    public static String getLinkerName(GoTargetArch arch) {
+        return getBinariesDesignation(arch) + "l";
     }
 
-    public static String getBinariesDesignation(GoTargetOs os, GoTargetArch arch) {
+    public static String getBinariesDesignation(GoTargetArch arch) {
 
         switch (arch) {
             case _386:
@@ -422,9 +422,9 @@ public class GoSdkUtil {
         return getGoogleGoSdkForModule(module);
     }
 
-    public static String getToolName(GoTargetOs os, GoTargetArch arch, GoSdkTool tool) {
+    public static String getToolName(GoTargetArch arch, GoSdkTool tool) {
 
-        String binariesDesignation = getBinariesDesignation(os, arch);
+        String binariesDesignation = getBinariesDesignation(arch);
 
         switch (tool) {
             case GoCompiler:
@@ -554,7 +554,7 @@ public class GoSdkUtil {
     public static List<Sdk> getSdkOfType(SdkType sdkType, ProjectJdkTable table) {
         Sdk[] sdks = table.getAllJdks();
 
-        List<Sdk> goSdks = new LinkedList<Sdk>();
+        List<Sdk> goSdks = new LinkedList<>();
         for (Sdk sdk : sdks) {
             if (sdk.getSdkType() == sdkType) {
                 goSdks.add(sdk);

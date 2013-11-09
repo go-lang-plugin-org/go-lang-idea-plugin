@@ -56,7 +56,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 public class GoLiteralIdentifierImpl extends GoPsiElementBase
     implements GoLiteralIdentifier {
 
-    boolean isIota;
+    private final boolean isIota;
 
     public GoLiteralIdentifierImpl(@NotNull ASTNode node) {
         this(node, false);
@@ -109,7 +109,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         return null;
     }
 
-    static final ElementPattern<PsiElement> NO_REFERENCE =
+    private static final ElementPattern<PsiElement> NO_REFERENCE =
         or(
             psiElement(GoLiteralIdentifier.class)
                 .withText(string().matches("nil")),

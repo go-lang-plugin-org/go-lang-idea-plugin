@@ -40,9 +40,7 @@ public class GoSwitchExpressionStatementImpl extends GoPsiElementBase
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
         GoSimpleStatement initStatement = getSimpleStatement();
-        if (lastParent == null || initStatement == null || lastParent == initStatement )
-            return true;
+        return lastParent == null || initStatement == null || lastParent == initStatement || initStatement.processDeclarations(processor, state, null, place);
 
-        return initStatement.processDeclarations(processor, state, null, place);
     }
 }

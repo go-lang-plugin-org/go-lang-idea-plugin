@@ -3,8 +3,6 @@ package ro.redeul.google.go.actions;
 import com.intellij.facet.FacetManager;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.actions.CreateTemplateInPackageAction;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
@@ -45,16 +43,8 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
         return "New Go file creation";
     }
 
-//    @Override
     protected boolean checkPackageExists(PsiDirectory directory) {
         return true;
-    }
-
-    @Override
-    protected boolean isAvailable(DataContext dataContext) {
-//        return super.isAvailable(dataContext)
-//                && hasGoFacet(DataKeys.MODULE.getData(dataContext));
-        return super.isAvailable(dataContext);
     }
 
     private boolean hasGoFacet(Module module) {
@@ -113,13 +103,12 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
         return parameterName;
     }
 
-//    @Override
     protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
 //        builder.setTitle("New Go file creation");
 
         PsiFile childs[] = directory.getFiles();
 
-        Set<String> packages = new HashSet<String>();
+        Set<String> packages = new HashSet<>();
 
         for (PsiFile child : childs) {
             if (child instanceof GoFile) {
@@ -139,11 +128,11 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
         builder.addKind("New library (this folder)", GoIcons.GO_ICON_16x16, "single");
     }
 
-    private boolean isLibraryFolder(PsiDirectory directory) {
+    private boolean isLibraryFolder() {
         return false;
     }
 
-    private boolean isApplicationFolder(PsiDirectory directory) {
+    private boolean isApplicationFolder() {
         return false;
     }
 

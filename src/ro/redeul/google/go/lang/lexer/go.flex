@@ -41,8 +41,8 @@ import org.jetbrains.annotations.NotNull;
 
 %{
 
-  private Stack <IElementType> gStringStack = new Stack<IElementType>();
-  private Stack <IElementType> blockStack = new Stack<IElementType>();
+  private Stack <IElementType> gStringStack = new Stack<>();
+  private Stack <IElementType> blockStack = new Stack<>();
 
   private int afterComment = YYINITIAL;
   private int afterNls = YYINITIAL;
@@ -53,7 +53,7 @@ import org.jetbrains.annotations.NotNull;
     blockStack.clear();
   }
 
-  private Stack<IElementType> braceCount = new Stack <IElementType>();
+  private Stack<IElementType> braceCount = new Stack <>();
 
 %}
 

@@ -3,8 +3,6 @@ package ro.redeul.google.go.inspection;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
@@ -30,7 +28,7 @@ public class TypeStructDeclarationInspection
     }
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
             @Override
             public void visitStructType(GoPsiTypeStruct type) {
@@ -77,7 +75,7 @@ public class TypeStructDeclarationInspection
     }
 
     private static void checkFields(GoPsiTypeStruct struct, InspectionResult result) {
-        Set<String> fields = new HashSet<String>();
+        Set<String> fields = new HashSet<>();
         for (GoTypeStructField field : struct.getFields()) {
             if (typeContainsStruct(field.getType(), struct)) {
                 result.addProblem(field, GoBundle.message(

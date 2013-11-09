@@ -67,7 +67,7 @@ public class GoAppEngineUpload extends AnAction {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Messages.showErrorDialog("Error while processing upload command.", "Error on App Engine plugin");
+            Messages.showErrorDialog("Error while processing upload command.", "Error on App Engine Plugin");
         }
 
 

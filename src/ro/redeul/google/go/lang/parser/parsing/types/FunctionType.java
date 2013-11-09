@@ -12,7 +12,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 25, 2010
  * Time: 2:52:27 AM
  */
-public class FunctionType implements GoElementTypes {
+class FunctionType implements GoElementTypes {
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
         if (!ParserUtils.lookAhead(builder, kFUNC))

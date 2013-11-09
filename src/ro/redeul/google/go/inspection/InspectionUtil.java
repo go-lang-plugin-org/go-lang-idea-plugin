@@ -43,7 +43,7 @@ public class InspectionUtil {
         return UNKNOWN_COUNT;
     }
 
-    public static int getTypeAssertionResultCount(GoTypeAssertionExpression expression) {
+    private static int getTypeAssertionResultCount(GoTypeAssertionExpression expression) {
         PsiElement parent = expression.getParent();
         if (isNodeOfType(parent, GoElementTypes.ASSIGN_STATEMENT)) {
             // TODO: get expressions and identifiers of assign statement
@@ -65,7 +65,7 @@ public class InspectionUtil {
         return 1;
     }
 
-    public static int getFunctionResultCount(GoCallOrConvExpression call) {
+    private static int getFunctionResultCount(GoCallOrConvExpression call) {
         GoFunctionDeclaration function = resolveToFunctionDeclaration(call);
         return function == null ? UNKNOWN_COUNT : getFunctionResultCount(function);
     }

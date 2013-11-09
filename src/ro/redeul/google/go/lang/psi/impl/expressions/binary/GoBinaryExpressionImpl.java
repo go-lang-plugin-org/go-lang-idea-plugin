@@ -14,7 +14,7 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 public abstract class GoBinaryExpressionImpl extends GoExpressionBase
     implements GoBinaryExpression {
 
-    public GoBinaryExpressionImpl(@NotNull ASTNode node) {
+    GoBinaryExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
 

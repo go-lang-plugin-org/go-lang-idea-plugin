@@ -24,7 +24,7 @@ public class MethodResolver extends GoPsiReferenceResolver<MethodReference>
             addDeclaration(declaration, declaration.getNameIdentifier());
     }
 
-    public boolean isReferenceTo(GoMethodDeclaration declaration) {
+    boolean isReferenceTo(GoMethodDeclaration declaration) {
         GoPsiType receiverType = declaration.getMethodReceiver().getType();
 
         if (receiverType == null)

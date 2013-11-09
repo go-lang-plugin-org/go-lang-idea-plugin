@@ -100,7 +100,7 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
 
     @Override
     public GoUnderlyingType getUnderlyingType() {
-        return GoUnderlyingTypes.getFunction(this);
+        return GoUnderlyingTypes.getFunction();
     }
 
     @Override
@@ -120,7 +120,7 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
 
     @Override
     public GoPsiType[] getReturnType() {
-        List<GoPsiType> types = new ArrayList<GoPsiType>();
+        List<GoPsiType> types = new ArrayList<>();
 
         GoFunctionParameter[] results = getResults();
         for (GoFunctionParameter result : results) {

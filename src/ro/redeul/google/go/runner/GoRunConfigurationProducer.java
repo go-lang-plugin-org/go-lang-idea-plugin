@@ -25,7 +25,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
  */
 public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
 
-    PsiElement element;
+    private PsiElement element;
 
     public GoRunConfigurationProducer() {
         super(GoRunConfigurationType.getInstance());
@@ -95,8 +95,7 @@ public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
     }
 
     protected RunnerAndConfigurationSettings findExistingByElement(Location location,
-                                                                   @NotNull RunnerAndConfigurationSettings[] existingConfigurations,
-                                                                   ConfigurationContext context) {
+                                                                   @NotNull RunnerAndConfigurationSettings[] existingConfigurations) {
         for (RunnerAndConfigurationSettings existingConfiguration : existingConfigurations) {
             final RunConfiguration configuration = existingConfiguration.getConfiguration();
 

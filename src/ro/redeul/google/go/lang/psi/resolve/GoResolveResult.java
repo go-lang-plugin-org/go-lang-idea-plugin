@@ -7,7 +7,7 @@ public class GoResolveResult implements ResolveResult {
 
     public static final GoResolveResult NULL = new GoResolveResult(null);
 
-    PsiElement element;
+    private final PsiElement element;
 
     public GoResolveResult(PsiElement element) {
         this.element = element;

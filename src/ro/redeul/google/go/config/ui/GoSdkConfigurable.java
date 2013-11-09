@@ -19,20 +19,16 @@ public class GoSdkConfigurable implements AdditionalDataConfigurable {
     private JLabel labelSdkTarget;
     private JLabel labelBinariesPath;
 
-    private SdkModel model;
-    private SdkModificator modifier;
     private Sdk sdk;
 
-    public GoSdkConfigurable(final SdkModel model, final SdkModificator modifier) {
-        this.model = model;
-        this.modifier = modifier;
+    public GoSdkConfigurable() {
     }
 
     public void setSdk(Sdk sdk) {
         this.sdk = sdk;
     }
 
-    public void removeSdk(Sdk sdk) {
+    public void removeSdk() {
         this.sdk = null;
     }
 
@@ -62,8 +58,8 @@ public class GoSdkConfigurable implements AdditionalDataConfigurable {
                 String.format("%s-%s (%s, %s)",
                     sdkData.TARGET_OS.getName(),
                     sdkData.TARGET_ARCH.getName(),
-                    GoSdkUtil.getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH),
-                    GoSdkUtil.getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH)
+                    GoSdkUtil.getCompilerName(sdkData.TARGET_ARCH),
+                    GoSdkUtil.getLinkerName(sdkData.TARGET_ARCH)
             ));
         } else {
             labelSdkTarget.setText("Unknown target");

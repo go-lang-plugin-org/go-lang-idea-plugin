@@ -17,7 +17,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
  */
 public class GoImportUsageCheckingVisitor extends GoRecursiveElementVisitor {
 
-    private Map<String, GoImportDeclaration> imports;
+    private final Map<String, GoImportDeclaration> imports;
 
     public GoImportUsageCheckingVisitor(Map<String, GoImportDeclaration> imports)
     {
@@ -44,7 +44,7 @@ public class GoImportUsageCheckingVisitor extends GoRecursiveElementVisitor {
     private void checkQualifiedIdentifier(GoLiteralIdentifier identifier) {
         if ( identifier != null && identifier.isQualified() ) {
             if ( imports.remove(identifier.getLocalPackageName()) == null ) {
-                for (String s : new HashSet<String>(imports.keySet())) {
+                for (String s : new HashSet<>(imports.keySet())) {
                     if (s.toLowerCase()
                          .equals(identifier.getLocalPackageName()))  {
                         imports.remove(s);

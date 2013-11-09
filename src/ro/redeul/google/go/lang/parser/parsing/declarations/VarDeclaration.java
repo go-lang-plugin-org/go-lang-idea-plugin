@@ -14,7 +14,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 24, 2010
  * Time: 9:38:55 PM
  */
-public class VarDeclaration extends ParserUtils implements GoElementTypes {
+class VarDeclaration extends ParserUtils implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 

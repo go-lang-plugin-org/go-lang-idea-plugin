@@ -1,9 +1,7 @@
 package ro.redeul.google.go.config.sdk;
 
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.SdkAdditionalData;
-import com.intellij.openapi.projectRoots.SdkModel;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
 /**
@@ -26,7 +24,7 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
     public GoAppEngineSdkData() {
     }
 
-    public GoAppEngineSdkData(String homePath, String binPath, GoTargetOs TARGET_OS, GoTargetArch TARGET_ARCH, String VERSION_MAJOR, String VERSION_MINOR) {
+    public GoAppEngineSdkData(String homePath, GoTargetOs TARGET_OS, GoTargetArch TARGET_ARCH, String VERSION_MAJOR, String VERSION_MINOR) {
         this.GO_HOME_PATH = homePath;
         this.TARGET_OS = TARGET_OS;
         this.TARGET_ARCH = TARGET_ARCH;
@@ -39,10 +37,6 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
-    }
-
-    public void checkValid(SdkModel sdkModel) throws ConfigurationException {
-        //
     }
 
     @Override

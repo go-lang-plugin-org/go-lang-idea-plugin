@@ -20,9 +20,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.MethodResolver;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.typing.GoType;
@@ -31,14 +29,13 @@ import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.util.LookupElementUtil;
-import static ro.redeul.google.go.lang.completion.GoCompletionContributor.DUMMY_IDENTIFIER;
 
 public class MethodReference
     extends GoPsiReference.Single<GoSelectorExpression, MethodReference> {
 
-    Set<GoTypeName> receiverTypes;
+    private Set<GoTypeName> receiverTypes;
 
-    private static ResolveCache.AbstractResolver<MethodReference, GoResolveResult> RESOLVER =
+    private static final ResolveCache.AbstractResolver<MethodReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<MethodReference, GoResolveResult>() {
             @Override
             public GoResolveResult resolve(MethodReference methodReference, boolean incompleteCode) {
@@ -100,7 +97,7 @@ public class MethodReference
         if (resolverTypeNames.size() == 0)
             return LookupElementBuilder.EMPTY_ARRAY;
 
-        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+        final List<LookupElementBuilder> variants = new ArrayList<>();
 
         MethodResolver processor = new MethodResolver(this) {
             @Override
@@ -128,7 +125,7 @@ public class MethodReference
         if ( receiverTypes != null )
             return receiverTypes;
 
-        receiverTypes = new HashSet<GoTypeName>();
+        receiverTypes = new HashSet<>();
 
         GoType[] types = getElement().getBaseExpression().getType();
 
@@ -144,7 +141,7 @@ public class MethodReference
 
         GoTypeName typeName = (GoTypeName) type;
 
-        Queue<GoTypeName> typeNamesToExplore = new LinkedList<GoTypeName>();
+        Queue<GoTypeName> typeNamesToExplore = new LinkedList<>();
         typeNamesToExplore.offer(typeName);
 
         while ( ! typeNamesToExplore.isEmpty() ) {

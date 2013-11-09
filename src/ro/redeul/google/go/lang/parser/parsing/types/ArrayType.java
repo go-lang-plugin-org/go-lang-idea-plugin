@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 25, 2010
  * Time: 2:50:25 AM
  */
-public class ArrayType implements GoElementTypes
+class ArrayType implements GoElementTypes
 {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {

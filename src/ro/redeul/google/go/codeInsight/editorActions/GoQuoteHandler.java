@@ -13,10 +13,7 @@ public class GoQuoteHandler extends SimpleTokenSetQuoteHandler {
 
     @Override
     public boolean isOpeningQuote(HighlighterIterator iterator, int offset) {
-        if (iterator.getTokenType() == GoTokenTypes.mWRONG) {
-            return true;
-        }
-        return super.isOpeningQuote(iterator, offset);
+        return iterator.getTokenType() == GoTokenTypes.mWRONG || super.isOpeningQuote(iterator, offset);
     }
 
     @Override

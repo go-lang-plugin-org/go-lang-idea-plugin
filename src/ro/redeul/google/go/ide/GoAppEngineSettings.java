@@ -27,15 +27,15 @@ public class GoAppEngineSettings implements PersistentStateComponent<GoAppEngine
 
     private static final Logger LOG = Logger.getInstance(GoAppEngineSettings.class.getName());
 
-    String myPassword = "";
+    private String myPassword = "";
 
-    final String GO_APP_ENGINE_SETTINGS_PASSWORD_KEY = "GO_APP_ENGINE_SETTINGS_PASSWORD_KEY";
+    private final String GO_APP_ENGINE_SETTINGS_PASSWORD_KEY = "GO_APP_ENGINE_SETTINGS_PASSWORD_KEY";
 
     public static class Bean {
         public String GO_APP_ENGINE_EMAIL = "";
     }
 
-    Bean bean = new Bean();
+    private Bean bean = new Bean();
 
     @Override
     public Bean getState() {

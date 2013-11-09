@@ -2,8 +2,6 @@ package ro.redeul.google.go.lang.psi.stubs.elements;
 
 import com.intellij.psi.stubs.*;
 import com.intellij.util.io.StringRef;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeNameDeclarationImpl;
 import ro.redeul.google.go.lang.psi.stubs.GoStubUtils;
 import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;

@@ -6,7 +6,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
-public class InterfaceType implements GoElementTypes {
+class InterfaceType implements GoElementTypes {
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
         if (!ParserUtils.lookAhead(builder, kINTERFACE))
@@ -46,10 +46,7 @@ public class InterfaceType implements GoElementTypes {
             return true;
         }
 
-        if ( ParserUtils.lookAhead(builder, mIDENT) ) {
-            return parser.parseTypeName(builder);
-        }
+        return ParserUtils.lookAhead(builder, mIDENT) && parser.parseTypeName(builder);
 
-        return false;
     }
 }

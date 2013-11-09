@@ -30,7 +30,7 @@ public class GoBlockGenerator {
         GoElementTypes.VAR_DECLARATIONS
     );
 
-    public static final Wrap NO_WRAP = Wrap.createWrap(WrapType.NONE, false);
+    private static final Wrap NO_WRAP = Wrap.createWrap(WrapType.NONE, false);
 
     public static Block generateBlock(ASTNode node,
                                       CommonCodeStyleSettings settings) {

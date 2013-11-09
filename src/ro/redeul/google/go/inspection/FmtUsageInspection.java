@@ -22,14 +22,14 @@ import static ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral.Type.R
 
 public class FmtUsageInspection extends AbstractWholeGoFileInspection {
 
-    public static final String GENERAL_VERBS = "vT";
-    public static final String BOOL_VERBS = "t";
-    public static final String INT_VERBS = "bcdoqxXU";
-    public static final String FLOAT_VERBS = "beEfgG";
-    public static final String STR_VERBS = "sqxX";
-    public static final String PTR_VERBS = "p";
+    private static final String GENERAL_VERBS = "vT";
+    private static final String BOOL_VERBS = "t";
+    private static final String INT_VERBS = "bcdoqxXU";
+    private static final String FLOAT_VERBS = "beEfgG";
+    private static final String STR_VERBS = "sqxX";
+    private static final String PTR_VERBS = "p";
 
-    public static final String INVALID_VERBS_IN_SCANNING = "pT";
+    private static final String INVALID_VERBS_IN_SCANNING = "pT";
 
     @Nls
     @NotNull
@@ -39,7 +39,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
     }
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
             @Override
             public void visitCallOrConvExpression(GoCallOrConvExpression expression) {
@@ -79,7 +79,6 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
 
         if ("fmt.Scanf".equals(methodCall)) {
             checkFormat(result, call, args, true);
-            return;
         }
     }
 
@@ -113,7 +112,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
             case InterpretedString:
             case RawString:
                 GoLiteralString stringLiteral = (GoLiteralString) literal;
-                Context ctx = new Context(expression, stringLiteral,
+                Context ctx = new Context(stringLiteral,
                                           result,
                                           Arrays.copyOfRange(args, 1, args.length),
                                           isScanning);
@@ -256,8 +255,6 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
     private static class Context {
         private static final ProblemHighlightType TYPE = ProblemHighlightType.LIKE_UNUSED_SYMBOL;
 
-        public final GoCallOrConvExpression theCall;
-        public final boolean isFmtLiteralString;
         public final GoLiteral fmtLiteral;
         public final InspectionResult result;
         public final GoExpr[] parameters;
@@ -266,11 +263,9 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         public int startOffset = 0;
         public int endOffset = 0;
 
-        private Context(GoCallOrConvExpression theCall, GoLiteral fmtLiteral,
+        private Context(GoLiteral fmtLiteral,
                         InspectionResult result, GoExpr[] parameters, boolean isScanning) {
             this.fmtLiteral = fmtLiteral;
-            this.theCall = theCall;
-            this.isFmtLiteralString = fmtLiteral.getParent() instanceof GoCallOrConvExpression;
             this.result = result;
             this.parameters = parameters;
             this.isScanning = isScanning;
@@ -295,16 +290,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
             }
         }
 
-        public void addWrongParameterType(GoExpr expr, String msg) {
-            result.addProblem(expr, msg, TYPE);
-        }
-
         public void missingParameter() {
-            // If the format string is defined elsewhere, also mark the right parenthesis as error.
-//            if (!isFmtLiteralString) {
-//                result.addProblem(theCall.getLastChild(), "Missing parameter", TYPE);
-//            }
-
             result.addProblem(fmtLiteral, startOffset + 1, endOffset + 2, "Missing parameter", TYPE);
         }
 

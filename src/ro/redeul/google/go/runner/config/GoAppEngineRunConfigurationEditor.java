@@ -13,7 +13,7 @@ import javax.swing.*;
  * Date: Aug 19, 2010
  * Time: 2:59:34 PM
  */
-public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngineApplicationConfiguration> {
+class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngineApplicationConfiguration> {
 
     @Override
     protected void resetEditorFrom(GoAppEngineApplicationConfiguration s) {

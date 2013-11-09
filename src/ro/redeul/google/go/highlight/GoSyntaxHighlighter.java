@@ -31,7 +31,7 @@ import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.STRINGS;
 public class GoSyntaxHighlighter extends SyntaxHighlighterBase
     implements GoTokenTypes {
 
-    private static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
+    private static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<>();
 
     public static final String DEFAULT_SETTINGS_ID = "go.default";
     public static final String LINE_COMMENT_ID = "go.line.comment";
@@ -57,7 +57,7 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase
 
     public static final String VARIABLE_ID = "go.variable";
     public static final String GLOBAL_VARIABLE_ID = "go.global.variable";
-    public static final String METHOD_DECLARATION_ID = "go.method.declaration";
+    private static final String METHOD_DECLARATION_ID = "go.method.declaration";
 
     public static final TextAttributesKey LINE_COMMENT =
         createKey(LINE_COMMENT_ID, SyntaxHighlighterColors.LINE_COMMENT);

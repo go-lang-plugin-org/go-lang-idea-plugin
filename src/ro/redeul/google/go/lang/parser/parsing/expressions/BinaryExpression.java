@@ -13,18 +13,18 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 28, 2010
  * Time: 3:02:31 AM
  */
-public class BinaryExpression implements GoElementTypes {
+class BinaryExpression implements GoElementTypes {
 
-    private IElementType elementType;
-    private TokenSet operators;
+    private final IElementType elementType;
+    private final TokenSet operators;
 
-    static BinaryExpression MUL_EXPR = new BinaryExpression(MUL_EXPRESSION, oMUL, oQUOTIENT, oREMAINDER, oSHIFT_LEFT, oSHIFT_RIGHT, oBIT_AND, oBIT_CLEAR);
-    static BinaryExpression ADD_EXPR = new BinaryExpression(ADD_EXPRESSION, oPLUS, oMINUS, oBIT_OR, oBIT_XOR);
-    static BinaryExpression REL_EXPR = new BinaryExpression(REL_EXPRESSION, oEQ, oNOT_EQ, oLESS, oLESS_OR_EQUAL, oGREATER, oGREATER_OR_EQUAL);
-    static BinaryExpression LOG_AND_EXPR = new BinaryExpression(LOG_AND_EXPRESSION, oCOND_AND);
-    static BinaryExpression LOG_OR_EXPR = new BinaryExpression(LOG_OR_EXPRESSION, oCOND_OR);
+    private static final BinaryExpression MUL_EXPR = new BinaryExpression(MUL_EXPRESSION, oMUL, oQUOTIENT, oREMAINDER, oSHIFT_LEFT, oSHIFT_RIGHT, oBIT_AND, oBIT_CLEAR);
+    private static final BinaryExpression ADD_EXPR = new BinaryExpression(ADD_EXPRESSION, oPLUS, oMINUS, oBIT_OR, oBIT_XOR);
+    private static final BinaryExpression REL_EXPR = new BinaryExpression(REL_EXPRESSION, oEQ, oNOT_EQ, oLESS, oLESS_OR_EQUAL, oGREATER, oGREATER_OR_EQUAL);
+    private static final BinaryExpression LOG_AND_EXPR = new BinaryExpression(LOG_AND_EXPRESSION, oCOND_AND);
+    private static final BinaryExpression LOG_OR_EXPR = new BinaryExpression(LOG_OR_EXPRESSION, oCOND_OR);
 
-    static BinaryExpression precedence[] = {
+    private static final BinaryExpression[] precedence = {
             LOG_OR_EXPR,
             LOG_AND_EXPR,
             REL_EXPR,
@@ -68,7 +68,7 @@ public class BinaryExpression implements GoElementTypes {
         return true;
     }
 
-    public BinaryExpression(IElementType elementType, IElementType ... operators) {
+    private BinaryExpression(IElementType elementType, IElementType... operators) {
         this.elementType = elementType;
         this.operators = TokenSet.create(operators);
     }

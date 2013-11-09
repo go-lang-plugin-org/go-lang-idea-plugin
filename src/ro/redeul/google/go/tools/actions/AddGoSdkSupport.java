@@ -29,12 +29,5 @@ public class AddGoSdkSupport extends AnAction {
 
         AddGoSdkDialogForm addGoSdkDialogForm = new AddGoSdkDialogForm(project);
         addGoSdkDialogForm.show();
-        if (addGoSdkDialogForm.isOK()) {
-            addGoSdk();
-        }
-    }
-
-    private void addGoSdk() {
-        //To change body of created methods use File | Settings | File Templates.
     }
 }

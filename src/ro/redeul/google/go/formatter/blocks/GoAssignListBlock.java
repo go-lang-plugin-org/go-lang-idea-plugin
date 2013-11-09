@@ -25,7 +25,7 @@ class GoAssignListBlock extends GoBlock {
      *          BCD = 3
      *      )
      */
-    protected static final TokenSet ALIGN_ASSIGNMENT_STATEMENTS = TokenSet.create(
+    private static final TokenSet ALIGN_ASSIGNMENT_STATEMENTS = TokenSet.create(
         CONST_DECLARATION,
         VAR_DECLARATION
     );
@@ -36,7 +36,7 @@ class GoAssignListBlock extends GoBlock {
 
     @Override
     protected List<Block> buildChildren() {
-        List<Block> children = new ArrayList<Block>();
+        List<Block> children = new ArrayList<>();
         int newLinesAfterLastAssign = 0;
         int newLinesAfterLastComment = 0;
         Alignment assignAlignment = null;

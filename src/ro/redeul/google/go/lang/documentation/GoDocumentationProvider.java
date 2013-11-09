@@ -131,11 +131,8 @@ public class GoDocumentationProvider implements CodeDocumentationProvider,
     @Override
     public boolean hasDocumentationFor(PsiElement element,
                                        PsiElement originalElement) {
-        if ( element instanceof GoFunctionDeclaration || element instanceof GoPsiTypeName) {
-            return true;
-        }
-
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        //To change body of implemented methods use File | Settings | File Templates.
+        return element instanceof GoFunctionDeclaration || element instanceof GoPsiTypeName;
     }
 
     @Override

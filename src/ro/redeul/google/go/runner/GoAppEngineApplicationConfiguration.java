@@ -40,7 +40,7 @@ public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguratio
     public String email;
     public String password;
     public String scriptArguments;
-    public String workDir;
+    private String workDir;
 
     public GoAppEngineApplicationConfiguration(String name, Project project, GoAppEngineRunConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
@@ -89,8 +89,7 @@ public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguratio
     }
 
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
-        GoAppEngineRunningState state = new GoAppEngineRunningState(env,sdkDirectory,scriptArguments,workDir);
-        return state;
+        return new GoAppEngineRunningState(env,sdkDirectory,scriptArguments,workDir);
     }
 
     private String getCompiledFileName(Module module, String scriptName) {

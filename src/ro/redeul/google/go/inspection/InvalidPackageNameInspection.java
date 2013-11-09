@@ -23,7 +23,7 @@ public class InvalidPackageNameInspection
     }
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result, boolean isOnTheFly) {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result) {
 
         GoPackageDeclaration packageDeclaration = file.getPackage();
 

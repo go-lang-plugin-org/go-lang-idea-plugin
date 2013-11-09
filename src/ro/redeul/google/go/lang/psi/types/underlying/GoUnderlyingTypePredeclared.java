@@ -8,8 +8,8 @@ import ro.redeul.google.go.lang.psi.typing.GoTypes;
 
 public class GoUnderlyingTypePredeclared implements GoUnderlyingType {
 
-    static Map<String, GoUnderlyingTypePredeclared> predeclaredTypes =
-        new HashMap<String, GoUnderlyingTypePredeclared>();
+    private static final Map<String, GoUnderlyingTypePredeclared> predeclaredTypes =
+        new HashMap<>();
 
     static {
         for (GoTypes.Builtin builtin : GoTypes.Builtin.values())
@@ -20,7 +20,7 @@ public class GoUnderlyingTypePredeclared implements GoUnderlyingType {
         }
     }
 
-    private GoTypes.Builtin type;
+    private final GoTypes.Builtin type;
 
     private GoUnderlyingTypePredeclared(GoTypes.Builtin type) {
         this.type = type;

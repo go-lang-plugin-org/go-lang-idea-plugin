@@ -18,7 +18,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.util.xmlb.XmlSerializer;
-import com.intellij.util.xmlb.annotations.Transient;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.runner.ui.GoTestConfigurationEditorForm;
@@ -58,12 +57,6 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     protected ModuleBasedConfiguration createInstance() {
         return new GoTestConfiguration(getName(), getProject(),
                                        GoTestConfigurationType.getInstance());
-    }
-
-    @Override
-    @Transient
-    public void setModule(Module module) {
-        super.setModule(module);
     }
 
     @Override

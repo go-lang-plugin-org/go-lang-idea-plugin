@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.parser.parsing.statements;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
@@ -13,8 +12,8 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Time: 8:07:21 PM
  * To change this template use File | Settings | File Templates.
  */
-public class FallthroughStatement implements GoElementTypes {
-    public static IElementType parse(PsiBuilder builder, GoParser parser) {
+class FallthroughStatement implements GoElementTypes {
+    public static IElementType parse(PsiBuilder builder) {
 
         PsiBuilder.Marker marker = builder.mark();
 

@@ -13,7 +13,6 @@ import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 
 class GoBinaryExpressionBlock extends GoBlock {
     public enum Mode {
-        Normal, Compact
     }
 
     private static final TokenSet EMPTY_SPACE_TOKENS = TokenSet.create(

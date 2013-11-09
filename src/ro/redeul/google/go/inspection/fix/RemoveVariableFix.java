@@ -27,10 +27,10 @@ public class RemoveVariableFix implements LocalQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-        applyFix(project, descriptor.getPsiElement());
+        applyFix(descriptor.getPsiElement());
     }
 
-    public void applyFix(@NotNull Project project, @NotNull PsiElement element) {
+    public void applyFix(@NotNull PsiElement element) {
         if (!(element instanceof GoLiteralIdentifier)) {
             return;
         }

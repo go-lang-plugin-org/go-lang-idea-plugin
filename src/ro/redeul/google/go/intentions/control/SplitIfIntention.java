@@ -3,7 +3,6 @@ package ro.redeul.google.go.intentions.control;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -46,7 +45,7 @@ public class SplitIfIntention extends Intention {
     }
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Project project, Editor editor)
+    protected void processIntention(@NotNull PsiElement element, Editor editor)
             throws IncorrectOperationException {
         PsiElement parent = element.getParent();
         GoIfStatement ifStmt = (GoIfStatement) parent.getParent();

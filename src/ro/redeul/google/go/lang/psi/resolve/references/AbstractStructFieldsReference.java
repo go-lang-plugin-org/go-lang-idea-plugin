@@ -18,16 +18,16 @@ import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
-public abstract class AbstractStructFieldsReference
+abstract class AbstractStructFieldsReference
     <
         T extends GoPsiElement,
         Ref extends AbstractStructFieldsReference<T, Ref>
         >
     extends GoPsiReference<T, GoLiteralIdentifier, Ref> {
 
-    protected AbstractStructFieldsReference(T element,
-                                         GoLiteralIdentifier name,
-                                         ResolveCache.AbstractResolver<Ref, GoResolveResult> RESOLVER) {
+    AbstractStructFieldsReference(T element,
+                                  GoLiteralIdentifier name,
+                                  ResolveCache.AbstractResolver<Ref, GoResolveResult> RESOLVER) {
         super(element, name, RESOLVER);
     }
 
@@ -46,7 +46,7 @@ public abstract class AbstractStructFieldsReference
         if (typeStruct == null || typeStruct.getPsiType() == null)
             return LookupElementBuilder.EMPTY_ARRAY;
 
-        List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+        List<LookupElementBuilder> variants = new ArrayList<>();
 
         GoPsiTypeStruct psiType = typeStruct.getPsiType();
         for (GoTypeStructField field : psiType.getFields()) {

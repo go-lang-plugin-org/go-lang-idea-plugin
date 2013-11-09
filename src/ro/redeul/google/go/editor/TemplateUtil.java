@@ -17,10 +17,10 @@ public class TemplateUtil {
     /**
      * In the specified range of editor, replace all variables with defaultValue,
      * and let user change the value.
-     * @param editor
-     * @param range
-     * @param variable
-     * @param defaultValue
+     * @param editor Editor
+     * @param range TextRange
+     * @param variable String
+     * @param defaultValue String
      */
     public static void runTemplate(Editor editor, TextRange range, String variable, String defaultValue) {
         String text = editor.getDocument().getText(range);

@@ -17,19 +17,19 @@ import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 
 public class PromotedFieldsDiscover {
-    Map<String, List<GoLiteralIdentifier>> namedFieldsMap = new HashMap<String, List<GoLiteralIdentifier>>();
-    Map<String, List<GoTypeStructAnonymousField>> anonymousFieldsMap = new HashMap<String, List<GoTypeStructAnonymousField>>();
+    private final Map<String, List<GoLiteralIdentifier>> namedFieldsMap = new HashMap<>();
+    private final Map<String, List<GoTypeStructAnonymousField>> anonymousFieldsMap = new HashMap<>();
 
-    GoPsiTypeStruct struct;
-    Set<String> ignoreNames;
+    private final GoPsiTypeStruct struct;
+    private final Set<String> ignoreNames;
 
     public PromotedFieldsDiscover(GoPsiTypeStruct struct) {
         this(struct, Collections.<String>emptySet());
     }
 
-    public PromotedFieldsDiscover(GoPsiTypeStruct struct, Set<String> ignoreNames) {
+    private PromotedFieldsDiscover(GoPsiTypeStruct struct, Set<String> ignoreNames) {
         this.struct = struct;
-        this.ignoreNames = new HashSet<String>(ignoreNames);
+        this.ignoreNames = new HashSet<>(ignoreNames);
         this.ignoreNames.addAll(getDirectFieldNameSet());
     }
 
@@ -47,7 +47,7 @@ public class PromotedFieldsDiscover {
     }
 
     private GoLiteralIdentifier[] getNamedFields() {
-        List<GoLiteralIdentifier> namedFields = new ArrayList<GoLiteralIdentifier>();
+        List<GoLiteralIdentifier> namedFields = new ArrayList<>();
         for (List<GoLiteralIdentifier> identifiers : namedFieldsMap.values()) {
             if (identifiers.size() == 1 && !ignore(identifiers.get(0))) {
                 namedFields.add(identifiers.get(0));
@@ -58,7 +58,7 @@ public class PromotedFieldsDiscover {
     }
 
     private GoTypeStructAnonymousField[] getAnonymousFields() {
-        List<GoTypeStructAnonymousField> anonymousFields = new ArrayList<GoTypeStructAnonymousField>();
+        List<GoTypeStructAnonymousField> anonymousFields = new ArrayList<>();
         for (List<GoTypeStructAnonymousField> fields : anonymousFieldsMap.values()) {
             if (fields.size() == 1 && !ignore(fields.get(0))) {
                 anonymousFields.add(fields.get(0));
@@ -124,7 +124,7 @@ public class PromotedFieldsDiscover {
         String name = field.getFieldName();
         List<GoTypeStructAnonymousField> fields = anonymousFieldsMap.get(name);
         if (fields == null) {
-            fields = new ArrayList<GoTypeStructAnonymousField>();
+            fields = new ArrayList<>();
             anonymousFieldsMap.put(name, fields);
         }
         fields.add(field);
@@ -138,14 +138,14 @@ public class PromotedFieldsDiscover {
         String name = identifier.getUnqualifiedName();
         List<GoLiteralIdentifier> fields = namedFieldsMap.get(name);
         if (fields == null) {
-            fields = new ArrayList<GoLiteralIdentifier>();
+            fields = new ArrayList<>();
             namedFieldsMap.put(name, fields);
         }
         fields.add(identifier);
     }
 
     private Set<String> getDirectFieldNameSet() {
-        Set<String> directFields = new HashSet<String>();
+        Set<String> directFields = new HashSet<>();
         for (GoTypeStructField field : struct.getFields()) {
             for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                 if (!identifier.isBlank()) {

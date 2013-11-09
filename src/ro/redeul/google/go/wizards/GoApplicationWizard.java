@@ -24,7 +24,7 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
  */
 public class GoApplicationWizard extends WizardMode {
 
-    GoModuleBuilder goModuleBuilder;
+    private final GoModuleBuilder goModuleBuilder;
 
     public GoApplicationWizard() {
         goModuleBuilder = new GoModuleBuilder();

@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 25, 2010
  * Time: 2:52:27 AM
  */
-public class StructType implements GoElementTypes {
+class StructType implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 

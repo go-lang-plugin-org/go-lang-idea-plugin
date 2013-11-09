@@ -10,7 +10,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 
 public abstract class GoStubElementType<S extends StubElement, T extends GoPsiElement> extends IStubElementType<S, T> {
 
-    public GoStubElementType(@NotNull @NonNls String debugName) {
+    GoStubElementType(@NotNull @NonNls String debugName) {
         super(debugName, GoLanguage.INSTANCE);
     }
 

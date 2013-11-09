@@ -33,7 +33,7 @@ import static com.intellij.patterns.StandardPatterns.string;
 
 public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
 
-    PsiElement element;
+    private PsiElement element;
 
     public GoTestConfigurationProducer() {
         super(GoTestConfigurationType.getInstance());
@@ -65,7 +65,7 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
                                    location.getPsiElement());
     }
 
-    private static ElementPattern<GoFunctionDeclaration> FUNCTION_BENCHMARK =
+    private static final ElementPattern<GoFunctionDeclaration> FUNCTION_BENCHMARK =
         psiElement(GoFunctionDeclaration.class)
             .withParent(psiElement(GoFile.class))
             .withChild(
@@ -82,7 +82,7 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
                         psiElement(GoLiteralIdentifier.class)
                             .withText(string().matches("Benchmark.*"))));
 
-    private static ElementPattern<GoFunctionDeclaration> FUNCTION_TEST =
+    private static final ElementPattern<GoFunctionDeclaration> FUNCTION_TEST =
         psiElement(GoFunctionDeclaration.class)
             .withParent(psiElement(GoFile.class))
             .withChild(

@@ -21,6 +21,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ui.UIUtil;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.AddImportFix;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
@@ -48,7 +49,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
 public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
     private final GoFile file;
     private final Editor editor;
-    private TextRange visibleRange;
+    private final TextRange visibleRange;
 
     public AutoImportHighlightingPass(Project project, GoFile file,
                                       Editor editor) {
@@ -61,7 +62,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
     }
 
     @Override
-    public void doCollectInformation(ProgressIndicator progress) {
+    public void doCollectInformation(@NotNull ProgressIndicator progress) {
     }
 
     private Data getVisibleHighlights() {
@@ -77,7 +78,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             return null;
         }
 
-        Set<String> imported = new HashSet<String>();
+        Set<String> imported = new HashSet<>();
         for (GoImportDeclarations ids : file.getImportDeclarations()) {
             for (GoImportDeclaration id : ids.getDeclarations()) {
                 String name = id.getPackageName();
@@ -147,7 +148,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
     public static List<String> getPackagesByName(Collection<String> allPackages,
                                                  String expectedName) {
-        List<String> packageFiles = new ArrayList<String>();
+        List<String> packageFiles = new ArrayList<>();
         for (String p : allPackages) {
             if (expectedName.equals(p) || p.endsWith(
                 "/" + expectedName)) {
@@ -179,20 +180,14 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         }
 
         // if caret is on a package name, don't optimize it.
-        if (isCaretOnPackageName()) {
-            return false;
-        }
-        return true;
+        return !isCaretOnPackageName();
     }
 
     private boolean isCaretOnPackageName() {
         int offset = editor.getCaretModel().getOffset();
         PsiElement caretElement = file.findElementAt(offset);
-        if (isElementAPackageName(file.findElementAt(offset))) {
-            return true;
-        }
 
-        return offset > 0 && isElementAPackageName(file.findElementAt(offset - 1));
+        return isElementAPackageName(file.findElementAt(offset)) || offset > 0 && isElementAPackageName(file.findElementAt(offset - 1));
     }
 
     private boolean isElementAPackageName(PsiElement element) {
@@ -245,7 +240,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                     return;
                 }
 
-                List<String> allPackages = new ArrayList<String>(
+                List<String> allPackages = new ArrayList<>(
                     data.projectPackages);
                 allPackages.addAll(data.sdkPackages);
                 String importMessage = getPromptMessage(allPackages);

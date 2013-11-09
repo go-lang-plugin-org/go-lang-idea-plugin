@@ -9,7 +9,7 @@ package ro.redeul.google.go.config.sdk;
 public enum GoTargetArch {
     _386("386"), _amd64("amd64"), _arm("arm");
 
-    String name;
+    private final String name;
 
     GoTargetArch(String name) {
         this.name = name;

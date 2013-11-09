@@ -35,11 +35,8 @@ public class GoResolveUtil {
         }
 
         // import x "a"; var x.T;
-        if ( importedPackageReference != null && elementReference != null && elementReference.getString().equals(importedPackageReference.getString())) {
-            return true;
-        }
+        return importedPackageReference != null && elementReference != null && elementReference.getString().equals(importedPackageReference.getString());
 
-        return false;
     }
 
 }

@@ -15,10 +15,10 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
  * Date: 5/26/11
  * Time: 7:38 PM
  */
-public class VariableTypeResolver extends BaseScopeProcessor {
+class VariableTypeResolver extends BaseScopeProcessor {
 
     private GoPsiType type;
-    private GoLiteralIdentifier identifier;
+    private final GoLiteralIdentifier identifier;
 
     public VariableTypeResolver(GoLiteralIdentifier identifier) {
         this.identifier = identifier;

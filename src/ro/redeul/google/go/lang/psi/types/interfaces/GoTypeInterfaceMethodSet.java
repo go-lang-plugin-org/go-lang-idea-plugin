@@ -8,8 +8,8 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 public class GoTypeInterfaceMethodSet {
 
-    private Set<GoFunctionDeclaration> myFunctions =
-        new HashSet<GoFunctionDeclaration>();
+    private final Set<GoFunctionDeclaration> myFunctions =
+        new HashSet<>();
 
     public void add(GoFunctionDeclaration functionDeclaration) {
         myFunctions.add(functionDeclaration);

@@ -14,18 +14,18 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
  * Date: 8/21/11
  * Time: 12:02 PM
  */
-public class GoFileMetadata {
-    private String packageName;
+class GoFileMetadata {
+    private final String packageName;
 
-    private boolean main;
+    private final boolean main;
 
-    private List<String> imports;
+    private final List<String> imports;
 
     public GoFileMetadata(GoFile file) {
         packageName = file.getPackage().getPackageName();
         main = file.getMainFunction() != null;
 
-        imports = new ArrayList<String>();
+        imports = new ArrayList<>();
 
         GoImportDeclarations[] importDeclarations = file.getImportDeclarations();
 

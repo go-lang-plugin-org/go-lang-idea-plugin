@@ -8,9 +8,9 @@ public class GoTypeFunction
     extends GoTypePsiBacked<GoPsiTypeFunction, GoUnderlyingTypeFunction>
     implements GoType {
 
-    protected GoTypeFunction(GoPsiTypeFunction type) {
+    GoTypeFunction(GoPsiTypeFunction type) {
         super(type);
-        setUnderlyingType(GoUnderlyingTypes.getFunction(type));
+        setUnderlyingType(GoUnderlyingTypes.getFunction());
     }
 
     @Override
@@ -20,6 +20,5 @@ public class GoTypeFunction
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitTypeFunction(this);
     }
 }

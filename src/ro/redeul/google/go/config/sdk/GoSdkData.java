@@ -3,7 +3,6 @@ package ro.redeul.google.go.config.sdk;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.SdkAdditionalData;
-import com.intellij.openapi.projectRoots.SdkModel;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
 /**
@@ -50,10 +49,6 @@ public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<Go
             throw new ConfigurationException(
                 "SDK configuration needs to be upgraded");
         }
-    }
-
-    public void checkValid(SdkModel sdkModel) throws ConfigurationException {
-        checkValid();
     }
 
     public GoSdkData getState() {

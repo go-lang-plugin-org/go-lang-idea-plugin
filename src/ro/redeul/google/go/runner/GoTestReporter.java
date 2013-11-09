@@ -17,7 +17,7 @@ class GoTestReporter {
     private static final String TEST_REPORTER_ATTACHED = "enteredTheMatrix";
     private static final String NAME = "name";
     private static final String DURATION = "duration";
-    public static final String LOCATION_HINT = "locationHint";
+    private static final String LOCATION_HINT = "locationHint";
 
     private final ProcessHandler handler;
     private final String packageDir;
@@ -57,7 +57,7 @@ class GoTestReporter {
         testSuiteStartingTime = System.currentTimeMillis();
     }
 
-    public void testSuiteFinished() {
+    void testSuiteFinished() {
         if (testSuiteName != null) {
             report(TEST_SUITE_FINISHED, testSuiteName, System.currentTimeMillis() - testSuiteStartingTime);
             testSuiteName = null;
@@ -85,7 +85,7 @@ class GoTestReporter {
         }
     }
 
-    public void testCaseFinished() {
+    void testCaseFinished() {
         if (testCaseName != null) {
             report(TEST_FINISHED, testCaseName, System.currentTimeMillis() - testCaseStartingTime);
             testCaseName = null;

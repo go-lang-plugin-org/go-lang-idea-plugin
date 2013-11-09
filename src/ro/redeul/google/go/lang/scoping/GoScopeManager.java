@@ -8,10 +8,10 @@ import java.util.Set;
  * Date: Sep 2, 2010
  * Time: 1:30:13 PM
  */
-public class GoScopeManager {
+class GoScopeManager {
 
     class Scope {
-        Scope parentScope;
+        final Scope parentScope;
 
         Set<String> names;
 

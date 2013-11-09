@@ -6,7 +6,6 @@ import java.util.Set;
 import com.intellij.facet.FacetManager;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.actions.CreateTemplateInPackageAction;
-import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
@@ -48,13 +47,6 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<GoFile>
     //    @Override
     protected boolean checkPackageExists(PsiDirectory directory) {
         return true;
-    }
-
-    @Override
-    protected boolean isAvailable(DataContext dataContext) {
-//        return super.isAvailable(dataContext)
-//                && hasGoFacet(DataKeys.MODULE.getData(dataContext));
-        return super.isAvailable(dataContext);
     }
 
     private boolean hasGoFacet(Module module) {
@@ -128,7 +120,7 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<GoFile>
 
         PsiFile childs[] = directory.getFiles();
 
-        Set<String> packages = new HashSet<String>();
+        Set<String> packages = new HashSet<>();
 
         for (PsiFile child : childs) {
             if (child instanceof GoFile) {
@@ -148,11 +140,11 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<GoFile>
         }
     }
 
-    private boolean isLibraryFolder(PsiDirectory directory) {
+    private boolean isLibraryFolder() {
         return false;
     }
 
-    private boolean isApplicationFolder(PsiDirectory directory) {
+    private boolean isApplicationFolder() {
         return false;
     }
 

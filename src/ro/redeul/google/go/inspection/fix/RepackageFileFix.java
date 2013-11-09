@@ -23,7 +23,7 @@ import ro.redeul.google.go.GoBundle;
 
 public class RepackageFileFix implements IntentionAction, LocalQuickFix {
 
-    private VirtualFile rootPath;
+    private final VirtualFile rootPath;
     private final String targetPackage;
 
     /**
@@ -69,13 +69,14 @@ public class RepackageFileFix implements IntentionAction, LocalQuickFix {
     @Override
     public final boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
         if (!rootPath.isValid() || !rootPath.isDirectory()) return false;
+
         if (!file.isValid()) return false;
+
         VirtualFile vFile = file.getVirtualFile();
         if (vFile == null) return false;
-        final VirtualFile parent = vFile.getParent();
-        if (parent == null) return false;
 
-        return true;
+        final VirtualFile parent = vFile.getParent();
+        return parent != null;
     }
 
 

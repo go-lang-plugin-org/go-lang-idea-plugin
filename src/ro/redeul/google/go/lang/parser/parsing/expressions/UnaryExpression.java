@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
  * Date: Jul 25, 2010
  * Time: 2:18:28 AM
  */
-public class UnaryExpression implements GoElementTypes {
+class UnaryExpression implements GoElementTypes {
 
     public static boolean parse(PsiBuilder builder, GoParser parser) {
 

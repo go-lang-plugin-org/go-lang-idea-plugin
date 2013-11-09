@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.parser.parsing.toplevel.packaging;
 import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
@@ -13,7 +12,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class PackageDeclaration implements GoElementTypes {
 
-    public static boolean parse(PsiBuilder builder, GoParser parser) {
+    public static void parse(PsiBuilder builder) {
 
         PsiBuilder.Marker packageDeclaration = builder.mark();
 
@@ -22,7 +21,5 @@ public class PackageDeclaration implements GoElementTypes {
         }
 
         packageDeclaration.done(PACKAGE_DECLARATION);
-
-        return true;
     }
 }

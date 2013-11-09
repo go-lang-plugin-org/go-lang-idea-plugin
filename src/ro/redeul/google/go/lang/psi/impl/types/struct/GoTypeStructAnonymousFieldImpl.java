@@ -29,7 +29,7 @@ public class GoTypeStructAnonymousFieldImpl extends GoPsiElementBase implements 
     public String getFieldName() {
         GoPsiType type = getType();
         if ( type instanceof GoPsiTypeName) {
-            return ((GoPsiTypeName)type).getName();
+            return type.getName();
         }
 
         if (type instanceof GoPsiTypePointer) {

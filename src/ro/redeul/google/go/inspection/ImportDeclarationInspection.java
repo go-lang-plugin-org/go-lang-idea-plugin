@@ -27,8 +27,7 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
 
     @Override
     protected void doCheckFile(@NotNull GoFile file,
-                               @NotNull final InspectionResult result,
-                               boolean onTheFly) {
+                               @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
             @Override
             public void visitFile(GoFile file) {
@@ -92,7 +91,7 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
         }
     }
 
-    public static boolean isValidImport(GoImportDeclaration declaration) {
+    private static boolean isValidImport(GoImportDeclaration declaration) {
         if (declaration == null) {
             return false;
         }
@@ -103,18 +102,7 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
             importPathValue = importPath.getValue();
         }
 
-        if (importPathValue == null || importPathValue.isEmpty()) {
-            return false;
-        }
+        return !(importPathValue == null || importPathValue.isEmpty()) && !(importPathValue.contains(" ") || importPathValue.contains("\t")) && !importPathValue.contains("\\");
 
-        if (importPathValue.contains(" ") || importPathValue.contains("\t")) {
-            return false;
-        }
-
-        if (importPathValue.contains("\\")) {
-            return false;
-        }
-
-        return true;
     }
 }

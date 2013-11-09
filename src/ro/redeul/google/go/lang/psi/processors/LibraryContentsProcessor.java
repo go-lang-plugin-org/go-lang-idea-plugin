@@ -15,21 +15,21 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
-public class LibraryContentsProcessor extends BaseScopeProcessor {
+class LibraryContentsProcessor extends BaseScopeProcessor {
 
-    private GoQualifiedNameElement qualifiedName;
+    private final GoQualifiedNameElement qualifiedName;
 
-    private List<Object> objects = new ArrayList<Object>();
+    private final List<Object> objects = new ArrayList<>();
 
     public LibraryContentsProcessor(GoQualifiedNameElement qualifiedName) {
         this.qualifiedName = qualifiedName;
     }
 
     public boolean execute(PsiElement element, ResolveState state) {
-        return tryTypeDeclaration(element, state);
+        return tryTypeDeclaration(element);
     }
 
-    private boolean tryTypeDeclaration(PsiElement element, ResolveState state) {
+    private boolean tryTypeDeclaration(PsiElement element) {
         if ( !(element instanceof GoTypeSpec) ) {
             return true;
         }

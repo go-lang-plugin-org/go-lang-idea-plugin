@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 public class Statements implements GoElementTypes {
 
-    static TokenSet SIMPLE_STMT = TokenSet.create(
+    private static final TokenSet SIMPLE_STMT = TokenSet.create(
         mIDENT, litINT, litOCT, litHEX, litCHAR, litFLOAT, litDECIMAL_I, litFLOAT_I, litSTRING,
         kFUNC, kSTRUCT,
         pLPAREN, pLBRACK,
@@ -45,19 +45,19 @@ public class Statements implements GoElementTypes {
         }
 
         if ( builder.getTokenType() == kBREAK ) {
-            return BreakStatement.parse(builder, parser);
+            return BreakStatement.parse(builder);
         }
 
         if ( builder.getTokenType() == kCONTINUE ) {
-            return ContinueStatement.parse(builder, parser);
+            return ContinueStatement.parse(builder);
         }
 
         if ( builder.getTokenType() == kFALLTHROUGH ) {
-            return FallthroughStatement.parse(builder, parser);
+            return FallthroughStatement.parse(builder);
         }
 
         if ( builder.getTokenType() == kGOTO ) {
-            return GotoStatement.parse(builder, parser);
+            return GotoStatement.parse(builder);
         }
 
         if ( builder.getTokenType() == pLCURLY) {
@@ -90,14 +90,14 @@ public class Statements implements GoElementTypes {
         return null;
     }
 
-    static TokenSet ASSIGN_OPERATORS = TokenSet.create(
+    private static final TokenSet ASSIGN_OPERATORS = TokenSet.create(
             oASSIGN,
             oPLUS_ASSIGN, oMINUS_ASSIGN, oMUL_ASSIGN, oQUOTIENT_ASSIGN, oREMAINDER_ASSIGN,
             oBIT_AND_ASSIGN, oBIT_OR_ASSIGN, oBIT_XOR_ASSIGN, oSHIFT_LEFT_ASSIGN, oSHIFT_RIGHT_ASSIGN,
             oBIT_CLEAR_ASSIGN
     );
 
-    static TokenSet INC_DEC_OPERATORS = TokenSet.create(
+    private static final TokenSet INC_DEC_OPERATORS = TokenSet.create(
         oMINUS_MINUS, oPLUS_PLUS
     );
 

@@ -13,7 +13,7 @@ import com.intellij.psi.PsiElement;
 
 public class InspectionResult {
     private final InspectionManager manager;
-    private final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
+    private final List<ProblemDescriptor> problems = new ArrayList<>();
 
     public InspectionResult(Project project) {
         this(InspectionManager.getInstance(project));

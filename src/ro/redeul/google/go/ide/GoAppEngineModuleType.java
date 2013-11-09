@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class GoAppEngineModuleType extends ModuleType<GoAppEngineModuleBuilder> {
 
-    public static final String MODULE_TYPE_ID = "GO_APP_ENGINE_MODULE";
+    private static final String MODULE_TYPE_ID = "GO_APP_ENGINE_MODULE";
 
     public GoAppEngineModuleType() {
         super(MODULE_TYPE_ID);
@@ -65,7 +65,7 @@ public class GoAppEngineModuleType extends ModuleType<GoAppEngineModuleBuilder> 
     @Override
     public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext, GoAppEngineModuleBuilder moduleBuilder, ModulesProvider modulesProvider)
     {
-        List<ModuleWizardStep> steps = new ArrayList<ModuleWizardStep>();
+        List<ModuleWizardStep> steps = new ArrayList<>();
 
 //        ProjectWizardStepFactory factory = ProjectWizardStepFactory.getInstance();
 //        steps.add(factory.createSourcePathsStep(wizardContext, moduleBuilder, null, "reference.dialogs.new.project.fromScratch.source"));

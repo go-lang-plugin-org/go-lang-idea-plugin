@@ -24,7 +24,7 @@ import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class BuiltinCallOrConversionReference extends AbstractCallOrConversionReference<BuiltinCallOrConversionReference> {
 
-    public static ElementPattern<GoLiteralExpression> MATCHER =
+    public static final ElementPattern<GoLiteralExpression> MATCHER =
                 psiElement(GoLiteralExpression.class)
                     .withParent(psiElement(GoBuiltinCallExpression.class))
                     .atStartOf(psiElement(GoBuiltinCallExpression.class));
@@ -77,7 +77,7 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
 
         PsiElement element = getElement();
 
-        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+        final List<LookupElementBuilder> variants = new ArrayList<>();
 
         MethodOrTypeNameResolver processor = new MethodOrTypeNameResolver(this) {
             @Override

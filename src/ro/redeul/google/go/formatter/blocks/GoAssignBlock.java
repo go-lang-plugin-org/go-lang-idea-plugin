@@ -24,7 +24,7 @@ class GoAssignBlock extends GoBlock {
 
     @Override
     protected List<Block> buildChildren() {
-        List<Block> children = new ArrayList<Block>();
+        List<Block> children = new ArrayList<>();
         for (ASTNode child : getGoChildren()) {
             Block block;
             Indent indent = Indent.getNormalIndent();

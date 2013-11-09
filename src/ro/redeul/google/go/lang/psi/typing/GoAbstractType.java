@@ -12,7 +12,7 @@ public abstract class GoAbstractType<
     UnderlyingType extends GoUnderlyingType
     > implements GoType {
 
-    UnderlyingType underlyingType;
+    private UnderlyingType underlyingType;
 
     @Override
     public GoUnderlyingType getUnderlyingType() {
@@ -22,7 +22,7 @@ public abstract class GoAbstractType<
                 : GoUnderlyingType.Undefined;
     }
 
-    public void setUnderlyingType(UnderlyingType underlyingType) {
+    void setUnderlyingType(UnderlyingType underlyingType) {
         this.underlyingType = underlyingType;
     }
 }

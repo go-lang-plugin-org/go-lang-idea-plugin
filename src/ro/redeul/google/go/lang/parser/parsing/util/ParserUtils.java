@@ -16,7 +16,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
  */
 public abstract class ParserUtils {
 
-    public static final Logger LOG = Logger.getInstance(
+    protected static final Logger LOG = Logger.getInstance(
         "#ro.redeul.google.go.lang.parsing");
 
     /**
@@ -65,16 +65,13 @@ public abstract class ParserUtils {
     /**
      * Same as simple getToken() method but with TokenSet
      *
-     * @param builder
-     * @param tokenSet
-     * @return
+     * @param builder PsiBuilder
+     * @param tokenSet TokenSet
+     * @return boolean
      */
     public static boolean getToken(PsiBuilder builder, TokenSet tokenSet) {
-        if (tokenSet.contains(builder.getTokenType())) {
-            return getToken(builder, builder.getTokenType());
-        }
+        return tokenSet.contains(builder.getTokenType()) && getToken(builder, builder.getTokenType());
 
-        return false;
     }
 
     /**
@@ -85,8 +82,8 @@ public abstract class ParserUtils {
      * @param errorMsg error message if nto applicable
      * @return true/false (the operation result
      */
-    public static boolean getToken(PsiBuilder builder, TokenSet tokenSet,
-                                   String errorMsg) {
+    private static boolean getToken(PsiBuilder builder, TokenSet tokenSet,
+                                    String errorMsg) {
 
         PsiBuilder.Marker mark = builder.mark();
         if (tokenSet.contains(builder.getTokenType())) {
@@ -189,20 +186,18 @@ public abstract class ParserUtils {
      *
      * @param builder Given builder
      * @param elem    Node element
-     * @return elem type.test
      */
-    public static IElementType eatElement(PsiBuilder builder,
+    public static void eatElement(PsiBuilder builder,
                                           IElementType elem) {
         PsiBuilder.Marker marker = builder.mark();
         builder.advanceLexer();
         marker.done(elem);
-        return elem;
     }
 
     /**
      * Wraps current token with error message
      *
-     * @param builder
+     * @param builder PsiBuilder
      * @param msg     Error message
      */
     public static void wrapError(PsiBuilder builder, String msg) {
@@ -267,15 +262,13 @@ public abstract class ParserUtils {
         return i == 0;
     }
 
-    public static boolean waitNext(PsiBuilder builder, TokenSet tokenSet) {
+    public static void waitNext(PsiBuilder builder, TokenSet tokenSet) {
         int i = 0;
 
         while (!builder.eof() && !tokenSet.contains(builder.getTokenType())) {
             builder.advanceLexer();
             i++;
         }
-
-        return i == 0;
     }
 
     public static void waitNext(PsiBuilder builder, TokenSet tokenSet,
@@ -295,7 +288,7 @@ public abstract class ParserUtils {
         }
     }
 
-    public static void advance(PsiBuilder builder, int count) {
+    private static void advance(PsiBuilder builder, int count) {
         for (int i = 0; i < count; i++) {
             builder.getTokenText();
             builder.advanceLexer();
@@ -341,13 +334,7 @@ public abstract class ParserUtils {
     }
 
     public static boolean endStatement(PsiBuilder builder) {
-        if (!builder.eof() && !ParserUtils.lookAhead(builder,
-                                                     GoTokenTypeSets.EOS_CAN_SKIP_SEMI)) {
-            return getToken(builder, GoTokenTypeSets.EOS,
-                     GoBundle.message("error.semicolon.or.newline.expected"));
-        }
-
-        return true;
+        return !(!builder.eof() && !ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS_CAN_SKIP_SEMI)) || getToken(builder, GoTokenTypeSets.EOS, GoBundle.message("error.semicolon.or.newline.expected"));
 
     }
 }

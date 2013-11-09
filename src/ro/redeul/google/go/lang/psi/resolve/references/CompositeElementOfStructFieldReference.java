@@ -36,8 +36,6 @@ public class CompositeElementOfStructFieldReference
                             GoLiteralCompositeElement.class)));
 
 
-    GoLiteralCompositeElement element;
-
     public CompositeElementOfStructFieldReference(GoLiteralIdentifier element,
                                                   GoLiteralIdentifier identifier) {
         super(element, identifier, RESOLVER);

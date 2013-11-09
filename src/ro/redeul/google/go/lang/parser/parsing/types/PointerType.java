@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Time: 2:52:27 AM
  * To change this template use File | Settings | File Templates.
  */
-public class PointerType implements GoElementTypes {
+class PointerType implements GoElementTypes {
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
         if ( !ParserUtils.lookAhead(builder, oMUL))

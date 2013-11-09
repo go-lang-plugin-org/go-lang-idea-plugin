@@ -16,9 +16,9 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public abstract class GoTemplateContextType extends TemplateContextType {
-    protected GoTemplateContextType(@NotNull @org.jetbrains.annotations.NonNls String id,
-                                    @NotNull String presentableName,
-                                    @Nullable Class<? extends TemplateContextType> baseContextType) {
+    GoTemplateContextType(@NotNull @org.jetbrains.annotations.NonNls String id,
+                          @NotNull String presentableName,
+                          @Nullable Class<? extends TemplateContextType> baseContextType) {
         super(id, presentableName, baseContextType);
     }
 

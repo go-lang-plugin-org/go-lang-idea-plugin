@@ -13,10 +13,10 @@ import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowComposit
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.ParseIota;
 import static ro.redeul.google.go.lang.parser.parsing.declarations.FunctionOrMethodDeclaration.parseCompleteMethodSignature;
 
-public class PrimaryExpression implements GoElementTypes {
+class PrimaryExpression implements GoElementTypes {
 
-    static Pattern BOOLEAN_LITERAL = Pattern.compile("true|false");
-    static Pattern IOTA_LITERAL = Pattern.compile("iota");
+    private static final Pattern BOOLEAN_LITERAL = Pattern.compile("true|false");
+    private static final Pattern IOTA_LITERAL = Pattern.compile("iota");
 
     /**
      * PrimaryExpr :=
@@ -89,7 +89,7 @@ public class PrimaryExpression implements GoElementTypes {
         //                          ->  TypeLit, TypeName  ->
         //                              '(' Type ')'
 
-        if (parseConstantLiteral(builder, parser))
+        if (parseConstantLiteral(builder))
             return true;
 
         if (ParserUtils.lookAhead(builder, kFUNC, pLPAREN)) {
@@ -190,14 +190,14 @@ public class PrimaryExpression implements GoElementTypes {
         return true;
     }
 
-    private static boolean parseLiteralFunction(PsiBuilder builder,
+    private static void parseLiteralFunction(PsiBuilder builder,
                                                 GoParser parser) {
 
         PsiBuilder.Marker mark = builder.mark();
 
         if (!ParserUtils.getToken(builder, kFUNC)) {
             mark.drop();
-            return false;
+            return;
         }
 
         parseCompleteMethodSignature(builder, parser);
@@ -205,8 +205,6 @@ public class PrimaryExpression implements GoElementTypes {
         parser.parseBody(builder);
 
         mark.done(LITERAL_FUNCTION);
-
-        return true;
     }
 
 
@@ -284,8 +282,7 @@ public class PrimaryExpression implements GoElementTypes {
         return true;
     }
 
-    private static boolean parseConstantLiteral(PsiBuilder builder,
-                                                GoParser parser) {
+    private static boolean parseConstantLiteral(PsiBuilder builder) {
         PsiBuilder.Marker expr = builder.mark();
 
         if (ParserUtils.markTokenIf(builder, LITERAL_STRING, litSTRING)) {

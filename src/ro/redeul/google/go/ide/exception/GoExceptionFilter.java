@@ -9,7 +9,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GoExceptionFilter implements Filter {
+class GoExceptionFilter implements Filter {
     private static final Pattern GOROUTINE_START = Pattern.compile("^goroutine \\d+ \\[\\w+\\]:\\s*$");
     private static final Pattern GOROUTINE_END = Pattern.compile("^\\s*$");
     private static final Pattern GOROUTINE_LINE = Pattern.compile("^\t(.*):(\\d+) \\+0x\\p{XDigit}+\\s*$");

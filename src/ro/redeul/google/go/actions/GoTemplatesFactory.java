@@ -20,7 +20,7 @@ public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
     public enum Template {
         GoAppMain("Go Application"), GoFile("Go File"), GoTestFile("Go Test File");
 
-        String file;
+        final String file;
         Template(String file) {
             this.file = file;
         }

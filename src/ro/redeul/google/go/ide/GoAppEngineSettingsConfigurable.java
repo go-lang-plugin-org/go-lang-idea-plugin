@@ -16,7 +16,7 @@ import ro.redeul.google.go.GoIcons;
  */
 public class GoAppEngineSettingsConfigurable implements SearchableConfigurable  {
 
-    GoAppEngineProjectSettingsConfigurableForm configurableForm;
+    private GoAppEngineProjectSettingsConfigurableForm configurableForm;
 
     @NotNull
     @Override

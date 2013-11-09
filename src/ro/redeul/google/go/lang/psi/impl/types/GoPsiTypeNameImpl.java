@@ -54,12 +54,12 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
         return findChildByClass(GoPackageReference.class);
     }
 
-    static final ElementPattern<PsiElement> PRIMITIVE_TYPES =
+    private static final ElementPattern<PsiElement> PRIMITIVE_TYPES =
         psiElement()
             .withText(
                 string().matches(GoTypes.PRIMITIVE_TYPES_PATTERN.pattern()));
 
-    static final ElementPattern<PsiElement> NIL_TYPE =
+    private static final ElementPattern<PsiElement> NIL_TYPE =
         psiElement()
             .withText(string().matches("nil"));
 
@@ -106,11 +106,8 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
-        if ( goType instanceof GoPsiTypeName) {
-            return getName().equals(goType.getName());
-        }
+        return goType instanceof GoPsiTypeName && getName().equals(goType.getName());
 
-        return false;
     }
 
     @NotNull

@@ -31,7 +31,7 @@ public class GoFrameworkSupportProvider extends FrameworkSupportProvider {
     @NotNull
     @Override
     public FrameworkSupportConfigurable createConfigurable(@NotNull FrameworkSupportModel model) {
-        return new GoFrameworkSupportConfigurable(new GoFrameworkSuportEditor(model.getProject()));
+        return new GoFrameworkSupportConfigurable(new GoFrameworkSuportEditor());
     }
 
     @Override

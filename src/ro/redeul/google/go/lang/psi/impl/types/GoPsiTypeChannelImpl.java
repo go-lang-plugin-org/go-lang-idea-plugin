@@ -18,7 +18,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 public class GoPsiTypeChannelImpl extends GoPsiPackagedElementBase implements
                                                                 GoPsiTypeChannel {
 
-    private GoTypeChannel.ChannelType channelType;
+    private final GoTypeChannel.ChannelType channelType;
 
     public GoPsiTypeChannelImpl(@NotNull ASTNode node, GoTypeChannel.ChannelType channelType) {
         super(node);

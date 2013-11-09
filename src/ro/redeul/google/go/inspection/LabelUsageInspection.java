@@ -42,7 +42,7 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
     }
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
             @Override
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
@@ -56,9 +56,9 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
         }.visitFile(file);
     }
 
-    public static void checkFunction(final InspectionResult result, GoFunctionDeclaration function) {
-        final Map<String, GoLiteralIdentifier> labelDeclarations = new HashMap<String, GoLiteralIdentifier>();
-        final List<GoLiteralIdentifier> labelUsages = new ArrayList<GoLiteralIdentifier>();
+    private static void checkFunction(final InspectionResult result, GoFunctionDeclaration function) {
+        final Map<String, GoLiteralIdentifier> labelDeclarations = new HashMap<>();
+        final List<GoLiteralIdentifier> labelUsages = new ArrayList<>();
         new GoRecursiveElementVisitor() {
             @Override
             public void visitLabeledStatement(GoLabeledStatement statement) {
@@ -107,7 +107,7 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
             }
         }.visitElement(function);
 
-        Set<String> usedLabels = new HashSet<String>();
+        Set<String> usedLabels = new HashSet<>();
         for (GoLiteralIdentifier label : labelUsages) {
             String name = label.getName();
             if (labelDeclarations.containsKey(name)) {
@@ -189,9 +189,6 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
                 addJumpOverProblem(label, ((GoConstDeclaration) statement).getIdentifiers(), result);
             }
             statement = statement.getNextSibling();
-        }
-        if (statement == null) {
-            return;
         }
     }
 

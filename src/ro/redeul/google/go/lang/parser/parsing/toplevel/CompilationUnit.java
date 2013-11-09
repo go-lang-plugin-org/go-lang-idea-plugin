@@ -18,7 +18,7 @@ public class CompilationUnit implements GoElementTypes {
 
     public static void parse(PsiBuilder builder, GoParser parser) {
 
-        PackageDeclaration.parse(builder, parser);
+        PackageDeclaration.parse(builder);
         ParserUtils.endStatement(builder);
 
         while (ParserUtils.lookAhead(builder, kIMPORT)) {

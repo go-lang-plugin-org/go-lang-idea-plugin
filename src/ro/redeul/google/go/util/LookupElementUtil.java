@@ -28,7 +28,7 @@ public class LookupElementUtil extends GoElementVisitor {
 
     private LookupElementBuilder lookupElement;
 
-    public LookupElementUtil(LookupElementBuilder lookupElement) {
+    private LookupElementUtil(LookupElementBuilder lookupElement) {
         this.lookupElement = lookupElement;
     }
 
@@ -143,7 +143,7 @@ public class LookupElementUtil extends GoElementVisitor {
         lookupElement = lookupElement.withIcon(PlatformIcons.FIELD_ICON);
     }
 
-    public LookupElementBuilder getLookupElement() {
+    LookupElementBuilder getLookupElement() {
         return lookupElement;
     }
 }

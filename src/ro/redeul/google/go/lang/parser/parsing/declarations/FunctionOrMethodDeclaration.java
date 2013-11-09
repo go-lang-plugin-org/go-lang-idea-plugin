@@ -50,7 +50,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         return nodeType;
     }
 
-    public static boolean parseCompleteMethodSignature(PsiBuilder builder,
+    public static void parseCompleteMethodSignature(PsiBuilder builder,
                                                        GoParser parser) {
         parseSignature(builder, parser);
 
@@ -60,13 +60,13 @@ public class FunctionOrMethodDeclaration extends ParserUtils
             parseSignature(builder, parser);
             result.done(FUNCTION_RESULT);
 
-            return true;
+            return;
         }
 
         PsiBuilder.Marker result = builder.mark();
         if (parser.parseType(builder) == null) {
             result.drop();
-            return true;
+            return;
         }
 
         result.done(FUNCTION_PARAMETER);
@@ -76,16 +76,14 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         result = result.precede();
 
         result.done(FUNCTION_RESULT);
-
-        return true;
     }
 
     /**
      * Receiver     := "(" [ identifier ] [ "*" ] BaseTypeName ")" .
      * BaseTypeName := identifier .
      *
-     * @param builder
-     * @param parser
+     * @param builder PsiBuilder
+     * @param parser GoParser
      */
     private static void parseReceiverDeclaration(PsiBuilder builder,
                                                  GoParser parser) {
@@ -105,12 +103,12 @@ public class FunctionOrMethodDeclaration extends ParserUtils
                              GoBundle.message("error.closing.para.expected"));
     }
 
-    public static boolean parseSignature(PsiBuilder builder, GoParser parser) {
+    public static void parseSignature(PsiBuilder builder, GoParser parser) {
 
         ParserUtils.getToken(builder, pLPAREN, "open.parenthesis.expected");
 
         if (ParserUtils.getToken(builder, pRPAREN))
-            return true;
+            return;
 
         PsiBuilder.Marker signature = builder.mark();
 
@@ -131,8 +129,6 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
         signature.done(FUNCTION_PARAMETER_LIST);
         ParserUtils.getToken(builder, pRPAREN, "close.parenthesis.expected");
-
-        return true;
     }
 
     private static void parseParameterDeclaration(PsiBuilder builder,

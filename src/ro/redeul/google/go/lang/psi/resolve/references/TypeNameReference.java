@@ -42,7 +42,7 @@ public class TypeNameReference
                     )
             );
 
-    private static ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult> RESOLVER =
+    private static final ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult>() {
             @Override
             public GoResolveResult resolve(TypeNameReference reference, boolean incompleteCode) {
@@ -87,7 +87,7 @@ public class TypeNameReference
     @Override
     public Object[] getVariants() {
 
-        final List<LookupElement> variants = new ArrayList<LookupElement>();
+        final List<LookupElement> variants = new ArrayList<>();
 
         // According to the spec, method receiver type "T" could not be an interface or a pointer.
         final boolean rejectInterfaceAndPointer = TYPE_IN_METHOD_RECEIVER.accepts(getElement());

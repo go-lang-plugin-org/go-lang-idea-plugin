@@ -72,7 +72,7 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
         return findChildByClass(GoLiteralCompositeValue.class);
     }
 
-    static
+    private static final
     ElementPattern patternCompositeParent =
         psiElement(GoLiteralCompositeElement.class)
             .withParent(
@@ -80,7 +80,7 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
                     .withParent(
                         psiElement(GoLiteralComposite.class)));
 
-    static
+    private static final
     ElementPattern patternElementParent =
         psiElement(GoLiteralCompositeElement.class)
             .withParent(
