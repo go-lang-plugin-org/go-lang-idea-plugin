@@ -50,7 +50,7 @@ Now you are ready to play with golang.
 
 ## Tutorials
 
-* [Philip Andrew's Intellij Go Plugin tutorial](http://www.philipandrew.com/?p=46)
+* [Philip Andrew's Intellij Go Plugin tutorial](http://webapp.org.ua/dev/intellij-idea-and-go-plugin/)
 
 ## Bugs
 
