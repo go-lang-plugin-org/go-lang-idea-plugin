@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.parser.parsing.statements;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
@@ -11,8 +10,8 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 25, 2010
  * Time: 8:07:21 PM
  */
-public class BreakStatement implements GoElementTypes {
-    public static IElementType parse(PsiBuilder builder, GoParser parser) {
+class BreakStatement implements GoElementTypes {
+    public static IElementType parse(PsiBuilder builder) {
 
         PsiBuilder.Marker marker = builder.mark();
 

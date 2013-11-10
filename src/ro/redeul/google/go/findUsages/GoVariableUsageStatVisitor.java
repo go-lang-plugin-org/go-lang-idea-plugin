@@ -22,7 +22,6 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
@@ -56,7 +55,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         GoElementTypes.SELECT_COMM_CLAUSE_SEND
     );
 
-    private InspectionResult result;
+    private final InspectionResult result;
     private Context ctx;
 
     public GoVariableUsageStatVisitor(InspectionResult result) {
@@ -65,7 +64,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
     @Override
     public void visitFile(GoFile file) {
-        HashMap<String, VariableUsage> global = new HashMap<String, VariableUsage>();
+        HashMap<String, VariableUsage> global = new HashMap<>();
         ctx = new Context(result, global);
         getGlobalVariables(file, global);
 
@@ -94,11 +93,6 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
                 ctx.unusedVariable(v);
             }
         }
-    }
-
-    @Override
-    public void visitCallOrConvExpression(GoCallOrConvExpression expression) {
-        super.visitCallOrConvExpression(expression);
     }
 
     @Override
@@ -173,7 +167,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
 
         int nonBlankIdCount = 0;
-        List<GoLiteralIdentifier> redeclaredIds = new ArrayList<GoLiteralIdentifier>();
+        List<GoLiteralIdentifier> redeclaredIds = new ArrayList<>();
         for (GoLiteralIdentifier id : identifiers) {
             if (!id.isBlank()) {
                 nonBlankIdCount++;
@@ -210,11 +204,8 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     private static boolean couldOpenNewScope(PsiElement element) {
-        if (!(element instanceof GoPsiElementBase)) {
-            return false;
-        }
+        return element instanceof GoPsiElementBase && isNodeOfType(element, NEW_SCOPE_STATEMENT);
 
-        return isNodeOfType(element, NEW_SCOPE_STATEMENT);
     }
 
     private void visitExpressionAsIdentifier(GoExpr expr, boolean declaration) {
@@ -252,8 +243,8 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
     /**
      * Check whether id is a field name in composite literals
-     * @param id
-     * @return
+     * @param id GoLiteralIdentifier
+     * @return boolean
      */
     private boolean isTypeFieldInitializer(GoLiteralIdentifier id) {
         if (!(id.getParent() instanceof GoLiteral)) {
@@ -328,7 +319,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
 
-    private Map<String, VariableUsage> getFunctionParameters(GoFunctionDeclaration fd) {
+    private void getFunctionParameters(GoFunctionDeclaration fd) {
         Map<String, VariableUsage> variables = createFunctionParametersMap(fd.getParameters(), fd.getResults());
 
         if (fd instanceof GoMethodDeclaration) {
@@ -338,7 +329,6 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
                 variables.put(receiver.getName(), new VariableUsage(receiver));
             }
         }
-        return variables;
     }
 
     private Map<String, VariableUsage> createFunctionParametersMap(GoFunctionParameter[] parameters,
@@ -352,7 +342,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
 
-    public void afterVisitGoFunctionDeclaration() {
+    void afterVisitGoFunctionDeclaration() {
         for (VariableUsage v : ctx.popLastScopeLevel().values()) {
             if (!v.isUsed()) {
                 ctx.unusedParameter(v);
@@ -362,7 +352,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
     private static class Context {
         public final InspectionResult result;
-        public final List<Map<String, VariableUsage>> variables = new ArrayList<Map<String, VariableUsage>>();
+        public final List<Map<String, VariableUsage>> variables = new ArrayList<>();
 
         Context(InspectionResult result, Map<String, VariableUsage> global) {
             this.result = result;
@@ -370,7 +360,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
 
         public Map<String, VariableUsage> addNewScopeLevel() {
-            Map<String, VariableUsage> variables = new HashMap<String, VariableUsage>();
+            Map<String, VariableUsage> variables = new HashMap<>();
             this.variables.add(variables);
             return variables;
         }

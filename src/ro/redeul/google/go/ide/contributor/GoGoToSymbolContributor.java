@@ -17,10 +17,10 @@ public class GoGoToSymbolContributor implements ChooseByNameContributor {
     @Override
     public String[] getNames(Project project, boolean includeNonProjectItems) {
         GoNamesCache namesCache = GoNamesCache.getInstance(project);
-        Set<String> names = new HashSet<String>();
+        Set<String> names = new HashSet<>();
         namesCache.getAllTypeNames(names);
-        namesCache.getAllFunctionNames(names);
-        namesCache.getAllVariableNames(names);
+        namesCache.getAllFunctionNames();
+        namesCache.getAllVariableNames();
         return names.toArray(new String[names.size()]);
     }
 
@@ -29,10 +29,10 @@ public class GoGoToSymbolContributor implements ChooseByNameContributor {
     public NavigationItem[] getItemsByName(String name, String pattern, Project project,
                                            boolean includeNonProjectItems) {
         GoNamesCache namesCache = GoNamesCache.getInstance(project);
-        List<NavigationItem> result = new ArrayList<NavigationItem>();
+        List<NavigationItem> result = new ArrayList<>();
         Collections.addAll(result, namesCache.getTypesByName(name, includeNonProjectItems));
-        Collections.addAll(result, namesCache.getFunctionsByName(name, includeNonProjectItems));
-        Collections.addAll(result, namesCache.getVariablesByName(name, includeNonProjectItems));
+        Collections.addAll(result, namesCache.getFunctionsByName());
+        Collections.addAll(result, namesCache.getVariablesByName());
         return result.toArray(new NavigationItem[result.size()]);
     }
 }

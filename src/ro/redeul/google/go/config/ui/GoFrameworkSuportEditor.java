@@ -1,7 +1,5 @@
 package ro.redeul.google.go.config.ui;
 
-import com.intellij.openapi.project.Project;
-
 import javax.swing.*;
 
 /**
@@ -13,12 +11,9 @@ import javax.swing.*;
  */
 public class GoFrameworkSuportEditor {
 
-    private Project project;
-
     private JComponent component;
 
-    public GoFrameworkSuportEditor(Project project) {
-        this.project = project;
+    public GoFrameworkSuportEditor() {
     }
 
     public JComponent getComponent() {

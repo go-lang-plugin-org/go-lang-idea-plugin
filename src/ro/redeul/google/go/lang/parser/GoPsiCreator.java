@@ -71,7 +71,7 @@ import ro.redeul.google.go.lang.psi.impl.types.struct.GoTypeStructFieldImpl;
 
 import static ro.redeul.google.go.lang.psi.typing.GoTypeChannel.ChannelType;
 
-public class GoPsiCreator implements GoElementTypes {
+class GoPsiCreator implements GoElementTypes {
 
     public static PsiElement createElement(ASTNode node) {
 

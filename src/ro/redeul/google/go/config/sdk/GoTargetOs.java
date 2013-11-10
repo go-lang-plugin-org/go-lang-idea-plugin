@@ -10,7 +10,7 @@ public enum GoTargetOs {
 
     Windows("windows"), Linux("linux"), Darwin("darwin"), FreeBsd("freebsd");
 
-    String name;
+    private final String name;
 
     GoTargetOs(String name) {
         this.name = name;

@@ -2,7 +2,6 @@ package ro.redeul.google.go.intentions.conversions;
 
 import com.google.common.base.Charsets;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.intentions.GoIntentionsBundle;
@@ -25,13 +24,13 @@ public class ConvertToRawStringIntention extends Intention {
     }
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Project project, Editor editor)
+    protected void processIntention(@NotNull PsiElement element, Editor editor)
             throws IntentionExecutionException {
         String text = convertToRawString(element.getText());
         DocumentUtil.replaceElementWithText(editor.getDocument(), element, text);
     }
 
-    public static String convertToRawString(String text) throws IntentionExecutionException {
+    private static String convertToRawString(String text) throws IntentionExecutionException {
         byte[] textBytes = text.getBytes(Charsets.UTF_8);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {

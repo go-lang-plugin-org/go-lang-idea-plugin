@@ -17,16 +17,16 @@ import java.util.regex.Pattern;
  * User: jhonny
  * Date: 28/07/11
  */
-public class GoAppEngineRunningState extends CommandLineState {
+class GoAppEngineRunningState extends CommandLineState {
 
     private static final String ID = "Go App Engine Console";
     private static final String TITLE = "Go App Engine Console Output";
 
-    private String sdkDirectory;
-    private String scriptArguments;
-    private String workDir;
+    private final String sdkDirectory;
+    private final String scriptArguments;
+    private final String workDir;
 
-    private ExecutionEnvironment env;
+    private final ExecutionEnvironment env;
     //private OSProcessHandler processHandler;
 
     public GoAppEngineRunningState(ExecutionEnvironment env, String sdkDirectory, String scriptArguments, String workDir) {

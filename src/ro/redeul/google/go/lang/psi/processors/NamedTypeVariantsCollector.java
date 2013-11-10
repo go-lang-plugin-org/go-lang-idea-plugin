@@ -20,9 +20,9 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
  * Date: 5/21/11
  * Time: 6:16 PM
  */
-public class NamedTypeVariantsCollector extends BaseScopeProcessor {
+class NamedTypeVariantsCollector extends BaseScopeProcessor {
 
-    static final String builtInTypes[] = {
+    private static final String[] builtInTypes = {
             "uint8", "uint16", "uint32", "uint64",
             "int8", "int16", "int32", "int64",
             "float32", "float64",
@@ -30,7 +30,7 @@ public class NamedTypeVariantsCollector extends BaseScopeProcessor {
             "byte", "uint", "int", "float", "complex", "uintptr", "bool", "string"
     };
 
-    List<LookupElement> variants = new ArrayList<LookupElement>();
+    private final List<LookupElement> variants = new ArrayList<>();
 
     public boolean execute(PsiElement element, ResolveState state) {
 

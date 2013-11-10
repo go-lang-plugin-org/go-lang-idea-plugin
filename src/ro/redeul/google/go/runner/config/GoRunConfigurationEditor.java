@@ -14,7 +14,7 @@ import javax.swing.*;
  * Time: 2:59:34 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GoRunConfigurationEditor extends SettingsEditor<GoApplicationConfiguration> {
+class GoRunConfigurationEditor extends SettingsEditor<GoApplicationConfiguration> {
 
     @Override
     protected void resetEditorFrom(GoApplicationConfiguration s) {

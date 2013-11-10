@@ -40,9 +40,7 @@ public class GoSwitchTypeGuardImpl extends GoPsiElementBase
 
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-        if ( getIdentifier() != null )
-            return processor.execute(this, state);
+        return getIdentifier() == null || processor.execute(this, state);
 
-        return true;
     }
 }

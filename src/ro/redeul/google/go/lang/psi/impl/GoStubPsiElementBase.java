@@ -23,7 +23,7 @@ public abstract class GoStubPsiElementBase<T extends StubElement> extends StubBa
         super(stub, nodeType);
     }
 
-    public GoStubPsiElementBase(final ASTNode node) {
+    protected GoStubPsiElementBase(final ASTNode node) {
         super(node);
     }
 

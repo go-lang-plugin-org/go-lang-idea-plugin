@@ -48,7 +48,7 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
         GoElementTypes.SELECT_COMM_CLAUSE_DEFAULT
     );
 
-    private InspectionResult result;
+    private final InspectionResult result;
 
     public GoVariableUsageStatVisitor2(InspectionResult result) {
         this.result = result;
@@ -116,8 +116,8 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
         }
     }
 
-    Set<GoPsiElement> declarations = new HashSet<GoPsiElement>();
-    Set<GoPsiElement> usages = new HashSet<GoPsiElement>();
+    private final Set<GoPsiElement> declarations = new HashSet<>();
+    private final Set<GoPsiElement> usages = new HashSet<>();
 
     @Override
     public void visitConstDeclaration(GoConstDeclaration declaration) {

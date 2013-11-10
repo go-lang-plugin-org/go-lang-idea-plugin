@@ -2,8 +2,8 @@ package ro.redeul.google.go.lang.psi.types.underlying;
 
 public class GoUnderlyingTypeArray implements GoUnderlyingType {
 
-    GoUnderlyingType elementType;
-    int length;
+    private final GoUnderlyingType elementType;
+    private final int length;
 
     public GoUnderlyingTypeArray(GoUnderlyingType elementType, int length) {
         this.elementType = elementType;

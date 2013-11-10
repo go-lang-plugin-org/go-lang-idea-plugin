@@ -5,7 +5,7 @@ import com.intellij.formatting.Spacing;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 
-public class GoLabeledStatmentBlock extends GoBlock {
+class GoLabeledStatmentBlock extends GoBlock {
     public GoLabeledStatmentBlock(ASTNode node, CommonCodeStyleSettings styleSettings) {
         super(node, null, Indent.getLabelIndent(), null, styleSettings);
     }

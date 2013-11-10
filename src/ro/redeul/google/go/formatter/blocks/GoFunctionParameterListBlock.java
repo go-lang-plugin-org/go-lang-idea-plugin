@@ -14,7 +14,7 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 /**
  * // TODO: mtoader ! Please explain yourself.
  */
-public class GoFunctionParameterListBlock extends GoBlock {
+class GoFunctionParameterListBlock extends GoBlock {
     public GoFunctionParameterListBlock(ASTNode node, Indent indent, CommonCodeStyleSettings settings) {
         super(node, null, indent, null, settings);
     }

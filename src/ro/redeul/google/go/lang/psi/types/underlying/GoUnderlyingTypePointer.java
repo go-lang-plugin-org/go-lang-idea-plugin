@@ -2,7 +2,7 @@ package ro.redeul.google.go.lang.psi.types.underlying;
 
 public class GoUnderlyingTypePointer implements GoUnderlyingType {
 
-    private GoUnderlyingType baseType;
+    private final GoUnderlyingType baseType;
 
     public GoUnderlyingTypePointer(GoUnderlyingType baseType) {
         this.baseType = baseType;

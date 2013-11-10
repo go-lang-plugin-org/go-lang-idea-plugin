@@ -175,7 +175,7 @@ public class GoPsiUtils {
 
         VirtualFile[] children = packageFilesLocation.getChildren();
 
-        List<GoFile> files = new ArrayList<GoFile>();
+        List<GoFile> files = new ArrayList<>();
 
         for (VirtualFile child : children) {
             if (child.getFileType() != GoFileType.INSTANCE ||
@@ -278,7 +278,7 @@ public class GoPsiUtils {
             return Collections.emptyList();
         }
 
-        List<T> children = new ArrayList<T>();
+        List<T> children = new ArrayList<>();
         for (PsiElement element : node.getChildren()) {
             if (ReflectionCache.isInstance(element, type)) {
                 children.add(type.cast(element));
@@ -294,7 +294,7 @@ public class GoPsiUtils {
             return Collections.emptyList();
         }
 
-        List<PsiElement> children = new ArrayList<PsiElement>();
+        List<PsiElement> children = new ArrayList<>();
         PsiElement child = node.getFirstChild();
         while (child != null) {
             if (isNodeOfType(child, type)) {
@@ -452,7 +452,7 @@ public class GoPsiUtils {
         return getPackageSearchScope(element);
     }
 
-    public static SearchScope getPackageSearchScope(GoPsiElement element) {
+    private static SearchScope getPackageSearchScope(GoPsiElement element) {
         GoNamesCache namesCache = GoNamesCache.getInstance(element.getProject());
         String packageName = ((GoFile) element.getContainingFile()).getPackageName();
         Collection<GoFile> files = namesCache.getFilesByPackageName(packageName);
@@ -471,7 +471,7 @@ public class GoPsiUtils {
         return  (file != null && psiIsA(file, GoFile.class)) ? (GoFile) file : null;
     }
 
-    static Pattern relativeImportPathRegex = Pattern.compile("^\\.\\.?/.*");
+    private static final Pattern relativeImportPathRegex = Pattern.compile("^\\.\\.?/.*");
 
     public static String getAbsoluteImportPath(String value, GoFile goFile) {
         if ( value == null || goFile == null)

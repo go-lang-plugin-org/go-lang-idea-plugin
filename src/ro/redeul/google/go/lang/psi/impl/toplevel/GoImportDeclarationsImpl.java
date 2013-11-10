@@ -38,9 +38,6 @@ public class GoImportDeclarationsImpl extends GoPsiElementBase implements GoImpo
                                        PsiElement lastParent, @NotNull PsiElement place) {
 
         // don't process recursively imported names (yet).
-        if (!state.get(GoResolveStates.IsOriginalPackage) || !state.get(GoResolveStates.IsOriginalFile))
-            return true;
-
-        return PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
+        return !state.get(GoResolveStates.IsOriginalPackage) || !state.get(GoResolveStates.IsOriginalFile) || PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
     }
 }

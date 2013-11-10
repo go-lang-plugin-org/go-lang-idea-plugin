@@ -87,7 +87,7 @@ public class GoIntroduceVariableHandler extends GoIntroduceVariableHandlerBase {
 
     private List<String> getFunctionResultNames(GoFunctionDeclaration function) {
         int index = 0;
-        List<String> parameterNames = new ArrayList<String>();
+        List<String> parameterNames = new ArrayList<>();
         for (GoFunctionParameter fp : function.getResults()) {
             GoLiteralIdentifier[] identifiers = fp.getIdentifiers();
             // unnamed parameter

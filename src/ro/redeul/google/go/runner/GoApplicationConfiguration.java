@@ -31,7 +31,6 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathUtil;
 import com.intellij.util.xmlb.XmlSerializer;
-import com.intellij.util.xmlb.annotations.Transient;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.ide.GoProjectSettings;
@@ -47,7 +46,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
     public String scriptName;
     public String scriptArguments;
-    public String workDir;
+    private final String workDir;
 
     public GoApplicationConfiguration(String name, Project project, GoRunConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
@@ -77,12 +76,6 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
         return new GoRunConfigurationEditorForm(getProject());
-    }
-
-    @Override
-    @Transient
-    public void setModule(Module module) {
-        super.setModule(module);
     }
 
     public void readExternal(final Element element) throws InvalidDataException {
@@ -171,7 +164,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
         return scriptName;
     }
 
-    public Module getModule() {
+    Module getModule() {
         return getConfigurationModule().getModule();
     }
 }

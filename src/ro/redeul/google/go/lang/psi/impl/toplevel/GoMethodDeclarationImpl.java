@@ -44,9 +44,7 @@ public class GoMethodDeclarationImpl extends GoFunctionDeclarationImpl
 
         // if we are coming from a child then we should expose the
         // method receiver as a declaration
-        if (lastParent != null && !processor.execute(getMethodReceiver(), state))
-            return false;
+        return !(lastParent != null && !processor.execute(getMethodReceiver(), state));
 
-        return true;
     }
 }

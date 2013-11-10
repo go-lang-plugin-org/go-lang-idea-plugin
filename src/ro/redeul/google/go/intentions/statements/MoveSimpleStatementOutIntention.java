@@ -3,7 +3,6 @@ package ro.redeul.google.go.intentions.statements;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +34,7 @@ import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class MoveSimpleStatementOutIntention extends Intention {
 
-    public static final Comparator<PsiElement> REVERSE_POSITION_COMPARATOR = new Comparator<PsiElement>() {
+    private static final Comparator<PsiElement> REVERSE_POSITION_COMPARATOR = new Comparator<PsiElement>() {
         @Override
         public int compare(PsiElement o1, PsiElement o2) {
             return o2.getTextOffset() - o1.getTextOffset();
@@ -85,7 +84,7 @@ public class MoveSimpleStatementOutIntention extends Intention {
     }
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Project project, Editor editor)
+    protected void processIntention(@NotNull PsiElement element, Editor editor)
             throws IntentionExecutionException {
         GoIfStatement ifStatement = findParentOfType(element, GoIfStatement.class);
         if (ifStatement != null) {
@@ -108,7 +107,6 @@ public class MoveSimpleStatementOutIntention extends Intention {
         GoForWithClausesStatement forStatement = findParentOfType(element, GoForWithClausesStatement.class);
         if (forStatement != null) {
             moveSimpleStatementOut(editor, forStatement);
-            return;
         }
     }
 
@@ -201,7 +199,7 @@ public class MoveSimpleStatementOutIntention extends Intention {
 
     private static List<GoIfStatement> findAllDependentIfs(GoIfStatement ifStatement,
                                                            GoSimpleStatement simpleStatement) {
-        final List<GoIfStatement> dependentIfs = new ArrayList<GoIfStatement>();
+        final List<GoIfStatement> dependentIfs = new ArrayList<>();
         final Set<GoIfStatement> outerIfs = findAllOuterIfs(ifStatement);
 
         new GoRecursiveElementVisitor() {
@@ -228,7 +226,7 @@ public class MoveSimpleStatementOutIntention extends Intention {
     }
 
     private static Set<GoIfStatement> findAllOuterIfs(GoIfStatement ifStatement) {
-        final Set<GoIfStatement> outerIfs = new HashSet<GoIfStatement>();
+        final Set<GoIfStatement> outerIfs = new HashSet<>();
         while (ifStatement != null && ifStatement.getParent() instanceof GoIfStatement) {
             ifStatement = (GoIfStatement) ifStatement.getParent();
             outerIfs.add(ifStatement);

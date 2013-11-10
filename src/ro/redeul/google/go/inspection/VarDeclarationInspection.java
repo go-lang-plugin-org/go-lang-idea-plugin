@@ -15,7 +15,7 @@ import static ro.redeul.google.go.inspection.InspectionUtil.getExpressionResultC
 public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result, boolean isOnTheFly) {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
             @Override
             public void visitVarDeclaration(GoVarDeclaration declaration) {

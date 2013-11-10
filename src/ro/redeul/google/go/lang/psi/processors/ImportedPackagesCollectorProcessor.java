@@ -17,7 +17,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
  */
 public class ImportedPackagesCollectorProcessor extends BaseScopeProcessor {
 
-    List<GoImportDeclaration> imports = new ArrayList<GoImportDeclaration>();
+    private final List<GoImportDeclaration> imports = new ArrayList<>();
 
     public boolean execute(PsiElement element, ResolveState state) {
 
@@ -38,7 +38,7 @@ public class ImportedPackagesCollectorProcessor extends BaseScopeProcessor {
 
     public String[] getPackageImports() {
 
-        List<String> packageImports = new ArrayList<String>();
+        List<String> packageImports = new ArrayList<>();
 
         for (GoImportDeclaration importSpec : imports) {
             GoPackageReference packageReference = importSpec.getPackageReference();

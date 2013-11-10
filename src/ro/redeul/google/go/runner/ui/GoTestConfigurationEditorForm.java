@@ -29,7 +29,7 @@ public class GoTestConfigurationEditorForm
     private ButtonGroup testsGroup;
 
     private ConfigurationModuleSelector moduleSelector;
-    private Project project;
+    private final Project project;
 
     public GoTestConfigurationEditorForm(final Project project) {
         this.project = project;
@@ -41,7 +41,7 @@ public class GoTestConfigurationEditorForm
             }
         });
 
-        Vector<String> myPackages = new Vector<String>();
+        Vector<String> myPackages = new Vector<>();
         Collection<String> allPackages =
             GoNamesCache.getInstance(project).getProjectPackages();
 
@@ -105,7 +105,4 @@ public class GoTestConfigurationEditorForm
         panel.setVisible(false);
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
 }

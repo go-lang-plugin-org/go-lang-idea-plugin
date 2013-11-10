@@ -28,13 +28,13 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
  */
 public class GoAppEngineSdkType extends SdkType {
 
-    GoAppEngineSdkData sdkData;
+    private GoAppEngineSdkData sdkData;
 
     public GoAppEngineSdkType() {
         super("Google Go App Engine SDK");
     }
 
-    public GoAppEngineSdkData getSdkData() {
+    GoAppEngineSdkData getSdkData() {
         return sdkData;
     }
 
@@ -71,7 +71,7 @@ public class GoAppEngineSdkType extends SdkType {
 
     @Override
     public AdditionalDataConfigurable createAdditionalDataConfigurable(SdkModel sdkModel, SdkModificator sdkModificator) {
-        return new GoAppEngineSdkConfigurable(sdkModel, sdkModificator);
+        return new GoAppEngineSdkConfigurable();
     }
 
     @Override

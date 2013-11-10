@@ -42,7 +42,7 @@ public class GoMakefileCompiler implements TranslatingCompiler {
     private static final Logger LOG =
         Logger.getInstance("#ro.redeul.google.go.compilation.GoMakefileCompiler");
 
-    Project project;
+    private final Project project;
 
     public GoMakefileCompiler(Project project) {
         this.project = project;
@@ -80,10 +80,10 @@ public class GoMakefileCompiler implements TranslatingCompiler {
     }
 
     public void compile(CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
-        make(context, moduleChunk, files, sink);
+        make(context, moduleChunk);
     }
 
-    private void make(final CompileContext context, final Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
+    private void make(final CompileContext context, final Chunk<Module> moduleChunk) {
         String basePath = project.getBaseDir().getPath();
         File makeFile = new File(basePath, "/Makefile");
         if (!makeFile.exists()) {
@@ -134,9 +134,9 @@ public class GoMakefileCompiler implements TranslatingCompiler {
     private static class MakeOutputStreamParser implements ProcessUtil.StreamParser<List<CompilerMessage>> {
 
         private final static Pattern pattern = Pattern.compile("([^:]+):(\\d+): ((?:(?:.)|(?:\\n(?!/)))+)", Pattern.UNIX_LINES);
-        private Sdk projectSdk;
-        private GoSdkData goSdkData;
-        private String basePath;
+        private final Sdk projectSdk;
+        private final GoSdkData goSdkData;
+        private final String basePath;
 
         public MakeOutputStreamParser(Sdk projectSdk, GoSdkData goSdkData, String basePath) {
             this.goSdkData = goSdkData;
@@ -146,7 +146,7 @@ public class GoMakefileCompiler implements TranslatingCompiler {
 
         public List<CompilerMessage> parseStream(String data) {
 
-            List<CompilerMessage> messages = new ArrayList<CompilerMessage>();
+            List<CompilerMessage> messages = new ArrayList<>();
 
             Matcher matcher = pattern.matcher(data);
 
@@ -160,7 +160,7 @@ public class GoMakefileCompiler implements TranslatingCompiler {
 
                 // Ignore error lines that start with the compiler as the line that follows this contains the error that
                 // we're interested in. Otherwise, the error is more severe and we should display it
-                if (!StringUtils.startsWith(data, GoSdkUtil.getCompilerName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH))) {
+                if (!StringUtils.startsWith(data, GoSdkUtil.getCompilerName(goSdkData.TARGET_ARCH))) {
                     messages.add(new CompilerMessage(CompilerMessageCategory.ERROR, data, null, -1, -1));
                 }
             }
@@ -171,7 +171,7 @@ public class GoMakefileCompiler implements TranslatingCompiler {
 
     private String getMakeBinary(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return goSdkData.GO_BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_OS, goSdkData.TARGET_ARCH, GoSdkTool.GoMake);
+        return goSdkData.GO_BIN_PATH + "/" + GoSdkUtil.getToolName(goSdkData.TARGET_ARCH, GoSdkTool.GoMake);
     }
 
     private GoSdkData goSdkData(Sdk sdk) {

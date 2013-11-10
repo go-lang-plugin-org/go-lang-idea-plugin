@@ -23,7 +23,7 @@ class GoTypeStructBlock extends GoBlock {
 
     @Override
     protected List<Block> buildChildren() {
-        List<Block> children = new ArrayList<Block>();
+        List<Block> children = new ArrayList<>();
         int newLinesAfterLastField = 0;
         int newLinesAfterLastComment = 0;
         Alignment fieldAlignment = null;

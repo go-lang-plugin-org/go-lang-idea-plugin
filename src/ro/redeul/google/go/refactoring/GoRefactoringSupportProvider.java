@@ -4,7 +4,6 @@ import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.refactoring.RefactoringActionHandler;
-import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.refactoring.introduce.GoIntroduceConstantHandler;
 import ro.redeul.google.go.refactoring.introduce.GoIntroduceVariableHandler;

@@ -36,7 +36,6 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         return findChildByClass(GoPackageReference.class);
     }
 
-    @NotNull
     public GoLiteralString getImportPath() {
         return findChildByClass(GoLiteralString.class);
     }

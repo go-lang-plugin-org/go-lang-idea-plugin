@@ -85,7 +85,7 @@ public class ImportReference extends GoPsiReference.Single<GoImportDeclaration, 
 
         GoNamesCache namesCache = GoNamesCache.getInstance(element.getProject());
 
-        List<ResolveResult> files = new ArrayList<ResolveResult>();
+        List<ResolveResult> files = new ArrayList<>();
         for (GoFile file : namesCache.getFilesByPackageImportPath(importPath.getValue())) {
             files.add(new PsiElementResolveResult(file.getOriginalFile()));
         }

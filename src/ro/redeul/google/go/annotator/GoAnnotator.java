@@ -227,7 +227,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         }
     }
 
-    public void processLiteralIdentifier(GoLiteralIdentifier identifier) {
+    void processLiteralIdentifier(GoLiteralIdentifier identifier) {
         if (identifier.isBlank()) {
             return;
         }

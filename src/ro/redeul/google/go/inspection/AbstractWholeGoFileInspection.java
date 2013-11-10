@@ -20,11 +20,11 @@ public abstract class AbstractWholeGoFileInspection extends LocalInspectionTool 
         }
 
         InspectionResult result = new InspectionResult(manager);
-        doCheckFile((GoFile) file, result, isOnTheFly);
+        doCheckFile((GoFile) file, result);
 
         List<ProblemDescriptor> problems = result.getProblems();
         return problems.toArray(new ProblemDescriptor[problems.size()]);
     }
 
-    protected abstract void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result, boolean isOnTheFly);
+    protected abstract void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result);
 }

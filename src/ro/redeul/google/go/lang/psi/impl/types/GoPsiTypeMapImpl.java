@@ -38,8 +38,8 @@ public class GoPsiTypeMapImpl extends GoPsiPackagedElementBase implements
 
     @Override
     public GoUnderlyingType getUnderlyingType() {
-        return GoUnderlyingTypes.getMap(getKeyType().getUnderlyingType(),
-                                        getElementType().getUnderlyingType());
+        return GoUnderlyingTypes.getMap(
+        );
     }
 
     @Override

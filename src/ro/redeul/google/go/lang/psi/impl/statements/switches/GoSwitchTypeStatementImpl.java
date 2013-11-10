@@ -54,10 +54,8 @@ public class GoSwitchTypeStatementImpl extends GoPsiElementBase
         }
 
         GoSimpleStatement initStatement = getSimpleStatement();
-        if ( initStatement != null && lastParent != initStatement)
-            return initStatement.processDeclarations(processor, state, null, place);
+        return !(initStatement != null && lastParent != initStatement) || initStatement.processDeclarations(processor, state, null, place);
 
-        return true;
     }
 
 }

@@ -60,7 +60,7 @@ public class GoTypes {
         uInt, uInt8, uInt16, uInt32, uInt64, uIntPtr
     }
 
-    static Map<Builtin, GoType> cachedTypes = new HashMap<Builtin, GoType>();
+    private static final Map<Builtin, GoType> cachedTypes = new HashMap<>();
 
     public static GoType getBuiltin(Builtin builtinType, GoNamesCache namesCache) {
         GoType type = cachedTypes.get(builtinType);

@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Time: 8:06:41 AM
  * To change this template use File | Settings | File Templates.
  */
-public class DeferStatement implements GoElementTypes {
+class DeferStatement implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
         PsiBuilder.Marker marker = builder.mark();

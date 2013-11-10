@@ -18,7 +18,7 @@ import static ro.redeul.google.go.lang.lexer.GoTokenTypes.*;
 public class GoAssignmentStatementImpl extends GoPsiElementBase
     implements GoAssignmentStatement {
 
-    private static Map<IElementType, Op> operatorsMap =
+    private static final Map<IElementType, Op> operatorsMap =
         new HashMap<IElementType, Op>() {
             {
                 put(oPLUS_ASSIGN, Op.PlusEq);

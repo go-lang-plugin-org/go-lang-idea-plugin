@@ -2,7 +2,6 @@ package ro.redeul.google.go.lang.parser.parsing.helpers;
 
 import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 /**
@@ -13,11 +12,11 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class IdentifierList implements GoElementTypes {
 
-    public static int parse(PsiBuilder builder, GoParser parser) {
-        return parse(builder, parser, true);
+    public static int parse(PsiBuilder builder) {
+        return parse(builder, true);
     }
 
-    public static int parse(PsiBuilder builder, GoParser parser, boolean markList) {
+    public static int parse(PsiBuilder builder, boolean markList) {
 
         int length = 0;
 

@@ -9,7 +9,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
  */
 public class GoTypeSlice extends GoTypePsiBacked<GoPsiTypeSlice, GoUnderlyingTypeSlice> implements GoType {
 
-    GoType elementType;
+    private final GoType elementType;
 
     public GoTypeSlice(GoPsiTypeSlice type) {
         super(type);

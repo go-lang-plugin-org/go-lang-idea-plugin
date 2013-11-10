@@ -7,7 +7,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 public class UnusedVariableInspection extends AbstractWholeGoFileInspection {
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result, boolean isOnTheFly) {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull InspectionResult result) {
         new GoVariableUsageStatVisitor2(result).visitFile(file);
     }
 }

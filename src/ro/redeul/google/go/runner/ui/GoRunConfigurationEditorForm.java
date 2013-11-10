@@ -29,7 +29,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
     private JComboBox comboModules;
 
     private ConfigurationModuleSelector moduleSelector;
-    private Project project;
+    private final Project project;
 
     @Override
     protected void resetEditorFrom(GoApplicationConfiguration configuration) {

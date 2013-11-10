@@ -8,7 +8,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 
-public class GoFunctionDeclarationBlock extends GoBlock {
+class GoFunctionDeclarationBlock extends GoBlock {
     public GoFunctionDeclarationBlock(ASTNode node, Alignment alignment, Indent indent,
                                       CommonCodeStyleSettings settings) {
         super(node, alignment, indent, null, settings);

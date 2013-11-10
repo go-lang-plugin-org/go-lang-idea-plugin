@@ -14,7 +14,7 @@ import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowComposit
  * Date: Jul 25, 2010
  * Time: 8:01:22 PM
  */
-public class SwitchStatement implements GoElementTypes {
+class SwitchStatement implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 

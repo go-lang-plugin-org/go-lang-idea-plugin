@@ -32,7 +32,7 @@ public class GoPsiElementFactory {
             return new PsiElement[0];
         }
 
-        List<PsiElement> nodes = new ArrayList<PsiElement>();
+        List<PsiElement> nodes = new ArrayList<>();
         while ((child = child.getNextSibling()) != null) {
             nodes.add(child);
         }

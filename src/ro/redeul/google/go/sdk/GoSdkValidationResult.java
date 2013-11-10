@@ -54,25 +54,7 @@ public class GoSdkValidationResult {
 
     }
 
-    String homePath;
-
-    String binPath;
-
-    Os targetOs;
-
-    Arch targetArch;
-
-    String majorVersion;
-
-    String minorVersion;
-
-    public GoSdkValidationResult(String homePath, String binPath, Os targetOs, Arch targetArch, String majorVersion, String minorVersion) {
-        this.homePath = homePath;
-        this.binPath = binPath;
-        this.targetOs = targetOs;
-        this.targetArch = targetArch;
-        this.majorVersion = majorVersion;
-        this.minorVersion = minorVersion;
+    public GoSdkValidationResult() {
     }
 }
 

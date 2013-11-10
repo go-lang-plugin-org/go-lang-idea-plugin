@@ -23,7 +23,7 @@ public interface GoType {
 
         @Override
         public void accept(Visitor visitor) {
-            visitor.visitTypeUnknown(this);
+
         }
     };
 
@@ -49,19 +49,11 @@ public interface GoType {
             this.data = data;
         }
 
-        protected void visitTypeUnknown(GoType type) { }
-
         protected void visitTypeArray(GoTypeArray array) { }
-
-        public void visitTypeInterface(GoTypeInterface iface) { }
-
-        public void visitTypeFunction(GoTypeFunction function) { }
 
         public void visitTypeChannel(GoTypeChannel channel) { }
 
         public void visitTypeName(GoTypeName name) { }
-
-        public void visitTypeStruct(GoTypeStruct struct) { }
 
         public void visitTypeSlice(GoTypeSlice slice) { }
 

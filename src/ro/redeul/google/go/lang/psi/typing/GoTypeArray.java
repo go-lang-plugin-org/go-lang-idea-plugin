@@ -6,7 +6,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
 public class GoTypeArray extends GoAbstractType<GoUnderlyingTypeArray> implements GoType {
 
-    GoType elementType;
+    private final GoType elementType;
 
     public GoTypeArray(GoPsiTypeArray type) {
         this(GoTypes.fromPsiType(type.getElementType()));

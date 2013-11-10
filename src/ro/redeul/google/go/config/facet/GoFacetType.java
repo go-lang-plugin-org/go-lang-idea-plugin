@@ -13,7 +13,7 @@ import javax.swing.*;
 
 public class GoFacetType extends FacetType<GoFacet, GoFacetConfiguration> {
 
-    public static final FacetTypeId<GoFacet> GO_FACET_TYPE_ID = new FacetTypeId<GoFacet>("Google Go Facet");
+    public static final FacetTypeId<GoFacet> GO_FACET_TYPE_ID = new FacetTypeId<>("Google Go Facet");
 
     public GoFacetType() {
         super(GO_FACET_TYPE_ID, "id", "google go");

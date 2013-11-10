@@ -27,7 +27,7 @@ public class TypeNameResolver extends GoPsiReferenceResolver<TypeNameReference> 
     }
 
     @Override
-    protected boolean checkReference(PsiElement element) {
+    boolean checkReference(PsiElement element) {
         if (!(element instanceof GoTypeNameDeclaration)) {
             return false;
         }

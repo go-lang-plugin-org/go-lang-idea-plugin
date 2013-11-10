@@ -11,9 +11,9 @@ public abstract class GoTypePsiBacked<
     UnderlyingType extends GoUnderlyingType
     > extends GoAbstractType<UnderlyingType> {
 
-    PsiType psiType;
+    private final PsiType psiType;
 
-    protected GoTypePsiBacked(PsiType psiType) {
+    GoTypePsiBacked(PsiType psiType) {
         this.psiType = psiType;
     }
 

@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  * Date: Jul 25, 2010
  * Time: 2:50:17 AM
  */
-public class SliceType implements GoElementTypes  {
+class SliceType implements GoElementTypes  {
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
         PsiBuilder.Marker marker = builder.mark();
 

@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 
@@ -17,18 +17,15 @@ import java.util.List;
  * Date: 5/20/11
  * Time: 1:02 AM
  */
-public class GoExpressionTypeResolver extends BaseScopeProcessor {
+class GoExpressionTypeResolver extends BaseScopeProcessor {
 
-    List<GoFunctionDeclaration> nodeFunctions = new ArrayList<GoFunctionDeclaration>();
+    private final List<GoFunctionDeclaration> nodeFunctions = new ArrayList<>();
 
-    private GoExpr contextualExpression;
-
-    public GoExpressionTypeResolver(GoExpr contextualExpression) {
-        this.contextualExpression = contextualExpression;
+    public GoExpressionTypeResolver() {
     }
 
     @Override
-    public boolean execute(PsiElement element, ResolveState state) {
+    public boolean execute(@NotNull PsiElement element, ResolveState state) {
         if ( element instanceof GoFunctionDeclaration && ! (element instanceof GoMethodDeclaration) ) {
 
             GoFunctionDeclaration function = (GoFunctionDeclaration) element;

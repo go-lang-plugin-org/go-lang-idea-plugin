@@ -24,7 +24,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 public class LabelReference
     extends GoPsiReference.Single<GoLiteralIdentifier, LabelReference> {
 
-    public static ElementPattern<GoLiteralIdentifier> MATCHER =
+    public static final ElementPattern<GoLiteralIdentifier> MATCHER =
         psiElement(GoLiteralIdentifier.class)
             .withParent(
                 or(
@@ -34,7 +34,7 @@ public class LabelReference
                 )
             );
 
-    private static ResolveCache.AbstractResolver<LabelReference, GoResolveResult> RESOLVER =
+    private static final ResolveCache.AbstractResolver<LabelReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<LabelReference, GoResolveResult>() {
             @Override
             public GoResolveResult resolve(LabelReference labelReference, boolean incompleteCode) {
@@ -46,7 +46,7 @@ public class LabelReference
                     return null;
                 }
 
-                final AtomicReference<PsiElement> declaration = new AtomicReference<PsiElement>();
+                final AtomicReference<PsiElement> declaration = new AtomicReference<>();
 
                 new GoRecursiveElementVisitor() {
                     @Override
@@ -123,7 +123,7 @@ public class LabelReference
             return new Object[0];
         }
 
-        final TreeSet<String> labels = new TreeSet<String>();
+        final TreeSet<String> labels = new TreeSet<>();
         new GoRecursiveElementVisitor() {
             @Override
             public void visitLabeledStatement(GoLabeledStatement statement) {

@@ -17,9 +17,9 @@ import javax.swing.*;
  * Time: 2:58:12 AM
  * To change this template use File | Settings | File Templates.
  */
-public class GoFrameworkSupportConfigurable extends FrameworkSupportConfigurable {
+class GoFrameworkSupportConfigurable extends FrameworkSupportConfigurable {
     
-    private GoFrameworkSuportEditor editor;
+    private final GoFrameworkSuportEditor editor;
 
     public GoFrameworkSupportConfigurable(GoFrameworkSuportEditor editor) {
         this.editor = editor;

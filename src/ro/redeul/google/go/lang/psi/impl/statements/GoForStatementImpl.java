@@ -9,7 +9,7 @@ import ro.redeul.google.go.lang.psi.statements.GoForStatement;
 public class GoForStatementImpl extends GoPsiElementBase
     implements GoForStatement {
 
-    public GoForStatementImpl(@NotNull ASTNode node) {
+    GoForStatementImpl(@NotNull ASTNode node) {
         super(node);
     }
 

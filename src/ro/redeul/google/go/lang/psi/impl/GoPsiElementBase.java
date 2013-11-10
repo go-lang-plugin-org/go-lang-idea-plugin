@@ -25,17 +25,15 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
     implements GoPsiElement {
 
 
-    PsiReference references[];
     protected PsiReference[] refs(PsiReference ... references) {
-        this.references = references;
-        return this.references;
+        return references;
     }
 
     public GoPsiElementBase(@NotNull ASTNode node) {
         super(node);
     }
 
-    public IElementType getTokenType() {
+    protected IElementType getTokenType() {
         return getNode().getElementType();
     }
 

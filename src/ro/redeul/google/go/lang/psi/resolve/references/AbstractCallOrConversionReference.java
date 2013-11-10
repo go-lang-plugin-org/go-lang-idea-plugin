@@ -22,15 +22,15 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 public abstract class AbstractCallOrConversionReference<Reference extends AbstractCallOrConversionReference<Reference>>
     extends GoPsiReference.Single<GoLiteralExpression, Reference> {
 
-    public static ElementPattern<GoLiteralExpression> MATCHER =
+    public static final ElementPattern<GoLiteralExpression> MATCHER =
         psiElement(GoLiteralExpression.class)
             .withChild(psiElement(GoLiteralIdentifier.class))
             .withParent(psiElement(GoCallOrConvExpression.class))
             .atStartOf(psiElement(GoCallOrConvExpression.class));
 
 
-    protected AbstractCallOrConversionReference(GoLiteralExpression identifier,
-                                                ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
+    AbstractCallOrConversionReference(GoLiteralExpression identifier,
+                                      ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
         super(identifier, resolver);
     }
 
@@ -90,7 +90,7 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
         return false;
     }
 
-    static ElementPattern IDENT_IN_SHORT_VAR =
+    private static final ElementPattern IDENT_IN_SHORT_VAR =
         psiElement(GoLiteralIdentifier.class)
             .withParent(psiElement(GoShortVarDeclaration.class));
 

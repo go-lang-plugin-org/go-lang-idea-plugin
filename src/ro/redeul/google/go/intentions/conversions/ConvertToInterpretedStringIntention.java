@@ -1,7 +1,6 @@
 package ro.redeul.google.go.intentions.conversions;
 
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.intentions.Intention;
@@ -18,7 +17,7 @@ public class ConvertToInterpretedStringIntention extends Intention {
     }
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Project project, Editor editor)
+    protected void processIntention(@NotNull PsiElement element, Editor editor)
             throws IntentionExecutionException {
         String text = convertToInterpretedString(element.getText());
         DocumentUtil.replaceElementWithText(editor.getDocument(), element, text);

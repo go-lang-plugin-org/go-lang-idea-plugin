@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.psi.processors;
 
 import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.KeyWithDefaultValue;
 import com.intellij.psi.ResolveState;
 
 /**
@@ -37,11 +36,11 @@ public class GoResolveStates {
                 .put(IsOriginalPackage, true);
     }
 
-    public static Key<Boolean> ResolvingVariables = new Key<Boolean>("ResolvingVariables");
-    public static Key<Boolean> IsOriginalFile = new Key<Boolean>("IsOriginalFile");
-    public static Key<Boolean> IsOriginalPackage = new Key<Boolean>("IsOriginalPackage");
+    private static final Key<Boolean> ResolvingVariables = new Key<>("ResolvingVariables");
+    public static final Key<Boolean> IsOriginalFile = new Key<>("IsOriginalFile");
+    public static final Key<Boolean> IsOriginalPackage = new Key<>("IsOriginalPackage");
 
-    public static Key<String> VisiblePackageName = new Key<String>("VisiblePackageName");
+    public static final Key<String> VisiblePackageName = new Key<>("VisiblePackageName");
 
-    public static Key<String> PackageName = new Key<String>("PackageName");
+    public static final Key<String> PackageName = new Key<>("PackageName");
 }

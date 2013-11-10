@@ -16,10 +16,10 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
 
     private PsiElement declaration;
     private PsiElement childDeclaration;
-    private Reference reference;
+    private final Reference reference;
     private ResolveState state;
 
-    public GoPsiReferenceResolver(Reference reference) {
+    GoPsiReferenceResolver(Reference reference) {
         this.reference = reference;
     }
 
@@ -34,7 +34,7 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
         return declaration == null;
     }
 
-    protected boolean checkReference(PsiElement element) {
+    boolean checkReference(PsiElement element) {
         if ( element == null )
             return false;
 
@@ -48,7 +48,7 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
         }
     }
 
-    protected Reference getReference() {
+    Reference getReference() {
         return reference;
     }
 

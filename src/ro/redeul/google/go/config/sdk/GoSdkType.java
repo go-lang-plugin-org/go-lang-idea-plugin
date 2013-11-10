@@ -23,7 +23,7 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 
 public class GoSdkType extends SdkType {
 
-    GoSdkData sdkData;
+    private GoSdkData sdkData;
 
     public GoSdkType() {
         super("Google Go SDK");
@@ -33,7 +33,7 @@ public class GoSdkType extends SdkType {
         return SdkType.findInstance(GoSdkType.class);
     }
 
-    public GoSdkData getSdkData() {
+    GoSdkData getSdkData() {
         return sdkData;
     }
 
@@ -122,7 +122,7 @@ public class GoSdkType extends SdkType {
 
     @Override
     public AdditionalDataConfigurable createAdditionalDataConfigurable(SdkModel sdkModel, SdkModificator sdkModificator) {
-        return new GoSdkConfigurable(sdkModel, sdkModificator);
+        return new GoSdkConfigurable();
     }
 
     @Override

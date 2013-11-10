@@ -8,21 +8,18 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
-import ro.redeul.google.go.config.sdk.GoTargetOs;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class GoInstallCompiler implements TranslatingCompiler {
 
-    Project project;
+    private final Project project;
 
     public GoInstallCompiler(Project project) {
         this.project = project;
@@ -37,10 +34,9 @@ public class GoInstallCompiler implements TranslatingCompiler {
     public void compile(CompileContext compileContext, Chunk<Module> moduleChunk, VirtualFile[] virtualFiles, OutputSink outputSink) {
 
         String basePath = compileContext.getProject().getBasePath();
-        HashSet<String> packages = new HashSet<String>();
+        HashSet<String> packages = new HashSet<>();
 
-        for (int i = 0; i < virtualFiles.length; i++) {
-            VirtualFile vf = virtualFiles[i];
+        for (VirtualFile vf : virtualFiles) {
             String fullPath = vf.getParent().getPath();
             String importPath = fullPath.substring(basePath.length() + 5);
             packages.add(importPath);
@@ -57,7 +53,7 @@ public class GoInstallCompiler implements TranslatingCompiler {
 
         command.setWorkDirectory(basePath);
 
-        HashMap<String, String> envparams = new HashMap<String, String>();
+        HashMap<String, String> envparams = new HashMap<>();
         envparams.put("GOROOT", projectSdk.getHomePath());
         envparams.put("GOPATH", project.getBasePath());
 

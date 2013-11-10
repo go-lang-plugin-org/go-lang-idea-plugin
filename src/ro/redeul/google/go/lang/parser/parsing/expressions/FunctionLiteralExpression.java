@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.parser.GoParser;
  * Time: 2:18:28 AM
  * To change this template use File | Settings | File Templates.
  */
-public class FunctionLiteralExpression implements GoElementTypes {
+class FunctionLiteralExpression implements GoElementTypes {
 
     public static boolean parse(PsiBuilder builder, GoParser parser) {
 

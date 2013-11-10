@@ -35,7 +35,7 @@ public class GoNamesCache {
         return new GoNamesCache(project);
     }
 
-    public GoNamesCache(Project project) {
+    private GoNamesCache(Project project) {
         this.project = project;
     }
 
@@ -52,14 +52,14 @@ public class GoNamesCache {
         return getPackagesInScope(GlobalSearchScope.allScope(project));
     }
 
-    public Collection<String> getPackagesInScope(GlobalSearchScope scope) {
+    Collection<String> getPackagesInScope(GlobalSearchScope scope) {
 
         StubIndex index = StubIndex.getInstance();
 
         Collection<String> keys = index.getAllKeys(GoPackageImportPath.KEY,
                                                    project);
 
-        Collection<String> packagesCollection = new ArrayList<String>();
+        Collection<String> packagesCollection = new ArrayList<>();
 
         for (String key : keys) {
             Collection<GoFile> files = index.get(GoPackageImportPath.KEY, key,
@@ -111,7 +111,7 @@ public class GoNamesCache {
 
         StubIndex index = StubIndex.getInstance();
         GlobalSearchScope scope = getSearchScope(includeNonProjectItems);
-        Collection<NavigationItem> items = new ArrayList<NavigationItem>();
+        Collection<NavigationItem> items = new ArrayList<>();
         for (GoTypeNameDeclaration type : index.get(GoTypeName.KEY, name,
                                                     project, scope)) {
             if (type instanceof NavigationItem) {
@@ -124,7 +124,7 @@ public class GoNamesCache {
 
     @NotNull
     public String[] getAllTypeNames() {
-        HashSet<String> classNames = new HashSet<String>();
+        HashSet<String> classNames = new HashSet<>();
         getAllTypeNames(classNames);
         return classNames.toArray(new String[classNames.size()]);
     }
@@ -139,8 +139,7 @@ public class GoNamesCache {
     }
 
     @NotNull
-    public NavigationItem[] getFunctionsByName(@NotNull @NonNls String name,
-                                               boolean includeNonProjectItems) {
+    public NavigationItem[] getFunctionsByName() {
         return new NavigationItem[0];
     }
 
@@ -149,12 +148,8 @@ public class GoNamesCache {
         return ArrayUtils.EMPTY_STRING_ARRAY;
     }
 
-    public void getAllFunctionNames(@NotNull Set<String> set) {
-    }
-
     @NotNull
-    public NavigationItem[] getVariablesByName(@NotNull @NonNls String name,
-                                               boolean includeNonProjectItems) {
+    public NavigationItem[] getVariablesByName() {
         return new NavigationItem[0];
     }
 
@@ -163,6 +158,4 @@ public class GoNamesCache {
         return ArrayUtils.EMPTY_STRING_ARRAY;
     }
 
-    public void getAllVariableNames(@NotNull Set<String> set) {
-    }
 }

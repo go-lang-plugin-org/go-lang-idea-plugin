@@ -26,11 +26,8 @@ public class GoReadWriteAccessDetector extends ReadWriteAccessDetector {
         }
 
         PsiElement resolve = resolveSafely(element, PsiElement.class);
-        if (!(resolve instanceof GoLiteralIdentifier)) {
-            return false;
-        }
+        return resolve instanceof GoLiteralIdentifier && resolve.getParent() instanceof GoVarDeclaration;
 
-        return resolve.getParent() instanceof GoVarDeclaration;
     }
 
     @Override

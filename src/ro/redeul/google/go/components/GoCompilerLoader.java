@@ -7,16 +7,13 @@ import com.intellij.compiler.CompilerWorkspaceConfiguration;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.compilation.GoInstallCompiler;
 import ro.redeul.google.go.compilation.GoCompiler;
 import ro.redeul.google.go.compilation.GoMakefileCompiler;
-import ro.redeul.google.go.ide.GoModuleType;
 import ro.redeul.google.go.ide.GoProjectSettings;
 
 /**
@@ -24,11 +21,6 @@ import ro.redeul.google.go.ide.GoProjectSettings;
  *         Date: Aug 24, 2010
  */
 public class GoCompilerLoader extends AbstractProjectComponent {
-
-    private boolean myPreviousExternalCompilerSetting = false;
-    private boolean myProjectUsesGo = false;
-
-    private CompilerWorkspaceConfiguration myConfiguration;
 
     public GoCompilerLoader(Project project) {
         super(project);
@@ -40,14 +32,9 @@ public class GoCompilerLoader extends AbstractProjectComponent {
     }
 
     public void projectOpened() {
-        myConfiguration = CompilerWorkspaceConfiguration.getInstance(myProject);
-
+        CompilerWorkspaceConfiguration myConfiguration = CompilerWorkspaceConfiguration.getInstance(myProject);
 
         ModuleManager moduleManager = ModuleManager.getInstance(myProject);
-        for (Module module : moduleManager.getModules()) {
-            if (ModuleType.get(module) == GoModuleType.getInstance())
-                myProjectUsesGo = true;
-        }
 
         CompilerManager compilerManager =
             CompilerManager.getInstance(myProject);
@@ -78,13 +65,13 @@ public class GoCompilerLoader extends AbstractProjectComponent {
                 compilerManager.addTranslatingCompiler(
                     new GoMakefileCompiler(myProject),
                     new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
-                    new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
+                    new HashSet<>(Arrays.asList(FileType.EMPTY_ARRAY)));
                 break;
             case Install:
                 compilerManager.addTranslatingCompiler(
                         new GoInstallCompiler(myProject),
                         new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
-                        new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
+                        new HashSet<>(Arrays.asList(FileType.EMPTY_ARRAY)));
         }
     }
 

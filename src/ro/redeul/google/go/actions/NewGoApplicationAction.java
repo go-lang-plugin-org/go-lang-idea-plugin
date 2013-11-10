@@ -96,7 +96,7 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
         return FacetManager.getInstance(module).getFacetByType(GoFacetType.GO_FACET_TYPE_ID) != null;
     }
 
-    protected void doCheckCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException {
+    protected void doCheckCreate(PsiDirectory dir, String className) throws IncorrectOperationException {
         // check to see if a file with the same name already exists
         PsiFile files[] = dir.getFiles();
         for (PsiFile file : files) {
@@ -132,11 +132,11 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
 //        builder.addKind("Helper file", GoIcons.GO_ICON_16x16, "helper");
     }
 
-    private boolean isLibraryFolder(PsiDirectory directory) {
+    private boolean isLibraryFolder() {
         return false;
     }
 
-    private boolean isApplicationFolder(PsiDirectory directory) {
+    private boolean isApplicationFolder() {
         return false;
     }
 

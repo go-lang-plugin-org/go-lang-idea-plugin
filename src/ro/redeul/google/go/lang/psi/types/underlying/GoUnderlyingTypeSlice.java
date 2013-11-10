@@ -1,7 +1,7 @@
 package ro.redeul.google.go.lang.psi.types.underlying;
 
 public class GoUnderlyingTypeSlice implements GoUnderlyingType{
-    private GoUnderlyingType memberType;
+    private final GoUnderlyingType memberType;
 
     public GoUnderlyingTypeSlice(GoUnderlyingType memberType) {
         this.memberType = memberType;

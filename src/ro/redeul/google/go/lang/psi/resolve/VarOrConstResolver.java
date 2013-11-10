@@ -78,7 +78,7 @@ public class VarOrConstResolver extends
             addDeclaration(typeGuard, typeGuard.getIdentifier());
     }
 
-    protected void checkIdentifiers(GoLiteralIdentifier ... identifiers) {
+    void checkIdentifiers(GoLiteralIdentifier... identifiers) {
         for (GoLiteralIdentifier id : identifiers) {
             if (checkReference(id)) {
                 if ( ! addDeclaration(id) )
@@ -88,7 +88,7 @@ public class VarOrConstResolver extends
     }
 
     @Override
-    protected boolean checkReference(PsiElement element) {
+    boolean checkReference(PsiElement element) {
         if (getDeclaration() != null) {
             return false;
         }

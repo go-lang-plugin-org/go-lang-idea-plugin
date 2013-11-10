@@ -27,7 +27,7 @@ public class GoProjectSettings implements PersistentStateComponent<GoProjectSett
         public boolean enableOptimizeImports = false;
     }
 
-    GoProjectSettingsBean bean;
+    private GoProjectSettingsBean bean;
 
     @Override
     @NotNull

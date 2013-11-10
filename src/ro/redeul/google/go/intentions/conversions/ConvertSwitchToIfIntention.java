@@ -3,7 +3,6 @@ package ro.redeul.google.go.intentions.conversions;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +35,7 @@ public class ConvertSwitchToIfIntention extends Intention {
     }
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Project project, Editor editor)
+    protected void processIntention(@NotNull PsiElement element, Editor editor)
             throws IntentionExecutionException {
         GoSwitchExpressionStatement se = findParentOfType(element, GoSwitchExpressionStatement.class);
         if (se == null) {
@@ -114,7 +113,7 @@ public class ConvertSwitchToIfIntention extends Intention {
             boolean expressionIsFalse = expression != null && "false".equals(expression.getText());
             String es = expressionIsTrue || expressionIsFalse ? "" : expression.getText();
             CaseElement defaultCase = null;
-            List<CaseElement> cases = new ArrayList<CaseElement>();
+            List<CaseElement> cases = new ArrayList<>();
             for (GoSwitchExpressionClause clause : se.getClauses()) {
                 CaseElement c = CaseElement.create(document, clause, expressionIsFalse);
                 if (clause.isDefault()) {
@@ -152,7 +151,7 @@ public class ConvertSwitchToIfIntention extends Intention {
         }
 
         private static CaseElement create(Document document, GoSwitchExpressionClause clause, boolean flipExpression) {
-            List<String> expressions = new ArrayList<String>();
+            List<String> expressions = new ArrayList<>();
             for (GoExpr expr : clause.getExpressions()) {
                 expressions.add(flipExpression ? FlipBooleanExpression.flip(expr) : expr.getText());
             }

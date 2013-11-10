@@ -13,7 +13,7 @@ import java.util.Set;
  * Date: Aug 16, 2010
  * Time: 7:53:26 AM
  */
-public class BuiltInCallExpression implements GoElementTypes {
+class BuiltInCallExpression implements GoElementTypes {
 
     private static final Set<String> hasTypeParameter = ImmutableSet.of(
         "new",
@@ -60,7 +60,7 @@ public class BuiltInCallExpression implements GoElementTypes {
     );
 
 
-    public static boolean isBuiltInCall(String methodCall) {
+    private static boolean isBuiltInCall(String methodCall) {
         return
             defaultConversions.contains(methodCall) ||
                 hasTypeParameter.contains(methodCall) ||

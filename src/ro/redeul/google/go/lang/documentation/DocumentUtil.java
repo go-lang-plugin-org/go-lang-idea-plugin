@@ -31,9 +31,9 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
 public class DocumentUtil {
 
-    public static String getTailingDocumentOfElement(PsiElement element) {
+    private static String getTailingDocumentOfElement(PsiElement element) {
         boolean foundNewLine = false;
-        List<String> comments = new ArrayList<String>();
+        List<String> comments = new ArrayList<>();
         while ((element = element.getNextSibling()) != null) {
             if (isNodeOfType(element, GoElementTypes.COMMENTS)) {
                 foundNewLine = false;
@@ -52,9 +52,9 @@ public class DocumentUtil {
         return StringUtil.join(comments, "\n");
     }
 
-    public static String getHeaderDocumentOfElement(PsiElement element) {
+    private static String getHeaderDocumentOfElement(PsiElement element) {
         boolean foundNewLine = false;
-        List<String> comments = new ArrayList<String>();
+        List<String> comments = new ArrayList<>();
         while ((element = element.getPrevSibling()) != null) {
             if (isNodeOfType(element, GoElementTypes.COMMENTS)) {
                 foundNewLine = false;
@@ -73,7 +73,7 @@ public class DocumentUtil {
         return StringUtil.join(comments, "\n");
     }
 
-    public static String getCommentText(PsiElement comment) {
+    private static String getCommentText(PsiElement comment) {
         String text = comment.getText().trim();
         if (text.startsWith("//")) {
             return text.substring(2);
@@ -189,7 +189,7 @@ public class DocumentUtil {
         return doc;
     }
 
-    public static String getElementPackageInfo(PsiElement element) {
+    private static String getElementPackageInfo(PsiElement element) {
         PsiFile file = element.getContainingFile();
 
         if (!(file instanceof GoFile)) {

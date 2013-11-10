@@ -5,8 +5,6 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessTerminatedListener;
 
-import java.nio.charset.Charset;
-
 /**
  * Created by IntelliJ IDEA.
  * User: mtoader
@@ -16,15 +14,14 @@ import java.nio.charset.Charset;
  */
 public class GoApplicationProcessHandler extends OSProcessHandler {
 
-    public GoApplicationProcessHandler(Process process, String commandLineString, Charset charset) {
+    private GoApplicationProcessHandler(Process process, String commandLineString) {
         super(process, commandLineString);
     }
 
     public static GoApplicationProcessHandler runCommandLine(final GeneralCommandLine commandLine) throws ExecutionException {
       final GoApplicationProcessHandler goAppProcess = new GoApplicationProcessHandler(
               commandLine.createProcess(),
-              commandLine.getCommandLineString(),
-              commandLine.getCharset());
+              commandLine.getCommandLineString());
 
       ProcessTerminatedListener.attach(goAppProcess);
       return goAppProcess;

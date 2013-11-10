@@ -20,10 +20,7 @@ class ParenthesisUtil {
             return ((GoImportDeclarations) element).getDeclarations().length == 1;
         }
 
-        if (element instanceof GoConstDeclarations) {
-            return ((GoConstDeclarations) element).getDeclarations().length == 1;
-        }
-        return false;
+        return element instanceof GoConstDeclarations && ((GoConstDeclarations) element).getDeclarations().length == 1;
     }
 
     static PsiElement getDeclaration(PsiElement element) {

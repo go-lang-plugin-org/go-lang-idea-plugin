@@ -22,10 +22,10 @@ import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 public class InterfaceMethodReference extends
                                       GoPsiReference.Single<GoSelectorExpression, InterfaceMethodReference> {
 
-    GoTypeInterface type;
-    GoSelectorExpression selector;
+    private final GoTypeInterface type;
+    private final GoSelectorExpression selector;
 
-    private static ResolveCache.AbstractResolver<InterfaceMethodReference, GoResolveResult> RESOLVER =
+    private static final ResolveCache.AbstractResolver<InterfaceMethodReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<InterfaceMethodReference, GoResolveResult>() {
             @Override
             public GoResolveResult resolve(InterfaceMethodReference intfMethodRef,
@@ -116,7 +116,7 @@ public class InterfaceMethodReference extends
         GoTypeInterfaceMethodSet methodSet =
             new MethodSetDiscover(type.getPsiType()).getMethodSet();
 
-        List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+        List<LookupElementBuilder> variants = new ArrayList<>();
         for (GoFunctionDeclaration functionDeclaration : methodSet.getMethods()) {
             variants.add(functionDeclaration.getCompletionPresentation());
         }

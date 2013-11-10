@@ -2,7 +2,6 @@ package ro.redeul.google.go.lang.lexer;
 
 import com.intellij.lexer.DelegateLexer;
 import com.intellij.lexer.Lexer;
-import com.intellij.lexer.LexerPosition;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 
@@ -13,11 +12,11 @@ import com.intellij.psi.tree.TokenSet;
  * Time: 12:56:23 AM
  * To change this template use File | Settings | File Templates.
  */
-public class GoFixElidedSemiLexer extends DelegateLexer implements GoTokenTypes {
+class GoFixElidedSemiLexer extends DelegateLexer implements GoTokenTypes {
 
-    IElementType lastElementType;
+    private IElementType lastElementType;
 
-    TokenSet elidingTokens = TokenSet.create(
+    private final TokenSet elidingTokens = TokenSet.create(
             mIDENT,
             litINT, litOCT, litHEX, litFLOAT,
             litDECIMAL_I, litFLOAT_I,
@@ -57,21 +56,6 @@ public class GoFixElidedSemiLexer extends DelegateLexer implements GoTokenTypes 
         }
 
         return super.getTokenEnd();
-    }
-
-    @Override
-    public void start(CharSequence buffer, int startOffset, int endOffset, int initialState) {
-        super.start(buffer, startOffset, endOffset, initialState);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void restore(LexerPosition position) {
-        super.restore(position);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public LexerPosition getCurrentPosition() {
-        return super.getCurrentPosition();    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     private boolean isElidedPlace() {

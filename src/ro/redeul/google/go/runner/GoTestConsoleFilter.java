@@ -9,7 +9,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GoTestConsoleFilter implements Filter {
+class GoTestConsoleFilter implements Filter {
     private static final Pattern MSG_LINE = Pattern.compile("^\t(.*):(\\d+):.*\n?");
 
     private final Project project;

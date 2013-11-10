@@ -1244,8 +1244,8 @@ public class _GoLexer implements FlexLexer, GoTokenTypes {
 
   /* user code: */
 
-  private Stack <IElementType> gStringStack = new Stack<IElementType>();
-  private Stack <IElementType> blockStack = new Stack<IElementType>();
+  private Stack <IElementType> gStringStack = new Stack<>();
+  private Stack <IElementType> blockStack = new Stack<>();
 
   private int afterComment = YYINITIAL;
   private int afterNls = YYINITIAL;
@@ -1256,7 +1256,7 @@ public class _GoLexer implements FlexLexer, GoTokenTypes {
     blockStack.clear();
   }
 
-  private Stack<IElementType> braceCount = new Stack <IElementType>();
+  private Stack<IElementType> braceCount = new Stack<>();
 
 
 

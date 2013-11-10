@@ -28,7 +28,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Test"/>
+                  <text value="&amp;Test"/>
                 </properties>
               </component>
               <component id="748e2" class="javax.swing.JLabel">
@@ -36,7 +36,8 @@
                   <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Package name:"/>
+                  <labelFor value="ae119"/>
+                  <text value="&amp;Package name:"/>
                 </properties>
               </component>
               <component id="5574b" class="javax.swing.JCheckBox" binding="filter">
@@ -44,7 +45,9 @@
                   <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Filter (by regexp):"/>
+                  <inheritsPopupMenu value="false"/>
+                  <selected value="false"/>
+                  <text value="&amp;Filter (by regexp):"/>
                 </properties>
               </component>
               <component id="11907" class="javax.swing.JCheckBox" binding="useShort">
@@ -52,7 +55,7 @@
                   <grid row="3" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Ask for short run time (-test.short)"/>
+                  <text value="&amp;Ask for short run time (-test.short)"/>
                 </properties>
               </component>
               <component id="ae119" class="javax.swing.JComboBox" binding="packages">
@@ -74,7 +77,7 @@
                   <grid row="1" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Benchmark"/>
+                  <text value="&amp;Benchmark"/>
                 </properties>
               </component>
               <component id="41747" class="javax.swing.JLabel">
@@ -82,7 +85,8 @@
                   <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Module:"/>
+                  <labelFor value="139e8"/>
+                  <text value="&amp;Module:"/>
                 </properties>
               </component>
               <component id="139e8" class="javax.swing.JComboBox" binding="modules">
@@ -101,7 +105,7 @@
                   <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Run test before benchmark"/>
+                  <text value="&amp;Run test before benchmark"/>
                 </properties>
               </component>
             </children>

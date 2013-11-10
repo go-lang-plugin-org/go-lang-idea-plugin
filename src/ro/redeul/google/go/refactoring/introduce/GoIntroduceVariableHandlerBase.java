@@ -26,13 +26,13 @@ import java.util.List;
 import java.util.Map;
 
 abstract class GoIntroduceVariableHandlerBase extends GoIntroduceHandlerBase {
-    protected static final String VARIABLE = "____INTRODUCE_VARIABLE____";
-    protected Project project;
-    protected Document document;
-    protected Editor editor;
-    protected GoFile file;
+    static final String VARIABLE = "____INTRODUCE_VARIABLE____";
+    Project project;
+    Document document;
+    Editor editor;
+    GoFile file;
 
-    protected GoPsiElement getDefaultVisitStartElement() {
+    GoPsiElement getDefaultVisitStartElement() {
         return null;
     }
 
@@ -91,7 +91,7 @@ abstract class GoIntroduceVariableHandlerBase extends GoIntroduceHandlerBase {
                !ApplicationManager.getApplication().isUnitTestMode();
     }
 
-    protected static String getExpressionDeclaration(GoExpr e) {
+    static String getExpressionDeclaration(GoExpr e) {
         while (e instanceof GoParenthesisedExpression) {
             e = ((GoParenthesisedExpression) e).getInnerExpression();
         }
@@ -101,7 +101,7 @@ abstract class GoIntroduceVariableHandlerBase extends GoIntroduceHandlerBase {
     private Map<OccurrencesChooser.ReplaceChoice, List<PsiElement>> fillChoiceMap(GoExpr current,
                                                                                   GoExpr[] occurrences) {
         Map<OccurrencesChooser.ReplaceChoice, List<PsiElement>> map =
-                new LinkedHashMap<OccurrencesChooser.ReplaceChoice, List<PsiElement>>();
+                new LinkedHashMap<>();
         map.put(OccurrencesChooser.ReplaceChoice.NO, Collections.<PsiElement>singletonList(current));
         if (occurrences.length > 1) {
             map.put(OccurrencesChooser.ReplaceChoice.ALL, Arrays.<PsiElement>asList(occurrences));
@@ -109,7 +109,7 @@ abstract class GoIntroduceVariableHandlerBase extends GoIntroduceHandlerBase {
         return map;
     }
 
-    protected boolean expressionIsTheWholeStatement(PsiElement element, GoStatement stmt) {
+    boolean expressionIsTheWholeStatement(PsiElement element, GoStatement stmt) {
         return element.getTextRange().equals(stmt.getTextRange());
     }
 

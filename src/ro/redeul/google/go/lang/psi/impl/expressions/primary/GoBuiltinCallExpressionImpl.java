@@ -34,7 +34,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
     implements GoBuiltinCallExpression {
 
-    private static ElementPattern<GoFunctionDeclaration> BUILTIN_FUNCTION =
+    private static final ElementPattern<GoFunctionDeclaration> BUILTIN_FUNCTION =
         psiElement(GoFunctionDeclaration.class)
             .withParent(
                 psiElement(GoFile.class)

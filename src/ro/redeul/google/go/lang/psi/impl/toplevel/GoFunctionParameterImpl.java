@@ -1,9 +1,6 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -43,14 +40,6 @@ public class GoFunctionParameterImpl extends GoPsiElementBase implements GoFunct
     @Override
     public GoPsiType getType() {
         return findChildByClass(GoPsiType.class);
-    }
-
-    @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
-                                       PsiElement lastParent,
-                                       @NotNull PsiElement place)
-    {
-        return super.processDeclarations(processor, state, lastParent, place);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     @Override

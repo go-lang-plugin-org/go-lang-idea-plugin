@@ -56,9 +56,9 @@ public class GoCompiler implements TranslatingCompiler {
     private static final Logger LOG = Logger.getInstance(
         "#ro.redeul.google.go.compilation.GoCompiler");
 
-    Project project;
-    CompileContext context;
-    OutputSink sink;
+    private final Project project;
+    private CompileContext context;
+    private OutputSink sink;
 
     public GoCompiler(Project project) {
         this.project = project;
@@ -73,7 +73,7 @@ public class GoCompiler implements TranslatingCompiler {
 
         final VirtualFile files[] = scope.getFiles(GoFileType.INSTANCE, true);
 
-        final Set<Module> affectedModules = new HashSet<Module>();
+        final Set<Module> affectedModules = new HashSet<>();
 
         ApplicationManager.getApplication().runReadAction(new Runnable() {
             public void run() {
@@ -131,7 +131,7 @@ public class GoCompiler implements TranslatingCompiler {
 
     private VirtualFile[] findAllFiles(Chunk<Module> moduleChunk) {
 
-        final CommonProcessors.CollectUniquesProcessor<VirtualFile> collector = new CommonProcessors.CollectUniquesProcessor<VirtualFile>();
+        final CommonProcessors.CollectUniquesProcessor<VirtualFile> collector = new CommonProcessors.CollectUniquesProcessor<>();
 
         for (Module module : moduleChunk.getNodes()) {
 
@@ -142,7 +142,7 @@ public class GoCompiler implements TranslatingCompiler {
                 public void run() {
                     for (final VirtualFile sourceRoot : sourceRoots) {
                         VfsUtil.processFilesRecursively(sourceRoot,
-                                                        new FilteringProcessor<VirtualFile>(
+                                                        new FilteringProcessor<>(
                                                             new Condition<VirtualFile>() {
                                                                 @Override
                                                                 public boolean value(VirtualFile virtualFile) {
@@ -207,7 +207,7 @@ public class GoCompiler implements TranslatingCompiler {
         }
 
         // sorting reverse by relative paths.
-        List<String> relativePaths = new ArrayList<String>(
+        List<String> relativePaths = new ArrayList<>(
             filesToCompile.keySet());
         Collections.sort(relativePaths, new Comparator<String>() {
             public int compare(String o1, String o2) {
@@ -220,7 +220,7 @@ public class GoCompiler implements TranslatingCompiler {
         }
 
         // packageName | applicationName -> Package | Application, dependencies, files
-        Map<String, Trinity<TargetType, Set<String>, List<VirtualFile>>> targets = new HashMap<String, Trinity<TargetType, Set<String>, List<VirtualFile>>>();
+        Map<String, Trinity<TargetType, Set<String>, List<VirtualFile>>> targets = new HashMap<>();
 
         for (String relativePath : relativePaths) {
             List<Pair<VirtualFile, GoFileMetadata>> list = filesToCompile.get(
@@ -247,7 +247,7 @@ public class GoCompiler implements TranslatingCompiler {
             }
 
             String currentPackage = "";
-            List<Pair<VirtualFile, GoFileMetadata>> targetFiles = new ArrayList<Pair<VirtualFile, GoFileMetadata>>();
+            List<Pair<VirtualFile, GoFileMetadata>> targetFiles = new ArrayList<>();
             for (Pair<VirtualFile, GoFileMetadata> fileMetadata : list) {
                 // file, declaredPackage, imports
 
@@ -259,7 +259,7 @@ public class GoCompiler implements TranslatingCompiler {
                     targetFiles.clear();
                 }
 
-                targetFiles.add(new Pair<VirtualFile, GoFileMetadata>(
+                targetFiles.add(new Pair<>(
                     fileMetadata.getFirst(), fileMetadata.getSecond()));
             }
 
@@ -288,7 +288,7 @@ public class GoCompiler implements TranslatingCompiler {
                               Map<String, Trinity<TargetType, Set<String>, List<VirtualFile>>> targets,
                               String baseOutputPath, Sdk sdk) {
         // collect only library targets
-        Set<String> allLibraries = new HashSet<String>();
+        Set<String> allLibraries = new HashSet<>();
         for (Map.Entry<String, Trinity<TargetType, Set<String>, List<VirtualFile>>> targetEntry : targets
             .entrySet()) {
             if (targetEntry.getValue().getFirst() == TargetType.Library) {
@@ -297,12 +297,12 @@ public class GoCompiler implements TranslatingCompiler {
         }
 
         // extract the local dependency graph and also initialize the starting set for the topological sort
-        Set<String> startSet = new HashSet<String>();
-        Map<String, Set<String>> mutableDependenciesGraph = new HashMap<String, Set<String>>();
+        Set<String> startSet = new HashSet<>();
+        Map<String, Set<String>> mutableDependenciesGraph = new HashMap<>();
 
         for (Map.Entry<String, Trinity<TargetType, Set<String>, List<VirtualFile>>> targetEntry : targets
             .entrySet()) {
-            Set<String> properDependencies = new HashSet<String>();
+            Set<String> properDependencies = new HashSet<>();
 
             for (String dependency : targetEntry.getValue().getSecond()) {
                 if (allLibraries.contains(dependency)) {
@@ -319,7 +319,7 @@ public class GoCompiler implements TranslatingCompiler {
         }
 
         // do a topological sorting
-        List<String> buildOrder = new ArrayList<String>();
+        List<String> buildOrder = new ArrayList<>();
         while (startSet.size() > 0) {
 
             for (String node : startSet) {
@@ -391,7 +391,7 @@ public class GoCompiler implements TranslatingCompiler {
         command.setExePath(getGoToolBinary(sdk));
         command.addParameter("tool");
         command.addParameter(
-            GoSdkUtil.getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH));
+            GoSdkUtil.getCompilerName(sdkData.TARGET_ARCH));
         command.addParameter("-I");
         command.addParameter(baseOutputPath);
         command.addParameter("-o");
@@ -423,7 +423,7 @@ public class GoCompiler implements TranslatingCompiler {
             return;
         }
 
-        Collection<OutputItem> outputItems = new ArrayList<OutputItem>();
+        Collection<OutputItem> outputItems = new ArrayList<>();
         for (VirtualFile file : targetDescription.getThird()) {
             outputItems.add(new MyOutputItem(outputBinary, file));
         }
@@ -438,7 +438,7 @@ public class GoCompiler implements TranslatingCompiler {
         linkCommand.setExePath(getGoToolBinary(sdk));
         linkCommand.addParameter("tool");
         linkCommand.addParameter(
-            GoSdkUtil.getLinkerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH));
+            GoSdkUtil.getLinkerName(sdkData.TARGET_ARCH));
         linkCommand.addParameter("-L");
         linkCommand.addParameter(baseOutputPath);
         linkCommand.addParameter("-o");
@@ -462,7 +462,7 @@ public class GoCompiler implements TranslatingCompiler {
             return;
         }
 
-        Collection<OutputItem> items = new ArrayList<OutputItem>();
+        Collection<OutputItem> items = new ArrayList<>();
         items.add(new MyOutputItem(outputApplication, intermediateFile));
         sink.add(targetPath.getAbsolutePath(), items, VirtualFile.EMPTY_ARRAY);
     }
@@ -490,7 +490,7 @@ public class GoCompiler implements TranslatingCompiler {
         command.setExePath(getGoToolBinary(sdk));
         command.addParameter("tool");
         command.addParameter(
-            GoSdkUtil.getCompilerName(sdkData.TARGET_OS, sdkData.TARGET_ARCH));
+            GoSdkUtil.getCompilerName(sdkData.TARGET_ARCH));
         command.addParameter("-I");
         command.addParameter(baseOutputPath);
         command.addParameter("-o");
@@ -522,7 +522,7 @@ public class GoCompiler implements TranslatingCompiler {
             return;
         }
 
-        Collection<OutputItem> outputItems = new ArrayList<OutputItem>();
+        Collection<OutputItem> outputItems = new ArrayList<>();
         for (VirtualFile file : targetDescription.getThird()) {
             outputItems.add(new MyOutputItem(outputBinary, file));
         }
@@ -534,7 +534,7 @@ public class GoCompiler implements TranslatingCompiler {
         libraryPackCommand.setExePath(getGoToolBinary(sdk));
         libraryPackCommand.addParameter("tool");
         libraryPackCommand.addParameter(
-            GoSdkUtil.getToolName(sdkData.TARGET_OS, sdkData.TARGET_ARCH,
+            GoSdkUtil.getToolName(sdkData.TARGET_ARCH,
                                   GoSdkTool.GoArchivePacker));
         libraryPackCommand.addParameter("grc");
         libraryPackCommand.addParameter(libraryFile.getPath());
@@ -556,7 +556,7 @@ public class GoCompiler implements TranslatingCompiler {
             return;
         }
 
-        Collection<OutputItem> items = new ArrayList<OutputItem>();
+        Collection<OutputItem> items = new ArrayList<>();
         items.add(new MyOutputItem(libraryFile.getPath(), intermediateFile));
         sink.add(outputFolder.getAbsolutePath(), items,
                  VirtualFile.EMPTY_ARRAY);
@@ -587,8 +587,8 @@ public class GoCompiler implements TranslatingCompiler {
             targetName = makefileTarget;
         }
 
-        List<VirtualFile> targetFiles = new ArrayList<VirtualFile>();
-        Set<String> imports = new HashSet<String>();
+        List<VirtualFile> targetFiles = new ArrayList<>();
+        Set<String> imports = new HashSet<>();
 
         for (Pair<VirtualFile, GoFileMetadata> file : files) {
             targetFiles.add(file.getFirst());
@@ -606,7 +606,7 @@ public class GoCompiler implements TranslatingCompiler {
         }
 
         targets.put(targetName,
-                    new Trinity<TargetType, Set<String>, List<VirtualFile>>(
+                    new Trinity<>(
                         targetType, imports, targetFiles));
     }
 
@@ -625,7 +625,7 @@ public class GoCompiler implements TranslatingCompiler {
 
         // relative path to source
         final Map<VirtualFile, Map<String, List<Pair<VirtualFile, GoFileMetadata>>>>
-            sourceRootsMap = new HashMap<VirtualFile, Map<String, List<Pair<VirtualFile, GoFileMetadata>>>>();
+            sourceRootsMap = new HashMap<>();
 
         // we need to find and sort the files as packages in order to compile them properly
         for (final VirtualFile virtualFile : files) {
@@ -644,7 +644,7 @@ public class GoCompiler implements TranslatingCompiler {
             relativePathsMap = sourceRootsMap.get(sourceRoot);
 
             if (relativePathsMap == null) {
-                relativePathsMap = new HashMap<String, List<Pair<VirtualFile, GoFileMetadata>>>();
+                relativePathsMap = new HashMap<>();
                 sourceRootsMap.put(sourceRoot, relativePathsMap);
             }
 
@@ -721,8 +721,8 @@ public class GoCompiler implements TranslatingCompiler {
 
     private String getTargetExtension(Sdk sdk) {
         GoSdkData goSdkData = goSdkData(sdk);
-        return GoSdkUtil.getBinariesDesignation(goSdkData.TARGET_OS,
-                                                goSdkData.TARGET_ARCH);
+        return GoSdkUtil.getBinariesDesignation(
+                goSdkData.TARGET_ARCH);
     }
 
     private GoSdkData goSdkData(Sdk sdk) {

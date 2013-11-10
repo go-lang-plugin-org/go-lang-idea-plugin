@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
@@ -20,12 +19,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoImportUsageCheckingVisitor;
  */
 public class GoCodeManager {
 
-    private static final Logger LOG = Logger.getInstance("ro.redeul.google.go.services.GoCodeManager");
-
-    Project project;
-
-    public GoCodeManager(Project project) {
-        this.project = project;
+    private GoCodeManager() {
     }
 
     public static GoCodeManager getInstance(Project project) {
@@ -35,7 +29,7 @@ public class GoCodeManager {
     public Collection<GoImportDeclaration> findUnusedImports(GoFile file) {
 
         Map<String, GoImportDeclaration> imports =
-            new HashMap<String, GoImportDeclaration>();
+            new HashMap<>();
 
         for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
             for (GoImportDeclaration declaration : importDeclarations.getDeclarations()) {

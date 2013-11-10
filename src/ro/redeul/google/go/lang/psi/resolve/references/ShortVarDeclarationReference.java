@@ -27,7 +27,7 @@ public class ShortVarDeclarationReference
                             psiElement(GoShortVarDeclaration.class)
                     );
 
-    private static ResolveCache.AbstractResolver<ShortVarDeclarationReference, GoResolveResult> RESOLVER =
+    private static final ResolveCache.AbstractResolver<ShortVarDeclarationReference, GoResolveResult> RESOLVER =
             new ResolveCache.AbstractResolver<ShortVarDeclarationReference, GoResolveResult>() {
                 @Override
                 public GoResolveResult resolve(ShortVarDeclarationReference reference, boolean incompleteCode) {

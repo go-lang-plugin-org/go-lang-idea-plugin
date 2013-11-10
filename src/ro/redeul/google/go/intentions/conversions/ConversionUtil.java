@@ -2,7 +2,7 @@ package ro.redeul.google.go.intentions.conversions;
 
 import java.util.regex.Pattern;
 
-public class ConversionUtil {
+class ConversionUtil {
 
     private static final Pattern DECIMAL_INTEGER_PATTERN = Pattern.compile("[1-9][0-9]*");
     private static final Pattern HEX_INTEGER_PATTERN = Pattern.compile("0[xX][0-9]+");

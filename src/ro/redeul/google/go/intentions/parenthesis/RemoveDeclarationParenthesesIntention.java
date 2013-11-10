@@ -2,7 +2,6 @@ package ro.redeul.google.go.intentions.parenthesis;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
@@ -10,7 +9,6 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.intentions.Intention;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElementFactory;
 
@@ -27,7 +25,7 @@ public class RemoveDeclarationParenthesesIntention extends Intention {
     }
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Project project, Editor editor)
+    protected void processIntention(@NotNull PsiElement element, Editor editor)
             throws IncorrectOperationException {
 
         PsiElement rightEnd = getRightParenthesis(element);

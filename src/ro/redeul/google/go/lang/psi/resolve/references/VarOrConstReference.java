@@ -28,7 +28,7 @@ public class VarOrConstReference
             .withParent(psiElement(GoLiteralExpression.class));
 
 
-    private static ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult> RESOLVER =
+    private static final ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult>() {
             @Override
             public GoResolveResult resolve(VarOrConstReference reference, boolean incompleteCode) {
@@ -73,7 +73,7 @@ public class VarOrConstReference
     @Override
     public Object[] getVariants() {
 
-        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+        final List<LookupElementBuilder> variants = new ArrayList<>();
 
         VarOrConstResolver processor = new VarOrConstResolver(this) {
             @Override

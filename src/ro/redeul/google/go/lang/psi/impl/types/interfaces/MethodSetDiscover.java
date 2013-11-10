@@ -13,15 +13,15 @@ import ro.redeul.google.go.lang.psi.typing.GoTypes;
 public class MethodSetDiscover {
 
     private final GoPsiTypeInterface myPsiType;
-    private Set<String> myIgnoredNames;
+    private final Set<String> myIgnoredNames;
     private GoTypeInterfaceMethodSet myMethodSet;
 
     public MethodSetDiscover(GoPsiTypeInterface psiType) {
         this(psiType, new HashSet<String>());
     }
 
-    public MethodSetDiscover(GoPsiTypeInterface psiType,
-                             Set<String> ignoredNames) {
+    private MethodSetDiscover(GoPsiTypeInterface psiType,
+                              Set<String> ignoredNames) {
         this.myPsiType = psiType;
         this.myIgnoredNames = ignoredNames;
     }
