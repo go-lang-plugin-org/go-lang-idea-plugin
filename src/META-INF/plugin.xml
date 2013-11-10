@@ -461,8 +461,7 @@
     </project-components>
 
     <actions>
-        <group id="Go.ActionGroup" popup="true" text="Go" description="ads"
-               icon="/icons/go_16x16.png">
+        <group id="Go.ActionGroup" popup="true" text="Go" description="GOlang actions">
 
             <action id="Go.NewApplication" text="Go application"
                     description="Create new application in the GO language"
@@ -488,7 +487,7 @@
         </action>
 
         <group id="Go.Tools" popup="true" text="Go Tools"
-               description="Go tools support" icon="/icons/go_16x16.png">
+               description="Go tools support">
             <!--<action id="Go.Tools.AddGoSdk" text="Add Go Sdk Support"-->
             <!--description="Add Go Sdk to current module"-->
             <!--class="ro.redeul.google.go.tools.actions.AddGoSdkSupport">-->
