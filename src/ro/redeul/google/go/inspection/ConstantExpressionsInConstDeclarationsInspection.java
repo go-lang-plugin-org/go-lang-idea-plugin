@@ -6,6 +6,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+
 import static ro.redeul.google.go.GoBundle.message;
 
 public class ConstantExpressionsInConstDeclarationsInspection

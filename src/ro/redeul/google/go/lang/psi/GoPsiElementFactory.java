@@ -1,14 +1,14 @@
 package ro.redeul.google.go.lang.psi;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GoPsiElementFactory {
     @Nullable

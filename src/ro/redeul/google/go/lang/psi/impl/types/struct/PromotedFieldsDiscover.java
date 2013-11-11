@@ -1,13 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl.types.struct;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
@@ -15,6 +7,8 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+
+import java.util.*;
 
 public class PromotedFieldsDiscover {
     private final Map<String, List<GoLiteralIdentifier>> namedFieldsMap = new HashMap<>();

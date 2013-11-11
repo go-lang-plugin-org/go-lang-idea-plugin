@@ -1,13 +1,13 @@
 package ro.redeul.google.go.lang.psi.processors;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

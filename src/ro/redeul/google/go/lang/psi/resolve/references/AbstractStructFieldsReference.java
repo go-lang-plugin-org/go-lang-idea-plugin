@@ -1,8 +1,5 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
@@ -11,10 +8,13 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
-import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 

@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
-import javax.swing.*;
-
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
@@ -22,6 +20,8 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.util.LookupElementUtil;
+
+import javax.swing.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

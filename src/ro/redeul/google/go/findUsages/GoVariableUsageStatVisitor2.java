@@ -1,9 +1,5 @@
 package ro.redeul.google.go.findUsages;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.GoBundle;
@@ -24,11 +20,13 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static ro.redeul.google.go.lang.psi.patterns.GoElementPatterns.CONST_DECLARATION;
-import static ro.redeul.google.go.lang.psi.patterns.GoElementPatterns.GLOBAL_CONST_DECL;
-import static ro.redeul.google.go.lang.psi.patterns.GoElementPatterns.GLOBAL_VAR_DECL;
-import static ro.redeul.google.go.lang.psi.patterns.GoElementPatterns.PARAMETER_DECLARATION;
+import static ro.redeul.google.go.lang.psi.patterns.GoElementPatterns.*;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {

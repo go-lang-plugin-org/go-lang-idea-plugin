@@ -6,11 +6,7 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class GoGoToSymbolContributor implements ChooseByNameContributor {
     @NotNull

@@ -19,10 +19,7 @@ import ro.redeul.google.go.refactoring.GoRefactoringException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ro.redeul.google.go.editor.TemplateUtil.createTemplate;
-import static ro.redeul.google.go.editor.TemplateUtil.getTemplateVariableExpression;
-import static ro.redeul.google.go.editor.TemplateUtil.runTemplate;
-import static ro.redeul.google.go.editor.TemplateUtil.setTemplateVariableValues;
+import static ro.redeul.google.go.editor.TemplateUtil.*;
 import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.resolveToFunctionDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 

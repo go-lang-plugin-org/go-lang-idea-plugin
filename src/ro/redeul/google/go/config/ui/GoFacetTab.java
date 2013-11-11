@@ -1,14 +1,5 @@
 package ro.redeul.google.go.config.ui;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.List;
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
-
 import com.intellij.facet.ui.FacetEditorTab;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -19,6 +10,15 @@ import org.jetbrains.annotations.Nls;
 import ro.redeul.google.go.config.facet.GoFacetConfiguration;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.

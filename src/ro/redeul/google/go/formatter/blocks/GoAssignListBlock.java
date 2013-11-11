@@ -12,9 +12,7 @@ import com.intellij.psi.tree.TokenSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 
 class GoAssignListBlock extends GoBlock {
     /**

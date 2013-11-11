@@ -19,17 +19,10 @@ import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionStatem
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.intellij.psi.util.PsiTreeUtil.findFirstParent;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class MoveSimpleStatementOutIntention extends Intention {

@@ -1,8 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
@@ -15,6 +12,9 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
 

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 class GoIdentifierUtils {
     private static final ElementPattern FUNCTION_DECLARATION_PATTERN =

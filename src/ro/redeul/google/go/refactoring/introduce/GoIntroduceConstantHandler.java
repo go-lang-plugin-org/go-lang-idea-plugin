@@ -21,9 +21,7 @@ import ro.redeul.google.go.refactoring.GoRefactoringException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ro.redeul.google.go.editor.TemplateUtil.runTemplate;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.createSmartElementPointer;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isEnclosedByParenthesis;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class GoIntroduceConstantHandler extends GoIntroduceVariableHandlerBase {

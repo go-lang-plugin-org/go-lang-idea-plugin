@@ -1,9 +1,5 @@
 package ro.redeul.google.go.ide;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import javax.swing.*;
-
 import com.intellij.openapi.compiler.Compiler;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.fileTypes.FileType;
@@ -14,10 +10,14 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.compilation.GoInstallCompiler;
 import ro.redeul.google.go.compilation.GoCompiler;
+import ro.redeul.google.go.compilation.GoInstallCompiler;
 import ro.redeul.google.go.compilation.GoMakefileCompiler;
 import ro.redeul.google.go.options.GoSettings;
+
+import javax.swing.*;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class GoConfigurable implements SearchableConfigurable {
 

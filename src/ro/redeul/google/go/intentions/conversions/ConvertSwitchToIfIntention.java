@@ -22,9 +22,7 @@ import ro.redeul.google.go.util.expression.FlipBooleanExpression;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class ConvertSwitchToIfIntention extends Intention {

@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl.types.struct;
 
-import javax.swing.*;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -13,6 +11,8 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
+import javax.swing.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

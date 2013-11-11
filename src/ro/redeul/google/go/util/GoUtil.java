@@ -1,5 +1,8 @@
 package ro.redeul.google.go.util;
 
+import com.intellij.ide.Bootstrap;
+import com.intellij.openapi.vfs.VirtualFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -7,9 +10,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.intellij.ide.Bootstrap;
-import com.intellij.openapi.vfs.VirtualFile;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

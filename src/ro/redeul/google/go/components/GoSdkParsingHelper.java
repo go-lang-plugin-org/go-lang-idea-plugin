@@ -1,12 +1,5 @@
 package ro.redeul.google.go.components;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.module.Module;
@@ -32,6 +25,8 @@ import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.GoUtil;
+
+import java.util.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

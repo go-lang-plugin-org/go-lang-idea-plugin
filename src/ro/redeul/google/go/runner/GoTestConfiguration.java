@@ -1,8 +1,5 @@
 package ro.redeul.google.go.runner;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
@@ -22,6 +19,9 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.runner.ui.GoTestConfigurationEditorForm;
 import ro.redeul.google.go.runner.ui.properties.GoTestConsoleProperties;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

@@ -17,6 +17,8 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 
+import java.util.List;
+
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
@@ -95,7 +97,7 @@ public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
     }
 
     protected RunnerAndConfigurationSettings findExistingByElement(Location location,
-                                                                   @NotNull RunnerAndConfigurationSettings[] existingConfigurations) {
+                                                                   @NotNull List<RunnerAndConfigurationSettings> existingConfigurations) {
         for (RunnerAndConfigurationSettings existingConfiguration : existingConfigurations) {
             final RunConfiguration configuration = existingConfiguration.getConfiguration();
 

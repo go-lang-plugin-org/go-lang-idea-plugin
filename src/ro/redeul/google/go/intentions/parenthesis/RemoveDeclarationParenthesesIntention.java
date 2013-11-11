@@ -14,9 +14,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElementFactory;
 
 import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.getRightParenthesis;
 import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.hasOnlyOneDeclaration;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 
 public class RemoveDeclarationParenthesesIntention extends Intention {
     @Override

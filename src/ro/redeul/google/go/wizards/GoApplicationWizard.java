@@ -1,7 +1,5 @@
 package ro.redeul.google.go.wizards;
 
-import java.util.List;
-
 import com.intellij.ide.util.newProjectWizard.ProjectNameStep;
 import com.intellij.ide.util.newProjectWizard.StepSequence;
 import com.intellij.ide.util.newProjectWizard.modes.WizardMode;
@@ -15,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.ide.GoModuleBuilder;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

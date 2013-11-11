@@ -1,15 +1,15 @@
 package ro.redeul.google.go.services;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.visitors.GoImportUsageCheckingVisitor;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

@@ -1,8 +1,5 @@
 package ro.redeul.google.go.lang.psi.stubs.elements;
 
-import java.io.IOException;
-import java.util.regex.Pattern;
-
 import com.intellij.lang.Language;
 import com.intellij.psi.StubBuilder;
 import com.intellij.psi.stubs.IndexSink;
@@ -16,6 +13,9 @@ import ro.redeul.google.go.lang.psi.stubs.GoFileStub;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStubBuilder;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageImportPath;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageName;
+
+import java.io.IOException;
+import java.util.regex.Pattern;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

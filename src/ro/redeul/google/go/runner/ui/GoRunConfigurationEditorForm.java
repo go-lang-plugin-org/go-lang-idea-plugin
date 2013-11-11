@@ -1,9 +1,5 @@
 package ro.redeul.google.go.runner.ui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
-
 import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.ide.util.TreeFileChooser;
 import com.intellij.ide.util.TreeFileChooserFactory;
@@ -18,6 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.runner.GoApplicationConfiguration;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationConfiguration> {
 

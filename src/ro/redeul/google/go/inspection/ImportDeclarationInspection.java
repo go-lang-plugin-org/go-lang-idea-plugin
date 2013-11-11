@@ -1,7 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.Collection;
-
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
@@ -15,6 +13,9 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.services.GoCodeManager;
+
+import java.util.Collection;
+
 import static ro.redeul.google.go.GoBundle.message;
 
 public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {

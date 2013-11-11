@@ -9,9 +9,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.intentions.Intention;
 
-import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.getDeclaration;
-import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.getRightParenthesis;
-import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.hasOnlyOneDeclaration;
+import static ro.redeul.google.go.intentions.parenthesis.ParenthesisUtil.*;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class AddDeclarationParenthesesIntention extends Intention {

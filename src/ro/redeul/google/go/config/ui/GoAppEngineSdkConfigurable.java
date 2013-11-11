@@ -1,14 +1,14 @@
 package ro.redeul.google.go.config.ui;
 
-import javax.swing.*;
-
-import static java.lang.String.format;
-
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.AdditionalDataConfigurable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkAdditionalData;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
+
+import javax.swing.*;
+
+import static java.lang.String.format;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

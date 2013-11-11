@@ -1,8 +1,5 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -18,6 +15,9 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InterfaceMethodReference extends
                                       GoPsiReference.Single<GoSelectorExpression, InterfaceMethodReference> {

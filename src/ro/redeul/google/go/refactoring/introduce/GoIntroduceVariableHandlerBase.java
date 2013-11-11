@@ -19,11 +19,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpressio
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.refactoring.GoRefactoringException;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 abstract class GoIntroduceVariableHandlerBase extends GoIntroduceHandlerBase {
     static final String VARIABLE = "____INTRODUCE_VARIABLE____";

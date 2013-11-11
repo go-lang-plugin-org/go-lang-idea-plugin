@@ -1,8 +1,5 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
-import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicReference;
-
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
@@ -14,11 +11,13 @@ import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+
+import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicReference;
+
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.BREAK_STATEMENT;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.CONTINUE_STATEMENT;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.GOTO_STATEMENT;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.*;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public class LabelReference

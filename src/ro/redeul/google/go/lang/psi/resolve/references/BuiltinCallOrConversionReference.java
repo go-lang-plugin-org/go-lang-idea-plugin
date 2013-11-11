@@ -1,9 +1,5 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
@@ -19,6 +15,11 @@ import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 

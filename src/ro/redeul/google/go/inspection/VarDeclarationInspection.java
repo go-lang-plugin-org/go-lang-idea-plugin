@@ -8,9 +8,8 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-import static ro.redeul.google.go.inspection.InspectionUtil.UNKNOWN_COUNT;
-import static ro.redeul.google.go.inspection.InspectionUtil.checkExpressionShouldReturnOneResult;
-import static ro.redeul.google.go.inspection.InspectionUtil.getExpressionResultCount;
+
+import static ro.redeul.google.go.inspection.InspectionUtil.*;
 
 public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
 

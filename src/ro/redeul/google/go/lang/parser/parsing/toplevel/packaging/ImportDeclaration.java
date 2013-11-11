@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.declarations.NestedDeclarationParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findDefaultPackageName;
 
 /**

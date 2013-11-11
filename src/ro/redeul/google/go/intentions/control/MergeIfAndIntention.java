@@ -18,11 +18,7 @@ import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.createSmartElementPointer;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getNextSiblingIfItsWhiteSpaceOrComment;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class MergeIfAndIntention extends Intention {

@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.hasPrevSiblingOfType;
 
 public class GoSliceExpressionImpl extends GoExpressionBase

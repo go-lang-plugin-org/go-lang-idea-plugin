@@ -58,7 +58,7 @@
          <h3>0.9.16 changes:</h3>
             <ul>
                 <li>More Cardea (IntelliJ IDEA 13) support</li>
-                <li>Fixed live templates and compilation against latest EAP</li>
+                <li>Fixed live templates and compilation against latest IDEA 13 EAP 132.947</li>
             </ul>
          </h3
          <h3>0.9.15 changes:</h3>

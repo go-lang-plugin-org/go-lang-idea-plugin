@@ -1,10 +1,10 @@
 package ro.redeul.google.go.ide;
 
+import ro.redeul.google.go.options.GoSettings;
+
+import javax.swing.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import javax.swing.*;
-
-import ro.redeul.google.go.options.GoSettings;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

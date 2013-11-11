@@ -8,6 +8,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
 import static ro.redeul.google.go.lang.psi.processors.GoResolveStates.VisiblePackageName;
 
 public abstract class GoPsiReferenceResolver<Reference extends PsiReference>

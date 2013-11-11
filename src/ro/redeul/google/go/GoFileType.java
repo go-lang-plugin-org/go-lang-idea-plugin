@@ -1,7 +1,5 @@
 package ro.redeul.google.go;
 
-import javax.swing.*;
-
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.fileTypes.LanguageFileType;
@@ -10,6 +8,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.highlight.GoEditorHighlighter;
+
+import javax.swing.*;
 
 public class GoFileType extends LanguageFileType {
 

@@ -12,17 +12,10 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static ro.redeul.google.go.lang.parser.GoElementTypes.CONST_DECLARATION;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.SHORT_VAR_STATEMENT;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.VAR_DECLARATION;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.*;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 

@@ -31,15 +31,15 @@ public class GoApplicationRunner extends DefaultProgramRunner {
         return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof GoApplicationConfiguration;
     }
 
-    protected RunContentDescriptor doExecute(Project project, Executor executor, RunProfileState state, RunContentDescriptor contentToReuse, ExecutionEnvironment env) throws ExecutionException {
+    protected RunContentDescriptor doExecute(Project project, RunProfileState state, RunContentDescriptor contentToReuse, ExecutionEnvironment env) throws ExecutionException {
         FileDocumentManager.getInstance().saveAllDocuments();
 
-        ExecutionResult executionResult = state.execute(executor, this);
+        ExecutionResult executionResult = state.execute(env.getExecutor(), this);
         if (executionResult == null) {
             return null;
         }
 
-        final RunContentBuilder contentBuilder = new RunContentBuilder(project, this, executor);
+        final RunContentBuilder contentBuilder = new RunContentBuilder(project, this, env.getExecutor());
         contentBuilder.setExecutionResult(executionResult);
         contentBuilder.setEnvironment(env);
 

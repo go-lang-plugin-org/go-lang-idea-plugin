@@ -14,15 +14,11 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
-import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
-import ro.redeul.google.go.lang.psi.typing.GoTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;

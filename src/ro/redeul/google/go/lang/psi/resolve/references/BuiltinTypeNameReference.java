@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
-import java.util.Collection;
-
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.NotNull;
@@ -11,6 +9,8 @@ import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+
+import java.util.Collection;
 
 public class BuiltinTypeNameReference extends TypeNameReference {
 

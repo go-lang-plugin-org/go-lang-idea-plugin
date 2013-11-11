@@ -25,6 +25,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+
 import static ro.redeul.google.go.GoBundle.message;
 import static ro.redeul.google.go.inspection.fix.CreateFunctionFix.isFunctionNameIdentifier;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;

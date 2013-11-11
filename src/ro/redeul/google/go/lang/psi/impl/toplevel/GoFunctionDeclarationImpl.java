@@ -1,8 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
@@ -27,6 +24,10 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
 
 /**

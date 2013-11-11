@@ -5,7 +5,8 @@ import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
-import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.*;
+
+import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.ParseIota;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

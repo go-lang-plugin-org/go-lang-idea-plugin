@@ -6,7 +6,7 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.EmptyRunnable;
@@ -30,7 +30,7 @@ public class GoAppEngineUpload extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
 
-        final Project project = anActionEvent.getData(DataKeys.PROJECT);
+        final Project project = anActionEvent.getData(LangDataKeys.PROJECT);
 
         if (GoAppEngineUpload.consoleView == null)
             GoAppEngineUpload.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();

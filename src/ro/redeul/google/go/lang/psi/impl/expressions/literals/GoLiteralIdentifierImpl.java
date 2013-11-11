@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
-import java.util.List;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
@@ -26,25 +24,21 @@ import ro.redeul.google.go.lang.psi.resolve.references.CompositeElementOfStructF
 import ro.redeul.google.go.lang.psi.resolve.references.LabelReference;
 import ro.redeul.google.go.lang.psi.resolve.references.ShortVarDeclarationReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
+import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+
+import java.util.List;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
 import static com.intellij.patterns.StandardPatterns.string;
 import static ro.redeul.google.go.lang.lexer.GoTokenTypes.mIDENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_CLAUSES_STATEMENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_RANGE_STATEMENT;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getLocalElementSearchScope;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**

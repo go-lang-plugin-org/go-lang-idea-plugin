@@ -1,11 +1,5 @@
 package ro.redeul.google.go.runner.ui;
 
-import java.util.Collection;
-import java.util.Vector;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
@@ -13,6 +7,12 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.runner.GoTestConfiguration;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.util.Collection;
+import java.util.Vector;
 
 public class GoTestConfigurationEditorForm
     extends SettingsEditor<GoTestConfiguration> {

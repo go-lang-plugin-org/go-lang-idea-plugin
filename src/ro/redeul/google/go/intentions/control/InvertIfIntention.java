@@ -22,10 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.replaceElementWithText;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceOrComment;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 import static ro.redeul.google.go.util.expression.FlipBooleanExpression.flip;
 

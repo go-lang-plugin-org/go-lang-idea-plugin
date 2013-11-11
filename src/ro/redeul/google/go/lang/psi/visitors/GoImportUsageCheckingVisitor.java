@@ -1,13 +1,13 @@
 package ro.redeul.google.go.lang.psi.visitors;
 
-import java.util.HashSet;
-import java.util.Map;
-
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

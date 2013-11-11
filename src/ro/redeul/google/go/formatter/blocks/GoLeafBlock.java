@@ -1,7 +1,5 @@
 package ro.redeul.google.go.formatter.blocks;
 
-import java.util.List;
-
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
@@ -9,6 +7,8 @@ import com.intellij.formatting.Wrap;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 class GoLeafBlock extends GoBlock {
     public GoLeafBlock(ASTNode node, Alignment alignment, Indent indent,
