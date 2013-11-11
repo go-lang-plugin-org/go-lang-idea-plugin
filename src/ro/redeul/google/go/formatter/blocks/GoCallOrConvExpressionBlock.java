@@ -22,7 +22,7 @@ class GoCallOrConvExpressionBlock extends GoBlock {
     @Override
     protected Indent getChildIndent(@Nullable PsiElement child) {
         if (child instanceof GoExpressionList || child instanceof GoLiteralIdentifier) {
-            return NORMAL_INDENT_TO_CHILDREN;
+            return CONTINUATION_WITHOUT_FIRST;
         }
         return super.getChildIndent(child);
     }

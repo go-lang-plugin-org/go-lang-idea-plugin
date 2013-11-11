@@ -16,8 +16,7 @@ class GoBinaryExpressionBlock extends GoBlock {
     }
 
     private static final TokenSet EMPTY_SPACE_TOKENS = TokenSet.create(
-            oMUL, oQUOTIENT, oREMAINDER,
-            oSHIFT_LEFT, oSHIFT_RIGHT
+            oQUOTIENT, oREMAINDER, oSHIFT_LEFT, oSHIFT_RIGHT
     );
 
     private final Spacing spacing;
@@ -26,7 +25,7 @@ class GoBinaryExpressionBlock extends GoBlock {
         super(node, alignment, Indent.getNormalIndent(), wrap, settings);
 
         GoBinaryExpression psi = node.getPsi(GoBinaryExpression.class);
-        if (psi != null && EMPTY_SPACE_TOKENS.contains(psi.getOperator())) {
+        if (psi != null && (EMPTY_SPACE_TOKENS.contains(psi.getOperator()) || psi.getOperator() == oMUL)) {
             spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
         } else {
             spacing = BASIC_SPACING_KEEP_LINE_BREAKS;

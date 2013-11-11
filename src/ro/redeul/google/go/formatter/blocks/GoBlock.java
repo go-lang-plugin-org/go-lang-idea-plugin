@@ -52,7 +52,8 @@ class GoBlock implements Block, GoElementTypes {
     static final Spacing EMPTY_SPACING_KEEP_LINE_BREAKS = Spacing.createSpacing(0, 0, 0, true, 0);
     static final Spacing LINE_SPACING = Spacing.createSpacing(0, 0, 2, false, 0);
 
-    static final Indent NORMAL_INDENT_TO_CHILDREN = Indent.getIndent(Indent.Type.NORMAL, false, true);
+    static final Indent NORMAL_INDENT_TO_CHILDREN  = Indent.getIndent(Indent.Type.NORMAL, false, true);
+    static final Indent CONTINUATION_WITHOUT_FIRST = Indent.getIndent(Indent.Type.CONTINUATION_WITHOUT_FIRST, false, false);
 
     /**
      * Those statements might contain comments which need to align together
@@ -247,7 +248,7 @@ class GoBlock implements Block, GoElementTypes {
             // for function declarations, there should be exactly one space after "func"
             // for literal functions, there should be no space after "func"
             ASTNode parent = child1.getNode().getTreeParent();
-            if (parent != null && parent.getElementType() == LITERAL_FUNCTION) {
+            if (parent != null && (parent.getElementType() == LITERAL_FUNCTION || parent.getElementType() == TYPE_FUNCTION)) {
                 return EMPTY_SPACING;
             }
 
