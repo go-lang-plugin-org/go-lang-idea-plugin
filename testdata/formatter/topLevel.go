@@ -43,6 +43,11 @@ return 3
 // doc
 package main
 
+import (
+	"fmt"
+	"io"
+)
+
 const CA = 5
 const (
 	// CB
