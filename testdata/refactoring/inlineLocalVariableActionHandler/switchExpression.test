@@ -8,8 +8,8 @@ func main() {
 -----
 package main
 func main() {
-    switch {
-    default:
-        println("true", 5)
-    }
+	switch {
+	default:
+		println("true", 5)
+	}
 }

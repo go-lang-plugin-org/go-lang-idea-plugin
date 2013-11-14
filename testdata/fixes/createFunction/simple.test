@@ -11,5 +11,5 @@ func main() {
 }
 
 func Foo() {
-    <caret>
+	<caret>
 }

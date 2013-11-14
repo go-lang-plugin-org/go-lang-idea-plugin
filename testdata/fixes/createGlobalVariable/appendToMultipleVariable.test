@@ -14,7 +14,7 @@ package main
 var (
     va = 5
     vb = 3
-    Foo = value
+	Foo = value
 )
 
 func main() {

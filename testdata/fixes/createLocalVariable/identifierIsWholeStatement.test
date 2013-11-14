@@ -7,5 +7,5 @@ func main() {
 package main
 
 func main() {
-    test := value<caret>
+	test := value<caret>
 }

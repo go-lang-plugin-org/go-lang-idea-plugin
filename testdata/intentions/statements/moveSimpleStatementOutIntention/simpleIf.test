@@ -10,7 +10,7 @@ package main
 
 func main() {
     a := 5
-    if <caret>a > 2 {
+	if <caret>a > 2 {
         println(a)
     }
 }

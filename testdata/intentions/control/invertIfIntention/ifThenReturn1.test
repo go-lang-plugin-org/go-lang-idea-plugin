@@ -8,9 +8,9 @@ func Foo(a int) {
 package main
 func Foo(a int) {
     b := a*2
-    if a <= b {
-        return
-    }
-    println("hi", b)
+	if a <= b {
+		return
+	}
+	println("hi", b)
 
 }

@@ -6,7 +6,7 @@ func main() {
 -----
 package main
 func main() {
-    value := b == 3
-    c := a == 5 ||
-            value<caret>
+	value := b == 3
+	c := a == 5 ||
+			value<caret>
 }

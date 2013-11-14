@@ -12,11 +12,11 @@ func main() {
 -----
 package main
 func main() {
-    println(5)
-    if true {
-        var a = 3
-        println(a)
-    } else {
-        println(5)
-    }
+	println(5)
+	if true {
+		var a = 3
+		println(a)
+	} else {
+		println(5)
+	}
 }

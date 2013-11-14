@@ -7,6 +7,6 @@ func main() {
 package main
 func main() {
     a := 1
-    value := a + 2
-    var b = value<caret>
+	value := a + 2
+	var b = value<caret>
 }

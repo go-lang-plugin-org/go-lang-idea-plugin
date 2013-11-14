@@ -11,7 +11,7 @@ package main
 
 func main() {
     x := f()
-    switch <caret>{
+	switch <caret>{
     case x < 0: println("a")
     default: println("b")
     }

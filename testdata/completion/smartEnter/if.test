@@ -7,7 +7,7 @@ func Foo() {
 package main
 
 func Foo() {
-    if a > b {
-        <caret>
-    }
+	if a > b {
+		<caret>
+	}
 }

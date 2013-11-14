@@ -14,12 +14,12 @@ package main
 
 func main() {
     a := 5
-    c := a + 1
-    if a > 2 {
-        println("a")
-    } else if b := 3; b < 0 {
-        println("b")
-    } else if <caret>c > 5 {
+	c := a + 1
+	if a > 2 {
+		println("a")
+	} else if b := 3; b < 0 {
+		println("b")
+	} else if <caret>c > 5 {
         println("c")
     }
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
 
 class GoTypeStructFieldBlock extends GoBlock {
     private static final TokenSet FIELD_TYPE_SET = TokenSet.create(
@@ -33,7 +34,7 @@ class GoTypeStructFieldBlock extends GoBlock {
     protected List<Block> buildChildren() {
         List<Block> children = new ArrayList<Block>();
         for (ASTNode child : getGoChildren()) {
-            if (isNewLineNode(child.getPsi())) {
+            if (isNewLineNode(child.getPsi()) || isWhiteSpaceNode(child.getPsi())) {
                 continue;
             }
 

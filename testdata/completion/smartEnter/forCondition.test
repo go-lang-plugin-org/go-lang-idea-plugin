@@ -7,7 +7,7 @@ func Foo() {
 package main
 
 func Foo() {
-    for a > b {
-        <caret>
-    }
+	for a > b {
+		<caret>
+	}
 }

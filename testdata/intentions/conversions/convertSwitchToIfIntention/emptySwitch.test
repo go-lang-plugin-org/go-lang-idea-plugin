@@ -8,6 +8,6 @@ func Foo(a int) {
 package main
 
 func Foo(a int) {
-    if false {
-    }
+	if false {
+	}
 }

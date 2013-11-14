@@ -10,7 +10,7 @@ package main
 
 func main() {
     a := 0
-    for <caret>; a < 10; a++ {
+	for <caret>; a < 10; a++ {
         println(a)
     }
 }

@@ -14,11 +14,6 @@ public class GoBraceMatcher implements PairedBraceMatcher {
         new BracePair(GoTokenTypes.pLPAREN, GoTokenTypes.pRPAREN, true),
         new BracePair(GoTokenTypes.pLBRACK, GoTokenTypes.pRBRACK, false),
         new BracePair(GoTokenTypes.pLCURLY, GoTokenTypes.pRCURLY, true),
-
-//        new BracePair(GroovyDocTokenTypes.mGDOC_INLINE_TAG_START, GroovyDocTokenTypes.mGDOC_INLINE_TAG_END, true),
-//        new BracePair(GroovyDocTokenTypes.mGDOC_TAG_VALUE_LPAREN, GroovyDocTokenTypes.mGDOC_TAG_VALUE_RPAREN, false),
-//        new BracePair(GroovyTokenTypes.mGSTRING_BEGIN, GroovyTokenTypes.mGSTRING_END, false),
-//        new BracePair(GroovyTokenTypes.mREGEX_BEGIN, GroovyTokenTypes.mREGEX_END, false)
     };
 
     public BracePair[] getPairs() {
@@ -26,14 +21,8 @@ public class GoBraceMatcher implements PairedBraceMatcher {
     }
 
     public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType tokenType, @Nullable IElementType contextType) {
-        return tokenType == null ||
-//            || GoTokenTypes.wsWS == tokenType
-//            || GoTokenTypes.wsNLS == tokenType
-//            || GoTokenTypeSets.COMMENTS.contains(tokenType)
-//            || tokenType == GoTokenTypes.oSEMI
-//            || tokenType == GoTokenTypes.oCOMMA
-                ( tokenType != GoTokenTypes.pRPAREN   && tokenType != GoTokenTypes.pRBRACK && tokenType != GoTokenTypes.pRCURLY)
-                ;
+        return tokenType != GoTokenTypes.pRPAREN && tokenType != GoTokenTypes.pRBRACK && tokenType != GoTokenTypes.pRCURLY;
+        //return true;
     }
 
     public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {

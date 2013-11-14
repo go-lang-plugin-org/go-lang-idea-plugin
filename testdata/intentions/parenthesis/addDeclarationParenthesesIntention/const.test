@@ -5,7 +5,7 @@ func main(){}
 -----
 package main
 const (
-    A = 10
+	A = 10
 )
 
 func main(){}

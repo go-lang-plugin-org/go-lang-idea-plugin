@@ -9,8 +9,8 @@ func Foo(a int) {
 package main
 
 func Foo(a int) {
-    if x := a*2; false {
-    } else {
-        println("c")
-    }
+	if x := a * 2; false {
+	} else {
+		println("c")
+	}
 }

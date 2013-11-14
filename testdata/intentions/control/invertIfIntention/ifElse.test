@@ -9,9 +9,9 @@ func Foo(a, b int) {
 -----
 package main
 func Foo(a, b int) {
-    if a <= b {
-        println("test")
-    } else {
-        println("hi")
-    }
+	if a <= b {
+		println("test")
+	} else {
+		println("hi")
+	}
 }

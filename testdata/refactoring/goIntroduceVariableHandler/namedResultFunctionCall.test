@@ -11,5 +11,5 @@ func Foo()(a int, b, c int) {
     return 1, 2, 3
 }
 func main() {
-    a, b, c := Foo()
+	a, b, c := Foo()
 }

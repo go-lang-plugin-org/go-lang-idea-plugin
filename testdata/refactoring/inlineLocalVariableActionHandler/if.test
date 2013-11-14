@@ -9,9 +9,9 @@ func main() {
 -----
 package main
 func main() {
-    if 5 > 3 {
-        println("true", 5)
-    } else {
-        println("false", 2*5)
-    }
+	if 5 > 3 {
+		println("true", 5)
+	} else {
+		println("false", 2*5)
+	}
 }

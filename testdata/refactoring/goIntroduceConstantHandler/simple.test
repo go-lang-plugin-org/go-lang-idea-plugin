@@ -9,5 +9,5 @@ package main
 const VALUE = 1 + 2
 
 func main() {
-    println(VALUE<caret>)
+	println(VALUE<caret>)
 }

@@ -7,7 +7,7 @@ func Foo() {
 package main
 
 func Foo() {
-    go func() {
-        <caret>
-    }()
+	go func() {
+		<caret>
+	}()
 }

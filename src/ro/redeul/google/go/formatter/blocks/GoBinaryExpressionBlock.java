@@ -9,42 +9,138 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import org.jaxen.expr.AdditiveExpr;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 
 class GoBinaryExpressionBlock extends GoBlock {
-    public enum Mode {
-    }
-
-    private static final TokenSet EMPTY_SPACE_TOKENS = TokenSet.create(
-            oQUOTIENT, oREMAINDER, oSHIFT_LEFT, oSHIFT_RIGHT
-    );
 
     private final Spacing spacing;
+
+    private static final TokenSet EMPTY_SET = TokenSet.create(
+            oMINUS, oPLUS, oMUL, oQUOTIENT, oREMAINDER,
+            oBIT_AND, oBIT_CLEAR, oBIT_XOR,
+            oSHIFT_LEFT, oSHIFT_RIGHT
+    );
 
     public GoBinaryExpressionBlock(ASTNode node, Alignment alignment, Wrap wrap, CommonCodeStyleSettings settings) {
         super(node, alignment, Indent.getNormalIndent(), wrap, settings);
 
         GoBinaryExpression psi = node.getPsi(GoBinaryExpression.class);
-        if (psi != null) {
-            IElementType psiOperator = psi.getOperator();
 
-            if (EMPTY_SPACE_TOKENS.contains(psiOperator)) {
+        if (psi == null) {
+            spacing = BASIC_SPACING_KEEP_LINE_BREAKS;
+            return;
+        }
+
+        ASTNode parentElement = node.getTreeParent();
+        ASTNode preParentElement = node;
+        IElementType parentElementType = parentElement.getElementType();
+
+        boolean inARelation = false;
+        if (parentElementType == REL_EXPRESSION) {
+            inARelation = true;
+        }
+
+        while (parentElementType != BUILTIN_CALL_EXPRESSION
+                && parentElementType != EXPRESSION_LIST
+                && !STATEMENTS.contains(parentElementType)
+                && parentElementType != CONST_DECLARATION
+                && parentElementType != VAR_DECLARATION
+                ) {
+            preParentElement = parentElement;
+            parentElement = parentElement.getTreeParent();
+            parentElementType = parentElement.getElementType();
+
+            if (parentElementType == REL_EXPRESSION) {
+                inARelation = true;
+            }
+        }
+
+        if (inARelation) {
+            spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
+            return;
+        }
+
+        if (parentElementType == EXPRESSION_LIST) {
+            if (inTheSameLine(psi.getLeftOperand().getNode(), psi.getRightOperand().getNode())
+                && !(node.getElementType() == LOG_OR_EXPRESSION || node.getElementType() == LOG_AND_EXPRESSION || node.getElementType() == REL_EXPRESSION)
+                ) {
+                spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
+            } else {
+                spacing = BASIC_SPACING_KEEP_LINE_BREAKS;
+            }
+            return;
+        }
+
+        if (STATEMENTS.contains(parentElementType)
+                || parentElementType == CONST_DECLARATION
+                || parentElementType == VAR_DECLARATION
+            ) {
+            if (preParentElement.getElementType() == ADD_EXPRESSION
+                    && node != preParentElement
+                    && preParentElement.getPsi(GoAdditiveExpression.class).getOperator() == oBIT_OR) {
                 spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
                 return;
             }
-            IElementType parentElementType = node.getTreeParent().getElementType();
-            if (EXPRESSION_SETS.contains(parentElementType)
-                    && inTheSameLine(psi.getLeftOperand().getNode(), psi.getRightOperand().getNode())
-            && (
-                    psiOperator == oMUL ||
-                    psiOperator == oQUOTIENT ||
-                    psiOperator == oPLUS ||
-                    psiOperator == oMINUS
-            )) {
+
+            if (preParentElement.getElementType() == SLICE_EXPRESSION) {
                 spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
                 return;
             }
+
+            spacing = BASIC_SPACING_KEEP_LINE_BREAKS;
+            return;
+        }
+
+        ASTNode expression = node;
+        ASTNode expressionChild = node;
+
+        while (expression.getElementType() != BUILTIN_CALL_EXPRESSION
+                ) {
+            expressionChild = expression;
+            expression = expression.getTreeParent();
+        }
+
+        if (expression.getElementType() != BUILTIN_CALL_EXPRESSION) {
+            spacing = BASIC_SPACING_KEEP_LINE_BREAKS;
+            return;
+        }
+
+        ASTNode elem = expressionChild;
+        boolean isAlone = true;
+        while (!elem.getElementType().toString().equals(")")) {
+            elem = elem.getTreeNext();
+            if (elem.getElementType().toString().equals(",")) {
+                isAlone = false;
+            }
+        }
+
+        if (!isAlone) {
+            if (inTheSameLine(psi.getLeftOperand().getNode(), psi.getRightOperand().getNode())) {
+                spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
+            } else {
+                spacing = BASIC_SPACING_KEEP_LINE_BREAKS;
+            }
+            return;
+        }
+
+        elem = expressionChild;
+        while (!elem.getElementType().toString().equals("(")) {
+            elem = elem.getTreePrev();
+            if (elem.getElementType().toString().equals(",")) {
+                isAlone = false;
+            }
+        }
+
+        if (!isAlone) {
+            if (inTheSameLine(node, elem)) {
+                spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
+            } else {
+                spacing = BASIC_SPACING_KEEP_LINE_BREAKS;
+            }
+            return;
         }
 
         spacing = BASIC_SPACING_KEEP_LINE_BREAKS;

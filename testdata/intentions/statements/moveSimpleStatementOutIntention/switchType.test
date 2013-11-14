@@ -11,7 +11,7 @@ package main
 
 func main() {
     x := f()
-    switch <caret>x.(T) {
+	switch <caret>x.(T) {
     case nil: println("nil")
     default: println("b")
     }

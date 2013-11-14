@@ -10,11 +10,11 @@ func main() {
 -----
 package main
 func main() {
-    value := 1 + 2
-    println(value)
-    println(value)
-    if true {
-        println(value)
-        println(value<caret>)
+	value := 1 + 2
+	println(value)
+	println(value)
+	if true {
+		println(value)
+		println(value<caret>)
     }
 }

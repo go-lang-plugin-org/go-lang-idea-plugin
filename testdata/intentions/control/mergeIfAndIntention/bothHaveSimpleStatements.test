@@ -10,7 +10,7 @@ func Foo(a, b int) {
 package main
 func Foo(a, b int) {
     ta := a
-    if a2 := a*2; ta > b && a2 > b {
-        println("test")
-    }
+	if a2 := a * 2; ta > b && a2 > b {
+		println("test")
+	}
 }

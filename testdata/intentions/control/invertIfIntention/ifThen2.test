@@ -11,10 +11,10 @@ func Foo(a int) {
 package main
 func Foo(a int) {
     if a > 3 {
-        if b := a * 2; a <= b {
-        } else {
-            println("hi")
-        }
+		if b := a * 2; a <= b {
+		} else {
+			println("hi")
+		}
     }
     println("test")
 }

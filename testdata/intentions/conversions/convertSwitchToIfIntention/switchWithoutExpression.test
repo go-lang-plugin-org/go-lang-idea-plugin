@@ -13,11 +13,11 @@ package main
 
 func Foo(a int) {
     x := a*2
-    if x > 0 {
-        println("a")
-    } else if a < 3 {
-        println("b")
-    } else {
-        println("c")
-    }
+	if x > 0 {
+		println("a")
+	} else if a < 3 {
+		println("b")
+	} else {
+		println("c")
+	}
 }

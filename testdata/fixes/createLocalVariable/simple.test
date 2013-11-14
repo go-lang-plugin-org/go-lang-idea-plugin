@@ -7,6 +7,6 @@ func main() {
 package main
 
 func main() {
-    test := value
-    println(test<caret>)
+	test := value
+	println(test<caret>)
 }
