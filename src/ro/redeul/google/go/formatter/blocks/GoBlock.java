@@ -254,6 +254,11 @@ class GoBlock implements Block, GoElementTypes {
 
             return BASIC_SPACING;
         }
+
+        if (COMMENTS.contains(child1Type) && child2Type == FUNCTION_DECLARATION) {
+            return BASIC_SPACING;
+        }
+
         return null;
     }
 

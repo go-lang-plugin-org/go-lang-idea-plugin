@@ -7,6 +7,7 @@ import com.intellij.formatting.Wrap;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
@@ -25,11 +26,28 @@ class GoBinaryExpressionBlock extends GoBlock {
         super(node, alignment, Indent.getNormalIndent(), wrap, settings);
 
         GoBinaryExpression psi = node.getPsi(GoBinaryExpression.class);
-        if (psi != null && (EMPTY_SPACE_TOKENS.contains(psi.getOperator()) || psi.getOperator() == oMUL)) {
-            spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
-        } else {
-            spacing = BASIC_SPACING_KEEP_LINE_BREAKS;
+        if (psi != null) {
+            IElementType psiOperator = psi.getOperator();
+
+            if (EMPTY_SPACE_TOKENS.contains(psiOperator)) {
+                spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
+                return;
+            }
+            IElementType parentElementType = node.getTreeParent().getElementType();
+            if (EXPRESSION_SETS.contains(parentElementType)
+                    && inTheSameLine(psi.getLeftOperand().getNode(), psi.getRightOperand().getNode())
+            && (
+                    psiOperator == oMUL ||
+                    psiOperator == oQUOTIENT ||
+                    psiOperator == oPLUS ||
+                    psiOperator == oMINUS
+            )) {
+                spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
+                return;
+            }
         }
+
+        spacing = BASIC_SPACING_KEEP_LINE_BREAKS;
     }
 
     @Override

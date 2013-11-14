@@ -22,7 +22,7 @@ fmt.Println(1,
 fmt.Println(
 1,
 2,
-(1+     // space before comment should be removed
+(1+     // all space but one before comment should be removed
 2*-  3),
 3,
 )
@@ -70,7 +70,7 @@ func main() {
 	fmt.Println(
 		1,
 		2,
-		(1 + // space before comment should be removed
+		(1 + // all space but one before comment should be removed
 			2*-3),
 		3,
 	)
