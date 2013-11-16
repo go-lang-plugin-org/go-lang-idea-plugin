@@ -1,0 +1,141 @@
+{
+  classHeader="header.txt"
+  parserClass="org.intellij.grammar.parser.GrammarParser"
+  parserUtilClass="org.intellij.grammar.parser.GrammarParserUtil"
+
+  implements="org.intellij.grammar.psi.BnfCompositeElement"
+  extends="org.intellij.grammar.psi.impl.BnfCompositeElementImpl"
+
+  psiClassPrefix="Bnf"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.intellij.grammar.psi"
+  psiImplPackage="org.intellij.grammar.psi.impl"
+  psiImplUtilClass="org.intellij.grammar.psi.impl.GrammarPsiImplUtil"
+
+  elementTypeHolderClass="org.intellij.grammar.psi.BnfTypes"
+  elementTypePrefix="BNF_"
+  elementTypeClass="org.intellij.grammar.psi.BnfCompositeElementType"
+  tokenTypeClass="org.intellij.grammar.psi.BnfTokenType"
+
+  tokens = [
+    comment="regexp://.*"
+    K_IMPORT="import"
+    K_PACKAGE="package"
+    K_CONST="const"
+    OP_DOT="."
+    identifier="regexp:(\p{L}|_)(\p{L}|\p{Nd}|_)*"
+    raw_string_lit="regexp:`[^`]*`"
+    OP_SEMI=";"
+    LEFT_PAREN="("
+    RIGHT_PAREN=")"
+
+//    OP_ADD="+"
+//    OP_SUB="-"
+//    OP_MUL="*"
+//    OP_DIV="/"
+//    OP_QUOT="%"
+//
+//    OP_
+//
+//
+//  +    &     +=    &=     &&    ==    !=    (    )
+//  -    |     -=    |=     ||    <     <=    [    ]
+//  *    ^     *=    ^=     <-    >     >=    {    }
+//  /    <<    /=    <<=    ++    =     :=    ,    ;
+//  %    >>    %=    >>=    --    !     ...   .    :
+//       &^          &^=
+//    OP_EQ="="
+//    OP_IS="::="
+//    OP_OR="|"
+//    OP_OPT="?"
+//    OP_ONEMORE="+"
+//    OP_ZEROMORE="*"
+//    OP_AND="&"
+//    OP_NOT="!"
+//    SEMICOLON=";"
+//    LEFT_BRACE="{"
+//    RIGHT_BRACE="}"
+//    LEFT_BRACKET="["
+//    RIGHT_BRACKET="]"
+//    EXTERNAL_START="<<"
+//    EXTERNAL_END=">>"
+  ]
+
+  implements("rule|attr")="org.intellij.grammar.psi.BnfNamedElement"
+  extends("rule|attr")="org.intellij.grammar.psi.impl.BnfNamedElementImpl"
+  mixin("reference_or_token")="org.intellij.grammar.psi.impl.BnfRefOrTokenImpl"
+  mixin("string_literal_expression")="org.intellij.grammar.psi.impl.BnfStringImpl"
+  extends("paren_.*expression")=parenthesized
+
+  methodRenames("getStringLiteralExpression")="getLiteralExpression"
+}
+
+file ::= PackageClause ';' (ImportDecl ';')+ (TopLevelDecl ';')+
+PackageClause       ::= "package" PackageName {pin=1}
+private PackageName ::= identifier
+
+ImportDecl       ::= 'import' (ImportSpec | '(' (ImportSpec ';' )+ ')' ) { pin=1 }
+ImportSpec       ::= [ '.' | PackageName ] ImportPath
+private ImportPath       ::= string_lit
+
+
+TopLevelDecl ::= Declaration | FunctionDecl | MethodDecl
+Declaration ::= ConstDecl | TypeDecl | VarDecl
+
+ConstDecl ::= 'const' (ConstSpec | '(' ( ConstSpec ";" )+ ')' ) { pin=1}
+
+ConstSpec ::= identifier
+// keyword ::= 'break' | 'default' | 'func' | 'interface' | 'select'
+//case         defer        go           map          struct
+//chan         else         goto         package      switch
+//const        fallthrough  if           range        type
+//continue     for          import       return       var
+
+string_lit              ::= raw_string_lit
+
+//external grammar ::= parseGrammar grammar_element
+//private grammar_element ::= !<<eof>> (attrs | rule) {pin=1 recoverUntil=grammar_element_recover}
+//private grammar_element_recover::=!('{'|rule_start)
+//
+//rule ::= rule_start expression attrs? ';'? {pin=2}
+//private rule_start ::= modifier* id '::='
+//modifier ::= 'private' | 'external' | 'meta' | 'inner' | 'left' | 'fake'
+//
+//
+//attrs ::= '{' attr * '}' {pin=1}
+//attr ::= attr_start attr_value ';'? {pin=1 recoverUntil=attr_recover_until}
+//private attr_start ::= id (attr_pattern '=' | '=') {pin(".*")="attr_pattern"}
+//private attr_start_simple ::= id attr_pattern? '='
+//private attr_recover_until ::= !('}' | attr_start)
+//private attr_value ::= (reference_or_token | literal_expression | value_list) !'='
+//attr_pattern ::= '(' string_literal_expression ')' {pin=1}
+//
+//value_list ::= '[' list_entry * ']' {pin=1 extends=expression}
+//list_entry ::= (id list_entry_tail? | string_literal_expression) ';'? {
+//  recoverUntil=list_entry_recover_until
+//  methods=[getReferences]
+//}
+//private list_entry_tail ::= '=' string_literal_expression {pin=1}
+//private list_entry_recover_until ::= !(']' | '}' | id | string)
+//
+//expression ::= sequence choice?
+//sequence ::= option * {extends=expression recoverUntil=sequence_recover}
+//private sequence_recover ::= !(';'|'|'|'('|')'|'['|']'|'{'|'}') grammar_element_recover
+//private option ::= predicate | paren_opt_expression | simple quantified?
+//
+//left choice ::= ( '|' sequence ) + {pin(".*")=1 extends=expression}
+//left quantified ::= quantifier {extends=expression }
+//quantifier ::= '?' | '+' | '*'
+//
+//predicate ::= predicate_sign simple {extends=expression}
+//predicate_sign ::= '&' | '!'
+//
+//fake parenthesized ::= '(' expression ')' {extends=expression}
+//private simple ::= !(modifier* id '::=' ) reference_or_token | literal_expression | external_expression | paren_expression
+//external_expression ::= '<<' reference_or_token option * '>>' {pin=2 extends=expression}
+//reference_or_token ::= id  {extends=expression }
+//literal_expression ::= string_literal_expression | number {extends=expression }
+//string_literal_expression ::= string {extends=literal_expression}
+//paren_expression ::= '(' expression ')' | '{' alt_choice_element '}' {pin(".*")=2}
+//paren_opt_expression ::= '[' expression ']' {pin=2}
+//private alt_choice_element ::= !attr_start_simple expression
