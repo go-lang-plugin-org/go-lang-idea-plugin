@@ -1,76 +1,120 @@
 {
-  classHeader="header.txt"
-  parserClass="org.intellij.grammar.parser.GrammarParser"
-  parserUtilClass="org.intellij.grammar.parser.GrammarParserUtil"
+//  classHeader="header.txt"
+  parserClass="ro.redeul.google.go.parser.GoParser"
+  parserUtilClass="ro.redeul.google.go.parser.GoParserUtil"
+//  parserUtilClass="ro.redeul.google.go.parser.GoParserUtil"
 
-  implements="org.intellij.grammar.psi.BnfCompositeElement"
-  extends="org.intellij.grammar.psi.impl.BnfCompositeElementImpl"
+  implements="ro.redeul.google.go.lang.psi.GoPsiElement"
+  extends="ro.redeul.google.go.lang.psi.impl.GoPsiElementBase"
 
-  psiClassPrefix="Bnf"
+  psiClassPrefix="Go"
   psiImplClassSuffix="Impl"
-  psiPackage="org.intellij.grammar.psi"
-  psiImplPackage="org.intellij.grammar.psi.impl"
-  psiImplUtilClass="org.intellij.grammar.psi.impl.GrammarPsiImplUtil"
+  psiPackage="ro.redeul.google.go.psi"
+  psiImplPackage="ro.redeul.google.go.psi.impl"
+  psiImplUtilClass="ro.redeul.google.go.psi.impl.GoPsiImplUtil"
 
-  elementTypeHolderClass="org.intellij.grammar.psi.BnfTypes"
-  elementTypePrefix="BNF_"
-  elementTypeClass="org.intellij.grammar.psi.BnfCompositeElementType"
-  tokenTypeClass="org.intellij.grammar.psi.BnfTokenType"
+  elementTypeHolderClass="ro.redeul.google.go.psi.impl.GoTypes"
+  elementTypePrefix="GO_"
+  elementTypeClass="ro.redeul.google.go.psi.GoCompositeElementType"
+  tokenTypeClass="ro.redeul.google.go.psi.GoTokenType"
+  generateTokens="true"
 
   tokens = [
-    comment="regexp://.*"
     K_IMPORT="import"
     K_PACKAGE="package"
     K_CONST="const"
+    K_STRUCT="struct"
+    K_FUNC="func"
+    K_TYPE="type"
+    K_INTERFACE="interface"
+    K_RETURN="return"
+    K_BREAK="break"
+    K_CONTINUE="continue"
+    K_GOTO="goto"
+    K_FALLTHROUGH="fallthrough"
+    K_IF="if"
+    K_ELSE="else"
+    K_SWITCH="switch"
+    K_CASE="case"
+    K_DEFAULT="default"
+    K_SELECT="select"
+    K_FOR="for"
+    K_DEFER="defer"
+    K_GO="go"
+    K_MAP="map"
+    K_CHAN="chan"
+    K_VAR="var"
+    K_RANGE="range"
+
+    OP_DOTS="..."
+
+    PLUS_PLUS="++"
+    MINUS_MINUS="--"
+
+    OP_AND="&&"
+    OP_OR="||"
+
+    OP_ADD="+"
+    OP_SUB="-"
+    OP_BIT_OR="|"
+    OP_BIT_XOR="^"
+
+    OP_LEFT_SHIFT="<<"
+    OP_RIGHT_SHIFT=">>"
+
+    OP_NOT="!"
+    OP_CHAN='<-'
+
+    OP_EQ_EQ="=="
+    OP_NOT_EQ="!="
+    OP_LESS_EQ="<="
+    OP_GREAT_EQ=">="
+    OP_LESS="<"
+    OP_GREAT=">"
+
+    OP_STAR="*"
+    OP_DIV="/"
+    OP_MOD="%"
+
+
+    OP_BIT_CLEAR="&^"
+    OP_BIT_AND="&"
+
+    OP_EQ="="
     OP_DOT="."
+    OP_COMMA=','
+
+    OP_ASSIGN=":="
+    OP_COLON=":"
+
+    SEMI=";"
+
+    comment="regexp://.*"
     identifier="regexp:(\p{L}|_)(\p{L}|\p{Nd}|_)*"
     raw_string_lit="regexp:`[^`]*`"
-    OP_SEMI=";"
-    LEFT_PAREN="("
-    RIGHT_PAREN=")"
 
-//    OP_ADD="+"
-//    OP_SUB="-"
-//    OP_MUL="*"
-//    OP_DIV="/"
-//    OP_QUOT="%"
-//
-//    OP_
-//
-//
-//  +    &     +=    &=     &&    ==    !=    (    )
-//  -    |     -=    |=     ||    <     <=    [    ]
-//  *    ^     *=    ^=     <-    >     >=    {    }
-//  /    <<    /=    <<=    ++    =     :=    ,    ;
-//  %    >>    %=    >>=    --    !     ...   .    :
-//       &^          &^=
-//    OP_EQ="="
-//    OP_IS="::="
-//    OP_OR="|"
-//    OP_OPT="?"
-//    OP_ONEMORE="+"
-//    OP_ZEROMORE="*"
-//    OP_AND="&"
-//    OP_NOT="!"
-//    SEMICOLON=";"
-//    LEFT_BRACE="{"
-//    RIGHT_BRACE="}"
-//    LEFT_BRACKET="["
-//    RIGHT_BRACKET="]"
-//    EXTERNAL_START="<<"
-//    EXTERNAL_END=">>"
+    decimal_lit="regexp:[1-9][0-9]*"
+    octal_lit="regexp:0[0-7]*"
+    hex_lit="regexp:0[xX][0-9A-Fa-f]+"
+
+    L_PAREN="("
+    R_PAREN=")"
+    L_BRACE="{"
+    R_BRACE="}"
+    L_BRACKET="["
+    R_BRACKET="]"
   ]
 
-  implements("rule|attr")="org.intellij.grammar.psi.BnfNamedElement"
-  extends("rule|attr")="org.intellij.grammar.psi.impl.BnfNamedElementImpl"
-  mixin("reference_or_token")="org.intellij.grammar.psi.impl.BnfRefOrTokenImpl"
-  mixin("string_literal_expression")="org.intellij.grammar.psi.impl.BnfStringImpl"
-  extends("paren_.*expression")=parenthesized
+//  implements("rule|attr")="org.intellij.grammar.psi.BnfNamedElement"
+//  extends("rule|attr")="org.intellij.grammar.psi.impl.BnfNamedElementImpl"
+//  mixin("reference_or_token")="org.intellij.grammar.psi.impl.BnfRefOrTokenImpl"
+//  mixin("string_literal_expression")="org.intellij.grammar.psi.impl.BnfStringImpl"
+//  extends("paren_.*expression")=parenthesized
 
-  methodRenames("getStringLiteralExpression")="getLiteralExpression"
+//  methodRenames("getStringLiteralExpression")="getLiteralExpression"
 }
 
-file ::= PackageClause ';' (ImportDecl ';')+ (TopLevelDecl ';')+
+file ::= PackageClause ';' (ImportDecl ';')* (TopLevelDecl ';')*
 PackageClause       ::= "package" PackageName {pin=1}
 private PackageName ::= identifier
 
@@ -78,20 +122,208 @@ ImportDecl       ::= 'import' (ImportSpec | '(' (ImportSpec ';' )+ ')' ) { pin=1
 ImportSpec       ::= [ '.' | PackageName ] ImportPath
 private ImportPath       ::= string_lit
 
-
 TopLevelDecl ::= Declaration | FunctionDecl | MethodDecl
 Declaration ::= ConstDecl | TypeDecl | VarDecl
 
-ConstDecl ::= 'const' (ConstSpec | '(' ( ConstSpec ";" )+ ')' ) { pin=1}
+ConstDecl ::= 'const' (ConstSpec | '(' ( ConstSpec ";" )+ ')' ) { pin=1 extends=Declaration}
+ConstSpec ::= IdentifierList "=" Expression
 
-ConstSpec ::= identifier
-// keyword ::= 'break' | 'default' | 'func' | 'interface' | 'select'
-//case         defer        go           map          struct
-//chan         else         goto         package      switch
-//const        fallthrough  if           range        type
-//continue     for          import       return       var
+TypeDecl     ::= "type" ( TypeSpec | "(" ( TypeSpec ";" )* ")" ) { pin=1 extends=Declaration}
+TypeSpec     ::= identifier Type
 
-string_lit              ::= raw_string_lit
+VarDecl     ::= "var" ( VarSpec | "(" ( VarSpec ";" )* ")" ) { pin=1 extends=Declaration}
+VarSpec     ::= IdentifierList ( Type [ "=" ExpressionList ] | "=" ExpressionList )
+
+IdentifierList ::= identifier ( "," identifier )*
+ExpressionList ::= Expression ( "," Expression )*
+
+string_lit  ::= raw_string_lit //| int_string_lit
+
+Type      ::= TypeName | TypeLit | "(" Type ")"
+TypeName  ::= identifier | QualifiedIdent { extends=Type }
+TypeLit   ::= ArrayType | StructType | PointerType | FunctionType | InterfaceType |
+	    SliceType | MapType | ChannelType { extends=Type }
+
+QualifiedIdent ::= PackageName '.' identifier
+
+ArrayType ::= "[" ArrayLength "]" ElementType { extends=TypeLit }
+ArrayLength ::= Expression
+private ElementType ::= Type
+
+StructType          ::= "struct" '{' ( FieldDecl ';' )* '}' { pin=1 extends=TypeLit }
+FieldDecl           ::= (IdentifierList Type | AnonymousField) Tag?
+AnonymousField      ::= '*'? TypeName
+Tag                 ::= string_lit
+
+PointerType       ::= "*" BaseType { pin=1 extends=TypeLit }
+private BaseType  ::= Type
+
+FunctionType   ::= "func" Signature { pin=1 extends=TypeLit }
+Signature      ::= Parameters [ Result ]
+Result         ::= Parameters | Type
+Parameters     ::= '(' ( ParameterList ','? )? ')'
+ParameterList  ::= ParameterDecl ( ',' ParameterDecl )*
+ParameterDecl  ::= IdentifierList? "..."? Type
+
+InterfaceType      ::= "interface" '{' (MethodSpec ";")* '}' { pin=1 extends=TypeLit }
+MethodSpec         ::= MethodName Signature | InterfaceTypeName
+MethodName         ::= identifier
+InterfaceTypeName  ::= TypeName
+
+SliceType          ::= '[' ']' ElementType { pin=2 extends=TypeLit }
+
+MapType     ::= 'map' '[' KeyType ']' ElementType { pin=1 extends=TypeLit }
+KeyType     ::= Type
+
+ChannelType ::= ("chan" "<-"? | "<-" "chan" ) ElementType { pin=1 extends=TypeLit }
+
+
+FunctionDecl ::= "func" FunctionName ( Function | Signature ) { pin=2 }
+FunctionName ::= identifier
+Function     ::= Signature FunctionBody
+FunctionBody ::= Block
+
+MethodDecl   ::= "func" Receiver MethodName ( Function | Signature ) { pin=2 }
+Receiver     ::= "(" identifier? "*"? BaseTypeName ")"
+BaseTypeName ::= identifier
+
+//Block ::= "{"  "}"
+Block           ::= "{" StatementList "}"
+StatementList   ::= ( Statement ";" )*
+
+Statement ::= Declaration |
+    LabeledStmt |
+    SimpleStmt |
+	GoStmt |
+	ReturnStmt |
+	BreakStmt |
+	ContinueStmt |
+	GotoStmt |
+	FallthroughStmt |
+	Block |
+	IfStmt |
+	SwitchStmt |
+	SelectStmt |
+	ForStmt |
+	DeferStmt
+
+SimpleStmt ::=
+    //EmptyStmt |
+    ExpressionStmt |
+    SendStmt |
+    IncDecStmt |
+    Assignment |
+    ShortVarDecl
+
+LabeledStmt ::= Label ":" Statement
+Label       ::= identifier
+
+GoStmt          ::= "go" Expression { pin=1 }
+ReturnStmt      ::= "return" ExpressionList? { pin=1 }
+BreakStmt       ::= "break" Label? { pin=1 }
+ContinueStmt    ::= "continue" Label? { pin=1 }
+GotoStmt        ::= "goto" Label { pin=1 }
+FallthroughStmt ::= "fallthrough" { pin=1 }
+IfStmt          ::= "if" ( SimpleStmt ";" )? Expression Block ( "else" ( IfStmt | Block ) )? { pin=1 }
+
+SwitchStmt      ::= ExprSwitchStmt | TypeSwitchStmt
+ExprSwitchStmt  ::= "switch" [ SimpleStmt ";" ] [ Expression ] "{" { ExprCaseClause } "}" { pin=1 }
+ExprCaseClause  ::= ExprSwitchCase ":" StatementList
+ExprSwitchCase  ::= "case" ExpressionList | "default"
+
+TypeSwitchStmt  ::= "switch" ( SimpleStmt ";" )? TypeSwitchGuard "{" TypeCaseClause* "}" { pin=1 }
+TypeSwitchGuard ::= (identifier ":=")? PrimaryExpr "." "(" "type" ")"
+TypeCaseClause  ::= TypeSwitchCase ":" StatementList { pin=1 }
+TypeSwitchCase  ::= "case" TypeList | "default"
+TypeList        ::= Type ( "," Type )*
+
+SelectStmt      ::= "select" "{" CommClause* "}" { pin=1 }
+CommClause      ::= CommCase ":" StatementList { pin=1 }
+CommCase        ::= "case" ( SendStmt | RecvStmt ) | "default"
+RecvStmt        ::= ( ExpressionList "=" | IdentifierList ":=" )? RecvExpr
+RecvExpr        ::= Expression
+
+ForStmt         ::= "for" ( Condition | ForClause | RangeClause )? Block { pin=1 }
+Condition       ::= Expression
+
+ForClause       ::= InitStmt? ";" Condition? ";" PostStmt?
+InitStmt        ::= SimpleStmt
+PostStmt        ::= SimpleStmt
+
+RangeClause     ::= ( ExpressionList "=" | IdentifierList ":=" ) "range" Expression
+
+DeferStmt       ::= "defer" Expression { pin=1 }
+
+ExpressionStmt  ::= Expression
+
+SendStmt        ::= Channel "<-" Expression
+Channel         ::= Expression
+
+IncDecStmt      ::= Expression ( "++" | "--" )
+
+Assignment      ::= ExpressionList assign_op ExpressionList
+assign_op       ::= ( '+' | '-' | '|' | '^' | "/" | "%" | "<<" | ">>" | "&" | "&^" | '*' )? "="
+
+ShortVarDecl    ::= IdentifierList ":=" ExpressionList
+
+Expression      ::= BinaryExpr | UnaryExpr
+//    Expression binary_op UnaryExpr
+
+UnaryExpr       ::=
+    PrimaryExpr | ("+" | "-" | "!" | "^" | "*" | "&" | "<-")? UnaryExpr {extends=Expression}
+
+private BinaryExpr  ::= MultiplicativeExpr | AdditiveExpr | ComparisonExpr | LogicalAndExpr | LogicalOrExpr { extends=Expression }
+
+MultiplicativeExpr  ::= Expression ("*" | "/" | "%" | "<<" | ">>" | "&" | "&^") Expression { extends=Expression }
+AdditiveExpr        ::= Expression ("+" | "-" | "|" | "^") Expression { extends=Expression }
+ComparisonExpr      ::= Expression ("==" | "!=" | "<" | "<=" | ">" | ">=") Expression { extends=Expression }
+LogicalAndExpr      ::= Expression "&&" Expression { extends=Expression }
+LogicalOrExpr       ::= Expression "||" Expression { extends=Expression }
+
+PrimaryExpr ::= ExtendedPrimaryExpr | BasePrimaryExpr { extends=Expression }
+
+private BasePrimaryExpr ::= Operand | Conversion | BuiltinCall
+private ExtendedPrimaryExpr ::= BasePrimaryExpr extra_rule
+
+private extra_rule ::=
+    (SliceExpr | IndexExpr | SelectorExpr | TypeAssertionExpr | CallExpr) extra_rule?
+
+left SelectorExpr       ::= "." identifier { extends=PrimaryExpr }
+left IndexExpr          ::= "[" Expression "]" { extends=PrimaryExpr }
+left SliceExpr          ::= "[" Expression? ":" Expression? "]" { extends=PrimaryExpr }
+left TypeAssertionExpr  ::= "." "(" Type ")" { extends=PrimaryExpr }
+left CallExpr           ::= "(" (ArgumentList ","? )? ")" {extends=PrimaryExpr}
+
+ArgumentList   ::= ExpressionList "..."?
+
+private Operand  ::= Literal | OperandName | MethodExpr | "(" Expression ")" { extends=PrimaryExpr }
+Literal    ::= BasicLit | CompositeLit | FunctionLit { extends=PrimaryExpr }
+BasicLit   ::= int_lit | /* float_lit | imaginary_lit | rune_lit | */ string_lit
+OperandName ::= QualifiedIdent | identifier
+
+int_lit     ::= decimal_lit | octal_lit | hex_lit { extends=BasicLit }
+
+Conversion ::= Type "(" Expression ","? ")"
+
+BuiltinCall ::= identifier "(" [ BuiltinArgs [ "," ] ] ")"
+BuiltinArgs ::= Type ( "," ArgumentList )? | ArgumentList
+
+MethodExpr    ::= ReceiverType "." MethodName
+ReceiverType  ::= TypeName | "(" "*" TypeName ")" | "(" ReceiverType ")"
+
+
+CompositeLit  ::= LiteralType LiteralValue
+LiteralType   ::= StructType | ArrayType | "[" "..." "]" ElementType | SliceType | MapType | TypeName
+LiteralValue  ::= "{" ( ElementList ","? )? "}"
+ElementList   ::= Element ( "," Element )*
+Element       ::= ( Key ":")? Value
+Key           ::= FieldName | ElementIndex
+FieldName     ::= identifier
+ElementIndex  ::= Expression
+Value         ::= Expression | LiteralValue
+
+FunctionLit   ::= "func" Function
+
 
 //external grammar ::= parseGrammar grammar_element
 //private grammar_element ::= !<<eof>> (attrs | rule) {pin=1 recoverUntil=grammar_element_recover}
