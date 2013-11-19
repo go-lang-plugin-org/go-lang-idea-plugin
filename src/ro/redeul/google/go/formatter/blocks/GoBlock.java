@@ -1,15 +1,6 @@
 package ro.redeul.google.go.formatter.blocks;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Block;
-import com.intellij.formatting.ChildAttributes;
-import com.intellij.formatting.Indent;
-import com.intellij.formatting.Spacing;
-import com.intellij.formatting.Wrap;
+import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -25,6 +16,10 @@ import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;

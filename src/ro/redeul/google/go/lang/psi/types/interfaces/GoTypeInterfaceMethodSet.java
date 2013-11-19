@@ -1,10 +1,10 @@
 package ro.redeul.google.go.lang.psi.types.interfaces;
 
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 public class GoTypeInterfaceMethodSet {
 

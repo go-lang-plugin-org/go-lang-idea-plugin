@@ -1,12 +1,12 @@
 package ro.redeul.google.go;
 
-import java.lang.ref.Reference;
-import java.util.ResourceBundle;
-
 import com.intellij.CommonBundle;
 import com.intellij.reference.SoftReference;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
+
+import java.lang.ref.Reference;
+import java.util.ResourceBundle;
 
 public class GoBundle {
     private static Reference<ResourceBundle> ourBundle;

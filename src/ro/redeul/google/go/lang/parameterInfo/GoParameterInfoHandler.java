@@ -1,11 +1,7 @@
 package ro.redeul.google.go.lang.parameterInfo;
 
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.lang.parameterInfo.CreateParameterInfoContext;
-import com.intellij.lang.parameterInfo.ParameterInfoContext;
-import com.intellij.lang.parameterInfo.ParameterInfoHandler;
-import com.intellij.lang.parameterInfo.ParameterInfoUIContext;
-import com.intellij.lang.parameterInfo.UpdateParameterInfoContext;
+import com.intellij.lang.parameterInfo.*;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -23,9 +19,7 @@ import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionPar
 import static ro.redeul.google.go.lang.documentation.DocumentUtil.getFunctionPresentationText;
 import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.getCallParenthesesTextRange;
 import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.resolveToFunctionDeclaration;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildrenOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 
 public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement, GoParameterInfoHandler.ParameterInfo> {
     @Override

@@ -1,8 +1,5 @@
 package ro.redeul.google.go.formatter.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
@@ -11,9 +8,11 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 
 class GoTypeInterfaceBlock extends GoBlock {
     public GoTypeInterfaceBlock(ASTNode node, Alignment alignment, Indent indent, CommonCodeStyleSettings settings) {

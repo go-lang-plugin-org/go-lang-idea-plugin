@@ -4,6 +4,7 @@ import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findDefaultPackageName;
 
 /**

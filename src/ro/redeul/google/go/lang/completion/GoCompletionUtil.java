@@ -1,12 +1,5 @@
 package ro.redeul.google.go.lang.completion;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -20,11 +13,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.util.AdapterProcessor;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.Function;
-import com.intellij.util.PlatformIcons;
-import com.intellij.util.Processor;
+import com.intellij.util.*;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.completion.insertHandler.AutoImportInsertHandler;
@@ -33,6 +22,8 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.util.*;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>

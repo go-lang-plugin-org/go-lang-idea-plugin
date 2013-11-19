@@ -1,16 +1,5 @@
 package ro.redeul.google.go.compilation;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.make.MakeUtil;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -50,6 +39,9 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkTool;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 import ro.redeul.google.go.util.GoUtil;
+
+import java.io.File;
+import java.util.*;
 
 public class GoCompiler implements TranslatingCompiler {
 

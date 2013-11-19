@@ -1,8 +1,5 @@
 package com.redeul.google.go.spellchecker.tokenizer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -14,6 +11,9 @@ import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GoIdentifierTokenizerStrategy extends SpellcheckingStrategy {
 

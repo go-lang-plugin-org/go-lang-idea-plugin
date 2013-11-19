@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl;
 
-import java.util.Collection;
-
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.diagnostic.Logger;
@@ -29,16 +27,14 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.util.GoUtil;
 import ro.redeul.google.go.util.LookupElementUtil;
+
+import java.util.Collection;
 
 public class GoFileImpl extends PsiFileBase implements GoFile {
 

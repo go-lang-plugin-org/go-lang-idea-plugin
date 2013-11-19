@@ -1,7 +1,5 @@
 package ro.redeul.google.go.inspection.fix;
 
-import java.io.IOException;
-
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -20,6 +18,8 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
+
+import java.io.IOException;
 
 public class RepackageFileFix implements IntentionAction, LocalQuickFix {
 

@@ -1,7 +1,5 @@
 package ro.redeul.google.go.config.facet;
 
-import java.util.List;
-
 import com.intellij.facet.Facet;
 import com.intellij.facet.FacetType;
 import com.intellij.openapi.module.Module;
@@ -9,6 +7,8 @@ import com.intellij.openapi.projectRoots.Sdk;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.

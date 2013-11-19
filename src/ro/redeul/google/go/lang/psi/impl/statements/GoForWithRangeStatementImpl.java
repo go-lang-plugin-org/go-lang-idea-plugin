@@ -9,16 +9,10 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
-import ro.redeul.google.go.lang.psi.typing.GoTypeChannel;
-import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
-import ro.redeul.google.go.lang.psi.typing.GoTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
-import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.hasPrevSiblingOfType;
 
 public class GoForWithRangeStatementImpl extends GoForStatementImpl

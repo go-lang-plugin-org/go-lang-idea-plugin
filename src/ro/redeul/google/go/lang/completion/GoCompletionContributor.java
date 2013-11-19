@@ -1,11 +1,6 @@
 package ro.redeul.google.go.lang.completion;
 
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionInitializationContext;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionProvider;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -19,17 +14,7 @@ import com.intellij.psi.impl.DebugUtil;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.completion.insertHandler.BlockWithCursorBeforeInsertHandler;
-import ro.redeul.google.go.lang.completion.insertHandler.ConstInsertHandler;
-import ro.redeul.google.go.lang.completion.insertHandler.CurlyBracesInsertHandler;
-import ro.redeul.google.go.lang.completion.insertHandler.FunctionInsertHandler;
-import ro.redeul.google.go.lang.completion.insertHandler.IfInsertHandler;
-import ro.redeul.google.go.lang.completion.insertHandler.ImportInsertHandler;
-import ro.redeul.google.go.lang.completion.insertHandler.InlineCurlyBracesInsertHandler;
-import ro.redeul.google.go.lang.completion.insertHandler.KeywordInsertionHandler;
-import ro.redeul.google.go.lang.completion.insertHandler.LiteralFunctionInsertHandler;
-import ro.redeul.google.go.lang.completion.insertHandler.ReturnInsertHandler;
-import ro.redeul.google.go.lang.completion.insertHandler.VarInsertHandler;
+import ro.redeul.google.go.lang.completion.insertHandler.*;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
@@ -39,13 +24,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.statements.GoAssignmentStatement;
-import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
-import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
-import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
-import ro.redeul.google.go.lang.psi.statements.GoGoStatement;
-import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
-import ro.redeul.google.go.lang.psi.statements.GoStatement;
+import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
@@ -55,22 +34,12 @@ import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.not;
 import static com.intellij.patterns.StandardPatterns.or;
-import static ro.redeul.google.go.lang.completion.GoCompletionUtil.builtinFunc;
-import static ro.redeul.google.go.lang.completion.GoCompletionUtil.getImportedPackagesNames;
-import static ro.redeul.google.go.lang.completion.GoCompletionUtil.keyword;
-import static ro.redeul.google.go.lang.completion.GoCompletionUtil.packageElement;
+import static ro.redeul.google.go.lang.completion.GoCompletionUtil.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

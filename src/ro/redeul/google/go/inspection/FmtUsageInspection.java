@@ -1,7 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.Arrays;
-
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nls;
@@ -17,6 +15,9 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+
+import java.util.Arrays;
+
 import static ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral.Type.InterpretedString;
 import static ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral.Type.RawString;
 

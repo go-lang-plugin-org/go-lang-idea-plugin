@@ -1,8 +1,5 @@
 package ro.redeul.google.go.actions;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.intellij.facet.FacetManager;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.actions.CreateTemplateInPackageAction;
@@ -20,6 +17,9 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.lang.psi.GoFile;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>

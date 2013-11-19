@@ -17,6 +17,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeFunction;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public abstract class AbstractCallOrConversionReference<Reference extends AbstractCallOrConversionReference<Reference>>

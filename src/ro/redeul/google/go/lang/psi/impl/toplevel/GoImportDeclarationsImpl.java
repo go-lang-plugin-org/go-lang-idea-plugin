@@ -4,13 +4,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.scope.util.PsiScopesUtil;
+import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -38,6 +38,6 @@ public class GoImportDeclarationsImpl extends GoPsiElementBase implements GoImpo
                                        PsiElement lastParent, @NotNull PsiElement place) {
 
         // don't process recursively imported names (yet).
-        return !state.get(GoResolveStates.IsOriginalPackage) || !state.get(GoResolveStates.IsOriginalFile) || PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
+        return !state.get(GoResolveStates.IsOriginalPackage) || !state.get(GoResolveStates.IsOriginalFile) || GoPsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
     }
 }

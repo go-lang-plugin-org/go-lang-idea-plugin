@@ -11,22 +11,12 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.statements.GoBreakStatement;
-import ro.redeul.google.go.lang.psi.statements.GoContinueStatement;
-import ro.redeul.google.go.lang.psi.statements.GoGotoStatement;
-import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
-import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
-import ro.redeul.google.go.lang.psi.statements.GoStatement;
+import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.intellij.psi.util.PsiTreeUtil.findCommonParent;
 import static com.intellij.psi.util.PsiTreeUtil.isAncestor;

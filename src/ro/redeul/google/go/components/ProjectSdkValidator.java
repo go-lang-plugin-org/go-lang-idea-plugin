@@ -1,8 +1,5 @@
 package ro.redeul.google.go.components;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -17,6 +14,9 @@ import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectSdkValidator extends AbstractProjectComponent {
     public ProjectSdkValidator(Project project) {

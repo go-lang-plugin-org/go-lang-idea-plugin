@@ -1,18 +1,9 @@
 package ro.redeul.google.go.runner;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.CommandLineState;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -35,6 +26,10 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.runner.ui.GoRunConfigurationEditorForm;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

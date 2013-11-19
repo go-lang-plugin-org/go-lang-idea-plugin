@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
-import java.util.Collection;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -18,6 +16,9 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+
+import java.util.Collection;
+
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAbsoluteImportPath;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getContainingGoFile;
 

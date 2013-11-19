@@ -1,6 +1,9 @@
 package ro.redeul.google.go.lang.psi.stubs.elements;
 
-import com.intellij.psi.stubs.*;
+import com.intellij.psi.stubs.IndexSink;
+import com.intellij.psi.stubs.StubElement;
+import com.intellij.psi.stubs.StubInputStream;
+import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.util.io.StringRef;
 import ro.redeul.google.go.lang.psi.impl.toplevel.GoTypeNameDeclarationImpl;
 import ro.redeul.google.go.lang.psi.stubs.GoStubUtils;

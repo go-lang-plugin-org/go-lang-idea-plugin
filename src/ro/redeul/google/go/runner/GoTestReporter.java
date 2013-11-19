@@ -4,11 +4,7 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder;
 
-import static jetbrains.buildServer.messages.serviceMessages.ServiceMessageTypes.TEST_SUITE_FINISHED;
-import static jetbrains.buildServer.messages.serviceMessages.ServiceMessageTypes.TEST_SUITE_STARTED;
-import static jetbrains.buildServer.messages.serviceMessages.ServiceMessageTypes.TEST_STARTED;
-import static jetbrains.buildServer.messages.serviceMessages.ServiceMessageTypes.TEST_FINISHED;
-import static jetbrains.buildServer.messages.serviceMessages.ServiceMessageTypes.TEST_FAILED;
+import static jetbrains.buildServer.messages.serviceMessages.ServiceMessageTypes.*;
 
 /**
  * GoTestReporter reports test progress to Intellij IDEA via ServiceMessage.

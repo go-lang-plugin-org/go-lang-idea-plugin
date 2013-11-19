@@ -1,17 +1,10 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.scope.util.PsiScopesUtil;
+import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -23,12 +16,10 @@ import ro.redeul.google.go.lang.psi.resolve.MethodResolver;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
-import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.util.LookupElementUtil;
+
+import java.util.*;
 
 public class MethodReference
     extends GoPsiReference.Single<GoSelectorExpression, MethodReference> {
@@ -45,7 +36,7 @@ public class MethodReference
 
                 GoSelectorExpression element = methodReference.getElement();
 
-                PsiScopesUtil.treeWalkUp(
+                GoPsiScopesUtil.treeWalkUp(
                     processor,
                     element.getContainingFile().getLastChild(),
                     element.getContainingFile(),
@@ -111,7 +102,7 @@ public class MethodReference
             }
         };
 
-        PsiScopesUtil.treeWalkUp(
+        GoPsiScopesUtil.treeWalkUp(
             processor,
             getElement().getContainingFile().getLastChild(),
             getElement().getContainingFile(),

@@ -1,9 +1,5 @@
 package ro.redeul.google.go.lang.parser;
 
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
@@ -19,6 +15,10 @@ import ro.redeul.google.go.lang.parser.parsing.statements.Statements;
 import ro.redeul.google.go.lang.parser.parsing.toplevel.CompilationUnit;
 import ro.redeul.google.go.lang.parser.parsing.types.Types;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
+
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

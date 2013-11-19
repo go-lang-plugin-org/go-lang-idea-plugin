@@ -54,7 +54,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;

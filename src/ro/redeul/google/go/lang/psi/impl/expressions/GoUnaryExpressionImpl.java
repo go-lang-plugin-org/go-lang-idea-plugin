@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.typing.GoTypeChannel;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+
 import static ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression.Op.Channel;
 
 public class GoUnaryExpressionImpl extends GoExpressionBase

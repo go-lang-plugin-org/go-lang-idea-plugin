@@ -13,7 +13,8 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class CompositeElementOfStructFieldReference
     extends AbstractStructFieldsReference<GoLiteralIdentifier, CompositeElementOfStructFieldReference> {

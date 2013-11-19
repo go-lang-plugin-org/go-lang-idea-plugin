@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -12,6 +10,8 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.completion.GoCompletionContributor;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class GoPsiReference<
     GoPsi extends PsiElement,

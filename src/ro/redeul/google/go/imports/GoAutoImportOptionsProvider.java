@@ -1,10 +1,10 @@
 package ro.redeul.google.go.imports;
 
-import javax.swing.*;
-
 import com.intellij.application.options.editor.AutoImportOptionsProvider;
 import com.intellij.openapi.options.ConfigurationException;
 import ro.redeul.google.go.options.GoSettings;
+
+import javax.swing.*;
 
 public class GoAutoImportOptionsProvider implements AutoImportOptionsProvider {
 

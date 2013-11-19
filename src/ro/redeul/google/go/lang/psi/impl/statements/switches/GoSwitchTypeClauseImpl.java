@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl.statements.switches;
 
-import java.util.List;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
@@ -15,6 +13,8 @@ import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+
+import java.util.List;
 
 public class GoSwitchTypeClauseImpl extends GoPsiElementBase
     implements GoSwitchTypeClause {

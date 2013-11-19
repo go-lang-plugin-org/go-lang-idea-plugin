@@ -15,13 +15,10 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.string;
-import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.Complex128;
-import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.Complex64;
-import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.Float32;
-import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.Float64;
-import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.Int;
+import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.*;
 import static ro.redeul.google.go.lang.psi.typing.GoTypes.getBuiltin;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 

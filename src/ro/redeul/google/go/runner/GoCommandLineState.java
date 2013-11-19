@@ -1,13 +1,6 @@
 package ro.redeul.google.go.runner;
 
-import java.io.File;
-import java.util.HashMap;
-
-import com.intellij.execution.CantRunException;
-import com.intellij.execution.DefaultExecutionResult;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ExecutionResult;
-import com.intellij.execution.Executor;
+import com.intellij.execution.*;
 import com.intellij.execution.configurations.CommandLineState;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
@@ -22,6 +15,10 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.runner.ui.properties.GoTestConsoleProperties;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.io.File;
+import java.util.HashMap;
+
 import static com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil.createAndAttachConsole;
 import static ro.redeul.google.go.sdk.GoSdkUtil.prependToGoPath;
 
@@ -103,8 +100,7 @@ class GoCommandLineState extends CommandLineState {
         String packageDir = consoleProperties.getConfiguration().packageDir;
         processHandler.addProcessListener(new GoTestProcessListener(processHandler, packageDir));
 
-        ConsoleView console = createAndAttachConsole("GoTest", processHandler, consoleProperties,
-                getEnvironment());
+        ConsoleView console = createAndAttachConsole("GoTest", processHandler, consoleProperties, getEnvironment());
         Project project = consoleProperties.getProject();
         console.addMessageFilter(new GoTestConsoleFilter(project, packageDir));
         return new DefaultExecutionResult(console, processHandler, createActions(console, processHandler, executor));

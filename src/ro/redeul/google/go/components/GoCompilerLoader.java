@@ -1,8 +1,5 @@
 package ro.redeul.google.go.components;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import com.intellij.compiler.CompilerWorkspaceConfiguration;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
@@ -11,10 +8,13 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
-import ro.redeul.google.go.compilation.GoInstallCompiler;
 import ro.redeul.google.go.compilation.GoCompiler;
+import ro.redeul.google.go.compilation.GoInstallCompiler;
 import ro.redeul.google.go.compilation.GoMakefileCompiler;
 import ro.redeul.google.go.ide.GoProjectSettings;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>

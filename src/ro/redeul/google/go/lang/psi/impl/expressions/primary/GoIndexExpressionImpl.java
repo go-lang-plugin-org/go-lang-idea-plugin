@@ -10,11 +10,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeArray;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeMap;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeSlice;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
-import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
-import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoIndexExpressionImpl extends GoExpressionBase

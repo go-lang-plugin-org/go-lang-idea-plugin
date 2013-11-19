@@ -14,11 +14,8 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
-import static ro.redeul.google.go.inspection.InspectionUtil.UNKNOWN_COUNT;
-import static ro.redeul.google.go.inspection.InspectionUtil.checkExpressionShouldReturnOneResult;
-import static ro.redeul.google.go.inspection.InspectionUtil.getExpressionResultCount;
+import static ro.redeul.google.go.inspection.InspectionUtil.*;
 import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.getCallFunctionIdentifier;
-import static ro.redeul.google.go.inspection.InspectionUtil.getFunctionParameterCount;
 import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 public class FunctionCallInspection extends AbstractWholeGoFileInspection {

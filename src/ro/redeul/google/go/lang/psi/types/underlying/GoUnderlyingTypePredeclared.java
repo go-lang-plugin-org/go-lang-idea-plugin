@@ -1,10 +1,10 @@
 package ro.redeul.google.go.lang.psi.types.underlying;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GoUnderlyingTypePredeclared implements GoUnderlyingType {
 

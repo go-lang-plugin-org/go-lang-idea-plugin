@@ -9,7 +9,7 @@ import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.ShortVarDeclarationResolver;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
  * ShortVarDeclarationReference is a reference of identifier defined in short variable declaration.

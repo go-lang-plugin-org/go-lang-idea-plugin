@@ -1,18 +1,5 @@
 package ro.redeul.google.go.sdk;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static java.lang.String.format;
-
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.CapturingProcessHandler;
@@ -32,13 +19,21 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.SystemProperties;
-import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
-import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
-import ro.redeul.google.go.config.sdk.GoSdkData;
-import ro.redeul.google.go.config.sdk.GoSdkType;
-import ro.redeul.google.go.config.sdk.GoTargetArch;
-import ro.redeul.google.go.config.sdk.GoTargetOs;
+import ro.redeul.google.go.config.sdk.*;
 import ro.redeul.google.go.util.GoUtil;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.lang.String.format;
 
 public class GoSdkUtil {
 

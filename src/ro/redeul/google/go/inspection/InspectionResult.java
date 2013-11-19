@@ -1,8 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -10,6 +7,9 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InspectionResult {
     private final InspectionManager manager;

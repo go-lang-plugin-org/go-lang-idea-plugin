@@ -1,9 +1,5 @@
 package ro.redeul.google.go.lang.psi.processors;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.*;
-
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
@@ -13,6 +9,10 @@ import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

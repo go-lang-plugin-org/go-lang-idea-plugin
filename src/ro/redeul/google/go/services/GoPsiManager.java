@@ -1,7 +1,5 @@
 package ro.redeul.google.go.services;
 
-import java.util.concurrent.ConcurrentMap;
-
 import com.intellij.ProjectTopics;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -18,6 +16,8 @@ import com.intellij.util.containers.ConcurrentWeakHashMap;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

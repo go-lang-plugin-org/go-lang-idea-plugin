@@ -1,11 +1,5 @@
 package ro.redeul.google.go.imports;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.intellij.codeHighlighting.TextEditorHighlightingPass;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.ShowAutoImportPass;
@@ -35,12 +29,11 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.options.GoSettings;
 
+import java.util.*;
+
 import static com.intellij.psi.util.PsiTreeUtil.findElementOfClassAtRange;
 import static ro.redeul.google.go.lang.psi.utils.GoFileUtils.isPackageNameImported;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 
 /**
  * This class search for all "Unresolved symbols" highlights, try to prompt user to import

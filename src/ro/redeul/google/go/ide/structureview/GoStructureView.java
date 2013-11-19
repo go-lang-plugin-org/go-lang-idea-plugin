@@ -1,10 +1,6 @@
 package ro.redeul.google.go.ide.structureview;
 
-import com.intellij.ide.structureView.StructureViewBuilder;
-import com.intellij.ide.structureView.StructureViewModel;
-import com.intellij.ide.structureView.StructureViewTreeElement;
-import com.intellij.ide.structureView.TextEditorBasedStructureViewModel;
-import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
+import com.intellij.ide.structureView.*;
 import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;

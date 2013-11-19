@@ -1,7 +1,9 @@
 package ro.redeul.google.go.config.ui;
 
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.projectRoots.*;
+import com.intellij.openapi.projectRoots.AdditionalDataConfigurable;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkAdditionalData;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 

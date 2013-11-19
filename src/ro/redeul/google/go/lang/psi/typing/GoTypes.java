@@ -1,29 +1,20 @@
 package ro.redeul.google.go.lang.psi.typing;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import com.intellij.util.Function;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
+import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.services.GoPsiManager;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class GoTypes {
 

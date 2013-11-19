@@ -11,9 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static ro.redeul.google.go.testIntegration.TestUtil.getPsiFile;
-import static ro.redeul.google.go.testIntegration.TestUtil.getTestFileName;
-import static ro.redeul.google.go.testIntegration.TestUtil.isTestFile;
+import static ro.redeul.google.go.testIntegration.TestUtil.*;
 
 public class GoTestFinder implements TestFinder {
 

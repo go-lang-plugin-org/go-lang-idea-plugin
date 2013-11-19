@@ -12,7 +12,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public class ShortVarDeclarationResolver {

@@ -1,7 +1,5 @@
 package ro.redeul.google.go.config.facet;
 
-import java.util.List;
-
 import com.intellij.facet.FacetConfiguration;
 import com.intellij.facet.ui.FacetEditorContext;
 import com.intellij.facet.ui.FacetEditorTab;
@@ -22,6 +20,8 @@ import org.jdom.Element;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.config.ui.GoFacetTab;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.

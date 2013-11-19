@@ -1,9 +1,9 @@
 package ro.redeul.google.go.ide;
 
-import javax.swing.*;
-
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.project.Project;
+
+import javax.swing.*;
 
 /**
  * User: mtoader

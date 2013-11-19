@@ -1,9 +1,5 @@
 package ro.redeul.google.go.components;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.ApplicationComponent;
@@ -17,6 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

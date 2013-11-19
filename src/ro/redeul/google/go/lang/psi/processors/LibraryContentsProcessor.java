@@ -1,8 +1,5 @@
 package ro.redeul.google.go.lang.psi.processors;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
@@ -14,6 +11,9 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class LibraryContentsProcessor extends BaseScopeProcessor {
 

@@ -6,9 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
-import static ro.redeul.google.go.inspection.fix.FixUtil.isOnlyConstDeclaration;
-import static ro.redeul.google.go.inspection.fix.FixUtil.isOnlyVarDeclaration;
-import static ro.redeul.google.go.inspection.fix.FixUtil.removeWholeElement;
+import static ro.redeul.google.go.inspection.fix.FixUtil.*;
 
 public class DeleteStmtFix implements LocalQuickFix {
 
