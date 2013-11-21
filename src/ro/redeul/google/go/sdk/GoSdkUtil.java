@@ -210,7 +210,11 @@ public class GoSdkUtil {
         sdkData.GO_HOME_PATH = format("%s/goroot", path);
 
         GeneralCommandLine command = new GeneralCommandLine();
-        command.setExePath(sdkData.GO_HOME_PATH + "/bin/go");
+        if(checkFileExists(sdkData.GO_HOME_PATH + "/bin/go")) {
+            command.setExePath(sdkData.GO_HOME_PATH + "/bin/go");
+        } else {
+            command.setExePath(sdkData.GO_HOME_PATH + "/bin/goapp");
+        }
         command.addParameter("env");
         command.setWorkDirectory(sdkData.GO_HOME_PATH + "/bin");
 
