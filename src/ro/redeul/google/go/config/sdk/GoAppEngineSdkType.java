@@ -98,8 +98,13 @@ public class GoAppEngineSdkType extends SdkType {
         if ( sdkData == null )
             return;
 
-        final VirtualFile librariesRoot =
-                homeDirectory.findFileByRelativePath(String.format("goroot/pkg/%s_%s/", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName()));
+        String libPath = String.format("goroot/pkg/%s_%s/", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName());
+        String newLibPath = String.format("goroot/pkg/%s_%s_appengine/", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName());
+
+        final VirtualFile librariesRoot = (homeDirectory.findFileByRelativePath(libPath)==null?
+                homeDirectory.findFileByRelativePath(newLibPath):
+                homeDirectory.findFileByRelativePath(libPath)
+        );
 
         final VirtualFile sourcesRoot = homeDirectory.findFileByRelativePath("goroot/src/pkg/");
 
@@ -113,9 +118,13 @@ public class GoAppEngineSdkType extends SdkType {
         final SdkModificator sdkModificator = sdk.getSdkModificator();
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             public void run() {
-                sdkModificator.addRoot(librariesRoot, OrderRootType.CLASSES);
-                sdkModificator.addRoot(sourcesRoot, OrderRootType.CLASSES);
-                sdkModificator.addRoot(sourcesRoot, OrderRootType.SOURCES);
+                if (librariesRoot != null) {
+                    sdkModificator.addRoot(librariesRoot, OrderRootType.CLASSES);
+                }
+                if (sourcesRoot != null) {
+                    sdkModificator.addRoot(sourcesRoot, OrderRootType.CLASSES);
+                    sdkModificator.addRoot(sourcesRoot, OrderRootType.SOURCES);
+                }
             }
         });
 
