@@ -23,11 +23,10 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.facet.GoFacetType;
-import ro.redeul.google.go.lang.psi.GoFile;
 
 import static ro.redeul.google.go.actions.GoTemplatesFactory.Template;
 
-public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile>
+public class NewGoApplicationAction extends CreateTemplateInPackageAction<PsiElement>
     implements DumbAware {
 
     public NewGoApplicationAction() {
@@ -35,7 +34,7 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
     }
 
     @Override
-    protected PsiElement getNavigationElement(@NotNull GoFile file) {
+    protected PsiElement getNavigationElement(@NotNull PsiElement file) {
         return file;
     }
 
@@ -108,7 +107,7 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<GoFile
     }
 
     @Override
-    protected GoFile doCreate(PsiDirectory dir, String fileName, String templateName) throws IncorrectOperationException {
+    protected PsiElement doCreate(PsiDirectory dir, String fileName, String templateName) throws IncorrectOperationException {
 
         Template template = Template.GoFile;
 

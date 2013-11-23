@@ -25,7 +25,7 @@ import java.util.Set;
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
  *         Date: Jun 2, 2012
  */
-public class NewGoFileAction extends CreateTemplateInPackageAction<GoFile>
+public class NewGoFileAction extends CreateTemplateInPackageAction<PsiElement>
     implements DumbAware {
 
     public NewGoFileAction() {
@@ -35,7 +35,7 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<GoFile>
     }
 
     @Override
-    protected PsiElement getNavigationElement(@NotNull GoFile file) {
+    protected PsiElement getNavigationElement(@NotNull PsiElement file) {
         return file;
     }
 
@@ -71,7 +71,7 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<GoFile>
     }
 
     @Override
-    protected GoFile doCreate(PsiDirectory dir, String parameterName,
+    protected PsiElement doCreate(PsiDirectory dir, String parameterName,
                               String typeName)
         throws IncorrectOperationException {
         GoTemplatesFactory.Template template = GoTemplatesFactory.Template.GoFile;

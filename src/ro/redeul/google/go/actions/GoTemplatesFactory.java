@@ -2,19 +2,20 @@ package ro.redeul.google.go.actions;
 
 import com.intellij.ide.fileTemplates.*;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.lang.psi.GoFile;
 
 import java.util.Properties;
 
 public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
 
     public enum Template {
-        GoAppMain("Go Application"), GoFile("Go File"), GoTestFile("Go Test File");
+        GoAppMain("Go Application"), GoFile("Go File"), GoTestFile("Go Test File"),
+        GoAppEngineMain("Go App Engine Application"), GoAppEngineConfig("Go App Engine YAML");
 
         final String file;
         Template(String file) {
@@ -38,7 +39,7 @@ public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
         return group;
     }
 
-    public static GoFile createFromTemplate(PsiDirectory directory, String name, String fileName, Template template) {
+    public static PsiElement createFromTemplate(PsiDirectory directory, String name, String fileName, Template template) {
 
         final FileTemplate fileTemplate = FileTemplateManager.getInstance().getInternalTemplate(template.getFile());
 
@@ -58,6 +59,6 @@ public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
         final PsiFileFactory factory = PsiFileFactory.getInstance(directory.getProject());
         final PsiFile file = factory.createFileFromText(fileName, GoFileType.INSTANCE, text);
 
-        return (GoFile) directory.add(file);
+        return directory.add(file);
     }
 }

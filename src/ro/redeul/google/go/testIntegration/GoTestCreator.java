@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.testIntegration.TestCreator;
@@ -52,9 +53,9 @@ public class GoTestCreator implements TestCreator {
             public void run() {
                 GoTemplatesFactory.Template template = GoTemplatesFactory.Template.GoTestFile;
                 String packageName = ((GoFile) file).getPackageName();
-                GoFile test = GoTemplatesFactory.createFromTemplate(psiDir, packageName, testFileName, template);
+                PsiElement test = GoTemplatesFactory.createFromTemplate(psiDir, packageName, testFileName, template);
                 if (test != null) {
-                    test.navigate(true);
+                    if (test instanceof GoFile) ((GoFile) test).navigate(true);
                 }
             }
         });

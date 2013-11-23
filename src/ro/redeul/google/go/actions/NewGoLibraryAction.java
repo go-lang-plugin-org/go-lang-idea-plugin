@@ -27,14 +27,14 @@ import java.util.Set;
  * Date: Aug 20, 2010
  * Time: 11:41:58 PM
  */
-public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> implements DumbAware {
+public class NewGoLibraryAction extends CreateTemplateInPackageAction<PsiElement> implements DumbAware {
 
     public NewGoLibraryAction() {
         super(GoBundle.message("new.go.lib"), GoBundle.message("new.go.lib.description"), GoIcons.GO_ICON_16x16, JavaModuleSourceRootTypes.SOURCES);
     }
 
     @Override
-    protected PsiElement getNavigationElement(@NotNull GoFile file) {
+    protected PsiElement getNavigationElement(@NotNull PsiElement file) {
         return file;
     }
 
@@ -63,7 +63,7 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<GoFile> im
     }
 
     @Override
-    protected GoFile doCreate(PsiDirectory dir, String parameterName, String typeName) throws IncorrectOperationException {
+    protected PsiElement doCreate(PsiDirectory dir, String parameterName, String typeName) throws IncorrectOperationException {
         GoTemplatesFactory.Template template = GoTemplatesFactory.Template.GoFile;
 
         String fileName = fileNameFromTypeName(typeName, parameterName);
