@@ -36,7 +36,8 @@ public class GoAppEngineModuleBuilder extends JavaModuleBuilder implements Sourc
         PsiDirectory directory = PsiManager.getInstance(module.getProject()).findDirectory(sourceRoots[0]);
 
         if ( directory != null ) {
-            GoTemplatesFactory.createFromTemplate(directory, "main", "main.go", GoTemplatesFactory.Template.GoAppMain);
+            GoTemplatesFactory.createFromTemplate(directory, "main", "main.go", GoTemplatesFactory.Template.GoAppEngineMain);
+            GoTemplatesFactory.createFromTemplate(directory.getParent(), "yaml", "app.yaml", GoTemplatesFactory.Template.GoAppEngineConfig);
         }
     }
 
