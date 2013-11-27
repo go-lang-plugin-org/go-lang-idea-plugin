@@ -76,8 +76,11 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
 
     public void readExternal(final Element element) throws InvalidDataException {
         PathMacroManager.getInstance(getProject()).expandPaths(element);
-        XmlSerializer.deserializeInto(this, element);
+        super.readExternal(element);
         readModule(element);
+        try{
+            XmlSerializer.deserializeInto(this, element);
+        }catch (Exception e) {}
     }
 
     public void writeExternal(final Element element) throws WriteExternalException {

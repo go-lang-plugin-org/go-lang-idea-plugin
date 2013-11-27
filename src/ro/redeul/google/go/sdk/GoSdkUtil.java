@@ -565,6 +565,6 @@ public class GoSdkUtil {
 
     public static String prependToGoPath(String prependedPath) {
         return format("%s%s%s", prependedPath, File.pathSeparator,
-                      System.getProperty("GOPATH", ""));
+                      System.getenv("GOPATH"));
     }
 }
