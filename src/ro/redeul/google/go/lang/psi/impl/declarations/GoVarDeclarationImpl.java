@@ -63,7 +63,7 @@ public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDecla
         GoLiteralIdentifier[] identifiers = getIdentifiers();
         GoExpr[] expressions = getExpressions();
 
-        List<GoType> types = new ArrayList<>();
+        List<GoType> types = new ArrayList<GoType>();
         for (GoExpr expression : expressions) {
             Collections.addAll(types, expression.getType());
         }

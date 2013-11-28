@@ -57,7 +57,7 @@ public class GoTestFinder implements TestFinder {
             return Collections.emptyList();
         }
 
-        List<PsiElement> tests = new ArrayList<>();
+        List<PsiElement> tests = new ArrayList<PsiElement>();
         for (VirtualFile virtualFile : file.getParent().getChildren()) {
             if (isTestFile(virtualFile)) {
                 PsiFile psiFile = getPsiFile(containingFile.getProject(), virtualFile);

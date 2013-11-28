@@ -30,7 +30,7 @@ class NamedTypeVariantsCollector extends BaseScopeProcessor {
             "byte", "uint", "int", "float", "complex", "uintptr", "bool", "string"
     };
 
-    private final List<LookupElement> variants = new ArrayList<>();
+    private final List<LookupElement> variants = new ArrayList<LookupElement>();
 
     public boolean execute(PsiElement element, ResolveState state) {
 

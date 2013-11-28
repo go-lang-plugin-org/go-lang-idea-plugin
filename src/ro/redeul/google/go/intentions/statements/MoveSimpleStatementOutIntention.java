@@ -192,7 +192,7 @@ public class MoveSimpleStatementOutIntention extends Intention {
 
     private static List<GoIfStatement> findAllDependentIfs(GoIfStatement ifStatement,
                                                            GoSimpleStatement simpleStatement) {
-        final List<GoIfStatement> dependentIfs = new ArrayList<>();
+        final List<GoIfStatement> dependentIfs = new ArrayList<GoIfStatement>();
         final Set<GoIfStatement> outerIfs = findAllOuterIfs(ifStatement);
 
         new GoRecursiveElementVisitor() {
@@ -219,7 +219,7 @@ public class MoveSimpleStatementOutIntention extends Intention {
     }
 
     private static Set<GoIfStatement> findAllOuterIfs(GoIfStatement ifStatement) {
-        final Set<GoIfStatement> outerIfs = new HashSet<>();
+        final Set<GoIfStatement> outerIfs = new HashSet<GoIfStatement>();
         while (ifStatement != null && ifStatement.getParent() instanceof GoIfStatement) {
             ifStatement = (GoIfStatement) ifStatement.getParent();
             outerIfs.add(ifStatement);

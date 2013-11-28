@@ -157,7 +157,7 @@ public class InvertIfIntention extends Intention {
             return Collections.emptyList();
         }
 
-        List<PsiElement> siblings = new ArrayList<>();
+        List<PsiElement> siblings = new ArrayList<PsiElement>();
         while ((element = element.getNextSibling()) != null) {
             siblings.add(element);
         }

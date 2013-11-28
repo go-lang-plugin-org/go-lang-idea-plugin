@@ -68,7 +68,7 @@ public class GoModuleType extends ModuleType<GoModuleBuilder> {
     @Override
     public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext, GoModuleBuilder moduleBuilder, ModulesProvider modulesProvider)
     {
-        List<ModuleWizardStep> steps = new ArrayList<>();
+        List<ModuleWizardStep> steps = new ArrayList<ModuleWizardStep>();
 
         ProjectWizardStepFactory factory = ProjectWizardStepFactory.getInstance();
 
@@ -76,7 +76,7 @@ public class GoModuleType extends ModuleType<GoModuleBuilder> {
 //        steps.add(factory.createProjectJdkStep(wizardContext));
 //        steps.add(new AndroidModuleWizardStep(moduleBuilder, wizardContext.getProject()));
         steps.add(factory.createSourcePathsStep(wizardContext, moduleBuilder, null, "reference.dialogs.new.project.fromScratch.source"));
-        steps.add(factory.createProjectJdkStep(wizardContext, SdkType.findInstance(GoSdkType.class), moduleBuilder, new Computable.PredefinedValueComputable<>(true), null, ""));
+        steps.add(factory.createProjectJdkStep(wizardContext, SdkType.findInstance(GoSdkType.class), moduleBuilder, new Computable.PredefinedValueComputable<Boolean>(true), null, ""));
 //        steps.add(new GoModuleWizardStep(moduleBuilder, wizardContext.getProject()));
         return steps.toArray(new ModuleWizardStep[steps.size()]);
     }

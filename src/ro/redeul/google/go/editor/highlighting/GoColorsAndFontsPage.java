@@ -104,7 +104,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     }
 
     public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
-        final Map<String, TextAttributesKey> map = new HashMap<>();
+        final Map<String, TextAttributesKey> map = new HashMap<String, TextAttributesKey>();
 
         map.put("unused.parameter", CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES);
         map.put("unused.import", CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES);

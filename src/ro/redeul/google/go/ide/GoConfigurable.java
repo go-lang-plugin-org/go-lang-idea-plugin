@@ -104,20 +104,20 @@ public class GoConfigurable implements SearchableConfigurable {
             compilerManager.addTranslatingCompiler(
                     new GoCompiler(project),
                     new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
-                    new HashSet<>(Arrays.asList(FileType.EMPTY_ARRAY)));
+                    new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
 
             break;
         case Makefile:
             compilerManager.addTranslatingCompiler(
                     new GoMakefileCompiler(project),
                     new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
-                    new HashSet<>(Arrays.asList(FileType.EMPTY_ARRAY)));
+                    new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
             break;
         case Install:
             compilerManager.addTranslatingCompiler(
                     new GoInstallCompiler(project),
                     new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
-                    new HashSet<>(Arrays.asList(FileType.EMPTY_ARRAY)));
+                    new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
         }
     }
 

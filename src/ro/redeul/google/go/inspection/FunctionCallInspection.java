@@ -35,16 +35,15 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
 
                 GoPrimaryExpression baseExpression = expression.getBaseExpression();
                 String expressionText = baseExpression.getText();
-                switch (expressionText) {
-                    case "make":
-                        checkMakeCall(expression, result);
-                        break;
-                    case "new":
-                        checkNewCall(expression, result);
-                        break;
-                    default:
-                        checkFunctionCallArguments(expression, result);
-                        break;
+                if (expressionText.equals("make")) {
+                    checkMakeCall(expression, result);
+
+                } else if (expressionText.equals("new")) {
+                    checkNewCall(expression, result);
+
+                } else {
+                    checkFunctionCallArguments(expression, result);
+
                 }
             }
         }.visitFile(file);

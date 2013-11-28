@@ -71,7 +71,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             return null;
         }
 
-        Set<String> imported = new HashSet<>();
+        Set<String> imported = new HashSet<String>();
         for (GoImportDeclarations ids : file.getImportDeclarations()) {
             for (GoImportDeclaration id : ids.getDeclarations()) {
                 String name = id.getPackageName();
@@ -141,7 +141,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
     public static List<String> getPackagesByName(Collection<String> allPackages,
                                                  String expectedName) {
-        List<String> packageFiles = new ArrayList<>();
+        List<String> packageFiles = new ArrayList<String>();
         for (String p : allPackages) {
             if (expectedName.equals(p) || p.endsWith(
                 "/" + expectedName)) {
@@ -233,7 +233,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                     return;
                 }
 
-                List<String> allPackages = new ArrayList<>(
+                List<String> allPackages = new ArrayList<String>(
                     data.projectPackages);
                 allPackages.addAll(data.sdkPackages);
                 String importMessage = getPromptMessage(allPackages);

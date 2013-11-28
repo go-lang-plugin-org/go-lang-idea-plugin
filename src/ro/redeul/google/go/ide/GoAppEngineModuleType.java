@@ -65,7 +65,7 @@ public class GoAppEngineModuleType extends ModuleType<GoAppEngineModuleBuilder> 
     @Override
     public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext, GoAppEngineModuleBuilder moduleBuilder, ModulesProvider modulesProvider)
     {
-        List<ModuleWizardStep> steps = new ArrayList<>();
+        List<ModuleWizardStep> steps = new ArrayList<ModuleWizardStep>();
 
 //        ProjectWizardStepFactory factory = ProjectWizardStepFactory.getInstance();
 //        steps.add(factory.createSourcePathsStep(wizardContext, moduleBuilder, null, "reference.dialogs.new.project.fromScratch.source"));

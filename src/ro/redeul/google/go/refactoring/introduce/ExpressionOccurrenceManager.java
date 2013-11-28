@@ -30,7 +30,7 @@ class ExpressionOccurrenceManager {
     private static final TokenSet VAR_DECL_TYPE =
             TokenSet.create(VAR_DECLARATION, CONST_DECLARATION, SHORT_VAR_STATEMENT);
 
-    private final List<GoExpr> occurrences = new ArrayList<>();
+    private final List<GoExpr> occurrences = new ArrayList<GoExpr>();
     private final GoExpr expr;
     private final GoFunctionDeclaration parentFunction;
 
@@ -74,7 +74,7 @@ class ExpressionOccurrenceManager {
     }
 
     private Set<PsiElement> getParentsOfIdentifierDeclarations(Map<GoLiteralIdentifier, PsiElement> identifiers) {
-        Set<PsiElement> parents = new HashSet<>();
+        Set<PsiElement> parents = new HashSet<PsiElement>();
         for (PsiElement element : identifiers.values()) {
             GoStatement statement = findParentOfType(element, GoStatement.class);
             if (statement != null) {
@@ -85,7 +85,7 @@ class ExpressionOccurrenceManager {
     }
 
     private Map<GoLiteralIdentifier, PsiElement> getAllLocalIdentifiers() {
-        final Map<GoLiteralIdentifier, PsiElement> identifiers = new HashMap<>();
+        final Map<GoLiteralIdentifier, PsiElement> identifiers = new HashMap<GoLiteralIdentifier, PsiElement>();
         final AtomicBoolean error = new AtomicBoolean(false);
         new GoRecursiveElementVisitor() {
             @Override

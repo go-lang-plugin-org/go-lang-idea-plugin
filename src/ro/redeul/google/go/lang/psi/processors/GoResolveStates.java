@@ -36,11 +36,11 @@ public class GoResolveStates {
                 .put(IsOriginalPackage, true);
     }
 
-    private static final Key<Boolean> ResolvingVariables = new Key<>("ResolvingVariables");
-    public static final Key<Boolean> IsOriginalFile = new Key<>("IsOriginalFile");
-    public static final Key<Boolean> IsOriginalPackage = new Key<>("IsOriginalPackage");
+    private static final Key<Boolean> ResolvingVariables = new Key<Boolean>("ResolvingVariables");
+    public static final Key<Boolean> IsOriginalFile = new Key<Boolean>("IsOriginalFile");
+    public static final Key<Boolean> IsOriginalPackage = new Key<Boolean>("IsOriginalPackage");
 
-    public static final Key<String> VisiblePackageName = new Key<>("VisiblePackageName");
+    public static final Key<String> VisiblePackageName = new Key<String>("VisiblePackageName");
 
-    public static final Key<String> PackageName = new Key<>("PackageName");
+    public static final Key<String> PackageName = new Key<String>("PackageName");
 }

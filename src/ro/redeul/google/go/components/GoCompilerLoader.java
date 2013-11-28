@@ -65,13 +65,13 @@ public class GoCompilerLoader extends AbstractProjectComponent {
                 compilerManager.addTranslatingCompiler(
                     new GoMakefileCompiler(myProject),
                     new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
-                    new HashSet<>(Arrays.asList(FileType.EMPTY_ARRAY)));
+                    new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
                 break;
             case Install:
                 compilerManager.addTranslatingCompiler(
                         new GoInstallCompiler(myProject),
                         new HashSet<FileType>(Arrays.asList(GoFileType.INSTANCE)),
-                        new HashSet<>(Arrays.asList(FileType.EMPTY_ARRAY)));
+                        new HashSet<FileType>(Arrays.asList(FileType.EMPTY_ARRAY)));
         }
     }
 

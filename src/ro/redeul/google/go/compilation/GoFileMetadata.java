@@ -25,7 +25,7 @@ class GoFileMetadata {
         packageName = file.getPackage().getPackageName();
         main = file.getMainFunction() != null;
 
-        imports = new ArrayList<>();
+        imports = new ArrayList<String>();
 
         GoImportDeclarations[] importDeclarations = file.getImportDeclarations();
 

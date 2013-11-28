@@ -146,7 +146,7 @@ public class GoMakefileCompiler implements TranslatingCompiler {
 
         public List<CompilerMessage> parseStream(String data) {
 
-            List<CompilerMessage> messages = new ArrayList<>();
+            List<CompilerMessage> messages = new ArrayList<CompilerMessage>();
 
             Matcher matcher = pattern.matcher(data);
 

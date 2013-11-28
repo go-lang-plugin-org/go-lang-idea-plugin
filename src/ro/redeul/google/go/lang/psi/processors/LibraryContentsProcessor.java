@@ -19,7 +19,7 @@ class LibraryContentsProcessor extends BaseScopeProcessor {
 
     private final GoQualifiedNameElement qualifiedName;
 
-    private final List<Object> objects = new ArrayList<>();
+    private final List<Object> objects = new ArrayList<Object>();
 
     public LibraryContentsProcessor(GoQualifiedNameElement qualifiedName) {
         this.qualifiedName = qualifiedName;

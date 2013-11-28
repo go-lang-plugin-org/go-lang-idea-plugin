@@ -37,7 +37,7 @@ public class GoParser extends ParserUtils implements PsiParser {
 
     private final EnumSet<ParsingFlag> flags = EnumSet.noneOf(ParsingFlag.class);
 
-    private final Set<String> packageNames = new HashSet<>();
+    private final Set<String> packageNames = new HashSet<String>();
 
     public boolean isSet(ParsingFlag parseFlag) {
         return flags.contains(parseFlag);

@@ -17,7 +17,7 @@ import java.util.Map;
 import static ro.redeul.google.go.lang.lexer.GoTokenTypes.oCOND_AND;
 
 public class FlipBooleanExpression {
-    private static final Map<IElementType, IElementType> BINARY_FLIP = new HashMap<>();
+    private static final Map<IElementType, IElementType> BINARY_FLIP = new HashMap<IElementType, IElementType>();
 
     private static void addBinaryFlip(IElementType type1, IElementType type2) {
         BINARY_FLIP.put(type1, type2);

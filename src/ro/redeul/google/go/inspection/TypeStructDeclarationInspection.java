@@ -75,7 +75,7 @@ public class TypeStructDeclarationInspection
     }
 
     private static void checkFields(GoPsiTypeStruct struct, InspectionResult result) {
-        Set<String> fields = new HashSet<>();
+        Set<String> fields = new HashSet<String>();
         for (GoTypeStructField field : struct.getFields()) {
             if (typeContainsStruct(field.getType(), struct)) {
                 result.addProblem(field, GoBundle.message(

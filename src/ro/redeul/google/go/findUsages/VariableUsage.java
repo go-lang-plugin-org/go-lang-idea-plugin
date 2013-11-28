@@ -7,7 +7,7 @@ import java.util.List;
 
 class VariableUsage {
     public final PsiElement element;
-    private final List<PsiElement> usages = new ArrayList<>();
+    private final List<PsiElement> usages = new ArrayList<PsiElement>();
     public final boolean ignoreAnyProblem;
 
     VariableUsage(PsiElement element) {

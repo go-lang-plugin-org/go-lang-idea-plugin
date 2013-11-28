@@ -26,7 +26,7 @@ public class GoBundle {
 
         if (bundle == null) {
             bundle = ResourceBundle.getBundle(BUNDLE);
-            ourBundle = new SoftReference<>(bundle);
+            ourBundle = new SoftReference<ResourceBundle>(bundle);
         }
         return bundle;
     }

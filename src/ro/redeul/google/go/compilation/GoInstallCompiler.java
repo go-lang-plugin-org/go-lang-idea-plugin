@@ -35,7 +35,7 @@ public class GoInstallCompiler implements TranslatingCompiler {
     public void compile(CompileContext compileContext, Chunk<Module> moduleChunk, VirtualFile[] virtualFiles, OutputSink outputSink) {
 
         String basePath = compileContext.getProject().getBasePath();
-        HashSet<String> packages = new HashSet<>();
+        HashSet<String> packages = new HashSet<String>();
 
         for (VirtualFile vf : virtualFiles) {
             String fullPath = vf.getParent().getPath();
@@ -54,7 +54,7 @@ public class GoInstallCompiler implements TranslatingCompiler {
 
         command.setWorkDirectory(basePath);
 
-        HashMap<String, String> envparams = new HashMap<>();
+        HashMap<String, String> envparams = new HashMap<String, String>();
         envparams.put("GOROOT", projectSdk.getHomePath());
 
         envparams.put("GOPATH", GoSdkUtil.prependToGoPath(project.getBasePath()));

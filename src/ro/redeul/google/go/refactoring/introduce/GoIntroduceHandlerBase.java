@@ -106,8 +106,8 @@ abstract class GoIntroduceHandlerBase implements RefactoringActionHandler {
     }
 
     List<GoExpr> collectExpressions(PsiFile file, int offset) {
-        Set<TextRange> expressionRanges = new HashSet<>();
-        List<GoExpr> expressions = new ArrayList<>();
+        Set<TextRange> expressionRanges = new HashSet<TextRange>();
+        List<GoExpr> expressions = new ArrayList<GoExpr>();
         for (GoExpr expression = PsiTreeUtil.findElementOfClassAtOffset(file, offset, GoExpr.class, false);
              expression != null;
              expression = PsiTreeUtil.getParentOfType(expression, GoExpr.class)) {

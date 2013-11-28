@@ -31,7 +31,7 @@ class GoTypeStructFieldBlock extends GoBlock {
 
     @Override
     protected List<Block> buildChildren() {
-        List<Block> children = new ArrayList<>();
+        List<Block> children = new ArrayList<Block>();
         for (ASTNode child : getGoChildren()) {
             if (isNewLineNode(child.getPsi())) {
                 continue;

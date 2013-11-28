@@ -87,7 +87,7 @@ public class TypeNameReference
     @Override
     public Object[] getVariants() {
 
-        final List<LookupElement> variants = new ArrayList<>();
+        final List<LookupElement> variants = new ArrayList<LookupElement>();
 
         // According to the spec, method receiver type "T" could not be an interface or a pointer.
         final boolean rejectInterfaceAndPointer = TYPE_IN_METHOD_RECEIVER.accepts(getElement());

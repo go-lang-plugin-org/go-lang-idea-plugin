@@ -142,7 +142,7 @@ class GoBlock implements Block, GoElementTypes {
 
     @Nullable
     List<Block> buildChildren() {
-        List<Block> children = new ArrayList<>();
+        List<Block> children = new ArrayList<Block>();
 
         ASTNode prevChild = null;
         for (ASTNode child : getGoChildren()) {
@@ -310,7 +310,7 @@ class GoBlock implements Block, GoElementTypes {
         PsiElement psi = myNode.getPsi();
         if (psi instanceof OuterLanguageElement) {
             TextRange range = myNode.getTextRange();
-            List<ASTNode> childList = new ArrayList<>();
+            List<ASTNode> childList = new ArrayList<ASTNode>();
             PsiFile goFile = psi.getContainingFile()
                                 .getViewProvider()
                                 .getPsi(GoLanguage.INSTANCE);

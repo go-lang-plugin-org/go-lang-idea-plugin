@@ -78,7 +78,7 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
 
         PsiElement element = getElement();
 
-        final List<LookupElementBuilder> variants = new ArrayList<>();
+        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
 
         MethodOrTypeNameResolver processor = new MethodOrTypeNameResolver(this) {
             @Override
