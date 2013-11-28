@@ -63,7 +63,7 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     public void checkConfiguration() throws RuntimeConfigurationException {
         super.checkConfiguration();
 
-        if (getModule() == null)
+        if (getConfigurationModule().getModule() == null)
             throw new RuntimeConfigurationException("A module is required");
 
         if (packageName == null || packageName.isEmpty())
@@ -78,9 +78,7 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
         PathMacroManager.getInstance(getProject()).expandPaths(element);
         super.readExternal(element);
         readModule(element);
-        try{
-            XmlSerializer.deserializeInto(this, element);
-        }catch (Exception e) {}
+        XmlSerializer.deserializeInto(this, element);
     }
 
     public void writeExternal(final Element element) throws WriteExternalException {
@@ -93,10 +91,6 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env)
             throws ExecutionException {
         return new GoCommandLineState(new GoTestConsoleProperties(this, executor), env);
-    }
-
-    public Module getModule() {
-        return getConfigurationModule().getModule();
     }
 
     @Override
