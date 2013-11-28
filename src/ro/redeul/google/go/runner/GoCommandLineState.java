@@ -8,6 +8,7 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -36,6 +37,7 @@ class GoCommandLineState extends CommandLineState {
         GeneralCommandLine commandLine = new GeneralCommandLine();
 
         GoTestConfiguration cfg = consoleProperties.getConfiguration();
+        Module module = cfg.getConfigurationModule().getModule();
         Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(cfg.getProject());
         if ( sdk == null ) {
             throw new CantRunException("No Go Sdk defined for this project");
@@ -46,11 +48,11 @@ class GoCommandLineState extends CommandLineState {
             throw new CantRunException("No Go Sdk defined for this project");
         }
 
-        if ( cfg.getModule() == null || cfg.getModule().getModuleFile() == null ) {
+        if ( module == null || module.getModuleFile() == null ) {
             throw new CantRunException("No module selected for this test configuration");
         }
 
-        final VirtualFile moduleFile = cfg.getModule().getModuleFile();
+        final VirtualFile moduleFile = module.getModuleFile();
         if ( moduleFile == null || moduleFile.getParent() == null) {
             throw new CantRunException("The module does not have a valid parent folder");
         }
