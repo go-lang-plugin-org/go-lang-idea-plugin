@@ -87,7 +87,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
                 "\n" +
                 "type <typeName>T</typeName> <typeName>int</typeName>\n" +
                 "type (\n" +
-                "   <typeName>T1</typeName> []<typeName>T</typeName>\n" +
+                "   <typeName>T1</typeName> <brackets>[</brackets><brackets>]</brackets><typeName>T</typeName>\n" +
                 ")\n" +
                 "const <const>CONST_VALUE</const> = 10\n\n" +
                 "var <globalVariable>globalValue</globalVariable> = 5\n" +
@@ -115,6 +115,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
         map.put("typeName", TYPE_NAME);
         map.put("const", CONST);
         map.put("error", CodeInsightColors.ERRORS_ATTRIBUTES);
+        map.put("brackets", GoSyntaxHighlighter.BRACKET);
 
         return map;
 
