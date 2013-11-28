@@ -73,7 +73,7 @@ public class VarOrConstReference
     @Override
     public Object[] getVariants() {
 
-        final List<LookupElementBuilder> variants = new ArrayList<>();
+        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
 
         VarOrConstResolver processor = new VarOrConstResolver(this) {
             @Override

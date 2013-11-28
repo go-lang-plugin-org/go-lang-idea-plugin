@@ -13,7 +13,7 @@ import java.util.List;
 
 public class InspectionResult {
     private final InspectionManager manager;
-    private final List<ProblemDescriptor> problems = new ArrayList<>();
+    private final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
 
     public InspectionResult(Project project) {
         this(InspectionManager.getInstance(project));

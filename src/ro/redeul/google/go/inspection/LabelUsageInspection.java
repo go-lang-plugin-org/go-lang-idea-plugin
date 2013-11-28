@@ -47,8 +47,8 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
     }
 
     private static void checkFunction(final InspectionResult result, GoFunctionDeclaration function) {
-        final Map<String, GoLiteralIdentifier> labelDeclarations = new HashMap<>();
-        final List<GoLiteralIdentifier> labelUsages = new ArrayList<>();
+        final Map<String, GoLiteralIdentifier> labelDeclarations = new HashMap<String, GoLiteralIdentifier>();
+        final List<GoLiteralIdentifier> labelUsages = new ArrayList<GoLiteralIdentifier>();
         new GoRecursiveElementVisitor() {
             @Override
             public void visitLabeledStatement(GoLabeledStatement statement) {
@@ -97,7 +97,7 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
             }
         }.visitElement(function);
 
-        Set<String> usedLabels = new HashSet<>();
+        Set<String> usedLabels = new HashSet<String>();
         for (GoLiteralIdentifier label : labelUsages) {
             String name = label.getName();
             if (labelDeclarations.containsKey(name)) {

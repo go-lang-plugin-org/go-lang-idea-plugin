@@ -46,7 +46,7 @@ abstract class AbstractStructFieldsReference
         if (typeStruct == null || typeStruct.getPsiType() == null)
             return LookupElementBuilder.EMPTY_ARRAY;
 
-        List<LookupElementBuilder> variants = new ArrayList<>();
+        List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
 
         GoPsiTypeStruct psiType = typeStruct.getPsiType();
         for (GoTypeStructField field : psiType.getFields()) {

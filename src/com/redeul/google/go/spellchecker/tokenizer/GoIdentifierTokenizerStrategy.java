@@ -40,7 +40,7 @@ public class GoIdentifierTokenizerStrategy extends SpellcheckingStrategy {
         }
 
       private List<TextRange> splitByDot(String text, TextRange range) {
-          List<TextRange> result = new ArrayList<>();
+          List<TextRange> result = new ArrayList<TextRange>();
           int i = range.getStartOffset();
           int s = i;
           while (i < range.getEndOffset())  {

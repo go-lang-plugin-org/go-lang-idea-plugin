@@ -29,7 +29,7 @@ public class GoCodeManager {
     public Collection<GoImportDeclaration> findUnusedImports(GoFile file) {
 
         Map<String, GoImportDeclaration> imports =
-            new HashMap<>();
+            new HashMap<String, GoImportDeclaration>();
 
         for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
             for (GoImportDeclaration declaration : importDeclarations.getDeclarations()) {

@@ -157,7 +157,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         TreeElement[] getChildren() {
             GoFile psiFile = (GoFile) element;
 
-            ArrayList<StructureViewTreeElement> children = new ArrayList<>();
+            ArrayList<StructureViewTreeElement> children = new ArrayList<StructureViewTreeElement>();
 
             for (GoLiteralIdentifier id : getConstDeclarations(psiFile)) {
                 children.add(new GoStructureViewElement(new ConstLiteralIdentifierInfo(id)));
@@ -379,7 +379,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         @Override
         TreeElement[] getChildren() {
             GoTypeSpec typeSpec = (GoTypeSpec) element;
-            ArrayList<TreeElement> children = new ArrayList<>();
+            ArrayList<TreeElement> children = new ArrayList<TreeElement>();
             for (PsiNamedElement psi : getMembers(typeSpec)) {
                 children.add(new GoStructureViewElement(psi));
             }
@@ -412,7 +412,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
                 return Collections.emptyList();
             }
 
-            List<PsiNamedElement> members = new ArrayList<>();
+            List<PsiNamedElement> members = new ArrayList<PsiNamedElement>();
             members.addAll(getMethods(typeSpec));
             members.addAll(getFields((GoPsiTypeStruct) type));
             return members;
@@ -432,7 +432,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
                 return Collections.emptyList();
             }
 
-            List<PsiNamedElement> children = new ArrayList<>();
+            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
             for (GoFile f : getAllSamePackageFiles((GoFile) file)) {
                 getMethodsInFile(children, name, f);
             }
@@ -446,7 +446,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
                 return Collections.singleton(goFile);
             }
 
-            List<GoFile> files = new ArrayList<>();
+            List<GoFile> files = new ArrayList<GoFile>();
             String packageName = goFile.getPackageName();
             GoNamesCache namesCache = GoNamesCache.getInstance(goFile.getProject());
             for (GoFile file : namesCache.getFilesByPackageName(packageName)) {
@@ -494,7 +494,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         }
 
         private List<PsiNamedElement> getAnonymousFields(GoPsiTypeStruct struct) {
-            List<PsiNamedElement> children = new ArrayList<>();
+            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
             for (GoTypeStructAnonymousField field : struct.getAnonymousFields()) {
                 children.add(field.getType());
             }
@@ -502,7 +502,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         }
 
         private List<PsiNamedElement> getNamedFields(GoPsiTypeStruct struct) {
-            List<PsiNamedElement> children = new ArrayList<>();
+            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
             for (GoTypeStructField field : struct.getFields()) {
                 for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                     if (!identifier.isBlank()) {
@@ -531,7 +531,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
 
         @Override
         List<PsiNamedElement> getMembers(GoTypeSpec typeSpec) {
-            List<PsiNamedElement> children = new ArrayList<>();
+            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
             GoPsiType type = typeSpec.getType();
             if (!(type instanceof GoPsiTypeInterface)) {
                 return Collections.emptyList();

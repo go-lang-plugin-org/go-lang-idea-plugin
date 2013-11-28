@@ -28,7 +28,7 @@ public class DocumentUtil {
 
     private static String getTailingDocumentOfElement(PsiElement element) {
         boolean foundNewLine = false;
-        List<String> comments = new ArrayList<>();
+        List<String> comments = new ArrayList<String>();
         while ((element = element.getNextSibling()) != null) {
             if (isNodeOfType(element, GoElementTypes.COMMENTS)) {
                 foundNewLine = false;
@@ -49,7 +49,7 @@ public class DocumentUtil {
 
     private static String getHeaderDocumentOfElement(PsiElement element) {
         boolean foundNewLine = false;
-        List<String> comments = new ArrayList<>();
+        List<String> comments = new ArrayList<String>();
         while ((element = element.getPrevSibling()) != null) {
             if (isNodeOfType(element, GoElementTypes.COMMENTS)) {
                 foundNewLine = false;

@@ -9,7 +9,7 @@ import java.util.Map;
 public class GoUnderlyingTypePredeclared implements GoUnderlyingType {
 
     private static final Map<String, GoUnderlyingTypePredeclared> predeclaredTypes =
-        new HashMap<>();
+        new HashMap<String, GoUnderlyingTypePredeclared>();
 
     static {
         for (GoTypes.Builtin builtin : GoTypes.Builtin.values())

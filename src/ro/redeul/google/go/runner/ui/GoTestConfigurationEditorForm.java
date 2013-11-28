@@ -41,7 +41,7 @@ public class GoTestConfigurationEditorForm
             }
         });
 
-        Vector<String> myPackages = new Vector<>();
+        Vector<String> myPackages = new Vector<String>();
         Collection<String> allPackages =
             GoNamesCache.getInstance(project).getProjectPackages();
 

@@ -26,7 +26,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
     @Override
     public void initComponent() {
         ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
-        List<Sdk> sdkList = new ArrayList<>();
+        List<Sdk> sdkList = new ArrayList<Sdk>();
 
         sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
 

@@ -19,7 +19,7 @@ import java.util.List;
  */
 class GoExpressionTypeResolver extends BaseScopeProcessor {
 
-    private final List<GoFunctionDeclaration> nodeFunctions = new ArrayList<>();
+    private final List<GoFunctionDeclaration> nodeFunctions = new ArrayList<GoFunctionDeclaration>();
 
     public GoExpressionTypeResolver() {
     }

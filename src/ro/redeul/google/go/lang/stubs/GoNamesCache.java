@@ -59,7 +59,7 @@ public class GoNamesCache {
         Collection<String> keys = index.getAllKeys(GoPackageImportPath.KEY,
                                                    project);
 
-        Collection<String> packagesCollection = new ArrayList<>();
+        Collection<String> packagesCollection = new ArrayList<String>();
 
         for (String key : keys) {
             Collection<GoFile> files = index.get(GoPackageImportPath.KEY, key,
@@ -111,7 +111,7 @@ public class GoNamesCache {
 
         StubIndex index = StubIndex.getInstance();
         GlobalSearchScope scope = getSearchScope(includeNonProjectItems);
-        Collection<NavigationItem> items = new ArrayList<>();
+        Collection<NavigationItem> items = new ArrayList<NavigationItem>();
         for (GoTypeNameDeclaration type : index.get(GoTypeName.KEY, name,
                                                     project, scope)) {
             if (type instanceof NavigationItem) {
@@ -124,7 +124,7 @@ public class GoNamesCache {
 
     @NotNull
     public String[] getAllTypeNames() {
-        HashSet<String> classNames = new HashSet<>();
+        HashSet<String> classNames = new HashSet<String>();
         getAllTypeNames(classNames);
         return classNames.toArray(new String[classNames.size()]);
     }

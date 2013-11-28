@@ -111,7 +111,7 @@ public class ConvertSwitchToIfIntention extends Intention {
             boolean expressionIsFalse = expression != null && "false".equals(expression.getText());
             String es = expressionIsTrue || expressionIsFalse ? "" : expression.getText();
             CaseElement defaultCase = null;
-            List<CaseElement> cases = new ArrayList<>();
+            List<CaseElement> cases = new ArrayList<CaseElement>();
             for (GoSwitchExpressionClause clause : se.getClauses()) {
                 CaseElement c = CaseElement.create(document, clause, expressionIsFalse);
                 if (clause.isDefault()) {
@@ -149,7 +149,7 @@ public class ConvertSwitchToIfIntention extends Intention {
         }
 
         private static CaseElement create(Document document, GoSwitchExpressionClause clause, boolean flipExpression) {
-            List<String> expressions = new ArrayList<>();
+            List<String> expressions = new ArrayList<String>();
             for (GoExpr expr : clause.getExpressions()) {
                 expressions.add(flipExpression ? FlipBooleanExpression.flip(expr) : expr.getText());
             }

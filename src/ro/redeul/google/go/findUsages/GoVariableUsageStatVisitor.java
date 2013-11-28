@@ -61,7 +61,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
     @Override
     public void visitFile(GoFile file) {
-        HashMap<String, VariableUsage> global = new HashMap<>();
+        HashMap<String, VariableUsage> global = new HashMap<String, VariableUsage>();
         ctx = new Context(result, global);
         getGlobalVariables(file, global);
 
@@ -164,7 +164,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
 
         int nonBlankIdCount = 0;
-        List<GoLiteralIdentifier> redeclaredIds = new ArrayList<>();
+        List<GoLiteralIdentifier> redeclaredIds = new ArrayList<GoLiteralIdentifier>();
         for (GoLiteralIdentifier id : identifiers) {
             if (!id.isBlank()) {
                 nonBlankIdCount++;
@@ -349,7 +349,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
     private static class Context {
         public final InspectionResult result;
-        public final List<Map<String, VariableUsage>> variables = new ArrayList<>();
+        public final List<Map<String, VariableUsage>> variables = new ArrayList<Map<String, VariableUsage>>();
 
         Context(InspectionResult result, Map<String, VariableUsage> global) {
             this.result = result;
@@ -357,7 +357,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
 
         public Map<String, VariableUsage> addNewScopeLevel() {
-            Map<String, VariableUsage> variables = new HashMap<>();
+            Map<String, VariableUsage> variables = new HashMap<String, VariableUsage>();
             this.variables.add(variables);
             return variables;
         }

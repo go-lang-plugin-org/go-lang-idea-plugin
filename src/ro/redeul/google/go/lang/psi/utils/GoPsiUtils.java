@@ -170,7 +170,7 @@ public class GoPsiUtils {
 
         VirtualFile[] children = packageFilesLocation.getChildren();
 
-        List<GoFile> files = new ArrayList<>();
+        List<GoFile> files = new ArrayList<GoFile>();
 
         for (VirtualFile child : children) {
             if (child.getFileType() != GoFileType.INSTANCE ||
@@ -273,7 +273,7 @@ public class GoPsiUtils {
             return Collections.emptyList();
         }
 
-        List<T> children = new ArrayList<>();
+        List<T> children = new ArrayList<T>();
         for (PsiElement element : node.getChildren()) {
             if (ReflectionCache.isInstance(element, type)) {
                 children.add(type.cast(element));
@@ -289,7 +289,7 @@ public class GoPsiUtils {
             return Collections.emptyList();
         }
 
-        List<PsiElement> children = new ArrayList<>();
+        List<PsiElement> children = new ArrayList<PsiElement>();
         PsiElement child = node.getFirstChild();
         while (child != null) {
             if (isNodeOfType(child, type)) {

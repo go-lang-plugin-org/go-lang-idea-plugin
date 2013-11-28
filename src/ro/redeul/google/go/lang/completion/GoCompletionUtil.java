@@ -50,7 +50,7 @@ public class GoCompletionUtil {
             return LookupElement.EMPTY_ARRAY;
         }
 
-        Set<String> completions = new HashSet<>();
+        Set<String> completions = new HashSet<String>();
         VirtualFile roots[] = sdk.getRootProvider().getFiles(OrderRootType.CLASSES);
 
         for (VirtualFile root : roots) {
@@ -76,7 +76,7 @@ public class GoCompletionUtil {
             }
         }
 
-        List<LookupElement> list = new ArrayList<>();
+        List<LookupElement> list = new ArrayList<LookupElement>();
         for (String completion : completions) {
             list.add(LookupElementBuilder.create(completion));
         }
@@ -105,7 +105,7 @@ public class GoCompletionUtil {
 
         final PsiManager psiManager = PsiManager.getInstance(project);
 
-        CommonProcessors.CollectUniquesProcessor<String> localPackages = new CommonProcessors.CollectUniquesProcessor<>();
+        CommonProcessors.CollectUniquesProcessor<String> localPackages = new CommonProcessors.CollectUniquesProcessor<String>();
 
         Function<VirtualFile, String> convertor = new Function<VirtualFile, String>() {
             public String fun(VirtualFile virtualFile) {
@@ -151,7 +151,7 @@ public class GoCompletionUtil {
 
         VfsUtil.processFilesRecursively(targetFile.getParent(), processor);
 
-        List<LookupElementBuilder> elements = new ArrayList<>();
+        List<LookupElementBuilder> elements = new ArrayList<LookupElementBuilder>();
         for (String localPackage : localPackages.getResults()) {
             LookupElementBuilder elementBuilder = null;
 
@@ -218,7 +218,7 @@ public class GoCompletionUtil {
 
         GoFile goFile = (GoFile) file;
 
-        List<LookupElement> elements = new ArrayList<>();
+        List<LookupElement> elements = new ArrayList<LookupElement>();
         for (GoImportDeclaration importDeclaration : GoFileUtils.getImportDeclarations(goFile)) {
             String visiblePackageName = importDeclaration.getVisiblePackageName();
             String importPath = importDeclaration.getImportPath().getValue();

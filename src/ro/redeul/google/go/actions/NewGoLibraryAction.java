@@ -108,7 +108,7 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<PsiElement
 
         PsiFile childs[] = directory.getFiles();
 
-        Set<String> packages = new HashSet<>();
+        Set<String> packages = new HashSet<String>();
 
         for (PsiFile child : childs) {
             if (child instanceof GoFile) {

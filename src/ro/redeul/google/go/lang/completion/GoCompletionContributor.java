@@ -381,7 +381,7 @@ public class GoCompletionContributor extends CompletionContributor {
 
     private static void addPackageAutoCompletion(CompletionParameters parameters, CompletionResultSet result) {
         PsiFile originalFile = parameters.getOriginalFile();
-        Set<String> importedPackages = new HashSet<>();
+        Set<String> importedPackages = new HashSet<String>();
         for (LookupElement element : getImportedPackagesNames(originalFile)) {
             result.addElement(element);
             importedPackages.add(element.getLookupString());
@@ -435,7 +435,7 @@ public class GoCompletionContributor extends CompletionContributor {
     }
 
     private static Map<String, List<String>> getPackageNameToImportPathMapping(Project project, Set<String> importedPackages) {
-        Map<String, List<String>> packageMap = new HashMap<>();
+        Map<String, List<String>> packageMap = new HashMap<String, List<String>>();
         for (String pkg : GoNamesCache.getInstance(project).getAllPackages()) {
             String visibleName = pkg;
             if (visibleName.contains("/")) {
@@ -444,7 +444,7 @@ public class GoCompletionContributor extends CompletionContributor {
             if (!importedPackages.contains(visibleName)) {
                 List<String> packages = packageMap.get(visibleName);
                 if (packages == null) {
-                    packages = new ArrayList<>();
+                    packages = new ArrayList<String>();
                     packageMap.put(visibleName, packages);
                 }
                 packages.add(pkg);

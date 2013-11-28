@@ -36,7 +36,7 @@ import java.util.*;
  */
 public class GoSdkParsingHelper implements ApplicationComponent {
 
-    private final Map<Sdk, Map<String, String>> sdkPackageMappings = new HashMap<>();
+    private final Map<Sdk, Map<String, String>> sdkPackageMappings = new HashMap<Sdk, Map<String, String>>();
 
     public static GoSdkParsingHelper getInstance() {
         return ApplicationManager.getApplication().getComponent(GoSdkParsingHelper.class);
@@ -74,7 +74,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
             ProjectRootManager.getInstance(project).getFileIndex();
 
         ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
-        List<Sdk> sdkList = new ArrayList<>();
+        List<Sdk> sdkList = new ArrayList<Sdk>();
 
 
         sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
@@ -138,7 +138,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
     }
 
     private Map<String, String> findPackageMappings(Sdk ownerSdk) {
-        Map<String, String> result = new HashMap<>();
+        Map<String, String> result = new HashMap<String, String>();
 
         if (ownerSdk.getSdkType() != GoSdkType.getInstance() && ownerSdk.getSdkType() != GoAppEngineSdkType.getInstance())
             return result;
@@ -175,7 +175,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
             return result;
         }
 
-        CommonProcessors.CollectUniquesProcessor<String> libraryNames = new CommonProcessors.CollectUniquesProcessor<>();
+        CommonProcessors.CollectUniquesProcessor<String> libraryNames = new CommonProcessors.CollectUniquesProcessor<String>();
 
         final VirtualFile librariesRoot = packageRoot.findFileByRelativePath(activeTarget);
 
@@ -184,14 +184,14 @@ public class GoSdkParsingHelper implements ApplicationComponent {
         }
 
         VfsUtil.processFilesRecursively(librariesRoot,
-                new FilteringProcessor<>(
+                new FilteringProcessor<VirtualFile>(
                         new Condition<VirtualFile>() {
                             @Override
                             public boolean value(VirtualFile virtualFile) {
                                 return !virtualFile.isDirectory() && virtualFile.getName().matches(".*\\.a");
                             }
                         },
-                        new AdapterProcessor<>(
+                        new AdapterProcessor<VirtualFile, String>(
                                 libraryNames,
                                 new Function<VirtualFile, String>() {
                                     @Override
@@ -203,17 +203,17 @@ public class GoSdkParsingHelper implements ApplicationComponent {
                         ))
         );
 
-        Set<String> librariesSet = new HashSet<>(libraryNames.getResults());
+        Set<String> librariesSet = new HashSet<String>(libraryNames.getResults());
 
         // find makefiles
-        CommonProcessors.CollectUniquesProcessor<VirtualFile> makefiles = new CommonProcessors.CollectUniquesProcessor<>();
+        CommonProcessors.CollectUniquesProcessor<VirtualFile> makefiles = new CommonProcessors.CollectUniquesProcessor<VirtualFile>();
         final VirtualFile sourcesRoot = home.findFileByRelativePath(ownerSdk.getSdkType() == GoSdkType.getInstance() ? "src/pkg" : "goroot/src/pkg");
         if (sourcesRoot == null) {
             return result;
         }
 
         VfsUtil.processFilesRecursively(sourcesRoot,
-                new FilteringProcessor<>(
+                new FilteringProcessor<VirtualFile>(
                         new Condition<VirtualFile>() {
                             @Override
                             public boolean value(VirtualFile virtualFile) {

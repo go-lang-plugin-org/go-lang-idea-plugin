@@ -36,8 +36,8 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
             "append", "cap", "close", "complex", "copy", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover"
     };
 
-    private final List<LookupElement> variants = new ArrayList<>();
-    private final Set<String> names = new HashSet<>();
+    private final List<LookupElement> variants = new ArrayList<LookupElement>();
+    private final Set<String> names = new HashSet<String>();
 
     @Override
     public boolean execute(PsiElement element, ResolveState state) {

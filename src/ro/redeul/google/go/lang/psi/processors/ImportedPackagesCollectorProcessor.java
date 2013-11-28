@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class ImportedPackagesCollectorProcessor extends BaseScopeProcessor {
 
-    private final List<GoImportDeclaration> imports = new ArrayList<>();
+    private final List<GoImportDeclaration> imports = new ArrayList<GoImportDeclaration>();
 
     public boolean execute(PsiElement element, ResolveState state) {
 
@@ -38,7 +38,7 @@ public class ImportedPackagesCollectorProcessor extends BaseScopeProcessor {
 
     public String[] getPackageImports() {
 
-        List<String> packageImports = new ArrayList<>();
+        List<String> packageImports = new ArrayList<String>();
 
         for (GoImportDeclaration importSpec : imports) {
             GoPackageReference packageReference = importSpec.getPackageReference();

@@ -97,7 +97,7 @@ abstract class GoIntroduceVariableHandlerBase extends GoIntroduceHandlerBase {
     private Map<OccurrencesChooser.ReplaceChoice, List<PsiElement>> fillChoiceMap(GoExpr current,
                                                                                   GoExpr[] occurrences) {
         Map<OccurrencesChooser.ReplaceChoice, List<PsiElement>> map =
-                new LinkedHashMap<>();
+                new LinkedHashMap<OccurrencesChooser.ReplaceChoice, List<PsiElement>>();
         map.put(OccurrencesChooser.ReplaceChoice.NO, Collections.<PsiElement>singletonList(current));
         if (occurrences.length > 1) {
             map.put(OccurrencesChooser.ReplaceChoice.ALL, Arrays.<PsiElement>asList(occurrences));

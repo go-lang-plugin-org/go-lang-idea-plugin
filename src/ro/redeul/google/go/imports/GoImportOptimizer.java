@@ -54,7 +54,7 @@ public class GoImportOptimizer implements ImportOptimizer {
         final Project project = goFile.getProject();
         GoCodeManager goCodeManager = GoCodeManager.getInstance(project);
         final Set<GoImportDeclaration> unusedImports =
-            new HashSet<>(goCodeManager.findUnusedImports(goFile));
+            new HashSet<GoImportDeclaration>(goCodeManager.findUnusedImports(goFile));
 
         for (GoImportDeclaration id : unusedImports) {
             GoLiteralString importPath = id.getImportPath();

@@ -25,7 +25,7 @@ public class GoFileUtils {
             return Collections.emptyList();
         }
 
-        List<GoConstDeclaration> consts = new ArrayList<>();
+        List<GoConstDeclaration> consts = new ArrayList<GoConstDeclaration>();
         for (GoConstDeclarations cds : constDeclarations) {
             Collections.addAll(consts, cds.getDeclarations());
         }
@@ -43,7 +43,7 @@ public class GoFileUtils {
             return Collections.emptyList();
         }
 
-        List<GoLiteralIdentifier> consts = new ArrayList<>();
+        List<GoLiteralIdentifier> consts = new ArrayList<GoLiteralIdentifier>();
         for (GoConstDeclarations cds : constDeclarations) {
             for (GoConstDeclaration cd : cds.getDeclarations()) {
                 Collections.addAll(consts, cd.getIdentifiers());
@@ -63,7 +63,7 @@ public class GoFileUtils {
             return Collections.emptyList();
         }
 
-        List<GoLiteralIdentifier> vars = new ArrayList<>();
+        List<GoLiteralIdentifier> vars = new ArrayList<GoLiteralIdentifier>();
         for (GoVarDeclarations vds : varDeclarations) {
             for (GoVarDeclaration vd : vds.getDeclarations()) {
                 Collections.addAll(vars, vd.getIdentifiers());
@@ -83,7 +83,7 @@ public class GoFileUtils {
             return Collections.emptyList();
         }
 
-        List<GoImportDeclaration> declarations = new ArrayList<>();
+        List<GoImportDeclaration> declarations = new ArrayList<GoImportDeclaration>();
         for (GoImportDeclarations ids : importDeclarations) {
             Collections.addAll(declarations, ids.getDeclarations());
         }
@@ -109,7 +109,7 @@ public class GoFileUtils {
             return Collections.emptyList();
         }
 
-        List<GoVarDeclaration> vars = new ArrayList<>();
+        List<GoVarDeclaration> vars = new ArrayList<GoVarDeclaration>();
         for (GoVarDeclarations vds : varDeclarations) {
             Collections.addAll(vars, vds.getDeclarations());
         }
@@ -124,10 +124,10 @@ public class GoFileUtils {
 
         GoFunctionDeclaration[] functionDeclarations = psiFile.getFunctions();
         if (functionDeclarations == null) {
-            return new ArrayList<>();
+            return new ArrayList<GoFunctionDeclaration>();
         }
 
-        return new ArrayList<>(Arrays.asList(functionDeclarations));
+        return new ArrayList<GoFunctionDeclaration>(Arrays.asList(functionDeclarations));
     }
 
     public static List<GoMethodDeclaration> getMethodDeclarations(@Nullable GoFile psiFile) {
@@ -137,10 +137,10 @@ public class GoFileUtils {
 
         GoMethodDeclaration[] methodDeclarations = psiFile.getMethods();
         if (methodDeclarations == null) {
-            return new ArrayList<>();
+            return new ArrayList<GoMethodDeclaration>();
         }
 
-        return new ArrayList<>(Arrays.asList(methodDeclarations));
+        return new ArrayList<GoMethodDeclaration>(Arrays.asList(methodDeclarations));
     }
 
     public static List<GoTypeSpec> getTypeSpecs(@Nullable GoFile psiFile) {
@@ -150,10 +150,10 @@ public class GoFileUtils {
 
         GoTypeDeclaration[] typeDeclarations = psiFile.getTypeDeclarations();
         if (typeDeclarations == null) {
-            return new ArrayList<>();
+            return new ArrayList<GoTypeSpec>();
         }
 
-        List<GoTypeSpec> specs = new ArrayList<>();
+        List<GoTypeSpec> specs = new ArrayList<GoTypeSpec>();
         for (GoTypeDeclaration typeDec : typeDeclarations) {
             Collections.addAll(specs, typeDec.getTypeSpecs());
         }

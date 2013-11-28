@@ -23,7 +23,7 @@ import static ro.redeul.google.go.util.EditorUtil.reformatLines;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class AddImportFix implements QuestionAction {
-    private final List<String> pathsToImport = new ArrayList<>();
+    private final List<String> pathsToImport = new ArrayList<String>();
     private final List<String> sdkPackages;
     private final GoFile file;
     private final Editor editor;

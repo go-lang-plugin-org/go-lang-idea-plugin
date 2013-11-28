@@ -45,7 +45,7 @@ public class LabelReference
                     return null;
                 }
 
-                final AtomicReference<PsiElement> declaration = new AtomicReference<>();
+                final AtomicReference<PsiElement> declaration = new AtomicReference<PsiElement>();
 
                 new GoRecursiveElementVisitor() {
                     @Override
@@ -122,7 +122,7 @@ public class LabelReference
             return new Object[0];
         }
 
-        final TreeSet<String> labels = new TreeSet<>();
+        final TreeSet<String> labels = new TreeSet<String>();
         new GoRecursiveElementVisitor() {
             @Override
             public void visitLabeledStatement(GoLabeledStatement statement) {

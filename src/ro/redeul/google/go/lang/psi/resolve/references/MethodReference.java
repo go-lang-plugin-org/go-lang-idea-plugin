@@ -88,7 +88,7 @@ public class MethodReference
         if (resolverTypeNames.size() == 0)
             return LookupElementBuilder.EMPTY_ARRAY;
 
-        final List<LookupElementBuilder> variants = new ArrayList<>();
+        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
 
         MethodResolver processor = new MethodResolver(this) {
             @Override
@@ -116,7 +116,7 @@ public class MethodReference
         if ( receiverTypes != null )
             return receiverTypes;
 
-        receiverTypes = new HashSet<>();
+        receiverTypes = new HashSet<GoTypeName>();
 
         GoType[] types = getElement().getBaseExpression().getType();
 
@@ -132,7 +132,7 @@ public class MethodReference
 
         GoTypeName typeName = (GoTypeName) type;
 
-        Queue<GoTypeName> typeNamesToExplore = new LinkedList<>();
+        Queue<GoTypeName> typeNamesToExplore = new LinkedList<GoTypeName>();
         typeNamesToExplore.offer(typeName);
 
         while ( ! typeNamesToExplore.isEmpty() ) {

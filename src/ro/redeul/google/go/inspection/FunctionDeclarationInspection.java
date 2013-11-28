@@ -74,7 +74,7 @@ public class FunctionDeclarationInspection
     }
 
     private static void hasDuplicateArgument(Context ctx) {
-        Set<String> parameters = new HashSet<>();
+        Set<String> parameters = new HashSet<String>();
         for (GoFunctionParameter fp : ctx.function.getParameters()) {
             for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 if (id.isBlank()) {
@@ -92,7 +92,7 @@ public class FunctionDeclarationInspection
     }
 
     private static void hasRedeclaredParameterInResultList(Context ctx) {
-        Set<String> parameters = new HashSet<>(getParameterNames(ctx.function.getParameters()));
+        Set<String> parameters = new HashSet<String>(getParameterNames(ctx.function.getParameters()));
 
         for (GoFunctionParameter fp : ctx.function.getResults()) {
             for (GoLiteralIdentifier id : fp.getIdentifiers()) {
@@ -172,7 +172,7 @@ public class FunctionDeclarationInspection
     }
 
     private static List<String> getParameterNames(GoFunctionParameter[] parameters) {
-        List<String> parameterNames = new ArrayList<>();
+        List<String> parameterNames = new ArrayList<String>();
         for (GoFunctionParameter fp : parameters) {
             for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 if (!id.isBlank()) {

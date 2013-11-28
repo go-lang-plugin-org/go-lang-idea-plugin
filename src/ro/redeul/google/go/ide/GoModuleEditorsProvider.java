@@ -29,7 +29,7 @@ public class GoModuleEditorsProvider implements ModuleConfigurationEditorProvide
         }
 
         final DefaultModuleConfigurationEditorFactory editorFactory = DefaultModuleConfigurationEditorFactory.getInstance();
-        List<ModuleConfigurationEditor> editors = new ArrayList<>();
+        List<ModuleConfigurationEditor> editors = new ArrayList<ModuleConfigurationEditor>();
         editors.add(editorFactory.createModuleContentRootsEditor(state));
         editors.add(editorFactory.createOutputEditor(state));
         editors.add(editorFactory.createClasspathEditor(state));

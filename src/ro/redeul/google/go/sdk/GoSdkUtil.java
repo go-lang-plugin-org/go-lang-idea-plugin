@@ -553,7 +553,7 @@ public class GoSdkUtil {
     public static List<Sdk> getSdkOfType(SdkType sdkType, ProjectJdkTable table) {
         Sdk[] sdks = table.getAllJdks();
 
-        List<Sdk> goSdks = new LinkedList<>();
+        List<Sdk> goSdks = new LinkedList<Sdk>();
         for (Sdk sdk : sdks) {
             if (sdk.getSdkType() == sdkType) {
                 goSdks.add(sdk);

@@ -24,7 +24,7 @@ import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.*;
 public class GoSyntaxHighlighter extends SyntaxHighlighterBase
     implements GoTokenTypes {
 
-    private static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<>();
+    private static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
 
     public static final String DEFAULT_SETTINGS_ID = "go.default";
     public static final String LINE_COMMENT_ID = "go.line.comment";

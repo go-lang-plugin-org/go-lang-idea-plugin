@@ -116,7 +116,7 @@ public class InterfaceMethodReference extends
         GoTypeInterfaceMethodSet methodSet =
             new MethodSetDiscover(type.getPsiType()).getMethodSet();
 
-        List<LookupElementBuilder> variants = new ArrayList<>();
+        List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
         for (GoFunctionDeclaration functionDeclaration : methodSet.getMethods()) {
             variants.add(functionDeclaration.getCompletionPresentation());
         }

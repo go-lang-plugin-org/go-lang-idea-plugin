@@ -9,7 +9,7 @@ import java.util.Set;
 public class GoTypeInterfaceMethodSet {
 
     private final Set<GoFunctionDeclaration> myFunctions =
-        new HashSet<>();
+        new HashSet<GoFunctionDeclaration>();
 
     public void add(GoFunctionDeclaration functionDeclaration) {
         myFunctions.add(functionDeclaration);
