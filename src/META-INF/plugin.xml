@@ -431,12 +431,6 @@
             </implementation-class>
         </component>
 
-        <component>
-            <implementation-class>
-                ro.redeul.google.go.components.GoFileTypeRegistrationValidator
-            </implementation-class>
-        </component>
-
     </application-components>
 
     <project-components>
