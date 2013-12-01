@@ -13,30 +13,47 @@ import org.junit.Assert;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
 
+import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
+
 public abstract class GoEditorAwareTestCase
-    extends GoLightCodeInsightFixtureTestCase {
+        extends GoLightCodeInsightFixtureTestCase {
+
+    /**
+     * normalize the outputs of the test
+     * @param str
+     * @return
+     */
+    protected String normalizeOutputs(String str) {
+        return str.replaceAll("\t", "    ")
+                .replaceAll(" *\\* *","*")
+                .replaceAll(" *\\/ *","/")
+                .replaceAll(" *\\+ *","+")
+                .replaceAll(" *\\- *","-");
+    }
 
     protected void doTest() throws Exception {
         List<String> data = GoTestUtils.readInput(getTestFileName());
-        String expected = data.get(1).trim();
-        Assert.assertEquals(expected,
-                            processFile(data.get(0),
-                                        expected.contains(
-                                            GoTestUtils.MARKER_CARET)).trim());
+
+        String expected = normalizeOutputs(data.get(1).trim());
+
+        Assert.assertEquals(expected, normalizeOutputs(
+                processFile(data.get(0),
+                        expected.contains(
+                                GoTestUtils.MARKER_CARET)).trim()));
     }
 
     private String processFile(String fileText, boolean addCaretMarker) {
         final GoFile goFile = createGoFile(fileText);
         final Editor myEditor = myFixture.getEditor();
         CodeStyleSettings settings =
-            CodeStyleSettingsManager.getInstance(getProject()).getCurrentSettings();
+                CodeStyleSettingsManager.getInstance(getProject()).getCurrentSettings();
         if (settings != null) {
             CommonCodeStyleSettings commonSettings =
-                settings.getCommonSettings(GoLanguage.INSTANCE);
+                    settings.getCommonSettings(GoLanguage.INSTANCE);
 
             if (commonSettings != null) {
                 CommonCodeStyleSettings.IndentOptions indentOptions =
-                    commonSettings.getIndentOptions();
+                        commonSettings.getIndentOptions();
 
                 if (indentOptions != null)
                     indentOptions.USE_TAB_CHARACTER = false;
@@ -48,7 +65,7 @@ public abstract class GoEditorAwareTestCase
             public void run() {
                 invoke(getProject(), myEditor, goFile);
                 PostprocessReformattingAspect.getInstance(getProject())
-                                             .doPostponedFormatting();
+                        .doPostponedFormatting();
             }
         });
 
@@ -59,8 +76,8 @@ public abstract class GoEditorAwareTestCase
 
         int caretOffset = myEditor.getCaretModel().getOffset();
         return result.substring(0,
-                                caretOffset) + GoTestUtils.MARKER_CARET + result
-            .substring(caretOffset);
+                caretOffset) + GoTestUtils.MARKER_CARET + result
+                .substring(caretOffset);
     }
 
     private GoFile createGoFile(String fileText) {
@@ -71,14 +88,14 @@ public abstract class GoEditorAwareTestCase
             int endOffset = fileText.indexOf(GoTestUtils.MARKER_END);
             fileText = GoTestUtils.removeEndMarker(fileText);
             goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE,
-                                                        fileText);
+                    fileText);
             myFixture.getEditor()
-                     .getSelectionModel()
-                     .setSelection(startOffset, endOffset);
+                    .getSelectionModel()
+                    .setSelection(startOffset, endOffset);
             myFixture.getEditor().getCaretModel().moveToOffset(endOffset);
         } else {
             goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE,
-                                                        fileText);
+                    fileText);
         }
         return goFile;
     }
