@@ -80,6 +80,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                 }
             }
         }
+
         Data toImport = null;
         for (RangeHighlighter highlighter : getAllHighlighters(project)) {
             int start = highlighter.getStartOffset();

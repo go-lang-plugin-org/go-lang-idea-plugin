@@ -10,7 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/go-ide/resources" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/idea-home" />
     </content>
-    <orderEntry type="jdk" jdkName="IDEA IU-132.947" jdkType="IDEA JDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

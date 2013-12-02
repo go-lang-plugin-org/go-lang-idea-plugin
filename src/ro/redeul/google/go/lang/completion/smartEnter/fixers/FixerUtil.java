@@ -22,8 +22,8 @@ class FixerUtil {
             int offset = lastChild.getTextRange().getEndOffset();
             int line = doc.getLineNumber(offset);
             doc.insertString(offset, content);
-            reformatLines(lastChild.getContainingFile(), editor, line, line + 1);
             editor.getCaretModel().moveToOffset(offset);
+            reformatLines(lastChild.getContainingFile(), editor, line, line + 1);
             pressEnterAtLineEnd(editor);
         }
     }
