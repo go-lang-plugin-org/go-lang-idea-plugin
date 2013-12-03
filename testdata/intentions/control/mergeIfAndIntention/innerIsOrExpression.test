@@ -9,7 +9,7 @@ func Foo(a, b int) {
 -----
 package main
 func Foo(a, b int) {
-    if a > b && (a*2 > b || a*3 > b) {
-        println("test")
-    }
+	if a > b && (a*2 > b || a*3 > b) {
+		println("test")
+	}
 }

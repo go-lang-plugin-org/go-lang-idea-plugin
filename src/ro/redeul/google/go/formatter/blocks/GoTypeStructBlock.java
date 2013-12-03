@@ -64,13 +64,9 @@ class GoTypeStructBlock extends GoBlock {
 
             Block childBlock;
             if (getIndentedElements().contains(type)) {
-                childBlock =
-                    GoBlockGenerator.generateBlock(
-                        child, Indent.getNormalIndent(), mySettings);
+                childBlock = GoBlockGenerator.generateBlock(child, Indent.getNormalIndent(), mySettings);
             } else {
-                childBlock =
-                    GoBlockGenerator.generateBlock(
-                        child, mySettings);
+                childBlock = GoBlockGenerator.generateBlock(child, mySettings);
             }
 
             children.add(childBlock);

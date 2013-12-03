@@ -5,5 +5,5 @@ func Foo()(int<caret>)
 package main
 
 func Foo() (int) {
-    <caret>
+	<caret>
 }

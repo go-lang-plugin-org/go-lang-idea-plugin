@@ -13,6 +13,6 @@ func main() {
 }
 
 const (
-    N     = 5
-    VALUE = 1 + 2
+	N     = 5
+	VALUE = 1 + 2
 )<caret>

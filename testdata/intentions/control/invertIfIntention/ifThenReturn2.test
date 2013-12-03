@@ -9,10 +9,10 @@ func Foo(a int) int {
 package main
 func Foo(a int) int {
     b := a*2
-    if a <= b {
-        return 10 + a
-    }
-    println("hi", b)
+	if a <= b {
+		return 10 + a
+	}
+	println("hi", b)
 
-    return 10 + a
+	return 10 + a
 }

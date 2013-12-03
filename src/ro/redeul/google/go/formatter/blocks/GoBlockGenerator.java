@@ -64,6 +64,19 @@ public class GoBlockGenerator {
         IElementType elementType = node.getElementType();
         if (elementType == GoTokenTypes.pLPAREN) {
             return new GoLeafBlock(node, null, indent, NO_WRAP, styleSettings);
+        } else if(elementType == GoTokenTypes.pRCURLY) {
+            if (node.getTreeParent().getElementType() == GoElementTypes.LITERAL_COMPOSITE_VALUE) {
+                boolean inFunctionCall = false;
+                ASTNode nodeParent = node;
+                while (nodeParent != null) {
+                    if (nodeParent.getElementType() == GoElementTypes.CALL_OR_CONVERSION_EXPRESSION) {
+                        int indentTabSize = styleSettings.getIndentOptions() == null ? 4 : styleSettings.getIndentOptions().INDENT_SIZE;
+                        return new GoLeafBlock(node, null, Indent.getSpaceIndent(indentTabSize * -1), NO_WRAP, styleSettings);
+                    }
+
+                    nodeParent = nodeParent.getTreeParent();
+                }
+            }
         } else if (elementType == GoTokenTypes.kPACKAGE ||
             elementType == GoTokenTypes.oSEMI) {
             return new GoLeafBlock(node,

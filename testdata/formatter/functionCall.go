@@ -43,6 +43,11 @@ println()
 
 {
 a:=5
+result, err := demoCall(&DemoStruct{
+a:        true,
+b: false,
+cd:  false,
+}, nil)
 }
 }
 -----
@@ -89,5 +94,10 @@ func main() {
 
 	{
 		a := 5
+		result, err := demoCall(&DemoStruct{
+			a:  true,
+			b:  false,
+			cd: false,
+		}, nil)
 	}
 }

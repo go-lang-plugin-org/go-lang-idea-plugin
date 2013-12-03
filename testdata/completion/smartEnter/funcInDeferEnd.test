@@ -7,7 +7,7 @@ func Foo() {
 package main
 
 func Foo() {
-    defer func() {
-        <caret>
-    }()
+	defer func() {
+		<caret>
+	}()
 }

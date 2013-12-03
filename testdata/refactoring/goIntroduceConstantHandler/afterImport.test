@@ -14,6 +14,6 @@ import "fmt"
 const VALUE = 1 + 2
 
 func main() {
-    println(VALUE)
-    println(VALUE<caret>)
+	println(VALUE)
+	println(VALUE<caret>)
 }

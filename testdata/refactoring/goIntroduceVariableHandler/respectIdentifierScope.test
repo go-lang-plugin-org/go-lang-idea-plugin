@@ -15,9 +15,9 @@ package main
 func main() {
     if true {
         a := 1
-        value := a + 2
-        println(value)
-        println(value<caret>)
+		value := a + 2
+		println(value)
+		println(value<caret>)
     } else {
         a := 1
         println(a + 2)

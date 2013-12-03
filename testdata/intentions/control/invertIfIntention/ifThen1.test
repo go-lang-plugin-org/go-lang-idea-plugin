@@ -1,6 +1,6 @@
 package main
 func Foo(a int) {
-    <caret>if b := a * 2; a > b {
+    <caret>if b := a*2; a > b {
         println("hi")
     }
     println("test")
@@ -8,9 +8,9 @@ func Foo(a int) {
 -----
 package main
 func Foo(a int) {
-    if b := a * 2; a <= b {
-    } else {
-        println("hi")
-    }
+	if b := a * 2; a <= b {
+	} else {
+		println("hi")
+	}
     println("test")
 }

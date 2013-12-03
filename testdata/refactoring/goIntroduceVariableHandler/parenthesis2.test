@@ -5,6 +5,6 @@ func main() {
 -----
 package main
 func main() {
-    value := (1 + 2)/(3 + 4)
-    println(value<caret>)
+	value := (1 + 2) / (3 + 4)
+	println(value<caret>)
 }

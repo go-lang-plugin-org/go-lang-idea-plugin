@@ -10,10 +10,10 @@ func Foo(p interface{}) {
 -----
 package main
 func Foo(p interface{}) {
-    switch i := p.(type) {
-    case int:
-        println("int", 5, i)
-    default:
-        println("true", 5)
-    }
+	switch i := p.(type) {
+	case int:
+		println("int", 5, i)
+	default:
+		println("true", 5)
+	}
 }

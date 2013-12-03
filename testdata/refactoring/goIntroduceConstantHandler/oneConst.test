@@ -9,10 +9,10 @@ func main() {
 package main
 
 const (
-    N     = 5
-    VALUE = 1 + 2
+	N     = 5
+	VALUE = 1 + 2
 )
 
 func main() {
-    println(VALUE<caret>)
+	println(VALUE<caret>)
 }

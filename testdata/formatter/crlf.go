@@ -1,0 +1,26 @@
+/*
+	Source containing CR/LF line endings.
+	The gofmt'ed output must only have LF
+	line endings.
+*/
+package main
+
+func main() {
+	// line comment
+	println("hello, world!") // another line comment
+	println()
+}
+
+-----
+/*
+	Source containing CR/LF line endings.
+	The gofmt'ed output must only have LF
+	line endings.
+*/
+package main
+
+func main() {
+	// line comment
+	println("hello, world!") // another line comment
+	println()
+}

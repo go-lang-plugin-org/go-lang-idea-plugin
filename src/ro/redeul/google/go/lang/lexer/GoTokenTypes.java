@@ -93,8 +93,8 @@ public interface GoTokenTypes {
     IElementType oBIT_OR = new GoElementTypeImpl("|");
     IElementType oCOND_OR = new GoElementTypeImpl("||");
 
-    IElementType oBIT_CLEAR_ASSIGN = new GoElementTypeImpl("&^=");
-    IElementType oBIT_CLEAR = new GoElementTypeImpl("&^");
+    IElementType oBIT_CLEAR_ASSIGN = new GoElementTypeImpl("^&=");
+    IElementType oBIT_CLEAR = new GoElementTypeImpl("^&");
     IElementType oCOND_AND = new GoElementTypeImpl("&&");
 
     IElementType oBIT_AND_ASSIGN = new GoElementTypeImpl("&=");

@@ -6,5 +6,5 @@ func Foo() int {
 package main
 
 func Foo() int {
-    return
+	return
 }

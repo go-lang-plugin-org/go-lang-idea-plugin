@@ -11,8 +11,8 @@ package main
 
 import "fmt"
 import (
-    "strings"
-    "io"
+	"strings"
+	"io"
 )
 
 func Foo() {

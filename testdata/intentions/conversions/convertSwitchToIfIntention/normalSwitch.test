@@ -11,11 +11,11 @@ func Foo(a int) {
 package main
 
 func Foo(a int) {
-    if x := a*2; x == 0 || x == 1 || x == 2 {
-        println("a")
-    } else if x == 3 {
-        println("b")
-    } else {
-        println("c")
-    }
+	if x := a * 2; x == 0 || x == 1 || x == 2 {
+		println("a")
+	} else if x == 3 {
+		println("b")
+	} else {
+		println("c")
+	}
 }

@@ -11,9 +11,9 @@ func Foo(a, b int) {
 -----
 package main
 func Foo(a, b int) {
-    if a > b && a*2 > b {
-        println("test")
-    } else {
-        println("bar")
-    }
+	if a > b && a*2 > b {
+		println("test")
+	} else {
+		println("bar")
+	}
 }

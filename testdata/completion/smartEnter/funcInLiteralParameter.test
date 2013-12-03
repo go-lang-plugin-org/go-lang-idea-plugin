@@ -7,7 +7,7 @@ func Foo() {
 package main
 
 func Foo() {
-    f := func(a int) {
-        <caret>
-    }
+	f := func(a int) {
+		<caret>
+	}
 }

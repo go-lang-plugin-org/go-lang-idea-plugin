@@ -7,7 +7,7 @@ func main() {
 package main
 
 var (
-    Foo = value
+	Foo = value
 )
 
 func main() {

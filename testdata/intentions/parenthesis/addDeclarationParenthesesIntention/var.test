@@ -5,7 +5,7 @@ func main(){}
 -----
 package main
 var (
-    a = 5
+	a = 5
 )
 
 func main(){}

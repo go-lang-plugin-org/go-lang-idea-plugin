@@ -24,5 +24,5 @@ func (a *A) Print() {
 }
 
 func main() {
-    (&A{value:5}).Print()
+	(&A{value:5}).Print()
 }

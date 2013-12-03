@@ -9,8 +9,8 @@ func main() {
 package main
 
 var (
-    va  = 5
-    Foo = value
+	va  = 5
+	Foo = value
 )
 
 func main() {
