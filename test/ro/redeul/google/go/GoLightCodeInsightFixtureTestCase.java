@@ -24,6 +24,12 @@ public abstract class GoLightCodeInsightFixtureTestCase
         return (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
     }
 
+
+    @Override
+    protected String getTestDataPath() {
+        return testDataRoot + getTestDataRelativePath();
+    }
+
     protected String getTestFileName() {
         String baseName = getTestDataPath() + getTestName(true);
         if (new File(baseName + ".test").exists()) {

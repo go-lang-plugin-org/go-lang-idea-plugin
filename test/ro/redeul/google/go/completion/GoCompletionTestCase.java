@@ -50,30 +50,8 @@ public abstract class GoCompletionTestCase
         }
 
         if (testRoot != null && testRoot.isDirectory()) {
-            VfsUtil.processFilesRecursively(
-                testRoot,
-                new FilteringProcessor<VirtualFile>(
-                    new Condition<VirtualFile>() {
-                        @Override
-                        public boolean value(VirtualFile file) {
-                            return !file.isDirectory() &&
-                                !file.getName().equals(
-                                    getTestName(false) + ".go");
-                        }
-                    },
-                    new AdapterProcessor<VirtualFile, String>(
-                        new CommonProcessors.CollectProcessor<String>(files),
-                        new Function<VirtualFile, String>() {
-                            @Override
-                            public String fun(VirtualFile virtualFile) {
-                                return VfsUtil.getRelativePath(virtualFile,
-                                                               testRoot.getParent(),
-                                                               File.separatorChar);
-                            }
-                        }
-                    )
-                ));
-
+            String path = getTestName(false);
+            myFixture.copyDirectoryToProject(path, path);
             files.add(getTestName(false) + File.separator + getTestName(false) + ".go");
         } else {
             files.add(getTestName(false) + ".go");
