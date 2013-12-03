@@ -144,7 +144,7 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
             testConfiguration.filter = "^" + name +"$";
         }
 
-        testConfiguration.packageName = goFile.getPackageImportPath();
+        testConfiguration.packageName = getPackageNameForTesting(goFile);
         testConfiguration.packageDir = getGoFileDirRelativePath(goFile);
         testConfiguration.setModule(module);
         testConfiguration.useShortRun = false;
@@ -197,6 +197,18 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
 
         GoPackageDeclaration pkg = file.getPackage();
         return pkg == null ? "" : pkg.getPackageName();
+    }
+
+    private static String getPackageNameForTesting(GoFile file) {
+        String pkgName = file.getPackageImportPath();
+        if (pkgName.endsWith("_test")) {
+            String fileName = file.getName();
+            String testedFileName = fileName.replace("_test", "");
+            GoFile testedFile = (GoFile) file.getParent().findFile(testedFileName);
+
+            pkgName = testedFile.getPackageImportPath();
+        }
+        return pkgName;
     }
 
     private String getGoFileDirRelativePath(GoFile goFile) {

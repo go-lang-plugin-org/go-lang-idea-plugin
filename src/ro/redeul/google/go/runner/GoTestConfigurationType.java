@@ -1,10 +1,12 @@
 package ro.redeul.google.go.runner;
 
+import com.intellij.execution.BeforeRunTask;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +56,11 @@ public class GoTestConfigurationType implements ConfigurationType {
 
         public RunConfiguration createTemplateConfiguration(Project project) {
             return new GoTestConfiguration("Go Test", project, getInstance());
+        }
+
+        @Override
+        public void configureBeforeRunTaskDefaults(Key<? extends BeforeRunTask> providerID, BeforeRunTask task) {
+            task.setEnabled(false);
         }
     }
 }
