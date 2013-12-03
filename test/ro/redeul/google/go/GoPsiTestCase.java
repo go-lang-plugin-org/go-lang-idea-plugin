@@ -22,7 +22,7 @@ import ro.redeul.google.go.util.GoTestUtils;
 public abstract class GoPsiTestCase extends PsiTestCase {
 
     protected String getTestDataPath() {
-        return "testData/" + getTestDataRelativePath();
+        return "testdata/" + getTestDataRelativePath();
     }
 
     protected String getTestDataRelativePath() {
