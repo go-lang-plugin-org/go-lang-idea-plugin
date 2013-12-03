@@ -13,6 +13,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.SystemInfo;
@@ -24,8 +25,10 @@ import com.intellij.util.PathUtil;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.runner.ui.GoRunConfigurationEditorForm;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
 import java.util.Arrays;
@@ -95,24 +98,28 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
             @Override
             protected OSProcessHandler startProcess() throws ExecutionException {
 
+                Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(getProject());
+                if ( sdk == null ) {
+                    throw new CantRunException("No Go Sdk defined for this project");
+                }
+
+                final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
+                if ( sdkData == null ) {
+                    throw new CantRunException("No Go Sdk defined for this project");
+                }
+
                 GeneralCommandLine commandLine = new GeneralCommandLine();
 
-                Module module = getModule();
-
-                if ( module == null ) {
-                    throw new CantRunException("The module for the configuration is not set up properly");
-                }
-
-                String compiledFileName = getCompiledFileName(module, scriptName);
-                if (!new File(compiledFileName).exists()) {
-                    throw new CantRunException("Cannot find target. Is main function defined in main package?");
-                }
-
-                commandLine.setExePath(compiledFileName);
+                commandLine.setExePath(sdkData.GO_BIN_PATH);
+                commandLine.addParameter("run");
                 if (scriptArguments != null && scriptArguments.trim().length() > 0) {
                     commandLine.getParametersList().addParametersString(scriptArguments);
                 }
-                commandLine.setWorkDirectory(workDir);
+                commandLine.addParameter(scriptName);
+                VirtualFile moduleFile = getConfigurationModule().getModule().getModuleFile();
+
+                commandLine.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
+                commandLine.getEnvironment().put("GOPATH", GoSdkUtil.prependToGoPath(moduleFile.getParent().getCanonicalPath()));
 
                 return GoApplicationProcessHandler.runCommandLine(commandLine);
             }
@@ -161,5 +168,12 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
     Module getModule() {
         return getConfigurationModule().getModule();
+    }
+
+    private String getSdkHomePath(GoSdkData sdkData) {
+        if (sdkData.GO_HOME_PATH.isEmpty()) {
+            return new File(sdkData.GO_BIN_PATH).getParent();
+        }
+        return sdkData.GO_HOME_PATH;
     }
 }

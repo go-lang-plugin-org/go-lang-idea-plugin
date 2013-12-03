@@ -57,6 +57,19 @@ class GoCommandLineState extends CommandLineState {
             throw new CantRunException("The module does not have a valid parent folder");
         }
 
+
+        GeneralCommandLine testi = new GeneralCommandLine();
+        testi.setExePath(sdkData.GO_BIN_PATH);
+        testi.addParameter("test");
+        testi.addParameter("-i");
+        testi.addParameter(cfg.packageName);
+        testi.getEnvironment().put("GOPATH", prependToGoPath(moduleFile.getParent().getCanonicalPath()));
+        testi.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
+        try {
+            testi.createProcess().waitFor();
+        } catch (InterruptedException e) {
+        }
+
         commandLine.setExePath(sdkData.GO_BIN_PATH);
         commandLine.addParameter("test");
         commandLine.addParameter("-v");
@@ -81,10 +94,8 @@ class GoCommandLineState extends CommandLineState {
         }
 
         commandLine.addParameter(cfg.packageName);
-        commandLine.setEnvParams(new HashMap<String, String>() {{
-            put("GOPATH", prependToGoPath(moduleFile.getParent().getCanonicalPath()));
-            put("GOROOT", getSdkHomePath(sdkData));
-        }});
+        commandLine.getEnvironment().put("GOPATH", prependToGoPath(moduleFile.getParent().getCanonicalPath()));
+        commandLine.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
 
         return GoApplicationProcessHandler.runCommandLine(commandLine);
     }
