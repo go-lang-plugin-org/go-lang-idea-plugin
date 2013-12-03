@@ -19,6 +19,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import org.junit.Assert;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
@@ -41,7 +42,7 @@ public class GoAnnotatorHighlightTest extends GoLightCodeInsightFixtureTestCase 
         myFixture.addFileToProject("builtin.go", "package builtin\ntype byte byte\ntype int int\n");
         List<String> data;
         data = readInput(getTestDataPath() + getTestName(true) + ".go");
-        String expected = data.get(1).trim();
+        String expected = StringUtil.convertLineSeparators(data.get(1).trim());
         Assert.assertEquals(expected, processFile(data.get(0)).trim());
     }
 
