@@ -10,11 +10,13 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import org.junit.Assert;
+import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
 
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
+@Ignore
 public abstract class GoEditorAwareTestCase
         extends GoLightCodeInsightFixtureTestCase {
 

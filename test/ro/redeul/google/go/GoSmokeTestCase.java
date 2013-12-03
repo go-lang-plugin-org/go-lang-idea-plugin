@@ -10,8 +10,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.util.FilteringProcessor;
 import com.intellij.util.Processor;
+import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
 
+@Ignore
 public abstract class GoSmokeTestCase extends PsiTestCase {
 
     public static String sourceRoot = "/Users/mtoader/Work/Personal/go/src/";

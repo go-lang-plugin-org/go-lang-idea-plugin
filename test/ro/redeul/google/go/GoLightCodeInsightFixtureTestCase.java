@@ -7,8 +7,10 @@ import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
 
+@Ignore
 public abstract class GoLightCodeInsightFixtureTestCase
     extends LightCodeInsightFixtureTestCase {
 

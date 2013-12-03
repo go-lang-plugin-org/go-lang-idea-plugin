@@ -18,12 +18,14 @@ import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 
 import java.io.File;
 import java.lang.reflect.Method;
 
+@Ignore
 public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> extends UsefulTestCase {
 
     protected FixtureType fixture;
