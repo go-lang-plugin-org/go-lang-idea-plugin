@@ -223,6 +223,11 @@ class PrimaryExpression implements GoElementTypes {
             isSlice = true;
 
             parser.parseExpression(builder);
+
+            if (builder.getTokenType() == oCOLON) {
+                builder.advanceLexer();
+                parser.parseExpression(builder);
+            }
         }
 
         ParserUtils.getToken(builder, pRBRACK, "right.bracket.expected");
