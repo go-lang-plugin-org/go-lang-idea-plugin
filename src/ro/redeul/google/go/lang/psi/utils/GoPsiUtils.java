@@ -417,6 +417,18 @@ public class GoPsiUtils {
         return node != null && node.getNode().getElementType() == type;
     }
 
+    public static boolean hasNextSiblingOfType(PsiElement node,
+                                               IElementType type) {
+        if (node == null)
+            return false;
+
+        do {
+            node = node.getNextSibling();
+        } while (node != null && isWhiteSpaceOrComment(node));
+
+        return node != null && node.getNode().getElementType() == type;
+    }
+
     public static SearchScope getLocalElementSearchScope(GoPsiElement element) {
         GoStatement statement = findParentOfType(element, GoStatement.class);
         if (statement == null) {
