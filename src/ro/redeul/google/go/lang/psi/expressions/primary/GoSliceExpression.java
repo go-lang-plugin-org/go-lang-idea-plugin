@@ -13,4 +13,7 @@ public interface GoSliceExpression extends GoPrimaryExpression {
 
     @Nullable
     GoExpr getSecondIndex();
+
+    @Nullable
+    GoExpr getCapacity();
 }
