@@ -67,8 +67,7 @@ public class GoSliceExpressionImpl extends GoExpressionBase
         while (secondStop != null &&
                 isWhiteSpaceOrComment(secondStop) &&
                 secondStop.getNode().getElementType() != GoTokenTypes.oCOLON &&
-                secondStop.getNode().getElementType() != GoTokenTypes.pRBRACK
-                ) {
+                secondStop.getNode().getElementType() != GoTokenTypes.pRBRACK) {
             secondStop = secondStop.getNextSibling();
         }
 
@@ -85,14 +84,12 @@ public class GoSliceExpressionImpl extends GoExpressionBase
     }
 
     @Override
-    public GoExpr getThirdIndex() {
+    public GoExpr getCapacity() {
         GoExpr expressions[] = findChildrenByClass(GoExpr.class);
 
         PsiElement firstColon = expressions[0].getNextSibling();
 
-        while (firstColon != null &&
-                firstColon.getNode().getElementType() != GoTokenTypes.oCOLON
-                ) {
+        while (firstColon != null && firstColon.getNode().getElementType() != GoTokenTypes.oCOLON) {
             firstColon = firstColon.getNextSibling();
         }
 
@@ -104,8 +101,7 @@ public class GoSliceExpressionImpl extends GoExpressionBase
 
         while (secondStop != null &&
                 secondStop.getNode().getElementType() != GoTokenTypes.oCOLON &&
-                secondStop.getNode().getElementType() != GoTokenTypes.pRBRACK
-                ) {
+                secondStop.getNode().getElementType() != GoTokenTypes.pRBRACK) {
             secondStop = secondStop.getNextSibling();
         }
 
@@ -121,9 +117,7 @@ public class GoSliceExpressionImpl extends GoExpressionBase
             elem = elem.getNextSibling();
         }
 
-        if (elem == null ||
-                elem.getNode().getElementType() == GoTokenTypes.pRBRACK
-            ) {
+        if (elem == null || elem.getNode().getElementType() == GoTokenTypes.pRBRACK) {
             return null;
         }
 

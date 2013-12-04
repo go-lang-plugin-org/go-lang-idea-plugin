@@ -47,7 +47,7 @@ public class GoPsiSliceExpressionsTestCase extends GoPsiTestCase {
         assertEquals("a", get(sliceExpression.getBaseExpression()).getText());
         assertEquals("i", get(sliceExpression.getFirstIndex()).getText());
         assertEquals("j", get(sliceExpression.getSecondIndex()).getText());
-        assertEquals("k", get(sliceExpression.getThirdIndex()).getText());
+        assertEquals("k", get(sliceExpression.getCapacity()).getText());
     }
 
     public void testEmptySlice() throws Exception {
@@ -68,7 +68,7 @@ public class GoPsiSliceExpressionsTestCase extends GoPsiTestCase {
         assertEquals("a", get(sliceExpression.getBaseExpression()).getText());
         assertNull(sliceExpression.getFirstIndex());
         assertNull(sliceExpression.getSecondIndex());
-        assertNull(sliceExpression.getThirdIndex());
+        assertNull(sliceExpression.getCapacity());
     }
 
     public void testSliceFirstIndex() throws Exception {
@@ -89,7 +89,7 @@ public class GoPsiSliceExpressionsTestCase extends GoPsiTestCase {
         assertEquals("a", get(sliceExpression.getBaseExpression()).getText());
         assertEquals("i", get(sliceExpression.getFirstIndex()).getText());
         assertNull(sliceExpression.getSecondIndex());
-        assertNull(sliceExpression.getThirdIndex());
+        assertNull(sliceExpression.getCapacity());
     }
 
     public void testSliceSecondIndex() throws Exception {
@@ -110,9 +110,9 @@ public class GoPsiSliceExpressionsTestCase extends GoPsiTestCase {
         assertEquals("a", get(sliceExpression.getBaseExpression()).getText());
         assertNull(sliceExpression.getFirstIndex());
         assertEquals("j", get(sliceExpression.getSecondIndex()).getText());
-        assertNull(sliceExpression.getThirdIndex());
+        assertNull(sliceExpression.getCapacity());
     }
-    public void testSliceThirdIndex() throws Exception {
+    public void testSliceCapacity() throws Exception {
         GoFile file = get(parse("package main; func a() { a[:j:k] }"));
 
 
@@ -130,7 +130,7 @@ public class GoPsiSliceExpressionsTestCase extends GoPsiTestCase {
         assertEquals("a", get(sliceExpression.getBaseExpression()).getText());
         assertNull(sliceExpression.getFirstIndex());
         assertEquals("j", get(sliceExpression.getSecondIndex()).getText());
-        assertEquals("k", get(sliceExpression.getThirdIndex()).getText());
+        assertEquals("k", get(sliceExpression.getCapacity()).getText());
     }
 
     public void testSliceWithCommentsAndWhitespaces() throws Exception {
@@ -177,6 +177,6 @@ public class GoPsiSliceExpressionsTestCase extends GoPsiTestCase {
         assertEquals("ad", get(sliceExpression.getBaseExpression()).getText());
         assertEquals("1", get(sliceExpression.getFirstIndex()).getText());
         assertEquals("2", get(sliceExpression.getSecondIndex()).getText());
-        assertEquals("3", get(sliceExpression.getThirdIndex()).getText());
+        assertEquals("3", get(sliceExpression.getCapacity()).getText());
     }
 }
