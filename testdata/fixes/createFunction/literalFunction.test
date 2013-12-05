@@ -1,17 +1,17 @@
 package main
 
 func main() {
-    f := func (n int) int {return 7+n+/*begin*/Foo/*end*/()}
+    f := func (n int) int {return 7+n+/*begin*/Foo/*end*/(5)}
     println(f(5))
 }
 -----
 package main
 
 func main() {
-    f := func (n int) int {return 7+n+Foo()}
+    f := func (n int) int {return 7+n+Foo(5)}
     println(f(5))
 }
 
-func Foo() {
+func Foo(arg0 int) {
 	<caret>
 }

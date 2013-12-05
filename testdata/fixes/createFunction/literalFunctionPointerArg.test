@@ -1,0 +1,25 @@
+package main
+
+type Person struct{
+
+}
+
+func main() {
+    f := func (n int) int {return 7+n+/*begin*/Foo/*end*/(&Person{})}
+    println(f(5))
+}
+-----
+package main
+
+type Person struct{
+
+}
+
+func main() {
+    f := func (n int) int {return 7+n+Foo(&Person{})}
+    println(f(5))
+}
+
+func Foo(arg0 *Person) {
+	<caret>
+}
