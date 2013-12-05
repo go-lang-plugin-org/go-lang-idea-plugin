@@ -138,10 +138,7 @@ public class GoUtil {
                 stringBuilder.append(',');
             stringBuilder.append("arg").append(arg).append(" ");
             PsiElement firstChildExp = argument.getFirstChild();
-            //Compositives Types
-            if (firstChildExp instanceof GoLiteralIdentifier) {
-                stringBuilder.append(((GoLiteral) firstChildExp).getType().name().toLowerCase());
-            } else if (firstChildExp instanceof GoLiteralComposite || firstChildExp.getText().equals("&")) {
+            if (firstChildExp instanceof GoLiteralIdentifier || firstChildExp instanceof GoLiteralComposite || firstChildExp.getText().equals("&")) {
 
                 GoType[] goTypes = argument.getType();
                 if (goTypes.length > 0) {
@@ -157,6 +154,8 @@ public class GoUtil {
                         goType = ((GoTypePointer) goType).getTargetType();
                         stringBuilder.append('*');
                         stringBuilder.append(((GoTypeName) goType).getPsiType().getText());
+                    } else {
+                        stringBuilder.append("interface{}");
                     }
                 } else {
                     stringBuilder.append("interface{}");
