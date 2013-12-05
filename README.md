@@ -40,7 +40,7 @@ Google go language plugin is an attempt to build an outstanding IDE for
 * Right click on the proper plugin and install
 * Download [latest release of the Google Go language](http://golang.org/doc/install.html).
 * Build and install it.
-* Open IDEA and create an empty Java project.
+* Open IDEA and create an empty Go project.
 * Go to File -> Project Structure and select SDKs entry in the left column of the new window
 * Add a new Google Go SDK by clicking the plus sign an choosing the appropriate SDK type.
 * After the SDK is defined go to the Modules entry and add a new google facet to your default module.
