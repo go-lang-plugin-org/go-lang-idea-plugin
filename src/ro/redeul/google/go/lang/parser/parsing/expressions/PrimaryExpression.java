@@ -241,7 +241,7 @@ class PrimaryExpression implements GoElementTypes {
     private static boolean parseCallOrConversion(PsiBuilder builder,
                                                  GoParser parser,
                                                  PsiBuilder.Marker mark) {
-
+        boolean allowComposite = parser.resetFlag(AllowCompositeLiteral, true);
         ParserUtils.getToken(builder, pLPAREN);
 
         if (builder.getTokenType() != pRPAREN) {
@@ -256,6 +256,7 @@ class PrimaryExpression implements GoElementTypes {
         ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");
 
         mark.done(CALL_OR_CONVERSION_EXPRESSION);
+        parser.resetFlag(AllowCompositeLiteral, allowComposite);
         return true;
     }
 
