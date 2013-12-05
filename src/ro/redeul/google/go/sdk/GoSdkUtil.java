@@ -4,8 +4,11 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.CapturingProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
@@ -15,11 +18,15 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ModuleRootModel;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.newvfs.impl.VirtualFileImpl;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.SystemProperties;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.*;
 import ro.redeul.google.go.util.GoUtil;
 
@@ -28,7 +35,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -88,13 +94,9 @@ public class GoSdkUtil {
         if (!checkFolderExists(path, "pkg"))
             return null;
 
-        String goCommand = path + "/bin/go";
-        if ( ! checkFileExists(goCommand) ) {
-            // Perhaps we're on Windows?
-            goCommand = path + "/bin/go.exe";
-            if ( ! checkFileExists(goCommand) ) {
-                goCommand = "/usr/bin/go";
-            }
+        String goCommand = findGoExecutable(path);
+        if (goCommand.equals("")) {
+            return null;
         }
 
         GoSdkData data = findHostOsAndArch(path, goCommand, new GoSdkData());
@@ -102,12 +104,36 @@ public class GoSdkUtil {
         data = findVersion(path, goCommand, data);
 
         if (data != null ) {
-            data.GO_HOME_PATH = path;
+            data.GO_GOROOT_PATH = path;
             data.GO_BIN_PATH = goCommand;
+            data.GO_GOPATH_PATH = getSysGoPathPath();
             data.version = GoSdkData.LATEST_VERSION;
         }
 
         return data;
+    }
+
+    public static String findGoExecutable(String path) {
+        String goCommand = path + "/bin/go";
+        if (checkFileExists(goCommand)) {
+            return goCommand;
+        }
+
+        // Perhaps we're on Windows?
+        goCommand = path + "/bin/go.exe";
+        if (checkFileExists(goCommand)) {
+            return goCommand;
+        }
+
+        // Perhaps we are not on Windows but the packers have a different idea
+        // on how this should work...
+        goCommand = "/usr/bin/go";
+        if (checkFileExists(goCommand)) {
+            return goCommand;
+        }
+
+        // Well then no go executable for us :(
+        return "";
     }
 
     private static GoSdkData findVersion(final String path, String goCommand, GoSdkData data) {
@@ -568,6 +594,34 @@ public class GoSdkUtil {
     public static String appendToGoPath(String prependedPath) {
         return format("%s%s%s", System.getenv("GOPATH"), File.pathSeparator,
                 prependedPath);
+    }
+
+    public static String getSysGoRootPath() {
+        try {
+            return System.getenv("GOROOT");
+        } catch (NullPointerException ignored) {
+            return "";
+        } catch (SecurityException ignored) {
+            return "";
+        }
+    }
+
+    public static String getSysGoPathPath() {
+        try {
+            return System.getenv("GOPATH");
+        } catch (NullPointerException ignored) {
+            return "";
+        } catch (SecurityException ignored) {
+            return "";
+        }
+    }
+
+    @NotNull
+    public static String getPathToDisplay(final VirtualFile file) {
+        if (file == null) {
+            return "";
+        }
+        return FileUtil.toSystemDependentName(file.getPath());
     }
 
     public static VirtualFile getVirtualFile(String path) {

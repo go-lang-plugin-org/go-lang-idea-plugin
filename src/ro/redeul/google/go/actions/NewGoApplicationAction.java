@@ -1,13 +1,11 @@
 package ro.redeul.google.go.actions;
 
-import com.intellij.facet.FacetManager;
 import com.intellij.ide.IdeView;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.actions.CreateTemplateInPackageAction;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -22,7 +20,6 @@ import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.config.facet.GoFacetType;
 
 import static ro.redeul.google.go.actions.GoTemplatesFactory.Template;
 
@@ -61,7 +58,6 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<PsiEle
     protected boolean isAvailable(DataContext dataContext) {
         return
                 super.isAvailable(dataContext)
-                        // && hasGoFacet(DataKeys.MODULE.getData(dataContext))
                         && isNotIsSourceRoot(dataContext);
     }
 
@@ -89,10 +85,6 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<PsiEle
         }
 
         return false;
-    }
-
-    private boolean hasGoFacet(Module module) {
-        return FacetManager.getInstance(module).getFacetByType(GoFacetType.GO_FACET_TYPE_ID) != null;
     }
 
     protected void doCheckCreate(PsiDirectory dir, String className) throws IncorrectOperationException {

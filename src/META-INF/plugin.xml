@@ -430,7 +430,6 @@
                 ro.redeul.google.go.components.GoSdkParsingHelper
             </implementation-class>
         </component>
-
     </application-components>
 
     <project-components>
@@ -438,18 +437,7 @@
         <!-- Add your project components here -->
         <component>
             <implementation-class>
-                ro.redeul.google.go.components.GoCompilerLoader
-            </implementation-class>
-        </component>
-
-        <component>
-            <implementation-class>
                 ro.redeul.google.go.imports.AutoImportHighlightingPassFactory
-            </implementation-class>
-        </component>
-        <component>
-            <implementation-class>
-                ro.redeul.google.go.components.ProjectSdkValidator
             </implementation-class>
         </component>
     </project-components>
@@ -594,13 +582,15 @@
                 implementation="ro.redeul.google.go.ide.contributor.GoGoToClassContributor"/>
         <gotoSymbolContributor
                 implementation="ro.redeul.google.go.ide.contributor.GoGoToSymbolContributor"/>
-        <!--<frameworkSupport implementation="ro.redeul.google.go.config.framework.GoFrameworkSupportProvider"/>-->
-        <!--<facetType implementation="ro.redeul.google.go.config.facet.GoFacetType"/>-->
+
         <sdkType implementation="ro.redeul.google.go.config.sdk.GoSdkType"/>
         <sdkType
                 implementation="ro.redeul.google.go.config.sdk.GoAppEngineSdkType"/>
 
-        <moduleType id="GO_MODULE"
+        <projectTemplatesFactory implementation="ro.redeul.google.go.template.GoTemplatesFactory"/>
+        <directoryProjectGenerator implementation="ro.redeul.google.go.template.GoApplicationGenerator"/>
+
+        <!--moduleType id="GO_MODULE"
                     implementationClass="ro.redeul.google.go.ide.GoModuleType"
                     classpathProvider="true"/>
         <moduleType id="GO_APP_ENGINE_MODULE"
@@ -608,10 +598,7 @@
                     classpathProvider="true"/>
 
         <moduleConfigurationEditorProvider
-                implementation="ro.redeul.google.go.ide.GoModuleEditorsProvider"/>
-        <!--<compiler.makeDependencyProcessor implementation="ro.redeul.google.go.compilation.GoDependencyProvider"/>-->
-        <!--<compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>-->
-        <compileServer.plugin classpath=""/>
+                implementation="ro.redeul.google.go.ide.GoModuleEditorsProvider"/-->
 
         <configurationType
                 implementation="ro.redeul.google.go.runner.GoRunConfigurationType"/>
@@ -639,8 +626,11 @@
         <defaultLiveTemplatesProvider
                 implementation="ro.redeul.google.go.template.GoTemplatesProvider"/>
 
-        <fileTemplateGroup
-                implementation="ro.redeul.google.go.actions.GoTemplatesFactory"/>
+        <internalFileTemplate name="Go Application"/>
+        <internalFileTemplate name="Go File"/>
+        <internalFileTemplate name="Go Test File"/>
+        <internalFileTemplate name="Go App Engine Application"/>
+        <internalFileTemplate name="Go App Engine YAML"/>
 
         <colorSettingsPage
                 implementation="ro.redeul.google.go.editor.highlighting.GoColorsAndFontsPage"/>

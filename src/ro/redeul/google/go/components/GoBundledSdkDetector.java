@@ -68,7 +68,7 @@ public class GoBundledSdkDetector implements ApplicationComponent {
             final GoSdkType goSdkType = GoSdkType.getInstance();
 
             goSdkType.setSdkData(sdkData);
-            String newSdkName = SdkConfigurationUtil.createUniqueSdkName(goSdkType, sdkData.GO_HOME_PATH, Arrays.asList(jdkTable.getAllJdks()));
+            String newSdkName = SdkConfigurationUtil.createUniqueSdkName(goSdkType, sdkData.GO_GOROOT_PATH, Arrays.asList(jdkTable.getAllJdks()));
             bundledGoSdk = new ProjectJdkImpl(newSdkName, goSdkType);
             bundledGoSdk.setHomePath(homePath);
             ApplicationManager.getApplication().runWriteAction(new Runnable() {

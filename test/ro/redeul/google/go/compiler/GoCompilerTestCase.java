@@ -13,8 +13,6 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.compiler.*;
@@ -23,7 +21,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
-import com.intellij.openapi.roots.CompilerProjectExtension;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -37,7 +34,6 @@ import com.intellij.testFramework.fixtures.TempDirTestFixture;
 import com.intellij.testFramework.fixtures.impl.TempDirTestFixtureImpl;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.ui.UIUtil;
-import ro.redeul.google.go.components.GoCompilerLoader;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.runner.GoApplicationConfiguration;
@@ -82,14 +78,12 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
         myMainOutput = new TempDirTestFixtureImpl();
         myMainOutput.setUp();
         super.setUp();
-        getProject().getComponent(GoCompilerLoader.class).projectOpened();
 
         CompilerManagerImpl.testSetup();
 
         new WriteCommandAction(getProject()) {
             protected void run(Result result) throws Throwable {
                 addGoFacetAndSdk(myModule, getProject());
-                CompilerProjectExtension.getInstance(getProject()).setCompilerOutputUrl(myMainOutput.findOrCreateDir("out").getUrl());
             }
         }.execute();
     }
@@ -124,7 +118,7 @@ public abstract class GoCompilerTestCase extends JavaCodeInsightFixtureTestCase 
         assertTrue("Test go sdk not available to run tests, check that the system property [go.test.sdk.home] or your GOROOT environment variable are set correctly.",
                 goSdkData != null);
 
-        sdkModificator.setHomePath(goSdkData.GO_HOME_PATH);
+        sdkModificator.setHomePath(goSdkData.GO_GOROOT_PATH);
         sdkModificator.setVersionString(goSdkData.VERSION_MAJOR);
         sdkModificator.setSdkAdditionalData(goSdkData);
         sdkModificator.commitChanges();

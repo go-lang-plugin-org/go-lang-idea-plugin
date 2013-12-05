@@ -63,13 +63,11 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     public void checkConfiguration() throws RuntimeConfigurationException {
         super.checkConfiguration();
 
-        if (getConfigurationModule().getModule() == null)
-            throw new RuntimeConfigurationException("A module is required");
-
         if (packageName == null || packageName.isEmpty())
             throw new RuntimeConfigurationException("A package is required");
     }
 
+    @NotNull
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
         return new GoTestConfigurationEditorForm(getProject());
     }
