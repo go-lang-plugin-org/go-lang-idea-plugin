@@ -387,7 +387,77 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         }
 
         List<PsiNamedElement> getMembers(GoTypeSpec typeSpec) {
-            return Collections.emptyList();
+            List<PsiNamedElement> members = new ArrayList<PsiNamedElement>();
+            members.addAll(getMethods(typeSpec));
+            return members;
+        }
+
+        protected void getMethodsInFile(List<PsiNamedElement> children, String name, GoFile file) {
+            for (GoMethodDeclaration md : file.getMethods()) {
+                GoMethodReceiver mr = md.getMethodReceiver();
+                if (mr == null) {
+                    continue;
+                }
+
+                GoPsiType type = mr.getType();
+                if (type instanceof GoPsiTypePointer) {
+                    type = ((GoPsiTypePointer) type).getTargetType();
+                }
+
+                if (type != null && name.equals(type.getName())) {
+                    children.add(md);
+                }
+            }
+        }
+
+        protected Collection<GoFile> getAllSamePackageFiles(GoFile goFile) {
+            String path = getFilePath(goFile);
+            if (path.isEmpty()) {
+                return Collections.singleton(goFile);
+            }
+
+            List<GoFile> files = new ArrayList<GoFile>();
+            String packageName = goFile.getPackageName();
+            GoNamesCache namesCache = GoNamesCache.getInstance(goFile.getProject());
+            for (GoFile file : namesCache.getFilesByPackageName(packageName)) {
+                if (path.equals(getFilePath(file))) {
+                    files.add(file);
+                }
+            }
+
+            if (files.isEmpty()) {
+                files.add(goFile);
+            }
+            return files;
+        }
+
+        protected String getFilePath(GoFile file) {
+            VirtualFile vf = file.getVirtualFile();
+            if (vf == null) {
+                return "";
+            }
+
+            VirtualFile parent = vf.getParent();
+            if (parent == null) {
+                return "";
+            }
+
+            return parent.getPath();
+        }
+
+        protected List<PsiNamedElement> getMethods(GoTypeSpec typeSpec) {
+            PsiFile file = typeSpec.getContainingFile();
+            String name = typeSpec.getName();
+            if (name == null || !(file instanceof GoFile)) {
+                return Collections.emptyList();
+            }
+
+            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
+            for (GoFile f : getAllSamePackageFiles((GoFile) file)) {
+                getMethodsInFile(children, name, f);
+            }
+            Collections.sort(children, NAMED_ELEMENT_COMPARATOR);
+            return children;
         }
 
         @Override
@@ -423,74 +493,6 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
             fields.addAll(getAnonymousFields(struct));
             Collections.sort(fields, NAMED_ELEMENT_COMPARATOR);
             return fields;
-        }
-
-        private List<PsiNamedElement> getMethods(GoTypeSpec typeSpec) {
-            PsiFile file = typeSpec.getContainingFile();
-            String name = typeSpec.getName();
-            if (name == null || !(file instanceof GoFile)) {
-                return Collections.emptyList();
-            }
-
-            List<PsiNamedElement> children = new ArrayList<PsiNamedElement>();
-            for (GoFile f : getAllSamePackageFiles((GoFile) file)) {
-                getMethodsInFile(children, name, f);
-            }
-            Collections.sort(children, NAMED_ELEMENT_COMPARATOR);
-            return children;
-        }
-
-        private Collection<GoFile> getAllSamePackageFiles(GoFile goFile) {
-            String path = getFilePath(goFile);
-            if (path.isEmpty()) {
-                return Collections.singleton(goFile);
-            }
-
-            List<GoFile> files = new ArrayList<GoFile>();
-            String packageName = goFile.getPackageName();
-            GoNamesCache namesCache = GoNamesCache.getInstance(goFile.getProject());
-            for (GoFile file : namesCache.getFilesByPackageName(packageName)) {
-                if (path.equals(getFilePath(file))) {
-                    files.add(file);
-                }
-            }
-
-            if (files.isEmpty()) {
-                files.add(goFile);
-            }
-            return files;
-        }
-
-        private String getFilePath(GoFile file) {
-            VirtualFile vf = file.getVirtualFile();
-            if (vf == null) {
-                return "";
-            }
-
-            VirtualFile parent = vf.getParent();
-            if (parent == null) {
-                return "";
-            }
-
-            return parent.getPath();
-        }
-
-        private void getMethodsInFile(List<PsiNamedElement> children, String name, GoFile file) {
-            for (GoMethodDeclaration md : file.getMethods()) {
-                GoMethodReceiver mr = md.getMethodReceiver();
-                if (mr == null) {
-                    continue;
-                }
-
-                GoPsiType type = mr.getType();
-                if (type instanceof GoPsiTypePointer) {
-                    type = ((GoPsiTypePointer) type).getTargetType();
-                }
-
-                if (type != null && name.equals(type.getName())) {
-                    children.add(md);
-                }
-            }
         }
 
         private List<PsiNamedElement> getAnonymousFields(GoPsiTypeStruct struct) {
