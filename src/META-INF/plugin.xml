@@ -55,12 +55,16 @@
     </description>
     <change-notes>
         <![CDATA[
+         <h3>0.9.17 changes:</h3>
+            <ul>
+               <li>Added a new inspection/fix which will generate a closure function</li>
+               <li>Now the function inspection/fix will generate the arguments when specified</li>
+            </ul>
          <h3>0.9.16 changes:</h3>
             <ul>
                 <li>More Cardea (IntelliJ IDEA 13) support</li>
                 <li>Fixed live templates and compilation against latest IDEA 13 EAP 132.947</li>
             </ul>
-         </h3
          <h3>0.9.15 changes:</h3>
             <ul>
                 <li>Cardea (IntelliJ IDEA 13) support</li>
@@ -69,7 +73,6 @@
                 <li>New build system available</li>
                 <li>Other fixes and improvements</li>
             </ul>
-         </h3
          <h3>0.9.14 changes:</h3>
             <ul>
                 <li>[feature] Basic support for completion of the whole method set for an interface.</li>

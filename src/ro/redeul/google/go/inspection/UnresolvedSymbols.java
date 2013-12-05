@@ -6,10 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.inspection.fix.CreateFunctionFix;
-import ro.redeul.google.go.inspection.fix.CreateGlobalVariableFix;
-import ro.redeul.google.go.inspection.fix.CreateLocalVariableFix;
-import ro.redeul.google.go.inspection.fix.CreateTypeFix;
+import ro.redeul.google.go.inspection.fix.*;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
@@ -66,7 +63,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
             @Override
             public void visitLiteralExpression(GoLiteralExpression expression) {
                 if (CallOrConversionReference.MATCHER.accepts(expression) ||
-                    BuiltinCallOrConversionReference.MATCHER.accepts(expression)) {
+                        BuiltinCallOrConversionReference.MATCHER.accepts(expression)) {
                     tryToResolveReference(expression, expression.getText());
                 } else {
                     super.visitLiteralExpression(expression);
@@ -87,10 +84,12 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
                     LocalQuickFix[] fixes;
                     if (isFunctionNameIdentifier(element)) {
-                        fixes = new LocalQuickFix[]{new CreateFunctionFix(element)};
+                        fixes = new LocalQuickFix[]{new CreateFunctionFix(element), new CreateClosureFunctionFix(element)};
                     } else if (isLocalVariableIdentifier(element)) {
                         fixes = new LocalQuickFix[]{new CreateLocalVariableFix(element),
-                                new CreateGlobalVariableFix(element)};
+                                new CreateGlobalVariableFix(element),
+                                new CreateClosureFunctionFix(element)
+                        };
                     } else if (isGlobalVariableIdentifier(element)) {
                         fixes = new LocalQuickFix[]{new CreateGlobalVariableFix(element)};
                     } else if (isUnqualifiedTypeName(element)) {
@@ -100,9 +99,9 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                     }
 
                     result.addProblem(
-                        element,
-                        message("warning.unresolved.symbol", name),
-                        ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, fixes);
+                            element,
+                            message("warning.unresolved.symbol", name),
+                            ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, fixes);
                 }
             }
         }.visitElement(file);
@@ -138,14 +137,15 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
     private static boolean isGlobalVariableIdentifier(PsiElement element) {
         return element instanceof GoLiteralIdentifier &&
-               findParentOfType(element, GoSelectorExpression.class) == null &&
-               findParentOfType(element, GoFunctionDeclaration.class) == null &&
-               findParentOfType(element, GoVarDeclarations.class) != null;
+                findParentOfType(element, GoSelectorExpression.class) == null &&
+                findParentOfType(element, GoFunctionDeclaration.class) == null &&
+                findParentOfType(element, GoVarDeclarations.class) != null;
     }
 
     private static boolean isLocalVariableIdentifier(PsiElement element) {
         return element instanceof GoLiteralIdentifier &&
-               findParentOfType(element, GoSelectorExpression.class) == null &&
-               findParentOfType(element, GoFunctionDeclaration.class) != null;
+                findParentOfType(element, GoSelectorExpression.class) == null &&
+                findParentOfType(element, GoFunctionDeclaration.class) != null &&
+                !element.textContains('.');
     }
 }
