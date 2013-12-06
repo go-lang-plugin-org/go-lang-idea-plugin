@@ -9,7 +9,7 @@ func tc(arg *Person)bool{
 }
 
 func main() {
-    f := func (n int) int {return 7+n+/*begin*/Foo/*end*/([]string{"1","2","3"},tc,tc(),func()int{return 0}())}
+    f := func (n int) int {return 7+n+/*begin*/Foo/*end*/([]string{"1","2","3"},tc,tc(),func()int{return 0}(),50/5,.5*2,.5*2==1)}
     println(f(5))
 }
 -----
@@ -24,10 +24,10 @@ func tc(arg *Person)bool{
 }
 
 func main() {
-    f := func (n int) int {return 7+n+Foo([]string{"1","2","3"},tc,tc(),func()int{return 0}())}
+    f := func (n int) int {return 7+n+Foo([]string{"1","2","3"},tc,tc(),func()int{return 0}(),50/5,.5*2,.5*2==1)}
     println(f(5))
 }
 
-func Foo(arg0 []string, arg1 func(*Person)bool, arg2 bool, arg3 int) {
+func Foo(arg0 []string, arg1 func(*Person)bool, arg2 bool, arg3 int, arg4 int, arg5 float, arg6 bool) {
 	<caret>
 }
