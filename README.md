@@ -45,6 +45,8 @@ Google go language plugin is an attempt to build an outstanding IDE for
 * Add a new Google Go SDK by clicking the plus sign an choosing the appropriate SDK type.
 * After the SDK is defined go to the Modules entry and add a new google facet to your default module.
 Select the proper sdk for the module.
+* If you are using a multiple value GOPATH for your computer, add the first directory to the ``` Classpath ```
+of the GO SDK so that packages from ``` go get ``` are added to the autocompletion system.
 
 Now you are ready to play with golang.
 
@@ -55,7 +57,14 @@ Now you are ready to play with golang.
 ## Bugs
 
 If you found a bug, please report it at the Google Go plugin project's tracker
-on GitHub: <http://github.com/mtoader/google-go-lang-idea-plugin/issues>
+on GitHub: <http://github.com/mtoader/google-go-lang-idea-plugin/issues>.
+
+When reporting a bug, please include the following:
+- IDEA version
+- OS version
+- JDK version
+
+Please ensure that the bug is not reported.
 
 ## Authors
 
@@ -64,7 +73,7 @@ on GitHub: <http://github.com/mtoader/google-go-lang-idea-plugin/issues>
     + Sdk indexing
     + Reference Resolving & Completions
 
-+ <https://github.com/leojay>
++ [leojay](https://github.com/leojay)
     + folding improvement
     + refactorings
         + introduce variable
@@ -78,7 +87,7 @@ on GitHub: <http://github.com/mtoader/google-go-lang-idea-plugin/issues>
     +  gofmt integration
     +  simple Structure View for Go files.
 
-+ [dlsniper](https://github.com/dlsniper)
++ [Florin Patan (dlsniper)](https://github.com/dlsniper)
     +  Cardea support
 
 ## Contributing

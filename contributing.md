@@ -12,13 +12,15 @@ In order to be able to contribute to the plugin you need to:
 ### Checking out the IntellJ IDEA Platform sources.
 
 We start with cloning the idea git repository and checking out the revision
-used to build IDEA 11.1.1:
+used to build IDEA 13:
 
-    git clone git://git.jetbrains.org/idea/community.git idea
+```bash
+    git clone git@github.com:JetBrains/intellij-community.git idea
     cd idea
-    git checkout idea/117.117
+    git checkout idea/133.139
     # and we build it using ant
     ant
+```
 
 The build will take around 10 to 20 minutes (depending on the machine) and at the
 end it should put the build artifacts into `out/artifacts` folder.
@@ -35,9 +37,9 @@ end it should put the build artifacts into `out/artifacts` folder.
 
 Use the artifact from your target OS to run the built version of IDEA.
 
-### Checking out and building Google Go 1
+### Checking out and building Google Go 1.2
 
-We prefer to work with a Go 1 release installed from sources by following the page
+We prefer to work with a Go 1.2 release installed from sources by following the page
 source installation page from here: <http://golang.org/doc/install/source>.
 
 This will work even with a binary installation (as a result of following the
@@ -65,12 +67,12 @@ The steps:
 from here: <http://www.jetbrains.com/idea/>.
 2. Open the copy of google-go-lang-idea-plugin repository (that was previously
 checked out) with it (the default project module config should work with a
-recent IDEA 11 version).
+recent IDEA 13 version).
 3. Open the Project Settings (Comamnd + ; on Mac or File -> Project Settings on
 other platforms), go to the SDKs entry, click the `+` (and select IntelliJ IDEA
 Plugin SDK) and navigate to the unzipped location of the IDEA build that you
 created before. It will recognize a new IDEA Plugin sdk with the name
-`IDEA IC-117.SNAPSHOT`. After that you should add the IDEA sources to it by
+`IDEA IC-113.139`. After that you should add the IDEA sources to it by
  selecting the SDK, going to the `Sourcepath` tab, clicking `+` in the lower
  panel and navigating to the checkout out sources of IDEA. Press add, let it
  inspect the folders for sources and add all the found sources to the SDK.
