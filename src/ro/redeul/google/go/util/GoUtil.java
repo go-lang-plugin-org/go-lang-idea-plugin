@@ -5,7 +5,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoMultiplicativeExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
@@ -15,6 +16,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.*;
 
 import java.io.File;
@@ -144,7 +146,8 @@ public class GoUtil {
             PsiElement firstChildExp = argument.getFirstChild();
 
             if (argument instanceof GoCallOrConvExpression ||
-                    argument instanceof GoBinaryExpression ||
+                    argument instanceof GoMultiplicativeExpression ||
+                    argument instanceof GoAdditiveExpression ||
                     argument instanceof GoLiteralExpression ||
                     firstChildExp instanceof GoLiteralIdentifier ||
                     firstChildExp instanceof GoLiteralComposite ||
@@ -177,7 +180,17 @@ public class GoUtil {
                         }
                     }
                 } else {
-                    stringBuilder.append("interface{}");
+                    PsiElement firstChild = firstChildExp.getFirstChild();
+                    if (firstChild instanceof GoLiteralFunction) {
+                        GoPsiType[] returnType = ((GoLiteralFunction) firstChild).getReturnType();
+                        if (returnType.length > 0) {
+                            stringBuilder.append(returnType[0].getText());
+                        } else {
+                            stringBuilder.append("interface{}");
+                        }
+                    } else {
+                        stringBuilder.append("interface{}");
+                    }
                 }
 
             } else if (firstChildExp instanceof GoLiteralFunction) {
