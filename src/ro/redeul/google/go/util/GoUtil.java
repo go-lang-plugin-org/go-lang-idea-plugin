@@ -3,6 +3,7 @@ package ro.redeul.google.go.util;
 import com.intellij.ide.Bootstrap;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
@@ -16,8 +17,11 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.typing.*;
+import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +30,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -130,6 +136,24 @@ public class GoUtil {
         return stringBuilder.toString();
     }
 
+    public static boolean isFunctionNameIdentifier(PsiElement e) {
+        if (!psiIsA(e, GoLiteralExpression.class))
+            return false;
+
+        GoLiteral literal = ((GoLiteralExpression) e).getLiteral();
+        if (!(literal instanceof GoLiteralIdentifier))
+            return false;
+
+        if (((GoLiteralIdentifier) literal).isQualified())
+            return false;
+
+        if (!psiIsA(e.getParent(), GoCallOrConvExpression.class))
+            return false;
+
+        // function name is the first element of its parent.
+        return e.getStartOffsetInParent() == 0;
+    }
+
     /**
      * Helper method to generate function arguments type, based on param being passed to the function
      *
@@ -139,68 +163,108 @@ public class GoUtil {
     public static String InspectionGenFuncArgs(PsiElement e) {
         StringBuilder stringBuilder = new StringBuilder();
         int arg = 0;
-        for (GoExpr argument : ((GoCallOrConvExpression) e.getParent()).getArguments()) {
-            if (arg != 0)
-                stringBuilder.append(',');
-            stringBuilder.append("arg").append(arg).append(" ");
-            PsiElement firstChildExp = argument.getFirstChild();
+        if (isFunctionNameIdentifier(e)) {
+            for (GoExpr argument : ((GoCallOrConvExpression) e.getParent()).getArguments()) {
+                if (arg != 0)
+                    stringBuilder.append(',');
+                stringBuilder.append("arg").append(arg).append(" ");
+                PsiElement firstChildExp = argument.getFirstChild();
 
-            if (argument instanceof GoCallOrConvExpression ||
-                    argument instanceof GoMultiplicativeExpression ||
-                    argument instanceof GoAdditiveExpression ||
-                    argument instanceof GoLiteralExpression ||
-                    firstChildExp instanceof GoLiteralIdentifier ||
-                    firstChildExp instanceof GoLiteralComposite ||
-                    firstChildExp.getText().equals("&")) {
+                if (argument instanceof GoCallOrConvExpression ||
+                        argument instanceof GoMultiplicativeExpression ||
+                        argument instanceof GoAdditiveExpression ||
+                        //  argument instanceof GoLiteralExpression ||
+                        firstChildExp instanceof GoLiteralIdentifier ||
+                        firstChildExp instanceof GoLiteralComposite ||
+                        firstChildExp.getText().equals("&")) {
 
-                GoType[] goTypes = argument.getType();
-                if (goTypes.length > 0) {
-                    GoType goType = goTypes[0];
-                    if (goType instanceof GoTypeSlice) {
-                        stringBuilder.append(((GoTypeSlice) goType).getPsiType().getText());
-                    } else if (goType instanceof GoTypeName) {
-                        if (firstChildExp.getText().equals("&"))
+                    GoType[] goTypes = argument.getType();
+                    if (goTypes.length > 0) {
+                        GoType goType = goTypes[0];
+                        if (goType instanceof GoTypeSlice) {
+                            stringBuilder.append(((GoTypeSlice) goType).getPsiType().getText());
+                        } else if (goType instanceof GoTypeName) {
+                            if (firstChildExp.getText().equals("&"))
+                                stringBuilder.append('*');
+                            stringBuilder.append(((GoTypeName) goType).getPsiType().getText());
+
+                        } else if (goType instanceof GoTypePointer) {
+                            goType = ((GoTypePointer) goType).getTargetType();
                             stringBuilder.append('*');
-                        stringBuilder.append(((GoTypeName) goType).getPsiType().getText());
+                            stringBuilder.append(((GoTypeName) goType).getPsiType().getText());
+                        } else if (goType instanceof GoTypeFunction) {
+                            stringBuilder.append(getFuncDecAsParam(((GoFunctionDeclaration) ((GoTypeFunction) goType).getPsiType())));
+                        } else {
 
-                    } else if (goType instanceof GoTypePointer) {
-                        goType = ((GoTypePointer) goType).getTargetType();
-                        stringBuilder.append('*');
-                        stringBuilder.append(((GoTypeName) goType).getPsiType().getText());
-                    } else if (goType instanceof GoTypeFunction) {
-                        stringBuilder.append(getFuncDecAsParam(((GoFunctionDeclaration) ((GoTypeFunction) goType).getPsiType())));
-                    } else {
-                        try {
                             //Get the expression element
-                            GoPsiElement resl_element = (GoPsiElement) firstChildExp.getReferences()[0].resolve().getParent().getLastChild();
-                            GoLiteralFunction fn = (GoLiteralFunction) resl_element.getFirstChild();
-                            stringBuilder.append(getFuncDecAsParam(fn));
-                        } catch (NullPointerException $ex) {
-                            stringBuilder.append("interface{}");
+                            final PsiReference[] references = firstChildExp.getReferences();
+                            if (references.length > 0) {
+                                GoPsiElement resl_element = (GoPsiElement) references[0].resolve().getParent().getLastChild();
+                                GoLiteralFunction fn = (GoLiteralFunction) resl_element.getFirstChild();
+                                stringBuilder.append(getFuncDecAsParam(fn));
+                            } else {
+                                stringBuilder.append("interface{}");
+                            }
+
                         }
-                    }
-                } else {
-                    PsiElement firstChild = firstChildExp.getFirstChild();
-                    if (firstChild instanceof GoLiteralFunction) {
-                        GoPsiType[] returnType = ((GoLiteralFunction) firstChild).getReturnType();
-                        if (returnType.length > 0) {
-                            stringBuilder.append(returnType[0].getText());
+                    } else {
+                        PsiElement firstChild = firstChildExp.getFirstChild();
+                        if (firstChild instanceof GoLiteralFunction) {
+                            GoPsiType[] returnType = ((GoLiteralFunction) firstChild).getReturnType();
+                            if (returnType.length > 0) {
+                                stringBuilder.append(returnType[0].getText());
+                            } else {
+                                stringBuilder.append("interface{}");
+                            }
                         } else {
                             stringBuilder.append("interface{}");
                         }
-                    } else {
-                        stringBuilder.append("interface{}");
+                    }
+
+                } else if (firstChildExp instanceof GoLiteralFunction) {
+                    stringBuilder.append(GoUtil.getFuncDecAsParam((GoLiteralFunction) firstChildExp));
+                } else if (argument instanceof GoRelationalExpression) {
+                    stringBuilder.append("bool");
+                } else {
+                    stringBuilder.append(((GoLiteral) firstChildExp).getType().name().toLowerCase());
+                }
+                arg++;
+            }
+        } else {
+            GoCallOrConvExpression parentOfTypeCallOrConvExpression = findParentOfType(e, GoCallOrConvExpression.class);
+            GoFunctionDeclaration goFunctionDeclaration = GoExpressionUtils.resolveToFunctionDeclaration(parentOfTypeCallOrConvExpression);
+
+            if (goFunctionDeclaration != null) {
+
+                int myIndex = 0;
+
+                for (GoExpr argum : parentOfTypeCallOrConvExpression.getArguments()) {
+                    if (argum.equals(e) || argum.getFirstChild().equals(e))
+                        break;
+                    myIndex++;
+                }
+
+                GoFunctionParameter[] parameter = goFunctionDeclaration.getParameters();
+
+                if (myIndex < parameter.length) {
+                    GoPsiType type = parameter[myIndex].getType();
+                    if (type instanceof GoPsiTypeFunction) {
+                        GoFunctionParameterList goFunctionParameterList = findChildOfClass(type, GoFunctionParameterList.class);
+                        if (goFunctionParameterList != null) {
+                            for (GoFunctionParameter parameter1 : goFunctionParameterList.getFunctionParameters()) {
+                                if (arg > 0)
+                                    stringBuilder.append(',');
+                                stringBuilder.append("arg").append(arg).append(' ').append(parameter1.getType().getText());
+                                arg++;
+                            }
+                        }
                     }
                 }
 
-            } else if (firstChildExp instanceof GoLiteralFunction) {
-                stringBuilder.append(GoUtil.getFuncDecAsParam((GoLiteralFunction) firstChildExp));
-            } else if (argument instanceof GoRelationalExpression) {
-                stringBuilder.append("bool");
             } else {
-                stringBuilder.append(((GoLiteral) firstChildExp).getType().name().toLowerCase());
+                return "";
             }
-            arg++;
+
         }
 
         return stringBuilder.toString();

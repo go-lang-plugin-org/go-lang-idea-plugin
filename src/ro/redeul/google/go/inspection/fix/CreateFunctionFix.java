@@ -10,16 +10,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.util.GoUtil;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.psiIsA;
 import static ro.redeul.google.go.util.EditorUtil.pressEnter;
 import static ro.redeul.google.go.util.EditorUtil.reformatLines;
 
@@ -47,20 +42,14 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
                        @Nullable("is null when called from inspection") final Editor editor,
                        @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
         final PsiElement e = startElement;
-        if (!e.getContainingFile().equals(file) || !isFunctionNameIdentifier(e)) {
-            return;
-        }
+
 
         GoFunctionDeclaration fd = findParentOfType(e, GoFunctionDeclaration.class);
         while (fd instanceof GoLiteralFunction) {
             fd = findParentOfType(fd.getParent(), GoFunctionDeclaration.class);
         }
 
-        //put arguments with the new func
-
-
         final String fnArguments = GoUtil.InspectionGenFuncArgs(e);
-        //end arguments
 
         final int insertPoint;
         if (fd != null) {
@@ -83,23 +72,5 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
                 }
             }
         });
-    }
-
-    public static boolean isFunctionNameIdentifier(PsiElement e) {
-        if (!psiIsA(e, GoLiteralExpression.class))
-            return false;
-
-        GoLiteral literal = ((GoLiteralExpression) e).getLiteral();
-        if (!(literal instanceof GoLiteralIdentifier))
-            return false;
-
-        if (((GoLiteralIdentifier) literal).isQualified())
-            return false;
-
-        if (!psiIsA(e.getParent(), GoCallOrConvExpression.class))
-            return false;
-
-        // function name is the first element of its parent.
-        return e.getStartOffsetInParent() == 0;
     }
 }
