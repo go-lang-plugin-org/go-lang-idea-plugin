@@ -4,6 +4,7 @@ import com.intellij.ide.Bootstrap;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
@@ -20,6 +21,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 
@@ -250,14 +252,26 @@ public class GoUtil {
                     GoPsiType type = parameter[myIndex].getType();
                     if (type instanceof GoPsiTypeFunction) {
                         GoFunctionParameterList goFunctionParameterList = findChildOfClass(type, GoFunctionParameterList.class);
+                        final String packageName = ((GoFile) e.getContainingFile()).getPackageName();
                         if (goFunctionParameterList != null) {
                             for (GoFunctionParameter parameter1 : goFunctionParameterList.getFunctionParameters()) {
                                 if (arg > 0)
                                     stringBuilder.append(',');
-                                stringBuilder.append("arg").append(arg).append(' ').append(parameter1.getType().getText());
+
+                                stringBuilder.append("arg").append(arg).append(' ');
+
+                                final GoPsiType type1 = parameter1.getType();
+                                if (type1.getPackageName().equals(packageName)) {
+                                    stringBuilder.append(type1.getText());
+                                } else if (type1 instanceof GoPsiTypePointer) {
+                                    stringBuilder.append('*').append(((GoPsiType) ((GoPsiTypePointer) type1).getTargetType()).getQualifiedName());
+                                } else {
+                                    stringBuilder.append(type1.getQualifiedName());
+                                }
                                 arg++;
                             }
                         }
+
                     }
                 }
 

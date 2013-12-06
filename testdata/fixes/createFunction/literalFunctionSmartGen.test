@@ -1,6 +1,6 @@
 package main
 
-func HandleFunc(pa string, handler func(http.ResponseWriter,*http.Request)){
+func HandleFunc(pa string, handler func(int,*string)){
 
 }
 
@@ -10,7 +10,7 @@ func main() {
 -----
 package main
 
-func HandleFunc(pa string, handler func(http.ResponseWriter,*http.Request)){
+func HandleFunc(pa string, handler func(int,*string)){
 
 }
 
@@ -18,6 +18,6 @@ func main() {
    HandleFunc("/",indexHandler)
 }
 
-func indexHandler(arg0 http.ResponseWriter, arg1 *http.Request) {
+func indexHandler(arg0 int, arg1 *string) {
 	<caret>
 }
