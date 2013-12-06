@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.AddReturnStmtFix;
 import ro.redeul.google.go.inspection.fix.RemoveFunctionResultFix;
+import ro.redeul.google.go.lang.lexer.GoElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -13,10 +14,13 @@ import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
-import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
-import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
-import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
-import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
+import ro.redeul.google.go.lang.psi.statements.*;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClause;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionClause;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionStatement;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
@@ -139,22 +143,7 @@ public class FunctionDeclarationInspection
     }
 
     private static boolean hasReturnAtTheEnd(Context ctx) {
-        GoBlockStatement block = ctx.function.getBlock();
-        if (block == null) {
-            return false;
-        }
-
-        PsiElement lastChild = getPrevSiblingIfItsWhiteSpaceOrComment(block.getLastChild());
-        if (lastChild == null || !"}".equals(lastChild.getText())) {
-            return false;
-        }
-
-        lastChild = getPrevSiblingIfItsWhiteSpaceOrComment(lastChild.getPrevSibling());
-        while (lastChild instanceof GoLabeledStatement) {
-            lastChild = ((GoLabeledStatement) lastChild).getStatement();
-        }
-        return isNodeOfType(lastChild, GoElementTypes.RETURN_STATEMENT) ||
-               isPanicCall(lastChild);
+        return isTerminating(ctx.function.getBlock());
     }
 
     private static boolean isPanicCall(PsiElement element) {
@@ -169,6 +158,87 @@ public class FunctionDeclarationInspection
 
         GoPrimaryExpression expression = ((GoBuiltinCallExpression) call).getBaseExpression();
         return expression != null && "panic".equals(expression.getText());
+    }
+
+    private static boolean isTerminating(GoStatement statement) {
+        if (statement instanceof GoReturnStatement) {
+            return true;
+        }else if (statement instanceof GoGoStatement){
+            return true;
+        }else if (isPanicCall(statement)) {
+            return true;
+        }else if (statement instanceof GoBlockStatement) {
+            GoBlockStatement block = (GoBlockStatement)statement;
+            GoStatement[] statements = block.getStatements();
+            return statements.length > 0 && isTerminating(statements[statements.length - 1]);
+        }else if (statement instanceof GoIfStatement) {
+            GoIfStatement ifStatement = (GoIfStatement)(statement);
+            if (!isTerminating(ifStatement.getThenBlock())){
+                return false;
+            }else if (ifStatement.getElseIfStatement() != null){
+                return isTerminating(ifStatement.getElseIfStatement());
+            }else if (ifStatement.getElseBlock() != null) {
+                return isTerminating(ifStatement.getElseBlock());
+            }else {
+                return false;
+            }
+        }else if(statement instanceof GoForWithConditionStatement){
+            GoForWithConditionStatement forStatement = (GoForWithConditionStatement)statement;
+            return forStatement.getCondition() == null;
+        }else if (statement instanceof GoSwitchExpressionStatement){
+            GoSwitchExpressionStatement switchExpr = (GoSwitchExpressionStatement)statement;
+            boolean hasDefalut = false;
+            for (GoSwitchExpressionClause clause: switchExpr.getClauses()) {
+                if (clause.isDefault()) {
+                    hasDefalut = true;
+                }
+                GoStatement[] statmentsInClause = clause.getStatements();
+
+                if (statmentsInClause.length == 0) {
+                    return false;
+                }
+
+                if (!isTerminating(statmentsInClause[statmentsInClause.length-1])){
+                    return false;
+                }
+            }
+            return hasDefalut;
+        }else if (statement instanceof GoSwitchTypeStatement){
+            GoSwitchTypeStatement switchTypeStatement = (GoSwitchTypeStatement)statement;
+            boolean hasDefalut = false;
+            for (GoSwitchTypeClause clause: switchTypeStatement.getClauses()) {
+                if (clause.isDefault()) {
+                    hasDefalut = true;
+                }
+                GoStatement[] statmentsInClause = clause.getStatements();
+
+                if (statmentsInClause.length == 0) {
+                    return false;
+                }
+
+                if (!isTerminating(statmentsInClause[statmentsInClause.length-1])){
+                    return false;
+                }
+            }
+            return hasDefalut;
+        }else if (statement instanceof GoSelectStatement){
+            GoSelectStatement selectStatement = (GoSelectStatement)statement;
+            for (GoSelectCommClause clause : selectStatement.getCommClauses()) {
+                GoStatement[] statmentsInClause = clause.getStatements();
+                if (statmentsInClause.length == 0) {
+                    return false;
+                }
+                if (!isTerminating(statmentsInClause[statmentsInClause.length-1])){
+                    return false;
+                }
+            }
+            return true;
+        }else if (statement instanceof GoLabeledStatement){
+            GoLabeledStatement labeledStatement = (GoLabeledStatement)statement;
+            return isTerminating (labeledStatement.getStatement());
+        }else{
+            return false;
+        }
     }
 
     private static List<String> getParameterNames(GoFunctionParameter[] parameters) {
