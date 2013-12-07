@@ -39,8 +39,7 @@ public class GoApplicationRunner extends DefaultProgramRunner {
             return null;
         }
 
-        final RunContentBuilder contentBuilder = new RunContentBuilder(project, this, env.getExecutor());
-        contentBuilder.setExecutionResult(executionResult);
+        final RunContentBuilder contentBuilder = new RunContentBuilder(this, executionResult, env);
         contentBuilder.setEnvironment(env);
 
         return contentBuilder.showRunContent(contentToReuse);

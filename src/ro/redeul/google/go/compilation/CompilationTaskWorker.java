@@ -45,12 +45,10 @@ class CompilationTaskWorker {
                     buf.append("\t").append(pair).append("\n");
                 }
 
-                Map<String, String> map = command.getEnvParams();
-                if (map != null) {
-                    buf.append("===== Custom environment:").append("\n");
-                    for (String key : map.keySet()) {
-                        buf.append("\t").append(key).append("=").append(map.get(key)).append("\n");
-                    }
+                Map<String, String> map = command.getEnvironment();
+                buf.append("===== Custom environment:").append("\n");
+                for (String key : map.keySet()) {
+                    buf.append("\t").append(key).append("=").append(map.get(key)).append("\n");
                 }
                 buf.append("===== Working folder:===========================\n");
                 buf.append("\t").append(path).append("\n");

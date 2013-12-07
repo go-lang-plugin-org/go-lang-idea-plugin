@@ -59,7 +59,7 @@ public class GoInstallCompiler implements TranslatingCompiler {
 
         envparams.put("GOPATH", GoSdkUtil.prependToGoPath(project.getBasePath()));
 
-        command.setEnvParams(envparams);
+        command.getEnvironment().putAll(envparams);
 
         CompilationTaskWorker compilationTaskWorker = new CompilationTaskWorker(
                 new GoCompilerOutputStreamParser(basePath));

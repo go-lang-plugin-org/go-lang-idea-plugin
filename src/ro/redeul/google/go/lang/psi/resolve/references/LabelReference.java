@@ -23,6 +23,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 public class LabelReference
     extends GoPsiReference.Single<GoLiteralIdentifier, LabelReference> {
 
+    @SuppressWarnings("unchecked")
     public static final ElementPattern<GoLiteralIdentifier> MATCHER =
         psiElement(GoLiteralIdentifier.class)
             .withParent(

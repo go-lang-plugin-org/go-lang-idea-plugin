@@ -103,6 +103,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     private static final ElementPattern<PsiElement> NO_REFERENCE =
         or(
             psiElement(GoLiteralIdentifier.class)

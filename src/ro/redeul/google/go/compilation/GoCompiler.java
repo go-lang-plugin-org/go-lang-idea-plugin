@@ -388,9 +388,7 @@ public class GoCompiler implements TranslatingCompiler {
         command.addParameter(baseOutputPath);
         command.addParameter("-o");
         command.addParameter(outputBinary);
-        command.setEnvParams(new HashMap<String, String>() {{
-            put("GOROOT", sdk.getHomePath());
-        }});
+        command.getEnvironment().put("GOROOT", sdk.getHomePath());
 
         for (VirtualFile file : targetDescription.getThird()) {
             String fileRelativePath = VfsUtil.getRelativePath(file, sourceRoot,
@@ -438,9 +436,7 @@ public class GoCompiler implements TranslatingCompiler {
             fixApplicationExtension(outputApplication, sdk));
         linkCommand.addParameter(outputBinary);
         linkCommand.setWorkDirectory(sourceRoot.getPath());
-        linkCommand.setEnvParams(new HashMap<String, String>() {{
-            put("GOROOT", sdk.getHomePath());
-        }});
+        linkCommand.getEnvironment().put("GOROOT", sdk.getHomePath());
 
         if (compilationTaskWorker.executeTask(linkCommand, sourceRoot.getPath(),
                                               context) == null) {
@@ -488,9 +484,7 @@ public class GoCompiler implements TranslatingCompiler {
         command.addParameter("-o");
         command.addParameter(outputBinary);
         command.setWorkDirectory(sourceRoot.getPath());
-        command.setEnvParams(new HashMap<String, String>() {{
-            put("GOROOT", sdk.getHomePath());
-        }});
+        command.getEnvironment().put("GOROOT", sdk.getHomePath());
 
         for (VirtualFile file : targetDescription.getThird()) {
             String fileRelativePath = VfsUtil.getRelativePath(file, sourceRoot,
@@ -531,9 +525,7 @@ public class GoCompiler implements TranslatingCompiler {
         libraryPackCommand.addParameter("grc");
         libraryPackCommand.addParameter(libraryFile.getPath());
         libraryPackCommand.addParameter(outputBinary);
-        libraryPackCommand.setEnvParams(new HashMap<String, String>() {{
-            put("GOROOT", sdk.getHomePath());
-        }});
+        libraryPackCommand.getEnvironment().put("GOROOT", sdk.getHomePath());
 
         if (compilationTaskWorker.executeTask(libraryPackCommand,
                                               sourceRoot.getPath(),

@@ -61,6 +61,7 @@ import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class InlineLocalVariableActionHandler extends InlineActionHandler {
 
+    @SuppressWarnings("unchecked")
     private static final ElementPattern<GoLiteralIdentifier> LOCAL_VAR_DECLARATION =
         psiElement(GoLiteralIdentifier.class)
             .withParent(

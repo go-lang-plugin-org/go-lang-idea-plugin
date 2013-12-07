@@ -8,9 +8,9 @@
     <property name="go.plugin" value="${dist}/ro.redeul.google.go.jar"/>
 
     <property name="idea.community.build"
-              location="${dist}/idea-IC-107.SNAPSHOT/"/>
+              location="idea-home/idea-IC-107.SNAPSHOT/"/>
     <property name="go.sdk.build"
-              location="${user.home}/Tools/google-go/release/"/>
+              location="idea-home/go/"/>
 
     <property name="target.platform" value="current"/>
 
