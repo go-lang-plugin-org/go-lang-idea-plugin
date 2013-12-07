@@ -116,7 +116,11 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                     commandLine.getParametersList().addParametersString(scriptArguments);
                 }
                 commandLine.addParameter(scriptName);
-                VirtualFile moduleFile = getConfigurationModule().getModule().getModuleFile();
+                Module module = getConfigurationModule().getModule();
+                if ( module == null || module.getModuleFile() == null ) {
+                    throw new CantRunException("No module selected for this run configuration");
+                }
+                VirtualFile moduleFile = module.getModuleFile();
 
                 commandLine.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
                 commandLine.getEnvironment().put("GOPATH", GoSdkUtil.prependToGoPath(moduleFile.getParent().getCanonicalPath()));
