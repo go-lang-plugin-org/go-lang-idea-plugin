@@ -15,10 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor2;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
-import ro.redeul.google.go.inspection.ConstDeclarationInspection;
-import ro.redeul.google.go.inspection.FunctionDeclarationInspection;
-import ro.redeul.google.go.inspection.InspectionResult;
-import ro.redeul.google.go.inspection.VarDeclarationInspection;
+import ro.redeul.google.go.inspection.*;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -26,6 +23,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
@@ -438,5 +436,13 @@ public class GoAnnotator extends GoRecursiveElementVisitor
             annotationHolder.createErrorAnnotation(lastChild,
                                                    "Argument to defer must be function call");
         }
+    }
+
+    @Override
+    public void visitBinaryExpression(GoBinaryExpression expression) {
+        super.visitBinaryExpression(expression);
+        InspectionResult result = new InspectionResult(inspectionManager);
+        TypeMatchInspection.checkBinaryExpression(result, expression);
+        addProblems(result.getProblems());
     }
 }

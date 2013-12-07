@@ -19,6 +19,7 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 public abstract class GoExpressionBase extends GoPsiElementBase implements GoExpr {
 
     GoPsiType type;
+    GoType[]  goTypes;
 
     protected GoExpressionBase(@NotNull ASTNode node) {
         super(node);
@@ -31,14 +32,10 @@ public abstract class GoExpressionBase extends GoPsiElementBase implements GoExp
     @NotNull
     @Override
     public GoType[] getType() {
-//        return
-//            GoPsiManager.getInstance(getProject()).getType(this, new Function<GoExpressionBase, GoType[]>() {
-//            @Override
-//            public GoType[] fun(GoExpressionBase goExpressionBase) {
-//                return resolveTypes();
-//            }
-//        });
-        return resolveTypes();
+        if (goTypes == null){
+            goTypes = resolveTypes();
+        }
+        return goTypes;
     }
 
     @Override

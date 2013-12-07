@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalOrExpression;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 public class GoLogicalOrExpressionImpl extends GoBinaryExpressionImpl
     implements GoLogicalOrExpression
@@ -15,9 +17,11 @@ public class GoLogicalOrExpressionImpl extends GoBinaryExpressionImpl
 
     @Override
     protected GoType[] resolveTypes() {
-        GoExpr operand = getLeftOperand();
-        // return Undefined
-        return operand != null ? operand.getType() : GoType.EMPTY_ARRAY;
+        return new GoType[]{
+                GoTypes.getBuiltin(
+                        GoTypes.Builtin.Bool,
+                        GoNamesCache.getInstance(getProject()))
+        };
     }
 }
 
