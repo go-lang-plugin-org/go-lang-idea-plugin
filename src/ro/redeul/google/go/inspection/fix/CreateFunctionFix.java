@@ -85,26 +85,26 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
             wFile = this.workingFile;
         }
 
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-            @Override
-            public void run() {
-                Document doc = PsiDocumentManager.getInstance(project).getDocument(wFile);
-                int insertPoint1 = insertPoint;
-                if (((GoFile) wFile).getPackageName().equals("")) {
-                    String packStr = String.format("\npackage %s", startElement.getFirstChild().getText());
-                    doc.insertString(insertPoint1, packStr);
-                    insertPoint1 += packStr.length();
-                }
-                doc.insertString(insertPoint1, String.format("\n\nfunc %s(%s) {\n}\n", e.getText(), fnArguments));
-                if (wEditor != null) {
-                    int line = doc.getLineNumber(insertPoint1);
-                    int offset = doc.getLineEndOffset(line + 2);
-                    wEditor.getCaretModel().moveToOffset(offset);
-                    reformatLines(wFile, wEditor, line, line + 3);
-                    pressEnter(wEditor);
 
-                }
-            }
-        });
+        Document doc = PsiDocumentManager.getInstance(project).getDocument(wFile);
+        if (doc == null) {
+            return;
+        }
+
+        int insertPoint1 = insertPoint;
+        if (((GoFile) wFile).getPackageName().equals("")) {
+            String packStr = String.format("\npackage %s", startElement.getFirstChild().getText());
+            doc.insertString(insertPoint1, packStr);
+            insertPoint1 += packStr.length();
+        }
+
+        doc.insertString(insertPoint1, String.format("\n\nfunc %s(%s) {\n}\n", e.getText(), fnArguments));
+        if (wEditor != null) {
+            int line = doc.getLineNumber(insertPoint1);
+            int offset = doc.getLineEndOffset(line + 2);
+            wEditor.getCaretModel().moveToOffset(offset);
+            reformatLines(wFile, wEditor, line, line + 3);
+            pressEnter(wEditor);
+        }
     }
 }
