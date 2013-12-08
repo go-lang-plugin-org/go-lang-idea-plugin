@@ -13,16 +13,13 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.util.GoUtil;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfClass;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 import static ro.redeul.google.go.util.EditorUtil.pressEnter;
 import static ro.redeul.google.go.util.EditorUtil.reformatLines;
 
@@ -58,15 +55,7 @@ public class CreateClosureFunctionFix extends LocalQuickFixAndIntentionActionOnP
         if (childOfClass == null)
             childOfClass = findChildOfClass(p, GoShortVarDeclaration.class);
 
-        final String fnArguments;
-        //put arguments with the new func
-        StringBuilder stringBuilder = new StringBuilder();
-        if (isFunctionNameIdentifier(e)) {
-            fnArguments = GoUtil.InspectionGenFuncArgs(e);
-        } else {
-            fnArguments = "";
-        }
-        //end arguments
+        final String fnArguments = GoUtil.InspectionGenFuncArgs(e);
 
         final int insertPoint;
 
@@ -92,23 +81,5 @@ public class CreateClosureFunctionFix extends LocalQuickFixAndIntentionActionOnP
                 }
             }
         });
-    }
-
-    public static boolean isFunctionNameIdentifier(PsiElement e) {
-        if (!psiIsA(e, GoLiteralExpression.class))
-            return false;
-
-        GoLiteral literal = ((GoLiteralExpression) e).getLiteral();
-        if (!(literal instanceof GoLiteralIdentifier))
-            return false;
-
-        if (((GoLiteralIdentifier) literal).isQualified())
-            return false;
-
-        if (!psiIsA(e.getParent(), GoCallOrConvExpression.class))
-            return false;
-
-        // function name is the first element of its parent.
-        return e.getStartOffsetInParent() == 0;
     }
 }

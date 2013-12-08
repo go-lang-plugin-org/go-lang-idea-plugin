@@ -34,6 +34,7 @@ public class TypeNameReference
     public static final ElementPattern<GoPsiTypeName> MATCHER =
         psiElement(GoPsiTypeName.class);
 
+    @SuppressWarnings("unchecked")
     private static final ElementPattern<GoPsiTypeName> TYPE_IN_METHOD_RECEIVER =
             psiElement(GoPsiTypeName.class).withParent(
                     or(

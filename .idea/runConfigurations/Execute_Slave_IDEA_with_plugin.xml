@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Execute Slave IDEA with plugin" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+  <configuration default="false" name="Execute Slave IDEA with plugin" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
     <module name="google-go-language" />
     <option name="VM_PARAMETERS" value="-Xmx1024m -XX:MaxPermSize=256m" />
     <option name="PROGRAM_PARAMETERS" value="" />

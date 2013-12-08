@@ -61,6 +61,7 @@ public class GoCompletionContributor extends CompletionContributor {
     };
 
     // Check whether a PsiElement is a valid position for a type name.
+    @SuppressWarnings("unchecked")
     private static final PsiElementPattern.Capture<PsiElement> TYPE_DECLARATION = psiElement().withParent(
             psiElement(GoLiteralIdentifier.class).withParent(
                     or(psiElement(GoPsiTypeName.class),             // where type name is expected
@@ -95,6 +96,7 @@ public class GoCompletionContributor extends CompletionContributor {
             );
 
     // Check whether a PsiElement is a valid position for a qualified identifier (identifier with package name).
+    @SuppressWarnings("unchecked")
     public static final PsiElementPattern.Capture<PsiElement> VALID_PACKAGE_NAME_POSITION = psiElement().withParent(
             psiElement(GoLiteralIdentifier.class).withParent(
                     or(psiElement(GoPsiTypeName.class),             // where type name is expected
@@ -114,6 +116,7 @@ public class GoCompletionContributor extends CompletionContributor {
             )
     );
 
+    @SuppressWarnings("unchecked")
     private static final PsiElementPattern.Capture<PsiElement> GO_OR_DEFER_STATEMENT = psiElement().withParent(
             psiElement(GoLiteralIdentifier.class).withParent(
                     psiElement(GoLiteralExpression.class).withParent(
@@ -164,6 +167,7 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
 
+    @SuppressWarnings("unchecked")
     public GoCompletionContributor() {
 
 //        extend(CompletionType.BASIC,

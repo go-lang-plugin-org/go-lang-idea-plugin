@@ -34,6 +34,7 @@ public class GoFacetTab extends FacetEditorTab {
     private final GoFacetConfiguration facetConfiguration;
     private boolean modified;
 
+    @SuppressWarnings("unchecked")
     public GoFacetTab(GoFacetConfiguration facetConfiguration, List<Sdk> SDKs) {
         this.facetConfiguration = facetConfiguration;
         final DefaultComboBoxModel model = new DefaultComboBoxModel(SDKs.toArray());

@@ -1,0 +1,23 @@
+package main
+
+func HandleFunc(pa string, handler func(int,*string)){
+
+}
+
+func main() {
+   HandleFunc("/",index/*begin*/H/*end*/andler)
+}
+-----
+package main
+
+func HandleFunc(pa string, handler func(int,*string)){
+
+}
+
+func main() {
+   HandleFunc("/",indexHandler)
+}
+
+func indexHandler(arg0 int, arg1 *string) {
+	<caret>
+}

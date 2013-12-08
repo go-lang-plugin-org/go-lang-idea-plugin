@@ -1,13 +1,16 @@
 package ro.redeul.google.go.runner;
 
 import com.intellij.execution.Location;
+import com.intellij.execution.RunManager;
 import com.intellij.execution.RunManagerEx;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.execution.actions.ConfigurationContext;
+import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.execution.configurations.ConfigurationFactory;
-import com.intellij.execution.junit.RuntimeConfigurationProducer;
+import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.ElementPattern;
@@ -31,9 +34,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.collection;
 import static com.intellij.patterns.StandardPatterns.string;
 
-public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
-
-    private PsiElement element;
+public class GoTestConfigurationProducer extends RunConfigurationProducer {
 
     public GoTestConfigurationProducer() {
         super(GoTestConfigurationType.getInstance());
@@ -44,11 +45,15 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
     }
 
     @Override
-    public PsiElement getSourceElement() {
-        return element;
+    public boolean isConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context) {
+        return false;
     }
 
     @Override
+    protected boolean setupConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context, Ref sourceElement) {
+        return false;
+    }
+
     protected RunnerAndConfigurationSettings createConfigurationByElement(Location location, ConfigurationContext context) {
         GoFile goFile = locationToFile(location);
 
@@ -62,65 +67,65 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
             return null;
 
         return createConfiguration(goFile, context.getModule(),
-                                   location.getPsiElement());
+                location.getPsiElement());
     }
 
     private static final ElementPattern<GoFunctionDeclaration> FUNCTION_BENCHMARK =
-        psiElement(GoFunctionDeclaration.class)
-            .withParent(psiElement(GoFile.class))
-            .withChild(
-                psiElement(GoFunctionParameterList.class)
+            psiElement(GoFunctionDeclaration.class)
+                    .withParent(psiElement(GoFile.class))
                     .withChild(
-                        psiElement(GoFunctionParameter.class)
-                            .withChildren(
-                                collection(PsiElement.class)
-                                    .first(
-                                        psiElement(GoLiteralIdentifier.class))
-                                    .last(psiElement(GoPsiTypePointer.class)
-                                              .withText("*testing.B"))))
-                    .afterSibling(
-                        psiElement(GoLiteralIdentifier.class)
-                            .withText(string().matches("Benchmark.*"))));
+                            psiElement(GoFunctionParameterList.class)
+                                    .withChild(
+                                            psiElement(GoFunctionParameter.class)
+                                                    .withChildren(
+                                                            collection(PsiElement.class)
+                                                                    .first(
+                                                                            psiElement(GoLiteralIdentifier.class))
+                                                                    .last(psiElement(GoPsiTypePointer.class)
+                                                                            .withText("*testing.B"))))
+                                    .afterSibling(
+                                            psiElement(GoLiteralIdentifier.class)
+                                                    .withText(string().matches("Benchmark.*"))));
 
     private static final ElementPattern<GoFunctionDeclaration> FUNCTION_TEST =
-        psiElement(GoFunctionDeclaration.class)
-            .withParent(psiElement(GoFile.class))
-            .withChild(
-                psiElement(GoFunctionParameterList.class)
+            psiElement(GoFunctionDeclaration.class)
+                    .withParent(psiElement(GoFile.class))
                     .withChild(
-                        psiElement(GoFunctionParameter.class)
-                            .withChildren(
-                                collection(PsiElement.class)
-                                    .first(
-                                        psiElement(GoLiteralIdentifier.class))
-                                    .last(psiElement(GoPsiTypePointer.class)
-                                              .withText("*testing.T"))))
-                    .afterSibling(
-                        psiElement(GoLiteralIdentifier.class)
-                            .withText(string().matches("Test.*"))));
+                            psiElement(GoFunctionParameterList.class)
+                                    .withChild(
+                                            psiElement(GoFunctionParameter.class)
+                                                    .withChildren(
+                                                            collection(PsiElement.class)
+                                                                    .first(
+                                                                            psiElement(GoLiteralIdentifier.class))
+                                                                    .last(psiElement(GoPsiTypePointer.class)
+                                                                            .withText("*testing.T"))))
+                                    .afterSibling(
+                                            psiElement(GoLiteralIdentifier.class)
+                                                    .withText(string().matches("Test.*"))));
 
     private RunnerAndConfigurationSettings createConfiguration(GoFile goFile, Module module, PsiElement element) {
 
         final Project project = goFile.getProject();
 
         RunnerAndConfigurationSettings settings =
-            RunManagerEx.getInstanceEx(project)
-                        .createConfiguration("", getConfigurationFactory());
+                RunManager.getInstance(project)
+                        .createRunConfiguration("", getConfigurationFactory());
 
         GoTestConfiguration testConfiguration =
-            (GoTestConfiguration) settings.getConfiguration();
+                (GoTestConfiguration) settings.getConfiguration();
 
         final PsiDirectory dir = goFile.getContainingDirectory();
         if (dir == null)
             return null;
 
         while (!(element instanceof GoFile) &&
-            !FUNCTION_BENCHMARK.accepts(element) &&
-            !FUNCTION_TEST.accepts(element) ) {
+                !FUNCTION_BENCHMARK.accepts(element) &&
+                !FUNCTION_TEST.accepts(element) ) {
             element = element.getParent();
         }
 
-        this.element = element;
+        PsiElement element1 = element;
 
         String dottedPackagePath = goFile.getPackageImportPath().replace('/', '.');
         if (element instanceof GoFile) {
@@ -237,11 +242,5 @@ public class GoTestConfigurationProducer extends RuntimeConfigurationProducer {
         }
 
         return (GoFile) file;
-    }
-
-
-    @Override
-    public int compareTo(Object o) {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

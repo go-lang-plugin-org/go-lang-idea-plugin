@@ -30,8 +30,8 @@ public class AddGoSdkDialogForm extends DialogWrapper {
         super(canBeParent);
     }
 
-    public AddGoSdkDialogForm(boolean canBeParent, boolean toolkitModalIfPossible) {
-        super(canBeParent, toolkitModalIfPossible);
+    public AddGoSdkDialogForm(Project project, boolean canBeParent, boolean toolkitModalIfPossible) {
+        super(project, canBeParent, toolkitModalIfPossible);
     }
 
     public AddGoSdkDialogForm(Component parent, boolean canBeParent) {

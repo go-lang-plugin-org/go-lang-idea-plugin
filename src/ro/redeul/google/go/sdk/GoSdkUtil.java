@@ -119,9 +119,7 @@ public class GoSdkUtil {
             command.setExePath(goCommand);
             command.addParameter("version");
             command.setWorkDirectory(path);
-            command.setEnvParams(new HashMap<String, String>() {{
-                put("GOROOT", path);
-            }});
+            command.getEnvironment().put("GOROOT", path);
 
             ProcessOutput output = new CapturingProcessHandler(
                 command.createProcess(),
@@ -152,9 +150,7 @@ public class GoSdkUtil {
             command.setExePath(goCommand);
             command.addParameter("env");
             command.setWorkDirectory(path);
-            command.setEnvParams(new HashMap<String, String>() {{
-                put("GOROOT", path);
-            }});
+            command.getEnvironment().put("GOROOT", path);
 
             ProcessOutput output = new CapturingProcessHandler(
                 command.createProcess(),

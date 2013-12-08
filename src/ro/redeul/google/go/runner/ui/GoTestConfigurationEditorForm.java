@@ -31,6 +31,7 @@ public class GoTestConfigurationEditorForm
     private ConfigurationModuleSelector moduleSelector;
     private final Project project;
 
+    @SuppressWarnings("unchecked")
     public GoTestConfigurationEditorForm(final Project project) {
         this.project = project;
 

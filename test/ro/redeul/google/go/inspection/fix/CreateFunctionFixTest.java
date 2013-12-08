@@ -17,6 +17,10 @@ public class CreateFunctionFixTest extends GoEditorAwareTestCase {
     public void testLiteralFunctionPointerArg() throws Exception{ doTest(); }
     public void testLiteralFunctionSliceArg() throws Exception{ doTest(); }
 
+    public void testLiteralFunctionComplexArg() throws Exception{ doTest(); }
+    public void testLiteralFunctionSmartGen() throws Exception{ doTest(); }
+    public void testLiteralFunctionSmartGenVariadicArgs() throws Exception{ doTest(); }
+
     @Override
     protected void invoke(final Project project, final Editor editor, final GoFile file) {
         PsiElement element = file.findElementAt(editor.getSelectionModel().getSelectionStart());
