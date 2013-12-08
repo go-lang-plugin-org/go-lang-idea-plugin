@@ -5,7 +5,9 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.vfs.StandardFileSystems;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.newvfs.impl.VirtualFileImpl;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import ro.redeul.google.go.GoBundle;
@@ -14,6 +16,8 @@ import ro.redeul.google.go.config.ui.GoSdkConfigurable;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.*;
+
+import java.io.File;
 
 import static java.lang.String.format;
 
@@ -136,26 +140,58 @@ public class GoSdkType extends SdkType {
         if ( sdkData == null )
             return;
 
-        final VirtualFile librariesRoot =
-                homeDirectory.findFileByRelativePath(
-                    format("pkg/%s_%s/", sdkData.TARGET_OS.getName(),
-                           sdkData.TARGET_ARCH.getName()));
+        String pkgType = format("pkg/%s_%s/", sdkData.TARGET_OS.getName(),
+                sdkData.TARGET_ARCH.getName());
 
-        final VirtualFile sourcesRoot = homeDirectory.findFileByRelativePath("src/pkg/");
+        final VirtualFile sdkLibrariesRoot =
+                homeDirectory.findFileByRelativePath(pkgType);
 
-        if (librariesRoot != null) {
-            librariesRoot.refresh(false, false);
+        final VirtualFile sdkSourcesRoot = homeDirectory.findFileByRelativePath("src/pkg/");
+
+        if (sdkLibrariesRoot != null) {
+            sdkLibrariesRoot.refresh(false, false);
         }
-        if (sourcesRoot != null) {
-            sourcesRoot.refresh(false, false);
+        if (sdkSourcesRoot != null) {
+            sdkSourcesRoot.refresh(false, false);
+        }
+
+        String goPathFirst = System.getenv("GOPATH");
+
+        VirtualFile goPathDirectory = null;
+        VirtualFile pathSourcesRoot = null;
+        VirtualFile pathLibrariesRoot = null;
+
+        if (!goPathFirst.equals("") && goPathFirst.contains(File.pathSeparator)) {
+            goPathFirst = goPathFirst.split(File.pathSeparator)[0];
+
+            if ((new File(goPathFirst).exists())) {
+                goPathDirectory = StandardFileSystems.local().findFileByPath(goPathFirst);
+
+                if (goPathDirectory != null) {
+                    pathSourcesRoot = goPathDirectory.findFileByRelativePath("src/");
+                    pathLibrariesRoot = goPathDirectory.findFileByRelativePath(pkgType);
+                }
+            }
         }
 
         final SdkModificator sdkModificator = sdk.getSdkModificator();
+        final VirtualFile finalGoPathDirectory = goPathDirectory;
+        final VirtualFile finalPathSourcesRoot = pathSourcesRoot;
+        final VirtualFile finalPathLibrariesRoot = pathLibrariesRoot;
+        final String finalGoPathFirst = goPathFirst;
+
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             public void run() {
-                sdkModificator.addRoot(sourcesRoot, OrderRootType.CLASSES);
-                sdkModificator.addRoot(librariesRoot, OrderRootType.CLASSES);
-                sdkModificator.addRoot(sourcesRoot, OrderRootType.SOURCES);
+                sdkModificator.addRoot(sdkSourcesRoot, OrderRootType.CLASSES);
+                sdkModificator.addRoot(sdkLibrariesRoot, OrderRootType.CLASSES);
+                sdkModificator.addRoot(sdkSourcesRoot, OrderRootType.SOURCES);
+
+                // If we could detect the GOPATH properly, automatically add the first directory to the autocompletion path
+                if (finalPathSourcesRoot != null && finalPathLibrariesRoot != null) {
+                    sdkModificator.addRoot(finalPathSourcesRoot, OrderRootType.CLASSES);
+                    sdkModificator.addRoot(finalPathLibrariesRoot, OrderRootType.CLASSES);
+                    sdkModificator.addRoot(finalPathSourcesRoot, OrderRootType.SOURCES);
+                }
             }
         });
 
