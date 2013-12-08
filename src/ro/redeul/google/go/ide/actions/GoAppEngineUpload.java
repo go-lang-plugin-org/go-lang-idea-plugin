@@ -16,6 +16,9 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.ide.GoAppEngineSettings;
+
+import java.io.File;
 
 /**
  * User: jhonny
@@ -27,13 +30,39 @@ public class GoAppEngineUpload extends AnAction {
     private static final String TITLE = "Go App Engine Console Output";
     private static ConsoleView consoleView;
 
+    private final GoAppEngineSettings appEngineSettings = GoAppEngineSettings.getInstance();
+
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
 
         final Project project = anActionEvent.getData(LangDataKeys.PROJECT);
 
-        if (GoAppEngineUpload.consoleView == null)
+        if (project == null) {
+            return;
+        }
+
+        if (GoAppEngineUpload.consoleView == null) {
             GoAppEngineUpload.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+        }
+
+        if (appEngineSettings.getEmail().equals("")) {
+            Messages.showErrorDialog("Your e-mail address is empty. \nPlease check your Go App Engine settings.", "Error on Go App Engine Plugin");
+            return;
+        }
+
+        if (appEngineSettings.getPassword().equals("")) {
+            Messages.showErrorDialog("Your password is empty. \nPlease check your Go App Engine settings.", "Error on Go App Engine Plugin");
+            return;
+        }
+
+        if (appEngineSettings.getGaePath().equals("")) {
+            Messages.showErrorDialog("Your Go App Engine path is empty. \nPlease check your Go App Engine settings.", "Error on Go App Engine Plugin");
+            return;
+        }
+
+        if (!(new File(appEngineSettings.getGaePath()).exists())) {
+            Messages.showErrorDialog("Your Go App Engine path doesn't exists anymore. \nPlease check your Go App Engine settings.", "Error on Go App Engine Plugin");
+        }
 
         ProcessHandler processHandler = null;
         try {
@@ -41,8 +70,7 @@ public class GoAppEngineUpload extends AnAction {
             ToolWindow window = manager.getToolWindow(ID);
 
             if (window == null) {
-                window =
-                        manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
+                window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
 
                 ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
                 Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
@@ -54,10 +82,20 @@ public class GoAppEngineUpload extends AnAction {
             }
             window.show(EmptyRunnable.getInstance());
 
+            String username = appEngineSettings.getEmail();
+
+            String command = String.format(
+                    "%s/appcfg.py -e %s --passin update %s",
+                    appEngineSettings.getGaePath(),
+                    username,
+                    project.getBasePath()
+            );
+
+
             Runtime rt = Runtime.getRuntime();
-            // TODO create this configuration
-            Process proc = rt.exec("/opt/appengine-go/appcfg.py -e khronnuz@gmail.com --passin update /Users/jhonny/workspaces/gae/gae-go");
-            String password = "xx";
+
+            Process proc = rt.exec(command);
+            String password = appEngineSettings.getPassword();
             OSProcessHandler handler = new OSProcessHandler(proc, null);
             byte[] theByteArray = password.getBytes();
             handler.getProcessInput().write(theByteArray);
@@ -67,7 +105,7 @@ public class GoAppEngineUpload extends AnAction {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Messages.showErrorDialog("Error while processing upload command.", "Error on App Engine Plugin");
+            Messages.showErrorDialog("Error while processing upload command.", "Error on Go App Engine Plugin");
         }
 
 
