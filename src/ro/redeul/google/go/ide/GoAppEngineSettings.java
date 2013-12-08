@@ -29,6 +29,8 @@ public class GoAppEngineSettings implements PersistentStateComponent<GoAppEngine
 
     private String myPassword = "";
 
+    private String gaePath = "";
+
     private final String GO_APP_ENGINE_SETTINGS_PASSWORD_KEY = "GO_APP_ENGINE_SETTINGS_PASSWORD_KEY";
 
     public static class Bean {
@@ -84,5 +86,13 @@ public class GoAppEngineSettings implements PersistentStateComponent<GoAppEngine
         }
 
         myPassword = password;
+    }
+
+    public String getGaePath() {
+        return this.gaePath;
+    }
+
+    public void setGaePath(String gaePath) {
+        this.gaePath = gaePath;
     }
 }

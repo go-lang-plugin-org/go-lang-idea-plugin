@@ -494,7 +494,7 @@
             <action id="Go.AppEngine.Upload"
                     class="ro.redeul.google.go.ide.actions.GoAppEngineUpload"
                     text="App Engine Upload" description="Upload to App Engine"
-                    icon="/icons/gae_16x16.png">
+                    icon="/icons/gae_13x13.png">
                 <keyboard-shortcut first-keystroke="ctrl alt U"
                                    keymap="$default"/>
             </action>
