@@ -46,12 +46,16 @@ public class GoFacetConfiguration implements FacetConfiguration, PersistentState
         return new FacetEditorTab[]{new GoFacetTab(this, libraries)};
     }
 
+    @Override
+    @Deprecated
     public void readExternal(Element element) throws InvalidDataException {
-//        XmlSerializer.deserializeInto(this, element);
+
     }
 
+    @Override
+    @Deprecated
     public void writeExternal(Element element) throws WriteExternalException {
-//        XmlSerializer.serializeInto(this, element);
+
     }
 
     public Sdk getSdk() {

@@ -4,11 +4,12 @@ import com.intellij.execution.Location;
 import com.intellij.execution.RunManagerEx;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.execution.actions.ConfigurationContext;
+import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.junit.RuntimeConfigurationProducer;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -25,7 +26,7 @@ import java.util.List;
  * Date: Aug 19, 2010
  * Time: 2:49:31 PM
  */
-public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
+public class GoRunConfigurationProducer extends RunConfigurationProducer {
 
     private PsiElement element;
 
@@ -38,11 +39,19 @@ public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
     }
 
     @Override
+    public boolean isConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context) {
+        return false;
+    }
+
+    @Override
+    protected boolean setupConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context, Ref sourceElement) {
+        return false;
+    }
+
     public PsiElement getSourceElement() {
         return element;
     }
 
-    @Override
     protected RunnerAndConfigurationSettings createConfigurationByElement(Location location, ConfigurationContext context) {
 
         GoFile goFile = locationToFile(location);
@@ -72,7 +81,7 @@ public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
 
         element = goFile;
 
-        RunnerAndConfigurationSettings settings = RunManagerEx.getInstanceEx(project).createConfiguration("", getConfigurationFactory());
+        RunnerAndConfigurationSettings settings = RunManagerEx.getInstanceEx(project).createRunConfiguration("", getConfigurationFactory());
         GoApplicationConfiguration applicationConfiguration = (GoApplicationConfiguration) settings.getConfiguration();
 
         final PsiDirectory dir = goFile.getContainingDirectory();
@@ -89,11 +98,6 @@ public class GoRunConfigurationProducer extends RuntimeConfigurationProducer {
         applicationConfiguration.setModule(module);
 
         return settings;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        return -1;
     }
 
     protected RunnerAndConfigurationSettings findExistingByElement(Location location,

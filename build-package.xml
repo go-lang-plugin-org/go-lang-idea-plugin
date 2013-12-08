@@ -7,7 +7,7 @@
     <property name="dist" location="dist"/>
 
     <property name="go.plugin.name" value="ro.redeul.google.go" />
-    <property name="idea.community.build" location="${user.home}/Tools/idea-IU-107.322/" />
+    <property name="idea.community.build" location="${user.home}/Tools/idea-IU-133.193/" />
 
 
     <taskdef name="javac2" classname="com.intellij.ant.Javac2">

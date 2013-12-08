@@ -101,7 +101,7 @@ public class GoMakefileCompiler implements TranslatingCompiler {
             command.addParameter("-e");
             command.addParameter("install");
             command.addParameter("clean");
-            command.setEnvParams(new HashMap<String, String>() {{
+            command.getEnvironment().putAll(new HashMap<String, String>() {{
                 put("GOROOT", projectSdk.getHomePath());
                 put("GOARCH", goSdkData.TARGET_ARCH.getName());
                 put("GOOS", goSdkData.TARGET_OS.getName());

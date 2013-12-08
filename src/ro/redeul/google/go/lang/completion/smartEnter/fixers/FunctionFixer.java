@@ -24,6 +24,7 @@ public class FunctionFixer implements SmartEnterFixer {
             GoElementTypes.DEFER_STATEMENT
     );
 
+    @SuppressWarnings("unchecked")
     private static final PsiElementPattern.Capture<GoLiteralFunction> LITERAL_FUNCTION_IN_GO_OR_DEFER =
             psiElement(GoLiteralFunction.class)
             .withParent(

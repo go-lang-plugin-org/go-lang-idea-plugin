@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoLexer;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,15 +67,15 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase
 
     public static final TextAttributesKey IDENTIFIER = createKey(IDENTIFIER_ID, CodeInsightColors.LOCAL_VARIABLE_ATTRIBUTES);
 
-    public static final TextAttributesKey TYPE_NAME = createKey(TYPE_NAME_ID, changeFont(CodeInsightColors.ANNOTATION_NAME_ATTRIBUTES, Font.ITALIC));
+    public static final TextAttributesKey TYPE_NAME = createKey(TYPE_NAME_ID, CodeInsightColors.ANNOTATION_NAME_ATTRIBUTES);
 
-    public static final TextAttributesKey VARIABLE = createKey(VARIABLE_ID, changeFont(CodeInsightColors.INSTANCE_FIELD_ATTRIBUTES, Font.PLAIN));
+    public static final TextAttributesKey VARIABLE = createKey(VARIABLE_ID, CodeInsightColors.INSTANCE_FIELD_ATTRIBUTES);
 
     public static final TextAttributesKey CONST = createKey(CONST_ID, CodeInsightColors.STATIC_FINAL_FIELD_ATTRIBUTES);
 
     public static final TextAttributesKey GLOBAL_VARIABLE = createKey(GLOBAL_VARIABLE_ID, CodeInsightColors.STATIC_FIELD_ATTRIBUTES);
 
-    public static final TextAttributesKey METHOD_DECLARATION = createKey(METHOD_DECLARATION_ID, changeFont(CodeInsightColors.METHOD_DECLARATION_ATTRIBUTES, Font.PLAIN));
+    public static final TextAttributesKey METHOD_DECLARATION = createKey(METHOD_DECLARATION_ID, CodeInsightColors.METHOD_DECLARATION_ATTRIBUTES);
 
     static {
         fillMap(ATTRIBUTES, LINE_COMMENTS, LINE_COMMENT);
@@ -102,13 +101,8 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase
         return pack(ATTRIBUTES.get(tokenType));
     }
 
-    private static TextAttributesKey createKey(String externalName, TextAttributes attrs) {
-        return createTextAttributesKey(externalName, attrs);
-    }
-
     private static TextAttributesKey createKey(String externalName, TextAttributesKey fallbackAttrs) {
-        return createTextAttributesKey(externalName,
-                                       fallbackAttrs.getDefaultAttributes());
+        return createTextAttributesKey(externalName, fallbackAttrs);
     }
 
     private static TextAttributes changeFont(TextAttributes under, @JdkConstants.FontStyle int fontStyle) {

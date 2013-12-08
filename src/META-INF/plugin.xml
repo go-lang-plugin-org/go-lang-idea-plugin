@@ -622,9 +622,9 @@
                 implementation="ro.redeul.google.go.runner.GoTestConfigurationType"/>
         <configurationType
                 implementation="ro.redeul.google.go.runner.GoAppEngineRunConfigurationType"/>
-        <configurationProducer
+        <runConfigurationProducer
                 implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>
-        <configurationProducer
+        <runConfigurationProducer
                 implementation="ro.redeul.google.go.runner.GoTestConfigurationProducer"/>
 
         <liveTemplateContext
