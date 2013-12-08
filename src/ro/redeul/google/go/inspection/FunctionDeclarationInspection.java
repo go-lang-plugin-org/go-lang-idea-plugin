@@ -295,6 +295,8 @@ public class FunctionDeclarationInspection
                 return;
             }
 
+            //TO DO: We Could implement a change return stmt fix & inspect the type of the return stmt to match the function declaration
+
             if (expectedResCount < returnCount) {
                 result.addProblem(statement, GoBundle.message("error.too.many.arguments.to.return"));
             } else if (expectedResCount > returnCount) {
