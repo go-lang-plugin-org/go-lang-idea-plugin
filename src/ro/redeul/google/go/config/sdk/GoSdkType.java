@@ -161,7 +161,9 @@ public class GoSdkType extends SdkType {
         VirtualFile pathSourcesRoot = null;
         VirtualFile pathLibrariesRoot = null;
 
-        if (!goPathFirst.equals("") && goPathFirst.contains(File.pathSeparator)) {
+        if (goPathFirst != null &&
+                !goPathFirst.equals("") &&
+                goPathFirst.contains(File.pathSeparator)) {
             goPathFirst = goPathFirst.split(File.pathSeparator)[0];
 
             if ((new File(goPathFirst).exists())) {
