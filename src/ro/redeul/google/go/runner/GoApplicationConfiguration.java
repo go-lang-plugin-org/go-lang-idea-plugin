@@ -108,6 +108,16 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                     throw new CantRunException("No Go Sdk defined for this project");
                 }
 
+                if (getConfigurationModule().getModule() == null) {
+                    throw new CantRunException("No Go module is defined for this project");
+                }
+
+                VirtualFile moduleFile = getConfigurationModule().getModule().getModuleFile();
+
+                if (moduleFile == null || moduleFile.getParent() == null) {
+                    throw new CantRunException("No Go module is defined for this project");
+                }
+
                 GeneralCommandLine commandLine = new GeneralCommandLine();
 
                 commandLine.setExePath(sdkData.GO_BIN_PATH);
@@ -116,7 +126,6 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                     commandLine.getParametersList().addParametersString(scriptArguments);
                 }
                 commandLine.addParameter(scriptName);
-                VirtualFile moduleFile = getConfigurationModule().getModule().getModuleFile();
 
                 commandLine.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
                 commandLine.getEnvironment().put("GOPATH", GoSdkUtil.prependToGoPath(moduleFile.getParent().getCanonicalPath()));
