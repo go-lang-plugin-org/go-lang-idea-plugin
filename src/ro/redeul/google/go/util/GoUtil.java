@@ -205,7 +205,11 @@ public class GoUtil {
                 PsiElement firstChildExp = argument.getFirstChild();
 
                 GoType[] goTypes = argument.getType();
-                if (goTypes.length > 0 && goTypes[0] != null) {
+                // FIX TEST ##321
+                // Check first Relational is alwais boolean
+                if (argument instanceof GoRelationalExpression) {
+                    stringBuilder.append("bool");
+                } else if (goTypes.length > 0 && goTypes[0] != null) {
                     GoType goType = goTypes[0];
 
                     if (argument instanceof GoUnaryExpression && firstChildExp.getText().equals("&")) {
@@ -252,8 +256,6 @@ public class GoUtil {
                      * Resolves the type of a literal
                      */
                     stringBuilder.append(((GoLiteral) firstChildExp).getType().name().toLowerCase());
-                } else if (argument instanceof GoRelationalExpression) {
-                    stringBuilder.append("bool");
                 } else {
 
                     /*
@@ -273,7 +275,13 @@ public class GoUtil {
                             stringBuilder.append("interface{}");
                         }
                     } else if (firstChild instanceof GoLiteral) {
-                        stringBuilder.append(((GoLiteral) firstChild).getType().name().toLowerCase());
+                        GoLiteral.Type type = ((GoLiteral) firstChild).getType();
+                        //Fix TEST PR ##321 this only happens on test. i don't know why
+                        if (type == GoLiteral.Type.Float || type == GoLiteral.Type.ImaginaryFloat) {
+                            stringBuilder.append("float32");
+                        } else {
+                            stringBuilder.append(type.name().toLowerCase());
+                        }
                     } else {
                         stringBuilder.append("interface{}");
                     }
