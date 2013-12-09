@@ -18,6 +18,7 @@ public class CreateFunctionFixTest extends GoEditorAwareTestCase {
     public void testLiteralFunctionSliceArg() throws Exception{ doTest(); }
 
     public void testLiteralFunctionComplexArg() throws Exception{ doTest(); }
+    public void testLiteralFunctionBooleanExpArg() throws Exception{ doTest(); }
     public void testLiteralFunctionSmartGen() throws Exception{ doTest(); }
     public void testLiteralFunctionSmartGenVariadicArgs() throws Exception{ doTest(); }
 

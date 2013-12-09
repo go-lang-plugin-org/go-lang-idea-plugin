@@ -27,7 +27,7 @@ class NamedTypeVariantsCollector extends BaseScopeProcessor {
             "int8", "int16", "int32", "int64",
             "float32", "float64",
             "complex64", "complex128",
-            "byte", "uint", "int", "float", "complex", "uintptr", "bool", "string"
+            "byte", "uint", "int", "complex", "uintptr", "bool", "string"
     };
 
     private final List<LookupElement> variants = new ArrayList<LookupElement>();
