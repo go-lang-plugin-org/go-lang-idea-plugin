@@ -574,7 +574,6 @@
         <codeInsight.parameterInfo language="Google Go"
                                    implementationClass="ro.redeul.google.go.lang.parameterInfo.GoParameterInfoHandler"/>
 
-        <compileServer.plugin/>
         <!-- SM Test runner tests locations -->
         <testSrcLocator
                 implementation="ro.redeul.google.go.runner.GoTestLocationProvider"/>
@@ -611,6 +610,7 @@
                 implementation="ro.redeul.google.go.ide.GoModuleEditorsProvider"/>
         <!--<compiler.makeDependencyProcessor implementation="ro.redeul.google.go.compilation.GoDependencyProvider"/>-->
         <!--<compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>-->
+        <compileServer.plugin classpath=""/>
 
         <configurationType
                 implementation="ro.redeul.google.go.runner.GoRunConfigurationType"/>
