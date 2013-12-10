@@ -48,7 +48,7 @@ public class VarOrConstResolver extends
 
     @Override
     public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
-        checkIdentifiers(declaration.getIdentifiers());
+        checkIdentifiers(declaration.getDeclarations());
     }
 
     @Override
@@ -94,10 +94,6 @@ public class VarOrConstResolver extends
         }
 
         if (!(element instanceof GoLiteralIdentifier)) {
-            return false;
-        }
-
-        if (ShortVarDeclarationResolver.resolve((GoLiteralIdentifier) element) != null) {
             return false;
         }
 
