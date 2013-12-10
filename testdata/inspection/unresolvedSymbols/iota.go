@@ -17,6 +17,6 @@ func foo(a, iota int) int {
 
 func main() {
     k := 5
-    println(true, false, /*begin*/iota/*end.Unresolved symbol: 'iota'|CreateLocalVariableFix|CreateGlobalVariableFix*/)
+    println(true, false, /*begin*/iota/*end.Unresolved symbol: 'iota'|CreateLocalVariableFix|CreateGlobalVariableFix|CreateFunctionFix|CreateClosureFunctionFix*/)
     println(bit0, bit1, bit3, mask0, mask1, mask3)
 }

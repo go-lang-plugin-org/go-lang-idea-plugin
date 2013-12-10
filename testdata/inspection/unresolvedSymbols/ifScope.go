@@ -4,7 +4,7 @@ func pow(x, n, lim float64) float64 {
     if v := x; v < lim {
         return v
     }
-    /*begin*/v/*end.Unresolved symbol: 'v'|CreateLocalVariableFix|CreateGlobalVariableFix*/
+    /*begin*/v/*end.Unresolved symbol: 'v'|CreateLocalVariableFix|CreateGlobalVariableFix|CreateFunctionFix|CreateClosureFunctionFix*/
     return lim
 }
 

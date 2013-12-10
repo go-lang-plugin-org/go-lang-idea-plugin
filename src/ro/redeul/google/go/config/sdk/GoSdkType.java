@@ -161,8 +161,13 @@ public class GoSdkType extends SdkType {
         VirtualFile pathSourcesRoot = null;
         VirtualFile pathLibrariesRoot = null;
 
-        if (!goPathFirst.equals("") && goPathFirst.contains(File.pathSeparator)) {
-            goPathFirst = goPathFirst.split(File.pathSeparator)[0];
+        if (goPathFirst != null &&
+                !goPathFirst.equals("")) {
+
+            // If there are multiple directories under GOPATH then we extract only the first one
+            if (goPathFirst.contains(File.pathSeparator)) {
+                goPathFirst = goPathFirst.split(File.pathSeparator)[0];
+            }
 
             if ((new File(goPathFirst).exists())) {
                 goPathDirectory = StandardFileSystems.local().findFileByPath(goPathFirst);

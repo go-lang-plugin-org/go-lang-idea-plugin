@@ -40,12 +40,22 @@ public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
     }
 
     public static PsiElement createFromTemplate(PsiDirectory directory, String name, String fileName, Template template) {
+        String packageName = directory.getName();
+
+        if (packageName.equalsIgnoreCase("src")) {
+            packageName = "main";
+        }
+
+        return createFromTemplate(directory, packageName, name, fileName, template);
+    }
+
+    public static PsiElement createFromTemplate(PsiDirectory directory, String packageName, String name, String fileName, Template template) {
 
         final FileTemplate fileTemplate = FileTemplateManager.getInstance().getInternalTemplate(template.getFile());
 
         Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties());
 
-        properties.setProperty("PACKAGE_NAME", directory.getName());
+        properties.setProperty("PACKAGE_NAME", packageName);
         properties.setProperty("NAME", name);
 
         String text;

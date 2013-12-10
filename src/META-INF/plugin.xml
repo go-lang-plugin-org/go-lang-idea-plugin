@@ -55,22 +55,18 @@
     </description>
     <change-notes>
         <![CDATA[
-         <h3>0.9.17 changes:</h3>
-            <ul>
-               <li>Added a new inspection/fix which will generate a closure function</li>
-               <li>Now the function inspection/fix will generate the arguments when specified</li>
-            </ul>
-         <h3>0.9.16 changes:</h3>
-            <ul>
-                <li>More Cardea (IntelliJ IDEA 13) support</li>
-                <li>Fixed live templates and compilation against latest IDEA 13 EAP 132.947</li>
-            </ul>
          <h3>0.9.15 changes:</h3>
             <ul>
-                <li>Cardea (IntelliJ IDEA 13) support</li>
-                <li>GOlang 1.1.2 syntax support</li>
-                <li>Darcula support</li>
-                <li>New build system available</li>
+                <li>Added IntelliJ IDEA 13 (Cardea) support</li>
+                <li>Dropped IntelliJ IDEA 12 (Leda) support</li>
+                <li>GOlang 1.2 syntax support</li>
+                <li>Darcula theme support</li>
+                <li>New run system available</li>
+                <li>Dropped support for build systems</li>
+                <li>Fixed live templates and compilation</li>
+                <li>Fixed Go App Engine support</li>
+                <li>Added a new inspection/fix which will generate a closure function</li>
+                <li>Function inspection/fix will generate the arguments when specified</li>
                 <li>Other fixes and improvements</li>
             </ul>
          <h3>0.9.14 changes:</h3>
@@ -578,7 +574,6 @@
         <codeInsight.parameterInfo language="Google Go"
                                    implementationClass="ro.redeul.google.go.lang.parameterInfo.GoParameterInfoHandler"/>
 
-        <compileServer.plugin/>
         <!-- SM Test runner tests locations -->
         <testSrcLocator
                 implementation="ro.redeul.google.go.runner.GoTestLocationProvider"/>
@@ -615,6 +610,7 @@
                 implementation="ro.redeul.google.go.ide.GoModuleEditorsProvider"/>
         <!--<compiler.makeDependencyProcessor implementation="ro.redeul.google.go.compilation.GoDependencyProvider"/>-->
         <!--<compilerFactory implementation="ro.redeul.google.go.compilation.GoCompilerFactory"/>-->
+        <compileServer.plugin classpath=""/>
 
         <configurationType
                 implementation="ro.redeul.google.go.runner.GoRunConfigurationType"/>
