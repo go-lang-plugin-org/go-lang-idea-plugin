@@ -25,7 +25,6 @@ public abstract class GoPsiReference<
     final GoPsi element;
     private final GoPsiRefElement reference;
     private ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver;
-    protected PsiElement resolved;
 
     protected abstract Reference self();
 
@@ -62,17 +61,17 @@ public abstract class GoPsiReference<
 
     @Override
     public PsiElement resolve() {
-        if (resolved == null) {
-            if (resolver != null) {
-                GoResolveResult result = ResolveCache
-                        .getInstance(getElement().getProject())
-                        .resolveWithCaching(self(), resolver, true, false);
-                if (result != null && result.isValidResult()) {
-                    resolved = result.getElement();
-                }
-            }
+        if (resolver != null) {
+            GoResolveResult result = ResolveCache
+                .getInstance(getElement().getProject())
+                .resolveWithCaching(self(), resolver, true, false);
+
+            return result != null && result.isValidResult()
+                ? result.getElement()
+                : null;
         }
-        return resolved;
+
+        return null;
     }
 
 

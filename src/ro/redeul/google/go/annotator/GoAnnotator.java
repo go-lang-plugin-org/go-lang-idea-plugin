@@ -441,8 +441,8 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     @Override
     public void visitBinaryExpression(GoBinaryExpression expression) {
         super.visitBinaryExpression(expression);
-        InspectionResult result = new InspectionResult(inspectionManager);
-        TypeMatchInspection.checkBinaryExpression(result, expression);
-        addProblems(result.getProblems());
+//        InspectionResult result = new InspectionResult(inspectionManager);
+//        TypeMatchInspection.checkBinaryExpression(result, expression);
+//        addProblems(result.getProblems());
     }
 }
