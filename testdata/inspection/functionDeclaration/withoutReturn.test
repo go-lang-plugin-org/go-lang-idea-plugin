@@ -68,21 +68,21 @@ func NoReturn3(a int) (int, int) {
     if a == 5 {
         return a, a
     }
-/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/>
+/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/
 
 func NoReturn4(a int) (int, int) {
     a := 3
     for a > 0 {
 
     }
-/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/>
+/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/
 
 func NoReturn5(a int) (int, int) {
     a := 3
     if a > 0 {
         return 0, 0
     }
-/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/>
+/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/
 
 func NoReturn6(a int) (int, int) {
     a := 3
@@ -91,7 +91,7 @@ func NoReturn6(a int) (int, int) {
     }else if a < 2 {
         return 0, 0
     }
-/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/>
+/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/
 
 func NoReturn6(a int) (int, int) {
     a := 3
@@ -100,7 +100,7 @@ func NoReturn6(a int) (int, int) {
     }else {
 
     }
-/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/>
+/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/
 
 func NoReturn7(a int) (int, int) {
     a := 3
@@ -108,7 +108,7 @@ func NoReturn7(a int) (int, int) {
     case 1:
         return 0, 0
     }
-/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/>
+/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/
 
 func NoReturn8(a int) (int, int) {
     a := 3
@@ -117,7 +117,7 @@ func NoReturn8(a int) (int, int) {
         return 0, 0
     default:
     }
-/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/>
+/*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/
 
 func NoReturn9(a int) (int, int) {
     a := make(chan bool)

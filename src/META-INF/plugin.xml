@@ -692,6 +692,12 @@
                          displayName="Highlights non constant expressions used in constant definitions"
                          level="ERROR"
                          implementationClass="ro.redeul.google.go.inspection.ConstantExpressionsInConstDeclarationsInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="false"
+                         shortName="MismatchedTypes"
+                         displayName="Highlights mismatched types"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.TypeMatchInspection"/>
 
         <programRunner
                 implementation="ro.redeul.google.go.runner.GoApplicationRunner"/>

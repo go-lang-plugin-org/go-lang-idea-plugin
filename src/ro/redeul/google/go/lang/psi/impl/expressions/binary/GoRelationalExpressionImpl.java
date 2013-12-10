@@ -8,6 +8,8 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 public class GoRelationalExpressionImpl extends GoBinaryExpressionImpl
     implements GoRelationalExpression
@@ -18,8 +20,11 @@ public class GoRelationalExpressionImpl extends GoBinaryExpressionImpl
 
     @Override
     protected GoType[] resolveTypes() {
-        GoExpr operand = getLeftOperand();
-        return operand != null ? operand.getType() : GoType.EMPTY_ARRAY;
+        return new GoType[]{
+                GoTypes.getBuiltin(
+                        GoTypes.Builtin.Bool,
+                        GoNamesCache.getInstance(getProject()))
+        };
     }
 
     @Override

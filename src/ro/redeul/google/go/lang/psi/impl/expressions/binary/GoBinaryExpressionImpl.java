@@ -10,12 +10,17 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public abstract class GoBinaryExpressionImpl extends GoExpressionBase
     implements GoBinaryExpression {
 
     GoBinaryExpressionImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitBinaryExpression(this);
     }
 
     @Override
