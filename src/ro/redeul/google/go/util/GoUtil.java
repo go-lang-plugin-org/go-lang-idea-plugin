@@ -8,7 +8,6 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
@@ -23,6 +22,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
@@ -212,11 +212,13 @@ public class GoUtil {
                 } else if (goTypes.length > 0 && goTypes[0] != null) {
                     GoType goType = goTypes[0];
 
-                    if (argument instanceof GoUnaryExpression && firstChildExp.getText().equals("&")) {
+                    if (goType instanceof GoTypePointer) {
                         /*
                          * Detects when a reference is being passed
                          */
+                        //Fix: Now go we are receiving the right typ
                         stringBuilder.append('*');
+                        goType = ((GoTypePointer) goType).getTargetType();
                     }
 
                     if (goType instanceof GoTypePsiBacked) {
