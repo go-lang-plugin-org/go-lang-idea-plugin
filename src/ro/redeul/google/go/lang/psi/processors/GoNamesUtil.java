@@ -22,11 +22,19 @@ public class GoNamesUtil {
     }
 
     public static boolean isPublicType(String type) {
-        return RE_PUBLIC_NAME.matcher(type).matches();
+        if (type.length() == 0 ){
+            return false;
+        }
+        char first = type.charAt(0);
+        return first >= 'A' && first <= 'Z';
     }
 
     public static boolean isExportedName(String name) {
-        return RE_PUBLIC_NAME.matcher(name).matches();
+        if (name.length() == 0 ){
+            return false;
+        }
+        char first = name.charAt(0);
+        return first >= 'A' && first <= 'Z';
     }
 
     public static boolean isPredefinedConstant(String variable) {

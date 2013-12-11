@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.resolve;
 
 import com.intellij.psi.PsiElement;
+import ro.redeul.google.go.lang.completion.GoCompletionContributor;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -38,12 +39,7 @@ public class VarOrConstResolver extends
 
     @Override
     public void visitVarDeclaration(GoVarDeclaration declaration) {
-        boolean isOriginalPackage = getState().get(GoResolveStates.IsOriginalPackage);
-
-        for (GoLiteralIdentifier identifier : declaration.getIdentifiers()) {
-            if ( isOriginalPackage || GoNamesUtil.isExportedName(identifier.getName()) )
-                checkIdentifiers(identifier);
-        }
+        checkIdentifiers(declaration.getIdentifiers());
     }
 
     @Override
@@ -58,47 +54,48 @@ public class VarOrConstResolver extends
 
     @Override
     public void visitConstDeclaration(GoConstDeclaration declaration) {
-        boolean isOriginalPackage = getState().get(GoResolveStates.IsOriginalPackage);
-
-        for (GoLiteralIdentifier identifier : declaration.getIdentifiers()) {
-            if ( isOriginalPackage || GoNamesUtil.isExportedName(identifier.getName()) )
-                checkIdentifiers(identifier);
-        }
+        checkIdentifiers(declaration.getIdentifiers());
     }
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-        if (checkReference(declaration.getNameIdentifier()))
-            addDeclaration(declaration, declaration.getNameIdentifier());
+        checkIdentifiers(declaration.getNameIdentifier());
     }
 
     @Override
     public void visitSwitchTypeGuard(GoSwitchTypeGuard typeGuard) {
-        if (checkReference(typeGuard.getIdentifier()))
-            addDeclaration(typeGuard, typeGuard.getIdentifier());
+        checkIdentifiers(typeGuard.getIdentifier());
     }
 
-    void checkIdentifiers(GoLiteralIdentifier... identifiers) {
-        for (GoLiteralIdentifier id : identifiers) {
-            if (checkReference(id)) {
-                if ( ! addDeclaration(id) )
+    void checkIdentifiers(PsiElement... identifiers) {
+        String refName = getReference().getElement().getText();
+        String currentPackageName = getState().get(GoResolveStates.VisiblePackageName);
+        if (currentPackageName == null) {
+            currentPackageName = "";
+        }
+        boolean isOriginalPackage = getState().get(GoResolveStates.IsOriginalPackage);
+        boolean incomplete = refName.contains(GoCompletionContributor.DUMMY_IDENTIFIER);
+        if (incomplete) {
+            int completionPosition = refName.indexOf(GoCompletionContributor.DUMMY_IDENTIFIER);
+            refName = refName.substring(0, completionPosition);
+        }
+        for (PsiElement id : identifiers) {
+            if (id == null) {
+                continue;
+            }
+            String name = id.getText();
+            if (isOriginalPackage || GoNamesUtil.isExportedName(name)) {
+                if (refName.contains(".")) {
+                    name = currentPackageName + "." + name;
+                }
+                if (incomplete && name.startsWith(refName)) {
+                    addDeclaration(id);
                     return;
+                }else if (refName.equals(name)) {
+                    addDeclaration(id);
+                    return;
+                }
             }
         }
-    }
-
-    @Override
-    boolean checkReference(PsiElement element) {
-        if (getDeclaration() != null) {
-            return false;
-        }
-
-        if (!(element instanceof GoLiteralIdentifier)) {
-            return false;
-        }
-
-        String currentPackageName = getState().get(GoResolveStates.VisiblePackageName);
-        VarOrConstReference reference = getReference();
-        return reference.matchesVisiblePackageName(currentPackageName, element, reference.getElement().getName());
     }
 }
