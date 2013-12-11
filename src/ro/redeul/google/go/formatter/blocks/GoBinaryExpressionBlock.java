@@ -9,7 +9,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import org.jaxen.expr.AdditiveExpr;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
@@ -65,7 +64,7 @@ class GoBinaryExpressionBlock extends GoBlock {
 
         if (parentElementType == EXPRESSION_LIST) {
             if (inTheSameLine(psi.getLeftOperand().getNode(), psi.getRightOperand().getNode())
-                && !(node.getElementType() == LOG_OR_EXPRESSION || node.getElementType() == LOG_AND_EXPRESSION || node.getElementType() == REL_EXPRESSION)
+                && !(node.getElementType() == LOG_OR_EXPRESSION || node.getElementType() == LOG_AND_EXPRESSION || node.getElementType() == REL_EXPRESSION || node.getElementType() == MUL_EXPRESSION)
                 ) {
                 spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
             } else {
