@@ -185,6 +185,39 @@ public class GoUtil {
         return isVariadicFn.concat(targetPackageName).concat(".").concat(name);
     }
 
+    private static Object tryPsiType(Object element) {
+        if (element instanceof GoPsiType) {
+            return element;
+        }
+        if (element instanceof GoTypePsiBacked) {
+            return ((GoTypePsiBacked) element).getPsiType();
+        }
+        return element;
+    }
+
+
+    public static boolean CompairTypes(Object element, Object element2) {
+        /* TO DO: add more test cases */
+        element = tryPsiType(element);
+        element2 = tryPsiType(element2);
+        if (element instanceof GoPsiType && element2 instanceof GoPsiType) {
+            //element2.
+            GoPsiType psiType = (GoPsiType) element;
+
+
+            GoPsiType psiType1 = (GoPsiType) element2;
+            if (psiType1.isIdentical(psiType))
+                return true;
+            if (psiType1.isEquivalentTo(psiType))
+                return true;
+
+            return false;
+        }
+
+        return true;
+    }
+
+
     /**
      * Helper method to generate function arguments type, based on param being passed to the function
      *

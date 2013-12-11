@@ -1,18 +1,23 @@
 package ro.redeul.google.go.inspection;
 
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.ProblemHighlightType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.inspection.fix.CastTypeGix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.types.*;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+import ro.redeul.google.go.util.GoUtil;
 
 import static ro.redeul.google.go.inspection.InspectionUtil.*;
 import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.getCallFunctionIdentifier;
@@ -90,7 +95,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                                            GoExpr[] arguments, InspectionResult result) {
         if (arguments.length > 2) {
             result.addProblem(arguments[2], arguments[arguments.length - 1],
-                GoBundle.message("error.too.many.arguments.in.call", "make"));
+                    GoBundle.message("error.too.many.arguments.in.call", "make"));
             return;
         } else if (arguments.length == 0) {
             String method = "make(" + expression.getTypeArgument().getText() + ")";
@@ -112,7 +117,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
     private static void checkMakeMapCall(GoExpr[] arguments, InspectionResult result) {
         if (arguments.length > 1) {
             result.addProblem(arguments[1], arguments[arguments.length - 1],
-                GoBundle.message("error.too.many.arguments.in.call", "make"));
+                    GoBundle.message("error.too.many.arguments.in.call", "make"));
             return;
         }
 
@@ -127,7 +132,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
     private static void checkMakeChannelCall(GoExpr[] arguments, InspectionResult result) {
         if (arguments.length > 1) {
             result.addProblem(arguments[1], arguments[arguments.length - 1],
-                GoBundle.message("error.too.many.arguments.in.call", "make"));
+                    GoBundle.message("error.too.many.arguments.in.call", "make"));
             return;
         }
 
@@ -137,6 +142,56 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
 
         // TODO: check bufferSize
         GoExpr bufferSize = arguments[0];
+    }
+
+    private static boolean checkParametersExp(GoFunctionParameter functionParameter, GoExpr goExpr) {
+        GoType[] goTypes = goExpr.getType();
+        if (goTypes.length != 0 && goTypes[0] != null) {
+            GoPsiType type = functionParameter.getType();
+            type = resolveToFinalType(type);
+            if (type instanceof GoPsiTypeInterface)
+                return true;
+            return GoUtil.CompairTypes(type, goTypes[0]);
+        }
+        return true;
+    }
+
+    private static void checkFunctionTypeArguments(GoCallOrConvExpression call, InspectionResult result) {
+        GoFunctionDeclaration goFunctionDeclaration = GoExpressionUtils.resolveToFunctionDeclaration(call);
+        GoExpr[] goExprs = call.getArguments();
+        int index = 0;
+        for (GoFunctionParameter functionParameter : goFunctionDeclaration.getParameters()) {
+            if (index >= goExprs.length)
+                return;
+            GoExpr goExpr = goExprs[index];
+            if (functionParameter.isVariadic()) {
+                //Inspect the rest
+                for (; index < goExprs.length; index++)
+                    if (!checkParametersExp(functionParameter, goExpr)) {
+                        String name = goExpr.getText();
+                        result.addProblem(
+                                goExpr,
+                                GoBundle.message("warning.functioncall.type.mismatch", name, goFunctionDeclaration.getQualifiedName()),
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new LocalQuickFix[]{
+                                new CastTypeGix(goExpr)
+                        });
+                        return;
+                    }
+            } else {
+                if (!checkParametersExp(functionParameter, goExpr)) {
+                    String name = goExpr.getText();
+                    result.addProblem(
+                            goExpr,
+                            GoBundle.message("warning.functioncall.type.mismatch", name, goFunctionDeclaration.getQualifiedName()),
+                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new LocalQuickFix[]{
+                            new CastTypeGix(goExpr)
+                    });
+                    return;
+                }
+                index++;
+            }
+        }
+
     }
 
     private static void checkFunctionCallArguments(GoCallOrConvExpression call, InspectionResult result) {
@@ -173,6 +228,9 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             result.addProblem(call, GoBundle.message("error.not.enough.arguments.in.call", name));
         } else if (argumentCount > expectedCount) {
             result.addProblem(call, GoBundle.message("error.too.many.arguments.in.call", name));
+        }
+        if (expectedCount > 0) {
+            checkFunctionTypeArguments(call, result);
         }
     }
 }
