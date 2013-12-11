@@ -42,13 +42,16 @@ Google go language plugin is an attempt to build an outstanding IDE for
 * Build and install it.
 * Open IDEA and create an empty Go project.
 * Go to File -> Project Structure and select SDKs entry in the left column of the new window
-* Add a new Google Go SDK by clicking the plus sign an choosing the appropriate SDK type.
+* Add a new Google Go SDK by clicking the plus sign an choosing the appropriate SDK type. (See MacOS note below)
 * After the SDK is defined go to the Modules entry and add a new google facet to your default module.
 Select the proper sdk for the module.
 * If you are using a multiple value GOPATH for your computer, add the first directory to the ``` Classpath ```
 of the GO SDK so that packages from ``` go get ``` are added to the autocompletion system.
 
 Now you are ready to play with golang.
+
+_NOTE:_ In MacOS you may need to press <kbd>&#8984;</kbd>+<kbd>&#8679;</kbd>+<kbd>G</kbd> in Finder dialog and enter `/usr/local/go` if Go in installed 
+using package installer)
 
 ## Tutorials
 
