@@ -9,14 +9,17 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 
 public class GoParenthesisedExpressionImpl extends GoPsiElementBase
-    implements GoParenthesisedExpression {
+        implements GoParenthesisedExpression {
     public GoParenthesisedExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     @Override
     public GoExpr getInnerExpression() {
-        return findChildByClass(GoExpr.class);
+        GoExpr childByClass = findChildByClass(GoExpr.class);
+        if (childByClass instanceof GoParenthesisedExpression)
+            return ((GoParenthesisedExpression) childByClass).getInnerExpression();
+        return childByClass;
     }
 
     @NotNull
