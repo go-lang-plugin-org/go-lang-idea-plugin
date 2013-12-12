@@ -66,36 +66,4 @@ public class VarOrConstResolver extends
     public void visitSwitchTypeGuard(GoSwitchTypeGuard typeGuard) {
         checkIdentifiers(typeGuard.getIdentifier());
     }
-
-    void checkIdentifiers(PsiElement... identifiers) {
-        String refName = getReference().getElement().getText();
-        String currentPackageName = getState().get(GoResolveStates.VisiblePackageName);
-        if (currentPackageName == null) {
-            currentPackageName = "";
-        }
-        boolean isOriginalPackage = getState().get(GoResolveStates.IsOriginalPackage);
-        boolean incomplete = refName.contains(GoCompletionContributor.DUMMY_IDENTIFIER);
-        if (incomplete) {
-            int completionPosition = refName.indexOf(GoCompletionContributor.DUMMY_IDENTIFIER);
-            refName = refName.substring(0, completionPosition);
-        }
-        for (PsiElement id : identifiers) {
-            if (id == null) {
-                continue;
-            }
-            String name = id.getText();
-            if (isOriginalPackage || GoNamesUtil.isExportedName(name)) {
-                if (refName.contains(".")) {
-                    name = currentPackageName + "." + name;
-                }
-                if (incomplete && name.startsWith(refName)) {
-                    addDeclaration(id);
-                    return;
-                }else if (refName.equals(name)) {
-                    addDeclaration(id);
-                    return;
-                }
-            }
-        }
-    }
 }
