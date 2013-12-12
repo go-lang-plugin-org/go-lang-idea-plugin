@@ -35,7 +35,7 @@ public class CastToFix extends GoEditorAwareTestCase {
         CommandProcessor.getInstance().executeCommand(project, new Runnable() {
             @Override
             public void run() {
-                new CastTypeFix(expression, type).invoke(project, file, editor, expression, expression);
+                new CastTypeFix(expression, type,file).invoke(project, file, editor, expression, expression);
             }
         }, "", null);
     }
