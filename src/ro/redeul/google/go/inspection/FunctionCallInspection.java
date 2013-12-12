@@ -1,16 +1,17 @@
 package ro.redeul.google.go.inspection;
 
-import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemHighlightType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
-import ro.redeul.google.go.inspection.fix.CastTypeGix;
+import ro.redeul.google.go.inspection.fix.CastTypeFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.*;
@@ -145,16 +146,31 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
     }
 
     private static boolean checkParametersExp(GoFunctionParameter functionParameter, GoExpr goExpr) {
+        GoPsiType type = functionParameter.getType();
+        type = resolveToFinalType(type);
+        if (type instanceof GoPsiTypeInterface)
+            return true;
+
         GoType[] goTypes = goExpr.getType();
         if (goTypes.length != 0 && goTypes[0] != null) {
-            GoPsiType type = functionParameter.getType();
-            type = resolveToFinalType(type);
-            if (type instanceof GoPsiTypeInterface)
-                return true;
-            return GoUtil.CompairTypes(type, goTypes[0]);
+            return GoUtil.CompairTypes(type, goTypes[0], goExpr);
         }
+
+        if (type instanceof GoPsiTypeFunction)
+            return GoUtil.CompairTypes(type, null, goExpr);
+
+        if (goExpr instanceof GoLiteralExpression && type instanceof GoPsiTypeName && ((GoPsiTypeName) type).isPrimitive()) {
+            String typeText = type.getText();
+            GoLiteral.Type type1 = ((GoLiteralExpression) goExpr).getLiteral().getType();
+            if (typeText.equals("string")) {
+                return type1 == GoLiteral.Type.InterpretedString || type1 == GoLiteral.Type.RawString;
+            }
+            return type1.name().toLowerCase().equals(typeText);
+        }
+
         return true;
     }
+
 
     private static void checkFunctionTypeArguments(GoCallOrConvExpression call, InspectionResult result) {
         GoFunctionDeclaration goFunctionDeclaration = GoExpressionUtils.resolveToFunctionDeclaration(call);
@@ -164,17 +180,14 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             if (index >= goExprs.length)
                 return;
             GoExpr goExpr = goExprs[index];
+            GoPsiType type = functionParameter.getType();
             if (functionParameter.isVariadic()) {
-                //Inspect the rest
                 for (; index < goExprs.length; index++)
                     if (!checkParametersExp(functionParameter, goExpr)) {
-                        String name = goExpr.getText();
                         result.addProblem(
                                 goExpr,
-                                GoBundle.message("warning.functioncall.type.mismatch", name, goFunctionDeclaration.getQualifiedName()),
-                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new LocalQuickFix[]{
-                                new CastTypeGix(goExpr)
-                        });
+                                GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
                         return;
                     }
             } else {
@@ -182,10 +195,8 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                     String name = goExpr.getText();
                     result.addProblem(
                             goExpr,
-                            GoBundle.message("warning.functioncall.type.mismatch", name, goFunctionDeclaration.getQualifiedName()),
-                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new LocalQuickFix[]{
-                            new CastTypeGix(goExpr)
-                    });
+                            GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
                     return;
                 }
                 index++;

@@ -1,17 +1,25 @@
 package main
 
 func main() {
-    f := func (n int) int {return 7+n+/*begin*/Foo/*end*/(5)}
+    var myChan <-chan int
+    var myChan1 chan<- int
+    var myChan2 chan int
+    var myArray [100]int
+    f := func (n int) int {return 7+n+/*begin*/Foo/*end*/(5,myChan,myChan1,myChan2,myArray)}
     println(f(5))
 }
 -----
 package main
 
 func main() {
-    f := func (n int) int {return 7+n+Foo(5)}
+    var myChan <-chan int
+    var myChan1 chan<- int
+    var myChan2 chan int
+    var myArray [100]int
+    f := func (n int) int {return 7+n+Foo(5,myChan,myChan1,myChan2,myArray)}
     println(f(5))
 }
 
-func Foo(arg0 int) {
+func Foo(arg0 int, arg1 <-chan int, arg2 chan <-int, arg3 chan int, arg4 [100]int) {
 	<caret>
 }
