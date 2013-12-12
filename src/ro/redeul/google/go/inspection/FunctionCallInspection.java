@@ -146,18 +146,29 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         GoExpr bufferSize = arguments[0];
     }
 
-    private static boolean checkParametersExp(GoFunctionParameter functionParameter, GoExpr goExpr) {
-        GoPsiType type = functionParameter.getType();
+    private static boolean checkIsInterface(GoPsiType psiType) {
+        if (psiType instanceof GoPsiTypeInterface)
+            return true;
+        if (psiType instanceof GoPsiTypeSlice)
+            return checkIsInterface(((GoPsiTypeSlice) psiType).getElementType());
+        if (psiType instanceof GoPsiTypePointer)
+            return checkIsInterface(((GoPsiTypePointer) psiType).getTargetType());
+        if (psiType instanceof GoPsiTypeArray)
+            return checkIsInterface(((GoPsiTypeArray) psiType).getElementType());
+        if (psiType instanceof GoPsiTypeChannel)
+            return checkIsInterface(((GoPsiTypeChannel) psiType).getElementType());
+        return false;
+    }
+
+    private static boolean checkParametersExp(GoPsiType type, GoExpr goExpr) {
 
         GoPsiType resolved = resolveToFinalType(type);
         if (resolved instanceof GoPsiTypeInterface)
             return true;
 
         PsiElement firstChildOfExp = goExpr.getFirstChild();
-        if (resolved instanceof GoPsiTypeSlice) {
-            if (((GoPsiTypeSlice) resolved).getElementType() instanceof GoPsiTypeInterface) {
-                return true;
-            }
+        if (checkIsInterface(resolved)) {
+            return true;
         }
 
         if (firstChildOfExp instanceof GoLiteralInteger) {
@@ -207,7 +218,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             GoPsiType type = functionParameter.getType();
             if (functionParameter.isVariadic()) {
                 for (; index < goExprs.length; index++)
-                    if (!checkParametersExp(functionParameter, goExpr)) {
+                    if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                         result.addProblem(
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
@@ -215,7 +226,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                         return;
                     }
             } else {
-                if (!checkParametersExp(functionParameter, goExpr)) {
+                if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                     String name = goExpr.getText();
                     result.addProblem(
                             goExpr,
