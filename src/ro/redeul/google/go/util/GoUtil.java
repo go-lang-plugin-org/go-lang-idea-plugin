@@ -228,9 +228,8 @@ public class GoUtil {
     }
 
     public static GoPsiElement ResolveReferece(GoPsiElement element) {
-        PsiReference[] references = element.getReferences();
-        if (references.length != 0 && references[0] != null) {
-            PsiElement resolve = references[0].resolve();
+        for (PsiReference reference : element.getReferences()) {
+            PsiElement resolve = reference.resolve();
             if (resolve != null)
                 return ResolveReferece((GoPsiElement) resolve);
         }

@@ -254,9 +254,9 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         }
 
         String name = "";
-        GoLiteralIdentifier id = getCallFunctionIdentifier(call);
+        GoPsiElement id = getCallFunctionIdentifier(call);
         if (id != null) {
-            name = id.getName();
+            name = id.getText();
         }
 
         if (argumentCount < expectedCount) {
