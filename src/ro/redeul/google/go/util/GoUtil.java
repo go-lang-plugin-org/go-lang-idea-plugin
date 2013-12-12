@@ -173,6 +173,11 @@ public class GoUtil {
         } else if (type instanceof GoPsiTypeFunction) {
             GoPsiTypeFunction type1 = (GoPsiTypeFunction) type;
             return getFuncDecAsParam(type1.getParameters(), type1.getResults(), currentFile);
+        } else if (type instanceof GoPsiTypeInterface) {
+            GoPsiTypeName[] typeNames = ((GoPsiTypeInterface) type).getTypeNames();
+            if (typeNames.length == 0)
+                return "interface{}";
+            type = typeNames[0];
         }
 
         StringBuilder stringBuilder = new StringBuilder();

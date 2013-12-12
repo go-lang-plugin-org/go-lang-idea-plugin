@@ -149,25 +149,28 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
     private static boolean checkParametersExp(GoFunctionParameter functionParameter, GoExpr goExpr) {
         GoPsiType type = functionParameter.getType();
 
-        if (type instanceof GoPsiTypeInterface)
+        GoPsiType resolved = resolveToFinalType(type);
+        if (resolved instanceof GoPsiTypeInterface)
             return true;
 
         PsiElement firstChildOfExp = goExpr.getFirstChild();
+        if (resolved instanceof GoPsiTypeSlice) {
+            if (((GoPsiTypeSlice) resolved).getElementType() instanceof GoPsiTypeInterface) {
+                return true;
+            }
+        }
+
         if (firstChildOfExp instanceof GoLiteralInteger) {
-            type = resolveToFinalType(type);
-            return type.getText().startsWith("int");
+            return resolved.getText().startsWith("int");
         }
         if (firstChildOfExp instanceof GoLiteralFloat) {
-            type = resolveToFinalType(type);
-            return type.getText().startsWith("float");
+            return resolved.getText().startsWith("float");
         }
         if (firstChildOfExp instanceof GoLiteralString) {
-            type = resolveToFinalType(type);
-            return type.getText().equals("string");
+            return resolved.getText().equals("string");
         }
         if (firstChildOfExp instanceof GoLiteralBool) {
-            type = resolveToFinalType(type);
-            return type.getText().equals("bool");
+            return resolved.getText().equals("bool");
         }
 
         GoType[] goTypes = goExpr.getType();
@@ -184,7 +187,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                 return GoUtil.CompairTypes(type, goPsiElement);
         }
 
-        type = resolveToFinalType(type);
+        type = resolved;
         String typeText = type.getText();
         GoLiteral.Type type1 = ((GoLiteralExpression) goExpr).getLiteral().getType();
 
