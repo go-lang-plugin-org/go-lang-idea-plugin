@@ -13,7 +13,7 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public abstract class GoBinaryExpressionImpl extends GoExpressionBase
-    implements GoBinaryExpression {
+        implements GoBinaryExpression {
 
     GoBinaryExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -62,7 +62,12 @@ public abstract class GoBinaryExpressionImpl extends GoExpressionBase
         if (leftTypes.length == 1 && rightTypes.length == 1) {
             if (leftTypes[0].isIdentical(rightTypes[0])) {
                 return leftTypes;
+            } else if (leftOperand.isConstantExpression()) {
+                return rightTypes;
+            } else if (rightOperand.isConstantExpression()) {
+                return leftTypes;
             }
+
         }
 
         return GoType.EMPTY_ARRAY;
@@ -74,7 +79,7 @@ public abstract class GoBinaryExpressionImpl extends GoExpressionBase
         GoExpr rightOperand = getRightOperand();
 
         return
-            leftOperand != null && leftOperand.isConstantExpression() &&
-                rightOperand != null && rightOperand.isConstantExpression();
+                leftOperand != null && leftOperand.isConstantExpression() &&
+                        rightOperand != null && rightOperand.isConstantExpression();
     }
 }

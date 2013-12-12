@@ -197,12 +197,10 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             if (goPsiElement instanceof GoPsiType)
                 return GoUtil.CompairTypes(type, goPsiElement);
         }
-
         type = resolved;
         String typeText = type.getText();
         GoLiteral.Type type1 = ((GoLiteralExpression) goExpr).getLiteral().getType();
-
-        return type1.name().toLowerCase().equals(typeText);
+        return type1 == GoLiteral.Type.Identifier || type1.name().toLowerCase().equals(typeText);
 
     }
 
@@ -211,6 +209,8 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         GoFunctionDeclaration goFunctionDeclaration = GoExpressionUtils.resolveToFunctionDeclaration(call);
         GoExpr[] goExprs = call.getArguments();
         int index = 0;
+        if (goFunctionDeclaration == null)
+            return;
         for (GoFunctionParameter functionParameter : goFunctionDeclaration.getParameters()) {
             if (index >= goExprs.length)
                 return;

@@ -511,6 +511,7 @@ public class GoUtil {
 
     public static GoPsiElement ResolveTypeOfVarDecl(GoPsiElement element) {
         PsiElement parent = element.getParent();
+
         if (parent instanceof GoConstDeclaration) {
             GoPsiType identifiersType = ((GoConstDeclaration) parent).getIdentifiersType();
             if (identifiersType != null)
@@ -530,11 +531,12 @@ public class GoUtil {
             return (GoPsiElement) parent.getLastChild();
         }
         if (element instanceof GoLiteralIdentifier) {
-            PsiReference[] references = element.getReferences();
-            if (references.length != 0 && references[0] != null) {
-                PsiElement resolve = references[0].resolve();
-                if (resolve != null)
-                    return ResolveTypeOfVarDecl((GoPsiElement) resolve);
+            for (PsiReference reference : element.getReferences()) {
+                if (reference != null) {
+                    GoPsiElement resolve = (GoPsiElement) reference.resolve();
+                    if (resolve != null && !resolve.equals(element))
+                        return ResolveTypeOfVarDecl(resolve);
+                }
             }
         }
         return element;
