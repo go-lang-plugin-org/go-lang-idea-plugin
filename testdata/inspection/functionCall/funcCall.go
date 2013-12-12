@@ -9,6 +9,6 @@ func main() {
 	var valid = func(arg int, arg2 *string) bool {return true}
 	HandleFunc("/", (func(int, *string)bool)(indexHandler))
 	HandleFunc("/", valid)
-	HandleFunc("/", /*begin*/indexHandler/*end.Expression type mismatch, the expected type is func(int,*string)bool|CastTypeFix*/)
+	HandleFunc("/", /*begin*/indexHandler/*end.Expression type mismatch, the expected type is func(int, *string)bool|CastTypeFix*/)
 	HandleFunc(/*begin*/56/*end.Expression type mismatch, the expected type is string|CastTypeFix*/, valid)
 }
