@@ -1,14 +1,15 @@
 package ro.redeul.google.go.inspection;
 
 import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.CastTypeFix;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.*;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -147,9 +148,27 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
 
     private static boolean checkParametersExp(GoFunctionParameter functionParameter, GoExpr goExpr) {
         GoPsiType type = functionParameter.getType();
-        type = resolveToFinalType(type);
+
         if (type instanceof GoPsiTypeInterface)
             return true;
+
+        PsiElement firstChildOfExp = goExpr.getFirstChild();
+        if (firstChildOfExp instanceof GoLiteralInteger) {
+            type = resolveToFinalType(type);
+            return type.getText().startsWith("int");
+        }
+        if (firstChildOfExp instanceof GoLiteralFloat) {
+            type = resolveToFinalType(type);
+            return type.getText().startsWith("float");
+        }
+        if (firstChildOfExp instanceof GoLiteralString) {
+            type = resolveToFinalType(type);
+            return type.getText().equals("string");
+        }
+        if (firstChildOfExp instanceof GoLiteralBool) {
+            type = resolveToFinalType(type);
+            return type.getText().equals("bool");
+        }
 
         GoType[] goTypes = goExpr.getType();
         if (goTypes.length != 0 && goTypes[0] != null) {
@@ -159,16 +178,18 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         if (type instanceof GoPsiTypeFunction)
             return GoUtil.CompairTypes(type, null, goExpr);
 
-        if (goExpr instanceof GoLiteralExpression && type instanceof GoPsiTypeName && ((GoPsiTypeName) type).isPrimitive()) {
-            String typeText = type.getText();
-            GoLiteral.Type type1 = ((GoLiteralExpression) goExpr).getLiteral().getType();
-            if (typeText.equals("string")) {
-                return type1 == GoLiteral.Type.InterpretedString || type1 == GoLiteral.Type.RawString;
-            }
-            return type1.name().toLowerCase().equals(typeText);
+        if (firstChildOfExp instanceof GoLiteralIdentifier) {
+            GoPsiElement goPsiElement = GoUtil.ResolveTypeOfVarDecl((GoPsiElement) firstChildOfExp);
+            if (goPsiElement instanceof GoPsiType)
+                return GoUtil.CompairTypes(type, goPsiElement);
         }
 
-        return true;
+        type = resolveToFinalType(type);
+        String typeText = type.getText();
+        GoLiteral.Type type1 = ((GoLiteralExpression) goExpr).getLiteral().getType();
+
+        return type1.name().toLowerCase().equals(typeText);
+
     }
 
 
@@ -187,7 +208,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                         result.addProblem(
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
-                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type, (GoFile) call.getContainingFile()));
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
                         return;
                     }
             } else {
@@ -196,7 +217,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                     result.addProblem(
                             goExpr,
                             GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
-                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type, (GoFile) call));
+                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
                     return;
                 }
                 index++;
@@ -239,8 +260,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             result.addProblem(call, GoBundle.message("error.not.enough.arguments.in.call", name));
         } else if (argumentCount > expectedCount) {
             result.addProblem(call, GoBundle.message("error.too.many.arguments.in.call", name));
-        }
-        if (expectedCount > 0) {
+        } else {
             checkFunctionTypeArguments(call, result);
         }
     }

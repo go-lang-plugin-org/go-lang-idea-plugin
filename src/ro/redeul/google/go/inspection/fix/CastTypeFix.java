@@ -18,21 +18,21 @@ import static ro.redeul.google.go.util.EditorUtil.reformatLines;
 
 public class CastTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
+    private final GoPsiType type;
     @Nullable
     private PsiElement element;
-    private String castTo;
 
-    public CastTypeFix(@Nullable PsiElement element, GoPsiType type, GoFile currentFile) {
+    public CastTypeFix(@Nullable PsiElement element, GoPsiType type) {
         super(element);
         this.element = element;
-        castTo = GoUtil.getNameLocalOrGlobal(type, currentFile);
+        this.type = type;
     }
 
 
     @NotNull
     @Override
     public String getText() {
-        return "Cast {" + getStartElement().getText() + "} to " + castTo;
+        return "Cast {" + getStartElement().getText() + "} to " + type.getText();
     }
 
     @NotNull
@@ -47,7 +47,7 @@ public class CastTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
                        @NotNull PsiFile file,
                        @Nullable("is null when called from inspection") Editor editor,
                        @NotNull final PsiElement startElement, @NotNull PsiElement endElement) {
-        final PsiElement e;
+
 
         Document doc = PsiDocumentManager.getInstance(project).getDocument(file);
 
@@ -58,7 +58,7 @@ public class CastTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
         TextRange textRange = element.getTextRange();
         GoFile currentFile = (GoFile) element.getContainingFile();
 
-        String castString = String.format("(%s)(%s)", castTo, element.getText());
+        String castString = String.format("(%s)(%s)", GoUtil.getNameLocalOrGlobal(this.type, currentFile), element.getText());
         doc.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), castString);
         if (editor != null) {
             int line = doc.getLineNumber(textRange.getStartOffset());

@@ -15,9 +15,17 @@ import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public class CastToFix extends GoEditorAwareTestCase {
-    public void testCastFunc() throws Exception {doTest();}
-    public void testCastSlice() throws Exception {doTest();}
-    public void testCastString() throws Exception {doTest();}
+    public void testCastFunc() throws Exception {
+        doTest();
+    }
+
+    public void testCastSlice() throws Exception {
+        doTest();
+    }
+
+    public void testCastString() throws Exception {
+        doTest();
+    }
 
 
     @Override
@@ -35,7 +43,7 @@ public class CastToFix extends GoEditorAwareTestCase {
         CommandProcessor.getInstance().executeCommand(project, new Runnable() {
             @Override
             public void run() {
-                new CastTypeFix(expression, type,file).invoke(project, file, editor, expression, expression);
+                new CastTypeFix(expression, type).invoke(project, file, editor, expression, expression);
             }
         }, "", null);
     }
