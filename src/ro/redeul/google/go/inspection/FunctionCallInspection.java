@@ -187,7 +187,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                         result.addProblem(
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
-                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type, (GoFile) call.getContainingFile()));
                         return;
                     }
             } else {
@@ -196,7 +196,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                     result.addProblem(
                             goExpr,
                             GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
-                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type, (GoFile) call));
                     return;
                 }
                 index++;
