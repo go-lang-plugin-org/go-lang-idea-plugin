@@ -213,16 +213,6 @@ public class GoUtil {
         return recursiveNameOrGlobalTypeImp(type, currentFile);
     }
 
-    private static Object tryPsiType(Object element) {
-        if (element instanceof GoPsiType) {
-            return element;
-        }
-        if (element instanceof GoTypePsiBacked) {
-            return ((GoTypePsiBacked) element).getPsiType();
-        }
-        return element;
-    }
-
 
     public static boolean CompairTypes(GoPsiType element, Object element2) {
         return CompairTypes(element, element2, null);
@@ -238,7 +228,15 @@ public class GoUtil {
     }
 
     public static boolean CompairTypes(GoPsiType element, Object element2, GoPsiElement goExpr) {
+
+        if (element2 instanceof GoTypePsiBacked) {
+            GoPsiType psiType = ((GoTypePsiBacked) element2).getPsiType();
+            if (psiType != null)
+                return psiType.isIdentical(element);
+        }
+
         if (element instanceof GoPsiTypeFunction && !(element2 instanceof GoPsiTypeFunction)) {
+
 
             if (goExpr instanceof GoCallOrConvExpression) {
                 element2 = findChildOfClass(goExpr, GoPsiTypeParenthesized.class);
@@ -281,14 +279,12 @@ public class GoUtil {
         }
 
 
-        element2 = tryPsiType(element2);
-
         if (element2 instanceof GoPsiType) {
             GoTypeUtils.resolveToFinalType((GoPsiType) element2);
             return element.isIdentical((GoPsiType) element2);
         }
 
-        return !(element2 instanceof GoType) || element.getUnderlyingType().isIdentical(((GoType) element2).getUnderlyingType());
+        return element.getUnderlyingType().isIdentical(((GoType) element2).getUnderlyingType());
 
 
     }

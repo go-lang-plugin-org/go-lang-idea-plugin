@@ -27,6 +27,18 @@ public class CastToFix extends GoEditorAwareTestCase {
         doTest();
     }
 
+    public void testCastInterface() throws Exception {
+        doTest();
+    }
+
+    public void testCastEnum() throws Exception {
+        doTest();
+    }
+
+    public void testCastLiteralInt() throws Exception {
+        doTest();
+    }
+
 
     @Override
     protected void invoke(final Project project, final Editor editor, final GoFile file) {

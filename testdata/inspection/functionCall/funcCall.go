@@ -17,8 +17,11 @@ func HandleIFunc(fn func()iFunc) {
 }
 
 func main() {
+	var interfacE = interface{}
 	HandleIFunc(func() iFunc {return true})
-	HandleIFunc((func() iFunc {return true}))
+	HandleIFunc(((func() iFunc {return true})))
+	HandleIFunc((func() iFunc)(nil))
+	HandleIFunc(interfacE.(func() iFunc))
 	HandleInterface(34, func() interface {} {return true})
 	HandleInterface(34, (func() interface {} {return true}))
 	indexHandler := func() {}

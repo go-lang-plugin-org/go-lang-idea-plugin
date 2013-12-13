@@ -1,0 +1,37 @@
+package main
+
+type MyEnum int
+const(
+    AAAA MyEnum = iota
+    BBBB
+    CCCC
+    DDDD
+)
+
+func HandleFunc(pa string, handler MyEnum){
+
+}
+
+func main() {
+    var indexHandler = 45
+    HandleFunc("/",index/*begin*/H/*end*/andler)
+}
+-----
+package main
+
+type MyEnum int
+const(
+    AAAA MyEnum = iota
+    BBBB
+    CCCC
+    DDDD
+)
+
+func HandleFunc(pa string, handler MyEnum){
+
+}
+
+func main() {
+    var indexHandler = 45
+    HandleFunc("/", (MyEnum)(indexHandler))
+}
