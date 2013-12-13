@@ -233,7 +233,8 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                         return;
                     }
             } else {
-                for (GoLiteralIdentifier goLiteralIdentifier : functionParameter.getIdentifiers()) {
+                GoLiteralIdentifier[] identifiers = functionParameter.getIdentifiers();
+                if (identifiers.length > 2) {
                     GoExpr goExpr = goExprs[index];
                     if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                         String name = goExpr.getText();
@@ -244,6 +245,19 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                         return;
                     }
                     index++;
+                } else {
+                    for (GoLiteralIdentifier goLiteralIdentifier : identifiers) {
+                        GoExpr goExpr = goExprs[index];
+                        if (!checkParametersExp(functionParameter.getType(), goExpr)) {
+                            String name = goExpr.getText();
+                            result.addProblem(
+                                    goExpr,
+                                    GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                            return;
+                        }
+                        index++;
+                    }
                 }
             }
         }
