@@ -102,7 +102,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                         fixes = new LocalQuickFix[]{new CreateGlobalVariableFix(element)};
                     } else if (isUnqualifiedTypeName(element)) {
                         fixes = new LocalQuickFix[]{new CreateTypeFix(element)};
-                    } else {
+                    } else if (Character.isUpperCase(element.getLastChild().getText().charAt(0))) {
                          /*
                          * We can also resolve nested packages
                          */
@@ -153,10 +153,9 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
                             }
                         }
-                        if (fixes == null)
-                            fixes = LocalQuickFix.EMPTY_ARRAY;
                     }
-
+                    if (fixes == null)
+                        fixes = LocalQuickFix.EMPTY_ARRAY;
                     result.addProblem(
                             element,
                             message("warning.unresolved.symbol", name),

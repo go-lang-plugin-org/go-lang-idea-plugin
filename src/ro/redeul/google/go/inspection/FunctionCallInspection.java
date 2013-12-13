@@ -234,7 +234,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                     }
             } else {
                 GoLiteralIdentifier[] identifiers = functionParameter.getIdentifiers();
-                if (identifiers.length > 2) {
+                if (identifiers.length < 2) {
                     GoExpr goExpr = goExprs[index];
                     if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                         String name = goExpr.getText();
