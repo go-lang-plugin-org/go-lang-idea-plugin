@@ -109,4 +109,15 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
     public PsiReference getReference() {
         return new ImportReference(this);
     }
+
+    @Override
+    public boolean isValidImport() {
+        String importPathValue = null;
+        GoLiteralString importPath = this.getImportPath();
+        if ( importPath != null ) {
+            importPathValue = importPath.getValue();
+        }
+
+        return !(importPathValue == null || importPathValue.isEmpty()) && !(importPathValue.contains(" ") || importPathValue.contains("\t")) && !importPathValue.contains("\\");
+    }
 }

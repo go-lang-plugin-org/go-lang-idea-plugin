@@ -27,6 +27,7 @@
             <li>Inspections: Detect non constant expression used in constant declarations</li>
             <li>Intentions: Invert if condition/Merge nested 'if's/Split into 2 'if's/Convert switch statement to if chain.</li>
             <li>Intentions: Convert between interpreted string and raw string.</li>
+            <li>Intention: go get a package.</li>
             <li>Intention: Add/Remove parentheses.</li>
             <li>Intention: Move simple statement out.</li>
             <li>Inspection: Validate that the package names in files are correct with respect of the folder name.</li>
@@ -67,6 +68,7 @@
                 <li>Fixed Go App Engine support</li>
                 <li>Added a new inspection/fix which will generate a closure function</li>
                 <li>Function inspection/fix will generate the arguments when specified</li>
+                <li>Added intention to run "go get" on a package</li>
                 <li>Other fixes and improvements</li>
             </ul>
          <h3>0.9.14 changes:</h3>
@@ -817,6 +819,12 @@
             <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
             <categoryKey>intention.category.go/intention.category.parentheses</categoryKey>
             <className>ro.redeul.google.go.intentions.parenthesis.AddDeclarationParenthesesIntention</className>
+        </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.packages</categoryKey>
+            <className>ro.redeul.google.go.intentions.packages.GoGetIntention</className>
         </intentionAction>
     </extensions>
 

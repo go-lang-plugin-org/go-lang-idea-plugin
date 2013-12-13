@@ -80,7 +80,7 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
             GoCodeManager.getInstance(project).findUnusedImports(file);
 
         for (GoImportDeclaration unused : unusedImports) {
-            if (!isValidImport(unused)) {
+            if (!unused.isValidImport()) {
                 continue;
             }
 
@@ -90,20 +90,5 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
                 ProblemHighlightType.LIKE_UNUSED_SYMBOL,
                 new RemoveImportFix(unused));
         }
-    }
-
-    private static boolean isValidImport(GoImportDeclaration declaration) {
-        if (declaration == null) {
-            return false;
-        }
-
-        String importPathValue = null;
-        GoLiteralString importPath = declaration.getImportPath();
-        if ( importPath != null ) {
-            importPathValue = importPath.getValue();
-        }
-
-        return !(importPathValue == null || importPathValue.isEmpty()) && !(importPathValue.contains(" ") || importPathValue.contains("\t")) && !importPathValue.contains("\\");
-
     }
 }
