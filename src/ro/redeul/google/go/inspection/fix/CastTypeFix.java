@@ -61,13 +61,15 @@ public class CastTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
         TextRange textRange = element.getTextRange();
         GoFile currentFile = (GoFile) element.getContainingFile();
 
-        String castString;
+        String castString = null;
         GoType[] type1 = ((GoExpr) element).getType();
-        if (type1.length != 0 && type1[0] instanceof GoTypeInterface) {
-            castString = String.format("%s.(%s)", element.getText(), GoUtil.getNameLocalOrGlobal(this.type, currentFile));
-        } else {
-            castString = String.format("(%s)(%s)", GoUtil.getNameLocalOrGlobal(this.type, currentFile), element.getText());
+        if (type1.length != 0) {
+            if (type1[0] instanceof GoTypeInterface) {
+                castString = String.format("%s.(%s)", element.getText(), GoUtil.getNameLocalOrGlobal(this.type, currentFile));
+            }
         }
+        if (castString == null)
+            castString = String.format("(%s)(%s)", GoUtil.getNameLocalOrGlobal(this.type, currentFile), element.getText());
         doc.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), castString);
         if (editor != null) {
             int line = doc.getLineNumber(textRange.getStartOffset());

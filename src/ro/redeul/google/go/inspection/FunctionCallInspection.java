@@ -197,10 +197,17 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             if (goPsiElement instanceof GoPsiType)
                 return GoUtil.CompairTypes(type, goPsiElement);
         }
+        if (goExpr instanceof GoCallOrConvExpression && firstChildOfExp instanceof GoPsiTypeParenthesized) {
+            return GoUtil.CompairTypes(type, ((GoPsiTypeParenthesized) firstChildOfExp).getInnerType(), goExpr);
+        }
         type = resolved;
         String typeText = type.getText();
-        GoLiteral.Type type1 = ((GoLiteralExpression) goExpr).getLiteral().getType();
-        return type1 == GoLiteral.Type.Identifier || type1.name().toLowerCase().equals(typeText);
+        if (goExpr instanceof GoLiteralExpression) {
+            GoLiteral.Type type1 = ((GoLiteralExpression) goExpr).getLiteral().getType();
+            return type1 == GoLiteral.Type.Identifier || type1.name().toLowerCase().equals(typeText);
+        }
+
+        return true;
 
     }
 
@@ -214,9 +221,9 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         for (GoFunctionParameter functionParameter : goFunctionDeclaration.getParameters()) {
             if (index >= goExprs.length)
                 return;
-            GoExpr goExpr = goExprs[index];
             GoPsiType type = functionParameter.getType();
             if (functionParameter.isVariadic()) {
+                GoExpr goExpr = goExprs[index];
                 for (; index < goExprs.length; index++)
                     if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                         result.addProblem(
@@ -226,15 +233,18 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                         return;
                     }
             } else {
-                if (!checkParametersExp(functionParameter.getType(), goExpr)) {
-                    String name = goExpr.getText();
-                    result.addProblem(
-                            goExpr,
-                            GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
-                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
-                    return;
+                for (GoLiteralIdentifier goLiteralIdentifier : functionParameter.getIdentifiers()) {
+                    GoExpr goExpr = goExprs[index];
+                    if (!checkParametersExp(functionParameter.getType(), goExpr)) {
+                        String name = goExpr.getText();
+                        result.addProblem(
+                                goExpr,
+                                GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                        return;
+                    }
+                    index++;
                 }
-                index++;
             }
         }
 
