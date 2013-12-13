@@ -6,6 +6,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
@@ -101,7 +102,7 @@ public class InspectionUtil {
             if (count != UNKNOWN_COUNT && count != 1) {
                 String text = expr.getText();
                 if (expr instanceof GoCallOrConvExpression) {
-                    GoLiteralIdentifier id = getCallFunctionIdentifier((GoCallOrConvExpression) expr);
+                    GoPsiElement id = getCallFunctionIdentifier((GoCallOrConvExpression) expr);
                     if (id == null) {
                         continue;
                     }

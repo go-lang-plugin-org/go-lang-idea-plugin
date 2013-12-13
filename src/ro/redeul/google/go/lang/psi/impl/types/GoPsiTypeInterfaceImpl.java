@@ -19,7 +19,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Time: 2:14 PM
  */
 public class GoPsiTypeInterfaceImpl extends GoPsiPackagedElementBase implements
-                                                                  GoPsiTypeInterface {
+        GoPsiTypeInterface {
 
     public GoPsiTypeInterfaceImpl(@NotNull ASTNode node) {
         super(node);
@@ -32,11 +32,11 @@ public class GoPsiTypeInterfaceImpl extends GoPsiPackagedElementBase implements
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
-        if ( !(goType instanceof GoPsiTypeInterface))
-            return false;
-
-        // TODO: implement this.
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        //if (!(goType instanceof GoPsiTypeInterface))
+        //    return false;
+        //TODO: this may need to be changed later
+        //Right now the only interface{} expressions are getting this type
+        return goType instanceof GoPsiTypeInterface;
     }
 
     @Override

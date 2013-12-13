@@ -102,7 +102,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                         fixes = new LocalQuickFix[]{new CreateGlobalVariableFix(element)};
                     } else if (isUnqualifiedTypeName(element)) {
                         fixes = new LocalQuickFix[]{new CreateTypeFix(element)};
-                    } else {
+                    } else if (Character.isUpperCase(element.getLastChild().getText().charAt(0))) {
                          /*
                          * We can also resolve nested packages
                          */
@@ -117,21 +117,16 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                                 if (visiblePackageName.equals(element.getFirstChild().getText())) {
 
                                     final Project project = element.getProject();
-                                    //  Only resolve the nested will be sage i think
+
 
                                     PsiFile[] files = null;
-                                    String canonicalPathChild;
-                                    String canonicalPathRoot;
 
                                     VirtualFile packageFile = project.getBaseDir().findFileByRelativePath("src/" + declaration.getImportPath().getValue());
                                     if (packageFile != null) {
-                                        canonicalPathChild = packageFile.getCanonicalPath();
-                                        canonicalPathRoot = element.getContainingFile().getContainingDirectory().getVirtualFile().getCanonicalPath().concat("/");
-                                        if (canonicalPathChild.startsWith(canonicalPathRoot)) {
-                                            PsiDirectory directory = PsiManager.getInstance(project).findDirectory(packageFile);
-                                            if (directory != null)
-                                                files = directory.getFiles();
-                                        }
+                                        PsiDirectory directory = PsiManager.getInstance(project).findDirectory(packageFile);
+                                        if (directory != null)
+                                            files = directory.getFiles();
+
                                     }
 
 
@@ -158,10 +153,9 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
                             }
                         }
-                        if (fixes == null)
-                            fixes = LocalQuickFix.EMPTY_ARRAY;
                     }
-
+                    if (fixes == null)
+                        fixes = LocalQuickFix.EMPTY_ARRAY;
                     result.addProblem(
                             element,
                             message("warning.unresolved.symbol", name),

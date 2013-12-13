@@ -16,7 +16,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Time: 11:53 PM
  */
 public class GoPsiTypePointerImpl extends GoPsiPackagedElementBase implements
-                                                                GoPsiTypePointer {
+        GoPsiTypePointer {
 
     public GoPsiTypePointerImpl(@NotNull ASTNode node) {
         super(node);
@@ -39,12 +39,8 @@ public class GoPsiTypePointerImpl extends GoPsiPackagedElementBase implements
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
-        if (!(goType instanceof GoPsiTypePointer))
-            return false;
+        return goType instanceof GoPsiTypePointer && this.getTargetType().isIdentical(((GoPsiTypePointer) goType).getTargetType());
 
-        GoPsiTypePointer otherTypePointer = (GoPsiTypePointer) goType;
-
-        return otherTypePointer.isIdentical(goType);
     }
 
     @Override

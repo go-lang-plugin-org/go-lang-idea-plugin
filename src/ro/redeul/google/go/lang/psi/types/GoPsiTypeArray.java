@@ -8,7 +8,7 @@ package ro.redeul.google.go.lang.psi.types;
  */
 public interface GoPsiTypeArray extends GoPsiType {
 
-//    GoExpression getArrayLength();
+    String getArrayLength();
 
     GoPsiType getElementType();
 }

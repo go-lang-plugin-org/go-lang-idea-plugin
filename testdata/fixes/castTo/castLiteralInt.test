@@ -1,0 +1,21 @@
+package main
+
+func HandleFunc(pa string, handler int){
+
+}
+
+func main() {
+    var indexHandler = 4.0
+    HandleFunc("/",index/*begin*/H/*end*/andler)
+}
+-----
+package main
+
+func HandleFunc(pa string, handler int){
+
+}
+
+func main() {
+    var indexHandler = 4.0
+    HandleFunc("/", (int)(indexHandler))
+}

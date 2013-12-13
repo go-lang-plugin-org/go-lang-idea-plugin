@@ -2,11 +2,13 @@ package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeArray;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
@@ -16,10 +18,15 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Time: 9:07:51 PM
  */
 public class GoPsiTypeArrayImpl extends GoPsiPackagedElementBase implements
-                                                              GoPsiTypeArray {
+        GoPsiTypeArray {
 
     public GoPsiTypeArrayImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public String getArrayLength() {
+        return GoPsiUtils.findChildOfClass(this, GoLiteralExpression.class).getLiteral().getText();
     }
 
     public GoPsiType getElementType() {

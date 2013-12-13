@@ -1,0 +1,21 @@
+package main
+
+func HandleFunc(pa string, handler string){
+
+}
+
+func main() {
+    var indexHandler interface{}= nil
+    HandleFunc("/",index/*begin*/H/*end*/andler)
+}
+-----
+package main
+
+func HandleFunc(pa string, handler string){
+
+}
+
+func main() {
+    var indexHandler interface{}= nil
+    HandleFunc("/", indexHandler.(string))
+}

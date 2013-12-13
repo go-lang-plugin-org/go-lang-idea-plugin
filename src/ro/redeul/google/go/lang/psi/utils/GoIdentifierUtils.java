@@ -8,7 +8,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
-class GoIdentifierUtils {
+public class GoIdentifierUtils {
     private static final ElementPattern FUNCTION_DECLARATION_PATTERN =
             psiElement(GoLiteralIdentifier.class)
                     .withParent(
