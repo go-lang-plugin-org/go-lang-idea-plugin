@@ -32,7 +32,7 @@ public class GoAppEngineSettingsConfigurable implements SearchableConfigurable  
     @Nls
     @Override
     public String getDisplayName() {
-        return "Go App engine settings";
+        return "Google Go App Engine";
     }
 
     public Icon getIcon() {

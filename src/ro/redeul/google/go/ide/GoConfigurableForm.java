@@ -16,11 +16,8 @@ public class GoConfigurableForm {
 
     public JPanel componentPanel;
 
-    private JRadioButton internalBuildSystemRadioButton;
-    private JRadioButton makefileBasedRadioButton;
     private JCheckBox enableImportsOptimizer;
     private JCheckBox enableOnTheFlyImportOptimization;
-    private JRadioButton goInstallRadioButton;
 
     public void enableShowHide(){
         componentPanel.addComponentListener(new ComponentAdapter() {
@@ -51,44 +48,15 @@ public class GoConfigurableForm {
             return true;
         }
 
-        switch (settingsBean.BUILD_SYSTEM_TYPE) {
-            case Internal:
-                return !internalBuildSystemRadioButton.isSelected();
-            case Makefile:
-                return !makefileBasedRadioButton.isSelected();
-            case Install:
-                return !goInstallRadioButton.isSelected();
-        }
-
         return false;
     }
 
     public void apply(GoProjectSettings.GoProjectSettingsBean settingsBean, GoSettings goSettings) {
-        if ( internalBuildSystemRadioButton.isSelected() ) {
-            settingsBean.BUILD_SYSTEM_TYPE = GoProjectSettings.BuildSystemType.Internal;
-        } else if ( makefileBasedRadioButton.isSelected() ) {
-            settingsBean.BUILD_SYSTEM_TYPE = GoProjectSettings.BuildSystemType.Makefile;
-        } else if ( goInstallRadioButton.isSelected() ) {
-            settingsBean.BUILD_SYSTEM_TYPE = GoProjectSettings.BuildSystemType.Install;
-        }
-
         settingsBean.enableOptimizeImports = enableImportsOptimizer.isSelected();
         goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY = enableOnTheFlyImportOptimization.isSelected();
     }
 
     public void reset(GoProjectSettings.GoProjectSettingsBean settingsBean, GoSettings goSettings) {
-        switch (settingsBean.BUILD_SYSTEM_TYPE) {
-            case Internal:
-                internalBuildSystemRadioButton.setSelected(true);
-                break;
-            case Makefile:
-                makefileBasedRadioButton.setSelected(true);
-                break;
-            case Install:
-                goInstallRadioButton.setSelected(true);
-                break;
-        }
-
         enableOnTheFlyImportOptimization.setSelected(goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY);
         enableImportsOptimizer.setSelected(settingsBean.enableOptimizeImports);
     }
