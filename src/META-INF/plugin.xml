@@ -2,12 +2,11 @@
              url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>golang.org support plugin</name>
-    <version>0.9.16</version>
-    <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com
-    </vendor>
+    <version>0.9.15</version>
+    <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[
-        <p>Intellij IDEA support for Go language (see http://golang.org).</p>
+        <p>Intellij IDEA support for Go programming language (see <a href="http://golang.org">http://golang.org</a>).</p>
         <p>The plugin provides the following features:</p>
 
         <ul>
@@ -58,18 +57,18 @@
         <![CDATA[
          <h3>0.9.15 changes:</h3>
             <ul>
-                <li>Added IntelliJ IDEA 13 (Cardea) support</li>
-                <li>Dropped IntelliJ IDEA 12 (Leda) support</li>
-                <li>GOlang 1.2 syntax support</li>
-                <li>Darcula theme support</li>
-                <li>New run system available</li>
-                <li>Dropped support for build systems</li>
-                <li>Fixed live templates and compilation</li>
-                <li>Fixed Go App Engine support</li>
-                <li>Added a new inspection/fix which will generate a closure function</li>
-                <li>Function inspection/fix will generate the arguments when specified</li>
-                <li>Added intention to run "go get" on a package</li>
-                <li>Other fixes and improvements</li>
+                <li>[feature] Added IntelliJ IDEA 13 (Cardea) support</li>
+                <li>[feature] Dropped IntelliJ IDEA 12 (Leda) support</li>
+                <li>[feature] Golang 1.2 syntax support</li>
+                <li>[feature] Darcula theme support</li>
+                <li>[feature] New run system available</li>
+                <li>[bugfix] Dropped support for build systems</li>
+                <li>[bugfix] Fixed live templates and compilation</li>
+                <li>[bugfix] Fixed Go App Engine support</li>
+                <li>[feature] Added a new inspection/fix which will generate a closure function</li>
+                <li>[feature] Function inspection/fix will generate the arguments when specified</li>
+                <li>[feature] Added intention to run "go get" on a package</li>
+                <li>[bugfix] Other fixes and improvements</li>
             </ul>
          <h3>0.9.14 changes:</h3>
             <ul>

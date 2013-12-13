@@ -43,7 +43,7 @@ public class GoConfigurable implements SearchableConfigurable {
     @Nls
     @Override
     public String getDisplayName() {
-        return "Go Settings";
+        return "Google Go";
     }
 
     public Icon getIcon() {
