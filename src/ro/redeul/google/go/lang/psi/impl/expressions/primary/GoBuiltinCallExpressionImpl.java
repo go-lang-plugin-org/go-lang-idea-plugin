@@ -29,18 +29,18 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
  * Time: 3:58 AM
  */
 public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
-    implements GoBuiltinCallExpression {
+        implements GoBuiltinCallExpression {
 
     private static final ElementPattern<GoFunctionDeclaration> BUILTIN_FUNCTION =
-        psiElement(GoFunctionDeclaration.class)
-            .withParent(
-                psiElement(GoFile.class)
-                    .withChild(
-                        psiElement(GoPackageDeclaration.class)
-                            .withText(
-                                string().endsWith("builtin"))
-                    )
-            );
+            psiElement(GoFunctionDeclaration.class)
+                    .withParent(
+                            psiElement(GoFile.class)
+                                    .withChild(
+                                            psiElement(GoPackageDeclaration.class)
+                                                    .withText(
+                                                            string().endsWith("builtin"))
+                                    )
+                    );
 
     public GoBuiltinCallExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -49,9 +49,11 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
     @Override
     protected GoType[] resolveTypes() {
         PsiElement reference = resolveSafely(getBaseExpression(),
-                                             PsiElement.class);
-        if (reference == null)
-            return GoType.EMPTY_ARRAY;
+                PsiElement.class);
+
+        if (reference == null) {
+            return processBuiltinFunction(this.getBaseExpression().getText());
+        }
 
         if (reference.getParent() instanceof GoMethodDeclaration) {
             GoMethodDeclaration declaration = (GoMethodDeclaration) reference.getParent();
@@ -60,60 +62,60 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
 
         if (reference.getParent() instanceof GoFunctionDeclaration) {
             GoFunctionDeclaration declaration =
-                (GoFunctionDeclaration) reference.getParent();
+                    (GoFunctionDeclaration) reference.getParent();
 
             if (BUILTIN_FUNCTION.accepts(declaration))
-                return processBuiltinFunction(declaration);
+                return processBuiltinFunction(declaration.getFunctionName());
         }
 
         return GoType.EMPTY_ARRAY;
     }
 
-    private GoType[] processBuiltinFunction(GoFunctionDeclaration declaration) {
+    private GoType[] processBuiltinFunction(String functionName) {
 
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
-        String functionName = declaration.getFunctionName();
         GoExpr[] args = getArguments();
         GoPsiType typeArg = getTypeArgument();
 
         if (functionName.equals("new")) {
-            if (typeArg != null)
+            if (typeArg != null) {
                 return new GoType[]{
-                    GoTypes.makePointer(typeArg)
+                        GoTypes.makePointer(typeArg)
                 };
+            }
         } else if (functionName.matches("^(len|cap|copy)$")) {
             return new GoType[]{
-                getBuiltin(Int, namesCache)
+                    getBuiltin(Int, namesCache)
             };
         } else if (functionName.equals("complex")) {
             if (args.length > 0) {
                 if (args[0].hasType(Float32))
                     return new GoType[]{
-                        getBuiltin(Complex64, namesCache)
+                            getBuiltin(Complex64, namesCache)
                     };
 
                 if (args[0].hasType(Float64))
                     return new GoType[]{
-                        getBuiltin(Complex128, namesCache)
+                            getBuiltin(Complex128, namesCache)
                     };
             }
         } else if (functionName.matches("^(real|imag)$")) {
             if (args.length > 0) {
                 if (args[0].hasType(Complex128))
                     return new GoType[]{
-                        getBuiltin(Float64, namesCache)
+                            getBuiltin(Float64, namesCache)
                     };
 
                 if (args[0].hasType(Complex64))
                     return new GoType[]{
-                        getBuiltin(Float32, namesCache)
+                            getBuiltin(Float32, namesCache)
                     };
             }
         } else if (functionName.equals("make")) {
             if (typeArg != null)
                 return new GoType[]{
-                    GoTypes.fromPsiType(typeArg)
+                        GoTypes.fromPsiType(typeArg)
                 };
         } else if (functionName.equals("append")) {
             if (args.length > 1) {

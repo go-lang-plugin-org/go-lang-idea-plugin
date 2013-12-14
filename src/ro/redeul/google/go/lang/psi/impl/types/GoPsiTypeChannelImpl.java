@@ -16,7 +16,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Time: 1:22:29 PM
  */
 public class GoPsiTypeChannelImpl extends GoPsiPackagedElementBase implements
-                                                                GoPsiTypeChannel {
+        GoPsiTypeChannel {
 
     private final GoTypeChannel.ChannelType channelType;
 
@@ -49,8 +49,11 @@ public class GoPsiTypeChannelImpl extends GoPsiPackagedElementBase implements
             return false;
 
         GoPsiTypeChannel otherChannel = (GoPsiTypeChannel) goType;
+        GoPsiType elementType = this.getElementType();
+        if (elementType == null)
+            return false;
         return this.getChannelType() == otherChannel.getChannelType() &&
-                    this.getElementType().isIdentical(otherChannel.getElementType());
+                elementType.isIdentical(otherChannel.getElementType());
     }
 
     @Override

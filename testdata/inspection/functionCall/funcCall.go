@@ -16,6 +16,20 @@ func HandleIFunc(fn func()iFunc) {
 
 }
 
+type Foo struct {
+
+}
+
+func Accept(f *Foo) {
+
+}
+
+func Run() {
+	f := new(Foo)
+	Accept(f)
+}
+
+
 func main() {
 	var interfacE = interface{}
 	HandleIFunc(func() iFunc {return true})

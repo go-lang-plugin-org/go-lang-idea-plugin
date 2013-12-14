@@ -31,7 +31,7 @@ import static com.intellij.patterns.StandardPatterns.string;
  * Time: 7:12:16 PM
  */
 public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
-    implements GoPsiTypeName {
+        implements GoPsiTypeName {
 
     public GoPsiTypeNameImpl(@NotNull ASTNode node) {
         super(node);
@@ -41,13 +41,13 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
     @NotNull
     public String getName() {
         GoLiteralIdentifier identifier =
-            findChildByClass(GoLiteralIdentifier.class);
+                findChildByClass(GoLiteralIdentifier.class);
 
         return identifier != null ? identifier.getUnqualifiedName() : getText();
     }
 
     public PsiElement setName(@NonNls String name)
-        throws IncorrectOperationException {
+            throws IncorrectOperationException {
         return null;
     }
 
@@ -56,13 +56,13 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
     }
 
     private static final ElementPattern<PsiElement> PRIMITIVE_TYPES =
-        psiElement()
-            .withText(
-                string().matches(GoTypes.PRIMITIVE_TYPES_PATTERN.pattern()));
+            psiElement()
+                    .withText(
+                            string().matches(GoTypes.PRIMITIVE_TYPES_PATTERN.pattern()));
 
     private static final ElementPattern<PsiElement> NIL_TYPE =
-        psiElement()
-            .withText(string().matches("nil"));
+            psiElement()
+                    .withText(string().matches("nil"));
 
     @Override
     public PsiReference getReference() {
@@ -88,7 +88,7 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
         }
 
         PsiReference reference = getReference();
-        if (reference == null ){
+        if (reference == null) {
             return GoUnderlyingType.Undefined;
         }
 
@@ -98,7 +98,7 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
         }
 
         if (resolved instanceof GoTypeSpec) {
-            GoTypeSpec spec = (GoTypeSpec)resolved;
+            GoTypeSpec spec = (GoTypeSpec) resolved;
             return spec.getType().getUnderlyingType();
         }
 
@@ -107,8 +107,10 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
-        return goType instanceof GoPsiTypeName && getName().equals(goType.getName());
-
+        if (goType instanceof GoPsiTypeName)
+            if (getContainingFile().getContainingDirectory().equals(goType.getContainingFile().getContainingDirectory()) && getName().equals(goType.getName()))
+                return true;
+        return false;
     }
 
     @NotNull
