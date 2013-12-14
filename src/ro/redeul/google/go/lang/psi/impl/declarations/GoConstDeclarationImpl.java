@@ -7,14 +7,17 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoConstDeclarationImpl extends GoPsiElementBase
-    implements GoConstDeclaration {
+        implements GoConstDeclaration {
 
     public GoConstDeclarationImpl(@NotNull ASTNode node) {
         super(node);
@@ -32,7 +35,23 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
 
     @Override
     public GoPsiType getIdentifiersType() {
-        return findChildByClass(GoPsiType.class);
+        GoPsiType types = findChildByClass(GoPsiType.class);
+        if (types == null && getParent() instanceof GoConstDeclarations) {
+            for (GoConstDeclaration declaration : ((GoConstDeclarations) getParent()).getDeclarations()) {
+                types = declaration.getIdentifiersType();
+                if (types != null)
+                    return types;
+            }
+            for (GoExpr goExpr : getExpressions()) {
+                for (GoType goType : goExpr.getType()) {
+                    if (goType instanceof GoTypePsiBacked)
+                        return ((GoTypePsiBacked) goType).getPsiType();
+                }
+
+            }
+
+        }
+        return types;
     }
 
     @Override

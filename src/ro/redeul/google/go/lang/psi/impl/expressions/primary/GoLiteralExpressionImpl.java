@@ -5,7 +5,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -27,15 +26,17 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.services.GoPsiManager;
+import ro.redeul.google.go.util.GoUtil;
 
 import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin;
 
 public class GoLiteralExpressionImpl extends GoExpressionBase
-    implements GoLiteralExpression {
+        implements GoLiteralExpression {
 
     public GoLiteralExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -53,7 +54,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
 
 
     private static class LiteralTypeCalculator
-        implements Function<GoLiteralExpressionImpl, GoType[]> {
+            implements Function<GoLiteralExpressionImpl, GoType[]> {
         @Override
         public GoType[] fun(GoLiteralExpressionImpl expression) {
             GoLiteral literal = expression.getLiteral();
@@ -61,59 +62,58 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                 return GoType.EMPTY_ARRAY;
 
             GoNamesCache namesCache =
-                GoNamesCache.getInstance(expression.getProject());
+                    GoNamesCache.getInstance(expression.getProject());
 
             switch (literal.getType()) {
                 case Bool:
                     return new GoType[]{
-                        GoTypes.getBuiltin(Builtin.Bool, namesCache)
+                            GoTypes.getBuiltin(Builtin.Bool, namesCache)
                     };
 
                 case Int:
                     return new GoType[]{
-                        GoTypes.getBuiltin(Builtin.Int, namesCache)
+                            GoTypes.getBuiltin(Builtin.Int, namesCache)
                     };
 
                 case Float:
                     return new GoType[]{
-                        GoTypes.getBuiltin(Builtin.Float32, namesCache)
+                            GoTypes.getBuiltin(Builtin.Float32, namesCache)
                     };
 
                 case Char:
                     return new GoType[]{
-                        GoTypes.getBuiltin(Builtin.Rune, namesCache)
+                            GoTypes.getBuiltin(Builtin.Rune, namesCache)
                     };
 
                 case ImaginaryInt:
                 case ImaginaryFloat:
                     return new GoType[]{
-                        GoTypes.getBuiltin(Builtin.Complex64, namesCache)
+                            GoTypes.getBuiltin(Builtin.Complex64, namesCache)
                     };
 
                 case RawString:
                 case InterpretedString:
                     return new GoType[]{
-                        GoTypes.getBuiltin(Builtin.String, namesCache)
+                            GoTypes.getBuiltin(Builtin.String, namesCache)
                     };
 
                 case Function:
                     return new GoType[]{
-                        GoTypes.fromPsiType((GoLiteralFunction) literal)
+                            GoTypes.fromPsiType((GoLiteralFunction) literal)
                     };
 
                 case Identifier:
                     GoLiteralIdentifier identifier = (GoLiteralIdentifier) literal;
 
-                    PsiElement resolved = GoPsiUtils.resolveSafely(identifier,
-                                                                   PsiElement.class);
+                    PsiElement resolved = GoUtil.ResolveReferece(identifier);
                     if (resolved == null) {
                         return GoType.EMPTY_ARRAY;
                     }
 
-                    if (resolved.getParent() instanceof GoVarDeclaration) {
-                        GoVarDeclaration varDeclaration = (GoVarDeclaration) resolved
-                            .getParent();
-                        GoType identifierType = varDeclaration.getIdentifierType((GoLiteralIdentifier)resolved);
+                    PsiElement parent = resolved.getParent();
+                    if (parent instanceof GoVarDeclaration) {
+                        GoVarDeclaration varDeclaration = (GoVarDeclaration) parent;
+                        GoType identifierType = varDeclaration.getIdentifierType((GoLiteralIdentifier) resolved);
 
                         if (identifierType == null)
                             return GoType.EMPTY_ARRAY;
@@ -121,43 +121,49 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                         return new GoType[]{identifierType};
                     }
 
-                    if (resolved.getParent() instanceof GoFunctionParameter) {
-                        GoFunctionParameter functionParameter = (GoFunctionParameter) resolved
-                            .getParent();
+                    if (parent instanceof GoConstDeclaration) {
+                        GoPsiType identifiersType = ((GoConstDeclaration) parent).getIdentifiersType();
+                        if (identifiersType == null)
+                            return GoType.EMPTY_ARRAY;
+                        return new GoType[]{GoTypes.fromPsiType(identifiersType)};
+                    }
+
+                    if (parent instanceof GoFunctionParameter) {
+                        GoFunctionParameter functionParameter = (GoFunctionParameter) parent;
                         if (functionParameter.getType() != null) {
                             return new GoType[]{
-                                GoTypes.fromPsiType(functionParameter.getType())
+                                    GoTypes.fromPsiType(functionParameter.getType())
                             };
                         }
                     }
 
-                    if (resolved.getParent() instanceof GoMethodReceiver) {
+                    if (parent instanceof GoMethodReceiver) {
                         GoMethodReceiver receiver =
-                            (GoMethodReceiver) resolved.getParent();
+                                (GoMethodReceiver) parent;
 
                         if (receiver.getType() != null) {
                             return new GoType[]{
-                                GoTypes.fromPsiType(receiver.getType())
+                                    GoTypes.fromPsiType(receiver.getType())
                             };
                         }
                     }
 
-                    if (resolved.getParent() instanceof GoFunctionDeclaration) {
+                    if (parent instanceof GoFunctionDeclaration) {
                         GoFunctionDeclaration functionDeclaration =
-                            (GoFunctionDeclaration) resolved.getParent();
+                                (GoFunctionDeclaration) parent;
 
                         return new GoType[]{
-                            GoTypes.fromPsiType(functionDeclaration)
+                                GoTypes.fromPsiType(functionDeclaration)
                         };
                     }
 
                     if (GoElementPatterns.VAR_IN_FOR_RANGE.accepts(resolved)) {
                         GoForWithRangeStatement statement =
-                            (GoForWithRangeStatement) resolved.getParent().getParent();
+                                (GoForWithRangeStatement) parent.getParent();
 
-                        if (statement.getKey() == resolved.getParent()) {
+                        if (statement.getKey() == parent) {
                             return statement.getKeyType();
-                        } else if (statement.getValue() == resolved.getParent()) {
+                        } else if (statement.getValue() == parent) {
                             return statement.getValueType();
                         }
                     }
@@ -169,7 +175,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                         return GoType.EMPTY_ARRAY;
                     }
                     return new GoType[]{
-                        GoTypes.fromPsiType(literalType)
+                            GoTypes.fromPsiType(literalType)
                     };
 
                 default:
@@ -184,7 +190,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
     @Override
     public GoType[] getType() {
         return GoPsiManager.getInstance(getProject())
-                           .getType(this, TYPE_CALCULATOR);
+                .getType(this, TYPE_CALCULATOR);
     }
 
     @Override
@@ -206,17 +212,17 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
             case Identifier:
                 GoLiteralIdentifier identifier = (GoLiteralIdentifier) literal;
 
-                if ( identifier.isIota() ){
+                if (identifier.isIota()) {
                     return true;
                 }
 
                 PsiElement resolved =
-                    GoPsiUtils.resolveSafely(identifier, PsiElement.class);
+                        GoPsiUtils.resolveSafely(identifier, PsiElement.class);
 
                 if (resolved == null)
                     return false;
 
-                if (resolved.getParent() instanceof GoConstDeclaration )
+                if (resolved.getParent() instanceof GoConstDeclaration)
                     return true;
 
         }
@@ -230,9 +236,9 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
         return
-            GoPsiScopesUtil.walkChildrenScopes(this,
-                                             processor, state,
-                                             lastParent, place);
+                GoPsiScopesUtil.walkChildrenScopes(this,
+                        processor, state,
+                        lastParent, place);
     }
 
     @NotNull
@@ -248,7 +254,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
 
         if (CallOrConversionReference.MATCHER.accepts(this))
             return refs(new CallOrConversionReference(this),
-                        new VarOrConstReference((GoLiteralIdentifier)this.getLiteral()));
+                    new VarOrConstReference((GoLiteralIdentifier) this.getLiteral()));
 
         return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.
     }
