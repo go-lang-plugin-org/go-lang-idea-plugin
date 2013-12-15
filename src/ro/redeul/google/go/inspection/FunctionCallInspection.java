@@ -160,13 +160,13 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         return false;
     }
 
-    private static boolean checkParametersExp(GoPsiType type, GoExpr goExpr) {
+    private static boolean checkParametersExp(GoPsiType type, GoExpr expr) {
 
         GoPsiType resolved = resolveToFinalType(type);
         if (resolved instanceof GoPsiTypeInterface)
             return true;
 
-        PsiElement firstChildOfExp = goExpr.getFirstChild();
+        PsiElement firstChildOfExp = expr.getFirstChild();
         if (checkIsInterface(resolved)) {
             return true;
         }
@@ -184,26 +184,26 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             return resolved.getText().equals("bool");
         }
 
-        GoType[] goTypes = goExpr.getType();
+        GoType[] goTypes = expr.getType();
         if (goTypes.length != 0 && goTypes[0] != null) {
-            return GoUtil.CompairTypes(type, goTypes[0], goExpr);
+            return GoUtil.CompairTypes(type, goTypes[0], expr);
         }
 
         if (type instanceof GoPsiTypeFunction)
-            return GoUtil.CompairTypes(type, null, goExpr);
+            return GoUtil.CompairTypes(type, null, expr);
 
         if (firstChildOfExp instanceof GoLiteralIdentifier) {
             GoPsiElement goPsiElement = GoUtil.ResolveTypeOfVarDecl((GoPsiElement) firstChildOfExp);
             if (goPsiElement instanceof GoPsiType)
                 return GoUtil.CompairTypes(type, goPsiElement);
         }
-        if (goExpr instanceof GoCallOrConvExpression && firstChildOfExp instanceof GoPsiTypeParenthesized) {
-            return GoUtil.CompairTypes(type, ((GoPsiTypeParenthesized) firstChildOfExp).getInnerType(), goExpr);
+        if (expr instanceof GoCallOrConvExpression && firstChildOfExp instanceof GoPsiTypeParenthesized) {
+            return GoUtil.CompairTypes(type, ((GoPsiTypeParenthesized) firstChildOfExp).getInnerType(), expr);
         }
         type = resolved;
         String typeText = type.getText();
-        if (goExpr instanceof GoLiteralExpression) {
-            GoLiteral.Type type1 = ((GoLiteralExpression) goExpr).getLiteral().getType();
+        if (expr instanceof GoLiteralExpression) {
+            GoLiteral.Type type1 = ((GoLiteralExpression) expr).getLiteral().getType();
             return type1 == GoLiteral.Type.Identifier || type1.name().toLowerCase().equals(typeText);
         }
 

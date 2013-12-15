@@ -283,7 +283,14 @@ public class GoUtil {
             GoTypeUtils.resolveToFinalType((GoPsiType) element2);
             return element.isIdentical((GoPsiType) element2);
         }
-
+        //Resolve Issue In PR #330
+        if (element instanceof GoPsiTypePointer && element2 instanceof GoTypePointer) {
+            GoType targetType1 = ((GoTypePointer) element2).getTargetType();
+            if (targetType1 instanceof GoTypePsiBacked) {
+                GoTypePsiBacked targetType = (GoTypePsiBacked) targetType1;
+                return ((GoPsiTypePointer) element).getTargetType().isIdentical(targetType.getPsiType());
+            }
+        }
         return element.getUnderlyingType().isIdentical(((GoType) element2).getUnderlyingType());
 
 

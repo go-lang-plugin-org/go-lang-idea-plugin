@@ -59,12 +59,14 @@ public abstract class GoBinaryExpressionImpl extends GoExpressionBase
         GoType[] leftTypes = leftOperand.getType();
         GoType[] rightTypes = rightOperand.getType();
 
-        if (leftTypes.length == 1 && rightTypes.length == 1) {
+        if (leftTypes.length == 1 && rightTypes.length == 1 && leftTypes[0] != null && rightTypes[0] != null) {
             if (leftTypes[0].isIdentical(rightTypes[0])) {
                 return leftTypes;
             } else if (leftOperand.isConstantExpression()) {
                 return rightTypes;
             } else if (rightOperand.isConstantExpression()) {
+                return leftTypes;
+            } else {
                 return leftTypes;
             }
 

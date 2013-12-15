@@ -102,55 +102,58 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                         fixes = new LocalQuickFix[]{new CreateGlobalVariableFix(element)};
                     } else if (isUnqualifiedTypeName(element)) {
                         fixes = new LocalQuickFix[]{new CreateTypeFix(element)};
-                    } else if (Character.isUpperCase(element.getLastChild().getText().charAt(0))) {
+                    } else {
+                        String text = element.getLastChild().getText();
+                        if (text.length() != 0 && Character.isUpperCase(text.charAt(0))) {
                          /*
                          * We can also resolve nested packages
                          */
 
-                        final GoFile containingFile = (GoFile) element.getContainingFile();
-                        final GoImportDeclarations[] importDeclarations = containingFile.getImportDeclarations();
-                        for (GoImportDeclarations goImportDeclarations : importDeclarations) {
-                            final GoImportDeclaration[] declarations = goImportDeclarations.getDeclarations();
-                            for (final GoImportDeclaration declaration : declarations) {
+                            final GoFile containingFile = (GoFile) element.getContainingFile();
+                            final GoImportDeclarations[] importDeclarations = containingFile.getImportDeclarations();
+                            for (GoImportDeclarations goImportDeclarations : importDeclarations) {
+                                final GoImportDeclaration[] declarations = goImportDeclarations.getDeclarations();
+                                for (final GoImportDeclaration declaration : declarations) {
 
-                                final String visiblePackageName = declaration.getVisiblePackageName();
-                                if (visiblePackageName.equals(element.getFirstChild().getText())) {
+                                    final String visiblePackageName = declaration.getVisiblePackageName();
+                                    if (visiblePackageName.equals(element.getFirstChild().getText())) {
 
-                                    final Project project = element.getProject();
-
-
-                                    PsiFile[] files = null;
-
-                                    VirtualFile packageFile = project.getBaseDir().findFileByRelativePath("src/" + declaration.getImportPath().getValue());
-                                    if (packageFile != null) {
-                                        PsiDirectory directory = PsiManager.getInstance(project).findDirectory(packageFile);
-                                        if (directory != null)
-                                            files = directory.getFiles();
-
-                                    }
+                                        final Project project = element.getProject();
 
 
-                                    PsiFile workingFile = null;
-                                    if (files != null && files.length != 0) {
-                                        for (PsiFile psiFile : files) {
-                                            if (psiFile.getName().equals(visiblePackageName) || psiFile.getName().equals(declaration.getPackageName())) {
-                                                workingFile = psiFile;
-                                                break;
+                                        PsiFile[] files = null;
+
+                                        VirtualFile packageFile = project.getBaseDir().findFileByRelativePath("src/" + declaration.getImportPath().getValue());
+                                        if (packageFile != null) {
+                                            PsiDirectory directory = PsiManager.getInstance(project).findDirectory(packageFile);
+                                            if (directory != null)
+                                                files = directory.getFiles();
+
+                                        }
+
+
+                                        PsiFile workingFile = null;
+                                        if (files != null && files.length != 0) {
+                                            for (PsiFile psiFile : files) {
+                                                if (psiFile.getName().equals(visiblePackageName) || psiFile.getName().equals(declaration.getPackageName())) {
+                                                    workingFile = psiFile;
+                                                    break;
+                                                }
+                                            }
+                                            if (workingFile == null) {
+                                                workingFile = files[0];
+                                            }
+
+                                            if (workingFile != null) {
+
+                                                fixes = new LocalQuickFix[]{
+                                                        new CreateFunctionFix(element, workingFile)
+                                                };
                                             }
                                         }
-                                        if (workingFile == null) {
-                                            workingFile = files[0];
-                                        }
-
-                                        if (workingFile != null) {
-
-                                            fixes = new LocalQuickFix[]{
-                                                    new CreateFunctionFix(element, workingFile)
-                                            };
-                                        }
                                     }
-                                }
 
+                                }
                             }
                         }
                     }
