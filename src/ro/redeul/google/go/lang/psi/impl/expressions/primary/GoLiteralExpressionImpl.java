@@ -225,10 +225,10 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                 PsiElement constDecl = resolved.getParent();
                 if (constDecl instanceof GoConstDeclaration) {
                     GoPsiType identifiersType = ((GoConstDeclaration) constDecl).getIdentifiersType();
-                    return identifiersType instanceof GoPsiTypeName && ((GoPsiTypeName) identifiersType).isPrimitive();
+                    if (identifiersType instanceof GoPsiTypeName)
+                        return ((GoPsiTypeName) identifiersType).isPrimitive();
                 }
-
-
+                return true;
         }
 
         return false;
