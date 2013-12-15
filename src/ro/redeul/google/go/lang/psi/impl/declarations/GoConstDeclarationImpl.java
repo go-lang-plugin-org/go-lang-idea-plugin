@@ -36,11 +36,14 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
     @Override
     public GoPsiType getIdentifiersType() {
         GoPsiType types = findChildByClass(GoPsiType.class);
-        if (types == null && getParent() instanceof GoConstDeclarations) {
-            for (GoConstDeclaration declaration : ((GoConstDeclarations) getParent()).getDeclarations()) {
-                types = declaration.getIdentifiersType();
-                if (types != null)
-                    return types;
+        PsiElement parent = getParent();
+        if (types == null && parent instanceof GoConstDeclarations) {
+            for (GoConstDeclaration declaration : ((GoConstDeclarations) parent).getDeclarations()) {
+                if (declaration != this) {
+                    types = declaration.getIdentifiersType();
+                    if (types != null)
+                        return types;
+                }
             }
             for (GoExpr goExpr : getExpressions()) {
                 for (GoType goType : goExpr.getType()) {
