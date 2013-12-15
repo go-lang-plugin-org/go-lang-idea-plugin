@@ -19,6 +19,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePredeclared;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -107,9 +108,19 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
-        if (goType instanceof GoPsiTypeName)
-            if (getContainingFile().getContainingDirectory().equals(goType.getContainingFile().getContainingDirectory()) && getName().equals(goType.getName()))
+        if (goType instanceof GoPsiTypeName) {
+
+            if (!getName().equals(goType.getName()))
+                return false;
+
+            if (isPrimitive())
                 return true;
+            GoTypeSpec goTypeSpec = GoPsiUtils.resolveTypeSpec(this);
+            GoTypeSpec goTypeSpec1 = GoPsiUtils.resolveTypeSpec((GoPsiTypeName) goType);
+            if (!goTypeSpec.getContainingFile().getContainingDirectory().equals(goTypeSpec1.getContainingFile().getContainingDirectory()))
+                return false;
+            return true;
+        }
         return false;
     }
 
