@@ -66,6 +66,8 @@ public abstract class GoBinaryExpressionImpl extends GoExpressionBase
                 return rightTypes;
             } else if (rightOperand.isConstantExpression()) {
                 return leftTypes;
+            } else {
+                return leftTypes;
             }
 
         }

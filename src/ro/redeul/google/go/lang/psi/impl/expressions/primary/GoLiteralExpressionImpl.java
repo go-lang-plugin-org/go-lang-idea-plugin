@@ -24,6 +24,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
@@ -216,14 +217,17 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                     return true;
                 }
 
-                PsiElement resolved =
-                        GoPsiUtils.resolveSafely(identifier, PsiElement.class);
+                PsiElement resolved = GoPsiUtils.resolveSafely(identifier, PsiElement.class);
 
                 if (resolved == null)
                     return false;
 
-                if (resolved.getParent() instanceof GoConstDeclaration)
-                    return true;
+                PsiElement constDecl = resolved.getParent();
+                if (constDecl instanceof GoConstDeclaration) {
+                    GoPsiType identifiersType = ((GoConstDeclaration) constDecl).getIdentifiersType();
+                    return identifiersType instanceof GoPsiTypeName && ((GoPsiTypeName) identifiersType).isPrimitive();
+                }
+
 
         }
 
