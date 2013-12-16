@@ -23,6 +23,8 @@ import static java.lang.String.format;
 
 public class GoSdkType extends SdkType {
 
+    public static final String GO_SDK_NAME = "Go SDK";
+
     private GoSdkData sdkData;
 
     public GoSdkType() {
@@ -33,7 +35,7 @@ public class GoSdkType extends SdkType {
         return SdkType.findInstance(GoSdkType.class);
     }
 
-    GoSdkData getSdkData() {
+    public GoSdkData getSdkData() {
         return sdkData;
     }
 
@@ -95,7 +97,7 @@ public class GoSdkType extends SdkType {
 
         StringBuilder builder = new StringBuilder();
 
-        builder.append("Go sdk");
+        builder.append(GO_SDK_NAME);
         if ( getSdkData() != null ) {
             builder.append(" ").append(getSdkData().VERSION_MAJOR);
         }
@@ -117,7 +119,7 @@ public class GoSdkType extends SdkType {
         if (!isValidSdkHome(sdkHome))
             return super.getVersionString(sdkHome);
 
-        return sdkData.VERSION_MINOR;
+        return sdkData.VERSION_MAJOR;
     }
 
     @Override
@@ -208,8 +210,21 @@ public class GoSdkType extends SdkType {
 
     @Override
     public String getPresentableName() {
-        return "Go Sdk";
+        return GO_SDK_NAME;
     }
+
+    public String getSdkLongName() {
+        if (sdkData == null) {
+            return GO_SDK_NAME;
+        }
+
+        if (sdkData.VERSION_MAJOR.equals("")) {
+            return GO_SDK_NAME;
+        }
+
+        return GO_SDK_NAME.concat(" ").concat(sdkData.VERSION_MAJOR);
+    }
+
 
     @Override
     public boolean isRootTypeApplicable(OrderRootType type) {

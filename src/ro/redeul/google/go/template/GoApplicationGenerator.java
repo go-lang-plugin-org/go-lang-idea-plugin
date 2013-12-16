@@ -105,7 +105,11 @@ public class GoApplicationGenerator extends WebProjectTemplate {
                         ProjectJdkImpl goSdk = null;
                         final GoSdkType goSdkType = GoSdkType.getInstance();
 
-                        Sdk existingSdk = ProjectJdkTable.getInstance().findJdk(goSdkType.getPresentableName());
+                        if (goSdkType.getSdkData() == null) {
+                            goSdkType.setSdkData(sdkData);
+                        }
+
+                        Sdk existingSdk = ProjectJdkTable.getInstance().findJdk(goSdkType.getSdkLongName());
 
                         if (existingSdk == null) {
                             try {
