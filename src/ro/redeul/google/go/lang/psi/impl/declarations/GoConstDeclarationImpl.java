@@ -33,6 +33,10 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
         return findChildrenByClass(GoLiteralIdentifier.class);
     }
 
+    private GoPsiType getType() {
+        return findChildByClass(GoPsiType.class);
+    }
+
     @Override
     public GoPsiType getIdentifiersType() {
         GoPsiType types = findChildByClass(GoPsiType.class);
@@ -40,7 +44,7 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
         if (types == null && parent instanceof GoConstDeclarations) {
             for (GoConstDeclaration declaration : ((GoConstDeclarations) parent).getDeclarations()) {
                 if (declaration != this) {
-                    types = declaration.getIdentifiersType();
+                    types = ((GoConstDeclarationImpl) declaration).getType();
                     if (types != null)
                         return types;
                 }
