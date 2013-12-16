@@ -61,7 +61,7 @@
                 <li>[feature] Dropped IntelliJ IDEA 12 (Leda) support</li>
                 <li>[feature] Golang 1.2 syntax support</li>
                 <li>[feature] Darcula theme support</li>
-                <li>[feature] New run system available</li>
+                <li>[feature] New run / build system available</li>
                 <li>[bugfix] Dropped support for build systems</li>
                 <li>[bugfix] Fixed live templates and compilation</li>
                 <li>[bugfix] Fixed Go App Engine support</li>

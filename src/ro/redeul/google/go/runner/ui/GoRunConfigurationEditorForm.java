@@ -3,6 +3,7 @@ package ro.redeul.google.go.runner.ui;
 import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.ide.util.TreeFileChooser;
 import com.intellij.ide.util.TreeFileChooserFactory;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
@@ -26,58 +27,74 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
     private JPanel component;
     private RawCommandLineEditor appArguments;
     private TextFieldWithBrowseButton applicationName;
-    private JComboBox comboModules;
-
-    private ConfigurationModuleSelector moduleSelector;
-    private final Project project;
+    private JCheckBox buildBeforeRunCheckBox;
+    private TextFieldWithBrowseButton buildDirectoryPathBrowser;
+    private RawCommandLineEditor builderArguments;
 
     @Override
     protected void resetEditorFrom(GoApplicationConfiguration configuration) {
         applicationName.setText(configuration.scriptName);
         appArguments.setText(configuration.scriptArguments);
-
-        moduleSelector.reset(configuration);
+        builderArguments.setText(configuration.builderArguments);
+        buildBeforeRunCheckBox.setSelected(configuration.goBuildBeforeRun);
+        buildDirectoryPathBrowser.setText(configuration.goOutputDir);
     }
 
     @Override
     protected void applyEditorTo(GoApplicationConfiguration configuration) throws ConfigurationException {
+        if (applicationName.getText().length() == 0)
+            throw new ConfigurationException("Please select the file to run.");
+        if (buildBeforeRunCheckBox.isSelected() && buildDirectoryPathBrowser.getText().equals("")) {
+            throw new ConfigurationException("Please select the directory for the executable.");
+        }
+
         configuration.scriptName = applicationName.getText();
         configuration.scriptArguments = appArguments.getText();
-        moduleSelector.applyTo(configuration);
+        configuration.builderArguments = builderArguments.getText();
+        configuration.goBuildBeforeRun = buildBeforeRunCheckBox.isSelected();
+        configuration.goOutputDir = buildDirectoryPathBrowser.getText();
     }
 
     public GoRunConfigurationEditorForm(final Project project) {
 
-        this.project = project;
-
         applicationName.getButton().addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
 
-                TreeFileChooser fileChooser =
-                    TreeFileChooserFactory.getInstance(project).createFileChooser(
-                        "Go Application Chooser", null,
-                        GoFileType.INSTANCE,
-                        new TreeFileChooser.PsiFileFilter() {
-                            public boolean accept(PsiFile file) {
+                        TreeFileChooser fileChooser =
+                                TreeFileChooserFactory.getInstance(project).createFileChooser(
+                                        "Go Application Chooser", null,
+                                        GoFileType.INSTANCE,
+                                        new TreeFileChooser.PsiFileFilter() {
+                                            public boolean accept(PsiFile file) {
 
-                                if (!(file instanceof GoFile)) {
-                                    return false;
-                                }
+                                                if (!(file instanceof GoFile)) {
+                                                    return false;
+                                                }
 
-                                GoFile goFile = (GoFile) file;
+                                                GoFile goFile = (GoFile) file;
 
-                                return goFile.getPackage().isMainPackage();
-                            }
-                        }, true, false);
+                                                return goFile.getPackage().isMainPackage();
+                                            }
+                                        }, true, false);
 
-                fileChooser.showDialog();
+                        fileChooser.showDialog();
 
 
-                PsiFile selectedFile = fileChooser.getSelectedFile();
-                if ( selectedFile != null ) {
-                    setChosenFile(selectedFile.getVirtualFile());
-                }
+                        PsiFile selectedFile = fileChooser.getSelectedFile();
+                        if (selectedFile != null) {
+                            setChosenFile(selectedFile.getVirtualFile());
+                        }
+                    }
+                });
+
+        buildDirectoryPathBrowser.addBrowseFolderListener("Go executable build path", "Go executable build path",
+                project, new FileChooserDescriptor(false, true, false, false, false, false));
+
+        buildBeforeRunCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buildDirectoryPathBrowser.setEnabled(buildBeforeRunCheckBox.isSelected());
             }
         });
     }
@@ -89,7 +106,6 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
     @NotNull
     @Override
     protected JComponent createEditor() {
-        moduleSelector = new ConfigurationModuleSelector(project, comboModules);
         return component;
     }
 

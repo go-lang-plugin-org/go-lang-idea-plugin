@@ -17,6 +17,7 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.SystemProperties;
 import ro.redeul.google.go.config.sdk.*;
@@ -567,5 +568,17 @@ public class GoSdkUtil {
     public static String appendToGoPath(String prependedPath) {
         return format("%s%s%s", System.getenv("GOPATH"), File.pathSeparator,
                 prependedPath);
+    }
+
+    public static VirtualFile getVirtualFile(String path) {
+        File pluginPath = new File(path);
+
+        if (!pluginPath.exists()) {
+            return null;
+        }
+
+        String url = VfsUtil.pathToUrl(pluginPath.getAbsolutePath());
+
+        return VirtualFileManager.getInstance().findFileByUrl(url);
     }
 }
