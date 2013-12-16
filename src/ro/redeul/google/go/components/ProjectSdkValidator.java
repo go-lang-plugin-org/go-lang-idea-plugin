@@ -13,6 +13,7 @@ import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.util.ArrayList;
@@ -21,6 +22,14 @@ import java.util.List;
 public class ProjectSdkValidator extends AbstractProjectComponent {
     public ProjectSdkValidator(Project project) {
         super(project);
+    }
+
+
+    @Override
+    public void projectClosed() {
+        //Cleanups fix issue pointing out on pr #354
+        GoTypes.cachedTypes.clear();
+        super.projectClosed();
     }
 
     @Override
