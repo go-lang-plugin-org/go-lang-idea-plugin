@@ -1,0 +1,7 @@
+<idea-plugin version="2"
+             url="http://github.com/mtoader/google-go-lang-idea-plugin">
+    <extensions defaultExtensionNs="com.intellij">
+        <projectTemplatesFactory implementation="ro.redeul.google.go.template.GoTemplatesFactory"/>
+        <directoryProjectGenerator implementation="ro.redeul.google.go.template.GoApplicationGenerator"/>
+    </extensions>
+</idea-plugin>
