@@ -30,6 +30,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
     private JCheckBox buildBeforeRunCheckBox;
     private TextFieldWithBrowseButton buildDirectoryPathBrowser;
     private RawCommandLineEditor builderArguments;
+    private TextFieldWithBrowseButton workingDirectoryBrowser;
 
     @Override
     protected void resetEditorFrom(GoApplicationConfiguration configuration) {
@@ -38,6 +39,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
         builderArguments.setText(configuration.builderArguments);
         buildBeforeRunCheckBox.setSelected(configuration.goBuildBeforeRun);
         buildDirectoryPathBrowser.setText(configuration.goOutputDir);
+        workingDirectoryBrowser.setText(configuration.workingDir);
     }
 
     @Override
@@ -53,6 +55,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
         configuration.builderArguments = builderArguments.getText();
         configuration.goBuildBeforeRun = buildBeforeRunCheckBox.isSelected();
         configuration.goOutputDir = buildDirectoryPathBrowser.getText();
+        configuration.workingDir = workingDirectoryBrowser.getText();
     }
 
     public GoRunConfigurationEditorForm(final Project project) {
@@ -89,6 +92,9 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
                 });
 
         buildDirectoryPathBrowser.addBrowseFolderListener("Go executable build path", "Go executable build path",
+                project, new FileChooserDescriptor(false, true, false, false, false, false));
+
+        workingDirectoryBrowser.addBrowseFolderListener("Application working directory", "Application working directory",
                 project, new FileChooserDescriptor(false, true, false, false, false, false));
 
         buildBeforeRunCheckBox.addActionListener(new ActionListener() {

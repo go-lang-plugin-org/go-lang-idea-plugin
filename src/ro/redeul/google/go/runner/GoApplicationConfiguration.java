@@ -60,6 +60,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     public String builderArguments = "";
     public Boolean goBuildBeforeRun = false;
     public String goOutputDir = "";
+    public String workingDir = "";
 
     public GoApplicationConfiguration(String name, Project project, GoRunConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
@@ -85,6 +86,9 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                 goBuildBeforeRun &&
                 (goOutputDir == null || goOutputDir.equals(""))) {
             throw new RuntimeConfigurationException("Please select the directory for the executable.");
+        }
+        if (workingDir == null || workingDir.equals("")) {
+            throw new RuntimeConfigurationException("Please select the application working directory.");
         }
         super.checkConfiguration();
     }
@@ -155,6 +159,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
                     commandLine.getEnvironment().put("GOROOT", getSdkRootPath(sdkData));
                     commandLine.getEnvironment().put("GOPATH", GoSdkUtil.appendToGoPath(projectDir));
+                    commandLine.setWorkDirectory(workingDir);
 
                     return GoApplicationProcessHandler.runCommandLine(commandLine);
                 }
@@ -239,7 +244,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                 GeneralCommandLine commandLine = new GeneralCommandLine();
 
                 commandLine.setExePath(execName);
-                commandLine.setWorkDirectory(goOutputDir);
+                commandLine.setWorkDirectory(workingDir);
                 if (scriptArguments != null && scriptArguments.trim().length() > 0) {
                     commandLine.getParametersList().addParametersString(scriptArguments);
                 }
