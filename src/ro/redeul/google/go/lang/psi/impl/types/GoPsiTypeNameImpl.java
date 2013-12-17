@@ -117,6 +117,11 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
                 return true;
             GoTypeSpec goTypeSpec = GoPsiUtils.resolveTypeSpec(this);
             GoTypeSpec goTypeSpec1 = GoPsiUtils.resolveTypeSpec((GoPsiTypeName) goType);
+
+            if (goTypeSpec == null || goTypeSpec1 == null) {
+                return false;
+            }
+
             if (!goTypeSpec.getContainingFile().getContainingDirectory().equals(goTypeSpec1.getContainingFile().getContainingDirectory()))
                 return false;
             return true;
