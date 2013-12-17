@@ -45,8 +45,19 @@ func AcceptMyInt(arg MyInt) {
 
 }
 
+func MatchF(arg float64) {
+
+}
+
+func MatchI(arg int64) {
+
+}
 
 func main() {
+	//ISSUE #357
+	MatchF(45)
+	MatchI(1.0)
+	MatchI(/*begin*/2.5/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
 	//PR #344
 	var invalid int = 1
 	AcceptMyInt(BBBBB * 5)

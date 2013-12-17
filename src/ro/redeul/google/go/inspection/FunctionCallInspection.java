@@ -171,17 +171,20 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             return true;
         }
 
+        String resolvedTypeName = resolved.getText();
         if (firstChildOfExp instanceof GoLiteralInteger) {
-            return resolved.getText().startsWith("int");
+            return resolvedTypeName.startsWith("int") || resolvedTypeName.startsWith("float");
         }
         if (firstChildOfExp instanceof GoLiteralFloat) {
-            return resolved.getText().startsWith("float");
+            if (resolvedTypeName.startsWith("float"))
+                return true;
+            return resolvedTypeName.startsWith("int") && firstChildOfExp.getText().matches("^[0-9]+\\.0+$");
         }
         if (firstChildOfExp instanceof GoLiteralString) {
-            return resolved.getText().equals("string");
+            return resolvedTypeName.equals("string");
         }
         if (firstChildOfExp instanceof GoLiteralBool) {
-            return resolved.getText().equals("bool");
+            return resolvedTypeName.equals("bool");
         }
 
         GoType[] goTypes = expr.getType();
