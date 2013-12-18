@@ -1,9 +1,7 @@
 package ro.redeul.google.go.actions;
 
-import com.intellij.facet.FacetManager;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.actions.CreateTemplateInPackageAction;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -15,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.config.facet.GoFacetType;
 import ro.redeul.google.go.lang.psi.GoFile;
 
 import java.util.HashSet;
@@ -45,10 +42,6 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<PsiElement
 
     protected boolean checkPackageExists(PsiDirectory directory) {
         return true;
-    }
-
-    private boolean hasGoFacet(Module module) {
-        return FacetManager.getInstance(module).getFacetByType(GoFacetType.GO_FACET_TYPE_ID) != null;
     }
 
     protected void doCheckCreate(PsiDirectory dir, String parameterName, String typeName) throws IncorrectOperationException {

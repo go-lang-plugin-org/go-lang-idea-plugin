@@ -1,6 +1,5 @@
 package ro.redeul.google.go.runner.ui;
 
-import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
@@ -14,8 +13,7 @@ import javax.swing.event.ChangeListener;
 import java.util.Collection;
 import java.util.Vector;
 
-public class GoTestConfigurationEditorForm
-    extends SettingsEditor<GoTestConfiguration> {
+public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfiguration> {
 
     private JCheckBox filter;
     private JCheckBox useShort;
@@ -25,15 +23,10 @@ public class GoTestConfigurationEditorForm
     private JTextField testsFilter;
     private JRadioButton benchmark;
     private JRadioButton test;
-    private JComboBox modules;
     private ButtonGroup testsGroup;
-
-    private ConfigurationModuleSelector moduleSelector;
-    private final Project project;
 
     @SuppressWarnings("unchecked")
     public GoTestConfigurationEditorForm(final Project project) {
-        this.project = project;
 
         filter.addChangeListener(new ChangeListener() {
             @Override
@@ -74,7 +67,6 @@ public class GoTestConfigurationEditorForm
 
         packages.getModel().setSelectedItem(s.packageName);
         useShort.setSelected(s.useShortRun);
-        moduleSelector.reset(s);
     }
 
     private void updateTestsFilterField() {
@@ -91,13 +83,11 @@ public class GoTestConfigurationEditorForm
         s.executeWhat = test.isSelected() ? GoTestConfiguration.Type.Test : GoTestConfiguration.Type.Benchmark;
         s.useShortRun = this.useShort.isSelected();
         s.testBeforeBenchmark = runTestBeforeBenchmark.isSelected();
-        moduleSelector.applyTo(s);
     }
 
     @NotNull
     @Override
     protected JComponent createEditor() {
-        moduleSelector = new ConfigurationModuleSelector(project, modules);
         return panel;
     }
 

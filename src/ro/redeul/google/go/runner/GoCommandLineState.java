@@ -8,17 +8,14 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.runner.ui.properties.GoTestConsoleProperties;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
-import java.util.HashMap;
 
 import static com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil.createAndAttachConsole;
 import static ro.redeul.google.go.sdk.GoSdkUtil.prependToGoPath;
@@ -37,7 +34,6 @@ class GoCommandLineState extends CommandLineState {
         GeneralCommandLine commandLine = new GeneralCommandLine();
 
         GoTestConfiguration cfg = consoleProperties.getConfiguration();
-        Module module = cfg.getConfigurationModule().getModule();
         Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(cfg.getProject());
         if ( sdk == null ) {
             throw new CantRunException("No Go Sdk defined for this project");
@@ -48,22 +44,15 @@ class GoCommandLineState extends CommandLineState {
             throw new CantRunException("No Go Sdk defined for this project");
         }
 
-        if ( module == null || module.getModuleFile() == null ) {
-            throw new CantRunException("No module selected for this test configuration");
-        }
 
-        final VirtualFile moduleFile = module.getModuleFile();
-        if ( moduleFile == null || moduleFile.getParent() == null) {
-            throw new CantRunException("The module does not have a valid parent folder");
-        }
-
+        String workingDir = consoleProperties.getProject().getBaseDir().getCanonicalPath();
 
         GeneralCommandLine testi = new GeneralCommandLine();
         testi.setExePath(sdkData.GO_BIN_PATH);
         testi.addParameter("test");
         testi.addParameter("-i");
         testi.addParameter(cfg.packageName);
-        testi.getEnvironment().put("GOPATH", prependToGoPath(moduleFile.getParent().getCanonicalPath()));
+        testi.getEnvironment().put("GOPATH", prependToGoPath(workingDir));
         testi.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
         try {
             testi.createProcess().waitFor();
@@ -94,19 +83,20 @@ class GoCommandLineState extends CommandLineState {
         }
 
         commandLine.addParameter(cfg.packageName);
-        commandLine.getEnvironment().put("GOPATH", prependToGoPath(moduleFile.getParent().getCanonicalPath()));
+        commandLine.getEnvironment().put("GOPATH", prependToGoPath(workingDir));
         commandLine.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
 
         return GoApplicationProcessHandler.runCommandLine(commandLine);
     }
 
     private String getSdkHomePath(GoSdkData sdkData) {
-        if (sdkData.GO_HOME_PATH.isEmpty()) {
+        if (sdkData.GO_GOROOT_PATH.isEmpty()) {
             return new File(sdkData.GO_BIN_PATH).getParent();
         }
-        return sdkData.GO_HOME_PATH;
+        return sdkData.GO_GOROOT_PATH;
     }
 
+    @NotNull
     @Override
     public ExecutionResult execute(@NotNull Executor executor, @NotNull ProgramRunner runner) throws ExecutionException {
         ProcessHandler processHandler = startProcess();

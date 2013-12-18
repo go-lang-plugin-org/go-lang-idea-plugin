@@ -1,7 +1,5 @@
 package ro.redeul.google.go.runner;
 
-import com.intellij.compiler.options.CompileStepBeforeRun;
-import com.intellij.compiler.options.CompileStepBeforeRunNoErrorCheck;
 import com.intellij.execution.BeforeRunTask;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;

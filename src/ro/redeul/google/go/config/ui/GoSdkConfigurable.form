@@ -18,7 +18,9 @@
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <name value="asd"/>
+        </properties>
         <border type="etched"/>
         <children>
           <component id="6dd75" class="javax.swing.JLabel">

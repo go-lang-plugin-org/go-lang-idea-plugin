@@ -258,7 +258,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     }
 
     private String getSdkRootPath(GoSdkData sdkData) {
-        if (sdkData.GO_HOME_PATH.isEmpty()) {
+        if (sdkData.GO_GOROOT_PATH.isEmpty()) {
             File possibleRoot = new File(sdkData.GO_BIN_PATH).getParentFile();
             try {
                 if (new File(possibleRoot.getCanonicalPath().concat("/src")).exists()) {
@@ -274,6 +274,6 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                 return "";
             }
         }
-        return sdkData.GO_HOME_PATH;
+        return sdkData.GO_GOROOT_PATH;
     }
 }

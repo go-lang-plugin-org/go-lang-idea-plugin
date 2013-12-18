@@ -7,9 +7,9 @@ import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.StandardFileSystems;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.newvfs.impl.VirtualFileImpl;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.ui.GoSdkConfigurable;
@@ -23,6 +23,8 @@ import static java.lang.String.format;
 
 public class GoSdkType extends SdkType {
 
+    public static final String GO_SDK_NAME = "Go SDK";
+
     private GoSdkData sdkData;
 
     public GoSdkType() {
@@ -33,7 +35,7 @@ public class GoSdkType extends SdkType {
         return SdkType.findInstance(GoSdkType.class);
     }
 
-    GoSdkData getSdkData() {
+    public GoSdkData getSdkData() {
         return sdkData;
     }
 
@@ -95,7 +97,7 @@ public class GoSdkType extends SdkType {
 
         StringBuilder builder = new StringBuilder();
 
-        builder.append("Go sdk");
+        builder.append(GO_SDK_NAME);
         if ( getSdkData() != null ) {
             builder.append(" ").append(getSdkData().VERSION_MAJOR);
         }
@@ -117,7 +119,7 @@ public class GoSdkType extends SdkType {
         if (!isValidSdkHome(sdkHome))
             return super.getVersionString(sdkHome);
 
-        return sdkData.VERSION_MINOR;
+        return sdkData.VERSION_MAJOR;
     }
 
     @Override
@@ -126,7 +128,7 @@ public class GoSdkType extends SdkType {
     }
 
     @Override
-    public void setupSdkPaths(Sdk sdk) {
+    public void setupSdkPaths(@NotNull Sdk sdk) {
         VirtualFile homeDirectory = sdk.getHomeDirectory();
 
         if (sdk.getSdkType() != this || homeDirectory == null) {
@@ -143,14 +145,8 @@ public class GoSdkType extends SdkType {
         String pkgType = format("pkg/%s_%s/", sdkData.TARGET_OS.getName(),
                 sdkData.TARGET_ARCH.getName());
 
-        final VirtualFile sdkLibrariesRoot =
-                homeDirectory.findFileByRelativePath(pkgType);
-
         final VirtualFile sdkSourcesRoot = homeDirectory.findFileByRelativePath("src/pkg/");
 
-        if (sdkLibrariesRoot != null) {
-            sdkLibrariesRoot.refresh(false, false);
-        }
         if (sdkSourcesRoot != null) {
             sdkSourcesRoot.refresh(false, false);
         }
@@ -159,7 +155,6 @@ public class GoSdkType extends SdkType {
 
         VirtualFile goPathDirectory = null;
         VirtualFile pathSourcesRoot = null;
-        VirtualFile pathLibrariesRoot = null;
 
         if (goPathFirst != null &&
                 !goPathFirst.equals("") &&
@@ -175,7 +170,6 @@ public class GoSdkType extends SdkType {
 
                 if (goPathDirectory != null) {
                     pathSourcesRoot = goPathDirectory.findFileByRelativePath("src/");
-                    pathLibrariesRoot = goPathDirectory.findFileByRelativePath(pkgType);
                 }
             }
         }
@@ -183,19 +177,16 @@ public class GoSdkType extends SdkType {
         final SdkModificator sdkModificator = sdk.getSdkModificator();
         final VirtualFile finalGoPathDirectory = goPathDirectory;
         final VirtualFile finalPathSourcesRoot = pathSourcesRoot;
-        final VirtualFile finalPathLibrariesRoot = pathLibrariesRoot;
         final String finalGoPathFirst = goPathFirst;
 
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             public void run() {
                 sdkModificator.addRoot(sdkSourcesRoot, OrderRootType.CLASSES);
-                sdkModificator.addRoot(sdkLibrariesRoot, OrderRootType.CLASSES);
                 sdkModificator.addRoot(sdkSourcesRoot, OrderRootType.SOURCES);
 
                 // If we could detect the GOPATH properly, automatically add the first directory to the autocompletion path
-                if (finalPathSourcesRoot != null && finalPathLibrariesRoot != null) {
+                if (finalPathSourcesRoot != null) {
                     sdkModificator.addRoot(finalPathSourcesRoot, OrderRootType.CLASSES);
-                    sdkModificator.addRoot(finalPathLibrariesRoot, OrderRootType.CLASSES);
                     sdkModificator.addRoot(finalPathSourcesRoot, OrderRootType.SOURCES);
                 }
             }
@@ -220,8 +211,21 @@ public class GoSdkType extends SdkType {
 
     @Override
     public String getPresentableName() {
-        return "Go Sdk";
+        return GO_SDK_NAME;
     }
+
+    public String getSdkLongName() {
+        if (sdkData == null) {
+            return GO_SDK_NAME;
+        }
+
+        if (sdkData.VERSION_MAJOR.equals("")) {
+            return GO_SDK_NAME;
+        }
+
+        return GO_SDK_NAME.concat(" ").concat(sdkData.VERSION_MAJOR);
+    }
+
 
     @Override
     public boolean isRootTypeApplicable(OrderRootType type) {

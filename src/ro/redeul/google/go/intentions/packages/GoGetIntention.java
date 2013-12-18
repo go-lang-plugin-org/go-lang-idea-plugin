@@ -199,9 +199,9 @@ public class GoGetIntention extends Intention {
     }
 
     private String getSdkHomePath(GoSdkData sdkData) {
-        if (sdkData.GO_HOME_PATH.isEmpty()) {
+        if (sdkData.GO_GOROOT_PATH.isEmpty()) {
             return new File(sdkData.GO_BIN_PATH).getParent();
         }
-        return sdkData.GO_HOME_PATH;
+        return sdkData.GO_GOROOT_PATH;
     }
 }

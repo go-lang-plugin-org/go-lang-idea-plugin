@@ -92,6 +92,7 @@ Please ensure that the bug is not reported.
 
 + [Florin Patan (dlsniper)](https://github.com/dlsniper)
     +  Cardea support
+    +  Non-IntelliJ IDEs plugin support
 
 ## Contributing
 

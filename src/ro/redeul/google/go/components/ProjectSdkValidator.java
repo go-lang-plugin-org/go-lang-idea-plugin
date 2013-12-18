@@ -70,9 +70,9 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
 
             if (needsUpgrade) {
                 Notifications.Bus.notify(
-                    new Notification("GoLang SDK validator", "Corrupt Go SDK",
-                                     getContent("Go", sdk.getName()),
-                                     NotificationType.WARNING), myProject);
+                        new Notification("GoLang SDK validator", "Corrupt Go SDK",
+                                getContent("Go", sdk.getName()),
+                                NotificationType.WARNING), myProject);
             }
 
             SdkModificator sdkModificator = sdk.getSdkModificator();
@@ -88,9 +88,9 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
 
             if (sdkData == null || sdkData.TARGET_ARCH == null || sdkData.TARGET_OS == null) {
                 Notifications.Bus.notify(
-                    new Notification("GoLang SDK validator", "Corrupt Go SDK",
-                                     getContent("Go App Engine", sdk.getName()),
-                                     NotificationType.WARNING), myProject);
+                        new Notification("GoLang SDK validator", "Corrupt Go SDK",
+                                getContent("Go App Engine", sdk.getName()),
+                                NotificationType.WARNING), myProject);
             }
         }
 
@@ -99,7 +99,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
 
     private String getContent(String type, String name) {
         return
-            "<html>The attached " + type + " SDK named: <em>" + name + "</em> seems to be corrupt." +
-                "<br/>Please update it by going to the project sdk editor remove it and add it again.</html>";
+                "<html>The attached " + type + " SDK named: <em>" + name + "</em> seems to be corrupt." +
+                        "<br/>Please update it by going to the project sdk editor remove it and add it again.</html>";
     }
 }
