@@ -10,6 +10,7 @@ type MyInt int64
 
 const (
 	NORMAL = 45
+	NOTNARMAL = BBBBB
 )
 
 func HandleFunc(pa string, handler func(int, *string)bool) {
@@ -45,8 +46,26 @@ func AcceptMyInt(arg MyInt) {
 
 }
 
+func MatchF(arg float64) {
+
+}
+
+func MatchI(arg int64) {
+
+}
 
 func main() {
+	//ISSUE #357
+	MatchI('5')
+	MatchI(1.0 * NORMAL)
+	MatchF(5 * NORMAL)
+	MatchF(NORMAL)
+	MatchF(45)
+	MatchF(5 * 5 * 24 * 31 * 314)
+	MatchI(1.0)
+	MatchI(/*begin*/NOTNARMAL/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
+	MatchI(/*begin*/2.5/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
+	MatchI(/*begin*/"5"/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
 	//PR #344
 	var invalid int = 1
 	AcceptMyInt(BBBBB * 5)

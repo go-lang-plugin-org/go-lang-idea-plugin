@@ -9,6 +9,9 @@ import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -26,7 +29,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -226,8 +228,17 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                 PsiElement constDecl = resolved.getParent();
                 if (constDecl instanceof GoConstDeclaration) {
                     GoPsiType identifiersType = ((GoConstDeclaration) constDecl).getIdentifiersType();
-                    if (identifiersType instanceof GoTypePsiBacked)
+                    //Type was specified
+                    if (identifiersType != null) {
                         return ((GoPsiTypeName) identifiersType).isPrimitive();
+                    }
+                    //If not check the expressions
+                    for (GoExpr goExpr : ((GoConstDeclaration) constDecl).getExpressions()) {
+                        if (goExpr instanceof GoBinaryExpression || goExpr instanceof GoUnaryExpression) {
+                            if (!goExpr.isConstantExpression())
+                                return false;
+                        }
+                    }
                     return true;
                 }
 

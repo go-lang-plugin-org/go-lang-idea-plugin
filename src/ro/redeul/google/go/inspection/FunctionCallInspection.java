@@ -5,14 +5,19 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.CastTypeFix;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.*;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.*;
@@ -171,17 +176,20 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             return true;
         }
 
-        if (firstChildOfExp instanceof GoLiteralInteger) {
-            return resolved.getText().startsWith("int");
-        }
-        if (firstChildOfExp instanceof GoLiteralFloat) {
-            return resolved.getText().startsWith("float");
-        }
-        if (firstChildOfExp instanceof GoLiteralString) {
-            return resolved.getText().equals("string");
-        }
-        if (firstChildOfExp instanceof GoLiteralBool) {
-            return resolved.getText().equals("bool");
+        if (expr.isConstantExpression()) {
+            String resolvedTypeName = resolved.getText();
+            if (resolvedTypeName.startsWith("int")) {
+                return checkValidLiteralIntExpr(expr);
+            }
+            if (resolvedTypeName.startsWith("float")) {
+                return checkValidLiteralFloatExpr(expr);
+            }
+            if (firstChildOfExp instanceof GoLiteralString) {
+                return resolvedTypeName.equals("string");
+            }
+            if (firstChildOfExp instanceof GoLiteralBool) {
+                return resolvedTypeName.equals("bool");
+            }
         }
 
         GoType[] goTypes = expr.getType();
@@ -209,6 +217,66 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
 
         return true;
 
+    }
+
+    private static boolean checkValidLiteralFloatExpr(GoExpr expr) {
+        if (expr instanceof GoLiteralExpression) {
+            GoLiteral literal = ((GoLiteralExpression) expr).getLiteral();
+            if (literal instanceof GoLiteralIdentifier) {
+                //Never will be null
+                PsiElement goPsiElement = GoUtil.ResolveReferece(literal).getParent();
+                if (goPsiElement instanceof GoConstDeclaration) {
+                    for (GoExpr goExpr : ((GoConstDeclaration) goPsiElement).getExpressions()) {
+                        if (!checkValidLiteralFloatExpr(goExpr))
+                            return false;
+                    }
+                }
+                return true;
+            }
+            if (literal instanceof GoLiteralExpression)
+                return checkValidLiteralIntExpr((GoExpr) literal);
+            return literal instanceof GoLiteralFloat || literal instanceof GoLiteralInteger || literal.getNode().getElementType() == GoElementTypes.LITERAL_CHAR;
+        }
+        if (expr instanceof GoBinaryExpression) {
+            if (!checkValidLiteralFloatExpr(((GoBinaryExpression) expr).getLeftOperand()))
+                return false;
+            return checkValidLiteralFloatExpr(((GoBinaryExpression) expr).getRightOperand());
+        }
+        if (expr instanceof GoUnaryExpression)
+            return checkValidLiteralFloatExpr(((GoUnaryExpression) expr).getExpression());
+        return false;
+    }
+
+    private static boolean checkValidLiteralIntExpr(GoExpr expr) {
+        if (expr instanceof GoLiteralExpression) {
+            GoLiteral literal = ((GoLiteralExpression) expr).getLiteral();
+            if (literal instanceof GoLiteralIdentifier) {
+                //Never will be null
+                PsiElement goPsiElement = GoUtil.ResolveReferece(literal).getParent();
+                if (goPsiElement instanceof GoConstDeclaration) {
+                    for (GoExpr goExpr : ((GoConstDeclaration) goPsiElement).getExpressions()) {
+                        if (!checkValidLiteralIntExpr(goExpr))
+                            return false;
+                    }
+                }
+                return true;
+            }
+            if (literal instanceof GoLiteralExpression)
+                return checkValidLiteralIntExpr((GoExpr) literal);
+            if (literal instanceof GoLiteralInteger || literal.getNode().getElementType() == GoElementTypes.LITERAL_CHAR)
+                return true;
+            return literal instanceof GoLiteralFloat && literal.getText().matches("^[0-9]*\\.0+$");
+        }
+        if (expr instanceof GoBinaryExpression) {
+            if (!checkValidLiteralIntExpr(((GoBinaryExpression) expr).getLeftOperand()))
+                return false;
+            return checkValidLiteralIntExpr(((GoBinaryExpression) expr).getRightOperand());
+        }
+        if (expr instanceof GoUnaryExpression)
+            return checkValidLiteralIntExpr(((GoUnaryExpression) expr).getExpression());
+        if (expr instanceof GoParenthesisedExpression)
+            return checkValidLiteralIntExpr(((GoParenthesisedExpression) expr).getInnerExpression());
+        return false;
     }
 
 
