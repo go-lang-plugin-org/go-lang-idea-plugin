@@ -49,14 +49,14 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
                         return types;
                 }
             }
+        }
+        if (types == null) {
             for (GoExpr goExpr : getExpressions()) {
                 for (GoType goType : goExpr.getType()) {
                     if (goType instanceof GoTypePsiBacked)
                         return ((GoTypePsiBacked) goType).getPsiType();
                 }
-
             }
-
         }
         return types;
     }
