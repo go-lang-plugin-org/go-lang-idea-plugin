@@ -6,33 +6,42 @@ import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.openapi.compiler.CompilerPaths;
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowAnchor;
+import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentFactory;
 import com.intellij.util.PathUtil;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoSdkData;
-import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.runner.ui.GoRunConfigurationEditorForm;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -42,13 +51,20 @@ import java.util.Collection;
  */
 public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration> {
 
-    public String scriptName;
-    public String scriptArguments;
-    private final String workDir;
+    private static final String ID = "Go Console";
+    private static final String TITLE = " build";
+    private static ConsoleView consoleView;
+
+    public String scriptName = "";
+    public String scriptArguments = "";
+    public String builderArguments = "";
+    public Boolean goBuildBeforeRun = false;
+    public String goOutputDir = "";
+    public String workingDir = "";
 
     public GoApplicationConfiguration(String name, Project project, GoRunConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
-        workDir = PathUtil.getLocalPath(project.getBaseDir());
+        String workDir = PathUtil.getLocalPath(project.getBaseDir());
     }
 
     @Override
@@ -64,14 +80,20 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
-        super.checkConfiguration();
-
         if (scriptName == null || scriptName.length() == 0)
             throw new RuntimeConfigurationException("Please select the file to run.");
-        if (getModule() == null)
-            throw new RuntimeConfigurationException("Please select the module.");
+        if (goBuildBeforeRun != null &&
+                goBuildBeforeRun &&
+                (goOutputDir == null || goOutputDir.equals(""))) {
+            throw new RuntimeConfigurationException("Please select the directory for the executable.");
+        }
+        if (workingDir == null || workingDir.equals("")) {
+            throw new RuntimeConfigurationException("Please select the application working directory.");
+        }
+        super.checkConfiguration();
     }
 
+    @NotNull
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
         return new GoRunConfigurationEditorForm(getProject());
     }
@@ -92,6 +114,8 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
 
+        final Project project = getProject();
+
         CommandLineState state = new CommandLineState(env) {
 
             @NotNull
@@ -108,80 +132,147 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                     throw new CantRunException("No Go Sdk defined for this project");
                 }
 
-                if (getConfigurationModule().getModule() == null) {
-                    throw new CantRunException("No Go module is defined for this project");
+                VirtualFile scriptFile = GoSdkUtil.getVirtualFile(scriptName);
+
+                String goExecName = sdkData.GO_BIN_PATH;
+
+                String projectDir = project.getBasePath();
+
+                if (projectDir == null) {
+                    throw new CantRunException("Could not retrieve the project directory");
                 }
 
-                VirtualFile moduleFile = getConfigurationModule().getModule().getModuleFile();
+                if (!goBuildBeforeRun) {
+                    // Just run
+                    GeneralCommandLine commandLine = new GeneralCommandLine();
 
-                if (moduleFile == null || moduleFile.getParent() == null) {
-                    throw new CantRunException("No Go module is defined for this project");
+                    commandLine.setExePath(goExecName);
+                    commandLine.addParameter("run");
+                    if (builderArguments != null && builderArguments.trim().length() > 0) {
+                        commandLine.getParametersList().addParametersString(builderArguments);
+                    }
+
+                    commandLine.addParameter(scriptName);
+                    if (scriptArguments != null && scriptArguments.trim().length() > 0) {
+                        commandLine.getParametersList().addParametersString(scriptArguments);
+                    }
+
+                    commandLine.getEnvironment().put("GOROOT", getSdkRootPath(sdkData));
+                    commandLine.getEnvironment().put("GOPATH", GoSdkUtil.appendToGoPath(projectDir));
+                    commandLine.setWorkDirectory(workingDir);
+
+                    return GoApplicationProcessHandler.runCommandLine(commandLine);
                 }
 
+
+                // Build and run
+                String execName = goOutputDir.concat("/").concat(getProject().getName());
+
+                if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
+                    execName = execName.concat(".exe");
+                }
+
+                ProcessHandler processHandler = null;
+                try {
+                    ToolWindowManager manager = ToolWindowManager.getInstance(project);
+                    ToolWindow window = manager.getToolWindow(ID);
+
+                    if (GoApplicationConfiguration.consoleView == null) {
+                        GoApplicationConfiguration.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+                    }
+
+                    if (window == null) {
+                        window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
+
+                        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+                        Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
+                        window.getContentManager().addContent(content);
+                        window.setIcon(GoIcons.GO_ICON_13x13);
+                        window.setToHideOnEmptyContent(true);
+                        window.setTitle(TITLE);
+
+                    }
+
+                    window.show(EmptyRunnable.getInstance());
+
+                    Map<String,String> sysEnv = System.getenv();
+                    String[] goEnv = new String[sysEnv.size() + 2];
+                    Iterator it = sysEnv.entrySet().iterator();
+                    int i = 0;
+                    while (it.hasNext()) {
+                        Map.Entry pairs = (Map.Entry)it.next();
+                        goEnv[i] = pairs.getKey() + "=" + pairs.getValue();
+                        i++;
+                    }
+
+                    goEnv[i] = "GOROOT=" + getSdkRootPath(sdkData);
+                    i++;
+                    goEnv[i] = "GOPATH=" + GoSdkUtil.appendToGoPath(projectDir);
+
+                    String command = String.format(
+                            "%s build %s -o %s %s",
+                            goExecName,
+                            builderArguments,
+                            execName,
+                            scriptName
+                    );
+
+                    Runtime rt = Runtime.getRuntime();
+                    Process proc = rt.exec(command, goEnv);
+                    OSProcessHandler handler = new OSProcessHandler(proc, null);
+                    consoleView.attachToProcess(handler);
+                    consoleView.print(String.format("%s%n", command), ConsoleViewContentType.NORMAL_OUTPUT);
+                    handler.startNotify();
+
+                    if (proc.waitFor() == 0) {
+                        VirtualFileManager.getInstance().syncRefresh();
+
+                        consoleView.print(String.format("%nFinished building project %s%n", execName), ConsoleViewContentType.NORMAL_OUTPUT);
+                    } else {
+                        consoleView.print(String.format("%nCould build project %s%n", execName), ConsoleViewContentType.ERROR_OUTPUT);
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Messages.showErrorDialog(String.format("Error while processing %s build command.", goExecName), "Error on Google Go Plugin");
+
+                    throw new CantRunException(String.format("Error while processing %s build command.", goExecName));
+                }
+
+                // Now run the build
                 GeneralCommandLine commandLine = new GeneralCommandLine();
 
-                commandLine.setExePath(sdkData.GO_BIN_PATH);
-                commandLine.addParameter("run");
+                commandLine.setExePath(execName);
+                commandLine.setWorkDirectory(workingDir);
                 if (scriptArguments != null && scriptArguments.trim().length() > 0) {
                     commandLine.getParametersList().addParametersString(scriptArguments);
                 }
-                commandLine.addParameter(scriptName);
-
-                commandLine.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
-                commandLine.getEnvironment().put("GOPATH", GoSdkUtil.prependToGoPath(moduleFile.getParent().getCanonicalPath()));
 
                 return GoApplicationProcessHandler.runCommandLine(commandLine);
             }
         };
 
-        state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject()));
+        state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(project));
         return state;
     }
 
-    private String getCompiledFileName(Module module, String scriptName) {
-        VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
-        VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(new File(scriptName));
-
-        if (file == null) {
-            for (VirtualFile sourceRoot : sourceRoots) {
-                file = sourceRoot.findChild(scriptName);
-                if (file != null) {
-                    break;
-                }
-            }
-        }
-
-        if (file != null) {
-            for (VirtualFile sourceRoot : sourceRoots) {
-
-                if (VfsUtil.isAncestor(sourceRoot, file, true)) {
-                    String relativePath = VfsUtil.getRelativePath(file.getParent(), sourceRoot, File.separatorChar);
-                    GoProjectSettings setting = GoProjectSettings.getInstance(module.getProject());
-                    String compiledFileName;
-                    if (setting.getState().BUILD_SYSTEM_TYPE == GoProjectSettings.BuildSystemType.Install) {
-                        compiledFileName = module.getProject().getBasePath() + "/bin/" + relativePath;
-                    }else{
-                        compiledFileName = CompilerPaths.getModuleOutputPath(module, false)
-                                                + "/go-bins/" + relativePath + "/" + file.getNameWithoutExtension();
-                    }
-                    if (SystemInfo.isWindows) {
-                        compiledFileName += ".exe";
-                    }
-                    return compiledFileName;
-                }
-            }
-        }
-
-        return scriptName;
-    }
-
-    Module getModule() {
-        return getConfigurationModule().getModule();
-    }
-
-    private String getSdkHomePath(GoSdkData sdkData) {
+    private String getSdkRootPath(GoSdkData sdkData) {
         if (sdkData.GO_HOME_PATH.isEmpty()) {
-            return new File(sdkData.GO_BIN_PATH).getParent();
+            File possibleRoot = new File(sdkData.GO_BIN_PATH).getParentFile();
+            try {
+                if (new File(possibleRoot.getCanonicalPath().concat("/src")).exists()) {
+                    return possibleRoot.getCanonicalPath();
+                }
+            } catch (IOException ignored) {
+                return "";
+            }
+
+            try {
+                return possibleRoot.getParentFile().getCanonicalPath();
+            } catch (IOException e) {
+                return "";
+            }
         }
         return sdkData.GO_HOME_PATH;
     }
