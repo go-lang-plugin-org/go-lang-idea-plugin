@@ -251,6 +251,11 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
         return state;
     }
 
+    @Override
+    public String suggestedName() {
+        return scriptName.equals("") ? "go run" : GoSdkUtil.getVirtualFile(scriptName).getName();
+    }
+
     private String getSdkRootPath(GoSdkData sdkData) {
         if (sdkData.GO_GOROOT_PATH.isEmpty()) {
             File possibleRoot = new File(sdkData.GO_BIN_PATH).getParentFile();
