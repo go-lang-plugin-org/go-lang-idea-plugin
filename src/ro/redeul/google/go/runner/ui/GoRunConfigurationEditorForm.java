@@ -30,6 +30,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
     private TextFieldWithBrowseButton buildDirectoryPathBrowser;
     private RawCommandLineEditor builderArguments;
     private TextFieldWithBrowseButton workingDirectoryBrowser;
+    private RawCommandLineEditor envVars;
 
     @Override
     protected void resetEditorFrom(GoApplicationConfiguration configuration) {
@@ -39,6 +40,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
         buildBeforeRunCheckBox.setSelected(configuration.goBuildBeforeRun);
         buildDirectoryPathBrowser.setText(configuration.goOutputDir);
         workingDirectoryBrowser.setText(configuration.workingDir);
+        envVars.setText(configuration.envVars);
     }
 
     @Override
@@ -55,6 +57,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
         configuration.goBuildBeforeRun = buildBeforeRunCheckBox.isSelected();
         configuration.goOutputDir = buildDirectoryPathBrowser.getText();
         configuration.workingDir = workingDirectoryBrowser.getText();
+        configuration.envVars = envVars.getText();
     }
 
     public GoRunConfigurationEditorForm(final Project project) {

@@ -30,8 +30,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -630,5 +632,47 @@ public class GoSdkUtil {
         String url = VfsUtil.pathToUrl(pluginPath.getAbsolutePath());
 
         return VirtualFileManager.getInstance().findFileByUrl(url);
+    }
+
+    public static Map<String, String> getExtendedSysEnv(GoSdkData sdkData, String projectDir, String envVars) {
+        Map<String,String> sysEnv = new HashMap<String, String>(System.getenv());
+        sysEnv.put("GOROOT", getSdkRootPath(sdkData));
+        sysEnv.put("GOPATH", GoSdkUtil.appendToGoPath(projectDir));
+
+        if (envVars.length() > 0) {
+            String[] envVarsArray = envVars.split(";");
+            for(String envVar: envVarsArray) {
+                if (!envVar.contains("=")) {
+                    continue;
+                }
+                String[] splitEnvVars = envVar.split("=");
+                if (splitEnvVars.length != 2) {
+                    continue;
+                }
+                sysEnv.put(splitEnvVars[0], splitEnvVars[1]);
+            }
+        }
+
+        return sysEnv;
+    }
+
+    public static String getSdkRootPath(GoSdkData sdkData) {
+        if (sdkData.GO_GOROOT_PATH.isEmpty()) {
+            File possibleRoot = new File(sdkData.GO_BIN_PATH).getParentFile();
+            try {
+                if (new File(possibleRoot.getCanonicalPath().concat("/src")).exists()) {
+                    return possibleRoot.getCanonicalPath();
+                }
+            } catch (IOException ignored) {
+                return "";
+            }
+
+            try {
+                return possibleRoot.getParentFile().getCanonicalPath();
+            } catch (IOException e) {
+                return "";
+            }
+        }
+        return sdkData.GO_GOROOT_PATH;
     }
 }
