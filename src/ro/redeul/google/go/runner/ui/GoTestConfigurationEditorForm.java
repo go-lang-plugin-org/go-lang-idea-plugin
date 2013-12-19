@@ -3,6 +3,8 @@ package ro.redeul.google.go.runner.ui;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.ui.RawCommandLineEditor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.runner.GoTestConfiguration;
@@ -23,6 +25,11 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
     private JTextField testsFilter;
     private JRadioButton benchmark;
     private JRadioButton test;
+    private JRadioButton packageNameRadioButton;
+    private JRadioButton testFileNameRadioButton;
+    private RawCommandLineEditor testRunnerArguments;
+    private TextFieldWithBrowseButton testFile;
+    private RawCommandLineEditor testArguments;
     private ButtonGroup testsGroup;
 
     @SuppressWarnings("unchecked")
