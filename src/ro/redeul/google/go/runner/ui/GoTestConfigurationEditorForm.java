@@ -30,6 +30,7 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
     private RawCommandLineEditor testRunnerArguments;
     private TextFieldWithBrowseButton testFile;
     private RawCommandLineEditor testArguments;
+    private RawCommandLineEditor envVars;
     private ButtonGroup testsGroup;
 
     @SuppressWarnings("unchecked")
