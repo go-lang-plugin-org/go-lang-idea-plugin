@@ -62,8 +62,8 @@ public class GoNamesCache {
         Collection<String> packagesCollection = new ArrayList<String>();
 
         for (String key : keys) {
-            Collection<GoFile> files = index.get(GoPackageImportPath.KEY, key,
-                                                 project, scope);
+            Collection<GoFile> files = index.safeGet(GoPackageImportPath.KEY, key,
+                                                 project, scope, GoFile.class);
             if (files != null && files.size() > 0) {
                 packagesCollection.add(key);
             }
@@ -79,8 +79,8 @@ public class GoNamesCache {
     public Collection<GoFile> getFilesByPackageName(String packageName) {
         StubIndex index = StubIndex.getInstance();
 
-        return index.get(GoPackageName.KEY, packageName, project,
-                         GlobalSearchScope.allScope(project));
+        return index.safeGet(GoPackageName.KEY, packageName, project,
+                         GlobalSearchScope.allScope(project), GoFile.class);
     }
 
     public Collection<GoFile> getFilesByPackageImportPath(@NotNull String importPath) {
@@ -91,7 +91,7 @@ public class GoNamesCache {
                                                           @NotNull GlobalSearchScope scope) {
         StubIndex index = StubIndex.getInstance();
 
-        return index.get(GoPackageImportPath.KEY, importPath, project, scope);
+        return index.safeGet(GoPackageImportPath.KEY, importPath, project, scope, GoFile.class);
     }
 
 
@@ -112,8 +112,8 @@ public class GoNamesCache {
         StubIndex index = StubIndex.getInstance();
         GlobalSearchScope scope = getSearchScope(includeNonProjectItems);
         Collection<NavigationItem> items = new ArrayList<NavigationItem>();
-        for (GoTypeNameDeclaration type : index.get(GoTypeName.KEY, name,
-                                                    project, scope)) {
+        for (GoTypeNameDeclaration type : index.safeGet(GoTypeName.KEY, name,
+                                                    project, scope, GoTypeNameDeclaration.class)) {
             if (type instanceof NavigationItem) {
                 items.add((NavigationItem) type);
             }
