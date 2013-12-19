@@ -124,8 +124,6 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
             element = element.getParent();
         }
 
-        PsiElement element1 = element;
-
         String dottedPackagePath = goFile.getPackageImportPath().replace('/', '.');
         if (element instanceof GoFile) {
             testConfiguration.setName(dottedPackagePath);
@@ -208,9 +206,14 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
         if (pkgName.endsWith("_test")) {
             String fileName = file.getName();
             String testedFileName = fileName.replace("_test", "");
-            GoFile testedFile = (GoFile) file.getParent().findFile(testedFileName);
+            try {
+                GoFile testedFile = (GoFile) file.getParent().findFile(testedFileName);
 
-            pkgName = testedFile.getPackageImportPath();
+                return testedFile.getPackageImportPath();
+            } catch (NullPointerException ignored) {
+
+            }
+
         }
         return pkgName;
     }
@@ -229,6 +232,10 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
 
         String filePath = vf.getPath();
         String relativePath = FileUtil.getRelativePath(basePath, filePath, File.separatorChar);
+        if (relativePath == null) {
+            return "";
+        }
+
         return relativePath.replace(File.separatorChar, '/');
     }
 

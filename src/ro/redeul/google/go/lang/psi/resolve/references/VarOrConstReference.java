@@ -31,7 +31,7 @@ public class VarOrConstReference
     private static final ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult>() {
             @Override
-            public GoResolveResult resolve(VarOrConstReference reference, boolean incompleteCode) {
+            public GoResolveResult resolve(@NotNull VarOrConstReference reference, boolean incompleteCode) {
                 VarOrConstResolver processor =
                     new VarOrConstResolver(reference);
 

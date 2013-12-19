@@ -19,8 +19,6 @@ import javax.swing.*;
 
 import java.io.File;
 
-import static java.lang.String.format;
-
 public class GoSdkType extends SdkType {
 
     public static final String GO_SDK_NAME = "Go SDK";
@@ -110,7 +108,7 @@ public class GoSdkType extends SdkType {
     }
 
     @Override
-    public String getVersionString(Sdk sdk) {
+    public String getVersionString(@NotNull Sdk sdk) {
         return getVersionString(sdk.getHomePath());
     }
 
@@ -142,9 +140,6 @@ public class GoSdkType extends SdkType {
         if ( sdkData == null )
             return;
 
-        String pkgType = format("pkg/%s_%s/", sdkData.TARGET_OS.getName(),
-                sdkData.TARGET_ARCH.getName());
-
         final VirtualFile sdkSourcesRoot = homeDirectory.findFileByRelativePath("src/pkg/");
 
         if (sdkSourcesRoot != null) {
@@ -153,7 +148,7 @@ public class GoSdkType extends SdkType {
 
         String goPathFirst = System.getenv("GOPATH");
 
-        VirtualFile goPathDirectory = null;
+        VirtualFile goPathDirectory;
         VirtualFile pathSourcesRoot = null;
 
         if (goPathFirst != null &&
@@ -175,9 +170,7 @@ public class GoSdkType extends SdkType {
         }
 
         final SdkModificator sdkModificator = sdk.getSdkModificator();
-        final VirtualFile finalGoPathDirectory = goPathDirectory;
         final VirtualFile finalPathSourcesRoot = pathSourcesRoot;
-        final String finalGoPathFirst = goPathFirst;
 
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             public void run() {
@@ -203,7 +196,7 @@ public class GoSdkType extends SdkType {
     }
 
     @Override
-    public void saveAdditionalData(SdkAdditionalData additionalData, Element additional) {
+    public void saveAdditionalData(@NotNull SdkAdditionalData additionalData, @NotNull Element additional) {
         if (additionalData instanceof GoSdkData) {
             XmlSerializer.serializeInto(additionalData, additional);
         }

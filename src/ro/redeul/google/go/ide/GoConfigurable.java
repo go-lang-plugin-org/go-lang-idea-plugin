@@ -5,10 +5,11 @@ import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.options.GoSettings;
 
 import javax.swing.*;
+
+import static ro.redeul.google.go.GoIcons.GO_ICON_16x16;
 
 public class GoConfigurable implements SearchableConfigurable {
 
@@ -38,7 +39,7 @@ public class GoConfigurable implements SearchableConfigurable {
     }
 
     public Icon getIcon() {
-        return GoIcons.GO_ICON_16x16;
+        return GO_ICON_16x16;
     }
 
     @Override

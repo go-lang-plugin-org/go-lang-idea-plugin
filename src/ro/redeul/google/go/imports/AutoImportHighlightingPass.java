@@ -67,9 +67,6 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         }
 
         GoNamesCache namesCache = GoNamesCache.getInstance(project);
-        if (namesCache == null) {
-            return null;
-        }
 
         Set<String> imported = new HashSet<String>();
         for (GoImportDeclarations ids : file.getImportDeclarations()) {
@@ -102,6 +99,10 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
             GoLiteralIdentifier id = findElementOfClassAtRange(file, start, end, GoLiteralIdentifier.class);
             if (!isPackageUsage(id)) {
+                continue;
+            }
+
+            if (id == null) {
                 continue;
             }
 
@@ -179,7 +180,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
 
     private boolean isCaretOnPackageName() {
         int offset = editor.getCaretModel().getOffset();
-        PsiElement caretElement = file.findElementAt(offset);
+        //PsiElement caretElement = file.findElementAt(offset);
 
         return isElementAPackageName(file.findElementAt(offset)) || offset > 0 && isElementAPackageName(file.findElementAt(offset - 1));
     }

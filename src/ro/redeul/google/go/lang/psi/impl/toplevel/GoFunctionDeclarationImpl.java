@@ -192,7 +192,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     @NotNull
     @Override
     public String getPresentationText() {
-        return getName();
+        return getName() == null ? "" : getName();
     }
 
     @Override

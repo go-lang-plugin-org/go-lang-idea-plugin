@@ -58,7 +58,7 @@ public class GoPsiUtils {
     }
 
     public static <Psi extends PsiElement> Psi get(Psi node) {
-        return node != null ? node : node;
+        return node;
     }
 
     public static <

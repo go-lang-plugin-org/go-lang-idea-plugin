@@ -32,6 +32,10 @@ public class CreateTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
         }
 
         Document doc = PsiDocumentManager.getInstance(project).getDocument(file);
+        if (doc == null) {
+            return;
+        }
+
         int offset = insertPoint.getTextOffset();
         int line = doc.getLineNumber(offset);
         doc.insertString(offset, "type " + startElement.getText() + " \n\n");

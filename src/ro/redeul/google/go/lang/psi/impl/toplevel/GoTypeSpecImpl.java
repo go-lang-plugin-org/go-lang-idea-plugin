@@ -58,6 +58,10 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
 
     @Override
     public String getName() {
+        if (getTypeNameDeclaration() == null) {
+            return "";
+        }
+
         return getTypeNameDeclaration().getName();
     }
 

@@ -116,7 +116,7 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
         }
 
         if (parentType == null) {
-            return parentType;
+            return null;
         }
 
         while (parentType != null && parentType instanceof GoTypeName) {

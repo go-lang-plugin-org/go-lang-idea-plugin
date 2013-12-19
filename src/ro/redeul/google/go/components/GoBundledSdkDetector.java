@@ -6,7 +6,6 @@ import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl;
 import com.intellij.openapi.projectRoots.impl.SdkConfigurationUtil;
 import org.jetbrains.annotations.NotNull;
@@ -74,7 +73,6 @@ public class GoBundledSdkDetector implements ApplicationComponent {
             ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 @Override
                 public void run() {
-                    final SdkModificator sdkModificator = bundledGoSdk.getSdkModificator();
                     goSdkType.setupSdkPaths(bundledGoSdk);
                     jdkTable.addJdk(bundledGoSdk);
                 }

@@ -4,9 +4,10 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoIcons;
 
 import javax.swing.*;
+
+import static ro.redeul.google.go.GoIcons.GO_ICON_16x16;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -36,9 +37,10 @@ public class GoAppEngineSettingsConfigurable implements SearchableConfigurable  
     }
 
     public Icon getIcon() {
-        return GoIcons.GO_ICON_16x16;
+        return GO_ICON_16x16;
     }
 
+    @NotNull
     @Override
     public String getHelpTopic() {
         return "reference.settingsdialog.go.app.engine";

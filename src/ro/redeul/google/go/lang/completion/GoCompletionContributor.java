@@ -156,14 +156,11 @@ public class GoCompletionContributor extends CompletionContributor {
             protected void addCompletions(@NotNull CompletionParameters parameters,
                                           ProcessingContext context,
                                           @NotNull CompletionResultSet result) {
-                String originalFile =
-                    DebugUtil.psiToString(parameters.getOriginalFile(), false);
                 String currentFile =
                     DebugUtil.psiToString(
                         parameters.getPosition().getContainingFile(), false);
 
                 System.out.println(currentFile);
-                int a = 10;
             }
         };
 

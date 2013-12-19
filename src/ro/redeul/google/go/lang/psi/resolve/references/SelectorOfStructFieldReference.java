@@ -26,7 +26,7 @@ public class SelectorOfStructFieldReference
     private static final ResolveCache.AbstractResolver<SelectorOfStructFieldReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<SelectorOfStructFieldReference, GoResolveResult>() {
             @Override
-            public GoResolveResult resolve(SelectorOfStructFieldReference psiReference, boolean incompleteCode) {
+            public GoResolveResult resolve(@NotNull SelectorOfStructFieldReference psiReference, boolean incompleteCode) {
 
                 GoTypeStruct typeStruct = psiReference.resolveTypeDefinition();
 

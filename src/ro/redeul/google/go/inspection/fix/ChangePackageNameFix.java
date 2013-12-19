@@ -53,6 +53,10 @@ public class ChangePackageNameFix extends
                 Document doc =
                     PsiDocumentManager.getInstance(project).getDocument(file);
 
+                if (doc == null) {
+                    return;
+                }
+
                 TextRange textRange = packageDeclaration.getTextRange();
 
                 doc.replaceString(textRange.getStartOffset(),

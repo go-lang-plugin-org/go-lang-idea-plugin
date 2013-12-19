@@ -36,6 +36,10 @@ public class ConvertToAssignmentFix implements LocalQuickFix {
         }
 
         Document doc = PsiDocumentManager.getInstance(e.getProject()).getDocument(e.getContainingFile());
+        if (doc == null) {
+            return;
+        }
+
         doc.replaceString(e.getTextOffset(), e.getTextOffset() + e.getTextLength(), "=");
     }
 }

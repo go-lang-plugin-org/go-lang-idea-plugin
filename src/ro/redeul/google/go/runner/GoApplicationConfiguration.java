@@ -6,7 +6,6 @@ import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -20,14 +19,12 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import com.intellij.util.PathUtil;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +61,6 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
     public GoApplicationConfiguration(String name, Project project, GoRunConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
-        String workDir = PathUtil.getLocalPath(project.getBaseDir());
     }
 
     @Override
@@ -132,8 +128,6 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                     throw new CantRunException("No Go Sdk defined for this project");
                 }
 
-                VirtualFile scriptFile = GoSdkUtil.getVirtualFile(scriptName);
-
                 String goExecName = sdkData.GO_BIN_PATH;
 
                 String projectDir = project.getBasePath();
@@ -172,7 +166,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                     execName = execName.concat(".exe");
                 }
 
-                ProcessHandler processHandler = null;
+                //ProcessHandler processHandler = null;
                 try {
                     ToolWindowManager manager = ToolWindowManager.getInstance(project);
                     ToolWindow window = manager.getToolWindow(ID);

@@ -42,7 +42,10 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
 
         if (literal != null && literal.getType() == GoLiteral.Type.Identifier) {
             GoLiteralIdentifier identifier = (GoLiteralIdentifier) literal;
-            return identifier.getName();
+            String identifierName = identifier.getName();
+            if (identifierName != null) {
+                return getElement().getText();
+            }
         }
 
         return getElement().getText();

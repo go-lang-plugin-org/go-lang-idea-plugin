@@ -14,10 +14,11 @@ public abstract class GoStubElementType<S extends StubElement, T extends GoPsiEl
         super(debugName, GoLanguage.INSTANCE);
     }
 
-    public void indexStub(final S stub, final IndexSink sink) {
+    public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {
 
     }
 
+    @NotNull
     public String getExternalId() {
         return "go." + super.toString();
     }

@@ -9,7 +9,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 /**
  * // TODO: mtoader ! Please explain yourself.
@@ -21,11 +20,11 @@ class GoFunctionParameterListBlock extends GoBlock {
 
     @Override
     protected Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
-        boolean isNewLine1 = GoPsiUtils.isNewLineNode(child1.getNode().getPsi());
-        boolean isNewLine2 = GoPsiUtils.isNewLineNode(child2.getNode().getPsi());
+        //boolean isNewLine1 = GoPsiUtils.isNewLineNode(child1.getNode().getPsi());
+        //boolean isNewLine2 = GoPsiUtils.isNewLineNode(child2.getNode().getPsi());
 
-        String text1 = child1.getNode().getText();
-        String text2 = child2.getNode().getText();
+        //String text1 = child1.getNode().getText();
+        //String text2 = child2.getNode().getText();
 
         return super.getGoBlockSpacing(child1, child2);
     }

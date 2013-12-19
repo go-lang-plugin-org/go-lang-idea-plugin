@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.completion.GoCompletionContributor;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -27,7 +28,7 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
         this.reference = reference;
     }
 
-    public boolean execute(PsiElement element, ResolveState state) {
+    public boolean execute(@NotNull PsiElement element, ResolveState state) {
 
         if (element instanceof GoPsiElement) {
             this.state = state;
@@ -83,7 +84,7 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
     }
 
     @Override
-    public <T> T getHint(Key<T> hintKey) {
+    public <T> T getHint(@NotNull Key<T> hintKey) {
         return null;
     }
 

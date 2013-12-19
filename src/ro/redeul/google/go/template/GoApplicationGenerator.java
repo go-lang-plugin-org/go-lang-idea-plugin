@@ -7,7 +7,6 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl;
 import com.intellij.openapi.projectRoots.impl.SdkConfigurationUtil;
 import com.intellij.openapi.roots.*;
@@ -122,9 +121,7 @@ public class GoApplicationGenerator extends WebProjectTemplate {
                                 ApplicationManager.getApplication().runWriteAction(new Runnable() {
                                     @Override
                                     public void run() {
-                                        final SdkModificator sdkModificator = finalGoSdk.getSdkModificator();
                                         goSdkType.setupSdkPaths(finalGoSdk);
-
                                         jdkTable.addJdk(finalGoSdk);
                                     }
                                 });

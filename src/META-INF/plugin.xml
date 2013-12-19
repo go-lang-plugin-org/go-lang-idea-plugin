@@ -445,6 +445,9 @@
                 ro.redeul.google.go.imports.AutoImportHighlightingPassFactory
             </implementation-class>
         </component>
+        <component>
+            <implementation-class>ro.redeul.google.go.components.ProjectSdkValidator</implementation-class>
+        </component>
     </project-components>
 
     <actions>

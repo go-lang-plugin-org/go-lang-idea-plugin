@@ -103,52 +103,24 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         if (arguments.length > 2) {
             result.addProblem(arguments[2], arguments[arguments.length - 1],
                     GoBundle.message("error.too.many.arguments.in.call", "make"));
-            return;
         } else if (arguments.length == 0) {
             String method = "make(" + expression.getTypeArgument().getText() + ")";
             result.addProblem(expression, GoBundle.message("error.missing.argument", "len", method));
-            return;
         }
-
-        // TODO: check len
-        GoExpr len = arguments[0];
-
-        if (arguments.length != 2) {
-            return;
-        }
-
-        // TODO: check capacity
-        GoExpr capacity = arguments[1];
     }
 
     private static void checkMakeMapCall(GoExpr[] arguments, InspectionResult result) {
         if (arguments.length > 1) {
             result.addProblem(arguments[1], arguments[arguments.length - 1],
                     GoBundle.message("error.too.many.arguments.in.call", "make"));
-            return;
         }
-
-        if (arguments.length != 1) {
-            return;
-        }
-
-        // TODO: check space
-        GoExpr space = arguments[0];
     }
 
     private static void checkMakeChannelCall(GoExpr[] arguments, InspectionResult result) {
         if (arguments.length > 1) {
             result.addProblem(arguments[1], arguments[arguments.length - 1],
                     GoBundle.message("error.too.many.arguments.in.call", "make"));
-            return;
         }
-
-        if (arguments.length != 1) {
-            return;
-        }
-
-        // TODO: check bufferSize
-        GoExpr bufferSize = arguments[0];
     }
 
     private static boolean checkIsInterface(GoPsiType psiType) {
@@ -177,6 +149,9 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         }
 
         if (expr.isConstantExpression()) {
+            if (resolved == null) {
+                return false;
+            }
             String resolvedTypeName = resolved.getText();
             if (resolvedTypeName.startsWith("int")) {
                 return checkValidLiteralIntExpr(expr);
@@ -209,6 +184,10 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             return GoUtil.CompairTypes(type, ((GoPsiTypeParenthesized) firstChildOfExp).getInnerType(), expr);
         }
         type = resolved;
+        if (type == null) {
+            return false;
+        }
+
         String typeText = type.getText();
         if (expr instanceof GoLiteralExpression) {
             GoLiteral.Type type1 = ((GoLiteralExpression) expr).getLiteral().getType();
@@ -305,7 +284,6 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                 if (identifiers.length < 2) {
                     GoExpr goExpr = goExprs[index];
                     if (!checkParametersExp(functionParameter.getType(), goExpr)) {
-                        String name = goExpr.getText();
                         result.addProblem(
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
@@ -317,7 +295,6 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                     for (GoLiteralIdentifier goLiteralIdentifier : identifiers) {
                         GoExpr goExpr = goExprs[index];
                         if (!checkParametersExp(functionParameter.getType(), goExpr)) {
-                            String name = goExpr.getText();
                             result.addProblem(
                                     goExpr,
                                     GoBundle.message("warning.functioncall.type.mismatch", type.getText()),

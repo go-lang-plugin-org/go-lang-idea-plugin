@@ -22,8 +22,6 @@ public class BuiltinTypeNameReference extends TypeNameReference {
     public PsiElement resolve() {
 
         PsiElement element = getElement();
-        if (element == null)
-           return null;
 
         TypeNameResolver processor = new TypeNameResolver(this);
 
@@ -47,9 +45,6 @@ public class BuiltinTypeNameReference extends TypeNameReference {
     @Override
     public boolean isReferenceTo(PsiElement element) {
         GoPsiTypeName typeElement = getElement();
-
-        if (typeElement == null)
-            return false;
 
         if (element instanceof GoTypeNameDeclaration) {
             GoTypeNameDeclaration nameDeclaration = (GoTypeNameDeclaration)element;

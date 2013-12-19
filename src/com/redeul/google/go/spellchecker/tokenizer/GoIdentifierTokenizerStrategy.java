@@ -79,6 +79,10 @@ public class GoIdentifierTokenizerStrategy extends SpellcheckingStrategy {
             int offset = range.getStartOffset() - parent.getTextRange().getStartOffset();
             if(offset < 0 ) {
                 parent = PsiTreeUtil.findCommonParent(identifier, element);
+                if (parent == null) {
+                    return;
+                }
+
                 offset = range.getStartOffset() - parent.getTextRange().getStartOffset();
             }
             String text = identifier.getText();

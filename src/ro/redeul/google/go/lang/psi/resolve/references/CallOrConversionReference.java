@@ -26,7 +26,7 @@ public class CallOrConversionReference extends AbstractCallOrConversionReference
     private static final ResolveCache.AbstractResolver<CallOrConversionReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<CallOrConversionReference, GoResolveResult>() {
             @Override
-            public GoResolveResult resolve(CallOrConversionReference psiReference, boolean incompleteCode) {
+            public GoResolveResult resolve(@NotNull CallOrConversionReference psiReference, boolean incompleteCode) {
                 MethodOrTypeNameResolver processor =
                     new MethodOrTypeNameResolver(psiReference);
 

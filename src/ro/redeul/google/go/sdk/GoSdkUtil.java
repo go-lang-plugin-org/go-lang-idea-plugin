@@ -4,11 +4,8 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.CapturingProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
-import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
@@ -22,8 +19,6 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.newvfs.impl.VirtualFileImpl;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.SystemProperties;
 import org.jetbrains.annotations.NotNull;
@@ -357,6 +352,7 @@ public class GoSdkUtil {
 
     private static GoSdkData getMockGoogleSdk(String path) {
         GoSdkData sdkData = testGoogleGoSdk(path);
+        /* TODO: I'm not really sure why we need this.
         if (sdkData != null) {
             new File(
                 sdkData.GO_BIN_PATH,
@@ -373,6 +369,7 @@ public class GoSdkUtil {
                 getArchivePackerName()
             ).setExecutable(true);
         }
+        */
 
         return sdkData;
     }
@@ -409,7 +406,7 @@ public class GoSdkUtil {
 
         ModuleRootModel moduleRootModel = ModuleRootManager.getInstance(module);
 
-        Sdk sdk = null;
+        Sdk sdk;
         if (!moduleRootModel.isSdkInherited()) {
             sdk = moduleRootModel.getSdk();
         } else {
@@ -511,7 +508,6 @@ public class GoSdkUtil {
             command = "/usr/local/go/bin/go";
         }
 
-        String path = System.getenv("PATH");
         GeneralCommandLine goCommandLine = new GeneralCommandLine();
 
         goCommandLine.setExePath(command);
