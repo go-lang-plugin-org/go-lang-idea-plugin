@@ -47,7 +47,8 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
         return identifier != null ? identifier.getUnqualifiedName() : getText();
     }
 
-    public PsiElement setName(@NonNls String name)
+    @Override
+    public PsiElement setName(@NotNull @NonNls String name)
             throws IncorrectOperationException {
         return null;
     }

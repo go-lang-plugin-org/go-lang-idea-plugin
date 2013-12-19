@@ -227,8 +227,6 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         if (lastParent == this)
             return false;
 
-        String myPackageName = getPackage().getPackageName();
-
         PsiElement child = this.getLastChild();
 
         while (child != null) {

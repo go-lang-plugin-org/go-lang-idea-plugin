@@ -8,12 +8,14 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
-import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.ui.GoAppEngineSdkConfigurable;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.*;
+
+import static ro.redeul.google.go.GoIcons.GO_ICON_16x16;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -70,7 +72,7 @@ public class GoAppEngineSdkType extends SdkType {
     }
 
     @Override
-    public String getVersionString(Sdk sdk) {
+    public String getVersionString(@NotNull Sdk sdk) {
         return getVersionString(sdk.getHomePath());
     }
 
@@ -83,7 +85,7 @@ public class GoAppEngineSdkType extends SdkType {
     }
 
     @Override
-    public void setupSdkPaths(Sdk sdk) {
+    public void setupSdkPaths(@NotNull Sdk sdk) {
 
         VirtualFile homeDirectory = sdk.getHomeDirectory();
 
@@ -169,16 +171,16 @@ public class GoAppEngineSdkType extends SdkType {
 
     @Override
     public Icon getIcon() {
-        return GoIcons.GO_ICON_16x16;
+        return GO_ICON_16x16;
     }
 
     @Override
     public Icon getIconForAddAction() {
-        return GoIcons.GO_ICON_16x16;
+        return GO_ICON_16x16;
     }
 
     public Icon getIconForExpandedTreeNode() {
-        return GoIcons.GO_ICON_16x16;
+        return GO_ICON_16x16;
     }
 
     public static SdkType getInstance() {
@@ -191,7 +193,7 @@ public class GoAppEngineSdkType extends SdkType {
     }
 
     @Override
-    public void saveAdditionalData(SdkAdditionalData additionalData, Element additional) {
+    public void saveAdditionalData(@NotNull SdkAdditionalData additionalData, @NotNull Element additional) {
         if (additionalData instanceof GoAppEngineSdkData) {
             XmlSerializer.serializeInto(additionalData, additional);
         }

@@ -30,6 +30,10 @@ public class FunctionNameMacro extends Macro {
     @Override
     public Result calculateResult(@NotNull Expression[] params, ExpressionContext context) {
         Project project = context.getProject();
+        if (context.getEditor() == null) {
+            return new TextResult("");
+        }
+
         PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
         if (file == null) {
             return new TextResult("");

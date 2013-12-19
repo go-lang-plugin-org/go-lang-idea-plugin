@@ -2,7 +2,6 @@ package ro.redeul.google.go.ide.actions;
 
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -64,7 +63,6 @@ public class GoAppEngineUpload extends AnAction {
             Messages.showErrorDialog("Your Go App Engine path doesn't exists anymore. \nPlease check your Go App Engine settings.", "Error on Go App Engine Plugin");
         }
 
-        ProcessHandler processHandler = null;
         try {
             ToolWindowManager manager = ToolWindowManager.getInstance(project);
             ToolWindow window = manager.getToolWindow(ID);

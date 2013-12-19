@@ -38,7 +38,7 @@ public class AddImportFix implements QuestionAction {
 
     @Override
     public boolean execute() {
-        if (pathsToImport == null || pathsToImport.isEmpty()) {
+        if (pathsToImport.isEmpty()) {
             return true;
         }
 

@@ -37,7 +37,7 @@ public class LabelReference
     private static final ResolveCache.AbstractResolver<LabelReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<LabelReference, GoResolveResult>() {
             @Override
-            public GoResolveResult resolve(LabelReference labelReference, boolean incompleteCode) {
+            public GoResolveResult resolve(@NotNull LabelReference labelReference, boolean incompleteCode) {
                 GoLiteralIdentifier e = labelReference.getElement();
                 GoFunctionDeclaration function = findParentOfType(e,
                                                                   GoFunctionDeclaration.class);

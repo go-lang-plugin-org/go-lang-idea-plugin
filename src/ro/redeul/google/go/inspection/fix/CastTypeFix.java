@@ -54,7 +54,7 @@ public class CastTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
         Document doc = PsiDocumentManager.getInstance(project).getDocument(file);
 
-        if (doc == null) {
+        if (doc == null || element == null) {
             return;
         }
 

@@ -352,6 +352,7 @@ public class GoSdkUtil {
 
     private static GoSdkData getMockGoogleSdk(String path) {
         GoSdkData sdkData = testGoogleGoSdk(path);
+        /* TODO: I'm not really sure why we need this.
         if (sdkData != null) {
             new File(
                 sdkData.GO_BIN_PATH,
@@ -368,6 +369,7 @@ public class GoSdkUtil {
                 getArchivePackerName()
             ).setExecutable(true);
         }
+        */
 
         return sdkData;
     }
@@ -404,7 +406,7 @@ public class GoSdkUtil {
 
         ModuleRootModel moduleRootModel = ModuleRootManager.getInstance(module);
 
-        Sdk sdk = null;
+        Sdk sdk;
         if (!moduleRootModel.isSdkInherited()) {
             sdk = moduleRootModel.getSdk();
         } else {
@@ -506,7 +508,6 @@ public class GoSdkUtil {
             command = "/usr/local/go/bin/go";
         }
 
-        String path = System.getenv("PATH");
         GeneralCommandLine goCommandLine = new GeneralCommandLine();
 
         goCommandLine.setExePath(command);

@@ -29,8 +29,7 @@ class SwitchStatement implements GoElementTypes {
         boolean allowCompositeLiteral =
             parser.resetFlag(AllowCompositeLiteral, false);
 
-        boolean isTypeSwitch = false;
-        boolean simpleStatementParsed = false;
+        boolean isTypeSwitch;
 
         PsiBuilder.Marker mark = builder.mark();
 
@@ -54,7 +53,6 @@ class SwitchStatement implements GoElementTypes {
 
             PsiBuilder.Marker caseMark = builder.mark();
 
-            int position = builder.getCurrentOffset();
             if (ParserUtils.getToken(builder, kCASE)) {
                 if (isTypeSwitch) {
                     parser.parseTypeList(builder);

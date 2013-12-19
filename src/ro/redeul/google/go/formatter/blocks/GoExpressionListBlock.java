@@ -21,7 +21,7 @@ class GoExpressionListBlock extends GoBlock {
     @Override
     protected Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
         IElementType child1Type = child1.getNode().getElementType();
-        IElementType child2Type = child2.getNode().getElementType();
+        //IElementType child2Type = child2.getNode().getElementType();
         if (child1Type == oCOMMA) {
             return BASIC_SPACING_KEEP_LINE_BREAKS;
         }

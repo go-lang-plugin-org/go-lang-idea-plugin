@@ -21,7 +21,7 @@ public class GoLiteralBoolImpl extends GoPsiElementBase
     @NotNull
     @Override
     public Boolean getValue() {
-        return null;
+        return this.getText().equals("true");
     }
 
     @Override

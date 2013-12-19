@@ -30,7 +30,7 @@ public class ShortVarDeclarationReference
     private static final ResolveCache.AbstractResolver<ShortVarDeclarationReference, GoResolveResult> RESOLVER =
             new ResolveCache.AbstractResolver<ShortVarDeclarationReference, GoResolveResult>() {
                 @Override
-                public GoResolveResult resolve(ShortVarDeclarationReference reference, boolean incompleteCode) {
+                public GoResolveResult resolve(@NotNull ShortVarDeclarationReference reference, boolean incompleteCode) {
                     GoLiteralIdentifier element = reference.getElement();
                     PsiElement parent = element.getParent();
                     if (!(parent instanceof GoShortVarDeclaration)) {

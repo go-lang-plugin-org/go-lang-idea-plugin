@@ -5,6 +5,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
@@ -33,7 +34,7 @@ class GoFileBlock extends GoBlock {
     }
 
     @Override
-    public Spacing getSpacing(Block child1, Block child2) {
+    public Spacing getSpacing(Block child1, @NotNull Block child2) {
         if (!(child1 instanceof GoBlock)) {
             return null;
         }

@@ -82,7 +82,7 @@ public class GoPackageReferenceImpl extends GoPsiElementBase implements GoPackag
         return getText();
     }
 
-    public PsiElement setName(@NonNls String name) throws IncorrectOperationException {
+    public PsiElement setName(@NotNull @NonNls String name) throws IncorrectOperationException {
         return null;
     }
 

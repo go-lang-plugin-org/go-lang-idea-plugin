@@ -71,6 +71,10 @@ public class CreateClosureFunctionFix extends LocalQuickFixAndIntentionActionOnP
             public void run() {
                 Document doc = PsiDocumentManager.getInstance(e.getProject()).getDocument(file);
 
+                if (doc == null) {
+                    return;
+                }
+
                 doc.insertString(insertPoint, String.format("\n\n%s := func (%s) {\n}\n", e.getText(), fnArguments));
                 if (editor != null) {
                     int line = doc.getLineNumber(insertPoint);

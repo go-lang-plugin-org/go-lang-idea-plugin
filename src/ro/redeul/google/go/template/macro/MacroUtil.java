@@ -13,6 +13,10 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 class MacroUtil {
     public static <T extends GoPsiElement> T findElementOfType(ExpressionContext context, Class<T> clz) {
         Project project = context.getProject();
+        if (context.getEditor() == null) {
+            return null;
+        }
+
         PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
         if (file == null) {
             return null;

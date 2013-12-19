@@ -45,7 +45,7 @@ public class CompositeElementOfStructFieldReference
     private static final ResolveCache.AbstractResolver<CompositeElementOfStructFieldReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<CompositeElementOfStructFieldReference, GoResolveResult>() {
             @Override
-            public GoResolveResult resolve(CompositeElementOfStructFieldReference psiReference, boolean incompleteCode) {
+            public GoResolveResult resolve(@NotNull CompositeElementOfStructFieldReference psiReference, boolean incompleteCode) {
 
                 GoTypeStruct typeStruct = psiReference.resolveTypeDefinition();
 

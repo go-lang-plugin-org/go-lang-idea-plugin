@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.processors;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 
@@ -19,7 +20,7 @@ public class ImportedPackagesCollectorProcessor extends BaseScopeProcessor {
 
     private final List<GoImportDeclaration> imports = new ArrayList<GoImportDeclaration>();
 
-    public boolean execute(PsiElement element, ResolveState state) {
+    public boolean execute(@NotNull PsiElement element, ResolveState state) {
 
         if ( element instanceof GoImportDeclaration) {
             processImport((GoImportDeclaration) element);

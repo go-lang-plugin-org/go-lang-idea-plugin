@@ -48,6 +48,11 @@ public class CreateLocalVariableFix extends LocalQuickFixAndIntentionActionOnPsi
         }
 
         final Document doc = PsiDocumentManager.getInstance(project).getDocument(file);
+
+        if (doc == null) {
+            return;
+        }
+
         final RangeMarker rangeMarker;
         final int line = doc.getLineNumber(statement.getTextOffset());
         String variableName = startElement.getText();

@@ -49,6 +49,11 @@ public class CreateGlobalVariableFix extends LocalQuickFixAndIntentionActionOnPs
         }
 
         Document doc = PsiDocumentManager.getInstance(project).getDocument(file);
+
+        if (doc == null) {
+            return;
+        }
+
         final RangeMarker rangeMarker = doc.createRangeMarker(startElement.getTextRange());
 
         GoFile goFile = (GoFile) file;

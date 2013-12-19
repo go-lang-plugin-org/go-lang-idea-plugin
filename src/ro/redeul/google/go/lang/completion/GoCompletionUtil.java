@@ -32,8 +32,6 @@ import java.util.*;
 public class GoCompletionUtil {
 
     public static LookupElement[] resolveSdkPackagesForPath(Project project, PsiFile containingFile, String path) {
-        String currentPath = cleanupImportPath(path);
-
         VirtualFile virtualFile = containingFile.getVirtualFile();
         if (virtualFile == null) {
             return LookupElement.EMPTY_ARRAY;
@@ -153,7 +151,7 @@ public class GoCompletionUtil {
 
         List<LookupElementBuilder> elements = new ArrayList<LookupElementBuilder>();
         for (String localPackage : localPackages.getResults()) {
-            LookupElementBuilder elementBuilder = null;
+            LookupElementBuilder elementBuilder;
 
             if ( importPath.startsWith("./") ) {
                 elementBuilder = LookupElementBuilder.create(localPackage)

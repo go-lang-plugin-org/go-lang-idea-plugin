@@ -8,13 +8,6 @@ public class GoUnderlyingTypeFunction implements GoUnderlyingType {
 
     @Override
     public boolean isIdentical(GoUnderlyingType other) {
-        if ( other instanceof GoUnderlyingTypeFunction) {
-            GoUnderlyingTypeFunction otherArray =
-                (GoUnderlyingTypeFunction) other;
-
-            return true;
-        }
-
-        return false;
+        return other instanceof GoUnderlyingTypeFunction;
     }
 }

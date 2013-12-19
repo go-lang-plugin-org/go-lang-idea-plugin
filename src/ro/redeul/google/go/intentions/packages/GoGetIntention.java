@@ -3,7 +3,6 @@ package ro.redeul.google.go.intentions.packages;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.editor.Editor;
@@ -97,14 +96,13 @@ public class GoGetIntention extends Intention {
 
         GoImportDeclaration[] declarations = ((GoImportDeclarations) element).getDeclarations();
 
-        for (int i = 0, declarationsLength = declarations.length; i < declarationsLength; i++) {
-            GoImportDeclaration declaration = declarations[i];
+        for (GoImportDeclaration declaration : declarations) {
             if (!declaration.isValidImport()) {
                 return "";
             }
 
             String packageImportPath = declaration.getImportPath().getText();
-            packageImportPath = packageImportPath.substring(1, packageImportPath.length()-1);
+            packageImportPath = packageImportPath.substring(1, packageImportPath.length() - 1);
             boolean hasPackageInPath = false;
 
             for (String definedPackagePath : GoGetIntention.allPackages) {
@@ -133,7 +131,6 @@ public class GoGetIntention extends Intention {
             throw new CantRunException("No Go Sdk defined for this project");
         }
 
-        ProcessHandler processHandler = null;
         try {
             ToolWindowManager manager = ToolWindowManager.getInstance(project);
             ToolWindow window = manager.getToolWindow(ID);

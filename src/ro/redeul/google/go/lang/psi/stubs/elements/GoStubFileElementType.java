@@ -8,6 +8,7 @@ import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.psi.tree.IStubFileElementType;
 import com.intellij.util.io.StringRef;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStub;
 import ro.redeul.google.go.lang.psi.stubs.GoFileStubBuilder;
@@ -38,12 +39,14 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
         return super.getStubVersion() + 16;
     }
 
+    @Override
+    @NotNull
     public String getExternalId() {
         return "go.FILE";
     }
 
     @Override
-    public void serialize(final GoFileStub stub, final StubOutputStream dataStream) throws IOException {
+    public void serialize(@NotNull final GoFileStub stub, @NotNull final StubOutputStream dataStream) throws IOException {
         dataStream.writeName(stub.getPackageName().toString());
 
         dataStream.writeBoolean(stub.getPackageImportPath() != null);
@@ -54,8 +57,9 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
         dataStream.writeBoolean(stub.isMain());
     }
 
+    @NotNull
     @Override
-    public GoFileStub deserialize(final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+    public GoFileStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
         StringRef packageName = dataStream.readName();
         StringRef packageImportPath = null;
 
@@ -69,7 +73,7 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
         return new GoFileStub(packageImportPath, packageName, isMain);
     }
 
-    public void indexStub(GoFileStub stub, IndexSink sink) {
+    public void indexStub(@NotNull GoFileStub stub, @NotNull IndexSink sink) {
         StringRef packageImportPath = stub.getPackageImportPath();
         if ( packageImportPath != null ) {
             // don't index any package information on test files or test data.
