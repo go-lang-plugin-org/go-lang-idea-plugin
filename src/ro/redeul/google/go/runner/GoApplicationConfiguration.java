@@ -33,6 +33,7 @@ import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.runner.ui.GoRunConfigurationEditorForm;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -76,12 +77,23 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
             throw new RuntimeConfigurationException("Please select the file to run.");
         if (goBuildBeforeRun != null &&
                 goBuildBeforeRun &&
-                (goOutputDir == null || goOutputDir.equals(""))) {
+                (goOutputDir == null || goOutputDir.isEmpty())) {
             throw new RuntimeConfigurationException("Please select the directory for the executable.");
         }
-        if (workingDir == null || workingDir.equals("")) {
+        if (workingDir == null || workingDir.isEmpty()) {
             throw new RuntimeConfigurationException("Please select the application working directory.");
+        } else {
+            File dir = new File(workingDir);
+
+            if (!dir.exists()) {
+                throw new RuntimeConfigurationException("The selected application working directory does not appear to exist.");
+            }
+
+            if (!dir.isDirectory()) {
+                throw new RuntimeConfigurationException("The selected application working directory does not appear to be a directory.");
+            }
         }
+
         super.checkConfiguration();
     }
 

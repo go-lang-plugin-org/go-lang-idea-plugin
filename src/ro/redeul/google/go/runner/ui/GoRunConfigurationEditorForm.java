@@ -77,14 +77,11 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
                                                     return false;
                                                 }
 
-                                                GoFile goFile = (GoFile) file;
-
-                                                return goFile.getPackage().isMainPackage();
+                                                return ((GoFile) file).getMainFunction() != null;
                                             }
                                         }, true, false);
 
                         fileChooser.showDialog();
-
 
                         PsiFile selectedFile = fileChooser.getSelectedFile();
                         if (selectedFile != null) {
