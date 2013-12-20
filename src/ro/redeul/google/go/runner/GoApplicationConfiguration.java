@@ -257,7 +257,11 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
     @Override
     public String suggestedName() {
-        return scriptName.equals("") ? "go run" : GoSdkUtil.getVirtualFile(scriptName).getName();
+        try {
+            return scriptName.equals("") ? "go run" : GoSdkUtil.getVirtualFile(scriptName).getName();
+        } catch (NullPointerException ignored) {
+            return "go run";
+        }
     }
 
 }
