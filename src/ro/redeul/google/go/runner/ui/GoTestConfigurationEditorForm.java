@@ -1,19 +1,29 @@
 package ro.redeul.google.go.runner.ui;
 
+import com.intellij.ide.util.TreeFileChooser;
+import com.intellij.ide.util.TreeFileChooserFactory;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.psi.PsiFile;
 import com.intellij.ui.RawCommandLineEditor;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoFileType;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.runner.GoTestConfiguration;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.Vector;
+
+import static ro.redeul.google.go.runner.GoTestConfiguration.TestTargetType;
+import static ro.redeul.google.go.runner.GoTestConfiguration.Type;
 
 public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfiguration> {
 
@@ -31,6 +41,7 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
     private TextFieldWithBrowseButton testFile;
     private RawCommandLineEditor testArguments;
     private RawCommandLineEditor envVars;
+    private TextFieldWithBrowseButton workingDirectoryBrowser;
     private ButtonGroup testsGroup;
 
     @SuppressWarnings("unchecked")
@@ -52,29 +63,81 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
         }
 
         packages.setModel(new DefaultComboBoxModel(myPackages));
+        packageNameRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                packages.setEnabled(packageNameRadioButton.isSelected());
+                testFile.setEnabled(!packageNameRadioButton.isSelected());
+            }
+        });
+
+        testFileNameRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                packages.setEnabled(packageNameRadioButton.isSelected());
+                testFile.setEnabled(!packageNameRadioButton.isSelected());
+            }
+        });
+        testFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TreeFileChooser fileChooser =
+                        TreeFileChooserFactory.getInstance(project).createFileChooser(
+                                "Go Application Chooser", null,
+                                GoFileType.INSTANCE,
+                                new TreeFileChooser.PsiFileFilter() {
+                                    public boolean accept(PsiFile file) {
+
+                                        if (!(file instanceof GoFile)) {
+                                            return false;
+                                        }
+
+                                        return file.getName().contains("_test.go");
+                                    }
+                                }, true, false);
+
+                fileChooser.showDialog();
+
+                PsiFile selectedFile = fileChooser.getSelectedFile();
+                if (selectedFile != null) {
+                    testFile.setText(selectedFile.getVirtualFile().getPath());
+                }
+            }
+        });
     }
 
     @Override
-    protected void resetEditorFrom(GoTestConfiguration s) {
-        switch (s.executeWhat) {
-            case Test:
-                test.setSelected(true);
-                break;
-            case Benchmark:
-                benchmark.setSelected(true);
-                break;
+    protected void resetEditorFrom(GoTestConfiguration testConfiguration) {
+        envVars.setText(testConfiguration.envVars);
+        testRunnerArguments.setText(testConfiguration.testRunnerArgs);
+
+        if (testConfiguration.testTargetType == TestTargetType.File) {
+            testFileNameRadioButton.setSelected(true);
+        } else {
+            packageNameRadioButton.setSelected(true);
         }
-        runTestBeforeBenchmark.setSelected(s.testBeforeBenchmark);
-        if (s.filter == null || s.filter.isEmpty()) {
+
+        packages.getModel().setSelectedItem(testConfiguration.packageName);
+        testFile.setText(testConfiguration.testFile);
+        testArguments.setText(testConfiguration.testArgs);
+        workingDirectoryBrowser.setText(testConfiguration.workingDir);
+
+        if (testConfiguration.executeWhat == Type.Benchmark) {
+            benchmark.setSelected(true);
+        } else {
+            test.setSelected(true);
+        }
+
+        if (testConfiguration.filter == null || testConfiguration.filter.isEmpty()) {
             updateTestsFilterField();
         } else {
             filter.setSelected(true);
-            testsFilter.setText(s.filter);
+            testsFilter.setText(testConfiguration.filter);
             updateTestsFilterField();
         }
 
-        packages.getModel().setSelectedItem(s.packageName);
-        useShort.setSelected(s.useShortRun);
+        useShort.setSelected(testConfiguration.useShortRun);
+        runTestBeforeBenchmark.setSelected(testConfiguration.testBeforeBenchmark);
     }
 
     private void updateTestsFilterField() {
@@ -83,14 +146,20 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
     }
 
     @Override
-    protected void applyEditorTo(GoTestConfiguration s)
-        throws ConfigurationException {
+    protected void applyEditorTo(GoTestConfiguration testConfiguration) throws ConfigurationException {
         Object selectedItem = packages.getSelectedItem();
-        s.packageName = selectedItem != null ? selectedItem.toString() : "";
-        s.filter = filter.isSelected() ? testsFilter.getText() : "";
-        s.executeWhat = test.isSelected() ? GoTestConfiguration.Type.Test : GoTestConfiguration.Type.Benchmark;
-        s.useShortRun = this.useShort.isSelected();
-        s.testBeforeBenchmark = runTestBeforeBenchmark.isSelected();
+        testConfiguration.envVars = envVars.getText();
+        testConfiguration.testRunnerArgs = testRunnerArguments.getText();
+        testConfiguration.testTargetType = packageNameRadioButton.isSelected() ? TestTargetType.Package : TestTargetType.File;
+        testConfiguration.packageName = selectedItem != null ? selectedItem.toString() : "";
+        testConfiguration.testFile = testFile.getText();
+        testConfiguration.testArgs = testArguments.getText();
+        testConfiguration.workingDir = workingDirectoryBrowser.getText();
+        testConfiguration.executeWhat = test.isSelected() ? Type.Test : Type.Benchmark;
+        testConfiguration.filter = filter.isSelected() ? testsFilter.getText() : "";
+        testConfiguration.useShortRun = this.useShort.isSelected();
+        testConfiguration.testBeforeBenchmark = runTestBeforeBenchmark.isSelected();
+
     }
 
     @NotNull
