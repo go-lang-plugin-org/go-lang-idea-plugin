@@ -1,0 +1,15 @@
+package main
+func IsValid()bool{
+    return false
+}
+func main() {
+    IsValid(<caret>)
+}
+-----
+package main
+func IsValid()bool{
+    return false
+}
+func main() {
+    if IsValid(){<caret>}
+}

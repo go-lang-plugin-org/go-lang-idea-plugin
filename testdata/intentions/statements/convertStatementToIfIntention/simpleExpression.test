@@ -1,0 +1,11 @@
+package main
+
+func main() {
+    true==tr<caret>ue
+}
+-----
+package main
+
+func main() {
+    if true==true{<caret>}
+}

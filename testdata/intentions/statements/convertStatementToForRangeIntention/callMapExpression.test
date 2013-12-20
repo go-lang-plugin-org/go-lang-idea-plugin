@@ -1,0 +1,15 @@
+package main
+func GetMap()map[string]string{
+    return map[string]string{}
+}
+func main() {
+    GetMap(<caret>)
+}
+-----
+package main
+func GetMap()map[string]string{
+    return map[string]string{}
+}
+func main() {
+    for k,v:= range GetMap(){<caret>}
+}
