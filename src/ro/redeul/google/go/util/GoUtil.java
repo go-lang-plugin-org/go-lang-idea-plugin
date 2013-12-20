@@ -1,10 +1,15 @@
 package ro.redeul.google.go.util;
 
 import com.intellij.ide.Bootstrap;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -19,10 +24,12 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
+import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
+import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 
 import java.io.File;
@@ -543,6 +550,34 @@ public class GoUtil {
             }
         }
         return element;
+    }
+
+    public static boolean TestDeclVar(PsiElement expr, String k) {
+        return !GoPsiScopesUtil.treeWalkUp(new GoVariableScopeCheck(k), expr, expr.getContainingFile(), GoResolveStates.variables());
+    }
+
+    private static class GoVariableScopeCheck implements PsiScopeProcessor {
+        private String var;
+
+        public GoVariableScopeCheck(String k) {
+            var = k;
+        }
+
+        @Override
+        public boolean execute(@NotNull PsiElement element, ResolveState state) {
+            return !element.getText().equals(var);
+        }
+
+        @Nullable
+        @Override
+        public <T> T getHint(@NotNull Key<T> hintKey) {
+            return null;
+        }
+
+        @Override
+        public void handleEvent(Event event, @Nullable Object associated) {
+
+        }
     }
 }
 
