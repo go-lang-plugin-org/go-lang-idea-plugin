@@ -85,7 +85,7 @@ class GoCommandLineState extends CommandLineState {
         GeneralCommandLine commandLine = new GeneralCommandLine();
         commandLine.setExePath(goExecName);
         commandLine.addParameter("test");
-        // commandLine.addParameter("-v"); // I believe that users should add this manually
+        commandLine.addParameter("-v");
         if (testConfiguration.useShortRun)
             commandLine.addParameter("-short");
 
