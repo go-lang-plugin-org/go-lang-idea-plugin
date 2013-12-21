@@ -56,7 +56,7 @@ class GoCommandLineState extends CommandLineState {
         testi.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
         try {
             testi.createProcess().waitFor();
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
 
         commandLine.setExePath(sdkData.GO_BIN_PATH);
@@ -91,7 +91,7 @@ class GoCommandLineState extends CommandLineState {
 
     private String getSdkHomePath(GoSdkData sdkData) {
         if (sdkData.GO_GOROOT_PATH.isEmpty()) {
-            return new File(sdkData.GO_BIN_PATH).getParent();
+            return new File(sdkData.GO_BIN_PATH).getParentFile().getParent();
         }
         return sdkData.GO_GOROOT_PATH;
     }
