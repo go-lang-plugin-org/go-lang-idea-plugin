@@ -5,15 +5,18 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.intentions.Intention;
 import ro.redeul.google.go.intentions.IntentionExecutionException;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
-import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
-import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
+import ro.redeul.google.go.lang.psi.typing.*;
+import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 import ro.redeul.google.go.util.GoUtil;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
@@ -27,11 +30,20 @@ public class ConvertStatementToForRangeIntention extends Intention {
     @Override
     protected boolean satisfiedBy(PsiElement element) {
         statement = element instanceof GoExpressionStatement ? (GoExpressionStatement) element : findParentOfType(element, GoExpressionStatement.class);
+        if (statement == null && element instanceof PsiWhiteSpace && element.getPrevSibling() instanceof GoExpressionStatement) {
+            statement = (GoExpressionStatement) element.getPrevSibling();
+        }
         if (statement != null) {
             expr = statement.getExpression();
+            GoType[] types = expr.getType();
 
-            for (GoType goType : expr.getType()) {
+            for (GoType goType : types) {
                 if (goType != null) {
+                    if (goType instanceof GoTypePsiBacked) {
+                        GoPsiType psiType = ((GoTypePsiBacked) goType).getPsiType();
+                        psiType = GoTypeUtils.resolveToFinalType(psiType);
+                        return psiType instanceof GoPsiTypeMap || psiType instanceof GoPsiTypeSlice || psiType instanceof GoPsiTypeArray;
+                    }
                     return goType instanceof GoTypeMap || goType instanceof GoTypeSlice || goType instanceof GoTypeArray;
                 }
             }

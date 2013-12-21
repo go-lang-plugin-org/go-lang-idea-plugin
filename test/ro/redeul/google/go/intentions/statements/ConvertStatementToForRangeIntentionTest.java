@@ -14,4 +14,12 @@ public class ConvertStatementToForRangeIntentionTest extends GoIntentionTestCase
     public void testVarSliceExpression() throws Exception {
         doTest();
     }
+
+    public void testsubTypeExpression() throws Exception {
+        doTest();
+    }
+
+    public void testsubTypeInRangeValExpression() throws Exception {
+        doTest();
+    }
 }
