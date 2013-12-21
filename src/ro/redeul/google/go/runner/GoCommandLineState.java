@@ -8,14 +8,17 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.runner.ui.properties.GoTestConsoleProperties;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
+import java.util.Map;
 
 import static com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil.createAndAttachConsole;
 import static ro.redeul.google.go.sdk.GoSdkUtil.prependToGoPath;
@@ -31,10 +34,9 @@ class GoCommandLineState extends CommandLineState {
     @NotNull
     @Override
     protected OSProcessHandler startProcess() throws ExecutionException {
-        GeneralCommandLine commandLine = new GeneralCommandLine();
-
-        GoTestConfiguration cfg = consoleProperties.getConfiguration();
-        Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(cfg.getProject());
+        GoTestConfiguration testConfiguration = consoleProperties.getConfiguration();
+        Project project = testConfiguration.getProject();
+        Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
         if ( sdk == null ) {
             throw new CantRunException("No Go Sdk defined for this project");
         }
@@ -44,47 +46,81 @@ class GoCommandLineState extends CommandLineState {
             throw new CantRunException("No Go Sdk defined for this project");
         }
 
+        String projectDir = project.getBasePath();
 
-        String workingDir = consoleProperties.getProject().getBaseDir().getCanonicalPath();
+        if (projectDir == null) {
+            throw new CantRunException("Could not retrieve the project directory");
+        }
 
-        GeneralCommandLine testi = new GeneralCommandLine();
-        testi.setExePath(sdkData.GO_BIN_PATH);
-        testi.addParameter("test");
-        testi.addParameter("-i");
-        testi.addParameter(cfg.packageName);
-        testi.getEnvironment().put("GOPATH", prependToGoPath(workingDir));
-        testi.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
+        String goExecName = sdkData.GO_BIN_PATH;
+        String workingDir = testConfiguration.workingDir;
+        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, testConfiguration.envVars);
+
+        // Install dependencies
+        GeneralCommandLine testInstallDependencies = new GeneralCommandLine();
+        testInstallDependencies.setExePath(goExecName);
+        testInstallDependencies.addParameter("test");
+        testInstallDependencies.addParameter("-i");
+
+        if (testConfiguration.testArgs != null && testConfiguration.testArgs.trim().length() > 0) {
+            testInstallDependencies.getParametersList().addParametersString(testConfiguration.testArgs);
+        }
+
+        if (testConfiguration.testTargetType.equals(GoTestConfiguration.TestTargetType.Package)) {
+            testInstallDependencies.addParameter(testConfiguration.packageName);
+        } else {
+            testInstallDependencies.addParameter(testConfiguration.testFile);
+        }
+
+        testInstallDependencies.getEnvironment().putAll(sysEnv);
+        testInstallDependencies.setWorkDirectory(workingDir);
         try {
-            testi.createProcess().waitFor();
+            if (testInstallDependencies.createProcess().waitFor() == 0) {
+                VirtualFileManager.getInstance().syncRefresh();
+            }
         } catch (InterruptedException ignored) {
         }
 
-        commandLine.setExePath(sdkData.GO_BIN_PATH);
+        // Run the test
+        GeneralCommandLine commandLine = new GeneralCommandLine();
+        commandLine.setExePath(goExecName);
         commandLine.addParameter("test");
-        commandLine.addParameter("-v");
-        if (cfg.useShortRun)
+        // commandLine.addParameter("-v"); // I believe that users should add this manually
+        if (testConfiguration.useShortRun)
             commandLine.addParameter("-short");
 
-        switch (cfg.executeWhat) {
+        switch (testConfiguration.executeWhat) {
             case Test:
-                if (cfg.filter != null && !cfg.filter.isEmpty())
-                    commandLine.addParameter("-run=" + cfg.filter.trim());
+                if (testConfiguration.filter != null && !testConfiguration.filter.isEmpty())
+                    commandLine.addParameter("-run=" + testConfiguration.filter.trim());
                 break;
             case Benchmark:
                 String benchmarkName = ".*";
 
-                if (cfg.filter != null && !cfg.filter.isEmpty())
-                    benchmarkName = cfg.filter.trim();
-                if (!cfg.testBeforeBenchmark) {
+                if (testConfiguration.filter != null && !testConfiguration.filter.isEmpty())
+                    benchmarkName = testConfiguration.filter.trim();
+                if (!testConfiguration.testBeforeBenchmark) {
                     commandLine.addParameter("-run=NONE");
                 }
                 commandLine.addParameter("-bench=" + benchmarkName);
                 break;
         }
 
-        commandLine.addParameter(cfg.packageName);
-        commandLine.getEnvironment().put("GOPATH", prependToGoPath(workingDir));
-        commandLine.getEnvironment().put("GOROOT", getSdkHomePath(sdkData));
+        if (testConfiguration.testRunnerArgs != null && testConfiguration.testRunnerArgs.trim().length() > 0) {
+            commandLine.getParametersList().addParametersString(testConfiguration.testRunnerArgs);
+        }
+
+        if (testConfiguration.testTargetType.equals(GoTestConfiguration.TestTargetType.Package)) {
+            commandLine.addParameter(testConfiguration.packageName);
+        } else {
+            commandLine.addParameter(testConfiguration.testFile);
+        }
+        commandLine.getEnvironment().putAll(sysEnv);
+        commandLine.setWorkDirectory(workingDir);
+
+        if (testConfiguration.testArgs != null && testConfiguration.testArgs.trim().length() > 0) {
+            commandLine.getParametersList().addParametersString(testConfiguration.testArgs);
+        }
 
         return GoApplicationProcessHandler.runCommandLine(commandLine);
     }

@@ -81,7 +81,7 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
 
 
         if (testTargetType.equals(TestTargetType.File) &&
-                (testFile.isEmpty() || (!testFile.isEmpty() && testFile.contains("_test.go")))) {
+                (testFile.isEmpty() || (!testFile.isEmpty() && !testFile.contains("_test.go")))) {
             throw new RuntimeConfigurationException("The selected file does not appear to be a test file");
         }
 

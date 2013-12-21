@@ -1,5 +1,6 @@
 package ro.redeul.google.go.runner.ui;
 
+import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.ide.util.TreeFileChooser;
 import com.intellij.ide.util.TreeFileChooserFactory;
 import com.intellij.openapi.options.ConfigurationException;
@@ -19,6 +20,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -112,9 +115,15 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
         testRunnerArguments.setText(testConfiguration.testRunnerArgs);
 
         if (testConfiguration.testTargetType == TestTargetType.File) {
+            packageNameRadioButton.setSelected(false);
             testFileNameRadioButton.setSelected(true);
+            packages.setEnabled(false);
+            testFile.setEnabled(true);
         } else {
             packageNameRadioButton.setSelected(true);
+            testFileNameRadioButton.setSelected(false);
+            packages.setEnabled(true);
+            testFile.setEnabled(false);
         }
 
         packages.getModel().setSelectedItem(testConfiguration.packageName);
@@ -160,6 +169,7 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
         testConfiguration.useShortRun = this.useShort.isSelected();
         testConfiguration.testBeforeBenchmark = runTestBeforeBenchmark.isSelected();
 
+        testConfiguration.checkConfiguration();
     }
 
     @NotNull
