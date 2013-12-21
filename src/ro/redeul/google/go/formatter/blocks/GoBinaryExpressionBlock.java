@@ -50,6 +50,11 @@ class GoBinaryExpressionBlock extends GoBlock {
                 ) {
             preParentElement = parentElement;
             parentElement = parentElement.getTreeParent();
+
+            if (parentElement == null) {
+                return;
+            }
+
             parentElementType = parentElement.getElementType();
 
             if (parentElementType == REL_EXPRESSION) {
