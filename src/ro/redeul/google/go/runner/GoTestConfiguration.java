@@ -54,8 +54,7 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     public boolean testBeforeBenchmark = false;
 
     public GoTestConfiguration(String name, Project project, GoTestConfigurationType configurationType) {
-        super(name, new GoApplicationModuleBasedConfiguration(project),
-              configurationType.getConfigurationFactories()[0]);
+        super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
     }
 
     @Override

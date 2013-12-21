@@ -40,6 +40,10 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
         buildBeforeRunCheckBox.setSelected(configuration.goBuildBeforeRun);
         buildDirectoryPathBrowser.setText(configuration.goOutputDir);
         workingDirectoryBrowser.setText(configuration.workingDir);
+        if (workingDirectoryBrowser.getText().isEmpty()) {
+            workingDirectoryBrowser.setText(configuration.getProject().getBasePath());
+        }
+
         envVars.setText(configuration.envVars);
     }
 
