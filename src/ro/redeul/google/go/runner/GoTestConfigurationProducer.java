@@ -136,22 +136,6 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
         return false;
     }
 
-    protected RunnerAndConfigurationSettings createConfigurationByElement(Location location, ConfigurationContext context) {
-        GoFile goFile = locationToFile(location);
-
-        if (goFile == null) return null;
-
-        VirtualFile virtualFile = goFile.getVirtualFile();
-        if (virtualFile == null)
-            return null;
-
-        if (!virtualFile.getNameWithoutExtension().endsWith("_test"))
-            return null;
-
-        return createConfiguration(goFile, context.getModule(),
-                location.getPsiElement());
-    }
-
     private static final ElementPattern<GoFunctionDeclaration> FUNCTION_BENCHMARK =
             psiElement(GoFunctionDeclaration.class)
                     .withParent(psiElement(GoFile.class))
@@ -185,57 +169,6 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
                                     .afterSibling(
                                             psiElement(GoLiteralIdentifier.class)
                                                     .withText(string().matches("Test.*"))));
-
-    private RunnerAndConfigurationSettings createConfiguration(GoFile goFile, Module module, PsiElement element) {
-
-        final Project project = goFile.getProject();
-
-        RunnerAndConfigurationSettings settings =
-                RunManager.getInstance(project)
-                        .createRunConfiguration("", getConfigurationFactory());
-
-        GoTestConfiguration testConfiguration =
-                (GoTestConfiguration) settings.getConfiguration();
-
-        final PsiDirectory dir = goFile.getContainingDirectory();
-        if (dir == null)
-            return null;
-
-        while (!(element instanceof GoFile) &&
-                !FUNCTION_BENCHMARK.accepts(element) &&
-                !FUNCTION_TEST.accepts(element) ) {
-            element = element.getParent();
-        }
-
-        String dottedPackagePath = goFile.getPackageImportPath().replace('/', '.');
-        if (element instanceof GoFile) {
-            testConfiguration.setName(dottedPackagePath);
-            // If there is any tests in current package, run in test mode.
-            // Otherwise run in benchmark mode.
-            if (fileDirContainsTestsOfSamePackage(project, (GoFile) element)) {
-                testConfiguration.executeWhat = GoTestConfiguration.Type.Test;
-            } else {
-                testConfiguration.executeWhat = GoTestConfiguration.Type.Benchmark;
-            }
-        } else if (FUNCTION_TEST.accepts(element)) {
-            String name = ((GoFunctionDeclaration) element).getName();
-            testConfiguration.setName(dottedPackagePath + "." + name);
-            testConfiguration.executeWhat = GoTestConfiguration.Type.Test;
-            testConfiguration.filter = "^" + name +"$";
-        } else if (FUNCTION_BENCHMARK.accepts(element)) {
-            String name = ((GoFunctionDeclaration) element).getName();
-            testConfiguration.setName(dottedPackagePath + "." + name);
-            testConfiguration.executeWhat = GoTestConfiguration.Type.Benchmark;
-            testConfiguration.filter = "^" + name +"$";
-        }
-
-        testConfiguration.packageName = getPackageNameForTesting(goFile);
-        testConfiguration.packageDir = getGoFileDirRelativePath(goFile);
-        testConfiguration.setModule(module);
-        testConfiguration.useShortRun = false;
-
-        return settings;
-    }
 
     private static boolean fileDirContainsTestsOfSamePackage(Project project, GoFile file) {
         VirtualFile virtualFile = file.getVirtualFile();
