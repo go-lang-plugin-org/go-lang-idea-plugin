@@ -118,11 +118,7 @@ public class MoveSimpleStatementOutIntention extends Intention {
     private static void moveSimpleStatementOut(Editor editor, GoSwitchTypeStatement stStmt) {
         GoSimpleStatement simpleStatement = stStmt.getSimpleStatement();
         PsiElement endElement = stStmt.getTypeGuard();
-        if (endElement == null) {
-            endElement = findChildOfType(stStmt, GoTokenTypes.oSEMI);
-        } else {
-            endElement = endElement.getPrevSibling();
-        }
+        endElement = endElement.getPrevSibling();
 
         if (simpleStatement == null || endElement == null) {
             return;

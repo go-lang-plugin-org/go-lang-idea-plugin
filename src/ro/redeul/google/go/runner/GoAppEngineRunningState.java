@@ -6,9 +6,9 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.filters.*;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,6 +37,7 @@ class GoAppEngineRunningState extends CommandLineState {
         this.env = env;
     }
 
+    @NotNull
     @Override
     protected OSProcessHandler startProcess() throws ExecutionException {
 
@@ -60,7 +61,6 @@ class GoAppEngineRunningState extends CommandLineState {
 
         final TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(env.getProject());
 
-        final ConsoleView consoleView = consoleBuilder.getConsole();
         setConsoleBuilder(consoleBuilder);
         consoleBuilder.addFilter( new Filter(){
             @Override

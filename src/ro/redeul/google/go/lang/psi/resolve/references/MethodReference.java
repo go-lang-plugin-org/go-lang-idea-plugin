@@ -29,9 +29,7 @@ public class MethodReference
     private static final ResolveCache.AbstractResolver<MethodReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<MethodReference, GoResolveResult>() {
             @Override
-            public GoResolveResult resolve(MethodReference methodReference, boolean incompleteCode) {
-                Set<GoTypeName> receiverTypes = methodReference.resolveBaseReceiverTypes();
-
+            public GoResolveResult resolve(@NotNull MethodReference methodReference, boolean incompleteCode) {
                 MethodResolver processor = new MethodResolver(methodReference);
 
                 GoSelectorExpression element = methodReference.getElement();
@@ -72,7 +70,7 @@ public class MethodReference
     @NotNull
     @Override
     public String getCanonicalText() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return ""; // @TODO replace this with something more meaningful
     }
 
     @Override

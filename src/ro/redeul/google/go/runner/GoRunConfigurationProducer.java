@@ -5,10 +5,12 @@ import com.intellij.execution.RunManagerEx;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -30,6 +32,8 @@ public class GoRunConfigurationProducer extends RunConfigurationProducer {
 
     private PsiElement element;
 
+    private static final Logger LOG = Logger.getInstance(GoRunConfigurationProducer.class);
+
     public GoRunConfigurationProducer() {
         super(GoRunConfigurationType.getInstance());
     }
@@ -40,11 +44,60 @@ public class GoRunConfigurationProducer extends RunConfigurationProducer {
 
     @Override
     public boolean isConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context) {
+        if (context.getPsiLocation() == null) {
+            return false;
+        }
+
+        PsiFile file = context.getPsiLocation().getContainingFile();
+        if (!(file instanceof GoFile)) {
+            return false;
+        }
+
+        if (((GoFile) file).getMainFunction() != null) {
+            return true;
+        }
+
         return false;
     }
 
     @Override
     protected boolean setupConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context, Ref sourceElement) {
+        if (context.getPsiLocation() == null) {
+            return false;
+        }
+
+        PsiFile file = context.getPsiLocation().getContainingFile();
+        if (!(file instanceof GoFile)) {
+            return false;
+        }
+
+        if (((GoFile) file).getMainFunction() == null) {
+            return false;
+        }
+
+        try {
+            VirtualFile virtualFile = file.getVirtualFile();
+            if (virtualFile == null) {
+                return false;
+            }
+
+            Project project = file.getProject();
+            Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
+            String name = file.getVirtualFile().getCanonicalPath();
+
+            ((GoApplicationConfiguration) configuration).workingDir = project.getBasePath();
+            ((GoApplicationConfiguration) configuration).goBuildBeforeRun = false;
+            ((GoApplicationConfiguration) configuration).builderArguments = "";
+            ((GoApplicationConfiguration) configuration).scriptName = name;
+            ((GoApplicationConfiguration) configuration).builderArguments = "";
+            ((GoApplicationConfiguration) configuration).setModule(module);
+            configuration.setName(((GoApplicationConfiguration) configuration).suggestedName());
+
+            return true;
+        } catch (Exception ex) {
+            LOG.error(ex);
+        }
+
         return false;
     }
 

@@ -64,7 +64,7 @@ public class GoImportOptimizer implements ImportOptimizer {
 
             // refuse to optimize anything if there are some import whose path looks strange.
             String path = importPath.getValue();
-            if (path == null || path.contains("\n") || path.contains(" ") || path.contains("\t")) {
+            if (path.contains("\n") || path.contains(" ") || path.contains("\t")) {
                 return;
             }
         }

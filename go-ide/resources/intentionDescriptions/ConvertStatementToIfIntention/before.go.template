@@ -1,0 +1,9 @@
+package main
+
+func boolResult()bool{
+    return true
+}
+
+func main(){
+    boolResult()
+}

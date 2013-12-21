@@ -58,6 +58,7 @@ public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguratio
         return new GoAppEngineApplicationConfiguration(getName(), getProject(), GoAppEngineRunConfigurationType.getInstance());
     }
 
+    @NotNull
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
         return new GoAppEngineRunConfigurationEditorForm(getProject());
     }

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoExceptionFilterFactory implements ExceptionFilterFactory {
     @Override
     @NotNull
-    public Filter create(GlobalSearchScope searchScope) {
+    public Filter create(@NotNull GlobalSearchScope searchScope) {
         return new GoExceptionFilter(searchScope.getProject());
     }
 }

@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.processors;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
@@ -25,7 +26,7 @@ class LibraryContentsProcessor extends BaseScopeProcessor {
         this.qualifiedName = qualifiedName;
     }
 
-    public boolean execute(PsiElement element, ResolveState state) {
+    public boolean execute(@NotNull PsiElement element, ResolveState state) {
         return tryTypeDeclaration(element);
     }
 

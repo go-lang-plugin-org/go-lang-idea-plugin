@@ -2,7 +2,6 @@ package ro.redeul.google.go.components;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -122,7 +121,6 @@ public class GoSdkParsingHelper implements ApplicationComponent {
 
     private String getPackageImportPathFromProject(ProjectFileIndex projectIndex, VirtualFile virtualFile) {
 
-        Module module = projectIndex.getModuleForFile(virtualFile);
         VirtualFile contentRoot = projectIndex.getContentRootForFile(virtualFile);
         if ( contentRoot == null ) {
             return "";
@@ -133,7 +131,6 @@ public class GoSdkParsingHelper implements ApplicationComponent {
             return "";
         }
 
-        VirtualFile makefile = virtualFile.getParent().findChild("Makefile");
         return "";
     }
 

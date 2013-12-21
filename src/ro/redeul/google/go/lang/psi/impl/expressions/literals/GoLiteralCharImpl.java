@@ -15,7 +15,7 @@ public class GoLiteralCharImpl extends GoPsiElementBase
     @NotNull
     @Override
     public Character getValue() {
-        return null;
+        return getText().charAt(0);
     }
 
     @Override

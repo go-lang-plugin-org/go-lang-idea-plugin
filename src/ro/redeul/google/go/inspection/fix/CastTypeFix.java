@@ -35,7 +35,7 @@ public class CastTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     @NotNull
     @Override
     public String getText() {
-        return "Cast {" + getStartElement().getText() + "} to " + type.getText();
+        return "Cast (" + getStartElement().getText() + ") to " + type.getText();
     }
 
     @NotNull
@@ -54,7 +54,7 @@ public class CastTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
         Document doc = PsiDocumentManager.getInstance(project).getDocument(file);
 
-        if (doc == null) {
+        if (doc == null || element == null) {
             return;
         }
 

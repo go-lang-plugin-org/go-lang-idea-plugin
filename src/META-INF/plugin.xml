@@ -445,13 +445,16 @@
                 ro.redeul.google.go.imports.AutoImportHighlightingPassFactory
             </implementation-class>
         </component>
+        <component>
+            <implementation-class>ro.redeul.google.go.components.ProjectSdkValidator</implementation-class>
+        </component>
     </project-components>
 
     <actions>
         <group id="Go.ActionGroup" popup="true" text="Go" description="GOlang actions"
-                icon="/icons/go_16x16.png" class="ro.redeul.google.go.actions.NewGoGroup">
+               icon="/icons/go_16x16.png" class="ro.redeul.google.go.actions.NewGoGroup">
 
-            <action id="Go.NewApplication" text="Go application"
+        <action id="Go.NewApplication" text="Go application"
                     description="Create new application in the GO language"
                     class="ro.redeul.google.go.actions.NewGoApplicationAction">
             </action>
@@ -807,6 +810,25 @@
             <categoryKey>intention.category.go/intention.category.packages</categoryKey>
             <className>ro.redeul.google.go.intentions.packages.GoGetIntention</className>
         </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
+            <className>ro.redeul.google.go.intentions.statements.ConvertStatementToForWhileIntention</className>
+        </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
+            <className>ro.redeul.google.go.intentions.statements.ConvertStatementToIfIntention</className>
+        </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
+            <className>ro.redeul.google.go.intentions.statements.ConvertStatementToForRangeIntention</className>
+        </intentionAction>
+
     </extensions>
 
 </idea-plugin>

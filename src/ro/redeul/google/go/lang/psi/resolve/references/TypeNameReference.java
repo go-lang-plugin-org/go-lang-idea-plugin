@@ -46,7 +46,7 @@ public class TypeNameReference
     private static final ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult>() {
             @Override
-            public GoResolveResult resolve(TypeNameReference reference, boolean incompleteCode) {
+            public GoResolveResult resolve(@NotNull TypeNameReference reference, boolean incompleteCode) {
                 TypeNameResolver processor = new TypeNameResolver(reference);
 
                 GoPsiScopesUtil.treeWalkUp(

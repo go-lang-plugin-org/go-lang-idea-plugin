@@ -410,7 +410,6 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
     }
 
     private static Usage findUsage(final GoLiteralIdentifier identifier, GoPsiElement scope) {
-        final String identifierText = identifier.getText();
         final List<PsiElement> writeUsages = new ArrayList<PsiElement>();
         final List<PsiElement> readUsages = new ArrayList<PsiElement>();
 

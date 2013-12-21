@@ -7,6 +7,7 @@ import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
@@ -33,16 +34,19 @@ public class GoAppEngineModuleType extends ModuleType<GoAppEngineModuleBuilder> 
         return (GoAppEngineModuleType) ModuleTypeManager.getInstance().findByID(MODULE_TYPE_ID);
     }
 
+    @NotNull
     @Override
     public GoAppEngineModuleBuilder createModuleBuilder() {
         return new GoAppEngineModuleBuilder();
     }
 
+    @NotNull
     @Override
     public String getName() {
         return GoBundle.message("go.app.engine.module.type.name");
     }
 
+    @NotNull
     @Override
     public String getDescription() {
         return GoBundle.message("go.app.engine.module.type.description");
@@ -58,12 +62,13 @@ public class GoAppEngineModuleType extends ModuleType<GoAppEngineModuleBuilder> 
         return GoIcons.GAE_ICON_16x16;
     }
 
-    public boolean isValidSdk(final Module module, final Sdk projectSdk) {
+    public boolean isValidSdk(@NotNull final Module module, final Sdk projectSdk) {
         return projectSdk.getSdkType() == GoAppEngineSdkType.getInstance();
     }
 
+    @NotNull
     @Override
-    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext, GoAppEngineModuleBuilder moduleBuilder, ModulesProvider modulesProvider)
+    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext, @NotNull GoAppEngineModuleBuilder moduleBuilder, @NotNull ModulesProvider modulesProvider)
     {
         List<ModuleWizardStep> steps = new ArrayList<ModuleWizardStep>();
 

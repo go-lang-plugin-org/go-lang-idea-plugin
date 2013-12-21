@@ -1,0 +1,15 @@
+package main
+func GetSlice()[]string{
+    return []string{}
+}
+func main() {
+    GetSlice(<caret>)
+}
+-----
+package main
+func GetSlice()[]string{
+    return []string{}
+}
+func main() {
+    for k,v:= range GetSlice(){<caret>}
+}

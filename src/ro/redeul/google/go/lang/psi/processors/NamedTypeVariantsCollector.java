@@ -6,6 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.util.PlatformIcons;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
@@ -32,7 +33,7 @@ class NamedTypeVariantsCollector extends BaseScopeProcessor {
 
     private final List<LookupElement> variants = new ArrayList<LookupElement>();
 
-    public boolean execute(PsiElement element, ResolveState state) {
+    public boolean execute(@NotNull PsiElement element, ResolveState state) {
 
         if ( element instanceof GoTypeSpec ) {
             processTypeSpecification((GoTypeSpec) element, state);

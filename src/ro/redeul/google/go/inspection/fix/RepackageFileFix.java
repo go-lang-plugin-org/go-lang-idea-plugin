@@ -84,6 +84,10 @@ public class RepackageFileFix implements IntentionAction, LocalQuickFix {
     public void invoke(@NotNull Project project, Editor editor, PsiFile file) {
         VirtualFile vFile = file.getVirtualFile();
         Document document = PsiDocumentManager.getInstance(project).getDocument(file);
+        if (document == null) {
+            return;
+        }
+
         FileDocumentManager.getInstance().saveDocument(document);
         try {
             VirtualFile targetFolder = VfsUtil.createDirectoryIfMissing(rootPath, targetPackage);

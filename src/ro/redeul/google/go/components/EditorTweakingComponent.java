@@ -9,6 +9,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileDocumentManagerAdapter;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.text.CharArrayUtil;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 
 /**
@@ -18,7 +19,7 @@ import ro.redeul.google.go.GoFileType;
 public class EditorTweakingComponent extends FileDocumentManagerAdapter {
 
     @Override
-    public void beforeDocumentSaving(final Document document) {
+    public void beforeDocumentSaving(@NotNull final Document document) {
 
         if (!document.isWritable())
             return;

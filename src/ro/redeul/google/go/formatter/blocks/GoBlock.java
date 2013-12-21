@@ -194,7 +194,7 @@ class GoBlock implements Block, GoElementTypes {
         return true;
     }
 
-    public Spacing getSpacing(Block child1, Block child2) {
+    public Spacing getSpacing(Block child1, @NotNull Block child2) {
         if (!(child1 instanceof GoBlock) || !(child2 instanceof GoBlock)) {
             return null;
         }

@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.stubs.index;
 
 import com.intellij.psi.stubs.StringStubIndexExtension;
 import com.intellij.psi.stubs.StubIndexKey;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 
 /**
@@ -14,6 +15,7 @@ public class GoTypeName extends StringStubIndexExtension<GoTypeNameDeclaration> 
 
     public static final StubIndexKey<String, GoTypeNameDeclaration> KEY = StubIndexKey.createIndexKey("go.package.type.names");
 
+    @NotNull
     @Override
     public StubIndexKey<String, GoTypeNameDeclaration> getKey() {
         return KEY;

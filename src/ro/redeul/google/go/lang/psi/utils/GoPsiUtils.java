@@ -58,7 +58,7 @@ public class GoPsiUtils {
     }
 
     public static <Psi extends PsiElement> Psi get(Psi node) {
-        return node != null ? node : node;
+        return node;
     }
 
     public static <
@@ -72,9 +72,17 @@ public class GoPsiUtils {
 
 
     public static <T extends PsiElement> T resolveSafely(PsiElement element, Class<T> expectedType) {
+        if (element == null) {
+            return null;
+        }
+
         PsiReference []references = element.getReferences();
 
         for (PsiReference reference : references) {
+            if (reference == null) {
+                return null;
+            }
+
             PsiElement resolved = reference.resolve();
             if (resolved != null && expectedType.isAssignableFrom(resolved.getClass()))
                 return expectedType.cast(resolved);

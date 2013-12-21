@@ -1,6 +1,5 @@
 package ro.redeul.google.go.runner.ui;
 
-import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.ide.util.TreeFileChooser;
 import com.intellij.ide.util.TreeFileChooserFactory;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;

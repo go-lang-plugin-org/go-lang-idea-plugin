@@ -42,7 +42,7 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
     private static final ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, GoResolveResult> RESOLVER =
         new ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, GoResolveResult>() {
             @Override
-            public GoResolveResult resolve(BuiltinCallOrConversionReference psiReference, boolean incompleteCode) {
+            public GoResolveResult resolve(@NotNull BuiltinCallOrConversionReference psiReference, boolean incompleteCode) {
                 PsiElement element = psiReference.getElement();
 
                 MethodOrTypeNameResolver processor =

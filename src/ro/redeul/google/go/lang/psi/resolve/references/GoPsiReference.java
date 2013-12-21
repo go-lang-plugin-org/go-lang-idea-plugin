@@ -53,9 +53,6 @@ public abstract class GoPsiReference<
 
     @Override
     public TextRange getRangeInElement() {
-        if (reference == null)
-            return new TextRange(0, 0);
-
         return reference.getTextRange().shiftRight(-element.getTextOffset());
     }
 
@@ -101,9 +98,6 @@ public abstract class GoPsiReference<
     public boolean matchesVisiblePackageName(String currentPackageName,
                                                 PsiElement element,
                                                 String targetQualifiedName) {
-        String visiblePackageName =
-            element.getUserData(GoResolveStates.VisiblePackageName);
-
         String elementName = element.getText();
         if (currentPackageName == null)
             currentPackageName = "";

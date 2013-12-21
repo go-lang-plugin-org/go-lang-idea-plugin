@@ -26,7 +26,7 @@ public class ChanType implements GoElementTypes {
 
         PsiBuilder.Marker marker = builder.mark();
 
-        ChannelType type = null;
+        ChannelType type;
         if ( builder.getTokenType() == kCHAN ) {
             ParserUtils.getToken(builder, kCHAN);
 

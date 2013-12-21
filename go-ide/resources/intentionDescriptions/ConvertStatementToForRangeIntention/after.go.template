@@ -1,0 +1,9 @@
+package main
+
+func getList()[]string{
+    return []string{"Hey","Hola","Hi","Hello","Oi",}
+}
+
+func main(){
+    for k,v:= range getList(){}
+}

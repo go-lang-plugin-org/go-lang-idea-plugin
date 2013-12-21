@@ -48,7 +48,7 @@ public class GoApplicationWizard extends WizardMode {
     }
 
     @Override
-    protected StepSequence createSteps(WizardContext context, ModulesProvider modulesProvider) {
+    protected StepSequence createSteps(@NotNull WizardContext context, @NotNull ModulesProvider modulesProvider) {
         StepSequence sequence = new StepSequence();
 
         ProjectWizardStepFactory factory = ProjectWizardStepFactory.getInstance();
