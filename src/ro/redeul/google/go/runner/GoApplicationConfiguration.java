@@ -34,11 +34,7 @@ import ro.redeul.google.go.runner.ui.GoRunConfigurationEditorForm;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -58,6 +54,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     public Boolean goBuildBeforeRun = false;
     public String goOutputDir = "";
     public String workingDir = "";
+    public String envVars = "";
 
     public GoApplicationConfiguration(String name, Project project, GoRunConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
@@ -80,12 +77,23 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
             throw new RuntimeConfigurationException("Please select the file to run.");
         if (goBuildBeforeRun != null &&
                 goBuildBeforeRun &&
-                (goOutputDir == null || goOutputDir.equals(""))) {
+                (goOutputDir == null || goOutputDir.isEmpty())) {
             throw new RuntimeConfigurationException("Please select the directory for the executable.");
         }
-        if (workingDir == null || workingDir.equals("")) {
+        if (workingDir == null || workingDir.isEmpty()) {
             throw new RuntimeConfigurationException("Please select the application working directory.");
+        } else {
+            File dir = new File(workingDir);
+
+            if (!dir.exists()) {
+                throw new RuntimeConfigurationException("The selected application working directory does not appear to exist.");
+            }
+
+            if (!dir.isDirectory()) {
+                throw new RuntimeConfigurationException("The selected application working directory does not appear to be a directory.");
+            }
         }
+
         super.checkConfiguration();
     }
 
@@ -136,6 +144,8 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                     throw new CantRunException("Could not retrieve the project directory");
                 }
 
+                Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, envVars);
+
                 if (!goBuildBeforeRun) {
                     // Just run
                     GeneralCommandLine commandLine = new GeneralCommandLine();
@@ -151,8 +161,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                         commandLine.getParametersList().addParametersString(scriptArguments);
                     }
 
-                    commandLine.getEnvironment().put("GOROOT", getSdkRootPath(sdkData));
-                    commandLine.getEnvironment().put("GOPATH", GoSdkUtil.appendToGoPath(projectDir));
+                    commandLine.getEnvironment().putAll(sysEnv);
                     commandLine.setWorkDirectory(workingDir);
 
                     return GoApplicationProcessHandler.runCommandLine(commandLine);
@@ -189,8 +198,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
                     window.show(EmptyRunnable.getInstance());
 
-                    Map<String,String> sysEnv = System.getenv();
-                    String[] goEnv = new String[sysEnv.size() + 2];
+                    String[] goEnv = new String[sysEnv.size()];
                     Iterator it = sysEnv.entrySet().iterator();
                     int i = 0;
                     while (it.hasNext()) {
@@ -198,10 +206,6 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                         goEnv[i] = pairs.getKey() + "=" + pairs.getValue();
                         i++;
                     }
-
-                    goEnv[i] = "GOROOT=" + getSdkRootPath(sdkData);
-                    i++;
-                    goEnv[i] = "GOPATH=" + GoSdkUtil.appendToGoPath(projectDir);
 
                     String command = String.format(
                             "%s build %s -o %s %s",
@@ -253,26 +257,11 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
     @Override
     public String suggestedName() {
-        return scriptName.equals("") ? "go run" : GoSdkUtil.getVirtualFile(scriptName).getName();
-    }
-
-    private String getSdkRootPath(GoSdkData sdkData) {
-        if (sdkData.GO_GOROOT_PATH.isEmpty()) {
-            File possibleRoot = new File(sdkData.GO_BIN_PATH).getParentFile();
-            try {
-                if (new File(possibleRoot.getCanonicalPath().concat("/src")).exists()) {
-                    return possibleRoot.getCanonicalPath();
-                }
-            } catch (IOException ignored) {
-                return "";
-            }
-
-            try {
-                return possibleRoot.getParentFile().getCanonicalPath();
-            } catch (IOException e) {
-                return "";
-            }
+        try {
+            return scriptName.equals("") ? "go run" : GoSdkUtil.getVirtualFile(scriptName).getName();
+        } catch (NullPointerException ignored) {
+            return "go run";
         }
-        return sdkData.GO_GOROOT_PATH;
     }
+
 }

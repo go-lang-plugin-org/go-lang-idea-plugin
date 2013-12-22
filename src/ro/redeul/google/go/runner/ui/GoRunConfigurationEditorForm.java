@@ -30,6 +30,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
     private TextFieldWithBrowseButton buildDirectoryPathBrowser;
     private RawCommandLineEditor builderArguments;
     private TextFieldWithBrowseButton workingDirectoryBrowser;
+    private RawCommandLineEditor envVars;
 
     @Override
     protected void resetEditorFrom(GoApplicationConfiguration configuration) {
@@ -39,6 +40,11 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
         buildBeforeRunCheckBox.setSelected(configuration.goBuildBeforeRun);
         buildDirectoryPathBrowser.setText(configuration.goOutputDir);
         workingDirectoryBrowser.setText(configuration.workingDir);
+        if (workingDirectoryBrowser.getText().isEmpty()) {
+            workingDirectoryBrowser.setText(configuration.getProject().getBasePath());
+        }
+
+        envVars.setText(configuration.envVars);
     }
 
     @Override
@@ -55,6 +61,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
         configuration.goBuildBeforeRun = buildBeforeRunCheckBox.isSelected();
         configuration.goOutputDir = buildDirectoryPathBrowser.getText();
         configuration.workingDir = workingDirectoryBrowser.getText();
+        configuration.envVars = envVars.getText();
     }
 
     public GoRunConfigurationEditorForm(final Project project) {
@@ -74,14 +81,11 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
                                                     return false;
                                                 }
 
-                                                GoFile goFile = (GoFile) file;
-
-                                                return goFile.getPackage().isMainPackage();
+                                                return ((GoFile) file).getMainFunction() != null;
                                             }
                                         }, true, false);
 
                         fileChooser.showDialog();
-
 
                         PsiFile selectedFile = fileChooser.getSelectedFile();
                         if (selectedFile != null) {

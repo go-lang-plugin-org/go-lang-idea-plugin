@@ -7,8 +7,10 @@ import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -35,6 +37,8 @@ import static com.intellij.patterns.StandardPatterns.string;
 
 public class GoTestConfigurationProducer extends RunConfigurationProducer {
 
+    private static final Logger LOG = Logger.getInstance(GoTestConfigurationProducer.class);
+
     public GoTestConfigurationProducer() {
         super(GoTestConfigurationType.getInstance());
     }
@@ -45,28 +49,91 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
 
     @Override
     public boolean isConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context) {
+        if (context.getPsiLocation() == null) {
+            return false;
+        }
+
+        PsiFile file = context.getPsiLocation().getContainingFile();
+        if (!(file instanceof GoFile)) {
+            return false;
+        }
+
+        if (file.getName().endsWith("_test.go")) {
+            return true;
+        }
+
         return false;
     }
 
     @Override
     protected boolean setupConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context, Ref sourceElement) {
+        if (context.getPsiLocation() == null) {
+            return false;
+        }
+
+        PsiFile file = context.getPsiLocation().getContainingFile();
+        if (!(file instanceof GoFile)) {
+            return false;
+        }
+
+        if (!file.getName().endsWith("_test.go")) {
+            return false;
+        }
+
+        PsiElement psiSourceElement = (PsiElement) sourceElement.get();
+
+        try {
+            VirtualFile virtualFile = file.getVirtualFile();
+            if (virtualFile == null) {
+                return false;
+            }
+
+            while (!(psiSourceElement instanceof GoFile) &&
+                    !FUNCTION_BENCHMARK.accepts(psiSourceElement) &&
+                    !FUNCTION_TEST.accepts(psiSourceElement) ) {
+                psiSourceElement = psiSourceElement.getParent();
+            }
+
+            Project project = file.getProject();
+            Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
+            ((GoTestConfiguration) configuration).testTargetType = GoTestConfiguration.TestTargetType.Package;
+
+            String packageName = ((GoFile) file).getPackageName();
+            ((GoTestConfiguration) configuration).packageName = packageName;
+
+            if (psiSourceElement instanceof GoFile) {
+                configuration.setName(packageName);
+                // If there is any tests in current package, run in test mode.
+                // Otherwise run in benchmark mode.
+                if (fileDirContainsTestsOfSamePackage(project, (GoFile) psiSourceElement)) {
+                    ((GoTestConfiguration) configuration).executeWhat = GoTestConfiguration.Type.Test;
+                } else {
+                    ((GoTestConfiguration) configuration).executeWhat = GoTestConfiguration.Type.Benchmark;
+                }
+            } else if (FUNCTION_TEST.accepts(psiSourceElement)) {
+                String name = ((GoFunctionDeclaration) psiSourceElement).getName();
+                configuration.setName(packageName + "." + name);
+                ((GoTestConfiguration) configuration).executeWhat = GoTestConfiguration.Type.Test;
+                ((GoTestConfiguration) configuration).filter = "^" + name +"$";
+            } else if (FUNCTION_BENCHMARK.accepts(psiSourceElement)) {
+                String name = ((GoFunctionDeclaration) psiSourceElement).getName();
+                configuration.setName(packageName + "." + name);
+                ((GoTestConfiguration) configuration).executeWhat = GoTestConfiguration.Type.Benchmark;
+                ((GoTestConfiguration) configuration).filter = "^" + name +"$";
+            }
+
+            ((GoTestConfiguration) configuration).packageDir = file.getContainingDirectory().getVirtualFile().getCanonicalPath();
+            ((GoTestConfiguration) configuration).workingDir = project.getBasePath();
+            ((GoTestConfiguration) configuration).executeWhat = GoTestConfiguration.Type.Test;
+            ((GoTestConfiguration) configuration).setModule(module);
+
+
+            return true;
+        } catch (Exception ex) {
+            LOG.error(ex);
+        }
+
         return false;
-    }
-
-    protected RunnerAndConfigurationSettings createConfigurationByElement(Location location, ConfigurationContext context) {
-        GoFile goFile = locationToFile(location);
-
-        if (goFile == null) return null;
-
-        VirtualFile virtualFile = goFile.getVirtualFile();
-        if (virtualFile == null)
-            return null;
-
-        if (!virtualFile.getNameWithoutExtension().endsWith("_test"))
-            return null;
-
-        return createConfiguration(goFile, context.getModule(),
-                location.getPsiElement());
     }
 
     private static final ElementPattern<GoFunctionDeclaration> FUNCTION_BENCHMARK =
@@ -102,57 +169,6 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
                                     .afterSibling(
                                             psiElement(GoLiteralIdentifier.class)
                                                     .withText(string().matches("Test.*"))));
-
-    private RunnerAndConfigurationSettings createConfiguration(GoFile goFile, Module module, PsiElement element) {
-
-        final Project project = goFile.getProject();
-
-        RunnerAndConfigurationSettings settings =
-                RunManager.getInstance(project)
-                        .createRunConfiguration("", getConfigurationFactory());
-
-        GoTestConfiguration testConfiguration =
-                (GoTestConfiguration) settings.getConfiguration();
-
-        final PsiDirectory dir = goFile.getContainingDirectory();
-        if (dir == null)
-            return null;
-
-        while (!(element instanceof GoFile) &&
-                !FUNCTION_BENCHMARK.accepts(element) &&
-                !FUNCTION_TEST.accepts(element) ) {
-            element = element.getParent();
-        }
-
-        String dottedPackagePath = goFile.getPackageImportPath().replace('/', '.');
-        if (element instanceof GoFile) {
-            testConfiguration.setName(dottedPackagePath);
-            // If there is any tests in current package, run in test mode.
-            // Otherwise run in benchmark mode.
-            if (fileDirContainsTestsOfSamePackage(project, (GoFile) element)) {
-                testConfiguration.executeWhat = GoTestConfiguration.Type.Test;
-            } else {
-                testConfiguration.executeWhat = GoTestConfiguration.Type.Benchmark;
-            }
-        } else if (FUNCTION_TEST.accepts(element)) {
-            String name = ((GoFunctionDeclaration) element).getName();
-            testConfiguration.setName(dottedPackagePath + "." + name);
-            testConfiguration.executeWhat = GoTestConfiguration.Type.Test;
-            testConfiguration.filter = "^" + name +"$";
-        } else if (FUNCTION_BENCHMARK.accepts(element)) {
-            String name = ((GoFunctionDeclaration) element).getName();
-            testConfiguration.setName(dottedPackagePath + "." + name);
-            testConfiguration.executeWhat = GoTestConfiguration.Type.Benchmark;
-            testConfiguration.filter = "^" + name +"$";
-        }
-
-        testConfiguration.packageName = getPackageNameForTesting(goFile);
-        testConfiguration.packageDir = getGoFileDirRelativePath(goFile);
-        testConfiguration.setModule(module);
-        testConfiguration.useShortRun = false;
-
-        return settings;
-    }
 
     private static boolean fileDirContainsTestsOfSamePackage(Project project, GoFile file) {
         VirtualFile virtualFile = file.getVirtualFile();
