@@ -91,7 +91,7 @@ class GoCommandLineState extends CommandLineState {
 
     private String getSdkHomePath(GoSdkData sdkData) {
         if (sdkData.GO_GOROOT_PATH.isEmpty()) {
-            return new File(sdkData.GO_BIN_PATH).getParent();
+            return new File(sdkData.GO_BIN_PATH).getParentFile().getParent();
         }
         return sdkData.GO_GOROOT_PATH;
     }
