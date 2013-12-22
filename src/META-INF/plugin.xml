@@ -50,6 +50,7 @@
             <li>Added go application wizard</li>
             <li>Makefile based build system (bring your own Makefile). Experimental. Configured in project settings.</li>
             <li>Always use tabs instead of spaces (but configurable if desired).</li>
+            <li>go fmt integration via Tools -> Go menu options (default CTRL+ALT+SHIFT+F)</li>
         </ul>
     ]]>
     </description>
@@ -62,12 +63,13 @@
                 <li>[feature] Golang 1.2 syntax support</li>
                 <li>[feature] Darcula theme support</li>
                 <li>[feature] New run / build system available</li>
-                <li>[bugfix] Dropped support for build systems</li>
-                <li>[bugfix] Fixed live templates and compilation</li>
-                <li>[bugfix] Fixed Go App Engine support</li>
                 <li>[feature] Added a new inspection/fix which will generate a closure function</li>
                 <li>[feature] Function inspection/fix will generate the arguments when specified</li>
                 <li>[feature] Added intention to run "go get" on a package</li>
+                <li>[feature] go fmt integration via Tools -> Go menu options (default CTRL+ALT+SHIFT+F)
+                <li>[bugfix] Dropped support for old build systems</li>
+                <li>[bugfix] Fixed live templates and compilation</li>
+                <li>[bugfix] Fixed Go App Engine support</li>
                 <li>[bugfix] Other fixes and improvements</li>
             </ul>
          <h3>0.9.14 changes:</h3>
@@ -478,7 +480,16 @@
         </action>
 
         <group id="Go.Tools" popup="true" text="Go Tools"
-               description="Go tools support" icon="/icons/go_16x16.png" class="ro.redeul.google.go.actions.NewGoGroup">
+               description="Go tools support" icon="/icons/go_13x13.png" class="ro.redeul.google.go.actions.NewGoGroup">
+
+            <action id="Go.Fmt.FileRunner"
+                    class="ro.redeul.google.go.ide.actions.GoFmtFileRunner"
+                    text="go fmt file" description="Format current file with go fmt"
+                    icon="/icons/go_13x13.png">
+                <keyboard-shortcut first-keystroke="ctrl alt shift f"
+                                   keymap="$default"/>
+            </action>
+
             <!--<action id="Go.Tools.AddGoSdk" text="Add Go Sdk Support"-->
             <!--description="Add Go Sdk to current module"-->
             <!--class="ro.redeul.google.go.tools.actions.AddGoSdkSupport">-->
