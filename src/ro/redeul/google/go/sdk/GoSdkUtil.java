@@ -85,10 +85,12 @@ public class GoSdkUtil {
         if (!checkFolderExists(path))
             return null;
 
-        if (!checkFolderExists(path, "src"))
+        // 1.1.2 moves src into go/version/libexec
+        if (!checkFolderExists(path, "src") && !checkFolderExists(path, "libexec", "src"))
             return null;
 
-        if (!checkFolderExists(path, "pkg"))
+        // 1.1.2 moves pkg into go/version/libexec
+        if (!checkFolderExists(path, "pkg") && !checkFolderExists(path, "libexec", "src"))
             return null;
 
         String goCommand = findGoExecutable(path);
@@ -131,6 +133,18 @@ public class GoSdkUtil {
 
         // Well then no go executable for us :(
         return "";
+    }
+
+    public static VirtualFile getSdkSourcesRoot(Sdk sdk) {
+        final VirtualFile homeDirectory = sdk.getHomeDirectory();
+
+        if (checkFolderExists(homeDirectory.getPath(), "src")) {
+            return homeDirectory.findFileByRelativePath("src/pkg");
+        } else if (checkFolderExists(homeDirectory.getPath(), "libexec", "src")) {
+            return homeDirectory.findFileByRelativePath("libexec/src/pkg");
+        }
+
+        return null;
     }
 
     private static GoSdkData findVersion(final String path, String goCommand, GoSdkData data) {

@@ -140,7 +140,7 @@ public class GoSdkType extends SdkType {
         if ( sdkData == null )
             return;
 
-        final VirtualFile sdkSourcesRoot = homeDirectory.findFileByRelativePath("src/pkg/");
+        final VirtualFile sdkSourcesRoot = GoSdkUtil.getSdkSourcesRoot(sdk);
 
         if (sdkSourcesRoot != null) {
             sdkSourcesRoot.refresh(false, false);
