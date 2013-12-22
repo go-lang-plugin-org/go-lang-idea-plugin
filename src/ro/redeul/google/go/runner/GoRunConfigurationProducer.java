@@ -44,19 +44,6 @@ public class GoRunConfigurationProducer extends RunConfigurationProducer {
 
     @Override
     public boolean isConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context) {
-        if (context.getPsiLocation() == null) {
-            return false;
-        }
-
-        PsiFile file = context.getPsiLocation().getContainingFile();
-        if (!(file instanceof GoFile)) {
-            return false;
-        }
-
-        if (((GoFile) file).getMainFunction() != null) {
-            return true;
-        }
-
         return false;
     }
 
@@ -89,7 +76,7 @@ public class GoRunConfigurationProducer extends RunConfigurationProducer {
             ((GoApplicationConfiguration) configuration).goBuildBeforeRun = false;
             ((GoApplicationConfiguration) configuration).builderArguments = "";
             ((GoApplicationConfiguration) configuration).scriptName = name;
-            ((GoApplicationConfiguration) configuration).builderArguments = "";
+            ((GoApplicationConfiguration) configuration).scriptArguments = "";
             ((GoApplicationConfiguration) configuration).setModule(module);
             configuration.setName(((GoApplicationConfiguration) configuration).suggestedName());
 

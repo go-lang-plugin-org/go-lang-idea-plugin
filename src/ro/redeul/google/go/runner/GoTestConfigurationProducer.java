@@ -124,9 +124,7 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
 
             ((GoTestConfiguration) configuration).packageDir = file.getContainingDirectory().getVirtualFile().getCanonicalPath();
             ((GoTestConfiguration) configuration).workingDir = project.getBasePath();
-            ((GoTestConfiguration) configuration).executeWhat = GoTestConfiguration.Type.Test;
             ((GoTestConfiguration) configuration).setModule(module);
-
 
             return true;
         } catch (Exception ex) {
