@@ -1,11 +1,11 @@
 package main
 
 func main() {
-    1+2==3||tr<caret>ue
+    (1+2)==3||tr<caret>ue
 }
 -----
 package main
 
 func main() {
-    if 1+2==3||true{<caret>}
+    if (1+2)==3||true{<caret>}
 }

@@ -1,6 +1,7 @@
 package ro.redeul.google.go.intentions.statements;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiWhiteSpace;
 import ro.redeul.google.go.intentions.Intention;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -30,6 +31,9 @@ public abstract class BaseBoolStatement extends Intention {
     @Override
     protected boolean satisfiedBy(PsiElement element) {
         statement = element instanceof GoExpressionStatement ? (GoExpressionStatement) element : findParentOfType(element, GoExpressionStatement.class);
+        if (statement == null && element instanceof PsiWhiteSpace && element.getPrevSibling() instanceof GoExpressionStatement) {
+            statement = (GoExpressionStatement) element.getPrevSibling();
+        }
         if (statement != null) {
             expr = statement.getExpression();
             if (expr instanceof GoRelationalExpression

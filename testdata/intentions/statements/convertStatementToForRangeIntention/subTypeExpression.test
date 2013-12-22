@@ -1,0 +1,23 @@
+package main
+
+type Values map[string][]string
+
+func GetSlice()Values{
+    return Values{}
+}
+func main() {
+    slice:=GetSlice()
+    slice<caret>
+}
+-----
+package main
+
+type Values map[string][]string
+
+func GetSlice()Values{
+    return Values{}
+}
+func main() {
+    slice:=GetSlice()
+    for k,v:= range slice{<caret>}
+}

@@ -8,7 +8,7 @@ public class ConvertStatementToIfIntentionTest extends GoIntentionTestCase {
         doTest();
     }
 
-    public void testComplexExpression() throws Exception {
+    public void testLogicalExpression() throws Exception {
         doTest();
     }
 
