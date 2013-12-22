@@ -49,19 +49,6 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
 
     @Override
     public boolean isConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context) {
-        if (context.getPsiLocation() == null) {
-            return false;
-        }
-
-        PsiFile file = context.getPsiLocation().getContainingFile();
-        if (!(file instanceof GoFile)) {
-            return false;
-        }
-
-        if (file.getName().endsWith("_test.go")) {
-            return true;
-        }
-
         return false;
     }
 
