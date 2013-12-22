@@ -1,77 +1,136 @@
 <project name="Idea Google Go language scripted test file" default="test" basedir=".">
 
     <!-- set global properties for this build -->
-    <property name="src" location="src"/>
+    <property name="build.compiler" value="modern"/>
 
+    <property name="src" location="src"/>
+    <property name="test.src" location="test"/>
     <property name="build" location="build"/>
     <property name="test" location="test"/>
-    <property name="test.build" location="build.test"/>
-
+    <property name="test.build" location="build_test"/>
+    <property name="resources" value="${basedir}/go-ide/resources"/>
     <property name="go.plugin.name" value="ro.redeul.google.go" />
     <property name="idea.community.build" location="${basedir}/idea-IC/" />
 
-    <path id="classpath.base" />
+    <path id="idea.classpath">
+        <fileset dir="${idea.community.build}/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${idea.community.build}/plugins">
+            <include name="*Integration/lib/*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="my.classpath">
+        <pathelement location="${build}"/>
+        <pathelement path="${java.home}/../lib/tools.jar"/>
+    </path>
+
+    <path id="classpath">
+        <path refid="my.classpath"/>
+        <path refid="idea.classpath"/>
+    </path>
 
     <path id="classpath.test">
         <pathelement location="${idea.community.build}/lib/junit-4.10.jar" />
         <fileset dir="${idea.community.build}" includes="**/*.jar" />
+        <fileset dir="${java.home}/lib" includes="**/*.jar" />
         <pathelement location="${build}"/>
-        <path refid="classpath.base" />
+        <pathelement location="${test.build}"/>
     </path>
-
 
     <taskdef name="javac2" classname="com.intellij.ant.Javac2">
         <classpath>
             <pathelement location="${idea.community.build}/lib/javac2.jar"/>
             <fileset dir="${idea.community.build}" includes="**/*.jar" />
         </classpath>
-
     </taskdef>
 
+    <macrodef name="compile">
+        <attribute name="src"/>
+        <attribute name="dest"/>
+        <sequential>
+
+            <javac2 srcdir="@{src}" destdir="@{dest}" classpathref="classpath" verbose="false" debug="true" target="1.7" />
+
+            <copy toDir="@{dest}">
+                <fileset dir="@{src}">
+                    <include name="**/*.properties"/>
+                    <include name="**/*.xml"/>
+                    <include name="**/*.txt"/>
+                    <include name="**/*.go"/>
+                </fileset>
+            </copy>
+        </sequential>
+    </macrodef>
+
     <target name="init">
-        <!-- Create the time stamp -->
         <tstamp/>
-        <!-- Create the build directory structure used by compile -->
         <mkdir dir="${build}"/>
-
-        <echo message="Using IDEA build from: ${idea.community.build}" />
-    </target>
-
-    <target name="compile" depends="clean,init" description="compile the source ">
-        <!-- Compile the java code from ${src} into ${build} -->
-        <javac2 srcdir="${src}" destdir="${build}" includeantruntime="false" >
-            <classpath>
-                <fileset dir="${idea.community.build}" includes="**/*.jar" />
-            </classpath>
-            <compilerarg value="-Xlint:deprecation" />
-        </javac2>
-    </target>
-
-    <target name="build" depends="compile">
         <mkdir dir="${test.build}"/>
-        <javac srcdir="${test}" destdir="${test.build}" includeantruntime="false">
-            <classpath>
-                <fileset dir="${idea.community.build}" includes="**/*.jar" />
-            </classpath>
-            <classpath refid="classpath.test"/>
-        </javac>
-        <echo message="Build done" />
+        <echo message="Using IDEA build from: ${idea.community.build}" />
+        <echo message="Using JAVA_HOME: ${java.home}" />
     </target>
 
-    <target name="test" depends="build" description="run the tests">
-        <junit printsummary="on" haltonfailure="yes">
+    <target name="compile" depends="clean,init" description="Compile the source code">
+        <taskdef name="javac2" classname="com.intellij.ant.Javac2">
             <classpath>
-                <path refid="classpath.test" />
-                <pathelement location="${test.build}"/>
+                <pathelement location="${idea.community.build}/redist/javac2.jar"/>
+                <pathelement location="${idea.community.build}/redist/forms_rt.jar"/>
+                <pathelement location="${idea.community.build}/build/lib/javac2.jar"/>
+                <pathelement location="${idea.community.build}/build/lib/forms_rt.jar"/>
+                <path refid="idea.classpath"/>
             </classpath>
-            <formatter type="brief" usefile="false" />
+        </taskdef>
+
+        <compile src="${src}" dest="${build}"/>
+
+        <copy todir="${build}">
+            <fileset dir="${resources}">
+                <include name="*/**"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile_test" depends="compile" description="Compile tests">
+        <compile src="${test.src}" dest="${test.build}"/>
+    </target>
+
+    <target name="test" depends="compile_test" description="Run the tests">
+
+        <echo message="Running tests"/>
+
+        <property name="suspend" value="n"/>
+
+        <junit printsummary="yes"
+               haltonfailure="yes" showoutput="yes"
+               failureProperty="failure_found"
+               fork="yes" forkmode="once" reloading="no">
+
+            <jvmarg value="-Didea.home.path=${idea.community.build}"/>
+            <jvmarg value="-Xbootclasspath/a:${idea.community.build}/lib/boot.jar"/>
+            <jvmarg value="-Dfile.encoding=UTF-8"/>
+            <jvmarg value="-ea"/>
+            <jvmarg line="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=${suspend},address=43251"/>
+            <jvmarg value="-Didea.plugins.path=${idea.community.build}/plugins"/>
+            <jvmarg value="-Didea.launcher.bin.path=${idea.community.build}/bin"/>
+            <classpath refid="classpath.test"/>
+
+            <formatter type="brief" usefile="false"/>
+
             <batchtest>
-                <fileset dir="${test}">
-                    <include name="**/*Test*.java"/>
+                <fileset dir="${test.src}">
+                    <include name="**/*Test.java"/>
                     <exclude name="**/*TestCase.java"/>
                 </fileset>
             </batchtest>
         </junit>
+
+        <antcall target="check_test"/>
+    </target>
+
+    <target name="check_test" if="failure_found">
+        <fail message="Failures found"/>
     </target>
 
     <target name="clean" description="clean up">

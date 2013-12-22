@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-        <classpathentry kind="lib" path="idea-IC/lib/junit-4.10.jar"/>
-        <classpathentry kind="lib" path="idea-IC/lib/*.jar"/>
-        <classpathentry kind="src" path="src"/>
-        <classpathentry kind="src" path="test"/>
-        <classpathentry kind="output" path="build"/>
-</classpath>
