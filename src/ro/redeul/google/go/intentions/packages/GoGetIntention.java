@@ -153,19 +153,7 @@ public class GoGetIntention extends Intention {
 
             window.show(EmptyRunnable.getInstance());
 
-            Map<String,String> sysEnv = System.getenv();
-            String[] goEnv = new String[sysEnv.size() + 2];
-            Iterator it = sysEnv.entrySet().iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                Map.Entry pairs = (Map.Entry)it.next();
-                goEnv[i] = pairs.getKey() + "=" + pairs.getValue();
-                i++;
-            }
-
-            goEnv[i] = "GOROOT=" + getSdkHomePath(sdkData);
-            i++;
-            goEnv[i] = "GOPATH=" + GoSdkUtil.appendToGoPath(projectDir);
+            String[] goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
 
             String command = String.format(
                     "%s get %s",

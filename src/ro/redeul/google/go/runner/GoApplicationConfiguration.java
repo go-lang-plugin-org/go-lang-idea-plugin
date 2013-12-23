@@ -198,14 +198,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
                     window.show(EmptyRunnable.getInstance());
 
-                    String[] goEnv = new String[sysEnv.size()];
-                    Iterator it = sysEnv.entrySet().iterator();
-                    int i = 0;
-                    while (it.hasNext()) {
-                        Map.Entry pairs = (Map.Entry)it.next();
-                        goEnv[i] = pairs.getKey() + "=" + pairs.getValue();
-                        i++;
-                    }
+                    String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
 
                     String command = String.format(
                             "%s build %s -o %s %s",

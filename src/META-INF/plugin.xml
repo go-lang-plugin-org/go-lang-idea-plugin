@@ -50,6 +50,7 @@
             <li>Added go application wizard</li>
             <li>Makefile based build system (bring your own Makefile). Experimental. Configured in project settings.</li>
             <li>Always use tabs instead of spaces (but configurable if desired).</li>
+            <li>go fmt integration via Tools -> Go menu options (default CTRL+ALT+SHIFT+F for file and CTRL+ALT+SHIFT+G for project)</li>
         </ul>
     ]]>
     </description>
@@ -62,12 +63,13 @@
                 <li>[feature] Golang 1.2 syntax support</li>
                 <li>[feature] Darcula theme support</li>
                 <li>[feature] New run / build system available</li>
-                <li>[bugfix] Dropped support for build systems</li>
-                <li>[bugfix] Fixed live templates and compilation</li>
-                <li>[bugfix] Fixed Go App Engine support</li>
                 <li>[feature] Added a new inspection/fix which will generate a closure function</li>
                 <li>[feature] Function inspection/fix will generate the arguments when specified</li>
                 <li>[feature] Added intention to run "go get" on a package</li>
+                <li>[feature] go fmt integration via Tools -> Go menu options (default CTRL+ALT+SHIFT+F for file and CTRL+ALT+SHIFT+G for project)
+                <li>[bugfix] Dropped support for old build systems</li>
+                <li>[bugfix] Fixed live templates and compilation</li>
+                <li>[bugfix] Fixed Go App Engine support</li>
                 <li>[bugfix] Other fixes and improvements</li>
             </ul>
          <h3>0.9.14 changes:</h3>
@@ -219,7 +221,7 @@
             <ul>
                 <li>[bugfix] Revert to using Icons instead of PlatformIcons.</li>
             </ul>
-		 <h3>0.4.0 changes:</h3>
+        <h3>0.4.0 changes:</h3>
                 <ul>
                     <li>[feature] Detection of bundled Go Sdk packages (useful when deployed as GoIde)</li>
                     <li>[bugfix] NullPointerException while highlighting selector expression with non resolving context (Issue #34).</li>
@@ -228,19 +230,19 @@
                     <li>[feature] Run configuration validation. </li>
                 </ul>
          </h3>
-		 <h3>0.3.18 changes:</h3>
+        <h3>0.3.18 changes:</h3>
                 <ul>
                     <li>[bugfix] Fixed parsing error when the last function element is ...</li>
                     <li>[bugfix] Fixed multiline comment parsing in certain cases.</li>
                     <li>[bugfix] Fixed regression when parsing big const declaration with comments.</li>
                 </ul>
          </h3>
-		 <h3>0.3.17 changes:</h3>
+        <h3>0.3.17 changes:</h3>
                 <ul>
                     <li>[feature] Improved completion (use the top level var and const declarations as completion variants).</li>
                 </ul>
         </h3>
-		 <h3>0.3.16 changes:</h3>
+        <h3>0.3.16 changes:</h3>
                 <ul>
                     <li>[feature] Go aware imports optimizer (experimental).</li>
                 </ul>
@@ -478,7 +480,24 @@
         </action>
 
         <group id="Go.Tools" popup="true" text="Go Tools"
-               description="Go tools support" icon="/icons/go_16x16.png" class="ro.redeul.google.go.actions.NewGoGroup">
+               description="Go tools support" icon="/icons/go_13x13.png" class="ro.redeul.google.go.actions.NewGoGroup">
+
+            <action id="Go.Fmt.FileRunner"
+                    class="ro.redeul.google.go.ide.actions.GoFmtFileRunner"
+                    text="go fmt file" description="Format current file with go fmt"
+                    icon="/icons/go_13x13.png">
+                <keyboard-shortcut first-keystroke="ctrl alt shift f"
+                                   keymap="$default"/>
+            </action>
+
+            <action id="Go.Fmt.ProjectRunner"
+                    class="ro.redeul.google.go.ide.actions.GoFmtProjectRunner"
+                    text="go fmt project" description="Format current project with go fmt"
+                    icon="/icons/go_13x13.png">
+                <keyboard-shortcut first-keystroke="ctrl alt shift g"
+                                   keymap="$default"/>
+            </action>
+
             <!--<action id="Go.Tools.AddGoSdk" text="Add Go Sdk Support"-->
             <!--description="Add Go Sdk to current module"-->
             <!--class="ro.redeul.google.go.tools.actions.AddGoSdkSupport">-->
