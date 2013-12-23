@@ -1,6 +1,5 @@
 package ro.redeul.google.go.runner.ui;
 
-import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.ide.util.TreeFileChooser;
 import com.intellij.ide.util.TreeFileChooserFactory;
 import com.intellij.openapi.options.ConfigurationException;

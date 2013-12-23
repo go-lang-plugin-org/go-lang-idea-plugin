@@ -1,6 +1,5 @@
 package ro.redeul.google.go;
 
-import java.io.File;
 import java.io.IOException;
 
 import com.intellij.openapi.util.Condition;

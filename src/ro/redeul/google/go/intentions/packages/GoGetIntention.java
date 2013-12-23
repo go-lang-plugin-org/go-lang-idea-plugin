@@ -30,8 +30,6 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
 
 public class GoGetIntention extends Intention {
 
