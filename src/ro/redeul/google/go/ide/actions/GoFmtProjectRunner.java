@@ -7,6 +7,7 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -23,7 +24,9 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-public class GoFmtFileRunner extends AnAction {
+import java.io.File;
+
+public class GoFmtProjectRunner extends AnAction {
 
     private static final String ID = "go fmt Console";
     private static final String TITLE = "Output";
@@ -60,9 +63,8 @@ public class GoFmtFileRunner extends AnAction {
             return;
         }
 
+        FileDocumentManager.getInstance().saveAllDocuments();
         FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
-        VirtualFile selectedFile = fileEditorManager.getSelectedFiles()[0];
-        String fileName = selectedFile.getCanonicalPath();
 
         try {
             ToolWindowManager manager = ToolWindowManager.getInstance(project);
@@ -84,13 +86,12 @@ public class GoFmtFileRunner extends AnAction {
             String[] goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
 
             String command = String.format(
-                    "%s fmt %s",
-                    goExecName,
-                    fileName
+                    "%s fmt ./...",
+                    goExecName
             );
 
             Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec(command, goEnv);
+            Process proc = rt.exec(command, goEnv, new File(projectDir));
             OSProcessHandler handler = new OSProcessHandler(proc, null);
             consoleView.attachToProcess(handler);
             consoleView.print(String.format("%s%n", command), ConsoleViewContentType.NORMAL_OUTPUT);
@@ -98,7 +99,6 @@ public class GoFmtFileRunner extends AnAction {
 
             if (proc.waitFor() == 0) {
                 VirtualFileManager.getInstance().syncRefresh();
-                selectedFile.refresh(false, false);
             }
         } catch (Exception e) {
             e.printStackTrace();
