@@ -84,16 +84,7 @@ public class GoFmtFileRunner extends AnAction {
             }
             window.show(EmptyRunnable.getInstance());
 
-            Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, "");
-
-            String[] goEnv = new String[sysEnv.size()];
-            Iterator it = sysEnv.entrySet().iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                Map.Entry pairs = (Map.Entry)it.next();
-                goEnv[i] = pairs.getKey() + "=" + pairs.getValue();
-                i++;
-            }
+            String[] goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
 
             String command = String.format(
                     "%s fmt %s",
