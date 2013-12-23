@@ -52,6 +52,7 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     public String filter = "";
     public boolean useShortRun = false;
     public boolean testBeforeBenchmark = false;
+    public boolean goVetEnabled = false;
 
     public GoTestConfiguration(String name, Project project, GoTestConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);

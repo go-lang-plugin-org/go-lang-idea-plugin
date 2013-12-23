@@ -45,7 +45,7 @@ import java.util.*;
 public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration> {
 
     private static final String ID = "Go Console";
-    private static final String TITLE = " build";
+    private static final String TITLE = "build";
     private static ConsoleView consoleView;
 
     public String scriptName = "";
@@ -55,6 +55,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     public String goOutputDir = "";
     public String workingDir = "";
     public String envVars = "";
+    public Boolean goVetEnabled = false;
 
     public GoApplicationConfiguration(String name, Project project, GoRunConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
@@ -146,6 +147,62 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
                 Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, envVars);
 
+                if (goVetEnabled) {
+                    try {
+                        ToolWindowManager manager = ToolWindowManager.getInstance(project);
+                        ToolWindow window = manager.getToolWindow(ID);
+
+                        if (consoleView == null) {
+                            consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+                        }
+
+                        if (window == null) {
+                            window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
+
+                            ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+                            Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
+                            window.getContentManager().addContent(content);
+                            window.setIcon(GoIcons.GO_ICON_13x13);
+                            window.setToHideOnEmptyContent(true);
+                            window.setTitle(TITLE);
+
+                        }
+
+                        window.show(EmptyRunnable.getInstance());
+
+                        String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
+
+                        String command = String.format(
+                                "%s vet ./...",
+                                goExecName
+                        );
+
+                        Runtime rt = Runtime.getRuntime();
+                        Process proc = rt.exec(command, goEnv, new File(projectDir));
+                        OSProcessHandler handler = new OSProcessHandler(proc, null);
+                        consoleView.attachToProcess(handler);
+                        consoleView.print(String.format("%s%n", command), ConsoleViewContentType.NORMAL_OUTPUT);
+                        handler.startNotify();
+
+                        if (proc.waitFor() == 0) {
+                            VirtualFileManager.getInstance().syncRefresh();
+
+                            consoleView.print(String.format("%nFinished running go vet on project %s%n", projectDir), ConsoleViewContentType.NORMAL_OUTPUT);
+                        } else {
+                            consoleView.print(String.format("%nCouldn't vet project %s%n", projectDir), ConsoleViewContentType.ERROR_OUTPUT);
+
+                            throw new CantRunException(String.format("Error while processing %s vet command.", goExecName));
+                        }
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Messages.showErrorDialog(String.format("Error while processing %s vet command.", goExecName), "Error on Google Go Plugin");
+
+                        throw new CantRunException(String.format("Error while processing %s vet command.", goExecName));
+                    }
+                }
+
                 if (!goBuildBeforeRun) {
                     // Just run
                     GeneralCommandLine commandLine = new GeneralCommandLine();
@@ -175,13 +232,12 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                     execName = execName.concat(".exe");
                 }
 
-                //ProcessHandler processHandler = null;
                 try {
                     ToolWindowManager manager = ToolWindowManager.getInstance(project);
                     ToolWindow window = manager.getToolWindow(ID);
 
-                    if (GoApplicationConfiguration.consoleView == null) {
-                        GoApplicationConfiguration.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+                    if (consoleView == null) {
+                        consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
                     }
 
                     if (window == null) {
@@ -220,7 +276,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
                         consoleView.print(String.format("%nFinished building project %s%n", execName), ConsoleViewContentType.NORMAL_OUTPUT);
                     } else {
-                        consoleView.print(String.format("%nCould build project %s%n", execName), ConsoleViewContentType.ERROR_OUTPUT);
+                        consoleView.print(String.format("%nCould't build project %s%n", execName), ConsoleViewContentType.ERROR_OUTPUT);
                     }
 
 

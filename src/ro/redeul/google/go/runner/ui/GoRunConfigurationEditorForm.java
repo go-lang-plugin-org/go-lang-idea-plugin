@@ -31,6 +31,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
     private RawCommandLineEditor builderArguments;
     private TextFieldWithBrowseButton workingDirectoryBrowser;
     private RawCommandLineEditor envVars;
+    private JCheckBox runGoVetBeforeCheckBox;
 
     @Override
     protected void resetEditorFrom(GoApplicationConfiguration configuration) {
@@ -45,6 +46,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
         }
 
         envVars.setText(configuration.envVars);
+        runGoVetBeforeCheckBox.setSelected(configuration.goVetEnabled);
     }
 
     @Override
@@ -62,6 +64,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
         configuration.goOutputDir = buildDirectoryPathBrowser.getText();
         configuration.workingDir = workingDirectoryBrowser.getText();
         configuration.envVars = envVars.getText();
+        configuration.goVetEnabled = runGoVetBeforeCheckBox.isSelected();
     }
 
     public GoRunConfigurationEditorForm(final Project project) {

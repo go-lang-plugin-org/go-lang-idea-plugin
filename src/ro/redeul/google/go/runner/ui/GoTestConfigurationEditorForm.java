@@ -43,6 +43,7 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
     private RawCommandLineEditor testArguments;
     private RawCommandLineEditor envVars;
     private TextFieldWithBrowseButton workingDirectoryBrowser;
+    private JCheckBox runGoVetBeforeCheckBox;
     private ButtonGroup testsGroup;
 
     @SuppressWarnings("unchecked")
@@ -149,6 +150,7 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
 
         useShort.setSelected(testConfiguration.useShortRun);
         runTestBeforeBenchmark.setSelected(testConfiguration.testBeforeBenchmark);
+        runGoVetBeforeCheckBox.setSelected(testConfiguration.goVetEnabled);
     }
 
     private void updateTestsFilterField() {
@@ -170,6 +172,7 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
         testConfiguration.filter = filter.isSelected() ? testsFilter.getText() : "";
         testConfiguration.useShortRun = this.useShort.isSelected();
         testConfiguration.testBeforeBenchmark = runTestBeforeBenchmark.isSelected();
+        testConfiguration.goVetEnabled = runGoVetBeforeCheckBox.isSelected();
 
         testConfiguration.checkConfiguration();
     }
