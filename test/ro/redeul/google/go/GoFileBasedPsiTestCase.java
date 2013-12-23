@@ -18,7 +18,9 @@ import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.FilteringProcessor;
 import com.intellij.util.Processor;
+import org.junit.Ignore;
 
+@Ignore
 public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
     protected void doTest() throws Exception {
         final String fullPath =

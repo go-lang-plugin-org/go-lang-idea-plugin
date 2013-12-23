@@ -16,9 +16,11 @@ import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.util.FilteringProcessor;
 import com.intellij.util.Processor;
+import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
 
+@Ignore
 public abstract class GoPsiTestCase extends PsiTestCase {
 
     protected String getTestDataPath() {

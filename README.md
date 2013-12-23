@@ -1,5 +1,7 @@
 # Google Go language plugin for IntelliJ Idea
 
+[![Build Status](https://secure.travis-ci.org/mtoader/google-go-lang-idea-plugin.png)](http://travis-ci.org/mtoader/google-go-lang-idea-plugin)
+
 Google go language plugin is an attempt to build an outstanding IDE for
 [Google Go language](http://golang.org) using Intellij IDEA.
 
