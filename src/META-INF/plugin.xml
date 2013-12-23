@@ -66,7 +66,8 @@
                 <li>[feature] Added a new inspection/fix which will generate a closure function</li>
                 <li>[feature] Function inspection/fix will generate the arguments when specified</li>
                 <li>[feature] Added intention to run "go get" on a package</li>
-                <li>[feature] go fmt integration via Tools -> Go menu options (default CTRL+ALT+SHIFT+F for file and CTRL+ALT+SHIFT+G for project)
+                <li>[feature] go fmt integration via Tools -> Go menu options (default CTRL+ALT+SHIFT+F for file and CTRL+ALT+SHIFT+G for project)</li>
+                <li>[feature] go vet integration</li>
                 <li>[bugfix] Dropped support for old build systems</li>
                 <li>[bugfix] Fixed live templates and compilation</li>
                 <li>[bugfix] Fixed Go App Engine support</li>
@@ -411,7 +412,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="133.139"/>
+    <idea-version since-build="133.326"/>
 
     <category>Custom Languages</category>
     <resource-bundle>ro.redeul.google.go.GoBundle</resource-bundle>

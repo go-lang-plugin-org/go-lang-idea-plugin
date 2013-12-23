@@ -2,14 +2,8 @@ package ro.redeul.google.go.completion;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.AdapterProcessor;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.FilteringProcessor;
-import com.intellij.util.Function;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 
 import java.io.File;

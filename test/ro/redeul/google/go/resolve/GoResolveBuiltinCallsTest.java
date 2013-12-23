@@ -4,7 +4,6 @@ import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static ro.redeul.google.go.util.GoPsiTestUtils.getAs;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
