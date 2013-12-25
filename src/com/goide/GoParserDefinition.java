@@ -1,7 +1,7 @@
 package com.goide;
 
 import com.goide.lexer.GoLexer;
-import com.goide.psi.GoElementStub;
+import com.goide.psi.GoCompositeElement;
 import com.goide.psi.GoFile;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
@@ -53,7 +53,7 @@ public class GoParserDefinition implements ParserDefinition {
   @NotNull
   @Override
   public PsiElement createElement(ASTNode node) {
-    return new GoElementStub(node.getElementType());
+    return new GoCompositeElement(node.getElementType());
   }
 
   @Override
