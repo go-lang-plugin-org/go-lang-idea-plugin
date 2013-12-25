@@ -1,6 +1,7 @@
 package com.goide;
 
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 
 public interface GoTokenTypes {
   IElementType wsWS = new GoElementType("WHITESPACE");
@@ -120,4 +121,8 @@ public interface GoTokenTypes {
   IElementType oGREATER = new GoElementType(">");
 
   IElementType oVAR_ASSIGN = new GoElementType(":=");
+
+  TokenSet WHITESPACES = TokenSet.create(wsWS, wsNLS);
+  TokenSet COMMENTS = TokenSet.create(mSL_COMMENT, mML_COMMENT);
+  TokenSet STRING_LITERALS = TokenSet.create(litCHAR, litSTRING);
 }

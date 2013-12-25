@@ -7,6 +7,6 @@ import com.intellij.psi.tree.TokenSet;
 
 public class GoLexer extends MergingLexerAdapter {
   public GoLexer() {
-    super(new FlexAdapter(new _GoLexer()), TokenSet.create(GoTokenTypes.mSL_COMMENT, GoTokenTypes.wsWS));
+    super(new FlexAdapter(new _GoLexer()), TokenSet.orSet(GoTokenTypes.COMMENTS, GoTokenTypes.WHITESPACES));
   }
 }
