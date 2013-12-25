@@ -16,7 +16,7 @@ public class GoSyntaxHighlightingColors {
   public static final TextAttributesKey BRACES = createTextAttributesKey("GO_BRACES", DefaultLanguageHighlighterColors.BRACES);
   public static final TextAttributesKey PARENTHESES = createTextAttributesKey("GO_PARENTHESES", DefaultLanguageHighlighterColors.PARENTHESES);
   public static final TextAttributesKey OPERATOR = createTextAttributesKey("GO_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
-  public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("GO_IDENTIFIER", DefaultLanguageHighlighterColors.KEYWORD);
+  public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("GO_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
   public static final TextAttributesKey DOT = createTextAttributesKey("GO_DOT", DefaultLanguageHighlighterColors.DOT);
   public static final TextAttributesKey SEMICOLON = createTextAttributesKey("GO_SEMICOLON", DefaultLanguageHighlighterColors.SEMICOLON);
   public static final TextAttributesKey COLON = createTextAttributesKey("GO_COLON", HighlighterColors.TEXT);
