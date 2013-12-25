@@ -1,4 +1,4 @@
-package ro.redeul.google.go.lang.lexer;
+package com.goide.lexer
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
@@ -7,6 +7,13 @@ import java.lang.reflect.Field;
 import org.jetbrains.annotations.NotNull;
 
 %%
+
+
+%{
+  public _GoLexer() {
+    this((java.io.Reader)null);
+  }
+%}
 
 %unicode
 %class _GoLexer
