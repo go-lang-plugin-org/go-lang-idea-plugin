@@ -1,18 +1,82 @@
 {
-  pin(".*List(?:_\d.*)?")=1
+  parserClass='com.goide.parser.GoParser'
+
+  implements='com.goide.psi.GoCompositeElement'
+  extends='com.goide.psi.impl.GoCompositeElementImpl'
+  
+  elementTypeHolderClass='com.goide.GoTypes'
+  elementTypePrefix='GO_'
+  elementTypeClass='com.goide.psi.GoCompositeElementType'
+  tokenTypeClass='com.goide.psi.GoTokenType'
+  
+  psiClassPrefix='Go'
+  psiImplClassSuffix='Impl'
+  psiPackage='com.goide.psi'
+  psiImplPackage='com.goide.psi.impl'
+  
+  LCURLY               =  '{'
+  RCURLY               =  '}'
+  LBRACK               =  '['
+  RBRACK               =  ']'
+  LPAREN               =  '('
+  RPAREN               =  ')'
+  COLON                =  ':'
+  SEMI                 =  ';'
+  COMMA                =  ','
+  EQ                   =  '=='
+  ASSIGN               =  '='
+  NOT_EQ               =  '!='
+  NOT                  =  '!'
+  PLUS_PLUS            =  '++'
+  PLUS_ASSIGN          =  '+='
+  PLUS                 =  '+'
+  MINUS_MINUS          =  '--'
+  MINUS_ASSIGN         =  '-='
+  MINUS                =  '-'
+  COND_OR              =  '||'
+  BIT_OR_ASSIGN        =  '|='
+  BIT_CLEAR_ASSIGN     =  '&^='
+  BIT_CLEAR            =  '&^'
+  COND_AND             =  '&&'
+  BIT_AND_ASSIGN       =  '&='
+  BIT_AND              =  '&'
+  BIT_OR               =  '|'
+  SHIFT_LEFT_ASSIGN    =  '<<='
+  SHIFT_LEFT           =  '<<'
+  SEND_CHANNEL         =  '<-'
+  LESS_OR_EQUAL        =  '<='
+  LESS                 =  '<'
+  BIT_XOR_ASSIGN       =  '^='
+  BIT_XOR              =  '^'
+  MUL_ASSIGN           =  '*='
+  MUL                  =  '*'
+  QUOTIENT_ASSIGN      =  '/='
+  QUOTIENT             =  '/'
+  REMAINDER_ASSIGN     =  '%='
+  REMAINDER            =  '%'
+  SHIFT_RIGHT_ASSIGN   =  '>>='
+  SHIFT_RIGHT          =  '>>'
+  GREATER_OR_EQUAL     =  '>='
+  GREATER              =  '>'
+  VAR_ASSIGN           =  ':='
+  TRIPLE_DOT           =  '...'
+  DOT                  =  '.'
+  SEMI_SYNTHETIC       = '<NL>'
+
+  pin('.*List(?:_\d.*)?')=1
 }
 
 SourceFile ::= PackageClause semi ( ImportDecl semi )* ( TopLevelDecl semi )* {pin=1}
-private semi ::= ";"?
+private semi ::= '<NL>' | ';'?
 
-PackageClause ::= "package" PackageName {pin=1}
+PackageClause ::= package PackageName {pin=1}
 private PackageName ::= identifier
 
-ImportDecl ::= "import" ( ImportSpec | "(" ( ImportSpec semi )* ")" ) {pin=1}
-ImportSpec ::= [ "." | PackageName ] ImportPath
-ImportPath ::= string_lit
+ImportDecl ::= import ( ImportSpec | '(' ( ImportSpec semi )* ')' ) {pin=1}
+ImportSpec ::= [ '.' | PackageName ] ImportPath
+ImportPath ::= string
 
-Type ::= TypeName | TypeLit | "(" Type ")"
+GoType ::= TypeName | TypeLit | '(' GoType ')'
 TypeName ::= identifier | QualifiedIdent
 TypeLit ::=
     ArrayType
@@ -24,38 +88,38 @@ TypeLit ::=
   | MapType
   | ChannelType
 
-ArrayType ::= "[" ArrayLength "]" ElementType
+ArrayType ::= '[' ArrayLength ']' ElementType
 ArrayLength ::= Expression
-ElementType ::= Type
-SliceType ::= "[" "]" ElementType
+ElementType ::= GoType
+SliceType ::= '[' ']' ElementType
 
-StructType ::= "struct" "{" ( FieldDecl semi )* "}" {pin=1}
-FieldDecl ::= (IdentifierList Type | AnonymousField) [ Tag ]
-AnonymousField ::= [ "*" ] TypeName
-Tag ::= string_lit
+StructType ::= struct '{' ( FieldDecl semi )* '}' {pin=1}
+FieldDecl ::= (IdentifierList GoType | AnonymousField) [ Tag ]
+AnonymousField ::= [ '*' ] TypeName
+Tag ::= string
 
-PointerType ::= "*" BaseType
-BaseType ::= Type
+PointerType ::= '*' BaseType
+BaseType ::= GoType
 
-FunctionType ::= "func" Signature
+FunctionType ::= func Signature
 Signature ::= Parameters [ Result ]
-Result ::= Parameters | Type
-Parameters ::= "(" [ ParameterList [ "," ] ] ")"
-ParameterList ::= ParameterDecl ( "," ParameterDecl )*
-ParameterDecl ::= [ IdentifierList ] [ "..." ] Type
+Result ::= Parameters | GoType
+Parameters ::= '(' [ ParameterList [ ',' ] ] ')'
+ParameterList ::= ParameterDecl ( ',' ParameterDecl )*
+ParameterDecl ::= [ IdentifierList ] [ '...' ] GoType
 
-InterfaceType ::= "interface" "{" ( MethodSpec semi )* "}"
+InterfaceType ::= interface '{' ( MethodSpec semi )* '}'
 MethodSpec ::= MethodName Signature | InterfaceTypeName
 MethodName ::= identifier
 InterfaceTypeName ::= TypeName
 
-MapType ::= "map" "[" KeyType "]" ElementType
-KeyType ::= Type
+MapType ::= map '[' KeyType ']' ElementType
+KeyType ::= GoType
 
-ChannelType ::= ( "chan" [ "<-" ] | "<-" "chan" ) ElementType
+ChannelType ::= ( chan [ '<-' ] | '<-' chan ) ElementType
 
-Block ::= "{" StatementList "}"
-StatementList ::= ( Statement semi )* //{recoverWhile="#auto"}
+Block ::= '{' StatementList '}'
+StatementList ::= ( Statement semi )* //{recoverWhile='#auto'}
 
 Statement ::=
 	  DeclarationStatement
@@ -84,60 +148,62 @@ SimpleStatement ::=
 DeclarationStatement  ::= ConstDecl | TypeDecl | VarDecl
 TopLevelDecl ::= DeclarationStatement | FunctionDecl | MethodDecl
 
-ConstDecl ::= "const" ( ConstSpec | "(" ( ConstSpec semi )* ")" )
-ConstSpec ::= IdentifierList [ [ Type ] "=" ExpressionList ]
+ConstDecl ::= const ( ConstSpec | '(' ( ConstSpec semi )* ')' )
+ConstSpec ::= IdentifierList [ [ GoType ] '=' ExpressionList ]
 
-IdentifierList ::= identifier ( "," identifier )*
-ExpressionList ::= Expression ( "," Expression )*
+IdentifierList ::= identifier ( ',' identifier )*
+ExpressionList ::= Expression ( ',' Expression )*
 
 
-TypeDecl ::= "type" ( TypeSpec | "(" ( TypeSpec semi )* ")" )
-TypeSpec ::= identifier Type
+TypeDecl ::= type ( TypeSpec | '(' ( TypeSpec semi )* ')' )
+TypeSpec ::= identifier GoType
 
-VarDecl ::= "var" ( VarSpec | "(" ( VarSpec semi )* ")" )
-VarSpec ::= IdentifierList ( Type [ "=" ExpressionList ] | "=" ExpressionList )
+VarDecl ::= var ( VarSpec | '(' ( VarSpec semi )* ')' )
+VarSpec ::= IdentifierList ( GoType [ '=' ExpressionList ] | '=' ExpressionList )
 
-ShortVarDecl ::= IdentifierList ":=" ExpressionList
+ShortVarDecl ::= IdentifierList ':=' ExpressionList
 
-FunctionDecl ::= "func" FunctionName ( Function | Signature )
+FunctionDecl ::= func FunctionName ( Function | Signature )
 FunctionName ::= identifier
 Function     ::= Signature FunctionBody
 FunctionBody ::= Block
 
-MethodDecl ::= "func" Receiver MethodName ( Function | Signature )
-Receiver ::= "(" [ identifier ] [ "*" ] BaseTypeName ")"
+MethodDecl ::= func Receiver MethodName ( Function | Signature )
+Receiver ::= '(' [ identifier ] [ '*' ] BaseTypeName ')'
 BaseTypeName ::= identifier
 
-Operand ::= Literal | OperandName | MethodExpr | "(" Expression ")"
+Operand ::= Literal | OperandName | MethodExpr | '(' Expression ')'
 Literal ::= BasicLit | CompositeLit | FunctionLit
 BasicLit ::=
-    int_lit
-  | float_lit
-  | imaginary_lit
-  | rune_lit
-  | string_lit
+    int
+  | float
+  | float_i
+  | decimal_i
+  | imaginary
+  | rune
+  | string
 OperandName ::= identifier | QualifiedIdent
 
-QualifiedIdent ::= PackageName "." identifier
+QualifiedIdent ::= PackageName '.' identifier
 
 CompositeLit ::= LiteralType LiteralValue
 LiteralType ::=
     StructType
   | ArrayType
-  | "[" "..." "]" ElementType
+  | '[' '...' ']' ElementType
   | SliceType
   | MapType
   | TypeName
 
-LiteralValue ::= "{" [ ElementList [ "," ] ] "}"
-ElementList  ::= Element ( "," Element )*
-Element ::= [ Key ":" ] Value
+LiteralValue ::= '{' [ ElementList [ ',' ] ] '}'
+ElementList  ::= Element ( ',' Element )*
+Element ::= [ Key ':' ] Value
 Key ::= FieldName | ElementIndex
 FieldName ::= identifier
 ElementIndex ::= Expression
 Value ::= Expression | LiteralValue
 
-FunctionLit ::= "func" Function
+FunctionLit ::= func Function
 
 PrimaryExpr ::=
 	Operand |
@@ -145,80 +211,81 @@ PrimaryExpr ::=
 	BuiltinCall |
 	PrimaryExpr (Selector | Index | Slice | TypeAssertion | Call)
 
-Selector ::= "." identifier
-Index ::= "[" Expression "]"
-Slice ::= "["
-  ( [ Expression ] ":" [ Expression ] )
-  | ( [ Expression ] ":" Expression ":" Expression ) "]"
-TypeAssertion ::= "." "(" Type ")"
-Call ::= "(" [ ArgumentList [ "," ] ] ")"
-ArgumentList ::= ExpressionList [ "..." ]
+Selector ::= '.' identifier
+Index ::= '[' Expression ']'
+Slice ::= '['
+  ( [ Expression ] ':' [ Expression ] )
+  | ( [ Expression ] ':' Expression ':' Expression ) ']'
+TypeAssertion ::= '.' '(' GoType ')'
+Call ::= '(' [ ArgumentList [ ',' ] ] ')'
+ArgumentList ::= ExpressionList [ '...' ]
 
 
 Expression ::= UnaryExpr | Expression binary_op UnaryExpr
 UnaryExpr ::= PrimaryExpr | unary_op UnaryExpr
 
-binary_op  ::= "||" | "&&" | rel_op | add_op | mul_op
-rel_op     ::= "==" | "!=" | "<" | "<=" | ">" | ">="
-add_op     ::= "+" | "-" | "|" | "^"
-mul_op     ::= "*" | "/" | "%" | "<<" | ">>" | "&" | "&^"
+binary_op  ::= '||' | '&&' | rel_op | add_op | mul_op
+rel_op     ::= '==' | '!=' | '<' | '<=' | '>' | '>='
+add_op     ::= '+' | '-' | '|' | '^'
+mul_op     ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
 
-unary_op   ::= "+" | "-" | "!" | "^" | "*" | "&" | "<-"
+unary_op   ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
-MethodExpr ::= ReceiverType "." MethodName
-ReceiverType ::= TypeName | "(" "*" TypeName ")" | "(" ReceiverType ")"
+MethodExpr ::= ReceiverType '.' MethodName
+ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
 
-Conversion ::= Type "(" Expression [ "," ] ")"
+Conversion ::= GoType '(' Expression [ ',' ] ')'
 
-LabeledStatement ::= Label ":" Statement
+LabeledStatement ::= Label ':' Statement
 Label ::= identifier
 
 ExpressionStatement ::= Expression
 
-SendStatement ::= Channel "<-" Expression
+SendStatement ::= Channel '<-' Expression
 Channel  ::= Expression
 
-IncDecStatement ::= Expression ( "++" | "--" )
+IncDecStatement ::= Expression ( '++' | '--' )
 
 Assignment ::= ExpressionList assign_op ExpressionList
 
-assign_op ::= [ add_op | mul_op ] "="
+assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
 
-IfStatement ::= "if" [ SimpleStatement semi ] Expression Block [ "else" ( IfStatement | Block ) ]
+IfStatement ::= if [ SimpleStatement semi ] Expression Block [ else ( IfStatement | Block ) ]
 
 SwitchStatement ::= ExprSwitchStatement | TypeSwitchStatement
 
-ExprSwitchStatement ::= "switch" [ SimpleStatement semi ] [ Expression ] "{" ( ExprCaseClause )* "}"
-ExprCaseClause ::= ExprSwitchCase ":" StatementList
-ExprSwitchCase ::= "case" ExpressionList | "default"
+ExprSwitchStatement ::= switch [ SimpleStatement semi ] [ Expression ] '{' ( ExprCaseClause )* '}'
+ExprCaseClause ::= ExprSwitchCase ':' StatementList
+ExprSwitchCase ::= case ExpressionList | default
 
-TypeSwitchStatement  ::= "switch" [ SimpleStatement semi ] TypeSwitchGuard "{" ( TypeCaseClause )* "}"
-TypeSwitchGuard ::= [ identifier ":=" ] PrimaryExpr "." "(" "type" ")"
-TypeCaseClause  ::= TypeSwitchCase ":" StatementList
-TypeSwitchCase  ::= "case" TypeList | "default"
-TypeList        ::= Type ( "," Type )*
+TypeSwitchStatement  ::= switch [ SimpleStatement semi ] TypeSwitchGuard '{' ( TypeCaseClause )* '}'
+TypeSwitchGuard ::= [ identifier ':=' ] PrimaryExpr '.' '(' type ')'
+TypeCaseClause  ::= TypeSwitchCase ':' StatementList
+TypeSwitchCase  ::= case TypeList | default
+TypeList        ::= GoType ( ',' GoType )*
 
-ForStatement ::= "for" [ Expression | RangeClause | ForClause ] Block
+ForStatement ::= for [ Expression | RangeClause | ForClause ] Block
 
 ForClause ::= SimpleStatement? semi Expression? semi SimpleStatement?
 
-RangeClause ::= ( ExpressionList "=" | IdentifierList ":=" ) "range" Expression
+RangeClause ::= ( ExpressionList '=' | IdentifierList ':=' ) range Expression
 
-GoStatement ::= "go" Expression
+GoStatement ::= go Expression
 
-SelectStatement ::= "select" "{" ( CommClause )* "}"
-CommClause ::= CommCase ":" StatementList
-CommCase   ::= "case" ( SendStatement | RecvStatement ) | "default"
-RecvStatement   ::= [ ExpressionList "=" | IdentifierList ":=" ] Expression
+SelectStatement ::= select '{' ( CommClause )* '}'
+CommClause ::= CommCase ':' StatementList
+CommCase   ::= case ( SendStatement | RecvStatement ) | default
+RecvStatement   ::= [ ExpressionList '=' | IdentifierList ':=' ] Expression
 
-ReturnStatement ::= "return" [ ExpressionList ]
+ReturnStatement ::= return [ ExpressionList ]
 
-BreakStatement ::= "break" Label?
-ContinueStatement ::= "continue" Label?
-GotoStatement ::= "goto" Label
-FallthroughStatement ::= "fallthrough"
-DeferStatement ::= "defer" Expression
+BreakStatement ::= break Label?
+ContinueStatement ::= continue Label?
+GotoStatement ::= goto Label
+FallthroughStatement ::= fallthrough
+DeferStatement ::= defer Expression
 
-BuiltinCall ::= identifier "(" [ BuiltinArgs [ "," ] ] ")"
-BuiltinArgs ::= Type [ "," ArgumentList ] | ArgumentList
+BuiltinCall ::= identifier '(' [ BuiltinArgs [ ',' ] ] ')'
+BuiltinArgs ::= GoType [ ',' ArgumentList ] | ArgumentList
 
+dummy ::= char | oct | hex // todo: remove

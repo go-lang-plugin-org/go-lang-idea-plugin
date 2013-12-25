@@ -2,10 +2,11 @@ package com.goide.lexer;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import com.goide.GoTokenTypes;
+import com.goide.GoTypes;
 import java.util.*;
 import java.lang.reflect.Field;
 import org.jetbrains.annotations.NotNull;
+import static com.goide.GoParserDefinition.*;
 
 %%
 
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 %unicode
 %class _GoLexer
-%implements FlexLexer, GoTokenTypes
+%implements FlexLexer, GoTypes
 %unicode
 %public
 
@@ -79,6 +80,7 @@ NUM_FLOAT = ( ( ({DIGIT}+ "." {DIGIT}*) | ({DIGIT}* "." {DIGIT}+) ) {FLOAT_EXPON
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 //IDENT_NOBUCKS = {LETTER} ({LETTER} | {DIGIT})*
 
+SLASH =    "\\"
 STR =      "\""
 ESCAPES = [abfnrtv]
 
@@ -117,7 +119,7 @@ ESCAPES = [abfnrtv]
 
 
 // %state IN_COMMENT
-%state MAYBE_SEMICOLON
+%state MAYBE_SEMI
 
 %%
 
@@ -129,145 +131,145 @@ ESCAPES = [abfnrtv]
 //}
 
 <YYINITIAL> {
-"|"                                       { return BIT_OR; }
+"|"                                       { return GO_BIT_OR; }
 
-{WS}                                     { return WS; }
-{NL}+                                    { return NLS; }
+{WS}                                     { return GO_WS; }
+{NL}+                                    { return GO_NLS; }
 
-{LINE_COMMENT}                             { return( LINE_COMMENT ); }
+{LINE_COMMENT}                             { return( GO_LINE_COMMENT ); }
 //{MULTILINE_COMMENT}                             { return( MULTILINE_COMMENT ); }
-"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return( MULTILINE_COMMENT ); }
+"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return( GO_MULTILINE_COMMENT ); }
 
 //([^"*/"] | [\r\n])+ "*/"?
 
-"..."                                     { return TRIPLE_DOT; }
-"."                                       { return DOT; }
+"..."                                     { return GO_TRIPLE_DOT; }
+"."                                       { return GO_DOT; }
 
-"'" . "'"                                               { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'" \n "'"                                              { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\" [abfnrtv\\\'] "'"                                 { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\" {OCT_DIGIT} {OCT_DIGIT} {OCT_DIGIT} "'"        { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\x" {HEX_DIGIT} {HEX_DIGIT} "'"                    { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'" . "'"                                               { yybegin(MAYBE_SEMI); return GO_CHAR; }
+"'" \n "'"                                              { yybegin(MAYBE_SEMI); return GO_CHAR; }
+"'\\" [abfnrtv\\\'] "'"                                 { yybegin(MAYBE_SEMI); return GO_CHAR; }
+"'\\" {OCT_DIGIT} {OCT_DIGIT} {OCT_DIGIT} "'"        { yybegin(MAYBE_SEMI); return GO_CHAR; }
+"'\\x" {HEX_DIGIT} {HEX_DIGIT} "'"                    { yybegin(MAYBE_SEMI); return GO_CHAR; }
 "'\\u" {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} "'"
-                                                        { yybegin(MAYBE_SEMICOLON); return CHAR; }
+                                                        { yybegin(MAYBE_SEMI); return GO_CHAR; }
 "'\\U" {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} "'"
-                                                        { yybegin(MAYBE_SEMICOLON); return CHAR; }
+                                                        { yybegin(MAYBE_SEMI); return GO_CHAR; }
 
-"`" [^`]* "`"?                            { yybegin(MAYBE_SEMICOLON); return STRING; }
-{STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}? { yybegin(MAYBE_SEMICOLON); return STRING; }
-"{"                                       { return LBRACE; }
-"}"                                       { yybegin(MAYBE_SEMICOLON); return RBRACE; }
+"`" [^`]* "`"?                            { yybegin(MAYBE_SEMI); return GO_STRING; }
+{STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}? { yybegin(MAYBE_SEMI); return GO_STRING; }
+"{"                                       { return GO_LCURLY; }
+"}"                                       { yybegin(MAYBE_SEMI); return GO_RCURLY; }
 
-"["                                       { return LBRACKET; }
-"]"                                       { yybegin(MAYBE_SEMICOLON); return RBRACKET; }
+"["                                       { return GO_LBRACK; }
+"]"                                       { yybegin(MAYBE_SEMI); return GO_RBRACK; }
 
-"("                                       { return LPAREN; }
-")"                                       { yybegin(MAYBE_SEMICOLON); return RPAREN; }
+"("                                       { return GO_LPAREN; }
+")"                                       { yybegin(MAYBE_SEMI); return GO_RPAREN; }
 
-":"                                       { return COLON; }
-";"                                       { return SEMICOLON; }
-","                                       { return COMMA; }
+":"                                       { return GO_COLON; }
+";"                                       { return GO_SEMI; }
+","                                       { return GO_COMMA; }
 
-"=="                                      { return EQ; }
-"="                                       { return ASSIGN; }
+"=="                                      { return GO_EQ; }
+"="                                       { return GO_ASSIGN; }
 
-"!="                                      { return NOT_EQ; }
-"!"                                       { return NOT; }
+"!="                                      { return GO_NOT_EQ; }
+"!"                                       { return GO_NOT; }
 
-"++"                                      { yybegin(MAYBE_SEMICOLON); return PLUS_PLUS; }
-"+="                                      { return PLUS_ASSIGN; }
-"+"                                       { return PLUS; }
+"++"                                      { yybegin(MAYBE_SEMI); return GO_PLUS_PLUS; }
+"+="                                      { return GO_PLUS_ASSIGN; }
+"+"                                       { return GO_PLUS; }
 
-"--"                                      { yybegin(MAYBE_SEMICOLON); return MINUS_MINUS; }
-"-="                                      { return MINUS_ASSIGN; }
-"-"                                       { return MINUS; }
+"--"                                      { yybegin(MAYBE_SEMI); return GO_MINUS_MINUS; }
+"-="                                      { return GO_MINUS_ASSIGN; }
+"-"                                       { return GO_MINUS; }
 
-"||"                                      { return COND_OR; }
-"|="                                      { return BIT_OR_ASSIGN; }
+"||"                                      { return GO_COND_OR; }
+"|="                                      { return GO_BIT_OR_ASSIGN; }
 
-"&^="                                     { return BIT_CLEAR_ASSIGN; }
-"&^"                                      { return BIT_CLEAR; }
-"&&"                                      { return COND_AND; }
+"&^="                                     { return GO_BIT_CLEAR_ASSIGN; }
+"&^"                                      { return GO_BIT_CLEAR; }
+"&&"                                      { return GO_COND_AND; }
 
-"&="                                      { return BIT_AND_ASSIGN; }
-"&"                                       { return BIT_AND; }
+"&="                                      { return GO_BIT_AND_ASSIGN; }
+"&"                                       { return GO_BIT_AND; }
 
-"<<="                                     { return SHIFT_LEFT_ASSIGN; }
-"<<"                                      { return SHIFT_LEFT; }
-"<-"                                      { return SEND_CHANNEL; }
-"<="                                      { return LESS_OR_EQUAL; }
-"<"                                       { return LESS; }
+"<<="                                     { return GO_SHIFT_LEFT_ASSIGN; }
+"<<"                                      { return GO_SHIFT_LEFT; }
+"<-"                                      { return GO_SEND_CHANNEL; }
+"<="                                      { return GO_LESS_OR_EQUAL; }
+"<"                                       { return GO_LESS; }
 
-"^="                                      { return BIT_XOR_ASSIGN; }
-"^"                                       { return BIT_XOR; }
+"^="                                      { return GO_BIT_XOR_ASSIGN; }
+"^"                                       { return GO_BIT_XOR; }
 
-"*="                                      { return MUL_ASSIGN; }
-"*"                                       { return MUL; }
+"*="                                      { return GO_MUL_ASSIGN; }
+"*"                                       { return GO_MUL; }
 
-"/="                                      { return QUOTIENT_ASSIGN; }
-"/"                                       { return QUOTIENT; }
+"/="                                      { return GO_QUOTIENT_ASSIGN; }
+"/"                                       { return GO_QUOTIENT; }
 
-"%="                                      { return REMAINDER_ASSIGN; }
-"%"                                       { return REMAINDER; }
+"%="                                      { return GO_REMAINDER_ASSIGN; }
+"%"                                       { return GO_REMAINDER; }
 
-">>="                                     { return SHIFT_RIGHT_ASSIGN; }
-">>"                                      { return SHIFT_RIGHT; }
-">="                                      { return GREATER_OR_EQUAL; }
-">"                                       { return GREATER; }
+">>="                                     { return GO_SHIFT_RIGHT_ASSIGN; }
+">>"                                      { return GO_SHIFT_RIGHT; }
+">="                                      { return GO_GREATER_OR_EQUAL; }
+">"                                       { return GO_GREATER; }
 
-":="                                      { return VAR_ASSIGN; }
+":="                                      { return GO_VAR_ASSIGN; }
 
 
-"break"                                   { yybegin(MAYBE_SEMICOLON); return( BREAK );  }
-"fallthrough"                             { yybegin(MAYBE_SEMICOLON); return( FALLTHROUGH ); }
-"return"                                  { yybegin(MAYBE_SEMICOLON); return RETURN ;  }
-"continue"                                { yybegin(MAYBE_SEMICOLON); return CONTINUE ;  }
+"break"                                   { yybegin(MAYBE_SEMI); return GO_BREAK;  }
+"fallthrough"                             { yybegin(MAYBE_SEMI); return GO_FALLTHROUGH; }
+"return"                                  { yybegin(MAYBE_SEMI); return GO_RETURN ;  }
+"continue"                                { yybegin(MAYBE_SEMI); return GO_CONTINUE ;  }
 
-"default"                                 { return( DEFAULT );  }
-"package"                                 { return( PACKAGE );  }
-"func"                                    { return( FUNC );  }
-"interface"                               { return( INTERFACE );  }
-"select"                                  { return( SELECT );  }
+"default"                                 { return( GO_DEFAULT );  }
+"package"                                 { return( GO_PACKAGE );  }
+"func"                                    { return( GO_FUNC );  }
+"interface"                               { return( GO_INTERFACE );  }
+"select"                                  { return( GO_SELECT );  }
 
-"case"                                    { return( CASE );  }
-"defer"                                   { return( DEFER );  }
-"go"                                      { return( GO );  }
-"map"                                     { return( MAP );  }
+"case"                                    { return( GO_CASE );  }
+"defer"                                   { return( GO_DEFER );  }
+"go"                                      { return( GO_GO );  }
+"map"                                     { return( GO_MAP );  }
 
-"chan"                                    {  return( CHAN );  }
+"chan"                                    {  return( GO_CHAN );  }
 
-"struct"                                  {  return( STRUCT );  }
-"else"                                    {  return( ELSE );  }
-"goto"                                    {  return( GOTO );  }
-"switch"                                  {  return( SWITCH );  }
-"const"                                   {  return( CONST ); }
+"struct"                                  {  return( GO_STRUCT );  }
+"else"                                    {  return( GO_ELSE );  }
+"goto"                                    {  return( GO_GOTO );  }
+"switch"                                  {  return( GO_SWITCH );  }
+"const"                                   {  return( GO_CONST ); }
 
-"if"                                      {  return IF ;  }
-"for"                                     {  return FOR ;  }
-"import"                                  {  return IMPORT ;  }
+"if"                                      {  return GO_IF ;  }
+"for"                                     {  return GO_FOR ;  }
+"import"                                  {  return GO_IMPORT ;  }
 
-"range"                                   {  return RANGE;  }
-"type"                                    {  return TYPE;  }
-"var"                                     {  return VAR;  }
+"range"                                   {  return GO_RANGE;  }
+"type"                                    {  return GO_TYPE;  }
+"var"                                     {  return GO_VAR;  }
 
-{IDENT}                                  {  yybegin(MAYBE_SEMICOLON); return IDENT; }
+{IDENT}                                  {  yybegin(MAYBE_SEMI); return GO_IDENTIFIER; }
 
-{NUM_FLOAT}"i"                           {  yybegin(MAYBE_SEMICOLON); return FLOAT_I; }
-{NUM_FLOAT}                              {  yybegin(MAYBE_SEMICOLON); return FLOAT; }
-{DIGIT}+"i"                              {  yybegin(MAYBE_SEMICOLON); return DECIMAL_I; }
-{NUM_OCT}                                {  yybegin(MAYBE_SEMICOLON); return OCT; }
-{NUM_HEX}                                {  yybegin(MAYBE_SEMICOLON); return HEX; }
-{NUM_INT}                                {  yybegin(MAYBE_SEMICOLON); return INT; }
+{NUM_FLOAT}"i"                           {  yybegin(MAYBE_SEMI); return GO_FLOAT_I; }
+{NUM_FLOAT}                              {  yybegin(MAYBE_SEMI); return GO_FLOAT; }
+{DIGIT}+"i"                              {  yybegin(MAYBE_SEMI); return GO_DECIMAL_I; }
+{NUM_OCT}                                {  yybegin(MAYBE_SEMI); return GO_OCT; }
+{NUM_HEX}                                {  yybegin(MAYBE_SEMI); return GO_HEX; }
+{NUM_INT}                                {  yybegin(MAYBE_SEMI); return GO_INT; }
 
-.                                         {  return WRONG; }
+.                                         {  return com.intellij.psi.TokenType.BAD_CHARACTER; }
 }
 
-<MAYBE_SEMICOLON> {
-{WS}               { return WS; }
-{NL}               { yybegin(YYINITIAL); yypushback(yytext().length()); return SEMICOLON_SYNTHETIC; }
-{LINE_COMMENT}       { return LINE_COMMENT; }
+<MAYBE_SEMI> {
+{WS}               { return GO_WS; }
+{NL}               { yybegin(YYINITIAL); yypushback(yytext().length()); return GO_SEMI_SYNTHETIC; }
+{LINE_COMMENT}       { return GO_LINE_COMMENT; }
 "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
-                    { return MULTILINE_COMMENT; }
+                    { return GO_MULTILINE_COMMENT; }
 
 .           { yybegin(YYINITIAL); yypushback(yytext().length()); }
 }
