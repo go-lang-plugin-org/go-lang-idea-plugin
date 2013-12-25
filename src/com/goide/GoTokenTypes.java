@@ -55,15 +55,15 @@ public interface GoTokenTypes {
 
   IElementType IDENT = new GoElementType("IDENTIFIER");
 
-  IElementType LCURLY = new GoElementType("{");
-  IElementType RCURLY = new GoElementType("}");
-  IElementType LBRACK = new GoElementType("[");
-  IElementType RBRACK = new GoElementType("]");
+  IElementType LBRACE = new GoElementType("{");
+  IElementType RBRACE = new GoElementType("}");
+  IElementType LBRACKET = new GoElementType("[");
+  IElementType RBRACKET = new GoElementType("]");
   IElementType LPAREN = new GoElementType("(");
   IElementType RPAREN = new GoElementType(")");
 
-  IElementType SEMI = new GoElementType(";");
-  IElementType SEMI_SYNTHETIC = new GoElementType("; (synthetic)");
+  IElementType SEMICOLON = new GoElementType(";");
+  IElementType SEMICOLON_SYNTHETIC = new GoElementType("; (synthetic)");
 
   IElementType TRIPLE_DOT = new GoElementType("...");
   IElementType DOT = new GoElementType(".");
