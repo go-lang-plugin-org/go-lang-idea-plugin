@@ -12,7 +12,7 @@ public class GoFileType extends LanguageFileType {
   private static final Icon ICON = IconLoader.findIcon("/icons/go.png");
 
   protected GoFileType() {
-    super(GoLanguage.GO);
+    super(GoLanguage.INSTANCE);
   }
 
   @NotNull

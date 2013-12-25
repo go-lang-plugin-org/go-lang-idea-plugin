@@ -5,6 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoElementType extends IElementType {
   public GoElementType(@NotNull String debugName) {
-    super(debugName, GoLanguage.GO);
+    super(debugName, GoLanguage.INSTANCE);
   }
 }

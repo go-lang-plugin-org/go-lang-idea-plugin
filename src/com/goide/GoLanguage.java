@@ -5,7 +5,7 @@ import com.intellij.openapi.fileTypes.LanguageFileType;
 import org.jetbrains.annotations.Nullable;
 
 public class GoLanguage extends Language {
-  public static final Language GO = new GoLanguage();
+  public static final Language INSTANCE = new GoLanguage();
 
   protected GoLanguage() {
     super("go", "application/go");

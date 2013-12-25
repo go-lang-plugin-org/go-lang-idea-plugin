@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoFile extends PsiFileBase {
   public GoFile(@NotNull FileViewProvider viewProvider) {
-    super(viewProvider, GoLanguage.GO);
+    super(viewProvider, GoLanguage.INSTANCE);
   }
 
   @NotNull
