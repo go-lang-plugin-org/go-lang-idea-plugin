@@ -7,8 +7,8 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
 public class GoSyntaxHighlightingColors {
-  public static final TextAttributesKey LINE_COMMENT = createTextAttributesKey("GO_BLOCK_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-  public static final TextAttributesKey BLOCK_COMMENT = createTextAttributesKey("GO_LINE_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT);
+  public static final TextAttributesKey LINE_COMMENT = createTextAttributesKey("GO_LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
+  public static final TextAttributesKey BLOCK_COMMENT = createTextAttributesKey("GO_BLOCK_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT);
   public static final TextAttributesKey KEYWORD = createTextAttributesKey("GO_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
   public static final TextAttributesKey STRING = createTextAttributesKey("GO_STRING", DefaultLanguageHighlighterColors.STRING);
   public static final TextAttributesKey NUMBER = createTextAttributesKey("GO_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
