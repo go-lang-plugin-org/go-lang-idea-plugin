@@ -17,17 +17,17 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase {
   private static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
 
   static {
-    fillMap(ATTRIBUTES, LINE_COMMENT, GoTokenTypes.mSL_COMMENT);
-    fillMap(ATTRIBUTES, BLOCK_COMMENT, GoTokenTypes.mML_COMMENT);
-    fillMap(ATTRIBUTES, PARENTHESES, GoTokenTypes.pLPAREN, GoTokenTypes.pRPAREN);
-    fillMap(ATTRIBUTES, BRACES, GoTokenTypes.pLCURLY, GoTokenTypes.pRCURLY);
-    fillMap(ATTRIBUTES, BRACKETS, GoTokenTypes.pLBRACK, GoTokenTypes.pRBRACK);
-    fillMap(ATTRIBUTES, BAD_CHARACTER, GoTokenTypes.mWRONG);
-    fillMap(ATTRIBUTES, IDENTIFIER, GoTokenTypes.mIDENT);
-    fillMap(ATTRIBUTES, DOT, GoTokenTypes.oDOT, GoTokenTypes.oTRIPLE_DOT);
-    fillMap(ATTRIBUTES, COLON, GoTokenTypes.oCOLON);
-    fillMap(ATTRIBUTES, SEMICOLON, GoTokenTypes.oSEMI);
-    fillMap(ATTRIBUTES, COMMA, GoTokenTypes.oCOMMA);
+    fillMap(ATTRIBUTES, LINE_COMMENT, GoTokenTypes.LINE_COMMENT);
+    fillMap(ATTRIBUTES, BLOCK_COMMENT, GoTokenTypes.MULTILINE_COMMENT);
+    fillMap(ATTRIBUTES, PARENTHESES, GoTokenTypes.LPAREN, GoTokenTypes.RPAREN);
+    fillMap(ATTRIBUTES, BRACES, GoTokenTypes.LCURLY, GoTokenTypes.RCURLY);
+    fillMap(ATTRIBUTES, BRACKETS, GoTokenTypes.LBRACK, GoTokenTypes.RBRACK);
+    fillMap(ATTRIBUTES, BAD_CHARACTER, GoTokenTypes.WRONG);
+    fillMap(ATTRIBUTES, IDENTIFIER, GoTokenTypes.IDENT);
+    fillMap(ATTRIBUTES, DOT, GoTokenTypes.DOT, GoTokenTypes.TRIPLE_DOT);
+    fillMap(ATTRIBUTES, COLON, GoTokenTypes.COLON);
+    fillMap(ATTRIBUTES, SEMICOLON, GoTokenTypes.SEMI);
+    fillMap(ATTRIBUTES, COMMA, GoTokenTypes.COMMA);
     fillMap(ATTRIBUTES, GoTokenTypes.OPERATORS, OPERATOR);
     fillMap(ATTRIBUTES, GoTokenTypes.KEYWORDS, KEYWORD);
     fillMap(ATTRIBUTES, GoTokenTypes.NUMBERS, NUMBER);

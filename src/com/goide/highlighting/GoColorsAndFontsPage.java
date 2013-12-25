@@ -62,7 +62,8 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
 
   @NotNull
   public String getDemoText() {
-    return "package main\n" +
+    return "∫∫∫\n\n" +
+        "package main\n" +
         "\n" +
         "import (\n" +
         "    \"fmt\"\n" +
@@ -74,9 +75,9 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
         "}\n" +
         "\n" +
         "func main() {\n" +
-        "    var a Abser\n" +
-        "    f := MyFloat(-math.Sqrt2)\n" +
-        "    v := Vertex{3, 4}\n" +
+        "    var a Abser;\n" +
+        "    f := MyFloat(-math.Sqrt2);\n" +
+        "    v := Vertex{3, 4};\n" +
         "\n" +
         "    a = f  // a MyFloat implements Abser\n" +
         "    a = &v // a *Vertex implements Abser\n" +
