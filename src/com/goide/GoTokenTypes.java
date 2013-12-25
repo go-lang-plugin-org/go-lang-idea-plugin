@@ -4,125 +4,125 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 
 public interface GoTokenTypes {
-  IElementType wsWS = new GoElementType("WHITESPACE");
-  IElementType wsNLS = new GoElementType("WS_NEW_LINES");
+  IElementType WS = new GoElementType("WHITESPACE");
+  IElementType NLS = new GoElementType("WS_NEW_LINES");
 
-  IElementType litCHAR = new GoElementType("LITERAL_CHAR");
-  IElementType litSTRING = new GoElementType("LITERAL_STRING");
+  IElementType CHAR = new GoElementType("LITERAL_CHAR");
+  IElementType STRING = new GoElementType("LITERAL_STRING");
 
-  IElementType litOCT = new GoElementType("LITERAL_OCT");
-  IElementType litINT = new GoElementType("LITERAL_INT");
-  IElementType litHEX = new GoElementType("LITERAL_HEX");
-  IElementType litFLOAT = new GoElementType("LITERAL_FLOAT");
-  IElementType litFLOAT_I = new GoElementType("LITERAL_IMAGINARY_FLOAT");
-  IElementType litDECIMAL_I = new GoElementType("LITERAL_IMAGINARY_INTEGER");
+  IElementType OCT = new GoElementType("LITERAL_OCT");
+  IElementType INT = new GoElementType("LITERAL_INT");
+  IElementType HEX = new GoElementType("LITERAL_HEX");
+  IElementType FLOAT = new GoElementType("LITERAL_FLOAT");
+  IElementType FLOAT_I = new GoElementType("LITERAL_IMAGINARY_FLOAT");
+  IElementType DECIMAL_I = new GoElementType("LITERAL_IMAGINARY_INTEGER");
 
-  IElementType kBREAK = new GoElementType("KEYWORD_BREAK");
-  IElementType kDEFAULT = new GoElementType("KEYWORD_DEFAULT");
-  IElementType kPACKAGE = new GoElementType("KEYWORD_PACKAGE");
-  IElementType kFUNC = new GoElementType("KEYWORD_FUNC");
-  IElementType kINTERFACE = new GoElementType("KEYWORD_INTERFACE");
-  IElementType kSELECT = new GoElementType("KEYWORD_SELECT");
+  IElementType BREAK = new GoElementType("KEYWORD_BREAK");
+  IElementType DEFAULT = new GoElementType("KEYWORD_DEFAULT");
+  IElementType PACKAGE = new GoElementType("KEYWORD_PACKAGE");
+  IElementType FUNC = new GoElementType("KEYWORD_FUNC");
+  IElementType INTERFACE = new GoElementType("KEYWORD_INTERFACE");
+  IElementType SELECT = new GoElementType("KEYWORD_SELECT");
 
-  IElementType kCASE = new GoElementType("KEYWORD_CASE");
-  IElementType kDEFER = new GoElementType("KEYWORD_DEFER");
-  IElementType kGO = new GoElementType("KEYWORD_GO");
-  IElementType kMAP = new GoElementType("KEYWORD_MAP");
+  IElementType CASE = new GoElementType("KEYWORD_CASE");
+  IElementType DEFER = new GoElementType("KEYWORD_DEFER");
+  IElementType GO = new GoElementType("KEYWORD_GO");
+  IElementType MAP = new GoElementType("KEYWORD_MAP");
 
-  IElementType kCHAN = new GoElementType("KEYWORD_CHAN");
+  IElementType CHAN = new GoElementType("KEYWORD_CHAN");
 
-  IElementType kSTRUCT = new GoElementType("KEYWORD_STRUCT");
-  IElementType kELSE = new GoElementType("KEYWORD_ELSE");
-  IElementType kGOTO = new GoElementType("KEYWORD_GOTO");
-  IElementType kSWITCH = new GoElementType("KEYWORD_SWITCH");
-  IElementType kCONST = new GoElementType("KEYWORD_CONST");
-  IElementType kFALLTHROUGH = new GoElementType("KEYWORD_FALLTHROUGH");
+  IElementType STRUCT = new GoElementType("KEYWORD_STRUCT");
+  IElementType ELSE = new GoElementType("KEYWORD_ELSE");
+  IElementType GOTO = new GoElementType("KEYWORD_GOTO");
+  IElementType SWITCH = new GoElementType("KEYWORD_SWITCH");
+  IElementType CONST = new GoElementType("KEYWORD_CONST");
+  IElementType FALLTHROUGH = new GoElementType("KEYWORD_FALLTHROUGH");
 
-  IElementType kIF = new GoElementType("KEYWORD_IF");
-  IElementType kFOR = new GoElementType("KEYWORD_FOR");
-  IElementType kRETURN = new GoElementType("KEYWORD_RETURN");
-  IElementType kIMPORT = new GoElementType("KEYWORD_IMPORT");
-  IElementType kCONTINUE = new GoElementType("KEYWORD_CONTINUE");
+  IElementType IF = new GoElementType("KEYWORD_IF");
+  IElementType FOR = new GoElementType("KEYWORD_FOR");
+  IElementType RETURN = new GoElementType("KEYWORD_RETURN");
+  IElementType IMPORT = new GoElementType("KEYWORD_IMPORT");
+  IElementType CONTINUE = new GoElementType("KEYWORD_CONTINUE");
 
-  IElementType kRANGE = new GoElementType("KEYWORD_RANGE");
-  IElementType kTYPE = new GoElementType("KEYWORD_TYPE");
-  IElementType kVAR = new GoElementType("KEYWORD_VAR");
+  IElementType RANGE = new GoElementType("KEYWORD_RANGE");
+  IElementType TYPE = new GoElementType("KEYWORD_TYPE");
+  IElementType VAR = new GoElementType("KEYWORD_VAR");
 
-  IElementType mWRONG = new GoElementType("WRONG");
+  IElementType WRONG = new GoElementType("WRONG");
 
-  IElementType mSL_COMMENT = new GoElementType("SL_COMMENT");
-  IElementType mML_COMMENT = new GoElementType("ML_COMMENT");
+  IElementType LINE_COMMENT = new GoElementType("LINE_COMMENT");
+  IElementType MULTILINE_COMMENT = new GoElementType("MULTILINE_COMMENT");
 
-  IElementType mIDENT = new GoElementType("IDENTIFIER");
+  IElementType IDENT = new GoElementType("IDENTIFIER");
 
-  IElementType pLCURLY = new GoElementType("{");
-  IElementType pRCURLY = new GoElementType("}");
-  IElementType pLBRACK = new GoElementType("[");
-  IElementType pRBRACK = new GoElementType("]");
-  IElementType pLPAREN = new GoElementType("(");
-  IElementType pRPAREN = new GoElementType(")");
+  IElementType LCURLY = new GoElementType("{");
+  IElementType RCURLY = new GoElementType("}");
+  IElementType LBRACK = new GoElementType("[");
+  IElementType RBRACK = new GoElementType("]");
+  IElementType LPAREN = new GoElementType("(");
+  IElementType RPAREN = new GoElementType(")");
 
-  IElementType oSEMI = new GoElementType(";");
-  IElementType oSEMI_SYNTHETIC = new GoElementType("; (synthetic)");
+  IElementType SEMI = new GoElementType(";");
+  IElementType SEMI_SYNTHETIC = new GoElementType("; (synthetic)");
 
-  IElementType oTRIPLE_DOT = new GoElementType("...");
-  IElementType oDOT = new GoElementType(".");
-  IElementType oCOLON = new GoElementType(":");
-  IElementType oCOMMA = new GoElementType(",");
+  IElementType TRIPLE_DOT = new GoElementType("...");
+  IElementType DOT = new GoElementType(".");
+  IElementType COLON = new GoElementType(":");
+  IElementType COMMA = new GoElementType(",");
 
-  IElementType oEQ = new GoElementType("==");
-  IElementType oASSIGN = new GoElementType("=");
+  IElementType EQ = new GoElementType("==");
+  IElementType ASSIGN = new GoElementType("=");
 
-  IElementType oNOT_EQ = new GoElementType("!=");
-  IElementType oNOT = new GoElementType("!");
+  IElementType NOT_EQ = new GoElementType("!=");
+  IElementType NOT = new GoElementType("!");
 
-  IElementType oPLUS_PLUS = new GoElementType("++");
-  IElementType oPLUS_ASSIGN = new GoElementType("+=");
-  IElementType oPLUS = new GoElementType("+");
+  IElementType PLUS_PLUS = new GoElementType("++");
+  IElementType PLUS_ASSIGN = new GoElementType("+=");
+  IElementType PLUS = new GoElementType("+");
 
-  IElementType oMINUS_MINUS = new GoElementType("--");
-  IElementType oMINUS_ASSIGN = new GoElementType("-=");
-  IElementType oMINUS = new GoElementType("-");
+  IElementType MINUS_MINUS = new GoElementType("--");
+  IElementType MINUS_ASSIGN = new GoElementType("-=");
+  IElementType MINUS = new GoElementType("-");
 
-  IElementType oBIT_OR_ASSIGN = new GoElementType("|=");
-  IElementType oBIT_OR = new GoElementType("|");
-  IElementType oCOND_OR = new GoElementType("||");
+  IElementType BIT_OR_ASSIGN = new GoElementType("|=");
+  IElementType BIT_OR = new GoElementType("|");
+  IElementType COND_OR = new GoElementType("||");
 
-  IElementType oBIT_CLEAR_ASSIGN = new GoElementType("^&=");
-  IElementType oBIT_CLEAR = new GoElementType("^&");
-  IElementType oCOND_AND = new GoElementType("&&");
+  IElementType BIT_CLEAR_ASSIGN = new GoElementType("^&=");
+  IElementType BIT_CLEAR = new GoElementType("^&");
+  IElementType COND_AND = new GoElementType("&&");
 
-  IElementType oBIT_AND_ASSIGN = new GoElementType("&=");
-  IElementType oBIT_AND = new GoElementType("&");
+  IElementType BIT_AND_ASSIGN = new GoElementType("&=");
+  IElementType BIT_AND = new GoElementType("&");
 
-  IElementType oBIT_XOR_ASSIGN = new GoElementType("^=");
-  IElementType oBIT_XOR = new GoElementType("^");
+  IElementType BIT_XOR_ASSIGN = new GoElementType("^=");
+  IElementType BIT_XOR = new GoElementType("^");
 
-  IElementType oMUL_ASSIGN = new GoElementType("*=");
-  IElementType oMUL = new GoElementType("*");
+  IElementType MUL_ASSIGN = new GoElementType("*=");
+  IElementType MUL = new GoElementType("*");
 
-  IElementType oQUOTIENT_ASSIGN = new GoElementType("/=");
-  IElementType oQUOTIENT = new GoElementType("/");
+  IElementType QUOTIENT_ASSIGN = new GoElementType("/=");
+  IElementType QUOTIENT = new GoElementType("/");
 
-  IElementType oREMAINDER_ASSIGN = new GoElementType("%=");
-  IElementType oREMAINDER = new GoElementType("%");
+  IElementType REMAINDER_ASSIGN = new GoElementType("%=");
+  IElementType REMAINDER = new GoElementType("%");
 
-  IElementType oSEND_CHANNEL = new GoElementType("<-");
-  IElementType oSHIFT_LEFT_ASSIGN = new GoElementType("<<=");
-  IElementType oSHIFT_LEFT = new GoElementType("<<");
+  IElementType SEND_CHANNEL = new GoElementType("<-");
+  IElementType SHIFT_LEFT_ASSIGN = new GoElementType("<<=");
+  IElementType SHIFT_LEFT = new GoElementType("<<");
 
-  IElementType oSHIFT_RIGHT_ASSIGN = new GoElementType(">>=");
-  IElementType oSHIFT_RIGHT = new GoElementType(">>");
+  IElementType SHIFT_RIGHT_ASSIGN = new GoElementType(">>=");
+  IElementType SHIFT_RIGHT = new GoElementType(">>");
 
-  IElementType oLESS_OR_EQUAL = new GoElementType("<=");
-  IElementType oLESS = new GoElementType("<");
+  IElementType LESS_OR_EQUAL = new GoElementType("<=");
+  IElementType LESS = new GoElementType("<");
 
-  IElementType oGREATER_OR_EQUAL = new GoElementType(">=");
-  IElementType oGREATER = new GoElementType(">");
+  IElementType GREATER_OR_EQUAL = new GoElementType(">=");
+  IElementType GREATER = new GoElementType(">");
 
-  IElementType oVAR_ASSIGN = new GoElementType(":=");
+  IElementType VAR_ASSIGN = new GoElementType(":=");
 
-  TokenSet WHITESPACES = TokenSet.create(wsWS, wsNLS);
-  TokenSet COMMENTS = TokenSet.create(mSL_COMMENT, mML_COMMENT);
-  TokenSet STRING_LITERALS = TokenSet.create(litCHAR, litSTRING);
+  TokenSet WHITESPACES = TokenSet.create(WS, NLS);
+  TokenSet COMMENTS = TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT);
+  TokenSet STRING_LITERALS = TokenSet.create(CHAR, STRING);
 }
