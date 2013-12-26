@@ -121,8 +121,7 @@ KeyType ::= GoType
 
 ChannelType ::= ( chan [ '<-' ] | '<-' chan ) ElementType
 
-Block ::= '{' rule* '}' {pin(".*")=1}
-private rule ::= Statement semi {pin=1}
+Block ::= '{' (Statement semi)* '}' {pin(".*")=1}
 
 Statement ::=
 	  DeclarationStatement
@@ -139,7 +138,7 @@ Statement ::=
 	| SwitchStatement
 	| SelectStatement
 	| ForStatement
-	| DeferStatement
+	| DeferStatement {recoverWhile="#auto"}
 
 SimpleStatement ::=
     AssignmentStatement
