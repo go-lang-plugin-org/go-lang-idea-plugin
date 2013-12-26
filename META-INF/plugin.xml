@@ -16,6 +16,7 @@
     <fileTypeFactory implementation="com.goide.GoFileTypeFactory"/>
     <lang.syntaxHighlighterFactory key="go" implementationClass="com.goide.highlighting.GoSyntaxHighlighterFactory"/>
     <colorSettingsPage implementation="com.goide.highlighting.GoColorsAndFontsPage"/>
+    <lang.braceMatcher language="go" implementationClass="com.goide.GoBraceMatcher"/>
   </extensions>
 
 </idea-plugin>
