@@ -16,6 +16,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -48,7 +49,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
  * Time: 10:43:49 PM
  */
 public class GoLiteralIdentifierImpl extends GoPsiElementBase
-    implements GoLiteralIdentifier {
+        implements GoLiteralIdentifier {
 
     private final boolean isIota;
 
@@ -99,40 +100,40 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
     @Override
     public PsiElement setName(@NonNls @NotNull String name)
-        throws IncorrectOperationException {
+            throws IncorrectOperationException {
         return null;
     }
 
     @SuppressWarnings("unchecked")
     private static final ElementPattern<PsiElement> NO_REFERENCE =
-        or(
-            psiElement(GoLiteralIdentifier.class)
-                .withText(string().matches("nil")),
-            psiElement()
-                .withParent(
-                    or(
-                        psiElement(GoFunctionDeclaration.class),
-                        psiElement(GoFunctionParameter.class),
-                        psiElement(GoMethodReceiver.class),
-                        psiElement(GoTypeStructField.class),
-                        psiElement(GoPsiTypeName.class),
-                        psiElement(GoLiteralExpression.class)
+            or(
+                    psiElement(GoLiteralIdentifier.class)
+                            .withText(string().matches("nil")),
+                    psiElement()
                             .withParent(
-                                or(
-                                    psiElement(FOR_WITH_CLAUSES_STATEMENT),
-                                    psiElement(FOR_WITH_RANGE_STATEMENT)
+                                    or(
+                                            psiElement(GoFunctionDeclaration.class),
+                                            psiElement(GoFunctionParameter.class),
+                                            psiElement(GoMethodReceiver.class),
+                                            psiElement(GoTypeStructField.class),
+                                            psiElement(GoPsiTypeName.class),
+                                            psiElement(GoLiteralExpression.class)
+                                                    .withParent(
+                                                            or(
+                                                                    psiElement(FOR_WITH_CLAUSES_STATEMENT),
+                                                                    psiElement(FOR_WITH_RANGE_STATEMENT)
 //                                    psiElement(BUILTIN_CALL_EXPRESSION)
-                                ))
-                            .atStartOf(
-                                or(
-                                    psiElement(FOR_WITH_CLAUSES_STATEMENT),
-                                    psiElement(FOR_WITH_RANGE_STATEMENT)
+                                                            ))
+                                                    .atStartOf(
+                                                            or(
+                                                                    psiElement(FOR_WITH_CLAUSES_STATEMENT),
+                                                                    psiElement(FOR_WITH_RANGE_STATEMENT)
 //                                    psiElement(BUILTIN_CALL_EXPRESSION)
-                                )
+                                                            )
+                                                    )
+                                    )
                             )
-                    )
-                )
-        );
+            );
 
     //    @NotNull
 //    @Override
@@ -190,19 +191,19 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             GoLiteralComposite composite = findParentOfType(this, GoLiteralComposite.class);
             if (resolveToFinalType(composite.getLiteralType()) instanceof GoPsiTypeStruct) {
                 return refs(
-                    new CompositeElementOfStructFieldReference(this, this)
+                        new CompositeElementOfStructFieldReference(this, this)
                 );
             }
 
             return refs(
-                new CompositeElementOfStructFieldReference(this, this),
-                new VarOrConstReference(this)
+                    new CompositeElementOfStructFieldReference(this, this),
+                    new VarOrConstReference(this)
             );
         }
 
         if (CompositeElementOfStructFieldReference.MATCHER_ELEMENT.accepts(this))
             return refs(
-                new VarOrConstReference(this)
+                    new VarOrConstReference(this)
             );
 
         if (ShortVarDeclarationReference.MATCHER.accepts(this)) {
@@ -211,7 +212,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
         if (VarOrConstReference.MATCHER.accepts(this))
             return refs(
-                new VarOrConstReference(this)
+                    new VarOrConstReference(this)
             );
 
         return refs(PsiReference.EMPTY_ARRAY);
@@ -293,11 +294,13 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         for (GoImportDeclarations importDeclarations : goImportDeclarations) {
             for (GoImportDeclaration importDeclaration : importDeclarations.getDeclarations()) {
                 if (importDeclaration.getVisiblePackageName().toLowerCase()
-                                     .equals(packageName.toLowerCase()))
-                    return String.format("%s:%s",
-                                         importDeclaration.getImportPath()
-                                                          .getValue(),
-                                         getUnqualifiedName());
+                        .equals(packageName.toLowerCase())) {
+                    GoLiteralString importPath = importDeclaration.getImportPath();
+                    if (importPath != null)
+                        return String.format("%s:%s",
+                                importPath.getValue(),
+                                getUnqualifiedName());
+                }
             }
         }
 
@@ -316,16 +319,16 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     @Override
     public SearchScope getUseScope() {
         if (GoElementPatterns.GLOBAL_CONST_DECL.accepts(this) ||
-            GoElementPatterns.GLOBAL_VAR_DECL.accepts(this) ||
-            GoElementPatterns.FUNCTION_DECLARATION.accepts(this) ||
-            GoElementPatterns.METHOD_DECLARATION.accepts(this)) {
+                GoElementPatterns.GLOBAL_VAR_DECL.accepts(this) ||
+                GoElementPatterns.FUNCTION_DECLARATION.accepts(this) ||
+                GoElementPatterns.METHOD_DECLARATION.accepts(this)) {
             return getGlobalElementSearchScope(this, getName());
         }
 
         if (isNodeOfType(getParent(), GoElementTypes.LABELED_STATEMENT) ||
-            LabelReference.MATCHER.accepts(this)) {
+                LabelReference.MATCHER.accepts(this)) {
             return new LocalSearchScope(
-                findParentOfType(this, GoFunctionDeclaration.class));
+                    findParentOfType(this, GoFunctionDeclaration.class));
         }
 
         return getLocalElementSearchScope(this);

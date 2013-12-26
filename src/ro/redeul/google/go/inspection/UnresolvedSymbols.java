@@ -16,6 +16,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
@@ -123,7 +124,11 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
                                         PsiFile[] files = null;
 
-                                        VirtualFile packageFile = project.getBaseDir().findFileByRelativePath("src/" + declaration.getImportPath().getValue());
+                                        VirtualFile packageFile = null;
+                                        GoLiteralString importPath = declaration.getImportPath();
+                                        if (importPath != null)
+                                            packageFile = project.getBaseDir().findFileByRelativePath("src/" + importPath.getValue());
+
                                         if (packageFile != null) {
                                             PsiDirectory directory = PsiManager.getInstance(project).findDirectory(packageFile);
                                             if (directory != null)

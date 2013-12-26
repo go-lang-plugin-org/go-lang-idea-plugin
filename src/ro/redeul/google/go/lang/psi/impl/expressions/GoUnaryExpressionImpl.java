@@ -24,7 +24,10 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-        GoType[] basic = getExpression().getType();
+        GoExpr expression = getExpression();
+        if (expression == null)
+            return GoType.EMPTY_ARRAY;
+        GoType[] basic = expression.getType();
         switch (getUnaryOp()) {
             case Channel:
                 if (basic.length == 1 && basic[0] instanceof GoTypeChannel) {

@@ -20,7 +20,7 @@ public abstract class Intention implements IntentionAction {
     }
 
     @Nullable
-    private PsiElement findMatchingElement(PsiFile file, Editor editor) {
+    public PsiElement findMatchingElement(PsiFile file, Editor editor) {
         final int position = editor.getCaretModel().getOffset();
         PsiElement element = file.findElementAt(position);
         while (element != null) {

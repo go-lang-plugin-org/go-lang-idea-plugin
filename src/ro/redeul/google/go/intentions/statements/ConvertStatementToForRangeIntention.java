@@ -35,19 +35,20 @@ public class ConvertStatementToForRangeIntention extends Intention {
         }
         if (statement != null) {
             expr = statement.getExpression();
-            GoType[] types = expr.getType();
+            if (expr != null) {
+                GoType[] types = expr.getType();
 
-            for (GoType goType : types) {
-                if (goType != null) {
-                    if (goType instanceof GoTypePsiBacked) {
-                        GoPsiType psiType = ((GoTypePsiBacked) goType).getPsiType();
-                        psiType = GoTypeUtils.resolveToFinalType(psiType);
-                        return psiType instanceof GoPsiTypeMap || psiType instanceof GoPsiTypeSlice || psiType instanceof GoPsiTypeArray;
+                for (GoType goType : types) {
+                    if (goType != null) {
+                        if (goType instanceof GoTypePsiBacked) {
+                            GoPsiType psiType = ((GoTypePsiBacked) goType).getPsiType();
+                            psiType = GoTypeUtils.resolveToFinalType(psiType);
+                            return psiType instanceof GoPsiTypeMap || psiType instanceof GoPsiTypeSlice || psiType instanceof GoPsiTypeArray;
+                        }
+                        return goType instanceof GoTypeMap || goType instanceof GoTypeSlice || goType instanceof GoTypeArray;
                     }
-                    return goType instanceof GoTypeMap || goType instanceof GoTypeSlice || goType instanceof GoTypeArray;
                 }
             }
-
         }
         return false;
     }

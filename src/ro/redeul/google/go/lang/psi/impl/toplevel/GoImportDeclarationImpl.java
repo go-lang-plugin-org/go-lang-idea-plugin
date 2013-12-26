@@ -45,7 +45,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
     public String getPackageName() {
         GoLiteralString importPath = getImportPath();
 
-        if ( importPath != null )
+        if (importPath != null)
             return GoPsiUtils.findDefaultPackageName(importPath.getValue());
 
         return "";
@@ -74,8 +74,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
                                        @NotNull ResolveState state, PsiElement lastParent,
-                                       @NotNull PsiElement place)
-    {
+                                       @NotNull PsiElement place) {
         // import _ "a"; ( no declarations are visible from this import )
         GoPackageReference packageReference = getPackageReference();
         if (packageReference != null && packageReference.isBlank()) {
@@ -85,20 +84,22 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
         GoLiteralString importPath = getImportPath();
-
+        //Some times import path can be null
+        if (importPath == null)
+            return true;
         GoFile goFile = getContainingGoFile(this);
 
         String importPathValue = getAbsoluteImportPath(importPath.getValue(), goFile);
 
         // get the file included in the imported package name
         Collection<GoFile> files =
-            namesCache.getFilesByPackageImportPath(importPathValue);
+                namesCache.getFilesByPackageImportPath(importPathValue);
 
         for (GoFile file : files) {
             ResolveState newState =
-                GoResolveStates.imported(getPackageName(), getVisiblePackageName());
+                    GoResolveStates.imported(getPackageName(), getVisiblePackageName());
 
-            if ( ! file.processDeclarations(processor, newState, lastParent, place))
+            if (!file.processDeclarations(processor, newState, lastParent, place))
                 return false;
         }
 
@@ -114,7 +115,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
     public boolean isValidImport() {
         String importPathValue = null;
         GoLiteralString importPath = this.getImportPath();
-        if ( importPath != null ) {
+        if (importPath != null) {
             importPathValue = importPath.getValue();
         }
 

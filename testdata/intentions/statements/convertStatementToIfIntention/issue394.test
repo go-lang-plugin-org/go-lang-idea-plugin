@@ -1,0 +1,13 @@
+package main
+
+func main() {
+    var isValid = true
+    if (<caret>
+}
+-----
+package main
+
+func main() {
+    var isValid = true
+    if (<caret>
+}
