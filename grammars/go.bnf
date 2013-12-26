@@ -71,7 +71,7 @@
   pin('.*List(?:_\d.*)?')=1
 }
 
-SourceFile ::= PackageClause semi ( ImportDeclaration semi )* ( TopLevelDeclaration semi )* {pin=1}
+File ::= PackageClause semi ( ImportDeclaration semi )* ( TopLevelDeclaration semi )* {pin=1}
 private semi ::= '<NL>' | ';'?
 
 PackageClause ::= package PackageName {pin=1}

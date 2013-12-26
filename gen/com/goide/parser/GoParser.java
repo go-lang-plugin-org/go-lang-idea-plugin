@@ -326,7 +326,7 @@ public class GoParser implements PsiParser {
   }
 
   protected boolean parse_root_(final IElementType root_, final PsiBuilder builder_, final int level_) {
-    return SourceFile(builder_, level_ + 1);
+    return File(builder_, level_ + 1);
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
@@ -1221,6 +1221,69 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, IDENTIFIER);
     exit_section_(builder_, marker_, FIELD_NAME, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // PackageClause semi ( ImportDeclaration semi )* ( TopLevelDeclaration semi )*
+  static boolean File(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "File")) return false;
+    if (!nextTokenIs(builder_, PACKAGE)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = PackageClause(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, semi(builder_, level_ + 1));
+    result_ = pinned_ && report_error_(builder_, File_2(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && File_3(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // ( ImportDeclaration semi )*
+  private static boolean File_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "File_2")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!File_2_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "File_2", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // ImportDeclaration semi
+  private static boolean File_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "File_2_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ImportDeclaration(builder_, level_ + 1);
+    result_ = result_ && semi(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // ( TopLevelDeclaration semi )*
+  private static boolean File_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "File_3")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!File_3_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "File_3", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // TopLevelDeclaration semi
+  private static boolean File_3_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "File_3_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = TopLevelDeclaration(builder_, level_ + 1);
+    result_ = result_ && semi(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
@@ -2321,69 +2384,6 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, PLUS_PLUS);
     if (!result_) result_ = consumeToken(builder_, MINUS_MINUS);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // PackageClause semi ( ImportDeclaration semi )* ( TopLevelDeclaration semi )*
-  static boolean SourceFile(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SourceFile")) return false;
-    if (!nextTokenIs(builder_, PACKAGE)) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = PackageClause(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, semi(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, SourceFile_2(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && SourceFile_3(builder_, level_ + 1) && result_;
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
-  }
-
-  // ( ImportDeclaration semi )*
-  private static boolean SourceFile_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SourceFile_2")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!SourceFile_2_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "SourceFile_2", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
-  }
-
-  // ImportDeclaration semi
-  private static boolean SourceFile_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SourceFile_2_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = ImportDeclaration(builder_, level_ + 1);
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ( TopLevelDeclaration semi )*
-  private static boolean SourceFile_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SourceFile_3")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!SourceFile_3_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "SourceFile_3", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
-  }
-
-  // TopLevelDeclaration semi
-  private static boolean SourceFile_3_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SourceFile_3_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = TopLevelDeclaration(builder_, level_ + 1);
-    result_ = result_ && semi(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
