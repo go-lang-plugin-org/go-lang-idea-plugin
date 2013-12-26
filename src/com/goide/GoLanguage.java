@@ -8,7 +8,7 @@ public class GoLanguage extends Language {
   public static final Language INSTANCE = new GoLanguage();
 
   protected GoLanguage() {
-    super("go", "application/go");
+    super("go", "text/go", "text/x-go", "application/x-go");
   }
 
   @Nullable
