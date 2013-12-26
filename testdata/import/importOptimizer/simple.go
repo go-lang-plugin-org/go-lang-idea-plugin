@@ -8,6 +8,7 @@ import (
 func main() {
     fmt.Println()
 }
+
 -----
 package main
 

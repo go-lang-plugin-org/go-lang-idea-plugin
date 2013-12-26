@@ -11,6 +11,7 @@ func printMedia (p Person, gaCallback func(...Person)int) {
 func main() {
    printMedia(Person{1000},/*begin*/myMediaProcess/*end*/)
 }
+
 -----
 package main
 
@@ -27,5 +28,5 @@ func main() {
 }
 
 func myMediaProcess(arg0 ...Person) {
-    <caret>
+	<caret>
 }

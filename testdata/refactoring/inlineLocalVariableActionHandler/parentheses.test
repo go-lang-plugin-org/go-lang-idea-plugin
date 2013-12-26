@@ -3,6 +3,7 @@ func main() {
     var <caret>a = (5+2)
     println(a)
 }
+
 -----
 package main
 func main() {

@@ -16,6 +16,7 @@ func main() {
         b.Func()
     }()
 }
+
 -----
 package main
 

@@ -3,6 +3,7 @@ package main
 type T struct {
     a <caret>INT
 }
+
 -----
 package main
 

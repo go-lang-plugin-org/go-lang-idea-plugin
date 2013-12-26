@@ -8,6 +8,7 @@ var (
 func main() {
     println(/*begin*/Foo/*end*/, va, vb)
 }
+
 -----
 package main
 

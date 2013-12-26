@@ -18,28 +18,15 @@ import ro.redeul.google.go.util.GoTestUtils;
 public abstract class GoEditorAwareTestCase
         extends GoLightCodeInsightFixtureTestCase {
 
-    /**
-     * normalize the outputs of the test
-     * @param str
-     * @return
-     */
-    protected String normalizeOutputs(String str) {
-        return str.replaceAll("\t", "    ")
-                .replaceAll(" *\\* *","*")
-                .replaceAll(" *\\/ *","/")
-                .replaceAll(" *\\+ *","+")
-                .replaceAll(" *\\- *","-");
-    }
-
     protected void doTest() throws Exception {
         List<String> data = GoTestUtils.readInput(getTestFileName());
 
-        String expected = normalizeOutputs(data.get(1).trim());
+        String expected = data.get(1);
 
-        Assert.assertEquals(expected, normalizeOutputs(
+        Assert.assertEquals(expected,
                 processFile(data.get(0),
                         expected.contains(
-                                GoTestUtils.MARKER_CARET)).trim()));
+                                GoTestUtils.MARKER_CARET)));
     }
 
     private String processFile(String fileText, boolean addCaretMarker) {
@@ -47,17 +34,15 @@ public abstract class GoEditorAwareTestCase
         final Editor myEditor = myFixture.getEditor();
         CodeStyleSettings settings =
                 CodeStyleSettingsManager.getInstance(getProject()).getCurrentSettings();
-        if (settings != null) {
-            CommonCodeStyleSettings commonSettings =
-                    settings.getCommonSettings(GoLanguage.INSTANCE);
+        CommonCodeStyleSettings commonSettings =
+                settings.getCommonSettings(GoLanguage.INSTANCE);
 
-            if (commonSettings != null) {
-                CommonCodeStyleSettings.IndentOptions indentOptions =
-                        commonSettings.getIndentOptions();
+        if (commonSettings != null) {
+            CommonCodeStyleSettings.IndentOptions indentOptions =
+                    commonSettings.getIndentOptions();
 
-                if (indentOptions != null)
-                    indentOptions.USE_TAB_CHARACTER = false;
-            }
+            if (indentOptions != null)
+                indentOptions.USE_TAB_CHARACTER = true;
         }
 
         ApplicationManager.getApplication().runWriteAction(new Runnable() {

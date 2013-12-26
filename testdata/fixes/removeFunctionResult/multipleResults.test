@@ -2,6 +2,7 @@ package main
 
 func /*begin*/Foo/*end*/() (int, int) {
 }
+
 -----
 package main
 

@@ -5,6 +5,7 @@ var va = 5
 func main() {
     println(/*begin*/Foo/*end*/, va)
 }
+
 -----
 package main
 

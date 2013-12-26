@@ -69,7 +69,7 @@ class GoBinaryExpressionBlock extends GoBlock {
 
         if (parentElementType == EXPRESSION_LIST) {
             if (inTheSameLine(psi.getLeftOperand().getNode(), psi.getRightOperand().getNode())
-                && !(node.getElementType() == LOG_OR_EXPRESSION || node.getElementType() == LOG_AND_EXPRESSION || node.getElementType() == REL_EXPRESSION || node.getElementType() == MUL_EXPRESSION)
+                && !(node.getElementType() == LOG_OR_EXPRESSION || node.getElementType() == LOG_AND_EXPRESSION || node.getElementType() == REL_EXPRESSION)
                 ) {
                 spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
             } else {

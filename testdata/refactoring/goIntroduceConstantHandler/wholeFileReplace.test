@@ -10,6 +10,7 @@ func main() {
 func Foo() {
     println(a + a)
 }
+
 -----
 package main
 

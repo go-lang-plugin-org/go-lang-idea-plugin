@@ -36,6 +36,7 @@ x=5*5
     for i:=1;;i++ {
     }
 }
+
 -----
 package main
 

@@ -3,6 +3,7 @@ func main() {
     var a int = 5 + 2
     println(<caret>a, a*3)
 }
+
 -----
 package main
 func main() {

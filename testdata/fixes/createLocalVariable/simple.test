@@ -3,6 +3,7 @@ package main
 func main() {
     println(<caret>test)
 }
+
 -----
 package main
 

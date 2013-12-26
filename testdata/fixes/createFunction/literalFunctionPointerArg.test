@@ -8,6 +8,7 @@ func main() {
     f := func (n int) int {return 7+n+/*begin*/Foo/*end*/(&Person{})}
     println(f(5))
 }
+
 -----
 package main
 

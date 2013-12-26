@@ -8,6 +8,7 @@ duration time.Duration
 self interface{}      // To be sent on signal channel when done.
 signal chan interface{} // Output for serial tests.
 }
+
 -----
 package main
 

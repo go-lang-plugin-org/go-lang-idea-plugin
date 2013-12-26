@@ -3,6 +3,7 @@ package main
 func main() {
     /*begin*/println(5, 1+2)/*end*/
 }
+
 -----
 package main
 

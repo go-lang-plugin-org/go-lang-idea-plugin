@@ -9,6 +9,7 @@ func main() {
         println(a)
     }
 }
+
 -----
 package main
 func main() {

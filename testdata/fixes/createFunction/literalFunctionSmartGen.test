@@ -7,6 +7,7 @@ func HandleFunc(pa string, handler func(int,*string)){
 func main() {
    HandleFunc("/",index/*begin*/H/*end*/andler)
 }
+
 -----
 package main
 

@@ -222,8 +222,21 @@ class GoBlock implements Block, GoElementTypes {
         }
 
         // there should be a space before any block statement
-        if (child2.getNode().getPsi() instanceof GoBlockStatement) {
+        if (child2.getNode().getPsi() instanceof GoBlockStatement ||
+                child2Type == FUNCTION_RESULT) {
             return BASIC_SPACING_KEEP_LINE_BREAKS;
+        }
+
+        if (child1Type == kINTERFACE) {
+            try {
+                if (child1.getNode().getTreeParent().getTreeParent().getTreeParent().getTreeParent().getPsi() instanceof GoFile) {
+                    return BASIC_SPACING_KEEP_LINE_BREAKS;
+                } else {
+                    return EMPTY_SPACING_KEEP_LINE_BREAKS;
+                }
+            } catch (Exception ignored) {
+                return BASIC_SPACING_KEEP_LINE_BREAKS;
+            }
         }
 
         // there should be no space after "type" in type guard: p.(type)

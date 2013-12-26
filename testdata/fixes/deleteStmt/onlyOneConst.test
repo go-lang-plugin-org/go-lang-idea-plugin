@@ -4,6 +4,7 @@ const /*begin*/v = 5/*end*/
 
 func main() {
 }
+
 -----
 package main
 

@@ -6,7 +6,7 @@ func HandleFunc(pa string, handler string){
 
 func main() {
     indexHandler := func(){}
-    HandleFunc("/",index/*begin*/H/*end*/andler)
+	HandleFunc("/",index/*begin*/H/*end*/andler)
 }
 -----
 package main
@@ -17,5 +17,5 @@ func HandleFunc(pa string, handler string){
 
 func main() {
     indexHandler := func(){}
-    HandleFunc("/", (string)(indexHandler))
+	HandleFunc("/", (string)(indexHandler))
 }

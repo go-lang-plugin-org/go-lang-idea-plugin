@@ -4,6 +4,7 @@ func main() {
     f := func (n int) int {return 7+n+/*begin*/Foo/*end*/(.5*5==2.5)}
     println(f(5))
 }
+
 -----
 package main
 
