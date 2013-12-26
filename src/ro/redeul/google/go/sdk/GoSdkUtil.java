@@ -596,13 +596,39 @@ public class GoSdkUtil {
     }
 
     public static String prependToGoPath(String prependedPath) {
-        return format("%s%s%s", prependedPath, File.pathSeparator,
-                      System.getenv("GOPATH"));
+        String sysGoPath = System.getenv("GOPATH");
+        if (sysGoPath == null || sysGoPath.isEmpty()) {
+            return prependedPath;
+        }
+
+        return format("%s%s%s", prependedPath, File.pathSeparator, sysGoPath);
     }
 
-    public static String appendToGoPath(String prependedPath) {
-        return format("%s%s%s", System.getenv("GOPATH"), File.pathSeparator,
-                prependedPath);
+    public static String appendToGoPath(String appendedPath) {
+        String sysGoPath = System.getenv("GOPATH");
+        if (sysGoPath == null || sysGoPath.isEmpty()) {
+            return appendedPath;
+        }
+
+        return format("%s%s%s", sysGoPath, File.pathSeparator, appendedPath);
+    }
+
+    public static String appendGoPathToPath(String goPath) {
+        String binarizedPath = "";
+        String[] splitGoPath = goPath.split(File.pathSeparator);
+
+        for (String path : splitGoPath) {
+            binarizedPath += path + File.separator + "bin" + File.pathSeparator;
+        }
+
+        binarizedPath = binarizedPath.substring(0, binarizedPath.length()-1);
+
+        String sysPath = System.getenv("PATH");
+        if (sysPath == null || sysPath.isEmpty()) {
+            return binarizedPath;
+        }
+
+        return format("%s%s%s", sysPath, File.pathSeparator, binarizedPath);
     }
 
     public static String getSysGoRootPath() {
@@ -647,8 +673,11 @@ public class GoSdkUtil {
 
     public static Map<String, String> getExtendedSysEnv(GoSdkData sdkData, String projectDir, String envVars) {
         Map<String,String> sysEnv = new HashMap<String, String>(System.getenv());
-        sysEnv.put("GOROOT", getSdkRootPath(sdkData));
-        sysEnv.put("GOPATH", GoSdkUtil.appendToGoPath(projectDir));
+        String goRoot = getSdkRootPath(sdkData);
+        String goPath = appendToGoPath(projectDir);
+        sysEnv.put("GOROOT", goRoot);
+        sysEnv.put("GOPATH", goPath);
+        sysEnv.put("PATH", appendGoPathToPath(goRoot + File.pathSeparator + goPath));
 
         if (envVars.length() > 0) {
             String[] envVarsArray = envVars.split(";");
