@@ -191,7 +191,7 @@ public interface GoTypes {
   IElementType STRUCT = new GoTokenType("struct");
   IElementType SWITCH = new GoTokenType("switch");
   IElementType TRIPLE_DOT = new GoTokenType("...");
-  IElementType TYPE = new GoTokenType("type");
+  IElementType TYPE_ = new GoTokenType("type");
   IElementType VAR = new GoTokenType("var");
   IElementType VAR_ASSIGN = new GoTokenType(":=");
 

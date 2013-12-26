@@ -61,7 +61,7 @@
   TRIPLE_DOT           =  '...'
   DOT                  =  '.'
   SEMICOLON_SYNTHETIC  = '<NL>'
-  TYPE                 = 'type'
+  TYPE_                = 'type'
 
   extends(".*(Expr|Literal|QualifiedIdent|identifier|Lit|OperandName)")=Expression
   pin(".*Statement")=1
@@ -256,20 +256,20 @@ IfStatement ::= if [ SimpleStatement semi ] Expression Block [ else ( IfStatemen
 SwitchStatement ::= ExprSwitchStatement | TypeSwitchStatement
 ExprSwitchStatement ::= switch [ SimpleStatement semi ] [ Expression ] '{' ( ExprCaseClause )* '}'
 ExprCaseClause ::= ExprSwitchCase ':' ( Statement semi )*
-ExprSwitchCase ::= case ExpressionList | default
+ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
 TypeSwitchStatement  ::= switch [ SimpleStatement semi ] TypeSwitchGuard '{' ( TypeCaseClause )* '}'
 TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' type ')'
 TypeCaseClause ::= TypeSwitchCase ':' ( Statement semi )*
-TypeSwitchCase ::= case TypeList | default
+TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
 ForStatement ::= for [ Expression | RangeClause | ForClause ] Block
 ForClause ::= SimpleStatement? semi Expression? semi SimpleStatement?
 RangeClause ::= ( ExpressionList '=' | IdentifierList ':=' ) range Expression {pin=2}
 GoStatement ::= go Expression
 SelectStatement ::= select '{' ( CommClause )* '}'
-CommClause ::= CommCase ':' ( Statement semi )*
-CommCase ::= case ( SendStatement | RecvStatement ) | default
-RecvStatement ::= [ ExpressionList '=' | IdentifierList ':=' ] Expression
+CommClause ::= CommCase ':' ( Statement semi )* {pin=1}
+CommCase ::= case ( SendStatement | RecvStatement ) | default {pin(".*")=1}
+RecvStatement ::= [ ExpressionList '=' | IdentifierList ':=' ] Expression {pin=0}
 ReturnStatement ::= return [ ExpressionList ]
 BreakStatement ::= break identifier?
 ContinueStatement ::= continue identifier?

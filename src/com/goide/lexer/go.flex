@@ -249,7 +249,7 @@ ESCAPES = [abfnrtv]
 "import"                                  {  return IMPORT ;  }
 
 "range"                                   {  return RANGE;  }
-"type"                                    {  return TYPE;  }
+"type"                                    {  return TYPE_;  }
 "var"                                     {  return VAR;  }
 
 {IDENT}                                  {  yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }

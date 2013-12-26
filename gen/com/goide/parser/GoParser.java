@@ -699,11 +699,13 @@ public class GoParser implements PsiParser {
   private static boolean CommCase_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CommCase_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, CASE);
+    pinned_ = result_; // pin = 1
     result_ = result_ && CommCase_0_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // SendStatement | RecvStatement
@@ -723,12 +725,14 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "CommClause")) return false;
     if (!nextTokenIs(builder_, "<comm clause>", CASE, DEFAULT)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<comm clause>");
     result_ = CommCase(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, COLON);
-    result_ = result_ && CommClause_2(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, COMM_CLAUSE, result_, false, null);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, consumeToken(builder_, COLON));
+    result_ = pinned_ && CommClause_2(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, COMM_CLAUSE, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // ( Statement semi )*
@@ -1054,11 +1058,13 @@ public class GoParser implements PsiParser {
   private static boolean ExprSwitchCase_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ExprSwitchCase_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, CASE);
+    pinned_ = result_; // pin = 1
     result_ = result_ && ExpressionList(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -2118,13 +2124,11 @@ public class GoParser implements PsiParser {
   public static boolean RecvStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RecvStatement")) return false;
     boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<recv statement>");
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<recv statement>");
     result_ = RecvStatement_0(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
     result_ = result_ && Expression(builder_, level_ + 1, -1);
-    exit_section_(builder_, level_, marker_, RECV_STATEMENT, result_, pinned_, null);
-    return result_ || pinned_;
+    exit_section_(builder_, level_, marker_, RECV_STATEMENT, result_, false, null);
+    return result_;
   }
 
   // [ ExpressionList '=' | IdentifierList ':=' ]
@@ -2583,11 +2587,11 @@ public class GoParser implements PsiParser {
   // 'type' ( TypeSpec | '(' ( TypeSpec semi )* ')' )
   public static boolean TypeDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeDecl")) return false;
-    if (!nextTokenIs(builder_, TYPE)) return false;
+    if (!nextTokenIs(builder_, TYPE_)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, TYPE);
+    result_ = consumeToken(builder_, TYPE_);
     pinned_ = result_; // pin = 1
     result_ = result_ && TypeDecl_1(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, TYPE_DECL, result_, pinned_, null);
@@ -2751,11 +2755,13 @@ public class GoParser implements PsiParser {
   private static boolean TypeSwitchCase_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeSwitchCase_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, CASE);
+    pinned_ = result_; // pin = 1
     result_ = result_ && TypeList(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -3439,7 +3445,7 @@ public class GoParser implements PsiParser {
         DOT, TRIPLE_DOT, QUOTIENT, QUOTIENT_ASSIGN, COLON, SEMICOLON,
         LESS, SEND_CHANNEL, SHIFT_LEFT, SHIFT_LEFT_ASSIGN, LESS_OR_EQUAL, SEMICOLON_SYNTHETIC,
         ASSIGN, EQ, GREATER, GREATER_OR_EQUAL, SHIFT_RIGHT, SHIFT_RIGHT_ASSIGN,
-        LBRACK, RBRACK, BIT_XOR, BIT_XOR_ASSIGN, TYPE, LBRACE,
+        LBRACK, RBRACK, BIT_XOR, BIT_XOR_ASSIGN, TYPE_, LBRACE,
         BIT_OR, BIT_OR_ASSIGN, COND_OR, RBRACE, BREAK, CASE,
         CHAN, CONST, CONTINUE, DECIMAL_I, DEFAULT, DEFER,
         ELSE, FALLTHROUGH, FLOAT, FLOAT_I, FOR, FUNC,
