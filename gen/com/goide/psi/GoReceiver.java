@@ -7,10 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface GoReceiver extends GoCompositeElement {
 
-  @NotNull
-  GoBaseTypeName getBaseTypeName();
-
-  @Nullable
-  PsiElement getIdentifier();
-
 }

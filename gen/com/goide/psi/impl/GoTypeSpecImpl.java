@@ -22,9 +22,9 @@ public class GoTypeSpecImpl extends GoCompositeElementImpl implements GoTypeSpec
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoGoType getGoType() {
-    return findNotNullChildByClass(GoGoType.class);
+    return findChildByClass(GoGoType.class);
   }
 
   @Override

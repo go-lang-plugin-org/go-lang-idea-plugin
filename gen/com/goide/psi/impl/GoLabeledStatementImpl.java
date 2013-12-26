@@ -22,15 +22,15 @@ public class GoLabeledStatementImpl extends GoCompositeElementImpl implements Go
   }
 
   @Override
-  @NotNull
-  public GoLabel getLabel() {
-    return findNotNullChildByClass(GoLabel.class);
+  @Nullable
+  public GoStatement getStatement() {
+    return findChildByClass(GoStatement.class);
   }
 
   @Override
   @NotNull
-  public GoStatement getStatement() {
-    return findNotNullChildByClass(GoStatement.class);
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

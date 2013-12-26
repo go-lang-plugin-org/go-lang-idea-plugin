@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoFunctionLit extends GoCompositeElement {
+public interface GoFunctionLit extends GoExpression {
 
   @NotNull
   GoFunction getFunction();

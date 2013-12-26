@@ -21,22 +21,4 @@ public class GoExpressionImpl extends GoCompositeElementImpl implements GoExpres
     else super.accept(visitor);
   }
 
-  @Override
-  @Nullable
-  public GoExpression getExpression() {
-    return findChildByClass(GoExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public GoUnaryExpr getUnaryExpr() {
-    return findNotNullChildByClass(GoUnaryExpr.class);
-  }
-
-  @Override
-  @Nullable
-  public GoBinaryOp getBinaryOp() {
-    return findChildByClass(GoBinaryOp.class);
-  }
-
 }

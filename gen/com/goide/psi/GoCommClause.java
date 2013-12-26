@@ -11,6 +11,6 @@ public interface GoCommClause extends GoCompositeElement {
   GoCommCase getCommCase();
 
   @NotNull
-  GoStatementList getStatementList();
+  List<GoStatement> getStatementList();
 
 }

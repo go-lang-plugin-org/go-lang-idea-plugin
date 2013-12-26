@@ -158,9 +158,9 @@ ESCAPES = [abfnrtv]
 "`" [^`]* "`"?                            { yybegin(MAYBE_SEMICOLON); return STRING; }
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}? { yybegin(MAYBE_SEMICOLON); return STRING; }
 "{"                                       { return LBRACE; }
-"}"                                       { yybegin(MAYBE_SEMICOLON); return LBRACE; }
+"}"                                       { yybegin(MAYBE_SEMICOLON); return RBRACE; }
 
-"["                                       { return LBRACE; }
+"["                                       { return LBRACK; }
 "]"                                       { yybegin(MAYBE_SEMICOLON); return RBRACK; }
 
 "("                                       { return LPAREN; }

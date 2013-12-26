@@ -10,10 +10,10 @@ public interface GoMethodDecl extends GoCompositeElement {
   @Nullable
   GoFunction getFunction();
 
-  @NotNull
+  @Nullable
   GoMethodName getMethodName();
 
-  @NotNull
+  @Nullable
   GoReceiver getReceiver();
 
   @Nullable

@@ -5,13 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoLiteral extends GoCompositeElement {
-
-  @Nullable
-  GoCompositeLit getCompositeLit();
-
-  @Nullable
-  GoFunctionLit getFunctionLit();
+public interface GoLiteral extends GoExpression {
 
   @Nullable
   PsiElement getDecimalI();

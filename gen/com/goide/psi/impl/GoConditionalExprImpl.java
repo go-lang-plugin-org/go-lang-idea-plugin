@@ -10,21 +10,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoLabelImpl extends GoCompositeElementImpl implements GoLabel {
+public class GoConditionalExprImpl extends GoExpressionImpl implements GoConditionalExpr {
 
-  public GoLabelImpl(ASTNode node) {
+  public GoConditionalExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitLabel(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitConditionalExpr(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
 }

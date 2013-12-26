@@ -23,8 +23,8 @@ public class GoTypeSwitchGuardImpl extends GoCompositeElementImpl implements GoT
 
   @Override
   @NotNull
-  public GoPrimaryExpr getPrimaryExpr() {
-    return findNotNullChildByClass(GoPrimaryExpr.class);
+  public GoExpression getExpression() {
+    return findNotNullChildByClass(GoExpression.class);
   }
 
   @Override

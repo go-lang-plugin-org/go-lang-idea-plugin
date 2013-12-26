@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoOperandNameImpl extends GoCompositeElementImpl implements GoOperandName {
+public class GoOperandNameImpl extends GoExpressionImpl implements GoOperandName {
 
   public GoOperandNameImpl(ASTNode node) {
     super(node);
@@ -19,12 +19,6 @@ public class GoOperandNameImpl extends GoCompositeElementImpl implements GoOpera
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitOperandName(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public GoQualifiedIdent getQualifiedIdent() {
-    return findChildByClass(GoQualifiedIdent.class);
   }
 
   @Override

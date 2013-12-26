@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoAssignment extends GoCompositeElement {
+public interface GoConditionalExpr extends GoExpression {
 
   @NotNull
-  List<GoExpressionList> getExpressionListList();
-
-  @NotNull
-  GoAssignOp getAssignOp();
+  List<GoExpression> getExpressionList();
 
 }

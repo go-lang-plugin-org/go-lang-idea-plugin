@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoUnaryExprImpl extends GoCompositeElementImpl implements GoUnaryExpr {
+public class GoUnaryExprImpl extends GoExpressionImpl implements GoUnaryExpr {
 
   public GoUnaryExprImpl(ASTNode node) {
     super(node);
@@ -23,20 +23,8 @@ public class GoUnaryExprImpl extends GoCompositeElementImpl implements GoUnaryEx
 
   @Override
   @Nullable
-  public GoPrimaryExpr getPrimaryExpr() {
-    return findChildByClass(GoPrimaryExpr.class);
-  }
-
-  @Override
-  @Nullable
-  public GoUnaryExpr getUnaryExpr() {
-    return findChildByClass(GoUnaryExpr.class);
-  }
-
-  @Override
-  @Nullable
-  public GoUnaryOp getUnaryOp() {
-    return findChildByClass(GoUnaryOp.class);
+  public GoExpression getExpression() {
+    return findChildByClass(GoExpression.class);
   }
 
 }

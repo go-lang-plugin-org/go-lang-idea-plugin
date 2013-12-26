@@ -10,27 +10,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoBuiltinCallImpl extends GoCompositeElementImpl implements GoBuiltinCall {
+public class GoMulExprImpl extends GoExpressionImpl implements GoMulExpr {
 
-  public GoBuiltinCallImpl(ASTNode node) {
+  public GoMulExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitBuiltinCall(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitMulExpr(this);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public GoBuiltinArgs getBuiltinArgs() {
-    return findChildByClass(GoBuiltinArgs.class);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
 }

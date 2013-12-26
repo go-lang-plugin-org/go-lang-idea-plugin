@@ -21,16 +21,4 @@ public class GoReceiverImpl extends GoCompositeElementImpl implements GoReceiver
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public GoBaseTypeName getBaseTypeName() {
-    return findNotNullChildByClass(GoBaseTypeName.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
 }

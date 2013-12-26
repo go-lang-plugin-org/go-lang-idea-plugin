@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoTypeLitImpl extends GoCompositeElementImpl implements GoTypeLit {
+public class GoTypeLitImpl extends GoExpressionImpl implements GoTypeLit {
 
   public GoTypeLitImpl(ASTNode node) {
     super(node);

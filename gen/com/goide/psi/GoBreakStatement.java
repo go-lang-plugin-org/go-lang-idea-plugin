@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface GoBreakStatement extends GoCompositeElement {
 
-  @Nullable
-  GoLabel getLabel();
-
   @NotNull
   PsiElement getBreak();
+
+  @Nullable
+  PsiElement getIdentifier();
 
 }

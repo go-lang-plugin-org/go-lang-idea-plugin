@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface GoContinueStatement extends GoCompositeElement {
 
-  @Nullable
-  GoLabel getLabel();
-
   @NotNull
   PsiElement getContinue();
+
+  @Nullable
+  PsiElement getIdentifier();
 
 }

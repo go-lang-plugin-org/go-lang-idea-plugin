@@ -10,33 +10,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoBinaryOpImpl extends GoCompositeElementImpl implements GoBinaryOp {
+public class GoOrExprImpl extends GoExpressionImpl implements GoOrExpr {
 
-  public GoBinaryOpImpl(ASTNode node) {
+  public GoOrExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitBinaryOp(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitOrExpr(this);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public GoAddOp getAddOp() {
-    return findChildByClass(GoAddOp.class);
-  }
-
-  @Override
-  @Nullable
-  public GoMulOp getMulOp() {
-    return findChildByClass(GoMulOp.class);
-  }
-
-  @Override
-  @Nullable
-  public GoRelOp getRelOp() {
-    return findChildByClass(GoRelOp.class);
+  @NotNull
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
 }

@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface GoGotoStatement extends GoCompositeElement {
 
   @NotNull
-  GoLabel getLabel();
-
-  @NotNull
   PsiElement getGoto();
+
+  @Nullable
+  PsiElement getIdentifier();
 
 }

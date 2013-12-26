@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoTypeLit extends GoCompositeElement {
+public interface GoTypeLit extends GoExpression {
 
   @Nullable
   GoArrayType getArrayType();

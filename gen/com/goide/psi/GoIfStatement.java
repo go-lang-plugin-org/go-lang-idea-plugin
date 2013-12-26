@@ -10,7 +10,7 @@ public interface GoIfStatement extends GoCompositeElement {
   @NotNull
   List<GoBlock> getBlockList();
 
-  @NotNull
+  @Nullable
   GoExpression getExpression();
 
   @Nullable

@@ -22,9 +22,9 @@ public class GoRecvStatementImpl extends GoCompositeElementImpl implements GoRec
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoExpression getExpression() {
-    return findNotNullChildByClass(GoExpression.class);
+    return findChildByClass(GoExpression.class);
   }
 
   @Override

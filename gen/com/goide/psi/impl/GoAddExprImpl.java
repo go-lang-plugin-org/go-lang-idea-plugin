@@ -10,21 +10,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoBaseTypeNameImpl extends GoCompositeElementImpl implements GoBaseTypeName {
+public class GoAddExprImpl extends GoExpressionImpl implements GoAddExpr {
 
-  public GoBaseTypeNameImpl(ASTNode node) {
+  public GoAddExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitBaseTypeName(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitAddExpr(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
 }

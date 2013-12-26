@@ -23,8 +23,8 @@ public class GoSimpleStatementImpl extends GoCompositeElementImpl implements GoS
 
   @Override
   @Nullable
-  public GoAssignment getAssignment() {
-    return findChildByClass(GoAssignment.class);
+  public GoAssignmentStatement getAssignmentStatement() {
+    return findChildByClass(GoAssignmentStatement.class);
   }
 
   @Override

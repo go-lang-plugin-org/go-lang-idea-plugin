@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoQualifiedIdentImpl extends GoCompositeElementImpl implements GoQualifiedIdent {
+public class GoQualifiedIdentImpl extends GoExpressionImpl implements GoQualifiedIdent {
 
   public GoQualifiedIdentImpl(ASTNode node) {
     super(node);

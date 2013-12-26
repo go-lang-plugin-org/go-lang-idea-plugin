@@ -34,9 +34,9 @@ public class GoTypeSwitchStatementImpl extends GoCompositeElementImpl implements
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoTypeSwitchGuard getTypeSwitchGuard() {
-    return findNotNullChildByClass(GoTypeSwitchGuard.class);
+    return findChildByClass(GoTypeSwitchGuard.class);
   }
 
   @Override

@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GoBlock extends GoCompositeElement {
 
   @NotNull
-  GoStatementList getStatementList();
+  List<GoStatement> getStatementList();
 
 }

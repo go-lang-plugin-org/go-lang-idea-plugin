@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoTypeSwitchGuard extends GoCompositeElement {
 
   @NotNull
-  GoPrimaryExpr getPrimaryExpr();
+  GoExpression getExpression();
 
   @Nullable
   PsiElement getIdentifier();

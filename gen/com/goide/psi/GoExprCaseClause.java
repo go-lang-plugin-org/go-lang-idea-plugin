@@ -11,6 +11,6 @@ public interface GoExprCaseClause extends GoCompositeElement {
   GoExprSwitchCase getExprSwitchCase();
 
   @NotNull
-  GoStatementList getStatementList();
+  List<GoStatement> getStatementList();
 
 }

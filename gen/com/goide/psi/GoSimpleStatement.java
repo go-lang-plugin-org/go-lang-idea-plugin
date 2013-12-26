@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoSimpleStatement extends GoCompositeElement {
 
   @Nullable
-  GoAssignment getAssignment();
+  GoAssignmentStatement getAssignmentStatement();
 
   @Nullable
   GoExpressionStatement getExpressionStatement();

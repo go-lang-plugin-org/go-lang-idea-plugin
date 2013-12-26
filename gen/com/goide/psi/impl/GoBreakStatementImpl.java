@@ -22,15 +22,15 @@ public class GoBreakStatementImpl extends GoCompositeElementImpl implements GoBr
   }
 
   @Override
-  @Nullable
-  public GoLabel getLabel() {
-    return findChildByClass(GoLabel.class);
-  }
-
-  @Override
   @NotNull
   public PsiElement getBreak() {
     return findNotNullChildByType(BREAK);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

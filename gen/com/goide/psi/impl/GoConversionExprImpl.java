@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoOperandImpl extends GoCompositeElementImpl implements GoOperand {
+public class GoConversionExprImpl extends GoExpressionImpl implements GoConversionExpr {
 
-  public GoOperandImpl(ASTNode node) {
+  public GoConversionExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitOperand(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitConversionExpr(this);
     else super.accept(visitor);
   }
 
@@ -28,21 +28,9 @@ public class GoOperandImpl extends GoCompositeElementImpl implements GoOperand {
   }
 
   @Override
-  @Nullable
-  public GoLiteral getLiteral() {
-    return findChildByClass(GoLiteral.class);
-  }
-
-  @Override
-  @Nullable
-  public GoMethodExpr getMethodExpr() {
-    return findChildByClass(GoMethodExpr.class);
-  }
-
-  @Override
-  @Nullable
-  public GoOperandName getOperandName() {
-    return findChildByClass(GoOperandName.class);
+  @NotNull
+  public GoGoType getGoType() {
+    return findNotNullChildByClass(GoGoType.class);
   }
 
 }

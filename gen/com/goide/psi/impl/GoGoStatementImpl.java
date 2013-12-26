@@ -22,9 +22,9 @@ public class GoGoStatementImpl extends GoCompositeElementImpl implements GoGoSta
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoExpression getExpression() {
-    return findNotNullChildByClass(GoExpression.class);
+    return findChildByClass(GoExpression.class);
   }
 
   @Override

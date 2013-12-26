@@ -23,14 +23,14 @@ public class GoGotoStatementImpl extends GoCompositeElementImpl implements GoGot
 
   @Override
   @NotNull
-  public GoLabel getLabel() {
-    return findNotNullChildByClass(GoLabel.class);
+  public PsiElement getGoto() {
+    return findNotNullChildByType(GOTO);
   }
 
   @Override
-  @NotNull
-  public PsiElement getGoto() {
-    return findNotNullChildByType(GOTO);
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

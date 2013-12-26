@@ -22,9 +22,9 @@ public class GoDeferStatementImpl extends GoCompositeElementImpl implements GoDe
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoExpression getExpression() {
-    return findNotNullChildByClass(GoExpression.class);
+    return findChildByClass(GoExpression.class);
   }
 
   @Override

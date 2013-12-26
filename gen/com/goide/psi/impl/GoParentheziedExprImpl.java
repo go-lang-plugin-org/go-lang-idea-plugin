@@ -10,21 +10,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoChannelImpl extends GoCompositeElementImpl implements GoChannel {
+public class GoParentheziedExprImpl extends GoExpressionImpl implements GoParentheziedExpr {
 
-  public GoChannelImpl(ASTNode node) {
+  public GoParentheziedExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitChannel(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitParentheziedExpr(this);
     else super.accept(visitor);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoExpression getExpression() {
-    return findNotNullChildByClass(GoExpression.class);
+    return findChildByClass(GoExpression.class);
   }
 
 }

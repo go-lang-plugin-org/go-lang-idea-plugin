@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoUnaryExpr extends GoCompositeElement {
+public interface GoUnaryExpr extends GoExpression {
 
   @Nullable
-  GoPrimaryExpr getPrimaryExpr();
-
-  @Nullable
-  GoUnaryExpr getUnaryExpr();
-
-  @Nullable
-  GoUnaryOp getUnaryOp();
+  GoExpression getExpression();
 
 }

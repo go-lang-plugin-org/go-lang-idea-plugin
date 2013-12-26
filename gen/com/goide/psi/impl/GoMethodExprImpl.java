@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoMethodExprImpl extends GoCompositeElementImpl implements GoMethodExpr {
+public class GoMethodExprImpl extends GoExpressionImpl implements GoMethodExpr {
 
   public GoMethodExprImpl(ASTNode node) {
     super(node);

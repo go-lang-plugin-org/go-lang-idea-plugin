@@ -22,9 +22,9 @@ public class GoForStatementImpl extends GoCompositeElementImpl implements GoForS
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoBlock getBlock() {
-    return findNotNullChildByClass(GoBlock.class);
+    return findChildByClass(GoBlock.class);
   }
 
   @Override

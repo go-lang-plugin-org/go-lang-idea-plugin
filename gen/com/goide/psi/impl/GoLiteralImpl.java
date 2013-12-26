@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoLiteralImpl extends GoCompositeElementImpl implements GoLiteral {
+public class GoLiteralImpl extends GoExpressionImpl implements GoLiteral {
 
   public GoLiteralImpl(ASTNode node) {
     super(node);
@@ -19,18 +19,6 @@ public class GoLiteralImpl extends GoCompositeElementImpl implements GoLiteral {
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitLiteral(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public GoCompositeLit getCompositeLit() {
-    return findChildByClass(GoCompositeLit.class);
-  }
-
-  @Override
-  @Nullable
-  public GoFunctionLit getFunctionLit() {
-    return findChildByClass(GoFunctionLit.class);
   }
 
   @Override

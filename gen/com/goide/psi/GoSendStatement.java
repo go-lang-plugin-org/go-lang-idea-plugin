@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GoSendStatement extends GoCompositeElement {
 
   @NotNull
-  GoChannel getChannel();
-
-  @NotNull
-  GoExpression getExpression();
+  List<GoExpression> getExpressionList();
 
 }

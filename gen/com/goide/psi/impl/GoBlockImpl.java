@@ -23,8 +23,8 @@ public class GoBlockImpl extends GoCompositeElementImpl implements GoBlock {
 
   @Override
   @NotNull
-  public GoStatementList getStatementList() {
-    return findNotNullChildByClass(GoStatementList.class);
+  public List<GoStatement> getStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
   }
 
 }

@@ -28,9 +28,9 @@ public class GoIfStatementImpl extends GoCompositeElementImpl implements GoIfSta
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoExpression getExpression() {
-    return findNotNullChildByClass(GoExpression.class);
+    return findChildByClass(GoExpression.class);
   }
 
   @Override

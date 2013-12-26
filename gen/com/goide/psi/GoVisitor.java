@@ -6,6 +6,14 @@ import com.intellij.psi.PsiElementVisitor;
 
 public class GoVisitor extends PsiElementVisitor {
 
+  public void visitAddExpr(@NotNull GoAddExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitAndExpr(@NotNull GoAndExpr o) {
+    visitExpression(o);
+  }
+
   public void visitAnonymousField(@NotNull GoAnonymousField o) {
     visitCompositeElement(o);
   }
@@ -22,15 +30,11 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitAssignment(@NotNull GoAssignment o) {
+  public void visitAssignmentStatement(@NotNull GoAssignmentStatement o) {
     visitCompositeElement(o);
   }
 
   public void visitBaseType(@NotNull GoBaseType o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitBaseTypeName(@NotNull GoBaseTypeName o) {
     visitCompositeElement(o);
   }
 
@@ -46,16 +50,8 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitBuiltinCall(@NotNull GoBuiltinCall o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitCall(@NotNull GoCall o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitChannel(@NotNull GoChannel o) {
-    visitCompositeElement(o);
+  public void visitBuiltinCallExpr(@NotNull GoBuiltinCallExpr o) {
+    visitExpression(o);
   }
 
   public void visitChannelType(@NotNull GoChannelType o) {
@@ -71,7 +67,11 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitCompositeLit(@NotNull GoCompositeLit o) {
-    visitCompositeElement(o);
+    visitExpression(o);
+  }
+
+  public void visitConditionalExpr(@NotNull GoConditionalExpr o) {
+    visitExpression(o);
   }
 
   public void visitConstDecl(@NotNull GoConstDecl o) {
@@ -86,8 +86,8 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitConversion(@NotNull GoConversion o) {
-    visitCompositeElement(o);
+  public void visitConversionExpr(@NotNull GoConversionExpr o) {
+    visitExpression(o);
   }
 
   public void visitDeclarationStatement(@NotNull GoDeclarationStatement o) {
@@ -171,7 +171,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitFunctionLit(@NotNull GoFunctionLit o) {
-    visitCompositeElement(o);
+    visitExpression(o);
   }
 
   public void visitFunctionName(@NotNull GoFunctionName o) {
@@ -218,10 +218,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitIndex(@NotNull GoIndex o) {
-    visitCompositeElement(o);
-  }
-
   public void visitInterfaceType(@NotNull GoInterfaceType o) {
     visitCompositeElement(o);
   }
@@ -238,16 +234,12 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitLabel(@NotNull GoLabel o) {
-    visitCompositeElement(o);
-  }
-
   public void visitLabeledStatement(@NotNull GoLabeledStatement o) {
     visitCompositeElement(o);
   }
 
   public void visitLiteral(@NotNull GoLiteral o) {
-    visitCompositeElement(o);
+    visitExpression(o);
   }
 
   public void visitLiteralType(@NotNull GoLiteralType o) {
@@ -267,7 +259,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitMethodExpr(@NotNull GoMethodExpr o) {
-    visitCompositeElement(o);
+    visitExpression(o);
   }
 
   public void visitMethodName(@NotNull GoMethodName o) {
@@ -278,12 +270,16 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitOperand(@NotNull GoOperand o) {
-    visitCompositeElement(o);
+  public void visitMulExpr(@NotNull GoMulExpr o) {
+    visitExpression(o);
   }
 
   public void visitOperandName(@NotNull GoOperandName o) {
-    visitCompositeElement(o);
+    visitExpression(o);
+  }
+
+  public void visitOrExpr(@NotNull GoOrExpr o) {
+    visitExpression(o);
   }
 
   public void visitPackageClause(@NotNull GoPackageClause o) {
@@ -302,16 +298,16 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitParentheziedExpr(@NotNull GoParentheziedExpr o) {
+    visitExpression(o);
+  }
+
   public void visitPointerType(@NotNull GoPointerType o) {
     visitCompositeElement(o);
   }
 
-  public void visitPrimaryExpr(@NotNull GoPrimaryExpr o) {
-    visitCompositeElement(o);
-  }
-
   public void visitQualifiedIdent(@NotNull GoQualifiedIdent o) {
-    visitCompositeElement(o);
+    visitExpression(o);
   }
 
   public void visitRangeClause(@NotNull GoRangeClause o) {
@@ -342,10 +338,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitSelector(@NotNull GoSelector o) {
-    visitCompositeElement(o);
-  }
-
   public void visitSendStatement(@NotNull GoSendStatement o) {
     visitCompositeElement(o);
   }
@@ -362,19 +354,11 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitSlice(@NotNull GoSlice o) {
-    visitCompositeElement(o);
-  }
-
   public void visitSliceType(@NotNull GoSliceType o) {
     visitCompositeElement(o);
   }
 
   public void visitStatement(@NotNull GoStatement o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitStatementList(@NotNull GoStatementList o) {
     visitCompositeElement(o);
   }
 
@@ -394,10 +378,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitTypeAssertion(@NotNull GoTypeAssertion o) {
-    visitCompositeElement(o);
-  }
-
   public void visitTypeCaseClause(@NotNull GoTypeCaseClause o) {
     visitCompositeElement(o);
   }
@@ -411,7 +391,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitTypeLit(@NotNull GoTypeLit o) {
-    visitCompositeElement(o);
+    visitExpression(o);
   }
 
   public void visitTypeName(@NotNull GoTypeName o) {
@@ -435,7 +415,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitUnaryExpr(@NotNull GoUnaryExpr o) {
-    visitCompositeElement(o);
+    visitExpression(o);
   }
 
   public void visitValue(@NotNull GoValue o) {
@@ -450,27 +430,7 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitAddOp(@NotNull GoAddOp o) {
-    visitCompositeElement(o);
-  }
-
   public void visitAssignOp(@NotNull GoAssignOp o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitBinaryOp(@NotNull GoBinaryOp o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitMulOp(@NotNull GoMulOp o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitRelOp(@NotNull GoRelOp o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitUnaryOp(@NotNull GoUnaryOp o) {
     visitCompositeElement(o);
   }
 

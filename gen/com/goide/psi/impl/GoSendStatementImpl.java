@@ -23,14 +23,8 @@ public class GoSendStatementImpl extends GoCompositeElementImpl implements GoSen
 
   @Override
   @NotNull
-  public GoChannel getChannel() {
-    return findNotNullChildByClass(GoChannel.class);
-  }
-
-  @Override
-  @NotNull
-  public GoExpression getExpression() {
-    return findNotNullChildByClass(GoExpression.class);
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
 }

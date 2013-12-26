@@ -22,15 +22,15 @@ public class GoContinueStatementImpl extends GoCompositeElementImpl implements G
   }
 
   @Override
-  @Nullable
-  public GoLabel getLabel() {
-    return findChildByClass(GoLabel.class);
-  }
-
-  @Override
   @NotNull
   public PsiElement getContinue() {
     return findNotNullChildByType(CONTINUE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

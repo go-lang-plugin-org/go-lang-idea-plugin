@@ -10,30 +10,28 @@ import com.goide.psi.impl.*;
 
 public interface GoTypes {
 
-  IElementType ADD_OP = new GoCompositeElementType("ADD_OP");
+  IElementType ADD_EXPR = new GoCompositeElementType("ADD_EXPR");
+  IElementType AND_EXPR = new GoCompositeElementType("AND_EXPR");
   IElementType ANONYMOUS_FIELD = new GoCompositeElementType("ANONYMOUS_FIELD");
   IElementType ARGUMENT_LIST = new GoCompositeElementType("ARGUMENT_LIST");
   IElementType ARRAY_LENGTH = new GoCompositeElementType("ARRAY_LENGTH");
   IElementType ARRAY_TYPE = new GoCompositeElementType("ARRAY_TYPE");
-  IElementType ASSIGNMENT = new GoCompositeElementType("ASSIGNMENT");
+  IElementType ASSIGNMENT_STATEMENT = new GoCompositeElementType("ASSIGNMENT_STATEMENT");
   IElementType ASSIGN_OP = new GoCompositeElementType("ASSIGN_OP");
   IElementType BASE_TYPE = new GoCompositeElementType("BASE_TYPE");
-  IElementType BASE_TYPE_NAME = new GoCompositeElementType("BASE_TYPE_NAME");
-  IElementType BINARY_OP = new GoCompositeElementType("BINARY_OP");
   IElementType BLOCK = new GoCompositeElementType("BLOCK");
   IElementType BREAK_STATEMENT = new GoCompositeElementType("BREAK_STATEMENT");
   IElementType BUILTIN_ARGS = new GoCompositeElementType("BUILTIN_ARGS");
-  IElementType BUILTIN_CALL = new GoCompositeElementType("BUILTIN_CALL");
-  IElementType CALL = new GoCompositeElementType("CALL");
-  IElementType CHANNEL = new GoCompositeElementType("CHANNEL");
+  IElementType BUILTIN_CALL_EXPR = new GoCompositeElementType("BUILTIN_CALL_EXPR");
   IElementType CHANNEL_TYPE = new GoCompositeElementType("CHANNEL_TYPE");
   IElementType COMM_CASE = new GoCompositeElementType("COMM_CASE");
   IElementType COMM_CLAUSE = new GoCompositeElementType("COMM_CLAUSE");
   IElementType COMPOSITE_LIT = new GoCompositeElementType("COMPOSITE_LIT");
+  IElementType CONDITIONAL_EXPR = new GoCompositeElementType("CONDITIONAL_EXPR");
   IElementType CONST_DECL = new GoCompositeElementType("CONST_DECL");
   IElementType CONST_SPEC = new GoCompositeElementType("CONST_SPEC");
   IElementType CONTINUE_STATEMENT = new GoCompositeElementType("CONTINUE_STATEMENT");
-  IElementType CONVERSION = new GoCompositeElementType("CONVERSION");
+  IElementType CONVERSION_EXPR = new GoCompositeElementType("CONVERSION_EXPR");
   IElementType DECLARATION_STATEMENT = new GoCompositeElementType("DECLARATION_STATEMENT");
   IElementType DEFER_STATEMENT = new GoCompositeElementType("DEFER_STATEMENT");
   IElementType ELEMENT = new GoCompositeElementType("ELEMENT");
@@ -66,12 +64,10 @@ public interface GoTypes {
   IElementType IMPORT_PATH = new GoCompositeElementType("IMPORT_PATH");
   IElementType IMPORT_SPEC = new GoCompositeElementType("IMPORT_SPEC");
   IElementType INC_DEC_STATEMENT = new GoCompositeElementType("INC_DEC_STATEMENT");
-  IElementType INDEX = new GoCompositeElementType("INDEX");
   IElementType INTERFACE_TYPE = new GoCompositeElementType("INTERFACE_TYPE");
   IElementType INTERFACE_TYPE_NAME = new GoCompositeElementType("INTERFACE_TYPE_NAME");
   IElementType KEY = new GoCompositeElementType("KEY");
   IElementType KEY_TYPE = new GoCompositeElementType("KEY_TYPE");
-  IElementType LABEL = new GoCompositeElementType("LABEL");
   IElementType LABELED_STATEMENT = new GoCompositeElementType("LABELED_STATEMENT");
   IElementType LITERAL = new GoCompositeElementType("LITERAL");
   IElementType LITERAL_TYPE = new GoCompositeElementType("LITERAL_TYPE");
@@ -81,38 +77,33 @@ public interface GoTypes {
   IElementType METHOD_EXPR = new GoCompositeElementType("METHOD_EXPR");
   IElementType METHOD_NAME = new GoCompositeElementType("METHOD_NAME");
   IElementType METHOD_SPEC = new GoCompositeElementType("METHOD_SPEC");
-  IElementType MUL_OP = new GoCompositeElementType("MUL_OP");
-  IElementType OPERAND = new GoCompositeElementType("OPERAND");
+  IElementType MUL_EXPR = new GoCompositeElementType("MUL_EXPR");
   IElementType OPERAND_NAME = new GoCompositeElementType("OPERAND_NAME");
+  IElementType OR_EXPR = new GoCompositeElementType("OR_EXPR");
   IElementType PACKAGE_CLAUSE = new GoCompositeElementType("PACKAGE_CLAUSE");
   IElementType PARAMETERS = new GoCompositeElementType("PARAMETERS");
   IElementType PARAMETER_DECL = new GoCompositeElementType("PARAMETER_DECL");
   IElementType PARAMETER_LIST = new GoCompositeElementType("PARAMETER_LIST");
+  IElementType PARENTHEZIED_EXPR = new GoCompositeElementType("PARENTHEZIED_EXPR");
   IElementType POINTER_TYPE = new GoCompositeElementType("POINTER_TYPE");
-  IElementType PRIMARY_EXPR = new GoCompositeElementType("PRIMARY_EXPR");
   IElementType QUALIFIED_IDENT = new GoCompositeElementType("QUALIFIED_IDENT");
   IElementType RANGE_CLAUSE = new GoCompositeElementType("RANGE_CLAUSE");
   IElementType RECEIVER = new GoCompositeElementType("RECEIVER");
   IElementType RECEIVER_TYPE = new GoCompositeElementType("RECEIVER_TYPE");
   IElementType RECV_STATEMENT = new GoCompositeElementType("RECV_STATEMENT");
-  IElementType REL_OP = new GoCompositeElementType("REL_OP");
   IElementType RESULT = new GoCompositeElementType("RESULT");
   IElementType RETURN_STATEMENT = new GoCompositeElementType("RETURN_STATEMENT");
-  IElementType SELECTOR = new GoCompositeElementType("SELECTOR");
   IElementType SELECT_STATEMENT = new GoCompositeElementType("SELECT_STATEMENT");
   IElementType SEND_STATEMENT = new GoCompositeElementType("SEND_STATEMENT");
   IElementType SHORT_VAR_DECL = new GoCompositeElementType("SHORT_VAR_DECL");
   IElementType SIGNATURE = new GoCompositeElementType("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new GoCompositeElementType("SIMPLE_STATEMENT");
-  IElementType SLICE = new GoCompositeElementType("SLICE");
   IElementType SLICE_TYPE = new GoCompositeElementType("SLICE_TYPE");
   IElementType STATEMENT = new GoCompositeElementType("STATEMENT");
-  IElementType STATEMENT_LIST = new GoCompositeElementType("STATEMENT_LIST");
   IElementType STRUCT_TYPE = new GoCompositeElementType("STRUCT_TYPE");
   IElementType SWITCH_STATEMENT = new GoCompositeElementType("SWITCH_STATEMENT");
   IElementType TAG = new GoCompositeElementType("TAG");
   IElementType TOP_LEVEL_DECL = new GoCompositeElementType("TOP_LEVEL_DECL");
-  IElementType TYPE_ASSERTION = new GoCompositeElementType("TYPE_ASSERTION");
   IElementType TYPE_CASE_CLAUSE = new GoCompositeElementType("TYPE_CASE_CLAUSE");
   IElementType TYPE_DECL = new GoCompositeElementType("TYPE_DECL");
   IElementType TYPE_LIST = new GoCompositeElementType("TYPE_LIST");
@@ -123,7 +114,6 @@ public interface GoTypes {
   IElementType TYPE_SWITCH_GUARD = new GoCompositeElementType("TYPE_SWITCH_GUARD");
   IElementType TYPE_SWITCH_STATEMENT = new GoCompositeElementType("TYPE_SWITCH_STATEMENT");
   IElementType UNARY_EXPR = new GoCompositeElementType("UNARY_EXPR");
-  IElementType UNARY_OP = new GoCompositeElementType("UNARY_OP");
   IElementType VALUE = new GoCompositeElementType("VALUE");
   IElementType VAR_DECL = new GoCompositeElementType("VAR_DECL");
   IElementType VAR_SPEC = new GoCompositeElementType("VAR_SPEC");
@@ -215,8 +205,11 @@ public interface GoTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == ADD_OP) {
-        return new GoAddOpImpl(node);
+       if (type == ADD_EXPR) {
+        return new GoAddExprImpl(node);
+      }
+      else if (type == AND_EXPR) {
+        return new GoAndExprImpl(node);
       }
       else if (type == ANONYMOUS_FIELD) {
         return new GoAnonymousFieldImpl(node);
@@ -230,20 +223,14 @@ public interface GoTypes {
       else if (type == ARRAY_TYPE) {
         return new GoArrayTypeImpl(node);
       }
-      else if (type == ASSIGNMENT) {
-        return new GoAssignmentImpl(node);
+      else if (type == ASSIGNMENT_STATEMENT) {
+        return new GoAssignmentStatementImpl(node);
       }
       else if (type == ASSIGN_OP) {
         return new GoAssignOpImpl(node);
       }
       else if (type == BASE_TYPE) {
         return new GoBaseTypeImpl(node);
-      }
-      else if (type == BASE_TYPE_NAME) {
-        return new GoBaseTypeNameImpl(node);
-      }
-      else if (type == BINARY_OP) {
-        return new GoBinaryOpImpl(node);
       }
       else if (type == BLOCK) {
         return new GoBlockImpl(node);
@@ -254,14 +241,8 @@ public interface GoTypes {
       else if (type == BUILTIN_ARGS) {
         return new GoBuiltinArgsImpl(node);
       }
-      else if (type == BUILTIN_CALL) {
-        return new GoBuiltinCallImpl(node);
-      }
-      else if (type == CALL) {
-        return new GoCallImpl(node);
-      }
-      else if (type == CHANNEL) {
-        return new GoChannelImpl(node);
+      else if (type == BUILTIN_CALL_EXPR) {
+        return new GoBuiltinCallExprImpl(node);
       }
       else if (type == CHANNEL_TYPE) {
         return new GoChannelTypeImpl(node);
@@ -275,6 +256,9 @@ public interface GoTypes {
       else if (type == COMPOSITE_LIT) {
         return new GoCompositeLitImpl(node);
       }
+      else if (type == CONDITIONAL_EXPR) {
+        return new GoConditionalExprImpl(node);
+      }
       else if (type == CONST_DECL) {
         return new GoConstDeclImpl(node);
       }
@@ -284,8 +268,8 @@ public interface GoTypes {
       else if (type == CONTINUE_STATEMENT) {
         return new GoContinueStatementImpl(node);
       }
-      else if (type == CONVERSION) {
-        return new GoConversionImpl(node);
+      else if (type == CONVERSION_EXPR) {
+        return new GoConversionExprImpl(node);
       }
       else if (type == DECLARATION_STATEMENT) {
         return new GoDeclarationStatementImpl(node);
@@ -383,9 +367,6 @@ public interface GoTypes {
       else if (type == INC_DEC_STATEMENT) {
         return new GoIncDecStatementImpl(node);
       }
-      else if (type == INDEX) {
-        return new GoIndexImpl(node);
-      }
       else if (type == INTERFACE_TYPE) {
         return new GoInterfaceTypeImpl(node);
       }
@@ -397,9 +378,6 @@ public interface GoTypes {
       }
       else if (type == KEY_TYPE) {
         return new GoKeyTypeImpl(node);
-      }
-      else if (type == LABEL) {
-        return new GoLabelImpl(node);
       }
       else if (type == LABELED_STATEMENT) {
         return new GoLabeledStatementImpl(node);
@@ -428,14 +406,14 @@ public interface GoTypes {
       else if (type == METHOD_SPEC) {
         return new GoMethodSpecImpl(node);
       }
-      else if (type == MUL_OP) {
-        return new GoMulOpImpl(node);
-      }
-      else if (type == OPERAND) {
-        return new GoOperandImpl(node);
+      else if (type == MUL_EXPR) {
+        return new GoMulExprImpl(node);
       }
       else if (type == OPERAND_NAME) {
         return new GoOperandNameImpl(node);
+      }
+      else if (type == OR_EXPR) {
+        return new GoOrExprImpl(node);
       }
       else if (type == PACKAGE_CLAUSE) {
         return new GoPackageClauseImpl(node);
@@ -449,11 +427,11 @@ public interface GoTypes {
       else if (type == PARAMETER_LIST) {
         return new GoParameterListImpl(node);
       }
+      else if (type == PARENTHEZIED_EXPR) {
+        return new GoParentheziedExprImpl(node);
+      }
       else if (type == POINTER_TYPE) {
         return new GoPointerTypeImpl(node);
-      }
-      else if (type == PRIMARY_EXPR) {
-        return new GoPrimaryExprImpl(node);
       }
       else if (type == QUALIFIED_IDENT) {
         return new GoQualifiedIdentImpl(node);
@@ -470,17 +448,11 @@ public interface GoTypes {
       else if (type == RECV_STATEMENT) {
         return new GoRecvStatementImpl(node);
       }
-      else if (type == REL_OP) {
-        return new GoRelOpImpl(node);
-      }
       else if (type == RESULT) {
         return new GoResultImpl(node);
       }
       else if (type == RETURN_STATEMENT) {
         return new GoReturnStatementImpl(node);
-      }
-      else if (type == SELECTOR) {
-        return new GoSelectorImpl(node);
       }
       else if (type == SELECT_STATEMENT) {
         return new GoSelectStatementImpl(node);
@@ -497,17 +469,11 @@ public interface GoTypes {
       else if (type == SIMPLE_STATEMENT) {
         return new GoSimpleStatementImpl(node);
       }
-      else if (type == SLICE) {
-        return new GoSliceImpl(node);
-      }
       else if (type == SLICE_TYPE) {
         return new GoSliceTypeImpl(node);
       }
       else if (type == STATEMENT) {
         return new GoStatementImpl(node);
-      }
-      else if (type == STATEMENT_LIST) {
-        return new GoStatementListImpl(node);
       }
       else if (type == STRUCT_TYPE) {
         return new GoStructTypeImpl(node);
@@ -520,9 +486,6 @@ public interface GoTypes {
       }
       else if (type == TOP_LEVEL_DECL) {
         return new GoTopLevelDeclImpl(node);
-      }
-      else if (type == TYPE_ASSERTION) {
-        return new GoTypeAssertionImpl(node);
       }
       else if (type == TYPE_CASE_CLAUSE) {
         return new GoTypeCaseClauseImpl(node);
@@ -553,9 +516,6 @@ public interface GoTypes {
       }
       else if (type == UNARY_EXPR) {
         return new GoUnaryExprImpl(node);
-      }
-      else if (type == UNARY_OP) {
-        return new GoUnaryOpImpl(node);
       }
       else if (type == VALUE) {
         return new GoValueImpl(node);

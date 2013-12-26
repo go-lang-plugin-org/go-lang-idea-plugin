@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoGoStatement extends GoCompositeElement {
 
-  @NotNull
+  @Nullable
   GoExpression getExpression();
 
   @NotNull

@@ -7,13 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface GoExpression extends GoCompositeElement {
 
-  @Nullable
-  GoExpression getExpression();
-
-  @NotNull
-  GoUnaryExpr getUnaryExpr();
-
-  @Nullable
-  GoBinaryOp getBinaryOp();
-
 }

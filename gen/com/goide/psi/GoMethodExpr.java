@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoMethodExpr extends GoCompositeElement {
+public interface GoMethodExpr extends GoExpression {
 
   @NotNull
   GoMethodName getMethodName();

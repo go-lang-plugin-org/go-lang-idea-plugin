@@ -28,15 +28,15 @@ public class GoMethodDeclImpl extends GoCompositeElementImpl implements GoMethod
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoMethodName getMethodName() {
-    return findNotNullChildByClass(GoMethodName.class);
+    return findChildByClass(GoMethodName.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoReceiver getReceiver() {
-    return findNotNullChildByClass(GoReceiver.class);
+    return findChildByClass(GoReceiver.class);
   }
 
   @Override

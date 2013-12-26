@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoSlice extends GoCompositeElement {
+public interface GoBuiltinCallExpr extends GoExpression {
+
+  @Nullable
+  GoBuiltinArgs getBuiltinArgs();
 
   @NotNull
-  List<GoExpression> getExpressionList();
+  PsiElement getIdentifier();
 
 }

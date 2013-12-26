@@ -13,7 +13,7 @@ public interface GoTypeSwitchStatement extends GoCompositeElement {
   @NotNull
   List<GoTypeCaseClause> getTypeCaseClauseList();
 
-  @NotNull
+  @Nullable
   GoTypeSwitchGuard getTypeSwitchGuard();
 
   @NotNull

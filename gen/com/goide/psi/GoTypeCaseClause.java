@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoTypeCaseClause extends GoCompositeElement {
 
   @NotNull
-  GoStatementList getStatementList();
+  List<GoStatement> getStatementList();
 
   @NotNull
   GoTypeSwitchCase getTypeSwitchCase();

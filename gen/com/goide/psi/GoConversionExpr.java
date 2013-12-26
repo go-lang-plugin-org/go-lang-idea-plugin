@@ -5,15 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoBinaryOp extends GoCompositeElement {
+public interface GoConversionExpr extends GoExpression {
 
   @Nullable
-  GoAddOp getAddOp();
+  GoExpression getExpression();
 
-  @Nullable
-  GoMulOp getMulOp();
-
-  @Nullable
-  GoRelOp getRelOp();
+  @NotNull
+  GoGoType getGoType();
 
 }

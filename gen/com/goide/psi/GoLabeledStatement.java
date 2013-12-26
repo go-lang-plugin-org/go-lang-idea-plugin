@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface GoLabeledStatement extends GoCompositeElement {
 
-  @NotNull
-  GoLabel getLabel();
+  @Nullable
+  GoStatement getStatement();
 
   @NotNull
-  GoStatement getStatement();
+  PsiElement getIdentifier();
 
 }

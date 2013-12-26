@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoForStatement extends GoCompositeElement {
 
-  @NotNull
+  @Nullable
   GoBlock getBlock();
 
   @Nullable

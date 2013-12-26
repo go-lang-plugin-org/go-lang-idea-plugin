@@ -5,10 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoOperandName extends GoCompositeElement {
-
-  @Nullable
-  GoQualifiedIdent getQualifiedIdent();
+public interface GoOperandName extends GoExpression {
 
   @Nullable
   PsiElement getIdentifier();
