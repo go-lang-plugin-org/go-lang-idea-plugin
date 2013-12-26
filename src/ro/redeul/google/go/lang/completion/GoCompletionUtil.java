@@ -19,6 +19,7 @@ import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.completion.insertHandler.AutoImportInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.KeywordInsertionHandler;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -109,19 +110,19 @@ public class GoCompletionUtil {
             public String fun(VirtualFile virtualFile) {
 
                 GoFile goFile = (GoFile) psiManager.findFile(virtualFile);
-                if ( goFile == null ) {
+                if (goFile == null) {
                     return "";
                 }
 
                 String packageName = goFile.getPackage().getPackageName();
 
                 // in the same folder as the target file we just import the package
-                if ( targetFile.getParent().equals(virtualFile.getParent())) {
+                if (targetFile.getParent().equals(virtualFile.getParent())) {
                     return packageName;
                 }
 
                 String importName = VfsUtil.getRelativePath(virtualFile.getParent(), targetFile.getParent(), '/');
-                if ( ! virtualFile.getParent().getName().equals(packageName) ) {
+                if (!virtualFile.getParent().getName().equals(packageName)) {
                     importName += "/" + packageName;
                 }
 
@@ -132,10 +133,10 @@ public class GoCompletionUtil {
         Processor<VirtualFile> processor = new AdapterProcessor<VirtualFile, String>(localPackages, convertor) {
             @Override
             public boolean process(VirtualFile file) {
-                if ( file.getFileType() == GoFileType.INSTANCE) {
+                if (file.getFileType() == GoFileType.INSTANCE) {
                     GoFile goFile = (GoFile) psiManager.findFile(file);
 
-                    if ( goFile != null && ! goFile.getPackage().isMainPackage() ) {
+                    if (goFile != null && !goFile.getPackage().isMainPackage()) {
                         super.process(file);
                     }
 
@@ -153,21 +154,21 @@ public class GoCompletionUtil {
         for (String localPackage : localPackages.getResults()) {
             LookupElementBuilder elementBuilder;
 
-            if ( importPath.startsWith("./") ) {
+            if (importPath.startsWith("./")) {
                 elementBuilder = LookupElementBuilder.create(localPackage)
-                                                     .bold()
-                                                     .withTypeText(
-                                                         "via project");
-            } else if ( importPath.startsWith(".") ) {
+                        .bold()
+                        .withTypeText(
+                                "via project");
+            } else if (importPath.startsWith(".")) {
                 elementBuilder = LookupElementBuilder.create("/" + localPackage)
-                                                     .bold()
-                                                     .withTypeText(
-                                                         "via project");
+                        .bold()
+                        .withTypeText(
+                                "via project");
             } else {
                 elementBuilder = LookupElementBuilder.create("./" + localPackage)
-                                                     .bold()
-                                                     .withTypeText(
-                                                         "via project");
+                        .bold()
+                        .withTypeText(
+                                "via project");
             }
 
             elements.add(elementBuilder);
@@ -182,17 +183,17 @@ public class GoCompletionUtil {
 
     public static LookupElement keyword(String keyword, @Nullable InsertHandler<LookupElement> handler) {
         return LookupElementBuilder.create(keyword)
-                                   .bold()
-                                   .withTypeText("keyword")
-                                   .withInsertHandler(handler);
+                .bold()
+                .withTypeText("keyword")
+                .withInsertHandler(handler);
     }
 
     public static LookupElement builtinFunc(String name, @Nullable InsertHandler<LookupElement> handler) {
         return LookupElementBuilder.create(name)
-                                   .bold()
-                                   .withTypeText("builtin")
-                                   .withPresentableText(String.format("%s()", name))
-                                   .withInsertHandler(handler);
+                .bold()
+                .withTypeText("builtin")
+                .withPresentableText(String.format("%s()", name))
+                .withInsertHandler(handler);
     }
 
     public static LookupElement packageElement(String packageName) {
@@ -201,16 +202,16 @@ public class GoCompletionUtil {
 
     public static LookupElement packageElement(String packageName, String tailText) {
         return LookupElementBuilder.create(packageName)
-                                   .withIcon(PlatformIcons.PACKAGE_ICON)
-                                   .withTypeText(" (" + tailText + ")", true)
-                                   .withInsertHandler(
-                                       new AutoImportInsertHandler())
-                                   .withTypeText("package");
+                .withIcon(PlatformIcons.PACKAGE_ICON)
+                .withTypeText(" (" + tailText + ")", true)
+                .withInsertHandler(
+                        new AutoImportInsertHandler())
+                .withTypeText("package");
     }
 
     public static LookupElement[] getImportedPackagesNames(PsiFile file) {
 
-        if ( ! (file instanceof GoFile) ) {
+        if (!(file instanceof GoFile)) {
             return LookupElement.EMPTY_ARRAY;
         }
 
@@ -219,8 +220,11 @@ public class GoCompletionUtil {
         List<LookupElement> elements = new ArrayList<LookupElement>();
         for (GoImportDeclaration importDeclaration : GoFileUtils.getImportDeclarations(goFile)) {
             String visiblePackageName = importDeclaration.getVisiblePackageName();
-            String importPath = importDeclaration.getImportPath().getValue();
-            elements.add(packageElement(visiblePackageName, importPath));
+            GoLiteralString importPath1 = importDeclaration.getImportPath();
+            if (importPath1 != null) {
+                String importPath = importPath1.getValue();
+                elements.add(packageElement(visiblePackageName, importPath));
+            }
         }
 
         return elements.toArray(new LookupElement[elements.size()]);

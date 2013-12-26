@@ -36,26 +36,28 @@ public abstract class BaseBoolStatement extends Intention {
         }
         if (statement != null) {
             expr = statement.getExpression();
-            if (expr instanceof GoRelationalExpression
-                    || expr instanceof GoLogicalAndExpression
-                    || expr instanceof GoLogicalOrExpression)
-                return true;
+            if (expr != null) {
+                if (expr instanceof GoRelationalExpression
+                        || expr instanceof GoLogicalAndExpression
+                        || expr instanceof GoLogicalOrExpression)
+                    return true;
 
-            for (GoType goType : expr.getType()) {
-                if (goType != null) {
-                    if (goType instanceof GoTypePsiBacked) {
-                        GoPsiType psiType = GoTypeUtils.resolveToFinalType(((GoTypePsiBacked) goType).getPsiType());
-                        if (psiType instanceof GoPsiTypeName)
-                            return psiType.getText().equals("bool") && ((GoPsiTypeName) psiType).isPrimitive();
+                for (GoType goType : expr.getType()) {
+                    if (goType != null) {
+                        if (goType instanceof GoTypePsiBacked) {
+                            GoPsiType psiType = GoTypeUtils.resolveToFinalType(((GoTypePsiBacked) goType).getPsiType());
+                            if (psiType instanceof GoPsiTypeName)
+                                return psiType.getText().equals("bool") && ((GoPsiTypeName) psiType).isPrimitive();
+                        }
                     }
                 }
-            }
-            if (expr instanceof GoLiteralExpression) {
-                PsiElement literal = ((GoLiteralExpression) expr).getLiteral();
-                if (literal instanceof GoLiteralIdentifier) {
-                    literal = GoUtil.ResolveTypeOfVarDecl((GoPsiElement) literal);
-                    if (literal.getText().equals("true") || literal.getText().equals("false")) {
-                        return true;
+                if (expr instanceof GoLiteralExpression) {
+                    PsiElement literal = ((GoLiteralExpression) expr).getLiteral();
+                    if (literal instanceof GoLiteralIdentifier) {
+                        literal = GoUtil.ResolveTypeOfVarDecl((GoPsiElement) literal);
+                        if (literal.getText().equals("true") || literal.getText().equals("false")) {
+                            return true;
+                        }
                     }
                 }
             }

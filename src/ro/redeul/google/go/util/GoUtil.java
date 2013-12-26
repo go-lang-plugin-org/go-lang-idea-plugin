@@ -21,6 +21,7 @@ import ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
@@ -198,7 +199,8 @@ public class GoUtil {
             for (GoImportDeclarations declarations : currentFile.getImportDeclarations())
                 for (GoImportDeclaration declaration : declarations.getDeclarations()) {
                     String canonicalPath = containingDirectory.getVirtualFile().getCanonicalPath();
-                    if (canonicalPath != null && canonicalPath.endsWith(declaration.getImportPath().getValue())) {
+                    GoLiteralString importPath = declaration.getImportPath();
+                    if (importPath != null && canonicalPath != null && canonicalPath.endsWith(importPath.getValue())) {
                         String visiblePackageName = declaration.getVisiblePackageName();
                         if (visiblePackageName.equals(".")) {
                             stringBuilder.append(type.getName());

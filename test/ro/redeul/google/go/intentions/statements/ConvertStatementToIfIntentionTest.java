@@ -19,4 +19,9 @@ public class ConvertStatementToIfIntentionTest extends GoIntentionTestCase {
     public void testVarExpression() throws Exception {
         doTest();
     }
+
+    public void testIssue394() throws Exception {
+        doTest();
+    }
+
 }

@@ -14,7 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ImportReference extends GoPsiReference.Single<GoImportDeclaration, ImportReference>
-    implements PsiPolyVariantReference {
+        implements PsiPolyVariantReference {
 
     public ImportReference(GoImportDeclaration element) {
         super(element);
@@ -33,15 +33,16 @@ public class ImportReference extends GoPsiReference.Single<GoImportDeclaration, 
         }
 
         return new TextRange(
-            importPath.getStartOffsetInParent(),
-            importPath.getStartOffsetInParent() + importPath.getTextLength()
+                importPath.getStartOffsetInParent(),
+                importPath.getStartOffsetInParent() + importPath.getTextLength()
         );
     }
 
     @NotNull
     @Override
     public String getCanonicalText() {
-        return getElement().getImportPath().getValue();
+        GoLiteralString importPath = getElement().getImportPath();
+        return importPath == null ? "" : importPath.getValue();
     }
 
     @Override
