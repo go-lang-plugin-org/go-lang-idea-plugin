@@ -125,8 +125,8 @@ ESCAPES = [abfnrtv]
 //<IN_COMMENT> {
 //!"*/"+                                      {}
 //
-//"*/"                                        { yybegin(YYINITIAL); return( MULTILINE_COMMENT ); }
-//<<EOF>>                                     { yybegin(YYINITIAL); return( MULTILINE_COMMENT ); }
+//"*/"                                        { yybegin(YYINITIAL); return MULTILINE_COMMENT; }
+//<<EOF>>                                     { yybegin(YYINITIAL); return MULTILINE_COMMENT; }
 //}
 
 <YYINITIAL> {
@@ -135,9 +135,9 @@ ESCAPES = [abfnrtv]
 {WS}                                     { return WS; }
 {NL}+                                    { return NLS; }
 
-{LINE_COMMENT}                             { return( LINE_COMMENT ); }
-//{MULTILINE_COMMENT}                             { return( MULTILINE_COMMENT ); }
-"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return( MULTILINE_COMMENT ); }
+{LINE_COMMENT}                             { return LINE_COMMENT; }
+//{MULTILINE_COMMENT}                             { return MULTILINE_COMMENT; }
+"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return MULTILINE_COMMENT; }
 
 //([^"*/"] | [\r\n])+ "*/"?
 
@@ -225,24 +225,24 @@ ESCAPES = [abfnrtv]
 "return"                                  { yybegin(MAYBE_SEMICOLON); return RETURN ;  }
 "continue"                                { yybegin(MAYBE_SEMICOLON); return CONTINUE ;  }
 
-"default"                                 { return( DEFAULT );  }
-"package"                                 { return( PACKAGE );  }
-"func"                                    { return( FUNC );  }
-"interface"                               { return( INTERFACE );  }
-"select"                                  { return( SELECT );  }
+"default"                                 { return DEFAULT;  }
+"package"                                 { return PACKAGE;  }
+"func"                                    { return FUNC;  }
+"interface"                               { return INTERFACE;  }
+"select"                                  { return SELECT;  }
 
-"case"                                    { return( CASE );  }
-"defer"                                   { return( DEFER );  }
-"go"                                      { return( GO );  }
-"map"                                     { return( MAP );  }
+"case"                                    { return CASE;  }
+"defer"                                   { return DEFER;  }
+"go"                                      { return GO;  }
+"map"                                     { return MAP;  }
 
-"chan"                                    {  return( CHAN );  }
+"chan"                                    {  return CHAN;  }
 
-"struct"                                  {  return( STRUCT );  }
-"else"                                    {  return( ELSE );  }
-"goto"                                    {  return( GOTO );  }
-"switch"                                  {  return( SWITCH );  }
-"const"                                   {  return( CONST ); }
+"struct"                                  {  return STRUCT;  }
+"else"                                    {  return ELSE;  }
+"goto"                                    {  return GOTO;  }
+"switch"                                  {  return SWITCH;  }
+"const"                                   {  return CONST; }
 
 "if"                                      {  return IF ;  }
 "for"                                     {  return FOR ;  }
