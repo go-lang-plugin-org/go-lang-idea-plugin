@@ -3,6 +3,7 @@ package main
 func main() {
     println(/*begin*/1 + 2/*end*/)
 }
+
 -----
 package main
 

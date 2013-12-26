@@ -17,5 +17,5 @@ func HandleFunc(pa string, handler string){
 
 func main() {
     var indexHandler interface{}= nil
-    HandleFunc("/", indexHandler.(string))
+	HandleFunc("/", indexHandler.(string))
 }

@@ -12,6 +12,7 @@ public class GoFormatterTest extends GoEditorAwareTestCase {
     public void testBinaryExpressions() throws Exception { doTest(); }
     public void testAssignment() throws Exception { doTest(); }
     public void testType() throws Exception { doTest(); }
+    public void testCastFunc() throws Exception { doTest(); }
     public void testFunctionCall() throws Exception { doTest(); }
     public void testInterfaceType() throws Exception { doTest(); }
     public void testCallParameters() throws Exception { doTest(); }

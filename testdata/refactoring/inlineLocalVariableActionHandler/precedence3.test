@@ -12,6 +12,7 @@ func main() {
     a := &A{value:5}
     <caret>a.Print()
 }
+
 -----
 package main
 

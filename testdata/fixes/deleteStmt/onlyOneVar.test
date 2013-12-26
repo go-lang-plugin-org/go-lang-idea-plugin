@@ -3,6 +3,7 @@ package main
 func main() {
     var /*begin*/v = 5/*end*/
 }
+
 -----
 package main
 

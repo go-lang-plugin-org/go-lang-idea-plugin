@@ -18,6 +18,7 @@ Call(fn interface {},injections ...interface {}) interface {}
 //returns true if there is some implementation of the module in the current scope will not resolve top containers
 HasModule(reflect.Type) bool
 }
+
 -----
 package main
 

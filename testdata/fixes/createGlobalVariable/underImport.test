@@ -5,6 +5,7 @@ import "fmt"
 func main() {
     println(/*begin*/Foo/*end*/)
 }
+
 -----
 package main
 

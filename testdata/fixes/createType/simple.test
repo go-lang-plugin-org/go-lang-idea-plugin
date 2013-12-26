@@ -3,6 +3,7 @@ package main
 func main() {
     var a <caret>INT
 }
+
 -----
 package main
 

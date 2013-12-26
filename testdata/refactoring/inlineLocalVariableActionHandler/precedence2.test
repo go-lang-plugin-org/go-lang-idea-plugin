@@ -3,6 +3,7 @@ func main() {
     a := 5 > 2 || 3 > 1
     println(<caret>a, a && 3 > 3)
 }
+
 -----
 package main
 func main() {

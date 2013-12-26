@@ -17,5 +17,5 @@ func HandleFunc(pa string, handler int){
 
 func main() {
     var indexHandler = 4.0
-    HandleFunc("/", (int)(indexHandler))
+	HandleFunc("/", (int)(indexHandler))
 }

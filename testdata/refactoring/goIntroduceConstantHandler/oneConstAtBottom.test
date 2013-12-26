@@ -5,6 +5,7 @@ func main() {
 }
 
 const N = 5
+
 -----
 package main
 

@@ -5,6 +5,7 @@ func main() {
         println("true", <caret>a)
     }
 }
+
 -----
 package main
 func main() {

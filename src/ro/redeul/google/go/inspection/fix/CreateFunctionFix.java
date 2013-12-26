@@ -97,7 +97,7 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
             insertPoint1 += packStr.length();
         }
 
-        doc.insertString(insertPoint1, String.format("\n\nfunc %s(%s) {\n}\n", e.getText(), fnArguments));
+        doc.insertString(insertPoint1, String.format("\n\nfunc %s(%s) {\n}", e.getText(), fnArguments));
         if (wEditor != null) {
             int line = doc.getLineNumber(insertPoint1);
             int offset = doc.getLineEndOffset(line + 2);

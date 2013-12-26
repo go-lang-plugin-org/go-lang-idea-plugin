@@ -6,6 +6,7 @@ func main() {
         println("false", 2*a)
     }
 }
+
 -----
 package main
 func main() {

@@ -33,5 +33,5 @@ func HandleFunc(pa string, handler MyEnum){
 
 func main() {
     var indexHandler = 45
-    HandleFunc("/", (MyEnum)(indexHandler))
+	HandleFunc("/", (MyEnum)(indexHandler))
 }
