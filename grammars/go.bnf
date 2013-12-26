@@ -168,7 +168,7 @@ Receiver ::= '(' [ identifier ] [ '*' ] identifier ')'
 
 private Operand ::= Literal | MethodExpr | OperandName
 Literal ::= BasicLit | FunctionLit | CompositeLit
-private BasicLit ::= // todo
+private BasicLit ::=
     int
   | float
   | floati
