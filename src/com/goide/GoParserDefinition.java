@@ -20,24 +20,24 @@ import org.jetbrains.annotations.NotNull;
 import static com.goide.GoTypes.*;
 
 public class GoParserDefinition implements ParserDefinition {
-  public static final IElementType GO_LINE_COMMENT = new GoTokenType("GO_LINE_COMMENT");
-  public static final IElementType GO_MULTILINE_COMMENT = new GoTokenType("GO_MULTILINE_COMMENT");
+  public static final IElementType LINE_COMMENT = new GoTokenType("GO_LINE_COMMENT");
+  public static final IElementType MULTILINE_COMMENT = new GoTokenType("GO_MULTILINE_COMMENT");
 
-  public static final IElementType GO_WS = new GoTokenType("GO_WHITESPACE");
-  public static final IElementType GO_NLS = new GoTokenType("GO_WS_NEW_LINES");
+  public static final IElementType WS = new GoTokenType("GO_WHITESPACE");
+  public static final IElementType NLS = new GoTokenType("GO_WS_NEW_LINES");
 
-  public static final TokenSet WHITESPACES = TokenSet.create(GO_WS, GO_NLS);
-  public static final TokenSet COMMENTS = TokenSet.create(GO_LINE_COMMENT, GO_MULTILINE_COMMENT);
-  public static final TokenSet STRING_LITERALS = TokenSet.create(GO_STRING); // todo: leave GO_CHAR in lexer
-  public static final TokenSet NUMBERS = TokenSet.create(GO_INT, GO_FLOAT, GO_IMAGINARY); // todo: GO_HEX, GO_OCT,
-  public static final TokenSet KEYWORDS = TokenSet.create(GO_PACKAGE, GO_IMPORT, GO_BREAK, GO_CASE, GO_CHAN, GO_CONST, GO_CONTINUE, GO_DEFAULT, GO_DEFER,
-      GO_ELSE, GO_FALLTHROUGH, GO_FOR, GO_FUNC, GO_GO, GO_GOTO, GO_IF, GO_IMPORT, GO_INTERFACE, GO_MAP, GO_PACKAGE, GO_RANGE, GO_RETURN,
-      GO_SELECT, GO_STRUCT, GO_SWITCH, GO_TYPE, GO_VAR);
-  public static final TokenSet OPERATORS = TokenSet.create(GO_EQ, GO_ASSIGN, GO_NOT_EQ, GO_NOT, GO_PLUS_PLUS,
-      GO_PLUS_ASSIGN, GO_PLUS, GO_MINUS_MINUS, GO_MINUS_ASSIGN, GO_MINUS, GO_COND_OR, GO_BIT_OR_ASSIGN, GO_BIT_OR, GO_BIT_CLEAR_ASSIGN,
-      GO_BIT_CLEAR, GO_COND_AND, GO_BIT_AND_ASSIGN, GO_BIT_AND, GO_SHIFT_LEFT_ASSIGN, GO_SHIFT_LEFT, GO_SEND_CHANNEL, GO_LESS_OR_EQUAL,
-      GO_LESS, GO_BIT_XOR_ASSIGN, GO_BIT_XOR, GO_MUL_ASSIGN, GO_MUL, GO_QUOTIENT_ASSIGN, GO_QUOTIENT, GO_REMAINDER_ASSIGN,
-      GO_REMAINDER, GO_SHIFT_RIGHT_ASSIGN, GO_SHIFT_RIGHT, GO_GREATER_OR_EQUAL, GO_GREATER, GO_VAR_ASSIGN);
+  public static final TokenSet WHITESPACES = TokenSet.create(WS, NLS);
+  public static final TokenSet COMMENTS = TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT);
+  public static final TokenSet STRING_LITERALS = TokenSet.create(STRING); // todo: leave CHAR in lexer
+  public static final TokenSet NUMBERS = TokenSet.create(INT, FLOAT, IMAGINARY); // todo: HEX, OCT,
+  public static final TokenSet KEYWORDS = TokenSet.create(PACKAGE, IMPORT, BREAK, CASE, CHAN, CONST, CONTINUE, DEFAULT, DEFER,
+      ELSE, FALLTHROUGH, FOR, FUNC, GO, GOTO, IF, IMPORT, INTERFACE, MAP, PACKAGE, RANGE, RETURN,
+      SELECT, STRUCT, SWITCH, TYPE, VAR);
+  public static final TokenSet OPERATORS = TokenSet.create(EQ, ASSIGN, NOT_EQ, NOT, PLUS_PLUS,
+      PLUS_ASSIGN, PLUS, MINUS_MINUS, MINUS_ASSIGN, MINUS, COND_OR, BIT_OR_ASSIGN, BIT_OR, BIT_CLEAR_ASSIGN,
+      BIT_CLEAR, COND_AND, BIT_AND_ASSIGN, BIT_AND, SHIFT_LEFT_ASSIGN, SHIFT_LEFT, SEND_CHANNEL, LESS_OR_EQUAL,
+      LESS, BIT_XOR_ASSIGN, BIT_XOR, MUL_ASSIGN, MUL, QUOTIENT_ASSIGN, QUOTIENT, REMAINDER_ASSIGN,
+      REMAINDER, SHIFT_RIGHT_ASSIGN, SHIFT_RIGHT, GREATER_OR_EQUAL, GREATER, VAR_ASSIGN);
 
   @NotNull
   @Override

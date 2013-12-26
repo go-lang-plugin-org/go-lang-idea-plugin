@@ -1,14 +1,17 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.goide.psi.GoTypeList;
+import com.goide.psi.GoTypeSwitchCase;
+import com.goide.psi.GoVisitor;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import static com.goide.GoTypes.*;
-import com.goide.psi.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import static com.goide.GoTypes.CASE;
+import static com.goide.GoTypes.DEFAULT;
 
 public class GoTypeSwitchCaseImpl extends GoCompositeElementImpl implements GoTypeSwitchCase {
 
@@ -30,13 +33,13 @@ public class GoTypeSwitchCaseImpl extends GoCompositeElementImpl implements GoTy
   @Override
   @Nullable
   public PsiElement getCase() {
-    return findChildByType(GO_CASE);
+    return findChildByType(CASE);
   }
 
   @Override
   @Nullable
   public PsiElement getDefault() {
-    return findChildByType(GO_DEFAULT);
+    return findChildByType(DEFAULT);
   }
 
 }

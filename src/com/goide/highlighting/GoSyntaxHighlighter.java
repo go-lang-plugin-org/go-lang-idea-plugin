@@ -19,17 +19,17 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase {
   private static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
 
   static {
-    fillMap(ATTRIBUTES, LINE_COMMENT, GoParserDefinition.GO_LINE_COMMENT);
-    fillMap(ATTRIBUTES, BLOCK_COMMENT, GoParserDefinition.GO_MULTILINE_COMMENT);
-    fillMap(ATTRIBUTES, PARENTHESES, GoTypes.GO_LPAREN, GoTypes.GO_RPAREN);
-    fillMap(ATTRIBUTES, BRACES, GoTypes.GO_LBRACE, GoTypes.GO_RBRACE);
-    fillMap(ATTRIBUTES, BRACKETS, GoTypes.GO_LBRACK, GoTypes.GO_RBRACK);
+    fillMap(ATTRIBUTES, LINE_COMMENT, GoParserDefinition.LINE_COMMENT);
+    fillMap(ATTRIBUTES, BLOCK_COMMENT, GoParserDefinition.MULTILINE_COMMENT);
+    fillMap(ATTRIBUTES, PARENTHESES, GoTypes.LPAREN, GoTypes.RPAREN);
+    fillMap(ATTRIBUTES, BRACES, GoTypes.LBRACE, GoTypes.RBRACE);
+    fillMap(ATTRIBUTES, BRACKETS, GoTypes.LBRACK, GoTypes.RBRACK);
     fillMap(ATTRIBUTES, BAD_CHARACTER, TokenType.BAD_CHARACTER);
-    fillMap(ATTRIBUTES, IDENTIFIER, GoTypes.GO_IDENTIFIER);
-    fillMap(ATTRIBUTES, DOT, GoTypes.GO_DOT, GoTypes.GO_TRIPLE_DOT);
-    fillMap(ATTRIBUTES, COLON, GoTypes.GO_COLON);
-    fillMap(ATTRIBUTES, SEMICOLON, GoTypes.GO_SEMICOLON);
-    fillMap(ATTRIBUTES, COMMA, GoTypes.GO_COMMA);
+    fillMap(ATTRIBUTES, IDENTIFIER, GoTypes.IDENTIFIER);
+    fillMap(ATTRIBUTES, DOT, GoTypes.DOT, GoTypes.TRIPLE_DOT);
+    fillMap(ATTRIBUTES, COLON, GoTypes.COLON);
+    fillMap(ATTRIBUTES, SEMICOLON, GoTypes.SEMICOLON);
+    fillMap(ATTRIBUTES, COMMA, GoTypes.COMMA);
     fillMap(ATTRIBUTES, GoParserDefinition.OPERATORS, OPERATOR);
     fillMap(ATTRIBUTES, GoParserDefinition.KEYWORDS, KEYWORD);
     fillMap(ATTRIBUTES, GoParserDefinition.NUMBERS, NUMBER);

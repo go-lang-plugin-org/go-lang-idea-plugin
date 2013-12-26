@@ -1,14 +1,18 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.goide.psi.GoConstDecl;
+import com.goide.psi.GoConstSpec;
+import com.goide.psi.GoVisitor;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static com.goide.GoTypes.*;
-import com.goide.psi.*;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+import static com.goide.GoTypes.CONST;
 
 public class GoConstDeclImpl extends GoCompositeElementImpl implements GoConstDecl {
 
@@ -30,7 +34,7 @@ public class GoConstDeclImpl extends GoCompositeElementImpl implements GoConstDe
   @Override
   @NotNull
   public PsiElement getConst() {
-    return findNotNullChildByType(GO_CONST);
+    return findNotNullChildByType(CONST);
   }
 
 }

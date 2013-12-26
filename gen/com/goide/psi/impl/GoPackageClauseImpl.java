@@ -1,14 +1,16 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.goide.psi.GoPackageClause;
+import com.goide.psi.GoVisitor;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import static com.goide.GoTypes.*;
-import com.goide.psi.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import static com.goide.GoTypes.IDENTIFIER;
+import static com.goide.GoTypes.PACKAGE;
 
 public class GoPackageClauseImpl extends GoCompositeElementImpl implements GoPackageClause {
 
@@ -24,13 +26,13 @@ public class GoPackageClauseImpl extends GoCompositeElementImpl implements GoPac
   @Override
   @Nullable
   public PsiElement getIdentifier() {
-    return findChildByType(GO_IDENTIFIER);
+    return findChildByType(IDENTIFIER);
   }
 
   @Override
   @NotNull
   public PsiElement getPackage() {
-    return findNotNullChildByType(GO_PACKAGE);
+    return findNotNullChildByType(PACKAGE);
   }
 
 }

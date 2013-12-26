@@ -1,14 +1,16 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.goide.psi.GoElementType;
+import com.goide.psi.GoKeyType;
+import com.goide.psi.GoMapType;
+import com.goide.psi.GoVisitor;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import static com.goide.GoTypes.*;
-import com.goide.psi.*;
+import org.jetbrains.annotations.NotNull;
+
+import static com.goide.GoTypes.MAP;
 
 public class GoMapTypeImpl extends GoCompositeElementImpl implements GoMapType {
 
@@ -36,7 +38,7 @@ public class GoMapTypeImpl extends GoCompositeElementImpl implements GoMapType {
   @Override
   @NotNull
   public PsiElement getMap() {
-    return findNotNullChildByType(GO_MAP);
+    return findNotNullChildByType(MAP);
   }
 
 }

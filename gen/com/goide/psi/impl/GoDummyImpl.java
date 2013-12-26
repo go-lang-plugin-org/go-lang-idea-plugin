@@ -1,14 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.goide.psi.GoDummy;
+import com.goide.psi.GoVisitor;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import static com.goide.GoTypes.*;
-import com.goide.psi.*;
 
 public class GoDummyImpl extends GoCompositeElementImpl implements GoDummy {
 
@@ -24,19 +25,19 @@ public class GoDummyImpl extends GoCompositeElementImpl implements GoDummy {
   @Override
   @Nullable
   public PsiElement getChar() {
-    return findChildByType(GO_CHAR);
+    return findChildByType(CHAR);
   }
 
   @Override
   @Nullable
   public PsiElement getHex() {
-    return findChildByType(GO_HEX);
+    return findChildByType(HEX);
   }
 
   @Override
   @Nullable
   public PsiElement getOct() {
-    return findChildByType(GO_OCT);
+    return findChildByType(OCT);
   }
 
 }

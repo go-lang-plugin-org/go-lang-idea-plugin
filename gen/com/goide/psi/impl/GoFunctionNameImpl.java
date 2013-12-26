@@ -1,14 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.goide.psi.GoFunctionName;
+import com.goide.psi.GoVisitor;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import static com.goide.GoTypes.*;
-import com.goide.psi.*;
+import org.jetbrains.annotations.NotNull;
+
+import static com.goide.GoTypes.IDENTIFIER;
 
 public class GoFunctionNameImpl extends GoCompositeElementImpl implements GoFunctionName {
 
@@ -24,7 +24,7 @@ public class GoFunctionNameImpl extends GoCompositeElementImpl implements GoFunc
   @Override
   @NotNull
   public PsiElement getIdentifier() {
-    return findNotNullChildByType(GO_IDENTIFIER);
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

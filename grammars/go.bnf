@@ -5,7 +5,6 @@
   extends='com.goide.psi.impl.GoCompositeElementImpl'
   
   elementTypeHolderClass='com.goide.GoTypes'
-  elementTypePrefix='GO_'
   elementTypeClass='com.goide.psi.GoCompositeElementType'
   tokenTypeClass='com.goide.psi.GoTokenType'
   

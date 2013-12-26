@@ -1,14 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.goide.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import static com.goide.GoTypes.*;
-import com.goide.psi.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import static com.goide.GoTypes.RANGE;
 
 public class GoRangeClauseImpl extends GoCompositeElementImpl implements GoRangeClause {
 
@@ -42,7 +42,7 @@ public class GoRangeClauseImpl extends GoCompositeElementImpl implements GoRange
   @Override
   @NotNull
   public PsiElement getRange() {
-    return findNotNullChildByType(GO_RANGE);
+    return findNotNullChildByType(RANGE);
   }
 
 }

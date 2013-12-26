@@ -1,14 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.goide.psi.GoBasicLit;
+import com.goide.psi.GoVisitor;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import static com.goide.GoTypes.*;
-import com.goide.psi.*;
 
 public class GoBasicLitImpl extends GoCompositeElementImpl implements GoBasicLit {
 
@@ -24,43 +25,43 @@ public class GoBasicLitImpl extends GoCompositeElementImpl implements GoBasicLit
   @Override
   @Nullable
   public PsiElement getDecimalI() {
-    return findChildByType(GO_DECIMAL_I);
+    return findChildByType(DECIMAL_I);
   }
 
   @Override
   @Nullable
   public PsiElement getFloat() {
-    return findChildByType(GO_FLOAT);
+    return findChildByType(FLOAT);
   }
 
   @Override
   @Nullable
   public PsiElement getFloatI() {
-    return findChildByType(GO_FLOAT_I);
+    return findChildByType(FLOAT_I);
   }
 
   @Override
   @Nullable
   public PsiElement getImaginary() {
-    return findChildByType(GO_IMAGINARY);
+    return findChildByType(IMAGINARY);
   }
 
   @Override
   @Nullable
   public PsiElement getInt() {
-    return findChildByType(GO_INT);
+    return findChildByType(INT);
   }
 
   @Override
   @Nullable
   public PsiElement getRune() {
-    return findChildByType(GO_RUNE);
+    return findChildByType(RUNE);
   }
 
   @Override
   @Nullable
   public PsiElement getString() {
-    return findChildByType(GO_STRING);
+    return findChildByType(STRING);
   }
 
 }
