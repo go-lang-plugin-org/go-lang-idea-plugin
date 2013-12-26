@@ -17,6 +17,7 @@
     <lang.syntaxHighlighterFactory key="go" implementationClass="com.goide.highlighting.GoSyntaxHighlighterFactory"/>
     <colorSettingsPage implementation="com.goide.highlighting.GoColorsAndFontsPage"/>
     <lang.braceMatcher language="go" implementationClass="com.goide.GoBraceMatcher"/>
+    <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
   </extensions>
 
 </idea-plugin>
