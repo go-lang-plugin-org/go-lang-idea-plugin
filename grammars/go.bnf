@@ -14,14 +14,14 @@
   psiPackage='com.goide.psi'
   psiImplPackage='com.goide.psi.impl'
   
-  LCURLY               =  '{'
-  RCURLY               =  '}'
+  LBRACE               =  '{'
+  RBRACE               =  '}'
   LBRACK               =  '['
   RBRACK               =  ']'
   LPAREN               =  '('
   RPAREN               =  ')'
   COLON                =  ':'
-  SEMI                 =  ';'
+  SEMICOLON            =  ';'
   COMMA                =  ','
   EQ                   =  '=='
   ASSIGN               =  '='
@@ -61,7 +61,7 @@
   VAR_ASSIGN           =  ':='
   TRIPLE_DOT           =  '...'
   DOT                  =  '.'
-  SEMI_SYNTHETIC       = '<NL>'
+  SEMICOLON_SYNTHETIC  = '<NL>'
 
   pin('.*List(?:_\d.*)?')=1
 }

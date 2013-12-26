@@ -22,13 +22,13 @@ public class GoSyntaxHighlighter extends SyntaxHighlighterBase {
     fillMap(ATTRIBUTES, LINE_COMMENT, GoParserDefinition.GO_LINE_COMMENT);
     fillMap(ATTRIBUTES, BLOCK_COMMENT, GoParserDefinition.GO_MULTILINE_COMMENT);
     fillMap(ATTRIBUTES, PARENTHESES, GoTypes.GO_LPAREN, GoTypes.GO_RPAREN);
-    fillMap(ATTRIBUTES, BRACES, GoTypes.GO_LCURLY, GoTypes.GO_RCURLY);
+    fillMap(ATTRIBUTES, BRACES, GoTypes.GO_LBRACE, GoTypes.GO_RBRACE);
     fillMap(ATTRIBUTES, BRACKETS, GoTypes.GO_LBRACK, GoTypes.GO_RBRACK);
     fillMap(ATTRIBUTES, BAD_CHARACTER, TokenType.BAD_CHARACTER);
     fillMap(ATTRIBUTES, IDENTIFIER, GoTypes.GO_IDENTIFIER);
     fillMap(ATTRIBUTES, DOT, GoTypes.GO_DOT, GoTypes.GO_TRIPLE_DOT);
     fillMap(ATTRIBUTES, COLON, GoTypes.GO_COLON);
-    fillMap(ATTRIBUTES, SEMICOLON, GoTypes.GO_SEMI);
+    fillMap(ATTRIBUTES, SEMICOLON, GoTypes.GO_SEMICOLON);
     fillMap(ATTRIBUTES, COMMA, GoTypes.GO_COMMA);
     fillMap(ATTRIBUTES, GoParserDefinition.OPERATORS, OPERATOR);
     fillMap(ATTRIBUTES, GoParserDefinition.KEYWORDS, KEYWORD);

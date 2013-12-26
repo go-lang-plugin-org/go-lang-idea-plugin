@@ -1,12 +1,12 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide;
 
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.PsiElement;
-import com.intellij.lang.ASTNode;
 import com.goide.psi.GoCompositeElementType;
 import com.goide.psi.GoTokenType;
 import com.goide.psi.impl.*;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 
 public interface GoTypes {
 
@@ -171,8 +171,8 @@ public interface GoTypes {
   IElementType GO_IMPORT = new GoTokenType("import");
   IElementType GO_INT = new GoTokenType("int");
   IElementType GO_INTERFACE = new GoTokenType("interface");
+  IElementType GO_LBRACE = new GoTokenType("{");
   IElementType GO_LBRACK = new GoTokenType("[");
-  IElementType GO_LCURLY = new GoTokenType("{");
   IElementType GO_LESS = new GoTokenType("<");
   IElementType GO_LESS_OR_EQUAL = new GoTokenType("<=");
   IElementType GO_LPAREN = new GoTokenType("(");
@@ -192,16 +192,16 @@ public interface GoTypes {
   IElementType GO_QUOTIENT = new GoTokenType("/");
   IElementType GO_QUOTIENT_ASSIGN = new GoTokenType("/=");
   IElementType GO_RANGE = new GoTokenType("range");
+  IElementType GO_RBRACE = new GoTokenType("}");
   IElementType GO_RBRACK = new GoTokenType("]");
-  IElementType GO_RCURLY = new GoTokenType("}");
   IElementType GO_REMAINDER = new GoTokenType("%");
   IElementType GO_REMAINDER_ASSIGN = new GoTokenType("%=");
   IElementType GO_RETURN = new GoTokenType("return");
   IElementType GO_RPAREN = new GoTokenType(")");
   IElementType GO_RUNE = new GoTokenType("rune");
   IElementType GO_SELECT = new GoTokenType("select");
-  IElementType GO_SEMI = new GoTokenType(";");
-  IElementType GO_SEMI_SYNTHETIC = new GoTokenType("<NL>");
+  IElementType GO_SEMICOLON = new GoTokenType(";");
+  IElementType GO_SEMICOLON_SYNTHETIC = new GoTokenType("<NL>");
   IElementType GO_SEND_CHANNEL = new GoTokenType("<-");
   IElementType GO_SHIFT_LEFT = new GoTokenType("<<");
   IElementType GO_SHIFT_LEFT_ASSIGN = new GoTokenType("<<=");
