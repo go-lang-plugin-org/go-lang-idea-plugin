@@ -16,6 +16,7 @@
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>
     <fileTypeFactory implementation="com.goide.GoFileTypeFactory"/>
     <lang.syntaxHighlighterFactory key="go" implementationClass="com.goide.highlighting.GoSyntaxHighlighterFactory"/>
+    <lang.psiStructureViewFactory language="go" implementationClass="com.goide.GoStructureViewFactory"/>
     <colorSettingsPage implementation="com.goide.highlighting.GoColorsAndFontsPage"/>
     <lang.braceMatcher language="go" implementationClass="com.goide.GoBraceMatcher"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
