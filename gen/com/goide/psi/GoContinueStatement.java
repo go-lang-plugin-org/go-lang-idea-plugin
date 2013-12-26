@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoContinueStatement extends GoCompositeElement {
+public interface GoContinueStatement extends GoStatement {
 
   @NotNull
   PsiElement getContinue();

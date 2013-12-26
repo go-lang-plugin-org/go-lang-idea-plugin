@@ -22,9 +22,9 @@ public class GoExprSwitchCaseImpl extends GoCompositeElementImpl implements GoEx
   }
 
   @Override
-  @Nullable
-  public GoExpressionList getExpressionList() {
-    return findChildByClass(GoExpressionList.class);
+  @NotNull
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
   @Override

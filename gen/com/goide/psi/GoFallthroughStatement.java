@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoFallthroughStatement extends GoCompositeElement {
+public interface GoFallthroughStatement extends GoStatement {
 
   @NotNull
   PsiElement getFallthrough();

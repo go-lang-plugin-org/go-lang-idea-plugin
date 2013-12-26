@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoAssignmentStatementImpl extends GoCompositeElementImpl implements GoAssignmentStatement {
+public class GoAssignmentStatementImpl extends GoStatementImpl implements GoAssignmentStatement {
 
   public GoAssignmentStatementImpl(ASTNode node) {
     super(node);
@@ -23,8 +23,8 @@ public class GoAssignmentStatementImpl extends GoCompositeElementImpl implements
 
   @Override
   @NotNull
-  public List<GoExpressionList> getExpressionListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpressionList.class);
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
   @Override

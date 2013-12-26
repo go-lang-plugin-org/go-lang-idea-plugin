@@ -5,10 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoReceiverType extends GoCompositeElement {
-
-  @Nullable
-  GoReceiverType getReceiverType();
+public interface GoReceiverType extends GoGoType {
 
   @Nullable
   GoTypeName getTypeName();

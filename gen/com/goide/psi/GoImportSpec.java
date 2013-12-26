@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface GoImportSpec extends GoCompositeElement {
 
-  @NotNull
-  GoImportPath getImportPath();
-
   @Nullable
   PsiElement getIdentifier();
+
+  @NotNull
+  PsiElement getString();
 
 }

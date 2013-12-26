@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoIfStatement extends GoCompositeElement {
+public interface GoIfStatement extends GoStatement {
 
   @NotNull
   List<GoBlock> getBlockList();
@@ -13,11 +13,8 @@ public interface GoIfStatement extends GoCompositeElement {
   @Nullable
   GoExpression getExpression();
 
-  @Nullable
-  GoIfStatement getIfStatement();
-
-  @Nullable
-  GoSimpleStatement getSimpleStatement();
+  @NotNull
+  List<GoStatement> getStatementList();
 
   @Nullable
   PsiElement getElse();

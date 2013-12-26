@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoArrayTypeImpl extends GoCompositeElementImpl implements GoArrayType {
+public class GoArrayTypeImpl extends GoGoTypeImpl implements GoArrayType {
 
   public GoArrayTypeImpl(ASTNode node) {
     super(node);
@@ -29,8 +29,8 @@ public class GoArrayTypeImpl extends GoCompositeElementImpl implements GoArrayTy
 
   @Override
   @NotNull
-  public GoElementType getElementType() {
-    return findNotNullChildByClass(GoElementType.class);
+  public GoGoType getGoType() {
+    return findNotNullChildByClass(GoGoType.class);
   }
 
 }

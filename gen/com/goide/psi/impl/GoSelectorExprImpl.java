@@ -10,21 +10,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoElementListImpl extends GoCompositeElementImpl implements GoElementList {
+public class GoSelectorExprImpl extends GoExpressionImpl implements GoSelectorExpr {
 
-  public GoElementListImpl(ASTNode node) {
+  public GoSelectorExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitElementList(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitSelectorExpr(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public List<GoElement> getElementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoElement.class);
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
 }

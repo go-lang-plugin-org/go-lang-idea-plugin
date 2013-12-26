@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoRecvStatementImpl extends GoCompositeElementImpl implements GoRecvStatement {
+public class GoRecvStatementImpl extends GoStatementImpl implements GoRecvStatement {
 
   public GoRecvStatementImpl(ASTNode node) {
     super(node);
@@ -22,21 +22,9 @@ public class GoRecvStatementImpl extends GoCompositeElementImpl implements GoRec
   }
 
   @Override
-  @Nullable
-  public GoExpression getExpression() {
-    return findChildByClass(GoExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public GoExpressionList getExpressionList() {
-    return findChildByClass(GoExpressionList.class);
-  }
-
-  @Override
-  @Nullable
-  public GoIdentifierList getIdentifierList() {
-    return findChildByClass(GoIdentifierList.class);
+  @NotNull
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
 }

@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoReceiverTypeImpl extends GoCompositeElementImpl implements GoReceiverType {
+public class GoReceiverTypeImpl extends GoGoTypeImpl implements GoReceiverType {
 
   public GoReceiverTypeImpl(ASTNode node) {
     super(node);
@@ -19,12 +19,6 @@ public class GoReceiverTypeImpl extends GoCompositeElementImpl implements GoRece
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitReceiverType(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public GoReceiverType getReceiverType() {
-    return findChildByClass(GoReceiverType.class);
   }
 
   @Override

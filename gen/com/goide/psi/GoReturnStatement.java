@@ -5,10 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoReturnStatement extends GoCompositeElement {
+public interface GoReturnStatement extends GoStatement {
 
-  @Nullable
-  GoExpressionList getExpressionList();
+  @NotNull
+  List<GoExpression> getExpressionList();
 
   @NotNull
   PsiElement getReturn();

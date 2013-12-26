@@ -22,21 +22,9 @@ public class GoRangeClauseImpl extends GoCompositeElementImpl implements GoRange
   }
 
   @Override
-  @Nullable
-  public GoExpression getExpression() {
-    return findChildByClass(GoExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public GoExpressionList getExpressionList() {
-    return findChildByClass(GoExpressionList.class);
-  }
-
-  @Override
-  @Nullable
-  public GoIdentifierList getIdentifierList() {
-    return findChildByClass(GoIdentifierList.class);
+  @NotNull
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
   @Override

@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoLiteralValue extends GoCompositeElement {
 
-  @Nullable
-  GoElementList getElementList();
+  @NotNull
+  List<GoElement> getElementList();
 
 }

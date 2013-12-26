@@ -5,13 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoMapType extends GoCompositeElement {
+public interface GoMapType extends GoGoType {
 
   @NotNull
-  GoElementType getElementType();
-
-  @NotNull
-  GoKeyType getKeyType();
+  List<GoGoType> getGoTypeList();
 
   @NotNull
   PsiElement getMap();

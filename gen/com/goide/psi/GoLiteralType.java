@@ -5,22 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoLiteralType extends GoCompositeElement {
-
-  @Nullable
-  GoArrayType getArrayType();
-
-  @Nullable
-  GoElementType getElementType();
-
-  @Nullable
-  GoMapType getMapType();
-
-  @Nullable
-  GoSliceType getSliceType();
-
-  @Nullable
-  GoStructType getStructType();
+public interface GoLiteralType extends GoGoType {
 
   @Nullable
   GoTypeName getTypeName();

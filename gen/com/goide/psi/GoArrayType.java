@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoArrayType extends GoCompositeElement {
+public interface GoArrayType extends GoGoType {
 
   @NotNull
   GoArrayLength getArrayLength();
 
   @NotNull
-  GoElementType getElementType();
+  GoGoType getGoType();
 
 }

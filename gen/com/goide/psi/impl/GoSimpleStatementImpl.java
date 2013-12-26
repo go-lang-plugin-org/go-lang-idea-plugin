@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoSimpleStatementImpl extends GoCompositeElementImpl implements GoSimpleStatement {
+public class GoSimpleStatementImpl extends GoStatementImpl implements GoSimpleStatement {
 
   public GoSimpleStatementImpl(ASTNode node) {
     super(node);
@@ -23,26 +23,8 @@ public class GoSimpleStatementImpl extends GoCompositeElementImpl implements GoS
 
   @Override
   @Nullable
-  public GoAssignmentStatement getAssignmentStatement() {
-    return findChildByClass(GoAssignmentStatement.class);
-  }
-
-  @Override
-  @Nullable
-  public GoExpressionStatement getExpressionStatement() {
-    return findChildByClass(GoExpressionStatement.class);
-  }
-
-  @Override
-  @Nullable
-  public GoIncDecStatement getIncDecStatement() {
-    return findChildByClass(GoIncDecStatement.class);
-  }
-
-  @Override
-  @Nullable
-  public GoSendStatement getSendStatement() {
-    return findChildByClass(GoSendStatement.class);
+  public GoExpression getExpression() {
+    return findChildByClass(GoExpression.class);
   }
 
   @Override

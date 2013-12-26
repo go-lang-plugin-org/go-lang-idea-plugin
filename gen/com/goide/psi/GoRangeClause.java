@@ -7,14 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface GoRangeClause extends GoCompositeElement {
 
-  @Nullable
-  GoExpression getExpression();
-
-  @Nullable
-  GoExpressionList getExpressionList();
-
-  @Nullable
-  GoIdentifierList getIdentifierList();
+  @NotNull
+  List<GoExpression> getExpressionList();
 
   @NotNull
   PsiElement getRange();

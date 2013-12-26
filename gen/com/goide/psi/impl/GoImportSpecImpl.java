@@ -22,15 +22,15 @@ public class GoImportSpecImpl extends GoCompositeElementImpl implements GoImport
   }
 
   @Override
-  @NotNull
-  public GoImportPath getImportPath() {
-    return findNotNullChildByClass(GoImportPath.class);
-  }
-
-  @Override
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getString() {
+    return findNotNullChildByType(STRING);
   }
 
 }

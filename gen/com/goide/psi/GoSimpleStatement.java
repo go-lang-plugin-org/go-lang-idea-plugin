@@ -5,19 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoSimpleStatement extends GoCompositeElement {
+public interface GoSimpleStatement extends GoStatement {
 
   @Nullable
-  GoAssignmentStatement getAssignmentStatement();
-
-  @Nullable
-  GoExpressionStatement getExpressionStatement();
-
-  @Nullable
-  GoIncDecStatement getIncDecStatement();
-
-  @Nullable
-  GoSendStatement getSendStatement();
+  GoExpression getExpression();
 
   @Nullable
   GoShortVarDecl getShortVarDecl();

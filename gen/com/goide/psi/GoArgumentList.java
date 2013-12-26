@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GoArgumentList extends GoCompositeElement {
 
   @NotNull
-  GoExpressionList getExpressionList();
+  List<GoExpression> getExpressionList();
 
 }

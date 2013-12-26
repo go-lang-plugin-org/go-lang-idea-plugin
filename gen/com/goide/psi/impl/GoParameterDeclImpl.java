@@ -27,10 +27,4 @@ public class GoParameterDeclImpl extends GoCompositeElementImpl implements GoPar
     return findNotNullChildByClass(GoGoType.class);
   }
 
-  @Override
-  @Nullable
-  public GoIdentifierList getIdentifierList() {
-    return findChildByClass(GoIdentifierList.class);
-  }
-
 }

@@ -10,7 +10,4 @@ public interface GoParameterDecl extends GoCompositeElement {
   @NotNull
   GoGoType getGoType();
 
-  @Nullable
-  GoIdentifierList getIdentifierList();
-
 }

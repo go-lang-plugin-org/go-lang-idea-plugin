@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoFallthroughStatementImpl extends GoCompositeElementImpl implements GoFallthroughStatement {
+public class GoFallthroughStatementImpl extends GoStatementImpl implements GoFallthroughStatement {
 
   public GoFallthroughStatementImpl(ASTNode node) {
     super(node);

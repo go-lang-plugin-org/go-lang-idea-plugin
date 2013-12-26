@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoExpressionListImpl extends GoCompositeElementImpl implements GoExpressionList {
+public class GoIndexExprImpl extends GoExpressionImpl implements GoIndexExpr {
 
-  public GoExpressionListImpl(ASTNode node) {
+  public GoIndexExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitExpressionList(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitIndexExpr(this);
     else super.accept(visitor);
   }
 

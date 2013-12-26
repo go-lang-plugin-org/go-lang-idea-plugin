@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoSliceType extends GoCompositeElement {
+public interface GoSliceType extends GoGoType {
 
   @NotNull
-  GoElementType getElementType();
+  GoGoType getGoType();
 
 }

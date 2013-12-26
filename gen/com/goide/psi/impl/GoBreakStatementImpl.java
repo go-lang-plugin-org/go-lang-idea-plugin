@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoBreakStatementImpl extends GoCompositeElementImpl implements GoBreakStatement {
+public class GoBreakStatementImpl extends GoStatementImpl implements GoBreakStatement {
 
   public GoBreakStatementImpl(ASTNode node) {
     super(node);

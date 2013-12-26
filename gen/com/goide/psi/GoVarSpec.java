@@ -7,13 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface GoVarSpec extends GoCompositeElement {
 
-  @Nullable
-  GoExpressionList getExpressionList();
+  @NotNull
+  List<GoExpression> getExpressionList();
 
   @Nullable
   GoGoType getGoType();
-
-  @NotNull
-  GoIdentifierList getIdentifierList();
 
 }

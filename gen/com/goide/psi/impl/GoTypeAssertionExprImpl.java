@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoExpressionStatementImpl extends GoCompositeElementImpl implements GoExpressionStatement {
+public class GoTypeAssertionExprImpl extends GoExpressionImpl implements GoTypeAssertionExpr {
 
-  public GoExpressionStatementImpl(ASTNode node) {
+  public GoTypeAssertionExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitExpressionStatement(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitTypeAssertionExpr(this);
     else super.accept(visitor);
   }
 
@@ -25,6 +25,12 @@ public class GoExpressionStatementImpl extends GoCompositeElementImpl implements
   @NotNull
   public GoExpression getExpression() {
     return findNotNullChildByClass(GoExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public GoGoType getGoType() {
+    return findNotNullChildByClass(GoGoType.class);
   }
 
 }

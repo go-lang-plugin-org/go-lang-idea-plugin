@@ -7,28 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoTypeLit extends GoExpression {
 
-  @Nullable
-  GoArrayType getArrayType();
-
-  @Nullable
-  GoChannelType getChannelType();
-
-  @Nullable
-  GoFunctionType getFunctionType();
-
-  @Nullable
-  GoInterfaceType getInterfaceType();
-
-  @Nullable
-  GoMapType getMapType();
-
-  @Nullable
-  GoPointerType getPointerType();
-
-  @Nullable
-  GoSliceType getSliceType();
-
-  @Nullable
-  GoStructType getStructType();
+  @NotNull
+  GoGoType getGoType();
 
 }

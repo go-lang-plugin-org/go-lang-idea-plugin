@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoImportPath extends GoCompositeElement {
+public interface GoCallExpr extends GoExpression {
 
   @NotNull
-  PsiElement getString();
+  GoArgumentList getArgumentList();
+
+  @NotNull
+  GoExpression getExpression();
 
 }

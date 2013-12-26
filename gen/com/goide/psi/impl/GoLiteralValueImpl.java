@@ -22,9 +22,9 @@ public class GoLiteralValueImpl extends GoCompositeElementImpl implements GoLite
   }
 
   @Override
-  @Nullable
-  public GoElementList getElementList() {
-    return findChildByClass(GoElementList.class);
+  @NotNull
+  public List<GoElement> getElementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoElement.class);
   }
 
 }

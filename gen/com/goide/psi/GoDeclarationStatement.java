@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoDeclarationStatement extends GoCompositeElement {
+public interface GoDeclarationStatement extends GoStatement {
 
   @Nullable
   GoConstDecl getConstDecl();

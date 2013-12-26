@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface GoBuiltinArgs extends GoCompositeElement {
 
-  @Nullable
-  GoArgumentList getArgumentList();
+  @NotNull
+  List<GoExpression> getExpressionList();
 
   @Nullable
   GoGoType getGoType();

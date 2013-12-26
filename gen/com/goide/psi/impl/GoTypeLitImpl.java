@@ -22,51 +22,9 @@ public class GoTypeLitImpl extends GoExpressionImpl implements GoTypeLit {
   }
 
   @Override
-  @Nullable
-  public GoArrayType getArrayType() {
-    return findChildByClass(GoArrayType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoChannelType getChannelType() {
-    return findChildByClass(GoChannelType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoFunctionType getFunctionType() {
-    return findChildByClass(GoFunctionType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoInterfaceType getInterfaceType() {
-    return findChildByClass(GoInterfaceType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoMapType getMapType() {
-    return findChildByClass(GoMapType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoPointerType getPointerType() {
-    return findChildByClass(GoPointerType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoSliceType getSliceType() {
-    return findChildByClass(GoSliceType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoStructType getStructType() {
-    return findChildByClass(GoStructType.class);
+  @NotNull
+  public GoGoType getGoType() {
+    return findNotNullChildByClass(GoGoType.class);
   }
 
 }

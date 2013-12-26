@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface GoExprSwitchCase extends GoCompositeElement {
 
-  @Nullable
-  GoExpressionList getExpressionList();
+  @NotNull
+  List<GoExpression> getExpressionList();
 
   @Nullable
   PsiElement getCase();

@@ -22,9 +22,9 @@ public class GoParametersImpl extends GoCompositeElementImpl implements GoParame
   }
 
   @Override
-  @Nullable
-  public GoParameterList getParameterList() {
-    return findChildByClass(GoParameterList.class);
+  @NotNull
+  public List<GoParameterDecl> getParameterDeclList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoParameterDecl.class);
   }
 
 }

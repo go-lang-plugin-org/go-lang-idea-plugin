@@ -23,14 +23,8 @@ public class GoShortVarDeclImpl extends GoCompositeElementImpl implements GoShor
 
   @Override
   @NotNull
-  public GoExpressionList getExpressionList() {
-    return findNotNullChildByClass(GoExpressionList.class);
-  }
-
-  @Override
-  @NotNull
-  public GoIdentifierList getIdentifierList() {
-    return findNotNullChildByClass(GoIdentifierList.class);
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
 }

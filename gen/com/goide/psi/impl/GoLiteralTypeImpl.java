@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoLiteralTypeImpl extends GoCompositeElementImpl implements GoLiteralType {
+public class GoLiteralTypeImpl extends GoGoTypeImpl implements GoLiteralType {
 
   public GoLiteralTypeImpl(ASTNode node) {
     super(node);
@@ -19,36 +19,6 @@ public class GoLiteralTypeImpl extends GoCompositeElementImpl implements GoLiter
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitLiteralType(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public GoArrayType getArrayType() {
-    return findChildByClass(GoArrayType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoElementType getElementType() {
-    return findChildByClass(GoElementType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoMapType getMapType() {
-    return findChildByClass(GoMapType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoSliceType getSliceType() {
-    return findChildByClass(GoSliceType.class);
-  }
-
-  @Override
-  @Nullable
-  public GoStructType getStructType() {
-    return findChildByClass(GoStructType.class);
   }
 
   @Override

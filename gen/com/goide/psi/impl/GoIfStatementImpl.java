@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoIfStatementImpl extends GoCompositeElementImpl implements GoIfStatement {
+public class GoIfStatementImpl extends GoStatementImpl implements GoIfStatement {
 
   public GoIfStatementImpl(ASTNode node) {
     super(node);
@@ -34,15 +34,9 @@ public class GoIfStatementImpl extends GoCompositeElementImpl implements GoIfSta
   }
 
   @Override
-  @Nullable
-  public GoIfStatement getIfStatement() {
-    return findChildByClass(GoIfStatement.class);
-  }
-
-  @Override
-  @Nullable
-  public GoSimpleStatement getSimpleStatement() {
-    return findChildByClass(GoSimpleStatement.class);
+  @NotNull
+  public List<GoStatement> getStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
   }
 
   @Override

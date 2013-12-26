@@ -5,12 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoSwitchStatement extends GoCompositeElement {
-
-  @Nullable
-  GoExprSwitchStatement getExprSwitchStatement();
-
-  @Nullable
-  GoTypeSwitchStatement getTypeSwitchStatement();
+public interface GoSwitchStatement extends GoStatement {
 
 }

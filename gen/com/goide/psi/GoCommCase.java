@@ -8,10 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoCommCase extends GoCompositeElement {
 
   @Nullable
-  GoRecvStatement getRecvStatement();
-
-  @Nullable
-  GoSendStatement getSendStatement();
+  GoStatement getStatement();
 
   @Nullable
   PsiElement getCase();

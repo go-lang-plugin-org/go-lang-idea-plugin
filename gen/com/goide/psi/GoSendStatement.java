@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoSendStatement extends GoCompositeElement {
+public interface GoSendStatement extends GoStatement {
 
   @NotNull
   List<GoExpression> getExpressionList();

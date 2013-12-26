@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoLabeledStatementImpl extends GoCompositeElementImpl implements GoLabeledStatement {
+public class GoLabeledStatementImpl extends GoStatementImpl implements GoLabeledStatement {
 
   public GoLabeledStatementImpl(ASTNode node) {
     super(node);

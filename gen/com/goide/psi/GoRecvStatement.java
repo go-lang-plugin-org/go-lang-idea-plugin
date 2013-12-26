@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoRecvStatement extends GoCompositeElement {
+public interface GoRecvStatement extends GoStatement {
 
-  @Nullable
-  GoExpression getExpression();
-
-  @Nullable
-  GoExpressionList getExpressionList();
-
-  @Nullable
-  GoIdentifierList getIdentifierList();
+  @NotNull
+  List<GoExpression> getExpressionList();
 
 }

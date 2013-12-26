@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GoShortVarDecl extends GoCompositeElement {
 
   @NotNull
-  GoExpressionList getExpressionList();
-
-  @NotNull
-  GoIdentifierList getIdentifierList();
+  List<GoExpression> getExpressionList();
 
 }

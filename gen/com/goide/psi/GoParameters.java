@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoParameters extends GoCompositeElement {
 
-  @Nullable
-  GoParameterList getParameterList();
+  @NotNull
+  List<GoParameterDecl> getParameterDeclList();
 
 }

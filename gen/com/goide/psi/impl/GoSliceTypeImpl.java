@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoSliceTypeImpl extends GoCompositeElementImpl implements GoSliceType {
+public class GoSliceTypeImpl extends GoGoTypeImpl implements GoSliceType {
 
   public GoSliceTypeImpl(ASTNode node) {
     super(node);
@@ -23,8 +23,8 @@ public class GoSliceTypeImpl extends GoCompositeElementImpl implements GoSliceTy
 
   @Override
   @NotNull
-  public GoElementType getElementType() {
-    return findNotNullChildByClass(GoElementType.class);
+  public GoGoType getGoType() {
+    return findNotNullChildByClass(GoGoType.class);
   }
 
 }

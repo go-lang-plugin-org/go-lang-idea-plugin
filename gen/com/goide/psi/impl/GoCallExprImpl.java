@@ -10,15 +10,27 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoIdentifierListImpl extends GoCompositeElementImpl implements GoIdentifierList {
+public class GoCallExprImpl extends GoExpressionImpl implements GoCallExpr {
 
-  public GoIdentifierListImpl(ASTNode node) {
+  public GoCallExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitIdentifierList(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitCallExpr(this);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public GoArgumentList getArgumentList() {
+    return findNotNullChildByClass(GoArgumentList.class);
+  }
+
+  @Override
+  @NotNull
+  public GoExpression getExpression() {
+    return findNotNullChildByClass(GoExpression.class);
   }
 
 }

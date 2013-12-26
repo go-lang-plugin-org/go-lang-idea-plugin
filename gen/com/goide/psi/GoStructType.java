@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoStructType extends GoCompositeElement {
+public interface GoStructType extends GoGoType {
 
   @NotNull
   List<GoFieldDecl> getFieldDeclList();

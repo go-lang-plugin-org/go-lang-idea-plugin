@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoDeferStatement extends GoCompositeElement {
+public interface GoDeferStatement extends GoStatement {
 
   @Nullable
   GoExpression getExpression();

@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoBaseTypeImpl extends GoCompositeElementImpl implements GoBaseType {
+public class GoBaseTypeImpl extends GoGoTypeImpl implements GoBaseType {
 
   public GoBaseTypeImpl(ASTNode node) {
     super(node);
@@ -19,12 +19,6 @@ public class GoBaseTypeImpl extends GoCompositeElementImpl implements GoBaseType
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitBaseType(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public GoGoType getGoType() {
-    return findNotNullChildByClass(GoGoType.class);
   }
 
 }

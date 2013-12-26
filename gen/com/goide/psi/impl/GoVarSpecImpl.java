@@ -22,21 +22,15 @@ public class GoVarSpecImpl extends GoCompositeElementImpl implements GoVarSpec {
   }
 
   @Override
-  @Nullable
-  public GoExpressionList getExpressionList() {
-    return findChildByClass(GoExpressionList.class);
+  @NotNull
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
   @Override
   @Nullable
   public GoGoType getGoType() {
     return findChildByClass(GoGoType.class);
-  }
-
-  @Override
-  @NotNull
-  public GoIdentifierList getIdentifierList() {
-    return findNotNullChildByClass(GoIdentifierList.class);
   }
 
 }

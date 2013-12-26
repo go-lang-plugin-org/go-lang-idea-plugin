@@ -22,9 +22,9 @@ public class GoBuiltinArgsImpl extends GoCompositeElementImpl implements GoBuilt
   }
 
   @Override
-  @Nullable
-  public GoArgumentList getArgumentList() {
-    return findChildByClass(GoArgumentList.class);
+  @NotNull
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
   @Override

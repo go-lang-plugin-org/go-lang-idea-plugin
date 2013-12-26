@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoContinueStatementImpl extends GoCompositeElementImpl implements GoContinueStatement {
+public class GoContinueStatementImpl extends GoStatementImpl implements GoContinueStatement {
 
   public GoContinueStatementImpl(ASTNode node) {
     super(node);

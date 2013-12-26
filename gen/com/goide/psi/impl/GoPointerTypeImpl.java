@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoPointerTypeImpl extends GoCompositeElementImpl implements GoPointerType {
+public class GoPointerTypeImpl extends GoGoTypeImpl implements GoPointerType {
 
   public GoPointerTypeImpl(ASTNode node) {
     super(node);
@@ -23,8 +23,8 @@ public class GoPointerTypeImpl extends GoCompositeElementImpl implements GoPoint
 
   @Override
   @NotNull
-  public GoBaseType getBaseType() {
-    return findNotNullChildByClass(GoBaseType.class);
+  public GoGoType getGoType() {
+    return findNotNullChildByClass(GoGoType.class);
   }
 
 }

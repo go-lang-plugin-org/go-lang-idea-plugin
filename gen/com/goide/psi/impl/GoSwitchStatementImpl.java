@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoSwitchStatementImpl extends GoCompositeElementImpl implements GoSwitchStatement {
+public class GoSwitchStatementImpl extends GoStatementImpl implements GoSwitchStatement {
 
   public GoSwitchStatementImpl(ASTNode node) {
     super(node);
@@ -19,18 +19,6 @@ public class GoSwitchStatementImpl extends GoCompositeElementImpl implements GoS
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitSwitchStatement(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public GoExprSwitchStatement getExprSwitchStatement() {
-    return findChildByClass(GoExprSwitchStatement.class);
-  }
-
-  @Override
-  @Nullable
-  public GoTypeSwitchStatement getTypeSwitchStatement() {
-    return findChildByClass(GoTypeSwitchStatement.class);
   }
 
 }

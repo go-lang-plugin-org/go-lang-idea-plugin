@@ -23,8 +23,8 @@ public class GoArgumentListImpl extends GoCompositeElementImpl implements GoArgu
 
   @Override
   @NotNull
-  public GoExpressionList getExpressionList() {
-    return findNotNullChildByClass(GoExpressionList.class);
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
 }

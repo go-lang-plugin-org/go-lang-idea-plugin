@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoExprSwitchStatement extends GoCompositeElement {
+public interface GoExprSwitchStatement extends GoStatement {
 
   @NotNull
   List<GoExprCaseClause> getExprCaseClauseList();

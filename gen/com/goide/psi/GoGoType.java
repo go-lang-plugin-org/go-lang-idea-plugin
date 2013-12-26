@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GoGoType extends GoCompositeElement {
 
   @Nullable
-  GoGoType getGoType();
-
-  @Nullable
   GoTypeLit getTypeLit();
 
   @Nullable
