@@ -28,11 +28,10 @@ public interface GoTypes {
   IElementType COMM_CLAUSE = new GoCompositeElementType("COMM_CLAUSE");
   IElementType COMPOSITE_LIT = new GoCompositeElementType("COMPOSITE_LIT");
   IElementType CONDITIONAL_EXPR = new GoCompositeElementType("CONDITIONAL_EXPR");
-  IElementType CONST_DECL = new GoCompositeElementType("CONST_DECL");
+  IElementType CONST_DECLARATION = new GoCompositeElementType("CONST_DECLARATION");
   IElementType CONST_SPEC = new GoCompositeElementType("CONST_SPEC");
   IElementType CONTINUE_STATEMENT = new GoCompositeElementType("CONTINUE_STATEMENT");
   IElementType CONVERSION_EXPR = new GoCompositeElementType("CONVERSION_EXPR");
-  IElementType DECLARATION_STATEMENT = new GoCompositeElementType("DECLARATION_STATEMENT");
   IElementType DEFER_STATEMENT = new GoCompositeElementType("DEFER_STATEMENT");
   IElementType ELEMENT = new GoCompositeElementType("ELEMENT");
   IElementType ELEMENT_INDEX = new GoCompositeElementType("ELEMENT_INDEX");
@@ -41,20 +40,20 @@ public interface GoTypes {
   IElementType EXPR_SWITCH_CASE = new GoCompositeElementType("EXPR_SWITCH_CASE");
   IElementType EXPR_SWITCH_STATEMENT = new GoCompositeElementType("EXPR_SWITCH_STATEMENT");
   IElementType FALLTHROUGH_STATEMENT = new GoCompositeElementType("FALLTHROUGH_STATEMENT");
-  IElementType FIELD_DECL = new GoCompositeElementType("FIELD_DECL");
+  IElementType FIELD_DECLARATION = new GoCompositeElementType("FIELD_DECLARATION");
   IElementType FIELD_NAME = new GoCompositeElementType("FIELD_NAME");
   IElementType FOR_CLAUSE = new GoCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new GoCompositeElementType("FOR_STATEMENT");
   IElementType FUNCTION = new GoCompositeElementType("FUNCTION");
   IElementType FUNCTION_BODY = new GoCompositeElementType("FUNCTION_BODY");
-  IElementType FUNCTION_DECL = new GoCompositeElementType("FUNCTION_DECL");
+  IElementType FUNCTION_DECLARATION = new GoCompositeElementType("FUNCTION_DECLARATION");
   IElementType FUNCTION_LIT = new GoCompositeElementType("FUNCTION_LIT");
   IElementType FUNCTION_NAME = new GoCompositeElementType("FUNCTION_NAME");
   IElementType FUNCTION_TYPE = new GoCompositeElementType("FUNCTION_TYPE");
   IElementType GOTO_STATEMENT = new GoCompositeElementType("GOTO_STATEMENT");
   IElementType GO_STATEMENT = new GoCompositeElementType("GO_STATEMENT");
   IElementType IF_STATEMENT = new GoCompositeElementType("IF_STATEMENT");
-  IElementType IMPORT_DECL = new GoCompositeElementType("IMPORT_DECL");
+  IElementType IMPORT_DECLARATION = new GoCompositeElementType("IMPORT_DECLARATION");
   IElementType IMPORT_SPEC = new GoCompositeElementType("IMPORT_SPEC");
   IElementType INDEX_EXPR = new GoCompositeElementType("INDEX_EXPR");
   IElementType INTERFACE_TYPE = new GoCompositeElementType("INTERFACE_TYPE");
@@ -65,7 +64,7 @@ public interface GoTypes {
   IElementType LITERAL_TYPE = new GoCompositeElementType("LITERAL_TYPE");
   IElementType LITERAL_VALUE = new GoCompositeElementType("LITERAL_VALUE");
   IElementType MAP_TYPE = new GoCompositeElementType("MAP_TYPE");
-  IElementType METHOD_DECL = new GoCompositeElementType("METHOD_DECL");
+  IElementType METHOD_DECLARATION = new GoCompositeElementType("METHOD_DECLARATION");
   IElementType METHOD_EXPR = new GoCompositeElementType("METHOD_EXPR");
   IElementType METHOD_SPEC = new GoCompositeElementType("METHOD_SPEC");
   IElementType MUL_EXPR = new GoCompositeElementType("MUL_EXPR");
@@ -73,7 +72,7 @@ public interface GoTypes {
   IElementType OR_EXPR = new GoCompositeElementType("OR_EXPR");
   IElementType PACKAGE_CLAUSE = new GoCompositeElementType("PACKAGE_CLAUSE");
   IElementType PARAMETERS = new GoCompositeElementType("PARAMETERS");
-  IElementType PARAMETER_DECL = new GoCompositeElementType("PARAMETER_DECL");
+  IElementType PARAMETER_DECLARATION = new GoCompositeElementType("PARAMETER_DECLARATION");
   IElementType PARENTHEZIED_EXPR = new GoCompositeElementType("PARENTHEZIED_EXPR");
   IElementType POINTER_TYPE = new GoCompositeElementType("POINTER_TYPE");
   IElementType QUALIFIED_IDENT = new GoCompositeElementType("QUALIFIED_IDENT");
@@ -86,7 +85,7 @@ public interface GoTypes {
   IElementType SELECTOR_EXPR = new GoCompositeElementType("SELECTOR_EXPR");
   IElementType SELECT_STATEMENT = new GoCompositeElementType("SELECT_STATEMENT");
   IElementType SEND_STATEMENT = new GoCompositeElementType("SEND_STATEMENT");
-  IElementType SHORT_VAR_DECL = new GoCompositeElementType("SHORT_VAR_DECL");
+  IElementType SHORT_VAR_DECLARATION = new GoCompositeElementType("SHORT_VAR_DECLARATION");
   IElementType SIGNATURE = new GoCompositeElementType("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new GoCompositeElementType("SIMPLE_STATEMENT");
   IElementType SLICE_EXPR = new GoCompositeElementType("SLICE_EXPR");
@@ -94,11 +93,11 @@ public interface GoTypes {
   IElementType STRUCT_TYPE = new GoCompositeElementType("STRUCT_TYPE");
   IElementType SWITCH_STATEMENT = new GoCompositeElementType("SWITCH_STATEMENT");
   IElementType TAG = new GoCompositeElementType("TAG");
-  IElementType TOP_LEVEL_DECL = new GoCompositeElementType("TOP_LEVEL_DECL");
+  IElementType TOP_LEVEL_DECLARATION = new GoCompositeElementType("TOP_LEVEL_DECLARATION");
   IElementType TYPE = new GoCompositeElementType("TYPE");
   IElementType TYPE_ASSERTION_EXPR = new GoCompositeElementType("TYPE_ASSERTION_EXPR");
   IElementType TYPE_CASE_CLAUSE = new GoCompositeElementType("TYPE_CASE_CLAUSE");
-  IElementType TYPE_DECL = new GoCompositeElementType("TYPE_DECL");
+  IElementType TYPE_DECLARATION = new GoCompositeElementType("TYPE_DECLARATION");
   IElementType TYPE_LIST = new GoCompositeElementType("TYPE_LIST");
   IElementType TYPE_LIT = new GoCompositeElementType("TYPE_LIT");
   IElementType TYPE_NAME = new GoCompositeElementType("TYPE_NAME");
@@ -108,7 +107,7 @@ public interface GoTypes {
   IElementType TYPE_SWITCH_STATEMENT = new GoCompositeElementType("TYPE_SWITCH_STATEMENT");
   IElementType UNARY_EXPR = new GoCompositeElementType("UNARY_EXPR");
   IElementType VALUE = new GoCompositeElementType("VALUE");
-  IElementType VAR_DECL = new GoCompositeElementType("VAR_DECL");
+  IElementType VAR_DECLARATION = new GoCompositeElementType("VAR_DECLARATION");
   IElementType VAR_SPEC = new GoCompositeElementType("VAR_SPEC");
 
   IElementType ASSIGN = new GoTokenType("=");
@@ -252,8 +251,8 @@ public interface GoTypes {
       else if (type == CONDITIONAL_EXPR) {
         return new GoConditionalExprImpl(node);
       }
-      else if (type == CONST_DECL) {
-        return new GoConstDeclImpl(node);
+      else if (type == CONST_DECLARATION) {
+        return new GoConstDeclarationImpl(node);
       }
       else if (type == CONST_SPEC) {
         return new GoConstSpecImpl(node);
@@ -263,9 +262,6 @@ public interface GoTypes {
       }
       else if (type == CONVERSION_EXPR) {
         return new GoConversionExprImpl(node);
-      }
-      else if (type == DECLARATION_STATEMENT) {
-        return new GoDeclarationStatementImpl(node);
       }
       else if (type == DEFER_STATEMENT) {
         return new GoDeferStatementImpl(node);
@@ -291,8 +287,8 @@ public interface GoTypes {
       else if (type == FALLTHROUGH_STATEMENT) {
         return new GoFallthroughStatementImpl(node);
       }
-      else if (type == FIELD_DECL) {
-        return new GoFieldDeclImpl(node);
+      else if (type == FIELD_DECLARATION) {
+        return new GoFieldDeclarationImpl(node);
       }
       else if (type == FIELD_NAME) {
         return new GoFieldNameImpl(node);
@@ -309,8 +305,8 @@ public interface GoTypes {
       else if (type == FUNCTION_BODY) {
         return new GoFunctionBodyImpl(node);
       }
-      else if (type == FUNCTION_DECL) {
-        return new GoFunctionDeclImpl(node);
+      else if (type == FUNCTION_DECLARATION) {
+        return new GoFunctionDeclarationImpl(node);
       }
       else if (type == FUNCTION_LIT) {
         return new GoFunctionLitImpl(node);
@@ -330,8 +326,8 @@ public interface GoTypes {
       else if (type == IF_STATEMENT) {
         return new GoIfStatementImpl(node);
       }
-      else if (type == IMPORT_DECL) {
-        return new GoImportDeclImpl(node);
+      else if (type == IMPORT_DECLARATION) {
+        return new GoImportDeclarationImpl(node);
       }
       else if (type == IMPORT_SPEC) {
         return new GoImportSpecImpl(node);
@@ -363,8 +359,8 @@ public interface GoTypes {
       else if (type == MAP_TYPE) {
         return new GoMapTypeImpl(node);
       }
-      else if (type == METHOD_DECL) {
-        return new GoMethodDeclImpl(node);
+      else if (type == METHOD_DECLARATION) {
+        return new GoMethodDeclarationImpl(node);
       }
       else if (type == METHOD_EXPR) {
         return new GoMethodExprImpl(node);
@@ -387,8 +383,8 @@ public interface GoTypes {
       else if (type == PARAMETERS) {
         return new GoParametersImpl(node);
       }
-      else if (type == PARAMETER_DECL) {
-        return new GoParameterDeclImpl(node);
+      else if (type == PARAMETER_DECLARATION) {
+        return new GoParameterDeclarationImpl(node);
       }
       else if (type == PARENTHEZIED_EXPR) {
         return new GoParentheziedExprImpl(node);
@@ -426,8 +422,8 @@ public interface GoTypes {
       else if (type == SEND_STATEMENT) {
         return new GoSendStatementImpl(node);
       }
-      else if (type == SHORT_VAR_DECL) {
-        return new GoShortVarDeclImpl(node);
+      else if (type == SHORT_VAR_DECLARATION) {
+        return new GoShortVarDeclarationImpl(node);
       }
       else if (type == SIGNATURE) {
         return new GoSignatureImpl(node);
@@ -450,8 +446,8 @@ public interface GoTypes {
       else if (type == TAG) {
         return new GoTagImpl(node);
       }
-      else if (type == TOP_LEVEL_DECL) {
-        return new GoTopLevelDeclImpl(node);
+      else if (type == TOP_LEVEL_DECLARATION) {
+        return new GoTopLevelDeclarationImpl(node);
       }
       else if (type == TYPE) {
         return new GoTypeImpl(node);
@@ -462,8 +458,8 @@ public interface GoTypes {
       else if (type == TYPE_CASE_CLAUSE) {
         return new GoTypeCaseClauseImpl(node);
       }
-      else if (type == TYPE_DECL) {
-        return new GoTypeDeclImpl(node);
+      else if (type == TYPE_DECLARATION) {
+        return new GoTypeDeclarationImpl(node);
       }
       else if (type == TYPE_LIST) {
         return new GoTypeListImpl(node);
@@ -492,8 +488,8 @@ public interface GoTypes {
       else if (type == VALUE) {
         return new GoValueImpl(node);
       }
-      else if (type == VAR_DECL) {
-        return new GoVarDeclImpl(node);
+      else if (type == VAR_DECLARATION) {
+        return new GoVarDeclarationImpl(node);
       }
       else if (type == VAR_SPEC) {
         return new GoVarSpecImpl(node);

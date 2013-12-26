@@ -10,4 +10,7 @@ public interface GoStatement extends GoCompositeElement {
   @Nullable
   GoBlock getBlock();
 
+  @Nullable
+  GoTopLevelDeclaration getTopLevelDeclaration();
+
 }

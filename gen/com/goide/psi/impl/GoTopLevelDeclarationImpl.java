@@ -10,27 +10,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoStatementImpl extends GoCompositeElementImpl implements GoStatement {
+public class GoTopLevelDeclarationImpl extends GoCompositeElementImpl implements GoTopLevelDeclaration {
 
-  public GoStatementImpl(ASTNode node) {
+  public GoTopLevelDeclarationImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitStatement(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitTopLevelDeclaration(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public GoBlock getBlock() {
-    return findChildByClass(GoBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public GoTopLevelDeclaration getTopLevelDeclaration() {
-    return findChildByClass(GoTopLevelDeclaration.class);
   }
 
 }

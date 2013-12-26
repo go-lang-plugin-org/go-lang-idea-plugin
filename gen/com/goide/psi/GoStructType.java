@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoStructType extends GoType {
 
   @NotNull
-  List<GoFieldDecl> getFieldDeclList();
+  List<GoFieldDeclaration> getFieldDeclarationList();
 
   @NotNull
   PsiElement getStruct();

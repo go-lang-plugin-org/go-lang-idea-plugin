@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoSimpleStatement extends GoStatement {
+public interface GoConstDeclaration extends GoTopLevelDeclaration {
 
-  @Nullable
-  GoExpression getExpression();
+  @NotNull
+  List<GoConstSpec> getConstSpecList();
 
-  @Nullable
-  GoShortVarDeclaration getShortVarDeclaration();
+  @NotNull
+  PsiElement getConst();
 
 }

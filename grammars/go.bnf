@@ -71,13 +71,13 @@
   pin('.*List(?:_\d.*)?')=1
 }
 
-SourceFile ::= PackageClause semi ( ImportDecl semi )* ( TopLevelDecl semi )* {pin=1}
+SourceFile ::= PackageClause semi ( ImportDeclaration semi )* ( TopLevelDeclaration semi )* {pin=1}
 private semi ::= '<NL>' | ';'?
 
 PackageClause ::= package PackageName {pin=1}
 private PackageName ::= identifier
 
-ImportDecl ::= import ( ImportSpec | '(' ( ImportSpec semi )* ')' ) {pin=1}
+ImportDeclaration ::= import ( ImportSpec | '(' ( ImportSpec semi )* ')' ) {pin=1}
 ImportSpec ::= [ '.' | PackageName ] string
 
 Type ::= TypeName | TypeLit | '(' Type ')' {pin(".*")=1}
@@ -93,8 +93,8 @@ TypeLit ::=
 
 ArrayOrSliceType ::= '[' Expression? ']' Type {pin=1}
 
-StructType ::= struct '{' ( FieldDecl semi )* '}' {pin=1}
-FieldDecl ::= (IdentifierList Type | AnonymousField) [ Tag ]
+StructType ::= struct '{' ( FieldDeclaration semi )* '}' {pin=1}
+FieldDeclaration ::= (IdentifierList Type | AnonymousField) [ Tag ]
 AnonymousField ::= [ '*' ] TypeName
 Tag ::= string
 
@@ -105,8 +105,8 @@ FunctionType ::= func Signature
 Signature ::= Parameters [ Result ]
 Result ::= Parameters | Type
 Parameters ::= '(' [ ParameterList [ ',' ] ] ')'
-private ParameterList ::= ParameterDecl ( ',' ParameterDecl )*
-ParameterDecl ::= [ IdentifierList ] [ '...' ] Type
+private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
+ParameterDeclaration ::= [ IdentifierList ] [ '...' ] Type
 
 InterfaceType ::= interface '{' ( MethodSpec semi )* '}' {pin(".*")=1}
 MethodSpec ::= identifier Signature | InterfaceTypeName
@@ -119,7 +119,7 @@ ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
 Block ::= '{' (Statement semi)* '}' {pin(".*")=1}
 
 Statement ::=
-	  DeclarationStatement
+	  ConstDeclaration | TypeDeclaration | VarDeclaration
 	| LabeledStatement
 	| SimpleStatement
 	| GoStatement
@@ -138,32 +138,40 @@ Statement ::=
 SimpleStatement ::=
     AssignmentStatement
   | SendStatement
-  | ShortVarDecl
+  | ShortVarDeclaration
   | Expression ['++' | '--']
 
-DeclarationStatement  ::= ConstDecl | TypeDecl | VarDecl
-TopLevelDecl ::= DeclarationStatement | FunctionDecl | MethodDecl
+;{
+  extends("(Const|Type|Var|Function|Method)Declaration")=TopLevelDeclaration
+}
 
-ConstDecl ::= const ( ConstSpec | '(' ( ConstSpec semi )* ')' ) {pin(".*")=1}
+TopLevelDeclaration ::=
+    ConstDeclaration
+  | TypeDeclaration
+  | VarDeclaration
+  | FunctionDeclaration
+  | MethodDeclaration
+
+ConstDeclaration ::= const ( ConstSpec | '(' ( ConstSpec semi )* ')' ) {pin(".*")=1}
 ConstSpec ::= IdentifierList [ [ Type ] '=' ExpressionList ]
 
 private IdentifierList ::= identifier ( ',' identifier )*
 private ExpressionList ::= Expression ( ',' Expression )*
 
-TypeDecl ::= 'type' ( TypeSpec | '(' ( TypeSpec semi )* ')' ) {pin(".*")=1}
+TypeDeclaration ::= 'type' ( TypeSpec | '(' ( TypeSpec semi )* ')' ) {pin(".*")=1}
 TypeSpec ::= identifier Type {pin=1}
 
-VarDecl ::= var ( VarSpec | '(' ( VarSpec semi )* ')' ) {pin=1}
+VarDeclaration ::= var ( VarSpec | '(' ( VarSpec semi )* ')' ) {pin=1}
 VarSpec ::= IdentifierList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
 
-ShortVarDecl ::= IdentifierList ':=' ExpressionList
+ShortVarDeclaration ::= IdentifierList ':=' ExpressionList
 
-FunctionDecl ::= func FunctionName ( Function | Signature ) {pin=2}
+FunctionDeclaration ::= func FunctionName ( Function | Signature ) {pin=2}
 FunctionName ::= identifier
 Function     ::= Signature FunctionBody
 FunctionBody ::= Block
 
-MethodDecl ::= func Receiver identifier ( Function | Signature ) {pin=2}
+MethodDeclaration ::= func Receiver identifier ( Function | Signature ) {pin=2}
 Receiver ::= '(' [ identifier ] [ '*' ] identifier ')'
 
 private Operand ::= Literal | MethodExpr | OperandName

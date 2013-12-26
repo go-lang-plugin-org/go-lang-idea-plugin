@@ -23,8 +23,8 @@ public class GoStructTypeImpl extends GoTypeImpl implements GoStructType {
 
   @Override
   @NotNull
-  public List<GoFieldDecl> getFieldDeclList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoFieldDecl.class);
+  public List<GoFieldDeclaration> getFieldDeclarationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoFieldDeclaration.class);
   }
 
   @Override

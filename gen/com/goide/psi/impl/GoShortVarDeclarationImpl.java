@@ -10,27 +10,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoSimpleStatementImpl extends GoStatementImpl implements GoSimpleStatement {
+public class GoShortVarDeclarationImpl extends GoCompositeElementImpl implements GoShortVarDeclaration {
 
-  public GoSimpleStatementImpl(ASTNode node) {
+  public GoShortVarDeclarationImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitSimpleStatement(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitShortVarDeclaration(this);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public GoExpression getExpression() {
-    return findChildByClass(GoExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public GoShortVarDeclaration getShortVarDeclaration() {
-    return findChildByClass(GoShortVarDeclaration.class);
+  @NotNull
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
 }
