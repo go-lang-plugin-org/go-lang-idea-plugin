@@ -34,10 +34,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitBasicLit(@NotNull GoBasicLit o) {
-    visitCompositeElement(o);
-  }
-
   public void visitBlock(@NotNull GoBlock o) {
     visitCompositeElement(o);
   }
@@ -463,10 +459,6 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitBinaryOp(@NotNull GoBinaryOp o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitDummy(@NotNull GoDummy o) {
     visitCompositeElement(o);
   }
 

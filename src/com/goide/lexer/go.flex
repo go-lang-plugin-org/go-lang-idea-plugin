@@ -143,7 +143,7 @@ ESCAPES = [abfnrtv]
 
 "..."                                     { return TRIPLE_DOT; }
 "."                                       { return DOT; }
-
+/*
 "'" . "'"                                               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "'" \n "'"                                              { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "'\\" [abfnrtv\\\'] "'"                                 { yybegin(MAYBE_SEMICOLON); return CHAR; }
@@ -154,6 +154,7 @@ ESCAPES = [abfnrtv]
 "'\\U" {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} "'"
                                                         { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
+*/
 "`" [^`]* "`"?                            { yybegin(MAYBE_SEMICOLON); return STRING; }
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}? { yybegin(MAYBE_SEMICOLON); return STRING; }
 "{"                                       { return LBRACE; }

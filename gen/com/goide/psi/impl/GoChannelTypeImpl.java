@@ -1,15 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import com.goide.psi.GoChannelType;
-import com.goide.psi.GoElementType;
-import com.goide.psi.GoVisitor;
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.annotations.NotNull;
-
-import static com.goide.GoTypes.CHAN;
+import com.intellij.psi.util.PsiTreeUtil;
+import static com.goide.GoTypes.*;
+import com.goide.psi.*;
 
 public class GoChannelTypeImpl extends GoCompositeElementImpl implements GoChannelType {
 

@@ -1,15 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import com.goide.psi.GoFunction;
-import com.goide.psi.GoFunctionLit;
-import com.goide.psi.GoVisitor;
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.annotations.NotNull;
-
-import static com.goide.GoTypes.FUNC;
+import com.intellij.psi.util.PsiTreeUtil;
+import static com.goide.GoTypes.*;
+import com.goide.psi.*;
 
 public class GoFunctionLitImpl extends GoCompositeElementImpl implements GoFunctionLit {
 

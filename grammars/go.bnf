@@ -173,11 +173,13 @@ BaseTypeName ::= identifier
 
 Operand ::= Literal | OperandName | MethodExpr | '(' Expression ')'
 Literal ::= BasicLit | CompositeLit | FunctionLit
-BasicLit ::=
+private BasicLit ::= // todo
     int
   | float
   | float_i
   | decimal_i
+  | hex
+  | oct
   | imaginary
   | rune
   | string
@@ -286,5 +288,3 @@ DeferStatement ::= defer Expression
 
 BuiltinCall ::= identifier '(' [ BuiltinArgs [ ',' ] ] ')'
 BuiltinArgs ::= GoType [ ',' ArgumentList ] | ArgumentList
-
-dummy ::= char | oct | hex // todo: remove

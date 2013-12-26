@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.parser;
 
-import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import com.intellij.lang.PsiParser;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.tree.IElementType;
-
 import static com.goide.GoTypes.*;
 import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.tree.TokenSet;
+import com.intellij.lang.PsiParser;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class GoParser implements PsiParser {
@@ -40,9 +40,6 @@ public class GoParser implements PsiParser {
     }
     else if (root_ == BASE_TYPE_NAME) {
       result_ = BaseTypeName(builder_, 0);
-    }
-    else if (root_ == BASIC_LIT) {
-      result_ = BasicLit(builder_, 0);
     }
     else if (root_ == BLOCK) {
       result_ = Block(builder_, 0);
@@ -365,9 +362,6 @@ public class GoParser implements PsiParser {
     else if (root_ == BINARY_OP) {
       result_ = binary_op(builder_, 0);
     }
-    else if (root_ == DUMMY) {
-      result_ = dummy(builder_, 0);
-    }
     else if (root_ == MUL_OP) {
       result_ = mul_op(builder_, 0);
     }
@@ -496,21 +490,25 @@ public class GoParser implements PsiParser {
   //   | float
   //   | float_i
   //   | decimal_i
+  //   | hex
+  //   | oct
   //   | imaginary
   //   | rune
   //   | string
-  public static boolean BasicLit(PsiBuilder builder_, int level_) {
+  static boolean BasicLit(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BasicLit")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<basic lit>");
+    Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, INT);
     if (!result_) result_ = consumeToken(builder_, FLOAT);
     if (!result_) result_ = consumeToken(builder_, FLOAT_I);
     if (!result_) result_ = consumeToken(builder_, DECIMAL_I);
+    if (!result_) result_ = consumeToken(builder_, HEX);
+    if (!result_) result_ = consumeToken(builder_, OCT);
     if (!result_) result_ = consumeToken(builder_, IMAGINARY);
     if (!result_) result_ = consumeToken(builder_, RUNE);
     if (!result_) result_ = consumeToken(builder_, STRING);
-    exit_section_(builder_, level_, marker_, BASIC_LIT, result_, false, null);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
@@ -3374,19 +3372,6 @@ public class GoParser implements PsiParser {
     if (!result_) result_ = add_op(builder_, level_ + 1);
     if (!result_) result_ = mul_op(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, BINARY_OP, result_, false, null);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // char | oct | hex
-  public static boolean dummy(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "dummy")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<dummy>");
-    result_ = consumeToken(builder_, CHAR);
-    if (!result_) result_ = consumeToken(builder_, OCT);
-    if (!result_) result_ = consumeToken(builder_, HEX);
-    exit_section_(builder_, level_, marker_, DUMMY, result_, false, null);
     return result_;
   }
 

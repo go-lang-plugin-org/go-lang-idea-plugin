@@ -8,12 +8,36 @@ import com.intellij.psi.PsiElement;
 public interface GoLiteral extends GoCompositeElement {
 
   @Nullable
-  GoBasicLit getBasicLit();
-
-  @Nullable
   GoCompositeLit getCompositeLit();
 
   @Nullable
   GoFunctionLit getFunctionLit();
+
+  @Nullable
+  PsiElement getDecimalI();
+
+  @Nullable
+  PsiElement getFloat();
+
+  @Nullable
+  PsiElement getFloatI();
+
+  @Nullable
+  PsiElement getHex();
+
+  @Nullable
+  PsiElement getImaginary();
+
+  @Nullable
+  PsiElement getInt();
+
+  @Nullable
+  PsiElement getOct();
+
+  @Nullable
+  PsiElement getRune();
+
+  @Nullable
+  PsiElement getString();
 
 }

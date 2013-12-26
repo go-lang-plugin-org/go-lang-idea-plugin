@@ -1,12 +1,12 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide;
 
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.PsiElement;
+import com.intellij.lang.ASTNode;
 import com.goide.psi.GoCompositeElementType;
 import com.goide.psi.GoTokenType;
 import com.goide.psi.impl.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
 
 public interface GoTypes {
 
@@ -19,7 +19,6 @@ public interface GoTypes {
   IElementType ASSIGN_OP = new GoCompositeElementType("ASSIGN_OP");
   IElementType BASE_TYPE = new GoCompositeElementType("BASE_TYPE");
   IElementType BASE_TYPE_NAME = new GoCompositeElementType("BASE_TYPE_NAME");
-  IElementType BASIC_LIT = new GoCompositeElementType("BASIC_LIT");
   IElementType BINARY_OP = new GoCompositeElementType("BINARY_OP");
   IElementType BLOCK = new GoCompositeElementType("BLOCK");
   IElementType BREAK_STATEMENT = new GoCompositeElementType("BREAK_STATEMENT");
@@ -37,7 +36,6 @@ public interface GoTypes {
   IElementType CONVERSION = new GoCompositeElementType("CONVERSION");
   IElementType DECLARATION_STATEMENT = new GoCompositeElementType("DECLARATION_STATEMENT");
   IElementType DEFER_STATEMENT = new GoCompositeElementType("DEFER_STATEMENT");
-  IElementType DUMMY = new GoCompositeElementType("DUMMY");
   IElementType ELEMENT = new GoCompositeElementType("ELEMENT");
   IElementType ELEMENT_INDEX = new GoCompositeElementType("ELEMENT_INDEX");
   IElementType ELEMENT_LIST = new GoCompositeElementType("ELEMENT_LIST");
@@ -142,7 +140,6 @@ public interface GoTypes {
   IElementType BREAK = new GoTokenType("break");
   IElementType CASE = new GoTokenType("case");
   IElementType CHAN = new GoTokenType("chan");
-  IElementType CHAR = new GoTokenType("char");
   IElementType COLON = new GoTokenType(":");
   IElementType COMMA = new GoTokenType(",");
   IElementType COND_AND = new GoTokenType("&&");
@@ -245,9 +242,6 @@ public interface GoTypes {
       else if (type == BASE_TYPE_NAME) {
         return new GoBaseTypeNameImpl(node);
       }
-      else if (type == BASIC_LIT) {
-        return new GoBasicLitImpl(node);
-      }
       else if (type == BINARY_OP) {
         return new GoBinaryOpImpl(node);
       }
@@ -298,9 +292,6 @@ public interface GoTypes {
       }
       else if (type == DEFER_STATEMENT) {
         return new GoDeferStatementImpl(node);
-      }
-      else if (type == DUMMY) {
-        return new GoDummyImpl(node);
       }
       else if (type == ELEMENT) {
         return new GoElementImpl(node);
