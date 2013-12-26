@@ -222,7 +222,8 @@ class GoBlock implements Block, GoElementTypes {
         }
 
         // there should be a space before any block statement
-        if (child2.getNode().getPsi() instanceof GoBlockStatement) {
+        if (child2.getNode().getPsi() instanceof GoBlockStatement ||
+                child2.getNode().getElementType() == FUNCTION_RESULT) {
             return BASIC_SPACING_KEEP_LINE_BREAKS;
         }
 
