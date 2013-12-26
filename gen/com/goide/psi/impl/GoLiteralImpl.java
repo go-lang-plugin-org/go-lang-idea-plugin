@@ -23,8 +23,8 @@ public class GoLiteralImpl extends GoExpressionImpl implements GoLiteral {
 
   @Override
   @Nullable
-  public PsiElement getDecimalI() {
-    return findChildByType(DECIMAL_I);
+  public PsiElement getDecimali() {
+    return findChildByType(DECIMALI);
   }
 
   @Override
@@ -35,8 +35,8 @@ public class GoLiteralImpl extends GoExpressionImpl implements GoLiteral {
 
   @Override
   @Nullable
-  public PsiElement getFloatI() {
-    return findChildByType(FLOAT_I);
+  public PsiElement getFloati() {
+    return findChildByType(FLOATI);
   }
 
   @Override

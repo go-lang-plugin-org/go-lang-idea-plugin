@@ -473,8 +473,8 @@ public class GoParser implements PsiParser {
   /* ********************************************************** */
   // int
   //   | float
-  //   | float_i
-  //   | decimal_i
+  //   | floati
+  //   | decimali
   //   | hex
   //   | oct
   //   | imaginary
@@ -486,8 +486,8 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, INT);
     if (!result_) result_ = consumeToken(builder_, FLOAT);
-    if (!result_) result_ = consumeToken(builder_, FLOAT_I);
-    if (!result_) result_ = consumeToken(builder_, DECIMAL_I);
+    if (!result_) result_ = consumeToken(builder_, FLOATI);
+    if (!result_) result_ = consumeToken(builder_, DECIMALI);
     if (!result_) result_ = consumeToken(builder_, HEX);
     if (!result_) result_ = consumeToken(builder_, OCT);
     if (!result_) result_ = consumeToken(builder_, IMAGINARY);
@@ -3447,8 +3447,8 @@ public class GoParser implements PsiParser {
         ASSIGN, EQ, GREATER, GREATER_OR_EQUAL, SHIFT_RIGHT, SHIFT_RIGHT_ASSIGN,
         LBRACK, RBRACK, BIT_XOR, BIT_XOR_ASSIGN, TYPE_, LBRACE,
         BIT_OR, BIT_OR_ASSIGN, COND_OR, RBRACE, BREAK, CASE,
-        CHAN, CONST, CONTINUE, DECIMAL_I, DEFAULT, DEFER,
-        ELSE, FALLTHROUGH, FLOAT, FLOAT_I, FOR, FUNC,
+        CHAN, CONST, CONTINUE, DECIMALI, DEFAULT, DEFER,
+        ELSE, FALLTHROUGH, FLOAT, FLOATI, FOR, FUNC,
         GO, GOTO, HEX, IDENTIFIER, IF, IMAGINARY,
         INT, INTERFACE, MAP, OCT, RETURN, RUNE,
         SELECT, STRING, STRUCT, SWITCH, VAR);

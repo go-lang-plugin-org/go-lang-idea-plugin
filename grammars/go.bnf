@@ -171,8 +171,8 @@ Literal ::= BasicLit | FunctionLit | CompositeLit
 private BasicLit ::= // todo
     int
   | float
-  | float_i
-  | decimal_i
+  | floati
+  | decimali
   | hex
   | oct
   | imaginary

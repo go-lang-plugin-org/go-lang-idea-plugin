@@ -8,13 +8,13 @@ import com.intellij.psi.PsiElement;
 public interface GoLiteral extends GoExpression {
 
   @Nullable
-  PsiElement getDecimalI();
+  PsiElement getDecimali();
 
   @Nullable
   PsiElement getFloat();
 
   @Nullable
-  PsiElement getFloatI();
+  PsiElement getFloati();
 
   @Nullable
   PsiElement getHex();

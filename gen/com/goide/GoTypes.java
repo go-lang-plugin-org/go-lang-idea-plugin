@@ -129,7 +129,7 @@ public interface GoTypes {
   IElementType COND_OR = new GoTokenType("||");
   IElementType CONST = new GoTokenType("const");
   IElementType CONTINUE = new GoTokenType("continue");
-  IElementType DECIMAL_I = new GoTokenType("decimal_i");
+  IElementType DECIMALI = new GoTokenType("decimali");
   IElementType DEFAULT = new GoTokenType("default");
   IElementType DEFER = new GoTokenType("defer");
   IElementType DOT = new GoTokenType(".");
@@ -137,7 +137,7 @@ public interface GoTypes {
   IElementType EQ = new GoTokenType("==");
   IElementType FALLTHROUGH = new GoTokenType("fallthrough");
   IElementType FLOAT = new GoTokenType("float");
-  IElementType FLOAT_I = new GoTokenType("float_i");
+  IElementType FLOATI = new GoTokenType("floati");
   IElementType FOR = new GoTokenType("for");
   IElementType FUNC = new GoTokenType("func");
   IElementType GO = new GoTokenType("go");

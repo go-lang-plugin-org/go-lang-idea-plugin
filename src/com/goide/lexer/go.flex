@@ -254,9 +254,9 @@ ESCAPES = [abfnrtv]
 
 {IDENT}                                  {  yybegin(MAYBE_SEMICOLON); return IDENTIFIER; }
 
-{NUM_FLOAT}"i"                           {  yybegin(MAYBE_SEMICOLON); return FLOAT_I; }
+{NUM_FLOAT}"i"                           {  yybegin(MAYBE_SEMICOLON); return FLOATI; }
 {NUM_FLOAT}                              {  yybegin(MAYBE_SEMICOLON); return FLOAT; }
-{DIGIT}+"i"                              {  yybegin(MAYBE_SEMICOLON); return DECIMAL_I; }
+{DIGIT}+"i"                              {  yybegin(MAYBE_SEMICOLON); return DECIMALI; }
 {NUM_OCT}                                {  yybegin(MAYBE_SEMICOLON); return OCT; }
 {NUM_HEX}                                {  yybegin(MAYBE_SEMICOLON); return HEX; }
 {NUM_INT}                                {  yybegin(MAYBE_SEMICOLON); return INT; }
