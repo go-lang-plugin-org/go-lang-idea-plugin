@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoPointerType extends GoGoType {
+public interface GoPointerType extends GoType {
 
   @NotNull
-  GoGoType getGoType();
+  GoType getType();
 
 }

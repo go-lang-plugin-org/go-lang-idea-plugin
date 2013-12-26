@@ -23,8 +23,8 @@ public class GoTypeLitImpl extends GoExpressionImpl implements GoTypeLit {
 
   @Override
   @NotNull
-  public GoGoType getGoType() {
-    return findNotNullChildByClass(GoGoType.class);
+  public GoType getType() {
+    return findNotNullChildByClass(GoType.class);
   }
 
 }

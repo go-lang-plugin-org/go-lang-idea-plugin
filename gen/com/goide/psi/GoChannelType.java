@@ -5,10 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoChannelType extends GoGoType {
+public interface GoChannelType extends GoType {
 
   @NotNull
-  GoGoType getGoType();
+  GoType getType();
 
   @NotNull
   PsiElement getChan();

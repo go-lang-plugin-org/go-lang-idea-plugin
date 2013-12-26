@@ -11,9 +11,9 @@ public interface GoFieldDecl extends GoCompositeElement {
   GoAnonymousField getAnonymousField();
 
   @Nullable
-  GoGoType getGoType();
+  GoTag getTag();
 
   @Nullable
-  GoTag getTag();
+  GoType getType();
 
 }

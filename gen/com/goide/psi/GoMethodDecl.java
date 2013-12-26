@@ -11,9 +11,6 @@ public interface GoMethodDecl extends GoCompositeElement {
   GoFunction getFunction();
 
   @Nullable
-  GoMethodName getMethodName();
-
-  @Nullable
   GoReceiver getReceiver();
 
   @Nullable
@@ -21,5 +18,8 @@ public interface GoMethodDecl extends GoCompositeElement {
 
   @NotNull
   PsiElement getFunc();
+
+  @Nullable
+  PsiElement getIdentifier();
 
 }

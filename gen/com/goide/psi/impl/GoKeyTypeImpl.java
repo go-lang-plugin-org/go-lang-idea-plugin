@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoKeyTypeImpl extends GoGoTypeImpl implements GoKeyType {
+public class GoKeyTypeImpl extends GoTypeImpl implements GoKeyType {
 
   public GoKeyTypeImpl(ASTNode node) {
     super(node);

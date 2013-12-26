@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface GoResult extends GoCompositeElement {
 
   @Nullable
-  GoGoType getGoType();
+  GoParameters getParameters();
 
   @Nullable
-  GoParameters getParameters();
+  GoType getType();
 
 }

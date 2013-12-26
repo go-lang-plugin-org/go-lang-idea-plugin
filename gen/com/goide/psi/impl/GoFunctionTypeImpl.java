@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoFunctionTypeImpl extends GoGoTypeImpl implements GoFunctionType {
+public class GoFunctionTypeImpl extends GoTypeImpl implements GoFunctionType {
 
   public GoFunctionTypeImpl(ASTNode node) {
     super(node);

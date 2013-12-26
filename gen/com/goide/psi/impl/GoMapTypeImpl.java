@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoMapTypeImpl extends GoGoTypeImpl implements GoMapType {
+public class GoMapTypeImpl extends GoTypeImpl implements GoMapType {
 
   public GoMapTypeImpl(ASTNode node) {
     super(node);
@@ -23,8 +23,8 @@ public class GoMapTypeImpl extends GoGoTypeImpl implements GoMapType {
 
   @Override
   @NotNull
-  public List<GoGoType> getGoTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoGoType.class);
+  public List<GoType> getTypeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoType.class);
   }
 
   @Override

@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GoTypeLit extends GoExpression {
 
   @NotNull
-  GoGoType getGoType();
+  GoType getType();
 
 }

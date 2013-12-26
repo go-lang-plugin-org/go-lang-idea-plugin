@@ -11,9 +11,9 @@ public interface GoMethodSpec extends GoCompositeElement {
   GoInterfaceTypeName getInterfaceTypeName();
 
   @Nullable
-  GoMethodName getMethodName();
+  GoSignature getSignature();
 
   @Nullable
-  GoSignature getSignature();
+  PsiElement getIdentifier();
 
 }

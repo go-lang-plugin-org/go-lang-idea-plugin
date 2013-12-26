@@ -23,14 +23,14 @@ public class GoResultImpl extends GoCompositeElementImpl implements GoResult {
 
   @Override
   @Nullable
-  public GoGoType getGoType() {
-    return findChildByClass(GoGoType.class);
+  public GoParameters getParameters() {
+    return findChildByClass(GoParameters.class);
   }
 
   @Override
   @Nullable
-  public GoParameters getParameters() {
-    return findChildByClass(GoParameters.class);
+  public GoType getType() {
+    return findChildByClass(GoType.class);
   }
 
 }

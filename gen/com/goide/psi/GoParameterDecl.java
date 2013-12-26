@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GoParameterDecl extends GoCompositeElement {
 
   @NotNull
-  GoGoType getGoType();
+  GoType getType();
 
 }

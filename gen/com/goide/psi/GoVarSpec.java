@@ -11,6 +11,6 @@ public interface GoVarSpec extends GoCompositeElement {
   List<GoExpression> getExpressionList();
 
   @Nullable
-  GoGoType getGoType();
+  GoType getType();
 
 }

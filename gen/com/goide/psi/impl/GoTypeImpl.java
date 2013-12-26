@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoGoTypeImpl extends GoCompositeElementImpl implements GoGoType {
+public class GoTypeImpl extends GoCompositeElementImpl implements GoType {
 
-  public GoGoTypeImpl(ASTNode node) {
+  public GoTypeImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitGoType(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitType(this);
     else super.accept(visitor);
   }
 

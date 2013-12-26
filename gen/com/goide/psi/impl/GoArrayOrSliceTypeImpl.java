@@ -10,27 +10,27 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoArrayTypeImpl extends GoGoTypeImpl implements GoArrayType {
+public class GoArrayOrSliceTypeImpl extends GoTypeImpl implements GoArrayOrSliceType {
 
-  public GoArrayTypeImpl(ASTNode node) {
+  public GoArrayOrSliceTypeImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitArrayType(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitArrayOrSliceType(this);
     else super.accept(visitor);
   }
 
   @Override
-  @NotNull
-  public GoArrayLength getArrayLength() {
-    return findNotNullChildByClass(GoArrayLength.class);
+  @Nullable
+  public GoExpression getExpression() {
+    return findChildByClass(GoExpression.class);
   }
 
   @Override
-  @NotNull
-  public GoGoType getGoType() {
-    return findNotNullChildByClass(GoGoType.class);
+  @Nullable
+  public GoType getType() {
+    return findChildByClass(GoType.class);
   }
 
 }

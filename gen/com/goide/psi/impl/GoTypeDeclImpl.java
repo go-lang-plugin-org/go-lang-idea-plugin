@@ -27,10 +27,4 @@ public class GoTypeDeclImpl extends GoCompositeElementImpl implements GoTypeDecl
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoTypeSpec.class);
   }
 
-  @Override
-  @NotNull
-  public PsiElement getType() {
-    return findNotNullChildByType(TYPE);
-  }
-
 }

@@ -10,7 +10,4 @@ public interface GoTypeDecl extends GoCompositeElement {
   @NotNull
   List<GoTypeSpec> getTypeSpecList();
 
-  @NotNull
-  PsiElement getType();
-
 }

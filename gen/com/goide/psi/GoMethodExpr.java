@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface GoMethodExpr extends GoExpression {
 
   @NotNull
-  GoMethodName getMethodName();
+  GoReceiverType getReceiverType();
 
   @NotNull
-  GoReceiverType getReceiverType();
+  PsiElement getIdentifier();
 
 }

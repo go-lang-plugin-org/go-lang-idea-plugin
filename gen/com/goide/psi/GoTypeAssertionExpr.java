@@ -11,6 +11,6 @@ public interface GoTypeAssertionExpr extends GoExpression {
   GoExpression getExpression();
 
   @NotNull
-  GoGoType getGoType();
+  GoType getType();
 
 }

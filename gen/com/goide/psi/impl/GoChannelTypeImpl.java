@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoChannelTypeImpl extends GoGoTypeImpl implements GoChannelType {
+public class GoChannelTypeImpl extends GoTypeImpl implements GoChannelType {
 
   public GoChannelTypeImpl(ASTNode node) {
     super(node);
@@ -23,8 +23,8 @@ public class GoChannelTypeImpl extends GoGoTypeImpl implements GoChannelType {
 
   @Override
   @NotNull
-  public GoGoType getGoType() {
-    return findNotNullChildByClass(GoGoType.class);
+  public GoType getType() {
+    return findNotNullChildByClass(GoType.class);
   }
 
   @Override

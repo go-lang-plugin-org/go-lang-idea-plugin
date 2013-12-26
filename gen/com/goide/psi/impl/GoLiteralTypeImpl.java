@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoLiteralTypeImpl extends GoGoTypeImpl implements GoLiteralType {
+public class GoLiteralTypeImpl extends GoTypeImpl implements GoLiteralType {
 
   public GoLiteralTypeImpl(ASTNode node) {
     super(node);

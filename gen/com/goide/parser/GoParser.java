@@ -33,11 +33,8 @@ public class GoParser implements PsiParser {
     else if (root_ == ARGUMENT_LIST) {
       result_ = ArgumentList(builder_, 0);
     }
-    else if (root_ == ARRAY_LENGTH) {
-      result_ = ArrayLength(builder_, 0);
-    }
-    else if (root_ == ARRAY_TYPE) {
-      result_ = ArrayType(builder_, 0);
+    else if (root_ == ARRAY_OR_SLICE_TYPE) {
+      result_ = ArrayOrSliceType(builder_, 0);
     }
     else if (root_ == ASSIGNMENT_STATEMENT) {
       result_ = AssignmentStatement(builder_, 0);
@@ -99,9 +96,6 @@ public class GoParser implements PsiParser {
     else if (root_ == ELEMENT_INDEX) {
       result_ = ElementIndex(builder_, 0);
     }
-    else if (root_ == ELEMENT_TYPE) {
-      result_ = ElementType(builder_, 0);
-    }
     else if (root_ == EXPR_CASE_CLAUSE) {
       result_ = ExprCaseClause(builder_, 0);
     }
@@ -150,9 +144,6 @@ public class GoParser implements PsiParser {
     else if (root_ == GO_STATEMENT) {
       result_ = GoStatement(builder_, 0);
     }
-    else if (root_ == GO_TYPE) {
-      result_ = GoType(builder_, 0);
-    }
     else if (root_ == GOTO_STATEMENT) {
       result_ = GotoStatement(builder_, 0);
     }
@@ -200,9 +191,6 @@ public class GoParser implements PsiParser {
     }
     else if (root_ == METHOD_EXPR) {
       result_ = MethodExpr(builder_, 0);
-    }
-    else if (root_ == METHOD_NAME) {
-      result_ = MethodName(builder_, 0);
     }
     else if (root_ == METHOD_SPEC) {
       result_ = MethodSpec(builder_, 0);
@@ -273,9 +261,6 @@ public class GoParser implements PsiParser {
     else if (root_ == SLICE_EXPR) {
       result_ = Expression(builder_, 0, 7);
     }
-    else if (root_ == SLICE_TYPE) {
-      result_ = SliceType(builder_, 0);
-    }
     else if (root_ == STATEMENT) {
       result_ = Statement(builder_, 0);
     }
@@ -290,6 +275,9 @@ public class GoParser implements PsiParser {
     }
     else if (root_ == TOP_LEVEL_DECL) {
       result_ = TopLevelDecl(builder_, 0);
+    }
+    else if (root_ == TYPE) {
+      result_ = Type(builder_, 0);
     }
     else if (root_ == TYPE_ASSERTION_EXPR) {
       result_ = Expression(builder_, 0, 7);
@@ -354,15 +342,14 @@ public class GoParser implements PsiParser {
       MUL_EXPR, OPERAND_NAME, OR_EXPR, PARENTHEZIED_EXPR,
       QUALIFIED_IDENT, SELECTOR_EXPR, SLICE_EXPR, TYPE_ASSERTION_EXPR,
       TYPE_LIT, UNARY_EXPR),
-    create_token_set_(ARRAY_TYPE, BASE_TYPE, CHANNEL_TYPE, ELEMENT_TYPE,
-      FUNCTION_TYPE, GO_TYPE, INTERFACE_TYPE, KEY_TYPE,
-      LITERAL_TYPE, MAP_TYPE, POINTER_TYPE, RECEIVER_TYPE,
-      SLICE_TYPE, STRUCT_TYPE),
     create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, CONTINUE_STATEMENT, DECLARATION_STATEMENT,
       DEFER_STATEMENT, EXPR_SWITCH_STATEMENT, FALLTHROUGH_STATEMENT, FOR_STATEMENT,
       GOTO_STATEMENT, GO_STATEMENT, IF_STATEMENT, LABELED_STATEMENT,
       RECV_STATEMENT, RETURN_STATEMENT, SELECT_STATEMENT, SEND_STATEMENT,
       SIMPLE_STATEMENT, STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
+    create_token_set_(ARRAY_OR_SLICE_TYPE, BASE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE,
+      INTERFACE_TYPE, KEY_TYPE, LITERAL_TYPE, MAP_TYPE,
+      POINTER_TYPE, RECEIVER_TYPE, STRUCT_TYPE, TYPE),
   };
 
   /* ********************************************************** */
@@ -437,29 +424,27 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Expression
-  public static boolean ArrayLength(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ArrayLength")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<array length>");
-    result_ = Expression(builder_, level_ + 1, -1);
-    exit_section_(builder_, level_, marker_, ARRAY_LENGTH, result_, false, null);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // '[' ArrayLength ']' ElementType
-  public static boolean ArrayType(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ArrayType")) return false;
+  // '[' Expression? ']' Type
+  public static boolean ArrayOrSliceType(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ArrayOrSliceType")) return false;
     if (!nextTokenIs(builder_, LBRACK)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, LBRACK);
-    result_ = result_ && ArrayLength(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, RBRACK);
-    result_ = result_ && ElementType(builder_, level_ + 1);
-    exit_section_(builder_, marker_, ARRAY_TYPE, result_);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, ArrayOrSliceType_1(builder_, level_ + 1));
+    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, RBRACK)) && result_;
+    result_ = pinned_ && Type(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, ARRAY_OR_SLICE_TYPE, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // Expression?
+  private static boolean ArrayOrSliceType_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ArrayOrSliceType_1")) return false;
+    Expression(builder_, level_ + 1, -1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -478,12 +463,12 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // GoType
+  // Type
   public static boolean BaseType(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BaseType")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<base type>");
-    result_ = GoType(builder_, level_ + 1);
+    result_ = Type(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, BASE_TYPE, result_, false, null);
     return result_;
   }
@@ -579,7 +564,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // GoType [ ',' ExpressionList '...'? ] | ExpressionList '...'?
+  // Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
   public static boolean BuiltinArgs(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BuiltinArgs")) return false;
     boolean result_ = false;
@@ -590,12 +575,12 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // GoType [ ',' ExpressionList '...'? ]
+  // Type [ ',' ExpressionList '...'? ]
   private static boolean BuiltinArgs_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BuiltinArgs_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = GoType(builder_, level_ + 1);
+    result_ = Type(builder_, level_ + 1);
     result_ = result_ && BuiltinArgs_0_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
@@ -646,14 +631,14 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ( chan [ '<-' ] | '<-' chan ) ElementType
+  // ( chan [ '<-' ] | '<-' chan ) Type
   public static boolean ChannelType(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ChannelType")) return false;
     if (!nextTokenIs(builder_, "<channel type>", SEND_CHANNEL, CHAN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<channel type>");
     result_ = ChannelType_0(builder_, level_ + 1);
-    result_ = result_ && ElementType(builder_, level_ + 1);
+    result_ = result_ && Type(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, CHANNEL_TYPE, result_, false, null);
     return result_;
   }
@@ -848,7 +833,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IdentifierList [ [ GoType ] '=' ExpressionList ]
+  // IdentifierList [ [ Type ] '=' ExpressionList ]
   public static boolean ConstSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
@@ -860,14 +845,14 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ [ GoType ] '=' ExpressionList ]
+  // [ [ Type ] '=' ExpressionList ]
   private static boolean ConstSpec_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec_1")) return false;
     ConstSpec_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // [ GoType ] '=' ExpressionList
+  // [ Type ] '=' ExpressionList
   private static boolean ConstSpec_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec_1_0")) return false;
     boolean result_ = false;
@@ -879,10 +864,10 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ GoType ]
+  // [ Type ]
   private static boolean ConstSpec_1_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec_1_0_0")) return false;
-    GoType(builder_, level_ + 1);
+    Type(builder_, level_ + 1);
     return true;
   }
 
@@ -1014,17 +999,6 @@ public class GoParser implements PsiParser {
     result_ = result_ && Element(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
-  }
-
-  /* ********************************************************** */
-  // GoType
-  public static boolean ElementType(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ElementType")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<element type>");
-    result_ = GoType(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, ELEMENT_TYPE, result_, false, null);
-    return result_;
   }
 
   /* ********************************************************** */
@@ -1206,7 +1180,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (IdentifierList GoType | AnonymousField) [ Tag ]
+  // (IdentifierList Type | AnonymousField) [ Tag ]
   public static boolean FieldDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FieldDecl")) return false;
     if (!nextTokenIs(builder_, "<field decl>", MUL, IDENTIFIER)) return false;
@@ -1218,7 +1192,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // IdentifierList GoType | AnonymousField
+  // IdentifierList Type | AnonymousField
   private static boolean FieldDecl_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FieldDecl_0")) return false;
     boolean result_ = false;
@@ -1229,13 +1203,13 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // IdentifierList GoType
+  // IdentifierList Type
   private static boolean FieldDecl_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FieldDecl_0_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = IdentifierList(builder_, level_ + 1);
-    result_ = result_ && GoType(builder_, level_ + 1);
+    result_ = result_ && Type(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -1431,31 +1405,6 @@ public class GoParser implements PsiParser {
     result_ = result_ && Expression(builder_, level_ + 1, -1);
     exit_section_(builder_, level_, marker_, GO_STATEMENT, result_, pinned_, null);
     return result_ || pinned_;
-  }
-
-  /* ********************************************************** */
-  // TypeName | TypeLit | '(' GoType ')'
-  public static boolean GoType(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "GoType")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<go type>");
-    result_ = TypeName(builder_, level_ + 1);
-    if (!result_) result_ = TypeLit(builder_, level_ + 1);
-    if (!result_) result_ = GoType_2(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, GO_TYPE, result_, false, null);
-    return result_;
-  }
-
-  // '(' GoType ')'
-  private static boolean GoType_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "GoType_2")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, LPAREN);
-    result_ = result_ && GoType(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, RPAREN);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
   }
 
   /* ********************************************************** */
@@ -1676,13 +1625,15 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "InterfaceType")) return false;
     if (!nextTokenIs(builder_, INTERFACE)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, INTERFACE);
-    result_ = result_ && consumeToken(builder_, LBRACE);
-    result_ = result_ && InterfaceType_2(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, RBRACE);
-    exit_section_(builder_, marker_, INTERFACE_TYPE, result_);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, consumeToken(builder_, LBRACE));
+    result_ = pinned_ && report_error_(builder_, InterfaceType_2(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && consumeToken(builder_, RBRACE) && result_;
+    exit_section_(builder_, level_, marker_, INTERFACE_TYPE, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // ( MethodSpec semi )*
@@ -1701,11 +1652,13 @@ public class GoParser implements PsiParser {
   private static boolean InterfaceType_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "InterfaceType_2_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = MethodSpec(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
     result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -1733,12 +1686,12 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // GoType
+  // Type
   public static boolean KeyType(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "KeyType")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<key type>");
-    result_ = GoType(builder_, level_ + 1);
+    result_ = Type(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, KEY_TYPE, result_, false, null);
     return result_;
   }
@@ -1761,9 +1714,8 @@ public class GoParser implements PsiParser {
 
   /* ********************************************************** */
   // StructType
-  //   | ArrayType
-  //   | '[' '...' ']' ElementType
-  //   | SliceType
+  //   | ArrayOrSliceType
+  //   | '[' '...' ']' Type
   //   | MapType
   //   | TypeName
   public static boolean LiteralType(PsiBuilder builder_, int level_) {
@@ -1771,16 +1723,15 @@ public class GoParser implements PsiParser {
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<literal type>");
     result_ = StructType(builder_, level_ + 1);
-    if (!result_) result_ = ArrayType(builder_, level_ + 1);
+    if (!result_) result_ = ArrayOrSliceType(builder_, level_ + 1);
     if (!result_) result_ = LiteralType_2(builder_, level_ + 1);
-    if (!result_) result_ = SliceType(builder_, level_ + 1);
     if (!result_) result_ = MapType(builder_, level_ + 1);
     if (!result_) result_ = TypeName(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, LITERAL_TYPE, result_, false, null);
     return result_;
   }
 
-  // '[' '...' ']' ElementType
+  // '[' '...' ']' Type
   private static boolean LiteralType_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "LiteralType_2")) return false;
     boolean result_ = false;
@@ -1788,7 +1739,7 @@ public class GoParser implements PsiParser {
     result_ = consumeToken(builder_, LBRACK);
     result_ = result_ && consumeToken(builder_, TRIPLE_DOT);
     result_ = result_ && consumeToken(builder_, RBRACK);
-    result_ = result_ && ElementType(builder_, level_ + 1);
+    result_ = result_ && Type(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -1833,23 +1784,25 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // map '[' KeyType ']' ElementType
+  // map '[' KeyType ']' Type
   public static boolean MapType(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MapType")) return false;
     if (!nextTokenIs(builder_, MAP)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, MAP);
-    result_ = result_ && consumeToken(builder_, LBRACK);
-    result_ = result_ && KeyType(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, RBRACK);
-    result_ = result_ && ElementType(builder_, level_ + 1);
-    exit_section_(builder_, marker_, MAP_TYPE, result_);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, consumeToken(builder_, LBRACK));
+    result_ = pinned_ && report_error_(builder_, KeyType(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, RBRACK)) && result_;
+    result_ = pinned_ && Type(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, MAP_TYPE, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
-  // func Receiver MethodName ( Function | Signature )
+  // func Receiver identifier ( Function | Signature )
   public static boolean MethodDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MethodDecl")) return false;
     if (!nextTokenIs(builder_, FUNC)) return false;
@@ -1859,7 +1812,7 @@ public class GoParser implements PsiParser {
     result_ = consumeToken(builder_, FUNC);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, Receiver(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, MethodName(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, IDENTIFIER)) && result_;
     result_ = pinned_ && MethodDecl_3(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, METHOD_DECL, result_, pinned_, null);
     return result_ || pinned_;
@@ -1877,19 +1830,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // identifier
-  public static boolean MethodName(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "MethodName")) return false;
-    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, IDENTIFIER);
-    exit_section_(builder_, marker_, METHOD_NAME, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // MethodName Signature | InterfaceTypeName
+  // identifier Signature | InterfaceTypeName
   public static boolean MethodSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MethodSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
@@ -1901,12 +1842,12 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // MethodName Signature
+  // identifier Signature
   private static boolean MethodSpec_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MethodSpec_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = MethodName(builder_, level_ + 1);
+    result_ = consumeToken(builder_, IDENTIFIER);
     result_ = result_ && Signature(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
@@ -1934,14 +1875,14 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // [ IdentifierList ] [ '...' ] GoType
+  // [ IdentifierList ] [ '...' ] Type
   public static boolean ParameterDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ParameterDecl")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<parameter decl>");
     result_ = ParameterDecl_0(builder_, level_ + 1);
     result_ = result_ && ParameterDecl_1(builder_, level_ + 1);
-    result_ = result_ && GoType(builder_, level_ + 1);
+    result_ = result_ && Type(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, PARAMETER_DECL, result_, false, null);
     return result_;
   }
@@ -2237,13 +2178,13 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Parameters | GoType
+  // Parameters | Type
   public static boolean Result(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Result")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<result>");
     result_ = Parameters(builder_, level_ + 1);
-    if (!result_) result_ = GoType(builder_, level_ + 1);
+    if (!result_) result_ = Type(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, RESULT, result_, false, null);
     return result_;
   }
@@ -2401,20 +2342,6 @@ public class GoParser implements PsiParser {
     result_ = consumeToken(builder_, PLUS_PLUS);
     if (!result_) result_ = consumeToken(builder_, MINUS_MINUS);
     exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // '[' ']' ElementType
-  public static boolean SliceType(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SliceType")) return false;
-    if (!nextTokenIs(builder_, LBRACK)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, LBRACK);
-    result_ = result_ && consumeToken(builder_, RBRACK);
-    result_ = result_ && ElementType(builder_, level_ + 1);
-    exit_section_(builder_, marker_, SLICE_TYPE, result_);
     return result_;
   }
 
@@ -2599,6 +2526,33 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // TypeName | TypeLit | '(' Type ')'
+  public static boolean Type(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Type")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<type>");
+    result_ = TypeName(builder_, level_ + 1);
+    if (!result_) result_ = TypeLit(builder_, level_ + 1);
+    if (!result_) result_ = Type_2(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, TYPE, result_, false, null);
+    return result_;
+  }
+
+  // '(' Type ')'
+  private static boolean Type_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Type_2")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, LPAREN);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, Type(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, RPAREN) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
   // TypeSwitchCase ':' ( Statement semi )*
   public static boolean TypeCaseClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeCaseClause")) return false;
@@ -2636,7 +2590,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // type ( TypeSpec | '(' ( TypeSpec semi )* ')' )
+  // 'type' ( TypeSpec | '(' ( TypeSpec semi )* ')' )
   public static boolean TypeDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeDecl")) return false;
     if (!nextTokenIs(builder_, TYPE)) return false;
@@ -2701,20 +2655,20 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // GoType ( ',' GoType )*
+  // Type ( ',' Type )*
   public static boolean TypeList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeList")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type list>");
-    result_ = GoType(builder_, level_ + 1);
+    result_ = Type(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && TypeList_1(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, TYPE_LIST, result_, pinned_, null);
     return result_ || pinned_;
   }
 
-  // ( ',' GoType )*
+  // ( ',' Type )*
   private static boolean TypeList_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeList_1")) return false;
     int pos_ = current_position_(builder_);
@@ -2726,7 +2680,7 @@ public class GoParser implements PsiParser {
     return true;
   }
 
-  // ',' GoType
+  // ',' Type
   private static boolean TypeList_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeList_1_0")) return false;
     boolean result_ = false;
@@ -2734,30 +2688,28 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, COMMA);
     pinned_ = result_; // pin = 1
-    result_ = result_ && GoType(builder_, level_ + 1);
+    result_ = result_ && Type(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
   }
 
   /* ********************************************************** */
-  // ArrayType
+  // ArrayOrSliceType
   //   | StructType
   //   | PointerType
   //   | FunctionType
   //   | InterfaceType
-  //   | SliceType
   //   | MapType
   //   | ChannelType
   public static boolean TypeLit(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeLit")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type lit>");
-    result_ = ArrayType(builder_, level_ + 1);
+    result_ = ArrayOrSliceType(builder_, level_ + 1);
     if (!result_) result_ = StructType(builder_, level_ + 1);
     if (!result_) result_ = PointerType(builder_, level_ + 1);
     if (!result_) result_ = FunctionType(builder_, level_ + 1);
     if (!result_) result_ = InterfaceType(builder_, level_ + 1);
-    if (!result_) result_ = SliceType(builder_, level_ + 1);
     if (!result_) result_ = MapType(builder_, level_ + 1);
     if (!result_) result_ = ChannelType(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, TYPE_LIT, result_, false, null);
@@ -2778,7 +2730,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // identifier GoType
+  // identifier Type
   public static boolean TypeSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
@@ -2787,7 +2739,7 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, IDENTIFIER);
     pinned_ = result_; // pin = 1
-    result_ = result_ && GoType(builder_, level_ + 1);
+    result_ = result_ && Type(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, TYPE_SPEC, result_, pinned_, null);
     return result_ || pinned_;
   }
@@ -2983,7 +2935,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IdentifierList ( GoType [ '=' ExpressionList ] | '=' ExpressionList )
+  // IdentifierList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
   public static boolean VarSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
@@ -2995,7 +2947,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // GoType [ '=' ExpressionList ] | '=' ExpressionList
+  // Type [ '=' ExpressionList ] | '=' ExpressionList
   private static boolean VarSpec_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarSpec_1")) return false;
     boolean result_ = false;
@@ -3006,12 +2958,12 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // GoType [ '=' ExpressionList ]
+  // Type [ '=' ExpressionList ]
   private static boolean VarSpec_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarSpec_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = GoType(builder_, level_ + 1);
+    result_ = Type(builder_, level_ + 1);
     result_ = result_ && VarSpec_1_0_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
@@ -3302,7 +3254,7 @@ public class GoParser implements PsiParser {
     return true;
   }
 
-  // ReceiverType '.' MethodName
+  // ReceiverType '.' identifier
   public static boolean MethodExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MethodExpr")) return false;
     if (!nextTokenIs(builder_, "<method expr>", LPAREN, IDENTIFIER)) return false;
@@ -3310,7 +3262,7 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<method expr>");
     result_ = ReceiverType(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, DOT);
-    result_ = result_ && MethodName(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, IDENTIFIER);
     exit_section_(builder_, level_, marker_, METHOD_EXPR, result_, false, null);
     return result_;
   }
@@ -3352,12 +3304,12 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // GoType '('
+  // Type '('
   private static boolean ConversionExpr_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConversionExpr_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = GoType(builder_, level_ + 1);
+    result_ = Type(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, LPAREN);
     exit_section_(builder_, marker_, null, result_);
     return result_;
@@ -3461,14 +3413,14 @@ public class GoParser implements PsiParser {
     return true;
   }
 
-  // '.' '(' GoType ')'
+  // '.' '(' Type ')'
   private static boolean TypeAssertionExpr_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeAssertionExpr_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, DOT);
     result_ = result_ && consumeToken(builder_, LPAREN);
-    result_ = result_ && GoType(builder_, level_ + 1);
+    result_ = result_ && Type(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, RPAREN);
     exit_section_(builder_, marker_, null, result_);
     return result_;
@@ -3497,13 +3449,13 @@ public class GoParser implements PsiParser {
         DOT, TRIPLE_DOT, QUOTIENT, QUOTIENT_ASSIGN, COLON, SEMICOLON,
         LESS, SEND_CHANNEL, SHIFT_LEFT, SHIFT_LEFT_ASSIGN, LESS_OR_EQUAL, SEMICOLON_SYNTHETIC,
         ASSIGN, EQ, GREATER, GREATER_OR_EQUAL, SHIFT_RIGHT, SHIFT_RIGHT_ASSIGN,
-        LBRACK, RBRACK, BIT_XOR, BIT_XOR_ASSIGN, LBRACE, BIT_OR,
-        BIT_OR_ASSIGN, COND_OR, RBRACE, BREAK, CASE, CHAN,
-        CONST, CONTINUE, DECIMAL_I, DEFAULT, DEFER, ELSE,
-        FALLTHROUGH, FLOAT, FLOAT_I, FOR, FUNC, GO,
-        GOTO, HEX, IDENTIFIER, IF, IMAGINARY, INT,
-        INTERFACE, MAP, OCT, RETURN, RUNE, SELECT,
-        STRING, STRUCT, SWITCH, TYPE, VAR);
+        LBRACK, RBRACK, BIT_XOR, BIT_XOR_ASSIGN, TYPE, LBRACE,
+        BIT_OR, BIT_OR_ASSIGN, COND_OR, RBRACE, BREAK, CASE,
+        CHAN, CONST, CONTINUE, DECIMAL_I, DEFAULT, DEFER,
+        ELSE, FALLTHROUGH, FLOAT, FLOAT_I, FOR, FUNC,
+        GO, GOTO, HEX, IDENTIFIER, IF, IMAGINARY,
+        INT, INTERFACE, MAP, OCT, RETURN, RUNE,
+        SELECT, STRING, STRUCT, SWITCH, VAR);
     }
   };
 }

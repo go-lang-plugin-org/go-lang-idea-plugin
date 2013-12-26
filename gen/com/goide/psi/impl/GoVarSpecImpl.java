@@ -29,8 +29,8 @@ public class GoVarSpecImpl extends GoCompositeElementImpl implements GoVarSpec {
 
   @Override
   @Nullable
-  public GoGoType getGoType() {
-    return findChildByClass(GoGoType.class);
+  public GoType getType() {
+    return findChildByClass(GoType.class);
   }
 
 }

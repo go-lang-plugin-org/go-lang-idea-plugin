@@ -23,8 +23,8 @@ public class GoParameterDeclImpl extends GoCompositeElementImpl implements GoPar
 
   @Override
   @NotNull
-  public GoGoType getGoType() {
-    return findNotNullChildByClass(GoGoType.class);
+  public GoType getType() {
+    return findNotNullChildByClass(GoType.class);
   }
 
 }

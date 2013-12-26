@@ -23,14 +23,14 @@ public class GoMethodExprImpl extends GoExpressionImpl implements GoMethodExpr {
 
   @Override
   @NotNull
-  public GoMethodName getMethodName() {
-    return findNotNullChildByClass(GoMethodName.class);
+  public GoReceiverType getReceiverType() {
+    return findNotNullChildByClass(GoReceiverType.class);
   }
 
   @Override
   @NotNull
-  public GoReceiverType getReceiverType() {
-    return findNotNullChildByClass(GoReceiverType.class);
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

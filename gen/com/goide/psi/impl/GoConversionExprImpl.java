@@ -29,8 +29,8 @@ public class GoConversionExprImpl extends GoExpressionImpl implements GoConversi
 
   @Override
   @NotNull
-  public GoGoType getGoType() {
-    return findNotNullChildByClass(GoGoType.class);
+  public GoType getType() {
+    return findNotNullChildByClass(GoType.class);
   }
 
 }

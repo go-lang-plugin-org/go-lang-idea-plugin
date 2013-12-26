@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoBaseTypeImpl extends GoGoTypeImpl implements GoBaseType {
+public class GoBaseTypeImpl extends GoTypeImpl implements GoBaseType {
 
   public GoBaseTypeImpl(ASTNode node) {
     super(node);

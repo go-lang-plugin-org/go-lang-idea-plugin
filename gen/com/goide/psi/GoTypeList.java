@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GoTypeList extends GoCompositeElement {
 
   @NotNull
-  List<GoGoType> getGoTypeList();
+  List<GoType> getTypeList();
 
 }

@@ -29,14 +29,14 @@ public class GoFieldDeclImpl extends GoCompositeElementImpl implements GoFieldDe
 
   @Override
   @Nullable
-  public GoGoType getGoType() {
-    return findChildByClass(GoGoType.class);
+  public GoTag getTag() {
+    return findChildByClass(GoTag.class);
   }
 
   @Override
   @Nullable
-  public GoTag getTag() {
-    return findChildByClass(GoTag.class);
+  public GoType getType() {
+    return findChildByClass(GoType.class);
   }
 
 }

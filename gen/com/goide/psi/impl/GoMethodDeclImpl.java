@@ -29,12 +29,6 @@ public class GoMethodDeclImpl extends GoCompositeElementImpl implements GoMethod
 
   @Override
   @Nullable
-  public GoMethodName getMethodName() {
-    return findChildByClass(GoMethodName.class);
-  }
-
-  @Override
-  @Nullable
   public GoReceiver getReceiver() {
     return findChildByClass(GoReceiver.class);
   }
@@ -49,6 +43,12 @@ public class GoMethodDeclImpl extends GoCompositeElementImpl implements GoMethod
   @NotNull
   public PsiElement getFunc() {
     return findNotNullChildByType(FUNC);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

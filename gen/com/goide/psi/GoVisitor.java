@@ -22,12 +22,8 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitArrayLength(@NotNull GoArrayLength o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitArrayType(@NotNull GoArrayType o) {
-    visitGoType(o);
+  public void visitArrayOrSliceType(@NotNull GoArrayOrSliceType o) {
+    visitType(o);
   }
 
   public void visitAssignmentStatement(@NotNull GoAssignmentStatement o) {
@@ -35,7 +31,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitBaseType(@NotNull GoBaseType o) {
-    visitGoType(o);
+    visitType(o);
   }
 
   public void visitBlock(@NotNull GoBlock o) {
@@ -59,7 +55,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitChannelType(@NotNull GoChannelType o) {
-    visitGoType(o);
+    visitType(o);
   }
 
   public void visitCommCase(@NotNull GoCommCase o) {
@@ -108,10 +104,6 @@ public class GoVisitor extends PsiElementVisitor {
 
   public void visitElementIndex(@NotNull GoElementIndex o) {
     visitCompositeElement(o);
-  }
-
-  public void visitElementType(@NotNull GoElementType o) {
-    visitGoType(o);
   }
 
   public void visitExprCaseClause(@NotNull GoExprCaseClause o) {
@@ -171,15 +163,11 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitFunctionType(@NotNull GoFunctionType o) {
-    visitGoType(o);
+    visitType(o);
   }
 
   public void visitGoStatement(@NotNull GoGoStatement o) {
     visitStatement(o);
-  }
-
-  public void visitGoType(@NotNull GoGoType o) {
-    visitCompositeElement(o);
   }
 
   public void visitGotoStatement(@NotNull GoGotoStatement o) {
@@ -203,7 +191,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitInterfaceType(@NotNull GoInterfaceType o) {
-    visitGoType(o);
+    visitType(o);
   }
 
   public void visitInterfaceTypeName(@NotNull GoInterfaceTypeName o) {
@@ -215,7 +203,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitKeyType(@NotNull GoKeyType o) {
-    visitGoType(o);
+    visitType(o);
   }
 
   public void visitLabeledStatement(@NotNull GoLabeledStatement o) {
@@ -227,7 +215,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitLiteralType(@NotNull GoLiteralType o) {
-    visitGoType(o);
+    visitType(o);
   }
 
   public void visitLiteralValue(@NotNull GoLiteralValue o) {
@@ -235,7 +223,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitMapType(@NotNull GoMapType o) {
-    visitGoType(o);
+    visitType(o);
   }
 
   public void visitMethodDecl(@NotNull GoMethodDecl o) {
@@ -244,10 +232,6 @@ public class GoVisitor extends PsiElementVisitor {
 
   public void visitMethodExpr(@NotNull GoMethodExpr o) {
     visitExpression(o);
-  }
-
-  public void visitMethodName(@NotNull GoMethodName o) {
-    visitCompositeElement(o);
   }
 
   public void visitMethodSpec(@NotNull GoMethodSpec o) {
@@ -283,7 +267,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitPointerType(@NotNull GoPointerType o) {
-    visitGoType(o);
+    visitType(o);
   }
 
   public void visitQualifiedIdent(@NotNull GoQualifiedIdent o) {
@@ -299,7 +283,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitReceiverType(@NotNull GoReceiverType o) {
-    visitGoType(o);
+    visitType(o);
   }
 
   public void visitRecvStatement(@NotNull GoRecvStatement o) {
@@ -342,16 +326,12 @@ public class GoVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitSliceType(@NotNull GoSliceType o) {
-    visitGoType(o);
-  }
-
   public void visitStatement(@NotNull GoStatement o) {
     visitCompositeElement(o);
   }
 
   public void visitStructType(@NotNull GoStructType o) {
-    visitGoType(o);
+    visitType(o);
   }
 
   public void visitSwitchStatement(@NotNull GoSwitchStatement o) {
@@ -363,6 +343,10 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitTopLevelDecl(@NotNull GoTopLevelDecl o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitType(@NotNull GoType o) {
     visitCompositeElement(o);
   }
 

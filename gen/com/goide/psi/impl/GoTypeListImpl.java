@@ -23,8 +23,8 @@ public class GoTypeListImpl extends GoCompositeElementImpl implements GoTypeList
 
   @Override
   @NotNull
-  public List<GoGoType> getGoTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoGoType.class);
+  public List<GoType> getTypeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoType.class);
   }
 
 }

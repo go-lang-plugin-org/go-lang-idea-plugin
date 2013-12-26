@@ -5,6 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoElementType extends GoGoType {
+public interface GoType extends GoCompositeElement {
+
+  @Nullable
+  GoTypeLit getTypeLit();
+
+  @Nullable
+  GoTypeName getTypeName();
 
 }

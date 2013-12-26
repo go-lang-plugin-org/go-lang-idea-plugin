@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoInterfaceType extends GoGoType {
+public interface GoInterfaceType extends GoType {
 
   @NotNull
   List<GoMethodSpec> getMethodSpecList();

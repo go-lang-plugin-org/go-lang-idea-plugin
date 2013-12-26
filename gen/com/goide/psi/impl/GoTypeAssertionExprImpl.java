@@ -29,8 +29,8 @@ public class GoTypeAssertionExprImpl extends GoExpressionImpl implements GoTypeA
 
   @Override
   @NotNull
-  public GoGoType getGoType() {
-    return findNotNullChildByClass(GoGoType.class);
+  public GoType getType() {
+    return findNotNullChildByClass(GoType.class);
   }
 
 }

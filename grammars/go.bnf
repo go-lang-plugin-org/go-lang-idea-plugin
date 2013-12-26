@@ -61,11 +61,12 @@
   TRIPLE_DOT           =  '...'
   DOT                  =  '.'
   SEMICOLON_SYNTHETIC  = '<NL>'
+  TYPE                 = 'type'
 
   extends(".*(Expr|Literal|QualifiedIdent|identifier|Lit|OperandName)")=Expression
   pin(".*Statement")=1
   extends(".*Statement")=Statement
-  extends(".*Type")=GoType
+  extends(".*Type")=Type
 
   pin('.*List(?:_\d.*)?')=1
 }
@@ -79,47 +80,42 @@ private PackageName ::= identifier
 ImportDecl ::= import ( ImportSpec | '(' ( ImportSpec semi )* ')' ) {pin=1}
 ImportSpec ::= [ '.' | PackageName ] string
 
-GoType ::= TypeName | TypeLit | '(' GoType ')'
+Type ::= TypeName | TypeLit | '(' Type ')' {pin(".*")=1}
 TypeName ::= identifier | QualifiedIdent
 TypeLit ::=
-    ArrayType
+    ArrayOrSliceType
   | StructType
   | PointerType
   | FunctionType
   | InterfaceType
-  | SliceType
   | MapType
   | ChannelType
 
-ArrayType ::= '[' ArrayLength ']' ElementType
-ArrayLength ::= Expression
-ElementType ::= GoType
-SliceType ::= '[' ']' ElementType
+ArrayOrSliceType ::= '[' Expression? ']' Type {pin=1}
 
 StructType ::= struct '{' ( FieldDecl semi )* '}' {pin=1}
-FieldDecl ::= (IdentifierList GoType | AnonymousField) [ Tag ]
+FieldDecl ::= (IdentifierList Type | AnonymousField) [ Tag ]
 AnonymousField ::= [ '*' ] TypeName
 Tag ::= string
 
 PointerType ::= '*' BaseType
-BaseType ::= GoType
+BaseType ::= Type
 
 FunctionType ::= func Signature
 Signature ::= Parameters [ Result ]
-Result ::= Parameters | GoType
+Result ::= Parameters | Type
 Parameters ::= '(' [ ParameterList [ ',' ] ] ')'
 private ParameterList ::= ParameterDecl ( ',' ParameterDecl )*
-ParameterDecl ::= [ IdentifierList ] [ '...' ] GoType
+ParameterDecl ::= [ IdentifierList ] [ '...' ] Type
 
-InterfaceType ::= interface '{' ( MethodSpec semi )* '}'
-MethodSpec ::= MethodName Signature | InterfaceTypeName
-MethodName ::= identifier
+InterfaceType ::= interface '{' ( MethodSpec semi )* '}' {pin(".*")=1}
+MethodSpec ::= identifier Signature | InterfaceTypeName
 InterfaceTypeName ::= TypeName
 
-MapType ::= map '[' KeyType ']' ElementType
-KeyType ::= GoType
+MapType ::= map '[' KeyType ']' Type {pin=1}
+KeyType ::= Type
 
-ChannelType ::= ( chan [ '<-' ] | '<-' chan ) ElementType
+ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type
 
 Block ::= '{' (Statement semi)* '}' {pin(".*")=1}
 
@@ -150,16 +146,16 @@ DeclarationStatement  ::= ConstDecl | TypeDecl | VarDecl
 TopLevelDecl ::= DeclarationStatement | FunctionDecl | MethodDecl
 
 ConstDecl ::= const ( ConstSpec | '(' ( ConstSpec semi )* ')' ) {pin(".*")=1}
-ConstSpec ::= IdentifierList [ [ GoType ] '=' ExpressionList ]
+ConstSpec ::= IdentifierList [ [ Type ] '=' ExpressionList ]
 
 private IdentifierList ::= identifier ( ',' identifier )*
 private ExpressionList ::= Expression ( ',' Expression )*
 
-TypeDecl ::= type ( TypeSpec | '(' ( TypeSpec semi )* ')' ) {pin(".*")=1}
-TypeSpec ::= identifier GoType {pin=1}
+TypeDecl ::= 'type' ( TypeSpec | '(' ( TypeSpec semi )* ')' ) {pin(".*")=1}
+TypeSpec ::= identifier Type {pin=1}
 
 VarDecl ::= var ( VarSpec | '(' ( VarSpec semi )* ')' ) {pin=1}
-VarSpec ::= IdentifierList ( GoType [ '=' ExpressionList ] | '=' ExpressionList )
+VarSpec ::= IdentifierList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
 
 ShortVarDecl ::= IdentifierList ':=' ExpressionList
 
@@ -168,7 +164,7 @@ FunctionName ::= identifier
 Function     ::= Signature FunctionBody
 FunctionBody ::= Block
 
-MethodDecl ::= func Receiver MethodName ( Function | Signature ) {pin=1}
+MethodDecl ::= func Receiver identifier ( Function | Signature ) {pin=1}
 Receiver ::= '(' [ identifier ] [ '*' ] identifier ')'
 
 private Operand ::= Literal | MethodExpr | OperandName
@@ -190,9 +186,8 @@ QualifiedIdent ::= PackageName '.' identifier
 CompositeLit ::= LiteralType LiteralValue
 LiteralType ::=
     StructType
-  | ArrayType
-  | '[' '...' ']' ElementType
-  | SliceType
+  | ArrayOrSliceType
+  | '[' '...' ']' Type
   | MapType
   | TypeName
 
@@ -227,7 +222,7 @@ MulExpr ::= Expression mul_op Expression
 ParentheziedExpr ::= '(' Expression ')'
 
 BuiltinCallExpr ::= identifier '(' [ BuiltinArgs [ ',' ] ] ')' {pin=2}
-BuiltinArgs ::= GoType [ ',' ExpressionList '...'? ] | ExpressionList '...'?
+BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
 
 private MaxGroup ::=
       Operand
@@ -244,15 +239,15 @@ private add_op     ::= '+' | '-' | '|' | '^'
 private mul_op     ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
 private unary_op   ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
-MethodExpr ::= ReceiverType '.' MethodName
+MethodExpr ::= ReceiverType '.' identifier
 ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
 SelectorExpr ::= Expression '.' Expression
 IndexExpr ::= Expression '[' Expression ']'
 SliceExpr ::= Expression ('[' ( [ Expression ] ':' [ Expression ] ) | ( [ Expression ] ':' Expression ':' Expression ) ']')
-TypeAssertionExpr ::= Expression '.' '(' GoType ')'
+TypeAssertionExpr ::= Expression '.' '(' Type ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')'
-ConversionExpr ::= GoType '(' Expression [ ',' ] ')'
+ConversionExpr ::= Type '(' Expression [ ',' ] ')'
 
 LabeledStatement ::= identifier ':' Statement {pin=2}
 SendStatement ::= Expression '<-' Expression {pin=2}
@@ -267,7 +262,7 @@ TypeSwitchStatement  ::= switch [ SimpleStatement semi ] TypeSwitchGuard '{' ( T
 TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' type ')'
 TypeCaseClause ::= TypeSwitchCase ':' ( Statement semi )*
 TypeSwitchCase ::= case TypeList | default
-TypeList ::= GoType ( ',' GoType )*
+TypeList ::= Type ( ',' Type )*
 ForStatement ::= for [ Expression | RangeClause | ForClause ] Block
 ForClause ::= SimpleStatement? semi Expression? semi SimpleStatement?
 RangeClause ::= ( ExpressionList '=' | IdentifierList ':=' ) range Expression {pin=2}

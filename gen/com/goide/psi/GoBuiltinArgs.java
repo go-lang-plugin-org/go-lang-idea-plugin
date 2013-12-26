@@ -11,6 +11,6 @@ public interface GoBuiltinArgs extends GoCompositeElement {
   List<GoExpression> getExpressionList();
 
   @Nullable
-  GoGoType getGoType();
+  GoType getType();
 
 }
