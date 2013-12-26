@@ -12,6 +12,7 @@
   <depends>com.intellij.modules.lang</depends>
 
   <extensions defaultExtensionNs="com.intellij">
+    <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>
     <fileTypeFactory implementation="com.goide.GoFileTypeFactory"/>
     <lang.syntaxHighlighterFactory key="go" implementationClass="com.goide.highlighting.GoSyntaxHighlighterFactory"/>
