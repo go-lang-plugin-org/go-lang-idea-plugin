@@ -202,10 +202,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitKeyType(@NotNull GoKeyType o) {
-    visitType(o);
-  }
-
   public void visitLabeledStatement(@NotNull GoLabeledStatement o) {
     visitStatement(o);
   }

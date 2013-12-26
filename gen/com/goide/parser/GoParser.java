@@ -168,9 +168,6 @@ public class GoParser implements PsiParser {
     else if (root_ == KEY) {
       result_ = Key(builder_, 0);
     }
-    else if (root_ == KEY_TYPE) {
-      result_ = KeyType(builder_, 0);
-    }
     else if (root_ == LABELED_STATEMENT) {
       result_ = LabeledStatement(builder_, 0);
     }
@@ -348,8 +345,8 @@ public class GoParser implements PsiParser {
       RECV_STATEMENT, RETURN_STATEMENT, SELECT_STATEMENT, SEND_STATEMENT,
       SIMPLE_STATEMENT, STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
     create_token_set_(ARRAY_OR_SLICE_TYPE, BASE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE,
-      INTERFACE_TYPE, KEY_TYPE, LITERAL_TYPE, MAP_TYPE,
-      POINTER_TYPE, RECEIVER_TYPE, STRUCT_TYPE, TYPE),
+      INTERFACE_TYPE, LITERAL_TYPE, MAP_TYPE, POINTER_TYPE,
+      RECEIVER_TYPE, STRUCT_TYPE, TYPE),
   };
 
   /* ********************************************************** */
@@ -658,11 +655,13 @@ public class GoParser implements PsiParser {
   private static boolean ChannelType_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ChannelType_0_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, CHAN);
+    pinned_ = result_; // pin = chan
     result_ = result_ && ChannelType_0_0_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // [ '<-' ]
@@ -1335,12 +1334,14 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "FunctionDecl")) return false;
     if (!nextTokenIs(builder_, FUNC)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, FUNC);
     result_ = result_ && FunctionName(builder_, level_ + 1);
+    pinned_ = result_; // pin = 2
     result_ = result_ && FunctionDecl_2(builder_, level_ + 1);
-    exit_section_(builder_, marker_, FUNCTION_DECL, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, FUNCTION_DECL, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // Function | Signature
@@ -1686,17 +1687,6 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Type
-  public static boolean KeyType(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "KeyType")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<key type>");
-    result_ = Type(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, KEY_TYPE, result_, false, null);
-    return result_;
-  }
-
-  /* ********************************************************** */
   // identifier ':' Statement
   public static boolean LabeledStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "LabeledStatement")) return false;
@@ -1784,7 +1774,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // map '[' KeyType ']' Type
+  // map '[' Type ']' Type
   public static boolean MapType(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MapType")) return false;
     if (!nextTokenIs(builder_, MAP)) return false;
@@ -1794,7 +1784,7 @@ public class GoParser implements PsiParser {
     result_ = consumeToken(builder_, MAP);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, consumeToken(builder_, LBRACK));
-    result_ = pinned_ && report_error_(builder_, KeyType(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, Type(builder_, level_ + 1)) && result_;
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, RBRACK)) && result_;
     result_ = pinned_ && Type(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, MAP_TYPE, result_, pinned_, null);
@@ -1810,9 +1800,9 @@ public class GoParser implements PsiParser {
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, FUNC);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, Receiver(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, IDENTIFIER)) && result_;
+    result_ = result_ && Receiver(builder_, level_ + 1);
+    pinned_ = result_; // pin = 2
+    result_ = result_ && report_error_(builder_, consumeToken(builder_, IDENTIFIER));
     result_ = pinned_ && MethodDecl_3(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, METHOD_DECL, result_, pinned_, null);
     return result_ || pinned_;

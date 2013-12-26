@@ -112,10 +112,9 @@ InterfaceType ::= interface '{' ( MethodSpec semi )* '}' {pin(".*")=1}
 MethodSpec ::= identifier Signature | InterfaceTypeName
 InterfaceTypeName ::= TypeName
 
-MapType ::= map '[' KeyType ']' Type {pin=1}
-KeyType ::= Type
+MapType ::= map '[' Type ']' Type {pin=1}
 
-ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type
+ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
 
 Block ::= '{' (Statement semi)* '}' {pin(".*")=1}
 
@@ -159,12 +158,12 @@ VarSpec ::= IdentifierList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
 
 ShortVarDecl ::= IdentifierList ':=' ExpressionList
 
-FunctionDecl ::= func FunctionName ( Function | Signature )
+FunctionDecl ::= func FunctionName ( Function | Signature ) {pin=2}
 FunctionName ::= identifier
 Function     ::= Signature FunctionBody
 FunctionBody ::= Block
 
-MethodDecl ::= func Receiver identifier ( Function | Signature ) {pin=1}
+MethodDecl ::= func Receiver identifier ( Function | Signature ) {pin=2}
 Receiver ::= '(' [ identifier ] [ '*' ] identifier ')'
 
 private Operand ::= Literal | MethodExpr | OperandName
