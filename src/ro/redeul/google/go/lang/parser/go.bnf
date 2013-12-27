@@ -2,7 +2,6 @@
 //  classHeader="header.txt"
   parserClass="ro.redeul.google.go.parser.GoParser"
   parserUtilClass="ro.redeul.google.go.parser.GoParserUtil"
-//  parserUtilClass="ro.redeul.google.go.parser.GoParserUtil"
 
   implements="ro.redeul.google.go.lang.psi.GoPsiElement"
   extends="ro.redeul.google.go.lang.psi.impl.GoPsiElementBase"
@@ -112,30 +111,36 @@
 //  extends("paren_.*expression")=parenthesized
 
 //  methodRenames("getStringLiteralExpression")="getLiteralExpression"
+
+    recoverWhile("Package|(.*(Declaration|Spec))")=notEndOfStatement
 }
 
-file ::= PackageClause ';' (ImportDecl ';')* (TopLevelDecl ';')*
-PackageClause       ::= "package" PackageName {pin=1}
-private PackageName ::= identifier
+file ::= Package ';' (ImportDeclaration ';')* (TopLevelDeclaration ';')*
 
-ImportDecl       ::= 'import' (ImportSpec | '(' (ImportSpec ';' )+ ')' ) { pin=1 }
-ImportSpec       ::= [ '.' | PackageName ] ImportPath
-private ImportPath       ::= string_lit
+// package
+Package     ::= "package" identifier  { pin=1 }
 
-TopLevelDecl ::= Declaration | FunctionDecl | MethodDecl
-Declaration ::= ConstDecl | TypeDecl | VarDecl
+// imports
+ImportDeclaration   ::= 'import' (ImportSpec | '(' (ImportSpec ';' )+ ')' ) { pin=1 }
+ImportSpec          ::= [ '.' | identifier ] ImportPath { pin=2}
+private ImportPath  ::= string_lit
 
-ConstDecl ::= 'const' (ConstSpec | '(' ( ConstSpec ";" )+ ')' ) { pin=1 extends=Declaration}
-ConstSpec ::= IdentifierList "=" Expression
+private
+TopLevelDeclaration ::= Declaration | FunctionDeclaration | MethodDeclaration
 
-TypeDecl     ::= "type" ( TypeSpec | "(" ( TypeSpec ";" )* ")" ) { pin=1 extends=Declaration}
-TypeSpec     ::= identifier Type
+Declaration         ::= ConstDeclaration | TypeDeclaration | VarDeclaration
 
-VarDecl     ::= "var" ( VarSpec | "(" ( VarSpec ";" )* ")" ) { pin=1 extends=Declaration}
-VarSpec     ::= IdentifierList ( Type [ "=" ExpressionList ] | "=" ExpressionList )
+ConstDeclaration    ::= 'const' ( ConstSpec | '(' ( ConstSpec ';' )+ ')' ) { pin=1 extends=Declaration }
+ConstSpec           ::= IdentifierList "=" Expression
 
-IdentifierList ::= identifier ( "," identifier )*
-ExpressionList ::= Expression ( "," Expression )*
+TypeDeclaration     ::= "type" ( TypeSpec | "(" ( TypeSpec ";" )* ")" ) { pin=1 extends=Declaration }
+TypeSpec            ::= identifier Type
+
+VarDeclaration      ::= "var" ( VarSpec | "(" ( VarSpec ";" )* ")" ) { pin=1 extends=Declaration}
+VarSpec             ::= IdentifierList ( Type [ "=" ExpressionList ] | "=" ExpressionList )
+
+private IdentifierList ::= identifier ( "," identifier )*
+private ExpressionList ::= Expression ( "," Expression )*
 
 string_lit  ::= raw_string_lit //| int_string_lit
 
@@ -178,12 +183,10 @@ KeyType     ::= Type
 ChannelType ::= ("chan" "<-"? | "<-" "chan" ) ElementType { pin=1 extends=TypeLit }
 
 
-FunctionDecl ::= "func" FunctionName ( Function | Signature ) { pin=2 }
+FunctionDeclaration ::= "func" FunctionName Signature Block { pin=1 }
 FunctionName ::= identifier
-Function     ::= Signature FunctionBody
-FunctionBody ::= Block
 
-MethodDecl   ::= "func" Receiver MethodName ( Function | Signature ) { pin=2 }
+MethodDeclaration   ::= "func" Receiver MethodName ( Function | Signature ) { pin=2 }
 Receiver     ::= "(" identifier? "*"? BaseTypeName ")"
 BaseTypeName ::= identifier
 
@@ -324,6 +327,7 @@ Value         ::= Expression | LiteralValue
 
 FunctionLit   ::= "func" Function
 
+private notEndOfStatement ::= !(';' | EOF)
 
 //external grammar ::= parseGrammar grammar_element
 //private grammar_element ::= !<<eof>> (attrs | rule) {pin=1 recoverUntil=grammar_element_recover}
