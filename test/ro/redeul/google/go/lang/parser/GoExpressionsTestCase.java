@@ -41,6 +41,10 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
         doTest();
     }
 
+    public void testIndex_structLiteral() throws Throwable {
+        doTest();
+    }
+
     public void testSlice_simple() throws Throwable {
         doTest();
     }
