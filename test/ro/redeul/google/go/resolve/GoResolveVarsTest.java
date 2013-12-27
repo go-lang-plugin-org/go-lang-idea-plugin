@@ -168,4 +168,8 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     public void testLocalPackageDefinitionsShouldBeResolvedFirst() throws Exception {
         doTest();
     }
+
+    public void testRangeExpressionVarsShouldNotResolveToRangeVars() throws Exception {
+        doTest();
+    }
 }

@@ -4,8 +4,7 @@ const i = iota
 
 func main() {
   i := 0
-  var s[]string
-  for /*def*/i, s[i] := range m {
+  for /*def*/i, _ := range m {
       println(/*ref*/i)
   }
 }

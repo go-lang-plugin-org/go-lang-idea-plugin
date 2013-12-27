@@ -2,8 +2,11 @@ package ro.redeul.google.go.lang.psi.resolve.references;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.ElementPattern;
+import com.intellij.patterns.PatternCondition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.util.ProcessingContext;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +27,10 @@ public class VarOrConstReference
     extends GoPsiReference.Single<GoLiteralIdentifier, VarOrConstReference> {
 
     public static final ElementPattern<GoLiteralIdentifier> MATCHER =
-        psiElement(GoLiteralIdentifier.class)
-            .withParent(psiElement(GoLiteralExpression.class));
+            psiElement(GoLiteralIdentifier.class)
+                    .withParent(
+                            psiElement(GoLiteralExpression.class)
+                    );
 
 
     private static final ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult> RESOLVER =

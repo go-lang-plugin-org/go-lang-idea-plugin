@@ -89,8 +89,7 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
     }
 
     @Override
-    public void handleEvent(Event event,
-                            @Nullable Object associated) {
+    public void handleEvent(Event event, @Nullable Object associated) {
     }
 
     public PsiElement getChildDeclaration() {

@@ -22,6 +22,7 @@ import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeAndVarsStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -162,12 +163,11 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                     }
 
                     if (GoElementPatterns.VAR_IN_FOR_RANGE.accepts(resolved)) {
-                        GoForWithRangeStatement statement =
-                                (GoForWithRangeStatement) parent.getParent();
+                        GoForWithRangeAndVarsStatement statement = (GoForWithRangeAndVarsStatement) parent;
 
-                        if (statement.getKey() == parent) {
+                        if (statement.getKey() == resolved) {
                             return statement.getKeyType();
-                        } else if (statement.getValue() == parent) {
+                        } else if (statement.getValue() == resolved) {
                             return statement.getValueType();
                         }
                     }
@@ -252,10 +252,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        return
-                GoPsiScopesUtil.walkChildrenScopes(this,
-                        processor, state,
-                        lastParent, place);
+        return GoPsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
     }
 
     @NotNull
@@ -270,7 +267,8 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
         }
 
         if (CallOrConversionReference.MATCHER.accepts(this))
-            return refs(new CallOrConversionReference(this),
+            return refs(
+                    new CallOrConversionReference(this),
                     new VarOrConstReference((GoLiteralIdentifier) this.getLiteral()));
 
         return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.

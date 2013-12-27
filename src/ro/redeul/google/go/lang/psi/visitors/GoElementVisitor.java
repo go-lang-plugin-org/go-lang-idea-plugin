@@ -13,6 +13,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComp
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
 import ro.redeul.google.go.lang.psi.expressions.primary.*;
+import ro.redeul.google.go.lang.psi.impl.statements.GoForWithRangeAndVarsStatementImpl;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
@@ -120,6 +121,10 @@ public class GoElementVisitor  {
     }
 
     public void visitForWithRange(GoForWithRangeStatement statement) {
+        visitElement(statement);
+    }
+
+    public void visitForWithRangeAndVars(GoForWithRangeAndVarsStatement statement) {
         visitElement(statement);
     }
 

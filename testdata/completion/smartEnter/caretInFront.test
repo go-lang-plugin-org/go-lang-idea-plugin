@@ -1,0 +1,13 @@
+package main
+
+func Foo() {
+<caret>    for i := range b
+}
+-----
+package main
+
+func Foo() {
+	for i := range b {
+		<caret>
+	}
+}

@@ -4,7 +4,6 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.GoBundle;
-import ro.redeul.google.go.lang.lexer.GoElementType;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
@@ -25,9 +24,11 @@ class ForStatement implements GoElementTypes {
         boolean allowComposite;
         allowComposite = parser.resetFlag(AllowCompositeLiteral, false);
 
-        GoElementType forType = FOR_WITH_CONDITION_STATEMENT;
+        IElementType forType = FOR_WITH_CONDITION_STATEMENT;
         if ( builder.getTokenType() != pLCURLY) {
             forType = parseConditionOrForClauseOrRangeClause(builder, parser);
+            if (forType == null)
+                forType = FOR_WITH_CONDITION_STATEMENT;
         }
 
         parser.resetFlag(AllowCompositeLiteral, allowComposite);
@@ -39,12 +40,13 @@ class ForStatement implements GoElementTypes {
 
     private static final TokenSet RANGE_LOOKAHEAD = TokenSet.create(oCOMMA, oASSIGN, oVAR_ASSIGN);
 
-    private static GoElementType parseConditionOrForClauseOrRangeClause(
+    private static IElementType parseConditionOrForClauseOrRangeClause(
         PsiBuilder builder, GoParser parser)
     {
         PsiBuilder.Marker clause = builder.mark();
 
         IElementType statementType = parser.parseStatementSimple(builder);
+        IElementType forStatementType = null;
 
         if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder,
                                                                            pLCURLY)) {
@@ -55,14 +57,13 @@ class ForStatement implements GoElementTypes {
 
         if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder, RANGE_LOOKAHEAD)) {
             clause.rollbackTo();
-            tryParseRangeClause(builder, parser);
-            return FOR_WITH_RANGE_STATEMENT;
+            return tryParseRangeClause(builder, parser);
         }
 
         if ( statementType == null ) {
-            if (tryParseRangeClause(builder, parser)) {
+            if ((forStatementType = tryParseRangeClause(builder, parser)) != null) {
                 clause.drop();
-                return FOR_WITH_RANGE_STATEMENT;
+                return forStatementType;
             }
         }
 
@@ -80,24 +81,36 @@ class ForStatement implements GoElementTypes {
         return FOR_WITH_CLAUSES_STATEMENT;
     }
 
-    private static boolean tryParseRangeClause(PsiBuilder builder, GoParser parser) {
+    private static IElementType tryParseRangeClause(PsiBuilder builder, GoParser parser) {
         PsiBuilder.Marker m = builder.mark();
 
-        parser.parseExpressionList(builder);
+        parser.parseIdentifierList(builder, false);
 
-        if ( builder.getTokenType() == oVAR_ASSIGN || builder.getTokenType() == oASSIGN ) {
-            ParserUtils.advance(builder);
+        if ( ParserUtils.lookAhead(builder, oVAR_ASSIGN, kRANGE) ) {
+            ParserUtils.getToken(builder, oVAR_ASSIGN);
+            ParserUtils.getToken(builder, kRANGE);
+            parser.parseExpression(builder);
+            m.drop();
+            return FOR_WITH_RANGE_AND_VARS_STATEMENT;
+        }
 
-            if ( builder.getTokenType() == kRANGE ) {
-                ParserUtils.getToken(builder, kRANGE);
-                parser.parseExpression(builder);
-
-                m.drop();
-                return true;
-            }
+        if ( ParserUtils.lookAhead(builder, oASSIGN, kRANGE) ) {
+            m.rollbackTo();
+            parser.parseExpressionList(builder);
+            ParserUtils.getToken(builder, oASSIGN);
+            ParserUtils.getToken(builder, kRANGE);
+            parser.parseExpression(builder);
+            return FOR_WITH_RANGE_STATEMENT;
         }
 
         m.rollbackTo();
-        return false;
+        if ( parser.parseExpressionList(builder) != 0 && ParserUtils.lookAhead(builder, oASSIGN, kRANGE) ) {
+            ParserUtils.getToken(builder, oASSIGN);
+            ParserUtils.getToken(builder, kRANGE);
+            parser.parseExpression(builder);
+            return FOR_WITH_RANGE_STATEMENT;
+        }
+
+        return null;
     }
 }

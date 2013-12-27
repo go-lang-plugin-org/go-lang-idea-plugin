@@ -232,6 +232,9 @@ class GoPsiCreator implements GoElementTypes {
         if (elementType.equals(FOR_WITH_RANGE_STATEMENT))
             return new GoForWithRangeStatementImpl(node);
 
+        if (elementType.equals(FOR_WITH_RANGE_AND_VARS_STATEMENT))
+            return new GoForWithRangeAndVarsStatementImpl(node);
+
         if (elementType.equals(BUILTIN_CALL_EXPRESSION))
             return new GoBuiltinCallExpressionImpl(node);
 

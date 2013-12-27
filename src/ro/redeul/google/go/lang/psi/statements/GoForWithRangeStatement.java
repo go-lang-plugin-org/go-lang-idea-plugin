@@ -9,8 +9,6 @@ public interface GoForWithRangeStatement extends GoForStatement {
 
     GoExpr getValue();
 
-    boolean isDeclaration();
-
     GoExpr getRangeExpression();
 
     GoType[] getKeyType();
