@@ -206,8 +206,8 @@ public class GoVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitLiteralType(@NotNull GoLiteralType o) {
-    visitType(o);
+  public void visitLiteralTypeExpr(@NotNull GoLiteralTypeExpr o) {
+    visitExpression(o);
   }
 
   public void visitLiteralValue(@NotNull GoLiteralValue o) {

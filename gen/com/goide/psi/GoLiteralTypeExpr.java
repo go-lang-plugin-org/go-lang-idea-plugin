@@ -5,7 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoLiteralType extends GoType {
+public interface GoLiteralTypeExpr extends GoExpression {
+
+  @Nullable
+  GoType getType();
 
   @Nullable
   GoTypeName getTypeName();

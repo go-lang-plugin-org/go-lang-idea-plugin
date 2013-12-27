@@ -22,9 +22,9 @@ public class GoFunctionLitImpl extends GoExpressionImpl implements GoFunctionLit
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoFunction getFunction() {
-    return findNotNullChildByClass(GoFunction.class);
+    return findChildByClass(GoFunction.class);
   }
 
   @Override

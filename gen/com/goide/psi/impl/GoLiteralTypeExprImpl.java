@@ -10,15 +10,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoLiteralTypeImpl extends GoTypeImpl implements GoLiteralType {
+public class GoLiteralTypeExprImpl extends GoExpressionImpl implements GoLiteralTypeExpr {
 
-  public GoLiteralTypeImpl(ASTNode node) {
+  public GoLiteralTypeExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitLiteralType(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitLiteralTypeExpr(this);
     else super.accept(visitor);
+  }
+
+  @Override
+  @Nullable
+  public GoType getType() {
+    return findChildByClass(GoType.class);
   }
 
   @Override

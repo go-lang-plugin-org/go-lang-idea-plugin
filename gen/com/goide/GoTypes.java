@@ -61,7 +61,7 @@ public interface GoTypes {
   IElementType KEY = new GoCompositeElementType("KEY");
   IElementType LABELED_STATEMENT = new GoCompositeElementType("LABELED_STATEMENT");
   IElementType LITERAL = new GoCompositeElementType("LITERAL");
-  IElementType LITERAL_TYPE = new GoCompositeElementType("LITERAL_TYPE");
+  IElementType LITERAL_TYPE_EXPR = new GoCompositeElementType("LITERAL_TYPE_EXPR");
   IElementType LITERAL_VALUE = new GoCompositeElementType("LITERAL_VALUE");
   IElementType MAP_TYPE = new GoCompositeElementType("MAP_TYPE");
   IElementType METHOD_DECLARATION = new GoCompositeElementType("METHOD_DECLARATION");
@@ -350,8 +350,8 @@ public interface GoTypes {
       else if (type == LITERAL) {
         return new GoLiteralImpl(node);
       }
-      else if (type == LITERAL_TYPE) {
-        return new GoLiteralTypeImpl(node);
+      else if (type == LITERAL_TYPE_EXPR) {
+        return new GoLiteralTypeExprImpl(node);
       }
       else if (type == LITERAL_VALUE) {
         return new GoLiteralValueImpl(node);

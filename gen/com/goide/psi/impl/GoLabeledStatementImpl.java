@@ -22,9 +22,9 @@ public class GoLabeledStatementImpl extends GoStatementImpl implements GoLabeled
   }
 
   @Override
-  @Nullable
+  @NotNull
   public GoStatement getStatement() {
-    return findChildByClass(GoStatement.class);
+    return findNotNullChildByClass(GoStatement.class);
   }
 
   @Override

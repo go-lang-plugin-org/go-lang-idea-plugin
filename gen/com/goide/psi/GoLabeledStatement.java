@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoLabeledStatement extends GoStatement {
 
-  @Nullable
+  @NotNull
   GoStatement getStatement();
 
   @NotNull

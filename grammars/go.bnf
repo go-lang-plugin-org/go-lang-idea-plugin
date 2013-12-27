@@ -119,7 +119,9 @@ ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
 Block ::= '{' (Statement semi)* '}' {pin(".*")=1}
 
 Statement ::=
-	  ConstDeclaration | TypeDeclaration | VarDeclaration
+	  ConstDeclaration
+	| TypeDeclaration
+	| VarDeclaration
 	| LabeledStatement
 	| SimpleStatement
 	| GoStatement
@@ -168,15 +170,13 @@ ShortVarDeclaration ::= IdentifierList ':=' ExpressionList
 
 FunctionDeclaration ::= func FunctionName ( Function | Signature ) {pin=2}
 FunctionName ::= identifier
-Function     ::= Signature FunctionBody
+Function ::= Signature FunctionBody
 FunctionBody ::= Block
 
 MethodDeclaration ::= func Receiver identifier ( Function | Signature ) {pin=2}
 Receiver ::= '(' [ identifier ] [ '*' ] identifier ')'
 
-private Operand ::= Literal | MethodExpr | OperandName
-Literal ::= BasicLit | FunctionLit | CompositeLit
-private BasicLit ::=
+Literal ::=
     int
   | float
   | floati
@@ -190,8 +190,8 @@ OperandName ::= identifier | QualifiedIdent
 
 QualifiedIdent ::= PackageName '.' identifier
 
-CompositeLit ::= LiteralType LiteralValue
-LiteralType ::=
+CompositeLit ::= Expression LiteralValue
+LiteralTypeExpr ::=
     StructType
   | ArrayOrSliceType
   | '[' '...' ']' Type
@@ -206,7 +206,7 @@ FieldName ::= identifier
 ElementIndex ::= Expression
 Value ::= Expression | LiteralValue
 
-FunctionLit ::= func Function
+FunctionLit ::= func Function {pin=1}
 
 Expression ::=
        OrExpr
@@ -232,7 +232,8 @@ BuiltinCallExpr ::= identifier '(' [ BuiltinArgs [ ',' ] ] ')' {pin=2}
 BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
 
 private MaxGroup ::=
-      Operand
+      OperandName
+    | LiteralTypeExpr
     | ConversionExpr
     | BuiltinCallExpr
     | SelectorExpr
@@ -240,6 +241,9 @@ private MaxGroup ::=
     | SliceExpr
     | TypeAssertionExpr
     | CallExpr
+    | Literal
+    | FunctionLit
+    | CompositeLit
 
 private rel_op     ::= '==' | '!=' | '<' | '<=' | '>' | '>='
 private add_op     ::= '+' | '-' | '|' | '^'
@@ -256,7 +260,7 @@ CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')'
 ConversionExpr ::= Type '(' Expression [ ',' ] ')'
 
-LabeledStatement ::= identifier ':' Statement {pin=2}
+LabeledStatement ::= identifier ':' Statement {pin=0}
 SendStatement ::= Expression '<-' Expression {pin=2}
 AssignmentStatement ::= ExpressionList assign_op ExpressionList {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
