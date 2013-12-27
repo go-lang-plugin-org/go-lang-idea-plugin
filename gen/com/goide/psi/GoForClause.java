@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoForClause extends GoCompositeElement {
 
-  @Nullable
+  @NotNull
   GoExpression getExpression();
 
   @NotNull

@@ -23,6 +23,12 @@ public class GoLiteralImpl extends GoExpressionImpl implements GoLiteral {
 
   @Override
   @Nullable
+  public PsiElement getChar() {
+    return findChildByType(CHAR);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getDecimali() {
     return findChildByType(DECIMALI);
   }

@@ -104,9 +104,9 @@ BaseType ::= Type
 FunctionType ::= func Signature {pin=1}
 Signature ::= Parameters [ Result ]
 Result ::= Parameters | Type
-Parameters ::= '(' [ ParameterList [ ',' ] ] ')'
+Parameters ::= '(' [ ParameterList [ ',' ] ] ')' {pin(".*")=1}
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
-ParameterDeclaration ::= [ IdentifierList ] [ '...' ] Type
+ParameterDeclaration ::= IdentifierListNoPin? '...'? Type? // todo: Type not optional
 
 InterfaceType ::= interface '{' ( MethodSpec semi )* '}' {pin(".*")=1}
 MethodSpec ::= identifier Signature | InterfaceTypeName
@@ -157,6 +157,7 @@ TopLevelDeclaration ::=
 ConstDeclaration ::= const ( ConstSpec | '(' ( ConstSpec semi )* ')' ) {pin(".*")=1}
 ConstSpec ::= IdentifierList [ [ Type ] '=' ExpressionList ]
 
+private IdentifierListNoPin ::= identifier ( ',' identifier )*
 private IdentifierList ::= identifier ( ',' identifier )*
 private ExpressionList ::= Expression ( ',' Expression )*
 
@@ -186,6 +187,7 @@ Literal ::=
   | imaginary
   | rune
   | string
+  | char
 OperandName ::= QualifiedIdent | identifier
 
 QualifiedIdent ::= PackageName '.' identifier {pin=2}
@@ -198,8 +200,8 @@ LiteralTypeExpr ::=
   | MapType
   | TypeName
 
-LiteralValue ::= '{' [ ElementList [ ',' ] ] '}'
-private ElementList  ::= Element ( ',' Element )*
+LiteralValue ::= '{' ElementList? '}'
+private ElementList  ::= Element ( ',' Element? )*
 Element ::= [ Key ':' ] Value
 Key ::= FieldName | ElementIndex
 FieldName ::= identifier
@@ -278,8 +280,8 @@ TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' type ')'
 TypeCaseClause ::= TypeSwitchCase ':' ( Statement semi )*
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
-ForStatement ::= for [ Expression | RangeClause | ForClause ] Block
-ForClause ::= SimpleStatement? semi Expression? semi SimpleStatement?
+ForStatement ::= for [ ForClause | RangeClause ] Block
+ForClause ::= SimpleStatement? semi Expression semi SimpleStatement?
 RangeClause ::= ( ExpressionList '=' | IdentifierList ':=' ) range Expression {pin=2}
 GoStatement ::= go Expression
 SelectStatement ::= select '{' ( CommClause )* '}'

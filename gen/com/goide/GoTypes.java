@@ -122,6 +122,7 @@ public interface GoTypes {
   IElementType BREAK = new GoTokenType("break");
   IElementType CASE = new GoTokenType("case");
   IElementType CHAN = new GoTokenType("chan");
+  IElementType CHAR = new GoTokenType("char");
   IElementType COLON = new GoTokenType(":");
   IElementType COMMA = new GoTokenType(",");
   IElementType COND_AND = new GoTokenType("&&");

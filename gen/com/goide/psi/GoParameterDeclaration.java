@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoParameterDeclaration extends GoCompositeElement {
 
-  @NotNull
+  @Nullable
   GoType getType();
 
 }

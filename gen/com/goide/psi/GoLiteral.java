@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface GoLiteral extends GoExpression {
 
   @Nullable
+  PsiElement getChar();
+
+  @Nullable
   PsiElement getDecimali();
 
   @Nullable

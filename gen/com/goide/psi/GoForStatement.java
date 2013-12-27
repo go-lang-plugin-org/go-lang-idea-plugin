@@ -11,9 +11,6 @@ public interface GoForStatement extends GoStatement {
   GoBlock getBlock();
 
   @Nullable
-  GoExpression getExpression();
-
-  @Nullable
   GoForClause getForClause();
 
   @Nullable
