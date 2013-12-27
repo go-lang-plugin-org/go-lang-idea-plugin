@@ -25,6 +25,8 @@ public class GoSmartEnterProcessorTest extends GoEditorAwareTestCase {
     public void testForClause() throws Exception { doTest(); }
     public void testForCondition() throws Exception { doTest(); }
     public void testForRange() throws Exception { doTest(); }
+    public void testForRangeAndVars() throws Exception { doTest(); }
+    public void testCaretInFront() throws Exception { doTest(); }
 
     @Override
     protected void invoke(final Project project, final Editor editor, final GoFile file) {

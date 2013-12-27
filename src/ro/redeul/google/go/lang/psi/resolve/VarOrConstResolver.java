@@ -2,8 +2,10 @@ package ro.redeul.google.go.lang.psi.resolve;
 
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -16,8 +18,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
  * Date: 5/22/11
  * Time: 8:35 PM
  */
-public class VarOrConstResolver extends
-                                GoPsiReferenceResolver<VarOrConstReference> {
+public class VarOrConstResolver extends GoPsiReferenceResolver<VarOrConstReference> {
 
     public VarOrConstResolver(VarOrConstReference reference) {
         super(reference);

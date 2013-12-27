@@ -186,6 +186,8 @@ public interface GoElementTypes extends GoTokenTypes {
         new GoElementTypeImpl("ForWithConditionStmt");
     GoElementType FOR_WITH_RANGE_STATEMENT =
         new GoElementTypeImpl("ForWithRangeStmt");
+    GoElementType FOR_WITH_RANGE_AND_VARS_STATEMENT =
+        new GoElementTypeImpl("ForWithRangeAndVarDeclarationsStmt");
 
     GoElementType SWITCH_TYPE_STATEMENT =
         new GoElementTypeImpl("SwitchTypeStmt");
@@ -308,7 +310,8 @@ public interface GoElementTypes extends GoTokenTypes {
     public final TokenSet FOR_STATEMENT = TokenSet.create(
             FOR_WITH_CLAUSES_STATEMENT,
             FOR_WITH_CONDITION_STATEMENT,
-            FOR_WITH_RANGE_STATEMENT
+            FOR_WITH_RANGE_STATEMENT,
+            FOR_WITH_RANGE_AND_VARS_STATEMENT
     );
 
     public final TokenSet SWITCH_STATEMENT = TokenSet.create(

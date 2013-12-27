@@ -202,18 +202,13 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         }
 
         if (CompositeElementOfStructFieldReference.MATCHER_ELEMENT.accepts(this))
-            return refs(
-                    new VarOrConstReference(this)
-            );
+            return refs(new VarOrConstReference(this));
 
-        if (ShortVarDeclarationReference.MATCHER.accepts(this)) {
+        if (ShortVarDeclarationReference.MATCHER.accepts(this))
             return refs(new ShortVarDeclarationReference(this));
-        }
 
         if (VarOrConstReference.MATCHER.accepts(this))
-            return refs(
-                    new VarOrConstReference(this)
-            );
+            return refs(new VarOrConstReference(this));
 
         return refs(PsiReference.EMPTY_ARRAY);
     }

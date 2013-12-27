@@ -5,6 +5,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
 import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
+import ro.redeul.google.go.lang.psi.statements.GoForWithRangeAndVarsStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import static ro.redeul.google.go.util.GoPsiTestUtils.castAs;
 import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
@@ -79,8 +80,8 @@ public class GoPsiForStatementTest extends GoPsiTestCase {
                                     "    }\n" +
                                     "}"));
 
-        GoForWithRangeStatement forStmt =
-            castAs(GoForWithRangeStatement.class, 0,
+        GoForWithRangeAndVarsStatement forStmt =
+            castAs(GoForWithRangeAndVarsStatement.class, 0,
                    get(
                        childAt(0,
                                file.getFunctions()
@@ -102,8 +103,8 @@ public class GoPsiForStatementTest extends GoPsiTestCase {
                                     "    }\n" +
                                     "}"));
 
-        GoForWithRangeStatement forStmt =
-            castAs(GoForWithRangeStatement.class, 0,
+        GoForWithRangeAndVarsStatement forStmt =
+            castAs(GoForWithRangeAndVarsStatement.class, 0,
                    get(
                        childAt(0,
                                file.getFunctions()
@@ -125,8 +126,8 @@ public class GoPsiForStatementTest extends GoPsiTestCase {
                                     "    }\n" +
                                     "}"));
 
-        GoForWithRangeStatement forStmt =
-            castAs(GoForWithRangeStatement.class, 0,
+        GoForWithRangeAndVarsStatement forStmt =
+            castAs(GoForWithRangeAndVarsStatement.class, 0,
                    get(
                        childAt(0,
                                file.getFunctions()

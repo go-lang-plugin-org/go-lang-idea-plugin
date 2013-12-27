@@ -19,7 +19,6 @@ public class EditorUtil {
         Document document = editor.getDocument();
         int line = document.getLineNumber(editor.getCaretModel().getOffset());
         editor.getCaretModel().moveToOffset(document.getLineEndOffset(line));
-
         pressEnter(editor);
     }
 
