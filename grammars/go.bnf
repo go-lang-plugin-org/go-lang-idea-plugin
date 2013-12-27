@@ -240,7 +240,6 @@ private MaxGroup ::=
     | BuiltinCallExpr
     | SelectorExpr
     | IndexExpr
-    | SliceExpr
     | TypeAssertionExpr
     | CallExpr
     | Literal
@@ -255,8 +254,8 @@ private unary_op   ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 MethodExpr ::= ReceiverType '.' identifier
 ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
 SelectorExpr ::= Expression '.' Expression
-IndexExpr ::= Expression '[' Expression ']'
-SliceExpr ::= Expression ('[' ( [ Expression ] ':' [ Expression ] ) | ( [ Expression ] ':' Expression ':' Expression ) ']')
+IndexExpr ::= Expression '[' IndexExprBody']'
+private IndexExprBody ::= Expression | ( Expression? ':' Expression ':' Expression) | (Expression? ':' Expression?)
 TypeAssertionExpr ::= Expression '.' '(' Type ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')'

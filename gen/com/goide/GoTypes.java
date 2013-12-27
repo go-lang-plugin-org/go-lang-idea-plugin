@@ -88,7 +88,6 @@ public interface GoTypes {
   IElementType SHORT_VAR_DECLARATION = new GoCompositeElementType("SHORT_VAR_DECLARATION");
   IElementType SIGNATURE = new GoCompositeElementType("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new GoCompositeElementType("SIMPLE_STATEMENT");
-  IElementType SLICE_EXPR = new GoCompositeElementType("SLICE_EXPR");
   IElementType STATEMENT = new GoCompositeElementType("STATEMENT");
   IElementType STRUCT_TYPE = new GoCompositeElementType("STRUCT_TYPE");
   IElementType SWITCH_STATEMENT = new GoCompositeElementType("SWITCH_STATEMENT");
@@ -431,9 +430,6 @@ public interface GoTypes {
       }
       else if (type == SIMPLE_STATEMENT) {
         return new GoSimpleStatementImpl(node);
-      }
-      else if (type == SLICE_EXPR) {
-        return new GoSliceExprImpl(node);
       }
       else if (type == STATEMENT) {
         return new GoStatementImpl(node);
