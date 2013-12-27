@@ -181,6 +181,9 @@ public class FunctionDeclarationInspection
         }else if(statement instanceof GoForWithConditionStatement){
             GoForWithConditionStatement forStatement = (GoForWithConditionStatement)statement;
             return forStatement.getCondition() == null;
+        }else if(statement instanceof GoForWithClausesStatement){
+            GoForWithClausesStatement forStatement = (GoForWithClausesStatement)statement;
+            return forStatement.getCondition() == null;
         }else if (statement instanceof GoSwitchExpressionStatement){
             GoSwitchExpressionStatement switchExpr = (GoSwitchExpressionStatement)statement;
             boolean hasDefalut = false;
