@@ -41,8 +41,8 @@ public class GoCompletionContributor extends CompletionContributor {
   private static Collection<String> suggestKeywords(@NotNull PsiElement position) {
     TextRange posRange = position.getTextRange();
     GoFile posFile = (GoFile) position.getContainingFile();
-    final TextRange range = new TextRange(0, posRange.getStartOffset());
-    final String text = range.isEmpty() ? CompletionInitializationContext.DUMMY_IDENTIFIER : range.substring(posFile.getText());
+    TextRange range = new TextRange(0, posRange.getStartOffset());
+    String text = range.isEmpty() ? CompletionInitializationContext.DUMMY_IDENTIFIER : range.substring(posFile.getText());
 
     PsiFile file = PsiFileFactory.getInstance(posFile.getProject()).createFileFromText("a.go", GoLanguage.INSTANCE, text, true, false);
     int completionOffset = posRange.getStartOffset() - range.getStartOffset();
