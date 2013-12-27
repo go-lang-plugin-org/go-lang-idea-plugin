@@ -15,10 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
-import ro.redeul.google.go.inspection.ConstDeclarationInspection;
-import ro.redeul.google.go.inspection.FunctionDeclarationInspection;
-import ro.redeul.google.go.inspection.InspectionResult;
-import ro.redeul.google.go.inspection.VarDeclarationInspection;
+import ro.redeul.google.go.inspection.*;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -299,7 +296,11 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         super.visitMethodDeclaration(declaration);
 
         InspectionResult result = new InspectionResult(inspectionManager);
-        FunctionDeclarationInspection.checkFunction(result, declaration);
+        FunctionDuplicateArgumentInspection.checkFunction(result, declaration);
+        FunctionVaraidicParameterInspection.checkFunction(result, declaration);
+        FunctionRedeclareParameterInResultInspection.checkFunction(result, declaration);
+        FunctionReturnParameterCountInspection.checkFunction(result, declaration);
+        FunctionWithResultButWihtoutReturnInspection.checkFunction(result, declaration);
         addProblems(result.getProblems());
 
         PsiElement nameIdentifier = declaration.getNameIdentifier();
@@ -315,7 +316,11 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         super.visitFunctionDeclaration(declaration);
 
         InspectionResult result = new InspectionResult(inspectionManager);
-        FunctionDeclarationInspection.checkFunction(result, declaration);
+        FunctionDuplicateArgumentInspection.checkFunction(result, declaration);
+        FunctionVaraidicParameterInspection.checkFunction(result, declaration);
+        FunctionRedeclareParameterInResultInspection.checkFunction(result, declaration);
+        FunctionReturnParameterCountInspection.checkFunction(result, declaration);
+        FunctionWithResultButWihtoutReturnInspection.checkFunction(result, declaration);
         addProblems(result.getProblems());
 
         PsiElement nameIdentifier = declaration.getNameIdentifier();
@@ -331,7 +336,11 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         super.visitFunctionLiteral(literal);
 
         InspectionResult result = new InspectionResult(inspectionManager);
-        FunctionDeclarationInspection.checkFunction(result, literal);
+        FunctionDuplicateArgumentInspection.checkFunction(result, literal);
+        FunctionVaraidicParameterInspection.checkFunction(result, literal);
+        FunctionRedeclareParameterInResultInspection.checkFunction(result, literal);
+        FunctionReturnParameterCountInspection.checkFunction(result, literal);
+        FunctionWithResultButWihtoutReturnInspection.checkFunction(result, literal);
         addProblems(result.getProblems());
     }
 
