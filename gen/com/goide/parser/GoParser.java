@@ -213,8 +213,8 @@ public class GoParser implements PsiParser {
     else if (root_ == POINTER_TYPE) {
       result_ = PointerType(builder_, 0);
     }
-    else if (root_ == QUALIFIED_IDENT) {
-      result_ = QualifiedIdent(builder_, 0);
+    else if (root_ == QUALIFIED_IDENTIFIER) {
+      result_ = QualifiedIdentifier(builder_, 0);
     }
     else if (root_ == RANGE_CLAUSE) {
       result_ = RangeClause(builder_, 0);
@@ -334,7 +334,7 @@ public class GoParser implements PsiParser {
       COMPOSITE_LIT, CONDITIONAL_EXPR, CONVERSION_EXPR, EXPRESSION,
       FUNCTION_LIT, INDEX_EXPR, LITERAL, LITERAL_TYPE_EXPR,
       METHOD_EXPR, MUL_EXPR, OPERAND_NAME, OR_EXPR,
-      PARENTHEZIED_EXPR, QUALIFIED_IDENT, SELECTOR_EXPR, SLICE_EXPR,
+      PARENTHEZIED_EXPR, QUALIFIED_IDENTIFIER, SELECTOR_EXPR, SLICE_EXPR,
       TYPE_ASSERTION_EXPR, TYPE_LIT, UNARY_EXPR),
     create_token_set_(FUNCTION_DECLARATION, METHOD_DECLARATION),
     create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, CONTINUE_STATEMENT, DEFER_STATEMENT,
@@ -1962,8 +1962,8 @@ public class GoParser implements PsiParser {
 
   /* ********************************************************** */
   // PackageName '.' identifier
-  public static boolean QualifiedIdent(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "QualifiedIdent")) return false;
+  public static boolean QualifiedIdentifier(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "QualifiedIdentifier")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
@@ -1972,7 +1972,7 @@ public class GoParser implements PsiParser {
     result_ = result_ && consumeToken(builder_, DOT);
     pinned_ = result_; // pin = 2
     result_ = result_ && consumeToken(builder_, IDENTIFIER);
-    exit_section_(builder_, level_, marker_, QUALIFIED_IDENT, result_, pinned_, null);
+    exit_section_(builder_, level_, marker_, QUALIFIED_IDENTIFIER, result_, pinned_, null);
     return result_ || pinned_;
   }
 
@@ -2651,13 +2651,13 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // QualifiedIdent | identifier
+  // QualifiedIdentifier | identifier
   public static boolean TypeName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeName")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = QualifiedIdent(builder_, level_ + 1);
+    result_ = QualifiedIdentifier(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, IDENTIFIER);
     exit_section_(builder_, marker_, TYPE_NAME, result_);
     return result_;
@@ -3191,13 +3191,13 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // QualifiedIdent | identifier
+  // QualifiedIdentifier | identifier
   public static boolean OperandName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "OperandName")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, null);
-    result_ = QualifiedIdent(builder_, level_ + 1);
+    result_ = QualifiedIdentifier(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, IDENTIFIER);
     exit_section_(builder_, level_, marker_, OPERAND_NAME, result_, false, null);
     return result_;

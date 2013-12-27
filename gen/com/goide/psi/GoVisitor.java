@@ -262,7 +262,7 @@ public class GoVisitor extends PsiElementVisitor {
     visitType(o);
   }
 
-  public void visitQualifiedIdent(@NotNull GoQualifiedIdent o) {
+  public void visitQualifiedIdentifier(@NotNull GoQualifiedIdentifier o) {
     visitExpression(o);
   }
 

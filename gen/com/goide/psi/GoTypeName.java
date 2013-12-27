@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoTypeName extends GoCompositeElement {
 
   @Nullable
-  GoQualifiedIdent getQualifiedIdent();
+  GoQualifiedIdentifier getQualifiedIdentifier();
 
   @Nullable
   PsiElement getIdentifier();

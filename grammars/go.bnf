@@ -63,7 +63,7 @@
   SEMICOLON_SYNTHETIC  = '<NL>'
   TYPE_                = 'type'
 
-  extends(".*(Expr|Literal|QualifiedIdent|identifier|Lit|OperandName)")=Expression
+  extends(".*(Expr|Literal|QualifiedIdentifier|identifier|Lit|OperandName)")=Expression
   pin(".*Statement")=1
   extends(".*Statement")=Statement
   extends(".*Type")=Type
@@ -81,7 +81,7 @@ ImportDeclaration ::= import ( ImportSpec | '(' ( ImportSpec semi )* ')' ) {pin=
 ImportSpec ::= [ '.' | PackageName ] string
 
 Type ::= TypeName | TypeLit | '(' Type ')' {pin(".*")=1}
-TypeName ::= QualifiedIdent | identifier
+TypeName ::= QualifiedIdentifier | identifier
 TypeLit ::=
     ArrayOrSliceType
   | StructType
@@ -188,9 +188,9 @@ Literal ::=
   | rune
   | string
   | char
-OperandName ::= QualifiedIdent | identifier
+OperandName ::= QualifiedIdentifier | identifier
 
-QualifiedIdent ::= PackageName '.' identifier {pin=2}
+QualifiedIdentifier ::= PackageName '.' identifier {pin=2}
 
 CompositeLit ::= Expression LiteralValue
 LiteralTypeExpr ::=

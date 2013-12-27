@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoQualifiedIdentImpl extends GoExpressionImpl implements GoQualifiedIdent {
+public class GoQualifiedIdentifierImpl extends GoExpressionImpl implements GoQualifiedIdentifier {
 
-  public GoQualifiedIdentImpl(ASTNode node) {
+  public GoQualifiedIdentifierImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitQualifiedIdent(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitQualifiedIdentifier(this);
     else super.accept(visitor);
   }
 

@@ -23,8 +23,8 @@ public class GoTypeNameImpl extends GoCompositeElementImpl implements GoTypeName
 
   @Override
   @Nullable
-  public GoQualifiedIdent getQualifiedIdent() {
-    return findChildByClass(GoQualifiedIdent.class);
+  public GoQualifiedIdentifier getQualifiedIdentifier() {
+    return findChildByClass(GoQualifiedIdentifier.class);
   }
 
   @Override
