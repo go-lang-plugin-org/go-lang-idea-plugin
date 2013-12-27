@@ -13,6 +13,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.util.text.StringUtilRt;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -44,6 +46,36 @@ public class GoRunConfigurationProducer extends RunConfigurationProducer {
 
     @Override
     public boolean isConfigurationFromContext(RunConfiguration configuration, ConfigurationContext context) {
+        if ( configuration.getType() != getConfigurationType() )
+            return false;
+
+        GoFile file = locationToFile(context.getLocation());
+        if ( file == null || file.getMainFunction() == null)
+            return false;
+
+        VirtualFile virtualFile = file.getVirtualFile();
+        if (virtualFile == null)
+            return false;
+
+        GoApplicationConfiguration goAppConfig = (GoApplicationConfiguration) configuration;
+
+        try {
+
+            Project project = file.getProject();
+            Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
+            String name = file.getVirtualFile().getCanonicalPath();
+
+            GoApplicationModuleBasedConfiguration configurationModule = goAppConfig.getConfigurationModule();
+
+            if ( ! StringUtil.equals(goAppConfig.workingDir, project.getBasePath()) ||
+                 ! StringUtil.equals(goAppConfig.scriptName, name) ||
+                 ! (configurationModule != null && module != null && module.equals(configurationModule.getModule())))
+                return false;
+
+            return true;
+        } catch (Exception ex) {
+            LOG.error(ex);
+        }
         return false;
     }
 
