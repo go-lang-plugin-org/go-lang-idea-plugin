@@ -32,11 +32,13 @@ public class GoCompletionContributor extends CompletionContributor {
     });
   }
 
-  private static LookupElement createKeywordLookupElement(String keyword) {
+  @NotNull
+  private static LookupElement createKeywordLookupElement(@NotNull String keyword) {
     return LookupElementBuilder.create(keyword).withBoldness(true);
   }
 
-  private static Collection<String> suggestKeywords(PsiElement position) {
+  @NotNull
+  private static Collection<String> suggestKeywords(@NotNull PsiElement position) {
     TextRange posRange = position.getTextRange();
     GoFile posFile = (GoFile) position.getContainingFile();
     final TextRange range = new TextRange(0, posRange.getStartOffset());
