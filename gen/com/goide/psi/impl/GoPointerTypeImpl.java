@@ -22,9 +22,9 @@ public class GoPointerTypeImpl extends GoTypeImpl implements GoPointerType {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoType getType() {
-    return findNotNullChildByClass(GoType.class);
+    return findChildByClass(GoType.class);
   }
 
 }

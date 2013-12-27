@@ -22,9 +22,9 @@ public class GoFunctionTypeImpl extends GoTypeImpl implements GoFunctionType {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoSignature getSignature() {
-    return findNotNullChildByClass(GoSignature.class);
+    return findChildByClass(GoSignature.class);
   }
 
   @Override

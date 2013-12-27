@@ -81,7 +81,7 @@ ImportDeclaration ::= import ( ImportSpec | '(' ( ImportSpec semi )* ')' ) {pin=
 ImportSpec ::= [ '.' | PackageName ] string
 
 Type ::= TypeName | TypeLit | '(' Type ')' {pin(".*")=1}
-TypeName ::= identifier | QualifiedIdent
+TypeName ::= QualifiedIdent | identifier
 TypeLit ::=
     ArrayOrSliceType
   | StructType
@@ -98,10 +98,10 @@ FieldDeclaration ::= (IdentifierList Type | AnonymousField) [ Tag ]
 AnonymousField ::= [ '*' ] TypeName
 Tag ::= string
 
-PointerType ::= '*' BaseType
+PointerType ::= '*' BaseType {pin=1}
 BaseType ::= Type
 
-FunctionType ::= func Signature
+FunctionType ::= func Signature {pin=1}
 Signature ::= Parameters [ Result ]
 Result ::= Parameters | Type
 Parameters ::= '(' [ ParameterList [ ',' ] ] ')'
@@ -173,7 +173,7 @@ FunctionName ::= identifier
 Function ::= Signature FunctionBody
 FunctionBody ::= Block
 
-MethodDeclaration ::= func Receiver identifier ( Function | Signature ) {pin=2}
+MethodDeclaration ::= func Receiver identifier ( Function | Signature ) {pin=2 extends=FunctionDeclaration}
 Receiver ::= '(' [ identifier ] [ '*' ] identifier ')'
 
 Literal ::=
@@ -186,9 +186,9 @@ Literal ::=
   | imaginary
   | rune
   | string
-OperandName ::= identifier | QualifiedIdent
+OperandName ::= QualifiedIdent | identifier
 
-QualifiedIdent ::= PackageName '.' identifier
+QualifiedIdent ::= PackageName '.' identifier {pin=2}
 
 CompositeLit ::= Expression LiteralValue
 LiteralTypeExpr ::=
@@ -260,16 +260,20 @@ CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')'
 ConversionExpr ::= Type '(' Expression [ ',' ] ')'
 
-LabeledStatement ::= identifier ':' Statement {pin=0}
+LabeledStatement ::= identifier ':' Statement {pin=2}
 SendStatement ::= Expression '<-' Expression {pin=2}
 AssignmentStatement ::= ExpressionList assign_op ExpressionList {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
-IfStatement ::= if [ SimpleStatement semi ] Expression Block [ else ( IfStatement | Block ) ] {pin(".*")="if|else"}
+IfStatement ::= if Condition Block [ else ( IfStatement | Block ) ] {pin(".*")="if|else"}
 SwitchStatement ::= ExprSwitchStatement | TypeSwitchStatement
-ExprSwitchStatement ::= switch [ SimpleStatement semi ] [ Expression ] '{' ( ExprCaseClause )* '}'
+ExprSwitchStatement ::= switch Condition '{' ( ExprCaseClause )* '}'
+
+private Condition ::= SimpleStatementOpt [ Expression ]
+private SimpleStatementOpt ::= [SimpleStatement semi]
+
 ExprCaseClause ::= ExprSwitchCase ':' ( Statement semi )*
 ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
-TypeSwitchStatement  ::= switch [ SimpleStatement semi ] TypeSwitchGuard '{' ( TypeCaseClause )* '}'
+TypeSwitchStatement  ::= switch SimpleStatementOpt TypeSwitchGuard '{' ( TypeCaseClause )* '}'
 TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' type ')'
 TypeCaseClause ::= TypeSwitchCase ':' ( Statement semi )*
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}

@@ -219,7 +219,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitMethodDeclaration(@NotNull GoMethodDeclaration o) {
-    visitTopLevelDeclaration(o);
+    visitFunctionDeclaration(o);
   }
 
   public void visitMethodExpr(@NotNull GoMethodExpr o) {

@@ -101,7 +101,6 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
           List<GoTopLevelDeclaration> declarations = ((GoFile) myElement).getDeclarations();
           for (GoTopLevelDeclaration o : declarations) result.add(new Element(o));
         }
-
         return result.toArray(new TreeElement[result.size()]);
       }
 

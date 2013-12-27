@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoFunctionType extends GoType {
 
-  @NotNull
+  @Nullable
   GoSignature getSignature();
 
   @NotNull

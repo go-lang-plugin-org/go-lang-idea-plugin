@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoPointerType extends GoType {
 
-  @NotNull
+  @Nullable
   GoType getType();
 
 }

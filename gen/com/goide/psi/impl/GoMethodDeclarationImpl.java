@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoMethodDeclarationImpl extends GoTopLevelDeclarationImpl implements GoMethodDeclaration {
+public class GoMethodDeclarationImpl extends GoFunctionDeclarationImpl implements GoMethodDeclaration {
 
   public GoMethodDeclarationImpl(ASTNode node) {
     super(node);
