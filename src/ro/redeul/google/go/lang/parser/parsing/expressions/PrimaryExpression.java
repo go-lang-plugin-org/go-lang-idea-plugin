@@ -214,9 +214,9 @@ class PrimaryExpression implements GoElementTypes {
                                              PsiBuilder.Marker mark) {
 
         ParserUtils.getToken(builder, pLBRACK);
-
+        boolean allowComposite = parser.resetFlag(AllowCompositeLiteral, true);
         parser.parseExpression(builder);
-
+        parser.resetFlag(AllowCompositeLiteral, allowComposite);
         boolean isSlice = false;
         if (builder.getTokenType() == oCOLON) {
             builder.advanceLexer();
