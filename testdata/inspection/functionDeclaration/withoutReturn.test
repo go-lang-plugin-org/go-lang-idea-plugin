@@ -57,6 +57,12 @@ func Ok7() bool {
     }
 }
 
+func Ok8() bool {
+    for a:=0;;a++ {
+
+    }
+}
+
 func NoReturn1() int {
 /*begin*/}/*end.Function ends without a return statement|AddReturnStmtFix|RemoveFunctionResultFix*/
 

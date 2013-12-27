@@ -54,7 +54,8 @@ class StructType implements GoElementTypes {
         if ( identifiersCount == 1 &&
             (ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) ||
                 ParserUtils.lookAhead(builder, GoTokenTypeSets.litSTRING) ||
-                ParserUtils.lookAhead(builder, GoTokenTypeSets.oDOT))) {
+                ParserUtils.lookAhead(builder, GoTokenTypeSets.oDOT) ||
+                ParserUtils.lookAhead(builder, pRCURLY))) {
             fieldDeclaration.rollbackTo();
             fieldDeclaration = builder.mark();
             isAnonymous = true;

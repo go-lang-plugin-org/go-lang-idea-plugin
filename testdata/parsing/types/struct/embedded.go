@@ -3,6 +3,7 @@ type T struct {
     T2
     x int
 }
+type T3 struct { T }
 /**-----
 Go file
   PackageDeclaration(main)
@@ -37,4 +38,23 @@ Go file
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('int')
         PsiWhiteSpace('\n')
+        PsiElement(})('}')
+  PsiWhiteSpace('\n')
+  TypeDeclarationsImpl
+    PsiElement(KEYWORD_TYPE)('type')
+    PsiWhiteSpace(' ')
+    TypeSpecImpl
+      TypeNameDeclaration(T3)
+        PsiElement(IDENTIFIER)('T3')
+      PsiWhiteSpace(' ')
+      TypeStructImpl
+        PsiElement(KEYWORD_STRUCT)('struct')
+        PsiWhiteSpace(' ')
+        PsiElement({)('{')
+        PsiWhiteSpace(' ')
+        TypeStructFieldAnonymousImpl
+          TypeNameImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('T')
+        PsiWhiteSpace(' ')
         PsiElement(})('}')
