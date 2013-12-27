@@ -27,6 +27,9 @@ public class GoUsageTest extends GoFileBasedPsiTestCase {
     public static final String REF_MARKER = "/*ref*/";
 
     public void testLocalVariable() throws Exception { doTest(); }
+    public void testLocalCaseVariable() throws Exception { doTest(); }
+    public void testLocalCaseVariable2() throws Exception { doTest(); }
+    public void testLocalCaseVariable3() throws Exception { doTest(); }
     public void testFunctionParameter() throws Exception { doTest(); }
     public void testFunctionResult() throws Exception { doTest(); }
     public void testMethodReceiver() throws Exception { doTest(); }

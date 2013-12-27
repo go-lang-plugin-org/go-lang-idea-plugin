@@ -22,6 +22,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeAndVarsStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
@@ -424,7 +425,16 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         }
 
         public boolean isDefinedInCurrentScope(GoPsiElement element) {
-            return variables.get(variables.size() - 1).containsKey(element.getText());
+            boolean isInCase = false;
+            PsiElement elem = element;
+            while (!(elem instanceof GoFile) && !isInCase) {
+                elem = elem.getParent();
+                if (elem instanceof GoSwitchTypeClause) {
+                    isInCase = true;
+                }
+            }
+
+            return variables.get(variables.size() - 1).containsKey(element.getText()) && !isInCase;
         }
 
         public void addDefinition(GoPsiElement element) {
