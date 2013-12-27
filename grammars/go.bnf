@@ -190,7 +190,7 @@ Literal ::=
   | char
 OperandName ::= QualifiedIdentifier | identifier
 
-QualifiedIdentifier ::= PackageName '.' identifier {pin=2}
+QualifiedIdentifier ::= PackageName '.' identifier
 
 CompositeLit ::= Expression LiteralValue
 LiteralTypeExpr ::=
@@ -230,7 +230,7 @@ AddExpr ::= Expression add_op Expression
 MulExpr ::= Expression mul_op Expression
 ParentheziedExpr ::= '(' Expression ')'
 
-BuiltinCallExpr ::= identifier '(' [ BuiltinArgs [ ',' ] ] ')' {pin=2}
+BuiltinCallExpr ::= identifier '(' [ BuiltinArgs [ ',' ] ] ')'
 BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
 
 private MaxGroup ::=

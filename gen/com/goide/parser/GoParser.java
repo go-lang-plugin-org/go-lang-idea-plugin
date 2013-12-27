@@ -1966,14 +1966,12 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "QualifiedIdentifier")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    Marker marker_ = enter_section_(builder_);
     result_ = PackageName(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, DOT);
-    pinned_ = result_; // pin = 2
     result_ = result_ && consumeToken(builder_, IDENTIFIER);
-    exit_section_(builder_, level_, marker_, QUALIFIED_IDENTIFIER, result_, pinned_, null);
-    return result_ || pinned_;
+    exit_section_(builder_, marker_, QUALIFIED_IDENTIFIER, result_);
+    return result_;
   }
 
   /* ********************************************************** */
@@ -3032,7 +3030,7 @@ public class GoParser implements PsiParser {
   // 5: PREFIX(UnaryExpr)
   // 6: ATOM(BuiltinCallExpr)
   // 7: ATOM(MethodExpr)
-  // 8: ATOM(OperandName) ATOM(LiteralTypeExpr) PREFIX(ConversionExpr) BINARY(SelectorExpr) BINARY(IndexExpr) POSTFIX(SliceExpr) POSTFIX(TypeAssertionExpr) POSTFIX(CallExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit)
+  // 8: ATOM(OperandName) ATOM(LiteralTypeExpr) PREFIX(ConversionExpr) BINARY(SelectorExpr) BINARY(IndexExpr) POSTFIX(SliceExpr) POSTFIX(TypeAssertionExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit) POSTFIX(CallExpr)
   // 9: PREFIX(ParentheziedExpr)
   public static boolean Expression(PsiBuilder builder_, int level_, int priority_) {
     if (!recursion_guard_(builder_, level_, "Expression")) return false;
@@ -3107,15 +3105,15 @@ public class GoParser implements PsiParser {
         marker_.drop();
         left_marker_.precede().done(TYPE_ASSERTION_EXPR);
       }
-      else if (priority_ < 8 && ArgumentList(builder_, level_ + 1)) {
-        result_ = true;
-        marker_.drop();
-        left_marker_.precede().done(CALL_EXPR);
-      }
       else if (priority_ < 8 && LiteralValue(builder_, level_ + 1)) {
         result_ = true;
         marker_.drop();
         left_marker_.precede().done(COMPOSITE_LIT);
+      }
+      else if (priority_ < 8 && CallExpr_0(builder_, level_ + 1)) {
+        result_ = true;
+        marker_.drop();
+        left_marker_.precede().done(CALL_EXPR);
       }
       else {
         exit_section_(builder_, marker_, null, false);
@@ -3142,15 +3140,13 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "BuiltinCallExpr")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, IDENTIFIER);
     result_ = result_ && consumeToken(builder_, LPAREN);
-    pinned_ = result_; // pin = 2
-    result_ = result_ && report_error_(builder_, BuiltinCallExpr_2(builder_, level_ + 1));
-    result_ = pinned_ && consumeToken(builder_, RPAREN) && result_;
-    exit_section_(builder_, level_, marker_, BUILTIN_CALL_EXPR, result_, pinned_, null);
-    return result_ || pinned_;
+    result_ = result_ && BuiltinCallExpr_2(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, RPAREN);
+    exit_section_(builder_, marker_, BUILTIN_CALL_EXPR, result_);
+    return result_;
   }
 
   // [ BuiltinArgs [ ',' ] ]
@@ -3409,6 +3405,37 @@ public class GoParser implements PsiParser {
     result_ = result_ && Function(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, FUNCTION_LIT, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  // &(!'.') ArgumentList
+  private static boolean CallExpr_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CallExpr_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = CallExpr_0_0(builder_, level_ + 1);
+    result_ = result_ && ArgumentList(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // &(!'.')
+  private static boolean CallExpr_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CallExpr_0_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _AND_, null);
+    result_ = CallExpr_0_0_0(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  // !'.'
+  private static boolean CallExpr_0_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CallExpr_0_0_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NOT_, null);
+    result_ = !consumeToken(builder_, DOT);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
   }
 
   public static boolean ParentheziedExpr(PsiBuilder builder_, int level_) {
