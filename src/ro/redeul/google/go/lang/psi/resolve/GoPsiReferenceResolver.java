@@ -117,10 +117,10 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
                 if (refName.contains(".")) {
                     name = currentPackageName + "." + name;
                 }
-                if (incomplete && name.startsWith(refName)) {
+                if (incomplete && name.toLowerCase().startsWith(refName.toLowerCase())) {
                     addDeclaration(id);
                     return;
-                }else if (refName.equals(name)) {
+                } else if (refName.equals(name)) {
                     addDeclaration(id);
                     return;
                 }

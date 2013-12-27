@@ -17,6 +17,10 @@ public class GoVariablesCompletionTestCase extends GoCompletionTestCase{
         doTestVariants();
     }
 
+    public void testLocalVarVariantsCaseInsensitive() {
+        doTestVariants();
+    }
+
     public void testStructFieldViaChannelExpression() {
         doTestVariants();
     }
