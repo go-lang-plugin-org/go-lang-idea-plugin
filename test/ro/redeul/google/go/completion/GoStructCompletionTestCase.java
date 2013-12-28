@@ -36,4 +36,8 @@ public class GoStructCompletionTestCase extends GoCompletionTestCase{
     public void testMethodsOfTypePointerCompletion(){
         doTestVariants();
     }
+
+    public void testPublicStructMemberFromImported() {
+        doTestVariants();
+    }
 }

@@ -3,6 +3,7 @@ package ro.redeul.google.go.completion;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 
@@ -45,11 +46,10 @@ public abstract class GoCompletionTestCase
 
         if (testRoot != null && testRoot.isDirectory()) {
             String path = getTestName(false);
-            myFixture.copyDirectoryToProject(path, path);
-            files.add(getTestName(false) + File.separator + getTestName(false) + ".go");
-        } else {
-            files.add(getTestName(false) + ".go");
+            myFixture.copyDirectoryToProject(path, "");
         }
+
+        files.add(getTestName(false) + ".go");
 
         Collections.reverse(files);
         myFixture.configureByFiles(files.toArray(new String[files.size()]));
