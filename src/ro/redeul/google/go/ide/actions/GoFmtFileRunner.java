@@ -7,6 +7,8 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -63,7 +65,10 @@ public class GoFmtFileRunner extends AnAction {
         FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
         VirtualFile selectedFile = fileEditorManager.getSelectedFiles()[0];
         String fileName = selectedFile.getCanonicalPath();
-
+        Document doc = FileDocumentManager.getInstance().getDocument(selectedFile);
+        if (doc != null) {
+            FileDocumentManager.getInstance().saveDocument(doc);
+        }
         try {
             ToolWindowManager manager = ToolWindowManager.getInstance(project);
             ToolWindow window = manager.getToolWindow(ID);
