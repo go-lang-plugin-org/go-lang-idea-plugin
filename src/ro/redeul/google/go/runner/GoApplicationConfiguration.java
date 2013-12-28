@@ -301,6 +301,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
         };
 
         state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(project));
+        state.addConsoleFilters(new GoConsoleFilter(project, project.getBasePath()));
         return state;
     }
 

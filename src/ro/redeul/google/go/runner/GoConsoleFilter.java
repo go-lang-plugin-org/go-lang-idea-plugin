@@ -6,16 +6,18 @@ import com.intellij.execution.filters.OpenFileHyperlinkInfo;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
+import java.io.File;
+import java.nio.file.FileSystem;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class GoTestConsoleFilter implements Filter {
-    private static final Pattern MSG_LINE = Pattern.compile("^\t(.*):(\\d+):.*\n?");
+class GoConsoleFilter implements Filter {
+    private static final Pattern MSG_LINE = Pattern.compile("\t?(\\S+\\.\\w+):(\\d+)[:\\s].*\n");
 
     private final Project project;
     private final String packageDir;
 
-    public GoTestConsoleFilter(Project project, String packageDir) {
+    public GoConsoleFilter(Project project, String packageDir) {
         this.project = project;
         this.packageDir = packageDir;
     }
@@ -34,8 +36,14 @@ class GoTestConsoleFilter implements Filter {
         } catch (NumberFormatException e) {
             return null;
         }
-
-        VirtualFile vf = project.getBaseDir().findFileByRelativePath(packageDir + "/" + fileName);
+        VirtualFile vf;
+        if (fileName.startsWith("/")||fileName.contains(":")) {
+            vf = project.getBaseDir().getFileSystem().findFileByPath(fileName);
+        }else if (fileName.contains("/")){
+            vf = project.getBaseDir().findFileByRelativePath(fileName);
+        }else{
+            vf = project.getBaseDir().getFileSystem().findFileByPath(packageDir + "/" + fileName);
+        }
         if (vf == null) {
             return null;
         }

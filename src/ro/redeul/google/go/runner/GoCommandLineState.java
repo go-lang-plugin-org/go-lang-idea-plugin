@@ -209,7 +209,7 @@ class GoCommandLineState extends CommandLineState {
 
         ConsoleView console = createAndAttachConsole("GoTest", processHandler, consoleProperties, getEnvironment());
         Project project = consoleProperties.getProject();
-        console.addMessageFilter(new GoTestConsoleFilter(project, packageDir));
+        console.addMessageFilter(new GoConsoleFilter(project, packageDir));
         return new DefaultExecutionResult(console, processHandler, createActions(console, processHandler, executor));
     }
 }
