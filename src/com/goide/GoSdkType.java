@@ -1,5 +1,6 @@
 package com.goide;
 
+import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
@@ -44,15 +45,38 @@ public class GoSdkType extends SdkType {
   public String suggestHomePath() {
     if (SystemInfo.isWindows) {
       return "C:\\cygwin\\bin";
+    } else {
+      String fromEnv = findPathInEnvironment();
+      if (fromEnv != null) {
+        return fromEnv;
+      }
+      else if (SystemInfo.isMac) {
+        String defaultPath = "/usr/local/go";
+        if (new File(defaultPath).exists()) return defaultPath;
+        String macPorts = "/opt/local/lib/go";
+        if (new File(macPorts).exists()) return macPorts;
+        return null;
+      } 
+      else if (SystemInfo.isLinux) {
+        return "/usr/lib/go";
+      }
     }
-    else if (SystemInfo.isMac) {
-      String macPorts = "/opt/local/lib/go";
-      if (new File(macPorts).exists()) return macPorts;
-      // todo: home brew root
-      return null;
-    }
-    else if (SystemInfo.isLinux) {
-      return "/usr/lib/go";
+    return null;
+  }
+
+  @Nullable
+  private static String findPathInEnvironment() {
+    File fileFromPath = PathEnvironmentVariableUtil.findInPath("go");
+    if (fileFromPath != null) {
+      File canonicalFile;
+      try {
+        canonicalFile = fileFromPath.getCanonicalFile();
+        String path = canonicalFile.getPath();
+        if (path.endsWith("bin/go")) {
+          return StringUtil.trimEnd(path, "bin/go");
+        }
+      } catch (IOException ignore) {
+      }
     }
     return null;
   }
@@ -73,7 +97,7 @@ public class GoSdkType extends SdkType {
   @Nullable
   @Override
   public String getVersionString(@NotNull String sdkHome) {
-     // todo
+    // todo
     try {
       String s = FileUtil.loadFile(new File(sdkHome, "src/pkg/runtime/zversion.go"));
       List<String> split = StringUtil.split(s, " ");
