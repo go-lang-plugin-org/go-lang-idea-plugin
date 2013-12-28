@@ -1,10 +1,6 @@
 package ro.redeul.google.go.annotator;
 
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.QuickFix;
-import com.intellij.codeInspection.ex.QuickFixWrapper;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -13,9 +9,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
-import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
-import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -38,8 +32,6 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
-import java.util.List;
-
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.inspection.InspectionUtil.getProblemRange;
 import static ro.redeul.google.go.lang.psi.patterns.GoElementPatterns.GLOBAL_VAR_DECL;
@@ -56,7 +48,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     implements Annotator {
 
     private AnnotationHolder annotationHolder;
-    private InspectionManager inspectionManager;
 
     public GoAnnotator() {
 
@@ -69,12 +60,9 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
             try {
                 annotationHolder = holder;
-                inspectionManager =
-                    InspectionManager.getInstance(element.getProject());
 
                 goPsiElement.accept(this);
             } finally {
-                inspectionManager = null;
                 annotationHolder = null;
             }
         }
@@ -120,30 +108,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         }
 
         return annotation;
-    }
-
-    /**
-     * Add all problems to annotation holder.
-     *
-     * @param problems problems to be added to annotation holder
-     */
-    private void addProblems(List<ProblemDescriptor> problems) {
-        for (ProblemDescriptor pd : problems) {
-            Annotation anno = toAnnotation(pd);
-            anno.setHighlightType(pd.getHighlightType());
-            QuickFix[] fixes = pd.getFixes();
-            if (fixes == null) {
-                continue;
-            }
-
-            for (int i = 0; i < fixes.length; i++) {
-                if (fixes[i] instanceof IntentionAction) {
-                    anno.registerFix((IntentionAction) fixes[i]);
-                } else {
-                    anno.registerFix(QuickFixWrapper.wrap(pd, i));
-                }
-            }
-        }
     }
 
     @Override
@@ -265,15 +229,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         }
 
         annotation.setTextAttributes(GoSyntaxHighlighter.VARIABLE);
-    }
-
-    @Override
-    public void visitFile(GoFile file) {
-        visitElement(file);
-
-        InspectionResult result = new InspectionResult(inspectionManager);
-        new GoVariableUsageStatVisitor(result).visitFile(file);
-        addProblems(result.getProblems());
     }
 
     @Override

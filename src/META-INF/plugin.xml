@@ -449,6 +449,12 @@
                          displayName="Highlights incorrect variable declaration"
                          level="ERROR"
                          implementationClass="ro.redeul.google.go.inspection.VarDeclarationInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
+                         shortName="UnusedVariable"
+                         displayName="Highlights unused variable"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.UnusedVariableInspection"/>
 
 
         <programRunner
