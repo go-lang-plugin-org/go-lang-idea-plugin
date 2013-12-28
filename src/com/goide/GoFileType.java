@@ -1,7 +1,6 @@
 package com.goide;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.util.IconLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,7 +8,6 @@ import javax.swing.*;
 
 public class GoFileType extends LanguageFileType {
   public static final LanguageFileType INSTANCE = new GoFileType();
-  private static final Icon ICON = IconLoader.findIcon("/icons/go.png");
 
   protected GoFileType() {
     super(GoLanguage.INSTANCE);
@@ -36,6 +34,6 @@ public class GoFileType extends LanguageFileType {
   @Nullable
   @Override
   public Icon getIcon() {
-    return ICON;
+    return GoIcons.ICON;
   }
 }

@@ -21,6 +21,10 @@
     <lang.braceMatcher language="go" implementationClass="com.goide.GoBraceMatcher"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
     <completion.contributor language="go" implementationClass="com.goide.GoCompletionContributor"/>
+
+    <sdkType implementation="com.goide.GoSdkType"/>
+    <!--contains java deps-->
+    <moduleType id="GO_MODULE" implementationClass="com.goide.GoModuleType"/>
   </extensions>
 
 </idea-plugin>
