@@ -1,10 +1,6 @@
 package ro.redeul.google.go.annotator;
 
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.QuickFix;
-import com.intellij.codeInspection.ex.QuickFixWrapper;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -13,19 +9,15 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
-import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
-import ro.redeul.google.go.inspection.*;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
@@ -39,8 +31,6 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-
-import java.util.List;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.inspection.InspectionUtil.getProblemRange;
@@ -58,7 +48,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     implements Annotator {
 
     private AnnotationHolder annotationHolder;
-    private InspectionManager inspectionManager;
 
     public GoAnnotator() {
 
@@ -71,12 +60,9 @@ public class GoAnnotator extends GoRecursiveElementVisitor
 
             try {
                 annotationHolder = holder;
-                inspectionManager =
-                    InspectionManager.getInstance(element.getProject());
 
                 goPsiElement.accept(this);
             } finally {
-                inspectionManager = null;
                 annotationHolder = null;
             }
         }
@@ -122,30 +108,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         }
 
         return annotation;
-    }
-
-    /**
-     * Add all problems to annotation holder.
-     *
-     * @param problems problems to be added to annotation holder
-     */
-    private void addProblems(List<ProblemDescriptor> problems) {
-        for (ProblemDescriptor pd : problems) {
-            Annotation anno = toAnnotation(pd);
-            anno.setHighlightType(pd.getHighlightType());
-            QuickFix[] fixes = pd.getFixes();
-            if (fixes == null) {
-                continue;
-            }
-
-            for (int i = 0; i < fixes.length; i++) {
-                if (fixes[i] instanceof IntentionAction) {
-                    anno.registerFix((IntentionAction) fixes[i]);
-                } else {
-                    anno.registerFix(QuickFixWrapper.wrap(pd, i));
-                }
-            }
-        }
     }
 
     @Override
@@ -270,15 +232,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     }
 
     @Override
-    public void visitFile(GoFile file) {
-        visitElement(file);
-
-        InspectionResult result = new InspectionResult(inspectionManager);
-        new GoVariableUsageStatVisitor(result).visitFile(file);
-        addProblems(result.getProblems());
-    }
-
-    @Override
     public void visitTypeName(GoPsiTypeName typeName) {
         Annotation ann = annotationHolder.createInfoAnnotation(typeName, null);
         ann.setTextAttributes(GoSyntaxHighlighter.TYPE_NAME);
@@ -295,14 +248,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     public void visitMethodDeclaration(GoMethodDeclaration declaration) {
         super.visitMethodDeclaration(declaration);
 
-        InspectionResult result = new InspectionResult(inspectionManager);
-        FunctionDuplicateArgumentInspection.checkFunction(result, declaration);
-        FunctionVaraidicParameterInspection.checkFunction(result, declaration);
-        FunctionRedeclareParameterInResultInspection.checkFunction(result, declaration);
-        FunctionReturnParameterCountInspection.checkFunction(result, declaration);
-        FunctionWithResultButWihtoutReturnInspection.checkFunction(result, declaration);
-        addProblems(result.getProblems());
-
         PsiElement nameIdentifier = declaration.getNameIdentifier();
         if (nameIdentifier != null) {
             Annotation ann = annotationHolder.createInfoAnnotation(
@@ -315,42 +260,12 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
         super.visitFunctionDeclaration(declaration);
 
-        InspectionResult result = new InspectionResult(inspectionManager);
-        FunctionDuplicateArgumentInspection.checkFunction(result, declaration);
-        FunctionVaraidicParameterInspection.checkFunction(result, declaration);
-        FunctionRedeclareParameterInResultInspection.checkFunction(result, declaration);
-        FunctionReturnParameterCountInspection.checkFunction(result, declaration);
-        FunctionWithResultButWihtoutReturnInspection.checkFunction(result, declaration);
-        addProblems(result.getProblems());
-
         PsiElement nameIdentifier = declaration.getNameIdentifier();
         if (nameIdentifier != null) {
             Annotation ann = annotationHolder.createInfoAnnotation(
                 nameIdentifier, null);
             ann.setTextAttributes(GoSyntaxHighlighter.METHOD_DECLARATION);
         }
-    }
-
-    @Override
-    public void visitFunctionLiteral(GoLiteralFunction literal) {
-        super.visitFunctionLiteral(literal);
-
-        InspectionResult result = new InspectionResult(inspectionManager);
-        FunctionDuplicateArgumentInspection.checkFunction(result, literal);
-        FunctionVaraidicParameterInspection.checkFunction(result, literal);
-        FunctionRedeclareParameterInResultInspection.checkFunction(result, literal);
-        FunctionReturnParameterCountInspection.checkFunction(result, literal);
-        FunctionWithResultButWihtoutReturnInspection.checkFunction(result, literal);
-        addProblems(result.getProblems());
-    }
-
-    @Override
-    public void visitConstDeclarations(GoConstDeclarations declarations) {
-        super.visitConstDeclarations(declarations);
-
-        InspectionResult result = new InspectionResult(inspectionManager);
-        ConstDeclarationInspection.checkConstDeclarations(declarations, result);
-        addProblems(result.getProblems());
     }
 
     @Override
@@ -362,10 +277,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
                 .createInfoAnnotation(identifier, null)
                 .setTextAttributes(GoSyntaxHighlighter.CONST);
         }
-
-        InspectionResult result = new InspectionResult(inspectionManager);
-        ConstDeclarationInspection.checkConstDeclaration(declaration, result);
-        addProblems(result.getProblems());
     }
 
     @Override
@@ -411,10 +322,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
                 .createInfoAnnotation(identifier, null)
                 .setTextAttributes(type);
         }
-
-        InspectionResult result = new InspectionResult(inspectionManager);
-        VarDeclarationInspection.checkVar(declaration, result);
-        addProblems(result.getProblems());
     }
 
     @Override

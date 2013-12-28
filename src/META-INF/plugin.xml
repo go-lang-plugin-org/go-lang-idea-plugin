@@ -385,6 +385,36 @@
                          implementationClass="ro.redeul.google.go.inspection.FunctionCallInspection"/>
         <localInspection groupName="Google Go" language="Google Go"
                          enabledByDefault="true"
+                         shortName="FunctionDuplicateArgument"
+                         displayName="Highlights function duplicate argument"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.FunctionDuplicateArgumentInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
+                         shortName="FunctionReturnParameterCount"
+                         displayName="Highlights incorrect function return parameter count"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.FunctionReturnParameterCountInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
+                         shortName="FunctionRedeclareParameterInResult"
+                         displayName="Highlights function redeclare parameter in result"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.FunctionRedeclareParameterInResultInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
+                         shortName="FunctionVaraidicParameter"
+                         displayName="Highlights incorrect function varaidic parameter"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.FunctionVaraidicParameterInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
+                         shortName="FunctionWithResultButWihtoutReturn"
+                         displayName="Highlights function with result but without return"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.FunctionWithResultButWihtoutReturnInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
                          shortName="TypeStructDeclaration"
                          displayName="Highlights incorrect struct declaration"
                          level="ERROR"
@@ -407,6 +437,25 @@
                          displayName="Highlights mismatched types"
                          level="ERROR"
                          implementationClass="ro.redeul.google.go.inspection.TypeMatchInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
+                         shortName="ConstDeclaration"
+                         displayName="Highlights incorrect constant declaration"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.ConstDeclarationInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
+                         shortName="VarDeclaration"
+                         displayName="Highlights incorrect variable declaration"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.VarDeclarationInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
+                         shortName="UnusedVariable"
+                         displayName="Highlights unused variable"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.UnusedVariableInspection"/>
+
 
         <programRunner
                 implementation="ro.redeul.google.go.runner.GoApplicationRunner"/>
