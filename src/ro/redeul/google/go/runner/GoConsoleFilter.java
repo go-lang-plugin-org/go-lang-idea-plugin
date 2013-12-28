@@ -37,8 +37,7 @@ class GoConsoleFilter implements Filter {
             return null;
         }
         VirtualFile vf;
-        char firstChar = fileName.charAt(0);
-        if (fileName.startsWith("/")) {
+        if (fileName.startsWith("/")||fileName.contains(":")) {
             vf = project.getBaseDir().getFileSystem().findFileByPath(fileName);
         }else if (fileName.contains("/")){
             vf = project.getBaseDir().findFileByRelativePath(fileName);
