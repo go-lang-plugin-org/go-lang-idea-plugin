@@ -134,7 +134,7 @@ public class GoSdkType extends SdkType {
   @Override
   public void setupSdkPaths(@NotNull Sdk sdk) {
     SdkModificator modificator = sdk.getSdkModificator();
-    add(modificator, new File(sdk.getHomePath(), "src")); // scr is enough at the moment, possible process binaries from pkg
+    add(modificator, new File(sdk.getHomePath(), "src/pkg")); // scr/pkg is enough at the moment, possible process binaries from pkg
     modificator.commitChanges();
   }
 
