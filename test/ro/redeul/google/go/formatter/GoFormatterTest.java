@@ -28,6 +28,7 @@ public class GoFormatterTest extends GoEditorAwareTestCase {
     public void testTypeswitch() throws Exception { doTest(); }
     */
 
+    public void testIssue_gh255() throws  Exception { doTest(); }
     public void testIssue_gh373() throws  Exception { doTest(); }
 
     @Override
