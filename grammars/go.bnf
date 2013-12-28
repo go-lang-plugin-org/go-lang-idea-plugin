@@ -220,7 +220,7 @@ Expression ::=
     | BuiltinCallExpr
     | MethodExpr
     | MaxGroup
-    | ParentheziedExpr
+    | ParenthesesExpr
 
 OrExpr ::= Expression '||' Expression
 AndExpr ::= Expression '&&' Expression
@@ -228,7 +228,7 @@ UnaryExpr ::= unary_op Expression
 ConditionalExpr ::= Expression rel_op Expression
 AddExpr ::= Expression add_op Expression
 MulExpr ::= Expression mul_op Expression
-ParentheziedExpr ::= '(' Expression ')'
+ParenthesesExpr ::= '(' Expression ')'
 
 BuiltinCallExpr ::= identifier '(' [ BuiltinArgs [ ',' ] ] ')'
 BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?

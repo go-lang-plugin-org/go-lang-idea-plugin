@@ -73,7 +73,7 @@ public interface GoTypes {
   IElementType PACKAGE_CLAUSE = new GoCompositeElementType("PACKAGE_CLAUSE");
   IElementType PARAMETERS = new GoCompositeElementType("PARAMETERS");
   IElementType PARAMETER_DECLARATION = new GoCompositeElementType("PARAMETER_DECLARATION");
-  IElementType PARENTHEZIED_EXPR = new GoCompositeElementType("PARENTHEZIED_EXPR");
+  IElementType PARENTHESES_EXPR = new GoCompositeElementType("PARENTHESES_EXPR");
   IElementType POINTER_TYPE = new GoCompositeElementType("POINTER_TYPE");
   IElementType QUALIFIED_IDENTIFIER = new GoCompositeElementType("QUALIFIED_IDENTIFIER");
   IElementType RANGE_CLAUSE = new GoCompositeElementType("RANGE_CLAUSE");
@@ -386,8 +386,8 @@ public interface GoTypes {
       else if (type == PARAMETER_DECLARATION) {
         return new GoParameterDeclarationImpl(node);
       }
-      else if (type == PARENTHEZIED_EXPR) {
-        return new GoParentheziedExprImpl(node);
+      else if (type == PARENTHESES_EXPR) {
+        return new GoParenthesesExprImpl(node);
       }
       else if (type == POINTER_TYPE) {
         return new GoPointerTypeImpl(node);

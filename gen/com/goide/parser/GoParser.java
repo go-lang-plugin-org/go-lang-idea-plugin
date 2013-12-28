@@ -207,8 +207,8 @@ public class GoParser implements PsiParser {
     else if (root_ == PARAMETERS) {
       result_ = Parameters(builder_, 0);
     }
-    else if (root_ == PARENTHEZIED_EXPR) {
-      result_ = ParentheziedExpr(builder_, 0);
+    else if (root_ == PARENTHESES_EXPR) {
+      result_ = ParenthesesExpr(builder_, 0);
     }
     else if (root_ == POINTER_TYPE) {
       result_ = PointerType(builder_, 0);
@@ -331,7 +331,7 @@ public class GoParser implements PsiParser {
       COMPOSITE_LIT, CONDITIONAL_EXPR, CONVERSION_EXPR, EXPRESSION,
       FUNCTION_LIT, INDEX_EXPR, LITERAL, LITERAL_TYPE_EXPR,
       METHOD_EXPR, MUL_EXPR, OPERAND_NAME, OR_EXPR,
-      PARENTHEZIED_EXPR, QUALIFIED_IDENTIFIER, SELECTOR_EXPR, TYPE_ASSERTION_EXPR,
+      PARENTHESES_EXPR, QUALIFIED_IDENTIFIER, SELECTOR_EXPR, TYPE_ASSERTION_EXPR,
       TYPE_LIT, UNARY_EXPR),
     create_token_set_(FUNCTION_DECLARATION, METHOD_DECLARATION),
     create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, CONTINUE_STATEMENT, DEFER_STATEMENT,
@@ -3088,7 +3088,7 @@ public class GoParser implements PsiParser {
   // 6: ATOM(BuiltinCallExpr)
   // 7: ATOM(MethodExpr)
   // 8: ATOM(OperandName) ATOM(LiteralTypeExpr) PREFIX(ConversionExpr) BINARY(SelectorExpr) POSTFIX(IndexExpr) POSTFIX(TypeAssertionExpr) POSTFIX(CallExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit)
-  // 9: PREFIX(ParentheziedExpr)
+  // 9: PREFIX(ParenthesesExpr)
   public static boolean Expression(PsiBuilder builder_, int level_, int priority_) {
     if (!recursion_guard_(builder_, level_, "Expression")) return false;
     boolean result_ = false;
@@ -3102,7 +3102,7 @@ public class GoParser implements PsiParser {
     if (!result_) result_ = ConversionExpr(builder_, level_ + 1);
     if (!result_) result_ = Literal(builder_, level_ + 1);
     if (!result_) result_ = FunctionLit(builder_, level_ + 1);
-    if (!result_) result_ = ParentheziedExpr(builder_, level_ + 1);
+    if (!result_) result_ = ParenthesesExpr(builder_, level_ + 1);
     pinned_ = result_;
     result_ = result_ && Expression_0(builder_, level_ + 1, priority_);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
@@ -3390,8 +3390,8 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  public static boolean ParentheziedExpr(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ParentheziedExpr")) return false;
+  public static boolean ParenthesesExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ParenthesesExpr")) return false;
     if (!nextTokenIs(builder_, "<expression>", LPAREN)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
@@ -3400,7 +3400,7 @@ public class GoParser implements PsiParser {
     pinned_ = result_;
     result_ = pinned_ && Expression(builder_, level_, -1);
     result_ = pinned_ && report_error_(builder_, consumeToken(builder_, RPAREN)) && result_;
-    exit_section_(builder_, level_, marker_, PARENTHEZIED_EXPR, result_, pinned_, null);
+    exit_section_(builder_, level_, marker_, PARENTHESES_EXPR, result_, pinned_, null);
     return result_ || pinned_;
   }
 

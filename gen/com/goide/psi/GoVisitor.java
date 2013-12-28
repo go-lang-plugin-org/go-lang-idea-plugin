@@ -254,7 +254,7 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitParentheziedExpr(@NotNull GoParentheziedExpr o) {
+  public void visitParenthesesExpr(@NotNull GoParenthesesExpr o) {
     visitExpression(o);
   }
 

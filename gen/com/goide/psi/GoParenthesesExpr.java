@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoParentheziedExpr extends GoExpression {
+public interface GoParenthesesExpr extends GoExpression {
 
   @Nullable
   GoExpression getExpression();

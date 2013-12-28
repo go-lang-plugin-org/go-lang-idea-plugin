@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoParentheziedExprImpl extends GoExpressionImpl implements GoParentheziedExpr {
+public class GoParenthesesExprImpl extends GoExpressionImpl implements GoParenthesesExpr {
 
-  public GoParentheziedExprImpl(ASTNode node) {
+  public GoParenthesesExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitParentheziedExpr(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitParenthesesExpr(this);
     else super.accept(visitor);
   }
 
