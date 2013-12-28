@@ -4,6 +4,7 @@ import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.actions.CreateTemplateInPackageAction;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -62,9 +63,8 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<PsiElement>
     }
 
     @Override
-    protected PsiElement doCreate(PsiDirectory dir, String parameterName,
-                              String typeName)
-        throws IncorrectOperationException {
+    protected PsiElement doCreate(PsiDirectory dir, String parameterName, String typeName)
+            throws IncorrectOperationException {
         GoTemplatesFactory.Template template = GoTemplatesFactory.Template.GoFile;
 
         String fileName = fileNameFromTypeName(typeName, parameterName);
@@ -80,8 +80,7 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<PsiElement>
             fileName = fileName.replaceFirst(parameterName + "/", "");
         }
 
-        return GoTemplatesFactory.createFromTemplate(dir, packageName, fileName,
-                                                     template);
+        return GoTemplatesFactory.createFromTemplate(dir, packageName, fileName, template);
     }
 
     String fileNameFromTypeName(String typeName, String parameterName) {
@@ -102,7 +101,7 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<PsiElement>
             return typeName.replaceFirst("^lib\\.", "");
         }
 
-        return parameterName;
+        return StringUtil.getPackageName(parameterName, '.');
     }
 
     //    @Override
@@ -123,7 +122,7 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<PsiElement>
             }
         }
 
-        builder.addKind("New file", GoIcons.GO_ICON_16x16, "single");
+        builder.addKind("New file", GoIcons.GO_ICON_16x16, "single.go");
 
         for (String packageName : packages) {
             builder.addKind("New file in library: " + packageName,
