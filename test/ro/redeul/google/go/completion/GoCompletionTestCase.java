@@ -1,15 +1,12 @@
 package ro.redeul.google.go.completion;
 
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +50,6 @@ public abstract class GoCompletionTestCase
 
         Collections.reverse(files);
         myFixture.configureByFiles(files.toArray(new String[files.size()]));
-        LookupElement[] lookupElements = myFixture.completeBasic();
         String fileText = myFixture.getFile().getText();
 
         List<String> expected = new ArrayList<String>(10);
