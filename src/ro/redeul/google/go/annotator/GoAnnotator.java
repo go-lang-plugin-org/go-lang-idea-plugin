@@ -15,17 +15,15 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.findUsages.GoVariableUsageStatVisitor;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
-import ro.redeul.google.go.inspection.*;
+import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
@@ -316,15 +314,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     }
 
     @Override
-    public void visitConstDeclarations(GoConstDeclarations declarations) {
-        super.visitConstDeclarations(declarations);
-
-        InspectionResult result = new InspectionResult(inspectionManager);
-        ConstDeclarationInspection.checkConstDeclarations(declarations, result);
-        addProblems(result.getProblems());
-    }
-
-    @Override
     public void visitConstDeclaration(GoConstDeclaration declaration) {
         super.visitConstDeclaration(declaration);
 
@@ -333,10 +322,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
                 .createInfoAnnotation(identifier, null)
                 .setTextAttributes(GoSyntaxHighlighter.CONST);
         }
-
-        InspectionResult result = new InspectionResult(inspectionManager);
-        ConstDeclarationInspection.checkConstDeclaration(declaration, result);
-        addProblems(result.getProblems());
     }
 
     @Override
@@ -382,10 +367,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
                 .createInfoAnnotation(identifier, null)
                 .setTextAttributes(type);
         }
-
-        InspectionResult result = new InspectionResult(inspectionManager);
-        VarDeclarationInspection.checkVar(declaration, result);
-        addProblems(result.getProblems());
     }
 
     @Override
