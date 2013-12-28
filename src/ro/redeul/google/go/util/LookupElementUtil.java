@@ -54,7 +54,8 @@ public class LookupElementUtil extends GoElementVisitor {
 
     @Override
     public void visitTypeSpec(GoTypeSpec type) {
-        type.getType().accept(this);
+        if (type.getType() != null)
+            type.getType().accept(this);
     }
 
     @Override

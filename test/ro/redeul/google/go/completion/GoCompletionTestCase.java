@@ -54,7 +54,6 @@ public abstract class GoCompletionTestCase
         Collections.reverse(files);
         myFixture.configureByFiles(files.toArray(new String[files.size()]));
         LookupElement[] lookupElements = myFixture.completeBasic();
-        System.out.println("lookupElements = " + Arrays.toString(lookupElements));
         String fileText = myFixture.getFile().getText();
 
         List<String> expected = new ArrayList<String>(10);
