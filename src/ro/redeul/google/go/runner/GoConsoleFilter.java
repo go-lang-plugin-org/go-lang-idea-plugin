@@ -11,13 +11,13 @@ import java.nio.file.FileSystem;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class GoTestConsoleFilter implements Filter {
+class GoConsoleFilter implements Filter {
     private static final Pattern MSG_LINE = Pattern.compile("\t?(\\S+\\.\\w+):(\\d+)[:\\s].*\n");
 
     private final Project project;
     private final String packageDir;
 
-    public GoTestConsoleFilter(Project project, String packageDir) {
+    public GoConsoleFilter(Project project, String packageDir) {
         this.project = project;
         this.packageDir = packageDir;
     }
