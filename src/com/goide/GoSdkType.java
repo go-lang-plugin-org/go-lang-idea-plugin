@@ -2,9 +2,12 @@ package com.goide;
 
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.projectRoots.*;
+import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.containers.ContainerUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -130,8 +133,18 @@ public class GoSdkType extends SdkType {
 
   @Override
   public void setupSdkPaths(@NotNull Sdk sdk) {
-    SdkModificator sdkModificator = sdk.getSdkModificator();
-    // todo
-    sdkModificator.commitChanges();
+    SdkModificator modificator = sdk.getSdkModificator();
+    add(modificator, new File(sdk.getHomePath(), "src")); // scr is enough at the moment, possible process binaries from pkg
+    modificator.commitChanges();
+  }
+
+  private static void add(@NotNull SdkModificator modificator, @NotNull File file) {
+    if (file.isDirectory()) {
+      VirtualFile dir = LocalFileSystem.getInstance().findFileByIoFile(file);
+      if (dir != null) {
+        modificator.addRoot(dir, OrderRootType.CLASSES);
+        modificator.addRoot(dir, OrderRootType.SOURCES);
+      }
+    }
   }
 }
