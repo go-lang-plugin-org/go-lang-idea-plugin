@@ -295,14 +295,6 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     public void visitMethodDeclaration(GoMethodDeclaration declaration) {
         super.visitMethodDeclaration(declaration);
 
-        InspectionResult result = new InspectionResult(inspectionManager);
-        FunctionDuplicateArgumentInspection.checkFunction(result, declaration);
-        FunctionVaraidicParameterInspection.checkFunction(result, declaration);
-        FunctionRedeclareParameterInResultInspection.checkFunction(result, declaration);
-        FunctionReturnParameterCountInspection.checkFunction(result, declaration);
-        FunctionWithResultButWihtoutReturnInspection.checkFunction(result, declaration);
-        addProblems(result.getProblems());
-
         PsiElement nameIdentifier = declaration.getNameIdentifier();
         if (nameIdentifier != null) {
             Annotation ann = annotationHolder.createInfoAnnotation(
@@ -315,33 +307,12 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
         super.visitFunctionDeclaration(declaration);
 
-        InspectionResult result = new InspectionResult(inspectionManager);
-        FunctionDuplicateArgumentInspection.checkFunction(result, declaration);
-        FunctionVaraidicParameterInspection.checkFunction(result, declaration);
-        FunctionRedeclareParameterInResultInspection.checkFunction(result, declaration);
-        FunctionReturnParameterCountInspection.checkFunction(result, declaration);
-        FunctionWithResultButWihtoutReturnInspection.checkFunction(result, declaration);
-        addProblems(result.getProblems());
-
         PsiElement nameIdentifier = declaration.getNameIdentifier();
         if (nameIdentifier != null) {
             Annotation ann = annotationHolder.createInfoAnnotation(
                 nameIdentifier, null);
             ann.setTextAttributes(GoSyntaxHighlighter.METHOD_DECLARATION);
         }
-    }
-
-    @Override
-    public void visitFunctionLiteral(GoLiteralFunction literal) {
-        super.visitFunctionLiteral(literal);
-
-        InspectionResult result = new InspectionResult(inspectionManager);
-        FunctionDuplicateArgumentInspection.checkFunction(result, literal);
-        FunctionVaraidicParameterInspection.checkFunction(result, literal);
-        FunctionRedeclareParameterInResultInspection.checkFunction(result, literal);
-        FunctionReturnParameterCountInspection.checkFunction(result, literal);
-        FunctionWithResultButWihtoutReturnInspection.checkFunction(result, literal);
-        addProblems(result.getProblems());
     }
 
     @Override
