@@ -26,12 +26,13 @@ public class GoFile extends PsiFileBase {
   @NotNull
   public List<GoTopLevelDeclaration> getDeclarations() {
     if (myDeclarationsValue == null) {
-      myDeclarationsValue = CachedValuesManager.getManager(getProject()).createCachedValue(new CachedValueProvider<List<GoTopLevelDeclaration>>() {
-        @Override
-        public Result<List<GoTopLevelDeclaration>> compute() {
-          return Result.create(calcDeclarations(), GoFile.this);
-        }
-      }, false);
+      myDeclarationsValue =
+        CachedValuesManager.getManager(getProject()).createCachedValue(new CachedValueProvider<List<GoTopLevelDeclaration>>() {
+          @Override
+          public Result<List<GoTopLevelDeclaration>> compute() {
+            return Result.create(calcDeclarations(), GoFile.this);
+          }
+        }, false);
     }
     return myDeclarationsValue.getValue();
   }
@@ -42,7 +43,7 @@ public class GoFile extends PsiFileBase {
       @Override
       public boolean process(PsiElement psiElement) {
         if (psiElement instanceof GoTopLevelDeclaration) {
-          result.add((GoTopLevelDeclaration) psiElement);
+          result.add((GoTopLevelDeclaration)psiElement);
         }
         return true;
       }

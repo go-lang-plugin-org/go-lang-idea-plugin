@@ -23,7 +23,6 @@ public class GoSyntaxHighlightingColors {
   public static final TextAttributesKey COMMA = createTextAttributesKey("GO_COMMA", DefaultLanguageHighlighterColors.COMMA);
   public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("GO_BAD_TOKEN", HighlighterColors.BAD_CHARACTER);
 
-
   private GoSyntaxHighlightingColors() {
   }
 }

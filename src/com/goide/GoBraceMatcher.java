@@ -22,13 +22,13 @@ public class GoBraceMatcher implements PairedBraceMatcher {
   @Override
   public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType lbraceType, @Nullable IElementType type) {
     return GoParserDefinition.COMMENTS.contains(type)
-      || GoParserDefinition.WHITESPACES.contains(type)
-      || type == GoTypes.SEMICOLON
-      || type == GoTypes.COMMA
-      || type == GoTypes.RPAREN
-      || type == GoTypes.RBRACK
-      || type == GoTypes.RBRACE
-      || null == type;
+           || GoParserDefinition.WHITESPACES.contains(type)
+           || type == GoTypes.SEMICOLON
+           || type == GoTypes.COMMA
+           || type == GoTypes.RPAREN
+           || type == GoTypes.RBRACK
+           || type == GoTypes.RBRACE
+           || null == type;
   }
 
   @Override

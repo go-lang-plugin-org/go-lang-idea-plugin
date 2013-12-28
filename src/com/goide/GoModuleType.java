@@ -18,7 +18,7 @@ public class GoModuleType extends ModuleType<GoModuleBuilder> {
   }
 
   public static GoModuleType getInstance() {
-    return (GoModuleType) ModuleTypeManager.getInstance().findByID(MODULE_TYPE_ID);
+    return (GoModuleType)ModuleTypeManager.getInstance().findByID(MODULE_TYPE_ID);
   }
 
   @NotNull

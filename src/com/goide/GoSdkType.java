@@ -48,7 +48,8 @@ public class GoSdkType extends SdkType {
   public String suggestHomePath() {
     if (SystemInfo.isWindows) {
       return "C:\\cygwin\\bin";
-    } else {
+    }
+    else {
       if (SystemInfo.isMac) {
         String fromEnv = findPathInEnvironment();
         if (fromEnv != null) return fromEnv;
@@ -57,7 +58,8 @@ public class GoSdkType extends SdkType {
         String macPorts = "/opt/local/lib/go";
         if (new File(macPorts).exists()) return macPorts;
         return null;
-      } else if (SystemInfo.isLinux) {
+      }
+      else if (SystemInfo.isLinux) {
         return "/usr/lib/go";
       }
     }
@@ -75,7 +77,8 @@ public class GoSdkType extends SdkType {
         if (path.endsWith("bin/go")) {
           return StringUtil.trimEnd(path, "bin/go");
         }
-      } catch (IOException ignore) {
+      }
+      catch (IOException ignore) {
       }
     }
     return null;
@@ -104,7 +107,8 @@ public class GoSdkType extends SdkType {
       String lastItem = ContainerUtil.getLastItem(split);
       if (lastItem == null) return null;
       return lastItem.replace("go", "").replaceAll("`", "");
-    } catch (IOException ignore) {
+    }
+    catch (IOException ignore) {
     }
     return null;
   }

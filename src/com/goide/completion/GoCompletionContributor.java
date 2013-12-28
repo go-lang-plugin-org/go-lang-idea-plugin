@@ -25,7 +25,9 @@ public class GoCompletionContributor extends CompletionContributor {
   public GoCompletionContributor() {
     extend(CompletionType.BASIC, psiElement().inFile(instanceOf(GoFile.class)), new CompletionProvider<CompletionParameters>() {
       @Override
-      protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+      protected void addCompletions(@NotNull CompletionParameters parameters,
+                                    ProcessingContext context,
+                                    @NotNull CompletionResultSet result) {
         PsiElement position = parameters.getPosition();
         for (String keyword : suggestKeywords(position)) {
           result.addElement(createKeywordLookupElement(keyword));
@@ -42,7 +44,7 @@ public class GoCompletionContributor extends CompletionContributor {
   @NotNull
   private static Collection<String> suggestKeywords(@NotNull PsiElement position) {
     TextRange posRange = position.getTextRange();
-    GoFile posFile = (GoFile) position.getContainingFile();
+    GoFile posFile = (GoFile)position.getContainingFile();
     TextRange range = new TextRange(0, posRange.getStartOffset());
     String text = range.isEmpty() ? CompletionInitializationContext.DUMMY_IDENTIFIER : range.substring(posFile.getText());
 
@@ -51,8 +53,8 @@ public class GoCompletionContributor extends CompletionContributor {
     GeneratedParserUtilBase.CompletionState state = new GeneratedParserUtilBase.CompletionState(completionOffset) {
       @Override
       public String convertItem(Object o) {
-        if (o instanceof IElementType && GoParserDefinition.KEYWORDS.contains((IElementType) o)) return o.toString();
-        return o instanceof String ? (String) o : null;
+        if (o instanceof IElementType && GoParserDefinition.KEYWORDS.contains((IElementType)o)) return o.toString();
+        return o instanceof String ? (String)o : null;
       }
     };
     file.putUserData(GeneratedParserUtilBase.COMPLETION_STATE_KEY, state);
