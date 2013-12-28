@@ -20,7 +20,7 @@
     <colorSettingsPage implementation="com.goide.highlighting.GoColorsAndFontsPage"/>
     <lang.braceMatcher language="go" implementationClass="com.goide.GoBraceMatcher"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
-    <completion.contributor language="go" implementationClass="com.goide.GoCompletionContributor"/>
+    <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
 
     <sdkType implementation="com.goide.GoSdkType"/>
     <!--contains java deps-->

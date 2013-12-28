@@ -1,5 +1,7 @@
-package com.goide;
+package com.goide.completion;
 
+import com.goide.GoLanguage;
+import com.goide.GoParserDefinition;
 import com.goide.psi.GoFile;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
