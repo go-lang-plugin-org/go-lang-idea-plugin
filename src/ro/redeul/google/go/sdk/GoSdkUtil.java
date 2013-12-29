@@ -634,9 +634,7 @@ public class GoSdkUtil {
     public static String getSysGoRootPath() {
         try {
             return System.getenv("GOROOT");
-        } catch (NullPointerException ignored) {
-            return "";
-        } catch (SecurityException ignored) {
+        } catch (Exception ignored) {
             return "";
         }
     }
@@ -644,9 +642,7 @@ public class GoSdkUtil {
     public static String getSysGoPathPath() {
         try {
             return System.getenv("GOPATH");
-        } catch (NullPointerException ignored) {
-            return "";
-        } catch (SecurityException ignored) {
+        } catch (Exception ignored) {
             return "";
         }
     }
