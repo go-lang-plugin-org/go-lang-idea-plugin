@@ -48,8 +48,12 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
-                baseDir.createSubdirectory("bin");
-                baseDir.createSubdirectory("pkg");
+                try {
+                    baseDir.createSubdirectory("bin");
+                    baseDir.createSubdirectory("pkg");
+                } catch (Exception ignored) {
+
+                }
             }
         });
 

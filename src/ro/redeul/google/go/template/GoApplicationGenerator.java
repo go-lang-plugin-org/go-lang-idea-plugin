@@ -74,7 +74,7 @@ public class GoApplicationGenerator extends WebProjectTemplate {
                     baseDir.createChildDirectory(this, "bin");
                     baseDir.createChildDirectory(this, "pkg");
                     sourceDir[0] = baseDir.createChildDirectory(this, "src");
-                } catch (IOException ignored) {
+                } catch (Exception ignored) {
 
                 }
             }
