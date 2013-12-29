@@ -2,6 +2,7 @@ package ro.redeul.google.go.template;
 
 import com.intellij.ide.util.projectWizard.WebProjectTemplate;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -27,10 +28,11 @@ import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.util.Arrays;
 
 public class GoApplicationGenerator extends WebProjectTemplate {
+    private static final Logger LOG = Logger.getInstance(GoApplicationGenerator.class);
+
     @NotNull
     @Override
     public String getName() {
@@ -74,8 +76,8 @@ public class GoApplicationGenerator extends WebProjectTemplate {
                     baseDir.createChildDirectory(this, "bin");
                     baseDir.createChildDirectory(this, "pkg");
                     sourceDir[0] = baseDir.createChildDirectory(this, "src");
-                } catch (Exception ignored) {
-
+                } catch (Exception e) {
+                    LOG.error(e.getMessage());
                 }
             }
         });
@@ -126,8 +128,8 @@ public class GoApplicationGenerator extends WebProjectTemplate {
                                     }
                                 });
 
-                            } catch (Exception ignored) {
-
+                            } catch (Exception e) {
+                                LOG.error(e.getMessage());
                             }
                         } else {
                             goSdk = (ProjectJdkImpl) existingSdk;
@@ -143,8 +145,8 @@ public class GoApplicationGenerator extends WebProjectTemplate {
 
                         try {
                             GoTemplatesFactory.createFromTemplate(directory, "main", project.getName().concat(".go"), GoTemplatesFactory.Template.GoAppMain);
-                        } catch(IncorrectOperationException ignored) {
-
+                        } catch(IncorrectOperationException e) {
+                            LOG.error(e.getMessage());
                         }
 
                         VirtualFileManager.getInstance().syncRefresh();

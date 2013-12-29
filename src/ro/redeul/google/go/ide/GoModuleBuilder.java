@@ -4,6 +4,7 @@ import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
 import com.intellij.ide.util.projectWizard.SourcePathsBuilder;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.projectRoots.SdkTypeId;
@@ -22,6 +23,8 @@ import ro.redeul.google.go.config.sdk.GoSdkType;
  * Time: 10:34 AM
  */
 public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBuilder, ModuleBuilderListener {
+
+    private static final Logger LOG = Logger.getInstance(GoModuleBuilder.class);
 
     public GoModuleBuilder() {
         addListener(this);
@@ -51,13 +54,18 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
                 try {
                     baseDir.createSubdirectory("bin");
                     baseDir.createSubdirectory("pkg");
-                } catch (Exception ignored) {
-
+                } catch (Exception e) {
+                    LOG.error(e.getMessage());
                 }
             }
         });
 
-        GoTemplatesFactory.createFromTemplate(directory, "main", module.getProject().getName().concat(".go"), GoTemplatesFactory.Template.GoAppMain);
+        try {
+            GoTemplatesFactory.createFromTemplate(directory, "main", module.getProject().getName().concat(".go"), GoTemplatesFactory.Template.GoAppMain);
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
+        }
+
     }
 
     @Override
