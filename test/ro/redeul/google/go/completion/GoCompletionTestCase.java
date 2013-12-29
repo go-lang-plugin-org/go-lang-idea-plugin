@@ -50,8 +50,9 @@ public abstract class GoCompletionTestCase
 
         Collections.reverse(files);
         myFixture.configureByFiles(files.toArray(new String[files.size()]));
-        String fileText = myFixture.getFile().getText();
 
+        // find the expected outcome
+        String fileText = myFixture.getFile().getText();
         List<String> expected = new ArrayList<String>(10);
         int dataPos = fileText.indexOf("/**---");
         if (dataPos != -1) {
@@ -64,6 +65,10 @@ public abstract class GoCompletionTestCase
             }
         }
 
+        // do the completion
+        myFixture.completeBasic();
+
+        // validate assertions
         assertOrderedEquals(myFixture.getLookupElementStrings(), expected);
     }
 
