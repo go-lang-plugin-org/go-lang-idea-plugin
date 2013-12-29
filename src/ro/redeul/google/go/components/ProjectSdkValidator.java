@@ -9,6 +9,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
+import com.intellij.openapi.startup.StartupManager;
+import com.intellij.openapi.ui.Messages;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
@@ -94,7 +96,28 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
             }
         }
 
-        super.initComponent();    //To change body of overridden methods use File | Settings | File Templates.
+        String msg = "";
+
+        if (GoSdkUtil.getSysGoRootPath().isEmpty()) {
+            msg += "GOROOT environment variable is empty\n";
+        }
+
+        if (GoSdkUtil.getSysGoPathPath().isEmpty()) {
+            msg += "GOPATH environment variable is empty\n";
+        }
+
+        final String message = msg;
+
+        if (!message.isEmpty()) {
+            StartupManager.getInstance(myProject).registerPostStartupActivity(new Runnable() {
+                public void run() {
+                    String msg = message + "Please check the readme here: http://git.io/_InSxQ";
+                    Messages.showErrorDialog(myProject, msg, "GOlang: Missing Environment Variables");
+                }
+            });
+        }
+
+        super.initComponent();
     }
 
     private String getContent(String type, String name) {
