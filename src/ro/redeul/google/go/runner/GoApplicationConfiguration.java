@@ -121,6 +121,10 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
         final Project project = getProject();
 
+        if (this.workingDir.isEmpty()) {
+            this.workingDir = project.getBaseDir().getCanonicalPath();
+        }
+
         CommandLineState state = new CommandLineState(env) {
 
             @NotNull
