@@ -119,6 +119,10 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
 
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env)
             throws ExecutionException {
+        if (this.workingDir.isEmpty()) {
+            this.workingDir = getProject().getBaseDir().getCanonicalPath();
+        }
+
         return new GoCommandLineState(new GoTestConsoleProperties(this, executor), env);
     }
 
