@@ -10,11 +10,22 @@ package ro.redeul.google.go.formatter;
  */
 public class GoTopLevelFormatterTest extends GoFormatterTestCase {
 
-    @Override
-    protected String getRelativeTestDataPath() {
-        return super.getRelativeTestDataPath() + "toplevel/";
-    }
+  @Override
+  protected String getRelativeTestDataPath() {
+    return super.getRelativeTestDataPath() + "toplevel/";
+  }
 
-    public void testBasic() throws Exception { _test(); }
-    public void testBasicWithLineComments() throws Exception { _test(); }
+  public void testBasic() throws Exception { _test(); }
+
+  public void testBasicWithLineComments() throws Exception { _test(); }
+
+//    public void testBasicWithMultiLineComments() throws Exception { _test(); }
+
+  public void testCommentAtTheStart() throws Exception { _test(); }
+
+  public void testEofNoWhiteSpace() throws Exception { _test(); }
+
+  public void testEofTooMuchWhiteSpace() throws Exception { _test(); }
+
+  public void testAlternatingComments() throws Exception { _test(); }
 }

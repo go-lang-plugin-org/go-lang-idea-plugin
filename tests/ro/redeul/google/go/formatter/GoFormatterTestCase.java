@@ -3,6 +3,7 @@ package ro.redeul.google.go.formatter;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import ro.redeul.google.go.GoLightCodeInsightTestCase;
 
 /**
@@ -14,25 +15,24 @@ import ro.redeul.google.go.GoLightCodeInsightTestCase;
  */
 public abstract class GoFormatterTestCase extends GoLightCodeInsightTestCase {
 
-    @Override
-    protected String getRelativeTestDataPath() {
-        return "formatter/";
-    }
+  @Override
+  protected String getRelativeTestDataPath() {
+    return "formatter/";
+  }
 
-    @Override
-    final protected void _test() {
-        String testName = getTestName(true);
+  @Override
+  final protected void _test() {
+    String testName = getTestName(true);
 
-        myFixture.configureByFiles(beforeFileName(testName));
+    myFixture.configureByFiles(beforeFileName(testName));
 
-        CodeStyleSettingsManager.getSettings(getProject()).SPACE_AROUND_ASSIGNMENT_OPERATORS = true;
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-            @Override
-            public void run() {
-                CodeStyleManager.getInstance(getProject()).reformat(myFixture.getFile());
-            }
-        });
+    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+      @Override
+      public void run() {
+        CodeStyleManager.getInstance(getProject()).reformat(myFixture.getFile());
+      }
+    });
 
-        myFixture.checkResultByFile(afterFileName(testName));
-    }
+    myFixture.checkResultByFile(afterFileName(testName));
+  }
 }

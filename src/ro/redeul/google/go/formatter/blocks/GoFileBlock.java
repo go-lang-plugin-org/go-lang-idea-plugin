@@ -55,14 +55,23 @@ class GoFileBlock extends GoBlock {
     @Override
     public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
 
+        if ( child1 == null )
+            return EMPTY_SPACING;
+
         IElementType typeChild1 = getASTElementType(child1);
         IElementType typeChild2 = getASTElementType(child2);
 
         if (NEED_NEW_LINE_TOKENS.contains(typeChild1))
-            if (typeChild1 == typeChild2)
+            if (shouldRemainTogether(typeChild1, typeChild2))
                 if (getLineCount(getTextBetween(child1, child2)) == 1)
                     return ONE_LINE_SPACING;
 
+
         return LINE_SPACING;
     }
+
+  private boolean shouldRemainTogether(IElementType typeChild1, IElementType typeChild2) {
+    return typeChild1 == typeChild2 || (COMMENTS.contains(typeChild1) && COMMENTS.contains(typeChild2));
+  }
 }
+

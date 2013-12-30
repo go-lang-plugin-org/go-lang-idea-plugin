@@ -39,7 +39,7 @@ class GoBlock implements ASTBlock, GoElementTypes {
 
     private List<Block> mySubBlocks = null;
 
-    static final Spacing ONE_LINE_SPACING = Spacing.createSpacing(0, 0, 1, false, 0);
+    static final Spacing ONE_LINE_SPACING = Spacing.createSpacing(0, 0,  1, false, 0);
     static final Spacing ONE_LINE_SPACING_KEEP_LINE_BREAKS = Spacing.createSpacing(0, 0, 1, true, 1);
     static final Spacing BASIC_SPACING = Spacing.createSpacing(1, 1, 0, false, 0);
     static final Spacing BASIC_SPACING_KEEP_LINE_BREAKS = Spacing.createSpacing(1, 1, 0, true, 0);

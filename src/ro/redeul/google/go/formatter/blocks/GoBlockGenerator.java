@@ -9,6 +9,7 @@ import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.*;
 
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
@@ -97,31 +98,31 @@ public class GoBlockGenerator {
             return new GoAssignListBlock(node, alignment, indent, styleSettings);
         }
 
-        if (elementType == GoElementTypes.TYPE_STRUCT) {
+        if (elementType == TYPE_STRUCT) {
             return new GoTypeStructBlock(node, alignment, indent, styleSettings);
 //        } else if (elementType == GoElementTypes.TYPE_INTERFACE) {
 //            return new GoTypeInterfaceBlock(node, alignment, indent, styleSettings);
         }
 
-        if (elementType == GoElementTypes.EXPRESSION_LIST)
+        if (elementType == EXPRESSION_LIST)
             return new GoExpressionListBlock(node, alignment, indent, styleSettings);
 
-        if (elementType == GoElementTypes.UNARY_EXPRESSION)
+        if (elementType == UNARY_EXPRESSION)
             return new GoUnaryExpressionBlock(node, alignment, indent, NO_WRAP, styleSettings);
 
         if (GoElementTypes.FUNCTION_CALL_SETS.contains(elementType))
             return new GoCallOrConvExpressionBlock(node, alignment, indent, NO_WRAP, styleSettings);
 
-        if (elementType == GoElementTypes.PARENTHESISED_EXPRESSION)
+        if (elementType == PARENTHESISED_EXPRESSION)
             return new GoParenthesisedExpressionBlock(node, alignment, indent, styleSettings);
 
-        if (elementType == GoElementTypes.LABELED_STATEMENT)
+        if (elementType == LABELED_STATEMENT)
             return new GoLabeledStatmentBlock(node, styleSettings);
 
-        if (elementType == GoElementTypes.FUNCTION_PARAMETER_LIST)
+        if (elementType == FUNCTION_PARAMETER_LIST)
             return new GoFunctionParameterListBlock(node, indent, styleSettings);
 
-        if (elementType == GoElementTypes.FUNCTION_PARAMETER)
+        if (elementType == FUNCTION_PARAMETER)
             return new GoFunctionParameterBlock(node, indent, styleSettings);
 
         if (LEAF_BLOCKS.contains(elementType))

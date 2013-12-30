@@ -563,6 +563,9 @@
         <fileDocumentManagerListener
                 implementation="ro.redeul.google.go.components.EditorTweakingComponent"/>
 
+        <postFormatProcessor implementation="ro.redeul.google.go.formatter.GoPostFormatProcessor" />
+
+
         <todoIndexer filetype="Google Go"
                      implementationClass="ro.redeul.google.go.highlight.GoToDoIndexer"/>
 
