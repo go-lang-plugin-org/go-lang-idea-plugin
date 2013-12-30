@@ -4,6 +4,7 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.AbstractProjectComponent;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectSdkValidator extends AbstractProjectComponent {
+    private static final Logger LOG = Logger.getInstance(ProjectSdkValidator.class);
+
     public ProjectSdkValidator(Project project) {
         super(project);
     }
@@ -98,12 +101,28 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
 
         String msg = "";
 
-        if (GoSdkUtil.getSysGoRootPath().isEmpty()) {
-            msg += "GOROOT environment variable is empty\n";
+        try {
+            if (GoSdkUtil.getSysGoRootPath() == null &&
+                    GoSdkUtil.getSysGoRootPath().isEmpty()) {
+                msg += "GOROOT environment variable is empty or could not be detected properly.\n";
+                msg += "This means that some tools like go run or go fmt might not run properly.\n\n";
+            }
+        } catch (Exception e) {
+            LOG.debug(e.getMessage());
+            msg += "GOROOT environment variable is empty or could not be detected properly.\n";
+            msg += "This means that some tools like go run or go fmt might not run properly.\n\n";
         }
 
-        if (GoSdkUtil.getSysGoPathPath().isEmpty()) {
-            msg += "GOPATH environment variable is empty\n";
+        try {
+            if (GoSdkUtil.getSysGoPathPath() == null &&
+                    GoSdkUtil.getSysGoPathPath().isEmpty()) {
+                msg += "GOPATH environment variable is empty or could not be detected properly.\n";
+                msg += "This means that autocomplete might not work correctly.\n\n";
+            }
+        } catch (Exception e) {
+            LOG.debug(e.getMessage());
+            msg += "GOPATH environment variable is empty or could not be detected properly.\n";
+            msg += "This means that autocomplete might not work correctly.\n";
         }
 
         final String message = msg;
