@@ -2,7 +2,6 @@ package ro.redeul.google.go.lang.psi.resolve;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveResult;
-import com.sun.tools.classfile.Annotation;
 import org.jetbrains.annotations.Nullable;
 
 public class GoResolveResult implements ResolveResult {
