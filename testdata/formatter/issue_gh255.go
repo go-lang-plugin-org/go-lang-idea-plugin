@@ -2,7 +2,11 @@ package main
 type a struct {
 b struct {
 c struct {
-d int
+d struct {
+e struct {
+f int
+}
+}
 }
 }
 }
@@ -13,7 +17,11 @@ package main
 type a struct {
 	b struct {
 		c struct {
-			d int
+			d struct {
+				e struct {
+					f int
+				}
+			}
 		}
 	}
 }

@@ -72,8 +72,8 @@ var (
 	b [20]float32
 	s []int
 	t struct {
-	s []byte
-}
+		s []byte
+	}
 
 	_ = a[0:]
 	_ = a[1:10]
