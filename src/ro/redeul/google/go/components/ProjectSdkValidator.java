@@ -3,6 +3,7 @@ package ro.redeul.google.go.components;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.ConfigurationException;
@@ -127,7 +128,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
 
         final String message = msg;
 
-        if (!message.isEmpty()) {
+        if (!message.isEmpty() && !ApplicationManager.getApplication().isUnitTestMode()) {
             StartupManager.getInstance(myProject).registerPostStartupActivity(new Runnable() {
                 public void run() {
                     String msg = message + "Please check the readme here: http://git.io/_InSxQ";
