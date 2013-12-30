@@ -1,9 +1,9 @@
 package ro.redeul.google.go.components;
 
 import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.ConfigurationException;
@@ -11,8 +11,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
-import com.intellij.openapi.startup.StartupManager;
-import com.intellij.openapi.ui.Messages;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
@@ -94,55 +92,55 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
 
             if (sdkData == null || sdkData.TARGET_ARCH == null || sdkData.TARGET_OS == null) {
                 Notifications.Bus.notify(
-                        new Notification("GoLang SDK validator", "Corrupt Go SDK",
+                        new Notification(
+                                "GoLang SDK validator",
+                                "Corrupt Go App Engine SDK",
                                 getContent("Go App Engine", sdk.getName()),
-                                NotificationType.WARNING), myProject);
+                                NotificationType.WARNING
+                        ), myProject);
             }
         }
 
-        String msg = "";
+        String sysGoRootPath = GoSdkUtil.getSysGoRootPath();
+        if (sysGoRootPath == null || sysGoRootPath.isEmpty())
+            Notifications.Bus.notify(
+                    new Notification(
+                            "Go SDK validator",
+                            "Problem with env variables",
+                            getInvalidGOROOTEnvMessage(),
+                            NotificationType.ERROR,
+                            NotificationListener.URL_OPENING_LISTENER),
+                    myProject);
 
-        try {
-            if (GoSdkUtil.getSysGoRootPath() == null &&
-                    GoSdkUtil.getSysGoRootPath().isEmpty()) {
-                msg += "GOROOT environment variable is empty or could not be detected properly.\n";
-                msg += "This means that some tools like go run or go fmt might not run properly.\n\n";
-            }
-        } catch (Exception e) {
-            LOG.debug(e.getMessage());
-            msg += "GOROOT environment variable is empty or could not be detected properly.\n";
-            msg += "This means that some tools like go run or go fmt might not run properly.\n\n";
-        }
+        String systemGOPATH = GoSdkUtil.getSysGoPathPath();
+        if (systemGOPATH == null || systemGOPATH.isEmpty())
+            Notifications.Bus.notify(
+                    new Notification(
+                            "Go SDK validator",
+                            "Problem with env variables",
+                            getInvalidGOPATHEnvMessage(),
+                            NotificationType.ERROR,
+                            NotificationListener.URL_OPENING_LISTENER),
+                    myProject);
 
-        try {
-            if (GoSdkUtil.getSysGoPathPath() == null &&
-                    GoSdkUtil.getSysGoPathPath().isEmpty()) {
-                msg += "GOPATH environment variable is empty or could not be detected properly.\n";
-                msg += "This means that autocomplete might not work correctly.\n\n";
-            }
-        } catch (Exception e) {
-            LOG.debug(e.getMessage());
-            msg += "GOPATH environment variable is empty or could not be detected properly.\n";
-            msg += "This means that autocomplete might not work correctly.\n";
-        }
-
-        final String message = msg;
-
-        if (!message.isEmpty() && !ApplicationManager.getApplication().isUnitTestMode()) {
-            StartupManager.getInstance(myProject).registerPostStartupActivity(new Runnable() {
-                public void run() {
-                    String msg = message + "Please check the readme here: http://git.io/_InSxQ";
-                    Messages.showErrorDialog(myProject, msg, "GOlang: Missing Environment Variables");
-                }
-            });
-        }
 
         super.initComponent();
     }
 
     private String getContent(String type, String name) {
-        return
-                "<html>The attached " + type + " SDK named: <em>" + name + "</em> seems to be corrupt." +
-                        "<br/>Please update it by going to the project sdk editor remove it and add it again.</html>";
+        return "<html>The attached " + type + " SDK named: <em>" + name + "</em> seems to be corrupt." +
+                "<br/>Please update it by going to the project sdk editor remove it and add it again.</html>";
+    }
+
+    private String getInvalidGOROOTEnvMessage() {
+        return "<html><em>GOROOT</em> environment variable is empty or could not be detected properly.<br/>" +
+                "This means that some tools like <code>go run</code> or <code>go fmt</code> might not run properly.<br/>" +
+                "See <a href='http://git.io/_InSxQ'>instructions</a> on how to fix this.";
+    }
+
+    private String getInvalidGOPATHEnvMessage() {
+        return "<html><em>GOPATH</em> environment variable is empty or could not be detected properly.<br/>" +
+                "This means that some tools like <code>go run</code> or <code>go fmt</code> might not run properly.<br/>" +
+                "See <a href='http://git.io/_InSxQ'>instructions</a> on how to fix this.";
     }
 }
