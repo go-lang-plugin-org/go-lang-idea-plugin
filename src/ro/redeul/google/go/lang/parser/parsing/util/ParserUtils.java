@@ -335,6 +335,5 @@ public abstract class ParserUtils {
 
     public static boolean endStatement(PsiBuilder builder) {
         return !(!builder.eof() && !ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS_CAN_SKIP_SEMI)) || getToken(builder, GoTokenTypeSets.EOS, GoBundle.message("error.semicolon.or.newline.expected"));
-
     }
 }

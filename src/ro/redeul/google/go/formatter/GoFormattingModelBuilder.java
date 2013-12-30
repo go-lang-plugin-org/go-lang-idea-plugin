@@ -1,9 +1,6 @@
 package ro.redeul.google.go.formatter;
 
-import com.intellij.formatting.Block;
-import com.intellij.formatting.FormattingModel;
-import com.intellij.formatting.FormattingModelBuilder;
-import com.intellij.formatting.FormattingModelProvider;
+import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -43,9 +40,15 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
 
         Block block = GoBlockGenerator.generateBlock(fileElement, goSettings);
 
-        return FormattingModelProvider
-            .createFormattingModelForPsiFile(element.getContainingFile(),
-                                             block, settings);
+        FormattingModel formattingModel = FormattingModelProvider
+                .createFormattingModelForPsiFile(
+                        element.getContainingFile(),
+                        block,
+                        settings);
+
+
+        FormattingModelDumper.dumpFormattingModel(formattingModel.getRootBlock(), 4, System.out);
+        return formattingModel;
     }
 
     public TextRange getRangeAffectingIndent(PsiFile file, int offset,

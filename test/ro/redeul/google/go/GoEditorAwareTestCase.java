@@ -30,10 +30,13 @@ public abstract class GoEditorAwareTestCase
     }
 
     private String processFile(String fileText, boolean addCaretMarker) {
-        final GoFile goFile = createGoFile(fileText);
+        final GoFile myFile = createGoFile(fileText);
         final Editor myEditor = myFixture.getEditor();
+        final Project myProject = getProject();
+
         CodeStyleSettings settings =
-                CodeStyleSettingsManager.getInstance(getProject()).getCurrentSettings();
+                CodeStyleSettingsManager.getInstance(myProject).getCurrentSettings();
+
         CommonCodeStyleSettings commonSettings =
                 settings.getCommonSettings(GoLanguage.INSTANCE);
 
@@ -48,9 +51,8 @@ public abstract class GoEditorAwareTestCase
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
-                invoke(getProject(), myEditor, goFile);
-                PostprocessReformattingAspect.getInstance(getProject())
-                        .doPostponedFormatting();
+                invoke(myProject, myEditor, myFile);
+                PostprocessReformattingAspect.getInstance(myProject).doPostponedFormatting();
             }
         });
 

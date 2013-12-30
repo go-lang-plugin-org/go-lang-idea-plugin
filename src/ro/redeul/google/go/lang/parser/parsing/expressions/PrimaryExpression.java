@@ -392,7 +392,7 @@ class PrimaryExpression implements GoElementTypes {
             }
 
             if (ParserUtils.lookAhead(builder, oCOLON)) {
-                valueElement.done(COMPOSITE_LITERAL_ELEMENT_KEY);
+                valueElement.done(LITERAL_COMPOSITE_ELEMENT_KEY);
                 valueElement = valueElement.precede();
 
                 ParserUtils.getToken(builder, oCOLON);

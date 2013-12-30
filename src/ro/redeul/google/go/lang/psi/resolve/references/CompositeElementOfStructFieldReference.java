@@ -24,7 +24,7 @@ public class CompositeElementOfStructFieldReference
             .withParent(
                 psiElement(GoLiteralExpression.class)
                     .withParent(
-                        psiElement(GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY)
+                        psiElement(GoElementTypes.LITERAL_COMPOSITE_ELEMENT_KEY)
                             .withParent(
                                 psiElement(GoLiteralCompositeElement.class))));
 

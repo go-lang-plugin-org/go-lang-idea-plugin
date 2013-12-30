@@ -8,6 +8,19 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 
 class GoPackageBlock extends GoBlock {
 
+    private Runnable a = new Runnable() {
+        @Override
+        public void run() {
+
+        }
+    };
+    private float    b = 10;
+
+    String c = "dsfas" + "adfa" +
+            "asdfasdf" + "adfa" + "asdfasdf" + "adfa" + "asdfasdf" + "adfa" +
+            "asdfasdf" + "adfa" + "asdfasdf" + "adfa" + "asdfasdf" + "adfa" + "asdfasdf";
+    int    x = 10;
+
 
     public GoPackageBlock(ASTNode node, Alignment alignment, Indent indent,
                           Wrap wrap, CommonCodeStyleSettings settings) {

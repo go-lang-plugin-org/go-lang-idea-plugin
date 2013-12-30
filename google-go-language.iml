@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/go-ide/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/testdata" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/idea-home" />
     </content>
     <orderEntry type="inheritedJdk" />

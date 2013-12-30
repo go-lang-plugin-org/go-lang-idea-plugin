@@ -19,7 +19,7 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.LITERAL_COMPOSITE_ELEMENT_KEY;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
 
@@ -49,7 +49,7 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
 
     @Override
     public GoExpr getIndex() {
-        PsiElement keyNode = findChildByType(COMPOSITE_LITERAL_ELEMENT_KEY);
+        PsiElement keyNode = findChildByType(LITERAL_COMPOSITE_ELEMENT_KEY);
 
         if (keyNode == null) {
             return null;

@@ -11,8 +11,7 @@ import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
 
 @Ignore
-public abstract class GoLightCodeInsightFixtureTestCase
-    extends LightCodeInsightFixtureTestCase {
+public abstract class GoLightCodeInsightFixtureTestCase extends LightCodeInsightFixtureTestCase {
 
     protected static String testDataRoot = "testdata/";
     @Override

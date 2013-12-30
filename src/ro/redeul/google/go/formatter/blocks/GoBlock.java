@@ -28,7 +28,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
  *         Date: Sep 27, 2010
  */
-class GoBlock implements Block, GoElementTypes {
+class GoBlock implements ASTBlock, GoElementTypes {
 
     final ASTNode myNode;
     private final Alignment myAlignment;
@@ -90,8 +90,8 @@ class GoBlock implements Block, GoElementTypes {
         SHORT_VAR_STATEMENT,
         SWITCH_EXPR_STATEMENT,
         SWITCH_TYPE_STATEMENT,
-        TYPE_DECLARATION,
-        TYPE_DECLARATIONS,
+//        TYPE_DECLARATION,
+//        TYPE_DECLARATIONS,
         TYPE_STRUCT_FIELD,
         TYPE_STRUCT_FIELD_ANONYMOUS,
         VAR_DECLARATION,
@@ -117,7 +117,7 @@ class GoBlock implements Block, GoElementTypes {
     }
 
     @NotNull
-    ASTNode getNode() {
+    public ASTNode getNode() {
         return myNode;
     }
 
@@ -146,7 +146,8 @@ class GoBlock implements Block, GoElementTypes {
 
         ASTNode prevChild = null;
         for (ASTNode child : getGoChildren()) {
-            if (child.getTextRange().getLength() == 0 || isWhiteSpaceNode(child.getPsi())) {
+            if (child.getElementType() != END_OF_COMPILATION_UNIT &&
+                    (child.getTextRange().getLength() == 0 || isWhiteSpaceNode(child.getPsi()))) {
                 continue;
             }
 
@@ -194,7 +195,7 @@ class GoBlock implements Block, GoElementTypes {
         return true;
     }
 
-    public Spacing getSpacing(Block child1, @NotNull Block child2) {
+    public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
         if (!(child1 instanceof GoBlock) || !(child2 instanceof GoBlock)) {
             return null;
         }
