@@ -27,26 +27,22 @@ public class MethodReference
     private Set<GoTypeName> receiverTypes;
 
     private static final ResolveCache.AbstractResolver<MethodReference, GoResolveResult> RESOLVER =
-        new ResolveCache.AbstractResolver<MethodReference, GoResolveResult>() {
-            @Override
-            public GoResolveResult resolve(@NotNull MethodReference methodReference, boolean incompleteCode) {
-                MethodResolver processor = new MethodResolver(methodReference);
+            new ResolveCache.AbstractResolver<MethodReference, GoResolveResult>() {
+                @Override
+                public GoResolveResult resolve(@NotNull MethodReference methodReference, boolean incompleteCode) {
+                    MethodResolver processor = new MethodResolver(methodReference);
 
-                GoSelectorExpression element = methodReference.getElement();
+                    GoSelectorExpression element = methodReference.getElement();
 
-                GoPsiScopesUtil.treeWalkUp(
-                    processor,
-                    element.getContainingFile().getLastChild(),
-                    element.getContainingFile(),
-                    GoResolveStates.initial());
+                    GoPsiScopesUtil.treeWalkUp(
+                            processor,
+                            element.getContainingFile().getLastChild(),
+                            element.getContainingFile(),
+                            GoResolveStates.initial());
 
-                PsiElement declaration = processor.getChildDeclaration();
-
-                return declaration != null
-                    ? new GoResolveResult(declaration)
-                    : GoResolveResult.NULL;
-            }
-        };
+                    return GoResolveResult.fromElement(processor.getChildDeclaration());
+                }
+            };
 
     public MethodReference(@NotNull GoSelectorExpression element) {
         super(element, RESOLVER);
@@ -64,7 +60,7 @@ public class MethodReference
             return TextRange.EMPTY_RANGE;
 
         return new TextRange(identifier.getStartOffsetInParent(),
-                             identifier.getStartOffsetInParent() + identifier.getTextLength());
+                identifier.getStartOffsetInParent() + identifier.getTextLength());
     }
 
     @NotNull

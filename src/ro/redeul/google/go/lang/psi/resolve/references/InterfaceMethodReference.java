@@ -47,7 +47,7 @@ public class InterfaceMethodReference extends
 
                 for (GoFunctionDeclaration declaration : methodSet.getMethods()) {
                     if (name.equals(declaration.getFunctionName())) {
-                        return new GoResolveResult(declaration.getNameIdentifier());
+                        return GoResolveResult.fromElement(declaration.getNameIdentifier());
                     }
                 }
 

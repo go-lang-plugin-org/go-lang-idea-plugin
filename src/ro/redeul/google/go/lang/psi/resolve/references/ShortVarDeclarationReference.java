@@ -42,7 +42,7 @@ public class ShortVarDeclarationReference
                     if (resolve == null) {
                         return GoResolveResult.NULL;
                     }
-                    return new GoResolveResult(resolve);
+                    return GoResolveResult.fromElement(resolve);
                 }
             };
 

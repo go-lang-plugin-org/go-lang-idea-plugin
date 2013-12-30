@@ -34,25 +34,21 @@ public class VarOrConstReference
 
 
     private static final ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult> RESOLVER =
-        new ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult>() {
-            @Override
-            public GoResolveResult resolve(@NotNull VarOrConstReference reference, boolean incompleteCode) {
-                VarOrConstResolver processor =
-                    new VarOrConstResolver(reference);
+            new ResolveCache.AbstractResolver<VarOrConstReference, GoResolveResult>() {
+                @Override
+                public GoResolveResult resolve(@NotNull VarOrConstReference reference, boolean incompleteCode) {
+                    VarOrConstResolver processor =
+                            new VarOrConstResolver(reference);
 
-                GoPsiScopesUtil.treeWalkUp(
-                        processor,
-                        reference.getElement().getParent().getParent(),
-                        reference.getElement().getContainingFile(),
-                        GoResolveStates.initial());
+                    GoPsiScopesUtil.treeWalkUp(
+                            processor,
+                            reference.getElement().getParent().getParent(),
+                            reference.getElement().getContainingFile(),
+                            GoResolveStates.initial());
 
-                PsiElement declaration = processor.getChildDeclaration();
-
-                return declaration != null
-                    ? new GoResolveResult(declaration)
-                    : GoResolveResult.NULL;
-            }
-        };
+                    return GoResolveResult.fromElement(processor.getChildDeclaration());
+                }
+            };
 
     public VarOrConstReference(GoLiteralIdentifier element) {
         super(element, RESOLVER);
@@ -86,7 +82,7 @@ public class VarOrConstReference
                 String name = PsiUtilCore.getName(declaration);
 
                 String visiblePackageName =
-                    getState().get(GoResolveStates.VisiblePackageName);
+                        getState().get(GoResolveStates.VisiblePackageName);
 
                 if (visiblePackageName != null) {
                     name = visiblePackageName + "." + name;

@@ -77,13 +77,13 @@ public class SelectorOfStructFieldReference
         GoTypeStructPromotedFields promotedFields = type.getPromotedFields();
         for (GoLiteralIdentifier identifier : promotedFields.getNamedFields()) {
             if (unqualifiedName.equals(identifier.getUnqualifiedName())) {
-                return new GoResolveResult(identifier);
+                return GoResolveResult.fromElement(identifier);
             }
         }
 
         for (GoTypeStructAnonymousField field : promotedFields.getAnonymousFields()) {
             if (unqualifiedName.equals(field.getFieldName())) {
-                return new GoResolveResult(field);
+                return GoResolveResult.fromElement(field);
             }
         }
         return GoResolveResult.NULL;
@@ -97,14 +97,14 @@ public class SelectorOfStructFieldReference
         for (GoTypeStructField field : type.getFields()) {
             for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                 if (identifier.getUnqualifiedName().equals(unqualifiedName))
-                    return new GoResolveResult(identifier);
+                    return GoResolveResult.fromElement(identifier);
             }
         }
 
         GoTypeStructAnonymousField[] anonymousFields = type.getAnonymousFields();
         for (GoTypeStructAnonymousField field : anonymousFields) {
             if (field.getFieldName().equals(unqualifiedName))
-                return new GoResolveResult(field);
+                return GoResolveResult.fromElement(field);
         }
         return GoResolveResult.NULL;
     }

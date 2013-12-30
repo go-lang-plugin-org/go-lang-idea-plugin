@@ -32,7 +32,7 @@ import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 public class TypeNameReference
     extends GoPsiReference.Single<GoPsiTypeName, TypeNameReference> {
     public static final ElementPattern<GoPsiTypeName> MATCHER =
-        psiElement(GoPsiTypeName.class);
+            psiElement(GoPsiTypeName.class);
 
     @SuppressWarnings("unchecked")
     private static final ElementPattern<GoPsiTypeName> TYPE_IN_METHOD_RECEIVER =
@@ -44,25 +44,20 @@ public class TypeNameReference
             );
 
     private static final ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult> RESOLVER =
-        new ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult>() {
-            @Override
-            public GoResolveResult resolve(@NotNull TypeNameReference reference, boolean incompleteCode) {
-                TypeNameResolver processor = new TypeNameResolver(reference);
+            new ResolveCache.AbstractResolver<TypeNameReference, GoResolveResult>() {
+                @Override
+                public GoResolveResult resolve(@NotNull TypeNameReference reference, boolean incompleteCode) {
+                    TypeNameResolver processor = new TypeNameResolver(reference);
 
-                GoPsiScopesUtil.treeWalkUp(
-                    processor,
-                    reference.getElement(),
-                    reference.getElement().getContainingFile(),
-                    GoResolveStates.initial());
+                    GoPsiScopesUtil.treeWalkUp(
+                            processor,
+                            reference.getElement(),
+                            reference.getElement().getContainingFile(),
+                            GoResolveStates.initial());
 
-                PsiElement declaration = processor.getDeclaration();
-
-                return
-                    declaration != null
-                        ? new GoResolveResult(declaration)
-                        : GoResolveResult.NULL;
-            }
-        };
+                    return GoResolveResult.fromElement(processor.getDeclaration());
+                }
+            };
 
     public TypeNameReference(GoPsiTypeName element) {
         super(element, RESOLVER);
@@ -95,22 +90,22 @@ public class TypeNameReference
         Collections.addAll(variants, getImportedPackagesNames(getElement().getContainingFile()));
 
         TypeNameResolver processor =
-            new TypeNameResolver(this) {
-                @Override
-                protected boolean addDeclaration(PsiElement declaration, PsiElement childDeclaration) {
-                    if (rejectInterfaceAndPointer && isInterfaceOrPointer(declaration)) {
-                        return true;
-                    }
+                new TypeNameResolver(this) {
+                    @Override
+                    protected boolean addDeclaration(PsiElement declaration, PsiElement childDeclaration) {
+                        if (rejectInterfaceAndPointer && isInterfaceOrPointer(declaration)) {
+                            return true;
+                        }
 
-                    String name = PsiUtilCore.getName(declaration);
+                        String name = PsiUtilCore.getName(declaration);
 
-                    String visiblePackageName =
-                        getState().get(GoResolveStates.VisiblePackageName);
+                        String visiblePackageName =
+                                getState().get(GoResolveStates.VisiblePackageName);
 
-                    if (visiblePackageName != null) {
-                        name = visiblePackageName + "." + name;
-                    }
-                    if (name == null) {
+                        if (visiblePackageName != null) {
+                            name = visiblePackageName + "." + name;
+                        }
+                        if (name == null) {
                         return true;
                     }
 

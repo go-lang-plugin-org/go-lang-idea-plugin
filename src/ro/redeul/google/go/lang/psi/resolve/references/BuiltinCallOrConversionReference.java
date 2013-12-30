@@ -60,7 +60,7 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
                     }
                 }
 
-                return new GoResolveResult(processor.getChildDeclaration());
+                return GoResolveResult.fromElement(processor.getChildDeclaration());
             }
 
         };
