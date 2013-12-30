@@ -82,12 +82,10 @@ public class GoSdkUtil {
         if (!checkFolderExists(path))
             return null;
 
-        // 1.1.2 moves src into go/version/libexec
-        if (!checkFolderExists(path, "src") && !checkFolderExists(path, "libexec", "src"))
+        if (!checkFolderExists(path, "src"))
             return null;
 
-        // 1.1.2 moves pkg into go/version/libexec
-        if (!checkFolderExists(path, "pkg") && !checkFolderExists(path, "libexec", "src"))
+        if (!checkFolderExists(path, "pkg"))
             return null;
 
         String goCommand = findGoExecutable(path);
@@ -137,8 +135,6 @@ public class GoSdkUtil {
 
         if (checkFolderExists(homeDirectory.getPath(), "src")) {
             return homeDirectory.findFileByRelativePath("src/pkg");
-        } else if (checkFolderExists(homeDirectory.getPath(), "libexec", "src")) {
-            return homeDirectory.findFileByRelativePath("libexec/src/pkg");
         }
 
         return null;
