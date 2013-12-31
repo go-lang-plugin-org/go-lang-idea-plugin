@@ -17,7 +17,6 @@ public interface GoTypes {
   IElementType ARRAY_OR_SLICE_TYPE = new GoCompositeElementType("ARRAY_OR_SLICE_TYPE");
   IElementType ASSIGNMENT_STATEMENT = new GoCompositeElementType("ASSIGNMENT_STATEMENT");
   IElementType ASSIGN_OP = new GoCompositeElementType("ASSIGN_OP");
-  IElementType BASE_TYPE = new GoCompositeElementType("BASE_TYPE");
   IElementType BLOCK = new GoCompositeElementType("BLOCK");
   IElementType BREAK_STATEMENT = new GoCompositeElementType("BREAK_STATEMENT");
   IElementType BUILTIN_ARGS = new GoCompositeElementType("BUILTIN_ARGS");
@@ -217,9 +216,6 @@ public interface GoTypes {
       }
       else if (type == ASSIGN_OP) {
         return new GoAssignOpImpl(node);
-      }
-      else if (type == BASE_TYPE) {
-        return new GoBaseTypeImpl(node);
       }
       else if (type == BLOCK) {
         return new GoBlockImpl(node);

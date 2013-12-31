@@ -30,10 +30,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
-  public void visitBaseType(@NotNull GoBaseType o) {
-    visitType(o);
-  }
-
   public void visitBlock(@NotNull GoBlock o) {
     visitCompositeElement(o);
   }

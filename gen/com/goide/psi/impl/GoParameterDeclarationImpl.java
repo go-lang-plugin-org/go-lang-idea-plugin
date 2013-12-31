@@ -22,9 +22,9 @@ public class GoParameterDeclarationImpl extends GoCompositeElementImpl implement
   }
 
   @Override
-  @Nullable
+  @NotNull
   public GoType getType() {
-    return findChildByClass(GoType.class);
+    return findNotNullChildByClass(GoType.class);
   }
 
 }

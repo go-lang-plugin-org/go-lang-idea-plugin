@@ -10,7 +10,7 @@ public interface GoTypeAssertionExpr extends GoExpression {
   @NotNull
   GoExpression getExpression();
 
-  @NotNull
+  @Nullable
   GoType getType();
 
 }

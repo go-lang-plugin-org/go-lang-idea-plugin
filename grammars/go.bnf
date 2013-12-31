@@ -74,13 +74,12 @@
 File ::= PackageClause semi ( ImportDeclaration semi )* ( TopLevelDeclaration semi )* {pin=1}
 private semi ::= '<NL>' | ';'?
 
-PackageClause ::= package PackageName {pin=1}
-private PackageName ::= identifier
+PackageClause ::= package identifier {pin=1}
 
 ImportDeclaration ::= import ( ImportSpec | '(' ( ImportSpec semi )* ')' ) {pin=1}
-ImportSpec ::= [ '.' | PackageName ] string
+ImportSpec ::= [ '.' | identifier ] string
 
-Type ::= TypeName | TypeLit | '(' Type ')' {pin(".*")=1}
+Type ::= TypeName | TypeLit | '(' Type ')'
 TypeName ::= QualifiedIdentifier | identifier
 TypeLit ::=
     ArrayOrSliceType
@@ -98,22 +97,20 @@ FieldDeclaration ::= (IdentifierList Type | AnonymousField) [ Tag ]
 AnonymousField ::= [ '*' ] TypeName
 Tag ::= string
 
-PointerType ::= '*' BaseType {pin=1}
-BaseType ::= Type
+PointerType ::= '*' Type {pin=1}
 
 FunctionType ::= func Signature {pin=1}
-Signature ::= Parameters [ Result ]
+Signature ::= Parameters Result? {pin=1}
 Result ::= Parameters | Type
-Parameters ::= '(' [ ParameterList [ ',' ] ] ')' {pin(".*")=1}
+Parameters ::= '(' [ ParameterList ','? ] ')' {pin(".*")=1}
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
-ParameterDeclaration ::= IdentifierListNoPin? '...'? Type? // todo: Type not optional
+ParameterDeclaration ::= IdentifierListNoPin? '...'? Type
 
 InterfaceType ::= interface '{' ( MethodSpec semi )* '}' {pin(".*")=1}
 MethodSpec ::= identifier Signature | InterfaceTypeName
 InterfaceTypeName ::= TypeName
 
 MapType ::= map '[' Type ']' Type {pin=1}
-
 ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
 
 Block ::= '{' (Statement semi)* '}' {pin(".*")=1}
@@ -157,7 +154,7 @@ TopLevelDeclaration ::=
 ConstDeclaration ::= const ( ConstSpec | '(' ( ConstSpec semi )* ')' ) {pin(".*")=1}
 ConstSpec ::= IdentifierList [ [ Type ] '=' ExpressionList ]
 
-private IdentifierListNoPin ::= identifier ( ',' identifier )*
+private IdentifierListNoPin ::= identifier &(!('.' | ')')) (',' identifier)*
 private IdentifierList ::= identifier ( ',' identifier )*
 private ExpressionList ::= Expression ( ',' Expression )*
 
@@ -190,7 +187,7 @@ Literal ::=
   | char
 OperandName ::= QualifiedIdentifier | identifier
 
-QualifiedIdentifier ::= PackageName '.' identifier
+QualifiedIdentifier ::= identifier '.' identifier
 
 CompositeLit ::= Expression LiteralValue
 LiteralTypeExpr ::=
@@ -256,7 +253,7 @@ ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
 SelectorExpr ::= Expression '.' Expression
 IndexExpr ::= Expression '[' IndexExprBody ']'
 private IndexExprBody ::= (Expression? ':' Expression ':' Expression) | (Expression? ':' Expression?) | Expression
-TypeAssertionExpr ::= Expression '.' '(' Type ')'
+TypeAssertionExpr ::= Expression '.' '(' (Type | 'type') ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')'
 ConversionExpr ::= Type '(' Expression [ ',' ] ')'
