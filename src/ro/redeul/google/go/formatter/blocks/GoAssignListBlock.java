@@ -71,15 +71,15 @@ class GoAssignListBlock extends GoBlock {
                     commentAlignment = Alignment.createAlignment(true);
                 }
                 newLinesAfterLastComment = 0;
-                children.add(GoBlockGenerator.generateBlock(child, commentAlignment, mySettings));
-                continue;
+                children.add(GoBlocks.generate(child, mySettings, commentAlignment));
+              continue;
             }
 
             Block childBlock;
             if (getIndentedElements().contains(type)) {
-                childBlock = GoBlockGenerator.generateBlock(child, Indent.getNormalIndent(), mySettings);
+                childBlock = GoBlocks.generate(child, mySettings, GoBlockUtil.Indents.NORMAL);
             } else {
-                childBlock = GoBlockGenerator.generateBlock(child, mySettings);
+                childBlock = GoBlocks.generate(child, mySettings);
             }
 
             children.add(childBlock);

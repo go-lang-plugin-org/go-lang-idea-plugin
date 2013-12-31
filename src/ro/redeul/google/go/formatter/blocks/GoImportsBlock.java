@@ -26,7 +26,7 @@ public class GoImportsBlock extends GoSyntheticBlock<GoImportDeclarations> {
 
   public GoImportsBlock(GoImportDeclarations imports,
                         CommonCodeStyleSettings settings) {
-    super(imports, settings, Indents.NONE, null);
+    super(imports, settings, Indents.NONE);
 
     hasMultipleImports = imports.isMulti();
   }
@@ -53,7 +53,7 @@ public class GoImportsBlock extends GoSyntheticBlock<GoImportDeclarations> {
   );
 
   @Override
-  protected boolean wantsBreakup(IElementType typeChild1) {
+  protected boolean wantsToBreakLine(IElementType typeChild1) {
     return WANT_BREAK_TOKS.contains(typeChild1);
   }
 

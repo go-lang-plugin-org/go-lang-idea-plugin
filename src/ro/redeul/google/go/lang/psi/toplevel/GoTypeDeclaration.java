@@ -12,4 +12,6 @@ import ro.redeul.google.go.lang.psi.statements.GoStatement;
 public interface GoTypeDeclaration extends GoPsiElement, GoStatement {
 
     GoTypeSpec[] getTypeSpecs();
+
+    boolean isMulti();
 }

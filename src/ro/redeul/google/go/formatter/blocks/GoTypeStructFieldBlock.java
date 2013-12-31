@@ -33,25 +33,29 @@ class GoTypeStructFieldBlock extends GoBlock {
         this.fieldTypeAlignment = fieldTypeAlignment;
     }
 
-    @Override
-    protected List<Block> buildChildren() {
-        List<Block> children = new ArrayList<Block>();
-        for (ASTNode child : getGoChildren()) {
-            if (isNewLineNode(child.getPsi()) || isWhiteSpaceNode(child.getPsi())) {
-                continue;
-            }
-
-            Block block;
-            Indent indent = Indent.getNormalIndent(false);
-            if (FIELD_TYPE_SET.contains(child.getElementType())) {
-                block = GoBlockGenerator.generateBlock(child, Indent.getNoneIndent(), fieldTypeAlignment, mySettings);
-            } else {
-                block = GoBlockGenerator.generateBlock(child, null, null, mySettings);
-            }
-            children.add(block);
-        }
-        return children;
-    }
+//    @Override
+//    protected List<Block> buildChildren() {
+//        List<Block> children = new ArrayList<Block>();
+//        for (ASTNode child : getGoChildren()) {
+//            if (isNewLineNode(child.getPsi()) || isWhiteSpaceNode(child.getPsi())) {
+//                continue;
+//            }
+//
+//            Block block;
+//            Indent indent = Indent.getNormalIndent(false);
+//            if (FIELD_TYPE_SET.contains(child.getElementType())) {
+//                block = GoBlocks.generateBlock(
+//                  child,
+//                  Indent.getNoneIndent(),
+//                  GoBlockUtil.Alignments.set(fieldTypeAlignment),
+//                  mySettings);
+//            } else {
+//                block = GoBlocks.generateBlock(child, null, null, mySettings);
+//            }
+//            children.add(block);
+//        }
+//        return children;
+//    }
 
     @Override
     public Spacing getSpacing(Block child1, @NotNull Block child2) {

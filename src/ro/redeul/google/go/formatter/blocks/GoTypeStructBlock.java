@@ -63,15 +63,15 @@ class GoTypeStructBlock extends GoBlock {
                     commentAlignment = Alignment.createAlignment(true);
                 }
                 newLinesAfterLastComment = 0;
-                children.add(GoBlockGenerator.generateBlock(child, commentAlignment, mySettings));
-                continue;
+                children.add(GoBlocks.generate(child, mySettings, commentAlignment));
+              continue;
             }
 
             Block childBlock;
             if (getIndentedElements().contains(type)) {
-                childBlock = GoBlockGenerator.generateBlock(child, normalIndent, mySettings);
+                childBlock = GoBlocks.generate(child, mySettings, normalIndent);
             } else {
-                childBlock = GoBlockGenerator.generateBlock(child, mySettings);
+                childBlock = GoBlocks.generate(child, mySettings);
             }
 
             children.add(childBlock);

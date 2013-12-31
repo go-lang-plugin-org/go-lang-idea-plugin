@@ -32,11 +32,11 @@ class GoAssignBlock extends GoBlock {
                 continue;
             }
 
-            if (child.getElementType() == GoElementTypes.oASSIGN) {
-                block = GoBlockGenerator.generateBlock(child, indent, assignAlignment, mySettings);
-            } else {
-                block = GoBlockGenerator.generateBlock(child, indent, mySettings);
-            }
+//            if (child.getElementType() == GoElementTypes.oASSIGN) {
+//                block = GoBlocks.generateBlock(child, indent, assignAlignment, mySettings);
+//            } else {
+                block = GoBlocks.generate(child, mySettings, indent);
+//            }
             children.add(block);
         }
         return children;

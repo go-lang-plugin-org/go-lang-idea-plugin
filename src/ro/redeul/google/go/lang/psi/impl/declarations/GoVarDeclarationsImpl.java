@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -27,6 +28,11 @@ public class GoVarDeclarationsImpl extends GoPsiElementBase implements GoVarDecl
     }
 
     @Override
+    public boolean isMulti() {
+        return findChildByType(GoTokenTypes.pLPAREN) != null;
+    }
+
+    @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
@@ -41,5 +47,4 @@ public class GoVarDeclarationsImpl extends GoPsiElementBase implements GoVarDecl
 
         return true;
     }
-
 }

@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 
 import java.util.ArrayList;
@@ -152,7 +151,7 @@ class GoBlock implements ASTBlock, GoElementTypes {
             }
 
             Indent indent = getChildIndent(prevChild != null ? prevChild.getPsi() : null, child.getPsi());
-            children.add(GoBlockGenerator.generateBlock(child, indent, mySettings));
+            children.add(GoBlocks.generate(child, mySettings, indent));
             prevChild = child;
         }
 

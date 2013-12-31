@@ -13,7 +13,7 @@ import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.impl.source.tree.TreeUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoLanguage;
-import ro.redeul.google.go.formatter.blocks.GoBlockGenerator;
+import ro.redeul.google.go.formatter.blocks.GoBlocks;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
@@ -38,14 +38,13 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
             goSettings.getIndentOptions().SMART_TABS = false;
         }
 
-        Block block = GoBlockGenerator.generateBlock(fileElement, goSettings);
+        Block block = GoBlocks.generate(fileElement, goSettings);
 
         FormattingModel formattingModel = FormattingModelProvider
                 .createFormattingModelForPsiFile(
                         element.getContainingFile(),
                         block,
                         settings);
-
 
         FormattingModelDumper.dumpFormattingModel(formattingModel.getRootBlock(), 4, System.out);
         return formattingModel;

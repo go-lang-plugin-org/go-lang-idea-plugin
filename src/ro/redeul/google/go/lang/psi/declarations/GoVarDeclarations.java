@@ -13,4 +13,5 @@ public interface GoVarDeclarations extends GoPsiElement {
 
     GoVarDeclaration[] getDeclarations();
 
+    boolean isMulti();
 }

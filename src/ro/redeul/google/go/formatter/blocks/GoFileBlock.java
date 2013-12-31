@@ -12,7 +12,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 class GoFileBlock extends GoSyntheticBlock<GoFile> {
 
   public GoFileBlock(GoFile goFile, CommonCodeStyleSettings settings) {
-    super(goFile, /*alignment, indent, wrap, */settings);
+    super(goFile, settings, GoBlockUtil.Indents.NONE_ABSOLUTE, GoBlockUtil.Alignments.one(), GoBlockUtil.Alignments.EMPTY_MAP);
   }
 
   private static final TokenSet NEED_NEW_LINE_TOKENS = TokenSet.create(
@@ -27,7 +27,7 @@ class GoFileBlock extends GoSyntheticBlock<GoFile> {
     mML_COMMENT
   );
 
-  protected boolean wantsBreakup(IElementType typeChild) {
+  protected boolean wantsToBreakLine(IElementType typeChild) {
     return NEED_NEW_LINE_TOKENS.contains(typeChild);
   }
 

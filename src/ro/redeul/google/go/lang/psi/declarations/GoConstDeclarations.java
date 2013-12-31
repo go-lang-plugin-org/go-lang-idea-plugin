@@ -12,4 +12,5 @@ public interface GoConstDeclarations extends GoPsiElement {
 
     GoConstDeclaration[] getDeclarations();
 
+    boolean isMulti();
 }

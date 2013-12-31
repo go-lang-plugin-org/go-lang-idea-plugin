@@ -2,6 +2,7 @@ package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.ASTBlock;
 import com.intellij.formatting.Block;
+import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
@@ -19,33 +20,54 @@ public class GoFormatterUtil {
         if (block == null || !(block instanceof ASTBlock))
             return null;
 
-        return ((ASTBlock) block).getNode().getElementType();
+        return getASTElementType(((ASTBlock) block).getNode());
+    }
+
+    @Nullable
+    public static IElementType getASTElementType(@Nullable ASTNode node) {
+        if (node == null)
+            return null;
+
+        return node.getElementType();
     }
 
     @Nullable
     public static String getTextBetween(@Nullable Block firstBlock, @Nullable Block lastBlock) {
+      ASTNode firstNode = null, lastNode = null;
+
+      if ( firstBlock != null && firstBlock instanceof ASTBlock)
+        firstNode = ((ASTBlock)firstBlock).getNode();
+
+      if (lastBlock != null && lastBlock instanceof ASTBlock)
+        lastNode = ((ASTBlock)lastBlock).getNode();
+
+      return getTextBetween(firstNode, lastNode);
+    }
+
+    @Nullable
+    public static String getTextBetween(@Nullable ASTNode firstNode, @Nullable ASTNode lastNode) {
         int firstBlockEnd = -1;
         int lastBlockStart = -1;
 
         PsiFile psiFile = null;
-        if ( firstBlock != null && firstBlock instanceof ASTBlock)
-            psiFile = ((ASTBlock)firstBlock).getNode().getPsi().getContainingFile();
+        if ( firstNode != null)
+            psiFile = firstNode.getPsi().getContainingFile();
 
-        if (psiFile == null && lastBlock != null && lastBlock instanceof ASTBlock)
-            psiFile = ((ASTBlock)lastBlock).getNode().getPsi().getContainingFile();
+        if (psiFile == null && lastNode != null)
+            psiFile = lastNode.getPsi().getContainingFile();
 
         if (psiFile == null)
             return null;
 
-        if ( firstBlock != null ) {
-            firstBlockEnd = firstBlock.getTextRange().getEndOffset();
+        if ( firstNode != null ) {
+            firstBlockEnd = firstNode.getTextRange().getEndOffset();
             lastBlockStart = psiFile.getTextLength();
         } else {
             firstBlockEnd = 0;
         }
 
-        if ( lastBlock != null) {
-            lastBlockStart = lastBlock.getTextRange().getStartOffset();
+        if ( lastNode != null) {
+            lastBlockStart = lastNode.getTextRange().getStartOffset();
         }
 
         return psiFile.getText().substring(firstBlockEnd, lastBlockStart);
