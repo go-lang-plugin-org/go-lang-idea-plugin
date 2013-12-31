@@ -1,0 +1,15 @@
+package main
+func VariadicFn(str_list ...string){
+    str_list<caret>
+}
+func main() {
+    VariadicFn("str_1","str_2")
+}
+-----
+package main
+func VariadicFn(str_list ...string){
+    for k,v:= range str_list{<caret>}
+}
+func main() {
+    VariadicFn("str_1","str_2")
+}
