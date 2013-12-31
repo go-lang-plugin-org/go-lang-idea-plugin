@@ -156,9 +156,6 @@ public class GoParser implements PsiParser {
     else if (root_ == INTERFACE_TYPE) {
       result_ = InterfaceType(builder_, 0);
     }
-    else if (root_ == INTERFACE_TYPE_NAME) {
-      result_ = InterfaceTypeName(builder_, 0);
-    }
     else if (root_ == KEY) {
       result_ = Key(builder_, 0);
     }
@@ -1750,18 +1747,6 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName
-  public static boolean InterfaceTypeName(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "InterfaceTypeName")) return false;
-    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = TypeName(builder_, level_ + 1);
-    exit_section_(builder_, marker_, INTERFACE_TYPE_NAME, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
   // FieldName | ElementIndex
   public static boolean Key(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Key")) return false;
@@ -1857,14 +1842,14 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // identifier Signature | InterfaceTypeName
+  // identifier Signature | TypeName
   public static boolean MethodSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MethodSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = MethodSpec_0(builder_, level_ + 1);
-    if (!result_) result_ = InterfaceTypeName(builder_, level_ + 1);
+    if (!result_) result_ = TypeName(builder_, level_ + 1);
     exit_section_(builder_, marker_, METHOD_SPEC, result_);
     return result_;
   }

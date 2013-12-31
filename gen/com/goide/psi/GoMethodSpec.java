@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface GoMethodSpec extends GoCompositeElement {
 
   @Nullable
-  GoInterfaceTypeName getInterfaceTypeName();
+  GoSignature getSignature();
 
   @Nullable
-  GoSignature getSignature();
+  GoTypeName getTypeName();
 
   @Nullable
   PsiElement getIdentifier();

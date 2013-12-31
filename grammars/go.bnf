@@ -107,8 +107,7 @@ private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
 ParameterDeclaration ::= IdentifierListNoPin? '...'? Type
 
 InterfaceType ::= interface '{' ( MethodSpec semi )* '}' {pin(".*")=1}
-MethodSpec ::= identifier Signature | InterfaceTypeName
-InterfaceTypeName ::= TypeName
+MethodSpec ::= identifier Signature | TypeName
 
 MapType ::= map '[' Type ']' Type {pin=1}
 ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}

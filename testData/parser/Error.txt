@@ -14,9 +14,8 @@ GO_FILE
         PsiElement(interface)('interface')
         PsiElement({)('{')
         METHOD_SPEC
-          INTERFACE_TYPE_NAME
-            TYPE_NAME
-              PsiElement(identifier)('error')
+          TYPE_NAME
+            PsiElement(identifier)('error')
         PsiComment(GO_LINE_COMMENT)('// RuntimeError is a no-op function but')
         PsiComment(GO_LINE_COMMENT)('// serves to distinguish types that are runtime')
         PsiComment(GO_LINE_COMMENT)('// errors from ordinary errors: a type is a')

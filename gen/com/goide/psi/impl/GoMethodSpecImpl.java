@@ -23,14 +23,14 @@ public class GoMethodSpecImpl extends GoCompositeElementImpl implements GoMethod
 
   @Override
   @Nullable
-  public GoInterfaceTypeName getInterfaceTypeName() {
-    return findChildByClass(GoInterfaceTypeName.class);
+  public GoSignature getSignature() {
+    return findChildByClass(GoSignature.class);
   }
 
   @Override
   @Nullable
-  public GoSignature getSignature() {
-    return findChildByClass(GoSignature.class);
+  public GoTypeName getTypeName() {
+    return findChildByClass(GoTypeName.class);
   }
 
   @Override
