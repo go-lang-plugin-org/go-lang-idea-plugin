@@ -5,17 +5,22 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.intentions.Intention;
 import ro.redeul.google.go.intentions.IntentionExecutionException;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
-import ro.redeul.google.go.lang.psi.typing.*;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
+import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 import ro.redeul.google.go.util.GoUtil;
 
@@ -43,9 +48,26 @@ public class ConvertStatementToForRangeIntention extends Intention {
                         if (goType instanceof GoTypePsiBacked) {
                             GoPsiType psiType = ((GoTypePsiBacked) goType).getPsiType();
                             psiType = GoTypeUtils.resolveToFinalType(psiType);
-                            return psiType instanceof GoPsiTypeMap || psiType instanceof GoPsiTypeSlice || psiType instanceof GoPsiTypeArray;
+                            if (psiType instanceof GoPsiTypeMap || psiType instanceof GoPsiTypeSlice || psiType instanceof GoPsiTypeArray)
+                                return true;
+                            break;
                         }
-                        return goType instanceof GoTypeMap || goType instanceof GoTypeSlice || goType instanceof GoTypeArray;
+                        if (goType instanceof GoTypeArray)
+                            return true;
+                    }
+                }
+
+                if (expr instanceof GoLiteralExpression) {
+                    for (PsiReference identifier : ((GoLiteralExpression) expr).getLiteral().getReferences()) {
+                        if (identifier != null) {
+                            PsiElement resolve = identifier.resolve();
+                            if (resolve != null) {
+                                resolve = resolve.getParent();
+                                if (resolve instanceof GoFunctionParameter) {
+                                    return ((GoFunctionParameter) resolve).isVariadic();
+                                }
+                            }
+                        }
                     }
                 }
             }
