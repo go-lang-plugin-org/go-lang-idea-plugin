@@ -12,14 +12,12 @@ GO_FILE
           PsiElement(()('(')
           PARAMETER_DECLARATION
             PsiElement(identifier)('key')
-            TYPE
-              TYPE_LIT
-                ARRAY_OR_SLICE_TYPE
-                  PsiElement([)('[')
-                  PsiElement(])(']')
-                  TYPE
-                    TYPE_NAME
-                      PsiElement(identifier)('byte')
+            ARRAY_OR_SLICE_TYPE
+              PsiElement([)('[')
+              PsiElement(])(']')
+              TYPE
+                TYPE_NAME
+                  PsiElement(identifier)('byte')
           PsiElement())(')')
         RESULT
           PARAMETERS

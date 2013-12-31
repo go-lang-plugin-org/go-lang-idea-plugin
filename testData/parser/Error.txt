@@ -10,58 +10,54 @@ GO_FILE
     PsiElement(type)('type')
     TYPE_SPEC
       PsiElement(identifier)('Error')
-      TYPE
-        TYPE_LIT
-          INTERFACE_TYPE
-            PsiElement(interface)('interface')
-            PsiElement({)('{')
-            METHOD_SPEC
-              INTERFACE_TYPE_NAME
-                TYPE_NAME
-                  PsiElement(identifier)('error')
-            PsiComment(GO_LINE_COMMENT)('// RuntimeError is a no-op function but')
-            PsiComment(GO_LINE_COMMENT)('// serves to distinguish types that are runtime')
-            PsiComment(GO_LINE_COMMENT)('// errors from ordinary errors: a type is a')
-            PsiComment(GO_LINE_COMMENT)('// runtime error if it has a RuntimeError method.')
-            METHOD_SPEC
-              PsiElement(identifier)('RuntimeError')
-              SIGNATURE
-                PARAMETERS
-                  PsiElement(()('(')
-                  PsiElement())(')')
-            PsiElement(})('}')
+      INTERFACE_TYPE
+        PsiElement(interface)('interface')
+        PsiElement({)('{')
+        METHOD_SPEC
+          INTERFACE_TYPE_NAME
+            TYPE_NAME
+              PsiElement(identifier)('error')
+        PsiComment(GO_LINE_COMMENT)('// RuntimeError is a no-op function but')
+        PsiComment(GO_LINE_COMMENT)('// serves to distinguish types that are runtime')
+        PsiComment(GO_LINE_COMMENT)('// errors from ordinary errors: a type is a')
+        PsiComment(GO_LINE_COMMENT)('// runtime error if it has a RuntimeError method.')
+        METHOD_SPEC
+          PsiElement(identifier)('RuntimeError')
+          SIGNATURE
+            PARAMETERS
+              PsiElement(()('(')
+              PsiElement())(')')
+        PsiElement(})('}')
   PsiComment(GO_LINE_COMMENT)('// A TypeAssertionError explains a failed type assertion.')
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
       PsiElement(identifier)('TypeAssertionError')
-      TYPE
-        TYPE_LIT
-          STRUCT_TYPE
-            PsiElement(struct)('struct')
-            PsiElement({)('{')
-            FIELD_DECLARATION
-              PsiElement(identifier)('interfaceString')
-              TYPE
-                TYPE_NAME
-                  PsiElement(identifier)('string')
-            FIELD_DECLARATION
-              PsiElement(identifier)('concreteString')
-              TYPE
-                TYPE_NAME
-                  PsiElement(identifier)('string')
-            FIELD_DECLARATION
-              PsiElement(identifier)('assertedString')
-              TYPE
-                TYPE_NAME
-                  PsiElement(identifier)('string')
-            FIELD_DECLARATION
-              PsiElement(identifier)('missingMethod')
-              TYPE
-                TYPE_NAME
-                  PsiElement(identifier)('string')
-            PsiComment(GO_LINE_COMMENT)('// one method needed by Interface, missing from Concrete')
-            PsiElement(})('}')
+      STRUCT_TYPE
+        PsiElement(struct)('struct')
+        PsiElement({)('{')
+        FIELD_DECLARATION
+          PsiElement(identifier)('interfaceString')
+          TYPE
+            TYPE_NAME
+              PsiElement(identifier)('string')
+        FIELD_DECLARATION
+          PsiElement(identifier)('concreteString')
+          TYPE
+            TYPE_NAME
+              PsiElement(identifier)('string')
+        FIELD_DECLARATION
+          PsiElement(identifier)('assertedString')
+          TYPE
+            TYPE_NAME
+              PsiElement(identifier)('string')
+        FIELD_DECLARATION
+          PsiElement(identifier)('missingMethod')
+          TYPE
+            TYPE_NAME
+              PsiElement(identifier)('string')
+        PsiComment(GO_LINE_COMMENT)('// one method needed by Interface, missing from Concrete')
+        PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER
@@ -247,36 +243,28 @@ GO_FILE
             PsiElement(identifier)('ps2')
             PsiElement(,)(',')
             PsiElement(identifier)('ps3')
-            TYPE
-              TYPE_LIT
-                POINTER_TYPE
-                  PsiElement(*)('*')
-                  TYPE
-                    TYPE_NAME
-                      PsiElement(identifier)('string')
+            POINTER_TYPE
+              PsiElement(*)('*')
+              TYPE
+                TYPE_NAME
+                  PsiElement(identifier)('string')
           PsiElement(,)(',')
           PARAMETER_DECLARATION
             PsiElement(identifier)('pmeth')
-            TYPE
-              TYPE_LIT
-                POINTER_TYPE
-                  PsiElement(*)('*')
-                  TYPE
-                    TYPE_NAME
-                      PsiElement(identifier)('string')
+            POINTER_TYPE
+              PsiElement(*)('*')
+              TYPE
+                TYPE_NAME
+                  PsiElement(identifier)('string')
           PsiElement(,)(',')
           PARAMETER_DECLARATION
             PsiElement(identifier)('ret')
-            TYPE
-              TYPE_LIT
-                POINTER_TYPE
-                  PsiElement(*)('*')
-                  TYPE
-                    TYPE_LIT
-                      INTERFACE_TYPE
-                        PsiElement(interface)('interface')
-                        PsiElement({)('{')
-                        PsiElement(})('}')
+            POINTER_TYPE
+              PsiElement(*)('*')
+              INTERFACE_TYPE
+                PsiElement(interface)('interface')
+                PsiElement({)('{')
+                PsiElement(})('}')
           PsiElement())(')')
       FUNCTION_BODY
         BLOCK
@@ -491,16 +479,12 @@ GO_FILE
           PsiElement(,)(',')
           PARAMETER_DECLARATION
             PsiElement(identifier)('ret')
-            TYPE
-              TYPE_LIT
-                POINTER_TYPE
-                  PsiElement(*)('*')
-                  TYPE
-                    TYPE_LIT
-                      INTERFACE_TYPE
-                        PsiElement(interface)('interface')
-                        PsiElement({)('{')
-                        PsiElement(})('}')
+            POINTER_TYPE
+              PsiElement(*)('*')
+              INTERFACE_TYPE
+                PsiElement(interface)('interface')
+                PsiElement({)('{')
+                PsiElement(})('}')
           PsiElement())(')')
       FUNCTION_BODY
         BLOCK
@@ -525,22 +509,20 @@ GO_FILE
     PsiElement(type)('type')
     TYPE_SPEC
       PsiElement(identifier)('stringer')
-      TYPE
-        TYPE_LIT
-          INTERFACE_TYPE
-            PsiElement(interface)('interface')
-            PsiElement({)('{')
-            METHOD_SPEC
-              PsiElement(identifier)('String')
-              SIGNATURE
-                PARAMETERS
-                  PsiElement(()('(')
-                  PsiElement())(')')
-                RESULT
-                  TYPE
-                    TYPE_NAME
-                      PsiElement(identifier)('string')
-            PsiElement(})('}')
+      INTERFACE_TYPE
+        PsiElement(interface)('interface')
+        PsiElement({)('{')
+        METHOD_SPEC
+          PsiElement(identifier)('String')
+          SIGNATURE
+            PARAMETERS
+              PsiElement(()('(')
+              PsiElement())(')')
+            RESULT
+              TYPE
+                TYPE_NAME
+                  PsiElement(identifier)('string')
+        PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     FUNCTION_NAME
@@ -549,12 +531,10 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          TYPE
-            TYPE_LIT
-              INTERFACE_TYPE
-                PsiElement(interface)('interface')
-                PsiElement({)('{')
-                PsiElement(})('}')
+          INTERFACE_TYPE
+            PsiElement(interface)('interface')
+            PsiElement({)('{')
+            PsiElement(})('}')
         PsiElement())(')')
       RESULT
         TYPE
@@ -574,12 +554,10 @@ GO_FILE
           PsiElement(()('(')
           PARAMETER_DECLARATION
             PsiElement(identifier)('i')
-            TYPE
-              TYPE_LIT
-                INTERFACE_TYPE
-                  PsiElement(interface)('interface')
-                  PsiElement({)('{')
-                  PsiElement(})('}')
+            INTERFACE_TYPE
+              PsiElement(interface)('interface')
+              PsiElement({)('{')
+              PsiElement(})('}')
           PsiElement())(')')
       FUNCTION_BODY
         BLOCK

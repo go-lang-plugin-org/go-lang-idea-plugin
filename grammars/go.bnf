@@ -81,7 +81,7 @@ ImportSpec ::= [ '.' | identifier ] string
 
 Type ::= TypeName | TypeLit | '(' Type ')'
 TypeName ::= QualifiedIdentifier | identifier
-TypeLit ::=
+private TypeLit ::=
     ArrayOrSliceType
   | StructType
   | PointerType

@@ -97,7 +97,6 @@ public interface GoTypes {
   IElementType TYPE_CASE_CLAUSE = new GoCompositeElementType("TYPE_CASE_CLAUSE");
   IElementType TYPE_DECLARATION = new GoCompositeElementType("TYPE_DECLARATION");
   IElementType TYPE_LIST = new GoCompositeElementType("TYPE_LIST");
-  IElementType TYPE_LIT = new GoCompositeElementType("TYPE_LIT");
   IElementType TYPE_NAME = new GoCompositeElementType("TYPE_NAME");
   IElementType TYPE_SPEC = new GoCompositeElementType("TYPE_SPEC");
   IElementType TYPE_SWITCH_CASE = new GoCompositeElementType("TYPE_SWITCH_CASE");
@@ -456,9 +455,6 @@ public interface GoTypes {
       }
       else if (type == TYPE_LIST) {
         return new GoTypeListImpl(node);
-      }
-      else if (type == TYPE_LIT) {
-        return new GoTypeLitImpl(node);
       }
       else if (type == TYPE_NAME) {
         return new GoTypeNameImpl(node);

@@ -23,12 +23,6 @@ public class GoTypeImpl extends GoCompositeElementImpl implements GoType {
 
   @Override
   @Nullable
-  public GoTypeLit getTypeLit() {
-    return findChildByClass(GoTypeLit.class);
-  }
-
-  @Override
-  @Nullable
   public GoTypeName getTypeName() {
     return findChildByClass(GoTypeName.class);
   }

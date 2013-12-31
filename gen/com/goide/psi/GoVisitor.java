@@ -350,10 +350,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitTypeLit(@NotNull GoTypeLit o) {
-    visitExpression(o);
-  }
-
   public void visitTypeName(@NotNull GoTypeName o) {
     visitCompositeElement(o);
   }

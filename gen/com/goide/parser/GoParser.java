@@ -279,9 +279,6 @@ public class GoParser implements PsiParser {
     else if (root_ == TYPE_LIST) {
       result_ = TypeList(builder_, 0);
     }
-    else if (root_ == TYPE_LIT) {
-      result_ = TypeLit(builder_, 0);
-    }
     else if (root_ == TYPE_NAME) {
       result_ = TypeName(builder_, 0);
     }
@@ -329,7 +326,7 @@ public class GoParser implements PsiParser {
       FUNCTION_LIT, INDEX_EXPR, LITERAL, LITERAL_TYPE_EXPR,
       METHOD_EXPR, MUL_EXPR, OPERAND_NAME, OR_EXPR,
       PARENTHESES_EXPR, QUALIFIED_IDENTIFIER, SELECTOR_EXPR, TYPE_ASSERTION_EXPR,
-      TYPE_LIT, UNARY_EXPR),
+      UNARY_EXPR),
     create_token_set_(FUNCTION_DECLARATION, METHOD_DECLARATION),
     create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, CONTINUE_STATEMENT, DEFER_STATEMENT,
       EXPR_SWITCH_STATEMENT, FALLTHROUGH_STATEMENT, FOR_STATEMENT, GOTO_STATEMENT,
@@ -2694,10 +2691,10 @@ public class GoParser implements PsiParser {
   //   | InterfaceType
   //   | MapType
   //   | ChannelType
-  public static boolean TypeLit(PsiBuilder builder_, int level_) {
+  static boolean TypeLit(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeLit")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type lit>");
+    Marker marker_ = enter_section_(builder_);
     result_ = ArrayOrSliceType(builder_, level_ + 1);
     if (!result_) result_ = StructType(builder_, level_ + 1);
     if (!result_) result_ = PointerType(builder_, level_ + 1);
@@ -2705,7 +2702,7 @@ public class GoParser implements PsiParser {
     if (!result_) result_ = InterfaceType(builder_, level_ + 1);
     if (!result_) result_ = MapType(builder_, level_ + 1);
     if (!result_) result_ = ChannelType(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, TYPE_LIT, result_, false, null);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
