@@ -1,8 +1,6 @@
 package com.goide;
 
-import com.goide.psi.GoFile;
-import com.goide.psi.GoFunctionDeclaration;
-import com.goide.psi.GoTopLevelDeclaration;
+import com.goide.psi.*;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.structureView.*;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
@@ -120,9 +118,10 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     @Override
     public Icon getIcon(boolean open) {
       if (!myElement.isValid()) return null;
-      if (myElement instanceof GoFunctionDeclaration) {
-        return AllIcons.Nodes.Function;
-      }
+      if (myElement instanceof GoFunctionDeclaration) return AllIcons.Nodes.Function;
+      if (myElement instanceof GoVarDeclaration) return AllIcons.Nodes.Variable;
+      if (myElement instanceof GoConstDeclaration) return AllIcons.Nodes.Variable; // todo: another icon
+      if (myElement instanceof GoTypeDeclaration) return GoIcons.TYPE;
       return myElement.getIcon(0);
     }
   }
