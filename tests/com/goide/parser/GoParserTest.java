@@ -39,4 +39,5 @@ public class GoParserTest extends ParsingTestCase {
   }
 
   public void testSimple() { doTest(true); }
+  public void testError()  { doTest(true); }
 }

@@ -3091,7 +3091,7 @@ public class GoParser implements PsiParser {
   // 5: PREFIX(UnaryExpr)
   // 6: ATOM(BuiltinCallExpr)
   // 7: ATOM(MethodExpr)
-  // 8: ATOM(OperandName) ATOM(LiteralTypeExpr) PREFIX(ConversionExpr) BINARY(SelectorExpr) POSTFIX(IndexExpr) POSTFIX(TypeAssertionExpr) POSTFIX(CallExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit)
+  // 8: ATOM(OperandName) ATOM(LiteralTypeExpr) PREFIX(ConversionExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) POSTFIX(IndexExpr) POSTFIX(CallExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit)
   // 9: PREFIX(ParenthesesExpr)
   public static boolean Expression(PsiBuilder builder_, int level_, int priority_) {
     if (!recursion_guard_(builder_, level_, "Expression")) return false;
@@ -3145,6 +3145,11 @@ public class GoParser implements PsiParser {
         marker_.drop();
         left_marker_.precede().done(MUL_EXPR);
       }
+      else if (priority_ < 8 && TypeAssertionExpr_0(builder_, level_ + 1)) {
+        result_ = true;
+        marker_.drop();
+        left_marker_.precede().done(TYPE_ASSERTION_EXPR);
+      }
       else if (priority_ < 8 && consumeToken(builder_, DOT)) {
         result_ = report_error_(builder_, Expression(builder_, level_, 8));
         marker_.drop();
@@ -3154,11 +3159,6 @@ public class GoParser implements PsiParser {
         result_ = true;
         marker_.drop();
         left_marker_.precede().done(INDEX_EXPR);
-      }
-      else if (priority_ < 8 && TypeAssertionExpr_0(builder_, level_ + 1)) {
-        result_ = true;
-        marker_.drop();
-        left_marker_.precede().done(TYPE_ASSERTION_EXPR);
       }
       else if (priority_ < 8 && ArgumentList(builder_, level_ + 1)) {
         result_ = true;
@@ -3327,18 +3327,6 @@ public class GoParser implements PsiParser {
     return true;
   }
 
-  // '[' IndexExprBody ']'
-  private static boolean IndexExpr_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IndexExpr_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, LBRACK);
-    result_ = result_ && IndexExprBody(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, RBRACK);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
   // '.' '(' (Type | 'type') ')'
   private static boolean TypeAssertionExpr_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeAssertionExpr_0")) return false;
@@ -3359,6 +3347,18 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_);
     result_ = Type(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, TYPE_);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // '[' IndexExprBody ']'
+  private static boolean IndexExpr_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "IndexExpr_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, LBRACK);
+    result_ = result_ && IndexExprBody(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, RBRACK);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }

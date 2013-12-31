@@ -235,9 +235,9 @@ private MaxGroup ::=
     | LiteralTypeExpr
     | ConversionExpr
     | BuiltinCallExpr
+    | TypeAssertionExpr
     | SelectorExpr
     | IndexExpr
-    | TypeAssertionExpr
     | CallExpr
     | Literal
     | FunctionLit
