@@ -102,6 +102,10 @@ Please ensure that the bug is not reported.
 + [Florin Patan (dlsniper)](https://github.com/dlsniper)
     +  Cardea support
     +  Non-IntelliJ IDEs plugin support
+    +  GDB debug support integration
+
++ [Chris Spencer (spencercw)](https://bitbucket.org/spencercw/ideagdb/overview)
+    + IDEA GDB support
 
 ## Contributing
 
