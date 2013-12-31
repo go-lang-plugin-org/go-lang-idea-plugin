@@ -115,23 +115,23 @@ ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
 Block ::= '{' (Statement semi)* '}' {pin(".*")=1}
 
 Statement ::=
-	  ConstDeclaration
-	| TypeDeclaration
-	| VarDeclaration
-	| LabeledStatement
-	| SimpleStatement
-	| GoStatement
-	| ReturnStatement
-	| BreakStatement
-	| ContinueStatement
-	| GotoStatement
-	| FallthroughStatement
-	| Block
-	| IfStatement
-	| SwitchStatement
-	| SelectStatement
-	| ForStatement
-	| DeferStatement {recoverWhile="#auto"}
+    ConstDeclaration
+  | TypeDeclaration
+  | VarDeclaration
+  | LabeledStatement
+  | SimpleStatement
+  | GoStatement
+  | ReturnStatement
+  | BreakStatement
+  | ContinueStatement
+  | GotoStatement
+  | FallthroughStatement
+  | Block
+  | IfStatement
+  | SwitchStatement
+  | SelectStatement
+  | ForStatement
+  | DeferStatement {recoverWhile="#auto"}
 
 SimpleStatement ::=
     AssignmentStatement
@@ -207,16 +207,16 @@ Value ::= Expression | LiteralValue
 FunctionLit ::= func Function {pin=1}
 
 Expression ::=
-       OrExpr
-    | AndExpr
-    | ConditionalExpr
-    | AddExpr
-    | MulExpr
-    | UnaryExpr
-    | BuiltinCallExpr
-    | MethodExpr
-    | MaxGroup
-    | ParenthesesExpr
+     OrExpr
+  | AndExpr
+  | ConditionalExpr
+  | AddExpr
+  | MulExpr
+  | UnaryExpr
+  | BuiltinCallExpr
+  | MethodExpr
+  | MaxGroup
+  | ParenthesesExpr
 
 OrExpr ::= Expression '||' Expression
 AndExpr ::= Expression '&&' Expression
@@ -230,17 +230,17 @@ BuiltinCallExpr ::= identifier '(' [ BuiltinArgs ','? ] ')'
 BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
 
 private MaxGroup ::=
-      OperandName
-    | LiteralTypeExpr
-    | ConversionExpr
-    | BuiltinCallExpr
-    | TypeAssertionExpr
-    | SelectorExpr
-    | IndexExpr
-    | CallExpr
-    | Literal
-    | FunctionLit
-    | CompositeLit
+    OperandName
+  | LiteralTypeExpr
+  | ConversionExpr
+  | BuiltinCallExpr
+  | TypeAssertionExpr
+  | SelectorExpr
+  | IndexExpr
+  | CallExpr
+  | Literal
+  | FunctionLit
+  | CompositeLit
 
 private rel_op ::= '==' | '!=' | '<' | '<=' | '>' | '>='
 private add_op ::= '+' | '-' | '|' | '^'
