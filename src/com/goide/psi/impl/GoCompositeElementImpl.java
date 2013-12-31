@@ -9,4 +9,9 @@ public class GoCompositeElementImpl extends ASTWrapperPsiElement implements GoCo
   public GoCompositeElementImpl(@NotNull ASTNode node) {
     super(node);
   }
+
+  @Override
+  public String toString() {
+    return getNode().getElementType().toString();
+  }
 }
