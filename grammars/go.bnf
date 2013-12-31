@@ -131,7 +131,7 @@ Statement ::=
   | SwitchStatement
   | SelectStatement
   | ForStatement
-  | DeferStatement {recoverWhile="#auto"}
+  | DeferStatement {recoverWhile='#auto'}
 
 SimpleStatement ::=
     AssignmentStatement
@@ -148,7 +148,7 @@ TopLevelDeclaration ::=
   | TypeDeclaration
   | VarDeclaration
   | FunctionDeclaration
-  | MethodDeclaration
+  | MethodDeclaration {recoverWhile='#auto'}
 
 ConstDeclaration ::= const ( ConstSpec | '(' ( ConstSpec semi )* ')' ) {pin(".*")=1}
 ConstSpec ::= IdentifierList [ Type? '=' ExpressionList ]

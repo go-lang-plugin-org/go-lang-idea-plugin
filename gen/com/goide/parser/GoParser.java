@@ -2383,22 +2383,22 @@ public class GoParser implements PsiParser {
 
   /* ********************************************************** */
   // ConstDeclaration
-  // 	| TypeDeclaration
-  // 	| VarDeclaration
-  // 	| LabeledStatement
-  // 	| SimpleStatement
-  // 	| GoStatement
-  // 	| ReturnStatement
-  // 	| BreakStatement
-  // 	| ContinueStatement
-  // 	| GotoStatement
-  // 	| FallthroughStatement
-  // 	| Block
-  // 	| IfStatement
-  // 	| SwitchStatement
-  // 	| SelectStatement
-  // 	| ForStatement
-  // 	| DeferStatement
+  //   | TypeDeclaration
+  //   | VarDeclaration
+  //   | LabeledStatement
+  //   | SimpleStatement
+  //   | GoStatement
+  //   | ReturnStatement
+  //   | BreakStatement
+  //   | ContinueStatement
+  //   | GotoStatement
+  //   | FallthroughStatement
+  //   | Block
+  //   | IfStatement
+  //   | SwitchStatement
+  //   | SelectStatement
+  //   | ForStatement
+  //   | DeferStatement
   public static boolean Statement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Statement")) return false;
     boolean result_ = false;
@@ -2504,7 +2504,7 @@ public class GoParser implements PsiParser {
     if (!result_) result_ = VarDeclaration(builder_, level_ + 1);
     if (!result_) result_ = FunctionDeclaration(builder_, level_ + 1);
     if (!result_) result_ = MethodDeclaration(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, TOP_LEVEL_DECLARATION, result_, false, null);
+    exit_section_(builder_, level_, marker_, TOP_LEVEL_DECLARATION, result_, false, TopLevelDeclaration_auto_recover_);
     return result_;
   }
 
@@ -3423,6 +3423,12 @@ public class GoParser implements PsiParser {
         FUNC, GO, GOTO, HEX, IDENTIFIER, IF,
         IMAGINARY, INT, INTERFACE, MAP, OCT, RETURN,
         RUNE, SELECT, STRING, STRUCT, SWITCH, VAR);
+    }
+  };
+  final static Parser TopLevelDeclaration_auto_recover_ = new Parser() {
+    public boolean parse(PsiBuilder builder_, int level_) {
+      return !nextTokenIsFast(builder_, SEMICOLON, SEMICOLON_SYNTHETIC,
+        TYPE_, CONST, FUNC, VAR);
     }
   };
 }
