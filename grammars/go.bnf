@@ -93,8 +93,8 @@ private TypeLit ::=
 ArrayOrSliceType ::= '[' Expression? ']' Type {pin=1}
 
 StructType ::= struct '{' ( FieldDeclaration semi )* '}' {pin=1}
-FieldDeclaration ::= (IdentifierList Type | AnonymousField) [ Tag ]
-AnonymousField ::= [ '*' ] TypeName
+FieldDeclaration ::= (IdentifierList Type | AnonymousField) Tag?
+AnonymousField ::= '*'? TypeName
 Tag ::= string
 
 PointerType ::= '*' Type {pin=1}
@@ -151,7 +151,7 @@ TopLevelDeclaration ::=
   | MethodDeclaration
 
 ConstDeclaration ::= const ( ConstSpec | '(' ( ConstSpec semi )* ')' ) {pin(".*")=1}
-ConstSpec ::= IdentifierList [ [ Type ] '=' ExpressionList ]
+ConstSpec ::= IdentifierList [ Type? '=' ExpressionList ]
 
 private IdentifierListNoPin ::= identifier &(!('.' | ')')) (',' identifier)* // todo
 private IdentifierList ::= identifier ( ',' identifier )*
@@ -171,7 +171,7 @@ Function ::= Signature FunctionBody
 FunctionBody ::= Block
 
 MethodDeclaration ::= func Receiver identifier ( Function | Signature ) {pin=2 extends=FunctionDeclaration}
-Receiver ::= '(' [ identifier ] [ '*' ] identifier ')'
+Receiver ::= '(' identifier? '*'? identifier ')'
 
 Literal ::=
     int
@@ -226,7 +226,7 @@ AddExpr ::= Expression add_op Expression
 MulExpr ::= Expression mul_op Expression
 ParenthesesExpr ::= '(' Expression ')'
 
-BuiltinCallExpr ::= identifier '(' [ BuiltinArgs [ ',' ] ] ')'
+BuiltinCallExpr ::= identifier '(' [ BuiltinArgs ','? ] ')'
 BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
 
 private MaxGroup ::=
@@ -255,7 +255,7 @@ private IndexExprBody ::= (Expression? ':' Expression ':' Expression) | (Express
 TypeAssertionExpr ::= Expression '.' '(' (Type | 'type') ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')'
-ConversionExpr ::= Type '(' Expression [ ',' ] ')'
+ConversionExpr ::= Type '(' Expression ','? ')'
 
 LabeledStatement ::= identifier ':' Statement {pin=2}
 SendStatement ::= Expression '<-' Expression {pin=2}
@@ -283,7 +283,7 @@ SelectStatement ::= select '{' ( CommClause )* '}'
 CommClause ::= CommCase ':' ( Statement semi )* {pin=1}
 CommCase ::= case ( SendStatement | RecvStatement ) | default {pin(".*")=1}
 RecvStatement ::= [ ExpressionList '=' | IdentifierList ':=' ] Expression {pin=0}
-ReturnStatement ::= return [ ExpressionList ]
+ReturnStatement ::= return ExpressionList?
 BreakStatement ::= break identifier?
 ContinueStatement ::= continue identifier?
 GotoStatement ::= goto identifier

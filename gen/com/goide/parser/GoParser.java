@@ -338,7 +338,7 @@ public class GoParser implements PsiParser {
   };
 
   /* ********************************************************** */
-  // [ '*' ] TypeName
+  // '*'? TypeName
   public static boolean AnonymousField(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AnonymousField")) return false;
     if (!nextTokenIs(builder_, "<anonymous field>", MUL, IDENTIFIER)) return false;
@@ -350,7 +350,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ '*' ]
+  // '*'?
   private static boolean AnonymousField_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AnonymousField_0")) return false;
     consumeToken(builder_, MUL);
@@ -793,7 +793,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IdentifierList [ [ Type ] '=' ExpressionList ]
+  // IdentifierList [ Type? '=' ExpressionList ]
   public static boolean ConstSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
@@ -805,14 +805,14 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ [ Type ] '=' ExpressionList ]
+  // [ Type? '=' ExpressionList ]
   private static boolean ConstSpec_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec_1")) return false;
     ConstSpec_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // [ Type ] '=' ExpressionList
+  // Type? '=' ExpressionList
   private static boolean ConstSpec_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec_1_0")) return false;
     boolean result_ = false;
@@ -824,7 +824,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ Type ]
+  // Type?
   private static boolean ConstSpec_1_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec_1_0_0")) return false;
     Type(builder_, level_ + 1);
@@ -1110,7 +1110,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (IdentifierList Type | AnonymousField) [ Tag ]
+  // (IdentifierList Type | AnonymousField) Tag?
   public static boolean FieldDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FieldDeclaration")) return false;
     if (!nextTokenIs(builder_, "<field declaration>", MUL, IDENTIFIER)) return false;
@@ -1144,7 +1144,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ Tag ]
+  // Tag?
   private static boolean FieldDeclaration_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FieldDeclaration_1")) return false;
     Tag(builder_, level_ + 1);
@@ -2066,7 +2066,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '(' [ identifier ] [ '*' ] identifier ')'
+  // '(' identifier? '*'? identifier ')'
   public static boolean Receiver(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Receiver")) return false;
     if (!nextTokenIs(builder_, LPAREN)) return false;
@@ -2081,14 +2081,14 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ identifier ]
+  // identifier?
   private static boolean Receiver_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Receiver_1")) return false;
     consumeToken(builder_, IDENTIFIER);
     return true;
   }
 
-  // [ '*' ]
+  // '*'?
   private static boolean Receiver_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Receiver_2")) return false;
     consumeToken(builder_, MUL);
@@ -2199,7 +2199,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // return [ ExpressionList ]
+  // return ExpressionList?
   public static boolean ReturnStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ReturnStatement")) return false;
     if (!nextTokenIs(builder_, RETURN)) return false;
@@ -2213,7 +2213,7 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // [ ExpressionList ]
+  // ExpressionList?
   private static boolean ReturnStatement_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ReturnStatement_1")) return false;
     ExpressionList(builder_, level_ + 1);
@@ -3172,7 +3172,7 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // identifier '(' [ BuiltinArgs [ ',' ] ] ')'
+  // identifier '(' [ BuiltinArgs ','? ] ')'
   public static boolean BuiltinCallExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BuiltinCallExpr")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
@@ -3186,14 +3186,14 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ BuiltinArgs [ ',' ] ]
+  // [ BuiltinArgs ','? ]
   private static boolean BuiltinCallExpr_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_2")) return false;
     BuiltinCallExpr_2_0(builder_, level_ + 1);
     return true;
   }
 
-  // BuiltinArgs [ ',' ]
+  // BuiltinArgs ','?
   private static boolean BuiltinCallExpr_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_2_0")) return false;
     boolean result_ = false;
@@ -3204,7 +3204,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ ',' ]
+  // ','?
   private static boolean BuiltinCallExpr_2_0_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_2_0_1")) return false;
     consumeToken(builder_, COMMA);
@@ -3291,7 +3291,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ ',' ] ')'
+  // ','? ')'
   private static boolean ConversionExpr_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConversionExpr_1")) return false;
     boolean result_ = false;
@@ -3302,7 +3302,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ ',' ]
+  // ','?
   private static boolean ConversionExpr_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConversionExpr_1_0")) return false;
     consumeToken(builder_, COMMA);
