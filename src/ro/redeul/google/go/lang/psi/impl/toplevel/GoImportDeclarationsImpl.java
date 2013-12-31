@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -28,7 +29,12 @@ public class GoImportDeclarationsImpl extends GoPsiElementBase implements GoImpo
         return findChildrenByClass(GoImportDeclaration.class);
     }
 
-    public void accept(GoElementVisitor visitor) {
+  @Override
+  public boolean isMulti() {
+    return findChildByType(GoTokenTypes.pLPAREN) != null;
+  }
+
+  public void accept(GoElementVisitor visitor) {
         visitor.visitImportDeclarations(this);
     }
 

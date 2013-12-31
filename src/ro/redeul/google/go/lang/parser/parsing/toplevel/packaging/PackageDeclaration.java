@@ -5,6 +5,8 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
+
 /**
  * User: mtoader
  * Date: Jul 24, 2010
@@ -21,5 +23,6 @@ public class PackageDeclaration implements GoElementTypes {
         }
 
         packageDeclaration.done(PACKAGE_DECLARATION);
+        packageDeclaration.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
     }
 }

@@ -19,59 +19,62 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findDefaultPackageNa
  */
 public class ImportDeclaration implements GoElementTypes {
 
-    public static void parse(PsiBuilder builder, GoParser parser) {
+  public static void parse(PsiBuilder builder, GoParser parser) {
 
-        if (!ParserUtils.lookAhead(builder, kIMPORT))
-            return;
+    if (!ParserUtils.lookAhead(builder, kIMPORT))
+      return;
 
-        PsiBuilder.Marker marker = builder.mark();
+    PsiBuilder.Marker marker = builder.mark();
 
-        ParserUtils.getToken(builder, kIMPORT);
+    ParserUtils.getToken(builder, kIMPORT);
 
-        NestedDeclarationParser.parseNestedOrBasicDeclaration(
-            builder, parser, new NestedDeclarationParser.DeclarationParser() {
-            public boolean parse(PsiBuilder builder, GoParser parser) {
-                return parseImportStatement(builder, parser);
-            }
-        });
+    NestedDeclarationParser.parseNestedOrBasicDeclaration(
+      builder, parser, new NestedDeclarationParser.DeclarationParser() {
+      public boolean parse(PsiBuilder builder, GoParser parser) {
+        return parseImportStatement(builder, parser);
+      }
+    });
 
-        marker.done(IMPORT_DECLARATIONS);
+    marker.done(IMPORT_DECLARATIONS);
+    marker.setCustomEdgeTokenBinders(null, ParserUtils.CommentBinders.TRAILING_COMMENTS);
+  }
+
+  private static final TokenSet localImportTokens = TokenSet.create(mIDENT, oDOT, litSTRING);
+
+  private static boolean parseImportStatement(PsiBuilder builder, GoParser parser) {
+
+    if (!ParserUtils.lookAhead(builder, localImportTokens)) {
+      return false;
     }
 
-    private static final TokenSet localImportTokens = TokenSet.create(mIDENT, oDOT, litSTRING);
+    PsiBuilder.Marker importStatement = builder.mark();
 
-    private static boolean parseImportStatement(PsiBuilder builder, GoParser parser) {
-
-        if (!ParserUtils.lookAhead(builder, localImportTokens)) {
-            return false;
-        }
-
-        PsiBuilder.Marker importStatement = builder.mark();
-
-        String localPackageName = null;
-        if (ParserUtils.lookAhead(builder, mIDENT) ) {
-            localPackageName = builder.getTokenText();
-            ParserUtils.eatElement(builder, PACKAGE_REFERENCE);
-        } else if (ParserUtils.lookAhead(builder, oDOT)) {
-            ParserUtils.eatElement(builder, PACKAGE_REFERENCE);
-        }
-
-        PsiBuilder.Marker importPathMarker = builder.mark();
-        String importPath = builder.getTokenText();
-        if (!ParserUtils.getToken(builder, litSTRING, GoBundle.message("error.import.path.expected"))) {
-            importPathMarker.drop();
-        } else {
-            importPathMarker.done(LITERAL_STRING);
-            if ( localPackageName == null) {
-                localPackageName = findDefaultPackageName(GoPsiUtils.getStringLiteralValue(importPath));
-            }
-        }
-
-        if (localPackageName != null) {
-            parser.setKnownPackage(localPackageName);
-        }
-
-        importStatement.done(IMPORT_DECLARATION);
-        return true;
+    String localPackageName = null;
+    if (ParserUtils.lookAhead(builder, mIDENT)) {
+      localPackageName = builder.getTokenText();
+      ParserUtils.eatElement(builder, PACKAGE_REFERENCE);
+    } else if (ParserUtils.lookAhead(builder, oDOT)) {
+      ParserUtils.eatElement(builder, PACKAGE_REFERENCE);
     }
+
+    PsiBuilder.Marker importPathMarker = builder.mark();
+    String importPath = builder.getTokenText();
+    if (!ParserUtils.getToken(builder, litSTRING, GoBundle.message("error.import.path.expected"))) {
+      importPathMarker.drop();
+    } else {
+      importPathMarker.done(LITERAL_STRING);
+      if (localPackageName == null) {
+        localPackageName = findDefaultPackageName(GoPsiUtils.getStringLiteralValue(importPath));
+      }
+    }
+
+    if (localPackageName != null) {
+      parser.setKnownPackage(localPackageName);
+    }
+
+    importStatement.done(IMPORT_DECLARATION);
+    importStatement.setCustomEdgeTokenBinders(null, ParserUtils.CommentBinders.TRAILING_COMMENTS);
+
+    return true;
+  }
 }

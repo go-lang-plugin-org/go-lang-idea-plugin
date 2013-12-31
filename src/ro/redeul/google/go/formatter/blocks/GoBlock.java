@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 
 import java.util.ArrayList;
@@ -146,8 +147,7 @@ class GoBlock implements ASTBlock, GoElementTypes {
 
         ASTNode prevChild = null;
         for (ASTNode child : getGoChildren()) {
-            if (child.getElementType() != END_OF_COMPILATION_UNIT &&
-                    (child.getTextRange().getLength() == 0 || isWhiteSpaceNode(child.getPsi()))) {
+            if (child.getTextRange().getLength() == 0 || isWhiteSpaceNode(child.getPsi())) {
                 continue;
             }
 

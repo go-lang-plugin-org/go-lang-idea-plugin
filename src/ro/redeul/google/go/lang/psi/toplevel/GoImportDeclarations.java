@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
  */
 public interface GoImportDeclarations extends GoPsiElement {
 
-    GoImportDeclaration[] getDeclarations();
+  GoImportDeclaration[] getDeclarations();
 
+  boolean isMulti();
 }

@@ -9,6 +9,8 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.types.Types;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
+
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
@@ -19,11 +21,11 @@ class TypeDeclaration implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-        PsiBuilder.Marker marker = builder.mark();
+        PsiBuilder.Marker typeDeclarations = builder.mark();
 
         if (!ParserUtils.getToken(builder, kTYPE)) {
             ParserUtils.wrapError(builder, "type.keyword.expected");
-            marker.drop();
+            typeDeclarations.drop();
             return null;
         }
 
@@ -35,7 +37,8 @@ class TypeDeclaration implements GoElementTypes {
                 }
             });
 
-        marker.done(TYPE_DECLARATIONS);
+        typeDeclarations.done(TYPE_DECLARATIONS);
+        typeDeclarations.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
         return TYPE_DECLARATIONS;
     }
 
@@ -49,14 +52,15 @@ class TypeDeclaration implements GoElementTypes {
             return false;
         }
 
-        PsiBuilder.Marker typeStatement = builder.mark();
+        PsiBuilder.Marker declaration = builder.mark();
         ParserUtils.eatElement(builder, TYPE_NAME_DECLARATION);
 
         if (Types.parseTypeDeclaration(builder, parser) == null) {
             builder.error(GoBundle.message("error.type.expected"));
         }
 
-        typeStatement.done(TYPE_DECLARATION);
+        declaration.done(TYPE_DECLARATION);
+        declaration.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
         return true;
     }
 }

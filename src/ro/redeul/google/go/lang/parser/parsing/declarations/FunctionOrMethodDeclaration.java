@@ -47,6 +47,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
             parser.parseBody(builder);
         }
         marker.done(nodeType);
+        marker.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
         return nodeType;
     }
 

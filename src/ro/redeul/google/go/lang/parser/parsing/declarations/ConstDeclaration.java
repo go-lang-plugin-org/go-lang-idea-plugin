@@ -7,6 +7,7 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.ParseIota;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -21,7 +22,7 @@ class ConstDeclaration implements GoElementTypes {
         if (!ParserUtils.lookAhead(builder, kCONST))
             return null;
 
-        PsiBuilder.Marker marker = builder.mark();
+        PsiBuilder.Marker constDeclarations = builder.mark();
 
         ParserUtils.getToken(builder, kCONST);
 
@@ -32,17 +33,19 @@ class ConstDeclaration implements GoElementTypes {
             }
         });
 
-        marker.done(CONST_DECLARATIONS);
+        constDeclarations.done(CONST_DECLARATIONS);
+        constDeclarations.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
+
         return CONST_DECLARATIONS;
     }
 
     private static boolean parseConstSpecification(PsiBuilder builder,
                                                    GoParser parser) {
 
-        PsiBuilder.Marker initializer = builder.mark();
+        PsiBuilder.Marker declaration = builder.mark();
 
         if (parser.parseIdentifierList(builder, false) == 0) {
-            initializer.drop();
+            declaration.drop();
             return false;
         }
 
@@ -56,7 +59,8 @@ class ConstDeclaration implements GoElementTypes {
             parser.resetFlag(ParseIota, parseIota);
         }
 
-        initializer.done(CONST_DECLARATION);
+        declaration.done(CONST_DECLARATION);
+        declaration.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
 
         return true;
     }

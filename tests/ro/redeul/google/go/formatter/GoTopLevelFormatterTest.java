@@ -28,4 +28,8 @@ public class GoTopLevelFormatterTest extends GoFormatterTestCase {
   public void testEofTooMuchWhiteSpace() throws Exception { _test(); }
 
   public void testAlternatingComments() throws Exception { _test(); }
+
+  public void testImportSimple() throws Exception { _test(); }
+
+  public void testImportRemoveEmptyLines() throws Exception { _test(); }
 }

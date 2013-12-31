@@ -18,10 +18,10 @@ class VarDeclaration extends ParserUtils implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-        PsiBuilder.Marker marker = builder.mark();
+        PsiBuilder.Marker varDeclarations = builder.mark();
 
         if (!getToken(builder, kVAR)) {
-            marker.rollbackTo();
+            varDeclarations.rollbackTo();
             return null;
         }
 
@@ -33,7 +33,8 @@ class VarDeclaration extends ParserUtils implements GoElementTypes {
                 }
             });
 
-        marker.done(VAR_DECLARATIONS);
+        varDeclarations.done(VAR_DECLARATIONS);
+        varDeclarations.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
         return VAR_DECLARATIONS;
     }
 
@@ -42,7 +43,7 @@ class VarDeclaration extends ParserUtils implements GoElementTypes {
     private static boolean parseVarSpecification(PsiBuilder builder,
                                                  GoParser parser) {
 
-        PsiBuilder.Marker varSpec = builder.mark();
+        PsiBuilder.Marker declaration = builder.mark();
         if (parser.parseIdentifierList(builder, false) != 0) {
             if (!ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS)) {
 
@@ -56,11 +57,12 @@ class VarDeclaration extends ParserUtils implements GoElementTypes {
                 }
             }
 
-            varSpec.done(VAR_DECLARATION);
+            declaration.done(VAR_DECLARATION);
+            declaration.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
             return true;
         }
 
-        varSpec.drop();
+        declaration.drop();
         builder.error("identifier.list.expected");
         return false;
     }
