@@ -76,7 +76,7 @@ private semi ::= '<NL>' | ';'?
 
 PackageClause ::= package identifier {pin=1}
 
-ImportDeclaration ::= import ( ImportSpec | '(' ( ImportSpec semi )* ')' ) {pin=1}
+ImportDeclaration ::= import ( ImportSpec | '(' ( ImportSpec semi )* ')' ) {pin(".*")=1}
 ImportSpec ::= [ '.' | identifier ] string
 
 Type ::= TypeName | TypeLit | '(' Type ')'
@@ -163,7 +163,7 @@ TypeSpec ::= identifier Type {pin=1}
 VarDeclaration ::= var ( VarSpec | '(' ( VarSpec semi )* ')' ) {pin=1}
 VarSpec ::= IdentifierList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
 
-ShortVarDeclaration ::= IdentifierList ':=' ExpressionList
+ShortVarDeclaration ::= IdentifierList ':=' ExpressionList {pin=2}
 
 FunctionDeclaration ::= func FunctionName ( Function | Signature ) {pin=2}
 FunctionName ::= identifier
