@@ -154,7 +154,7 @@ TopLevelDeclaration ::=
 ConstDeclaration ::= const ( ConstSpec | '(' ( ConstSpec semi )* ')' ) {pin(".*")=1}
 ConstSpec ::= IdentifierList [ [ Type ] '=' ExpressionList ]
 
-private IdentifierListNoPin ::= identifier &(!('.' | ')')) (',' identifier)*
+private IdentifierListNoPin ::= identifier &(!('.' | ')')) (',' identifier)* // todo
 private IdentifierList ::= identifier ( ',' identifier )*
 private ExpressionList ::= Expression ( ',' Expression )*
 
@@ -243,10 +243,10 @@ private MaxGroup ::=
     | FunctionLit
     | CompositeLit
 
-private rel_op     ::= '==' | '!=' | '<' | '<=' | '>' | '>='
-private add_op     ::= '+' | '-' | '|' | '^'
-private mul_op     ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
-private unary_op   ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
+private rel_op ::= '==' | '!=' | '<' | '<=' | '>' | '>='
+private add_op ::= '+' | '-' | '|' | '^'
+private mul_op ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
+private unary_op ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
 MethodExpr ::= ReceiverType '.' identifier
 ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
