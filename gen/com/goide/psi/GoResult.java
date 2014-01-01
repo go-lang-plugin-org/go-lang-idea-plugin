@@ -10,7 +10,7 @@ public interface GoResult extends GoCompositeElement {
   @Nullable
   GoParameters getParameters();
 
-  @Nullable
-  GoType getType();
+  @NotNull
+  List<GoType> getTypeList();
 
 }

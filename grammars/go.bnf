@@ -101,7 +101,7 @@ PointerType ::= '*' Type {pin=1}
 
 FunctionType ::= func Signature {pin=1}
 Signature ::= Parameters Result? {pin=1}
-Result ::= Parameters | Type
+Result ::= '(' TypeListNoPin ')' | Type | Parameters
 Parameters ::= '(' [ ParameterList ','? ] ')' {pin(".*")=1}
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
 ParameterDeclaration ::= IdentifierListNoPin? '...'? Type
@@ -273,7 +273,8 @@ TypeSwitchStatement  ::= switch SimpleStatementOpt TypeSwitchGuard '{' ( TypeCas
 TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' type ')'
 TypeCaseClause ::= TypeSwitchCase ':' ( Statement semi )*
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
-TypeList ::= Type ( ',' Type )*
+private TypeList ::= Type ( ',' Type )*
+private TypeListNoPin ::= Type ( ',' Type )*
 ForStatement ::= for [ ForClause | RangeClause ] Block
 ForClause ::= SimpleStatement? semi Expression semi SimpleStatement?
 RangeClause ::= ( ExpressionList '=' | IdentifierList ':=' ) range Expression {pin=2}

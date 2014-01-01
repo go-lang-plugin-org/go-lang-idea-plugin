@@ -20,21 +20,18 @@ GO_FILE
                   PsiElement(identifier)('byte')
           PsiElement())(')')
         RESULT
-          PARAMETERS
-            PsiElement(()('(')
-            PARAMETER_DECLARATION
-              TYPE
-                TYPE_NAME
-                  QUALIFIED_IDENTIFIER
-                    PsiElement(identifier)('cipher')
-                    PsiElement(.)('.')
-                    PsiElement(identifier)('Block')
-            PsiElement(,)(',')
-            PARAMETER_DECLARATION
-              TYPE
-                TYPE_NAME
-                  PsiElement(identifier)('error')
-            PsiElement())(')')
+          PsiElement(()('(')
+          TYPE
+            TYPE_NAME
+              QUALIFIED_IDENTIFIER
+                PsiElement(identifier)('cipher')
+                PsiElement(.)('.')
+                PsiElement(identifier)('Block')
+          PsiElement(,)(',')
+          TYPE
+            TYPE_NAME
+              PsiElement(identifier)('error')
+          PsiElement())(')')
       BLOCK
         PsiElement({)('{')
         RETURN_STATEMENT

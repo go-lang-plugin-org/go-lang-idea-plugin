@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface GoTypeSwitchCase extends GoCompositeElement {
 
-  @Nullable
-  GoTypeList getTypeList();
+  @NotNull
+  List<GoType> getTypeList();
 
   @Nullable
   PsiElement getCase();

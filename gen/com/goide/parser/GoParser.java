@@ -270,9 +270,6 @@ public class GoParser implements PsiParser {
     else if (root_ == TYPE_DECLARATION) {
       result_ = TypeDeclaration(builder_, 0);
     }
-    else if (root_ == TYPE_LIST) {
-      result_ = TypeList(builder_, 0);
-    }
     else if (root_ == TYPE_NAME) {
       result_ = TypeName(builder_, 0);
     }
@@ -2176,14 +2173,27 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Parameters | Type
+  // '(' TypeListNoPin ')' | Type | Parameters
   public static boolean Result(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Result")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<result>");
-    result_ = Parameters(builder_, level_ + 1);
+    result_ = Result_0(builder_, level_ + 1);
     if (!result_) result_ = Type(builder_, level_ + 1);
+    if (!result_) result_ = Parameters(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, RESULT, result_, false, null);
+    return result_;
+  }
+
+  // '(' TypeListNoPin ')'
+  private static boolean Result_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Result_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, LPAREN);
+    result_ = result_ && TypeListNoPin(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, RPAREN);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
@@ -2622,15 +2632,15 @@ public class GoParser implements PsiParser {
 
   /* ********************************************************** */
   // Type ( ',' Type )*
-  public static boolean TypeList(PsiBuilder builder_, int level_) {
+  static boolean TypeList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeList")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type list>");
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = Type(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && TypeList_1(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, TYPE_LIST, result_, pinned_, null);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
   }
 
@@ -2657,6 +2667,41 @@ public class GoParser implements PsiParser {
     result_ = result_ && Type(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // Type ( ',' Type )*
+  static boolean TypeListNoPin(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeListNoPin")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = Type(builder_, level_ + 1);
+    result_ = result_ && TypeListNoPin_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // ( ',' Type )*
+  private static boolean TypeListNoPin_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeListNoPin_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!TypeListNoPin_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "TypeListNoPin_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // ',' Type
+  private static boolean TypeListNoPin_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeListNoPin_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, COMMA);
+    result_ = result_ && Type(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
   }
 
   /* ********************************************************** */

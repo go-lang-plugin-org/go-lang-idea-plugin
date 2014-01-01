@@ -28,9 +28,9 @@ public class GoResultImpl extends GoCompositeElementImpl implements GoResult {
   }
 
   @Override
-  @Nullable
-  public GoType getType() {
-    return findChildByClass(GoType.class);
+  @NotNull
+  public List<GoType> getTypeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoType.class);
   }
 
 }
