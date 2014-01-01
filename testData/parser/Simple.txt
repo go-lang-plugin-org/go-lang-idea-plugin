@@ -35,17 +35,16 @@ GO_FILE
                 TYPE_NAME
                   PsiElement(identifier)('error')
             PsiElement())(')')
-      FUNCTION_BODY
-        BLOCK
-          PsiElement({)('{')
-          RETURN_STATEMENT
-            PsiElement(return)('return')
-            OPERAND_NAME
-              PsiElement(identifier)('c')
-            PsiElement(,)(',')
-            OPERAND_NAME
-              PsiElement(identifier)('nil')
-          PsiElement(})('}')
+      BLOCK
+        PsiElement({)('{')
+        RETURN_STATEMENT
+          PsiElement(return)('return')
+          OPERAND_NAME
+            PsiElement(identifier)('c')
+          PsiElement(,)(',')
+          OPERAND_NAME
+            PsiElement(identifier)('nil')
+        PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     FUNCTION_NAME
@@ -59,14 +58,13 @@ GO_FILE
           TYPE
             TYPE_NAME
               PsiElement(identifier)('int')
-      FUNCTION_BODY
-        BLOCK
-          PsiElement({)('{')
-          RETURN_STATEMENT
-            PsiElement(return)('return')
-            LITERAL
-              PsiElement(int)('2')
-          PsiElement(})('}')
+      BLOCK
+        PsiElement({)('{')
+        RETURN_STATEMENT
+          PsiElement(return)('return')
+          LITERAL
+            PsiElement(int)('2')
+        PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     FUNCTION_NAME
@@ -91,18 +89,17 @@ GO_FILE
                 TYPE_NAME
                   PsiElement(identifier)('float64')
             PsiElement())(')')
-      FUNCTION_BODY
-        BLOCK
-          PsiElement({)('{')
-          RETURN_STATEMENT
-            PsiElement(return)('return')
-            UNARY_EXPR
-              PsiElement(-)('-')
-              LITERAL
-                PsiElement(float)('7.0')
-            PsiElement(,)(',')
-            UNARY_EXPR
-              PsiElement(-)('-')
-              LITERAL
-                PsiElement(float)('4.0')
-          PsiElement(})('}')
+      BLOCK
+        PsiElement({)('{')
+        RETURN_STATEMENT
+          PsiElement(return)('return')
+          UNARY_EXPR
+            PsiElement(-)('-')
+            LITERAL
+              PsiElement(float)('7.0')
+          PsiElement(,)(',')
+          UNARY_EXPR
+            PsiElement(-)('-')
+            LITERAL
+              PsiElement(float)('4.0')
+        PsiElement(})('}')

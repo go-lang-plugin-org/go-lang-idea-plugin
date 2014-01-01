@@ -23,8 +23,8 @@ public class GoFunctionImpl extends GoCompositeElementImpl implements GoFunction
 
   @Override
   @NotNull
-  public GoFunctionBody getFunctionBody() {
-    return findNotNullChildByClass(GoFunctionBody.class);
+  public GoBlock getBlock() {
+    return findNotNullChildByClass(GoBlock.class);
   }
 
   @Override

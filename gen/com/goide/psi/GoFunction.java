@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoFunction extends GoCompositeElement {
 
   @NotNull
-  GoFunctionBody getFunctionBody();
+  GoBlock getBlock();
 
   @NotNull
   GoSignature getSignature();

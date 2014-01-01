@@ -120,9 +120,6 @@ public class GoParser implements PsiParser {
     else if (root_ == FUNCTION) {
       result_ = Function(builder_, 0);
     }
-    else if (root_ == FUNCTION_BODY) {
-      result_ = FunctionBody(builder_, 0);
-    }
     else if (root_ == FUNCTION_DECLARATION) {
       result_ = FunctionDeclaration(builder_, 0);
     }
@@ -1290,27 +1287,15 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Signature FunctionBody
+  // Signature Block
   public static boolean Function(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Function")) return false;
     if (!nextTokenIs(builder_, LPAREN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = Signature(builder_, level_ + 1);
-    result_ = result_ && FunctionBody(builder_, level_ + 1);
+    result_ = result_ && Block(builder_, level_ + 1);
     exit_section_(builder_, marker_, FUNCTION, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // Block
-  public static boolean FunctionBody(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "FunctionBody")) return false;
-    if (!nextTokenIs(builder_, LBRACE)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = Block(builder_, level_ + 1);
-    exit_section_(builder_, marker_, FUNCTION_BODY, result_);
     return result_;
   }
 

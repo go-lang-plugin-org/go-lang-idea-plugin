@@ -44,7 +44,6 @@ public interface GoTypes {
   IElementType FOR_CLAUSE = new GoCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new GoCompositeElementType("FOR_STATEMENT");
   IElementType FUNCTION = new GoCompositeElementType("FUNCTION");
-  IElementType FUNCTION_BODY = new GoCompositeElementType("FUNCTION_BODY");
   IElementType FUNCTION_DECLARATION = new GoCompositeElementType("FUNCTION_DECLARATION");
   IElementType FUNCTION_LIT = new GoCompositeElementType("FUNCTION_LIT");
   IElementType FUNCTION_NAME = new GoCompositeElementType("FUNCTION_NAME");
@@ -295,9 +294,6 @@ public interface GoTypes {
       }
       else if (type == FUNCTION) {
         return new GoFunctionImpl(node);
-      }
-      else if (type == FUNCTION_BODY) {
-        return new GoFunctionBodyImpl(node);
       }
       else if (type == FUNCTION_DECLARATION) {
         return new GoFunctionDeclarationImpl(node);
