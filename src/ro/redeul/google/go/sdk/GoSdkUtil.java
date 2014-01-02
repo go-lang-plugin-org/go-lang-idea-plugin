@@ -593,21 +593,17 @@ public class GoSdkUtil {
     }
 
     public static String prependToGoPath(String prependedPath) {
-        String sysGoPath = System.getenv("GOPATH");
-        if (sysGoPath == null || sysGoPath.isEmpty()) {
-            return prependedPath;
-        }
-
-        return format("%s%s%s", prependedPath, File.pathSeparator, sysGoPath);
+        String sysGoPath = getEnvVariable("GOPATH");
+        return sysGoPath.isEmpty()
+                  ? prependedPath
+                  : format("%s%s%s", prependedPath, File.pathSeparator, sysGoPath);
     }
 
     public static String appendToGoPath(String appendedPath) {
-        String sysGoPath = System.getenv("GOPATH");
-        if (sysGoPath == null || sysGoPath.isEmpty()) {
-            return appendedPath;
-        }
-
-        return format("%s%s%s", sysGoPath, File.pathSeparator, appendedPath);
+        String sysGoPath = getEnvVariable("GOPATH");
+        return sysGoPath.isEmpty()
+                  ? appendedPath
+                  : format("%s%s%s", sysGoPath, File.pathSeparator, appendedPath);
     }
 
     public static String appendGoPathToPath(String goPath) {
@@ -620,28 +616,25 @@ public class GoSdkUtil {
 
         binarizedPath = binarizedPath.substring(0, binarizedPath.length()-1);
 
-        String sysPath = System.getenv("PATH");
-        if (sysPath == null || sysPath.isEmpty()) {
-            return binarizedPath;
-        }
-
-        return format("%s%s%s", sysPath, File.pathSeparator, binarizedPath);
+        String sysPath = getEnvVariable("PATH");
+        return sysPath.isEmpty()
+                   ? binarizedPath
+                  : format("%s%s%s", sysPath, File.pathSeparator, binarizedPath);
     }
 
     public static String getSysGoRootPath() {
-        try {
-            return System.getenv("GOROOT");
-        } catch (Exception ignored) {
-            return "";
-        }
+        return getEnvVariable("GOROOT");
     }
 
+    @NotNull
     public static String getSysGoPathPath() {
-        try {
-            return System.getenv("GOPATH");
-        } catch (Exception ignored) {
-            return "";
-        }
+        return getEnvVariable("GOPATH");
+    }
+
+    @NotNull
+    private static String getEnvVariable(String varName) {
+        String variable = System.getenv(varName);
+        return variable == null ? "" : variable;
     }
 
     public static boolean isImportedPackage(Project project, String packageName) {
