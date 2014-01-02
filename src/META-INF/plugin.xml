@@ -66,7 +66,8 @@
                 <li>[feature] New run / build system available</li>
                 <li>[feature] Added a new inspection/fix which will generate a closure function</li>
                 <li>[feature] Function inspection/fix will generate the arguments when specified</li>
-                <li>[feature] Added intention to run "go get" on a package</li>
+                <li>[feature] Added intention to run "go get" to import a package</li>
+                <li>[feature] Added intention to run "go get -u" to update a package</li>
                 <li>[feature] go fmt integration via Tools -> Go menu options (default CTRL+ALT+SHIFT+F for file and CTRL+ALT+SHIFT+G for project)</li>
                 <li>[feature] go vet integration</li>
                 <li>[bugfix] Dropped support for old build systems</li>
@@ -78,12 +79,12 @@
             <ul>
                 <li>[feature] Basic support for completion of the whole method set for an interface.</li>
                 <li>[feature] Handle builtin function calls when doing type inference</li>
-                <li>[bugfix] Don't show methods for local types twice in strucure view.</li>
+                <li>[feature] make/len/cap/true/false/nil are also highlighted as keywords.</li>
                 <li>[feature] Add the builtins to the list of methods that we want to be able to autocomplete.</li>
+                <li>[bugfix] Don't show methods for local types twice in strucure view.</li>
                 <li>[bugfix] Make sure that by default go looks good on both dark and clear themes.</li>
                 <li>[bugfix] Fixed some formatting edge cases.</li>
                 <li>[bugfix] Resolving to variables declared in a select communication clause works.</li>
-                <li>[feature] make/len/cap/true/false/nil are also highlighted as keywords.</li>
                 <li>[bugfix] module relative imports are working properly inside the IDE.</li>
                 <li>[bugfix] resolve should work inside select statement clauses.</li>
                 <li>[bugfix] resolve should target the local package names first.</li>
@@ -581,6 +582,12 @@
             <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
             <categoryKey>intention.category.go/intention.category.packages</categoryKey>
             <className>ro.redeul.google.go.intentions.packages.GoGetIntention</className>
+        </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.packages</categoryKey>
+            <className>ro.redeul.google.go.intentions.packages.GoGetUpdateIntention</className>
         </intentionAction>
 
         <intentionAction>

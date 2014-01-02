@@ -1,0 +1,3 @@
+package demo
+
+import "code.google.com/p/go.crypto/ssh"  // This package is now updated

@@ -30,7 +30,7 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 import java.io.File;
 import java.util.Collection;
 
-public class GoGetIntention extends Intention {
+public class GoGetUpdateIntention extends Intention {
 
     private static final String ID = "Go Console";
     private static final String TITLE = "go get";
@@ -45,9 +45,9 @@ public class GoGetIntention extends Intention {
         }
 
         Project project = element.getProject();
-        GoGetIntention.allPackages = GoNamesCache.getInstance(project).getAllPackages();
+        GoGetUpdateIntention.allPackages = GoNamesCache.getInstance(project).getAllPackages();
 
-        return !this.getMissingPackages(element).equals("");
+        return !this.processElement(element).equals("");
     }
 
     @Override
@@ -56,17 +56,28 @@ public class GoGetIntention extends Intention {
         final Project project = element.getProject();
         final String projectDir = project.getBaseDir().getCanonicalPath();
 
-        String packagesToImport = this.getMissingPackages(element);
+
+        String packagesToUpdate = this.getUpdateablePackages(element);
+        String packagesToImport = (this.getMissingPackages(element) + " " + packagesToUpdate).trim();
 
         if (packagesToImport.isEmpty()) {
             return;
         }
 
+        if (!packagesToUpdate.isEmpty()) {
+            if (Messages.showYesNoDialog(
+                    "This will UPDATE ALL the following package(s)\n" + packagesToUpdate.replaceAll(" ", "\n") + "\n Are you sure you want to continue?",
+                    "go get -u",
+                    GoIcons.GO_ICON_13x13) == Messages.NO) {
+                return;
+            }
+        }
+
         ToolWindowManager manager = ToolWindowManager.getInstance(project);
         ToolWindow window = manager.getToolWindow(ID);
 
-        if (GoGetIntention.consoleView == null) {
-            GoGetIntention.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+        if (GoGetUpdateIntention.consoleView == null) {
+            GoGetUpdateIntention.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
         }
 
         if (window == null) {
@@ -95,7 +106,7 @@ public class GoGetIntention extends Intention {
 
 
         final String command = String.format(
-                "%s get -v %s",
+                "%s get -v -u %s",
                 sdkData.GO_BIN_PATH,
                 packagesToImport
         );
@@ -118,6 +129,42 @@ public class GoGetIntention extends Intention {
         });
     }
 
+    private String processElement(PsiElement element) {
+        return (this.getMissingPackages(element) + " " + this.getUpdateablePackages(element)).trim();
+    }
+
+    private String getUpdateablePackages(PsiElement element) {
+        GoImportDeclaration[] declarations = ((GoImportDeclarations) element).getDeclarations();
+
+        String externalPackages = "";
+
+        Project project = element.getProject();
+
+        for (GoImportDeclaration declaration : declarations) {
+            if (!declaration.isValidImport() ||
+                    declaration.getImportPath() == null) {
+                continue;
+            }
+
+            String packageImportPath = declaration.getImportPath().getText();
+            packageImportPath = packageImportPath.substring(1, packageImportPath.length() - 1);
+            boolean hasPackageInPath = false;
+
+            for (String definedPackagePath : GoGetUpdateIntention.allPackages) {
+                if (definedPackagePath.equals(packageImportPath)) {
+                    hasPackageInPath = true;
+                    break;
+                }
+            }
+
+            if (hasPackageInPath && GoSdkUtil.isImportedPackage(project, packageImportPath)) {
+                externalPackages += packageImportPath + " ";
+            }
+        }
+
+        return externalPackages.trim();
+    }
+
     private String getMissingPackages(PsiElement element) {
         GoImportDeclaration[] declarations = ((GoImportDeclarations) element).getDeclarations();
 
@@ -133,7 +180,7 @@ public class GoGetIntention extends Intention {
             packageImportPath = packageImportPath.substring(1, packageImportPath.length() - 1);
             boolean hasPackageInPath = false;
 
-            for (String definedPackagePath : GoGetIntention.allPackages) {
+            for (String definedPackagePath : GoGetUpdateIntention.allPackages) {
                 if (definedPackagePath.equals(packageImportPath)) {
                     hasPackageInPath = true;
                     break;
