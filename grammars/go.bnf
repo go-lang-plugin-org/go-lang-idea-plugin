@@ -262,7 +262,7 @@ SwitchStatement ::= ExprSwitchStatement | TypeSwitchStatement
 ExprSwitchStatement ::= switch Condition '{' ( ExprCaseClause )* '}'
 
 private Condition ::= SimpleStatementOpt [ Expression ]
-private SimpleStatementOpt ::= [SimpleStatement semi]
+private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
 ExprCaseClause ::= ExprSwitchCase ':' ( Statement semi )*
 ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
