@@ -20,6 +20,7 @@
     <lang.psiStructureViewFactory language="go" implementationClass="com.goide.GoStructureViewFactory"/>
     <colorSettingsPage implementation="com.goide.highlighting.GoColorsAndFontsPage"/>
     <lang.braceMatcher language="go" implementationClass="com.goide.GoBraceMatcher"/>
+    <quoteHandler fileType="Go" className="com.goide.GoQuoteHandler"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
 
