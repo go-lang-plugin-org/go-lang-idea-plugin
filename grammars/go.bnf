@@ -165,11 +165,10 @@ VarSpec ::= IdentifierList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
 
 ShortVarDeclaration ::= IdentifierList ':=' ExpressionList {pin=2}
 
-FunctionDeclaration ::= func FunctionName ( Function | Signature ) {pin=2}
-FunctionName ::= identifier
+FunctionDeclaration ::= func identifier ( Function | Signature ) {pin=2}
 Function ::= Signature Block
 
-MethodDeclaration ::= func Receiver identifier ( Function | Signature ) {pin=2 extends=FunctionDeclaration}
+MethodDeclaration ::= func Receiver identifier ( Function | Signature ) {pin=3 extends=FunctionDeclaration}
 Receiver ::= '(' identifier? '*'? identifier ')'
 
 Literal ::=

@@ -136,8 +136,7 @@ GO_FILE
   PsiComment(GO_LINE_COMMENT)('// NewWriter creates a new Writer writing to w.')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('NewWriter')
+    PsiElement(identifier)('NewWriter')
     FUNCTION
       SIGNATURE
         PARAMETERS
@@ -2405,8 +2404,7 @@ GO_FILE
   PsiComment(GO_LINE_COMMENT)('// paxHeader formats a single pax record, prefixing it with the appropriate length')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('paxHeader')
+    PsiElement(identifier)('paxHeader')
     FUNCTION
       SIGNATURE
         PARAMETERS

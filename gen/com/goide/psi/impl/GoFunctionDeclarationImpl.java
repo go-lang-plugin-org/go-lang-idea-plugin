@@ -28,12 +28,6 @@ public class GoFunctionDeclarationImpl extends GoTopLevelDeclarationImpl impleme
   }
 
   @Override
-  @NotNull
-  public GoFunctionName getFunctionName() {
-    return findNotNullChildByClass(GoFunctionName.class);
-  }
-
-  @Override
   @Nullable
   public GoSignature getSignature() {
     return findChildByClass(GoSignature.class);
@@ -43,6 +37,12 @@ public class GoFunctionDeclarationImpl extends GoTopLevelDeclarationImpl impleme
   @NotNull
   public PsiElement getFunc() {
     return findNotNullChildByType(FUNC);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

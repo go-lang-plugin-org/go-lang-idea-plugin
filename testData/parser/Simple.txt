@@ -4,8 +4,7 @@ GO_FILE
     PsiElement(identifier)('foo')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('NewCipher')
+    PsiElement(identifier)('NewCipher')
     FUNCTION
       SIGNATURE
         PARAMETERS
@@ -44,8 +43,7 @@ GO_FILE
         PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('simpleF')
+    PsiElement(identifier)('simpleF')
     FUNCTION
       SIGNATURE
         PARAMETERS
@@ -64,8 +62,7 @@ GO_FILE
         PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('complexF1')
+    PsiElement(identifier)('complexF1')
     FUNCTION
       SIGNATURE
         PARAMETERS

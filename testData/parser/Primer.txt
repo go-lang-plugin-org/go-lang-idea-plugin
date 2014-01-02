@@ -8,8 +8,7 @@ GO_FILE
       PsiElement(string)('"fmt"')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('printf')
+    PsiElement(identifier)('printf')
     FUNCTION
       SIGNATURE
         PARAMETERS
@@ -76,8 +75,7 @@ GO_FILE
         PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('main')
+    PsiElement(identifier)('main')
     FUNCTION
       SIGNATURE
         PARAMETERS
@@ -147,8 +145,7 @@ GO_FILE
         PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('main2')
+    PsiElement(identifier)('main2')
     FUNCTION
       SIGNATURE
         PARAMETERS

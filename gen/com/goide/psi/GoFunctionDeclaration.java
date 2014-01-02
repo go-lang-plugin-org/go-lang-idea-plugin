@@ -10,13 +10,13 @@ public interface GoFunctionDeclaration extends GoTopLevelDeclaration {
   @Nullable
   GoFunction getFunction();
 
-  @NotNull
-  GoFunctionName getFunctionName();
-
   @Nullable
   GoSignature getSignature();
 
   @NotNull
   PsiElement getFunc();
+
+  @NotNull
+  PsiElement getIdentifier();
 
 }

@@ -126,9 +126,6 @@ public class GoParser implements PsiParser {
     else if (root_ == FUNCTION_LIT) {
       result_ = FunctionLit(builder_, 0);
     }
-    else if (root_ == FUNCTION_NAME) {
-      result_ = FunctionName(builder_, 0);
-    }
     else if (root_ == FUNCTION_TYPE) {
       result_ = FunctionType(builder_, 0);
     }
@@ -1297,15 +1294,14 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // func FunctionName ( Function | Signature )
+  // func identifier ( Function | Signature )
   public static boolean FunctionDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionDeclaration")) return false;
     if (!nextTokenIs(builder_, FUNC)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, FUNC);
-    result_ = result_ && FunctionName(builder_, level_ + 1);
+    result_ = consumeTokens(builder_, 2, FUNC, IDENTIFIER);
     pinned_ = result_; // pin = 2
     result_ = result_ && FunctionDeclaration_2(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, FUNCTION_DECLARATION, result_, pinned_, null);
@@ -1320,18 +1316,6 @@ public class GoParser implements PsiParser {
     result_ = Function(builder_, level_ + 1);
     if (!result_) result_ = Signature(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // identifier
-  public static boolean FunctionName(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "FunctionName")) return false;
-    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, IDENTIFIER);
-    exit_section_(builder_, marker_, FUNCTION_NAME, result_);
     return result_;
   }
 
@@ -1809,9 +1793,9 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, FUNC);
     result_ = result_ && Receiver(builder_, level_ + 1);
-    pinned_ = result_; // pin = 2
-    result_ = result_ && report_error_(builder_, consumeToken(builder_, IDENTIFIER));
-    result_ = pinned_ && MethodDeclaration_3(builder_, level_ + 1) && result_;
+    result_ = result_ && consumeToken(builder_, IDENTIFIER);
+    pinned_ = result_; // pin = 3
+    result_ = result_ && MethodDeclaration_3(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, METHOD_DECLARATION, result_, pinned_, null);
     return result_ || pinned_;
   }

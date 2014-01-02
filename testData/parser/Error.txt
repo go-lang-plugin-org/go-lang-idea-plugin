@@ -228,8 +228,7 @@ GO_FILE
   PsiComment(GO_LINE_COMMENT)('// For calling from C.')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('newTypeAssertionError')
+    PsiElement(identifier)('newTypeAssertionError')
     FUNCTION
       SIGNATURE
         PARAMETERS
@@ -459,8 +458,7 @@ GO_FILE
   PsiComment(GO_LINE_COMMENT)('// For calling from C.')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('newErrorString')
+    PsiElement(identifier)('newErrorString')
     FUNCTION
       SIGNATURE
         PARAMETERS
@@ -518,8 +516,7 @@ GO_FILE
         PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('typestring')
+    PsiElement(identifier)('typestring')
     SIGNATURE
       PARAMETERS
         PsiElement(()('(')
@@ -539,8 +536,7 @@ GO_FILE
   PsiComment(GO_LINE_COMMENT)('// simple and handle just a few important cases: int, string, and Stringer.')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('printany')
+    PsiElement(identifier)('printany')
     FUNCTION
       SIGNATURE
         PARAMETERS
@@ -686,8 +682,7 @@ GO_FILE
   PsiComment(GO_LINE_COMMENT)('// called from generated code')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
-    FUNCTION_NAME
-      PsiElement(identifier)('panicwrap')
+    PsiElement(identifier)('panicwrap')
     FUNCTION
       SIGNATURE
         PARAMETERS

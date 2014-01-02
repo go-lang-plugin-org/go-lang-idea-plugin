@@ -19,7 +19,7 @@ public interface GoMethodDeclaration extends GoFunctionDeclaration {
   @NotNull
   PsiElement getFunc();
 
-  @Nullable
+  @NotNull
   PsiElement getIdentifier();
 
 }
