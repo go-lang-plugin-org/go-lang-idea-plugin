@@ -23,6 +23,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.SystemProperties;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.*;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.util.GoUtil;
 
 import java.io.File;
@@ -641,6 +642,21 @@ public class GoSdkUtil {
         } catch (Exception ignored) {
             return "";
         }
+    }
+
+    public static boolean isImportedPackage(Project project, String packageName) {
+        if (GoNamesCache.getInstance(project).isGoDefaultPackage(packageName)) {
+            return false;
+        }
+
+        String topPackageName = packageName.split("/")[0];
+
+        if (!topPackageName.contains(".")) {
+            return false;
+        }
+
+        String goPath = getSysGoPathPath().split(File.pathSeparator)[0];
+        return checkFolderExists(goPath + File.separator + "src" + File.separator + topPackageName);
     }
 
     @NotNull

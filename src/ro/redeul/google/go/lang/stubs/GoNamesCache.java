@@ -20,6 +20,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
@@ -74,6 +75,58 @@ public class GoNamesCache {
     public Collection<String> getSdkPackages() {
         return getPackagesInScope(GlobalSearchScope.notScope(
             GlobalSearchScope.projectScope(project)));
+    }
+
+    public String[] getGoDefaultPackagesArray() {
+        return new String[] {
+                "archive",
+                "bufio",
+                "builtin",
+                "bytes",
+                "compress",
+                "container",
+                "crypto",
+                "database",
+                "debug",
+                "encoding",
+                "errors",
+                "expvar",
+                "flag",
+                "fmt",
+                "go",
+                "hash",
+                "html",
+                "image",
+                "index",
+                "io",
+                "log",
+                "math",
+                "mime",
+                "net",
+                "os",
+                "path",
+                "reflect",
+                "regexp",
+                "runtime",
+                "sort",
+                "strconv",
+                "strings",
+                "sync",
+                "syscall",
+                "testing",
+                "text",
+                "time",
+                "unicode",
+                "unsafe"
+        };
+    }
+
+    public Collection<String> getGoDefaultPackages() {
+        return Arrays.asList(getGoDefaultPackagesArray());
+    }
+
+    public boolean isGoDefaultPackage(String packageName) {
+        return getGoDefaultPackages().contains(packageName.split("/")[0]);
     }
 
     public Collection<String> getAllPackages() {
