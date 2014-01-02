@@ -77,7 +77,7 @@ public class GoBlocks {
     PsiElement psi = node.getPsi();
 
     if (psi instanceof GoBlockStatement)
-      return new GoBlockStatementBlock(node, indent, settings);
+      return new GoBlockStatementBlock((GoBlockStatement) psi, settings, indent);
 
     if (psi instanceof GoFile)
       return new GoFileBlock((GoFile) psi, settings);
