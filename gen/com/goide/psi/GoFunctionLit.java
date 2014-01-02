@@ -8,7 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface GoFunctionLit extends GoExpression {
 
   @Nullable
-  GoFunction getFunction();
+  GoBlock getBlock();
+
+  @Nullable
+  GoSignature getSignature();
 
   @NotNull
   PsiElement getFunc();

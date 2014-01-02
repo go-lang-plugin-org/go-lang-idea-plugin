@@ -134,10 +134,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
-  public void visitFunction(@NotNull GoFunction o) {
-    visitCompositeElement(o);
-  }
-
   public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
     visitTopLevelDeclaration(o);
   }

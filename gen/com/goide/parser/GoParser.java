@@ -117,9 +117,6 @@ public class GoParser implements PsiParser {
     else if (root_ == FOR_STATEMENT) {
       result_ = ForStatement(builder_, 0);
     }
-    else if (root_ == FUNCTION) {
-      result_ = Function(builder_, 0);
-    }
     else if (root_ == FUNCTION_DECLARATION) {
       result_ = FunctionDeclaration(builder_, 0);
     }
@@ -1281,20 +1278,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Signature Block
-  public static boolean Function(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Function")) return false;
-    if (!nextTokenIs(builder_, LPAREN)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = Signature(builder_, level_ + 1);
-    result_ = result_ && Block(builder_, level_ + 1);
-    exit_section_(builder_, marker_, FUNCTION, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // func identifier ( Function | Signature )
+  // func identifier Signature Block?
   public static boolean FunctionDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionDeclaration")) return false;
     if (!nextTokenIs(builder_, FUNC)) return false;
@@ -1303,20 +1287,17 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeTokens(builder_, 2, FUNC, IDENTIFIER);
     pinned_ = result_; // pin = 2
-    result_ = result_ && FunctionDeclaration_2(builder_, level_ + 1);
+    result_ = result_ && report_error_(builder_, Signature(builder_, level_ + 1));
+    result_ = pinned_ && FunctionDeclaration_3(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, FUNCTION_DECLARATION, result_, pinned_, null);
     return result_ || pinned_;
   }
 
-  // Function | Signature
-  private static boolean FunctionDeclaration_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "FunctionDeclaration_2")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = Function(builder_, level_ + 1);
-    if (!result_) result_ = Signature(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+  // Block?
+  private static boolean FunctionDeclaration_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FunctionDeclaration_3")) return false;
+    Block(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -1784,7 +1765,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // func Receiver identifier ( Function | Signature )
+  // func Receiver identifier Signature Block?
   public static boolean MethodDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MethodDeclaration")) return false;
     if (!nextTokenIs(builder_, FUNC)) return false;
@@ -1795,20 +1776,17 @@ public class GoParser implements PsiParser {
     result_ = result_ && Receiver(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, IDENTIFIER);
     pinned_ = result_; // pin = 3
-    result_ = result_ && MethodDeclaration_3(builder_, level_ + 1);
+    result_ = result_ && report_error_(builder_, Signature(builder_, level_ + 1));
+    result_ = pinned_ && MethodDeclaration_4(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, METHOD_DECLARATION, result_, pinned_, null);
     return result_ || pinned_;
   }
 
-  // Function | Signature
-  private static boolean MethodDeclaration_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "MethodDeclaration_3")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = Function(builder_, level_ + 1);
-    if (!result_) result_ = Signature(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+  // Block?
+  private static boolean MethodDeclaration_4(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MethodDeclaration_4")) return false;
+    Block(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -3393,7 +3371,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // func Function
+  // func Signature Block
   public static boolean FunctionLit(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FunctionLit")) return false;
     if (!nextTokenIs(builder_, FUNC)) return false;
@@ -3402,7 +3380,8 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, FUNC);
     pinned_ = result_; // pin = 1
-    result_ = result_ && Function(builder_, level_ + 1);
+    result_ = result_ && report_error_(builder_, Signature(builder_, level_ + 1));
+    result_ = pinned_ && Block(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, FUNCTION_LIT, result_, pinned_, null);
     return result_ || pinned_;
   }

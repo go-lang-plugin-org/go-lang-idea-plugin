@@ -23,8 +23,14 @@ public class GoFunctionLitImpl extends GoExpressionImpl implements GoFunctionLit
 
   @Override
   @Nullable
-  public GoFunction getFunction() {
-    return findChildByClass(GoFunction.class);
+  public GoBlock getBlock() {
+    return findChildByClass(GoBlock.class);
+  }
+
+  @Override
+  @Nullable
+  public GoSignature getSignature() {
+    return findChildByClass(GoSignature.class);
   }
 
   @Override

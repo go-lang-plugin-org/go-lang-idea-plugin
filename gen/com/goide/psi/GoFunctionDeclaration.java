@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoFunctionDeclaration extends GoTopLevelDeclaration {
 
   @Nullable
-  GoFunction getFunction();
+  GoBlock getBlock();
 
   @Nullable
   GoSignature getSignature();

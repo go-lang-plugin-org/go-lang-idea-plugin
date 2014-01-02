@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoMethodDeclaration extends GoFunctionDeclaration {
 
   @Nullable
-  GoFunction getFunction();
+  GoBlock getBlock();
 
   @NotNull
   GoReceiver getReceiver();

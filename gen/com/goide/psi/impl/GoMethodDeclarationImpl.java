@@ -23,8 +23,8 @@ public class GoMethodDeclarationImpl extends GoFunctionDeclarationImpl implement
 
   @Override
   @Nullable
-  public GoFunction getFunction() {
-    return findChildByClass(GoFunction.class);
+  public GoBlock getBlock() {
+    return findChildByClass(GoBlock.class);
   }
 
   @Override
