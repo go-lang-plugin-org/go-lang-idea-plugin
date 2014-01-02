@@ -12,7 +12,7 @@
   psiImplClassSuffix='Impl'
   psiPackage='com.goide.psi'
   psiImplPackage='com.goide.psi.impl'
-  
+
   LBRACE               =  '{'
   RBRACE               =  '}'
   LBRACK               =  '['
@@ -272,8 +272,8 @@ TypeCaseClause ::= TypeSwitchCase ':' ( Statement semi )*
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 private TypeList ::= Type ( ',' Type )*
 private TypeListNoPin ::= Type ( ',' Type )*
-ForStatement ::= for [ ForClause | RangeClause ] Block
-ForClause ::= SimpleStatement? semi Expression semi SimpleStatement?
+ForStatement ::= for [ ForClause | RangeClause | Expression ] Block
+ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
 RangeClause ::= ( ExpressionList '=' | IdentifierList ':=' ) range Expression {pin=2}
 GoStatement ::= go Expression
 SelectStatement ::= select '{' ( CommClause )* '}'

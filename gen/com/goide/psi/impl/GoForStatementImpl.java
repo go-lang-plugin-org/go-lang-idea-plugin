@@ -29,6 +29,12 @@ public class GoForStatementImpl extends GoStatementImpl implements GoForStatemen
 
   @Override
   @Nullable
+  public GoExpression getExpression() {
+    return findChildByClass(GoExpression.class);
+  }
+
+  @Override
+  @Nullable
   public GoForClause getForClause() {
     return findChildByClass(GoForClause.class);
   }

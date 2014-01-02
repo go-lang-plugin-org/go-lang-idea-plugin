@@ -158,14 +158,12 @@ GO_FILE
       PsiComment(GO_LINE_COMMENT)('// while loop:')
       FOR_STATEMENT
         PsiElement(for)('for')
-      SIMPLE_STATEMENT
         CONDITIONAL_EXPR
           OPERAND_NAME
             PsiElement(identifier)('loops')
           PsiElement(>)('>')
           LITERAL
             PsiElement(int)('0')
-      STATEMENT
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT

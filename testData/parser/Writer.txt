@@ -254,7 +254,6 @@ GO_FILE
               PsiElement(identifier)('pad')
       FOR_STATEMENT
         PsiElement(for)('for')
-      SIMPLE_STATEMENT
         AND_EXPR
           CONDITIONAL_EXPR
             OPERAND_NAME
@@ -271,7 +270,6 @@ GO_FILE
             PsiElement(==)('==')
             OPERAND_NAME
               PsiElement(identifier)('nil')
-      STATEMENT
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
@@ -563,7 +561,6 @@ GO_FILE
       PsiComment(GO_LINE_COMMENT)('// leading zeros, but leave room for a NUL.')
       FOR_STATEMENT
         PsiElement(for)('for')
-      SIMPLE_STATEMENT
         CONDITIONAL_EXPR
           ADD_EXPR
             BUILTIN_CALL_EXPR
@@ -586,7 +583,6 @@ GO_FILE
                 TYPE_NAME
                   PsiElement(identifier)('b')
             PsiElement())(')')
-      STATEMENT
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT

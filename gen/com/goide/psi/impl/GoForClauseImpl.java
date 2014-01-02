@@ -22,9 +22,9 @@ public class GoForClauseImpl extends GoCompositeElementImpl implements GoForClau
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoExpression getExpression() {
-    return findNotNullChildByClass(GoExpression.class);
+    return findChildByClass(GoExpression.class);
   }
 
   @Override
