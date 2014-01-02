@@ -27,4 +27,10 @@ public class GoParametersImpl extends GoCompositeElementImpl implements GoParame
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoParameterDeclaration.class);
   }
 
+  @Override
+  @NotNull
+  public List<GoType> getTypeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoType.class);
+  }
+
 }

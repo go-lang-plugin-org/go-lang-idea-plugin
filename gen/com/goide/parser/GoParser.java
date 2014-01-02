@@ -1894,7 +1894,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '(' [ ParameterList ','? ] ')'
+  // '(' [ (ParameterList ','?| TypeListNoPin) ] ')'
   public static boolean Parameters(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Parameters")) return false;
     if (!nextTokenIs(builder_, LPAREN)) return false;
@@ -1909,29 +1909,38 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // [ ParameterList ','? ]
+  // [ (ParameterList ','?| TypeListNoPin) ]
   private static boolean Parameters_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Parameters_1")) return false;
     Parameters_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // ParameterList ','?
+  // ParameterList ','?| TypeListNoPin
   private static boolean Parameters_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Parameters_1_0")) return false;
     boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    Marker marker_ = enter_section_(builder_);
+    result_ = Parameters_1_0_0(builder_, level_ + 1);
+    if (!result_) result_ = TypeListNoPin(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // ParameterList ','?
+  private static boolean Parameters_1_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Parameters_1_0_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
     result_ = ParameterList(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && Parameters_1_0_1(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
+    result_ = result_ && Parameters_1_0_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
   }
 
   // ','?
-  private static boolean Parameters_1_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Parameters_1_0_1")) return false;
+  private static boolean Parameters_1_0_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Parameters_1_0_0_1")) return false;
     consumeToken(builder_, COMMA);
     return true;
   }

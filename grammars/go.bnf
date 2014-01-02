@@ -102,7 +102,7 @@ PointerType ::= '*' Type {pin=1}
 FunctionType ::= func Signature {pin=1}
 Signature ::= Parameters Result? {pin=1}
 Result ::= '(' TypeListNoPin ')' | Type | Parameters
-Parameters ::= '(' [ ParameterList ','? ] ')' {pin(".*")=1}
+Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {pin=1}
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
 ParameterDeclaration ::= IdentifierListNoPin? '...'? Type
 
