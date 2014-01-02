@@ -71,12 +71,13 @@
   pin('.*List(?:_\d.*)?')=1
 }
 
-File ::= PackageClause semi ( ImportDeclaration semi )* ( TopLevelDeclaration semi )* {pin=1}
-private semi ::= '<NL>' | ';'?
+File ::= PackageClause semi (ImportDeclaration semi)* (TopLevelDeclaration semi)* {pin(".*")=1}
+private semi ::= '<NL>' | ';'
 
 PackageClause ::= package identifier {pin=1}
 
-ImportDeclaration ::= import ( ImportSpec | '(' ( ImportSpec semi )* ')' ) {pin(".*")=1}
+ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {pin(".*")=1}
+private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
 ImportSpec ::= [ '.' | identifier ] string
 
 Type ::= TypeName | TypeLit | '(' Type ')'
@@ -92,7 +93,8 @@ private TypeLit ::=
 
 ArrayOrSliceType ::= '[' Expression? ']' Type {pin=1}
 
-StructType ::= struct '{' ( FieldDeclaration semi )* '}' {pin=1}
+StructType ::= struct '{' Fields? '}' {pin=1}
+private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
 FieldDeclaration ::= (IdentifierList Type | AnonymousField) Tag?
 AnonymousField ::= '*'? TypeName
 Tag ::= string
@@ -106,13 +108,15 @@ Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {pin=1}
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
 ParameterDeclaration ::= IdentifierListNoPin? '...'? Type
 
-InterfaceType ::= interface '{' ( MethodSpec semi )* '}' {pin(".*")=1}
+InterfaceType ::= interface '{' MethodSpecs? '}' {pin(".*")=1}
+private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
 MethodSpec ::= identifier Signature | TypeName
 
 MapType ::= map '[' Type ']' Type {pin=1}
 ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
 
-Block ::= '{' (Statement semi)* '}' {pin(".*")=1}
+Block ::= '{' Statements? '}' {pin(".*")=1}
+private Statements ::= Statement (semi Statement)* semi? {pin=1}
 
 Statement ::=
     ConstDeclaration
@@ -150,17 +154,20 @@ TopLevelDeclaration ::=
   | FunctionDeclaration
   | MethodDeclaration {recoverWhile='#auto'}
 
-ConstDeclaration ::= const ( ConstSpec | '(' ( ConstSpec semi )* ')' ) {pin(".*")=1}
+ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1}
+private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
 ConstSpec ::= IdentifierList [ Type? '=' ExpressionList ]
 
 private IdentifierListNoPin ::= identifier &(!('.' | ')')) (',' identifier)* // todo
 private IdentifierList ::= identifier ( ',' identifier )*
 private ExpressionList ::= Expression ( ',' Expression )*
 
-TypeDeclaration ::= 'type' ( TypeSpec | '(' ( TypeSpec semi )* ')' ) {pin(".*")=1}
+TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
+private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
 TypeSpec ::= identifier Type {pin=1}
 
-VarDeclaration ::= var ( VarSpec | '(' ( VarSpec semi )* ')' ) {pin=1}
+VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
+private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
 VarSpec ::= IdentifierList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
 
 ShortVarDeclaration ::= IdentifierList ':=' ExpressionList {pin=2}
@@ -264,11 +271,11 @@ ExprSwitchStatement ::= switch Condition '{' ( ExprCaseClause )* '}'
 private Condition ::= SimpleStatementOpt [ Expression ]
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
-ExprCaseClause ::= ExprSwitchCase ':' ( Statement semi )*
+ExprCaseClause ::= ExprSwitchCase ':' Statements
 ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
 TypeSwitchStatement  ::= switch SimpleStatementOpt TypeSwitchGuard '{' ( TypeCaseClause )* '}'
 TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' type ')'
-TypeCaseClause ::= TypeSwitchCase ':' ( Statement semi )*
+TypeCaseClause ::= TypeSwitchCase ':' Statements
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 private TypeList ::= Type ( ',' Type )*
 private TypeListNoPin ::= Type ( ',' Type )*
@@ -277,7 +284,7 @@ ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
 RangeClause ::= ( ExpressionList '=' | IdentifierList ':=' ) range Expression {pin=2}
 GoStatement ::= go Expression
 SelectStatement ::= select '{' ( CommClause )* '}'
-CommClause ::= CommCase ':' ( Statement semi )* {pin=1}
+CommClause ::= CommCase ':' Statements {pin=1}
 CommCase ::= case ( SendStatement | RecvStatement ) | default {pin(".*")=1}
 RecvStatement ::= [ ExpressionList '=' | IdentifierList ':=' ] Expression {pin=0}
 ReturnStatement ::= return ExpressionList?

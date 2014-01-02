@@ -436,7 +436,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '{' (Statement semi)* '}'
+  // '{' Statements? '}'
   public static boolean Block(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Block")) return false;
     if (!nextTokenIs(builder_, LBRACE)) return false;
@@ -451,29 +451,11 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // (Statement semi)*
+  // Statements?
   private static boolean Block_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Block_1")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!Block_1_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "Block_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
+    Statements(builder_, level_ + 1);
     return true;
-  }
-
-  // Statement semi
-  private static boolean Block_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Block_1_0")) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = Statement(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -658,7 +640,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // CommCase ':' ( Statement semi )*
+  // CommCase ':' Statements
   public static boolean CommClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CommClause")) return false;
     if (!nextTokenIs(builder_, "<comm clause>", CASE, DEFAULT)) return false;
@@ -668,32 +650,9 @@ public class GoParser implements PsiParser {
     result_ = CommCase(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, consumeToken(builder_, COLON));
-    result_ = pinned_ && CommClause_2(builder_, level_ + 1) && result_;
+    result_ = pinned_ && Statements(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, COMM_CLAUSE, result_, pinned_, null);
     return result_ || pinned_;
-  }
-
-  // ( Statement semi )*
-  private static boolean CommClause_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "CommClause_2")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!CommClause_2_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "CommClause_2", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
-  }
-
-  // Statement semi
-  private static boolean CommClause_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "CommClause_2_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = Statement(builder_, level_ + 1);
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
   }
 
   /* ********************************************************** */
@@ -716,7 +675,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // const ( ConstSpec | '(' ( ConstSpec semi )* ')' )
+  // const ( ConstSpec | '(' ConstSpecs? ')' )
   public static boolean ConstDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstDeclaration")) return false;
     if (!nextTokenIs(builder_, CONST)) return false;
@@ -730,7 +689,7 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ConstSpec | '(' ( ConstSpec semi )* ')'
+  // ConstSpec | '(' ConstSpecs? ')'
   private static boolean ConstDeclaration_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstDeclaration_1")) return false;
     boolean result_ = false;
@@ -741,7 +700,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // '(' ( ConstSpec semi )* ')'
+  // '(' ConstSpecs? ')'
   private static boolean ConstDeclaration_1_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstDeclaration_1_1")) return false;
     boolean result_ = false;
@@ -755,29 +714,11 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ( ConstSpec semi )*
+  // ConstSpecs?
   private static boolean ConstDeclaration_1_1_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstDeclaration_1_1_1")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!ConstDeclaration_1_1_1_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "ConstDeclaration_1_1_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
+    ConstSpecs(builder_, level_ + 1);
     return true;
-  }
-
-  // ConstSpec semi
-  private static boolean ConstDeclaration_1_1_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConstDeclaration_1_1_1_0")) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = ConstSpec(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -816,6 +757,52 @@ public class GoParser implements PsiParser {
   private static boolean ConstSpec_1_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec_1_0_0")) return false;
     Type(builder_, level_ + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // ConstSpec (semi ConstSpec)* semi?
+  static boolean ConstSpecs(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConstSpecs")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = ConstSpec(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, ConstSpecs_1(builder_, level_ + 1));
+    result_ = pinned_ && ConstSpecs_2(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // (semi ConstSpec)*
+  private static boolean ConstSpecs_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConstSpecs_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!ConstSpecs_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "ConstSpecs_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // semi ConstSpec
+  private static boolean ConstSpecs_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConstSpecs_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = semi(builder_, level_ + 1);
+    result_ = result_ && ConstSpec(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // semi?
+  private static boolean ConstSpecs_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConstSpecs_2")) return false;
+    semi(builder_, level_ + 1);
     return true;
   }
 
@@ -944,7 +931,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ExprSwitchCase ':' ( Statement semi )*
+  // ExprSwitchCase ':' Statements
   public static boolean ExprCaseClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ExprCaseClause")) return false;
     if (!nextTokenIs(builder_, "<expr case clause>", CASE, DEFAULT)) return false;
@@ -952,31 +939,8 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<expr case clause>");
     result_ = ExprSwitchCase(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
-    result_ = result_ && ExprCaseClause_2(builder_, level_ + 1);
+    result_ = result_ && Statements(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, EXPR_CASE_CLAUSE, result_, false, null);
-    return result_;
-  }
-
-  // ( Statement semi )*
-  private static boolean ExprCaseClause_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ExprCaseClause_2")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!ExprCaseClause_2_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "ExprCaseClause_2", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
-  }
-
-  // Statement semi
-  private static boolean ExprCaseClause_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ExprCaseClause_2_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = Statement(builder_, level_ + 1);
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
@@ -1152,7 +1116,53 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // PackageClause semi ( ImportDeclaration semi )* ( TopLevelDeclaration semi )*
+  // FieldDeclaration (semi FieldDeclaration)* semi?
+  static boolean Fields(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Fields")) return false;
+    if (!nextTokenIs(builder_, "", MUL, IDENTIFIER)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = FieldDeclaration(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, Fields_1(builder_, level_ + 1));
+    result_ = pinned_ && Fields_2(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // (semi FieldDeclaration)*
+  private static boolean Fields_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Fields_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!Fields_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "Fields_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // semi FieldDeclaration
+  private static boolean Fields_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Fields_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = semi(builder_, level_ + 1);
+    result_ = result_ && FieldDeclaration(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // semi?
+  private static boolean Fields_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Fields_2")) return false;
+    semi(builder_, level_ + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PackageClause semi (ImportDeclaration semi)* (TopLevelDeclaration semi)*
   static boolean File(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "File")) return false;
     if (!nextTokenIs(builder_, PACKAGE)) return false;
@@ -1168,7 +1178,7 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ( ImportDeclaration semi )*
+  // (ImportDeclaration semi)*
   private static boolean File_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "File_2")) return false;
     int pos_ = current_position_(builder_);
@@ -1184,14 +1194,16 @@ public class GoParser implements PsiParser {
   private static boolean File_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "File_2_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = ImportDeclaration(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
     result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
-  // ( TopLevelDeclaration semi )*
+  // (TopLevelDeclaration semi)*
   private static boolean File_3(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "File_3")) return false;
     int pos_ = current_position_(builder_);
@@ -1207,11 +1219,13 @@ public class GoParser implements PsiParser {
   private static boolean File_3_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "File_3_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = TopLevelDeclaration(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
     result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -1509,7 +1523,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // import ( ImportSpec | '(' ( ImportSpec semi )* ')' )
+  // import ( ImportSpec | '(' ImportSpecs? ')' )
   public static boolean ImportDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ImportDeclaration")) return false;
     if (!nextTokenIs(builder_, IMPORT)) return false;
@@ -1523,7 +1537,7 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ImportSpec | '(' ( ImportSpec semi )* ')'
+  // ImportSpec | '(' ImportSpecs? ')'
   private static boolean ImportDeclaration_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ImportDeclaration_1")) return false;
     boolean result_ = false;
@@ -1534,7 +1548,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // '(' ( ImportSpec semi )* ')'
+  // '(' ImportSpecs? ')'
   private static boolean ImportDeclaration_1_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ImportDeclaration_1_1")) return false;
     boolean result_ = false;
@@ -1548,29 +1562,11 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ( ImportSpec semi )*
+  // ImportSpecs?
   private static boolean ImportDeclaration_1_1_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ImportDeclaration_1_1_1")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!ImportDeclaration_1_1_1_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "ImportDeclaration_1_1_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
+    ImportSpecs(builder_, level_ + 1);
     return true;
-  }
-
-  // ImportSpec semi
-  private static boolean ImportDeclaration_1_1_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ImportDeclaration_1_1_1_0")) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = ImportSpec(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -1601,6 +1597,51 @@ public class GoParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, IDENTIFIER);
     exit_section_(builder_, marker_, null, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // ImportSpec (semi ImportSpec)* semi?
+  static boolean ImportSpecs(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ImportSpecs")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = ImportSpec(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, ImportSpecs_1(builder_, level_ + 1));
+    result_ = pinned_ && ImportSpecs_2(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // (semi ImportSpec)*
+  private static boolean ImportSpecs_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ImportSpecs_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!ImportSpecs_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "ImportSpecs_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // semi ImportSpec
+  private static boolean ImportSpecs_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ImportSpecs_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = semi(builder_, level_ + 1);
+    result_ = result_ && ImportSpec(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // semi?
+  private static boolean ImportSpecs_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ImportSpecs_2")) return false;
+    semi(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -1664,7 +1705,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // interface '{' ( MethodSpec semi )* '}'
+  // interface '{' MethodSpecs? '}'
   public static boolean InterfaceType(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "InterfaceType")) return false;
     if (!nextTokenIs(builder_, INTERFACE)) return false;
@@ -1680,29 +1721,11 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ( MethodSpec semi )*
+  // MethodSpecs?
   private static boolean InterfaceType_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "InterfaceType_2")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!InterfaceType_2_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "InterfaceType_2", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
+    MethodSpecs(builder_, level_ + 1);
     return true;
-  }
-
-  // MethodSpec semi
-  private static boolean InterfaceType_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "InterfaceType_2_0")) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = MethodSpec(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -1819,6 +1842,52 @@ public class GoParser implements PsiParser {
     result_ = result_ && Signature(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // MethodSpec (semi MethodSpec)* semi?
+  static boolean MethodSpecs(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MethodSpecs")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = MethodSpec(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, MethodSpecs_1(builder_, level_ + 1));
+    result_ = pinned_ && MethodSpecs_2(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // (semi MethodSpec)*
+  private static boolean MethodSpecs_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MethodSpecs_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!MethodSpecs_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "MethodSpecs_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // semi MethodSpec
+  private static boolean MethodSpecs_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MethodSpecs_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = semi(builder_, level_ + 1);
+    result_ = result_ && MethodSpec(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // semi?
+  private static boolean MethodSpecs_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MethodSpecs_2")) return false;
+    semi(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -2406,7 +2475,52 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // struct '{' ( FieldDeclaration semi )* '}'
+  // Statement (semi Statement)* semi?
+  static boolean Statements(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Statements")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = Statement(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, Statements_1(builder_, level_ + 1));
+    result_ = pinned_ && Statements_2(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // (semi Statement)*
+  private static boolean Statements_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Statements_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!Statements_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "Statements_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // semi Statement
+  private static boolean Statements_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Statements_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = semi(builder_, level_ + 1);
+    result_ = result_ && Statement(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // semi?
+  private static boolean Statements_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Statements_2")) return false;
+    semi(builder_, level_ + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // struct '{' Fields? '}'
   public static boolean StructType(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "StructType")) return false;
     if (!nextTokenIs(builder_, STRUCT)) return false;
@@ -2422,27 +2536,11 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ( FieldDeclaration semi )*
+  // Fields?
   private static boolean StructType_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "StructType_2")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!StructType_2_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "StructType_2", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
+    Fields(builder_, level_ + 1);
     return true;
-  }
-
-  // FieldDeclaration semi
-  private static boolean StructType_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "StructType_2_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = FieldDeclaration(builder_, level_ + 1);
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
   }
 
   /* ********************************************************** */
@@ -2515,7 +2613,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TypeSwitchCase ':' ( Statement semi )*
+  // TypeSwitchCase ':' Statements
   public static boolean TypeCaseClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeCaseClause")) return false;
     if (!nextTokenIs(builder_, "<type case clause>", CASE, DEFAULT)) return false;
@@ -2523,36 +2621,13 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type case clause>");
     result_ = TypeSwitchCase(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
-    result_ = result_ && TypeCaseClause_2(builder_, level_ + 1);
+    result_ = result_ && Statements(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, TYPE_CASE_CLAUSE, result_, false, null);
     return result_;
   }
 
-  // ( Statement semi )*
-  private static boolean TypeCaseClause_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TypeCaseClause_2")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!TypeCaseClause_2_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "TypeCaseClause_2", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
-  }
-
-  // Statement semi
-  private static boolean TypeCaseClause_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TypeCaseClause_2_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = Statement(builder_, level_ + 1);
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
   /* ********************************************************** */
-  // 'type' ( TypeSpec | '(' ( TypeSpec semi )* ')' )
+  // 'type' ( TypeSpec | '(' TypeSpecs? ')' )
   public static boolean TypeDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeDeclaration")) return false;
     if (!nextTokenIs(builder_, TYPE_)) return false;
@@ -2566,7 +2641,7 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // TypeSpec | '(' ( TypeSpec semi )* ')'
+  // TypeSpec | '(' TypeSpecs? ')'
   private static boolean TypeDeclaration_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeDeclaration_1")) return false;
     boolean result_ = false;
@@ -2577,7 +2652,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // '(' ( TypeSpec semi )* ')'
+  // '(' TypeSpecs? ')'
   private static boolean TypeDeclaration_1_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeDeclaration_1_1")) return false;
     boolean result_ = false;
@@ -2591,29 +2666,11 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ( TypeSpec semi )*
+  // TypeSpecs?
   private static boolean TypeDeclaration_1_1_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeDeclaration_1_1_1")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!TypeDeclaration_1_1_1_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "TypeDeclaration_1_1_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
+    TypeSpecs(builder_, level_ + 1);
     return true;
-  }
-
-  // TypeSpec semi
-  private static boolean TypeDeclaration_1_1_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TypeDeclaration_1_1_1_0")) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = TypeSpec(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -2742,6 +2799,52 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // TypeSpec (semi TypeSpec)* semi?
+  static boolean TypeSpecs(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeSpecs")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = TypeSpec(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, TypeSpecs_1(builder_, level_ + 1));
+    result_ = pinned_ && TypeSpecs_2(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // (semi TypeSpec)*
+  private static boolean TypeSpecs_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeSpecs_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!TypeSpecs_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "TypeSpecs_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // semi TypeSpec
+  private static boolean TypeSpecs_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeSpecs_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = semi(builder_, level_ + 1);
+    result_ = result_ && TypeSpec(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // semi?
+  private static boolean TypeSpecs_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeSpecs_2")) return false;
+    semi(builder_, level_ + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // case TypeList | default
   public static boolean TypeSwitchCase(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeSwitchCase")) return false;
@@ -2855,7 +2958,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // var ( VarSpec | '(' ( VarSpec semi )* ')' )
+  // var ( VarSpec | '(' VarSpecs? ')' )
   public static boolean VarDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDeclaration")) return false;
     if (!nextTokenIs(builder_, VAR)) return false;
@@ -2869,7 +2972,7 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // VarSpec | '(' ( VarSpec semi )* ')'
+  // VarSpec | '(' VarSpecs? ')'
   private static boolean VarDeclaration_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDeclaration_1")) return false;
     boolean result_ = false;
@@ -2880,7 +2983,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // '(' ( VarSpec semi )* ')'
+  // '(' VarSpecs? ')'
   private static boolean VarDeclaration_1_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDeclaration_1_1")) return false;
     boolean result_ = false;
@@ -2892,27 +2995,11 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // ( VarSpec semi )*
+  // VarSpecs?
   private static boolean VarDeclaration_1_1_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarDeclaration_1_1_1")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!VarDeclaration_1_1_1_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "VarDeclaration_1_1_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
+    VarSpecs(builder_, level_ + 1);
     return true;
-  }
-
-  // VarSpec semi
-  private static boolean VarDeclaration_1_1_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "VarDeclaration_1_1_1_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = VarSpec(builder_, level_ + 1);
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
   }
 
   /* ********************************************************** */
@@ -2977,6 +3064,52 @@ public class GoParser implements PsiParser {
     result_ = result_ && ExpressionList(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // VarSpec (semi VarSpec)* semi?
+  static boolean VarSpecs(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarSpecs")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = VarSpec(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, VarSpecs_1(builder_, level_ + 1));
+    result_ = pinned_ && VarSpecs_2(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // (semi VarSpec)*
+  private static boolean VarSpecs_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarSpecs_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!VarSpecs_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "VarSpecs_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // semi VarSpec
+  private static boolean VarSpecs_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarSpecs_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = semi(builder_, level_ + 1);
+    result_ = result_ && VarSpec(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // semi?
+  private static boolean VarSpecs_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarSpecs_2")) return false;
+    semi(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -3049,22 +3182,16 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '<NL>' | ';'?
+  // '<NL>' | ';'
   static boolean semi(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "semi")) return false;
+    if (!nextTokenIs(builder_, "", SEMICOLON, SEMICOLON_SYNTHETIC)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, SEMICOLON_SYNTHETIC);
-    if (!result_) result_ = semi_1(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, SEMICOLON);
     exit_section_(builder_, marker_, null, result_);
     return result_;
-  }
-
-  // ';'?
-  private static boolean semi_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "semi_1")) return false;
-    consumeToken(builder_, SEMICOLON);
-    return true;
   }
 
   /* ********************************************************** */
@@ -3434,12 +3561,10 @@ public class GoParser implements PsiParser {
         LESS, SEND_CHANNEL, SHIFT_LEFT, SHIFT_LEFT_ASSIGN, LESS_OR_EQUAL, SEMICOLON_SYNTHETIC,
         ASSIGN, EQ, GREATER, GREATER_OR_EQUAL, SHIFT_RIGHT, SHIFT_RIGHT_ASSIGN,
         LBRACK, RBRACK, BIT_XOR, BIT_XOR_ASSIGN, TYPE_, LBRACE,
-        BIT_OR, BIT_OR_ASSIGN, COND_OR, RBRACE, BREAK, CASE,
-        CHAN, CHAR, CONST, CONTINUE, DECIMALI, DEFAULT,
-        DEFER, ELSE, FALLTHROUGH, FLOAT, FLOATI, FOR,
-        FUNC, GO, GOTO, HEX, IDENTIFIER, IF,
-        IMAGINARY, INT, INTERFACE, MAP, OCT, RETURN,
-        RUNE, SELECT, STRING, STRUCT, SWITCH, VAR);
+        BIT_OR, BIT_OR_ASSIGN, COND_OR, RBRACE, CASE, CHAN,
+        CHAR, CONST, DECIMALI, DEFAULT, ELSE, FLOAT,
+        FLOATI, FUNC, HEX, IDENTIFIER, IMAGINARY, INT,
+        INTERFACE, MAP, OCT, RUNE, STRING, STRUCT, VAR);
     }
   };
   final static Parser TopLevelDeclaration_auto_recover_ = new Parser() {
