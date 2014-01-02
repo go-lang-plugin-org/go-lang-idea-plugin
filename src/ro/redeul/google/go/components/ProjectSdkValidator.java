@@ -123,6 +123,17 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
                             NotificationListener.URL_OPENING_LISTENER),
                     myProject);
 
+        if (sysGoRootPath != null && !sysGoRootPath.isEmpty() &&
+                systemGOPATH != null && !systemGOPATH.isEmpty() &&
+                systemGOPATH.contains(sysGoRootPath))
+            Notifications.Bus.notify(
+                    new Notification(
+                            "Go SDK validator",
+                            "Problem with env variables",
+                            getGOPATHinGOROOTEnvMessage(),
+                            NotificationType.ERROR,
+                            NotificationListener.URL_OPENING_LISTENER),
+                    myProject);
 
         super.initComponent();
     }
@@ -142,5 +153,11 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
         return "<html><em>GOPATH</em> environment variable is empty or could not be detected properly.<br/>" +
                 "This means that some tools like <code>go run</code> or <code>go fmt</code> might not run properly.<br/>" +
                 "See <a href='http://git.io/_InSxQ'>instructions</a> on how to fix this.";
+    }
+
+    private String getGOPATHinGOROOTEnvMessage() {
+        return "<html><em>GOPATH</em> environment variable seems to be inside <em>GOROOT</em>.<br/>" +
+                "This means that your system settings are not correct.<br/>" +
+                "See <a href='http://golang.org/doc/code.html#GOPATH'>instructions</a> on how to set it properly.";
     }
 }
