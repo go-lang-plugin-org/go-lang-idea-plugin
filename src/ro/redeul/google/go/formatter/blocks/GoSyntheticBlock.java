@@ -1,7 +1,9 @@
 package ro.redeul.google.go.formatter.blocks;
 
+import com.google.common.collect.ImmutableMap;
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -9,6 +11,9 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.containers.MultiMap;
+import com.intellij.util.containers.MultiMapBasedOnSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
@@ -16,6 +21,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 
+import java.lang.annotation.ElementType;
 import java.util.*;
 
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
@@ -52,6 +58,9 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
 
   // vertical line breaking tokens
   private TokenSet myLineBreakingTokens = TokenSet.EMPTY;
+
+  // custom spacing entries;
+  private GoBlockUtil.CustomSpacing myCustomSpacing;
 
   protected GoSyntheticBlock(@NotNull GoPsiType myNode, CommonCodeStyleSettings mySettings) {
     this(myNode, mySettings, null, Alignments.NONE, Alignments.EMPTY_MAP);
@@ -154,18 +163,34 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
     return children;
   }
 
+  protected void setCustomSpacing(@NotNull GoBlockUtil.CustomSpacing customSpacing) {
+    this.myCustomSpacing = customSpacing;
+  }
+
+  @Nullable
+  protected Spacing getCustomSpacing(@Nullable IElementType typeChild1,
+                                     @Nullable IElementType typeChild2) {
+    return myCustomSpacing != null
+      ? myCustomSpacing.getSpacingBetween(typeChild1, typeChild2)
+      : null;
+  }
+
   @Nullable
   @Override
   public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
+    IElementType typeChild1 = getASTElementType(child1);
+    IElementType typeChild2 = getASTElementType(child2);
 
     if (child1 == null)
       return Spacings.NONE;
 
+    Spacing customSpacing = getCustomSpacing(typeChild1, typeChild2);
+    if (customSpacing != null)
+      return customSpacing;
+
     if (!isMultiLine())
       return Spacings.BASIC;
 
-    IElementType typeChild1 = getASTElementType(child1);
-    IElementType typeChild2 = getASTElementType(child2);
 
     if (isMultiLine() && (isLeftBreak(typeChild1) || isRightBreak(typeChild2)))
       return Spacings.ONE_LINE;

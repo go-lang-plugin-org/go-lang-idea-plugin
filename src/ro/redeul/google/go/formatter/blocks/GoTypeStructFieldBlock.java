@@ -1,64 +1,60 @@
 package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
-import com.intellij.formatting.Spacing;
-import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacing;
 
-class GoTypeStructFieldBlock extends GoBlock {
-    private static final TokenSet FIELD_TYPE_SET = TokenSet.create(
-        TYPE_SLICE,
-        TYPE_NAME,
-        TYPE_INTERFACE,
-        TYPE_CHAN_BIDIRECTIONAL,
-        TYPE_CHAN_RECEIVING,
-        TYPE_CHAN_SENDING,
-        TYPE_STRUCT
-    );
+class GoTypeStructFieldBlock extends GoSyntheticBlock<GoTypeStructField> {
 
-    private final Alignment fieldTypeAlignment;
+  private static final TokenSet FIELD_TYPE_SET = TokenSet.create(
+    TYPE_SLICE,
+    TYPE_NAME,
+    TYPE_INTERFACE,
+    TYPE_CHAN_BIDIRECTIONAL,
+    TYPE_CHAN_RECEIVING,
+    TYPE_CHAN_SENDING,
+    TYPE_STRUCT,
+    TYPE_POINTER,
+    TYPE_FUNCTION,
+    TYPE_PARENTHESIZED
+  );
 
-    public GoTypeStructFieldBlock(ASTNode node, Alignment fieldTypeAlignment, Indent indent, CommonCodeStyleSettings settings) {
-        super(node, null, indent, null, settings);
-        this.fieldTypeAlignment = fieldTypeAlignment;
-    }
+  private static CustomSpacing CUSTOM_SPACING_RULES = CustomSpacing.Builder()
+    .setNone(LITERAL_IDENTIFIER, oCOMMA)  // x|, y, z int
+    .setBasic(oCOMMA, LITERAL_IDENTIFIER) // x,| y, z int
+    .build();
 
-//    @Override
-//    protected List<Block> buildChildren() {
-//        List<Block> children = new ArrayList<Block>();
-//        for (ASTNode child : getGoChildren()) {
-//            if (isNewLineNode(child.getPsi()) || isWhiteSpaceNode(child.getPsi())) {
-//                continue;
-//            }
-//
-//            Block block;
-//            Indent indent = Indent.getNormalIndent(false);
-//            if (FIELD_TYPE_SET.contains(child.getElementType())) {
-//                block = GoBlocks.generateBlock(
-//                  child,
-//                  Indent.getNoneIndent(),
-//                  GoBlockUtil.Alignments.set(fieldTypeAlignment),
-//                  mySettings);
-//            } else {
-//                block = GoBlocks.generateBlock(child, null, null, mySettings);
-//            }
-//            children.add(block);
-//        }
-//        return children;
-//    }
+  GoTypeStructFieldBlock(@NotNull GoTypeStructField node,
+                         CommonCodeStyleSettings settings,
+                         Indent indent,
+                         @NotNull Map<Alignments.Key, Alignment> alignsToUse) {
+    super(node, settings, indent, null, alignsToUse);
 
-    @Override
-    public Spacing getSpacing(Block child1, @NotNull Block child2) {
-        return Spacing.createSpacing(1, 10, 0, false, 0);
-    }
+    setCustomSpacing(CUSTOM_SPACING_RULES);
+  }
+
+  @Nullable
+  @Override
+  protected Alignment getChildAlignment(@NotNull PsiElement child, @Nullable PsiElement prevChild,
+                                        Map<Alignments.Key, Alignment> alignments) {
+
+    if (FIELD_TYPE_SET.contains(child.getNode().getElementType()))
+      return alignments.get(Alignments.Key.Type);
+
+    if (child instanceof PsiComment)
+      return alignments.get(Alignments.Key.Comments);
+
+    return super.getChildAlignment(child, prevChild, alignments);
+  }
 }

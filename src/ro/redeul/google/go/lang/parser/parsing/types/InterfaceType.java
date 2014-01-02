@@ -6,6 +6,8 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
+
 class InterfaceType implements GoElementTypes {
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
@@ -43,10 +45,10 @@ class InterfaceType implements GoElementTypes {
             ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
             parser.parseFunctionSignature(builder);
             methodSpec.done(FUNCTION_DECLARATION);
+            methodSpec.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
             return true;
         }
 
         return ParserUtils.lookAhead(builder, mIDENT) && parser.parseTypeName(builder);
-
     }
 }

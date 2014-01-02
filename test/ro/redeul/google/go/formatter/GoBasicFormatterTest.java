@@ -18,7 +18,6 @@ public class GoBasicFormatterTest extends GoFormatterTest {
     public void testFunctionCall() throws Exception { doTest(); }
     public void testInterfaceType() throws Exception { doTest(); }
     public void testCallParameters() throws Exception { doTest(); }
-    public void testComments() throws Exception { doTest(); }
     public void testComposites() throws Exception { doTest(); }
     public void testCrlf() throws Exception { doTest(); }
     public void testSlices1() throws Exception { doTest(); }

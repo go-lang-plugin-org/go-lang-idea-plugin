@@ -114,6 +114,7 @@ public class Types implements GoElementTypes {
         }
 
         typeNameMarker.done(TYPE_NAME);
+        typeNameMarker.setCustomEdgeTokenBinders(null, ParserUtils.CommentBinders.TRAILING_COMMENTS);
         return true;
     }
 

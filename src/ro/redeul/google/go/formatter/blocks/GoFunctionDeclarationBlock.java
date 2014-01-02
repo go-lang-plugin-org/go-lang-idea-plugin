@@ -2,36 +2,48 @@ package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Indent;
-import com.intellij.formatting.Spacing;
-import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.tree.IElementType;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
-class GoFunctionDeclarationBlock extends GoBlock {
-    public GoFunctionDeclarationBlock(ASTNode node, Alignment alignment, Indent indent,
-                                      CommonCodeStyleSettings settings) {
-        super(node, alignment, indent, null, settings);
-    }
+import java.util.Map;
 
-    @Override
-    protected Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
-        IElementType child1ElementType = child1.getNode().getElementType();
-        IElementType child2ElementType = child2.getNode().getElementType();
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacing;
 
-        if (child1ElementType == GoElementTypes.pRPAREN) {
-            return BASIC_SPACING;
-        }
+class GoFunctionDeclarationBlock extends GoSyntheticBlock<GoFunctionDeclaration> {
 
-        if (child1ElementType == GoElementTypes.FUNCTION_RESULT) {
-            return BASIC_SPACING;
-        }
+  private static CustomSpacing CUSTOM_SPACING_RULES = CustomSpacing.Builder()
+    .setNone(LITERAL_IDENTIFIER, pLPAREN) // func main|()
 
-        Spacing spacing = super.getGoBlockSpacing(child1, child2);
-        if (spacing != null) {
-            return spacing;
-        }
+    .setNone(pLPAREN, FUNCTION_PARAMETER_LIST) // func main(|a int)
+    .setNone(FUNCTION_PARAMETER_LIST, pRPAREN) // func main(a, b int|)
 
-        return EMPTY_SPACING;
-    }
+    .setNone(pLPAREN, METHOD_RECEIVER) // func (|a int) main()
+    .setNone(METHOD_RECEIVER, pRPAREN) // func (a int|) main()
+
+    .setNone(pLPAREN, pRPAREN) // (|)
+    .build();
+
+  public GoFunctionDeclarationBlock(GoFunctionDeclaration psi,
+                                    CommonCodeStyleSettings settings,
+                                    Indent indent,
+                                    Alignment alignment,
+                                    Map<Alignments.Key, Alignment> alignmentsMap) {
+    super(psi, settings, indent, null, alignmentsMap);
+
+    setCustomSpacing(CUSTOM_SPACING_RULES);
+  }
+
+  @Nullable
+  @Override
+  protected Alignment getChildAlignment(@NotNull PsiElement child, @Nullable PsiElement prevChild, Map<Alignments.Key, Alignment> alignments) {
+    if (child instanceof PsiComment)
+      return alignments.get(Alignments.Key.Comments);
+
+    return super.getChildAlignment(child, prevChild, alignments);
+  }
 }

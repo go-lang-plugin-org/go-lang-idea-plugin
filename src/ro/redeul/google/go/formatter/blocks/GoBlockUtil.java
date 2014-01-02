@@ -1,8 +1,12 @@
 package ro.redeul.google.go.formatter.blocks;
 
+import com.google.common.collect.ImmutableMap;
 import com.intellij.formatting.*;
+import com.intellij.openapi.util.Pair;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.util.containers.MultiMap;
+import com.intellij.util.containers.MultiMapBasedOnSet;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -14,6 +18,7 @@ import java.util.*;
  * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
  */
 public class GoBlockUtil {
+
   public interface Spacings {
     static final Spacing ONE_LINE = Spacing.createSpacing(0, 0, 1, false, 0);
     static final Spacing ONE_LINE_KEEP_BREAKS = Spacing.createSpacing(0, 0, 1, true, 1);
@@ -22,6 +27,70 @@ public class GoBlockUtil {
     static final Spacing NONE = Spacing.createSpacing(0, 0, 0, false, 0);
     static final Spacing NONE_KEEP_BREAKS = Spacing.createSpacing(0, 0, 0, true, 0);
     static final Spacing EMPTY_LINE = Spacing.createSpacing(0, 0, 2, false, 0);
+  }
+
+  static class CustomSpacing {
+
+    Map<IElementType, Map<IElementType, Spacing>> spacings;
+
+    private CustomSpacing() { }
+
+    static class Builder {
+      MultiMap<IElementType, Pair<IElementType, Spacing>> entries =
+        new MultiMapBasedOnSet<IElementType, Pair<IElementType, Spacing>>();
+
+      public Builder setNone(IElementType typeChild1, IElementType typeChild2) {
+        return set(typeChild1, typeChild2, Spacings.NONE);
+      }
+
+      public Builder setBasic(IElementType typeChild1, IElementType typeChild2) {
+        return set(typeChild1, typeChild2, Spacings.BASIC);
+      }
+
+      public Builder set(IElementType typeChild1, IElementType typeChild2,
+                         Spacing spacing) {
+        entries.putValue(typeChild1, Pair.create(typeChild2, spacing));
+        return this;
+      }
+
+      private Map<IElementType, Map<IElementType, Spacing>> makeEntriesImmutable() {
+
+        ImmutableMap.Builder<IElementType, Map<IElementType, Spacing>> builder = ImmutableMap.builder();
+
+        for (Map.Entry<IElementType, Collection<Pair<IElementType, Spacing>>> entry : entries.entrySet()) {
+
+          ImmutableMap.Builder<IElementType, Spacing> spacingsMapBuilder = ImmutableMap.builder();
+
+          for (Pair<IElementType, Spacing> pair : entry.getValue()) {
+            spacingsMapBuilder.put(pair.first, pair.second);
+          }
+
+          builder.put(entry.getKey(), spacingsMapBuilder.build());
+        }
+
+        return builder.build();
+      }
+
+      public CustomSpacing build() {
+        CustomSpacing spacing = new CustomSpacing();
+
+        spacing.spacings = entries.size() > 0
+          ? makeEntriesImmutable()
+          : ImmutableMap.<IElementType, Map<IElementType,Spacing>>of();
+        return spacing;
+      }
+    }
+
+    static Builder Builder() {
+      return new CustomSpacing.Builder();
+    }
+
+    public Spacing getSpacingBetween(IElementType firstElement, IElementType secondElement) {
+      Map<IElementType, Spacing> secondMap = this.spacings.get(firstElement);
+      return secondMap != null
+        ? secondMap.get(secondElement)
+        : null;
+    }
   }
 
   public interface Indents {

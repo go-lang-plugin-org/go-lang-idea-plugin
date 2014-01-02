@@ -241,4 +241,9 @@ public interface GoElementTypes extends GoTokenTypes {
             SWITCH_EXPR_STATEMENT,
             SWITCH_TYPE_STATEMENT
     );
+
+    public final TokenSet TYPE_STRUCT_FIELDS = TokenSet.create(
+            TYPE_STRUCT_FIELD,
+            TYPE_STRUCT_FIELD_ANONYMOUS
+    );
 }

@@ -1,89 +1,88 @@
 package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
-import com.intellij.formatting.Spacing;
-import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
+import com.intellij.psi.tree.TokenSet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.EnumSet;
+import java.util.Map;
 
-import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacing;
 
-class GoTypeInterfaceBlock extends GoBlock {
-    public GoTypeInterfaceBlock(ASTNode node, Alignment alignment, Indent indent, CommonCodeStyleSettings settings) {
-        super(node, alignment, indent, null, settings);
-    }
+class GoTypeInterfaceBlock extends GoSyntheticBlock<GoPsiTypeInterface> {
 
-    @Override
-    protected List<Block> buildChildren() {
-        List<Block> children = new ArrayList<Block>();
-        int newLinesAfterLastField = 0;
-        int newLinesAfterLastComment = 0;
-        Alignment fieldAlignment = null;
-        Alignment commentAlignment = null;
-        boolean needAlignComment = isNodeOfType(myNode.getPsi(), ALIGN_COMMENT_STATEMENTS);
+  private Alignment leadingAlignment = null;
 
-        // Whether there is a field definition in current line.
-        // We should only align those comments that after a field definition.
-        boolean fieldInCurrentLine = false;
+  private static final TokenSet SIMILAR_NODES = TokenSet.create(
+    FUNCTION_DECLARATION, TYPE_NAME
+  );
 
-        for (ASTNode child : getGoChildren()) {
-            if (child.getTextRange().getLength() == 0) {
-                continue;
-            }
+  private static final TokenSet LINE_BREAKING_TOKS = TokenSet.orSet(
+    COMMENTS, SIMILAR_NODES
+  );
 
-            IElementType type = child.getElementType();
-            if (isWhiteSpaceNode(child.getPsi())){
-                if (isNewLineNode(child.getPsi())) {
-                    newLinesAfterLastField += child.getTextLength();
-                    newLinesAfterLastComment += child.getTextLength();
-                    fieldInCurrentLine = false;
-                }
-                continue;
-            } else if (type == GoElementTypes.FUNCTION_DECLARATION) {
-                fieldInCurrentLine = true;
-                if (newLinesAfterLastField > 1 || fieldAlignment == null) {
-                    fieldAlignment = Alignment.createAlignment(true);
-                }
-                newLinesAfterLastField = 0;
-                children.add(new GoFunctionDeclarationBlock(child, fieldAlignment, Indent.getNormalIndent(), mySettings));
-                continue;
-            } else if (needAlignComment && fieldInCurrentLine && COMMENTS.contains(type)) {
-                if (newLinesAfterLastComment > 1 || commentAlignment == null) {
-                    commentAlignment = Alignment.createAlignment(true);
-                }
-                newLinesAfterLastComment = 0;
-                children.add(GoBlocks.generate(child, mySettings, commentAlignment));
-              continue;
-            }
+  private static final EnumSet<Alignments.Key> ALIGNMENT_KEYS = EnumSet.of(
+    Alignments.Key.Comments
+  );
 
-            Block childBlock;
-            if (getIndentedElements().contains(type)) {
-                childBlock = GoBlocks.generate(child, mySettings, Indents.NORMAL);
-            } else {
-                childBlock = GoBlocks.generate(child, mySettings);
-            }
+  private static final CustomSpacing CUSTOM_SPACING_RULES =
+    CustomSpacing.Builder()
+      .setNone(pLCURLY, pRCURLY)
+      .setNone(kINTERFACE, pLCURLY)
+      .build();
 
-            children.add(childBlock);
-        }
+  public GoTypeInterfaceBlock(GoPsiTypeInterface psi, CommonCodeStyleSettings settings,
+                              Alignment alignment,
+                              @NotNull Map<Alignments.Key, Alignment> alignmentsMap) {
+    super(psi, settings, null, null, alignmentsMap);
 
-        return children;
-    }
+    this.leadingAlignment = alignment;
+    setMultiLineMode(StringUtil.containsLineBreak(psi.getText()), pLCURLY, pRCURLY);
+    setLineBreakingTokens(LINE_BREAKING_TOKS);
+    setAlignmentKeys(ALIGNMENT_KEYS);
 
-    @Override
-    public Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
-        // put only 1 space between field block and the same line comment block
-        if (child1 instanceof GoTypeStructFieldBlock && isCommentBlock(child2) &&
-            inTheSameLine(child1, child2)) {
-            return BASIC_SPACING;
-        }
+    if (!isMultiLine())
+      setCustomSpacing(CUSTOM_SPACING_RULES);
+  }
 
-        return null;
-    }
+  @Nullable
+  @Override
+  protected Alignment getChildAlignment(@NotNull PsiElement child, @Nullable PsiElement prevChild,
+                                        Map<Alignments.Key, Alignment> alignments) {
+    if (child.getNode().getElementType() == kINTERFACE)
+      return leadingAlignment;
+
+    return super.getChildAlignment(child, prevChild, alignments);
+  }
+
+  @Override
+  protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
+    if (
+      child instanceof GoFunctionDeclaration ||
+        child instanceof GoPsiTypeName ||
+        child instanceof PsiComment)
+      return GoBlockUtil.Indents.NORMAL;
+
+    return GoBlockUtil.Indents.NONE;
+  }
+
+  @Override
+  protected boolean holdTogether(@Nullable IElementType typeChild1, @Nullable IElementType typeChild2, int linesBetween) {
+    if(SIMILAR_NODES.contains(typeChild1) && SIMILAR_NODES.contains(typeChild2) &&
+      linesBetween <= 1)
+      return true;
+
+    return super.holdTogether(typeChild1, typeChild2, linesBetween);
+  }
 }

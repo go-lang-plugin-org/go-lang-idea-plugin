@@ -32,4 +32,8 @@ public class GoTopLevelFormatterTest extends GoFormatterTestCase {
   public void testImportSimple() throws Exception { _test(); }
 
   public void testImportRemoveEmptyLines() throws Exception { _test(); }
+
+  public void testConstDeclarations() throws Exception { _test(); }
+
+  public void testVarDeclarations() throws Exception { _test(); }
 }

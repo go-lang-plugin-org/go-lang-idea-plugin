@@ -18,6 +18,9 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.*;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
 import java.util.Map;
 
@@ -43,8 +46,10 @@ public class GoBlocks {
     LITERAL_STRING,
     LITERAL_FLOAT, LITERAL_INTEGER, LITERAL_IMAGINARY,
     LITERAL_IDENTIFIER,
-    kIMPORT, kVAR, kCONST, kTYPE,
-    oASSIGN
+    kIMPORT, kVAR, kCONST, kTYPE, kSTRUCT, kPACKAGE, kINTERFACE,
+    oASSIGN,
+    TYPE_NAME_DECLARATION,
+    pLPAREN, pRPAREN, pLBRACK, pRBRACK, pLCURLY, pRCURLY
   );
 
   private static final Wrap NO_WRAP = Wrap.createWrap(WrapType.NONE, false);
@@ -104,13 +109,23 @@ public class GoBlocks {
     if (psi instanceof GoTypeSpec)
       return new GoTypeDeclarationBlock((GoTypeSpec) psi, settings, indent, alignmentsMap);
 
+    if (psi instanceof GoPsiTypeStruct)
+      return new GoTypeStructBlock((GoPsiTypeStruct) psi, settings, alignment, alignmentsMap);
+
+    if (psi instanceof GoPsiTypeInterface)
+      return new GoTypeInterfaceBlock((GoPsiTypeInterface) psi, settings, alignment, alignmentsMap);
+
+    // here
+    if (psi instanceof GoFunctionDeclaration)
+      return new GoFunctionDeclarationBlock((GoFunctionDeclaration) psi, settings, indent, alignment, alignmentsMap);
+
+    if (psi instanceof GoTypeStructField)
+      return new GoTypeStructFieldBlock((GoTypeStructField) psi, settings, indent, alignmentsMap);
+
     if (psi instanceof GoBinaryExpression) {
       return new GoBinaryExpressionBlock(node, alignment, NO_WRAP, settings);
     }
 
-    if (psi instanceof GoFunctionDeclaration) {
-      return new GoFunctionDeclarationBlock(node, alignment, indent, settings);
-    }
 
     IElementType elementType = node.getElementType();
     if (elementType == GoTokenTypes.pLPAREN) {
@@ -139,9 +154,6 @@ public class GoBlocks {
 //      return new GoAssignListBlock(node, alignment, indent, settings);
 //    }
 
-
-//    if (elementType == TYPE_STRUCT)
-//      return new GoTypeStructBlock(node, alignment, indent, settings);
 //
 //    if (elementType == EXPRESSION_LIST)
 //      return new GoExpressionListBlock(node, alignment, indent, settings);

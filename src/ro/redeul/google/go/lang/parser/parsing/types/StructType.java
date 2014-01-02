@@ -7,6 +7,8 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
+
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
@@ -77,6 +79,7 @@ class StructType implements GoElementTypes {
 
         fieldDeclaration.done(
             isAnonymous ? TYPE_STRUCT_FIELD_ANONYMOUS : TYPE_STRUCT_FIELD);
+        fieldDeclaration.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
         return true;
     }
 
