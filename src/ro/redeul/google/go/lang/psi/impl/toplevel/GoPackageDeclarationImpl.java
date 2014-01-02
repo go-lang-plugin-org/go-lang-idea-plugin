@@ -22,14 +22,14 @@ public class GoPackageDeclarationImpl extends GoPsiElementBase implements GoPack
     }
 
     public String toString() {
-      return "PackageDeclaration(" + getPackageName() + ")";
+        return "PackageDeclaration(" + getPackageName() + ")";
     }
 
     @NotNull
     public String getPackageName() {
 
         PsiElement identifier = findChildByType(GoTokenTypes.mIDENT);
-        if ( identifier == null ) {
+        if (identifier == null) {
             return "";
         }
 

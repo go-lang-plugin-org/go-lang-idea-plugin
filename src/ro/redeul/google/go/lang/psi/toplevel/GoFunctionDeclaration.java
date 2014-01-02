@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.toplevel;
 
 import com.intellij.psi.PsiNameIdentifierOwner;
+import ro.redeul.google.go.lang.psi.GoDocumentedPsiElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
@@ -13,7 +14,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
  * Time: 2:32:15 PM
  */
 public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOwner,
-                                               GoPsiTypeFunction {
+    GoPsiTypeFunction, GoDocumentedPsiElement {
 
     String getFunctionName();
 
@@ -21,7 +22,7 @@ public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOw
 
     GoBlockStatement getBlock();
 
-//    GoFunctionParameterList getParameters();
+    //    GoFunctionParameterList getParameters();
     GoFunctionParameter[] getParameters();
 
     GoFunctionParameter[] getResults();

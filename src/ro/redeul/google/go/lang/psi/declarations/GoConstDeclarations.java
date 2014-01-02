@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.declarations;
 
+import ro.redeul.google.go.lang.psi.GoDocumentedPsiElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 
 /**
@@ -8,7 +9,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
  * Date: 5/31/11
  * Time: 11:23 PM
  */
-public interface GoConstDeclarations extends GoPsiElement {
+public interface GoConstDeclarations extends GoPsiElement, GoDocumentedPsiElement {
 
     GoConstDeclaration[] getDeclarations();
 

@@ -1,5 +1,7 @@
 package ro.redeul.google.go.formatter;
 
+import ro.redeul.google.go.GoFormatterTestCase;
+
 /**
  * Top level file formatter test cases.
  * <br/>
@@ -15,7 +17,13 @@ public class GoStatementsFormatterTest extends GoFormatterTestCase {
     return super.getRelativeTestDataPath() + "statements/";
   }
 
-  public void testEmptyBlocks() throws Exception { _test(); }
+  public void testBlockEmpty() throws Exception { _test(); }
+
+  public void testBlockWithComments() throws Exception { _test(); }
 
   public void testShortVar() throws Exception { _test(); }
+
+  public void testShortVarAlignComments() throws Exception { _test(); }
+
+
 }

@@ -1,0 +1,4 @@
+GoFile(0,13)
+  PackageDeclaration(main)(0,12)
+    PsiElement(KEYWORD_PACKAGE)('package')(0,7)
+    PsiElement(IDENTIFIER)('main')(8,12)

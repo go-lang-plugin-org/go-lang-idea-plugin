@@ -7,7 +7,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
-import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.completeStatement;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -27,15 +27,9 @@ class StructType implements GoElementTypes {
         ParserUtils.getToken(builder, kSTRUCT);
         ParserUtils.getToken(builder, pLCURLY);
 
-        while ( ! builder.eof() && ! ParserUtils.lookAhead(builder, pRCURLY) ) {
-
-            if ( ! parseFieldDeclaration(builder, parser) )
+        while (!builder.eof() && !ParserUtils.lookAhead(builder, pRCURLY))
+            if (!parseFieldDeclaration(builder, parser))
                 break;
-
-            if ( ! ParserUtils.endStatement(builder) ) {
-                break;
-            }
-        }
 
         ParserUtils.getToken(builder, pRCURLY);
         marker.done(TYPE_STRUCT);
@@ -44,7 +38,7 @@ class StructType implements GoElementTypes {
 
     private static boolean parseFieldDeclaration(PsiBuilder builder, GoParser parser) {
 
-        if ( builder.eof() || ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) )
+        if (builder.eof() || ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS))
             return true;
 
         boolean isAnonymous = false;
@@ -53,7 +47,7 @@ class StructType implements GoElementTypes {
 
         int identifiersCount = parser.parseIdentifierList(builder, false);
 
-        if ( identifiersCount == 1 &&
+        if (identifiersCount == 1 &&
             (ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) ||
                 ParserUtils.lookAhead(builder, GoTokenTypeSets.litSTRING) ||
                 ParserUtils.lookAhead(builder, GoTokenTypeSets.oDOT) ||
@@ -63,23 +57,23 @@ class StructType implements GoElementTypes {
             isAnonymous = true;
         }
 
-        if ( identifiersCount == 0 && ParserUtils.lookAhead(builder, oMUL, mIDENT) ) {
+        if (identifiersCount == 0 && ParserUtils.lookAhead(builder, oMUL, mIDENT)) {
             isAnonymous = true;
         }
 
-        if ( parser.parseType(builder) == null ) {
+        if (parser.parseType(builder) == null) {
             fieldDeclaration.rollbackTo();
             return false;
         }
 //        parser.parseType(builder);
 
-        if ( builder.getTokenType() == litSTRING ) {
+        if (builder.getTokenType() == litSTRING) {
             ParserUtils.eatElement(builder, IDENTIFIER);
         }
 
-        fieldDeclaration.done(
-            isAnonymous ? TYPE_STRUCT_FIELD_ANONYMOUS : TYPE_STRUCT_FIELD);
-        fieldDeclaration.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
+        completeStatement(builder, fieldDeclaration, isAnonymous
+            ? TYPE_STRUCT_FIELD_ANONYMOUS
+            : TYPE_STRUCT_FIELD);
         return true;
     }
 

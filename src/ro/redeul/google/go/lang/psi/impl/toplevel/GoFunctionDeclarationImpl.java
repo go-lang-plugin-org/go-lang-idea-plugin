@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -26,6 +27,7 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
@@ -234,24 +236,4 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     public String getPresentationTypeText() {
         return "func";
     }
-
-    //    @Override
-//    public LookupElementBuilder getCompletionPresentation() {
-//
-//        StringBuilder presentationText = new StringBuilder();
-//
-//        if ( getName() != null ) {
-//            presentationText.append(getName()).append("(");
-//        }
-//
-//        for (GoFunctionParameter parameter : getParameters()) {
-//            for (GoLiteralIdentifier identifier : parameter.getIdentifiers()) {
-//                presentationText.append(identifier.getName()).append(", ");
-//            }
-//
-//            presentationText.append(parameter.getType().toString()).append(", ");
-//        }
-//
-//        return LookupElementUtil.createLookupElement(this);
-//    }
 }

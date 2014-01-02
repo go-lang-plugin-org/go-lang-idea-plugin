@@ -40,29 +40,14 @@ import org.jetbrains.annotations.NotNull;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 %{
-
-  private Stack <IElementType> gStringStack = new Stack<>();
-  private Stack <IElementType> blockStack = new Stack<>();
-
-  private int afterComment = YYINITIAL;
-  private int afterNls = YYINITIAL;
-  private int afterBrace = YYINITIAL;
-
-  private void clearStacks(){
-    gStringStack.clear();
-    blockStack.clear();
-  }
-
-  private Stack<IElementType> braceCount = new Stack <>();
-
 %}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////// NewLines and spaces /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-mNL = [\r\n] | \r\n      // NewLinE
-mWS = [ \t\f]    // Whitespaces
+mNL = \n            // NewLinE
+mWS = [ \t\r]*      // Whitespaces
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////// Comments ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,12 +193,10 @@ mESCAPES = [abfnrtv]
 <YYINITIAL> {
 "|"                                       { return oBIT_OR; }
 
-{mWS}                                     { return wsWS; }
-{mNL}+                                    { return wsNLS; }
-
+{mWS} ({mNL} | {mWS})*                    { return wsWS; }
 {mSL_COMMENT}                             { return( mSL_COMMENT ); }
 //{mML_COMMENT}                             { return( mML_COMMENT ); }
-"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return( mML_COMMENT ); }
+"/*" ( ([^"*/"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return( mML_COMMENT ); }
 
 //([^"*/"] | [\r\n])+ "*/"?
 
@@ -346,11 +329,12 @@ mESCAPES = [abfnrtv]
 }
 
 <MAYBE_SEMI> {
-{mWS}               { return wsWS; }
-{mNL}               { yybegin(YYINITIAL); yypushback(yytext().length()); return oSEMI_SYNTHETIC; }
-{mSL_COMMENT}       { return mSL_COMMENT; }
-"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
-                    { return mML_COMMENT; }
+{mWS}                                     { return wsWS; }
+"/*" [^"*/"\n]* "*/"                      { return mML_COMMENT; }
+{mNL}                                     { yybegin(YYINITIAL); yypushback(yytext().length()); return oSEMI_SYNTHETIC; }
+{mSL_COMMENT}                             { yybegin(YYINITIAL); yypushback(yytext().length()); return oSEMI_SYNTHETIC; }
 
-.           { yybegin(YYINITIAL); yypushback(yytext().length()); }
+"/*" ([^"*/"])* \n                        { yybegin(YYINITIAL); yypushback(yytext().length()); return oSEMI_SYNTHETIC; }
+
+.                                         { yybegin(YYINITIAL); yypushback(yytext().length()); }
 }

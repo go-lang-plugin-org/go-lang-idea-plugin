@@ -46,9 +46,8 @@ public class FunctionOrMethodDeclaration extends ParserUtils
         if (ParserUtils.lookAhead(builder, pLCURLY)) {
             parser.parseBody(builder);
         }
-        marker.done(nodeType);
-        marker.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
-        return nodeType;
+        
+        return completeStatement(builder, marker, nodeType);
     }
 
     public static void parseCompleteMethodSignature(PsiBuilder builder,
@@ -100,8 +99,7 @@ public class FunctionOrMethodDeclaration extends ParserUtils
 
         parser.parseType(builder);
         receiverDeclarationMarker.done(METHOD_RECEIVER);
-        ParserUtils.getToken(builder, pRPAREN,
-                             GoBundle.message("error.closing.para.expected"));
+        ParserUtils.getToken(builder, pRPAREN, GoBundle.message("error.closing.para.expected"));
     }
 
     public static void parseSignature(PsiBuilder builder, GoParser parser) {

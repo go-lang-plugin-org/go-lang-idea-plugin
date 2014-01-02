@@ -2,6 +2,7 @@ package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
@@ -17,6 +18,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
@@ -47,7 +49,8 @@ public class GoBlocks {
     LITERAL_FLOAT, LITERAL_INTEGER, LITERAL_IMAGINARY,
     LITERAL_IDENTIFIER,
     kIMPORT, kVAR, kCONST, kTYPE, kSTRUCT, kPACKAGE, kINTERFACE,
-    oASSIGN,
+    kSWITCH,
+    oASSIGN, oVAR_ASSIGN, oCOMMA,
     TYPE_NAME_DECLARATION,
     pLPAREN, pRPAREN, pLBRACK, pRBRACK, pLCURLY, pRCURLY
   );
@@ -55,16 +58,16 @@ public class GoBlocks {
   private static final Wrap NO_WRAP = Wrap.createWrap(WrapType.NONE, false);
 
   public static Block generate(ASTNode node, CommonCodeStyleSettings settings) {
-    return generate(node, settings, Indents.NONE, Alignments.NONE, Alignments.EMPTY_MAP);
+    return generate(node, settings, Indents.NONE, Alignments.NONE, Alignments.EMPTY_MAP, false);
   }
 
   public static Block generate(ASTNode node, CommonCodeStyleSettings settings,
                                @NotNull Alignment alignment) {
-    return generate(node, settings, Indents.NONE, alignment, Alignments.EMPTY_MAP);
+    return generate(node, settings, Indents.NONE, alignment, Alignments.EMPTY_MAP, false);
   }
 
   public static Block generate(ASTNode node, CommonCodeStyleSettings styleSettings, Indent indent) {
-    return generate(node, styleSettings, indent, Alignments.NONE, Alignments.EMPTY_MAP);
+    return generate(node, styleSettings, indent, Alignments.NONE, Alignments.EMPTY_MAP, false);
   }
 
   public enum Xx {
@@ -72,7 +75,8 @@ public class GoBlocks {
   }
   public static Block generate(ASTNode node, CommonCodeStyleSettings settings,
                                @Nullable Indent indent, @Nullable Alignment alignment,
-                               @NotNull Map<Alignments.Key, Alignment> alignmentsMap) {
+                               @NotNull Map<Alignments.Key, Alignment> alignmentsMap,
+                               boolean isPartOfLeadingCommentGroup) {
 
     PsiElement psi = node.getPsi();
 
@@ -121,6 +125,9 @@ public class GoBlocks {
 
     if (psi instanceof GoTypeStructField)
       return new GoTypeStructFieldBlock((GoTypeStructField) psi, settings, indent, alignmentsMap);
+
+//    if (psi instanceof GoShortVarDeclaration)
+//      return new GoShortVarDeclarationBlock((GoShortVarDeclaration)psi, settings, indent);
 
     if (psi instanceof GoBinaryExpression) {
       return new GoBinaryExpressionBlock(node, alignment, NO_WRAP, settings);
@@ -175,6 +182,9 @@ public class GoBlocks {
 //
 //    if (elementType == FUNCTION_PARAMETER)
 //      return new GoFunctionParameterBlock(node, indent, settings);
+
+    if (psi instanceof PsiComment && isPartOfLeadingCommentGroup)
+      return new GoCommentGroupPartBlock((PsiComment)psi, settings, alignment, indent);
 
     if (LEAF_BLOCKS.contains(elementType))
       return new GoLeafBlock(node, alignment, indent, null, settings);

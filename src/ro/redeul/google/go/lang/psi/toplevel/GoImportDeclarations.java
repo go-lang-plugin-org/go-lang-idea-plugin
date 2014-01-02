@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.toplevel;
 
+import ro.redeul.google.go.lang.psi.GoDocumentedPsiElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 
 /**
@@ -8,9 +9,10 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
  * Date: Jul 24, 2010
  * Time: 10:52:43 PM
  */
-public interface GoImportDeclarations extends GoPsiElement {
+public interface GoImportDeclarations extends GoPsiElement, GoDocumentedPsiElement {
 
   GoImportDeclaration[] getDeclarations();
 
   boolean isMulti();
+
 }

@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -11,6 +12,9 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

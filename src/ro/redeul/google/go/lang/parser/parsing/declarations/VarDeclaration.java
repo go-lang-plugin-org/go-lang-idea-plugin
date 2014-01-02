@@ -28,22 +28,21 @@ class VarDeclaration extends ParserUtils implements GoElementTypes {
         NestedDeclarationParser.parseNestedOrBasicDeclaration(
             builder, parser,
             new NestedDeclarationParser.DeclarationParser() {
-                public boolean parse(PsiBuilder builder, GoParser parser) {
-                    return parseVarSpecification(builder, parser);
+                public boolean parse(PsiBuilder builder, GoParser parser,
+                                     boolean shouldComplete) {
+                    return parseVarSpecification(builder, parser, shouldComplete);
                 }
             });
 
-        varDeclarations.done(VAR_DECLARATIONS);
-        varDeclarations.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
-        return VAR_DECLARATIONS;
+        return completeStatement(builder, varDeclarations, VAR_DECLARATIONS);
     }
 
     static TokenSet localImportTokens = TokenSet.create(mIDENT, oDOT);
 
-    private static boolean parseVarSpecification(PsiBuilder builder,
-                                                 GoParser parser) {
+    private static boolean parseVarSpecification(PsiBuilder builder, GoParser parser,
+                                                 boolean shouldComplete) {
 
-        PsiBuilder.Marker declaration = builder.mark();
+      PsiBuilder.Marker declaration = builder.mark();
         if (parser.parseIdentifierList(builder, false) != 0) {
             if (!ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS)) {
 
@@ -57,8 +56,10 @@ class VarDeclaration extends ParserUtils implements GoElementTypes {
                 }
             }
 
-            declaration.done(VAR_DECLARATION);
-            declaration.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
+            if ( shouldComplete )
+              completeStatement(builder, declaration, VAR_DECLARATION);
+            else
+              declaration.done(VAR_DECLARATION);
             return true;
         }
 

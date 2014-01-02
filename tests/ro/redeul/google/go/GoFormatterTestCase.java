@@ -1,4 +1,4 @@
-package ro.redeul.google.go.formatter;
+package ro.redeul.google.go;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.codeStyle.CodeStyleManager;

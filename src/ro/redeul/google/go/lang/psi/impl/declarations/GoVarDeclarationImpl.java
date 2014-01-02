@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl.declarations;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -16,6 +17,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDeclaration {

@@ -22,39 +22,19 @@ import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
  */
 public class GoImportsBlock extends GoSyntheticBlock<GoImportDeclarations> {
 
-  boolean hasMultipleImports;
-
-  public GoImportsBlock(GoImportDeclarations imports,
-                        CommonCodeStyleSettings settings) {
-    super(imports, settings, Indents.NONE);
-
-    hasMultipleImports = imports.isMulti();
-  }
-
-  @Override
-  protected boolean isMultiLine() {
-    return hasMultipleImports;
-  }
-
-  @Override
-  protected boolean isLeftBreak(IElementType typeChild) {
-    return typeChild == pLPAREN;
-  }
-
-  @Override
-  protected boolean isRightBreak(IElementType typeChild) {
-    return typeChild == pRPAREN;
-  }
-
-  private static final TokenSet WANT_BREAK_TOKS = TokenSet.create(
+  private static final TokenSet LINE_BREAKING_TOKENS = TokenSet.create(
     IMPORT_DECLARATION,
     mML_COMMENT,
     mSL_COMMENT
   );
 
-  @Override
-  protected boolean wantsToBreakLine(IElementType typeChild1) {
-    return WANT_BREAK_TOKS.contains(typeChild1);
+
+  public GoImportsBlock(GoImportDeclarations imports,
+                        CommonCodeStyleSettings settings) {
+    super(imports, settings, Indents.NONE);
+
+    setLineBreakingTokens(LINE_BREAKING_TOKENS);
+    setMultiLineMode(imports.isMulti(), pLPAREN, pRPAREN);
   }
 
   @Nullable

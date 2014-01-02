@@ -15,24 +15,4 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 class MapType implements GoElementTypes {
 
-    public static IElementType parse(PsiBuilder builder, GoParser parser) {
-
-        if (!ParserUtils.lookAhead(builder, kMAP))
-            return null;
-
-        PsiBuilder.Marker marker = builder.mark();
-
-        ParserUtils.getToken(builder, kMAP);
-
-        ParserUtils.getToken(builder, pLBRACK, "left.bracket.expected");
-
-        parser.parseType(builder);
-
-        ParserUtils.getToken(builder, pRBRACK, "right.bracket.expected");
-
-        parser.parseType(builder);
-
-        marker.done(TYPE_MAP);
-        return TYPE_MAP;
-    }
 }

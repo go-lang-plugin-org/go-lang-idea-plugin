@@ -21,25 +21,34 @@ import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
  * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
  */
 class GoConstDeclarationBlock extends GoSyntheticBlock<GoConstDeclaration> {
-  public GoConstDeclarationBlock(GoConstDeclaration psi, CommonCodeStyleSettings settings,
-                                 Indent indent,
-                                 Map<Alignments.Key, Alignment> alignmentsMap) {
-    super(psi, settings, indent, null, alignmentsMap);
-  }
 
-  @Override
-  protected Alignment getChildAlignment(@NotNull PsiElement child, @Nullable PsiElement prevChild,
-                                        Map<Alignments.Key, Alignment> alignments) {
+    public static final GoBlockUtil.CustomSpacing CUSTOM_SPACING = GoBlockUtil.CustomSpacing.Builder()
+        .setNone(LITERAL_IDENTIFIER, oCOMMA)
+        .setNone(EXPRESSIONS, oCOMMA)
+        .setNone(EXPRESSIONS, oSEMI)
+        .build();
 
-    if (child.getNode().getElementType() == oASSIGN)
-      return alignments.get(Alignments.Key.Operator);
+    public GoConstDeclarationBlock(GoConstDeclaration psi, CommonCodeStyleSettings settings,
+                                   Indent indent,
+                                   Map<Alignments.Key, Alignment> alignmentsMap) {
+        super(psi, settings, indent, null, alignmentsMap);
 
-    if (child instanceof PsiComment)
-      return alignments.get(Alignments.Key.Comments);
+        setCustomSpacing(CUSTOM_SPACING);
+    }
 
-    if (child instanceof GoExpr)
-      return alignments.get(Alignments.Key.Value);
+    @Override
+    protected Alignment getChildAlignment(@NotNull PsiElement child, @Nullable PsiElement prevChild,
+                                          Map<Alignments.Key, Alignment> alignments) {
 
-    return super.getChildAlignment(child, prevChild, alignments);
-  }
+        if (child.getNode().getElementType() == oASSIGN)
+            return alignments.get(Alignments.Key.Operator);
+
+        if (child instanceof PsiComment)
+            return alignments.get(Alignments.Key.Comments);
+
+        if (child instanceof GoExpr)
+            return alignments.get(Alignments.Key.Value);
+
+        return super.getChildAlignment(child, prevChild, alignments);
+    }
 }

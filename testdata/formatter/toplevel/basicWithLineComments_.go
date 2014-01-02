@@ -3,11 +3,9 @@ package main
 // comment
 
 // comment
-
 import "A"
 
 // commment
-
 type common1 int
 type a int
 
@@ -21,11 +19,9 @@ var a int = 1
 var a int = 1
 
 // comment
-
 var a int = 1
 
 // comment
-
 const a = iota
 const bb = iota
 
@@ -36,8 +32,10 @@ const bb = iota
 const ccc = iota
 
 // asdfasd
-// comment
+// asdfasd
 
+// asdf
+// comment
 func a() {}
 func b() {}
 
@@ -50,4 +48,5 @@ func (p *int) Length() {}
 
 // comment
 
+// asdf
 func (p *int) Length() {}

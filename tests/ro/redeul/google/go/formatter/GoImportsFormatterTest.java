@@ -1,5 +1,7 @@
 package ro.redeul.google.go.formatter;
 
+import ro.redeul.google.go.GoFormatterTestCase;
+
 /**
  * Top level file formatter test cases.
  * <br/>

@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.types.struct;
 
+import ro.redeul.google.go.lang.psi.GoDocumentedPsiElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
@@ -9,7 +10,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
  * Date: 5/29/11
  * Time: 1:54 PM
  */
-public interface GoTypeStructAnonymousField extends GoPsiElement {
+public interface GoTypeStructAnonymousField extends GoPsiElement, GoDocumentedPsiElement {
 
     GoPsiType getType();
 

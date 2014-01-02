@@ -9,6 +9,8 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.declarations.Declaration;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.completeStatement;
+
 public class Statements implements GoElementTypes {
 
     private static final TokenSet SIMPLE_STMT = TokenSet.create(
@@ -130,10 +132,8 @@ public class Statements implements GoElementTypes {
 
         int expressionCount = parser.parseExpressionList(builder);
 
-        if ( expressionCount == 0 && ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) ) {
-            mark.done(EMPTY_STATEMENT);
-            return EMPTY_STATEMENT;
-        }
+        if ( expressionCount == 0 && ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) )
+            return completeStatement(builder, mark, EMPTY_STATEMENT);
 
         if ( ASSIGN_OPERATORS.contains(builder.getTokenType()) ) {
             mark.done(EXPRESSION_LIST);
@@ -144,9 +144,8 @@ public class Statements implements GoElementTypes {
             PsiBuilder.Marker rightSideExpressions = builder.mark();
             if ( parser.parseExpressionList(builder) != 0) {
                 rightSideExpressions.done(EXPRESSION_LIST);
-                mark.done(ASSIGN_STATEMENT);
                 marker.drop();
-                return ASSIGN_STATEMENT;
+                return completeStatement(builder, mark, ASSIGN_STATEMENT);
             } else {
                 rightSideExpressions.drop();
                 marker.rollbackTo();
@@ -155,8 +154,7 @@ public class Statements implements GoElementTypes {
 
         if ( INC_DEC_OPERATORS.contains(builder.getTokenType())) {
             ParserUtils.getToken(builder, builder.getTokenType());
-            mark.done(INC_DEC_STATEMENT);
-            return INC_DEC_STATEMENT;
+            return completeStatement(builder, mark, INC_DEC_STATEMENT);
         }
 
 //        if (ParserUtils.lookAhead(builder, oVAR_ASSIGN)) {
@@ -185,26 +183,20 @@ public class Statements implements GoElementTypes {
                 return null;
             }
 
-            mark.done(SHORT_VAR_STATEMENT);
-            return SHORT_VAR_STATEMENT;
+            return completeStatement(builder, mark, SHORT_VAR_STATEMENT);
         }
 
         if (ParserUtils.lookAhead(builder, oSEND_CHANNEL)) {
             ParserUtils.getToken(builder, oSEND_CHANNEL);
             parser.parseExpression(builder);
-            mark.done(SEND_STATEMENT);
-            return SEND_STATEMENT;
+            return completeStatement(builder, mark, SEND_STATEMENT);
         }
 
-        if ( expressionCount == 0 && ParserUtils.lookAhead(builder, pLCURLY)) {
-            mark.done(EMPTY_STATEMENT);
-            return EMPTY_STATEMENT;
-        }
+        if ( expressionCount == 0 && ParserUtils.lookAhead(builder, pLCURLY))
+            return completeStatement(builder, mark, EMPTY_STATEMENT);
 
-        if ( expressionCount != 0 ) {
-            mark.done(EXPRESSION_STATEMENT);
-            return EXPRESSION_STATEMENT;
-        }
+        if ( expressionCount != 0 )
+            return completeStatement(builder, mark, EXPRESSION_STATEMENT);
 
         mark.drop();
         return null;

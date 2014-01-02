@@ -1,27 +1,23 @@
 package ro.redeul.google.go.formatter.blocks;
 
-import com.google.common.collect.ImmutableMap;
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
-import com.intellij.util.containers.MultiMapBasedOnSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.GoDocumentedPsiElement;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 
-import java.lang.annotation.ElementType;
 import java.util.*;
 
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
@@ -39,6 +35,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceNode;
 public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBlock, GoElementTypes {
 
   private final ASTNode myASTNode;
+  private final GoPsiType myPsiNode;
   private final CommonCodeStyleSettings mySettings;
 
   private final Indent myIndent;
@@ -59,6 +56,9 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
   // vertical line breaking tokens
   private TokenSet myLineBreakingTokens = TokenSet.EMPTY;
 
+  // vertical grouping support
+  private TokenSet[] myHoldTogetherGroups = new TokenSet[] { COMMENTS };
+
   // custom spacing entries;
   private GoBlockUtil.CustomSpacing myCustomSpacing;
 
@@ -75,12 +75,17 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
                              Indent indent, Alignment alignment,
                              @NotNull Map<Alignments.Key, Alignment> alignsToUse) {
     this.myASTNode = node.getNode();
+    this.myPsiNode = node;
     this.mySettings = settings;
     this.myIndent = indent;
     this.myWrap = null;
     this.myAlignment = alignment;
 
     this.knownAlignments = alignsToUse;
+  }
+
+  protected GoPsiType getPsi() {
+    return myPsiNode;
   }
 
   protected void setMultiLineMode(boolean multilineMode,
@@ -137,24 +142,33 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
     ASTNode prevChild = null;
     IElementType prevChildType = null;
 
+    boolean isPartOfLeadingCommentGroup = getPsi() instanceof GoDocumentedPsiElement;
     for (ASTNode child : getGoChildren()) {
       PsiElement childPsi = child.getPsi();
 
-      if (child.getTextRange().getLength() == 0 || isWhiteSpaceNode(childPsi)) {
+      if (child.getTextRange().getLength() == 0 || isWhiteSpaceNode(childPsi))
         continue;
-      }
+
+      if (!(childPsi instanceof PsiComment))
+        isPartOfLeadingCommentGroup = false;
 
       int linesBetween = getLineCount(getTextBetween(prevChild, child));
 
       PsiElement prevChildPsi = prevChild != null ? prevChild.getPsi() : null;
 
-      Indent childIndent = getChildIndent(childPsi, prevChildPsi);
-      Alignment childAlign = getChildAlignment(childPsi, prevChildPsi, knownAlignments);
+      Indent childIndent = isPartOfLeadingCommentGroup
+        ? GoBlockUtil.Indents.NONE
+        : getChildIndent(childPsi, prevChildPsi);
 
-      if (wantsToBreakLine(prevChildType) && !holdTogether(prevChildType, child.getElementType(), linesBetween))
+      Alignment childAlign = isPartOfLeadingCommentGroup
+        ? null
+        : getChildAlignment(childPsi, prevChildPsi, knownAlignments);
+
+      if (wantsToBreakLine(prevChildType) &&
+        !holdTogether(prevChildType, child.getElementType(), linesBetween))
         alignmentsMap = Alignments.set(getAlignmentKeys());
 
-      children.add(GoBlocks.generate(child, mySettings, childIndent, childAlign, alignmentsMap));
+      children.add(GoBlocks.generate(child, mySettings, childIndent, childAlign, alignmentsMap, isPartOfLeadingCommentGroup));
 
       prevChild = child;
       prevChildType = getASTElementType(prevChild);
@@ -184,13 +198,16 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
     if (child1 == null)
       return Spacings.NONE;
 
+    if (child1 instanceof GoCommentGroupPartBlock ||
+      child2 instanceof GoCommentGroupPartBlock)
+      return Spacings.ONE_LINE;
+
     Spacing customSpacing = getCustomSpacing(typeChild1, typeChild2);
     if (customSpacing != null)
       return customSpacing;
 
     if (!isMultiLine())
       return Spacings.BASIC;
-
 
     if (isMultiLine() && (isLeftBreak(typeChild1) || isRightBreak(typeChild2)))
       return Spacings.ONE_LINE;
@@ -229,10 +246,18 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
     if (typeChild1 == typeChild2)
       return true;
 
-    if (COMMENTS.contains(typeChild1) && COMMENTS.contains(typeChild2))
-      return true;
+    if (myHoldTogetherGroups != null)
+      for (TokenSet holdTogetherGroup : myHoldTogetherGroups)
+         if (holdTogetherGroup != null &&
+           holdTogetherGroup.contains(typeChild1) &&
+           holdTogetherGroup.contains(typeChild2))
+           return true;
 
     return false;
+  }
+
+  protected void setHoldTogetherGroups(TokenSet ... holdTogetherGroups) {
+    this.myHoldTogetherGroups = holdTogetherGroups;
   }
 
   @Nullable

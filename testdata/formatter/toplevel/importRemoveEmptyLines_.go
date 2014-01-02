@@ -7,13 +7,9 @@ import (
 	"math"
 
 	"log"
-
 	// asdfasdf
-
 	"errors"
-
 	/* dfasdfads
 f */
-
 	"io"
 )

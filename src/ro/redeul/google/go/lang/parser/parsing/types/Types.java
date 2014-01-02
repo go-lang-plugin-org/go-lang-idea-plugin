@@ -50,7 +50,8 @@ public class Types implements GoElementTypes {
         }
 
         if ( ParserUtils.lookAhead(builder, kMAP) ) {
-            return MapType.parse(builder, parser);
+          return parseMapType(builder, parser);
+//          return MapType.parse(builder, parser);
         }
 
         if ( ParserUtils.lookAhead(builder, kCHAN) || ParserUtils.lookAhead(builder, oSEND_CHANNEL) ) {
@@ -113,12 +114,33 @@ public class Types implements GoElementTypes {
             identifier.drop();
         }
 
-        typeNameMarker.done(TYPE_NAME);
-        typeNameMarker.setCustomEdgeTokenBinders(null, ParserUtils.CommentBinders.TRAILING_COMMENTS);
+        if ( parser.isSet(GoParser.ParsingFlag.ShouldCompleteStatement))
+            ParserUtils.completeStatement(builder, typeNameMarker, TYPE_NAME);
+        else {
+            typeNameMarker.done(TYPE_NAME);
+        }
         return true;
     }
 
-    public static int parseTypeDeclarationList(PsiBuilder builder, GoParser parser) {
+  public static IElementType parseMapType(PsiBuilder builder, GoParser parser) {
+
+    if (!ParserUtils.lookAhead(builder, kMAP))
+      return null;
+
+    PsiBuilder.Marker marker = builder.mark();
+
+    ParserUtils.getToken(builder, kMAP);
+    ParserUtils.getToken(builder, pLBRACK, "left.bracket.expected");
+    parser.parseType(builder);
+    ParserUtils.getToken(builder, pRBRACK, "right.bracket.expected");
+    parser.parseType(builder);
+
+    marker.done(TYPE_MAP);
+    return TYPE_MAP;
+  }
+
+
+  public static int parseTypeDeclarationList(PsiBuilder builder, GoParser parser) {
 
         PsiBuilder.Marker marker = builder.mark();
 

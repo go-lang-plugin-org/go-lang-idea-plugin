@@ -9,6 +9,8 @@ import ro.redeul.google.go.lang.parser.parsing.declarations.NestedDeclarationPar
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.completeStatement;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findDefaultPackageName;
 
 /**
@@ -30,18 +32,17 @@ public class ImportDeclaration implements GoElementTypes {
 
     NestedDeclarationParser.parseNestedOrBasicDeclaration(
       builder, parser, new NestedDeclarationParser.DeclarationParser() {
-      public boolean parse(PsiBuilder builder, GoParser parser) {
-        return parseImportStatement(builder, parser);
+      public boolean parse(PsiBuilder builder, GoParser parser, boolean shouldComplete) {
+        return parseImportStatement(builder, parser, shouldComplete);
       }
     });
 
-    marker.done(IMPORT_DECLARATIONS);
-    marker.setCustomEdgeTokenBinders(null, ParserUtils.CommentBinders.TRAILING_COMMENTS);
+    completeStatement(builder, marker, IMPORT_DECLARATIONS);
   }
 
   private static final TokenSet localImportTokens = TokenSet.create(mIDENT, oDOT, litSTRING);
 
-  private static boolean parseImportStatement(PsiBuilder builder, GoParser parser) {
+  private static boolean parseImportStatement(PsiBuilder builder, GoParser parser, boolean shouldComplete) {
 
     if (!ParserUtils.lookAhead(builder, localImportTokens)) {
       return false;
@@ -72,8 +73,10 @@ public class ImportDeclaration implements GoElementTypes {
       parser.setKnownPackage(localPackageName);
     }
 
-    importStatement.done(IMPORT_DECLARATION);
-    importStatement.setCustomEdgeTokenBinders(null, ParserUtils.CommentBinders.TRAILING_COMMENTS);
+    if (shouldComplete)
+      completeStatement(builder, importStatement, IMPORT_DECLARATION);
+    else
+      importStatement.done(IMPORT_DECLARATION);
 
     return true;
   }

@@ -1,0 +1,7 @@
+GoFile(0,37)
+  PackageDeclaration(main)(0,37)
+    PsiComment(SL_COMMENT)('// hannibal')(0,11)
+    PsiComment(SL_COMMENT)('// hannibal')(12,23)
+    PsiElement(KEYWORD_PACKAGE)('package')(24,31)
+    PsiElement(IDENTIFIER)('main')(32,36)
+    PsiElement(;)(';')(36,37)

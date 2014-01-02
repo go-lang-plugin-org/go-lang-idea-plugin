@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
  */
-public class SimpleCompletionTest extends LightCodeInsightFixtureTestCase {
+public abstract class SimpleCompletionTest extends LightCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {

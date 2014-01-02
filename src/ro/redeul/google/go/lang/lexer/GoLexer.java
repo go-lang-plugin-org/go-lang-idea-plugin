@@ -16,9 +16,9 @@ import static ro.redeul.google.go.lang.lexer.GoTokenTypes.*;
 public class GoLexer extends LookAheadLexer {
 
     private static final TokenSet tokensToMerge = TokenSet.create(
-        mSL_COMMENT,
-        mML_COMMENT,
-        wsWS
+//        mSL_COMMENT,
+//        mML_COMMENT,
+        wsWS, wsNLS
     );
 
     public GoLexer() {

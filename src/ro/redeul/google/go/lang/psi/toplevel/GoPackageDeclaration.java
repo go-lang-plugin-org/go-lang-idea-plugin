@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.toplevel;
 
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.GoDocumentedPsiElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 
 /**
@@ -10,7 +11,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
  * Time: 10:29:05 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface GoPackageDeclaration extends GoPsiElement {
+public interface GoPackageDeclaration extends GoPsiElement, GoDocumentedPsiElement {
 
     @NotNull
     String getPackageName();

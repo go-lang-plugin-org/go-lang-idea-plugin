@@ -1,5 +1,7 @@
 package ro.redeul.google.go.formatter;
 
+import ro.redeul.google.go.GoFormatterTestCase;
+
 /**
  * Top level file formatter test cases.
  * <br/>
@@ -22,7 +24,7 @@ public class GoFailingFormatterTest extends GoFormatterTestCase {
   public void testStructInconsistencies() throws Exception { _test(); }
 
   // https://github.com/mtoader/google-go-lang-idea-plugin/issues/450
-  public void testIncompleteConstsSlightMisalignments() throws Exception { _test(); }
+  public void testIncompleteConstsSlightMisalignment() throws Exception { _test(); }
 
   // https://github.com/mtoader/google-go-lang-idea-plugin/issues/451
   public void testIncompleteVarsMisalignments() throws Exception { _test(); }

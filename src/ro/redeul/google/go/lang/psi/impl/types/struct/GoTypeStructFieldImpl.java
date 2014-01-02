@@ -3,6 +3,8 @@ package ro.redeul.google.go.lang.psi.impl.types.struct;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -13,6 +15,8 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import javax.swing.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

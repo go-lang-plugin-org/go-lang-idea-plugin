@@ -7,6 +7,7 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.completeStatement;
 
 class InterfaceType implements GoElementTypes {
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
@@ -28,11 +29,8 @@ class InterfaceType implements GoElementTypes {
         ParserUtils.getToken(builder, pLCURLY, "left.curly.expected");
 
         while (!builder.eof() && ! ParserUtils.lookAhead(builder, pRCURLY) ) {
-
             if ( ! parseMethodSpec(builder, parser) )
                 break;
-
-            ParserUtils.endStatement(builder);
         }
 
         ParserUtils.getToken(builder, pRCURLY, "right.curly.expected");
@@ -44,11 +42,18 @@ class InterfaceType implements GoElementTypes {
             PsiBuilder.Marker methodSpec = builder.mark();
             ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
             parser.parseFunctionSignature(builder);
-            methodSpec.done(FUNCTION_DECLARATION);
-            methodSpec.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
+            completeStatement(builder, methodSpec, FUNCTION_DECLARATION);
             return true;
         }
 
-        return ParserUtils.lookAhead(builder, mIDENT) && parser.parseTypeName(builder);
+        if (ParserUtils.lookAhead(builder, mIDENT)) {
+            try {
+                parser.setFlag(GoParser.ParsingFlag.ShouldCompleteStatement);
+                return parser.parseTypeName(builder);
+            } finally {
+                parser.unsetFlag(GoParser.ParsingFlag.ShouldCompleteStatement);
+            }
+        }
+        return false;
     }
 }

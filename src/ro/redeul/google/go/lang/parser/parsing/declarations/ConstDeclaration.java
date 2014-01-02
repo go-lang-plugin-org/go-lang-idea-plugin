@@ -7,7 +7,7 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.ParseIota;
-import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.completeStatement;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -28,19 +28,16 @@ class ConstDeclaration implements GoElementTypes {
 
         NestedDeclarationParser.parseNestedOrBasicDeclaration(
             builder, parser, new NestedDeclarationParser.DeclarationParser() {
-            public boolean parse(PsiBuilder builder, GoParser parser) {
-                return parseConstSpecification(builder, parser);
+            public boolean parse(PsiBuilder builder, GoParser parser, boolean shouldComplete) {
+                return parseConstSpecification(builder, parser, shouldComplete);
             }
         });
 
-        constDeclarations.done(CONST_DECLARATIONS);
-        constDeclarations.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
-
-        return CONST_DECLARATIONS;
+        return completeStatement(builder, constDeclarations, CONST_DECLARATIONS);
     }
 
-    private static boolean parseConstSpecification(PsiBuilder builder,
-                                                   GoParser parser) {
+    private static boolean parseConstSpecification(PsiBuilder builder, GoParser parser,
+                                                   boolean shouldComplete) {
 
         PsiBuilder.Marker declaration = builder.mark();
 
@@ -59,8 +56,10 @@ class ConstDeclaration implements GoElementTypes {
             parser.resetFlag(ParseIota, parseIota);
         }
 
-        declaration.done(CONST_DECLARATION);
-        declaration.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
+        if (shouldComplete)
+            completeStatement(builder, declaration, CONST_DECLARATION);
+        else
+            declaration.done(CONST_DECLARATION);
 
         return true;
     }

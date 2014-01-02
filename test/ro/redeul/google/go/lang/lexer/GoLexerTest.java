@@ -34,11 +34,10 @@ public class GoLexerTest extends TestCase {
 
 
     public void testXxx2() {
-        String text = "" +
-            "func usage() {\n" +
-            "\tfmt.Fprintf(stderr, \"usage: yacc [-o output] [-v parsetable] input\\n\")\n" +
-            "\texit(1)\n" +
-            "}\n";
+        String text = "package main\n" +
+          "\n" +
+          "const A // ana\n" +
+          "\n";
 
         GoFlexLexer flexLexer = new GoFlexLexer();
 

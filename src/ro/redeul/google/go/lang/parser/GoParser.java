@@ -9,7 +9,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.parsing.declarations.Declaration;
 import ro.redeul.google.go.lang.parser.parsing.declarations.FunctionOrMethodDeclaration;
 import ro.redeul.google.go.lang.parser.parsing.expressions.Expressions;
-import ro.redeul.google.go.lang.parser.parsing.helpers.IdentifierList;
+import ro.redeul.google.go.lang.parser.parsing.helpers.Fragments;
 import ro.redeul.google.go.lang.parser.parsing.statements.BlockStatement;
 import ro.redeul.google.go.lang.parser.parsing.statements.Statements;
 import ro.redeul.google.go.lang.parser.parsing.toplevel.CompilationUnit;
@@ -32,7 +32,8 @@ public class GoParser extends ParserUtils implements PsiParser {
         Debug,
         WrapCompositeInExpression,
         AllowCompositeLiteral,
-        ParseIota
+        ParseIota,
+        ShouldCompleteStatement
     }
 
     private final EnumSet<ParsingFlag> flags = EnumSet.noneOf(ParsingFlag.class);
@@ -65,7 +66,7 @@ public class GoParser extends ParserUtils implements PsiParser {
     @NotNull
     public ASTNode parse(IElementType root, PsiBuilder builder) {
 
-        boolean debugging = false;
+        boolean debugging = true;
         builder.setDebugMode(debugging);
 
         resetFlag(ParsingFlag.AllowCompositeLiteral, true);
@@ -94,8 +95,7 @@ public class GoParser extends ParserUtils implements PsiParser {
             if ( parseTopLevelDeclaration(builder) == null ) {
                 ParserUtils.wrapError(builder, "unknown.token");
             }
-
-            ParserUtils.endStatement(builder);
+//            ParserUtils.endStatement(builder);
         }
     }
 
@@ -120,11 +120,11 @@ public class GoParser extends ParserUtils implements PsiParser {
     }
 
     public int parseIdentifierList(PsiBuilder builder, boolean markList) {
-        return IdentifierList.parse(builder, markList);
+        return Fragments.parseIdentifierList(builder, markList);
     }
 
     public IElementType parseBody(PsiBuilder builder) {
-        return BlockStatement.parse(builder, this);
+        return Fragments.parseBlock(builder, this, false);
     }
 
     public IElementType parseStatement(PsiBuilder builder) {

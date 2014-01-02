@@ -2,11 +2,13 @@ package ro.redeul.google.go.lang.parser.parsing.declarations;
 
 import com.intellij.lang.PsiBuilder;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.*;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.getToken;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
@@ -19,15 +21,14 @@ public class NestedDeclarationParser implements GoElementTypes {
                                                      DeclarationParser declarationParser) {
 
         if ( !ParserUtils.getToken(builder, pLPAREN)) {
-            declarationParser.parse(builder, parser);
+            declarationParser.parse(builder, parser, false);
             return;
         }
 
         while (!builder.eof() && !lookAhead(builder, pRPAREN)) {
-            if ( ! declarationParser.parse(builder, parser) ) {
+            if ( ! declarationParser.parse(builder, parser, true) ) {
                 break;
             }
-            ParserUtils.endStatement(builder);
             skipComments(builder);
         }
 
@@ -35,6 +36,6 @@ public class NestedDeclarationParser implements GoElementTypes {
     }
 
     public interface DeclarationParser {
-        boolean parse(PsiBuilder builder, GoParser parser);
+        boolean parse(PsiBuilder builder, GoParser parser, boolean shouldComplete);
     }
 }

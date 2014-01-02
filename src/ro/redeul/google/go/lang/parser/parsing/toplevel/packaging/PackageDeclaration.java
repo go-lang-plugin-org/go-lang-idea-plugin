@@ -6,6 +6,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.completeStatement;
 
 /**
  * User: mtoader
@@ -22,7 +23,6 @@ public class PackageDeclaration implements GoElementTypes {
             ParserUtils.getToken(builder, mIDENT, GoBundle.message("identifier.expected"));
         }
 
-        packageDeclaration.done(PACKAGE_DECLARATION);
-        packageDeclaration.setCustomEdgeTokenBinders(null, CommentBinders.TRAILING_COMMENTS);
+        completeStatement(builder, packageDeclaration, PACKAGE_DECLARATION);
     }
 }
