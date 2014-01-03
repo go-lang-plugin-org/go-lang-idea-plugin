@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class GoSdkType extends SdkType {
-  public static String GO_SDK_NAME = "Go SDK";
+  public static final String GO_SDK_NAME = "Go SDK";
 
   public GoSdkType() {
     super(GO_SDK_NAME);
