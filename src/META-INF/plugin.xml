@@ -1,8 +1,8 @@
 <idea-plugin version="2"
              url="http://github.com/mtoader/google-go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
-    <name>golang.org support plugin</name>
-    <version>0.9.15-dev</version>
+    <name>Go language (golang.org) support plugin</name>
+    <version>0.9.15</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[<h2>Support for Go programming language.</h2>(see <a href="http://golang.org">http://golang.org</a>)
@@ -44,7 +44,7 @@
             <li>Force UTF-8 encoding for go files</li>
             <li>Detection of bundled Go Sdk packages (useful when deployed as GoIde)</li>
             <li>Run configuration creator (right click on a program file and you can run it). </li>
-            <li>Go SDK (Go 1.0 on linux/mac/windows)</li>
+            <li>Go SDK (Go 1.2 on linux/mac/windows)</li>
             <li>Go module type</li>
             <li>Go App engine sdk type</li>
             <li>Go App engine credentials safe storage</li>
