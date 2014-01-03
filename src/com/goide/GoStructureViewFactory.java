@@ -114,7 +114,13 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     @Override
     public String getPresentableText() {
       if (myElement instanceof GoFile) return ((GoFile)myElement).getName();
-      else if (myElement instanceof GoTopLevelDeclaration) return StringUtil.first(myElement.getText(), 15, true);
+      else if (myElement instanceof GoFunctionDeclaration) {
+        String receiver = myElement instanceof GoMethodDeclaration ? ((GoMethodDeclaration)myElement).getReceiver().getText() + "." : "";
+        GoSignature signature = ((GoFunctionDeclaration)myElement).getSignature();
+        String signatureText = signature != null ? signature.getText() : "";
+        return receiver + ((GoFunctionDeclaration)myElement).getIdentifier().getText() + StringUtil.first(signatureText, 20, true);
+      }
+      else if (myElement instanceof GoTopLevelDeclaration) return StringUtil.first(myElement.getText(), 30, true);
       else if (myElement instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)myElement).getType();
         return ((GoTypeSpec)myElement).getIdentifier().getText() + ":" + (type != null ? type.getText() : "");
