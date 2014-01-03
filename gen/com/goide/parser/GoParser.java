@@ -3220,9 +3220,9 @@ public class GoParser implements PsiParser {
   // 3: BINARY(AddExpr)
   // 4: BINARY(MulExpr)
   // 5: PREFIX(UnaryExpr)
-  // 6: ATOM(BuiltinCallExpr)
+  // 6: PREFIX(ConversionExpr)
   // 7: ATOM(MethodExpr)
-  // 8: ATOM(OperandName) ATOM(LiteralTypeExpr) PREFIX(ConversionExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) POSTFIX(IndexExpr) POSTFIX(CallExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit)
+  // 8: ATOM(OperandName) ATOM(LiteralTypeExpr) ATOM(BuiltinCallExpr) POSTFIX(CallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) POSTFIX(IndexExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit)
   // 9: PREFIX(ParenthesesExpr)
   public static boolean Expression(PsiBuilder builder_, int level_, int priority_) {
     if (!recursion_guard_(builder_, level_, "Expression")) return false;
@@ -3230,11 +3230,11 @@ public class GoParser implements PsiParser {
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<expression>");
     result_ = UnaryExpr(builder_, level_ + 1);
-    if (!result_) result_ = BuiltinCallExpr(builder_, level_ + 1);
+    if (!result_) result_ = ConversionExpr(builder_, level_ + 1);
     if (!result_) result_ = MethodExpr(builder_, level_ + 1);
     if (!result_) result_ = OperandName(builder_, level_ + 1);
     if (!result_) result_ = LiteralTypeExpr(builder_, level_ + 1);
-    if (!result_) result_ = ConversionExpr(builder_, level_ + 1);
+    if (!result_) result_ = BuiltinCallExpr(builder_, level_ + 1);
     if (!result_) result_ = Literal(builder_, level_ + 1);
     if (!result_) result_ = FunctionLit(builder_, level_ + 1);
     if (!result_) result_ = ParenthesesExpr(builder_, level_ + 1);
@@ -3276,6 +3276,11 @@ public class GoParser implements PsiParser {
         marker_.drop();
         left_marker_.precede().done(MUL_EXPR);
       }
+      else if (priority_ < 8 && ArgumentList(builder_, level_ + 1)) {
+        result_ = true;
+        marker_.drop();
+        left_marker_.precede().done(CALL_EXPR);
+      }
       else if (priority_ < 8 && TypeAssertionExpr_0(builder_, level_ + 1)) {
         result_ = true;
         marker_.drop();
@@ -3290,11 +3295,6 @@ public class GoParser implements PsiParser {
         result_ = true;
         marker_.drop();
         left_marker_.precede().done(INDEX_EXPR);
-      }
-      else if (priority_ < 8 && ArgumentList(builder_, level_ + 1)) {
-        result_ = true;
-        marker_.drop();
-        left_marker_.precede().done(CALL_EXPR);
       }
       else if (priority_ < 8 && LiteralValue(builder_, level_ + 1)) {
         result_ = true;
@@ -3321,41 +3321,72 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // identifier '(' [ BuiltinArgs ','? ] ')'
-  public static boolean BuiltinCallExpr(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr")) return false;
-    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+  public static boolean ConversionExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionExpr")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = ConversionExpr_0(builder_, level_ + 1);
+    pinned_ = result_;
+    result_ = pinned_ && Expression(builder_, level_, 6);
+    result_ = pinned_ && report_error_(builder_, ConversionExpr_1(builder_, level_ + 1)) && result_;
+    exit_section_(builder_, level_, marker_, CONVERSION_EXPR, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // &('*' | '<-' | '[' | chan | func | interface | map | struct) Type '('
+  private static boolean ConversionExpr_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionExpr_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, IDENTIFIER);
+    result_ = ConversionExpr_0_0(builder_, level_ + 1);
+    result_ = result_ && Type(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, LPAREN);
-    result_ = result_ && BuiltinCallExpr_2(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, RPAREN);
-    exit_section_(builder_, marker_, BUILTIN_CALL_EXPR, result_);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
-  // [ BuiltinArgs ','? ]
-  private static boolean BuiltinCallExpr_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_2")) return false;
-    BuiltinCallExpr_2_0(builder_, level_ + 1);
-    return true;
+  // &('*' | '<-' | '[' | chan | func | interface | map | struct)
+  private static boolean ConversionExpr_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionExpr_0_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _AND_, null);
+    result_ = ConversionExpr_0_0_0(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
   }
 
-  // BuiltinArgs ','?
-  private static boolean BuiltinCallExpr_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_2_0")) return false;
+  // '*' | '<-' | '[' | chan | func | interface | map | struct
+  private static boolean ConversionExpr_0_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionExpr_0_0_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = BuiltinArgs(builder_, level_ + 1);
-    result_ = result_ && BuiltinCallExpr_2_0_1(builder_, level_ + 1);
+    result_ = consumeToken(builder_, MUL);
+    if (!result_) result_ = consumeToken(builder_, SEND_CHANNEL);
+    if (!result_) result_ = consumeToken(builder_, LBRACK);
+    if (!result_) result_ = consumeToken(builder_, CHAN);
+    if (!result_) result_ = consumeToken(builder_, FUNC);
+    if (!result_) result_ = consumeToken(builder_, INTERFACE);
+    if (!result_) result_ = consumeToken(builder_, MAP);
+    if (!result_) result_ = consumeToken(builder_, STRUCT);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // ','? ')'
+  private static boolean ConversionExpr_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionExpr_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ConversionExpr_1_0(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, RPAREN);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
   // ','?
-  private static boolean BuiltinCallExpr_2_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_2_0_1")) return false;
+  private static boolean ConversionExpr_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionExpr_1_0")) return false;
     consumeToken(builder_, COMMA);
     return true;
   }
@@ -3416,44 +3447,41 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  public static boolean ConversionExpr(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConversionExpr")) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = ConversionExpr_0(builder_, level_ + 1);
-    pinned_ = result_;
-    result_ = pinned_ && Expression(builder_, level_, 8);
-    result_ = pinned_ && report_error_(builder_, ConversionExpr_1(builder_, level_ + 1)) && result_;
-    exit_section_(builder_, level_, marker_, CONVERSION_EXPR, result_, pinned_, null);
-    return result_ || pinned_;
-  }
-
-  // Type '('
-  private static boolean ConversionExpr_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConversionExpr_0")) return false;
+  // identifier '(' [ BuiltinArgs ','? ] ')'
+  public static boolean BuiltinCallExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = Type(builder_, level_ + 1);
+    result_ = consumeToken(builder_, IDENTIFIER);
     result_ = result_ && consumeToken(builder_, LPAREN);
-    exit_section_(builder_, marker_, null, result_);
+    result_ = result_ && BuiltinCallExpr_2(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, RPAREN);
+    exit_section_(builder_, marker_, BUILTIN_CALL_EXPR, result_);
     return result_;
   }
 
-  // ','? ')'
-  private static boolean ConversionExpr_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConversionExpr_1")) return false;
+  // [ BuiltinArgs ','? ]
+  private static boolean BuiltinCallExpr_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_2")) return false;
+    BuiltinCallExpr_2_0(builder_, level_ + 1);
+    return true;
+  }
+
+  // BuiltinArgs ','?
+  private static boolean BuiltinCallExpr_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = ConversionExpr_1_0(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, RPAREN);
+    result_ = BuiltinArgs(builder_, level_ + 1);
+    result_ = result_ && BuiltinCallExpr_2_0_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
   // ','?
-  private static boolean ConversionExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConversionExpr_1_0")) return false;
+  private static boolean BuiltinCallExpr_2_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_2_0_1")) return false;
     consumeToken(builder_, COMMA);
     return true;
   }

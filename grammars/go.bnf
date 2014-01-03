@@ -216,7 +216,7 @@ Expression ::=
   | AddExpr
   | MulExpr
   | UnaryExpr
-  | BuiltinCallExpr
+  | ConversionExpr
   | MethodExpr
   | MaxGroup
   | ParenthesesExpr
@@ -235,12 +235,11 @@ BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
 private MaxGroup ::=
     OperandName
   | LiteralTypeExpr
-  | ConversionExpr
   | BuiltinCallExpr
+  | CallExpr
   | TypeAssertionExpr
   | SelectorExpr
   | IndexExpr
-  | CallExpr
   | Literal
   | FunctionLit
   | CompositeLit
@@ -258,7 +257,7 @@ private IndexExprBody ::= (Expression? ':' Expression ':' Expression) | (Express
 TypeAssertionExpr ::= Expression '.' '(' (Type | 'type') ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')'
-ConversionExpr ::= Type '(' Expression ','? ')'
+ConversionExpr ::= &('*' | '<-' | '[' | chan | func | interface | map | struct) Type '(' Expression ','? ')'
 
 LabeledStatement ::= identifier ':' Statement {pin=2}
 SendStatement ::= Expression '<-' Expression {pin=2}

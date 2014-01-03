@@ -60,14 +60,14 @@ GO_FILE
               PsiElement())(')')
       RETURN_STATEMENT
         PsiElement(return)('return')
-        BUILTIN_CALL_EXPR
-          PsiElement(identifier)('len')
-          PsiElement(()('(')
-          BUILTIN_ARGS
-            TYPE
-              TYPE_NAME
-                PsiElement(identifier)('args')
-          PsiElement())(')')
+        CALL_EXPR
+          OPERAND_NAME
+            PsiElement(identifier)('len')
+          ARGUMENT_LIST
+            PsiElement(()('(')
+            OPERAND_NAME
+              PsiElement(identifier)('args')
+            PsiElement())(')')
         PsiElement(,)(',')
         OPERAND_NAME
           PsiElement(identifier)('err')
@@ -105,10 +105,11 @@ GO_FILE
             BLOCK
               PsiElement({)('{')
               SIMPLE_STATEMENT
-                BUILTIN_CALL_EXPR
-                  PsiElement(identifier)('printf')
-                  PsiElement(()('(')
-                  BUILTIN_ARGS
+                CALL_EXPR
+                  OPERAND_NAME
+                    PsiElement(identifier)('printf')
+                  ARGUMENT_LIST
+                    PsiElement(()('(')
                     LITERAL
                       PsiElement(string)('"%d %s\n"')
                     PsiElement(,)(',')
@@ -117,28 +118,30 @@ GO_FILE
                     PsiElement(,)(',')
                     OPERAND_NAME
                       PsiElement(identifier)('msg')
-                  PsiElement())(')')
+                    PsiElement())(')')
               SIMPLE_STATEMENT
                 OPERAND_NAME
                   PsiElement(identifier)('count')
                 PsiElement(++)('++')
               PsiElement(})('}')
       SIMPLE_STATEMENT
-        BUILTIN_CALL_EXPR
-          PsiElement(identifier)('closure')
-          PsiElement(()('(')
-          BUILTIN_ARGS
+        CALL_EXPR
+          OPERAND_NAME
+            PsiElement(identifier)('closure')
+          ARGUMENT_LIST
+            PsiElement(()('(')
             LITERAL
               PsiElement(string)('"A Message"')
-          PsiElement())(')')
+            PsiElement())(')')
       SIMPLE_STATEMENT
-        BUILTIN_CALL_EXPR
-          PsiElement(identifier)('closure')
-          PsiElement(()('(')
-          BUILTIN_ARGS
+        CALL_EXPR
+          OPERAND_NAME
+            PsiElement(identifier)('closure')
+          ARGUMENT_LIST
+            PsiElement(()('(')
             LITERAL
               PsiElement(string)('"Another Message"')
-          PsiElement())(')')
+            PsiElement())(')')
       PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')

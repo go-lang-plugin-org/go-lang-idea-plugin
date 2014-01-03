@@ -441,14 +441,14 @@ GO_FILE
           LITERAL
             PsiElement(string)('"runtime error: "')
           PsiElement(+)('+')
-          BUILTIN_CALL_EXPR
-            PsiElement(identifier)('string')
-            PsiElement(()('(')
-            BUILTIN_ARGS
-              TYPE
-                TYPE_NAME
-                  PsiElement(identifier)('e')
-            PsiElement())(')')
+          CALL_EXPR
+            OPERAND_NAME
+              PsiElement(identifier)('string')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              OPERAND_NAME
+                PsiElement(identifier)('e')
+              PsiElement())(')')
       PsiElement(})('}')
   PsiComment(GO_LINE_COMMENT)('// For calling from C.')
   FUNCTION_DECLARATION
@@ -481,14 +481,14 @@ GO_FILE
             PsiElement(identifier)('ret')
         ASSIGN_OP
           PsiElement(=)('=')
-        BUILTIN_CALL_EXPR
-          PsiElement(identifier)('errorString')
-          PsiElement(()('(')
-          BUILTIN_ARGS
-            TYPE
-              TYPE_NAME
-                PsiElement(identifier)('s')
-          PsiElement())(')')
+        CALL_EXPR
+          OPERAND_NAME
+            PsiElement(identifier)('errorString')
+          ARGUMENT_LIST
+            PsiElement(()('(')
+            OPERAND_NAME
+              PsiElement(identifier)('s')
+            PsiElement())(')')
       PsiElement(})('}')
   TYPE_DECLARATION
     PsiElement(type)('type')
@@ -564,13 +564,14 @@ GO_FILE
               PsiElement(identifier)('nil')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('print')
-              PsiElement(()('(')
-              BUILTIN_ARGS
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('print')
+              ARGUMENT_LIST
+                PsiElement(()('(')
                 LITERAL
                   PsiElement(string)('"nil"')
-              PsiElement())(')')
+                PsiElement())(')')
         EXPR_CASE_CLAUSE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
@@ -620,14 +621,14 @@ GO_FILE
               PsiElement(identifier)('int')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('print')
-              PsiElement(()('(')
-              BUILTIN_ARGS
-                TYPE
-                  TYPE_NAME
-                    PsiElement(identifier)('v')
-              PsiElement())(')')
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('print')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                OPERAND_NAME
+                  PsiElement(identifier)('v')
+                PsiElement())(')')
         EXPR_CASE_CLAUSE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
@@ -635,41 +636,42 @@ GO_FILE
               PsiElement(identifier)('string')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('print')
-              PsiElement(()('(')
-              BUILTIN_ARGS
-                TYPE
-                  TYPE_NAME
-                    PsiElement(identifier)('v')
-              PsiElement())(')')
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('print')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                OPERAND_NAME
+                  PsiElement(identifier)('v')
+                PsiElement())(')')
         EXPR_CASE_CLAUSE
           EXPR_SWITCH_CASE
             PsiElement(default)('default')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('print')
-              PsiElement(()('(')
-              BUILTIN_ARGS
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('print')
+              ARGUMENT_LIST
+                PsiElement(()('(')
                 LITERAL
                   PsiElement(string)('"("')
                 PsiElement(,)(',')
-                BUILTIN_CALL_EXPR
-                  PsiElement(identifier)('typestring')
-                  PsiElement(()('(')
-                  BUILTIN_ARGS
-                    TYPE
-                      TYPE_NAME
-                        PsiElement(identifier)('i')
-                  PsiElement())(')')
+                CALL_EXPR
+                  OPERAND_NAME
+                    PsiElement(identifier)('typestring')
+                  ARGUMENT_LIST
+                    PsiElement(()('(')
+                    OPERAND_NAME
+                      PsiElement(identifier)('i')
+                    PsiElement())(')')
                 PsiElement(,)(',')
                 LITERAL
                   PsiElement(string)('") "')
                 PsiElement(,)(',')
                 OPERAND_NAME
                   PsiElement(identifier)('i')
-              PsiElement())(')')
+                PsiElement())(')')
         PsiElement(})('}')
       PsiElement(})('}')
   PsiComment(GO_LINE_COMMENT)('// called from generated code')
@@ -692,10 +694,11 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       SIMPLE_STATEMENT
-        BUILTIN_CALL_EXPR
-          PsiElement(identifier)('panic')
-          PsiElement(()('(')
-          BUILTIN_ARGS
+        CALL_EXPR
+          OPERAND_NAME
+            PsiElement(identifier)('panic')
+          ARGUMENT_LIST
+            PsiElement(()('(')
             ADD_EXPR
               ADD_EXPR
                 ADD_EXPR
@@ -730,5 +733,5 @@ GO_FILE
               PsiElement(+)('+')
               LITERAL
                 PsiElement(string)('" pointer"')
-          PsiElement())(')')
+            PsiElement())(')')
       PsiElement(})('}')

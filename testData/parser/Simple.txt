@@ -114,10 +114,12 @@ GO_FILE
             PsiElement(default)('default')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('s3')
-              PsiElement(()('(')
-              PsiElement())(')')
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('s3')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                PsiElement())(')')
         EXPR_CASE_CLAUSE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
@@ -134,10 +136,12 @@ GO_FILE
               PsiElement(int)('3')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('s1')
-              PsiElement(()('(')
-              PsiElement())(')')
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('s1')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                PsiElement())(')')
         EXPR_CASE_CLAUSE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
@@ -154,10 +158,12 @@ GO_FILE
               PsiElement(int)('7')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('s2')
-              PsiElement(()('(')
-              PsiElement())(')')
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('s2')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                PsiElement())(')')
         PsiElement(})('}')
       EXPR_SWITCH_STATEMENT
         PsiElement(switch)('switch')
@@ -165,10 +171,12 @@ GO_FILE
           SHORT_VAR_DECLARATION
             PsiElement(identifier)('x')
             PsiElement(:=)(':=')
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('f')
-              PsiElement(()('(')
-              PsiElement())(')')
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('f')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                PsiElement())(')')
         PsiElement(;)(';')
         PsiElement({)('{')
         PsiComment(GO_LINE_COMMENT)('// missing switch expression means "true"')
@@ -203,10 +211,12 @@ GO_FILE
           SHORT_VAR_DECLARATION
             PsiElement(identifier)('x')
             PsiElement(:=)(':=')
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('f')
-              PsiElement(()('(')
-              PsiElement())(')')
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('f')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                PsiElement())(')')
         PsiElement(;)(';')
         CONDITIONAL_EXPR
           LITERAL
@@ -255,10 +265,12 @@ GO_FILE
                 PsiElement(identifier)('y')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('f1')
-              PsiElement(()('(')
-              PsiElement())(')')
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('f1')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                PsiElement())(')')
         EXPR_CASE_CLAUSE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
@@ -270,10 +282,12 @@ GO_FILE
                 PsiElement(identifier)('z')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('f2')
-              PsiElement(()('(')
-              PsiElement())(')')
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('f2')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                PsiElement())(')')
         EXPR_CASE_CLAUSE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
@@ -285,9 +299,11 @@ GO_FILE
                 PsiElement(int)('4')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            BUILTIN_CALL_EXPR
-              PsiElement(identifier)('f3')
-              PsiElement(()('(')
-              PsiElement())(')')
+            CALL_EXPR
+              OPERAND_NAME
+                PsiElement(identifier)('f3')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                PsiElement())(')')
         PsiElement(})('}')
       PsiElement(})('}')
