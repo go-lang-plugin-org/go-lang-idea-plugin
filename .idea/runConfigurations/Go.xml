@@ -18,6 +18,10 @@
     <RunnerSettings RunnerId="Run" />
     <ConfigurationWrapper RunnerId="Debug" />
     <ConfigurationWrapper RunnerId="Run" />
-    <method />
+    <method>
+      <option name="BuildArtifacts" enabled="true">
+        <artifact name="jps-plugin:jar" />
+      </option>
+    </method>
   </configuration>
 </component>

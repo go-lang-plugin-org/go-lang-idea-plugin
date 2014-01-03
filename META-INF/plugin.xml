@@ -10,6 +10,7 @@
 
   <idea-version since-build="133"/>
   <depends>com.intellij.modules.lang</depends>
+  <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
 
   <extensions defaultExtensionNs="com.intellij">
     <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
@@ -23,9 +24,6 @@
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
 
     <sdkType implementation="com.goide.GoSdkType"/>
-    <!--contains java deps-->
-    <moduleType id="GO_MODULE" implementationClass="com.goide.GoModuleType"/>
-    <moduleConfigurationEditorProvider implementation="com.goide.configuration.GoModuleEditorsProvider" order="first"/>
   </extensions>
 
 </idea-plugin>
