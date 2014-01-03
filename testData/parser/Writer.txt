@@ -187,7 +187,8 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('tw')
       PsiElement(*)('*')
-      PsiElement(identifier)('Writer')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('Writer')
       PsiElement())(')')
     PsiElement(identifier)('Flush')
     SIGNATURE
@@ -400,7 +401,8 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('tw')
       PsiElement(*)('*')
-      PsiElement(identifier)('Writer')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('Writer')
       PsiElement())(')')
     PsiElement(identifier)('cString')
     SIGNATURE
@@ -536,7 +538,8 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('tw')
       PsiElement(*)('*')
-      PsiElement(identifier)('Writer')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('Writer')
       PsiElement())(')')
     PsiElement(identifier)('octal')
     SIGNATURE
@@ -639,7 +642,8 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('tw')
       PsiElement(*)('*')
-      PsiElement(identifier)('Writer')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('Writer')
       PsiElement())(')')
     PsiElement(identifier)('numeric')
     SIGNATURE
@@ -877,7 +881,8 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('tw')
       PsiElement(*)('*')
-      PsiElement(identifier)('Writer')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('Writer')
       PsiElement())(')')
     PsiElement(identifier)('WriteHeader')
     SIGNATURE
@@ -1889,7 +1894,8 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('tw')
       PsiElement(*)('*')
-      PsiElement(identifier)('Writer')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('Writer')
       PsiElement())(')')
     PsiElement(identifier)('splitUSTARLongName')
     SIGNATURE
@@ -2100,7 +2106,8 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('tw')
       PsiElement(*)('*')
-      PsiElement(identifier)('Writer')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('Writer')
       PsiElement())(')')
     PsiElement(identifier)('writePAXHeader')
     SIGNATURE
@@ -2642,7 +2649,8 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('tw')
       PsiElement(*)('*')
-      PsiElement(identifier)('Writer')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('Writer')
       PsiElement())(')')
     PsiElement(identifier)('Write')
     SIGNATURE
@@ -2837,7 +2845,8 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('tw')
       PsiElement(*)('*')
-      PsiElement(identifier)('Writer')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('Writer')
       PsiElement())(')')
     PsiElement(identifier)('Close')
     SIGNATURE

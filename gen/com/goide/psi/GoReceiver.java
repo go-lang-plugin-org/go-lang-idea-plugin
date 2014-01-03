@@ -7,4 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface GoReceiver extends GoCompositeElement {
 
+  @NotNull
+  GoTypeReferenceExpression getTypeReferenceExpression();
+
+  @Nullable
+  PsiElement getIdentifier();
+
 }

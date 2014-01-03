@@ -182,7 +182,7 @@ ShortVarDeclaration ::= IdentifierList ':=' ExpressionList {pin=2}
 
 FunctionDeclaration ::= func identifier Signature Block? { pin=2 extends="com.goide.psi.impl.GoFunctionDeclImpl" }
 MethodDeclaration ::= func Receiver identifier Signature Block? {pin=3 extends=FunctionDeclaration}
-Receiver ::= '(' identifier? '*'? identifier ')'
+Receiver ::= '(' identifier? '*'? TypeReferenceExpression ')'
 
 Literal ::=
     int

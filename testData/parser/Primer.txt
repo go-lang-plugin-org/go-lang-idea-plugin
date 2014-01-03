@@ -343,7 +343,8 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('i')
-      PsiElement(identifier)('integer')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('integer')
       PsiElement())(')')
     PsiElement(identifier)('log')
     SIGNATURE
@@ -375,7 +376,8 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('e')
       PsiElement(*)('*')
-      PsiElement(identifier)('Example')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('Example')
       PsiElement())(')')
     PsiElement(identifier)('Log')
     SIGNATURE
@@ -451,7 +453,8 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('p')
-      PsiElement(identifier)('cartesianPoint')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('cartesianPoint')
       PsiElement())(')')
     PsiElement(identifier)('X')
     SIGNATURE
@@ -477,7 +480,8 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('p')
-      PsiElement(identifier)('cartesianPoint')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('cartesianPoint')
       PsiElement())(')')
     PsiElement(identifier)('Y')
     SIGNATURE
@@ -503,7 +507,8 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('p')
-      PsiElement(identifier)('polarPoint')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('polarPoint')
       PsiElement())(')')
     PsiElement(identifier)('X')
     SIGNATURE
@@ -545,7 +550,8 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('p')
-      PsiElement(identifier)('polarPoint')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('polarPoint')
       PsiElement())(')')
     PsiElement(identifier)('Y')
     SIGNATURE
@@ -587,7 +593,8 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('self')
-      PsiElement(identifier)('cartesianPoint')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('cartesianPoint')
       PsiElement())(')')
     PsiElement(identifier)('Print')
     SIGNATURE
@@ -626,7 +633,8 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('self')
-      PsiElement(identifier)('polarPoint')
+      TYPE_REFERENCE_EXPRESSION
+        PsiElement(identifier)('polarPoint')
       PsiElement())(')')
     PsiElement(identifier)('Print')
     SIGNATURE

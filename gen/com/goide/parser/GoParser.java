@@ -2090,7 +2090,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '(' identifier? '*'? identifier ')'
+  // '(' identifier? '*'? TypeReferenceExpression ')'
   public static boolean Receiver(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Receiver")) return false;
     if (!nextTokenIs(builder_, LPAREN)) return false;
@@ -2099,7 +2099,7 @@ public class GoParser implements PsiParser {
     result_ = consumeToken(builder_, LPAREN);
     result_ = result_ && Receiver_1(builder_, level_ + 1);
     result_ = result_ && Receiver_2(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, IDENTIFIER);
+    result_ = result_ && TypeReferenceExpression(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, RPAREN);
     exit_section_(builder_, marker_, RECEIVER, result_);
     return result_;
