@@ -178,7 +178,6 @@ public class GoSdkType extends SdkType {
                 // If we could detect the GOPATH properly, automatically add the first directory to the autocompletion path
                 if (finalPathSourcesRoot != null) {
                     sdkModificator.addRoot(finalPathSourcesRoot, OrderRootType.CLASSES);
-                    sdkModificator.addRoot(finalPathSourcesRoot, OrderRootType.SOURCES);
                 }
             }
         });
