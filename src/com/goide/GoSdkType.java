@@ -1,5 +1,7 @@
 package com.goide;
 
+import com.goide.jps.model.JpsGoModelSerializerExtension;
+import com.goide.jps.model.JpsGoSdkType;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
@@ -20,10 +22,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class GoSdkType extends SdkType {
-  public static final String GO_SDK_NAME = "Go SDK";
-
   public GoSdkType() {
-    super(GO_SDK_NAME);
+    super(JpsGoModelSerializerExtension.GO_SDK_TYPE_ID);
   }
 
   @NotNull
@@ -86,7 +86,8 @@ public class GoSdkType extends SdkType {
 
   @Override
   public boolean isValidSdkHome(@NotNull String path) {
-    return true; // todo
+    File goExecutable = JpsGoSdkType.getExecutable(new File(path, "bin").getAbsolutePath(), "go");
+    return goExecutable.canExecute();
   }
 
   @NotNull
@@ -132,7 +133,7 @@ public class GoSdkType extends SdkType {
   @NonNls
   @Override
   public String getPresentableName() {
-    return GO_SDK_NAME;
+    return "Go SDK";
   }
 
   @Override
