@@ -9,6 +9,7 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoIcons;
 
+import java.io.File;
 import java.util.Properties;
 
 public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
@@ -67,6 +68,11 @@ public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
         }
 
         final PsiFileFactory factory = PsiFileFactory.getInstance(directory.getProject());
+
+        if ((new File(fileName)).exists()) {
+            throw new RuntimeException("File already exists");
+        }
+
         final PsiFile file = factory.createFileFromText(fileName, GoFileType.INSTANCE, text);
 
         return directory.add(file);

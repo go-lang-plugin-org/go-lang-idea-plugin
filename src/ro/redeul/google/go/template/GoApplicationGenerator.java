@@ -67,92 +67,71 @@ public class GoApplicationGenerator extends WebProjectTemplate {
         final String goRootPath = ((GoSdkData) settings).GO_GOROOT_PATH;
         final VirtualFile[] sourceDir = {null};
 
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-            @Override
-            public void run() {
-
-
-                try {
-                    baseDir.createChildDirectory(this, "bin");
-                    baseDir.createChildDirectory(this, "pkg");
-                    sourceDir[0] = baseDir.createChildDirectory(this, "src");
-                } catch (Exception e) {
-                    LOG.error(e.getMessage());
-                }
-            }
-        });
-
-
         StartupManager.getInstance(project).runWhenProjectIsInitialized(new Runnable() {
             @Override
             public void run() {ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 @Override
                 public void run() {
-                        ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
+                    try {
+                        baseDir.createChildDirectory(this, "bin");
+                        baseDir.createChildDirectory(this, "pkg");
+                        sourceDir[0] = baseDir.createChildDirectory(this, "src");
+                    } catch (Exception e) {
+                        LOG.error(e.getMessage());
+                    }
 
-                        if (sourceDir[0] != null) {
-                            model.addContentEntry(sourceDir[0].getParent()).addSourceFolder(sourceDir[0], false);
-                            model.commit();
-                        }
+                    ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
 
-                        GoSdkData sdkData = GoSdkUtil.testGoogleGoSdk(goRootPath);
+                    if (sourceDir[0] != null) {
+                        model.addContentEntry(sourceDir[0].getParent()).addSourceFolder(sourceDir[0], false);
+                        model.commit();
+                    }
 
-                        if ( sdkData == null ) {
-                            // skip since the folder isn't a proper go sdk
-                            return;
-                        }
+                    PsiDirectory directory = PsiManager.getInstance(project).findDirectory(GoSdkUtil.getVirtualFile(baseDir.getCanonicalPath().concat("/src")));
 
-                        final ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
-                        ProjectJdkImpl goSdk = null;
-                        final GoSdkType goSdkType = GoSdkType.getInstance();
+                    if (directory == null) {
+                        return;
+                    }
 
-                        if (goSdkType.getSdkData() == null) {
-                            goSdkType.setSdkData(sdkData);
-                        }
+                    try {
+                        GoTemplatesFactory.createFromTemplate(directory, "main", project.getName().concat(".go"), GoTemplatesFactory.Template.GoAppMain);
+                    } catch (IncorrectOperationException e) {
+                        LOG.error(e.getMessage());
+                    }
 
-                        Sdk existingSdk = ProjectJdkTable.getInstance().findJdk(goSdkType.getSdkLongName());
+                    VirtualFileManager.getInstance().syncRefresh();
 
-                        if (existingSdk == null) {
-                            try {
-                                String newSdkName = SdkConfigurationUtil.createUniqueSdkName(goSdkType, sdkData.GO_GOROOT_PATH, Arrays.asList(jdkTable.getAllJdks()));
-                                goSdk = new ProjectJdkImpl(newSdkName, goSdkType);
+                    GoSdkData sdkData = GoSdkUtil.testGoogleGoSdk(goRootPath);
 
-                                goSdk.setHomePath(goRootPath);
+                    if (sdkData == null) {
+                        // skip since the folder isn't a proper go sdk
+                        return;
+                    }
 
-                                final ProjectJdkImpl finalGoSdk = goSdk;
-                                ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        goSdkType.setupSdkPaths(finalGoSdk);
-                                        jdkTable.addJdk(finalGoSdk);
-                                    }
-                                });
+                    GoSdkType goSdkType = GoSdkType.getInstance();
+                    if (goSdkType.getSdkData() == null) {
+                        goSdkType.setSdkData(sdkData);
+                    }
 
-                            } catch (Exception e) {
-                                LOG.error(e.getMessage());
-                            }
-                        } else {
-                            goSdk = (ProjectJdkImpl) existingSdk;
-                        }
+                    Sdk existingSdk = ProjectJdkTable.getInstance().findJdk(goSdkType.getSdkLongName());
+
+                    if (existingSdk == null) {
+                        ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
+
+                        String newSdkName = SdkConfigurationUtil.createUniqueSdkName(goSdkType, sdkData.GO_GOROOT_PATH, Arrays.asList(jdkTable.getAllJdks()));
+                        ProjectJdkImpl goSdk = new ProjectJdkImpl(newSdkName, goSdkType);
+
+                        goSdk.setHomePath(goRootPath);
+
+                        goSdkType.setupSdkPaths(goSdk);
+                        jdkTable.addJdk(goSdk);
 
                         ProjectRootManager.getInstance(project).setProjectSdk(goSdk);
-
-                        PsiDirectory directory = PsiManager.getInstance(project).findDirectory(GoSdkUtil.getVirtualFile(baseDir.getCanonicalPath().concat("/src")));
-
-                        if ( directory == null ) {
-                            return;
-                        }
-
-                        try {
-                            GoTemplatesFactory.createFromTemplate(directory, "main", project.getName().concat(".go"), GoTemplatesFactory.Template.GoAppMain);
-                        } catch(IncorrectOperationException e) {
-                            LOG.error(e.getMessage());
-                        }
-
-                        VirtualFileManager.getInstance().syncRefresh();
+                    } else {
+                        ProjectRootManager.getInstance(project).setProjectSdk(existingSdk);
                     }
-                });
-            }
+                }
+            });}
         });
     }
 
