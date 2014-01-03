@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoFunctionDeclaration extends GoTopLevelDeclaration {
+public interface GoFunctionDeclaration extends GoNamedElement {
 
   @Nullable
   GoBlock getBlock();

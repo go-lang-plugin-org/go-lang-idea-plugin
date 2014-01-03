@@ -135,7 +135,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
-    visitTopLevelDeclaration(o);
+    visitNamedElement(o);
   }
 
   public void visitFunctionLit(@NotNull GoFunctionLit o) {
@@ -306,10 +306,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitTopLevelDeclaration(@NotNull GoTopLevelDeclaration o) {
-    visitCompositeElement(o);
-  }
-
   public void visitType(@NotNull GoType o) {
     visitCompositeElement(o);
   }
@@ -363,6 +359,14 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitAssignOp(@NotNull GoAssignOp o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitNamedElement(@NotNull GoNamedElement o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitTopLevelDeclaration(@NotNull GoTopLevelDeclaration o) {
     visitCompositeElement(o);
   }
 

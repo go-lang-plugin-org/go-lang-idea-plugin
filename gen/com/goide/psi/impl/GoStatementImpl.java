@@ -29,8 +29,20 @@ public class GoStatementImpl extends GoCompositeElementImpl implements GoStateme
 
   @Override
   @Nullable
-  public GoTopLevelDeclaration getTopLevelDeclaration() {
-    return findChildByClass(GoTopLevelDeclaration.class);
+  public GoConstDeclaration getConstDeclaration() {
+    return findChildByClass(GoConstDeclaration.class);
+  }
+
+  @Override
+  @Nullable
+  public GoTypeDeclaration getTypeDeclaration() {
+    return findChildByClass(GoTypeDeclaration.class);
+  }
+
+  @Override
+  @Nullable
+  public GoVarDeclaration getVarDeclaration() {
+    return findChildByClass(GoVarDeclaration.class);
   }
 
 }

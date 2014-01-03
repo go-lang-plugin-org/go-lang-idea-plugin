@@ -11,6 +11,12 @@ public interface GoStatement extends GoCompositeElement {
   GoBlock getBlock();
 
   @Nullable
-  GoTopLevelDeclaration getTopLevelDeclaration();
+  GoConstDeclaration getConstDeclaration();
+
+  @Nullable
+  GoTypeDeclaration getTypeDeclaration();
+
+  @Nullable
+  GoVarDeclaration getVarDeclaration();
 
 }

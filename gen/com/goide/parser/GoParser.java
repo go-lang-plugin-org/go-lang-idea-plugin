@@ -246,9 +246,6 @@ public class GoParser implements PsiParser {
     else if (root_ == TAG) {
       result_ = Tag(builder_, 0);
     }
-    else if (root_ == TOP_LEVEL_DECLARATION) {
-      result_ = TopLevelDeclaration(builder_, 0);
-    }
     else if (root_ == TYPE) {
       result_ = Type(builder_, 0);
     }
@@ -314,8 +311,6 @@ public class GoParser implements PsiParser {
       GO_STATEMENT, IF_STATEMENT, LABELED_STATEMENT, RECV_STATEMENT,
       RETURN_STATEMENT, SELECT_STATEMENT, SEND_STATEMENT, SIMPLE_STATEMENT,
       STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
-    create_token_set_(CONST_DECLARATION, FUNCTION_DECLARATION, METHOD_DECLARATION, TOP_LEVEL_DECLARATION,
-      TYPE_DECLARATION, VAR_DECLARATION),
     create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE, INTERFACE_TYPE,
       MAP_TYPE, POINTER_TYPE, RECEIVER_TYPE, STRUCT_TYPE,
       TYPE),
@@ -2594,16 +2589,16 @@ public class GoParser implements PsiParser {
   //   | VarDeclaration
   //   | FunctionDeclaration
   //   | MethodDeclaration
-  public static boolean TopLevelDeclaration(PsiBuilder builder_, int level_) {
+  static boolean TopLevelDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TopLevelDeclaration")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<top level declaration>");
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = ConstDeclaration(builder_, level_ + 1);
     if (!result_) result_ = TypeDeclaration(builder_, level_ + 1);
     if (!result_) result_ = VarDeclaration(builder_, level_ + 1);
     if (!result_) result_ = FunctionDeclaration(builder_, level_ + 1);
     if (!result_) result_ = MethodDeclaration(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, TOP_LEVEL_DECLARATION, result_, false, TopLevelDeclaration_auto_recover_);
+    exit_section_(builder_, level_, marker_, null, result_, false, TopLevelDeclaration_auto_recover_);
     return result_;
   }
 

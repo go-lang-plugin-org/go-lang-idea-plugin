@@ -86,7 +86,6 @@ public interface GoTypes {
   IElementType STRUCT_TYPE = new GoCompositeElementType("STRUCT_TYPE");
   IElementType SWITCH_STATEMENT = new GoCompositeElementType("SWITCH_STATEMENT");
   IElementType TAG = new GoCompositeElementType("TAG");
-  IElementType TOP_LEVEL_DECLARATION = new GoCompositeElementType("TOP_LEVEL_DECLARATION");
   IElementType TYPE = new GoCompositeElementType("TYPE");
   IElementType TYPE_ASSERTION_EXPR = new GoCompositeElementType("TYPE_ASSERTION_EXPR");
   IElementType TYPE_CASE_CLAUSE = new GoCompositeElementType("TYPE_CASE_CLAUSE");
@@ -416,9 +415,6 @@ public interface GoTypes {
       }
       else if (type == TAG) {
         return new GoTagImpl(node);
-      }
-      else if (type == TOP_LEVEL_DECLARATION) {
-        return new GoTopLevelDeclarationImpl(node);
       }
       else if (type == TYPE) {
         return new GoTypeImpl(node);

@@ -65,6 +65,11 @@
   TYPE_                = 'type'
 
   extends(".*(Expr|Literal|identifier|Lit|OperandName)")=Expression
+
+  implements("(Function|Method)Declaration")="com.goide.psi.GoNamedElement"
+  implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
+  extends("FunctionDeclaration|MethodDeclaration")="com.goide.psi.impl.GoNamedElementImpl"
+
   pin(".*Statement")=1
   extends(".*Statement")=Statement
   extends(".*Type")=Type
@@ -147,11 +152,7 @@ SimpleStatement ::=
   | ShortVarDeclaration
   | Expression ['++' | '--']
 
-;{
-  extends("(Const|Type|Var|Function|Method)Declaration")=TopLevelDeclaration
-}
-
-TopLevelDeclaration ::=
+private TopLevelDeclaration ::=
     ConstDeclaration
   | TypeDeclaration
   | VarDeclaration
@@ -176,7 +177,7 @@ VarSpec ::= IdentifierList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
 
 ShortVarDeclaration ::= IdentifierList ':=' ExpressionList {pin=2}
 
-FunctionDeclaration ::= func identifier Signature Block? {pin=2}
+FunctionDeclaration ::= func identifier Signature Block? { pin=2 extends="com.goide.psi.impl.GoFunctionDeclImpl" }
 MethodDeclaration ::= func Receiver identifier Signature Block? {pin=3 extends=FunctionDeclaration}
 Receiver ::= '(' identifier? '*'? identifier ')'
 
