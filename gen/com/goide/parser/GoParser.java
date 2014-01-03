@@ -1153,7 +1153,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // PackageClause semi (ImportDeclaration semi)* (TopLevelDeclaration semi)*
+  // PackageClause semi (ImportDeclaration semi)* TopLevelDeclaration*
   static boolean File(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "File")) return false;
     if (!nextTokenIs(builder_, PACKAGE)) return false;
@@ -1194,29 +1194,16 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // (TopLevelDeclaration semi)*
+  // TopLevelDeclaration*
   private static boolean File_3(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "File_3")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!File_3_0(builder_, level_ + 1)) break;
+      if (!TopLevelDeclaration(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "File_3", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
-  }
-
-  // TopLevelDeclaration semi
-  private static boolean File_3_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "File_3_0")) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = TopLevelDeclaration(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
   }
 
   /* ********************************************************** */
@@ -2485,7 +2472,93 @@ public class GoParser implements PsiParser {
     if (!result_) result_ = SelectStatement(builder_, level_ + 1);
     if (!result_) result_ = ForStatement(builder_, level_ + 1);
     if (!result_) result_ = DeferStatement(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, STATEMENT, result_, false, Statement_auto_recover_);
+    exit_section_(builder_, level_, marker_, STATEMENT, result_, false, StatementRecover_parser_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | case | chan | char | decimali | default | else | float | floati | func | hex | identifier | imaginary | int | interface | map | oct | rune | string | struct)
+  static boolean StatementRecover(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "StatementRecover")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NOT_, null);
+    result_ = !StatementRecover_0(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  // '!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | case | chan | char | decimali | default | else | float | floati | func | hex | identifier | imaginary | int | interface | map | oct | rune | string | struct
+  private static boolean StatementRecover_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "StatementRecover_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, NOT);
+    if (!result_) result_ = consumeToken(builder_, NOT_EQ);
+    if (!result_) result_ = consumeToken(builder_, REMAINDER);
+    if (!result_) result_ = consumeToken(builder_, REMAINDER_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, COND_AND);
+    if (!result_) result_ = consumeToken(builder_, BIT_AND);
+    if (!result_) result_ = consumeToken(builder_, BIT_AND_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, BIT_CLEAR);
+    if (!result_) result_ = consumeToken(builder_, BIT_CLEAR_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, LPAREN);
+    if (!result_) result_ = consumeToken(builder_, RPAREN);
+    if (!result_) result_ = consumeToken(builder_, MUL);
+    if (!result_) result_ = consumeToken(builder_, MUL_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, PLUS);
+    if (!result_) result_ = consumeToken(builder_, PLUS_PLUS);
+    if (!result_) result_ = consumeToken(builder_, PLUS_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, COMMA);
+    if (!result_) result_ = consumeToken(builder_, MINUS);
+    if (!result_) result_ = consumeToken(builder_, MINUS_MINUS);
+    if (!result_) result_ = consumeToken(builder_, MINUS_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, DOT);
+    if (!result_) result_ = consumeToken(builder_, TRIPLE_DOT);
+    if (!result_) result_ = consumeToken(builder_, QUOTIENT);
+    if (!result_) result_ = consumeToken(builder_, QUOTIENT_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, COLON);
+    if (!result_) result_ = consumeToken(builder_, SEMICOLON);
+    if (!result_) result_ = consumeToken(builder_, LESS);
+    if (!result_) result_ = consumeToken(builder_, SEND_CHANNEL);
+    if (!result_) result_ = consumeToken(builder_, SHIFT_LEFT);
+    if (!result_) result_ = consumeToken(builder_, SHIFT_LEFT_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, LESS_OR_EQUAL);
+    if (!result_) result_ = consumeToken(builder_, SEMICOLON_SYNTHETIC);
+    if (!result_) result_ = consumeToken(builder_, ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, EQ);
+    if (!result_) result_ = consumeToken(builder_, GREATER);
+    if (!result_) result_ = consumeToken(builder_, GREATER_OR_EQUAL);
+    if (!result_) result_ = consumeToken(builder_, SHIFT_RIGHT);
+    if (!result_) result_ = consumeToken(builder_, SHIFT_RIGHT_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, LBRACK);
+    if (!result_) result_ = consumeToken(builder_, RBRACK);
+    if (!result_) result_ = consumeToken(builder_, BIT_XOR);
+    if (!result_) result_ = consumeToken(builder_, BIT_XOR_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, LBRACE);
+    if (!result_) result_ = consumeToken(builder_, BIT_OR);
+    if (!result_) result_ = consumeToken(builder_, BIT_OR_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, COND_OR);
+    if (!result_) result_ = consumeToken(builder_, RBRACE);
+    if (!result_) result_ = consumeToken(builder_, CASE);
+    if (!result_) result_ = consumeToken(builder_, CHAN);
+    if (!result_) result_ = consumeToken(builder_, CHAR);
+    if (!result_) result_ = consumeToken(builder_, DECIMALI);
+    if (!result_) result_ = consumeToken(builder_, DEFAULT);
+    if (!result_) result_ = consumeToken(builder_, ELSE);
+    if (!result_) result_ = consumeToken(builder_, FLOAT);
+    if (!result_) result_ = consumeToken(builder_, FLOATI);
+    if (!result_) result_ = consumeToken(builder_, FUNC);
+    if (!result_) result_ = consumeToken(builder_, HEX);
+    if (!result_) result_ = consumeToken(builder_, IDENTIFIER);
+    if (!result_) result_ = consumeToken(builder_, IMAGINARY);
+    if (!result_) result_ = consumeToken(builder_, INT);
+    if (!result_) result_ = consumeToken(builder_, INTERFACE);
+    if (!result_) result_ = consumeToken(builder_, MAP);
+    if (!result_) result_ = consumeToken(builder_, OCT);
+    if (!result_) result_ = consumeToken(builder_, RUNE);
+    if (!result_) result_ = consumeToken(builder_, STRING);
+    if (!result_) result_ = consumeToken(builder_, STRUCT);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
@@ -2584,21 +2657,61 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // (ConstDeclaration
+  //   | TypeDeclaration
+  //   | VarDeclaration
+  //   | FunctionDeclaration
+  //   | MethodDeclaration) semi
+  static boolean TopLevelDeclaration(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TopLevelDeclaration")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = TopLevelDeclaration_0(builder_, level_ + 1);
+    result_ = result_ && semi(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, false, TopLevelDeclarationRecover_parser_);
+    return result_;
+  }
+
   // ConstDeclaration
   //   | TypeDeclaration
   //   | VarDeclaration
   //   | FunctionDeclaration
   //   | MethodDeclaration
-  static boolean TopLevelDeclaration(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TopLevelDeclaration")) return false;
+  private static boolean TopLevelDeclaration_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TopLevelDeclaration_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    Marker marker_ = enter_section_(builder_);
     result_ = ConstDeclaration(builder_, level_ + 1);
     if (!result_) result_ = TypeDeclaration(builder_, level_ + 1);
     if (!result_) result_ = VarDeclaration(builder_, level_ + 1);
     if (!result_) result_ = FunctionDeclaration(builder_, level_ + 1);
     if (!result_) result_ = MethodDeclaration(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, false, TopLevelDeclaration_auto_recover_);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // !(';' |'type' | const | func | var)
+  static boolean TopLevelDeclarationRecover(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TopLevelDeclarationRecover")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NOT_, null);
+    result_ = !TopLevelDeclarationRecover_0(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  // ';' |'type' | const | func | var
+  private static boolean TopLevelDeclarationRecover_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TopLevelDeclarationRecover_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, SEMICOLON);
+    if (!result_) result_ = consumeToken(builder_, TYPE_);
+    if (!result_) result_ = consumeToken(builder_, CONST);
+    if (!result_) result_ = consumeToken(builder_, FUNC);
+    if (!result_) result_ = consumeToken(builder_, VAR);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
@@ -3216,14 +3329,14 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '<NL>' | ';'
+  // '<NL>' | ';' | <<eof>>
   static boolean semi(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "semi")) return false;
-    if (!nextTokenIs(builder_, "", SEMICOLON, SEMICOLON_SYNTHETIC)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, SEMICOLON_SYNTHETIC);
     if (!result_) result_ = consumeToken(builder_, SEMICOLON);
+    if (!result_) result_ = eof(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -3622,26 +3735,14 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  final static Parser Statement_auto_recover_ = new Parser() {
+  final static Parser StatementRecover_parser_ = new Parser() {
     public boolean parse(PsiBuilder builder_, int level_) {
-      return !nextTokenIsFast(builder_, NOT, NOT_EQ,
-        REMAINDER, REMAINDER_ASSIGN, COND_AND, BIT_AND, BIT_AND_ASSIGN, BIT_CLEAR,
-        BIT_CLEAR_ASSIGN, LPAREN, RPAREN, MUL, MUL_ASSIGN, PLUS,
-        PLUS_PLUS, PLUS_ASSIGN, COMMA, MINUS, MINUS_MINUS, MINUS_ASSIGN,
-        DOT, TRIPLE_DOT, QUOTIENT, QUOTIENT_ASSIGN, COLON, SEMICOLON,
-        LESS, SEND_CHANNEL, SHIFT_LEFT, SHIFT_LEFT_ASSIGN, LESS_OR_EQUAL, SEMICOLON_SYNTHETIC,
-        ASSIGN, EQ, GREATER, GREATER_OR_EQUAL, SHIFT_RIGHT, SHIFT_RIGHT_ASSIGN,
-        LBRACK, RBRACK, BIT_XOR, BIT_XOR_ASSIGN, TYPE_, LBRACE,
-        BIT_OR, BIT_OR_ASSIGN, COND_OR, RBRACE, CASE, CHAN,
-        CHAR, CONST, DECIMALI, DEFAULT, ELSE, FLOAT,
-        FLOATI, FUNC, HEX, IDENTIFIER, IMAGINARY, INT,
-        INTERFACE, MAP, OCT, RUNE, STRING, STRUCT, VAR);
+      return StatementRecover(builder_, level_ + 1);
     }
   };
-  final static Parser TopLevelDeclaration_auto_recover_ = new Parser() {
+  final static Parser TopLevelDeclarationRecover_parser_ = new Parser() {
     public boolean parse(PsiBuilder builder_, int level_) {
-      return !nextTokenIsFast(builder_, SEMICOLON, SEMICOLON_SYNTHETIC,
-        TYPE_, CONST, FUNC, VAR);
+      return TopLevelDeclarationRecover(builder_, level_ + 1);
     }
   };
 }

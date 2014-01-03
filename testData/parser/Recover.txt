@@ -1,0 +1,46 @@
+GO_FILE
+  PACKAGE_CLAUSE
+    PsiElement(package)('package')
+    PsiElement(identifier)('main')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('main')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      PsiElement(})('}')
+  PsiErrorElement:'aa' unexpected
+    PsiElement(identifier)('aa')
+  TYPE_DECLARATION
+    PsiElement(type)('type')
+    TYPE_SPEC
+      PsiElement(identifier)('T')
+      STRUCT_TYPE
+        PsiElement(struct)('struct')
+        PsiElement({)('{')
+        PsiElement(})('}')
+  PsiErrorElement:'bb' unexpected
+    PsiElement(identifier)('bb')
+  VAR_DECLARATION
+    PsiElement(var)('var')
+    VAR_SPEC
+      PsiElement(identifier)('cc')
+      INTERFACE_TYPE
+        PsiElement(interface)('interface')
+        PsiElement({)('{')
+        PsiElement(})('}')
+  PsiErrorElement:'ccc' unexpected
+    PsiElement(identifier)('ccc')
+  CONST_DECLARATION
+    PsiElement(const)('const')
+    CONST_SPEC
+      PsiElement(identifier)('aa')
+      TYPE
+        TYPE_REFERENCE_EXPRESSION
+          PsiElement(identifier)('int')
+      PsiElement(=)('=')
+      LITERAL
+        PsiElement(int)('1')

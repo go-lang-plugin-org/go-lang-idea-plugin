@@ -77,8 +77,8 @@
   pin('.*List(?:_\d.*)?')=1
 }
 
-File ::= PackageClause semi (ImportDeclaration semi)* (TopLevelDeclaration semi)* {pin(".*")=1}
-private semi ::= '<NL>' | ';'
+File ::= PackageClause semi (ImportDeclaration semi)* TopLevelDeclaration* {pin(".*")=1}
+private semi ::= '<NL>' | ';' | <<eof>>
 
 PackageClause ::= package identifier {pin=1}
 
@@ -144,7 +144,9 @@ Statement ::=
   | SwitchStatement
   | SelectStatement
   | ForStatement
-  | DeferStatement {recoverWhile='#auto'}
+  | DeferStatement {recoverWhile=StatementRecover}
+
+private StatementRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | case | chan | char | decimali | default | else | float | floati | func | hex | identifier | imaginary | int | interface | map | oct | rune | string | struct)
 
 SimpleStatement ::=
     AssignmentStatement
@@ -153,11 +155,12 @@ SimpleStatement ::=
   | Expression ['++' | '--']
 
 private TopLevelDeclaration ::=
-    ConstDeclaration
+    (ConstDeclaration
   | TypeDeclaration
   | VarDeclaration
   | FunctionDeclaration
-  | MethodDeclaration {recoverWhile='#auto'}
+  | MethodDeclaration) semi {recoverWhile=TopLevelDeclarationRecover}
+private TopLevelDeclarationRecover ::= !(';' |'type' | const | func | var)
 
 ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
