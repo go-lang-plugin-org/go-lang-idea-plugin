@@ -239,6 +239,7 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
     return null;
   }
 
+  @NotNull
   protected <T extends JpsElement> JpsModule addModule(@NotNull String moduleName,
                                                        @NotNull String[] srcPaths,
                                                        @Nullable String outputPath,
@@ -351,6 +352,7 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
     return FileUtil.toSystemIndependentName(new File(getOrCreateProjectDir(), pathRelativeToProjectRoot).getAbsolutePath());
   }
 
+  @NotNull
   public JpsModule addModule(@NotNull String moduleName, @NotNull String... srcPaths) {
     if (myJdk == null) {
       myJdk = addJdk("1.6");

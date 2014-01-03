@@ -23,6 +23,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.PathUtilRt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jps.incremental.messages.BuildMessage;
 import org.jetbrains.jps.model.JpsDummyElement;
 import org.jetbrains.jps.model.JpsElement;
 import org.jetbrains.jps.model.library.JpsOrderRootType;
@@ -33,6 +34,7 @@ import org.jetbrains.jps.util.JpsPathUtil;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 public class GoBuilderTest extends JpsBuildTestCase {
   public static final String GO_LINUX_SDK_PATH = "/usr/lib/go";
@@ -44,6 +46,19 @@ public class GoBuilderTest extends JpsBuildTestCase {
     addModule(moduleName, PathUtilRt.getParentPath(depFile));
     rebuildAll();
     assertCompiled(moduleName, "simple");
+  }
+
+  public void testCompilerErrors() {
+    String depFile = createFile("src/errors.go", "package main\nimport \"fmt\"\nfunc main() {\n\tfmt.Printf(\"Hello\\n);\n}");
+    String moduleName = "m";
+    addModule(moduleName, PathUtilRt.getParentPath(depFile));
+    BuildResult result = doBuild(CompileScopeTestBuilder.rebuild().all());
+    result.assertFailed();
+    
+    List<BuildMessage> errors = result.getMessages(BuildMessage.Kind.ERROR);
+    assertEquals(1, errors.size());
+    assertEquals("unexpected }, expecting )", errors.get(0).getMessageText());
+    assertEquals(BuildMessage.Kind.ERROR, errors.get(0).getKind());
   }
 
   private void assertCompiled(@NotNull String moduleName, @NotNull String fileName) {
@@ -73,6 +88,7 @@ public class GoBuilderTest extends JpsBuildTestCase {
     throw new RuntimeException("Only mac & linux supported");
   }
 
+  @NotNull
   @Override
   protected <T extends JpsElement> JpsModule addModule(@NotNull String moduleName,
                                                        @NotNull String[] srcPaths,

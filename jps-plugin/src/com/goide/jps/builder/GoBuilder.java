@@ -113,7 +113,7 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
     return sdk;
   }
 
-  private static void runBuildProcess(@NotNull CompileContext context, @NotNull GeneralCommandLine commandLine, String path)
+  private static void runBuildProcess(@NotNull CompileContext context, @NotNull GeneralCommandLine commandLine, @NotNull String path)
     throws ProjectBuildException {
     Process process;
     try {

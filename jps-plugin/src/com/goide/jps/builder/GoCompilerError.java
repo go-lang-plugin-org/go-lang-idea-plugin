@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 //TODO
 public class GoCompilerError {
-  private static final Pattern COMPILER_MESSAGE_PATTERN = Pattern.compile("^(.+):(\\d+):(\\s*Warning:)?\\s*(.+)$");
+  private static final Pattern COMPILER_MESSAGE_PATTERN = Pattern.compile("^(.+):(\\d+):(\\s*syntax error:)?\\s*(.+)$");
 
   private final String errorMessage;
   private final String url;
@@ -44,14 +44,14 @@ public class GoCompilerError {
     Matcher matcher = COMPILER_MESSAGE_PATTERN.matcher(StringUtil.trimTrailing(compilerMessage));
     if (!matcher.matches()) return null;
 
-    String relativeFilePath = FileUtil.toSystemIndependentName(matcher.group(1));
+    String relativeFilePath = FileUtil.toSystemIndependentName(StringUtil.notNullize(FileUtil.toCanonicalPath(matcher.group(1))));
     String line = matcher.group(2);
-    String warning = matcher.group(3);
+    String error = matcher.group(3);
     String details = matcher.group(4);
 
-    String path = StringUtil.isEmpty(rootPath) ? relativeFilePath : new File(FileUtil.toSystemIndependentName(rootPath), relativeFilePath).getPath();
+    String path = rootPath.isEmpty() ? relativeFilePath : new File(FileUtil.toSystemIndependentName(rootPath), relativeFilePath).getPath();
     int lineNumber = StringUtil.parseInt(line, -1);
-    CompilerMessageCategory category = warning != null ? CompilerMessageCategory.WARNING : CompilerMessageCategory.ERROR;
+    CompilerMessageCategory category = error != null ? CompilerMessageCategory.ERROR : CompilerMessageCategory.WARNING;
     return new GoCompilerError(details, VfsUtilCore.pathToUrl(path), lineNumber, category);
   }
 
