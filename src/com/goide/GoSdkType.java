@@ -86,8 +86,7 @@ public class GoSdkType extends SdkType {
 
   @Override
   public boolean isValidSdkHome(@NotNull String path) {
-    File goExecutable = JpsGoSdkType.getExecutable(new File(path, "bin").getAbsolutePath(), "go");
-    return goExecutable.canExecute();
+    return JpsGoSdkType.getGoExecutableFile(path).canExecute();
   }
 
   @NotNull
