@@ -94,10 +94,19 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
     @Override
     public TreeElement[] getChildren() {
-      final ArrayList<TreeElement> result = new ArrayList<TreeElement>();
+      ArrayList<TreeElement> result = new ArrayList<TreeElement>();
       if (myElement instanceof GoFile) {
         List<GoTopLevelDeclaration> declarations = ((GoFile)myElement).getDeclarations();
-        for (GoTopLevelDeclaration o : declarations) result.add(new Element(o));
+        for (GoTopLevelDeclaration o : declarations) {
+          if (o instanceof GoTypeDeclaration) {
+            for (GoTypeSpec spec : ((GoTypeDeclaration)o).getTypeSpecList()) {
+              result.add(new Element(spec));
+            }
+          }
+          else {
+            result.add(new Element(o));
+          }
+        }
       }
       return result.toArray(new TreeElement[result.size()]);
     }
@@ -106,6 +115,10 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     public String getPresentableText() {
       if (myElement instanceof GoFile) return ((GoFile)myElement).getName();
       else if (myElement instanceof GoTopLevelDeclaration) return StringUtil.first(myElement.getText(), 15, true);
+      else if (myElement instanceof GoTypeSpec) {
+        GoType type = ((GoTypeSpec)myElement).getType();
+        return ((GoTypeSpec)myElement).getIdentifier().getText() + ":" + (type != null ? type.getText() : "");
+      }
       throw new AssertionError(myElement.getClass().getName());
     }
 
@@ -122,7 +135,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       if (myElement instanceof GoFunctionDeclaration) return AllIcons.Nodes.Function;
       if (myElement instanceof GoVarDeclaration) return AllIcons.Nodes.Variable;
       if (myElement instanceof GoConstDeclaration) return AllIcons.Nodes.Variable; // todo: another icon
-      if (myElement instanceof GoTypeDeclaration) return GoIcons.TYPE;
+      if (myElement instanceof GoTypeSpec) return GoIcons.TYPE;
       return myElement.getIcon(0);
     }
   }
