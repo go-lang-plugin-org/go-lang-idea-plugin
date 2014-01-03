@@ -63,18 +63,17 @@ public interface GoTypes {
   IElementType METHOD_EXPR = new GoCompositeElementType("METHOD_EXPR");
   IElementType METHOD_SPEC = new GoCompositeElementType("METHOD_SPEC");
   IElementType MUL_EXPR = new GoCompositeElementType("MUL_EXPR");
-  IElementType OPERAND_NAME = new GoCompositeElementType("OPERAND_NAME");
   IElementType OR_EXPR = new GoCompositeElementType("OR_EXPR");
   IElementType PACKAGE_CLAUSE = new GoCompositeElementType("PACKAGE_CLAUSE");
   IElementType PARAMETERS = new GoCompositeElementType("PARAMETERS");
   IElementType PARAMETER_DECLARATION = new GoCompositeElementType("PARAMETER_DECLARATION");
   IElementType PARENTHESES_EXPR = new GoCompositeElementType("PARENTHESES_EXPR");
   IElementType POINTER_TYPE = new GoCompositeElementType("POINTER_TYPE");
-  IElementType QUALIFIED_IDENTIFIER = new GoCompositeElementType("QUALIFIED_IDENTIFIER");
   IElementType RANGE_CLAUSE = new GoCompositeElementType("RANGE_CLAUSE");
   IElementType RECEIVER = new GoCompositeElementType("RECEIVER");
   IElementType RECEIVER_TYPE = new GoCompositeElementType("RECEIVER_TYPE");
   IElementType RECV_STATEMENT = new GoCompositeElementType("RECV_STATEMENT");
+  IElementType REFERENCE_EXPRESSION = new GoCompositeElementType("REFERENCE_EXPRESSION");
   IElementType RESULT = new GoCompositeElementType("RESULT");
   IElementType RETURN_STATEMENT = new GoCompositeElementType("RETURN_STATEMENT");
   IElementType SELECTOR_EXPR = new GoCompositeElementType("SELECTOR_EXPR");
@@ -92,7 +91,7 @@ public interface GoTypes {
   IElementType TYPE_ASSERTION_EXPR = new GoCompositeElementType("TYPE_ASSERTION_EXPR");
   IElementType TYPE_CASE_CLAUSE = new GoCompositeElementType("TYPE_CASE_CLAUSE");
   IElementType TYPE_DECLARATION = new GoCompositeElementType("TYPE_DECLARATION");
-  IElementType TYPE_NAME = new GoCompositeElementType("TYPE_NAME");
+  IElementType TYPE_REFERENCE_EXPRESSION = new GoCompositeElementType("TYPE_REFERENCE_EXPRESSION");
   IElementType TYPE_SPEC = new GoCompositeElementType("TYPE_SPEC");
   IElementType TYPE_SWITCH_CASE = new GoCompositeElementType("TYPE_SWITCH_CASE");
   IElementType TYPE_SWITCH_GUARD = new GoCompositeElementType("TYPE_SWITCH_GUARD");
@@ -349,9 +348,6 @@ public interface GoTypes {
       else if (type == MUL_EXPR) {
         return new GoMulExprImpl(node);
       }
-      else if (type == OPERAND_NAME) {
-        return new GoOperandNameImpl(node);
-      }
       else if (type == OR_EXPR) {
         return new GoOrExprImpl(node);
       }
@@ -370,9 +366,6 @@ public interface GoTypes {
       else if (type == POINTER_TYPE) {
         return new GoPointerTypeImpl(node);
       }
-      else if (type == QUALIFIED_IDENTIFIER) {
-        return new GoQualifiedIdentifierImpl(node);
-      }
       else if (type == RANGE_CLAUSE) {
         return new GoRangeClauseImpl(node);
       }
@@ -384,6 +377,9 @@ public interface GoTypes {
       }
       else if (type == RECV_STATEMENT) {
         return new GoRecvStatementImpl(node);
+      }
+      else if (type == REFERENCE_EXPRESSION) {
+        return new GoReferenceExpressionImpl(node);
       }
       else if (type == RESULT) {
         return new GoResultImpl(node);
@@ -436,8 +432,8 @@ public interface GoTypes {
       else if (type == TYPE_DECLARATION) {
         return new GoTypeDeclarationImpl(node);
       }
-      else if (type == TYPE_NAME) {
-        return new GoTypeNameImpl(node);
+      else if (type == TYPE_REFERENCE_EXPRESSION) {
+        return new GoTypeReferenceExpressionImpl(node);
       }
       else if (type == TYPE_SPEC) {
         return new GoTypeSpecImpl(node);

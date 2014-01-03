@@ -14,30 +14,30 @@ GO_FILE
             PsiElement([)('[')
             PsiElement(])(']')
             TYPE
-              TYPE_NAME
+              TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('byte')
         PsiElement())(')')
       RESULT
         PsiElement(()('(')
         TYPE
-          TYPE_NAME
-            QUALIFIED_IDENTIFIER
+          REFERENCE_EXPRESSION
+            TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('cipher')
-              PsiElement(.)('.')
-              PsiElement(identifier)('Block')
+            PsiElement(.)('.')
+            PsiElement(identifier)('Block')
         PsiElement(,)(',')
         TYPE
-          TYPE_NAME
+          TYPE_REFERENCE_EXPRESSION
             PsiElement(identifier)('error')
         PsiElement())(')')
     BLOCK
       PsiElement({)('{')
       RETURN_STATEMENT
         PsiElement(return)('return')
-        OPERAND_NAME
+        REFERENCE_EXPRESSION
           PsiElement(identifier)('c')
         PsiElement(,)(',')
-        OPERAND_NAME
+        REFERENCE_EXPRESSION
           PsiElement(identifier)('nil')
       PsiElement(})('}')
   FUNCTION_DECLARATION
@@ -49,7 +49,7 @@ GO_FILE
         PsiElement())(')')
       RESULT
         TYPE
-          TYPE_NAME
+          TYPE_REFERENCE_EXPRESSION
             PsiElement(identifier)('int')
     BLOCK
       PsiElement({)('{')
@@ -71,13 +71,13 @@ GO_FILE
           PARAMETER_DECLARATION
             PsiElement(identifier)('re')
             TYPE
-              TYPE_NAME
+              TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('float64')
           PsiElement(,)(',')
           PARAMETER_DECLARATION
             PsiElement(identifier)('im')
             TYPE
-              TYPE_NAME
+              TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('float64')
           PsiElement())(')')
     BLOCK
@@ -106,7 +106,7 @@ GO_FILE
       EXPR_SWITCH_STATEMENT
         PsiElement(switch)('switch')
         SIMPLE_STATEMENT
-          OPERAND_NAME
+          REFERENCE_EXPRESSION
             PsiElement(identifier)('tag')
         PsiElement({)('{')
         EXPR_CASE_CLAUSE
@@ -115,7 +115,7 @@ GO_FILE
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('s3')
               ARGUMENT_LIST
                 PsiElement(()('(')
@@ -137,7 +137,7 @@ GO_FILE
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('s1')
               ARGUMENT_LIST
                 PsiElement(()('(')
@@ -159,7 +159,7 @@ GO_FILE
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('s2')
               ARGUMENT_LIST
                 PsiElement(()('(')
@@ -172,7 +172,7 @@ GO_FILE
             PsiElement(identifier)('x')
             PsiElement(:=)(':=')
             CALL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('f')
               ARGUMENT_LIST
                 PsiElement(()('(')
@@ -184,7 +184,7 @@ GO_FILE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
             CONDITIONAL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('x')
               PsiElement(<)('<')
               LITERAL
@@ -194,7 +194,7 @@ GO_FILE
             PsiElement(return)('return')
             UNARY_EXPR
               PsiElement(-)('-')
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('x')
         EXPR_CASE_CLAUSE
           EXPR_SWITCH_CASE
@@ -202,7 +202,7 @@ GO_FILE
           PsiElement(:)(':')
           RETURN_STATEMENT
             PsiElement(return)('return')
-            OPERAND_NAME
+            REFERENCE_EXPRESSION
               PsiElement(identifier)('x')
         PsiElement(})('}')
       EXPR_SWITCH_STATEMENT
@@ -212,7 +212,7 @@ GO_FILE
             PsiElement(identifier)('x')
             PsiElement(:=)(':=')
             CALL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('f')
               ARGUMENT_LIST
                 PsiElement(()('(')
@@ -230,7 +230,7 @@ GO_FILE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
             CONDITIONAL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('x')
               PsiElement(<)('<')
               LITERAL
@@ -240,7 +240,7 @@ GO_FILE
             PsiElement(return)('return')
             UNARY_EXPR
               PsiElement(-)('-')
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('x')
         EXPR_CASE_CLAUSE
           EXPR_SWITCH_CASE
@@ -248,7 +248,7 @@ GO_FILE
           PsiElement(:)(':')
           RETURN_STATEMENT
             PsiElement(return)('return')
-            OPERAND_NAME
+            REFERENCE_EXPRESSION
               PsiElement(identifier)('x')
         PsiElement(})('}')
       EXPR_SWITCH_STATEMENT
@@ -258,15 +258,15 @@ GO_FILE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
             CONDITIONAL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('x')
               PsiElement(<)('<')
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('y')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('f1')
               ARGUMENT_LIST
                 PsiElement(()('(')
@@ -275,15 +275,15 @@ GO_FILE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
             CONDITIONAL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('x')
               PsiElement(<)('<')
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('z')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('f2')
               ARGUMENT_LIST
                 PsiElement(()('(')
@@ -292,7 +292,7 @@ GO_FILE
           EXPR_SWITCH_CASE
             PsiElement(case)('case')
             CONDITIONAL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('x')
               PsiElement(==)('==')
               LITERAL
@@ -300,7 +300,7 @@ GO_FILE
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('f3')
               ARGUMENT_LIST
                 PsiElement(()('(')

@@ -51,7 +51,6 @@ public class GoFile extends PsiFileBase {
     return result;
   }
 
-
   @NotNull
   @Override
   public FileType getFileType() {

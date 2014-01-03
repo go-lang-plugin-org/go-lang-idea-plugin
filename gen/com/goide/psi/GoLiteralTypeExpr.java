@@ -11,6 +11,6 @@ public interface GoLiteralTypeExpr extends GoExpression {
   GoType getType();
 
   @Nullable
-  GoTypeName getTypeName();
+  GoTypeReferenceExpression getTypeReferenceExpression();
 
 }

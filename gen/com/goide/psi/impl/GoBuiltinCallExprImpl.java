@@ -29,8 +29,8 @@ public class GoBuiltinCallExprImpl extends GoExpressionImpl implements GoBuiltin
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public GoReferenceExpression getReferenceExpression() {
+    return findNotNullChildByClass(GoReferenceExpression.class);
   }
 
 }

@@ -11,7 +11,7 @@ GO_FILE
         PsiElement([)('[')
         PsiElement(])(']')
         TYPE
-          TYPE_NAME
+          TYPE_REFERENCE_EXPRESSION
             PsiElement(identifier)('string')
     TYPE_SPEC
       PsiElement(identifier)('T1')
@@ -19,7 +19,7 @@ GO_FILE
         PsiElement([)('[')
         PsiElement(])(']')
         TYPE
-          TYPE_NAME
+          TYPE_REFERENCE_EXPRESSION
             PsiElement(identifier)('string')
     TYPE_SPEC
       PsiElement(identifier)('T2')
@@ -31,7 +31,7 @@ GO_FILE
           PsiElement(,)(',')
           PsiElement(identifier)('b')
           TYPE
-            TYPE_NAME
+            TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('int')
         PsiElement(})('}')
     TYPE_SPEC
@@ -44,7 +44,7 @@ GO_FILE
           PsiElement(,)(',')
           PsiElement(identifier)('c')
           TYPE
-            TYPE_NAME
+            TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('int')
         PsiElement(})('}')
     TYPE_SPEC
@@ -55,18 +55,18 @@ GO_FILE
           PARAMETERS
             PsiElement(()('(')
             TYPE
-              TYPE_NAME
+              TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('int')
             PsiElement(,)(',')
             TYPE
-              TYPE_NAME
+              TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('float64')
             PsiElement())(')')
           RESULT
             POINTER_TYPE
               PsiElement(*)('*')
               TYPE
-                TYPE_NAME
+                TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('T0')
     TYPE_SPEC
       PsiElement(identifier)('T5')
@@ -78,13 +78,13 @@ GO_FILE
             PARAMETER_DECLARATION
               PsiElement(identifier)('x')
               TYPE
-                TYPE_NAME
+                TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('int')
             PsiElement(,)(',')
             PARAMETER_DECLARATION
               PsiElement(identifier)('y')
               TYPE
-                TYPE_NAME
+                TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('float64')
             PsiElement())(')')
           RESULT
@@ -94,6 +94,6 @@ GO_FILE
                 PsiElement([)('[')
                 PsiElement(])(']')
                 TYPE
-                  TYPE_NAME
+                  TYPE_REFERENCE_EXPRESSION
                     PsiElement(identifier)('string')
     PsiElement())(')')

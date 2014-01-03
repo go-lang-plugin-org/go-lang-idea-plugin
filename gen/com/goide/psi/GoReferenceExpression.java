@@ -4,10 +4,17 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
-public interface GoOperandName extends GoExpression {
+public interface GoReferenceExpression extends GoCompositeElement {
+
+  @NotNull
+  PsiElement getIdentifier();
 
   @Nullable
-  PsiElement getIdentifier();
+  PsiReference getReference();
+
+  @Nullable
+  GoReferenceExpression getQualifier();
 
 }

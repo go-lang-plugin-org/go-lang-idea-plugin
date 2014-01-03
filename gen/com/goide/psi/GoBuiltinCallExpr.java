@@ -11,6 +11,6 @@ public interface GoBuiltinCallExpr extends GoExpression {
   GoBuiltinArgs getBuiltinArgs();
 
   @NotNull
-  PsiElement getIdentifier();
+  GoReferenceExpression getReferenceExpression();
 
 }

@@ -29,8 +29,8 @@ public class GoLiteralTypeExprImpl extends GoExpressionImpl implements GoLiteral
 
   @Override
   @Nullable
-  public GoTypeName getTypeName() {
-    return findChildByClass(GoTypeName.class);
+  public GoTypeReferenceExpression getTypeReferenceExpression() {
+    return findChildByClass(GoTypeReferenceExpression.class);
   }
 
 }

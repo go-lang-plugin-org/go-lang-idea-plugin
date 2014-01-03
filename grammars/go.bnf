@@ -12,6 +12,7 @@
   psiImplClassSuffix='Impl'
   psiPackage='com.goide.psi'
   psiImplPackage='com.goide.psi.impl'
+  psiImplUtilClass="com.goide.psi.impl.GoPsiImplUtil"
 
   LBRACE               =  '{'
   RBRACE               =  '}'
@@ -63,7 +64,7 @@
   SEMICOLON_SYNTHETIC  = '<NL>'
   TYPE_                = 'type'
 
-  extends(".*(Expr|Literal|QualifiedIdentifier|identifier|Lit|OperandName)")=Expression
+  extends(".*(Expr|Literal|identifier|Lit|OperandName)")=Expression
   pin(".*Statement")=1
   extends(".*Statement")=Statement
   extends(".*Type")=Type
@@ -81,7 +82,10 @@ private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
 ImportSpec ::= [ '.' | identifier ] string
 
 Type ::= TypeName | TypeLit | '(' Type ')'
-TypeName ::= QualifiedIdentifier | identifier
+private TypeName ::= TypeReferenceExpression QualifiedReferenceExpression?
+TypeReferenceExpression ::= identifier { methods=[getReference] }
+left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
+
 private TypeLit ::=
     ArrayOrSliceType
   | StructType
@@ -187,9 +191,10 @@ Literal ::=
   | rune
   | string
   | char
-OperandName ::= QualifiedIdentifier | identifier
+OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
 
-QualifiedIdentifier ::= identifier '.' identifier
+left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
+ReferenceExpression ::= identifier { methods=[getReference getQualifier] }
 
 CompositeLit ::= Expression LiteralValue
 LiteralTypeExpr ::=
@@ -229,14 +234,14 @@ AddExpr ::= Expression add_op Expression
 MulExpr ::= Expression mul_op Expression
 ParenthesesExpr ::= '(' Expression ')'
 
-BuiltinCallExpr ::= identifier '(' [ BuiltinArgs ','? ] ')'
+BuiltinCallExpr ::= ReferenceExpression '(' [ BuiltinArgs ','? ] ')'
 BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
 
 private MaxGroup ::=
     OperandName
   | LiteralTypeExpr
-  | BuiltinCallExpr
   | CallExpr
+  | BuiltinCallExpr
   | TypeAssertionExpr
   | SelectorExpr
   | IndexExpr

@@ -214,10 +214,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitOperandName(@NotNull GoOperandName o) {
-    visitExpression(o);
-  }
-
   public void visitOrExpr(@NotNull GoOrExpr o) {
     visitExpression(o);
   }
@@ -242,10 +238,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitType(o);
   }
 
-  public void visitQualifiedIdentifier(@NotNull GoQualifiedIdentifier o) {
-    visitExpression(o);
-  }
-
   public void visitRangeClause(@NotNull GoRangeClause o) {
     visitCompositeElement(o);
   }
@@ -260,6 +252,10 @@ public class GoVisitor extends PsiElementVisitor {
 
   public void visitRecvStatement(@NotNull GoRecvStatement o) {
     visitStatement(o);
+  }
+
+  public void visitReferenceExpression(@NotNull GoReferenceExpression o) {
+    visitCompositeElement(o);
   }
 
   public void visitResult(@NotNull GoResult o) {
@@ -330,7 +326,7 @@ public class GoVisitor extends PsiElementVisitor {
     visitTopLevelDeclaration(o);
   }
 
-  public void visitTypeName(@NotNull GoTypeName o) {
+  public void visitTypeReferenceExpression(@NotNull GoTypeReferenceExpression o) {
     visitCompositeElement(o);
   }
 

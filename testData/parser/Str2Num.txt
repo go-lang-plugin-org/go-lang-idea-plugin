@@ -23,8 +23,9 @@ GO_FILE
         SHORT_VAR_DECLARATION
           PsiElement(identifier)('p')
           PsiElement(:=)(':=')
-          QUALIFIED_IDENTIFIER
-            PsiElement(identifier)('fmt')
+          REFERENCE_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('fmt')
             PsiElement(.)('.')
             PsiElement(identifier)('Printf')
       SIMPLE_STATEMENT
@@ -33,8 +34,9 @@ GO_FILE
             PsiElement(()('(')
             PARENTHESES_EXPR
               PsiElement(()('(')
-              QUALIFIED_IDENTIFIER
-                PsiElement(identifier)('fmt')
+              REFERENCE_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('fmt')
                 PsiElement(.)('.')
                 PsiElement(identifier)('Printf')
               PsiElement())(')')
@@ -51,8 +53,9 @@ GO_FILE
         CALL_EXPR
           PARENTHESES_EXPR
             PsiElement(()('(')
-            QUALIFIED_IDENTIFIER
-              PsiElement(identifier)('fmt')
+            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('fmt')
               PsiElement(.)('.')
               PsiElement(identifier)('Printf')
             PsiElement())(')')
@@ -66,7 +69,7 @@ GO_FILE
             PsiElement())(')')
       SIMPLE_STATEMENT
         CALL_EXPR
-          OPERAND_NAME
+          REFERENCE_EXPRESSION
             PsiElement(identifier)('p')
           ARGUMENT_LIST
             PsiElement(()('(')
@@ -94,21 +97,21 @@ GO_FILE
         SIMPLE_STATEMENT
           PARENTHESES_EXPR
             PsiElement(()('(')
-            OPERAND_NAME
+            REFERENCE_EXPRESSION
               PsiElement(identifier)('false')
             PsiElement())(')')
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
             CALL_EXPR
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('p')
               ARGUMENT_LIST
                 PsiElement(()('(')
                 LITERAL
                   PsiElement(string)('""')
                 PsiElement(,)(',')
-                OPERAND_NAME
+                REFERENCE_EXPRESSION
                   PsiElement(identifier)('j')
                 PsiElement())(')')
           PsiElement(;)(';')
@@ -121,7 +124,7 @@ GO_FILE
           VAR_SPEC
             PsiElement(identifier)('i')
             TYPE
-              TYPE_NAME
+              TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('int')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
@@ -131,15 +134,16 @@ GO_FILE
             PsiElement(()('(')
             PARENTHESES_EXPR
               PsiElement(()('(')
-              QUALIFIED_IDENTIFIER
-                PsiElement(identifier)('fmt')
+              REFERENCE_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('fmt')
                 PsiElement(.)('.')
                 PsiElement(identifier)('Scanf')
               PsiElement())(')')
             PsiElement())(')')
       SIMPLE_STATEMENT
         CALL_EXPR
-          OPERAND_NAME
+          REFERENCE_EXPRESSION
             PsiElement(identifier)('f')
           ARGUMENT_LIST
             PsiElement(()('(')
@@ -148,7 +152,7 @@ GO_FILE
             PsiElement(,)(',')
             UNARY_EXPR
               PsiElement(&)('&')
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('i')
             PsiElement())(')')
       SIMPLE_STATEMENT
@@ -156,18 +160,19 @@ GO_FILE
           PsiElement(identifier)('str')
           PsiElement(:=)(':=')
           CALL_EXPR
-            QUALIFIED_IDENTIFIER
-              PsiElement(identifier)('strconv')
+            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('strconv')
               PsiElement(.)('.')
               PsiElement(identifier)('FormatInt')
             ARGUMENT_LIST
               PsiElement(()('(')
               CALL_EXPR
-                OPERAND_NAME
+                REFERENCE_EXPRESSION
                   PsiElement(identifier)('int64')
                 ARGUMENT_LIST
                   PsiElement(()('(')
-                  OPERAND_NAME
+                  REFERENCE_EXPRESSION
                     PsiElement(identifier)('i')
                   PsiElement())(')')
               PsiElement(,)(',')
@@ -181,13 +186,14 @@ GO_FILE
           PsiElement(identifier)('_')
           PsiElement(:=)(':=')
           CALL_EXPR
-            QUALIFIED_IDENTIFIER
-              PsiElement(identifier)('strconv')
+            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('strconv')
               PsiElement(.)('.')
               PsiElement(identifier)('ParseInt')
             ARGUMENT_LIST
               PsiElement(()('(')
-              OPERAND_NAME
+              REFERENCE_EXPRESSION
                 PsiElement(identifier)('str')
               PsiElement(,)(',')
               LITERAL
@@ -198,8 +204,9 @@ GO_FILE
               PsiElement())(')')
       SIMPLE_STATEMENT
         CALL_EXPR
-          QUALIFIED_IDENTIFIER
-            PsiElement(identifier)('fmt')
+          REFERENCE_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('fmt')
             PsiElement(.)('.')
             PsiElement(identifier)('Printf')
           ARGUMENT_LIST
@@ -207,7 +214,7 @@ GO_FILE
             LITERAL
               PsiElement(string)('"%d\n"')
             PsiElement(,)(',')
-            OPERAND_NAME
+            REFERENCE_EXPRESSION
               PsiElement(identifier)('hex')
             PsiElement())(')')
       PsiElement(})('}')
