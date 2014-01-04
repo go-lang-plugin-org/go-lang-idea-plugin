@@ -4,8 +4,8 @@ Google go language plugin is an attempt to build an outstanding IDE for
 [Google Go language](http://golang.org) using Intellij IDEA.
 
 + Project pages on github:
-    + <http://github.com/mtoader/google-go-lang-idea-plugin>
-    + <http://wiki.github.com/mtoader/google-go-lang-idea-plugin/> (wiki)
+    + <http://github.com/go-lang-plugin-org/go-lang-idea-plugin>
+    + <http://wiki.github.com/go-lang-plugin-org/go-lang-idea-plugin/> (wiki)
 + Google Go language page:
     + <http://golang.org/>
 + Intellij IDEA homepage:
@@ -67,7 +67,7 @@ using package installer)
 ## Bugs
 
 If you found a bug, please report it at the Google Go plugin project's tracker
-on GitHub: <http://github.com/mtoader/google-go-lang-idea-plugin/issues>.
+on GitHub: <http://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues>.
 
 When reporting a bug, please include the following:
 - IDEA version
@@ -104,4 +104,4 @@ Please ensure that the bug is not reported.
 ## Contributing
 
 If you want to contribute to this effort you should read the following page:
-[how to contribute](https://github.com/mtoader/google-go-lang-idea-plugin/blob/master/contributing.md).
+[how to contribute](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/blob/master/contributing.md).

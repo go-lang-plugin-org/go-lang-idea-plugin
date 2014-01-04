@@ -4,7 +4,7 @@ Build the plugin on various platforms
 Ubuntu
 ===
 
-(as provided by [LarryBattle](https://github.com/LarryBattle) [here](https://github.com/mtoader/google-go-lang-idea-plugin/issues/248#issuecomment-29878589))
+(as provided by [LarryBattle](https://github.com/LarryBattle) [here](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/248#issuecomment-29878589))
 
 The plugin works now with IDEA 13 after being built with the latest code from this repository.
 Here's the build process for Ubuntu 13 for those wondering.
@@ -12,7 +12,7 @@ Here's the build process for Ubuntu 13 for those wondering.
 ``` bash
 # Make sure to install ant and java jdk
 sudo apt-get install ant openjdk-6-jdk
-git clone https://github.com/mtoader/google-go-lang-idea-plugin.git
+git clone https://github.com/go-lang-plugin-org/go-lang-idea-plugin.git
 cd google-go-lang-idea-plugin
 gedit build-package.xml
 ```
@@ -35,7 +35,7 @@ Lastly, import the jar as plugin (File > Settings > Plugins > "Install plugin fr
 Mac OS X
 ===
 
-(as provided [here](https://github.com/mtoader/google-go-lang-idea-plugin/issues/306#issuecomment-30012659))
+(as provided [here](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/306#issuecomment-30012659))
 
 Should work as above:
 
