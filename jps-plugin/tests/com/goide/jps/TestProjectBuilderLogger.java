@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import static com.intellij.util.ObjectUtils.assertNotNull;
+
 public class TestProjectBuilderLogger extends ProjectBuilderLoggerBase {
   @NotNull private MultiMap<String, File> myCompiledFiles = new MultiMap<String, File>();
   @NotNull private Set<File> myDeletedFiles = new THashSet<File>(FileUtil.FILE_HASHING_STRATEGY);
@@ -53,6 +55,7 @@ public class TestProjectBuilderLogger extends ProjectBuilderLoggerBase {
           break;
         }
       }
+      path = assertNotNull(path);
       relativePaths.add(FileUtil.toSystemIndependentName(path));
     }
     UsefulTestCase.assertSameElements(relativePaths, expected);
