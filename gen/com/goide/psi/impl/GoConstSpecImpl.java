@@ -23,6 +23,12 @@ public class GoConstSpecImpl extends GoCompositeElementImpl implements GoConstSp
 
   @Override
   @NotNull
+  public List<GoConstDefinition> getConstDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoConstDefinition.class);
+  }
+
+  @Override
+  @NotNull
   public List<GoExpression> getExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }

@@ -162,7 +162,9 @@ private TopLevelDeclarationRecover ::= !(';' |'type' | const | func | var)
 
 ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
-ConstSpec ::= IdentifierList [ Type? '=' ExpressionList ]
+ConstSpec ::= ConstDefinitionList [ Type? '=' ExpressionList ]
+private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
+ConstDefinition ::= identifier
 
 private IdentifierListNoPin ::= identifier &(!('.' | ')')) (',' identifier)* // todo
 private IdentifierList ::= identifier ( ',' identifier )*
@@ -174,7 +176,9 @@ TypeSpec ::= identifier Type {pin=1 extends="com.goide.psi.impl.GoTypeDeclImpl"}
 
 VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
-VarSpec ::= IdentifierList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
+VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
+private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
+VarDefinition ::= identifier
 
 ShortVarDeclaration ::= IdentifierList ':=' ExpressionList {pin=2}
 

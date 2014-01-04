@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoConstSpec extends GoCompositeElement {
+public interface GoConstDefinition extends GoCompositeElement {
 
   @NotNull
-  List<GoConstDefinition> getConstDefinitionList();
-
-  @NotNull
-  List<GoExpression> getExpressionList();
-
-  @Nullable
-  GoType getType();
+  PsiElement getIdentifier();
 
 }

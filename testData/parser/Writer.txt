@@ -33,7 +33,8 @@ GO_FILE
     PsiElement(var)('var')
     PsiElement(()('(')
     VAR_SPEC
-      PsiElement(identifier)('ErrWriteTooLong')
+      VAR_DEFINITION
+        PsiElement(identifier)('ErrWriteTooLong')
       PsiElement(=)('=')
       CALL_EXPR
         REFERENCE_EXPRESSION
@@ -47,7 +48,8 @@ GO_FILE
             PsiElement(string)('"archive/tar: write too long"')
           PsiElement())(')')
     VAR_SPEC
-      PsiElement(identifier)('ErrFieldTooLong')
+      VAR_DEFINITION
+        PsiElement(identifier)('ErrFieldTooLong')
       PsiElement(=)('=')
       CALL_EXPR
         REFERENCE_EXPRESSION
@@ -61,7 +63,8 @@ GO_FILE
             PsiElement(string)('"archive/tar: header field too long"')
           PsiElement())(')')
     VAR_SPEC
-      PsiElement(identifier)('ErrWriteAfterClose')
+      VAR_DEFINITION
+        PsiElement(identifier)('ErrWriteAfterClose')
       PsiElement(=)('=')
       CALL_EXPR
         REFERENCE_EXPRESSION
@@ -75,7 +78,8 @@ GO_FILE
             PsiElement(string)('"archive/tar: write after close"')
           PsiElement())(')')
     VAR_SPEC
-      PsiElement(identifier)('errNameTooLong')
+      VAR_DEFINITION
+        PsiElement(identifier)('errNameTooLong')
       PsiElement(=)('=')
       CALL_EXPR
         REFERENCE_EXPRESSION
@@ -314,7 +318,8 @@ GO_FILE
             VAR_DECLARATION
               PsiElement(var)('var')
               VAR_SPEC
-                PsiElement(identifier)('nw')
+                VAR_DEFINITION
+                  PsiElement(identifier)('nw')
                 TYPE
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(identifier)('int')
@@ -822,7 +827,8 @@ GO_FILE
     PsiElement(var)('var')
     PsiElement(()('(')
     VAR_SPEC
-      PsiElement(identifier)('minTime')
+      VAR_DEFINITION
+        PsiElement(identifier)('minTime')
       PsiElement(=)('=')
       CALL_EXPR
         REFERENCE_EXPRESSION
@@ -840,7 +846,8 @@ GO_FILE
           PsiElement())(')')
     PsiComment(GO_LINE_COMMENT)('// There is room for 11 octal digits (33 bits) of mtime.')
     VAR_SPEC
-      PsiElement(identifier)('maxTime')
+      VAR_DEFINITION
+        PsiElement(identifier)('maxTime')
       PsiElement(=)('=')
       CALL_EXPR
         REFERENCE_EXPRESSION
@@ -1024,7 +1031,8 @@ GO_FILE
             VAR_DECLARATION
               PsiElement(var)('var')
               VAR_SPEC
-                PsiElement(identifier)('err')
+                VAR_DEFINITION
+                  PsiElement(identifier)('err')
                 TYPE
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(identifier)('error')
@@ -1240,7 +1248,8 @@ GO_FILE
         VAR_DECLARATION
           PsiElement(var)('var')
           VAR_SPEC
-            PsiElement(identifier)('modTime')
+            VAR_DEFINITION
+              PsiElement(identifier)('modTime')
             TYPE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('int64')
@@ -2250,7 +2259,8 @@ GO_FILE
         VAR_DECLARATION
           PsiElement(var)('var')
           VAR_SPEC
-            PsiElement(identifier)('buf')
+            VAR_DEFINITION
+              PsiElement(identifier)('buf')
             TYPE
               REFERENCE_EXPRESSION
                 TYPE_REFERENCE_EXPRESSION
@@ -2516,7 +2526,8 @@ GO_FILE
         CONST_DECLARATION
           PsiElement(const)('const')
           CONST_SPEC
-            PsiElement(identifier)('padding')
+            CONST_DEFINITION
+              PsiElement(identifier)('padding')
             PsiElement(=)('=')
             LITERAL
               PsiElement(int)('2')

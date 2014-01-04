@@ -72,6 +72,9 @@ public class GoParser implements PsiParser {
     else if (root_ == CONST_DECLARATION) {
       result_ = ConstDeclaration(builder_, 0);
     }
+    else if (root_ == CONST_DEFINITION) {
+      result_ = ConstDefinition(builder_, 0);
+    }
     else if (root_ == CONST_SPEC) {
       result_ = ConstSpec(builder_, 0);
     }
@@ -281,6 +284,9 @@ public class GoParser implements PsiParser {
     }
     else if (root_ == VAR_DECLARATION) {
       result_ = VarDeclaration(builder_, 0);
+    }
+    else if (root_ == VAR_DEFINITION) {
+      result_ = VarDefinition(builder_, 0);
     }
     else if (root_ == VAR_SPEC) {
       result_ = VarSpec(builder_, 0);
@@ -713,13 +719,65 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IdentifierList [ Type? '=' ExpressionList ]
+  // identifier
+  public static boolean ConstDefinition(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConstDefinition")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, IDENTIFIER);
+    exit_section_(builder_, marker_, CONST_DEFINITION, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // ConstDefinition ( ',' ConstDefinition )*
+  static boolean ConstDefinitionList(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConstDefinitionList")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = ConstDefinition(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && ConstDefinitionList_1(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // ( ',' ConstDefinition )*
+  private static boolean ConstDefinitionList_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConstDefinitionList_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!ConstDefinitionList_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "ConstDefinitionList_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // ',' ConstDefinition
+  private static boolean ConstDefinitionList_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConstDefinitionList_1_0")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, COMMA);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && ConstDefinition(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // ConstDefinitionList [ Type? '=' ExpressionList ]
   public static boolean ConstSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = IdentifierList(builder_, level_ + 1);
+    result_ = ConstDefinitionList(builder_, level_ + 1);
     result_ = result_ && ConstSpec_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, CONST_SPEC, result_);
     return result_;
@@ -3150,13 +3208,65 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IdentifierList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
+  // identifier
+  public static boolean VarDefinition(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarDefinition")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, IDENTIFIER);
+    exit_section_(builder_, marker_, VAR_DEFINITION, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // VarDefinition ( ',' VarDefinition )*
+  static boolean VarDefinitionList(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarDefinitionList")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = VarDefinition(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && VarDefinitionList_1(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // ( ',' VarDefinition )*
+  private static boolean VarDefinitionList_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarDefinitionList_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!VarDefinitionList_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "VarDefinitionList_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // ',' VarDefinition
+  private static boolean VarDefinitionList_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "VarDefinitionList_1_0")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, COMMA);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && VarDefinition(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  /* ********************************************************** */
+  // VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
   public static boolean VarSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "VarSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = IdentifierList(builder_, level_ + 1);
+    result_ = VarDefinitionList(builder_, level_ + 1);
     result_ = result_ && VarSpec_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, VAR_SPEC, result_);
     return result_;

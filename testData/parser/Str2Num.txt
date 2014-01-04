@@ -122,7 +122,8 @@ GO_FILE
         VAR_DECLARATION
           PsiElement(var)('var')
           VAR_SPEC
-            PsiElement(identifier)('i')
+            VAR_DEFINITION
+              PsiElement(identifier)('i')
             TYPE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('int')

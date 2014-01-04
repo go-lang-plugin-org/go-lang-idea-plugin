@@ -276,13 +276,17 @@ GO_FILE
         VAR_DECLARATION
           PsiElement(var)('var')
           VAR_SPEC
-            PsiElement(identifier)('s1')
+            VAR_DEFINITION
+              PsiElement(identifier)('s1')
             PsiElement(,)(',')
-            PsiElement(identifier)('s2')
+            VAR_DEFINITION
+              PsiElement(identifier)('s2')
             PsiElement(,)(',')
-            PsiElement(identifier)('s3')
+            VAR_DEFINITION
+              PsiElement(identifier)('s3')
             PsiElement(,)(',')
-            PsiElement(identifier)('meth')
+            VAR_DEFINITION
+              PsiElement(identifier)('meth')
             TYPE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('string')

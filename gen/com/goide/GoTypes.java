@@ -28,6 +28,7 @@ public interface GoTypes {
   IElementType COMPOSITE_LIT = new GoCompositeElementType("COMPOSITE_LIT");
   IElementType CONDITIONAL_EXPR = new GoCompositeElementType("CONDITIONAL_EXPR");
   IElementType CONST_DECLARATION = new GoCompositeElementType("CONST_DECLARATION");
+  IElementType CONST_DEFINITION = new GoCompositeElementType("CONST_DEFINITION");
   IElementType CONST_SPEC = new GoCompositeElementType("CONST_SPEC");
   IElementType CONTINUE_STATEMENT = new GoCompositeElementType("CONTINUE_STATEMENT");
   IElementType CONVERSION_EXPR = new GoCompositeElementType("CONVERSION_EXPR");
@@ -98,6 +99,7 @@ public interface GoTypes {
   IElementType UNARY_EXPR = new GoCompositeElementType("UNARY_EXPR");
   IElementType VALUE = new GoCompositeElementType("VALUE");
   IElementType VAR_DECLARATION = new GoCompositeElementType("VAR_DECLARATION");
+  IElementType VAR_DEFINITION = new GoCompositeElementType("VAR_DEFINITION");
   IElementType VAR_SPEC = new GoCompositeElementType("VAR_SPEC");
 
   IElementType ASSIGN = new GoTokenType("=");
@@ -241,6 +243,9 @@ public interface GoTypes {
       }
       else if (type == CONST_DECLARATION) {
         return new GoConstDeclarationImpl(node);
+      }
+      else if (type == CONST_DEFINITION) {
+        return new GoConstDefinitionImpl(node);
       }
       else if (type == CONST_SPEC) {
         return new GoConstSpecImpl(node);
@@ -451,6 +456,9 @@ public interface GoTypes {
       }
       else if (type == VAR_DECLARATION) {
         return new GoVarDeclarationImpl(node);
+      }
+      else if (type == VAR_DEFINITION) {
+        return new GoVarDefinitionImpl(node);
       }
       else if (type == VAR_SPEC) {
         return new GoVarSpecImpl(node);

@@ -254,7 +254,8 @@ GO_FILE
     PsiElement(const)('const')
     PsiElement(()('(')
     CONST_SPEC
-      PsiElement(identifier)('Red')
+      CONST_DEFINITION
+        PsiElement(identifier)('Red')
       PsiElement(=)('=')
       PARENTHESES_EXPR
         PsiElement(()('(')
@@ -266,7 +267,8 @@ GO_FILE
             PsiElement(identifier)('iota')
         PsiElement())(')')
     CONST_SPEC
-      PsiElement(identifier)('Green')
+      CONST_DEFINITION
+        PsiElement(identifier)('Green')
       PsiElement(=)('=')
       PARENTHESES_EXPR
         PsiElement(()('(')
@@ -278,9 +280,11 @@ GO_FILE
             PsiElement(identifier)('iota')
         PsiElement())(')')
     CONST_SPEC
-      PsiElement(identifier)('Blue')
+      CONST_DEFINITION
+        PsiElement(identifier)('Blue')
       PsiElement(,)(',')
-      PsiElement(identifier)('ColorMask')
+      CONST_DEFINITION
+        PsiElement(identifier)('ColorMask')
       PsiElement(=)('=')
       PARENTHESES_EXPR
         PsiElement(()('(')
