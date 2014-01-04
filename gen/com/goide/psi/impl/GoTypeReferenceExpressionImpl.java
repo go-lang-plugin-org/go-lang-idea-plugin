@@ -33,4 +33,9 @@ public class GoTypeReferenceExpressionImpl extends GoCompositeElementImpl implem
     return GoPsiImplUtil.getReference(this);
   }
 
+  @Nullable
+  public GoTypeReferenceExpression getQualifier() {
+    return GoPsiImplUtil.getQualifier(this);
+  }
+
 }

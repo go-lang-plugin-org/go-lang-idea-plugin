@@ -66,8 +66,7 @@
 
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("(Function|Method)Declaration")="com.goide.psi.GoNamedElement"
-  extends("FunctionDeclaration|MethodDeclaration")="com.goide.psi.impl.GoNamedElementImpl"
+  implements("(Function|Method)Declaration|TypeSpec")="com.goide.psi.GoNamedElement"
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -87,7 +86,7 @@ ImportSpec ::= [ '.' | identifier ] string
 
 Type ::= TypeName | TypeLit | '(' Type ')'
 private TypeName ::= TypeReferenceExpression QualifiedReferenceExpression?
-TypeReferenceExpression ::= identifier { methods=[getReference] }
+TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
 private TypeLit ::=
@@ -171,7 +170,7 @@ private ExpressionList ::= Expression ( ',' Expression )*
 
 TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
-TypeSpec ::= identifier Type {pin=1}
+TypeSpec ::= identifier Type {pin=1 extends="com.goide.psi.impl.GoTypeDeclImpl"}
 
 VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}

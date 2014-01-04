@@ -13,8 +13,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class GoPsiImplUtil {
   @Nullable
+  public static GoTypeReferenceExpression getQualifier(@NotNull GoTypeReferenceExpression o) {
+    return PsiTreeUtil.getChildOfType(o, GoTypeReferenceExpression.class);
+  }
+
+  @Nullable
   public static PsiReference getReference(@NotNull GoTypeReferenceExpression o) {
-    return null;
+    return new GoTypeReference(o);
   }
 
   @Nullable
@@ -28,8 +33,14 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  static LookupElement createFunctionLookupElement(GoFunctionDeclaration f) {
+  public static LookupElement createFunctionLookupElement(GoFunctionDeclaration f) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(f).withIcon(GoIcons.FUNCTION).withInsertHandler(null),
                                                  GoCompletionContributor.FUNCTION_PRIORITY);
+  }
+
+  @NotNull
+  public static LookupElement createTypeLookupElement(GoTypeSpec t) {
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(t).withIcon(GoIcons.TYPE).withInsertHandler(null),
+                                                 GoCompletionContributor.TYPE_PRIORITY);
   }
 }

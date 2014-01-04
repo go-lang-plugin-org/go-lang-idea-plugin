@@ -23,6 +23,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class GoCompletionContributor extends CompletionContributor {
   public static final int FUNCTION_PRIORITY = 10;
+  public static final int TYPE_PRIORITY = 5;
 
   public GoCompletionContributor() {
     extend(CompletionType.BASIC, psiElement().inFile(instanceOf(GoFile.class)), new CompletionProvider<CompletionParameters>() {
