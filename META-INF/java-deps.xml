@@ -2,6 +2,6 @@
   <extensions defaultExtensionNs="com.intellij">
     <moduleType id="GO_MODULE" implementationClass="com.goide.GoModuleType"/>
     <moduleConfigurationEditorProvider implementation="com.goide.configuration.GoModuleEditorsProvider" order="first"/>
-    <compileServer.plugin classpath="jps-plugin.jar"/>
+    <compileServer.plugin classpath="go-jps-plugin.jar"/>
   </extensions>
 </idea-plugin>
