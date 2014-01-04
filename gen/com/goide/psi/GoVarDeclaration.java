@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoVarDeclaration extends GoTopLevelDeclaration {
+public interface GoVarDeclaration extends GoCompositeElement {
 
   @NotNull
   List<GoVarSpec> getVarSpecList();

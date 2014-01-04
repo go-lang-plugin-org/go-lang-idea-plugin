@@ -5,12 +5,14 @@ import com.goide.GoLanguage;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.Processor;
+import com.intellij.util.containers.FilteringIterator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -21,34 +23,93 @@ public class GoFile extends PsiFileBase {
     super(viewProvider, GoLanguage.INSTANCE);
   }
 
-  private CachedValue<List<GoTopLevelDeclaration>> myDeclarationsValue;
+  private CachedValue<List<GoFunctionDeclaration>> myFunctionsValue;
+  private CachedValue<List<GoMethodDeclaration>> myMethodsValue;
+  private CachedValue<List<GoTypeSpec>> myTypesValue;
+  //private CachedValue<List<GoVarSpec>> myVarsValue;
+  //private CachedValue<List<GoConstSpec>> myConstsValue;
 
   @NotNull
-  public List<GoTopLevelDeclaration> getDeclarations() {
-    if (myDeclarationsValue == null) {
-      myDeclarationsValue =
-        CachedValuesManager.getManager(getProject()).createCachedValue(new CachedValueProvider<List<GoTopLevelDeclaration>>() {
-          @Override
-          public Result<List<GoTopLevelDeclaration>> compute() {
-            return Result.create(calcDeclarations(), GoFile.this);
-          }
-        }, false);
+  public List<GoFunctionDeclaration> getFunctions() {
+    if (myFunctionsValue == null) {
+      myFunctionsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoFunctionDeclaration>>() {
+        @Override
+        public Result<List<GoFunctionDeclaration>> compute() {
+          List<GoFunctionDeclaration> calc = calc(new Condition<PsiElement>() {
+            @Override
+            public boolean value(PsiElement e) {
+              return e instanceof GoFunctionDeclaration && !(e instanceof GoMethodDeclaration);
+            }
+          });
+          return Result.create(calc, GoFile.this);
+        }
+      }, false);
     }
-    return myDeclarationsValue.getValue();
+    return myFunctionsValue.getValue();
   }
 
-  private List<GoTopLevelDeclaration> calcDeclarations() {
-    final List<GoTopLevelDeclaration> result = new ArrayList<GoTopLevelDeclaration>();
+  @NotNull
+  public List<GoMethodDeclaration> getMethods() {
+    if (myMethodsValue == null) {
+      myMethodsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoMethodDeclaration>>() {
+        @Override
+        public Result<List<GoMethodDeclaration>> compute() {
+          //noinspection unchecked
+          List<GoMethodDeclaration> calc = calc(FilteringIterator.instanceOf(GoMethodDeclaration.class));
+          return Result.create(calc, GoFile.this);
+        }
+      }, false);
+    }
+    return myMethodsValue.getValue();
+  }
+
+  @NotNull
+  public List<GoTypeSpec> getTypes() {
+    if (myTypesValue == null) {
+      myTypesValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoTypeSpec>>() {
+        @Override
+        public Result<List<GoTypeSpec>> compute() {
+          return Result.create(calcTypes(), GoFile.this);
+        }
+      }, false);
+    }
+    return myTypesValue.getValue();
+  }
+
+  private List<GoTypeSpec> calcTypes() {
+    final List<GoTypeSpec> result = new ArrayList<GoTypeSpec>();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
-      public boolean process(PsiElement psiElement) {
-        if (psiElement instanceof GoTopLevelDeclaration) {
-          result.add((GoTopLevelDeclaration)psiElement);
+      public boolean process(PsiElement e) {
+        if (e instanceof GoTypeDeclaration) {
+          for (GoTypeSpec spec : ((GoTypeDeclaration)e).getTypeSpecList()) {
+            result.add(spec);
+          }
         }
         return true;
       }
     });
     return result;
+  }
+
+  private <T extends PsiElement> List<T> calc(final Condition<PsiElement> condition) {
+    final List<T> result = new ArrayList<T>();
+    processChildrenDummyAware(this, new Processor<PsiElement>() {
+      @Override
+      public boolean process(PsiElement e) {
+        if (condition.value(e)) {
+          //noinspection unchecked
+          result.add((T)e);
+        }
+        return true;
+      }
+    });
+    return result;
+  }
+
+  @NotNull
+  private CachedValuesManager getCachedValueManager() {
+    return CachedValuesManager.getManager(getProject());
   }
 
   @NotNull

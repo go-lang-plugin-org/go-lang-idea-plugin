@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GoStructureViewFactory implements PsiStructureViewFactory {
   @Nullable
@@ -40,7 +39,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
   public static class Model extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
     public Model(@NotNull PsiFile psiFile) {
       super(psiFile, new Element(psiFile));
-      withSuitableClasses(GoFile.class, GoTopLevelDeclaration.class);
+      withSuitableClasses(GoFile.class);
     }
 
     @Override
@@ -84,7 +83,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     @Nullable
     @Override
     public String getName() {
-      return myElement instanceof GoTopLevelDeclaration ? myElement.getText() : null;
+      return myElement.getText();
     }
 
     @Override
@@ -96,17 +95,9 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     public TreeElement[] getChildren() {
       ArrayList<TreeElement> result = new ArrayList<TreeElement>();
       if (myElement instanceof GoFile) {
-        List<GoTopLevelDeclaration> declarations = ((GoFile)myElement).getDeclarations();
-        for (GoTopLevelDeclaration o : declarations) {
-          if (o instanceof GoTypeDeclaration) {
-            for (GoTypeSpec spec : ((GoTypeDeclaration)o).getTypeSpecList()) {
-              result.add(new Element(spec));
-            }
-          }
-          else {
-            result.add(new Element(o));
-          }
-        }
+        for (GoTypeSpec o : ((GoFile)myElement).getTypes()) result.add(new Element(o));
+        for (GoFunctionDeclaration o : ((GoFile)myElement).getFunctions()) result.add(new Element(o));
+        for (GoMethodDeclaration o : ((GoFile)myElement).getMethods()) result.add(new Element(o));
       }
       return result.toArray(new TreeElement[result.size()]);
     }
@@ -122,7 +113,6 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         String signatureText = signature != null ? signature.getText() : "";
         return receiver + ((GoFunctionDeclaration)myElement).getIdentifier().getText() + StringUtil.first(signatureText, 20, true);
       }
-      else if (myElement instanceof GoTopLevelDeclaration) return StringUtil.first(myElement.getText(), 30, true);
       else if (myElement instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)myElement).getType();
         return ((GoTypeSpec)myElement).getIdentifier().getText() + ":" + (type != null ? type.getText() : "");

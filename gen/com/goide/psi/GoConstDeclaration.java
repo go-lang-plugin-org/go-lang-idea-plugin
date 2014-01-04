@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoConstDeclaration extends GoTopLevelDeclaration {
+public interface GoConstDeclaration extends GoCompositeElement {
 
   @NotNull
   List<GoConstSpec> getConstSpecList();

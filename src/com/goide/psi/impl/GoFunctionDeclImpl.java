@@ -1,12 +1,11 @@
 package com.goide.psi.impl;
 
 import com.goide.psi.GoFunctionDeclaration;
-import com.goide.psi.GoTopLevelDeclaration;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class GoFunctionDeclImpl extends GoNamedElementImpl implements GoFunctionDeclaration, GoTopLevelDeclaration {
+public abstract class GoFunctionDeclImpl extends GoNamedElementImpl implements GoFunctionDeclaration {
   public GoFunctionDeclImpl(ASTNode node) {
     super(node);
   }

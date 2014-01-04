@@ -1,14 +1,14 @@
 package com.goide.psi.impl;
 
-import com.goide.psi.*;
+import com.goide.psi.GoFile;
+import com.goide.psi.GoFunctionDeclaration;
+import com.goide.psi.GoReferenceExpression;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 class GoReference extends PsiReferenceBase<PsiElement> {
   @NotNull private final PsiElement myIdentifier;
@@ -27,13 +27,8 @@ class GoReference extends PsiReferenceBase<PsiElement> {
     if (qualifier == null) {
       PsiFile file = myRefExpression.getContainingFile();
       if (file instanceof GoFile) {
-        List<GoTopLevelDeclaration> declarations = ((GoFile)file).getDeclarations();
-        for (GoTopLevelDeclaration declaration : declarations) {
-          if (declaration instanceof GoFunctionDeclaration && !(declaration instanceof GoMethodDeclaration)) {
-            if (myIdentifier.getText().equals(((GoFunctionDeclaration)declaration).getName())) {
-              return declaration;
-            }
-          }
+        for (GoFunctionDeclaration f : ((GoFile)file).getFunctions()) {
+          if (myIdentifier.getText().equals(f.getName())) return f;
         }
       }
     }
