@@ -40,9 +40,11 @@ GO_FILE
       PsiElement({)('{')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('_')
+          VAR_DEFINITION
+            PsiElement(identifier)('_')
           PsiElement(,)(',')
-          PsiElement(identifier)('err')
+          VAR_DEFINITION
+            PsiElement(identifier)('err')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -84,13 +86,15 @@ GO_FILE
       PsiElement({)('{')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('count')
+          VAR_DEFINITION
+            PsiElement(identifier)('count')
           PsiElement(:=)(':=')
           LITERAL
             PsiElement(int)('1')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('closure')
+          VAR_DEFINITION
+            PsiElement(identifier)('closure')
           PsiElement(:=)(':=')
           FUNCTION_LIT
             PsiElement(func)('func')
@@ -155,7 +159,8 @@ GO_FILE
       PsiElement({)('{')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('loops')
+          VAR_DEFINITION
+            PsiElement(identifier)('loops')
           PsiElement(:=)(':=')
           LITERAL
             PsiElement(int)('1')
@@ -205,7 +210,8 @@ GO_FILE
             FOR_CLAUSE
               SIMPLE_STATEMENT
                 SHORT_VAR_DECLARATION
-                  PsiElement(identifier)('i')
+                  VAR_DEFINITION
+                    PsiElement(identifier)('i')
                   PsiElement(:=)(':=')
                   LITERAL
                     PsiElement(int)('0')

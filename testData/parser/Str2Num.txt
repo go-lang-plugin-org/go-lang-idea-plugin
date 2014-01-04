@@ -21,7 +21,8 @@ GO_FILE
       PsiElement({)('{')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('p')
+          VAR_DEFINITION
+            PsiElement(identifier)('p')
           PsiElement(:=)(':=')
           REFERENCE_EXPRESSION
             REFERENCE_EXPRESSION
@@ -81,7 +82,8 @@ GO_FILE
             PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('j')
+          VAR_DEFINITION
+            PsiElement(identifier)('j')
           PsiElement(:=)(':=')
           CONVERSION_EXPR
             INTERFACE_TYPE
@@ -129,7 +131,8 @@ GO_FILE
                 PsiElement(identifier)('int')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('f')
+          VAR_DEFINITION
+            PsiElement(identifier)('f')
           PsiElement(:=)(':=')
           PARENTHESES_EXPR
             PsiElement(()('(')
@@ -158,7 +161,8 @@ GO_FILE
             PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('str')
+          VAR_DEFINITION
+            PsiElement(identifier)('str')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -182,9 +186,11 @@ GO_FILE
               PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('hex')
+          VAR_DEFINITION
+            PsiElement(identifier)('hex')
           PsiElement(,)(',')
-          PsiElement(identifier)('_')
+          VAR_DEFINITION
+            PsiElement(identifier)('_')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION

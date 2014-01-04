@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoShortVarDeclarationImpl extends GoCompositeElementImpl implements GoShortVarDeclaration {
+public class GoShortVarDeclarationImpl extends GoVarSpecImpl implements GoShortVarDeclaration {
 
   public GoShortVarDeclarationImpl(ASTNode node) {
     super(node);
@@ -25,6 +25,12 @@ public class GoShortVarDeclarationImpl extends GoCompositeElementImpl implements
   @NotNull
   public List<GoExpression> getExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public List<GoVarDefinition> getVarDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoVarDefinition.class);
   }
 
 }

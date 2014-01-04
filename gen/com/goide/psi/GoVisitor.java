@@ -283,7 +283,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitShortVarDeclaration(@NotNull GoShortVarDeclaration o) {
-    visitCompositeElement(o);
+    visitVarSpec(o);
   }
 
   public void visitSignature(@NotNull GoSignature o) {

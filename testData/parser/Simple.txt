@@ -169,7 +169,8 @@ GO_FILE
         PsiElement(switch)('switch')
         SIMPLE_STATEMENT
           SHORT_VAR_DECLARATION
-            PsiElement(identifier)('x')
+            VAR_DEFINITION
+              PsiElement(identifier)('x')
             PsiElement(:=)(':=')
             CALL_EXPR
               REFERENCE_EXPRESSION
@@ -209,7 +210,8 @@ GO_FILE
         PsiElement(switch)('switch')
         SIMPLE_STATEMENT
           SHORT_VAR_DECLARATION
-            PsiElement(identifier)('x')
+            VAR_DEFINITION
+              PsiElement(identifier)('x')
             PsiElement(:=)(':=')
             CALL_EXPR
               REFERENCE_EXPRESSION

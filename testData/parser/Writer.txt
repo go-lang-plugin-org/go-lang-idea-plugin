@@ -254,7 +254,8 @@ GO_FILE
           PsiElement(})('}')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('n')
+          VAR_DEFINITION
+            PsiElement(identifier)('n')
           PsiElement(:=)(':=')
           ADD_EXPR
             REFERENCE_EXPRESSION
@@ -291,7 +292,8 @@ GO_FILE
           PsiElement({)('{')
           SIMPLE_STATEMENT
             SHORT_VAR_DECLARATION
-              PsiElement(identifier)('nr')
+              VAR_DEFINITION
+                PsiElement(identifier)('nr')
               PsiElement(:=)(':=')
               REFERENCE_EXPRESSION
                 PsiElement(identifier)('n')
@@ -569,7 +571,8 @@ GO_FILE
       PsiElement({)('{')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('s')
+          VAR_DEFINITION
+            PsiElement(identifier)('s')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -674,7 +677,8 @@ GO_FILE
       PsiComment(GO_LINE_COMMENT)('// Try octal first.')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('s')
+          VAR_DEFINITION
+            PsiElement(identifier)('s')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -747,7 +751,8 @@ GO_FILE
         FOR_CLAUSE
           SIMPLE_STATEMENT
             SHORT_VAR_DECLARATION
-              PsiElement(identifier)('i')
+              VAR_DEFINITION
+                PsiElement(identifier)('i')
               PsiElement(:=)(':=')
               ADD_EXPR
                 CALL_EXPR
@@ -977,7 +982,8 @@ GO_FILE
       PsiComment(GO_LINE_COMMENT)('// the long name/long symlink use case.')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('suffix')
+          VAR_DEFINITION
+            PsiElement(identifier)('suffix')
           PsiElement(:=)(':=')
           REFERENCE_EXPRESSION
             REFERENCE_EXPRESSION
@@ -986,7 +992,8 @@ GO_FILE
             PsiElement(identifier)('Name')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('prefix')
+          VAR_DEFINITION
+            PsiElement(identifier)('prefix')
           PsiElement(:=)(':=')
           LITERAL
             PsiElement(string)('""')
@@ -1095,7 +1102,8 @@ GO_FILE
                 PsiElement(if)('if')
                 SIMPLE_STATEMENT
                   SHORT_VAR_DECLARATION
-                    PsiElement(identifier)('err')
+                    VAR_DEFINITION
+                      PsiElement(identifier)('err')
                     PsiElement(:=)(':=')
                     CALL_EXPR
                       REFERENCE_EXPRESSION
@@ -1189,7 +1197,8 @@ GO_FILE
       PsiComment(GO_LINE_COMMENT)('// blockSize is a power of two')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('header')
+          VAR_DEFINITION
+            PsiElement(identifier)('header')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -1209,7 +1218,8 @@ GO_FILE
               PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('s')
+          VAR_DEFINITION
+            PsiElement(identifier)('s')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -1789,9 +1799,11 @@ GO_FILE
       PsiComment(GO_LINE_COMMENT)('// This is different from the other octal fields.')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('chksum')
+          VAR_DEFINITION
+            PsiElement(identifier)('chksum')
           PsiElement(,)(',')
-          PsiElement(identifier)('_')
+          VAR_DEFINITION
+            PsiElement(identifier)('_')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -1937,7 +1949,8 @@ GO_FILE
       PsiElement({)('{')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('length')
+          VAR_DEFINITION
+            PsiElement(identifier)('length')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -2002,7 +2015,8 @@ GO_FILE
             PsiElement(})('}')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('i')
+          VAR_DEFINITION
+            PsiElement(identifier)('i')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -2026,7 +2040,8 @@ GO_FILE
               PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('nlen')
+          VAR_DEFINITION
+            PsiElement(identifier)('nlen')
           PsiElement(:=)(':=')
           ADD_EXPR
             ADD_EXPR
@@ -2139,7 +2154,8 @@ GO_FILE
       PsiComment(GO_LINE_COMMENT)('// Prepare extended header')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('ext')
+          VAR_DEFINITION
+            PsiElement(identifier)('ext')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -2178,7 +2194,8 @@ GO_FILE
       PsiComment(GO_LINE_COMMENT)('// with the current pid.')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('pid')
+          VAR_DEFINITION
+            PsiElement(identifier)('pid')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -2191,9 +2208,11 @@ GO_FILE
               PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('dir')
+          VAR_DEFINITION
+            PsiElement(identifier)('dir')
           PsiElement(,)(',')
-          PsiElement(identifier)('file')
+          VAR_DEFINITION
+            PsiElement(identifier)('file')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -2402,7 +2421,8 @@ GO_FILE
         PsiElement(if)('if')
         SIMPLE_STATEMENT
           SHORT_VAR_DECLARATION
-            PsiElement(identifier)('err')
+            VAR_DEFINITION
+              PsiElement(identifier)('err')
             PsiElement(:=)(':=')
             CALL_EXPR
               REFERENCE_EXPRESSION
@@ -2433,9 +2453,11 @@ GO_FILE
         PsiElement(if)('if')
         SIMPLE_STATEMENT
           SHORT_VAR_DECLARATION
-            PsiElement(identifier)('_')
+            VAR_DEFINITION
+              PsiElement(identifier)('_')
             PsiElement(,)(',')
-            PsiElement(identifier)('err')
+            VAR_DEFINITION
+              PsiElement(identifier)('err')
             PsiElement(:=)(':=')
             CALL_EXPR
               REFERENCE_EXPRESSION
@@ -2473,7 +2495,8 @@ GO_FILE
         PsiElement(if)('if')
         SIMPLE_STATEMENT
           SHORT_VAR_DECLARATION
-            PsiElement(identifier)('err')
+            VAR_DEFINITION
+              PsiElement(identifier)('err')
             PsiElement(:=)(':=')
             CALL_EXPR
               REFERENCE_EXPRESSION
@@ -2534,7 +2557,8 @@ GO_FILE
       PsiComment(GO_LINE_COMMENT)('// Extra padding for space and newline')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('size')
+          VAR_DEFINITION
+            PsiElement(identifier)('size')
           PsiElement(:=)(':=')
           ADD_EXPR
             CALL_EXPR
@@ -2572,7 +2596,8 @@ GO_FILE
             PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('record')
+          VAR_DEFINITION
+            PsiElement(identifier)('record')
           PsiElement(:=)(':=')
           CALL_EXPR
             REFERENCE_EXPRESSION
@@ -2715,7 +2740,8 @@ GO_FILE
           PsiElement(})('}')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
-          PsiElement(identifier)('overwrite')
+          VAR_DEFINITION
+            PsiElement(identifier)('overwrite')
           PsiElement(:=)(':=')
           REFERENCE_EXPRESSION
             PsiElement(identifier)('false')
@@ -2947,7 +2973,8 @@ GO_FILE
         FOR_CLAUSE
           SIMPLE_STATEMENT
             SHORT_VAR_DECLARATION
-              PsiElement(identifier)('i')
+              VAR_DEFINITION
+                PsiElement(identifier)('i')
               PsiElement(:=)(':=')
               LITERAL
                 PsiElement(int)('0')

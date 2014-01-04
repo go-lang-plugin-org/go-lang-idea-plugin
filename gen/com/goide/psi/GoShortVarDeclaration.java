@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoShortVarDeclaration extends GoCompositeElement {
+public interface GoShortVarDeclaration extends GoVarSpec {
 
   @NotNull
   List<GoExpression> getExpressionList();
+
+  @NotNull
+  List<GoVarDefinition> getVarDefinitionList();
 
 }

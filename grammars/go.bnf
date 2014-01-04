@@ -180,7 +180,7 @@ VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
 VarDefinition ::= identifier {extends="com.goide.psi.impl.GoVarDefImpl"}
 
-ShortVarDeclaration ::= IdentifierList ':=' ExpressionList {pin=2}
+ShortVarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2 extends=VarSpec}
 
 FunctionDeclaration ::= func identifier Signature Block? { pin=2 extends="com.goide.psi.impl.GoFunctionDeclImpl" }
 MethodDeclaration ::= func Receiver identifier Signature Block? {pin=3 extends=FunctionDeclaration}

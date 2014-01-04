@@ -320,6 +320,7 @@ public class GoParser implements PsiParser {
     create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE, INTERFACE_TYPE,
       MAP_TYPE, POINTER_TYPE, RECEIVER_TYPE, STRUCT_TYPE,
       TYPE),
+    create_token_set_(SHORT_VAR_DECLARATION, VAR_SPEC),
   };
 
   /* ********************************************************** */
@@ -2382,14 +2383,14 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IdentifierList ':=' ExpressionList
+  // VarDefinitionList ':=' ExpressionList
   public static boolean ShortVarDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ShortVarDeclaration")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = IdentifierList(builder_, level_ + 1);
+    result_ = VarDefinitionList(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, VAR_ASSIGN);
     pinned_ = result_; // pin = 2
     result_ = result_ && ExpressionList(builder_, level_ + 1);
