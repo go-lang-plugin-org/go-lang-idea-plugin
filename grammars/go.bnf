@@ -64,7 +64,7 @@
   SEMICOLON_SYNTHETIC  = '<NL>'
   TYPE_                = 'type'
 
-  extends(".*(Expr|Literal|identifier|Lit|OperandName)")=Expression
+  extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
   implements("(Function|Method)Declaration")="com.goide.psi.GoNamedElement"
   implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
