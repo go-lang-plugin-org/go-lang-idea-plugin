@@ -40,7 +40,13 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createTypeLookupElement(GoTypeSpec t) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(t).withIcon(GoIcons.TYPE).withInsertHandler(null),
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(t).withIcon(GoIcons.TYPE),
                                                  GoCompletionContributor.TYPE_PRIORITY);
+  }
+
+  @NotNull
+  public static LookupElement createVariableLookupElement(GoVarDefinition v) {
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(v).withIcon(GoIcons.VARIABLE),
+                                                 GoCompletionContributor.VAR_PRIORITY);
   }
 }
