@@ -66,7 +66,7 @@
 
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("(Function|Method)Declaration|TypeSpec")="com.goide.psi.GoNamedElement"
+  implements("(Function|Method)Declaration|TypeSpec|(Var|Const)Definition")="com.goide.psi.GoNamedElement"
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -164,7 +164,7 @@ ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
 ConstSpec ::= ConstDefinitionList [ Type? '=' ExpressionList ]
 private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
-ConstDefinition ::= identifier
+ConstDefinition ::= identifier {extends="com.goide.psi.impl.GoConstDefImpl"}
 
 private IdentifierListNoPin ::= identifier &(!('.' | ')')) (',' identifier)* // todo
 private IdentifierList ::= identifier ( ',' identifier )*
@@ -178,7 +178,7 @@ VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
 VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
-VarDefinition ::= identifier
+VarDefinition ::= identifier {extends="com.goide.psi.impl.GoVarDefImpl"}
 
 ShortVarDeclaration ::= IdentifierList ':=' ExpressionList {pin=2}
 

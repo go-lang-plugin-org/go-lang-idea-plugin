@@ -75,7 +75,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitConstDefinition(@NotNull GoConstDefinition o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitConstSpec(@NotNull GoConstSpec o) {
@@ -359,7 +359,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitVarDefinition(@NotNull GoVarDefinition o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitVarSpec(@NotNull GoVarSpec o) {

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoVarDefinition extends GoCompositeElement {
+public interface GoVarDefinition extends GoNamedElement {
 
   @NotNull
   PsiElement getIdentifier();
