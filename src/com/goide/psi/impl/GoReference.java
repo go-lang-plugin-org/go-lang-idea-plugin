@@ -3,12 +3,17 @@ package com.goide.psi.impl;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoReferenceExpression;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
+import com.intellij.util.ArrayUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 class GoReference extends PsiReferenceBase<PsiElement> {
   @NotNull private final PsiElement myIdentifier;
@@ -38,6 +43,17 @@ class GoReference extends PsiReferenceBase<PsiElement> {
   @NotNull
   @Override
   public Object[] getVariants() {
-    return new Object[0];
+    ArrayList<LookupElement> result = ContainerUtil.newArrayList();
+    GoReferenceExpression qualifier = myRefExpression.getQualifier();
+    if (qualifier == null) {
+      PsiFile file = myRefExpression.getContainingFile();
+      if (file instanceof GoFile) {
+        for (GoFunctionDeclaration f : ((GoFile)file).getFunctions()) {
+          result.add(
+            GoPsiImplUtil.createFunctionLookupElement(f));
+        }
+      }
+    }
+    return ArrayUtil.toObjectArray(result);
   }
 }
