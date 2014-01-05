@@ -31,7 +31,7 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testParams() {
-    doTestInclude("package foo; func foo(p1, p2 int){<caret>}", "p1", "p2");
+    doTestInclude("package foo; func main(i, j int){<caret>}", "i", "j");
   }
 
   public void testKeywords() {
