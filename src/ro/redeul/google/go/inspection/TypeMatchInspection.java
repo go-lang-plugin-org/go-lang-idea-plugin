@@ -80,9 +80,19 @@ public class TypeMatchInspection extends AbstractWholeGoFileInspection {
                     }
                 }
                 if (leftType instanceof GoTypeName && rightType instanceof GoTypeName) {
-                    GoTypeName ltn = (GoTypeName)leftType;
-                    GoTypeName rtn = (GoTypeName)rightType;
-                    if (ltn.getName().equals(rtn.getName())) {
+                    String leftName = ((GoTypeName)leftType).getName();
+                    if (leftName.equals("byte")) {
+                        leftName = "uint8";
+                    }else if (leftName.equals("rune")) {
+                        leftName = "int32";
+                    }
+                    String rightName = ((GoTypeName)rightType).getName();
+                    if (rightName.equals("byte")) {
+                        rightName = "uint8";
+                    }else if (rightName.equals("rune")) {
+                        rightName = "int32";
+                    }
+                    if (leftName.equals(rightName)) {
                         return;
                     }
                 }
