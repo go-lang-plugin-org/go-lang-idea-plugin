@@ -30,6 +30,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
     doTestExclude("package foo; func main(){{var i, j int;}; <caret>}", "i", "j");
   }
 
+  public void testParams() {
+    doTestInclude("package foo; func foo(p1, p2 int){<caret>}", "p1", "p2");
+  }
+
   public void testKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "continue");
   }

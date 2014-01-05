@@ -13,13 +13,15 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('str')
+          PARAM_DEFINITION
+            PsiElement(identifier)('str')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')
         PsiElement(,)(',')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('args')
+          PARAM_DEFINITION
+            PsiElement(identifier)('args')
           PsiElement(...)('...')
           INTERFACE_TYPE
             PsiElement(interface)('interface')
@@ -102,7 +104,8 @@ GO_FILE
               PARAMETERS
                 PsiElement(()('(')
                 PARAMETER_DECLARATION
-                  PsiElement(identifier)('msg')
+                  PARAM_DEFINITION
+                    PsiElement(identifier)('msg')
                   TYPE
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(identifier)('string')

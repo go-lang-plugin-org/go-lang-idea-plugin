@@ -10,27 +10,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoParameterDeclarationImpl extends GoCompositeElementImpl implements GoParameterDeclaration {
+public class GoParamDefinitionImpl extends GoParamDefImpl implements GoParamDefinition {
 
-  public GoParameterDeclarationImpl(ASTNode node) {
+  public GoParamDefinitionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitParameterDeclaration(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitParamDefinition(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public List<GoParamDefinition> getParamDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoParamDefinition.class);
-  }
-
-  @Override
-  @NotNull
-  public GoType getType() {
-    return findNotNullChildByClass(GoType.class);
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

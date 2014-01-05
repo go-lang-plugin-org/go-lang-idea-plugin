@@ -9,7 +9,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('key')
+          PARAM_DEFINITION
+            PsiElement(identifier)('key')
           ARRAY_OR_SLICE_TYPE
             PsiElement([)('[')
             PsiElement(])(']')
@@ -69,13 +70,15 @@ GO_FILE
         PARAMETERS
           PsiElement(()('(')
           PARAMETER_DECLARATION
-            PsiElement(identifier)('re')
+            PARAM_DEFINITION
+              PsiElement(identifier)('re')
             TYPE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('float64')
           PsiElement(,)(',')
           PARAMETER_DECLARATION
-            PsiElement(identifier)('im')
+            PARAM_DEFINITION
+              PsiElement(identifier)('im')
             TYPE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('float64')

@@ -1,15 +1,13 @@
 package com.goide.psi.impl;
 
-import com.goide.psi.GoFile;
-import com.goide.psi.GoFunctionDeclaration;
-import com.goide.psi.GoReferenceExpression;
-import com.goide.psi.GoVarDefinition;
+import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +37,8 @@ class GoReference extends PsiReferenceBase<PsiElement> {
         for (GoVarDefinition definition : ((GoFile)file).getVars()) {
           processor.execute(definition, ResolveState.initial());
         }
-        GoVarDefinition result = processor.getResult();
+        processFunctionParameters(processor);
+        GoNamedElement result = processor.getResult();
         if (result != null) return result;
         for (GoFunctionDeclaration f : ((GoFile)file).getFunctions()) {
           if (myIdentifier.getText().equals(f.getName())) return f;
@@ -47,6 +46,13 @@ class GoReference extends PsiReferenceBase<PsiElement> {
       }
     }
     return null;
+  }
+
+  private void processFunctionParameters(GoVarProcessor processor) {
+    GoFunctionDeclaration function = PsiTreeUtil.getParentOfType(myRefExpression, GoFunctionDeclaration.class);
+    GoSignature signature = function != null ? function.getSignature() : null;
+    GoParameters parameters = signature != null ? signature.getParameters() : null;
+    if (parameters != null) parameters.processDeclarations(processor, ResolveState.initial(), null, myRefExpression);
   }
 
   @NotNull
@@ -59,7 +65,8 @@ class GoReference extends PsiReferenceBase<PsiElement> {
       if (file instanceof GoFile) {
         GoVarProcessor processor = new GoVarProcessor(myIdentifier.getText(), myRefExpression, true);
         ResolveUtil.treeWalkUp(myRefExpression, processor);
-        for (GoVarDefinition v : processor.getVariants()) {
+        processFunctionParameters(processor);
+        for (GoNamedElement v : processor.getVariants()) {
           result.add(GoPsiImplUtil.createVariableLookupElement(v));
         }
         for (GoVarDefinition v : ((GoFile)file).getVars()) {

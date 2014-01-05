@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoParameterDeclaration extends GoCompositeElement {
+public interface GoParamDefinition extends GoCompositeElement {
 
   @NotNull
-  List<GoParamDefinition> getParamDefinitionList();
-
-  @NotNull
-  GoType getType();
+  PsiElement getIdentifier();
 
 }

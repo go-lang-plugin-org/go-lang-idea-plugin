@@ -14,6 +14,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.List;
 
 public class GoPsiImplUtil {
@@ -73,8 +74,9 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static LookupElement createVariableLookupElement(GoVarDefinition v) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(v).withIcon(GoIcons.VARIABLE),
+  public static LookupElement createVariableLookupElement(GoNamedElement v) {
+    Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE : v instanceof GoParamDefinition ? GoIcons.PARAMETER : null;
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(v).withIcon(icon),
                                                  GoCompletionContributor.VAR_PRIORITY);
   }
 

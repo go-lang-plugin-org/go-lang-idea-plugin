@@ -76,13 +76,15 @@ GO_FILE
           PARAMETERS
             PsiElement(()('(')
             PARAMETER_DECLARATION
-              PsiElement(identifier)('x')
+              PARAM_DEFINITION
+                PsiElement(identifier)('x')
               TYPE
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('int')
             PsiElement(,)(',')
             PARAMETER_DECLARATION
-              PsiElement(identifier)('y')
+              PARAM_DEFINITION
+                PsiElement(identifier)('y')
               TYPE
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('float64')

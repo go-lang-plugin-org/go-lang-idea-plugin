@@ -243,11 +243,14 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('ps1')
+          PARAM_DEFINITION
+            PsiElement(identifier)('ps1')
           PsiElement(,)(',')
-          PsiElement(identifier)('ps2')
+          PARAM_DEFINITION
+            PsiElement(identifier)('ps2')
           PsiElement(,)(',')
-          PsiElement(identifier)('ps3')
+          PARAM_DEFINITION
+            PsiElement(identifier)('ps3')
           POINTER_TYPE
             PsiElement(*)('*')
             TYPE
@@ -255,7 +258,8 @@ GO_FILE
                 PsiElement(identifier)('string')
         PsiElement(,)(',')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('pmeth')
+          PARAM_DEFINITION
+            PsiElement(identifier)('pmeth')
           POINTER_TYPE
             PsiElement(*)('*')
             TYPE
@@ -263,7 +267,8 @@ GO_FILE
                 PsiElement(identifier)('string')
         PsiElement(,)(',')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('ret')
+          PARAM_DEFINITION
+            PsiElement(identifier)('ret')
           POINTER_TYPE
             PsiElement(*)('*')
             INTERFACE_TYPE
@@ -476,13 +481,15 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('s')
+          PARAM_DEFINITION
+            PsiElement(identifier)('s')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')
         PsiElement(,)(',')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('ret')
+          PARAM_DEFINITION
+            PsiElement(identifier)('ret')
           POINTER_TYPE
             PsiElement(*)('*')
             INTERFACE_TYPE
@@ -553,7 +560,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('i')
+          PARAM_DEFINITION
+            PsiElement(identifier)('i')
           INTERFACE_TYPE
             PsiElement(interface)('interface')
             PsiElement({)('{')
@@ -706,11 +714,14 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('pkg')
+          PARAM_DEFINITION
+            PsiElement(identifier)('pkg')
           PsiElement(,)(',')
-          PsiElement(identifier)('typ')
+          PARAM_DEFINITION
+            PsiElement(identifier)('typ')
           PsiElement(,)(',')
-          PsiElement(identifier)('meth')
+          PARAM_DEFINITION
+            PsiElement(identifier)('meth')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')

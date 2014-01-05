@@ -149,7 +149,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('w')
+          PARAM_DEFINITION
+            PsiElement(identifier)('w')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
@@ -416,7 +417,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('b')
+          PARAM_DEFINITION
+            PsiElement(identifier)('b')
           ARRAY_OR_SLICE_TYPE
             PsiElement([)('[')
             PsiElement(])(']')
@@ -425,7 +427,8 @@ GO_FILE
                 PsiElement(identifier)('byte')
         PsiElement(,)(',')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('s')
+          PARAM_DEFINITION
+            PsiElement(identifier)('s')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')
@@ -553,7 +556,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('b')
+          PARAM_DEFINITION
+            PsiElement(identifier)('b')
           ARRAY_OR_SLICE_TYPE
             PsiElement([)('[')
             PsiElement(])(']')
@@ -562,7 +566,8 @@ GO_FILE
                 PsiElement(identifier)('byte')
         PsiElement(,)(',')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('x')
+          PARAM_DEFINITION
+            PsiElement(identifier)('x')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('int64')
@@ -658,7 +663,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('b')
+          PARAM_DEFINITION
+            PsiElement(identifier)('b')
           ARRAY_OR_SLICE_TYPE
             PsiElement([)('[')
             PsiElement(])(']')
@@ -667,7 +673,8 @@ GO_FILE
                 PsiElement(identifier)('byte')
         PsiElement(,)(',')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('x')
+          PARAM_DEFINITION
+            PsiElement(identifier)('x')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('int64')
@@ -901,7 +908,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('hdr')
+          PARAM_DEFINITION
+            PsiElement(identifier)('hdr')
           POINTER_TYPE
             PsiElement(*)('*')
             TYPE
@@ -1923,7 +1931,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('name')
+          PARAM_DEFINITION
+            PsiElement(identifier)('name')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')
@@ -1932,15 +1941,18 @@ GO_FILE
         PARAMETERS
           PsiElement(()('(')
           PARAMETER_DECLARATION
-            PsiElement(identifier)('prefix')
+            PARAM_DEFINITION
+              PsiElement(identifier)('prefix')
             PsiElement(,)(',')
-            PsiElement(identifier)('suffix')
+            PARAM_DEFINITION
+              PsiElement(identifier)('suffix')
             TYPE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('string')
           PsiElement(,)(',')
           PARAMETER_DECLARATION
-            PsiElement(identifier)('err')
+            PARAM_DEFINITION
+              PsiElement(identifier)('err')
             TYPE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('error')
@@ -2138,7 +2150,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('hdr')
+          PARAM_DEFINITION
+            PsiElement(identifier)('hdr')
           POINTER_TYPE
             PsiElement(*)('*')
             TYPE
@@ -2534,7 +2547,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('msg')
+          PARAM_DEFINITION
+            PsiElement(identifier)('msg')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')
@@ -2693,7 +2707,8 @@ GO_FILE
       PARAMETERS
         PsiElement(()('(')
         PARAMETER_DECLARATION
-          PsiElement(identifier)('b')
+          PARAM_DEFINITION
+            PsiElement(identifier)('b')
           ARRAY_OR_SLICE_TYPE
             PsiElement([)('[')
             PsiElement(])(']')
@@ -2705,13 +2720,15 @@ GO_FILE
         PARAMETERS
           PsiElement(()('(')
           PARAMETER_DECLARATION
-            PsiElement(identifier)('n')
+            PARAM_DEFINITION
+              PsiElement(identifier)('n')
             TYPE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('int')
           PsiElement(,)(',')
           PARAMETER_DECLARATION
-            PsiElement(identifier)('err')
+            PARAM_DEFINITION
+              PsiElement(identifier)('err')
             TYPE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('error')
