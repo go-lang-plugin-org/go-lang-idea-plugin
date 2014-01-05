@@ -63,8 +63,7 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
       commandLine.setWorkDirectory(contentRootPath);
       commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameter("build");
-      String resultBinaryName = JpsGoSdkType.getBinaryFileNameForPath(contentRootPath);
-      commandLine.addParameters("-o", outputDirectory.getAbsolutePath() + File.separatorChar + resultBinaryName);
+      commandLine.addParameters("-o", JpsGoSdkType.getBinaryPathByModulePath(contentRootPath, outputDirectory.getAbsolutePath()));
       runBuildProcess(context, commandLine, contentRootPath);
     }
   }

@@ -23,6 +23,11 @@ public class JpsGoSdkType extends JpsSdkType<JpsDummyElement> implements JpsElem
   }
 
   @NotNull
+  public static String getBinaryPathByModulePath(String modulePath, String outputDirectory) {
+    return outputDirectory + File.separatorChar + getBinaryFileNameForPath(modulePath);
+  }
+
+  @NotNull
   public static String getBinaryFileNameForPath(@NotNull String path) {
     String resultBinaryName = FileUtil.getNameWithoutExtension(PathUtil.getFileName(path));
     return SystemInfo.isWindows ? resultBinaryName + ".exe" : resultBinaryName;

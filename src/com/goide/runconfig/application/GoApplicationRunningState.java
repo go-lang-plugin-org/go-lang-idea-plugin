@@ -7,9 +7,11 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.openapi.compiler.CompilerPaths;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoApplicationRunningState extends GoRunningState {
@@ -25,12 +27,12 @@ public class GoApplicationRunningState extends GoRunningState {
     GeneralCommandLine commandLine = new GeneralCommandLine();
     String homePath = sdk.getHomePath();
     assert homePath != null;
-    String executable = FileUtil.toSystemDependentName(JpsGoSdkType.getGoExecutableFile(homePath).getAbsolutePath());
+    String outputDirectory = CompilerPaths.getModuleOutputPath(myModule, false);
+    String modulePath = PathUtil.getParentPath(myModule.getModuleFilePath());
+    String executable = FileUtil.toSystemDependentName(JpsGoSdkType.getBinaryPathByModulePath(modulePath, outputDirectory));
     commandLine.setExePath(executable);
-    commandLine.addParameter("run");
-    commandLine.addParameter(myConfiguration.getFilePath());
     commandLine.addParameter(myConfiguration.getParams());
-    commandLine.setWorkDirectory(myModule.getProject().getBasePath());
+    commandLine.setWorkDirectory(PathUtil.getParentPath(executable));
     TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
     setConsoleBuilder(consoleBuilder);
     return commandLine;
