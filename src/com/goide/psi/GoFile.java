@@ -12,8 +12,10 @@ import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.Processor;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FilteringIterator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +25,31 @@ public class GoFile extends PsiFileBase {
     super(viewProvider, GoLanguage.INSTANCE);
   }
 
+  private CachedValue<GoPackageClause> myPackage;
   private CachedValue<List<GoFunctionDeclaration>> myFunctionsValue;
   private CachedValue<List<GoMethodDeclaration>> myMethodsValue;
   private CachedValue<List<GoTypeSpec>> myTypesValue;
   private CachedValue<List<GoVarDefinition>> myVarsValue;
   //private CachedValue<List<GoConstSpec>> myConstsValue;
+
+  @Nullable
+  public GoPackageClause getPackage() {
+    if (myPackage == null) {
+      myPackage = getCachedValueManager().createCachedValue(new CachedValueProvider<GoPackageClause>() {
+        @Override
+        public Result<GoPackageClause> compute() {
+          List<GoPackageClause> packageClauses = calc(new Condition<PsiElement>() {
+            @Override
+            public boolean value(PsiElement e) {
+              return e instanceof GoPackageClause;
+            }
+          });
+          return Result.create(ContainerUtil.getFirstItem(packageClauses), GoFile.this);
+        }
+      }, false);
+    }
+    return myPackage.getValue();
+  }
 
   @NotNull
   public List<GoFunctionDeclaration> getFunctions() {

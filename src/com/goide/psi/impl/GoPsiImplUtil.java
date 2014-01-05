@@ -90,4 +90,16 @@ public class GoPsiImplUtil {
     }
     return null;
   }
+
+  @Nullable
+  public static String getPackageName(@NotNull GoFile file) {
+    GoPackageClause packageClause = file.getPackage();
+    if (packageClause != null) {
+      PsiElement packageIdentifier = packageClause.getIdentifier();
+      if (packageIdentifier != null) {
+        return packageIdentifier.getText().trim();
+      }
+    }
+    return null;
+  }
 }
