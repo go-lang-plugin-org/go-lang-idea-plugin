@@ -15,7 +15,7 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.*;
 
-import static ro.redeul.google.go.GoIcons.GO_ICON_16x16;
+import static ro.redeul.google.go.GoIcons.GAE_ICON_16x16;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -171,16 +171,16 @@ public class GoAppEngineSdkType extends SdkType {
 
     @Override
     public Icon getIcon() {
-        return GO_ICON_16x16;
+        return GAE_ICON_16x16;
     }
 
     @Override
     public Icon getIconForAddAction() {
-        return GO_ICON_16x16;
+        return GAE_ICON_16x16;
     }
 
     public Icon getIconForExpandedTreeNode() {
-        return GO_ICON_16x16;
+        return GAE_ICON_16x16;
     }
 
     public static SdkType getInstance() {

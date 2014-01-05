@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-import static ro.redeul.google.go.GoIcons.GO_ICON_16x16;
+import static ro.redeul.google.go.GoIcons.GAE_ICON_16x16;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -37,7 +37,7 @@ public class GoAppEngineSettingsConfigurable implements SearchableConfigurable  
     }
 
     public Icon getIcon() {
-        return GO_ICON_16x16;
+        return GAE_ICON_16x16;
     }
 
     @NotNull

@@ -59,7 +59,9 @@
         <![CDATA[
         <h3>0.9.16 changes:</h3>
             <ul>
+                <li>[feature] Added support for Go on GoogleAppEngine for non-IDEA IDEs</li>
                 <li>[feature] Added support for running all tests in a directory</li>
+                <li>[bugfix] Improved support for Go on GoogleAppEngine</li>
         <h3>0.9.15.3 changes:</h3>
             <ul>
                 <li>[bugfix] Fix the creation of projects in IntelliJ Community again.</li>
@@ -143,12 +145,12 @@
     </project-components>
 
     <actions>
-        <group id="Go.ActionGroup" popup="true" text="Go" description="GOlang actions"
+        <group id="Go.ActionGroup" popup="true" text="Go" description="Go actions"
                icon="/icons/go_16x16.png" class="ro.redeul.google.go.actions.NewGoGroup">
 
-        <action id="Go.NewApplication" text="Go application"
-                    description="Create new application in the GO language"
-                    class="ro.redeul.google.go.actions.NewGoApplicationAction">
+            <action id="Go.NewFile" text="Go file"
+                    description="Create a new Go in the current project"
+                    class="ro.redeul.google.go.actions.NewGoFileAction">
             </action>
 
             <action id="Go.NewLibrary" text="Go library"
@@ -156,18 +158,26 @@
                     class="ro.redeul.google.go.actions.NewGoLibraryAction">
             </action>
 
+            <action id="Go.NewApplication" text="Go application"
+                    description="Create new application in the GO language"
+                    class="ro.redeul.google.go.actions.NewGoApplicationAction">
+            </action>
 
             <add-to-group group-id="NewGroup" anchor="before"
                           relative-to-action="NewFile"/>
         </group>
 
-        <action id="Go.NewFile" text="Go file"
-                description="Create a new Go in the current project"
-                class="ro.redeul.google.go.actions.NewGoFileAction">
+        <group id="GAE.ActionGroup" popup="true" text="Go AppEngine" description="Go AppEngine actions"
+               icon="/icons/gae_16x16.png" class="ro.redeul.google.go.actions.NewGAEGroup">
+
+            <action id="GAE.NewFile" text="Go file"
+                    description="Create a new Go in the current project"
+                    class="ro.redeul.google.go.actions.NewGoFileAction">
+            </action>
 
             <add-to-group group-id="NewGroup" anchor="before"
-                          relative-to-action="Go.ActionGroup"/>
-        </action>
+                          relative-to-action="NewFile"/>
+        </group>
 
         <group id="Go.Tools" popup="true" text="Go Tools"
                description="Go tools support" icon="/icons/go_13x13.png" class="ro.redeul.google.go.actions.NewGoGroup">
@@ -193,6 +203,12 @@
             <!--class="ro.redeul.google.go.tools.actions.AddGoSdkSupport">-->
             <!--</action>-->
 
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </group>
+
+        <group id="GAE.Tools" popup="true" text="Go AppEngine Tools"
+               description="Go AppEngine tools support" icon="/icons/gae_13x13.png" class="ro.redeul.google.go.actions.NewGAEGroup">
+
             <action id="Go.AppEngine.Upload"
                     class="ro.redeul.google.go.ide.actions.GoAppEngineUpload"
                     text="App Engine Upload" description="Upload to App Engine"
@@ -208,13 +224,13 @@
                description="Go plugin debug utilites" icon="/icons/go_13x13.png" class="ro.redeul.google.go.actions.NewGoDebugGroup">
             <action id="Go.Debug.SdkData"
                     class="ro.redeul.google.go.ide.actions.GoDebugSDK"
-                    text="go sdk data" description="Print the current go sdk data"
+                    text="go sdk data" description="Print the current sdk data"
                     icon="/icons/go_13x13.png">
             </action>
 
             <action id="Go.Debug.Env"
                     class="ro.redeul.google.go.ide.actions.GoDebugEnv"
-                    text="go env" description="Print the current go env"
+                    text="go env" description="Print the current env"
                     icon="/icons/go_13x13.png">
             </action>
 
@@ -225,6 +241,7 @@
             </action>
 
             <add-to-group group-id="Go.Tools" anchor="last"/>
+            <add-to-group group-id="GAE.Tools" anchor="last"/>
         </group>
 
     </actions>

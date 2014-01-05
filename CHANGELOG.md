@@ -1,3 +1,8 @@
+<h3>0.9.16 changes:</h3>
+<ul>
+    <li>[feature] Added support for Go on GoogleAppEngine for non-IDEA IDEs</li>
+    <li>[bugfix] Improved support for Go on GoogleAppEngine</li>
+</ul>
 <h3>0.9.15 changes:</h3>
 <ul>
     <li>[feature] Added IntelliJ IDEA 13 (Cardea) support</li>
