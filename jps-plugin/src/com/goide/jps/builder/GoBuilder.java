@@ -8,10 +8,6 @@ import com.intellij.execution.process.BaseOSProcessHandler;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.io.FileUtilRt;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jps.builders.BuildOutputConsumer;
 import org.jetbrains.jps.builders.DirtyFilesHolder;
@@ -23,18 +19,15 @@ import org.jetbrains.jps.incremental.messages.CompilerMessage;
 import org.jetbrains.jps.incremental.resources.ResourcesBuilder;
 import org.jetbrains.jps.incremental.resources.StandardResourceBuilderEnabler;
 import org.jetbrains.jps.model.JpsDummyElement;
-import org.jetbrains.jps.model.java.JavaSourceRootType;
 import org.jetbrains.jps.model.java.JpsJavaExtensionService;
 import org.jetbrains.jps.model.library.sdk.JpsSdk;
 import org.jetbrains.jps.model.module.JpsModule;
-import org.jetbrains.jps.model.module.JpsModuleSourceRoot;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
   public static final String NAME = "go";
@@ -64,15 +57,15 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
 
     File outputDirectory = getBuildOutputDirectory(module, target.isTests(), context);
 
-    for (String path : getGoModulePaths(module, target)) {
+    for (String contentRootUrl : module.getContentRootsList().getUrls()) {
+      String contentRootPath = new URL(contentRootUrl).getPath();
       GeneralCommandLine commandLine = new GeneralCommandLine();
-      commandLine.setWorkDirectory(outputDirectory);
+      commandLine.setWorkDirectory(contentRootPath);
       commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameter("build");
-      String resultBinaryName = JpsGoSdkType.getBinaryFileNameForPath(path);
+      String resultBinaryName = JpsGoSdkType.getBinaryFileNameForPath(contentRootPath);
       commandLine.addParameters("-o", outputDirectory.getAbsolutePath() + File.separatorChar + resultBinaryName);
-      commandLine.addParameters(path);
-      runBuildProcess(context, commandLine, path);
+      runBuildProcess(context, commandLine, contentRootPath);
     }
   }
 
@@ -125,29 +118,5 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
     handler.addProcessListener(adapter);
     handler.startNotify();
     handler.waitFor();
-  }
-
-  @NotNull
-  private static List<String> getGoModulePaths(@NotNull JpsModule module, @NotNull final GoTarget target) {
-    CommonProcessors.CollectProcessor<File> goFilesCollector = new CommonProcessors.CollectProcessor<File>() {
-      @Override
-      protected boolean accept(@NotNull File file) {
-        return !file.isDirectory() && FileUtilRt.extensionEquals(file.getName(), "go") &&
-               (target.isTests() || !FileUtil.getNameWithoutExtension(file).endsWith("_test"));
-      }
-    };
-    List<JpsModuleSourceRoot> sourceRoots = new ArrayList<JpsModuleSourceRoot>();
-    ContainerUtil.addAll(sourceRoots, module.getSourceRoots(JavaSourceRootType.SOURCE));
-    ContainerUtil.addAll(sourceRoots, module.getSourceRoots(JavaSourceRootType.TEST_SOURCE));
-    for (JpsModuleSourceRoot root : sourceRoots) {
-      FileUtil.processFilesRecursively(root.getFile(), goFilesCollector);
-    }
-    return ContainerUtil.map(goFilesCollector.getResults(), new Function<File, String>() {
-      @NotNull
-      @Override
-      public String fun(@NotNull File file) {
-        return file.getAbsolutePath();
-      }
-    });
   }
 }

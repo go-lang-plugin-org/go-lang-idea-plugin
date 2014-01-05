@@ -51,7 +51,7 @@ public class GoCompilerError {
       long lineNumber = parseLong(line);
       return new GoCompilerError(details, VfsUtilCore.pathToUrl(path), lineNumber, CompilerMessageCategory.ERROR);
     }
-    else if (!compilerMessage.startsWith("# ")) {
+    else if (!compilerMessage.isEmpty() && Character.isJavaIdentifierPart(compilerMessage.charAt(0))) {
       return new GoCompilerError(compilerMessage, null, -1L, CompilerMessageCategory.ERROR);
     }
     return null;
