@@ -169,6 +169,7 @@ public interface GoElementTypes extends GoTokenTypes {
         FOR_WITH_CLAUSES_STATEMENT,
         FOR_WITH_CONDITION_STATEMENT,
         FOR_WITH_RANGE_STATEMENT,
+        FOR_WITH_RANGE_AND_VARS_STATEMENT,
         GO_STATEMENT,
         GOTO_STATEMENT,
         IF_STATEMENT,
@@ -200,6 +201,11 @@ public interface GoElementTypes extends GoTokenTypes {
         litFLOAT
     );
 
+    public final TokenSet SELECT_CLAUSES = TokenSet.create(
+        SELECT_COMM_CLAUSE_DEFAULT, SELECT_COMM_CLAUSE_RECV, SELECT_COMM_CLAUSE_SEND
+    );
+
+    // TODO: dedup
     public final TokenSet EXPRESSION_SETS = TokenSet.create(
         PARENTHESISED_EXPRESSION,
         ADD_EXPRESSION, MUL_EXPRESSION, REL_EXPRESSION, COM_EXPRESSION,
@@ -262,4 +268,6 @@ public interface GoElementTypes extends GoTokenTypes {
         PARENTHESISED_EXPRESSION,
         UNARY_EXPRESSION
     );
+
+    public final TokenSet STATEMENTS_OR_COMMENTS = TokenSet.orSet(STATEMENTS, COMMENTS);
 }

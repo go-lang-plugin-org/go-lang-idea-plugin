@@ -57,11 +57,16 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
     // vertical line breaking tokens
     private TokenSet myLineBreakingTokens = TokenSet.EMPTY;
 
+    // indented child blocks
+    private TokenSet myIndentedChildBlocks = TokenSet.EMPTY;
+
     // vertical grouping support
     private TokenSet[] myHoldTogetherGroups = new TokenSet[]{COMMENTS};
 
     // custom spacing entries;
     private GoBlockUtil.CustomSpacing myCustomSpacing;
+
+
 
     private Indent leadingCommentGroupIndent = GoBlockUtil.Indents.NONE;
     private Alignment leadingCommentGroupAlign = null;
@@ -92,12 +97,13 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
         return myPsiNode;
     }
 
-    protected void setMultiLineMode(boolean multilineMode,
+    protected GoSyntheticBlock<GoPsiType> setMultiLineMode(boolean multilineMode,
                                     IElementType leftBreakElement,
                                     IElementType rightBreakElement) {
         this.myMultiLineMode = multilineMode;
         this.myLeftBreakElement = leftBreakElement;
         this.myRightBreakElement = rightBreakElement;
+        return this;
     }
 
     protected void setAlignmentKeys(@NotNull Set<Alignments.Key> alignmentKeys) {
@@ -106,6 +112,11 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
 
     protected GoSyntheticBlock<GoPsiType> setLineBreakingTokens(@NotNull TokenSet lineBreakingTokens) {
         this.myLineBreakingTokens = lineBreakingTokens;
+        return this;
+    }
+
+    protected GoSyntheticBlock<GoPsiType> setIndentedChildTokens(@NotNull TokenSet indentedChildTokens) {
+        this.myIndentedChildBlocks = indentedChildTokens;
         return this;
     }
 
@@ -160,7 +171,6 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
             int linesBetween = getLineCount(getTextBetween(prevChild, child));
 
             PsiElement prevChildPsi = prevChild != null ? prevChild.getPsi() : null;
-
 
             Indent childIndent = isPartOfLeadingCommentGroup
                 ? leadingCommentGroupIndent
@@ -230,7 +240,7 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
             return Spacings.ONE_LINE;
 
         if (!wantsToBreakLine(typeChild1))
-            return Spacings.BASIC;
+            return typeChild1 == mSL_COMMENT ? Spacings.ONE_LINE : Spacings.BASIC;
 
         if (holdTogether(typeChild1, typeChild2, getLineCount(getTextBetween(child1, child2))))
             return Spacings.ONE_LINE;
@@ -273,8 +283,9 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
         return false;
     }
 
-    protected void setHoldTogetherGroups(TokenSet... holdTogetherGroups) {
+    protected GoSyntheticBlock<GoPsiType> setHoldTogetherGroups(TokenSet... holdTogetherGroups) {
         this.myHoldTogetherGroups = holdTogetherGroups;
+        return this;
     }
 
     @Nullable
@@ -285,7 +296,9 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
     }
 
     protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
-        return Indent.getNoneIndent();
+        return myIndentedChildBlocks.contains(child.getNode().getElementType())
+            ? GoBlockUtil.Indents.NORMAL
+            : GoBlockUtil.Indents.NONE;
     }
 
     @Nullable

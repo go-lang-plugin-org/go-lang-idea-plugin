@@ -12,12 +12,15 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.statements.*;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClause;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
@@ -47,8 +50,9 @@ public class GoBlocks {
         LITERAL_STRING,
         LITERAL_FLOAT, LITERAL_INTEGER, LITERAL_IMAGINARY,
         LITERAL_IDENTIFIER,
-        kIMPORT, kVAR, kCONST, kTYPE, kSTRUCT, kPACKAGE, kINTERFACE,
-        kSWITCH, kBREAK, kCONTINUE, kFALLTHROUGH, kDEFER, kGO, kGOTO,
+        kIMPORT, kVAR, kCONST, kTYPE, kFUNC, kSTRUCT, kPACKAGE, kINTERFACE,
+        kSWITCH, kBREAK, kCONTINUE, kFALLTHROUGH, kDEFER, kGO, kGOTO, kRETURN,
+        kSELECT, kCASE, kDEFAULT,
         oASSIGN, oVAR_ASSIGN, oCOMMA, oSEND_CHANNEL, oCOLON,
         TYPE_NAME_DECLARATION,
         pLPAREN, pRPAREN, pLBRACK, pRBRACK, pLCURLY, pRCURLY
@@ -163,6 +167,17 @@ public class GoBlocks {
 
         if (psi instanceof GoLabeledStatement)
             return new GoLabeledStatementBlock((GoLabeledStatement) psi, settings, indent, alignmentsMap);
+
+        if (psi instanceof GoSelectStatement)
+            return new GoSelectStatementBlock((GoSelectStatement) psi, settings, indent, alignmentsMap);
+
+        if (psi instanceof GoSelectCommClause)
+            return new GoSyntheticBlock<GoSelectCommClause>((GoSelectCommClause) psi, settings, indent, null, alignmentsMap)
+                .setMultiLineMode(true, oCOLON, null)
+                .setCustomSpacing(GoBlockUtil.CustomSpacing.Builder().setNone(EXPRESSIONS,
+                    oCOLON).setNone(SELECT_COMM_CLAUSE_RECV_EXPR, oCOLON).setNone(kDEFAULT, oCOLON).build())
+                .setLineBreakingTokens(STATEMENTS_OR_COMMENTS)
+                .setIndentedChildTokens(STATEMENTS_OR_COMMENTS);
 
 //    if (psi instanceof GoShortVarDeclaration)
 //      return new GoShortVarDeclarationBlock((GoShortVarDeclaration)psi, settings, indent);

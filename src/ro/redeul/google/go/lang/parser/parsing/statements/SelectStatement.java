@@ -46,8 +46,6 @@ class SelectStatement implements GoElementTypes {
                     if (parser.parseStatement(builder) == null) {
                         break;
                     }
-
-                    endStatement(builder);
                 }
 
                 caseMark.done(clauseType);
@@ -81,7 +79,7 @@ class SelectStatement implements GoElementTypes {
         if ( oSEND_CHANNEL == builder.getTokenType() ) {
             builder.advanceLexer();
             parser.parseExpression(builder);
-            mark.done(SEND_STATEMENT);
+            mark.drop();
             return SELECT_COMM_CLAUSE_SEND;
         }
 

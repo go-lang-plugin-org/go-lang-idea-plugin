@@ -27,5 +27,9 @@ public abstract class GoLightCodeInsightTestCase extends LightCodeInsightFixture
 
     protected abstract String getRelativeTestDataPath();
 
+    protected String getTestName(boolean lowercaseFirstLetter) {
+        return super.getTestName(true).replaceAll("_+", "/");
+    }
+
     protected abstract void _test();
 }

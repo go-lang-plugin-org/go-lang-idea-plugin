@@ -19,36 +19,41 @@ import java.io.IOException;
  * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
  */
 public abstract class GoParsingTestCase extends ParsingTestCase {
-  public GoParsingTestCase() {
-    super("", "go", new GoParserDefinition());
-  }
+    public GoParsingTestCase() {
+        super("", "go", new GoParserDefinition());
+    }
 
-  @Override
-  protected boolean skipSpaces() {
-    return true;
-  }
+    @Override
+    protected boolean skipSpaces() {
+        return true;
+    }
 
-  @Override
-  protected boolean includeRanges() {
-    return true;
-  }
+    @Override
+    protected boolean includeRanges() {
+        return true;
+    }
 
-  @Override
-  final protected String getTestDataPath() {
-    return FileUtil.normalize(String.format("%s/%s", "testdata", getRelativeTestDataPath()));
-  }
+    @Override
+    final protected String getTestDataPath() {
+        return FileUtil.normalize(String.format("%s/%s", "testdata", getRelativeTestDataPath()));
+    }
 
-  protected String getRelativeTestDataPath() {
-    return "parsing/";
-  }
+    protected String getRelativeTestDataPath() {
+        return "parsing/";
+    }
 
-  protected String loadFile(@NonNls @TestDataFile String name) throws IOException {
-    String text = FileUtil.loadFile(new File(myFullDataPath, name), CharsetToolkit.UTF8);
-    text = StringUtil.convertLineSeparators(text);
-    return text;
-  }
+    protected String loadFile(@NonNls @TestDataFile String name) throws IOException {
+        String text = FileUtil.loadFile(new File(myFullDataPath, name), CharsetToolkit.UTF8);
+        text = StringUtil.convertLineSeparators(text);
+        return text;
+    }
 
-  protected void _test() throws Exception {
-    doTest("_psi");
-  }
+    protected String getTestName(boolean lowercaseFirstLetter) {
+        String name = getName();
+        return getTestName(name.replaceAll("_+", "/"), true);
+    }
+
+    protected void _test() throws Exception {
+        doTest("_psi");
+    }
 }

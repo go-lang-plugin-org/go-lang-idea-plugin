@@ -46,4 +46,8 @@ public class GoStatementsFormatterTest extends GoFormatterTestCase {
     public void testGo() throws Exception { _test(); }
 
     public void testDefer() throws Exception { _test(); }
+
+    public void testSelect_empty() throws Exception { _test(); }
+
+    public void testSelect_simple() throws Exception { _test(); }
 }

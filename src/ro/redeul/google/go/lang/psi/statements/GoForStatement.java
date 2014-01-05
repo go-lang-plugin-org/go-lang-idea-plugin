@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.statements;
 
-public interface GoForStatement extends GoStatement {
+import ro.redeul.google.go.lang.psi.GoDocumentedPsiElement;
+
+public interface GoForStatement extends GoStatement, GoDocumentedPsiElement {
     GoBlockStatement getBlock();
 }

@@ -1,27 +1,2 @@
 package main
 func main() { select {} }
-/**-----
-Go file
-  PackageDeclaration(main)
-    PsiElement(KEYWORD_PACKAGE)('package')
-    PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('main')
-  PsiWhiteSpace('\n')
-  FunctionDeclaration(main)
-    PsiElement(KEYWORD_FUNC)('func')
-    PsiWhiteSpace(' ')
-    LiteralIdentifierImpl
-      PsiElement(IDENTIFIER)('main')
-    PsiElement(()('(')
-    PsiElement())(')')
-    PsiWhiteSpace(' ')
-    BlockStmtImpl
-      PsiElement({)('{')
-      PsiWhiteSpace(' ')
-      SelectStmtImpl
-        PsiElement(KEYWORD_SELECT)('select')
-        PsiWhiteSpace(' ')
-        PsiElement({)('{')
-        PsiElement(})('}')
-      PsiWhiteSpace(' ')
-      PsiElement(})('}')

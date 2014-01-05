@@ -12,24 +12,27 @@ import ro.redeul.google.go.GoFormatterTestCase;
  */
 public class GoFailingFormatterTest extends GoFormatterTestCase {
 
-  @Override
-  protected String getRelativeTestDataPath() {
-    return super.getRelativeTestDataPath() + "failing/";
-  }
+    @Override
+    protected String getRelativeTestDataPath() {
+        return super.getRelativeTestDataPath() + "failing/";
+    }
 
-  // https://github.com/mtoader/google-go-lang-idea-plugin/issues/449
-  public void testLeadingCommentGroups() throws Exception { _test(); }
+    // https://github.com/mtoader/google-go-lang-idea-plugin/issues/449
+    public void testLeadingCommentGroups() throws Exception { _test(); }
 
-  // https://github.com/mtoader/google-go-lang-idea-plugin/issues/448
-  public void testStructInconsistencies() throws Exception { _test(); }
+    // https://github.com/mtoader/google-go-lang-idea-plugin/issues/448
+    public void testStructInconsistencies() throws Exception { _test(); }
 
-  // https://github.com/mtoader/google-go-lang-idea-plugin/issues/450
-  public void testIncompleteConstsSlightMisalignment() throws Exception { _test(); }
+    // https://github.com/mtoader/google-go-lang-idea-plugin/issues/450
+    public void testIncompleteConstsSlightMisalignment() throws Exception { _test(); }
 
-  // https://github.com/mtoader/google-go-lang-idea-plugin/issues/451
-  public void testIncompleteVarsMisalignments() throws Exception { _test(); }
+    // https://github.com/mtoader/google-go-lang-idea-plugin/issues/451
+    public void testIncompleteVarsMisalignments() throws Exception { _test(); }
 
-  public void testTrailingCommentsAreMisaligned() throws Exception { _test(); }
+    public void testTrailingCommentsAreMisaligned() throws Exception { _test(); }
+
+    // https://github.com/mtoader/google-go-lang-idea-plugin/issues/473
+    public void testSimpleCommentsInSelectAreMisaligned() throws Exception { _test(); }
 //  public void testBasicWithLineComments() throws Exception { _test(); }
 
 //    public void testBasicWithMultiLineComments() throws Exception { _test(); }
