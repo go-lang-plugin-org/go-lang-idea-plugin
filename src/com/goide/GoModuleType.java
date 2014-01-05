@@ -41,7 +41,7 @@ public class GoModuleType extends ModuleType<GoModuleBuilder> {
 
   @Override
   public Icon getBigIcon() {
-    return GoIcons.ICON; // todo: need big icon for sdk
+    return GoIcons.MODULE_ICON;
   }
 
   @Override

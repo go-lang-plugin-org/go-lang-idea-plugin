@@ -12,4 +12,5 @@ public interface GoIcons {
   Icon FUNCTION = AllIcons.Nodes.Function;
   Icon VARIABLE = AllIcons.Nodes.Variable;
   Icon CONST = AllIcons.Nodes.Variable;  // todo: another icon
+  Icon MODULE_ICON = IconLoader.findIcon("/icons/goModule.png");
 }
