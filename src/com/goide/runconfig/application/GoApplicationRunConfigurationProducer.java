@@ -21,11 +21,11 @@ public class GoApplicationRunConfigurationProducer extends RunConfigurationProdu
   protected boolean setupConfigurationFromContext(GoApplicationConfiguration configuration,
                                                   ConfigurationContext context,
                                                   Ref sourceElement) {
-    PsiFile containingFile = getFileFromContext(context);
-    if (containingFile != null) {
-      if (GoPsiImplUtil.findMainFunction((GoFile)containingFile) != null) {
-        configuration.setName(containingFile.getName());
-        configuration.setFilePath(containingFile.getVirtualFile().getPath());
+    PsiFile file = getFileFromContext(context);
+    if (file != null) {
+      if ("main".equals(GoPsiImplUtil.getPackageName((GoFile)file)) && GoPsiImplUtil.findMainFunction((GoFile)file) != null) {
+        configuration.setName(file.getName());
+        configuration.setFilePath(file.getVirtualFile().getPath());
         Module module = context.getModule();
         if (module != null) {
           configuration.setModule(module);

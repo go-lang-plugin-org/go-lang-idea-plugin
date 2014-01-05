@@ -64,11 +64,13 @@ public class GoApplicationConfiguration extends GoRunConfigurationBase<GoApplica
     if (psiFile == null || !(psiFile instanceof GoFile)) {
       throw new RuntimeConfigurationError("Main file is invalid");
     }
+    if (!"main".equals(GoPsiImplUtil.getPackageName((GoFile)psiFile))) {
+      throw new RuntimeConfigurationError("Main file has non-main package");
+    }
     GoFunctionDeclarationImpl mainFunction = GoPsiImplUtil.findMainFunction((GoFile)psiFile);
     if (mainFunction == null) {
       throw new RuntimeConfigurationError("Main file doesn't contain main function");
     }
-    // todo: check package
   }
 
   @Override
