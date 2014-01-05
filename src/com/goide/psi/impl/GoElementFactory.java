@@ -1,10 +1,7 @@
 package com.goide.psi.impl;
 
 import com.goide.GoLanguage;
-import com.goide.psi.GoFile;
-import com.goide.psi.GoParamDefinition;
-import com.goide.psi.GoReferenceExpression;
-import com.goide.psi.GoVarDefinition;
+import com.goide.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
@@ -42,5 +39,17 @@ public class GoElementFactory {
   public static GoParamDefinition createParamDefinitionFromText(Project project, String text) {
     GoFile file = createFileFromText(project, "package f; func f(" + text + " int) { }");
     return PsiTreeUtil.findChildOfType(file.getFunctions().get(0), GoParamDefinition.class);
+  }
+
+  @NotNull
+  public static GoTypeReferenceExpression createTypeReferenceFromText(Project project, String text) {
+    GoFile file = createFileFromText(project, "package f; var oo " + text + ";");
+    return PsiTreeUtil.findChildOfType(file, GoTypeReferenceExpression.class);
+  }
+
+  @NotNull
+  public static PsiElement createIdentifierFromText(Project project, String text) {
+    GoFile file = createFileFromText(project, "package " + text);
+    return PsiTreeUtil.getDeepestLast(file);
   }
 }
