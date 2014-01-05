@@ -22,7 +22,7 @@ After that, you need to restart your system for the changes to take effect.
 If you are launching the IDE the normal application launcher and you get the error message
 about missing paths then you need to add ``` GOROOT ``` and ``` GOPATH ``` to your ``` ~/.profile ```
 and then use: ```` launchctl setenv GOPATH $GOPATH ````.
-You can view more [details here](https://github.com/mtoader/google-go-lang-idea-plugin/issues/318#issuecomment-31303939).
+You can view more [details here](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/318#issuecomment-31303939).
 
 
 NOTE

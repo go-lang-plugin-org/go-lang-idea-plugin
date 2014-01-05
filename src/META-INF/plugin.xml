@@ -1,5 +1,5 @@
 <idea-plugin version="2"
-             url="http://github.com/mtoader/google-go-lang-idea-plugin">
+             url="http://github.com/go-lang-plugin-org/go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Go language (golang.org) support plugin</name>
     <version>0.9.16-dev</version>
@@ -7,7 +7,7 @@
     <description>
         <![CDATA[<h2>Support for Go programming language.</h2>(see <a href="http://golang.org">http://golang.org</a>)
 
-        <h3><a href="https://github.com/mtoader/google-go-lang-idea-plugin/blob/master/README 0.9.15.md">Release notes for version 0.9.15</a></h3>
+        <h3><a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin/blob/master/README 0.9.15.md">Release notes for version 0.9.15</a></h3>
 
         <p>The plugin provides the following features:</p>
         <ul>

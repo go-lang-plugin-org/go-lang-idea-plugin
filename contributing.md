@@ -49,7 +49,7 @@ This will work even with a binary installation (as a result of following the
 
 If you are on the contributors list:
 
-    git clone git@github.com:mtoader/google-go-lang-idea-plugin.git
+    git clone git@github.com:go-lang-plugin-org/go-lang-idea-plugin.git
 
 If you are not then fork the repository using the github web interface and do a
 clone of your fork on the local machine.

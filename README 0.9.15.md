@@ -5,7 +5,7 @@ Thank you for installing the latest version of the golang plugin for IDEA.
 
 While there are many new things in this version there are also a couple of bugs.
 
-Please help us finding them by submitting a proper bug report to the [repository](https://github.com/mtoader/google-go-lang-idea-plugin/issues?state=open)
+Please help us finding them by submitting a proper bug report to the [repository](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues?state=open)
 or fixing the existing ones.
 
 This plugin has been tested against IDEA 13.0.1 and PHPStorm 7.0.1 with

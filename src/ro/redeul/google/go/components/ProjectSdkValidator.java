@@ -146,13 +146,13 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
     private String getInvalidGOROOTEnvMessage() {
         return "<html><em>GOROOT</em> environment variable is empty or could not be detected properly.<br/>" +
                 "This means that some tools like <code>go run</code> or <code>go fmt</code> might not run properly.<br/>" +
-                "See <a href='http://git.io/_InSxQ'>instructions</a> on how to fix this.";
+                "See <a href='http://git.io/_bt0Hg'>instructions</a> on how to fix this.";
     }
 
     private String getInvalidGOPATHEnvMessage() {
         return "<html><em>GOPATH</em> environment variable is empty or could not be detected properly.<br/>" +
                 "This means that some tools like <code>go run</code> or <code>go fmt</code> might not run properly.<br/>" +
-                "See <a href='http://git.io/_InSxQ'>instructions</a> on how to fix this.";
+                "See <a href='http://git.io/_bt0Hg'>instructions</a> on how to fix this.";
     }
 
     private String getGOPATHinGOROOTEnvMessage() {
