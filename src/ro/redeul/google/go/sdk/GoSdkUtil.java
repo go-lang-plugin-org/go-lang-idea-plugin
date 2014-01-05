@@ -299,6 +299,8 @@ public class GoSdkUtil {
 
             sdkData.API_VERSIONS = matcher.group(1);
 
+            sdkData.version = GoAppEngineSdkData.LATEST_VERSION;
+
         } catch (IOException e) {
             return null;
         }

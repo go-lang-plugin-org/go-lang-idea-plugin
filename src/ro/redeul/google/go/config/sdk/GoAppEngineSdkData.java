@@ -1,6 +1,7 @@
 package ro.redeul.google.go.config.sdk;
 
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.SdkAdditionalData;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
@@ -12,6 +13,8 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
  */
 public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateComponent<GoAppEngineSdkData> {
 
+    public final static int LATEST_VERSION = 1;
+
     public String GO_HOME_PATH = "";
 
     public GoTargetOs TARGET_OS = null;
@@ -20,6 +23,8 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
     public String VERSION_MAJOR = "";
     public String VERSION_MINOR = "";
     public String API_VERSIONS = "";
+
+    public int version = 0;
 
     public GoAppEngineSdkData() {
     }
@@ -46,6 +51,12 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
 
     public GoAppEngineSdkData getState() {
         return this;
+    }
+
+    public void checkValid() throws ConfigurationException {
+        if (version != GoAppEngineSdkData.LATEST_VERSION) {
+            throw new ConfigurationException("SDK configuration needs to be upgraded");
+        }
     }
 
 }
