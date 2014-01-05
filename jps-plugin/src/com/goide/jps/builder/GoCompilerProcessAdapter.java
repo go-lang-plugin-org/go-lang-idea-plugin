@@ -27,8 +27,9 @@ public class GoCompilerProcessAdapter extends ProcessAdapter {
     if (error != null) {
       boolean isError = error.getCategory() == CompilerMessageCategory.ERROR;
       BuildMessage.Kind kind = isError ? BuildMessage.Kind.ERROR : BuildMessage.Kind.WARNING;
-      CompilerMessage msg = new CompilerMessage(myBuilderName, kind, error.getErrorMessage(),
-        VirtualFileManager.extractPath(error.getUrl()), -1, -1, -1, error.getLine(), -1);
+      String errorUrl = error.getUrl();
+      String sourcePath = errorUrl != null ? VirtualFileManager.extractPath(errorUrl) : null;
+      CompilerMessage msg = new CompilerMessage(myBuilderName, kind, error.getErrorMessage(), sourcePath, -1, -1, -1, error.getLine(), -1);
       myContext.processMessage(msg);
     }
   }

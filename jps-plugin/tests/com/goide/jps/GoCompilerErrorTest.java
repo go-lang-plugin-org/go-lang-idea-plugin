@@ -5,6 +5,7 @@ import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.testFramework.UsefulTestCase;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoCompilerErrorTest extends UsefulTestCase {
   public void testSyntaxError_1() throws Exception {
@@ -17,16 +18,28 @@ public class GoCompilerErrorTest extends UsefulTestCase {
            "syntax error: unexpected }, expecting )", CompilerMessageCategory.ERROR, "/some/root/path/some_source.go", 7);
   }
 
+  public void testBuildError() throws Exception {
+    doTest("/some/root/path", "can't load package: package /package/name: import \"/package/name\": cannot import absolute path\n",
+           "can't load package: package /package/name: import \"/package/name\": cannot import absolute path\n",
+           CompilerMessageCategory.ERROR, null, -1);
+  }
+
   private static void doTest(@NotNull String rootPath,
                              @NotNull String message,
-                             String expectedMessage,
-                             CompilerMessageCategory expectedCategory,
-                             String expectedPath, int expectedLine) {
+                             @NotNull String expectedMessage,
+                             @NotNull CompilerMessageCategory expectedCategory,
+                             @Nullable String expectedPath,
+                             long expectedLine) {
     GoCompilerError error = GoCompilerError.create(rootPath, message);
     assertNotNull(error);
     assertEquals(expectedMessage, error.getErrorMessage());
     assertEquals(expectedCategory, error.getCategory());
-    assertEquals(VfsUtilCore.pathToUrl(expectedPath), error.getUrl());
+    if (expectedPath == null) {
+      assertNull(error.getUrl());
+    }
+    else {
+      assertEquals(VfsUtilCore.pathToUrl(expectedPath), error.getUrl());
+    }
     assertEquals(expectedLine, error.getLine());
   }
 }
