@@ -10,16 +10,17 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowCompositeLiteral;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.*;
 
 class ForStatement implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-        if (!ParserUtils.lookAhead(builder, kFOR))
+        if (!lookAhead(builder, kFOR))
             return null;
 
         PsiBuilder.Marker marker = builder.mark();
-        ParserUtils.getToken(builder, kFOR);
+        getToken(builder, kFOR);
 
         boolean allowComposite;
         allowComposite = parser.resetFlag(AllowCompositeLiteral, false);
@@ -34,8 +35,8 @@ class ForStatement implements GoElementTypes {
         parser.resetFlag(AllowCompositeLiteral, allowComposite);
 
         parser.parseBody(builder);
-        marker.done(forType);
-        return forType;
+        
+        return completeStatement(builder, marker, forType);
     }
 
     private static final TokenSet RANGE_LOOKAHEAD = TokenSet.create(oCOMMA, oASSIGN, oVAR_ASSIGN);
@@ -45,17 +46,17 @@ class ForStatement implements GoElementTypes {
     {
         PsiBuilder.Marker clause = builder.mark();
 
-        IElementType statementType = parser.parseStatementSimple(builder);
+        IElementType statementType = Statements.parseSimple(builder, parser, false);
         IElementType forStatementType = null;
 
-        if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder,
-                                                                           pLCURLY)) {
+        if (statementType == EXPRESSION_STATEMENT && lookAhead(builder,
+            pLCURLY)) {
             clause.rollbackTo();
             parser.parseExpression(builder);
             return FOR_WITH_CONDITION_STATEMENT;
         }
 
-        if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder, RANGE_LOOKAHEAD)) {
+        if (statementType == EXPRESSION_STATEMENT && lookAhead(builder, RANGE_LOOKAHEAD)) {
             clause.rollbackTo();
             return tryParseRangeClause(builder, parser);
         }
@@ -68,10 +69,10 @@ class ForStatement implements GoElementTypes {
         }
 
         clause.drop();
-        if (ParserUtils.getToken(builder, GoTokenTypeSets.EOS) ) {
+        if (getToken(builder, GoTokenTypeSets.EOS) ) {
             parser.parseExpression(builder);
-            if (ParserUtils.getToken(builder, GoTokenTypeSets.EOS)) {
-                parser.parseStatementSimple(builder);
+            if (getToken(builder, GoTokenTypeSets.EOS)) {
+                Statements.parseSimple(builder, parser, false);
             } else {
                 builder.error(GoBundle.message("error.semicolon.or.newline.expected"));
             }
@@ -86,27 +87,27 @@ class ForStatement implements GoElementTypes {
 
         parser.parseIdentifierList(builder, false);
 
-        if ( ParserUtils.lookAhead(builder, oVAR_ASSIGN, kRANGE) ) {
-            ParserUtils.getToken(builder, oVAR_ASSIGN);
-            ParserUtils.getToken(builder, kRANGE);
+        if ( lookAhead(builder, oVAR_ASSIGN, kRANGE) ) {
+            getToken(builder, oVAR_ASSIGN);
+            getToken(builder, kRANGE);
             parser.parseExpression(builder);
             m.drop();
             return FOR_WITH_RANGE_AND_VARS_STATEMENT;
         }
 
-        if ( ParserUtils.lookAhead(builder, oASSIGN, kRANGE) ) {
+        if ( lookAhead(builder, oASSIGN, kRANGE) ) {
             m.rollbackTo();
             parser.parseExpressionList(builder);
-            ParserUtils.getToken(builder, oASSIGN);
-            ParserUtils.getToken(builder, kRANGE);
+            getToken(builder, oASSIGN);
+            getToken(builder, kRANGE);
             parser.parseExpression(builder);
             return FOR_WITH_RANGE_STATEMENT;
         }
 
         m.rollbackTo();
-        if ( parser.parseExpressionList(builder) != 0 && ParserUtils.lookAhead(builder, oASSIGN, kRANGE) ) {
-            ParserUtils.getToken(builder, oASSIGN);
-            ParserUtils.getToken(builder, kRANGE);
+        if ( parser.parseExpressionList(builder) != 0 && lookAhead(builder, oASSIGN, kRANGE) ) {
+            getToken(builder, oASSIGN);
+            getToken(builder, kRANGE);
             parser.parseExpression(builder);
             return FOR_WITH_RANGE_STATEMENT;
         }

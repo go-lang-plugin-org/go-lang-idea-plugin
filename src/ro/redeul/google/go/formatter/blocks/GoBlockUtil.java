@@ -8,8 +8,13 @@ import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.containers.MultiMapBasedOnSet;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 import java.util.*;
+
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.INC_DEC_OPS;
 
 /**
  * TODO: Document this
@@ -30,6 +35,58 @@ public class GoBlockUtil {
         static final Spacing EMPTY_LINE = Spacing.createSpacing(0, 0, 2, false, 0);
     }
 
+    public interface Indents {
+
+        static final Indent NONE = Indent.getNoneIndent();
+        static final Indent NONE_ABSOLUTE = Indent.getAbsoluteNoneIndent();
+
+        static final Indent NORMAL = Indent.getNormalIndent();
+        static final Indent NORMAL_RELATIVE = Indent.getNormalIndent(true);
+    }
+
+    public interface Wraps {
+        static final Wrap NONE = Wrap.createWrap(WrapType.NONE, false);
+    }
+
+    static public class Alignments {
+
+        public enum Key {
+            Operator, Value, Type, Comments
+        }
+
+        static final EnumSet<Key> EMPTY_KEY_SET = EnumSet.noneOf(Key.class);
+        static final Map<Key, Alignment> EMPTY_MAP = Collections.emptyMap();
+
+        static final Alignment NONE = null;
+
+
+        public static Alignment one() { return Alignment.createAlignment(true); }
+
+        public static Alignment[] set(Alignment... alignments) {
+            return alignments;
+        }
+
+        public static Alignment[] set(int count) {
+            Alignment[] alignments = new Alignment[count];
+
+            for (int i = 0; i < alignments.length; i++) {
+                alignments[i] = one();
+            }
+
+            return alignments;
+        }
+
+        public static <Key extends Enum<Key>> Map<Key, Alignment> set(@NotNull Set<Key> keys) {
+            Map<Key, Alignment> entries = new HashMap<Key, Alignment>();
+
+            for (Key enumKey : keys) {
+                entries.put(enumKey, one());
+            }
+
+            return entries;
+        }
+    }
+
     static class CustomSpacing {
 
         Map<IElementType, Map<IElementType, Spacing>> spacings;
@@ -46,6 +103,14 @@ public class GoBlockUtil {
 
             public Builder setNone(TokenSet leftTypes, IElementType rightType) {
                 return set(leftTypes, rightType, Spacings.NONE);
+            }
+
+            public Builder setNone(IElementType leftType, TokenSet rightTypes) {
+                return set(leftType, rightTypes, Spacings.NONE);
+            }
+
+            public Builder setNone(TokenSet leftTypes, TokenSet rightTypes) {
+                return set(leftTypes, rightTypes, Spacings.NONE);
             }
 
             public Builder setBasic(IElementType typeChild1, IElementType typeChild2) {
@@ -119,55 +184,17 @@ public class GoBlockUtil {
         }
     }
 
-    public interface Indents {
+    static interface CustomSpacings extends GoTokenTypeSets, GoElementTypes {
 
-        static final Indent NONE = Indent.getNoneIndent();
-        static final Indent NONE_ABSOLUTE = Indent.getAbsoluteNoneIndent();
+        public static final CustomSpacing INC_DEC_STMT = CustomSpacing.Builder()
+            .setNone(EXPRESSIONS, INC_DEC_OPS)
+            .setNone(INC_DEC_OPS, oSEMI)
+            .build();
 
-        static final Indent NORMAL = Indent.getNormalIndent();
-        static final Indent NORMAL_RELATIVE = Indent.getNormalIndent(true);
-    }
+        public static final CustomSpacing SEND_STATEMENT = CustomSpacing.Builder()
+            .setNone(EXPRESSIONS, INC_DEC_OPS)
+            .setNone(INC_DEC_OPS, oSEMI)
+            .build();
 
-    public interface Wraps {
-        static final Wrap NONE = Wrap.createWrap(WrapType.NONE, false);
-    }
-
-    static public class Alignments {
-
-        public enum Key {
-            Operator, Value, Type, Comments
-        }
-
-        static final EnumSet<Key> EMPTY_KEY_SET = EnumSet.noneOf(Key.class);
-        static final Map<Key, Alignment> EMPTY_MAP = Collections.emptyMap();
-
-        static final Alignment NONE = null;
-
-
-        public static Alignment one() { return Alignment.createAlignment(true); }
-
-        public static Alignment[] set(Alignment... alignments) {
-            return alignments;
-        }
-
-        public static Alignment[] set(int count) {
-            Alignment[] alignments = new Alignment[count];
-
-            for (int i = 0; i < alignments.length; i++) {
-                alignments[i] = one();
-            }
-
-            return alignments;
-        }
-
-        public static <Key extends Enum<Key>> Map<Key, Alignment> set(@NotNull Set<Key> keys) {
-            Map<Key, Alignment> entries = new HashMap<Key, Alignment>();
-
-            for (Key enumKey : keys) {
-                entries.put(enumKey, one());
-            }
-
-            return entries;
-        }
     }
 }

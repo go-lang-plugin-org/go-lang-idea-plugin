@@ -10,7 +10,6 @@ import ro.redeul.google.go.lang.parser.parsing.declarations.Declaration;
 import ro.redeul.google.go.lang.parser.parsing.declarations.FunctionOrMethodDeclaration;
 import ro.redeul.google.go.lang.parser.parsing.expressions.Expressions;
 import ro.redeul.google.go.lang.parser.parsing.helpers.Fragments;
-import ro.redeul.google.go.lang.parser.parsing.statements.BlockStatement;
 import ro.redeul.google.go.lang.parser.parsing.statements.Statements;
 import ro.redeul.google.go.lang.parser.parsing.toplevel.CompilationUnit;
 import ro.redeul.google.go.lang.parser.parsing.types.Types;
@@ -66,7 +65,7 @@ public class GoParser extends ParserUtils implements PsiParser {
     @NotNull
     public ASTNode parse(IElementType root, PsiBuilder builder) {
 
-        boolean debugging = true;
+        boolean debugging = false;
         builder.setDebugMode(debugging);
 
         resetFlag(ParsingFlag.AllowCompositeLiteral, true);
@@ -169,10 +168,6 @@ public class GoParser extends ParserUtils implements PsiParser {
 
     public void parseTypeList(PsiBuilder builder) {
         Types.parseTypeDeclarationList(builder, this);
-    }
-
-    public boolean tryParseSimpleStmt(PsiBuilder builder) {
-        return Statements.tryParseSimple(builder, this);
     }
 
     public void setKnownPackage(String packageName) {

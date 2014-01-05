@@ -145,7 +145,7 @@ public interface GoTokenTypeSets extends GoTokenTypes {
         oBIT_CLEAR
     );
 
-    public static final TokenSet INC_DEC_OPERATORS = TokenSet.create(
+    public static final TokenSet INC_DEC_OPS = TokenSet.create(
         oPLUS_PLUS, oMINUS_MINUS
     );
 

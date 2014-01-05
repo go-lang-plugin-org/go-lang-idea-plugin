@@ -12,18 +12,36 @@ import ro.redeul.google.go.GoFormatterTestCase;
  */
 public class GoStatementsFormatterTest extends GoFormatterTestCase {
 
-  @Override
-  protected String getRelativeTestDataPath() {
-    return super.getRelativeTestDataPath() + "statements/";
-  }
+    @Override
+    protected String getRelativeTestDataPath() {
+        return super.getRelativeTestDataPath() + "statements/";
+    }
 
-  public void testBlockEmpty() throws Exception { _test(); }
+    public void testBlockEmpty() throws Exception { _test(); }
 
-  public void testBlockWithComments() throws Exception { _test(); }
+    public void testBlockWithComments() throws Exception { _test(); }
 
-  public void testShortVar() throws Exception { _test(); }
+    public void testShortVar() throws Exception { _test(); }
 
-  public void testShortVarAlignComments() throws Exception { _test(); }
+    public void testShortVarAlignComments() throws Exception { _test(); }
 
+    public void testShortVarCommentGroups() throws Exception { _test(); }
 
+    public void testAssignment() throws Exception { _test(); }
+
+    public void testIncDec() throws Exception { _test(); }
+
+    public void testSend() throws Exception { _test(); }
+
+    public void testExpression() throws Exception { _test(); }
+
+    public void testBreakFallthroughContinueAndGoto() throws Exception { _test(); }
+
+    public void testReturn() throws Exception { _test(); }
+
+    public void testLabeledStatement() throws Exception { _test(); }
+
+    public void testLabeledStatementWithComments() throws Exception { _test(); }
+
+    public void testGo() throws Exception { _test(); }
 }

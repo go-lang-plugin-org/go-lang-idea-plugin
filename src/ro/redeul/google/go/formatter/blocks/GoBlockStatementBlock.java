@@ -21,49 +21,60 @@ import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
 
 class GoBlockStatementBlock extends GoSyntheticBlock<GoBlockStatement> {
 
-  private static final GoBlockUtil.CustomSpacing MULTI_LINE_SPACING =
-    GoBlockUtil.CustomSpacing.Builder()
-      .set(pLCURLY, pRCURLY, Spacing.createSpacing(0, 0, 1, true, 1))
-      .build();
+    private static final GoBlockUtil.CustomSpacing MULTI_LINE_SPACING =
+        GoBlockUtil.CustomSpacing.Builder()
+            .set(pLCURLY, pRCURLY, Spacing.createSpacing(0, 0, 1, true, 1))
+            .build();
 
-  private static final GoBlockUtil.CustomSpacing SAME_LINE_SPACING =
-    GoBlockUtil.CustomSpacing.Builder()
-      .setNone(pLCURLY, pRCURLY)
-      .build();
+    private static final GoBlockUtil.CustomSpacing SAME_LINE_SPACING =
+        GoBlockUtil.CustomSpacing.Builder()
+            .setNone(pLCURLY, pRCURLY)
+            .build();
 
-  public static final Set<Alignments.Key> ALIGNMENT_KEYS =
-    EnumSet.of(Alignments.Key.Comments);
+    public static final Set<Alignments.Key> ALIGNMENT_KEYS =
+        EnumSet.of(Alignments.Key.Comments);
 
-  public static final TokenSet LINE_BREAKING_TOKENS =
-    TokenSet.orSet(
-      GoElementTypes.STATEMENTS,
-      GoElementTypes.COMMENTS
-    );
+    public static final TokenSet LINE_BREAKING_TOKENS =
+        TokenSet.orSet(
+            GoElementTypes.STATEMENTS,
+            GoElementTypes.COMMENTS
+        );
 
-  public GoBlockStatementBlock(GoBlockStatement blockStatement,
-                               CommonCodeStyleSettings settings,
-                               Indent indent) {
-    super(blockStatement, settings, indent);
+    private final TokenSet INDENTED_STATEMENTS =
+        TokenSet.andNot(GoElementTypes.STATEMENTS, TokenSet.create(LABELED_STATEMENT));
 
-    setMultiLineMode(StringUtil.containsLineBreak(blockStatement.getText()), pLCURLY, pRCURLY);
 
-    setLineBreakingTokens(LINE_BREAKING_TOKENS);
-    setAlignmentKeys(ALIGNMENT_KEYS);
-    setHoldTogetherGroups(LINE_BREAKING_TOKENS);
+    public GoBlockStatementBlock(GoBlockStatement blockStatement,
+                                 CommonCodeStyleSettings settings,
+                                 Indent indent) {
+        super(blockStatement, settings, indent);
 
-    if (isMultiLine()) {
-      setCustomSpacing(MULTI_LINE_SPACING);
-    } else {
-      setCustomSpacing(SAME_LINE_SPACING);
+        setMultiLineMode(StringUtil.containsLineBreak(blockStatement.getText()), pLCURLY, pRCURLY);
+
+        setLineBreakingTokens(LINE_BREAKING_TOKENS);
+        setAlignmentKeys(ALIGNMENT_KEYS);
+        setHoldTogetherGroups(LINE_BREAKING_TOKENS);
+
+        if (isMultiLine()) {
+            setCustomSpacing(MULTI_LINE_SPACING);
+        } else {
+            setCustomSpacing(SAME_LINE_SPACING);
+        }
     }
-  }
 
-  @Override
-  protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
-    if ( GoElementTypes.STATEMENTS.contains(child.getNode().getElementType()) ||
-      child instanceof PsiComment)
-      return Indents.NORMAL;
+    @Override
+    protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
+        IElementType childType = child.getNode().getElementType();
 
-    return super.getChildIndent(child, prevChild);
-  }
+        if (child instanceof PsiComment)
+            return Indents.NORMAL;
+
+        if (INDENTED_STATEMENTS.contains(childType))
+            return Indents.NORMAL;
+
+        if (childType == LABELED_STATEMENT)
+            return Indents.NONE;
+
+        return super.getChildIndent(child, prevChild);
+    }
 }

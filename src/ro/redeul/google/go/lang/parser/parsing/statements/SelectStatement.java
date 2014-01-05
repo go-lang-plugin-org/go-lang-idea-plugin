@@ -6,17 +6,19 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.*;
+
 class SelectStatement implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-        if (!ParserUtils.lookAhead(builder, kSELECT))
+        if (!lookAhead(builder, kSELECT))
             return null;
 
         PsiBuilder.Marker marker = builder.mark();
-        ParserUtils.getToken(builder, kSELECT);
+        getToken(builder, kSELECT);
 
-        ParserUtils.getToken(builder, pLCURLY, "open.curly.expected");
+        getToken(builder, pLCURLY, "open.curly.expected");
 
         while ( !builder.eof() && builder.getTokenType() != pRCURLY) {
 
@@ -26,17 +28,17 @@ class SelectStatement implements GoElementTypes {
             int position = builder.getCurrentOffset();
             IElementType clauseType = null;
             if (builder.getTokenType() == kCASE) {
-                ParserUtils.advance(builder);
+                advance(builder);
                 clauseType = parseSendOrRecvExpression(builder, parser);
-                ParserUtils.getToken(builder, oCOLON, "colon.expected");
+                getToken(builder, oCOLON, "colon.expected");
                 validCase = true;
             } else if (builder.getTokenType() == kDEFAULT) {
-                ParserUtils.advance(builder);
-                ParserUtils.getToken(builder, oCOLON, "colon.expected");
+                advance(builder);
+                getToken(builder, oCOLON, "colon.expected");
                 clauseType = SELECT_COMM_CLAUSE_DEFAULT;
                 validCase = true;
             } else if ( builder.getTokenType() != pRCURLY ) {
-                ParserUtils.wrapError(builder, "case.of.default.keyword.expected");
+                wrapError(builder, "case.of.default.keyword.expected");
             }
 
             if ( validCase ) {
@@ -45,7 +47,7 @@ class SelectStatement implements GoElementTypes {
                         break;
                     }
 
-                    ParserUtils.endStatement(builder);
+                    endStatement(builder);
                 }
 
                 caseMark.done(clauseType);
@@ -58,9 +60,9 @@ class SelectStatement implements GoElementTypes {
             }
         }
 
-        ParserUtils.getToken(builder, pRCURLY, "closed.curly.expected");
-        marker.done(SELECT_STATEMENT);
-        return SELECT_STATEMENT;
+        getToken(builder, pRCURLY, "closed.curly.expected");
+
+        return completeStatement(builder, marker, SELECT_STATEMENT);
     }
 
     private static IElementType parseSendOrRecvExpression(PsiBuilder builder, GoParser parser) {

@@ -159,25 +159,26 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType EMPTY_STATEMENT = new GoElementTypeImpl("EmptyStmt");
 
     public final TokenSet STATEMENTS = TokenSet.create(
-        LABELED_STATEMENT,
-        EXPRESSION_STATEMENT,
         ASSIGN_STATEMENT,
-        FALLTHROUGH_STATEMENT,
-        GO_STATEMENT,
-        GOTO_STATEMENT,
         BREAK_STATEMENT,
         CONTINUE_STATEMENT,
-        SELECT_STATEMENT,
+        EXPRESSION_STATEMENT,
+        FALLTHROUGH_STATEMENT,
         FOR_WITH_CLAUSES_STATEMENT,
         FOR_WITH_CONDITION_STATEMENT,
         FOR_WITH_RANGE_STATEMENT,
-        INC_DEC_STATEMENT,
-        RETURN_STATEMENT,
+        GO_STATEMENT,
+        GOTO_STATEMENT,
         IF_STATEMENT,
+        INC_DEC_STATEMENT,
+        LABELED_STATEMENT,
+        RETURN_STATEMENT,
+        SEND_STATEMENT,
+        SELECT_STATEMENT,
         SHORT_VAR_STATEMENT,
-        VAR_DECLARATIONS,
         SWITCH_EXPR_STATEMENT,
-        SWITCH_EXPR_STATEMENT
+        SWITCH_EXPR_STATEMENT,
+        VAR_DECLARATIONS
     );
 
     public final TokenSet COMMENTS = TokenSet.create(

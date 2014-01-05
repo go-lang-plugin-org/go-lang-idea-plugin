@@ -381,7 +381,7 @@ public abstract class ParserUtils {
 
                     if (GoTokenSets.WHITESPACE.contains(tokenType) &&
                         StringUtil.getLineBreakCount(getter.get(currentToken)) > 1) {
-                        edgePosition = currentToken;
+                        edgePosition = currentToken + 1;
                     }
 
                     currentToken++;

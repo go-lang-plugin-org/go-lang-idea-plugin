@@ -14,18 +14,25 @@ import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
  */
 public class Declaration extends ParserUtils implements GoElementTypes {
 
-    public static IElementType parse(PsiBuilder builder, GoParser goParser) {
+    public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
         if ( lookAhead(builder, kCONST) ) {
-            return ConstDeclaration.parse(builder, goParser);
+            if ( parser.isSet(GoParser.ParsingFlag.Debug) )
+                System.out.println("Parsing const");
+
+            return ConstDeclaration.parse(builder, parser);
         }
 
         if ( lookAhead(builder, kVAR) ) {
-            return VarDeclaration.parse(builder, goParser);
+            if ( parser.isSet(GoParser.ParsingFlag.Debug) )
+                System.out.println("Parsing var");
+            return VarDeclaration.parse(builder, parser);
         }
 
         if ( ParserUtils.lookAhead(builder, kTYPE) ) {
-            return TypeDeclaration.parse(builder, goParser);
+            if ( parser.isSet(GoParser.ParsingFlag.Debug) )
+                System.out.println("Parsing type");
+            return TypeDeclaration.parse(builder, parser);
         }
 
         return null;

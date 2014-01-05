@@ -5,35 +5,32 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.psi.GoFile;
 
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
+
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
  *         Date: 6/3/12
  */
 class GoFileBlock extends GoSyntheticBlock<GoFile> {
 
-  public GoFileBlock(GoFile goFile, CommonCodeStyleSettings settings) {
-    super(goFile, settings, GoBlockUtil.Indents.NONE_ABSOLUTE, GoBlockUtil.Alignments.one(), GoBlockUtil.Alignments.EMPTY_MAP);
-  }
+    private static final TokenSet LINE_BREAKING_TOKENS = TokenSet.create(
+        PACKAGE_DECLARATION,
+        IMPORT_DECLARATIONS,
+        CONST_DECLARATIONS,
+        VAR_DECLARATIONS,
+        TYPE_DECLARATIONS,
+        FUNCTION_DECLARATION,
+        METHOD_DECLARATION,
+        mSL_COMMENT,
+        mML_COMMENT
+    );
 
-  private static final TokenSet NEED_NEW_LINE_TOKENS = TokenSet.create(
-    PACKAGE_DECLARATION,
-    IMPORT_DECLARATIONS,
-    CONST_DECLARATIONS,
-    VAR_DECLARATIONS,
-    TYPE_DECLARATIONS,
-    FUNCTION_DECLARATION,
-    METHOD_DECLARATION,
-    mSL_COMMENT,
-    mML_COMMENT
-  );
+    public GoFileBlock(GoFile goFile, CommonCodeStyleSettings settings) {
+        super(goFile, settings, Indents.NONE_ABSOLUTE, null, Alignments.EMPTY_MAP);
 
-  protected boolean wantsToBreakLine(IElementType typeChild) {
-    return NEED_NEW_LINE_TOKENS.contains(typeChild);
-  }
-
-  @Override
-  protected boolean isMultiLine() {
-    return true;
-  }
+        setMultiLineMode(true, null, null);
+        setLineBreakingTokens(LINE_BREAKING_TOKENS);
+    }
 }
 

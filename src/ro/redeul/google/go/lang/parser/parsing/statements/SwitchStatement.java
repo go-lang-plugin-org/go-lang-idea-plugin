@@ -6,9 +6,9 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
-import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowCompositeLiteral;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.*;
 
 /**
  * User: mtoader
@@ -19,12 +19,12 @@ class SwitchStatement implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
 
-        if (!ParserUtils.lookAhead(builder, kSWITCH))
+        if (!lookAhead(builder, kSWITCH))
             return null;
 
         PsiBuilder.Marker marker = builder.mark();
 
-        ParserUtils.getToken(builder, kSWITCH);
+        getToken(builder, kSWITCH);
 
         boolean allowCompositeLiteral =
             parser.resetFlag(AllowCompositeLiteral, false);
@@ -33,9 +33,9 @@ class SwitchStatement implements GoElementTypes {
 
         PsiBuilder.Marker mark = builder.mark();
 
-        IElementType statementType = parser.parseStatementSimple(builder);
-        if ( statementType != null && ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS)) {
-            ParserUtils.endStatement(builder);
+        IElementType statementType = Statements.parseSimple(builder, parser, false);
+        if ( statementType != null && lookAhead(builder, GoTokenTypeSets.EOS)) {
+            endStatement(builder);
             mark.drop();
         } else {
             mark.rollbackTo();
@@ -47,40 +47,39 @@ class SwitchStatement implements GoElementTypes {
             parser.parseExpression(builder);
         }
 
-        ParserUtils.getToken(builder, pLCURLY, "open.curly.expected");
+        getToken(builder, pLCURLY, "open.curly.expected");
 
         while (!builder.eof() && builder.getTokenType() != pRCURLY) {
 
             PsiBuilder.Marker caseMark = builder.mark();
 
-            if (ParserUtils.getToken(builder, kCASE)) {
+            if (getToken(builder, kCASE)) {
                 if (isTypeSwitch) {
                     parser.parseTypeList(builder);
                 } else {
                     parser.parseExpressionList(builder);
                 }
 
-                ParserUtils.getToken(builder, oCOLON, "colon.expected");
-            } else if (ParserUtils.getToken(builder, kDEFAULT)) {
-                ParserUtils.getToken(builder, oCOLON, "colon.expected");
+                getToken(builder, oCOLON, "colon.expected");
+            } else if (getToken(builder, kDEFAULT)) {
+                getToken(builder, oCOLON, "colon.expected");
             } else {
-                ParserUtils.wrapError(builder, GoBundle.message("case.of.default.keyword.expected"));
+                wrapError(builder, GoBundle.message("case.of.default.keyword.expected"));
             }
 
             parser.resetFlag(AllowCompositeLiteral, true);
-            while (!builder.eof() && !ParserUtils.lookAhead(builder, pRCURLY) && parser.parseStatement(builder) != null) {
-                ParserUtils.endStatement(builder);
+            while (!builder.eof() && !lookAhead(builder, pRCURLY) && parser.parseStatement(builder) != null) {
+                endStatement(builder);
             }
 
             caseMark.done(isTypeSwitch ? SWITCH_TYPE_CASE : SWITCH_EXPR_CASE);
         }
 
-        ParserUtils.getToken(builder, pRCURLY, "closed.curly.expected");
-        IElementType switchType = isTypeSwitch ? SWITCH_TYPE_STATEMENT : SWITCH_EXPR_STATEMENT;
-        marker.done(switchType);
-
+        getToken(builder, pRCURLY, "closed.curly.expected");
         parser.resetFlag(AllowCompositeLiteral, allowCompositeLiteral);
-        return switchType;
+
+        IElementType switchType = isTypeSwitch ? SWITCH_TYPE_STATEMENT : SWITCH_EXPR_STATEMENT;
+        return completeStatement(builder, marker, switchType);
     }
 
     private static boolean tryParseSimpleStmt(PsiBuilder builder,
@@ -94,14 +93,14 @@ class SwitchStatement implements GoElementTypes {
             (
                 GoTokenTypeSets.ASSIGN_OPERATORS
                                .contains(builder.getTokenType()) ||
-                    GoTokenTypeSets.INC_DEC_OPERATORS
+                    GoTokenTypeSets.INC_DEC_OPS
                                    .contains(builder.getTokenType()) ||
                     oVAR_ASSIGN == builder.getTokenType() ||
                     oSEMI == builder.getTokenType()
             )) {
             rememberMarker.rollbackTo();
-            parser.parseStatementSimple(builder);
-            ParserUtils.getToken(builder, oSEMI);
+            Statements.parseSimple(builder, parser, false);
+            getToken(builder, oSEMI);
             return true;
         } else {
             rememberMarker.drop();
@@ -114,9 +113,9 @@ class SwitchStatement implements GoElementTypes {
 
         PsiBuilder.Marker marker = builder.mark();
 
-        if (ParserUtils.lookAhead(builder, mIDENT, oVAR_ASSIGN)) {
-            ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
-            ParserUtils.getToken(builder, oVAR_ASSIGN);
+        if (lookAhead(builder, mIDENT, oVAR_ASSIGN)) {
+            eatElement(builder, LITERAL_IDENTIFIER);
+            getToken(builder, oVAR_ASSIGN);
         }
 
         if (!parser.parsePrimaryExpression(builder)) {
@@ -124,15 +123,15 @@ class SwitchStatement implements GoElementTypes {
             return false;
         }
 
-        if (!ParserUtils.lookAhead(builder, oDOT, pLPAREN, kTYPE, pRPAREN)) {
+        if (!lookAhead(builder, oDOT, pLPAREN, kTYPE, pRPAREN)) {
             marker.rollbackTo();
             return false;
         }
 
-        ParserUtils.getToken(builder, oDOT);
-        ParserUtils.getToken(builder, pLPAREN);
-        ParserUtils.getToken(builder, kTYPE);
-        ParserUtils.getToken(builder, pRPAREN);
+        getToken(builder, oDOT);
+        getToken(builder, pLPAREN);
+        getToken(builder, kTYPE);
+        getToken(builder, pRPAREN);
 
         marker.done(SWITCH_TYPE_GUARD);
         return true;

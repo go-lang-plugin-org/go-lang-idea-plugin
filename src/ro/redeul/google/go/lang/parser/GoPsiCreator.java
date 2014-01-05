@@ -283,6 +283,9 @@ class GoPsiCreator implements GoElementTypes {
         if (elementType.equals(SELECT_STATEMENT))
             return new GoSelectStatementImpl(node);
 
+        if (elementType.equals(INC_DEC_STATEMENT))
+            return new GoIncDecStatementImpl(node);
+
         if (elementType.equals(SELECT_COMM_CLAUSE_SEND))
             return new GoSelectCommClauseSendImpl(node);
 

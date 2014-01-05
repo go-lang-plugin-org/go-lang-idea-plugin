@@ -28,7 +28,6 @@ public class GoImportsBlock extends GoSyntheticBlock<GoImportDeclarations> {
     mSL_COMMENT
   );
 
-
   public GoImportsBlock(GoImportDeclarations imports,
                         CommonCodeStyleSettings settings) {
     super(imports, settings, Indents.NONE);

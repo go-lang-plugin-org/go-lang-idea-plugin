@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.parser.GoParser;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowCompositeLiteral;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.*;
 
 /**
  * User: mtoader
@@ -17,25 +18,29 @@ import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowComposit
 class IfStatement implements GoElementTypes {
 
     public static IElementType parse(PsiBuilder builder, GoParser parser) {
+        return parse(builder, parser, true);
+    }
 
-        if ( ! ParserUtils.lookAhead(builder, kIF) )
+    public static IElementType parse(PsiBuilder builder, GoParser parser, boolean complete) {
+
+        if ( ! lookAhead(builder, kIF) )
             return null;
 
         PsiBuilder.Marker marker = builder.mark();
 
-        ParserUtils.getToken(builder, kIF);
+        getToken(builder, kIF);
 
         PsiBuilder.Marker mark = builder.mark();
 
         boolean allowComposite = parser.resetFlag(AllowCompositeLiteral, false);
 
-        IElementType statementType = parser.parseStatementSimple(builder);
-        if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder,
-                                                                           pLCURLY)) {
+        IElementType statementType = Statements.parseSimple(builder, parser, false);
+        if (statementType == EXPRESSION_STATEMENT &&
+            lookAhead(builder, pLCURLY)) {
             mark.rollbackTo();
         } else {
             mark.drop();
-            ParserUtils.endStatement(builder);
+            endStatement(builder);
         }
 
         parser.parseExpression(builder);
@@ -43,20 +48,24 @@ class IfStatement implements GoElementTypes {
 
         parser.parseBody(builder);
 
-        if (ParserUtils.lookAhead(builder, kELSE)) {
+        if (lookAhead(builder, kELSE)) {
             if (builder.getTokenType() == kELSE) {
-                ParserUtils.getToken(builder, kELSE);
-                if (ParserUtils.lookAhead(builder, kIF))
-                    IfStatement.parse(builder, parser);
-                else if (ParserUtils.lookAhead(builder, pLCURLY))
-                    BlockStatement.parse(builder, parser);
+                getToken(builder, kELSE);
+                if (lookAhead(builder, kIF))
+                    IfStatement.parse(builder, parser, false);
+                else if (lookAhead(builder, pLCURLY))
+                    parser.parseBody(builder);
                 else {
                     builder.error(GoBundle.message("error.block.of.if.statement.expected"));
                 }
             }
         }
 
-        marker.done(IF_STATEMENT);
-        return IF_STATEMENT;
+        if (complete)
+            return completeStatement(builder, marker, IF_STATEMENT);
+        else {
+            marker.done(IF_STATEMENT);
+            return IF_STATEMENT;
+        }
     }
 }
