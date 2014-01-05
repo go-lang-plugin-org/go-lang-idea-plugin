@@ -241,6 +241,28 @@
             </action>
 
             <add-to-group group-id="Go.Tools" anchor="last"/>
+        </group>
+
+        <group id="GAE.Tools.Debug" popup="true" text="go plugin Debug internals"
+               description="Go plugin debug utilites" icon="/icons/gae_13x13.png" class="ro.redeul.google.go.actions.NewGAEDebugGroup">
+            <action id="GAE.Debug.SdkData"
+                    class="ro.redeul.google.go.ide.actions.GAEDebugSDK"
+                    text="go sdk data" description="Print the current sdk data"
+                    icon="/icons/gae_13x13.png">
+            </action>
+
+            <action id="GAE.Debug.Env"
+                    class="ro.redeul.google.go.ide.actions.GAEDebugEnv"
+                    text="go env" description="Print the current env"
+                    icon="/icons/gae_13x13.png">
+            </action>
+
+            <action id="GAE.Debug.SysEnv"
+                    class="ro.redeul.google.go.ide.actions.GAEDebugSysEnv"
+                    text="system env" description="Print the current System Env"
+                    icon="/icons/gae_13x13.png">
+            </action>
+
             <add-to-group group-id="GAE.Tools" anchor="last"/>
         </group>
 

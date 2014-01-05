@@ -16,10 +16,10 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-public class GoDebugSysEnv extends GoCommonDebugAction {
+public class GAEDebugSysEnv extends GoCommonDebugAction {
 
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
@@ -34,12 +34,12 @@ public class GoDebugSysEnv extends GoCommonDebugAction {
             consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
         }
 
-        Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
+        Sdk sdk = GoSdkUtil.getGoogleGAESdkForProject(project);
         if ( sdk == null ) {
             return;
         }
 
-        final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
+        final GoAppEngineSdkData sdkData = (GoAppEngineSdkData)sdk.getSdkAdditionalData();
         if ( sdkData == null ) {
             return;
         }

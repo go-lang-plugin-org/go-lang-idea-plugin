@@ -6,9 +6,9 @@ import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
-import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 
-public class NewGoDebugGroup extends DefaultActionGroup
+public class NewGAEDebugGroup extends DefaultActionGroup
 {
     private static final boolean debugEnabled = true;
 
@@ -27,6 +27,6 @@ public class NewGoDebugGroup extends DefaultActionGroup
         Sdk sdk = ProjectRootManager.getInstance(e.getProject()).getProjectSdk();
         e.getPresentation().setVisible(debugEnabled &&
                 sdk != null &&
-                sdk.getSdkType() instanceof GoSdkType);
+                sdk.getSdkType() instanceof GoAppEngineSdkType);
     }
 }
