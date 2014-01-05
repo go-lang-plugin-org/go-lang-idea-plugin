@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 //TODO
 public class GoCompilerError {
-  private static final Pattern COMPILER_MESSAGE_PATTERN = Pattern.compile("^(.+):(\\d+):(\\s*syntax error:)?\\s*(.+)$");
+  private static final Pattern COMPILER_MESSAGE_PATTERN = Pattern.compile("^(.+):(\\d+):\\s*(.+)$");
 
   private final String errorMessage;
   private final String url;
@@ -46,13 +46,11 @@ public class GoCompilerError {
 
     String relativeFilePath = FileUtil.toSystemIndependentName(StringUtil.notNullize(FileUtil.toCanonicalPath(matcher.group(1))));
     String line = matcher.group(2);
-    String error = matcher.group(3);
-    String details = matcher.group(4);
+    String details = matcher.group(3);
 
     String path = rootPath.isEmpty() ? relativeFilePath : new File(FileUtil.toSystemIndependentName(rootPath), relativeFilePath).getPath();
     int lineNumber = StringUtil.parseInt(line, -1);
-    CompilerMessageCategory category = error != null ? CompilerMessageCategory.ERROR : CompilerMessageCategory.WARNING;
-    return new GoCompilerError(details, VfsUtilCore.pathToUrl(path), lineNumber, category);
+    return new GoCompilerError(details, VfsUtilCore.pathToUrl(path), lineNumber, CompilerMessageCategory.ERROR);
   }
 
   public CompilerMessageCategory getCategory() {
