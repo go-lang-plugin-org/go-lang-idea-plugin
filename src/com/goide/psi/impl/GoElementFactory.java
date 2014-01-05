@@ -24,7 +24,7 @@ public class GoElementFactory {
 
   @NotNull
   public static GoVarDefinition createVarDefinitionFromText(@NotNull Project project, @NotNull String text) {
-    GoFile file = createFileFromText(project, "package f; var "+text+" int;");
+    GoFile file = createFileFromText(project, "package f; var " + text + " int;");
     return file.getVars().get(0);
   }
 
@@ -35,7 +35,7 @@ public class GoElementFactory {
 
   @NotNull
   private static GoFile createFileFromText(@NotNull Project project, @NotNull String text) {
-    return (GoFile) PsiFileFactory.getInstance(project).createFileFromText("a.go", GoLanguage.INSTANCE, text);
+    return (GoFile)PsiFileFactory.getInstance(project).createFileFromText("a.go", GoLanguage.INSTANCE, text);
   }
 
   @NotNull

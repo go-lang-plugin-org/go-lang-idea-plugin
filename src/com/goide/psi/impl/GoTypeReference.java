@@ -1,6 +1,8 @@
 package com.goide.psi.impl;
 
-import com.goide.psi.*;
+import com.goide.psi.GoFile;
+import com.goide.psi.GoTypeReferenceExpression;
+import com.goide.psi.GoTypeSpec;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
