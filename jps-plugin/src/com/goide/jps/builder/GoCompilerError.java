@@ -11,7 +11,6 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO
 public class GoCompilerError {
   private static final Pattern COMPILER_MESSAGE_PATTERN = Pattern.compile("^(.+):(\\d+):\\s*(.+)$");
 

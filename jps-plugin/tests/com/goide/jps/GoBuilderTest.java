@@ -40,9 +40,13 @@ public class GoBuilderTest extends JpsBuildTestCase {
     result.assertFailed();
     
     List<BuildMessage> errors = result.getMessages(BuildMessage.Kind.ERROR);
-    assertEquals(1, errors.size());
-    assertEquals("unexpected }, expecting )", errors.get(0).getMessageText());
+    assertEquals(2, errors.size());
+    
+    assertEquals("newline in string", errors.get(0).getMessageText());
     assertEquals(BuildMessage.Kind.ERROR, errors.get(0).getKind());
+    
+    assertEquals("syntax error: unexpected }, expecting )", errors.get(1).getMessageText());
+    assertEquals(BuildMessage.Kind.ERROR, errors.get(1).getKind());
   }
 
   private void assertCompiled(@NotNull String moduleName, @NotNull String fileName) {

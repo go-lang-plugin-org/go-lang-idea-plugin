@@ -7,14 +7,14 @@ import com.intellij.testFramework.UsefulTestCase;
 import org.jetbrains.annotations.NotNull;
 
 public class GoCompilerErrorTest extends UsefulTestCase {
-  public void testWarning() throws Exception {
+  public void testSyntaxError_1() throws Exception {
     doTest("/some/root/path", "./some_source.go:6: newline in string",
-           "newline in string", CompilerMessageCategory.WARNING, "/some/root/path/some_source.go", 6);
+           "newline in string", CompilerMessageCategory.ERROR, "/some/root/path/some_source.go", 6);
   }
 
-  public void testSyntaxError() throws Exception {
+  public void testSyntaxError_2() throws Exception {
     doTest("/some/root/path", "./some_source.go:7: syntax error: unexpected }, expecting )",
-           "unexpected }, expecting )", CompilerMessageCategory.ERROR, "/some/root/path/some_source.go", 7);
+           "syntax error: unexpected }, expecting )", CompilerMessageCategory.ERROR, "/some/root/path/some_source.go", 7);
   }
 
   private static void doTest(@NotNull String rootPath,
