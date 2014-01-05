@@ -43,6 +43,7 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
     private RawCommandLineEditor envVars;
     private TextFieldWithBrowseButton workingDirectoryBrowser;
     private JCheckBox runGoVetBeforeCheckBox;
+    private JRadioButton allTestsInCWDRadioButton;
     private ButtonGroup testsGroup;
 
     @SuppressWarnings("unchecked")
@@ -113,14 +114,22 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
         testRunnerArguments.setText(testConfiguration.testRunnerArgs);
 
         if (testConfiguration.testTargetType == TestTargetType.File) {
+            allTestsInCWDRadioButton.setSelected(false);
             packageNameRadioButton.setSelected(false);
             testFileNameRadioButton.setSelected(true);
             packages.setEnabled(false);
             testFile.setEnabled(true);
-        } else {
+        } else if (testConfiguration.testTargetType == TestTargetType.Package) {
+            allTestsInCWDRadioButton.setSelected(false);
             packageNameRadioButton.setSelected(true);
             testFileNameRadioButton.setSelected(false);
             packages.setEnabled(true);
+            testFile.setEnabled(false);
+        } else {
+            allTestsInCWDRadioButton.setSelected(true);
+            packageNameRadioButton.setSelected(false);
+            testFileNameRadioButton.setSelected(false);
+            packages.setEnabled(false);
             testFile.setEnabled(false);
         }
 
@@ -162,7 +171,16 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
         Object selectedItem = packages.getSelectedItem();
         testConfiguration.envVars = envVars.getText();
         testConfiguration.testRunnerArgs = testRunnerArguments.getText();
-        testConfiguration.testTargetType = packageNameRadioButton.isSelected() ? TestTargetType.Package : TestTargetType.File;
+
+        if (packageNameRadioButton.isSelected()) {
+            testConfiguration.testTargetType =  TestTargetType.Package;
+        } else if (testFileNameRadioButton.isSelected()) {
+            testConfiguration.testTargetType = TestTargetType.File;
+        } else if (allTestsInCWDRadioButton.isSelected()) {
+            testConfiguration.testTargetType = TestTargetType.CWD;
+        }
+
+
         testConfiguration.packageName = selectedItem != null ? selectedItem.toString() : "";
         testConfiguration.testFile = testFile.getText();
         testConfiguration.testArgs = testArguments.getText();

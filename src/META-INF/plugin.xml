@@ -57,7 +57,10 @@
     </description>
     <change-notes>
         <![CDATA[
-         <h3>0.9.15 changes:</h3>
+        <h3>0.9.16 changes:</h3>
+            <ul>
+                <li>[feature] Added support for running all tests in a directory</li>
+        <h3>0.9.15 changes:</h3>
             <ul>
                 <li>[feature] Added IntelliJ IDEA 13 (Cardea) support</li>
                 <li>[feature] Dropped IntelliJ IDEA 12 (Leda) support</li>
@@ -75,7 +78,7 @@
                 <li>[bugfix] Fixed Go App Engine support</li>
                 <li>[bugfix] Other fixes and improvements</li>
             </ul>
-         <h3>0.9.14 changes:</h3>
+        <h3>0.9.14 changes:</h3>
             <ul>
                 <li>[feature] Basic support for completion of the whole method set for an interface.</li>
                 <li>[feature] Handle builtin function calls when doing type inference</li>
