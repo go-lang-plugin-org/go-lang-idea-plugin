@@ -1033,9 +1033,9 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _LEFT_, "<expr switch statement>");
     result_ = Condition(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, LBRACE);
-    result_ = result_ && ExprSwitchStatement_2(builder_, level_ + 1);
-    pinned_ = result_; // pin = 3
-    result_ = result_ && consumeToken(builder_, RBRACE);
+    pinned_ = result_; // pin = 2
+    result_ = result_ && report_error_(builder_, ExprSwitchStatement_2(builder_, level_ + 1));
+    result_ = pinned_ && consumeToken(builder_, RBRACE) && result_;
     exit_section_(builder_, level_, marker_, EXPR_SWITCH_STATEMENT, result_, pinned_, null);
     return result_ || pinned_;
   }

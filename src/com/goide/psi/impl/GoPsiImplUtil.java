@@ -40,11 +40,23 @@ public class GoPsiImplUtil {
   }
 
   @SuppressWarnings("UnusedParameters")
-  public static boolean processDeclarations(@NotNull GoCompositeElement o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+  public static boolean processDeclarations(@NotNull GoCompositeElement o,
+                                            @NotNull PsiScopeProcessor processor,
+                                            @NotNull ResolveState state,
+                                            PsiElement lastParent,
+                                            @NotNull PsiElement place) {
     boolean isAncestor = PsiTreeUtil.isAncestor(o, place, false);
     if (isAncestor) return GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
 
-    if (o instanceof GoIfStatement || o instanceof GoBlock || o instanceof GoSwitchStatement || o instanceof GoForStatement) return false;
+    if (o instanceof GoBlock ||
+        o instanceof GoIfStatement ||
+        o instanceof GoSwitchStatement ||
+        o instanceof GoForStatement ||
+        o instanceof GoCommClause ||
+        o instanceof GoTypeCaseClause ||
+        o instanceof GoExprCaseClause) {
+      return false;
+    }
     return GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
   }
 

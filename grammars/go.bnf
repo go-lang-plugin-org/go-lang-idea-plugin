@@ -277,7 +277,7 @@ assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>
 IfStatement ::= if Condition Block [ else ( IfStatement | Block ) ] {pin(".*")="if|else"}
 SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 SwitchStart ::= switch
-left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=3 extends=SwitchStatement}
+left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=2 extends=SwitchStatement}
 
 private Condition ::= SimpleStatementOpt [ Expression ]
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
