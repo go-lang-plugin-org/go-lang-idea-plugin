@@ -24,6 +24,7 @@
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
     <lang.refactoringSupport language="go" implementationClass="com.goide.refactor.GoRefactoringSupportProvider"/>
+    <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
 
     <sdkType implementation="com.goide.GoSdkType"/>
     
