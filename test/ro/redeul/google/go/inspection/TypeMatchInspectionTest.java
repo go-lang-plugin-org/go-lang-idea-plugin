@@ -16,4 +16,8 @@ public class TypeMatchInspectionTest extends GoInspectionTestCase {
     public void testIssue389() throws Exception {
         doTest();
     }
+
+    public void testAlias() throws Exception {
+        doTest();
+    }
 }
