@@ -107,7 +107,7 @@ GO_FILE
         FIELD_DECLARATION
           PsiElement(identifier)('w')
           TYPE
-            REFERENCE_EXPRESSION
+            TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('io')
               PsiElement(.)('.')
@@ -151,7 +151,7 @@ GO_FILE
         PARAMETER_DECLARATION
           PsiElement(identifier)('w')
           TYPE
-            REFERENCE_EXPRESSION
+            TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('io')
               PsiElement(.)('.')
@@ -339,7 +339,7 @@ GO_FILE
             CALL_EXPR
               METHOD_EXPR
                 RECEIVER_TYPE
-                  REFERENCE_EXPRESSION
+                  TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(identifier)('tw')
                     PsiElement(.)('.')
@@ -1272,7 +1272,7 @@ GO_FILE
               CALL_EXPR
                 METHOD_EXPR
                   RECEIVER_TYPE
-                    REFERENCE_EXPRESSION
+                    TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(identifier)('hdr')
                       PsiElement(.)('.')
@@ -1290,7 +1290,7 @@ GO_FILE
               CALL_EXPR
                 METHOD_EXPR
                   RECEIVER_TYPE
-                    REFERENCE_EXPRESSION
+                    TYPE_REFERENCE_EXPRESSION
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(identifier)('hdr')
                       PsiElement(.)('.')
@@ -1312,7 +1312,7 @@ GO_FILE
             CALL_EXPR
               METHOD_EXPR
                 RECEIVER_TYPE
-                  REFERENCE_EXPRESSION
+                  TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(identifier)('hdr')
                     PsiElement(.)('.')
@@ -1885,7 +1885,7 @@ GO_FILE
         CALL_EXPR
           METHOD_EXPR
             RECEIVER_TYPE
-              REFERENCE_EXPRESSION
+              TYPE_REFERENCE_EXPRESSION
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('tw')
                 PsiElement(.)('.')
@@ -2281,7 +2281,7 @@ GO_FILE
             VAR_DEFINITION
               PsiElement(identifier)('buf')
             TYPE
-              REFERENCE_EXPRESSION
+              TYPE_REFERENCE_EXPRESSION
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('bytes')
                 PsiElement(.)('.')
@@ -2808,7 +2808,7 @@ GO_FILE
         CALL_EXPR
           METHOD_EXPR
             RECEIVER_TYPE
-              REFERENCE_EXPRESSION
+              TYPE_REFERENCE_EXPRESSION
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('tw')
                 PsiElement(.)('.')
@@ -3006,7 +3006,7 @@ GO_FILE
             CALL_EXPR
               METHOD_EXPR
                 RECEIVER_TYPE
-                  REFERENCE_EXPRESSION
+                  TYPE_REFERENCE_EXPRESSION
                     TYPE_REFERENCE_EXPRESSION
                       PsiElement(identifier)('tw')
                     PsiElement(.)('.')

@@ -7,10 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoAnonymousField extends GoCompositeElement {
 
-  @Nullable
-  GoReferenceExpression getReferenceExpression();
-
-  @Nullable
+  @NotNull
   GoTypeReferenceExpression getTypeReferenceExpression();
 
 }

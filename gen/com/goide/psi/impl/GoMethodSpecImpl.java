@@ -23,12 +23,6 @@ public class GoMethodSpecImpl extends GoCompositeElementImpl implements GoMethod
 
   @Override
   @Nullable
-  public GoReferenceExpression getReferenceExpression() {
-    return findChildByClass(GoReferenceExpression.class);
-  }
-
-  @Override
-  @Nullable
   public GoSignature getSignature() {
     return findChildByClass(GoSignature.class);
   }

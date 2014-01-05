@@ -2985,7 +2985,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TypeReferenceExpression QualifiedReferenceExpression?
+  // TypeReferenceExpression QualifiedTypeReferenceExpression?
   static boolean TypeName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeName")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
@@ -2997,10 +2997,10 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // QualifiedReferenceExpression?
+  // QualifiedTypeReferenceExpression?
   private static boolean TypeName_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeName_1")) return false;
-    QualifiedReferenceExpression(builder_, level_ + 1);
+    QualifiedTypeReferenceExpression(builder_, level_ + 1);
     return true;
   }
 

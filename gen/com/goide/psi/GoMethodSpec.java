@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GoMethodSpec extends GoCompositeElement {
 
   @Nullable
-  GoReferenceExpression getReferenceExpression();
-
-  @Nullable
   GoSignature getSignature();
 
   @Nullable

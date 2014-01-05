@@ -85,7 +85,7 @@ private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
 ImportSpec ::= [ '.' | identifier ] string
 
 Type ::= TypeName | TypeLit | '(' Type ')'
-private TypeName ::= TypeReferenceExpression QualifiedReferenceExpression?
+private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 

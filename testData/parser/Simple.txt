@@ -20,7 +20,7 @@ GO_FILE
       RESULT
         PsiElement(()('(')
         TYPE
-          REFERENCE_EXPRESSION
+          TYPE_REFERENCE_EXPRESSION
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('cipher')
             PsiElement(.)('.')

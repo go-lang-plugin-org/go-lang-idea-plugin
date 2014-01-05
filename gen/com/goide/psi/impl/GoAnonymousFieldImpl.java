@@ -22,15 +22,9 @@ public class GoAnonymousFieldImpl extends GoCompositeElementImpl implements GoAn
   }
 
   @Override
-  @Nullable
-  public GoReferenceExpression getReferenceExpression() {
-    return findChildByClass(GoReferenceExpression.class);
-  }
-
-  @Override
-  @Nullable
+  @NotNull
   public GoTypeReferenceExpression getTypeReferenceExpression() {
-    return findChildByClass(GoTypeReferenceExpression.class);
+    return findNotNullChildByClass(GoTypeReferenceExpression.class);
   }
 
 }

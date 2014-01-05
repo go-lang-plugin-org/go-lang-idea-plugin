@@ -23,12 +23,6 @@ public class GoReceiverTypeImpl extends GoTypeImpl implements GoReceiverType {
 
   @Override
   @Nullable
-  public GoReferenceExpression getReferenceExpression() {
-    return findChildByClass(GoReferenceExpression.class);
-  }
-
-  @Override
-  @Nullable
   public GoTypeReferenceExpression getTypeReferenceExpression() {
     return findChildByClass(GoTypeReferenceExpression.class);
   }
