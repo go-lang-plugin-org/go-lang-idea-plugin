@@ -9,6 +9,7 @@ import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -78,5 +79,11 @@ class GoReference extends PsiReferenceBase<PsiElement> {
       }
     }
     return ArrayUtil.toObjectArray(result);
+  }
+
+  @Override
+  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+    myRefExpression.replace(GoElementFactory.createReferenceFromText(myElement.getProject(), newElementName));
+    return myRefExpression;
   }
 }

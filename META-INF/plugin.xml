@@ -23,6 +23,7 @@
     <quoteHandler fileType="Go" className="com.goide.GoQuoteHandler"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
+    <lang.refactoringSupport language="go" implementationClass="com.goide.refactor.GoRefactoringSupportProvider"/>
 
     <sdkType implementation="com.goide.GoSdkType"/>
     

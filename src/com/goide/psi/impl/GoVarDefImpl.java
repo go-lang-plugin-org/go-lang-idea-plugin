@@ -5,6 +5,8 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class GoVarDefImpl extends GoNamedElementImpl implements GoVarDefinition {
@@ -34,5 +36,11 @@ public abstract class GoVarDefImpl extends GoNamedElementImpl implements GoVarDe
                                      PsiElement lastParent,
                                      @NotNull PsiElement place) {
     return processor.execute(this, state);
+  }
+
+  @Override
+  public PsiElement setName(@NonNls @NotNull String newName) throws IncorrectOperationException {
+    replace(GoElementFactory.createVarDefinitionFromText(getProject(), newName));
+    return this;
   }
 }
