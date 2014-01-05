@@ -13,8 +13,25 @@ public abstract class GoNamedElementImpl extends GoCompositeElementImpl implemen
     super(node);
   }
 
+  @NotNull
   @Override
-  public PsiElement setName(@NonNls @NotNull String s) throws IncorrectOperationException {
+  public PsiElement getNameIdentifier() {
+    return getIdentifier();
+  }
+
+  @Override
+  public String getName() {
+    return getIdentifier().getText();
+  }
+
+  @Override
+  public int getTextOffset() {
+    return getIdentifier().getTextOffset();
+  }
+
+  @Override
+  public PsiElement setName(@NonNls @NotNull String newName) throws IncorrectOperationException {
+    getIdentifier().replace(GoElementFactory.createIdentifierFromText(getProject(), newName));
     return this;
   }
 }

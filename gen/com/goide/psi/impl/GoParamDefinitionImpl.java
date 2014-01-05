@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoParamDefinitionImpl extends GoParamDefImpl implements GoParamDefinition {
+public class GoParamDefinitionImpl extends GoNamedElementImpl implements GoParamDefinition {
 
   public GoParamDefinitionImpl(ASTNode node) {
     super(node);

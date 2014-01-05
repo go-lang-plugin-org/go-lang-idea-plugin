@@ -66,7 +66,8 @@
 
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("(Function|Method)Declaration|TypeSpec|(Var|Const)Definition")="com.goide.psi.GoNamedElement"
+  implements("(Function|Method)Declaration|TypeSpec|(Var|Const|Param)Definition")="com.goide.psi.GoNamedElement"
+  extends("FunctionDeclaration|TypeSpec|(Var|Const|Param)Definition")="com.goide.psi.impl.GoNamedElementImpl"
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -115,7 +116,7 @@ Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {pin=1}
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
 ParameterDeclaration ::= IdentifierListNoPin? '...'? Type
 private IdentifierListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
-ParamDefinition ::= identifier {extends="com.goide.psi.impl.GoParamDefImpl"}
+ParamDefinition ::= identifier
 
 InterfaceType ::= interface '{' MethodSpecs? '}' {pin(".*")=1}
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
@@ -166,24 +167,24 @@ ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
 ConstSpec ::= ConstDefinitionList [ Type? '=' ExpressionList ]
 private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
-ConstDefinition ::= identifier {extends="com.goide.psi.impl.GoConstDefImpl"}
+ConstDefinition ::= identifier
 
 private IdentifierList ::= identifier ( ',' identifier )*
 private ExpressionList ::= Expression ( ',' Expression )*
 
 TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
-TypeSpec ::= identifier Type {pin=1 extends="com.goide.psi.impl.GoTypeDeclImpl"}
+TypeSpec ::= identifier Type {pin=1}
 
 VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
 VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
-VarDefinition ::= identifier {extends="com.goide.psi.impl.GoVarDefImpl"}
+VarDefinition ::= identifier
 
 ShortVarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2 extends=VarSpec}
 
-FunctionDeclaration ::= func identifier Signature Block? { pin=2 extends="com.goide.psi.impl.GoFunctionDeclImpl" }
+FunctionDeclaration ::= func identifier Signature Block? {pin=2}
 MethodDeclaration ::= func Receiver identifier Signature Block? {pin=3 extends=FunctionDeclaration}
 Receiver ::= '(' identifier? '*'? TypeReferenceExpression ')'
 
