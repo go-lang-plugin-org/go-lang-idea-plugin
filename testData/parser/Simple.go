@@ -34,3 +34,9 @@ func test() {
         case x == 4: f3()
     }
 }
+
+func emptyFor() {
+    for s.accept(decimalDigits) {
+
+    }
+}

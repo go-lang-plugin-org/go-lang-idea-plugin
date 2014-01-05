@@ -316,3 +316,29 @@ GO_FILE
                 PsiElement())(')')
         PsiElement(})('}')
       PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('emptyFor')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      FOR_STATEMENT
+        PsiElement(for)('for')
+        CALL_EXPR
+          REFERENCE_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('s')
+            PsiElement(.)('.')
+            PsiElement(identifier)('accept')
+          ARGUMENT_LIST
+            PsiElement(()('(')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('decimalDigits')
+            PsiElement())(')')
+        BLOCK
+          PsiElement({)('{')
+          PsiElement(})('}')
+      PsiElement(})('}')

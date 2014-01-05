@@ -5,7 +5,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.openapi.diagnostic.Logger;
 import static com.goide.GoTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static com.goide.parser.GoParserUtil.*;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
@@ -1307,7 +1307,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // for [ ForClause | RangeClause | Expression ] Block
+  // for <<enterMode "NO_EMPTY_LITERAL">> [ ForClause | RangeClause | Expression ] <<exitMode "NO_EMPTY_LITERAL">> Block
   public static boolean ForStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ForStatement")) return false;
     if (!nextTokenIs(builder_, FOR)) return false;
@@ -1316,22 +1316,24 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, FOR);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, ForStatement_1(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, enterMode(builder_, level_ + 1, "NO_EMPTY_LITERAL"));
+    result_ = pinned_ && report_error_(builder_, ForStatement_2(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, exitMode(builder_, level_ + 1, "NO_EMPTY_LITERAL")) && result_;
     result_ = pinned_ && Block(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, FOR_STATEMENT, result_, pinned_, null);
     return result_ || pinned_;
   }
 
   // [ ForClause | RangeClause | Expression ]
-  private static boolean ForStatement_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ForStatement_1")) return false;
-    ForStatement_1_0(builder_, level_ + 1);
+  private static boolean ForStatement_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForStatement_2")) return false;
+    ForStatement_2_0(builder_, level_ + 1);
     return true;
   }
 
   // ForClause | RangeClause | Expression
-  private static boolean ForStatement_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ForStatement_1_0")) return false;
+  private static boolean ForStatement_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForStatement_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = ForClause(builder_, level_ + 1);
@@ -1517,7 +1519,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // if Condition Block [ else ( IfStatement | Block ) ]
+  // if <<enterMode "NO_EMPTY_LITERAL">> Condition <<exitMode "NO_EMPTY_LITERAL">> Block [ else ( IfStatement | Block ) ]
   public static boolean IfStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "IfStatement")) return false;
     if (!nextTokenIs(builder_, IF)) return false;
@@ -1526,36 +1528,38 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, IF);
     pinned_ = result_; // pin = if|else
-    result_ = result_ && report_error_(builder_, Condition(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, enterMode(builder_, level_ + 1, "NO_EMPTY_LITERAL"));
+    result_ = pinned_ && report_error_(builder_, Condition(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, exitMode(builder_, level_ + 1, "NO_EMPTY_LITERAL")) && result_;
     result_ = pinned_ && report_error_(builder_, Block(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && IfStatement_3(builder_, level_ + 1) && result_;
+    result_ = pinned_ && IfStatement_5(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, IF_STATEMENT, result_, pinned_, null);
     return result_ || pinned_;
   }
 
   // [ else ( IfStatement | Block ) ]
-  private static boolean IfStatement_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IfStatement_3")) return false;
-    IfStatement_3_0(builder_, level_ + 1);
+  private static boolean IfStatement_5(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "IfStatement_5")) return false;
+    IfStatement_5_0(builder_, level_ + 1);
     return true;
   }
 
   // else ( IfStatement | Block )
-  private static boolean IfStatement_3_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IfStatement_3_0")) return false;
+  private static boolean IfStatement_5_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "IfStatement_5_0")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, ELSE);
     pinned_ = result_; // pin = if|else
-    result_ = result_ && IfStatement_3_0_1(builder_, level_ + 1);
+    result_ = result_ && IfStatement_5_0_1(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
   }
 
   // IfStatement | Block
-  private static boolean IfStatement_3_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IfStatement_3_0_1")) return false;
+  private static boolean IfStatement_5_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "IfStatement_5_0_1")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = IfStatement(builder_, level_ + 1);
@@ -1799,22 +1803,22 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '{' ElementList? '}'
+  // <<isModeOff "NO_EMPTY_LITERAL">> '{' ElementList? '}'
   public static boolean LiteralValue(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "LiteralValue")) return false;
-    if (!nextTokenIs(builder_, LBRACE)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, LBRACE);
-    result_ = result_ && LiteralValue_1(builder_, level_ + 1);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<literal value>");
+    result_ = isModeOff(builder_, level_ + 1, "NO_EMPTY_LITERAL");
+    result_ = result_ && consumeToken(builder_, LBRACE);
+    result_ = result_ && LiteralValue_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, RBRACE);
-    exit_section_(builder_, marker_, LITERAL_VALUE, result_);
+    exit_section_(builder_, level_, marker_, LITERAL_VALUE, result_, false, null);
     return result_;
   }
 
   // ElementList?
-  private static boolean LiteralValue_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "LiteralValue_1")) return false;
+  private static boolean LiteralValue_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "LiteralValue_2")) return false;
     ElementList(builder_, level_ + 1);
     return true;
   }

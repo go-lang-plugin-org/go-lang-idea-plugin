@@ -13,6 +13,7 @@
   psiPackage='com.goide.psi'
   psiImplPackage='com.goide.psi.impl'
   psiImplUtilClass="com.goide.psi.impl.GoPsiImplUtil"
+  parserUtilClass="com.goide.parser.GoParserUtil"
 
   LBRACE               =  '{'
   RBRACE               =  '}'
@@ -212,7 +213,7 @@ LiteralTypeExpr ::=
   | MapType
   | TypeName
 
-LiteralValue ::= '{' ElementList? '}'
+LiteralValue ::= <<isModeOff "NO_EMPTY_LITERAL">> '{' ElementList? '}' // todo: not a smart solution
 private ElementList  ::= Element ( ',' Element? )*
 Element ::= [ Key ':' ] Value
 Key ::= FieldName | ElementIndex
@@ -276,7 +277,7 @@ LabeledStatement ::= identifier ':' Statement {pin=2}
 SendStatement ::= Expression '<-' Expression {pin=2}
 AssignmentStatement ::= ExpressionList assign_op ExpressionList {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
-IfStatement ::= if Condition Block [ else ( IfStatement | Block ) ] {pin(".*")="if|else"}
+IfStatement ::= if <<enterMode "NO_EMPTY_LITERAL">> Condition <<exitMode "NO_EMPTY_LITERAL">> Block [ else ( IfStatement | Block ) ] {pin(".*")="if|else"}
 SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 SwitchStart ::= switch
 left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=2 extends=SwitchStatement}
@@ -292,7 +293,7 @@ TypeCaseClause ::= TypeSwitchCase ':' Statements
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 private TypeList ::= Type ( ',' Type )*
 private TypeListNoPin ::= Type ( ',' Type )*
-ForStatement ::= for [ ForClause | RangeClause | Expression ] Block
+ForStatement ::= for <<enterMode "NO_EMPTY_LITERAL">> [ ForClause | RangeClause | Expression ] <<exitMode "NO_EMPTY_LITERAL">> Block
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
 RangeClause ::= ( ExpressionList '=' | IdentifierList ':=' ) range Expression {pin=2}
 GoStatement ::= go Expression
