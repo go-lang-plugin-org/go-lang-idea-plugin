@@ -22,6 +22,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
     doTestInclude("package foo; func main(){var i, j int; <caret>}", "i", "j");
   }
 
+  public void testPackageLocalVar() {
+    doTestInclude("package foo; var i, j int; func main(){<caret>}", "i", "j");
+  }
+
   public void testLocalVarExclude() {
     doTestExclude("package foo; func main(){{var i, j int;}; <caret>}", "i", "j");
   }

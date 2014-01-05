@@ -9,6 +9,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.ResolveState;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,9 @@ class GoReference extends PsiReferenceBase<PsiElement> {
       if (file instanceof GoFile) {
         GoVarProcessor processor = new GoVarProcessor(myIdentifier.getText(), myRefExpression, false);
         ResolveUtil.treeWalkUp(myRefExpression, processor);
+        for (GoVarDefinition definition : ((GoFile)file).getVars()) {
+          processor.execute(definition, ResolveState.initial());
+        }
         GoVarDefinition result = processor.getResult();
         if (result != null) return result;
         for (GoFunctionDeclaration f : ((GoFile)file).getFunctions()) {
@@ -56,6 +60,9 @@ class GoReference extends PsiReferenceBase<PsiElement> {
         GoVarProcessor processor = new GoVarProcessor(myIdentifier.getText(), myRefExpression, true);
         ResolveUtil.treeWalkUp(myRefExpression, processor);
         for (GoVarDefinition v : processor.getVariants()) {
+          result.add(GoPsiImplUtil.createVariableLookupElement(v));
+        }
+        for (GoVarDefinition v : ((GoFile)file).getVars()) {
           result.add(GoPsiImplUtil.createVariableLookupElement(v));
         }
         for (GoFunctionDeclaration f : ((GoFile)file).getFunctions()) {

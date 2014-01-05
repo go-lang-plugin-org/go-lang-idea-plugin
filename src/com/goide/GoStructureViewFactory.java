@@ -95,6 +95,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       ArrayList<TreeElement> result = new ArrayList<TreeElement>();
       if (myElement instanceof GoFile) {
         for (GoTypeSpec o : ((GoFile)myElement).getTypes()) result.add(new Element(o));
+        for (GoVarDefinition o : ((GoFile)myElement).getVars()) result.add(new Element(o));
         for (GoFunctionDeclaration o : ((GoFile)myElement).getFunctions()) result.add(new Element(o));
         for (GoMethodDeclaration o : ((GoFile)myElement).getMethods()) result.add(new Element(o));
       }
@@ -116,6 +117,9 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         GoType type = ((GoTypeSpec)myElement).getType();
         return ((GoTypeSpec)myElement).getIdentifier().getText() + ":" + (type != null ? type.getText() : "");
       }
+      else if (myElement instanceof GoNamedElement) {
+        return ((GoNamedElement)myElement).getName();
+      }
       throw new AssertionError(myElement.getClass().getName());
     }
 
@@ -131,6 +135,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       if (myElement instanceof GoMethodDeclaration) return GoIcons.METHOD;
       if (myElement instanceof GoFunctionDeclaration) return GoIcons.FUNCTION;
       if (myElement instanceof GoTypeSpec) return GoIcons.TYPE;
+      if (myElement instanceof GoVarDefinition) return GoIcons.VARIABLE;
       return myElement.getIcon(0);
     }
   }
