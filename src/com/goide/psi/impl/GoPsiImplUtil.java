@@ -6,7 +6,10 @@ import com.goide.psi.*;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,6 +37,15 @@ public class GoPsiImplUtil {
   @Nullable
   public static PsiReference getReference(@NotNull final GoReferenceExpression o) {
     return new GoReference(o);
+  }
+
+  @SuppressWarnings("UnusedParameters")
+  public static boolean processDeclarations(@NotNull GoCompositeElement o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    boolean isAncestor = PsiTreeUtil.isAncestor(o, place, false);
+    if (isAncestor) return GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
+
+    if (o instanceof GoIfStatement || o instanceof GoBlock || o instanceof GoSwitchStatement || o instanceof GoForStatement) return false;
+    return GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
   }
 
   @NotNull

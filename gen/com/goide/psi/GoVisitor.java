@@ -111,7 +111,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitExprSwitchStatement(@NotNull GoExprSwitchStatement o) {
-    visitStatement(o);
+    visitSwitchStatement(o);
   }
 
   public void visitExpression(@NotNull GoExpression o) {
@@ -347,7 +347,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitTypeSwitchStatement(@NotNull GoTypeSwitchStatement o) {
-    visitStatement(o);
+    visitSwitchStatement(o);
   }
 
   public void visitUnaryExpr(@NotNull GoUnaryExpr o) {

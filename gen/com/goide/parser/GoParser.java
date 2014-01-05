@@ -320,6 +320,7 @@ public class GoParser implements PsiParser {
       GO_STATEMENT, IF_STATEMENT, LABELED_STATEMENT, RECV_STATEMENT,
       RETURN_STATEMENT, SELECT_STATEMENT, SEND_STATEMENT, SIMPLE_STATEMENT,
       STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
+    create_token_set_(EXPR_SWITCH_STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
     create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE, INTERFACE_TYPE,
       MAP_TYPE, POINTER_TYPE, RECEIVER_TYPE, STRUCT_TYPE,
       TYPE),
@@ -1028,13 +1029,15 @@ public class GoParser implements PsiParser {
   public static boolean ExprSwitchStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ExprSwitchStatement")) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _LEFT_, "<expr switch statement>");
     result_ = Condition(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, LBRACE);
     result_ = result_ && ExprSwitchStatement_2(builder_, level_ + 1);
+    pinned_ = result_; // pin = 3
     result_ = result_ && consumeToken(builder_, RBRACE);
-    exit_section_(builder_, level_, marker_, EXPR_SWITCH_STATEMENT, result_, false, null);
-    return result_;
+    exit_section_(builder_, level_, marker_, EXPR_SWITCH_STATEMENT, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // ( ExprCaseClause )*

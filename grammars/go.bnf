@@ -122,7 +122,7 @@ MethodSpec ::= identifier Signature | TypeName
 MapType ::= map '[' Type ']' Type {pin=1}
 ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
 
-Block ::= '{' Statements? '}' {pin(".*")=1}
+Block ::= '{' Statements? '}' {pin(".*")=1 methods=[processDeclarations]}
 private Statements ::= Statement (semi Statement)* semi? {pin=1}
 
 Statement ::=
@@ -142,7 +142,7 @@ Statement ::=
   | SwitchStatement
   | SelectStatement
   | ForStatement
-  | DeferStatement {recoverWhile=StatementRecover}
+  | DeferStatement { methods=[processDeclarations] recoverWhile=StatementRecover }
 
 private StatementRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | case | chan | char | decimali | default | else | float | floati | func | hex | identifier | imaginary | int | interface | map | oct | rune | string | struct)
 
@@ -277,14 +277,14 @@ assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>
 IfStatement ::= if Condition Block [ else ( IfStatement | Block ) ] {pin(".*")="if|else"}
 SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 SwitchStart ::= switch
-left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=0}
+left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=3 extends=SwitchStatement}
 
 private Condition ::= SimpleStatementOpt [ Expression ]
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
 ExprCaseClause ::= ExprSwitchCase ':' Statements
 ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
-left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}' {pin=1}
+left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}' {pin=1 extends=SwitchStatement}
 TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' 'type' ')' {pin=5}
 TypeCaseClause ::= TypeSwitchCase ':' Statements
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}

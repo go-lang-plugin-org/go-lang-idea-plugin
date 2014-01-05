@@ -9,6 +9,8 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.ResolveState;
 
 public class GoStatementImpl extends GoCompositeElementImpl implements GoStatement {
 
@@ -43,6 +45,10 @@ public class GoStatementImpl extends GoCompositeElementImpl implements GoStateme
   @Nullable
   public GoVarDeclaration getVarDeclaration() {
     return findChildByClass(GoVarDeclaration.class);
+  }
+
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
+    return GoPsiImplUtil.processDeclarations(this, processor, state, lastParent, place);
   }
 
 }

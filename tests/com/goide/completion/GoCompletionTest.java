@@ -22,6 +22,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
     doTestInclude("package foo; func main(){var i, j int; <caret>}", "i", "j");
   }
 
+  public void testLocalVarExclude() {
+    doTestExclude("package foo; func main(){{var i, j int;}; <caret>}", "i", "j");
+  }
+
   public void testKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "continue");
   }
@@ -63,5 +67,9 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
 
   protected void doTestInclude(String txt, String... variants) {
     doTestVariants(txt, CompletionType.BASIC, 1, CheckType.INCLUDES, variants);
+  }
+
+  protected void doTestExclude(String txt, String... variants) {
+    doTestVariants(txt, CompletionType.BASIC, 1, CheckType.EXCLUDES, variants);
   }
 }

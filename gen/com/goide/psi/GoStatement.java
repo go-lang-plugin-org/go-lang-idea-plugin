@@ -4,6 +4,8 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.ResolveState;
 
 public interface GoStatement extends GoCompositeElement {
 
@@ -18,5 +20,7 @@ public interface GoStatement extends GoCompositeElement {
 
   @Nullable
   GoVarDeclaration getVarDeclaration();
+
+  boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place);
 
 }

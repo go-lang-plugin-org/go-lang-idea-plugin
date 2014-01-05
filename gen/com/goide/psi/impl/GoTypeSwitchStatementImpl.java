@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoTypeSwitchStatementImpl extends GoStatementImpl implements GoTypeSwitchStatement {
+public class GoTypeSwitchStatementImpl extends GoSwitchStatementImpl implements GoTypeSwitchStatement {
 
   public GoTypeSwitchStatementImpl(ASTNode node) {
     super(node);

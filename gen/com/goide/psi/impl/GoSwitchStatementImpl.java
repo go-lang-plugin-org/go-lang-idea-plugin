@@ -23,14 +23,14 @@ public class GoSwitchStatementImpl extends GoStatementImpl implements GoSwitchSt
 
   @Override
   @Nullable
-  public GoStatement getStatement() {
-    return findChildByClass(GoStatement.class);
+  public GoSwitchStart getSwitchStart() {
+    return findChildByClass(GoSwitchStart.class);
   }
 
   @Override
   @Nullable
-  public GoSwitchStart getSwitchStart() {
-    return findChildByClass(GoSwitchStart.class);
+  public GoSwitchStatement getSwitchStatement() {
+    return findChildByClass(GoSwitchStatement.class);
   }
 
 }
