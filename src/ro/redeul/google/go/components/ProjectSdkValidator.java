@@ -18,6 +18,7 @@ import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
         }
 
         String sysGoRootPath = GoSdkUtil.getSysGoRootPath();
-        if (sysGoRootPath == null || sysGoRootPath.isEmpty())
+        if (sysGoRootPath.isEmpty())
             Notifications.Bus.notify(
                     new Notification(
                             "Go SDK validator",
@@ -113,7 +114,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
                     myProject);
 
         String systemGOPATH = GoSdkUtil.getSysGoPathPath();
-        if (systemGOPATH == null || systemGOPATH.isEmpty())
+        if (systemGOPATH.isEmpty())
             Notifications.Bus.notify(
                     new Notification(
                             "Go SDK validator",
@@ -123,17 +124,37 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
                             NotificationListener.URL_OPENING_LISTENER),
                     myProject);
 
-        if (sysGoRootPath != null && !sysGoRootPath.isEmpty() &&
-                systemGOPATH != null && !systemGOPATH.isEmpty() &&
-                systemGOPATH.contains(sysGoRootPath))
-            Notifications.Bus.notify(
-                    new Notification(
-                            "Go SDK validator",
-                            "Problem with env variables",
-                            getGOPATHinGOROOTEnvMessage(),
-                            NotificationType.ERROR,
-                            NotificationListener.URL_OPENING_LISTENER),
-                    myProject);
+        if (!sysGoRootPath.isEmpty() &&
+                !systemGOPATH.isEmpty()) {
+
+            // Ensure we always have the path separator at the end of it
+            if (!sysGoRootPath.endsWith(File.separator)) {
+                sysGoRootPath += File.separator;
+            }
+
+            // Get all the individual paths
+            String[] goPaths = systemGOPATH.split(File.pathSeparator);
+
+            for (String goPath : goPaths) {
+                if (!goPath.endsWith(File.separator)) {
+                    goPath += File.separator;
+                }
+
+                if (goPath.contains(sysGoRootPath)) {
+                    Notifications.Bus.notify(
+                            new Notification(
+                                    "Go SDK validator",
+                                    "Problem with env variables",
+                                    getGOPATHinGOROOTEnvMessage(),
+                                    NotificationType.ERROR,
+                                    NotificationListener.URL_OPENING_LISTENER),
+                            myProject);
+
+                    // Only show the message once
+                    break;
+                }
+            }
+        }
 
         super.initComponent();
     }

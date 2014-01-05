@@ -622,6 +622,7 @@ public class GoSdkUtil {
                   : format("%s%s%s", sysPath, File.pathSeparator, binarizedPath);
     }
 
+    @NotNull
     public static String getSysGoRootPath() {
         return getEnvVariable("GOROOT");
     }
