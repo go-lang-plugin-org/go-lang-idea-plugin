@@ -11,7 +11,11 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class GoPsiImplUtil {
+  private static final String MAIN_FUNCTION_NAME = "main";
+
   @Nullable
   public static GoTypeReferenceExpression getQualifier(@NotNull GoTypeReferenceExpression o) {
     return PsiTreeUtil.getChildOfType(o, GoTypeReferenceExpression.class);
@@ -48,5 +52,16 @@ public class GoPsiImplUtil {
   public static LookupElement createVariableLookupElement(GoVarDefinition v) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(v).withIcon(GoIcons.VARIABLE),
                                                  GoCompletionContributor.VAR_PRIORITY);
+  }
+
+  @Nullable
+  public static GoFunctionDeclarationImpl findMainFunction(@NotNull GoFile file) {
+    List<GoFunctionDeclaration> functions = file.getFunctions();
+    for (GoFunctionDeclaration function : functions) {
+      if (function instanceof GoFunctionDeclarationImpl && MAIN_FUNCTION_NAME.equals(function.getName())) {
+        return (GoFunctionDeclarationImpl)function;
+      }
+    }
+    return null;
   }
 }

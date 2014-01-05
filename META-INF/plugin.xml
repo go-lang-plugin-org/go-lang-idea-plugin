@@ -25,6 +25,11 @@
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
 
     <sdkType implementation="com.goide.GoSdkType"/>
+    
+    <!-- run -->
+    <programRunner implementation="com.goide.runconfig.GoRunner"/>
+    <runConfigurationProducer implementation="com.goide.runconfig.application.GoApplicationRunConfigurationProducer"/>
+    <configurationType implementation="com.goide.runconfig.application.GoApplicationRunConfigurationType"/>
   </extensions>
 
 </idea-plugin>

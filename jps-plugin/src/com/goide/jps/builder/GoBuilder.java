@@ -7,12 +7,10 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.BaseOSProcessHandler;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Function;
-import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jps.builders.BuildOutputConsumer;
@@ -71,7 +69,7 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
       commandLine.setWorkDirectory(outputDirectory);
       commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameter("build");
-      String resultBinaryName = getBinaryFileNameForPath(path);
+      String resultBinaryName = JpsGoSdkType.getBinaryFileNameForPath(path);
       commandLine.addParameters("-o", outputDirectory.getAbsolutePath() + File.separatorChar + resultBinaryName);
       commandLine.addParameters(path);
       runBuildProcess(context, commandLine, path);
@@ -151,12 +149,5 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
         return file.getAbsolutePath();
       }
     });
-  }
-
-
-  @NotNull
-  private static String getBinaryFileNameForPath(@NotNull String path) {
-    String resultBinaryName = FileUtil.getNameWithoutExtension(PathUtil.getFileName(path));
-    return SystemInfo.isWindows ? resultBinaryName + ".exe" : resultBinaryName;
   }
 }

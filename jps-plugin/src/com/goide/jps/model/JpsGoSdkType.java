@@ -1,6 +1,9 @@
 package com.goide.jps.model;
 
+import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.util.SystemInfo;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jps.model.JpsDummyElement;
 import org.jetbrains.jps.model.JpsElementFactory;
@@ -13,18 +16,26 @@ public class JpsGoSdkType extends JpsSdkType<JpsDummyElement> implements JpsElem
   public static final JpsGoSdkType INSTANCE = new JpsGoSdkType();
 
   @NotNull
-  public static File getExecutable(@NotNull final String path, @NotNull final String command) {
-    return new File(path, SystemInfo.isWindows ? command + ".exe" : command);
+  public static File getGoExecutableFile(@NotNull final String sdkHome) {
+    File fromSdkPath = getExecutable(new File(sdkHome, "bin").getAbsolutePath(), "go");
+    File fromEnvironment = PathEnvironmentVariableUtil.findInPath("go");
+    return fromSdkPath.canExecute() || fromEnvironment == null ? fromSdkPath : fromEnvironment;
   }
 
   @NotNull
-  public static File getGoExecutableFile(@NotNull final String sdkHome) {
-    return getExecutable(new File(sdkHome, "bin").getAbsolutePath(), "go");
+  public static String getBinaryFileNameForPath(@NotNull String path) {
+    String resultBinaryName = FileUtil.getNameWithoutExtension(PathUtil.getFileName(path));
+    return SystemInfo.isWindows ? resultBinaryName + ".exe" : resultBinaryName;
   }
 
   @NotNull
   @Override
   public JpsDummyElement createDefaultProperties() {
     return JpsElementFactory.getInstance().createDummyElement();
+  }
+
+  @NotNull
+  private static File getExecutable(@NotNull final String path, @NotNull final String command) {
+    return new File(path, getBinaryFileNameForPath(command));
   }
 }
