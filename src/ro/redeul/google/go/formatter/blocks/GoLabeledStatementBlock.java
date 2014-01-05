@@ -16,12 +16,12 @@ import java.util.Map;
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
 
 /**
-* TODO: Document this
-* <p/>
-* Created on Jan-04-2014 23:39
-*
-* @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
-*/
+ * Formatting block for a labeled statement
+ * <p/>
+ * Created on Jan-04-2014 23:39
+ *
+ * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
+ */
 class GoLabeledStatementBlock extends GoSyntheticBlock<GoLabeledStatement> {
 
     private final static GoBlockUtil.CustomSpacing CUSTOM_SPACING =
@@ -32,8 +32,11 @@ class GoLabeledStatementBlock extends GoSyntheticBlock<GoLabeledStatement> {
     public static final TokenSet LINE_BREAKING_TOKENS =
         TokenSet.orSet(STATEMENTS, COMMENTS, TokenSet.create(oCOLON));
 
-    private static final TokenSet HOLD_TOGETHER_GROUPS =
+    private static final TokenSet HOLD_TOGETHER_GROUP1 =
         TokenSet.orSet(COMMENTS, TokenSet.create(oCOLON));
+
+    private static final TokenSet HOLD_TOGETHER_GROUP2 =
+        TokenSet.orSet(STATEMENTS, TokenSet.create(oCOLON));
 
     public GoLabeledStatementBlock(GoLabeledStatement labeledStatement, CommonCodeStyleSettings settings,
                                    Indent indent,
@@ -42,7 +45,7 @@ class GoLabeledStatementBlock extends GoSyntheticBlock<GoLabeledStatement> {
 
         setLeadingCommentGroupIndent(Indents.NORMAL);
         setLineBreakingTokens(LINE_BREAKING_TOKENS);
-        setHoldTogetherGroups(HOLD_TOGETHER_GROUPS);
+        setHoldTogetherGroups(HOLD_TOGETHER_GROUP1, HOLD_TOGETHER_GROUP2);
         setCustomSpacing(CUSTOM_SPACING);
         setMultiLineMode(true, null, null);
     }

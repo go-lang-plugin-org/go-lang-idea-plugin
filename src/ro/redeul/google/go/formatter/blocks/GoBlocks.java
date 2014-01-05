@@ -48,7 +48,7 @@ public class GoBlocks {
         LITERAL_FLOAT, LITERAL_INTEGER, LITERAL_IMAGINARY,
         LITERAL_IDENTIFIER,
         kIMPORT, kVAR, kCONST, kTYPE, kSTRUCT, kPACKAGE, kINTERFACE,
-        kSWITCH, kBREAK, kCONTINUE, kFALLTHROUGH,
+        kSWITCH, kBREAK, kCONTINUE, kFALLTHROUGH, kDEFER, kGO, kGOTO,
         oASSIGN, oVAR_ASSIGN, oCOMMA, oSEND_CHANNEL, oCOLON,
         TYPE_NAME_DECLARATION,
         pLPAREN, pRPAREN, pLBRACK, pRBRACK, pLCURLY, pRCURLY
@@ -147,6 +147,9 @@ public class GoBlocks {
 
         if (psi instanceof GoContinueStatement)
             return new GoStatementBlock<GoContinueStatement>((GoContinueStatement) psi, settings, indent, alignmentsMap);
+
+        if (psi instanceof GoDeferStatement)
+            return new GoStatementBlock<GoDeferStatement>((GoDeferStatement) psi, settings, indent, alignmentsMap);
 
         if (psi instanceof GoGotoStatement)
             return new GoStatementBlock<GoGotoStatement>((GoGotoStatement) psi, settings, indent, alignmentsMap);

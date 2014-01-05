@@ -162,6 +162,8 @@ public interface GoElementTypes extends GoTokenTypes {
         ASSIGN_STATEMENT,
         BREAK_STATEMENT,
         CONTINUE_STATEMENT,
+        DEFER_STATEMENT,
+        EMPTY_STATEMENT,
         EXPRESSION_STATEMENT,
         FALLTHROUGH_STATEMENT,
         FOR_WITH_CLAUSES_STATEMENT,

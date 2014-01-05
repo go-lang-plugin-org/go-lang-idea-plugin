@@ -1,15 +1,9 @@
 package main
 
 func f() bool {
-// asdfasf
-       	// asdfsaf
 ana:
-	        // adsf
-// adsfas
-	if {
+	if true {
 	             c:
 	   return 10
 	}
-
-	return true
 }

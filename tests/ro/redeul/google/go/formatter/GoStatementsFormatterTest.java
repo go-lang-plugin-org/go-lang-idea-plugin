@@ -44,4 +44,6 @@ public class GoStatementsFormatterTest extends GoFormatterTestCase {
     public void testLabeledStatementWithComments() throws Exception { _test(); }
 
     public void testGo() throws Exception { _test(); }
+
+    public void testDefer() throws Exception { _test(); }
 }
