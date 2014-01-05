@@ -41,8 +41,8 @@ public class GoExprSwitchStatementImpl extends GoStatementImpl implements GoExpr
 
   @Override
   @NotNull
-  public PsiElement getSwitch() {
-    return findNotNullChildByType(SWITCH);
+  public GoSwitchStart getSwitchStart() {
+    return findNotNullChildByClass(GoSwitchStart.class);
   }
 
 }

@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoTypeAssertionExpr extends GoExpression {
+public interface GoSwitchStart extends GoCompositeElement {
 
   @NotNull
-  GoExpression getExpression();
-
-  @NotNull
-  GoType getType();
+  PsiElement getSwitch();
 
 }

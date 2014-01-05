@@ -33,10 +33,4 @@ public class GoTypeSwitchGuardImpl extends GoCompositeElementImpl implements GoT
     return findChildByType(IDENTIFIER);
   }
 
-  @Override
-  @NotNull
-  public PsiElement getType() {
-    return findNotNullChildByType(TYPE);
-  }
-
 }

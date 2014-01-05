@@ -85,6 +85,7 @@ public interface GoTypes {
   IElementType SIMPLE_STATEMENT = new GoCompositeElementType("SIMPLE_STATEMENT");
   IElementType STATEMENT = new GoCompositeElementType("STATEMENT");
   IElementType STRUCT_TYPE = new GoCompositeElementType("STRUCT_TYPE");
+  IElementType SWITCH_START = new GoCompositeElementType("SWITCH_START");
   IElementType SWITCH_STATEMENT = new GoCompositeElementType("SWITCH_STATEMENT");
   IElementType TAG = new GoCompositeElementType("TAG");
   IElementType TYPE = new GoCompositeElementType("TYPE");
@@ -414,6 +415,9 @@ public interface GoTypes {
       }
       else if (type == STRUCT_TYPE) {
         return new GoStructTypeImpl(node);
+      }
+      else if (type == SWITCH_START) {
+        return new GoSwitchStartImpl(node);
       }
       else if (type == SWITCH_STATEMENT) {
         return new GoSwitchStatementImpl(node);

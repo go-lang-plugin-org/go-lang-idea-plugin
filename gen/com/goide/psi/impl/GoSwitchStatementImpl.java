@@ -21,4 +21,16 @@ public class GoSwitchStatementImpl extends GoStatementImpl implements GoSwitchSt
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public GoStatement getStatement() {
+    return findChildByClass(GoStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GoSwitchStart getSwitchStart() {
+    return findChildByClass(GoSwitchStart.class);
+  }
+
 }

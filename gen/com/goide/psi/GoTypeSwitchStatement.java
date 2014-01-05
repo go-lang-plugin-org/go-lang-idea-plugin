@@ -11,12 +11,12 @@ public interface GoTypeSwitchStatement extends GoStatement {
   GoSimpleStatement getSimpleStatement();
 
   @NotNull
-  List<GoTypeCaseClause> getTypeCaseClauseList();
-
-  @Nullable
-  GoTypeSwitchGuard getTypeSwitchGuard();
+  GoSwitchStart getSwitchStart();
 
   @NotNull
-  PsiElement getSwitch();
+  List<GoTypeCaseClause> getTypeCaseClauseList();
+
+  @NotNull
+  GoTypeSwitchGuard getTypeSwitchGuard();
 
 }

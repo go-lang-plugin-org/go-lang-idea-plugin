@@ -561,26 +561,25 @@ GO_FILE
         PsiElement())(')')
     BLOCK
       PsiElement({)('{')
-      EXPR_SWITCH_STATEMENT
-        PsiElement(switch)('switch')
-        SIMPLE_STATEMENT
-          SHORT_VAR_DECLARATION
-            VAR_DEFINITION
-              PsiElement(identifier)('v')
-            PsiElement(:=)(':=')
-            TYPE_ASSERTION_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('i')
-              PsiElement(.)('.')
-              PsiElement(()('(')
-              PsiElement(type)('type')
-              PsiElement())(')')
+      TYPE_SWITCH_STATEMENT
+        SWITCH_START
+          PsiElement(switch)('switch')
+        TYPE_SWITCH_GUARD
+          PsiElement(identifier)('v')
+          PsiElement(:=)(':=')
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+          PsiElement(.)('.')
+          PsiElement(()('(')
+          PsiElement(type)('type')
+          PsiElement())(')')
         PsiElement({)('{')
-        EXPR_CASE_CLAUSE
-          EXPR_SWITCH_CASE
+        TYPE_CASE_CLAUSE
+          TYPE_SWITCH_CASE
             PsiElement(case)('case')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('nil')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('nil')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
@@ -591,11 +590,12 @@ GO_FILE
                 LITERAL
                   PsiElement(string)('"nil"')
                 PsiElement())(')')
-        EXPR_CASE_CLAUSE
-          EXPR_SWITCH_CASE
+        TYPE_CASE_CLAUSE
+          TYPE_SWITCH_CASE
             PsiElement(case)('case')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('stringer')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('stringer')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
@@ -613,11 +613,12 @@ GO_FILE
                     PsiElement(()('(')
                     PsiElement())(')')
                 PsiElement())(')')
-        EXPR_CASE_CLAUSE
-          EXPR_SWITCH_CASE
+        TYPE_CASE_CLAUSE
+          TYPE_SWITCH_CASE
             PsiElement(case)('case')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('error')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('error')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
@@ -635,11 +636,12 @@ GO_FILE
                     PsiElement(()('(')
                     PsiElement())(')')
                 PsiElement())(')')
-        EXPR_CASE_CLAUSE
-          EXPR_SWITCH_CASE
+        TYPE_CASE_CLAUSE
+          TYPE_SWITCH_CASE
             PsiElement(case)('case')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('int')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('int')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
@@ -650,11 +652,12 @@ GO_FILE
                 REFERENCE_EXPRESSION
                   PsiElement(identifier)('v')
                 PsiElement())(')')
-        EXPR_CASE_CLAUSE
-          EXPR_SWITCH_CASE
+        TYPE_CASE_CLAUSE
+          TYPE_SWITCH_CASE
             PsiElement(case)('case')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('string')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('string')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             CALL_EXPR
@@ -665,8 +668,8 @@ GO_FILE
                 REFERENCE_EXPRESSION
                   PsiElement(identifier)('v')
                 PsiElement())(')')
-        EXPR_CASE_CLAUSE
-          EXPR_SWITCH_CASE
+        TYPE_CASE_CLAUSE
+          TYPE_SWITCH_CASE
             PsiElement(default)('default')
           PsiElement(:)(':')
           SIMPLE_STATEMENT

@@ -29,20 +29,20 @@ public class GoTypeSwitchStatementImpl extends GoStatementImpl implements GoType
 
   @Override
   @NotNull
+  public GoSwitchStart getSwitchStart() {
+    return findNotNullChildByClass(GoSwitchStart.class);
+  }
+
+  @Override
+  @NotNull
   public List<GoTypeCaseClause> getTypeCaseClauseList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoTypeCaseClause.class);
   }
 
   @Override
-  @Nullable
-  public GoTypeSwitchGuard getTypeSwitchGuard() {
-    return findChildByClass(GoTypeSwitchGuard.class);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getSwitch() {
-    return findNotNullChildByType(SWITCH);
+  public GoTypeSwitchGuard getTypeSwitchGuard() {
+    return findNotNullChildByClass(GoTypeSwitchGuard.class);
   }
 
 }

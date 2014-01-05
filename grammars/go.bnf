@@ -262,10 +262,10 @@ private unary_op ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
 MethodExpr ::= ReceiverType '.' identifier
 ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
-SelectorExpr ::= Expression '.' Expression
+SelectorExpr ::= Expression '.' &(!('(' 'type')) Expression
 IndexExpr ::= Expression '[' IndexExprBody ']'
 private IndexExprBody ::= (Expression? ':' Expression ':' Expression) | (Expression? ':' Expression?) | Expression
-TypeAssertionExpr ::= Expression '.' '(' (Type | 'type') ')'
+TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')'
 ConversionExpr ::= &('*' | '<-' | '[' | chan | func | interface | map | struct) Type '(' Expression ','? ')'
@@ -275,16 +275,17 @@ SendStatement ::= Expression '<-' Expression {pin=2}
 AssignmentStatement ::= ExpressionList assign_op ExpressionList {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
 IfStatement ::= if Condition Block [ else ( IfStatement | Block ) ] {pin(".*")="if|else"}
-SwitchStatement ::= ExprSwitchStatement | TypeSwitchStatement
-ExprSwitchStatement ::= switch Condition '{' ( ExprCaseClause )* '}'
+SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
+SwitchStart ::= switch
+left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=0}
 
 private Condition ::= SimpleStatementOpt [ Expression ]
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
 ExprCaseClause ::= ExprSwitchCase ':' Statements
 ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
-TypeSwitchStatement  ::= switch SimpleStatementOpt TypeSwitchGuard '{' ( TypeCaseClause )* '}'
-TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' type ')'
+left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}' {pin=1}
+TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' 'type' ')' {pin=5}
 TypeCaseClause ::= TypeSwitchCase ':' Statements
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 private TypeList ::= Type ( ',' Type )*

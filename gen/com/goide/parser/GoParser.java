@@ -243,6 +243,9 @@ public class GoParser implements PsiParser {
     else if (root_ == STRUCT_TYPE) {
       result_ = StructType(builder_, 0);
     }
+    else if (root_ == SWITCH_START) {
+      result_ = SwitchStart(builder_, 0);
+    }
     else if (root_ == SWITCH_STATEMENT) {
       result_ = SwitchStatement(builder_, 0);
     }
@@ -1021,38 +1024,34 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // switch Condition '{' ( ExprCaseClause )* '}'
+  // Condition '{' ( ExprCaseClause )* '}'
   public static boolean ExprSwitchStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ExprSwitchStatement")) return false;
-    if (!nextTokenIs(builder_, SWITCH)) return false;
     boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, SWITCH);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, Condition(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, LBRACE)) && result_;
-    result_ = pinned_ && report_error_(builder_, ExprSwitchStatement_3(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && consumeToken(builder_, RBRACE) && result_;
-    exit_section_(builder_, level_, marker_, EXPR_SWITCH_STATEMENT, result_, pinned_, null);
-    return result_ || pinned_;
+    Marker marker_ = enter_section_(builder_, level_, _LEFT_, "<expr switch statement>");
+    result_ = Condition(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, LBRACE);
+    result_ = result_ && ExprSwitchStatement_2(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, RBRACE);
+    exit_section_(builder_, level_, marker_, EXPR_SWITCH_STATEMENT, result_, false, null);
+    return result_;
   }
 
   // ( ExprCaseClause )*
-  private static boolean ExprSwitchStatement_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ExprSwitchStatement_3")) return false;
+  private static boolean ExprSwitchStatement_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExprSwitchStatement_2")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!ExprSwitchStatement_3_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "ExprSwitchStatement_3", pos_)) break;
+      if (!ExprSwitchStatement_2_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "ExprSwitchStatement_2", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
   // ( ExprCaseClause )
-  private static boolean ExprSwitchStatement_3_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ExprSwitchStatement_3_0")) return false;
+  private static boolean ExprSwitchStatement_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExprSwitchStatement_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = ExprCaseClause(builder_, level_ + 1);
@@ -2691,15 +2690,40 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ExprSwitchStatement | TypeSwitchStatement
+  // switch
+  public static boolean SwitchStart(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SwitchStart")) return false;
+    if (!nextTokenIs(builder_, SWITCH)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, SWITCH);
+    exit_section_(builder_, marker_, SWITCH_START, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
   public static boolean SwitchStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SwitchStatement")) return false;
     if (!nextTokenIs(builder_, SWITCH)) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, null);
-    result_ = ExprSwitchStatement(builder_, level_ + 1);
-    if (!result_) result_ = TypeSwitchStatement(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, SWITCH_STATEMENT, result_, false, null);
+    result_ = SwitchStart(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && SwitchStatement_1(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, SWITCH_STATEMENT, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // TypeSwitchStatement | ExprSwitchStatement
+  private static boolean SwitchStatement_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SwitchStatement_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = TypeSwitchStatement(builder_, level_ + 1);
+    if (!result_) result_ = ExprSwitchStatement(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
@@ -3077,19 +3101,21 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // [ identifier ':=' ] Expression '.' '(' type ')'
+  // [ identifier ':=' ] Expression '.' '(' 'type' ')'
   public static boolean TypeSwitchGuard(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeSwitchGuard")) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type switch guard>");
     result_ = TypeSwitchGuard_0(builder_, level_ + 1);
     result_ = result_ && Expression(builder_, level_ + 1, -1);
     result_ = result_ && consumeToken(builder_, DOT);
     result_ = result_ && consumeToken(builder_, LPAREN);
-    result_ = result_ && consumeToken(builder_, TYPE);
+    result_ = result_ && consumeToken(builder_, TYPE_);
+    pinned_ = result_; // pin = 5
     result_ = result_ && consumeToken(builder_, RPAREN);
-    exit_section_(builder_, level_, marker_, TYPE_SWITCH_GUARD, result_, false, null);
-    return result_;
+    exit_section_(builder_, level_, marker_, TYPE_SWITCH_GUARD, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // [ identifier ':=' ]
@@ -3111,39 +3137,66 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // switch SimpleStatementOpt TypeSwitchGuard '{' ( TypeCaseClause )* '}'
+  // (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}'
   public static boolean TypeSwitchStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeSwitchStatement")) return false;
-    if (!nextTokenIs(builder_, SWITCH)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, SWITCH);
+    Marker marker_ = enter_section_(builder_, level_, _LEFT_, "<type switch statement>");
+    result_ = TypeSwitchStatement_0(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, SimpleStatementOpt(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, TypeSwitchGuard(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, consumeToken(builder_, LBRACE)) && result_;
-    result_ = pinned_ && report_error_(builder_, TypeSwitchStatement_4(builder_, level_ + 1)) && result_;
+    result_ = result_ && report_error_(builder_, consumeToken(builder_, LBRACE));
+    result_ = pinned_ && report_error_(builder_, TypeSwitchStatement_2(builder_, level_ + 1)) && result_;
     result_ = pinned_ && consumeToken(builder_, RBRACE) && result_;
     exit_section_(builder_, level_, marker_, TYPE_SWITCH_STATEMENT, result_, pinned_, null);
     return result_ || pinned_;
   }
 
+  // TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard
+  private static boolean TypeSwitchStatement_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeSwitchStatement_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = TypeSwitchGuard(builder_, level_ + 1);
+    if (!result_) result_ = TypeSwitchStatement_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // SimpleStatement ';'? TypeSwitchGuard
+  private static boolean TypeSwitchStatement_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeSwitchStatement_0_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = SimpleStatement(builder_, level_ + 1);
+    result_ = result_ && TypeSwitchStatement_0_1_1(builder_, level_ + 1);
+    result_ = result_ && TypeSwitchGuard(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // ';'?
+  private static boolean TypeSwitchStatement_0_1_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeSwitchStatement_0_1_1")) return false;
+    consumeToken(builder_, SEMICOLON);
+    return true;
+  }
+
   // ( TypeCaseClause )*
-  private static boolean TypeSwitchStatement_4(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TypeSwitchStatement_4")) return false;
+  private static boolean TypeSwitchStatement_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeSwitchStatement_2")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
-      if (!TypeSwitchStatement_4_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "TypeSwitchStatement_4", pos_)) break;
+      if (!TypeSwitchStatement_2_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "TypeSwitchStatement_2", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
   // ( TypeCaseClause )
-  private static boolean TypeSwitchStatement_4_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TypeSwitchStatement_4_0")) return false;
+  private static boolean TypeSwitchStatement_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeSwitchStatement_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = TypeCaseClause(builder_, level_ + 1);
@@ -3548,7 +3601,7 @@ public class GoParser implements PsiParser {
         marker_.drop();
         left_marker_.precede().done(TYPE_ASSERTION_EXPR);
       }
-      else if (priority_ < 8 && consumeToken(builder_, DOT)) {
+      else if (priority_ < 8 && SelectorExpr_0(builder_, level_ + 1)) {
         result_ = report_error_(builder_, Expression(builder_, level_, 8));
         marker_.drop();
         left_marker_.precede().done(SELECTOR_EXPR);
@@ -3753,7 +3806,7 @@ public class GoParser implements PsiParser {
     return true;
   }
 
-  // '.' '(' (Type | 'type') ')'
+  // '.' '(' &(!'type') Type ')'
   private static boolean TypeAssertionExpr_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeAssertionExpr_0")) return false;
     boolean result_ = false;
@@ -3761,18 +3814,70 @@ public class GoParser implements PsiParser {
     result_ = consumeToken(builder_, DOT);
     result_ = result_ && consumeToken(builder_, LPAREN);
     result_ = result_ && TypeAssertionExpr_0_2(builder_, level_ + 1);
+    result_ = result_ && Type(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, RPAREN);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
-  // Type | 'type'
+  // &(!'type')
   private static boolean TypeAssertionExpr_0_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeAssertionExpr_0_2")) return false;
     boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _AND_, null);
+    result_ = TypeAssertionExpr_0_2_0(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  // !'type'
+  private static boolean TypeAssertionExpr_0_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeAssertionExpr_0_2_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NOT_, null);
+    result_ = !consumeToken(builder_, TYPE_);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  // '.' &(!('(' 'type'))
+  private static boolean SelectorExpr_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SelectorExpr_0")) return false;
+    boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = Type(builder_, level_ + 1);
-    if (!result_) result_ = consumeToken(builder_, TYPE_);
+    result_ = consumeToken(builder_, DOT);
+    result_ = result_ && SelectorExpr_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // &(!('(' 'type'))
+  private static boolean SelectorExpr_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SelectorExpr_0_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _AND_, null);
+    result_ = SelectorExpr_0_1_0(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  // !('(' 'type')
+  private static boolean SelectorExpr_0_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SelectorExpr_0_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NOT_, null);
+    result_ = !SelectorExpr_0_1_0_0(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  // '(' 'type'
+  private static boolean SelectorExpr_0_1_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SelectorExpr_0_1_0_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, LPAREN);
+    result_ = result_ && consumeToken(builder_, TYPE_);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }

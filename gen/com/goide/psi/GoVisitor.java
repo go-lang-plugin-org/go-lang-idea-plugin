@@ -302,6 +302,10 @@ public class GoVisitor extends PsiElementVisitor {
     visitType(o);
   }
 
+  public void visitSwitchStart(@NotNull GoSwitchStart o) {
+    visitCompositeElement(o);
+  }
+
   public void visitSwitchStatement(@NotNull GoSwitchStatement o) {
     visitStatement(o);
   }

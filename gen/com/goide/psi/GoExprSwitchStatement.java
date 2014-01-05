@@ -17,6 +17,6 @@ public interface GoExprSwitchStatement extends GoStatement {
   GoSimpleStatement getSimpleStatement();
 
   @NotNull
-  PsiElement getSwitch();
+  GoSwitchStart getSwitchStart();
 
 }

@@ -13,7 +13,4 @@ public interface GoTypeSwitchGuard extends GoCompositeElement {
   @Nullable
   PsiElement getIdentifier();
 
-  @NotNull
-  PsiElement getType();
-
 }

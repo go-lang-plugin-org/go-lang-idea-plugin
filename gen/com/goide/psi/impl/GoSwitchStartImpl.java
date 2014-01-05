@@ -10,27 +10,21 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoTypeAssertionExprImpl extends GoExpressionImpl implements GoTypeAssertionExpr {
+public class GoSwitchStartImpl extends GoCompositeElementImpl implements GoSwitchStart {
 
-  public GoTypeAssertionExprImpl(ASTNode node) {
+  public GoSwitchStartImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitTypeAssertionExpr(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitSwitchStart(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public GoExpression getExpression() {
-    return findNotNullChildByClass(GoExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public GoType getType() {
-    return findNotNullChildByClass(GoType.class);
+  public PsiElement getSwitch() {
+    return findNotNullChildByType(SWITCH);
   }
 
 }
