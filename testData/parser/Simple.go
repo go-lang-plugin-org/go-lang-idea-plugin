@@ -40,3 +40,11 @@ func emptyFor() {
 
     }
 }
+
+func emptyClauses() {
+    verb := "1"[0]
+    switch verb {
+        case 'p':
+        default:
+    }
+}

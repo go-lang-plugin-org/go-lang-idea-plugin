@@ -645,7 +645,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // CommCase ':' Statements
+  // CommCase ':' Statements?
   public static boolean CommClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "CommClause")) return false;
     if (!nextTokenIs(builder_, "<comm clause>", CASE, DEFAULT)) return false;
@@ -655,9 +655,16 @@ public class GoParser implements PsiParser {
     result_ = CommCase(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, consumeToken(builder_, COLON));
-    result_ = pinned_ && Statements(builder_, level_ + 1) && result_;
+    result_ = pinned_ && CommClause_2(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, COMM_CLAUSE, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  // Statements?
+  private static boolean CommClause_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CommClause_2")) return false;
+    Statements(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -988,7 +995,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ExprSwitchCase ':' Statements
+  // ExprSwitchCase ':' Statements?
   public static boolean ExprCaseClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ExprCaseClause")) return false;
     if (!nextTokenIs(builder_, "<expr case clause>", CASE, DEFAULT)) return false;
@@ -996,9 +1003,16 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<expr case clause>");
     result_ = ExprSwitchCase(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
-    result_ = result_ && Statements(builder_, level_ + 1);
+    result_ = result_ && ExprCaseClause_2(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, EXPR_CASE_CLAUSE, result_, false, null);
     return result_;
+  }
+
+  // Statements?
+  private static boolean ExprCaseClause_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExprCaseClause_2")) return false;
+    Statements(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -2846,7 +2860,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TypeSwitchCase ':' Statements
+  // TypeSwitchCase ':' Statements?
   public static boolean TypeCaseClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeCaseClause")) return false;
     if (!nextTokenIs(builder_, "<type case clause>", CASE, DEFAULT)) return false;
@@ -2854,9 +2868,16 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type case clause>");
     result_ = TypeSwitchCase(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
-    result_ = result_ && Statements(builder_, level_ + 1);
+    result_ = result_ && TypeCaseClause_2(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, TYPE_CASE_CLAUSE, result_, false, null);
     return result_;
+  }
+
+  // Statements?
+  private static boolean TypeCaseClause_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TypeCaseClause_2")) return false;
+    Statements(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */

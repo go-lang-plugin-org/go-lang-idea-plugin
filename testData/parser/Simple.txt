@@ -342,3 +342,43 @@ GO_FILE
           PsiElement({)('{')
           PsiElement(})('}')
       PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('emptyClauses')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      SIMPLE_STATEMENT
+        SHORT_VAR_DECLARATION
+          VAR_DEFINITION
+            PsiElement(identifier)('verb')
+          PsiElement(:=)(':=')
+          INDEX_EXPR
+            LITERAL
+              PsiElement(string)('"1"')
+            PsiElement([)('[')
+            LITERAL
+              PsiElement(int)('0')
+            PsiElement(])(']')
+      EXPR_SWITCH_STATEMENT
+        SWITCH_START
+          PsiElement(switch)('switch')
+        SIMPLE_STATEMENT
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('verb')
+        PsiElement({)('{')
+        EXPR_CASE_CLAUSE
+          EXPR_SWITCH_CASE
+            PsiElement(case)('case')
+            LITERAL
+              PsiElement(char)(''p'')
+          PsiElement(:)(':')
+        EXPR_CASE_CLAUSE
+          EXPR_SWITCH_CASE
+            PsiElement(default)('default')
+          PsiElement(:)(':')
+        PsiElement(})('}')
+      PsiElement(})('}')

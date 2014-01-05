@@ -285,11 +285,11 @@ left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=2 extend
 private Condition ::= SimpleStatementOpt [ Expression ]
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
-ExprCaseClause ::= ExprSwitchCase ':' Statements
+ExprCaseClause ::= ExprSwitchCase ':' Statements?
 ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
 left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}' {pin=1 extends=SwitchStatement}
 TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' 'type' ')' {pin=5}
-TypeCaseClause ::= TypeSwitchCase ':' Statements
+TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 private TypeList ::= Type ( ',' Type )*
 private TypeListNoPin ::= Type ( ',' Type )*
@@ -298,7 +298,7 @@ ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
 RangeClause ::= ( ExpressionList '=' | IdentifierList ':=' ) range Expression {pin=2}
 GoStatement ::= go Expression
 SelectStatement ::= select '{' ( CommClause )* '}'
-CommClause ::= CommCase ':' Statements {pin=1}
+CommClause ::= CommCase ':' Statements? {pin=1}
 CommCase ::= case ( SendStatement | RecvStatement ) | default {pin(".*")=1}
 RecvStatement ::= [ ExpressionList '=' | IdentifierList ':=' ] Expression {pin=0}
 ReturnStatement ::= return ExpressionList?
