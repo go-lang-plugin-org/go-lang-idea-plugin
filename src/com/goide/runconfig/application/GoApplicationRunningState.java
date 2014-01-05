@@ -29,6 +29,7 @@ public class GoApplicationRunningState extends GoRunningState {
     commandLine.setExePath(executable);
     commandLine.addParameter("run");
     commandLine.addParameter(myConfiguration.getFilePath());
+    commandLine.addParameter(myConfiguration.getParams());
     commandLine.setWorkDirectory(myModule.getProject().getBasePath());
     TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
     setConsoleBuilder(consoleBuilder);
