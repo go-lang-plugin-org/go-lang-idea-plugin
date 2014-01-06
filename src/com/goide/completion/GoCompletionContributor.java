@@ -2,6 +2,7 @@ package com.goide.completion;
 
 import com.goide.GoLanguage;
 import com.goide.GoParserDefinition;
+import com.goide.GoTypes;
 import com.goide.psi.GoFile;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -33,6 +34,7 @@ public class GoCompletionContributor extends CompletionContributor {
                                     ProcessingContext context,
                                     @NotNull CompletionResultSet result) {
         PsiElement position = parameters.getPosition();
+        if (position.getNode().getElementType() == GoTypes.STRING) return;
         for (String keyword : suggestKeywords(position)) {
           result.addElement(createKeywordLookupElement(keyword));
         }
