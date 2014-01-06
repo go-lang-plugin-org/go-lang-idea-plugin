@@ -1,9 +1,6 @@
 package com.goide.psi.impl;
 
-import com.goide.psi.GoFunctionDeclaration;
-import com.goide.psi.GoNamedElement;
-import com.goide.psi.GoParamDefinition;
-import com.goide.psi.GoVarDefinition;
+import com.goide.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
@@ -31,7 +28,9 @@ public class GoVarProcessor extends BaseScopeProcessor {
   public boolean execute(@NotNull PsiElement psiElement, ResolveState resolveState) {
     if (psiElement instanceof GoFunctionDeclaration) return false;
     if (!(psiElement instanceof GoNamedElement)) return true;
-    if (!(psiElement instanceof GoVarDefinition) && !(psiElement instanceof GoParamDefinition)) return true;
+    if (!(psiElement instanceof GoVarDefinition) &&
+        !(psiElement instanceof GoParamDefinition) &&
+        !(psiElement instanceof GoConstDefinition)) return true;
     if (!myIsCompletion && !myRequestedName.equals(((GoNamedElement)psiElement).getName())) return true;
     if (psiElement.equals(myOrigin)) return true;
 

@@ -35,6 +35,9 @@ class GoReference extends PsiReferenceBase<PsiElement> {
       if (file instanceof GoFile) {
         GoVarProcessor processor = new GoVarProcessor(myIdentifier.getText(), myRefExpression, false);
         ResolveUtil.treeWalkUp(myRefExpression, processor);
+        for (GoConstDefinition definition : ((GoFile)file).getConsts()) {
+          processor.execute(definition, ResolveState.initial());
+        }
         for (GoVarDefinition definition : ((GoFile)file).getVars()) {
           processor.execute(definition, ResolveState.initial());
         }
@@ -68,10 +71,13 @@ class GoReference extends PsiReferenceBase<PsiElement> {
         ResolveUtil.treeWalkUp(myRefExpression, processor);
         processFunctionParameters(processor);
         for (GoNamedElement v : processor.getVariants()) {
-          result.add(GoPsiImplUtil.createVariableLookupElement(v));
+          result.add(GoPsiImplUtil.createVariableLikeLookupElement(v));
+        }
+        for (GoConstDefinition c : ((GoFile)file).getConsts()) {
+          result.add(GoPsiImplUtil.createVariableLikeLookupElement(c));
         }
         for (GoVarDefinition v : ((GoFile)file).getVars()) {
-          result.add(GoPsiImplUtil.createVariableLookupElement(v));
+          result.add(GoPsiImplUtil.createVariableLikeLookupElement(v));
         }
         for (GoFunctionDeclaration f : ((GoFile)file).getFunctions()) {
           result.add(GoPsiImplUtil.createFunctionLookupElement(f));
