@@ -161,9 +161,17 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
                 testConfig.executeWhat = GoTestConfiguration.Type.Benchmark;
                 testConfig.filter = "^" + name + "$";
             }
-
-            testConfig.packageDir = file.getContainingDirectory().getVirtualFile().getCanonicalPath();
             testConfig.workingDir = project.getBasePath();
+            VirtualFile path = file.getVirtualFile().getParent();
+            if (path != null) {
+                path = path.getParent();
+            }
+            while (path != null && !"src".equals(path.getName())) {
+                packageName = path.getName() + "/" + packageName;
+                path = path.getParent();
+            }
+            testConfig.packageName = packageName;
+            testConfig.packageDir = project.getBasePath();
             testConfig.setModule(module);
 
             return true;
