@@ -14,7 +14,7 @@ public class ForFixer implements SmartEnterFixer {
     @Override
     public boolean process(Editor editor, PsiElement psiElement) {
         psiElement = findParentOfType(psiElement, GoForStatement.class);
-        if (isNodeOfType(psiElement, GoElementTypes.FOR_STATEMENT) &&
+        if (isNodeOfType(psiElement, GoElementTypes.STMTS_FOR) &&
             !elementHasBlockChild(psiElement)) {
             addEmptyBlockAtTheEndOfElement(editor, psiElement);
             return true;

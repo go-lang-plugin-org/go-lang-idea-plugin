@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
@@ -29,6 +28,7 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import java.util.Map;
 
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacings;
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.*;
 
@@ -52,7 +52,7 @@ public class GoBlocks {
         LITERAL_IDENTIFIER,
         kIMPORT, kVAR, kCONST, kTYPE, kFUNC, kSTRUCT, kPACKAGE, kINTERFACE,
         kSWITCH, kBREAK, kCONTINUE, kFALLTHROUGH, kDEFER, kGO, kGOTO, kRETURN,
-        kSELECT, kCASE, kDEFAULT,
+        kSELECT, kCASE, kDEFAULT, kIF, kELSE,
         oASSIGN, oVAR_ASSIGN, oCOMMA, oSEND_CHANNEL, oCOLON,
         TYPE_NAME_DECLARATION,
         pLPAREN, pRPAREN, pLBRACK, pRBRACK, pLCURLY, pRCURLY
@@ -134,7 +134,7 @@ public class GoBlocks {
 
         if (psi instanceof GoIncDecStatement)
             return new GoStatementBlock<GoIncDecStatement>((GoIncDecStatement) psi, settings, indent, alignmentsMap)
-                .setCustomSpacing(GoBlockUtil.CustomSpacings.INC_DEC_STMT);
+                .setCustomSpacing(CustomSpacings.INC_DEC_STMT);
 
         if (psi instanceof GoSendStatement)
             return new GoStatementBlock<GoSendStatement>((GoSendStatement) psi, settings, indent, alignmentsMap);
@@ -174,10 +174,21 @@ public class GoBlocks {
         if (psi instanceof GoSelectCommClause)
             return new GoSyntheticBlock<GoSelectCommClause>((GoSelectCommClause) psi, settings, indent, null, alignmentsMap)
                 .setMultiLineMode(true, oCOLON, null)
-                .setCustomSpacing(GoBlockUtil.CustomSpacing.Builder().setNone(EXPRESSIONS,
-                    oCOLON).setNone(SELECT_COMM_CLAUSE_RECV_EXPR, oCOLON).setNone(kDEFAULT, oCOLON).build())
-                .setLineBreakingTokens(STATEMENTS_OR_COMMENTS)
-                .setIndentedChildTokens(STATEMENTS_OR_COMMENTS);
+                .setCustomSpacing(CustomSpacings.SELECT_CLAUSES_COLON)
+                .setLineBreakingTokens(STMTS_OR_COMMENTS)
+                .setIndentedChildTokens(STMTS_OR_COMMENTS);
+
+        if (psi instanceof GoIfStatement)
+            return new GoStatementBlock<GoIfStatement>((GoIfStatement) psi, settings, indent, alignmentsMap)
+                .setCustomSpacing(CustomSpacings.LOOP_STATEMENTS);
+
+        if (psi instanceof GoFunctionParameterList)
+            return new GoSyntheticBlock<GoFunctionParameterList>((GoFunctionParameterList) psi, settings, indent)
+                .setCustomSpacing(CustomSpacings.NO_SPACE_BEFORE_COMMA);
+
+        if (psi instanceof GoFunctionParameter)
+            return new GoSyntheticBlock<GoFunctionParameter>((GoFunctionParameter) psi, settings, indent)
+            .setCustomSpacing(CustomSpacings.NO_SPACE_BEFORE_COMMA);
 
 //    if (psi instanceof GoShortVarDeclaration)
 //      return new GoShortVarDeclarationBlock((GoShortVarDeclaration)psi, settings, indent);
@@ -221,7 +232,7 @@ public class GoBlocks {
 //    if (elementType == UNARY_EXPRESSION)
 //      return new GoUnaryExpressionBlock(node, alignment, indent, NO_WRAP, settings);
 //
-//    if (GoElementTypes.FUNCTION_CALL_SETS.contains(elementType))
+//    if (GoElementTypes.FUNCTION_CALLS.contains(elementType))
 //      return new GoCallOrConvExpressionBlock(node, alignment, indent, NO_WRAP, settings);
 //
 //    if (elementType == PARENTHESISED_EXPRESSION)
@@ -241,7 +252,6 @@ public class GoBlocks {
 
         if (LEAF_BLOCKS.contains(elementType))
             return new GoLeafBlock(node, alignment, indent, null, settings);
-
 
         return new GoBlock(node, alignment, indent, null, settings);
     }

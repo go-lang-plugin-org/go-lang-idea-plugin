@@ -28,7 +28,7 @@ public class GoRelationalExpressionImpl extends GoBinaryExpressionImpl
 
     @Override
     public IElementType getOperator() {
-        PsiElement child = findChildByFilter(GoElementTypes.RELATIONAL_OPS);
+        PsiElement child = findChildByFilter(GoElementTypes.OPS_RELATIONAL);
         return child != null ? child.getNode().getElementType(): null;
     }
 

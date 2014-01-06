@@ -122,8 +122,8 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
     }
 
     private static final TokenSet BREAK_LABEL_STATEMENT = TokenSet.orSet(
-            GoElementTypes.FOR_STATEMENT,
-            GoElementTypes.SWITCH_STATEMENT,
+            GoElementTypes.STMTS_FOR,
+            GoElementTypes.STMTS_SWITCH,
             TokenSet.create(GoElementTypes.SELECT_STATEMENT)
     );
 
@@ -138,7 +138,7 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
                 result.addProblem(label, GoBundle.message("error.invalid.break.label", label.getName()));
             }
         } else if (usageParent instanceof GoContinueStatement) {
-            if (!isNodeOfType(enclosingStatement, GoElementTypes.FOR_STATEMENT) ||
+            if (!isNodeOfType(enclosingStatement, GoElementTypes.STMTS_FOR) ||
                 !isAncestor(enclosingStatement, usageParent, true)) {
                 result.addProblem(label, GoBundle.message("error.invalid.continue.label", label.getName()));
             }

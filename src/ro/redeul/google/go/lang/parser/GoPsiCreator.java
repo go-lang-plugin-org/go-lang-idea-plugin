@@ -37,9 +37,6 @@ class GoPsiCreator implements GoElementTypes {
 
         IElementType elementType = node.getElementType();
 
-//        if (elementType.equals(IDENTIFIER))
-//            return new GoLiteralIdentifierImpl(node);
-
         if (elementType.equals(PACKAGE_DECLARATION))
             return new GoPackageDeclarationImpl(node);
 

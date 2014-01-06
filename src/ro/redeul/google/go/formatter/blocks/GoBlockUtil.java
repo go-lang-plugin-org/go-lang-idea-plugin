@@ -196,5 +196,19 @@ public class GoBlockUtil {
             .setNone(INC_DEC_OPS, oSEMI)
             .build();
 
+        public static final CustomSpacing NO_SPACE_BEFORE_COMMA = CustomSpacing.Builder()
+            .setNone(LITERAL_IDENTIFIER, oCOMMA)
+            .setNone(FUNCTION_PARAMETER, oCOMMA)
+            .build();
+
+        public static final CustomSpacing SELECT_CLAUSES_COLON = CustomSpacing.Builder()
+            .setNone(EXPRESSIONS, oCOLON)
+            .setNone(SELECT_COMM_CLAUSE_RECV_EXPR, oCOLON)
+            .setNone(kDEFAULT, oCOLON)
+            .build();
+
+        public static final CustomSpacing LOOP_STATEMENTS = CustomSpacing.Builder()
+            .setNone(STMTS, oSEMI)
+            .build();
     }
 }

@@ -18,17 +18,18 @@ import java.util.Set;
 
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Spacings;
 
 class GoBlockStatementBlock extends GoSyntheticBlock<GoBlockStatement> {
 
     private static final GoBlockUtil.CustomSpacing MULTI_LINE_SPACING =
         GoBlockUtil.CustomSpacing.Builder()
-            .set(pLCURLY, pRCURLY, Spacing.createSpacing(0, 0, 1, true, 1))
+            .set(pLCURLY, pRCURLY, Spacings.ONE_LINE_KEEP_BREAKS)
             .build();
 
     private static final GoBlockUtil.CustomSpacing SAME_LINE_SPACING =
         GoBlockUtil.CustomSpacing.Builder()
-            .setNone(pLCURLY, pRCURLY)
+            .set(pLCURLY, pRCURLY, Spacings.ONE_LINE)
             .build();
 
     public static final Set<Alignments.Key> ALIGNMENT_KEYS =
@@ -36,12 +37,12 @@ class GoBlockStatementBlock extends GoSyntheticBlock<GoBlockStatement> {
 
     public static final TokenSet LINE_BREAKING_TOKENS =
         TokenSet.orSet(
-            GoElementTypes.STATEMENTS,
+            GoElementTypes.STMTS,
             GoElementTypes.COMMENTS
         );
 
     private final TokenSet INDENTED_STATEMENTS =
-        TokenSet.andNot(GoElementTypes.STATEMENTS, TokenSet.create(LABELED_STATEMENT));
+        TokenSet.andNot(GoElementTypes.STMTS, TokenSet.create(LABELED_STATEMENT));
 
 
     public GoBlockStatementBlock(GoBlockStatement blockStatement,
@@ -49,7 +50,9 @@ class GoBlockStatementBlock extends GoSyntheticBlock<GoBlockStatement> {
                                  Indent indent) {
         super(blockStatement, settings, indent);
 
-        setMultiLineMode(StringUtil.containsLineBreak(blockStatement.getText()), pLCURLY, pRCURLY);
+        setMultiLineMode(
+            blockStatement.getStatements().length > 0 ||
+            StringUtil.containsLineBreak(blockStatement.getText()), pLCURLY, pRCURLY);
 
         setLineBreakingTokens(LINE_BREAKING_TOKENS);
         setAlignmentKeys(ALIGNMENT_KEYS);

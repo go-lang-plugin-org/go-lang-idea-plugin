@@ -30,13 +30,13 @@ class GoLabeledStatementBlock extends GoSyntheticBlock<GoLabeledStatement> {
             .build();
 
     public static final TokenSet LINE_BREAKING_TOKENS =
-        TokenSet.orSet(STATEMENTS, COMMENTS, TokenSet.create(oCOLON));
+        TokenSet.orSet(STMTS, COMMENTS, TokenSet.create(oCOLON));
 
     private static final TokenSet HOLD_TOGETHER_GROUP1 =
         TokenSet.orSet(COMMENTS, TokenSet.create(oCOLON));
 
     private static final TokenSet HOLD_TOGETHER_GROUP2 =
-        TokenSet.orSet(STATEMENTS, TokenSet.create(oCOLON));
+        TokenSet.orSet(STMTS, TokenSet.create(oCOLON));
 
     public GoLabeledStatementBlock(GoLabeledStatement labeledStatement, CommonCodeStyleSettings settings,
                                    Indent indent,

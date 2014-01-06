@@ -184,13 +184,22 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
                 !holdTogether(prevChildType, child.getElementType(), linesBetween))
                 alignmentsMap = Alignments.set(getAlignmentKeys());
 
-            children.add(GoBlocks.generate(child, mySettings, childIndent, childAlign, alignmentsMap, isPartOfLeadingCommentGroup));
+            Block childBlock = GoBlocks.generate(
+                child, mySettings,
+                childIndent, childAlign, alignmentsMap,
+                isPartOfLeadingCommentGroup);
+
+            children.add(customizeBlock(childBlock, childPsi));
 
             prevChild = child;
             prevChildType = getASTElementType(prevChild);
         }
 
         return children;
+    }
+
+    protected Block customizeBlock(@NotNull Block childBlock, @NotNull PsiElement childPsi) {
+        return childBlock;
     }
 
     protected GoSyntheticBlock<GoPsiType> setCustomSpacing(@NotNull GoBlockUtil.CustomSpacing customSpacing) {

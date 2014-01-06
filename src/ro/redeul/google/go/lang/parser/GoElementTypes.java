@@ -11,16 +11,18 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 
 public interface GoElementTypes extends GoTokenTypes {
 
-    GoElementType END_OF_COMPILATION_UNIT = new GoElementTypeImpl("EndOfCompilationUnit");
-
     GoElementType IDENTIFIER = new GoElementTypeImpl("Identifier");
+    GoElementType IDENTIFIERS = new GoElementTypeImpl("Identifiers");
+
+    // others
     GoElementType PACKAGE_REFERENCE = new GoElementTypeImpl("PackageReference");
-    GoElementType BUILTIN_FUNCTION = new GoElementTypeImpl("Built in call");
+    GoElementType BUILTIN_FUNCTION = new GoElementTypeImpl("BuiltinCall");
 
     //Packaging
-    GoElementType PACKAGE_NAME = new GoElementTypeImpl("Package name");
+    GoElementType PACKAGE_NAME = new GoElementTypeImpl("PackageName");
     GoElementType PACKAGE_DECLARATION = new GoElementTypeImpl("PackageDeclaration");
 
+    // declarations
     GoElementType IMPORT_DECLARATIONS = new GoElementTypeImpl("ImportDeclarations");
     GoElementType IMPORT_DECLARATION = new GoElementTypeImpl("ImportSpec");
 
@@ -32,8 +34,6 @@ public interface GoElementTypes extends GoTokenTypes {
 
     GoElementType TYPE_DECLARATIONS = new GoElementTypeImpl("TypeDeclarations");
     GoElementType TYPE_DECLARATION = new GoElementTypeImpl("TypeSpec");
-
-    GoElementType IDENTIFIERS = new GoElementTypeImpl("Identifiers");
 
     // literals
     GoElementType LITERAL_IDENTIFIER = new GoElementTypeImpl("LiteralIdentifier");
@@ -52,6 +52,7 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType LITERAL_COMPOSITE_ELEMENT_KEY = new GoElementTypeImpl("CompositeLiteralElementKey");
     GoElementType LITERAL_COMPOSITE_ELEMENT_VALUE = new GoElementTypeImpl("LiteralCompositeElementValue");
 
+    // expressions
     GoElementType LITERAL_EXPRESSION = new GoElementTypeImpl("LiteralExpression");
     GoElementType PARENTHESISED_EXPRESSION = new GoElementTypeImpl("ParenthesisedExpression");
 
@@ -67,18 +68,17 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType SLICE_EXPRESSION = new GoElementTypeImpl("SliceExpression");
     GoElementType TYPE_ASSERTION_EXPRESSION = new GoElementTypeImpl("TypeAssertionExpression");
 
-    GoElementType UNARY_EXPRESSION =
-        new GoElementTypeImpl("UnaryExpression");
-    GoElementType UNARY_OPERATOR =
-        new GoElementTypeImpl("unary operator");
+    GoElementType UNARY_EXPRESSION = new GoElementTypeImpl("UnaryExpression");
+    GoElementType UNARY_OPERATOR = new GoElementTypeImpl("UnaryOp");
 
     GoElementType PRIMARY_EXPRESSION = new GoElementTypeImpl("primary expression");
     GoElementType SELECTOR_EXPRESSION = new GoElementTypeImpl("SelectorExpression");
     GoElementType BUILTIN_CALL_EXPRESSION = new GoElementTypeImpl("BuiltInCallExpression");
 
+    GoElementType METHOD_EXPRESSION = new GoElementTypeImpl("MethodExpression");
     GoElementType EXPRESSION_LIST = new GoElementTypeImpl("ExpressionList");
 
-
+    // types
     GoElementType TYPE_NAME = new GoElementTypeImpl("TypeName");
 
     GoStubElementType<GoTypeNameDeclarationStub, GoTypeNameDeclaration>
@@ -96,7 +96,7 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType TYPE_INTERFACE = new GoElementTypeImpl("TypeInterface");
     GoElementType TYPE_FUNCTION = new GoElementTypeImpl("TypeFunction");
 
-    GoElementType INTERFACE_REFERENCE = new GoElementTypeImpl("interface type");
+    GoElementType INTERFACE_REFERENCE = new GoElementTypeImpl("InterfaceReference");
 
     GoElementType TYPE_STRUCT = new GoElementTypeImpl("TypeStruct");
     GoElementType TYPE_STRUCT_FIELD = new GoElementTypeImpl("TypeStructField");
@@ -117,9 +117,8 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType REFERENCE_BASE_TYPE_NAME = new GoElementTypeImpl("ReferenceBaseTypeName");
     GoElementType BASE_TYPE_NAME = new GoElementTypeImpl("BaseTypeName");
 
-    GoElementType STATEMENT = new GoElementTypeImpl("statement");
+    // statements
     GoElementType BLOCK_STATEMENT = new GoElementTypeImpl("BlockStmt");
-
 
     GoElementType FOR_WITH_CLAUSES_STATEMENT = new GoElementTypeImpl("ForWithClausesStmt");
     GoElementType FOR_WITH_CONDITION_STATEMENT = new GoElementTypeImpl("ForWithConditionStmt");
@@ -158,7 +157,8 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType DEFER_STATEMENT = new GoElementTypeImpl("DeferStmt");
     GoElementType EMPTY_STATEMENT = new GoElementTypeImpl("EmptyStmt");
 
-    public final TokenSet STATEMENTS = TokenSet.create(
+    // sets
+    public final TokenSet STMTS = TokenSet.create(
         ASSIGN_STATEMENT,
         BREAK_STATEMENT,
         CONTINUE_STATEMENT,
@@ -204,22 +204,12 @@ public interface GoElementTypes extends GoTokenTypes {
     );
 
     public final TokenSet SELECT_CLAUSES = TokenSet.create(
-        SELECT_COMM_CLAUSE_DEFAULT, SELECT_COMM_CLAUSE_RECV, SELECT_COMM_CLAUSE_SEND
+        SELECT_COMM_CLAUSE_DEFAULT,
+        SELECT_COMM_CLAUSE_RECV,
+        SELECT_COMM_CLAUSE_SEND
     );
 
-    // TODO: dedup
-    public final TokenSet EXPRESSION_SETS = TokenSet.create(
-        PARENTHESISED_EXPRESSION,
-        ADD_EXPRESSION, MUL_EXPRESSION, REL_EXPRESSION, COM_EXPRESSION,
-        LOG_AND_EXPRESSION, LOG_OR_EXPRESSION,
-        CALL_OR_CONVERSION_EXPRESSION,
-        INDEX_EXPRESSION, SLICE_EXPRESSION, TYPE_ASSERTION_EXPRESSION,
-        UNARY_EXPRESSION, SELECTOR_EXPRESSION,
-        BUILTIN_CALL_EXPRESSION, LITERAL_FUNCTION,
-        LITERAL_COMPOSITE_ELEMENT
-    );
-
-    public final TokenSet BINARY_OPS = TokenSet.create(
+    public final TokenSet OPS_BINARY = TokenSet.create(
         oPLUS, oPLUS_ASSIGN, oMINUS, oMINUS_ASSIGN,
         oMUL, oMUL_ASSIGN, oQUOTIENT, oQUOTIENT_ASSIGN,
         oREMAINDER, oREMAINDER_ASSIGN,
@@ -232,25 +222,23 @@ public interface GoElementTypes extends GoTokenTypes {
         oCOND_AND, oCOND_OR
     );
 
-    public final TokenSet RELATIONAL_OPS = TokenSet.create(
+    public final TokenSet OPS_RELATIONAL = TokenSet.create(
         oEQ, oNOT_EQ, oLESS, oLESS_OR_EQUAL, oGREATER, oGREATER_OR_EQUAL
     );
 
-    public final TokenSet FUNCTION_CALL_SETS = TokenSet.create(
+    public final TokenSet FUNCTION_CALLS = TokenSet.create(
         CALL_OR_CONVERSION_EXPRESSION,
         BUILTIN_CALL_EXPRESSION
     );
 
-    GoElementType METHOD_EXPRESSION = new GoElementTypeImpl("MethodExpression");
-
-    public final TokenSet FOR_STATEMENT = TokenSet.create(
+    public final TokenSet STMTS_FOR = TokenSet.create(
         FOR_WITH_CLAUSES_STATEMENT,
         FOR_WITH_CONDITION_STATEMENT,
         FOR_WITH_RANGE_STATEMENT,
         FOR_WITH_RANGE_AND_VARS_STATEMENT
     );
 
-    public final TokenSet SWITCH_STATEMENT = TokenSet.create(
+    public final TokenSet STMTS_SWITCH = TokenSet.create(
         SWITCH_EXPR_STATEMENT,
         SWITCH_TYPE_STATEMENT
     );
@@ -271,5 +259,5 @@ public interface GoElementTypes extends GoTokenTypes {
         UNARY_EXPRESSION
     );
 
-    public final TokenSet STATEMENTS_OR_COMMENTS = TokenSet.orSet(STATEMENTS, COMMENTS);
+    public final TokenSet STMTS_OR_COMMENTS = TokenSet.orSet(STMTS, COMMENTS);
 }

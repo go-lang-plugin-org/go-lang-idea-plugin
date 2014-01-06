@@ -12,30 +12,34 @@ import ro.redeul.google.go.GoFormatterTestCase;
  */
 public class GoTopLevelFormatterTest extends GoFormatterTestCase {
 
-  @Override
-  protected String getRelativeTestDataPath() {
-    return super.getRelativeTestDataPath() + "toplevel/";
-  }
+    @Override
+    protected String getRelativeTestDataPath() {
+        return super.getRelativeTestDataPath() + "toplevel/";
+    }
 
-  public void testBasic() throws Exception { _test(); }
+    public void testBasic() throws Exception { _test(); }
 
-  public void testBasicWithLineComments() throws Exception { _test(); }
+    public void testBasicWithLineComments() throws Exception { _test(); }
 
 //    public void testBasicWithMultiLineComments() throws Exception { _test(); }
 
-  public void testCommentAtTheStart() throws Exception { _test(); }
+    public void testCommentAtTheStart() throws Exception { _test(); }
 
-  public void testEofNoWhiteSpace() throws Exception { _test(); }
+    public void testEofNoWhiteSpace() throws Exception { _test(); }
 
-  public void testEofTooMuchWhiteSpace() throws Exception { _test(); }
+    public void testEofTooMuchWhiteSpace() throws Exception { _test(); }
 
-  public void testAlternatingComments() throws Exception { _test(); }
+    public void testAlternatingComments() throws Exception { _test(); }
 
-  public void testImportSimple() throws Exception { _test(); }
+    public void testImportSimple() throws Exception { _test(); }
 
-  public void testImportRemoveEmptyLines() throws Exception { _test(); }
+    public void testImportRemoveEmptyLines() throws Exception { _test(); }
 
-  public void testConstDeclarations() throws Exception { _test(); }
+    public void testConstDeclarations() throws Exception { _test(); }
 
-  public void testVarDeclarations() throws Exception { _test(); }
+    public void testVarDeclarations() throws Exception { _test(); }
+
+    public void testFunction_normal() throws Exception { _test(); }
+    public void testFunction_withMultilineStatements() throws Exception { _test(); }
+
 }

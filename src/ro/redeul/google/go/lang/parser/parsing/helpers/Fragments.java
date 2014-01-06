@@ -59,30 +59,30 @@ public class Fragments implements GoElementTypes {
 
 
     public static IElementType parseBlock(PsiBuilder builder, GoParser parser,
-                                               boolean asStatement){
+                                          boolean asStatement) {
 
         PsiBuilder.Marker block = builder.mark();
 
-        if (!getToken(builder, pLCURLY)){
+        if (!getToken(builder, pLCURLY)) {
             block.drop();
             return null;
         }
 
-        while ( !builder.eof() && builder.getTokenType() != pRCURLY ) {
+        while (!builder.eof() && builder.getTokenType() != pRCURLY) {
             IElementType statementType = parser.parseStatement(builder);
 
-            if ( statementType == null || statementType == EMPTY_STATEMENT) {
+            if (statementType == null || statementType == EMPTY_STATEMENT) {
                 waitNext(builder, TokenSet.create(oSEMI, oSEMI_SYNTHETIC, pRCURLY));
                 getToken(builder, GoTokenTypeSets.EOS);
             }
         }
 
-        if ( !getToken(builder, pRCURLY, GoBundle.message("error.closing.curly.expected"))) {
+        if (!getToken(builder, pRCURLY, GoBundle.message("error.closing.curly.expected"))) {
             block.drop();
             return null;
         }
 
-        if ( asStatement )
+        if (asStatement)
             completeStatement(builder, block, BLOCK_STATEMENT);
         else
             block.done(BLOCK_STATEMENT);

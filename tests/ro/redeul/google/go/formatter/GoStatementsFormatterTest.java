@@ -18,7 +18,6 @@ public class GoStatementsFormatterTest extends GoFormatterTestCase {
     }
 
     public void testBlockEmpty() throws Exception { _test(); }
-
     public void testBlockWithComments() throws Exception { _test(); }
 
     public void testShortVar() throws Exception { _test(); }
@@ -52,4 +51,8 @@ public class GoStatementsFormatterTest extends GoFormatterTestCase {
     public void testSelect_simple() throws Exception { _test(); }
 
     public void testConstVarAndTypeDeclarations() throws Exception { _test(); }
+
+    public void testIf_simple() throws Exception { _test(); }
+    public void testIf_else() throws Exception { _test(); }
+    public void testIf_withSimpleStmtAndComment() throws Exception { _test(); }
 }

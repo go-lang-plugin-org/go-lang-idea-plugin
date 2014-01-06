@@ -25,7 +25,7 @@ public abstract class GoBinaryExpressionImpl extends GoExpressionBase
 
     @Override
     public IElementType getOperator() {
-        PsiElement child = findChildByFilter(GoElementTypes.BINARY_OPS);
+        PsiElement child = findChildByFilter(GoElementTypes.OPS_BINARY);
         return child != null ? child.getNode().getElementType() : null;
     }
 

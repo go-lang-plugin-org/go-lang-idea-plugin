@@ -44,7 +44,7 @@ class GoBinaryExpressionBlock extends GoBlock {
 
         while (parentElementType != BUILTIN_CALL_EXPRESSION
                 && parentElementType != EXPRESSION_LIST
-                && !STATEMENTS.contains(parentElementType)
+                && !STMTS.contains(parentElementType)
                 && parentElementType != CONST_DECLARATION
                 && parentElementType != VAR_DECLARATION
                 ) {
@@ -78,7 +78,7 @@ class GoBinaryExpressionBlock extends GoBlock {
             return;
         }
 
-        if (STATEMENTS.contains(parentElementType)
+        if (STMTS.contains(parentElementType)
                 || parentElementType == CONST_DECLARATION
                 || parentElementType == VAR_DECLARATION
             ) {
