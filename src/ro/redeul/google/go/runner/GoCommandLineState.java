@@ -136,8 +136,10 @@ class GoCommandLineState extends CommandLineState {
 
         if (testConfiguration.testTargetType.equals(GoTestConfiguration.TestTargetType.Package)) {
             testInstallDependencies.addParameter(testConfiguration.packageName);
-        } else {
+        } else if (testConfiguration.testTargetType.equals(GoTestConfiguration.TestTargetType.File)) {
             testInstallDependencies.addParameter(testConfiguration.testFile);
+        } else if (testConfiguration.testTargetType.equals(GoTestConfiguration.TestTargetType.CWD)) {
+            testInstallDependencies.addParameter("./...");
         }
 
         testInstallDependencies.getEnvironment().putAll(sysEnv);
@@ -180,9 +182,12 @@ class GoCommandLineState extends CommandLineState {
 
         if (testConfiguration.testTargetType.equals(GoTestConfiguration.TestTargetType.Package)) {
             commandLine.addParameter(testConfiguration.packageName);
-        } else {
+        } else if (testConfiguration.testTargetType.equals(GoTestConfiguration.TestTargetType.File)) {
             commandLine.addParameter(testConfiguration.testFile);
+        } else if (testConfiguration.testTargetType.equals(GoTestConfiguration.TestTargetType.CWD)) {
+            commandLine.addParameter("./...");
         }
+
         commandLine.getEnvironment().putAll(sysEnv);
         commandLine.setWorkDirectory(workingDir);
 

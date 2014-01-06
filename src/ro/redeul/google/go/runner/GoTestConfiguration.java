@@ -37,7 +37,7 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
     }
 
     public enum TestTargetType {
-        Package, File
+        CWD, Package, File
     }
 
     public String envVars = "";
@@ -78,7 +78,6 @@ public class GoTestConfiguration extends ModuleBasedConfiguration<GoApplicationM
                 (packageName == null || packageName.isEmpty())) {
             throw new RuntimeConfigurationException("Package name is required");
         }
-
 
         if (testTargetType.equals(TestTargetType.File) &&
                 (testFile.isEmpty() || (!testFile.isEmpty() && !testFile.contains("_test.go")))) {
