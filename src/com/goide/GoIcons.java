@@ -2,6 +2,7 @@ package com.goide;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.ui.LayeredIcon;
 
 import javax.swing.*;
 
@@ -11,7 +12,7 @@ public interface GoIcons {
   Icon METHOD = AllIcons.Nodes.Method;
   Icon FUNCTION = AllIcons.Nodes.Function;
   Icon VARIABLE = AllIcons.Nodes.Variable;
-  Icon CONST = AllIcons.Nodes.Variable;  // todo: another icon
+  Icon CONST = new LayeredIcon(AllIcons.Nodes.Field, AllIcons.Nodes.FinalMark);  // todo: another icon
   Icon PARAMETER = AllIcons.Nodes.Parameter;
   Icon MODULE_ICON = IconLoader.findIcon("/icons/goModule.png");
 }

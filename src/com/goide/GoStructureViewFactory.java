@@ -95,6 +95,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       ArrayList<TreeElement> result = new ArrayList<TreeElement>();
       if (myElement instanceof GoFile) {
         for (GoTypeSpec o : ((GoFile)myElement).getTypes()) result.add(new Element(o));
+        for (GoConstDefinition o : ((GoFile)myElement).getConsts()) result.add(new Element(o));
         for (GoVarDefinition o : ((GoFile)myElement).getVars()) result.add(new Element(o));
         for (GoFunctionDeclaration o : ((GoFile)myElement).getFunctions()) result.add(new Element(o));
         for (GoMethodDeclaration o : ((GoFile)myElement).getMethods()) result.add(new Element(o));
@@ -136,6 +137,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       if (myElement instanceof GoFunctionDeclaration) return GoIcons.FUNCTION;
       if (myElement instanceof GoTypeSpec) return GoIcons.TYPE;
       if (myElement instanceof GoVarDefinition) return GoIcons.VARIABLE;
+      if (myElement instanceof GoConstDefinition) return GoIcons.CONST;
       return myElement.getIcon(0);
     }
   }

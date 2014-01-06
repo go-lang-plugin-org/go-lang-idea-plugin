@@ -30,7 +30,7 @@ public class GoFile extends PsiFileBase {
   private CachedValue<List<GoMethodDeclaration>> myMethodsValue;
   private CachedValue<List<GoTypeSpec>> myTypesValue;
   private CachedValue<List<GoVarDefinition>> myVarsValue;
-  //private CachedValue<List<GoConstSpec>> myConstsValue;
+  private CachedValue<List<GoConstDefinition>> myConstsValue;
 
   @Nullable
   public GoPackageClause getPackage() {
@@ -110,6 +110,19 @@ public class GoFile extends PsiFileBase {
     }
     return myVarsValue.getValue();
   }
+  
+  @NotNull
+  public List<GoConstDefinition> getConsts() {
+    if (myConstsValue == null) {
+      myConstsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoConstDefinition>>() {
+        @Override
+        public Result<List<GoConstDefinition>> compute() {
+          return Result.create(calcConsts(), GoFile.this);
+        }
+      }, false);
+    }
+    return myConstsValue.getValue();
+  }
 
   @NotNull
   private List<GoTypeSpec> calcTypes() {
@@ -137,6 +150,25 @@ public class GoFile extends PsiFileBase {
         if (e instanceof GoVarDeclaration) {
           for (GoVarSpec spec : ((GoVarDeclaration)e).getVarSpecList()) {
             for (GoVarDefinition def : spec.getVarDefinitionList()) {
+              result.add(def);
+            }
+          }
+        }
+        return true;
+      }
+    });
+    return result;
+  }
+
+  @NotNull
+  private List<GoConstDefinition> calcConsts() {
+    final List<GoConstDefinition> result = new ArrayList<GoConstDefinition>();
+    processChildrenDummyAware(this, new Processor<PsiElement>() {
+      @Override
+      public boolean process(PsiElement e) {
+        if (e instanceof GoConstDeclaration) {
+          for (GoConstSpec spec : ((GoConstDeclaration)e).getConstSpecList()) {
+            for (GoConstDefinition def : spec.getConstDefinitionList()) {
               result.add(def);
             }
           }
