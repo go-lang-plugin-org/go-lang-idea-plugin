@@ -25,7 +25,8 @@
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
     <lang.refactoringSupport language="go" implementationClass="com.goide.refactor.GoRefactoringSupportProvider"/>
     <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
-    <spellchecker.support language="go" implementationClass="com.goide.spellchecking.GoSpellcheckingStrategy"/>
+    <spellchecker.support language="go" implementationClass="com.goide.spellchecker.GoSpellcheckingStrategy"/>
+    <lang.namesValidator language="go" implementationClass="com.goide.GoNamesValidator"/>
 
     <sdkType implementation="com.goide.GoSdkType"/>
     
