@@ -137,7 +137,6 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
             String packageName = goFile.getPackageName();
 
             testConfig.testTargetType = GoTestConfiguration.TestTargetType.Package;
-            testConfig.packageName = packageName;
 
             if (psiSourceElement instanceof GoFile) {
                 configuration.setName(packageName);
@@ -161,7 +160,7 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
                 testConfig.executeWhat = GoTestConfiguration.Type.Benchmark;
                 testConfig.filter = "^" + name + "$";
             }
-            testConfig.workingDir = project.getBasePath();
+
             VirtualFile path = file.getVirtualFile().getParent();
             if (path != null) {
                 path = path.getParent();
@@ -171,7 +170,8 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
                 path = path.getParent();
             }
             testConfig.packageName = packageName;
-            testConfig.packageDir = project.getBasePath();
+            testConfig.packageDir = file.getContainingDirectory().getVirtualFile().getCanonicalPath();
+            testConfig.workingDir = project.getBasePath();
             testConfig.setModule(module);
 
             return true;
