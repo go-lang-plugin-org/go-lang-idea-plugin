@@ -2,6 +2,7 @@ package com.goide.psi;
 
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
+import com.goide.psi.impl.GoFunctionDeclarationImpl;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GoFile extends PsiFileBase {
+  private static final String MAIN_FUNCTION_NAME = "main";
+
   public GoFile(@NotNull FileViewProvider viewProvider) {
     super(viewProvider, GoLanguage.INSTANCE);
   }
@@ -60,7 +63,7 @@ public class GoFile extends PsiFileBase {
           List<GoFunctionDeclaration> calc = calc(new Condition<PsiElement>() {
             @Override
             public boolean value(PsiElement e) {
-              return e instanceof GoFunctionDeclaration && !(e instanceof GoMethodDeclaration);
+              return isPureFunction(e);
             }
           });
           return Result.create(calc, GoFile.this);
@@ -68,6 +71,10 @@ public class GoFile extends PsiFileBase {
       }, false);
     }
     return myFunctionsValue.getValue();
+  }
+
+  private static boolean isPureFunction(PsiElement e) {
+    return e instanceof GoFunctionDeclaration && !(e instanceof GoMethodDeclaration);
   }
 
   @NotNull
@@ -204,6 +211,29 @@ public class GoFile extends PsiFileBase {
   @Override
   public FileType getFileType() {
     return GoFileType.INSTANCE;
+  }
+
+  @Nullable
+  public GoFunctionDeclarationImpl findMainFunction() { // todo create a map for faster search
+    List<GoFunctionDeclaration> functions = getFunctions();
+    for (GoFunctionDeclaration function : functions) {
+      if (isPureFunction(function) && MAIN_FUNCTION_NAME.equals(function.getName())) {
+        return (GoFunctionDeclarationImpl)function;
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  public String getPackageName() {
+    GoPackageClause packageClause = getPackage();
+    if (packageClause != null) {
+      PsiElement packageIdentifier = packageClause.getIdentifier();
+      if (packageIdentifier != null) {
+        return packageIdentifier.getText().trim();
+      }
+    }
+    return null;
   }
 
   private static boolean processChildrenDummyAware(GoFile file, final Processor<PsiElement> processor) {

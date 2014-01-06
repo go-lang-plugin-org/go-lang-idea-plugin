@@ -1,7 +1,6 @@
 package com.goide.runconfig.application;
 
 import com.goide.psi.GoFile;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.openapi.module.Module;
@@ -23,7 +22,7 @@ public class GoApplicationRunConfigurationProducer extends RunConfigurationProdu
                                                   Ref sourceElement) {
     PsiFile file = getFileFromContext(context);
     if (file != null) {
-      if ("main".equals(GoPsiImplUtil.getPackageName((GoFile)file)) && GoPsiImplUtil.findMainFunction((GoFile)file) != null) {
+      if ("main".equals(((GoFile)file).getPackageName()) && ((GoFile)file).findMainFunction() != null) {
         configuration.setName(file.getName());
         configuration.setFilePath(file.getVirtualFile().getPath());
         Module module = context.getModule();

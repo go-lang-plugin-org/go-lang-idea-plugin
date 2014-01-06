@@ -15,11 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.List;
 
 public class GoPsiImplUtil {
-  private static final String MAIN_FUNCTION_NAME = "main";
-
   @Nullable
   public static GoTypeReferenceExpression getQualifier(@NotNull GoTypeReferenceExpression o) {
     return PsiTreeUtil.getChildOfType(o, GoTypeReferenceExpression.class);
@@ -78,28 +75,5 @@ public class GoPsiImplUtil {
     Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE : v instanceof GoParamDefinition ?
                                                                   GoIcons.PARAMETER : v instanceof GoConstDefinition ? GoIcons.CONST : null;
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(v).withIcon(icon), GoCompletionContributor.VAR_PRIORITY);
-  }
-
-  @Nullable
-  public static GoFunctionDeclarationImpl findMainFunction(@NotNull GoFile file) {
-    List<GoFunctionDeclaration> functions = file.getFunctions();
-    for (GoFunctionDeclaration function : functions) {
-      if (function instanceof GoFunctionDeclarationImpl && MAIN_FUNCTION_NAME.equals(function.getName())) {
-        return (GoFunctionDeclarationImpl)function;
-      }
-    }
-    return null;
-  }
-
-  @Nullable
-  public static String getPackageName(@NotNull GoFile file) {
-    GoPackageClause packageClause = file.getPackage();
-    if (packageClause != null) {
-      PsiElement packageIdentifier = packageClause.getIdentifier();
-      if (packageIdentifier != null) {
-        return packageIdentifier.getText().trim();
-      }
-    }
-    return null;
   }
 }
