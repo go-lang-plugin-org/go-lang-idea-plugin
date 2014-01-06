@@ -2,25 +2,17 @@ package com.goide.psi.impl;
 
 import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-class GoReference extends PsiReferenceBase<PsiElement> {
+public class GoReference extends GoReferenceBase {
   @NotNull private final PsiElement myIdentifier;
   @NotNull private final GoReferenceExpression myRefExpression;
 
@@ -30,62 +22,14 @@ class GoReference extends PsiReferenceBase<PsiElement> {
     myRefExpression = element;
   }
 
+  @Override
+  protected PsiElement getQualifier() {
+    return myRefExpression.getQualifier();
+  }
+
   @Nullable
   @Override
-  public PsiElement resolve() {
-    GoReferenceExpression qualifier = myRefExpression.getQualifier();
-    PsiFile file = myRefExpression.getContainingFile();
-    if (file instanceof GoFile) {
-      if (qualifier == null) {
-        return processUnqualified((GoFile)file);
-      }
-      else {
-        PsiDirectory dir = getDirectory(qualifier);
-        PsiElement result = processDirectory(dir);
-        if (result != null) return result;
-      }
-    }
-    return null;
-  }
-
-  @Nullable
-  private PsiDirectory getDirectory(@NotNull GoReferenceExpression qualifier) {
-    PsiReference reference = qualifier.getReference();
-    PsiElement resolve = reference != null ? reference.resolve() : null;
-
-    PsiDirectory dir = null;
-    if (resolve instanceof GoImportSpec) {
-      dir = resolvePackage(StringUtil.unquoteString(((GoImportSpec)resolve).getString().getText()));
-    }
-    else if (resolve instanceof PsiDirectory) {
-      dir = (PsiDirectory)resolve;
-    }
-    return dir;
-  }
-
-  @Nullable
-  private PsiElement processDirectory(@Nullable PsiDirectory dir) {
-    if (dir != null) {
-      for (PsiFile psiFile : dir.getFiles()) {
-        if (psiFile instanceof GoFile) {
-          PsiElement element = processUnqualified((GoFile)psiFile);
-          if (element != null) return element;
-        }
-      }
-    }
-    return null;
-  }
-
-  private void processDirectory(@NotNull List<LookupElement> result, @Nullable PsiDirectory dir) {
-    if (dir != null) {
-      for (PsiFile psiFile : dir.getFiles()) {
-        if (psiFile instanceof GoFile) processFile(result, (GoFile)psiFile, false);
-      }
-    }
-  }
-
-  @Nullable
-  private PsiElement processUnqualified(@NotNull GoFile file) {
+  protected PsiElement processUnqualified(@NotNull GoFile file) {
     String id = myIdentifier.getText();
     GoVarProcessor processor = new GoVarProcessor(id, myRefExpression, false);
     ResolveUtil.treeWalkUp(myRefExpression, processor);
@@ -102,24 +46,7 @@ class GoReference extends PsiReferenceBase<PsiElement> {
       if (id.equals(f.getName())) return f;
     }
 
-    Object o = file.getImportMap().get(id);
-    if (o instanceof GoImportSpec) return (PsiElement)o;
-    if (o instanceof String) return resolvePackage((String)o);
-    return null;
-  }
-
-  @Nullable
-  private PsiDirectory resolvePackage(@NotNull String str) {
-    VirtualFile basePath = getSdkBasePath();
-    VirtualFile child = basePath != null ? basePath.findFileByRelativePath(str) : null;
-    return child == null ? null : PsiManager.getInstance(myRefExpression.getProject()).findDirectory(child);
-  }
-
-  @Nullable
-  private VirtualFile getSdkBasePath() {
-    Module module = ModuleUtilCore.findModuleForPsiElement(myRefExpression);
-    Sdk sdk  = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
-    return sdk == null ? null : LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/src/pkg");
+    return resolveImportOrPackage(file, id);
   }
 
   private void processFunctionParameters(@NotNull GoVarProcessor processor) {
@@ -129,23 +56,8 @@ class GoReference extends PsiReferenceBase<PsiElement> {
     if (parameters != null) parameters.processDeclarations(processor, ResolveState.initial(), null, myRefExpression);
   }
 
-  @NotNull
   @Override
-  public Object[] getVariants() {
-    List<LookupElement> result = ContainerUtil.newArrayList();
-    GoReferenceExpression qualifier = myRefExpression.getQualifier();
-    PsiFile file = myRefExpression.getContainingFile();
-    if (file instanceof GoFile) {
-      if (qualifier == null) processFile(result, (GoFile)file, true);
-      else {
-        PsiDirectory dir = getDirectory(qualifier);
-        processDirectory(result, dir);
-      }
-    }
-    return ArrayUtil.toObjectArray(result);
-  }
-
-  private void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion) {
+  protected void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion) {
     GoVarProcessor processor = new GoVarProcessor(myIdentifier.getText(), myRefExpression, true);
     ResolveUtil.treeWalkUp(myRefExpression, processor);
     processFunctionParameters(processor);
@@ -161,11 +73,7 @@ class GoReference extends PsiReferenceBase<PsiElement> {
     for (GoFunctionDeclaration f : file.getFunctions()) {
       result.add(GoPsiImplUtil.createFunctionLookupElement(f));
     }
-    if (localCompletion) {
-      for (String i : file.getImportMap().keySet()) {
-        result.add(GoPsiImplUtil.createImportLookupElement(i));
-      }
-    }
+    processImports(result, file, localCompletion);
   }
 
   @NotNull
