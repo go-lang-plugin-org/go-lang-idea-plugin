@@ -29,6 +29,7 @@ public class GoDescriptionProvider implements ElementDescriptionProvider {
       if (o instanceof GoVarDefinition) return "Variable";
       if (o instanceof GoParamDefinition) return "Parameter";
       if (o instanceof GoTypeSpec) return "Type";
+      if (o instanceof GoImportSpec) return "Import alias";
     }
     return null;
   }
