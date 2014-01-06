@@ -2,7 +2,7 @@
   <id>com.goide</id>
   <name>Go</name>
   <version>1.0</version>
-  <vendor>OH ltd.</vendor>
+  <vendor>Oh ltd.</vendor>
 
   <description><![CDATA[]]></description>
 
@@ -25,6 +25,7 @@
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
     <lang.refactoringSupport language="go" implementationClass="com.goide.refactor.GoRefactoringSupportProvider"/>
     <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
+    <spellchecker.support language="go" implementationClass="com.goide.spellchecking.GoSpellcheckingStrategy"/>
 
     <sdkType implementation="com.goide.GoSdkType"/>
     
