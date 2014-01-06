@@ -9,27 +9,6 @@ public class GoStatementsTestCase extends GoParsingTestCase {
         return super.getTestDataRelativePath() + File.separator + "statements";
     }
 
-    public void testReturn_empty() throws Throwable { doTest(); }
-    public void testReturn_emptySemi() throws Throwable { doTest(); }
-    public void testReturn_emptySemi2() throws Throwable { doTest(); }
-    public void testReturn_emptyEnter() throws Throwable { doTest(); }
-    public void testReturn_emptyEnter2() throws Throwable { doTest(); }
-    public void testReturn_multiple() throws Throwable { doTest(); }
-    public void testReturn_multiple2() throws Throwable { doTest(); }
-    public void testReturn_multiple3() throws Throwable { doTest(); }
-    public void testReturn_commentsAfterEnd() throws Throwable { doTest(); }
-    public void testReturn_expressionAfter() throws Throwable { doTest(); }
-
-    public void testVar_var1() throws Throwable { doTest(); }
-    public void testVar_var2() throws Throwable { doTest(); }
-    public void testVar_var3() throws Throwable { doTest(); }
-    public void testVar_var4() throws Throwable { doTest(); }
-
-    public void testBreak_empty() throws Throwable { doTest(); }
-    public void testBreak_empty2() throws Throwable { doTest(); }
-    public void testBreak_simple() throws Throwable { doTest(); }
-    public void testBreak_commentsAfterEnd() throws Throwable { doTest(); }
-
     public void testContinue_empty() throws Throwable { doTest(); }
     public void testContinue_empty2() throws Throwable { doTest(); }
     public void testContinue_simple() throws Throwable { doTest(); }

@@ -16,41 +16,29 @@ public class GoStatementParsingTestCase extends GoParsingTestCase {
         return super.getRelativeTestDataPath() + "statements";
     }
 
-//    public void testReturn_empty() throws Throwable { _test(); }
-//
-//    public void testReturn_emptySemi() throws Throwable { _test(); }
-//
-//    public void testReturn_emptySemi2() throws Throwable { _test(); }
-//
-//    public void testReturn_emptyEnter() throws Throwable { _test(); }
-//
-//    public void testReturn_emptyEnter2() throws Throwable { _test(); }
-//
-//    public void testReturn_multiple() throws Throwable { _test(); }
-//
-//    public void testReturn_multiple2() throws Throwable { _test(); }
-//
-//    public void testReturn_multiple3() throws Throwable { _test(); }
-//
-//    public void testReturn_commentsAfterEnd() throws Throwable { _test(); }
-//
-//    public void testReturn_expressionAfter() throws Throwable { _test(); }
-//
-//    public void testVar_var1() throws Throwable { _test(); }
-//
-//    public void testVar_var2() throws Throwable { _test(); }
-//
-//    public void testVar_var3() throws Throwable { _test(); }
-//
-//    public void testVar_var4() throws Throwable { _test(); }
-//
-//    public void testBreak_empty() throws Throwable { _test(); }
-//
-//    public void testBreak_empty2() throws Throwable { _test(); }
-//
-//    public void testBreak_simple() throws Throwable { _test(); }
-//
-//    public void testBreak_commentsAfterEnd() throws Throwable { _test(); }
+    public void testReturn_empty() throws Throwable { _test(); }
+    public void testReturn_emptySemi() throws Throwable { _test(); }
+    public void testReturn_emptySemi2() throws Throwable { _test(); }
+    public void testReturn_emptyEnter() throws Throwable { _test(); }
+    public void testReturn_emptyEnter2() throws Throwable { _test(); }
+    public void testReturn_multiple() throws Throwable { _test(); }
+    public void testReturn_multiple2() throws Throwable { _test(); }
+    public void testReturn_multiple3() throws Throwable { _test(); }
+    public void testReturn_commentsAfterEnd() throws Throwable { _test(); }
+    public void testReturn_expressionAfter() throws Throwable { _test(); }
+
+    public void testVar_var1() throws Throwable { _test(); }
+    public void testVar_var2() throws Throwable { _test(); }
+    public void testVar_var3() throws Throwable { _test(); }
+    public void testVar_var4() throws Throwable { _test(); }
+    public void testVar_withComments() throws Throwable { _test(); }
+    public void testVar_withCommentsNotOwned() throws Throwable { _test(); }
+
+    public void testBreak_empty() throws Throwable { _test(); }
+    public void testBreak_empty2() throws Throwable { _test(); }
+    public void testBreak_simple() throws Throwable { _test(); }
+    public void testBreak_commentsAfterEnd() throws Throwable { _test(); }
+    public void testBreak_withOwnedComments() throws Throwable { _test(); }
 //
 //    public void testContinue_empty() throws Throwable { _test(); }
 //

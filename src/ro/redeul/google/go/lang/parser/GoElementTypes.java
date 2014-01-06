@@ -162,6 +162,7 @@ public interface GoElementTypes extends GoTokenTypes {
         ASSIGN_STATEMENT,
         BREAK_STATEMENT,
         CONTINUE_STATEMENT,
+        CONST_DECLARATIONS,
         DEFER_STATEMENT,
         EMPTY_STATEMENT,
         EXPRESSION_STATEMENT,
@@ -181,6 +182,7 @@ public interface GoElementTypes extends GoTokenTypes {
         SHORT_VAR_STATEMENT,
         SWITCH_EXPR_STATEMENT,
         SWITCH_EXPR_STATEMENT,
+        TYPE_DECLARATIONS,
         VAR_DECLARATIONS
     );
 

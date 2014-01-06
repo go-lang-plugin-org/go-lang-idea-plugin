@@ -103,19 +103,19 @@ public class GoBlocks {
             return new GoSyntheticBlock<GoImportDeclaration>((GoImportDeclaration) psi, settings, indent);
 
         if (psi instanceof GoConstDeclarations)
-            return new GoConstsBlock((GoConstDeclarations) psi, settings);
+            return new GoConstsBlock((GoConstDeclarations) psi, settings, indent, alignmentsMap);
 
         if (psi instanceof GoConstDeclaration)
             return new GoConstDeclarationBlock((GoConstDeclaration) psi, settings, indent, alignmentsMap);
 
         if (psi instanceof GoVarDeclarations)
-            return new GoVarsBlock((GoVarDeclarations) psi, settings);
+            return new GoVarsBlock((GoVarDeclarations) psi, settings, indent, alignmentsMap);
 
         if (psi instanceof GoVarDeclaration)
             return new GoVarDeclarationBlock((GoVarDeclaration) psi, settings, indent, alignmentsMap);
 
         if (psi instanceof GoTypeDeclaration)
-            return new GoTypesBlock((GoTypeDeclaration) psi, settings);
+            return new GoTypesBlock((GoTypeDeclaration) psi, settings, indent, alignmentsMap);
 
         if (psi instanceof GoTypeSpec)
             return new GoTypeDeclarationBlock((GoTypeSpec) psi, settings, indent, alignmentsMap);
