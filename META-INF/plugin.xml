@@ -27,6 +27,7 @@
     <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
     <spellchecker.support language="go" implementationClass="com.goide.spellchecker.GoSpellcheckingStrategy"/>
     <lang.namesValidator language="go" implementationClass="com.goide.GoNamesValidator"/>
+    <lang.findUsagesProvider language="go" implementationClass="com.goide.GoFindUsagesProvider"/>
 
     <sdkType implementation="com.goide.GoSdkType"/>
     

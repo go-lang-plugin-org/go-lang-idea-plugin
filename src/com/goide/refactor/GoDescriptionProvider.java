@@ -25,6 +25,7 @@ public class GoDescriptionProvider implements ElementDescriptionProvider {
     if (location == UsageViewTypeLocation.INSTANCE) {
       if (o instanceof GoMethodDeclaration) return "Method";
       if (o instanceof GoFunctionDeclaration) return "Function";
+      if (o instanceof GoConstDefinition) return "Constant";
       if (o instanceof GoVarDefinition) return "Variable";
       if (o instanceof GoParamDefinition) return "Parameter";
       if (o instanceof GoTypeSpec) return "Type";
