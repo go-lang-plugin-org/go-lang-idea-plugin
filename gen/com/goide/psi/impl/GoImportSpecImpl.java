@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoImportSpecImpl extends GoCompositeElementImpl implements GoImportSpec {
+public class GoImportSpecImpl extends GoNamedElementImpl implements GoImportSpec {
 
   public GoImportSpecImpl(ASTNode node) {
     super(node);

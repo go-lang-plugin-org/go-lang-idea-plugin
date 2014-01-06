@@ -7,6 +7,7 @@ import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.CachedValue;
@@ -19,7 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GoFile extends PsiFileBase {
   private static final String MAIN_FUNCTION_NAME = "main";
@@ -29,6 +32,7 @@ public class GoFile extends PsiFileBase {
   }
 
   private CachedValue<GoPackageClause> myPackage;
+  private CachedValue<List<GoImportSpec>> myImportsValue;
   private CachedValue<List<GoFunctionDeclaration>> myFunctionsValue;
   private CachedValue<List<GoMethodDeclaration>> myMethodsValue;
   private CachedValue<List<GoTypeSpec>> myTypesValue;
@@ -104,6 +108,36 @@ public class GoFile extends PsiFileBase {
     }
     return myTypesValue.getValue();
   }
+  
+  @NotNull
+  public List<GoImportSpec> getImports() {
+    if (myImportsValue == null) {
+      myImportsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoImportSpec>>() {
+        @Override
+        public Result<List<GoImportSpec>> compute() {
+          return Result.create(calcImports(), GoFile.this);
+        }
+      }, false);
+    }
+    return myImportsValue.getValue();
+  }
+
+  public Map<String, Object> getImportMap() {
+    HashMap<String, Object> map = ContainerUtil.newHashMap();
+    for (GoImportSpec spec : getImports()) {
+      String string = StringUtil.unquoteString(spec.getString().getText());
+      PsiElement identifier = spec.getIdentifier();
+      if (identifier != null) {
+        map.put(identifier.getText(), spec);
+        continue;
+      }
+      String key = ContainerUtil.getLastItem(StringUtil.split(string, "/"));
+      if (key != null) {
+        map.put(key, string);
+      }
+    }
+    return map;
+  }
 
   @NotNull
   public List<GoVarDefinition> getVars() {
@@ -139,6 +173,23 @@ public class GoFile extends PsiFileBase {
       public boolean process(PsiElement e) {
         if (e instanceof GoTypeDeclaration) {
           for (GoTypeSpec spec : ((GoTypeDeclaration)e).getTypeSpecList()) {
+            result.add(spec);
+          }
+        }
+        return true;
+      }
+    });
+    return result;
+  }
+  
+  @NotNull
+  private List<GoImportSpec> calcImports() {
+    final List<GoImportSpec> result = new ArrayList<GoImportSpec>();
+    processChildrenDummyAware(this, new Processor<PsiElement>() {
+      @Override
+      public boolean process(PsiElement e) {
+        if (e instanceof GoImportDeclaration) {
+          for (GoImportSpec spec : ((GoImportDeclaration)e).getImportSpecList()) {
             result.add(spec);
           }
         }

@@ -76,4 +76,9 @@ public class GoPsiImplUtil {
                                                                   GoIcons.PARAMETER : v instanceof GoConstDefinition ? GoIcons.CONST : null;
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(v).withIcon(icon), GoCompletionContributor.VAR_PRIORITY);
   }
+
+  @NotNull
+  public static LookupElement createImportLookupElement(String i) {
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE), GoCompletionContributor.VAR_PRIORITY);
+  }
 }

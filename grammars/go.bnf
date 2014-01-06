@@ -67,8 +67,8 @@
 
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("(Function|Method)Declaration|TypeSpec|(Var|Const|Param)Definition")="com.goide.psi.GoNamedElement"
-  extends("FunctionDeclaration|TypeSpec|(Var|Const|Param)Definition")="com.goide.psi.impl.GoNamedElementImpl"
+  implements("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param)Definition")="com.goide.psi.GoNamedElement"
+  extends("FunctionDeclaration|(Type|Import)Spec|(Var|Const|Param)Definition")="com.goide.psi.impl.GoNamedElementImpl"
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement

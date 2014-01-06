@@ -7,31 +7,38 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class GoNamedElementImpl extends GoCompositeElementImpl implements GoCompositeElement, GoNamedElement {
   public GoNamedElementImpl(ASTNode node) {
     super(node);
   }
 
-  @NotNull
+  @Nullable
   @Override
   public PsiElement getNameIdentifier() {
     return getIdentifier();
   }
 
+  @Nullable
   @Override
   public String getName() {
-    return getIdentifier().getText();
+    PsiElement identifier = getIdentifier();
+    return identifier != null ? identifier.getText() : null;
   }
 
   @Override
   public int getTextOffset() {
-    return getIdentifier().getTextOffset();
+    PsiElement identifier = getIdentifier();
+    return identifier != null ? identifier.getTextOffset() : 0;
   }
 
   @Override
   public PsiElement setName(@NonNls @NotNull String newName) throws IncorrectOperationException {
-    getIdentifier().replace(GoElementFactory.createIdentifierFromText(getProject(), newName));
+    PsiElement identifier = getIdentifier();
+    if (identifier != null) {
+      identifier.replace(GoElementFactory.createIdentifierFromText(getProject(), newName));
+    }
     return this;
   }
 }
