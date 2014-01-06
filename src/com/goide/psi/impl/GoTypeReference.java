@@ -22,6 +22,7 @@ public class GoTypeReference extends GoReferenceBase {
     myRefExpression = element;
   }
 
+  @Nullable
   @Override
   protected PsiElement getQualifier() {
     return myRefExpression.getQualifier();

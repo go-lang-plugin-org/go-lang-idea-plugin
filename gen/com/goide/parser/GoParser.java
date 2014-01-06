@@ -144,6 +144,9 @@ public class GoParser implements PsiParser {
     else if (root_ == IMPORT_SPEC) {
       result_ = ImportSpec(builder_, 0);
     }
+    else if (root_ == IMPORT_STRING) {
+      result_ = ImportString(builder_, 0);
+    }
     else if (root_ == INDEX_EXPR) {
       result_ = Expression(builder_, 0, 7);
     }
@@ -1630,13 +1633,13 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // [ '.' | identifier ] string
+  // [ '.' | identifier ] ImportString
   public static boolean ImportSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ImportSpec")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<import spec>");
     result_ = ImportSpec_0(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, STRING);
+    result_ = result_ && ImportString(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, IMPORT_SPEC, result_, false, null);
     return result_;
   }
@@ -1702,6 +1705,18 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ImportSpecs_2")) return false;
     semi(builder_, level_ + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // string
+  public static boolean ImportString(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ImportString")) return false;
+    if (!nextTokenIs(builder_, STRING)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, STRING);
+    exit_section_(builder_, marker_, IMPORT_STRING, result_);
+    return result_;
   }
 
   /* ********************************************************** */

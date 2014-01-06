@@ -84,7 +84,8 @@ PackageClause ::= package identifier {pin=1}
 
 ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {pin(".*")=1}
 private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
-ImportSpec ::= [ '.' | identifier ] string
+ImportSpec ::= [ '.' | identifier ] ImportString
+ImportString ::= string {methods=[getReference]}
 
 Type ::= TypeName | TypeLit | '(' Type ')'
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?

@@ -4,13 +4,14 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
-public interface GoImportSpec extends GoNamedElement {
+public interface GoImportString extends GoCompositeElement {
 
   @NotNull
-  GoImportString getImportString();
+  PsiElement getString();
 
-  @Nullable
-  PsiElement getIdentifier();
+  @NotNull
+  PsiReference getReference();
 
 }

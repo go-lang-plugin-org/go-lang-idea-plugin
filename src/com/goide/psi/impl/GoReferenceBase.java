@@ -39,7 +39,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
 
     PsiDirectory dir = null;
     if (resolve instanceof GoImportSpec) {
-      dir = resolvePackage(StringUtil.unquoteString(((GoImportSpec)resolve).getString().getText()));
+      dir = resolvePackage(StringUtil.unquoteString(((GoImportSpec)resolve).getImportString().getText()));
     }
     else if (resolve instanceof PsiDirectory) {
       dir = (PsiDirectory)resolve;
@@ -100,10 +100,6 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     return null;
   }
 
-  protected abstract PsiElement getQualifier();
-
-  @Nullable
-  protected abstract PsiElement processUnqualified(@NotNull GoFile file);
 
   @NotNull
   @Override
@@ -130,5 +126,16 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     return null;
   }
 
-  protected abstract void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion);
+  protected void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion) {
+  }
+
+  @Nullable
+  protected PsiElement getQualifier() {
+    return null;
+  }
+
+  @Nullable
+  protected PsiElement processUnqualified(@NotNull GoFile file) {
+    return null;
+  }
 }

@@ -125,7 +125,7 @@ public class GoFile extends PsiFileBase {
   public Map<String, Object> getImportMap() {
     HashMap<String, Object> map = ContainerUtil.newHashMap();
     for (GoImportSpec spec : getImports()) {
-      String string = StringUtil.unquoteString(spec.getString().getText());
+      String string = StringUtil.unquoteString(spec.getImportString().getText());
       PsiElement identifier = spec.getIdentifier();
       if (identifier != null) {
         map.put(identifier.getText(), spec);

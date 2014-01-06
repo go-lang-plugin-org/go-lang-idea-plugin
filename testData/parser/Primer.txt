@@ -5,7 +5,8 @@ GO_FILE
   IMPORT_DECLARATION
     PsiElement(import)('import')
     IMPORT_SPEC
-      PsiElement(string)('"fmt"')
+      IMPORT_STRING
+        PsiElement(string)('"fmt"')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     PsiElement(identifier)('printf')

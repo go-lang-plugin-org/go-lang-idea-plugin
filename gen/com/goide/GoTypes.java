@@ -52,6 +52,7 @@ public interface GoTypes {
   IElementType IF_STATEMENT = new GoCompositeElementType("IF_STATEMENT");
   IElementType IMPORT_DECLARATION = new GoCompositeElementType("IMPORT_DECLARATION");
   IElementType IMPORT_SPEC = new GoCompositeElementType("IMPORT_SPEC");
+  IElementType IMPORT_STRING = new GoCompositeElementType("IMPORT_STRING");
   IElementType INDEX_EXPR = new GoCompositeElementType("INDEX_EXPR");
   IElementType INTERFACE_TYPE = new GoCompositeElementType("INTERFACE_TYPE");
   IElementType KEY = new GoCompositeElementType("KEY");
@@ -317,6 +318,9 @@ public interface GoTypes {
       }
       else if (type == IMPORT_SPEC) {
         return new GoImportSpecImpl(node);
+      }
+      else if (type == IMPORT_STRING) {
+        return new GoImportStringImpl(node);
       }
       else if (type == INDEX_EXPR) {
         return new GoIndexExprImpl(node);

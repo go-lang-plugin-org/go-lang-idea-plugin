@@ -9,28 +9,28 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.psi.PsiReference;
 
-public class GoImportSpecImpl extends GoNamedElementImpl implements GoImportSpec {
+public class GoImportStringImpl extends GoCompositeElementImpl implements GoImportString {
 
-  public GoImportSpecImpl(ASTNode node) {
+  public GoImportStringImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitImportSpec(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitImportString(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public GoImportString getImportString() {
-    return findNotNullChildByClass(GoImportString.class);
+  public PsiElement getString() {
+    return findNotNullChildByType(STRING);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  @NotNull
+  public PsiReference getReference() {
+    return GoPsiImplUtil.getReference(this);
   }
 
 }

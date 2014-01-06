@@ -6,6 +6,7 @@ import com.goide.psi.*;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
@@ -25,6 +26,11 @@ public class GoPsiImplUtil {
   @Nullable
   public static PsiReference getReference(@NotNull GoTypeReferenceExpression o) {
     return new GoTypeReference(o);
+  }
+
+  @NotNull
+  public static PsiReference getReference(@NotNull GoImportString o) {
+    return new GoImportReference(o, TextRange.from(1, o.getTextLength() - 2));
   }
 
   @Nullable
