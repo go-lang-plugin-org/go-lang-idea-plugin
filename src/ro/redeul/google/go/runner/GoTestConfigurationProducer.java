@@ -134,7 +134,9 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
             Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
             GoTestConfiguration testConfig = (GoTestConfiguration) configuration;
 
-            String packageName = goFile.getPackageName();
+            String packageName = goFile.getFullPackageName();
+            testConfig.packageName = packageName;
+            testConfig.packageDir = goFile.getContainingDirectory().getVirtualFile().getCanonicalPath();
 
             testConfig.testTargetType = GoTestConfiguration.TestTargetType.Package;
 
@@ -161,16 +163,6 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
                 testConfig.filter = "^" + name + "$";
             }
 
-            VirtualFile path = file.getVirtualFile().getParent();
-            if (path != null) {
-                path = path.getParent();
-            }
-            while (path != null && !"src".equals(path.getName())) {
-                packageName = path.getName() + "/" + packageName;
-                path = path.getParent();
-            }
-            testConfig.packageName = packageName;
-            testConfig.packageDir = file.getContainingDirectory().getVirtualFile().getCanonicalPath();
             testConfig.workingDir = project.getBasePath();
             testConfig.setModule(module);
 
