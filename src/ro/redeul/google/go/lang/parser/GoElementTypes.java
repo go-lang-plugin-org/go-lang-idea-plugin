@@ -181,7 +181,7 @@ public interface GoElementTypes extends GoTokenTypes {
         SELECT_STATEMENT,
         SHORT_VAR_STATEMENT,
         SWITCH_EXPR_STATEMENT,
-        SWITCH_EXPR_STATEMENT,
+        SWITCH_TYPE_STATEMENT,
         TYPE_DECLARATIONS,
         VAR_DECLARATIONS
     );
@@ -257,6 +257,23 @@ public interface GoElementTypes extends GoTokenTypes {
         BUILTIN_CALL_EXPRESSION, CALL_OR_CONVERSION_EXPRESSION,
         PARENTHESISED_EXPRESSION,
         UNARY_EXPRESSION
+    );
+
+    public final TokenSet TYPES = TokenSet.create(
+        TYPE_FUNCTION,
+        TYPE_INTERFACE,
+        TYPE_STRUCT,
+
+        TYPE_ARRAY,
+        TYPE_SLICE,
+        TYPE_MAP,
+
+        TYPE_NAME,
+        TYPE_POINTER,
+        TYPE_PARENTHESIZED,
+        TYPE_CHAN_BIDIRECTIONAL,
+        TYPE_CHAN_SENDING,
+        TYPE_CHAN_RECEIVING
     );
 
     public final TokenSet STMTS_OR_COMMENTS = TokenSet.orSet(STMTS, COMMENTS);

@@ -20,6 +20,7 @@ import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClause;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
+import ro.redeul.google.go.lang.psi.statements.switches.*;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
@@ -53,7 +54,7 @@ public class GoBlocks {
         kIMPORT, kVAR, kCONST, kTYPE, kFUNC, kSTRUCT, kPACKAGE, kINTERFACE,
         kSWITCH, kBREAK, kCONTINUE, kFALLTHROUGH, kDEFER, kGO, kGOTO, kRETURN,
         kSELECT, kCASE, kDEFAULT, kIF, kELSE, kFOR, kRANGE,
-        oASSIGN, oVAR_ASSIGN, oCOMMA, oSEND_CHANNEL, oCOLON,
+        oASSIGN, oVAR_ASSIGN, oCOMMA, oSEND_CHANNEL, oCOLON, oDOT, oTRIPLE_DOT,
         TYPE_NAME_DECLARATION,
         pLPAREN, pRPAREN, pLBRACK, pRBRACK, pLCURLY, pRCURLY
     );
@@ -168,16 +169,6 @@ public class GoBlocks {
         if (psi instanceof GoLabeledStatement)
             return new GoLabeledStatementBlock((GoLabeledStatement) psi, settings, indent, alignmentsMap);
 
-        if (psi instanceof GoSelectStatement)
-            return new GoSelectStatementBlock((GoSelectStatement) psi, settings, indent, alignmentsMap);
-
-        if (psi instanceof GoSelectCommClause)
-            return new GoSyntheticBlock<GoSelectCommClause>((GoSelectCommClause) psi, settings, indent, null, alignmentsMap)
-                .setMultiLineMode(true, oCOLON, null)
-                .setCustomSpacing(CustomSpacings.SELECT_CLAUSES_COLON)
-                .setLineBreakingTokens(STMTS_OR_COMMENTS)
-                .setIndentedChildTokens(STMTS_OR_COMMENTS);
-
         if (psi instanceof GoIfStatement)
             return new GoStatementBlock<GoIfStatement>((GoIfStatement) psi, settings, indent, alignmentsMap)
                 .setCustomSpacing(CustomSpacings.LOOP_STATEMENTS);
@@ -185,6 +176,63 @@ public class GoBlocks {
         if (psi instanceof GoForStatement)
             return new GoStatementBlock<GoForStatement>((GoForStatement) psi, settings, indent, alignmentsMap)
                 .setCustomSpacing(CustomSpacings.FOR_STATEMENTS);
+
+        // TODO remove the SelectStatementBlock
+        if (psi instanceof GoSelectStatement)
+            return new GoSelectStatementBlock((GoSelectStatement) psi, settings, indent, alignmentsMap);
+
+        if (psi instanceof GoSelectCommClause)
+            return new GoSyntheticBlock<GoSelectCommClause>((GoSelectCommClause) psi, settings, indent, null, alignmentsMap)
+                .setMultiLineMode(true, oCOLON, null)
+                .setCustomSpacing(CustomSpacings.CLAUSES_COLON)
+                .setLineBreakingTokens(STMTS_OR_COMMENTS)
+                .setIndentedChildTokens(STMTS_OR_COMMENTS);
+
+        // TODO: prebuild the tokensets
+        if (psi instanceof GoSwitchExpressionStatement)
+            return new GoSyntheticBlock<GoSwitchExpressionStatement>((GoSwitchExpressionStatement) psi, settings, indent, null, alignmentsMap)
+                .setMultiLineMode(true, pLCURLY, pRCURLY)
+                .setLineBreakingTokens(TokenSet.create(SWITCH_EXPR_CASE))
+                .setHoldTogetherGroups(TokenSet.create(SWITCH_EXPR_CASE))
+                .setCustomSpacing(GoBlockUtil.CustomSpacing.Builder()
+                    .setNone(pLCURLY, pRCURLY)
+                    .setNone(STMTS, oSEMI)
+                    .build());
+
+        // TODO: prebuild the tokensets
+        if (psi instanceof GoSwitchTypeStatement)
+            return new GoSyntheticBlock<GoSwitchTypeStatement>((GoSwitchTypeStatement) psi, settings, indent, null, alignmentsMap)
+                .setMultiLineMode(true, pLCURLY, pRCURLY)
+                .setLineBreakingTokens(TokenSet.create(SWITCH_TYPE_CASE))
+                .setHoldTogetherGroups(TokenSet.create(SWITCH_TYPE_CASE))
+                .setCustomSpacing(GoBlockUtil.CustomSpacing.Builder()
+                    .setNone(pLCURLY, pRCURLY)
+                    .setNone(STMTS, oSEMI)
+                    .build());
+
+        // TODO: prebuild the tokensets
+        if (psi instanceof GoSwitchTypeGuard)
+            return new GoSyntheticBlock<GoSwitchTypeGuard>((GoSwitchTypeGuard) psi, settings)
+                .setCustomSpacing(GoBlockUtil.CustomSpacing.Builder()
+                    .setNone(EXPRESSIONS, oDOT)
+                    .setNone(oDOT, pLPAREN)
+                    .setNone(pLPAREN, kTYPE)
+                    .setNone(kTYPE, pRPAREN)
+                    .build());
+
+        if (psi instanceof GoSwitchTypeClause)
+            return new GoSyntheticBlock<GoSwitchTypeClause>((GoSwitchTypeClause) psi, settings, indent, null, alignmentsMap)
+                .setMultiLineMode(true, oCOLON, null)
+                .setCustomSpacing(CustomSpacings.CLAUSES_COLON)
+                .setLineBreakingTokens(STMTS_OR_COMMENTS)
+                .setIndentedChildTokens(STMTS_OR_COMMENTS);
+
+        if (psi instanceof GoSwitchExpressionClause)
+            return new GoSyntheticBlock<GoSwitchExpressionClause>((GoSwitchExpressionClause) psi, settings, indent, null, alignmentsMap)
+                .setMultiLineMode(true, oCOLON, null)
+                .setCustomSpacing(CustomSpacings.CLAUSES_COLON)
+                .setLineBreakingTokens(STMTS_OR_COMMENTS)
+                .setIndentedChildTokens(STMTS_OR_COMMENTS);
 
         if (psi instanceof GoFunctionParameterList)
             return new GoSyntheticBlock<GoFunctionParameterList>((GoFunctionParameterList) psi, settings, indent)

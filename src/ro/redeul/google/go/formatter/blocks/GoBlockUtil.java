@@ -202,8 +202,10 @@ public class GoBlockUtil {
             .setNone(FUNCTION_PARAMETER, oCOMMA)
             .build();
 
-        public static final CustomSpacing SELECT_CLAUSES_COLON = CustomSpacing.Builder()
+        public static final CustomSpacing CLAUSES_COLON = CustomSpacing.Builder()
             .setNone(EXPRESSIONS, oCOLON)
+            .setNone(TYPES, oCOLON)
+            .setNone(TYPE_LIST, oCOLON)
             .setNone(SELECT_COMM_CLAUSE_RECV_EXPR, oCOLON)
             .setNone(kDEFAULT, oCOLON)
             .build();

@@ -40,9 +40,6 @@ public class GoStatementParsingTestCase extends GoParsingTestCase {
     public void testBreak_commentsAfterEnd() throws Throwable { _test(); }
     public void testBreak_withOwnedComments() throws Throwable { _test(); }
 
-
-
-//
 //    public void testContinue_empty() throws Throwable { _test(); }
 //
 //    public void testContinue_empty2() throws Throwable { _test(); }
