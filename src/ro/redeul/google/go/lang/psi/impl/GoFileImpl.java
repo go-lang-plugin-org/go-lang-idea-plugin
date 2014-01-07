@@ -8,10 +8,7 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
+import com.intellij.psi.*;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScopes;
 import com.intellij.psi.tree.IElementType;
@@ -117,6 +114,23 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
     public GoPackageDeclaration getPackage() {
         return findChildByClass(GoPackageDeclaration.class);
+    }
+
+    @Override
+    public String getFullPackageName() { // HACK having to do with package names
+        PsiDirectory parent = this.getContainingDirectory();
+        if (parent == null) {
+            return getPackageName();
+        }
+        String packageDir = parent.getVirtualFile().getCanonicalPath();
+        if (packageDir == null){
+            return getPackageName();
+        }
+        if (!packageDir.contains("/src/")) {
+            return getPackageName();
+        }
+        int begin = packageDir.lastIndexOf("/src/") + 5;
+        return packageDir.substring(begin);
     }
 
     public GoImportDeclarations[] getImportDeclarations() {

@@ -134,10 +134,11 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
             Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
             GoTestConfiguration testConfig = (GoTestConfiguration) configuration;
 
-            String packageName = goFile.getPackageName();
+            String packageName = goFile.getFullPackageName();
+            testConfig.packageName = packageName;
+            testConfig.packageDir = goFile.getContainingDirectory().getVirtualFile().getCanonicalPath();
 
             testConfig.testTargetType = GoTestConfiguration.TestTargetType.Package;
-            testConfig.packageName = packageName;
 
             if (psiSourceElement instanceof GoFile) {
                 configuration.setName(packageName);
@@ -162,7 +163,6 @@ public class GoTestConfigurationProducer extends RunConfigurationProducer {
                 testConfig.filter = "^" + name + "$";
             }
 
-            testConfig.packageDir = file.getContainingDirectory().getVirtualFile().getCanonicalPath();
             testConfig.workingDir = project.getBasePath();
             testConfig.setModule(module);
 
