@@ -117,7 +117,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     }
 
     @Override
-    public String getFullPackageName() {
+    public String getFullPackageName() { // HACK having to do with package names
         PsiDirectory parent = this.getContainingDirectory();
         if (parent == null) {
             return getPackageName();
