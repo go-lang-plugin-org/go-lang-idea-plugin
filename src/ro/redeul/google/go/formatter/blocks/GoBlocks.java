@@ -182,6 +182,10 @@ public class GoBlocks {
             return new GoStatementBlock<GoIfStatement>((GoIfStatement) psi, settings, indent, alignmentsMap)
                 .setCustomSpacing(CustomSpacings.LOOP_STATEMENTS);
 
+        if (psi instanceof GoForStatement)
+            return new GoStatementBlock<GoForStatement>((GoForStatement) psi, settings, indent, alignmentsMap)
+                .setCustomSpacing(CustomSpacings.FOR_STATEMENTS);
+
         if (psi instanceof GoFunctionParameterList)
             return new GoSyntheticBlock<GoFunctionParameterList>((GoFunctionParameterList) psi, settings, indent)
                 .setCustomSpacing(CustomSpacings.NO_SPACE_BEFORE_COMMA);

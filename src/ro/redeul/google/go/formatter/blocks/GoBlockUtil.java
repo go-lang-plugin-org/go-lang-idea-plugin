@@ -198,6 +198,7 @@ public class GoBlockUtil {
 
         public static final CustomSpacing NO_SPACE_BEFORE_COMMA = CustomSpacing.Builder()
             .setNone(LITERAL_IDENTIFIER, oCOMMA)
+            .setNone(EXPRESSIONS, oCOMMA)
             .setNone(FUNCTION_PARAMETER, oCOMMA)
             .build();
 
@@ -209,6 +210,14 @@ public class GoBlockUtil {
 
         public static final CustomSpacing LOOP_STATEMENTS = CustomSpacing.Builder()
             .setNone(STMTS, oSEMI)
+            .setNone(EXPRESSIONS, oSEMI)
+            .build();
+
+        public static final CustomSpacing FOR_STATEMENTS = CustomSpacing.Builder()
+            .setNone(EXPRESSIONS, oCOMMA)
+            .setNone(LITERAL_IDENTIFIER, oCOMMA)
+            .setNone(STMTS, oSEMI)
+            .setNone(EXPRESSIONS, oSEMI)
             .build();
     }
 }
