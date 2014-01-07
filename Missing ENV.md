@@ -15,6 +15,12 @@ You need to set ``` GOROOT ``` and ``` GOPATH ``` in ``` /etc/environment ```
 to match the current values from your ``` .profile ```, ``` .bashrc ``` or ``` .zshrc ```
 After that, you need to restart your system for the changes to take effect.
 
+If you are using Gnome and these variables are stored in .profile, you can change the ```.desktop``` file that launches IDEA and edit the Exect line to:
+```
+Exec=sh -c "/usr/local/idea/bin/idea.sh" %f
+```
+changing the path to ```idea.sh``` to the appropriate path of course.
+
 
 - Mac OS X
 --
