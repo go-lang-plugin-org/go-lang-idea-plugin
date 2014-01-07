@@ -109,7 +109,7 @@ class PrimaryExpression implements GoElementTypes {
 
             if (parseLiteralIdentifier(builder, parser)) {
                 // package? '.' ident '{' -> CompositeLiteral
-                if (builder.lookAhead(1) == pLCURLY) {
+                if (builder.getTokenType() == pLCURLY) {
                     if ( parser.isSet(GoParser.ParsingFlag.AllowCompositeLiteral)) {
                         if (parseLiteralComposite(builder, parser, mark)) {
                             return true;

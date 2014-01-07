@@ -39,6 +39,9 @@ public class GoStatementParsingTestCase extends GoParsingTestCase {
     public void testBreak_simple() throws Throwable { _test(); }
     public void testBreak_commentsAfterEnd() throws Throwable { _test(); }
     public void testBreak_withOwnedComments() throws Throwable { _test(); }
+
+
+
 //
 //    public void testContinue_empty() throws Throwable { _test(); }
 //
@@ -133,7 +136,31 @@ public class GoStatementParsingTestCase extends GoParsingTestCase {
     public void testSelect_case4() throws Throwable { _test(); }
     public void testSelect_comments() throws Throwable { _test(); }
     public void testSelect_complicated() throws Throwable { _test(); }
-//
+
+    public void testSwitch_expr_case1() throws Throwable { _test(); }
+    public void testSwitch_expr_case2() throws Throwable { _test(); }
+    public void testSwitch_expr_case3() throws Throwable { _test(); }
+    public void testSwitch_expr_case4() throws Throwable { _test(); }
+    public void testSwitch_expr_case5() throws Throwable { _test(); }
+    public void testSwitch_expr_case6() throws Throwable { _test(); }
+    public void testSwitch_expr_case7() throws Throwable { _test(); }
+    public void testSwitch_expr_case8() throws Throwable { _test(); }
+    public void testSwitch_expr_case9() throws Throwable { _test(); }
+    public void testSwitch_expr_case10() throws Throwable { _test(); }
+    public void testSwitch_expr_case11() throws Throwable { _test(); }
+    public void testSwitch_expr_commentsAfterEnd() throws Throwable { _test(); }
+    public void testSwitch_expr_simple() throws Throwable { _test(); }
+    public void testSwitch_expr_withBreak() throws Throwable { _test(); }
+
+    public void testSwitch_type_case1() throws Throwable { _test(); }
+    public void testSwitch_type_case2() throws Throwable { _test(); }
+    public void testSwitch_type_case3() throws Throwable { _test(); }
+    public void testSwitch_type_case4() throws Throwable { _test(); }
+    public void testSwitch_type_case5() throws Throwable { _test(); }
+    public void testSwitch_type_case6() throws Throwable { _test(); }
+    public void testSwitch_type_case7() throws Throwable { _test(); }
+    public void testSwitch_type_commentsAfterEnd() throws Throwable { _test(); }
+
 //    public void testFor_case1() throws Throwable { _test(); }
 //
 //    public void testFor_case2() throws Throwable { _test(); }

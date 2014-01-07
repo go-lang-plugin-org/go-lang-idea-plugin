@@ -14,29 +14,6 @@ public class GoStatementsTestCase extends GoParsingTestCase {
     public void testContinue_simple() throws Throwable { doTest(); }
     public void testContinue_commentsAfterEnd() throws Throwable { doTest(); }
 
-    public void testSwitch_expr_case1() throws Throwable { doTest(); }
-    public void testSwitch_expr_case2() throws Throwable { doTest(); }
-    public void testSwitch_expr_case3() throws Throwable { doTest(); }
-    public void testSwitch_expr_case4() throws Throwable { doTest(); }
-    public void testSwitch_expr_case5() throws Throwable { doTest(); }
-    public void testSwitch_expr_case6() throws Throwable { doTest(); }
-    public void testSwitch_expr_case7() throws Throwable { doTest(); }
-    public void testSwitch_expr_case8() throws Throwable { doTest(); }
-    public void testSwitch_expr_case9() throws Throwable { doTest(); }
-    public void testSwitch_expr_case10() throws Throwable { doTest(); }
-    public void testSwitch_expr_case11() throws Throwable { doTest(); }
-    public void testSwitch_expr_commentsAfterEnd() throws Throwable { doTest(); }
-    public void testSwitch_expr_withBreak() throws Throwable { doTest(); }
-
-    public void testSwitch_type_case1() throws Throwable { doTest(); }
-    public void testSwitch_type_case2() throws Throwable { doTest(); }
-    public void testSwitch_type_case3() throws Throwable { doTest(); }
-    public void testSwitch_type_case4() throws Throwable { doTest(); }
-    public void testSwitch_type_case5() throws Throwable { doTest(); }
-    public void testSwitch_type_case6() throws Throwable { doTest(); }
-    public void testSwitch_type_case7() throws Throwable { doTest(); }
-
-    public void testSwitch_type_commentsAfterEnd() throws Throwable { doTest(); }
 
     public void testIf_case1() throws Throwable { doTest(); }
     public void testIf_case2() throws Throwable { doTest(); }

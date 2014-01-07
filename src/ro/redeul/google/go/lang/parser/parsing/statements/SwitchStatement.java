@@ -68,9 +68,8 @@ class SwitchStatement implements GoElementTypes {
             }
 
             parser.resetFlag(AllowCompositeLiteral, true);
-            while (!builder.eof() && !lookAhead(builder, pRCURLY) && parser.parseStatement(builder) != null) {
-                endStatement(builder);
-            }
+            // HACK: this should check against the possiblity of infinite loops
+            while (!builder.eof() && !lookAhead(builder, pRCURLY) && parser.parseStatement(builder) != null);
 
             caseMark.done(isTypeSwitch ? SWITCH_TYPE_CASE : SWITCH_EXPR_CASE);
         }
