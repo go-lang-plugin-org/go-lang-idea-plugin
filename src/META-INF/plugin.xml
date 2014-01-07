@@ -109,10 +109,7 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends optional="true" config-file="idea-features.xml">com.intellij.modules.java</depends>
-    <depends optional="true" config-file="non-idea-features.xml">com.intellij.modules.ruby</depends>
-    <depends optional="true" config-file="non-idea-features.xml">com.intellij.modules.python</depends>
-    <depends optional="true" config-file="non-idea-features.xml">com.intellij.modules.objc-</depends>
-    <depends optional="true" config-file="non-idea-features.xml">com.jetbrains.php</depends>
+    <depends optional="true" config-file="non-idea-features.xml">com.intellij.modules.xml</depends>
 
     <application-components>
         <component>
