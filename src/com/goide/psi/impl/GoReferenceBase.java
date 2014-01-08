@@ -13,10 +13,12 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.List;
 
 public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
@@ -49,16 +51,30 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
 
   @Nullable
   protected PsiDirectory resolvePackage(@NotNull String str) {
-    VirtualFile basePath = getSdkBasePath();
-    VirtualFile child = basePath != null ? basePath.findFileByRelativePath(str) : null;
-    return child == null ? null : PsiManager.getInstance(myElement.getProject()).findDirectory(child);
+    for (VirtualFile file : getSdkBasePath()) {
+      VirtualFile child = file != null ? file.findFileByRelativePath(str) : null;
+      if (child != null) return PsiManager.getInstance(myElement.getProject()).findDirectory(child);
+    }
+    return null;
   }
 
-  @Nullable
-  private VirtualFile getSdkBasePath() {
+  @NotNull
+  private List<VirtualFile> getSdkBasePath() {
+    List<VirtualFile> result = ContainerUtil.newArrayList();
     Module module = ModuleUtilCore.findModuleForPsiElement(myElement);
     Sdk sdk  = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
-    return sdk == null ? null : LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/src/pkg");
+    VirtualFile sdkHome = sdk == null ? null : LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/src/pkg");
+    ContainerUtil.addIfNotNull(result, sdkHome);
+
+    String gopath = EnvironmentUtil.getValue("GOPATH");
+    if (gopath != null) {
+      List<String> split = StringUtil.split(gopath, File.pathSeparator);
+      for (String s : split) {
+        VirtualFile path = LocalFileSystem.getInstance().findFileByPath(s + "/src");
+        ContainerUtil.addIfNotNull(result, path);
+      }
+    }
+    return result;
   }
 
   protected void processDirectory(@NotNull List<LookupElement> result, @Nullable PsiDirectory dir) {
