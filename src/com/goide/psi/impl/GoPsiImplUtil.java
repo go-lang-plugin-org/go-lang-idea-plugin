@@ -86,6 +86,6 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createImportLookupElement(String i) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE), GoCompletionContributor.VAR_PRIORITY);
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE), GoCompletionContributor.PACKAGE_PRIORITY);
   }
 }
