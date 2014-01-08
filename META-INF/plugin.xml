@@ -37,7 +37,7 @@
     <configurationType implementation="com.goide.runconfig.application.GoApplicationRunConfigurationType"/>
     
     <!-- test -->
-    <runConfigurationProducer implementation="com.goide.runconfig.testing.GoTestRunConfigurationProducer"/>
+    <!--<runConfigurationProducer implementation="com.goide.runconfig.testing.GoTestRunConfigurationProducer"/>-->
     <configurationType implementation="com.goide.runconfig.testing.GoTestRunConfigurationType"/>
 
     <localInspection language="go" shortName="GoUnresolvedReference" displayName="Unresolved reference inspection"
