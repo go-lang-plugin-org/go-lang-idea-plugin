@@ -39,7 +39,10 @@
     <!-- test -->
     <runConfigurationProducer implementation="com.goide.runconfig.testing.GoTestRunConfigurationProducer"/>
     <configurationType implementation="com.goide.runconfig.testing.GoTestRunConfigurationType"/>
-    
+
+    <localInspection language="go" shortName="GoUnresolvedReference" displayName="Unresolved reference inspection"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoUnresolvedReferenceInspection"/>
   </extensions>
 
 </idea-plugin>

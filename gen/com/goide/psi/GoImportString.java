@@ -11,7 +11,7 @@ public interface GoImportString extends GoCompositeElement {
   @NotNull
   PsiElement getString();
 
-  @NotNull
+  @Nullable
   PsiReference getReference();
 
 }

@@ -3,16 +3,22 @@ package com.goide.psi.impl;
 import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 
 public class GoReference extends GoReferenceBase {
+  private static final Set RESERVED_NAMES = ContainerUtil.newHashSet("print", "println");
   @NotNull private final PsiElement myIdentifier;
   @NotNull private final GoReferenceExpression myRefExpression;
 
@@ -46,6 +52,8 @@ public class GoReference extends GoReferenceBase {
     for (GoFunctionDeclaration f : file.getFunctions()) {
       if (id.equals(f.getName())) return f;
     }
+
+    if (RESERVED_NAMES.contains(id)) return myElement;
 
     return resolveImportOrPackage(file, id);
   }

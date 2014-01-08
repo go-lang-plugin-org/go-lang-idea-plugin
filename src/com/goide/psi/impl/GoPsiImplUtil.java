@@ -28,8 +28,9 @@ public class GoPsiImplUtil {
     return new GoTypeReference(o);
   }
 
-  @NotNull
+  @Nullable
   public static PsiReference getReference(@NotNull GoImportString o) {
+    if (o.getTextLength() < 2) return null;
     return new GoImportReference(o, TextRange.from(1, o.getTextLength() - 2));
   }
 
