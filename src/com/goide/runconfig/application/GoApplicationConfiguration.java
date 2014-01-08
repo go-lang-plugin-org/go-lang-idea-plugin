@@ -72,11 +72,6 @@ public class GoApplicationConfiguration extends GoRunConfigurationBase<GoApplica
     }
   }
 
-  @Override
-  public boolean isTestRunConfiguration() {
-    return false;
-  }
-
   @NotNull
   public String getParams() {
     return myParams;

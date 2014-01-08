@@ -50,7 +50,5 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     return newRunningState(env, module);
   }
 
-  public abstract boolean isTestRunConfiguration();
-
   protected abstract RunningState newRunningState(ExecutionEnvironment env, Module module);
 }

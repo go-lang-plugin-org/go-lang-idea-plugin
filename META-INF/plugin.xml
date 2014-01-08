@@ -35,6 +35,11 @@
     <programRunner implementation="com.goide.runconfig.GoRunner"/>
     <runConfigurationProducer implementation="com.goide.runconfig.application.GoApplicationRunConfigurationProducer"/>
     <configurationType implementation="com.goide.runconfig.application.GoApplicationRunConfigurationType"/>
+    
+    <!-- test -->
+    <runConfigurationProducer implementation="com.goide.runconfig.testing.GoTestRunConfigurationProducer"/>
+    <configurationType implementation="com.goide.runconfig.testing.GoTestRunConfigurationType"/>
+    
   </extensions>
 
 </idea-plugin>
