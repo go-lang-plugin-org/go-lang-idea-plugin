@@ -50,7 +50,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
 
   @Nullable
   protected PsiDirectory resolvePackage(@NotNull String str) {
-    for (VirtualFile file : getSdkBasePath()) {
+    for (VirtualFile file : getPathsToLookup()) {
       VirtualFile child = file != null ? file.findFileByRelativePath(str) : null;
       if (child != null) return PsiManager.getInstance(myElement.getProject()).findDirectory(child);
     }
@@ -58,7 +58,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   }
 
   @NotNull
-  private List<VirtualFile> getSdkBasePath() {
+  private List<VirtualFile> getPathsToLookup() {
     List<VirtualFile> result = ContainerUtil.newArrayList();
     Module module = ModuleUtilCore.findModuleForPsiElement(myElement);
     Sdk sdk  = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
