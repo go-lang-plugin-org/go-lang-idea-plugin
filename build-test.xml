@@ -103,7 +103,7 @@
         <property name="suspend" value="n"/>
 
         <junit printsummary="yes"
-               haltonfailure="yes" showoutput="yes"
+               haltonfailure="false" showoutput="yes"
                failureProperty="failure_found"
                fork="yes" forkmode="once" reloading="no">
 
