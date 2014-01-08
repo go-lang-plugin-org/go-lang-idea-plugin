@@ -67,9 +67,13 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     ContainerUtil.addIfNotNull(result, sdkHome);
 
     String gopath = EnvironmentUtil.getValue("GOPATH");
+    String home = EnvironmentUtil.getValue("HOME");
     if (gopath != null) {
       List<String> split = StringUtil.split(gopath, File.pathSeparator);
       for (String s : split) {
+        if (home != null) {
+          s = s.replaceAll("\\$HOME", home);
+        }
         VirtualFile path = LocalFileSystem.getInstance().findFileByPath(s + "/src");
         ContainerUtil.addIfNotNull(result, path);
       }
