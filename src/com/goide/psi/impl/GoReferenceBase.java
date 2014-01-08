@@ -1,5 +1,6 @@
 package com.goide.psi.impl;
 
+import com.goide.GoSdkType;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportSpec;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -13,12 +14,10 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.List;
 
 public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
@@ -65,19 +64,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     Sdk sdk  = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
     VirtualFile sdkHome = sdk == null ? null : LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/src/pkg");
     ContainerUtil.addIfNotNull(result, sdkHome);
-
-    String gopath = EnvironmentUtil.getValue("GOPATH");
-    String home = EnvironmentUtil.getValue("HOME");
-    if (gopath != null) {
-      List<String> split = StringUtil.split(gopath, File.pathSeparator);
-      for (String s : split) {
-        if (home != null) {
-          s = s.replaceAll("\\$HOME", home);
-        }
-        VirtualFile path = LocalFileSystem.getInstance().findFileByPath(s + "/src");
-        ContainerUtil.addIfNotNull(result, path);
-      }
-    }
+    result.addAll(GoSdkType.getGoPathsSources());
     return result;
   }
 

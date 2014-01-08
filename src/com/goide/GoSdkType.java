@@ -10,6 +10,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -139,16 +140,41 @@ public class GoSdkType extends SdkType {
   public void setupSdkPaths(@NotNull Sdk sdk) {
     SdkModificator modificator = sdk.getSdkModificator();
     add(modificator, new File(sdk.getHomePath(), "src/pkg")); // scr/pkg is enough at the moment, possible process binaries from pkg
+    for (VirtualFile file : getGoPathsSources()) {
+      add(modificator, file);
+    }
     modificator.commitChanges();
   }
 
   private static void add(@NotNull SdkModificator modificator, @NotNull File file) {
     if (file.isDirectory()) {
       VirtualFile dir = LocalFileSystem.getInstance().findFileByIoFile(file);
-      if (dir != null) {
-        modificator.addRoot(dir, OrderRootType.CLASSES);
-        modificator.addRoot(dir, OrderRootType.SOURCES);
+      add(modificator, dir);
+    }
+  }
+
+  private static void add(@NotNull SdkModificator modificator, @Nullable VirtualFile dir) {
+    if (dir != null && dir.isDirectory()) {
+      modificator.addRoot(dir, OrderRootType.CLASSES);
+      modificator.addRoot(dir, OrderRootType.SOURCES);
+    }
+  }
+
+  @NotNull
+  public static List<VirtualFile> getGoPathsSources() {
+    List<VirtualFile> result = ContainerUtil.newArrayList();
+    String gopath = EnvironmentUtil.getValue("GOPATH");
+    String home = EnvironmentUtil.getValue("HOME");
+    if (gopath != null) {
+      List<String> split = StringUtil.split(gopath, File.pathSeparator);
+      for (String s : split) {
+        if (home != null) {
+          s = s.replaceAll("\\$HOME", home);
+        }
+        VirtualFile path = LocalFileSystem.getInstance().findFileByPath(s + "/src");
+        ContainerUtil.addIfNotNull(result, path);
       }
     }
+    return result;
   }
 }
