@@ -667,20 +667,22 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // SimpleStatementOpt [ Expression ]
+  // SimpleStatementOpt <<enterMode "NO_EMPTY_LITERAL">> Expression? <<exitMode "NO_EMPTY_LITERAL">>
   static boolean Condition(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Condition")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = SimpleStatementOpt(builder_, level_ + 1);
-    result_ = result_ && Condition_1(builder_, level_ + 1);
+    result_ = result_ && enterMode(builder_, level_ + 1, "NO_EMPTY_LITERAL");
+    result_ = result_ && Condition_2(builder_, level_ + 1);
+    result_ = result_ && exitMode(builder_, level_ + 1, "NO_EMPTY_LITERAL");
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
-  // [ Expression ]
-  private static boolean Condition_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Condition_1")) return false;
+  // Expression?
+  private static boolean Condition_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Condition_2")) return false;
     Expression(builder_, level_ + 1, -1);
     return true;
   }
@@ -1532,7 +1534,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // if <<enterMode "NO_EMPTY_LITERAL">> Condition <<exitMode "NO_EMPTY_LITERAL">> Block [ else ( IfStatement | Block ) ]
+  // if Condition Block [ else ( IfStatement | Block ) ]
   public static boolean IfStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "IfStatement")) return false;
     if (!nextTokenIs(builder_, IF)) return false;
@@ -1541,38 +1543,36 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, IF);
     pinned_ = result_; // pin = if|else
-    result_ = result_ && report_error_(builder_, enterMode(builder_, level_ + 1, "NO_EMPTY_LITERAL"));
-    result_ = pinned_ && report_error_(builder_, Condition(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, exitMode(builder_, level_ + 1, "NO_EMPTY_LITERAL")) && result_;
+    result_ = result_ && report_error_(builder_, Condition(builder_, level_ + 1));
     result_ = pinned_ && report_error_(builder_, Block(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && IfStatement_5(builder_, level_ + 1) && result_;
+    result_ = pinned_ && IfStatement_3(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, IF_STATEMENT, result_, pinned_, null);
     return result_ || pinned_;
   }
 
   // [ else ( IfStatement | Block ) ]
-  private static boolean IfStatement_5(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IfStatement_5")) return false;
-    IfStatement_5_0(builder_, level_ + 1);
+  private static boolean IfStatement_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "IfStatement_3")) return false;
+    IfStatement_3_0(builder_, level_ + 1);
     return true;
   }
 
   // else ( IfStatement | Block )
-  private static boolean IfStatement_5_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IfStatement_5_0")) return false;
+  private static boolean IfStatement_3_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "IfStatement_3_0")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, ELSE);
     pinned_ = result_; // pin = if|else
-    result_ = result_ && IfStatement_5_0_1(builder_, level_ + 1);
+    result_ = result_ && IfStatement_3_0_1(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
   }
 
   // IfStatement | Block
-  private static boolean IfStatement_5_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IfStatement_5_0_1")) return false;
+  private static boolean IfStatement_3_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "IfStatement_3_0_1")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = IfStatement(builder_, level_ + 1);

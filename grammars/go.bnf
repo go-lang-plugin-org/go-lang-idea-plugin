@@ -278,12 +278,12 @@ LabeledStatement ::= identifier ':' Statement {pin=2}
 SendStatement ::= Expression '<-' Expression {pin=2}
 AssignmentStatement ::= ExpressionList assign_op ExpressionList {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
-IfStatement ::= if <<enterMode "NO_EMPTY_LITERAL">> Condition <<exitMode "NO_EMPTY_LITERAL">> Block [ else ( IfStatement | Block ) ] {pin(".*")="if|else"}
+IfStatement ::= if Condition Block [ else ( IfStatement | Block ) ] {pin(".*")="if|else"}
 SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 SwitchStart ::= switch
 left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=2 extends=SwitchStatement}
 
-private Condition ::= SimpleStatementOpt [ Expression ]
+private Condition ::= SimpleStatementOpt <<enterMode "NO_EMPTY_LITERAL">> Expression? <<exitMode "NO_EMPTY_LITERAL">>
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
 ExprCaseClause ::= ExprSwitchCase ':' Statements?

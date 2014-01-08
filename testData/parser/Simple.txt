@@ -344,6 +344,67 @@ GO_FILE
       PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
+    PsiElement(identifier)('emptyIf')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      IF_STATEMENT
+        PsiElement(if)('if')
+        SIMPLE_STATEMENT
+          SHORT_VAR_DECLARATION
+            VAR_DEFINITION
+              PsiElement(identifier)('err')
+            PsiElement(:=)(':=')
+            CALL_EXPR
+              REFERENCE_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('q')
+                PsiElement(.)('.')
+                PsiElement(identifier)('Send')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                UNARY_EXPR
+                  PsiElement(&)('&')
+                  COMPOSITE_LIT
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('Cmd')
+                    LITERAL_VALUE
+                      PsiElement({)('{')
+                      ELEMENT
+                        KEY
+                          FIELD_NAME
+                            PsiElement(identifier)('U')
+                        PsiElement(:)(':')
+                        VALUE
+                          REFERENCE_EXPRESSION
+                            PsiElement(identifier)('parsed')
+                      PsiElement(,)(',')
+                      ELEMENT
+                        KEY
+                          FIELD_NAME
+                            PsiElement(identifier)('M')
+                        PsiElement(:)(':')
+                        VALUE
+                          REFERENCE_EXPRESSION
+                            PsiElement(identifier)('method')
+                      PsiElement(})('}')
+                PsiElement())(')')
+        PsiElement(;)(';')
+        CONDITIONAL_EXPR
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('err')
+          PsiElement(!=)('!=')
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('nil')
+        BLOCK
+          PsiElement({)('{')
+          PsiElement(})('}')
+      PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
     PsiElement(identifier)('emptyClauses')
     SIGNATURE
       PARAMETERS

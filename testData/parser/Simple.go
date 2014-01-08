@@ -41,6 +41,11 @@ func emptyFor() {
     }
 }
 
+func emptyIf() {
+  if err := q.Send(&Cmd{U: parsed, M: method}); err != nil {
+  }
+}
+
 func emptyClauses() {
     verb := "1"[0]
     switch verb {
