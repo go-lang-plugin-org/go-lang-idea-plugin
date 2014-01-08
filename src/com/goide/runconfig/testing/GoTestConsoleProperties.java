@@ -88,9 +88,5 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
 
       return true;
     }
-
-    private String failedMessage() {
-      return ServiceMessageBuilder.testFailed(myCurrentTest).addAttribute("message", myStdOut.toString()).toString();
-    }
   }
 }
