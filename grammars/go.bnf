@@ -271,7 +271,7 @@ IndexExpr ::= Expression '[' IndexExprBody ']'
 private IndexExprBody ::= (Expression? ':' Expression ':' Expression) | (Expression? ':' Expression?) | Expression
 TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
-ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')'
+ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')' {pin=0}
 ConversionExpr ::= &('*' | '<-' | '[' | chan | func | interface | map | struct) Type '(' Expression ','? ')'
 
 LabeledStatement ::= identifier ':' Statement {pin=2}
