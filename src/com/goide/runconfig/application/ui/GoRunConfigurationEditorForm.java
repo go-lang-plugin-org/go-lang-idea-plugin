@@ -11,6 +11,7 @@ import com.intellij.openapi.roots.ui.configuration.ModulesCombobox;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Factory;
+import com.intellij.ui.RawCommandLineEditor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +20,7 @@ import javax.swing.*;
 public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationConfiguration> {
   private JPanel component;
   private ModulesCombobox myComboModules;
-  private JTextField myParamsField;
+  private RawCommandLineEditor myParamsField;
   private TextFieldWithBrowseButton myFilePathField;
 
   public GoRunConfigurationEditorForm(@NotNull Project project) {
