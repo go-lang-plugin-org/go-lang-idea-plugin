@@ -78,9 +78,10 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
           myStdOut.append(text);
         }
         else {
+          String failedMessage = ServiceMessageBuilder.testFailed(myCurrentTest).addAttribute("message", myStdOut.toString()).toString();
           myFailed = false;
           myStdOut = new StringBuilder();
-          return super.processServiceMessages(failedMessage(), outputType, visitor)
+          return super.processServiceMessages(failedMessage, outputType, visitor)
                  && super.processServiceMessages(ServiceMessageBuilder.testFinished(myCurrentTest).toString(), outputType, visitor);
         }
       }
