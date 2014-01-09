@@ -2,7 +2,7 @@
              url="http://github.com/go-lang-plugin-org/go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Go language (golang.org) support plugin</name>
-    <version>0.9.15.3</version>
+    <version>0.9.16-dev</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[<h2>Support for Go programming language.</h2>(see <a href="http://golang.org">http://golang.org</a>)
