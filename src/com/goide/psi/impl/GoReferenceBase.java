@@ -3,6 +3,7 @@ package com.goide.psi.impl;
 import com.goide.GoSdkType;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportSpec;
+import com.goide.psi.GoNamedElement;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -31,6 +32,10 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         result.add(GoPsiImplUtil.createImportLookupElement(i));
       }
     }
+  }
+
+  public static boolean isPublic(@NotNull GoNamedElement o) {
+    return StringUtil.isCapitalized(o.getName());
   }
 
   @Nullable
@@ -87,7 +92,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     if (dir != null) {
       for (PsiFile psiFile : dir.getFiles()) {
         if (psiFile instanceof GoFile) {
-          PsiElement element = processUnqualified((GoFile)psiFile);
+          PsiElement element = processUnqualified((GoFile)psiFile, false);
           if (element != null) return element;
         }
       }
@@ -102,7 +107,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     PsiFile file = myElement.getContainingFile();
     if (file instanceof GoFile) {
       if (qualifier == null) {
-        PsiElement unqualified = processUnqualified((GoFile)file);
+        PsiElement unqualified = processUnqualified((GoFile)file, true);
         if (unqualified != null) return unqualified;
 
         if (!file.getName().equals("builtin.go")) {
@@ -110,7 +115,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
           VirtualFile vBuiltin = home != null ? home.findFileByRelativePath("builtin/builtin.go") : null;
           if (vBuiltin != null) {
             PsiFile psiBuiltin = PsiManager.getInstance(file.getProject()).findFile(vBuiltin);
-            PsiElement r = psiBuiltin instanceof GoFile ? processUnqualified((GoFile)psiBuiltin) : null;
+            PsiElement r = psiBuiltin instanceof GoFile ? processUnqualified((GoFile)psiBuiltin, true) : null;
             if (r != null) return r;
           }
         }
@@ -139,7 +144,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
           if (vBuiltin != null) {
             PsiFile psiBuiltin = PsiManager.getInstance(file.getProject()).findFile(vBuiltin);
             if (psiBuiltin instanceof GoFile) {
-              processFile(result, (GoFile)psiBuiltin, false);
+              processFile(result, (GoFile)psiBuiltin, true);
             }
           }
         }
@@ -168,7 +173,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   }
 
   @Nullable
-  protected PsiElement processUnqualified(@NotNull GoFile file) {
+  protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {
     return null;
   }
 }

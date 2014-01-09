@@ -36,10 +36,10 @@ public class GoTypeReference extends GoReferenceBase {
 
   @Nullable
   @Override
-  protected PsiElement processUnqualified(@NotNull GoFile file) {
+  protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {
     String id = myIdentifier.getText();
     for (GoTypeSpec t : file.getTypes()) {
-      if (id.equals(t.getName())) return t;
+      if ((isPublic(t) || localResolve) && id.equals(t.getName())) return t;
     }
     return resolveImportOrPackage(file, id);
   }
@@ -47,7 +47,7 @@ public class GoTypeReference extends GoReferenceBase {
   @Override
   protected void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion) {
     for (GoTypeSpec t : file.getTypes()) {
-      result.add(GoPsiImplUtil.createTypeLookupElement(t));
+      if (isPublic(t) || localCompletion) result.add(GoPsiImplUtil.createTypeLookupElement(t));
     }
     processImports(result, file, localCompletion);
   }
