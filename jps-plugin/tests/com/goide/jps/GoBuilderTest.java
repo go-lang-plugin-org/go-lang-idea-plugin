@@ -76,12 +76,8 @@ public class GoBuilderTest extends JpsBuildTestCase {
 
   @NotNull
   private static String getGoSdkPath() {
-    if (SystemInfo.isLinux) {
-      return GO_LINUX_SDK_PATH;
-    }
-    else if (SystemInfo.isMac) {
-      return GO_MAC_SDK_PATH;
-    }
+    if (SystemInfo.isLinux) return GO_LINUX_SDK_PATH;
+    if (SystemInfo.isMac) return GO_MAC_SDK_PATH;
     throw new RuntimeException("Only mac & linux supported");
   }
 
