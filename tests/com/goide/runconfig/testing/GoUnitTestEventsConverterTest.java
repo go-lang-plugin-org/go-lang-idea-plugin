@@ -9,6 +9,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import jetbrains.buildServer.messages.serviceMessages.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 public class GoUnitTestEventsConverterTest extends GoCodeInsightFixtureTestCase {
 
   public void testSingleTestFailed() throws Exception {
@@ -42,7 +44,8 @@ public class GoUnitTestEventsConverterTest extends GoCodeInsightFixtureTestCase 
     String inputDataFilename = getTestName(true) + ".txt";
     LoggingServiceMessageVisitor serviceMessageVisitor = new LoggingServiceMessageVisitor();
     String lineSeparator = System.getProperty("line.separator");
-    for (String line : FileUtil.loadLines(getTestDataPath() + "/" + inputDataFilename)) {
+    // todo: replace with FileUtil.loadLines(String) in 13.1
+    for (String line : StringUtil.splitByLines(FileUtil.loadFile(new File(getTestDataPath() + "/" + inputDataFilename)))) {
       converter.processServiceMessages(line + lineSeparator, ProcessOutputTypes.STDOUT, serviceMessageVisitor);
     }
     assertSameLinesWithFile(getTestDataPath() + "/" + getTestName(true) + "-expected.txt", serviceMessageVisitor.getLog());
