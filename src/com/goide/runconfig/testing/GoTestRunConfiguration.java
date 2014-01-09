@@ -14,12 +14,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class GoTestConfiguration extends GoRunConfigurationBase<GoTestRunningState> {
+public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunningState> {
   private String myParams = "";
   private String myTestFilter = "";
   private String myWorkingDirectory;
 
-  public GoTestConfiguration(Project project, String name, ConfigurationType configurationType) {
+  public GoTestRunConfiguration(Project project, String name, ConfigurationType configurationType) {
     super(name, new GoModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
     Module module = getConfigurationModule().getModule();
     myWorkingDirectory = module != null ? PathUtil.getParentPath(module.getModuleFilePath()) : project.getBasePath();
@@ -27,7 +27,7 @@ public class GoTestConfiguration extends GoRunConfigurationBase<GoTestRunningSta
 
   @Override
   protected ModuleBasedConfiguration createInstance() {
-    return new GoTestConfiguration(getProject(), getName(), GoTestRunConfigurationType.getInstance());
+    return new GoTestRunConfiguration(getProject(), getName(), GoTestRunConfigurationType.getInstance());
   }
 
   @NotNull

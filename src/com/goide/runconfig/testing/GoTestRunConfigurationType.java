@@ -25,7 +25,7 @@ public class GoTestRunConfigurationType extends ConfigurationTypeBase {
     }
 
     public RunConfiguration createTemplateConfiguration(Project project) {
-      return new GoTestConfiguration(project, "Go Test", getInstance());
+      return new GoTestRunConfiguration(project, "Go Test", getInstance());
     }
   }
 }

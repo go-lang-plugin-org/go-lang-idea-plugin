@@ -1,7 +1,7 @@
 package com.goide.runconfig.testing.ui;
 
 import com.goide.GoModuleType;
-import com.goide.runconfig.testing.GoTestConfiguration;
+import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.roots.ui.configuration.ModulesCombobox;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestConfiguration> {
+public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfiguration> {
   private JPanel component;
   private ModulesCombobox myComboModules;
   private RawCommandLineEditor myParamsField;
@@ -25,7 +25,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestConfi
   }
 
   @Override
-  protected void resetEditorFrom(GoTestConfiguration configuration) {
+  protected void resetEditorFrom(GoTestRunConfiguration configuration) {
     myComboModules.fillModules(configuration.getProject(), GoModuleType.getInstance());
     myComboModules.setSelectedModule(configuration.getConfigurationModule().getModule());
     myParamsField.setText(configuration.getParams());
@@ -34,7 +34,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestConfi
   }
 
   @Override
-  protected void applyEditorTo(GoTestConfiguration configuration) throws ConfigurationException {
+  protected void applyEditorTo(GoTestRunConfiguration configuration) throws ConfigurationException {
     configuration.setModule(myComboModules.getSelectedModule());
     configuration.setParams(myParamsField.getText());
     configuration.setTestFilter(myFilterEditor.getText());

@@ -20,7 +20,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import org.jetbrains.annotations.NotNull;
 
 public class GoTestRunningState extends GoRunningState {
-  private GoTestConfiguration myConfiguration;
+  private GoTestRunConfiguration myConfiguration;
 
   @NotNull
   @Override
@@ -37,7 +37,7 @@ public class GoTestRunningState extends GoRunningState {
     return executionResult;
   }
 
-  public GoTestRunningState(ExecutionEnvironment env, Module module, GoTestConfiguration configuration) {
+  public GoTestRunningState(ExecutionEnvironment env, Module module, GoTestRunConfiguration configuration) {
     super(env, module);
     myConfiguration = configuration;
   }

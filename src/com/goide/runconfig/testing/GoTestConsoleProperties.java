@@ -21,7 +21,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
 
   private RunConfiguration myConfiguration;
 
-  public GoTestConsoleProperties(@NotNull GoTestConfiguration configuration, @NotNull Executor executor) {
+  public GoTestConsoleProperties(@NotNull GoTestRunConfiguration configuration, @NotNull Executor executor) {
     super(new Storage.PropertiesComponentStorage("GoTestSupport.", PropertiesComponent.getInstance()), configuration.getProject(),
           executor);
     myConfiguration = configuration;
@@ -38,7 +38,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
     return myConfiguration;
   }
 
-  private static class GoOutputToGeneralTestEventsConverter extends OutputToGeneralTestEventsConverter {
+  public static class GoOutputToGeneralTestEventsConverter extends OutputToGeneralTestEventsConverter {
     private static final Pattern RUN = Pattern.compile("^=== RUN (.+)");
     private static final Pattern PASSED = Pattern.compile("^--- PASS: ([^( ]+)");
     private static final Pattern FAILED = Pattern.compile("^--- FAIL: ([^( ]+)");
@@ -59,12 +59,12 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
 
       if ((matcher = RUN.matcher(text)).find()) {
         String testName = StringUtil.notNullize(matcher.group(1), "<test>");
-        return super.processServiceMessages(ServiceMessageBuilder.testStarted(testName).toString(), outputType, visitor);
+        return processNotFinishedMessage(ServiceMessageBuilder.testStarted(testName).toString(), outputType, visitor);
       }
 
       if ((matcher = PASSED.matcher(text)).find()) {
         String testName = StringUtil.notNullize(matcher.group(1), "<test>");
-        return super.processServiceMessages(ServiceMessageBuilder.testFinished(testName).toString(), outputType, visitor);
+        return processNotFinishedMessage(ServiceMessageBuilder.testFinished(testName).toString(), outputType, visitor);
       }
 
       if ((matcher = FAILED.matcher(text)).find()) {
@@ -78,15 +78,26 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
           myStdOut.append(text);
         }
         else {
-          String failedMessage = ServiceMessageBuilder.testFailed(myCurrentTest).addAttribute("message", myStdOut.toString()).toString();
-          myFailed = false;
-          myStdOut = new StringBuilder();
-          return super.processServiceMessages(failedMessage, outputType, visitor)
-                 && super.processServiceMessages(ServiceMessageBuilder.testFinished(myCurrentTest).toString(), outputType, visitor);
+          return processFailedMessage(outputType, visitor);
         }
       }
 
       return true;
+    }
+
+    private boolean processNotFinishedMessage(String message, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
+      if (myFailed) {
+        processFailedMessage(outputType, visitor);
+      }
+      return super.processServiceMessages(message, outputType, visitor);
+    }
+
+    private boolean processFailedMessage(Key outputType, ServiceMessageVisitor visitor) throws ParseException {
+      String failedMessage = ServiceMessageBuilder.testFailed(myCurrentTest).addAttribute("message", myStdOut.toString()).toString();
+      myFailed = false;
+      myStdOut = new StringBuilder();
+      return super.processServiceMessages(failedMessage, outputType, visitor)
+             && super.processServiceMessages(ServiceMessageBuilder.testFinished(myCurrentTest).toString(), outputType, visitor);
     }
   }
 }
