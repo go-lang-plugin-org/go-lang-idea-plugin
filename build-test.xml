@@ -34,7 +34,7 @@
     <path id="classpath.test">
         <pathelement location="${idea.community.build}/lib/junit-4.10.jar" />
         <fileset dir="${idea.community.build}" includes="**/*.jar" />
-        <fileset dir="${java.home}/lib" includes="**/*.jar" />
+        <fileset dir="${java.home}/../lib" includes="**/*.jar" />
         <pathelement location="${build}"/>
         <pathelement location="${test.build}"/>
     </path>
@@ -103,7 +103,7 @@
         <property name="suspend" value="n"/>
 
         <junit printsummary="yes"
-               haltonfailure="yes" showoutput="yes"
+               haltonfailure="false" showoutput="yes"
                failureProperty="failure_found"
                fork="yes" forkmode="once" reloading="no">
 
