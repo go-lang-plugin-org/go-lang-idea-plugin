@@ -1,8 +1,10 @@
 package ro.redeul.google.go.formatter.blocks;
 
+import com.intellij.formatting.ChildAttributes;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
@@ -31,6 +33,12 @@ class GoFileBlock extends GoSyntheticBlock<GoFile> {
 
         setMultiLineMode(true, null, null);
         setLineBreakingTokens(LINE_BREAKING_TOKENS);
+    }
+
+    @NotNull
+    @Override
+    public ChildAttributes getChildAttributes(int newChildIndex) {
+        return new ChildAttributes(Indents.NONE, null);
     }
 }
 

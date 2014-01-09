@@ -335,7 +335,9 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
     @NotNull
     @Override
     public ChildAttributes getChildAttributes(int newChildIndex) {
-        return ChildAttributes.DELEGATE_TO_NEXT_CHILD;
+        return newChildIndex == 0
+            ? new ChildAttributes(GoBlockUtil.Indents.NONE, null)
+            : ChildAttributes.DELEGATE_TO_NEXT_CHILD;
     }
 
     @Override
