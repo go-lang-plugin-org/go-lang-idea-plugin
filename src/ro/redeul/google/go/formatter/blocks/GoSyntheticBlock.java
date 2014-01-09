@@ -150,7 +150,7 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
     }
 
     @Nullable
-    List<Block> buildChildren() {
+    protected List<Block> buildChildren() {
         List<Block> children = new ArrayList<Block>();
 
         Map<Alignments.Key, Alignment> alignmentsMap = Alignments.set(getAlignmentKeys());

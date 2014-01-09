@@ -17,7 +17,7 @@ class UnaryExpression implements GoElementTypes {
 
         PsiBuilder.Marker mark = builder.mark();
 
-        if ( ParserUtils.getToken(builder, GoTokenSets.UNARY_OPS)) {
+        if ( ParserUtils.getToken(builder, GoTokenSets.OPS_UNARY)) {
             parse(builder, parser);
             mark.done(UNARY_EXPRESSION);
             return true;

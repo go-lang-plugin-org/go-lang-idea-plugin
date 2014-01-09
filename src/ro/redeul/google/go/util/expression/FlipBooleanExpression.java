@@ -37,7 +37,7 @@ public class FlipBooleanExpression {
 
         if (expr instanceof GoUnaryExpression) {
             GoUnaryExpression ue = (GoUnaryExpression) expr;
-            if (ue.getUnaryOp() == GoUnaryExpression.Op.Not) {
+            if (ue.getOp() == GoUnaryExpression.Op.Not) {
                 return ue.getExpression().getText();
             }
         }

@@ -8,9 +8,8 @@ import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.containers.MultiMapBasedOnSet;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.*;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.*;
 
 import java.util.*;
 
@@ -113,8 +112,20 @@ public class GoBlockUtil {
                 return set(leftTypes, rightTypes, Spacings.NONE);
             }
 
-            public Builder setBasic(IElementType typeChild1, IElementType typeChild2) {
-                return set(typeChild1, typeChild2, Spacings.BASIC);
+            public Builder setBasic(IElementType leftType, IElementType rightType) {
+                return set(leftType, rightType, Spacings.BASIC);
+            }
+
+            public Builder setBasic(IElementType leftType, TokenSet rightTypes) {
+                return set(leftType, rightTypes, Spacings.BASIC);
+            }
+
+            public Builder setBasic(TokenSet leftTypes, IElementType rightType) {
+                return set(leftTypes, rightType, Spacings.BASIC);
+            }
+
+            public Builder setBasic(TokenSet leftTypes, TokenSet rightTypes) {
+                return set(leftTypes, rightTypes, Spacings.BASIC);
             }
 
             public Builder set(IElementType leftType, IElementType rightType, Spacing spacing) {
@@ -184,7 +195,7 @@ public class GoBlockUtil {
         }
     }
 
-    static interface CustomSpacings extends GoTokenTypeSets, GoElementTypes {
+    static interface CustomSpacings {
 
         public static final CustomSpacing INC_DEC_STMT = CustomSpacing.Builder()
             .setNone(EXPRESSIONS, INC_DEC_OPS)
@@ -223,6 +234,15 @@ public class GoBlockUtil {
             .setNone(LITERAL_IDENTIFIER, oCOMMA)
             .setNone(STMTS, oSEMI)
             .setNone(EXPRESSIONS, oSEMI)
+            .build();
+
+        public static final CustomSpacing UNARY_EXPRESSION = CustomSpacing.Builder()
+            .setNone(UNARY_OPERATORS, EXPRESSIONS)
+            .build();
+
+        public static final CustomSpacing SLICE_EXPRESSION_EXPANDED = CustomSpacing.Builder()
+            .setBasic(oCOLON, EXPRESSIONS_BINARY)
+            .setBasic(EXPRESSIONS_BINARY, oCOLON)
             .build();
     }
 }

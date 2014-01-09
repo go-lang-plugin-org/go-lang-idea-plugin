@@ -209,6 +209,22 @@ public interface GoElementTypes extends GoTokenTypes {
         SELECT_COMM_CLAUSE_SEND
     );
 
+    public final TokenSet OPS_LOG_OR = TokenSet.create(oCOND_OR);
+
+    public final TokenSet OPS_LOG_AND = TokenSet.create(oCOND_AND);
+
+    public final TokenSet OPS_REL = TokenSet.create(
+        oEQ, oNOT_EQ, oLESS, oLESS_OR_EQUAL, oGREATER, oGREATER_OR_EQUAL
+    );
+
+    public final TokenSet OPS_ADD = TokenSet.create(
+        oPLUS, oMINUS, oBIT_OR, oBIT_XOR
+    );
+
+    public final TokenSet OPS_MUL = TokenSet.create(
+        oMUL, oQUOTIENT, oREMAINDER, oSHIFT_LEFT, oSHIFT_RIGHT, oBIT_AND, oBIT_CLEAR
+    );
+
     public final TokenSet OPS_BINARY = TokenSet.create(
         oPLUS, oPLUS_ASSIGN, oMINUS, oMINUS_ASSIGN,
         oMUL, oMUL_ASSIGN, oQUOTIENT, oQUOTIENT_ASSIGN,
@@ -220,10 +236,6 @@ public interface GoElementTypes extends GoTokenTypes {
         oBIT_CLEAR, oBIT_CLEAR_ASSIGN,
 
         oCOND_AND, oCOND_OR
-    );
-
-    public final TokenSet OPS_RELATIONAL = TokenSet.create(
-        oEQ, oNOT_EQ, oLESS, oLESS_OR_EQUAL, oGREATER, oGREATER_OR_EQUAL
     );
 
     public final TokenSet FUNCTION_CALLS = TokenSet.create(
@@ -248,15 +260,21 @@ public interface GoElementTypes extends GoTokenTypes {
         TYPE_STRUCT_FIELD_ANONYMOUS
     );
 
-    public final TokenSet EXPRESSIONS = TokenSet.create(
-        LITERAL_EXPRESSION,
+    public final TokenSet EXPRESSIONS_BINARY = TokenSet.create(
         ADD_EXPRESSION, MUL_EXPRESSION, REL_EXPRESSION, COM_EXPRESSION,
-        LOG_OR_EXPRESSION, LOG_AND_EXPRESSION,
-        PRIMARY_EXPRESSION,
-        INDEX_EXPRESSION, SLICE_EXPRESSION, SELECTOR_EXPRESSION, TYPE_ASSERTION_EXPRESSION,
-        BUILTIN_CALL_EXPRESSION, CALL_OR_CONVERSION_EXPRESSION,
-        PARENTHESISED_EXPRESSION,
-        UNARY_EXPRESSION
+        LOG_OR_EXPRESSION, LOG_AND_EXPRESSION
+    );
+
+    public final TokenSet EXPRESSIONS = TokenSet.orSet(
+        EXPRESSIONS_BINARY,
+        TokenSet.create(
+            LITERAL_EXPRESSION,
+            PRIMARY_EXPRESSION,
+            INDEX_EXPRESSION, SLICE_EXPRESSION, SELECTOR_EXPRESSION, TYPE_ASSERTION_EXPRESSION,
+            BUILTIN_CALL_EXPRESSION, CALL_OR_CONVERSION_EXPRESSION,
+            PARENTHESISED_EXPRESSION,
+            UNARY_EXPRESSION
+        )
     );
 
     public final TokenSet TYPES = TokenSet.create(

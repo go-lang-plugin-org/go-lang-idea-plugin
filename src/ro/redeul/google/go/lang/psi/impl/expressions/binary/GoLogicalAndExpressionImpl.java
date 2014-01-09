@@ -2,16 +2,20 @@ package ro.redeul.google.go.lang.psi.impl.expressions.binary;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalAndExpression;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl
+import static ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalAndExpression.Op;
+
+public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl<Op>
     implements GoLogicalAndExpression
 {
     public GoLogicalAndExpressionImpl(@NotNull ASTNode node) {
-        super(node);
+        super(node, Op.values(), GoElementTypes.OPS_LOG_AND);
     }
 
     @Override

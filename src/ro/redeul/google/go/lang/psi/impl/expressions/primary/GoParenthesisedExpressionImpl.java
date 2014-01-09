@@ -8,8 +8,8 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 
-public class GoParenthesisedExpressionImpl extends GoPsiElementBase
-        implements GoParenthesisedExpression {
+public class GoParenthesisedExpressionImpl extends GoPsiElementBase implements GoParenthesisedExpression {
+
     public GoParenthesisedExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }

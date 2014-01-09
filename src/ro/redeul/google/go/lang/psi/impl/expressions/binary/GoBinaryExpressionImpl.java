@@ -3,24 +3,39 @@ package ro.redeul.google.go.lang.psi.impl.expressions.binary;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.Operator;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public abstract class GoBinaryExpressionImpl extends GoExpressionBase
-        implements GoBinaryExpression {
+public abstract class GoBinaryExpressionImpl<Op extends Operator> extends GoExpressionBase
+        implements GoBinaryExpression<Op> {
 
-    GoBinaryExpressionImpl(@NotNull ASTNode node) {
+    private Op[] operators;
+    private TokenSet operatorTokens;
+
+    GoBinaryExpressionImpl(@NotNull ASTNode node, @NotNull Op[] operators, @NotNull TokenSet operatorTokens) {
         super(node);
+        this.operators = operators;
+        this.operatorTokens = operatorTokens;
     }
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitBinaryExpression(this);
+    }
+
+    @Override
+    public Op getOp() {
+        return GoPsiUtils.findOperator(this, operators, operatorTokens);
     }
 
     @Override

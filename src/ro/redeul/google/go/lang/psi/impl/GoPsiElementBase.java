@@ -27,8 +27,7 @@ import java.util.List;
  * Date: Jul 24, 2010
  * Time: 10:26:02 PM
  */
-public class GoPsiElementBase extends ASTWrapperPsiElement
-    implements GoPsiElement {
+public class GoPsiElementBase extends ASTWrapperPsiElement implements GoPsiElement {
 
 
     protected PsiReference[] refs(PsiReference ... references) {

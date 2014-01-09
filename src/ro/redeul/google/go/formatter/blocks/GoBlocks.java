@@ -7,17 +7,21 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import com.sun.jna.platform.win32.Guid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClause;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
@@ -28,9 +32,9 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
 import java.util.Map;
 
-import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
-import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacings;
-import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.*;
+import static ro.redeul.google.go.formatter.blocks.GoFormatterUtil.getASTElementType;
+import static ro.redeul.google.go.formatter.blocks.GoFormatterUtil.getPsiElement;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.*;
 
 /**
@@ -188,7 +192,7 @@ public class GoBlocks {
                 .setLineBreakingTokens(TokenSet.create(SWITCH_EXPR_CASE))
                 .setHoldTogetherGroups(TokenSet.create(SWITCH_EXPR_CASE))
                 .setCustomSpacing(GoBlockUtil.CustomSpacing.Builder()
-                    .setNone(pLCURLY, pRCURLY)
+                    .set(pLCURLY, pRCURLY, Spacings.ONE_LINE_KEEP_BREAKS)
                     .setNone(STMTS, oSEMI)
                     .build());
 
@@ -199,7 +203,7 @@ public class GoBlocks {
                 .setLineBreakingTokens(TokenSet.create(SWITCH_TYPE_CASE))
                 .setHoldTogetherGroups(TokenSet.create(SWITCH_TYPE_CASE))
                 .setCustomSpacing(GoBlockUtil.CustomSpacing.Builder()
-                    .setNone(pLCURLY, pRCURLY)
+                    .set(pLCURLY, pRCURLY, Spacings.ONE_LINE_KEEP_BREAKS)
                     .setNone(STMTS, oSEMI)
                     .build());
 
@@ -299,12 +303,135 @@ public class GoBlocks {
                         .setNone(TYPES, pRPAREN)
                         .build());
 
+        if (psi instanceof GoBinaryExpression)
+            return new GoBinaryExpressionBlock((GoBinaryExpression) psi, settings, indent);
+
+        if (psi instanceof GoUnaryExpression)
+            return new GoExpressionBlock<GoUnaryExpression>((GoUnaryExpression)psi, settings, indent)
+                .setCustomSpacing(CustomSpacings.UNARY_EXPRESSION);
+
+        if (psi instanceof GoIndexExpression)
+            return new GoExpressionBlock<GoIndexExpression>((GoIndexExpression)psi, settings, indent) {
+                @Override
+                protected Block customizeBlock(@NotNull Block childBlock, @NotNull PsiElement childPsi) {
+                    childBlock = super.customizeBlock(childBlock, childPsi);
+
+                    if (childBlock instanceof GoExpressionBlock) {
+                        GoExpressionBlock child = (GoExpressionBlock) childBlock;
+
+                        if (childPsi == getPsi().getIndex()) {
+                            child.setDepth(myDepth + 1);
+                        } else if (childPsi == getPsi().getBaseExpression()) {
+                            child.setDepth(1);
+                        }
+                    }
+
+                    return childBlock;
+                }
+
+                @Nullable
+                @Override
+                public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
+                    return Spacings.NONE;
+                }
+            };
+        
+        if (psi instanceof GoSliceExpression)
+            return new GoExpressionBlock<GoSliceExpression>((GoSliceExpression)psi, settings, indent) {
+                @Override
+                protected Block customizeBlock(@NotNull Block childBlock, @NotNull PsiElement childPsi) {
+                    childBlock = super.customizeBlock(childBlock, childPsi);
+
+                    if (childBlock instanceof GoExpressionBlock) {
+                        GoExpressionBlock child = (GoExpressionBlock) childBlock;
+
+                        if (childPsi == getPsi().getBaseExpression()) {
+                            child.setDepth(1);
+                        } else if (childPsi == getPsi().getFirstIndex()) {
+                            child.setDepth(myDepth + 1);
+                        } else if (childPsi == getPsi().getSecondIndex()) {
+                            child.setDepth(myDepth + 1);
+                        } else if (childPsi == getPsi().getCapacity()) {
+                            child.setDepth(myDepth + 1);
+                        }
+                    }
+
+                    return childBlock;
+                }
+
+                @Nullable
+                @Override
+                public Spacing getSpacing(@Nullable Block block1, @NotNull Block block2) {
+                    IElementType typeChild1 = getASTElementType(block1);
+                    IElementType typeChild2 = getASTElementType(block2);
+
+
+                    GoExpr child1Expr = getPsiElement(block1, GoExpr.class);
+                    if (child1Expr != null && typeChild2 == oCOLON ) {
+                        if (child1Expr == getPsi().getFirstIndex() && getPsi().getSecondIndex() != null &&
+                            (isBinary(child1Expr) || isBinary(getPsi().getSecondIndex())))
+                            return Spacings.BASIC;
+
+                        if (child1Expr == getPsi().getSecondIndex() && getPsi().getCapacity() != null &&
+                            (isBinary(child1Expr) || isBinary(getPsi().getCapacity())))
+                            return Spacings.BASIC;
+
+                    }
+
+                    GoExpr child2Expr = getPsiElement(block2, GoExpr.class);
+                    if ( typeChild1 == oCOLON && child2Expr != null) {
+                        if (getPsi().getFirstIndex() != null && child2Expr == getPsi().getSecondIndex() &&
+                            (isBinary(getPsi().getFirstIndex()) || isBinary(child2Expr)))
+                            return Spacings.BASIC;
+
+                        if (getPsi().getSecondIndex() != null && child2Expr == getPsi().getCapacity() &&
+                            (isBinary(getPsi().getSecondIndex()) || isBinary(child2Expr)))
+                            return Spacings.BASIC;
+                    }
+
+                    return Spacings.NONE;
+                }
+
+                private boolean isBinary(@Nullable GoExpr expr){
+                    return expr != null && expr instanceof GoBinaryExpression<?>;
+                }
+
+                @Override
+                public void setDepth(int depth) {
+                    super.setDepth(depth);
+
+                    if ( depth <= 1) {
+                        setCustomSpacing(CustomSpacings.SLICE_EXPRESSION_EXPANDED);
+                    }
+                }
+            };
+
+        if (psi instanceof GoParenthesisedExpression)
+            return new GoExpressionBlock<GoParenthesisedExpression>((GoParenthesisedExpression) psi, settings, indent) {
+                @Override
+                protected Block customizeBlock(@NotNull Block childBlock, @NotNull PsiElement childPsi) {
+                    childBlock = super.customizeBlock(childBlock, childPsi);
+
+                    if (childBlock instanceof GoExpressionBlock) {
+                        ((GoExpressionBlock)childBlock).setDepth(1);
+                    }
+
+                    return childBlock;
+                }
+
+                @Nullable
+                @Override
+                public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
+                    return Spacings.NONE;
+                }
+            };
+
 //    if (psi instanceof GoShortVarDeclaration)
 //      return new GoShortVarDeclarationBlock((GoShortVarDeclaration)psi, settings, indent);
 
-        if (psi instanceof GoBinaryExpression) {
-            return new GoBinaryExpressionBlock(node, alignment, NO_WRAP, settings);
-        }
+//        if (psi instanceof GoBinaryExpression) {
+//            return new GoBinaryExpressionBlock(node, alignment, NO_WRAP, settings);
+//        }
 
 
         IElementType elementType = node.getElementType();

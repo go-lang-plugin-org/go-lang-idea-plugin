@@ -22,6 +22,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
+import ro.redeul.google.go.lang.psi.expressions.Operator;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -42,6 +43,24 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class GoPsiUtils {
+
+    public static <Op extends Operator> Op findOperator(PsiElement psiElement, Op operators[],
+                                                                   TokenSet operatorTokens) {
+        PsiElement childOperator = findChildOfType(psiElement, operatorTokens);
+
+        if (childOperator == null)
+            return operators[0];
+
+        IElementType childElementType = childOperator.getNode().getElementType();
+
+        for (Op op : operators) {
+            if (op.tokenType() == childElementType)
+                return op;
+        }
+
+        return operators[0];
+    }
+
 
     public static <Psi extends PsiElement> Psi childAt(int i, Psi[] array) {
         if (array == null || array.length <= i)
@@ -266,6 +285,22 @@ public class GoPsiUtils {
         PsiElement child = node.getFirstChild();
         while (child != null) {
             if (isNodeOfType(child, type)) {
+                return child;
+            }
+            child = child.getNextSibling();
+        }
+
+        return null;
+    }
+
+    public static PsiElement findChildOfType(PsiElement node, TokenSet tokenSet) {
+        if (node == null) {
+            return null;
+        }
+
+        PsiElement child = node.getFirstChild();
+        while (child != null) {
+            if (isNodeOfType(child, tokenSet)) {
                 return child;
             }
             child = child.getNextSibling();

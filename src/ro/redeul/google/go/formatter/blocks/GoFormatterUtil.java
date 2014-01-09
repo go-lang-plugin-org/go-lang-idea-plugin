@@ -4,9 +4,11 @@ import com.intellij.formatting.ASTBlock;
 import com.intellij.formatting.Block;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 
 /**
  * Helper class for formatter block handling.
@@ -21,6 +23,34 @@ public class GoFormatterUtil {
             return null;
 
         return getASTElementType(((ASTBlock) block).getNode());
+    }
+
+    @Nullable
+    public static PsiElement getPsiElement(@Nullable Block block) {
+        if ( block == null || !(block instanceof ASTBlock))
+            return null;
+
+        ASTNode node = ((ASTBlock)block).getNode();
+        if ( node == null )
+            return null;
+
+        return node.getPsi();
+    }
+
+    @Nullable
+    public static <T extends GoPsiElement> T getPsiElement(@Nullable Block block, Class<T> type) {
+        if (block == null || !(block instanceof ASTBlock))
+            return null;
+
+        ASTNode node = ((ASTBlock) block).getNode();
+        if (node == null)
+            return null;
+
+        PsiElement psi = node.getPsi();
+        if (psi == null)
+            return null;
+
+        return type.isInstance(psi) ? type.cast(psi) : null;
     }
 
     @Nullable

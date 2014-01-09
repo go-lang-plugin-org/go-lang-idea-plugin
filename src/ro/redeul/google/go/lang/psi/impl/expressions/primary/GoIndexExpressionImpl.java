@@ -13,8 +13,8 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public class GoIndexExpressionImpl extends GoExpressionBase
-    implements GoIndexExpression {
+public class GoIndexExpressionImpl extends GoExpressionBase implements GoIndexExpression {
+
     public GoIndexExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }

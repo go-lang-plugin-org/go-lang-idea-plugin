@@ -25,7 +25,7 @@ public class GoTokenSets {
     public static final TokenSet NO_IDENTIFIER_COMPLETION_PARENTS =
         TokenSet.create(VAR_DECLARATION, CONST_DECLARATION, SHORT_VAR_STATEMENT);
 
-    public static final TokenSet UNARY_OPS = TokenSet.create(
+    public static final TokenSet OPS_UNARY = TokenSet.create(
         oPLUS, oMINUS, oNOT, oBIT_XOR, oBIT_AND, oMUL, oQUOTIENT, oSEND_CHANNEL
     );
     public static final TokenSet WHITESPACE = TokenSet.create(

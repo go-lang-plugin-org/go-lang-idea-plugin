@@ -14,8 +14,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.hasPrevSiblingOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceOrComment;
 
-public class GoSliceExpressionImpl extends GoExpressionBase
-    implements GoSliceExpression {
+public class GoSliceExpressionImpl extends GoExpressionBase implements GoSliceExpression {
 
     public GoSliceExpressionImpl(@NotNull ASTNode node) {
         super(node);
