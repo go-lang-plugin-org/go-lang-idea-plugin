@@ -2,7 +2,7 @@
              url="http://github.com/go-lang-plugin-org/go-lang-idea-plugin">
     <id>ro.redeul.google.go</id>
     <name>Go language (golang.org) support plugin</name>
-    <version>0.9.16-dev</version>
+    <version>0.9.15.3</version>
     <vendor email="mtoader@gmail.com" url="http://redeul.ro">mtoader@gmail.com</vendor>
     <description>
         <![CDATA[<h2>Support for Go programming language.</h2>(see <a href="http://golang.org">http://golang.org</a>)
@@ -60,6 +60,10 @@
         <h3>0.9.16 changes:</h3>
             <ul>
                 <li>[feature] Added support for running all tests in a directory</li>
+        <h3>0.9.15.3 changes:</h3>
+            <ul>
+                <li>[bugfix] Fix the creation of projects in IntelliJ Community again.</li>
+             </ul>
         <h3>0.9.15.1 changes:</h3>
             <ul>
                 <li>[bugfix] Fix auto-complete for third-party packages</li>
