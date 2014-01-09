@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
@@ -22,10 +23,7 @@ import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClause;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.*;
 import ro.redeul.google.go.lang.psi.toplevel.*;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
+import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
 import java.util.Map;
@@ -97,7 +95,7 @@ public class GoBlocks {
             return new GoFileBlock((GoFile) psi, settings);
 
         if (psi instanceof GoPackageDeclaration)
-            return new GoSyntheticBlock<GoPackageDeclaration>((GoPackageDeclaration) psi, settings);
+            return new GoSyntheticBlock<GoPackageDeclaration>((GoPackageDeclaration) psi, settings, indent, null, alignmentsMap);
 
         if (psi instanceof GoImportDeclarations)
             return new GoImportsBlock((GoImportDeclarations) psi, settings);
@@ -252,13 +250,54 @@ public class GoBlocks {
                         .setNone(oMUL, TYPES)
                         .build());
 
+        if (psi instanceof GoPsiTypeSlice)
+            return new GoSyntheticBlock<GoPsiTypeSlice>((GoPsiTypeSlice) psi, settings, null, alignment, alignmentsMap)
+                .setCustomSpacing(
+                    GoBlockUtil.CustomSpacing.Builder()
+                        .setNone(pLBRACK, pRBRACK)
+                        .setNone(pRBRACK, TYPES)
+                        .build());
+
+        if (psi instanceof GoPsiTypeMap)
+            return new GoSyntheticBlock<GoPsiTypeMap>((GoPsiTypeMap) psi, settings, null, alignment, alignmentsMap)
+                .setCustomSpacing(
+                    GoBlockUtil.CustomSpacing.Builder()
+                        .setNone(kMAP, pLBRACK)
+                        .setNone(pLBRACK, TYPES)
+                        .setNone(TYPES, pRBRACK)
+                        .setNone(pRBRACK, TYPES)
+                        .build());
+
+        if (psi instanceof GoPsiTypeChannel)
+            return new GoSyntheticBlock<GoPsiTypeChannel>((GoPsiTypeChannel) psi, settings, null, alignment, alignmentsMap)
+                .setCustomSpacing(
+            GoBlockUtil.CustomSpacing.Builder()
+                .setNone(kCHAN, oSEND_CHANNEL)
+                .setNone(oSEND_CHANNEL, kCHAN)
+                .build());
+        if (psi instanceof GoPsiTypeFunction)
+            return new GoSyntheticBlock<GoPsiTypeFunction>((GoPsiTypeFunction) psi, settings, null, alignment,alignmentsMap)
+                .setCustomSpacing(
+                    GoBlockUtil.CustomSpacing.Builder()
+                        .setNone(kFUNC, pLPAREN)
+                        .setNone(pLPAREN, pRPAREN)
+                        .setNone(pLPAREN, FUNCTION_PARAMETER_LIST)
+                        .setNone(FUNCTION_PARAMETER_LIST, pRPAREN)
+                        .build());
         if (psi instanceof GoPsiTypeStruct)
             return new GoTypeStructBlock((GoPsiTypeStruct) psi, settings, alignment, alignmentsMap);
 
         if (psi instanceof GoPsiTypeInterface)
             return new GoTypeInterfaceBlock((GoPsiTypeInterface) psi, settings, alignment, alignmentsMap);
 
-
+        if (psi instanceof GoPsiTypeParenthesized)
+            return new GoSyntheticBlock<GoPsiTypeParenthesized>((GoPsiTypeParenthesized) psi, settings, null, alignment,alignmentsMap)
+                .setCustomSpacing(
+                    GoBlockUtil.CustomSpacing.Builder()
+                        .setNone(pLPAREN, pRPAREN)
+                        .setNone(pLPAREN, TYPES)
+                        .setNone(TYPES, pRPAREN)
+                        .build());
 
 //    if (psi instanceof GoShortVarDeclaration)
 //      return new GoShortVarDeclarationBlock((GoShortVarDeclaration)psi, settings, indent);
@@ -269,27 +308,43 @@ public class GoBlocks {
 
 
         IElementType elementType = node.getElementType();
-        if (elementType == GoTokenTypes.pLPAREN) {
-            return new GoLeafBlock(node, null, indent, NO_WRAP, settings);
-        } else if (elementType == GoTokenTypes.pRCURLY) {
-            if (node.getTreeParent().getElementType() == GoElementTypes.LITERAL_COMPOSITE_VALUE) {
-                ASTNode nodeParent = node;
-                while (nodeParent != null) {
-                    if (nodeParent.getElementType() == GoElementTypes.CALL_OR_CONVERSION_EXPRESSION) {
-                        int indentTabSize = settings.getIndentOptions() == null ? 4 : settings.getIndentOptions().INDENT_SIZE;
-                        return new GoLeafBlock(node, null, Indent.getSpaceIndent(indentTabSize * -1), NO_WRAP, settings);
-                    }
 
-                    nodeParent = nodeParent.getTreeParent();
-                }
-            }
-        } else if (elementType == GoTokenTypes.kPACKAGE || elementType == GoTokenTypes.oSEMI) {
-            return new GoLeafBlock(node,
-                null,
-                Indent.getAbsoluteNoneIndent(),
-                Wrap.createWrap(WrapType.NONE, false),
-                settings);
-        }
+        if (elementType == FUNCTION_RESULT)
+            return new GoSyntheticBlock<GoPsiElement>((GoPsiElement)psi, settings)
+            .setCustomSpacing(GoBlockUtil.CustomSpacing.Builder()
+                .setNone(pLPAREN, pRPAREN)
+                .setNone(pLPAREN, FUNCTION_PARAMETER_LIST)
+            .setNone(FUNCTION_PARAMETER_LIST, pRPAREN)
+
+            .build());
+
+        if (elementType == TYPE_LIST)
+            return new GoSyntheticBlock<GoPsiElement>((GoPsiElement)psi, settings)
+            .setCustomSpacing(GoBlockUtil.CustomSpacing.Builder()
+                .setNone(TYPES, oCOMMA)
+            .build());
+
+//        if (elementType == GoTokenTypes.pLPAREN) {
+//            return new GoLeafBlock(node, null, indent, NO_WRAP, settings);
+//        } else if (elementType == GoTokenTypes.pRCURLY) {
+//            if (node.getTreeParent().getElementType() == GoElementTypes.LITERAL_COMPOSITE_VALUE) {
+//                ASTNode nodeParent = node;
+//                while (nodeParent != null) {
+//                    if (nodeParent.getElementType() == GoElementTypes.CALL_OR_CONVERSION_EXPRESSION) {
+//                        int indentTabSize = settings.getIndentOptions() == null ? 4 : settings.getIndentOptions().INDENT_SIZE;
+//                        return new GoLeafBlock(node, null, Indent.getSpaceIndent(indentTabSize * -1), NO_WRAP, settings);
+//                    }
+//
+//                    nodeParent = nodeParent.getTreeParent();
+//                }
+//            }
+//        } else if (elementType == GoTokenTypes.kPACKAGE || elementType == GoTokenTypes.oSEMI) {
+//            return new GoLeafBlock(node,
+//                null,
+//                Indent.getAbsoluteNoneIndent(),
+//                Wrap.createWrap(WrapType.NONE, false),
+//                settings);
+//        }
 
 //    if (ALIGN_LIST_BLOCK_STATEMENTS.contains(elementType)) {
 //      return new GoAssignListBlock(node, alignment, indent, settings);

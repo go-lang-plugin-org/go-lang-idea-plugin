@@ -26,19 +26,8 @@ public class GoTypesFormatterTest extends GoFormatterTestCase {
 
     public void testArray() throws Exception { _test(); }
     public void testPointer() throws Exception { _test(); }
-//  public void testBasicWithLineComments() throws Exception { _test(); }
-
-//    public void testBasicWithMultiLineComments() throws Exception { _test(); }
-
-//  public void testCommentAtTheStart() throws Exception { _test(); }
-//
-//  public void testEofNoWhiteSpace() throws Exception { _test(); }
-//
-//  public void testEofTooMuchWhiteSpace() throws Exception { _test(); }
-//
-//  public void testAlternatingComments() throws Exception { _test(); }
-//
-//  public void testImportSimple() throws Exception { _test(); }
-//
-//  public void testImportRemoveEmptyLines() throws Exception { _test(); }
+    public void testMap() throws Exception { _test(); }
+    public void testSlice() throws Exception { _test(); }
+    public void testChannel() throws Exception { _test(); }
+    public void testFunction() throws Exception { _test(); }
 }

@@ -199,6 +199,7 @@ public class GoBlockUtil {
         public static final CustomSpacing NO_SPACE_BEFORE_COMMA = CustomSpacing.Builder()
             .setNone(LITERAL_IDENTIFIER, oCOMMA)
             .setNone(EXPRESSIONS, oCOMMA)
+            .setNone(oTRIPLE_DOT, TYPES)
             .setNone(FUNCTION_PARAMETER, oCOMMA)
             .build();
 

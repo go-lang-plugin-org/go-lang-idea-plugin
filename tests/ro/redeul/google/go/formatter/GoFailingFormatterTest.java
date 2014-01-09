@@ -33,19 +33,6 @@ public class GoFailingFormatterTest extends GoFormatterTestCase {
 
     // https://github.com/mtoader/google-go-lang-idea-plugin/issues/473
     public void testSimpleCommentsInSelectAreMisaligned() throws Exception { _test(); }
-//  public void testBasicWithLineComments() throws Exception { _test(); }
 
-//    public void testBasicWithMultiLineComments() throws Exception { _test(); }
-
-//  public void testCommentAtTheStart() throws Exception { _test(); }
-//
-//  public void testEofNoWhiteSpace() throws Exception { _test(); }
-//
-//  public void testEofTooMuchWhiteSpace() throws Exception { _test(); }
-//
-//  public void testAlternatingComments() throws Exception { _test(); }
-//
-//  public void testImportSimple() throws Exception { _test(); }
-//
-//  public void testImportRemoveEmptyLines() throws Exception { _test(); }
+    public void testEliminateEmptyParenthesizedThings() throws Exception { _test(); }
 }
