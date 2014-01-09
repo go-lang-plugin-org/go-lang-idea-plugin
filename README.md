@@ -3,6 +3,8 @@
 Google go language plugin is an attempt to build an outstanding IDE for
 [Google Go language](http://golang.org) using Intellij IDEA.
 
+[![Build Status](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin.png?branch=master)](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin)
+
 + Project pages on github:
     + <http://github.com/go-lang-plugin-org/go-lang-idea-plugin>
     + <http://wiki.github.com/go-lang-plugin-org/go-lang-idea-plugin/> (wiki)
