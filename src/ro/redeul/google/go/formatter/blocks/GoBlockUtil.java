@@ -31,7 +31,7 @@ public class GoBlockUtil {
         static final Spacing BASIC = Spacing.createSpacing(1, 1, 0, false, 0);
         static final Spacing BASIC_KEEP_BREAKS = Spacing.createSpacing(1, 1, 0, true, 0);
         static final Spacing NONE = Spacing.createSpacing(0, 0, 0, false, 0);
-        static final Spacing NONE_KEEP_BREAKS = Spacing.createSpacing(0, 0, 0, true, 0);
+        static final Spacing NONE_KEEP_ONE_BREAK = Spacing.createSpacing(0, 0, 0, true, 1);
         static final Spacing EMPTY_LINE = Spacing.createSpacing(0, 0, 2, false, 0);
     }
 
@@ -204,7 +204,9 @@ public class GoBlockUtil {
 
         public static final CustomSpacing CLAUSES_COLON = CustomSpacing.Builder()
             .setNone(EXPRESSIONS, oCOLON)
+            .setNone(EXPRESSIONS, oCOMMA)
             .setNone(TYPES, oCOLON)
+            .setNone(TYPES, oCOMMA)
             .setNone(TYPE_LIST, oCOLON)
             .setNone(SELECT_COMM_CLAUSE_RECV_EXPR, oCOLON)
             .setNone(kDEFAULT, oCOLON)

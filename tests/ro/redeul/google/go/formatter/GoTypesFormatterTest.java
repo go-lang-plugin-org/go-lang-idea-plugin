@@ -12,19 +12,20 @@ import ro.redeul.google.go.GoFormatterTestCase;
  */
 public class GoTypesFormatterTest extends GoFormatterTestCase {
 
-  @Override
-  protected String getRelativeTestDataPath() {
-    return super.getRelativeTestDataPath() + "types/";
-  }
+    @Override
+    protected String getRelativeTestDataPath() {
+        return super.getRelativeTestDataPath() + "types/";
+    }
 
-  public void testStructSimple() throws Exception { _test(); }
+    public void testStruct_simple() throws Exception { _test(); }
+    public void testStruct_empty() throws Exception { _test(); }
+    public void testStruct_nested() throws Exception { _test(); }
 
-  public void testStructEmpty() throws Exception { _test(); }
+    public void testInterface_simple() throws Exception { _test(); }
+    public void testInterface_empty() throws Exception { _test(); }
 
-  public void testInterfaceSimple() throws Exception { _test(); }
-
-  public void testInterfaceEmpty() throws Exception { _test(); }
-
+    public void testArray() throws Exception { _test(); }
+    public void testPointer() throws Exception { _test(); }
 //  public void testBasicWithLineComments() throws Exception { _test(); }
 
 //    public void testBasicWithMultiLineComments() throws Exception { _test(); }

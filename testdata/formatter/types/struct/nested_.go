@@ -16,8 +16,7 @@ type (
 				bau struct {
 					c struct {
 						ef  int
-						eeg struct {
-						}
+						eeg struct{}
 						c   struct {
 						}
 					}

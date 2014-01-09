@@ -42,4 +42,6 @@ public class GoTopLevelFormatterTest extends GoFormatterTestCase {
     public void testFunction_normal() throws Exception { _test(); }
     public void testFunction_withMultilineStatements() throws Exception { _test(); }
 
+    public void testTypes_simple() throws Exception { _test(); }
+    public void testTypes_multiple() throws Exception { _test(); }
 }

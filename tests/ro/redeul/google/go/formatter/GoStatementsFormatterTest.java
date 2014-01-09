@@ -61,7 +61,9 @@ public class GoStatementsFormatterTest extends GoFormatterTestCase {
     public void testFor_withRanges() throws Exception { _test(); }
 
     public void testSwitch_expr() throws Exception { _test(); }
+    public void testSwitch_exprEmpty() throws Exception { _test(); }
     public void testSwitch_type() throws Exception { _test(); }
+    public void testSwitch_typeEmpty() throws Exception { _test(); }
     public void testSwitch_typeWithWhitespace() throws Exception { _test(); }
     public void testSwitch_multipleCaseValues() throws Exception { _test(); }
 }

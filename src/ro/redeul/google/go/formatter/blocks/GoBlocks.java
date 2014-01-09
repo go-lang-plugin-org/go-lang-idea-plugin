@@ -22,7 +22,9 @@ import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClause;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.*;
 import ro.redeul.google.go.lang.psi.toplevel.*;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 
@@ -121,12 +123,6 @@ public class GoBlocks {
         if (psi instanceof GoTypeSpec)
             return new GoTypeDeclarationBlock((GoTypeSpec) psi, settings, indent, alignmentsMap);
 
-        if (psi instanceof GoPsiTypeStruct)
-            return new GoTypeStructBlock((GoPsiTypeStruct) psi, settings, alignment, alignmentsMap);
-
-        if (psi instanceof GoPsiTypeInterface)
-            return new GoTypeInterfaceBlock((GoPsiTypeInterface) psi, settings, alignment, alignmentsMap);
-
         if (psi instanceof GoFunctionDeclaration)
             return new GoFunctionDeclarationBlock((GoFunctionDeclaration) psi, settings, indent, alignment, alignmentsMap);
 
@@ -160,8 +156,7 @@ public class GoBlocks {
             return new GoStatementBlock<GoGotoStatement>((GoGotoStatement) psi, settings, indent, alignmentsMap);
 
         if (psi instanceof GoReturnStatement)
-            return new GoStatementBlock<GoReturnStatement>((GoReturnStatement) psi, settings,
-                indent, alignmentsMap);
+            return new GoStatementBlock<GoReturnStatement>((GoReturnStatement) psi, settings, indent, alignmentsMap);
 
         if (psi instanceof GoGoStatement)
             return new GoStatementBlock<GoGoStatement>((GoGoStatement) psi, settings, indent, alignmentsMap);
@@ -210,6 +205,13 @@ public class GoBlocks {
                     .setNone(STMTS, oSEMI)
                     .build());
 
+        if (psi instanceof GoSwitchTypeClause)
+            return new GoSyntheticBlock<GoSwitchTypeClause>((GoSwitchTypeClause) psi, settings, indent, null, alignmentsMap)
+                .setMultiLineMode(true, oCOLON, null)
+                .setCustomSpacing(CustomSpacings.CLAUSES_COLON)
+                .setLineBreakingTokens(STMTS_OR_COMMENTS)
+                .setIndentedChildTokens(STMTS_OR_COMMENTS);
+
         // TODO: prebuild the tokensets
         if (psi instanceof GoSwitchTypeGuard)
             return new GoSyntheticBlock<GoSwitchTypeGuard>((GoSwitchTypeGuard) psi, settings)
@@ -219,13 +221,6 @@ public class GoBlocks {
                     .setNone(pLPAREN, kTYPE)
                     .setNone(kTYPE, pRPAREN)
                     .build());
-
-        if (psi instanceof GoSwitchTypeClause)
-            return new GoSyntheticBlock<GoSwitchTypeClause>((GoSwitchTypeClause) psi, settings, indent, null, alignmentsMap)
-                .setMultiLineMode(true, oCOLON, null)
-                .setCustomSpacing(CustomSpacings.CLAUSES_COLON)
-                .setLineBreakingTokens(STMTS_OR_COMMENTS)
-                .setIndentedChildTokens(STMTS_OR_COMMENTS);
 
         if (psi instanceof GoSwitchExpressionClause)
             return new GoSyntheticBlock<GoSwitchExpressionClause>((GoSwitchExpressionClause) psi, settings, indent, null, alignmentsMap)
@@ -241,6 +236,29 @@ public class GoBlocks {
         if (psi instanceof GoFunctionParameter)
             return new GoSyntheticBlock<GoFunctionParameter>((GoFunctionParameter) psi, settings, indent)
             .setCustomSpacing(CustomSpacings.NO_SPACE_BEFORE_COMMA);
+
+        if (psi instanceof GoPsiTypeArray)
+            return new GoSyntheticBlock<GoPsiTypeArray>((GoPsiTypeArray) psi, settings, null, alignment, alignmentsMap)
+                .setCustomSpacing(
+                    GoBlockUtil.CustomSpacing.Builder()
+                        .setNone(pLBRACK, EXPRESSIONS)
+                        .setNone(EXPRESSIONS, pRBRACK)
+                        .setNone(pRBRACK, TYPES).build());
+
+        if (psi instanceof GoPsiTypePointer)
+            return new GoSyntheticBlock<GoPsiTypePointer>((GoPsiTypePointer) psi, settings, null, alignment, alignmentsMap)
+                .setCustomSpacing(
+                    GoBlockUtil.CustomSpacing.Builder()
+                        .setNone(oMUL, TYPES)
+                        .build());
+
+        if (psi instanceof GoPsiTypeStruct)
+            return new GoTypeStructBlock((GoPsiTypeStruct) psi, settings, alignment, alignmentsMap);
+
+        if (psi instanceof GoPsiTypeInterface)
+            return new GoTypeInterfaceBlock((GoPsiTypeInterface) psi, settings, alignment, alignmentsMap);
+
+
 
 //    if (psi instanceof GoShortVarDeclaration)
 //      return new GoShortVarDeclarationBlock((GoShortVarDeclaration)psi, settings, indent);

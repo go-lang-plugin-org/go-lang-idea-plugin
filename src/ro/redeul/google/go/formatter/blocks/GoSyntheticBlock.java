@@ -245,6 +245,9 @@ public class GoSyntheticBlock<GoPsiType extends GoPsiElement> implements ASTBloc
         if (!isMultiLine())
             return typeChild1 == mSL_COMMENT ? Spacings.ONE_LINE : Spacings.BASIC;
 
+        if (isMultiLine() && isLeftBreak(typeChild1) && isRightBreak(typeChild2))
+            return Spacings.ONE_LINE_KEEP_BREAKS;
+
         if (isMultiLine() && (isLeftBreak(typeChild1) || isRightBreak(typeChild2)))
             return Spacings.ONE_LINE;
 
