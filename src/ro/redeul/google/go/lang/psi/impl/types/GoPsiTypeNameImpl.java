@@ -16,6 +16,9 @@ import ro.redeul.google.go.lang.psi.resolve.references.TypeNameReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePredeclared;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
@@ -24,6 +27,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.string;
+import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -127,6 +131,15 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
                 return false;
             return true;
         }
+        else {
+            if (goType instanceof GoPsiTypeMap || goType instanceof GoPsiTypeSlice || goType instanceof GoPsiTypeArray) {
+                GoPsiType resolved = resolveToFinalType(this);
+                if (resolved != null)
+                    return resolved.isIdentical(goType);
+            }
+        }
+
+
         return false;
     }
 

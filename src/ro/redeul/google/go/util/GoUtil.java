@@ -25,6 +25,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeArrayImpl;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
@@ -299,6 +300,11 @@ public class GoUtil {
                 GoTypePsiBacked targetType = (GoTypePsiBacked) targetType1;
                 return ((GoPsiTypePointer) element).getTargetType().isIdentical(targetType.getPsiType());
             }
+        }
+        if (element2 instanceof GoTypeArray) {
+            GoPsiType psiType = ((GoTypeArray) element2).getPsiType();
+            if (psiType != null)
+                return psiType.isIdentical(element);
         }
         return element.getUnderlyingType().isIdentical(((GoType) element2).getUnderlyingType());
 

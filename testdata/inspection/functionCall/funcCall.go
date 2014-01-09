@@ -8,6 +8,13 @@ const (
 
 type MyInt int64
 
+type MyMap map[string]string
+type MyMap2 MyMap
+type MySlice []string
+type MySlice2 MySlice
+type MyArray [3]string
+type MyArray2 MyArray
+
 const (
 	NORMAL = 45
 	NOTNARMAL = BBBBB
@@ -18,6 +25,42 @@ func HandleFunc(pa string, handler func(int, *string)bool) {
 }
 
 func HandleInterface(a int, fn func()interface {}) {
+
+}
+
+func HandleMap(a map[string]string) {
+
+}
+
+func HandleSlice(a []string) {
+
+}
+
+func HandleArray(a [3]string){
+
+}
+
+func HandleMyMap(a MyMap) {
+
+}
+
+func HandleMyMap2(a MyMap2) {
+
+}
+
+func HandleMySlice(a MySlice) {
+
+}
+
+func HandleMySlice2(a MySlice2) {
+
+}
+
+func HandleMyArray(a MyArray) {
+
+}
+
+func HandleMyArray2(a MyArray2) {
 
 }
 
@@ -90,4 +133,61 @@ func main() {
 	HandleFunc("/", valid)
 	HandleFunc("/", /*begin*/indexHandler/*end.Expression type mismatch, the expected type is func(int, *string)bool|CastTypeFix*/)
 	HandleFunc(/*begin*/56/*end.Expression type mismatch, the expected type is string|CastTypeFix*/, valid)
+
+	HandleMap(map[string]string{})
+	HandleMap(MyMap{})
+	HandleMap(MyMap2{})
+	HandleMap(/*begin*/map[int]string{}/*end.Expression type mismatch, the expected type is map[string]string|CastTypeFix*/)
+	HandleMap(/*begin*/map[string]int{}/*end.Expression type mismatch, the expected type is map[string]string|CastTypeFix*/)
+	HandleMap(/*begin*/[]int{}/*end.Expression type mismatch, the expected type is map[string]string|CastTypeFix*/)
+
+	HandleMyMap(MyMap{})
+	HandleMyMap(map[string]string{})
+	HandleMyMap(/*begin*/map[int]string{}/*end.Expression type mismatch, the expected type is MyMap|CastTypeFix*/)
+	HandleMyMap(/*begin*/map[string]int{}/*end.Expression type mismatch, the expected type is MyMap|CastTypeFix*/)
+	HandleMyMap(/*begin*/[]int{}/*end.Expression type mismatch, the expected type is MyMap|CastTypeFix*/)
+	HandleMyMap(/*begin*/MyMap2{}/*end.Expression type mismatch, the expected type is MyMap|CastTypeFix*/)
+
+	HandleMyMap2(MyMap2{})
+	HandleMyMap2(map[string]string{})
+	HandleMyMap2(/*begin*/map[int]string{}/*end.Expression type mismatch, the expected type is MyMap2|CastTypeFix*/)
+	HandleMyMap2(/*begin*/map[string]int{}/*end.Expression type mismatch, the expected type is MyMap2|CastTypeFix*/)
+	HandleMyMap2(/*begin*/[]int{}/*end.Expression type mismatch, the expected type is MyMap2|CastTypeFix*/)
+	HandleMyMap2(/*begin*/MyMap{}/*end.Expression type mismatch, the expected type is MyMap2|CastTypeFix*/)
+
+
+	HandleSlice([]string{})
+	HandleSlice(MySlice{})
+	HandleSlice(/*begin*/[]int{}/*end.Expression type mismatch, the expected type is []string|CastTypeFix*/)
+	HandleSlice(/*begin*/map[string]int{}/*end.Expression type mismatch, the expected type is []string|CastTypeFix*/)
+
+	HandleMySlice(MySlice{})
+	HandleMySlice([]string{})
+	HandleMySlice(/*begin*/[]int{}/*end.Expression type mismatch, the expected type is MySlice|CastTypeFix*/)
+	HandleMySlice(/*begin*/map[string]int{}/*end.Expression type mismatch, the expected type is MySlice|CastTypeFix*/)
+	HandleMySlice(/*begin*/MySlice2{}/*end.Expression type mismatch, the expected type is MySlice|CastTypeFix*/)
+
+	HandleMySlice2(MySlice2{})
+	HandleMySlice2([]string{})
+	HandleMySlice2(/*begin*/[]int{}/*end.Expression type mismatch, the expected type is MySlice2|CastTypeFix*/)
+	HandleMySlice2(/*begin*/map[string]int{}/*end.Expression type mismatch, the expected type is MySlice2|CastTypeFix*/)
+	HandleMySlice2(/*begin*/MySlice{}/*end.Expression type mismatch, the expected type is MySlice2|CastTypeFix*/)
+
+	HandleArray([3]string{})
+	HandleArray(MyArray{})
+	HandleArray(/*begin*/[4]string{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+	HandleArray(/*begin*/[3]int{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+
+	HandleMyArray(MyArray{})
+	HandleMyArray([3]string{})
+	HandleMyArray(/*begin*/[4]string{}/*end.Expression type mismatch, the expected type is MyArray|CastTypeFix*/)
+	HandleMyArray(/*begin*/[3]int{}/*end.Expression type mismatch, the expected type is MyArray|CastTypeFix*/)
+	HandleMyArray(/*begin*/MyArray2{}/*end.Expression type mismatch, the expected type is MyArray|CastTypeFix*/)
+
+	HandleMyArray2(MyArray2{})
+	HandleMyArray2([3]string{})
+	HandleMyArray2(/*begin*/[4]string{}/*end.Expression type mismatch, the expected type is MyArray2|CastTypeFix*/)
+	HandleMyArray2(/*begin*/[3]int{}/*end.Expression type mismatch, the expected type is MyArray2|CastTypeFix*/)
+	HandleMyArray2(/*begin*/MyArray{}/*end.Expression type mismatch, the expected type is MyArray2|CastTypeFix*/)
+
 }
