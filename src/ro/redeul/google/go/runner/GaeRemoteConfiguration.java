@@ -22,7 +22,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.runner.ui.GoAppEngineRunConfigurationEditorForm;
+import ro.redeul.google.go.runner.ui.GaeRemoteRunConfigurationEditorForm;
 
 import java.io.File;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ import java.util.Collection;
  * Date: Aug 19, 2010
  * Time: 2:53:03 PM
  */
-public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration> {
+public class GaeRemoteConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration> {
 
     public String sdkDirectory;
     public String email;
@@ -42,7 +42,9 @@ public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguratio
     public String scriptArguments;
     private String workDir;
 
-    public GoAppEngineApplicationConfiguration(String name, Project project, GoAppEngineRunConfigurationType configurationType) {
+    public static final String ID = "GAEApplicationRunConfiguration";
+
+    public GaeRemoteConfiguration(String name, Project project, GaeRemoteAppEngineRunConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
         workDir = PathUtil.getLocalPath(project.getBaseDir());
     }
@@ -55,12 +57,12 @@ public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguratio
 
     @Override
     protected ModuleBasedConfiguration createInstance() {
-        return new GoAppEngineApplicationConfiguration(getName(), getProject(), GoAppEngineRunConfigurationType.getInstance());
+        return new GaeRemoteConfiguration(getName(), getProject(), GaeRemoteAppEngineRunConfigurationType.getInstance());
     }
 
     @NotNull
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        return new GoAppEngineRunConfigurationEditorForm(getProject());
+        return new GaeRemoteRunConfigurationEditorForm(getProject());
     }
 
     public void readExternal(final Element element) throws InvalidDataException {
@@ -74,7 +76,6 @@ public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguratio
         workDir = JDOMExternalizerUtil.readField(element, "workDir");
 
         readModule(element);
-//        EnvironmentVariablesComponent.readExternal(element, getEnvs());
     }
 
     public void writeExternal(final Element element) throws WriteExternalException {
@@ -85,7 +86,6 @@ public class GoAppEngineApplicationConfiguration extends ModuleBasedConfiguratio
         JDOMExternalizerUtil.writeField(element, "scriptArguments", scriptArguments);
         JDOMExternalizerUtil.writeField(element, "workDir", workDir);
         writeModule(element);
-//        EnvironmentVariablesComponent.writeExternal(element, getEnvs());
         PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
     }
 

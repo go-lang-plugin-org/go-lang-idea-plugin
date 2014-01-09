@@ -18,20 +18,22 @@ import javax.swing.*;
  * Date: Aug 19, 2010
  * Time: 2:49:26 PM
  */
-public class GoAppEngineRunConfigurationType implements ConfigurationType {
+public class GaeRemoteAppEngineRunConfigurationType implements ConfigurationType {
 
     private final GoAppEngineRunConfigurationFactory myConfigurationFactory;
+    public static final String Name = "Go Remote AppEngine Server";
+    public static final String Description = "Go Remote AppEngine Server";
 
-    public GoAppEngineRunConfigurationType() {
+    public GaeRemoteAppEngineRunConfigurationType() {
         myConfigurationFactory = new GoAppEngineRunConfigurationFactory(this);
     }
 
     public String getDisplayName() {
-        return "Application Engine Server";
+        return Name;
     }
 
     public String getConfigurationTypeDescription() {
-        return "Application Engine Server";
+        return Description;
     }
 
     public Icon getIcon() {
@@ -41,15 +43,15 @@ public class GoAppEngineRunConfigurationType implements ConfigurationType {
     @NonNls
     @NotNull
     public String getId() {
-        return "GAEApplicationRunConfiguration";
+        return GaeRemoteConfiguration.ID;
     }
 
     public ConfigurationFactory[] getConfigurationFactories() {
         return new ConfigurationFactory[]{myConfigurationFactory};
     }
 
-    public static GoAppEngineRunConfigurationType getInstance() {
-        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GoAppEngineRunConfigurationType.class);
+    public static GaeRemoteAppEngineRunConfigurationType getInstance() {
+        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GaeRemoteAppEngineRunConfigurationType.class);
     }
 
     public static class GoAppEngineRunConfigurationFactory extends ConfigurationFactory {
@@ -59,7 +61,7 @@ public class GoAppEngineRunConfigurationType implements ConfigurationType {
         }
 
         public RunConfiguration createTemplateConfiguration(Project project) {
-            return new GoAppEngineApplicationConfiguration("Application Engine Server", project, getInstance());
+            return new GaeRemoteConfiguration(Name, project, getInstance());
         }        
     }
 }

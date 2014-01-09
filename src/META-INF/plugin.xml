@@ -371,7 +371,7 @@
         <configurationType
                 implementation="ro.redeul.google.go.runner.GoTestConfigurationType"/>
         <configurationType
-                implementation="ro.redeul.google.go.runner.GoAppEngineRunConfigurationType"/>
+                implementation="ro.redeul.google.go.runner.GaeRemoteAppEngineRunConfigurationType"/>
         <runConfigurationProducer
                 implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>
         <runConfigurationProducer
@@ -508,7 +508,7 @@
         <programRunner
                 implementation="ro.redeul.google.go.runner.GoApplicationRunner"/>
         <programRunner
-                implementation="ro.redeul.google.go.runner.GoAppEngineApplicationRunner"/>
+                implementation="ro.redeul.google.go.runner.GaeRemoteRunner"/>
 
         <testFinder
                 implementation="ro.redeul.google.go.testIntegration.GoTestFinder"/>

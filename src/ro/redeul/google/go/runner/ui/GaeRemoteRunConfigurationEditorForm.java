@@ -9,7 +9,7 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.RawCommandLineEditor;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.runner.GoAppEngineApplicationConfiguration;
+import ro.redeul.google.go.runner.GaeRemoteConfiguration;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,8 +21,8 @@ import java.awt.event.ActionListener;
  * Date: Aug 19, 2010
  * Time: 3:00:32 PM
  */
-public class GoAppEngineRunConfigurationEditorForm
-    extends SettingsEditor<GoAppEngineApplicationConfiguration> {
+public class GaeRemoteRunConfigurationEditorForm
+    extends SettingsEditor<GaeRemoteConfiguration> {
 
     private DefaultComboBoxModel modulesModel;
 
@@ -33,7 +33,7 @@ public class GoAppEngineRunConfigurationEditorForm
     private JPasswordField password;
 
     @Override
-    protected void resetEditorFrom(GoAppEngineApplicationConfiguration configuration) {
+    protected void resetEditorFrom(GaeRemoteConfiguration configuration) {
         sdkDirectory.setText(configuration.sdkDirectory);
         password.setText(configuration.password);
         email.setText(configuration.email);
@@ -41,7 +41,7 @@ public class GoAppEngineRunConfigurationEditorForm
     }
 
     @Override
-    protected void applyEditorTo(GoAppEngineApplicationConfiguration configuration)
+    protected void applyEditorTo(GaeRemoteConfiguration configuration)
         throws ConfigurationException {
         configuration.sdkDirectory = sdkDirectory.getText();
         configuration.email = email.getText();
@@ -49,7 +49,7 @@ public class GoAppEngineRunConfigurationEditorForm
         configuration.scriptArguments = appArguments.getText();
     }
 
-    public GoAppEngineRunConfigurationEditorForm(final Project project) {
+    public GaeRemoteRunConfigurationEditorForm(final Project project) {
         sdkDirectory.getButton().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 VirtualFile[] files = FileChooser.chooseFiles(
