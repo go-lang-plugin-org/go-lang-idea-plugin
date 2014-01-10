@@ -14,6 +14,7 @@ import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.actions.GoTemplatesFactory;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -46,8 +47,15 @@ public class GoAppEngineModuleBuilder extends JavaModuleBuilder implements Sourc
         }
 
         try {
-            GoTemplatesFactory.createFromTemplate(directory, "main", "main.go", GoTemplatesFactory.Template.GoAppEngineMain);
-            GoTemplatesFactory.createFromTemplate(directory.getParent(), "yaml", "app.yaml", GoTemplatesFactory.Template.GoAppEngineConfig);
+            directory.getParentDirectory().checkCreateFile("app.yaml");
+            GoTemplatesFactory.createFromTemplate(directory.getParentDirectory(), "yaml", "app.yaml", GoTemplatesFactory.Template.GoAppEngineConfig);
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
+        }
+
+        try {
+            directory.getParentDirectory().checkCreateFile("app.yaml");
+            GoTemplatesFactory.createFromTemplate(directory.getParentDirectory(), "yaml", "app.yaml", GoTemplatesFactory.Template.GoAppEngineConfig);
         } catch (Exception e) {
             LOG.error(e.getMessage());
         }

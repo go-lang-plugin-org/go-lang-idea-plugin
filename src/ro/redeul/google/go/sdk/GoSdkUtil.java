@@ -312,27 +312,27 @@ public class GoSdkUtil {
         return checkFileExists(new File(path, child));
     }
 
-    private static boolean checkFileExists(String path) {
+    public static boolean checkFileExists(String path) {
         return checkFileExists(new File(path));
     }
 
-    private static boolean checkFileExists(File file) {
+    public static boolean checkFileExists(File file) {
         return file.exists() && file.isFile();
     }
 
-    private static boolean checkFolderExists(String path) {
+    public static boolean checkFolderExists(String path) {
         return checkFolderExists(new File(path));
     }
 
-    private static boolean checkFolderExists(File file) {
+    public static boolean checkFolderExists(File file) {
         return file.exists() && file.isDirectory();
     }
 
-    private static boolean checkFolderExists(String path, String child) {
+    public static boolean checkFolderExists(String path, String child) {
         return checkFolderExists(new File(path, child));
     }
 
-    private static boolean checkFolderExists(String path, String child, String child2) {
+    public static boolean checkFolderExists(String path, String child, String child2) {
         return checkFolderExists(new File(new File(path, child), child2));
     }
 
