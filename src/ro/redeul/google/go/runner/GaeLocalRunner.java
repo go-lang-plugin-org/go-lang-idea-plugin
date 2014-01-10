@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  * Date: Aug 27, 2010
  * Time: 1:51:43 PM
  */
-public class GaeRemoteRunner extends DefaultProgramRunner {
+public class GaeLocalRunner extends DefaultProgramRunner {
 
     @NotNull
     public String getRunnerId() {
@@ -32,7 +32,7 @@ public class GaeRemoteRunner extends DefaultProgramRunner {
             return false;
         }
 
-        return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof GaeRemoteConfiguration;
+        return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof GaeLocalConfiguration;
     }
 
     protected RunContentDescriptor doExecute(Project project, RunProfileState state, RunContentDescriptor contentToReuse, ExecutionEnvironment env) throws ExecutionException {

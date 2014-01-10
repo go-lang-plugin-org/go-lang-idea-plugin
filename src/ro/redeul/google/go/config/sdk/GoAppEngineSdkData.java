@@ -15,6 +15,7 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
 
     public final static int LATEST_VERSION = 1;
 
+    public String SDK_HOME_PATH = "";
     public String GO_HOME_PATH = "";
 
     public GoTargetOs TARGET_OS = null;
@@ -29,7 +30,8 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
     public GoAppEngineSdkData() {
     }
 
-    public GoAppEngineSdkData(String homePath, GoTargetOs TARGET_OS, GoTargetArch TARGET_ARCH, String VERSION_MAJOR, String VERSION_MINOR) {
+    public GoAppEngineSdkData(String sdkHomePath, String homePath, GoTargetOs TARGET_OS, GoTargetArch TARGET_ARCH, String VERSION_MAJOR, String VERSION_MINOR) {
+        this.SDK_HOME_PATH = sdkHomePath;
         this.GO_HOME_PATH = homePath;
         this.TARGET_OS = TARGET_OS;
         this.TARGET_ARCH = TARGET_ARCH;

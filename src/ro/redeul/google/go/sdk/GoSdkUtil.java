@@ -235,7 +235,8 @@ public class GoSdkUtil {
 
         GoAppEngineSdkData sdkData = new GoAppEngineSdkData();
 
-        sdkData.GO_HOME_PATH = format("%s/goroot", path);
+        sdkData.SDK_HOME_PATH = path;
+        sdkData.GO_HOME_PATH = format("%s%sgoroot", path, File.separator);
 
         GeneralCommandLine command = new GeneralCommandLine();
         if(checkFileExists(sdkData.GO_HOME_PATH + "/bin/go")) {
@@ -278,8 +279,7 @@ public class GoSdkUtil {
 
         try {
             String fileContent =
-                VfsUtil.loadText(VfsUtil.findFileByIoFile(
-                        new File(format("%s/VERSION", path)), true));
+                VfsUtil.loadText(VfsUtil.findFileByIoFile(new File(format("%s/VERSION", path)), true));
 
             Matcher matcher = RE_APP_ENGINE_VERSION_MATCHER.matcher(
                 fileContent);

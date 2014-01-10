@@ -18,13 +18,14 @@ import javax.swing.*;
  * Date: Aug 19, 2010
  * Time: 2:49:26 PM
  */
-public class GaeRemoteAppEngineRunConfigurationType implements ConfigurationType {
+public class GaeAppEngineRunConfigurationType implements ConfigurationType {
 
     private final GoAppEngineRunConfigurationFactory myConfigurationFactory;
-    public static final String Name = "Go Remote AppEngine Server";
-    public static final String Description = "Go Remote AppEngine Server";
+    public static final String ID = "GaeLocalAppEngineServer";
+    public static final String Name = "Go Local AppEngine Server";
+    public static final String Description = "Go AppEngine Server";
 
-    public GaeRemoteAppEngineRunConfigurationType() {
+    public GaeAppEngineRunConfigurationType() {
         myConfigurationFactory = new GoAppEngineRunConfigurationFactory(this);
     }
 
@@ -43,15 +44,15 @@ public class GaeRemoteAppEngineRunConfigurationType implements ConfigurationType
     @NonNls
     @NotNull
     public String getId() {
-        return GaeRemoteConfiguration.ID;
+        return ID;
     }
 
     public ConfigurationFactory[] getConfigurationFactories() {
         return new ConfigurationFactory[]{myConfigurationFactory};
     }
 
-    public static GaeRemoteAppEngineRunConfigurationType getInstance() {
-        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GaeRemoteAppEngineRunConfigurationType.class);
+    public static GaeAppEngineRunConfigurationType getInstance() {
+        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GaeAppEngineRunConfigurationType.class);
     }
 
     public static class GoAppEngineRunConfigurationFactory extends ConfigurationFactory {
@@ -61,7 +62,7 @@ public class GaeRemoteAppEngineRunConfigurationType implements ConfigurationType
         }
 
         public RunConfiguration createTemplateConfiguration(Project project) {
-            return new GaeRemoteConfiguration(Name, project, getInstance());
+            return new GaeLocalConfiguration(Name, project, getInstance());
         }        
     }
 }

@@ -20,6 +20,8 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
+import java.io.File;
+
 public class GAEDebugEnv extends GoCommonDebugAction {
 
     @Override
@@ -45,7 +47,11 @@ public class GAEDebugEnv extends GoCommonDebugAction {
             return;
         }
 
-        String goExecName = sdkData.GO_HOME_PATH + "/../goapp";
+        String goExecName = sdkData.SDK_HOME_PATH + File.separator + "goapp";
+
+        if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
+            goExecName = goExecName.concat(".exe");
+        }
 
         String projectDir = project.getBasePath();
 
