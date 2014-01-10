@@ -15,6 +15,9 @@ type MySlice2 MySlice
 type MyArray [3]string
 type MyArray2 MyArray
 
+type MyFunc func(a map[string]string)
+type MyFunc2 MyFunc
+
 const (
 	NORMAL = 45
 	NOTNARMAL = BBBBB
@@ -63,6 +66,11 @@ func HandleMyArray(a MyArray) {
 func HandleMyArray2(a MyArray2) {
 
 }
+
+func HandleMyFunc(a MyFunc) {
+
+}
+
 
 type iFunc interface {
 
@@ -196,5 +204,14 @@ func main() {
 	HandleArray(/*begin*/[...]string{"a", "b",}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
 	HandleArray(/*begin*/[...]int{1, 2 ,3}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
 
+	HandleMyFunc(HandleMap)
+	HandleMyFunc(HandleMyMap)
+	HandleMyFunc((func(map[string]string){}))
+	HandleMyFunc(MyFunc(func(map[string]string){}))
+	fn := MyFunc(func(map[string]string){})
+	HandleMyFunc(fn)
+	HandleMyFunc(/*begin*/HandleSlice/*end.Expression type mismatch, the expected type is MyFunc|CastTypeFix*/)
+
+	// HandleMyFunc(MyFunc2(func(map[string]string){})) TODO: should generate "Expression type mismatch, the expected type is MyFunc|CastTypeFix"
 
 }

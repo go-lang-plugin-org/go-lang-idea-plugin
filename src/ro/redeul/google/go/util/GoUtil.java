@@ -312,7 +312,7 @@ public class GoUtil {
     }
 
 
-    private static boolean CompairFnTypeToDecl(GoPsiTypeFunction psiType, GoFunctionDeclaration functionDeclaration) {
+    public static boolean CompairFnTypeToDecl(GoPsiTypeFunction psiType, GoFunctionDeclaration functionDeclaration) {
 
 
         GoFunctionParameter[] funcTypeArguments = psiType.getParameters();
