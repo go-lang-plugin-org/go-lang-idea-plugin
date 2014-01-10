@@ -173,7 +173,7 @@ public class GoUtil {
             return String.format("[]%s", recursiveNameOrGlobalTypeImp(((GoPsiTypeSlice) type).getElementType(), currentFile));
         } else if (type instanceof GoPsiTypeArray) {
             GoPsiTypeArray elementType = (GoPsiTypeArray) type;
-            return String.format("[%s]%s", elementType.getArrayLength(), recursiveNameOrGlobalTypeImp(elementType.getElementType(), currentFile));
+            return String.format("[%d]%s", elementType.getArrayLength(), recursiveNameOrGlobalTypeImp(elementType.getElementType(), currentFile));
         } else if (type instanceof GoPsiTypeMap) {
             GoPsiTypeMap type1 = (GoPsiTypeMap) type;
             return String.format("map[%s]%s", recursiveNameOrGlobalTypeImp(type1.getKeyType(), currentFile), recursiveNameOrGlobalTypeImp(type1.getElementType(), currentFile));

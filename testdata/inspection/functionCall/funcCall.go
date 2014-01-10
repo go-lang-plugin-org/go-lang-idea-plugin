@@ -180,6 +180,7 @@ func main() {
 
 	HandleMyArray(MyArray{})
 	HandleMyArray([3]string{})
+	HandleArray([...]string{"a", "b", "c"})
 	HandleMyArray(/*begin*/[4]string{}/*end.Expression type mismatch, the expected type is MyArray|CastTypeFix*/)
 	HandleMyArray(/*begin*/[3]int{}/*end.Expression type mismatch, the expected type is MyArray|CastTypeFix*/)
 	HandleMyArray(/*begin*/MyArray2{}/*end.Expression type mismatch, the expected type is MyArray|CastTypeFix*/)
@@ -189,5 +190,11 @@ func main() {
 	HandleMyArray2(/*begin*/[4]string{}/*end.Expression type mismatch, the expected type is MyArray2|CastTypeFix*/)
 	HandleMyArray2(/*begin*/[3]int{}/*end.Expression type mismatch, the expected type is MyArray2|CastTypeFix*/)
 	HandleMyArray2(/*begin*/MyArray{}/*end.Expression type mismatch, the expected type is MyArray2|CastTypeFix*/)
+
+	HandleArray([...]string{"a", "b", "c"})
+	HandleArray(/*begin*/[...]string{"a", "b", "c", "d"}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+	HandleArray(/*begin*/[...]string{"a", "b",}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+	HandleArray(/*begin*/[...]int{1, 2 ,3}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+
 
 }

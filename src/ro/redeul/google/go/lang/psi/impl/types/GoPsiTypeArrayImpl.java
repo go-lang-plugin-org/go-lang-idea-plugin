@@ -2,8 +2,11 @@ package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeValueImpl;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
@@ -28,8 +31,22 @@ public class GoPsiTypeArrayImpl extends GoPsiPackagedElementBase implements
     }
 
     @Override
-    public String getArrayLength() {
-        return GoPsiUtils.findChildOfClass(this, GoLiteralExpression.class).getLiteral().getText();
+    public int getArrayLength() {
+        GoLiteralExpression child = GoPsiUtils.findChildOfClass(this, GoLiteralExpression.class);
+        if (child != null) {
+            GoLiteral literal = child.getLiteral();
+            String length = literal.getText();
+            try {
+                return Integer.parseInt(length);
+            } catch (NumberFormatException e){
+                // return default value
+            }
+        } else {
+            GoLiteralCompositeValue compositeValue = GoPsiUtils.findChildOfClass(this.getParent(), GoLiteralCompositeValueImpl.class);
+            if (compositeValue != null)
+                return compositeValue.getChildren().length;
+        }
+        return 0;
     }
 
     public GoPsiType getElementType() {
@@ -43,24 +60,19 @@ public class GoPsiTypeArrayImpl extends GoPsiPackagedElementBase implements
 
     @Override
     public GoUnderlyingType getUnderlyingType() {
-        return new GoUnderlyingTypeArray(getElementType().getUnderlyingType(), 10);
+        return new GoUnderlyingTypeArray(getElementType().getUnderlyingType(), getArrayLength());
     }
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
         if (goType instanceof GoPsiTypeName) {
-            goType =  resolveToFinalType(goType);
+            goType = resolveToFinalType(goType);
         }
         if (!(goType instanceof GoPsiTypeArray)) {
             return false;
         }
-
         GoPsiTypeArray otherTypeArray = (GoPsiTypeArray) goType;
-
-        if (!(getArrayLength().equals(otherTypeArray.getArrayLength()))) {
-            return false;
-        }
-        return getElementType().isIdentical(otherTypeArray.getElementType());
+        return getUnderlyingType().isIdentical(otherTypeArray.getUnderlyingType());
     }
 
     @NotNull
