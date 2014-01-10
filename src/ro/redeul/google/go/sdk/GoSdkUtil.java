@@ -236,6 +236,7 @@ public class GoSdkUtil {
         GoAppEngineSdkData sdkData = new GoAppEngineSdkData();
 
         sdkData.SDK_HOME_PATH = path;
+        sdkData.GOAPP_BIN_PATH = getGoAppBinPath(path);
         sdkData.GO_HOME_PATH = format("%s%sgoroot", path, File.separator);
 
         GeneralCommandLine command = new GeneralCommandLine();
@@ -306,6 +307,17 @@ public class GoSdkUtil {
         }
 
         return sdkData;
+    }
+
+    @NotNull
+    public static String getGoAppBinPath(String goAppPath) {
+        String goExecName = goAppPath + File.separator + "goapp";
+
+        if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
+            goExecName = goExecName.concat(".exe");
+        }
+
+        return goExecName;
     }
 
     private static boolean checkFileExists(String path, String child) {

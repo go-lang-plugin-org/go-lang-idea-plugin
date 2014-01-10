@@ -47,12 +47,6 @@ public class GAEDebugEnv extends GoCommonDebugAction {
             return;
         }
 
-        String goExecName = sdkData.SDK_HOME_PATH + File.separator + "goapp";
-
-        if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
-            goExecName = goExecName.concat(".exe");
-        }
-
         String projectDir = project.getBasePath();
 
         if (projectDir == null) {
@@ -84,7 +78,7 @@ public class GAEDebugEnv extends GoCommonDebugAction {
 
             String command = String.format(
                     "%s env",
-                    goExecName
+                    sdkData.GOAPP_BIN_PATH
             );
 
             consoleView.clear();

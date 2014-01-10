@@ -4,6 +4,10 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.SdkAdditionalData;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.io.File;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -13,9 +17,10 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
  */
 public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateComponent<GoAppEngineSdkData> {
 
-    public final static int LATEST_VERSION = 1;
+    public final static int LATEST_VERSION = 2;
 
     public String SDK_HOME_PATH = "";
+    public String GOAPP_BIN_PATH = "";
     public String GO_HOME_PATH = "";
 
     public GoTargetOs TARGET_OS = null;
@@ -32,6 +37,7 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
 
     public GoAppEngineSdkData(String sdkHomePath, String homePath, GoTargetOs TARGET_OS, GoTargetArch TARGET_ARCH, String VERSION_MAJOR, String VERSION_MINOR) {
         this.SDK_HOME_PATH = sdkHomePath;
+        this.GOAPP_BIN_PATH = GoSdkUtil.getGoAppBinPath(sdkHomePath);
         this.GO_HOME_PATH = homePath;
         this.TARGET_OS = TARGET_OS;
         this.TARGET_ARCH = TARGET_ARCH;
