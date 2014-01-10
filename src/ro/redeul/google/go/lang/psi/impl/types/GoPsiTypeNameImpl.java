@@ -134,7 +134,7 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
         else {
             if (goType instanceof GoPsiTypeMap || goType instanceof GoPsiTypeSlice || goType instanceof GoPsiTypeArray) {
                 GoPsiType resolved = resolveToFinalType(this);
-                if (resolved != null)
+                if (resolved != null && resolved != this)
                     return resolved.isIdentical(goType);
             }
         }
