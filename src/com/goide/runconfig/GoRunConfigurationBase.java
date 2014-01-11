@@ -45,7 +45,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     GoModuleBasedConfiguration configuration = getConfigurationModule();
     Module module = configuration.getModule();
     if (module == null) {
-      throw new ExecutionException("No Erlang configuration for run configuration: " + getName());
+      throw new ExecutionException("Go isn't configured for run configuration: " + getName());
     }
     return newRunningState(env, module);
   }
