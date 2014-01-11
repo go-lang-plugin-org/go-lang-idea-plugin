@@ -21,6 +21,10 @@ public class GoTestFinder implements TestFinder {
   private static final String TEST_SUFFIX = "_test.go";
   private static final String EXTENSION = "." + GoFileType.INSTANCE.getDefaultExtension();
 
+  public static boolean isTestFile(@Nullable PsiFile file) {
+    return file != null && file instanceof GoFile && file.getName().endsWith(TEST_SUFFIX);
+  }
+
   @Nullable
   @Override
   public PsiElement findSourceElement(@NotNull PsiElement from) {
@@ -41,7 +45,6 @@ public class GoTestFinder implements TestFinder {
     return Collections.emptyList();
   }
 
-
   @NotNull
   @Override
   public Collection<PsiElement> findClassesForTest(@NotNull PsiElement element) {
@@ -55,10 +58,9 @@ public class GoTestFinder implements TestFinder {
     }
     return Collections.emptyList();
   }
-
+  
   @Override
   public boolean isTest(@NotNull PsiElement element) {
-    PsiFile file = InjectedLanguageUtil.getTopLevelFile(element);
-    return file instanceof GoFile && file.getName().endsWith(TEST_SUFFIX);
+    return isTestFile(InjectedLanguageUtil.getTopLevelFile(element));
   }
 }
