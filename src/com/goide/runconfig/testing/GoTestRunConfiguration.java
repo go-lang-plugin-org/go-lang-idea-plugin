@@ -15,9 +15,14 @@ import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunningState> {
+  private String myPackage = "";
+  private String myFilePath = "";
+  private String myDirectoryPath = "";
+
   private String myParams = "";
-  private String myTestFilter = "";
+  private String myPattern = "";
   private String myWorkingDirectory;
+  private Kind myKind = Kind.DIRECTORY;
 
   public GoTestRunConfiguration(Project project, String name, ConfigurationType configurationType) {
     super(name, new GoModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
@@ -63,12 +68,12 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   }
 
   @NotNull
-  public String getTestFilter() {
-    return myTestFilter;
+  public String getPattern() {
+    return myPattern;
   }
 
-  public void setTestFilter(@NotNull String testFilter) {
-    myTestFilter = testFilter;
+  public void setPattern(@NotNull String pattern) {
+    myPattern = pattern;
   }
 
   @NotNull
@@ -78,5 +83,45 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
 
   public void setWorkingDirectory(@NotNull String workingDirectory) {
     myWorkingDirectory = workingDirectory;
+  }
+
+  @NotNull
+  public Kind getKind() {
+    return myKind;
+  }
+
+  public void setKind(@NotNull Kind kind) {
+    myKind = kind;
+  }
+
+  @NotNull
+  public String getPackage() {
+    return myPackage;
+  }
+
+  public void setPackage(@NotNull String aPackage) {
+    myPackage = aPackage;
+  }
+
+  @NotNull
+  public String getFilePath() {
+    return myFilePath;
+  }
+
+  public void setFilePath(@NotNull String filePath) {
+    myFilePath = filePath;
+  }
+
+  @NotNull
+  public String getDirectoryPath() {
+    return myDirectoryPath;
+  }
+
+  public void setDirectoryPath(@NotNull String directoryPath) {
+    myDirectoryPath = directoryPath;
+  }
+
+  public enum Kind {
+    DIRECTORY, PACKAGE, FILE
   }
 }

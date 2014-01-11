@@ -64,7 +64,7 @@ public class GoTestRunningState extends GoRunningState {
     runTests.setExePath(executable);
     runTests.addParameter("test");
     runTests.addParameter("-v");
-    runTests.addParameter("-run=" + myConfiguration.getTestFilter().trim());
+    runTests.addParameter("-run=" + myConfiguration.getPattern().trim());
     runTests.getParametersList().addParametersString(myConfiguration.getParams());
     runTests.setWorkDirectory(myConfiguration.getWorkingDirectory());
 

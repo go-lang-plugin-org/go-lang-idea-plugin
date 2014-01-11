@@ -1,88 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.goide.runconfig.testing.ui.GoTestRunConfigurationEditorForm">
-  <grid id="27dc6" binding="component" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="component" layout-manager="GridLayoutManager" row-count="9" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="657" height="187"/>
+      <xy x="20" y="20" width="657" height="315"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="487df" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="0" left="0" bottom="0" right="0"/>
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="true"/>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children>
-          <component id="b24ba" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="1" height="1"/>
-              </grid>
-            </constraints>
-            <properties>
-              <text value="&amp;Module:"/>
-            </properties>
-          </component>
-          <component id="a4845" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="&amp;Arguments:"/>
-            </properties>
-          </component>
-          <component id="fcef4" class="com.intellij.openapi.roots.ui.configuration.ModulesCombobox" binding="myComboModules">
-            <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="ecfb1" class="com.intellij.ui.RawCommandLineEditor" binding="myParamsField">
-            <constraints>
-              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="5d2fe" class="com.intellij.ui.EditorTextField" binding="myFilterEditor" custom-create="true">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="be44b" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="125" height="15"/>
-              </grid>
-            </constraints>
-            <properties>
-              <text value="Test &amp;filter:"/>
-            </properties>
-          </component>
-          <component id="bb98f" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Working directory:"/>
-            </properties>
-          </component>
-          <component id="88217" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="myWorkingDirectoryField">
-            <constraints>
-              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties/>
-          </component>
-        </children>
-      </grid>
       <vspacer id="632bf">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
+      <component id="c65ef" class="javax.swing.JComboBox" binding="myTestKindComboBox">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <model>
+            <item value="All in directory"/>
+            <item value="All in package"/>
+            <item value="File"/>
+          </model>
+        </properties>
+      </component>
+      <component id="b1040" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <labelFor value="c65ef"/>
+          <text value="&amp;Test kind:"/>
+        </properties>
+      </component>
+      <component id="c1b" class="javax.swing.JLabel" binding="myDirectoryLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="67" height="16"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="&amp;Directory:"/>
+          <visible value="true"/>
+        </properties>
+      </component>
+      <component id="c2258" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="myDirectoryField">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <visible value="true"/>
+        </properties>
+      </component>
+      <component id="69539" class="javax.swing.JLabel" binding="myPackageLabel">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="&amp;Package:"/>
+          <visible value="true"/>
+        </properties>
+      </component>
+      <component id="d8a73" class="com.intellij.ui.EditorTextField" binding="myPackageField">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <visible value="true"/>
+        </properties>
+      </component>
+      <component id="a9bf9" class="javax.swing.JLabel" binding="myFileLabel">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="&amp;File:"/>
+          <visible value="true"/>
+        </properties>
+      </component>
+      <component id="b2116" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="myFileField">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <visible value="true"/>
+        </properties>
+      </component>
+      <hspacer id="e93e6">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
+      <component id="b24ba" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="1" height="1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <inheritsPopupMenu value="true"/>
+          <text value="&amp;Module:"/>
+        </properties>
+      </component>
+      <component id="a4845" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="&amp;Arguments:"/>
+        </properties>
+      </component>
+      <component id="fcef4" class="com.intellij.openapi.roots.ui.configuration.ModulesCombobox" binding="myComboModules">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="ecfb1" class="com.intellij.ui.RawCommandLineEditor" binding="myParamsField">
+        <constraints>
+          <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="5d2fe" class="com.intellij.ui.EditorTextField" binding="myPatternEditor" custom-create="true">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="be44b" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="125" height="15"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Patte&amp;rn:"/>
+        </properties>
+      </component>
+      <component id="bb98f" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="&amp;Working directory:"/>
+        </properties>
+      </component>
+      <component id="88217" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="myWorkingDirectoryField">
+        <constraints>
+          <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
     </children>
   </grid>
 </form>
