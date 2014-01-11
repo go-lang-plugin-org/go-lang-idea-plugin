@@ -186,16 +186,14 @@
                     class="ro.redeul.google.go.ide.actions.GoFmtFileRunner"
                     text="go fmt file" description="Format current file with go fmt"
                     icon="/icons/go_13x13.png">
-                <keyboard-shortcut first-keystroke="ctrl alt shift f"
-                                   keymap="$default"/>
+                <keyboard-shortcut first-keystroke="ctrl alt shift f" keymap="$default"/>
             </action>
 
             <action id="Go.Fmt.ProjectRunner"
                     class="ro.redeul.google.go.ide.actions.GoFmtProjectRunner"
                     text="go fmt project" description="Format current project with go fmt"
                     icon="/icons/go_13x13.png">
-                <keyboard-shortcut first-keystroke="ctrl alt shift g"
-                                   keymap="$default"/>
+                <keyboard-shortcut first-keystroke="ctrl alt shift g" keymap="$default"/>
             </action>
 
             <!--<action id="Go.Tools.AddGoSdk" text="Add Go Sdk Support"-->
@@ -209,12 +207,25 @@
         <group id="GAE.Tools" popup="true" text="Go AppEngine Tools"
                description="Go AppEngine tools support" icon="/icons/gae_13x13.png" class="ro.redeul.google.go.actions.NewGAEGroup">
 
-            <action id="Go.AppEngine.Upload"
+            <action id="GAE.AppEngine.Upload"
                     class="ro.redeul.google.go.ide.actions.GoAppEngineUpload"
-                    text="App Engine Upload" description="Upload to App Engine"
+                    text="Upload to AppEngine" description="Upload to AppEngine"
                     icon="/icons/gae_13x13.png">
-                <keyboard-shortcut first-keystroke="ctrl alt U"
-                                   keymap="$default"/>
+                <keyboard-shortcut first-keystroke="ctrl alt U" keymap="$default"/>
+            </action>
+
+            <action id="GAE.Fmt.FileRunner"
+                    class="ro.redeul.google.go.ide.actions.GoFmtFileRunner"
+                    text="go fmt file" description="Format current file with go fmt"
+                    icon="/icons/gae_13x13.png">
+                <keyboard-shortcut first-keystroke="ctrl alt shift f" keymap="$default"/>
+            </action>
+
+            <action id="GAE.Fmt.ProjectRunner"
+                    class="ro.redeul.google.go.ide.actions.GoFmtProjectRunner"
+                    text="go fmt project" description="Format current project with go fmt"
+                    icon="/icons/gae_13x13.png">
+                <keyboard-shortcut first-keystroke="ctrl alt shift g" keymap="$default"/>
             </action>
 
             <add-to-group group-id="ToolsMenu" anchor="last"/>
