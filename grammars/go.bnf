@@ -101,7 +101,7 @@ private TypeLit ::=
   | MapType
   | ChannelType
 
-ArrayOrSliceType ::= '[' Expression? ']' Type {pin=1}
+ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
 
 StructType ::= struct '{' Fields? '}' {pin=1}
 private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
