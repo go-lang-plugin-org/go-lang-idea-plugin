@@ -255,7 +255,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitReceiver(@NotNull GoReceiver o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitReceiverType(@NotNull GoReceiverType o) {

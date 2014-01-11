@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoReceiverImpl extends GoCompositeElementImpl implements GoReceiver {
+public class GoReceiverImpl extends GoNamedElementImpl implements GoReceiver {
 
   public GoReceiverImpl(ASTNode node) {
     super(node);
