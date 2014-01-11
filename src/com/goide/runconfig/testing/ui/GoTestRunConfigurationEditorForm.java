@@ -2,9 +2,13 @@ package com.goide.runconfig.testing.ui;
 
 import com.goide.GoModuleType;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.ModulesCombobox;
+import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.EditorTextField;
@@ -32,41 +36,39 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private JLabel myDirectoryLabel;
   private TextFieldWithBrowseButton myDirectoryField;
 
-  public GoTestRunConfigurationEditorForm() {
+  public GoTestRunConfigurationEditorForm(@NotNull Project project) {
     super(null);
-    myTestKindComboBox.removeAllItems();
-    myTestKindComboBox.setRenderer(getTestKindListCellRendererWrapper());
-    for (GoTestRunConfiguration.Kind kind : GoTestRunConfiguration.Kind.values()) {
-      myTestKindComboBox.addItem(kind);
+    installTestKindComboBox();
+    installFileChoosers(project);
+  }
+
+  private void onTestKindChanged() {
+    GoTestRunConfiguration.Kind selectedKind = (GoTestRunConfiguration.Kind)myTestKindComboBox.getSelectedItem();
+    if (selectedKind == null) {
+      selectedKind = GoTestRunConfiguration.Kind.DIRECTORY;
     }
+    boolean allInPackage = selectedKind == GoTestRunConfiguration.Kind.PACKAGE;
+    boolean allInDirectory = selectedKind == GoTestRunConfiguration.Kind.DIRECTORY;
+    boolean file = selectedKind == GoTestRunConfiguration.Kind.FILE;
 
-    myTestKindComboBox.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        GoTestRunConfiguration.Kind selectedKind = (GoTestRunConfiguration.Kind)myTestKindComboBox.getSelectedItem();
-        if (selectedKind == null) {
-          selectedKind = GoTestRunConfiguration.Kind.DIRECTORY;
-        }
-        boolean allInPackage = selectedKind == GoTestRunConfiguration.Kind.PACKAGE;
-        boolean allInDirectory = selectedKind == GoTestRunConfiguration.Kind.DIRECTORY;
-        boolean file = selectedKind == GoTestRunConfiguration.Kind.FILE;
-
-        myPackageField.setVisible(allInPackage);
-        myPackageLabel.setVisible(allInPackage);
-        myDirectoryField.setVisible(allInDirectory);
-        myDirectoryLabel.setVisible(allInDirectory);
-        myFileField.setVisible(file);
-        myFileLabel.setVisible(file);
-      }
-    });
+    myPackageField.setVisible(allInPackage);
+    myPackageLabel.setVisible(allInPackage);
+    myDirectoryField.setVisible(allInDirectory);
+    myDirectoryLabel.setVisible(allInDirectory);
+    myFileField.setVisible(file);
+    myFileLabel.setVisible(file);
   }
 
   @Override
   protected void resetEditorFrom(GoTestRunConfiguration configuration) {
     myTestKindComboBox.setSelectedItem(configuration.getKind());
     myPackageField.setText(configuration.getPackage());
-    myDirectoryField.setText(configuration.getDirectoryPath());
-    myFileField.setText(configuration.getFilePath());
+
+    String directoryPath = configuration.getDirectoryPath();
+    myDirectoryField.setText(directoryPath.isEmpty() ? configuration.getProject().getBasePath() : directoryPath);
+
+    String filePath = configuration.getFilePath();
+    myFileField.setText(filePath.isEmpty() ? configuration.getProject().getBasePath() : filePath);
 
     myComboModules.fillModules(configuration.getProject(), GoModuleType.getInstance());
     myComboModules.setSelectedModule(configuration.getConfigurationModule().getModule());
@@ -80,7 +82,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     configuration.setKind((GoTestRunConfiguration.Kind)myTestKindComboBox.getSelectedItem());
     configuration.setPackage(myPackageField.getText());
     configuration.setDirectoryPath(myDirectoryField.getText());
-    configuration.setFilePath(myDirectoryField.getText());
+    configuration.setFilePath(myFileField.getText());
 
     configuration.setModule(myComboModules.getSelectedModule());
     configuration.setParams(myParamsField.getText());
@@ -99,6 +101,10 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     component.setVisible(false);
   }
 
+  private void createUIComponents() {
+    myPatternEditor = new EditorTextField("", null, RegExpLanguage.INSTANCE.getAssociatedFileType());
+  }
+
   private static ListCellRendererWrapper<GoTestRunConfiguration.Kind> getTestKindListCellRendererWrapper() {
     return new ListCellRendererWrapper<GoTestRunConfiguration.Kind>() {
       @Override
@@ -111,7 +117,29 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     };
   }
 
-  private void createUIComponents() {
-    myPatternEditor = new EditorTextField("", null, RegExpLanguage.INSTANCE.getAssociatedFileType());
+  private void installFileChoosers(Project project) {
+    FileChooserDescriptor chooseFileDescriptor = FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
+    chooseFileDescriptor.setRoots(project.getBaseDir());
+    chooseFileDescriptor.setShowFileSystemRoots(false);
+    myFileField.addBrowseFolderListener(new TextBrowseFolderListener(chooseFileDescriptor));
+
+    FileChooserDescriptor chooseDirectoryDescriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
+    chooseDirectoryDescriptor.setRoots(project.getBaseDir());
+    chooseDirectoryDescriptor.setShowFileSystemRoots(false);
+    myDirectoryField.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));
+  }
+
+  private void installTestKindComboBox() {
+    myTestKindComboBox.removeAllItems();
+    myTestKindComboBox.setRenderer(getTestKindListCellRendererWrapper());
+    for (GoTestRunConfiguration.Kind kind : GoTestRunConfiguration.Kind.values()) {
+      myTestKindComboBox.addItem(kind);
+    }
+    myTestKindComboBox.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        onTestKindChanged();
+      }
+    });
   }
 }

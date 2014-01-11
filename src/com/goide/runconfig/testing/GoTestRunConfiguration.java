@@ -38,7 +38,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   @NotNull
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    return new GoTestRunConfigurationEditorForm();
+    return new GoTestRunConfigurationEditorForm(getProject());
   }
 
   @Override
