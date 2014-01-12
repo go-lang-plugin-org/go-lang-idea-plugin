@@ -1,5 +1,6 @@
 <h3>0.9.16 changes:</h3>
 <ul>
+    <li>[feature] Added debugging support via GDB</li>
     <li>[feature] Added support for Go on Google AppEngine for non-IDEA IDEs</li>
     <li>[bugfix] Improved support for Go on Google AppEngine</li>
     <li>[enhancement] Inspection: Update "functionReturnCountInspection" to check the type of returning expressions</li>

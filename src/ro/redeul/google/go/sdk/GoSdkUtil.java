@@ -931,4 +931,52 @@ public class GoSdkUtil {
 
         return null;
     }
+
+    public static String[] computeGoCommand(String goName, String goArgs) {
+        List<String> result = new ArrayList<String>();
+        result.add(goName);
+
+        Pattern pattern = Pattern.compile("(([a-z0-9]+)|(\\-[a-z0-9]+)|(\"([a-z0-9-\\s]+)\")|(\\s([\\.a-z0-9/\\\\]+)))+", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(goArgs);
+        while (matcher.find()) {
+            String group = matcher.group();
+            if (group.indexOf('"') == 0 || group.indexOf("'") == 0) {
+                result.add(group.substring(1, group.length()-1));
+            } else if (group.indexOf('-') == 0 && group.indexOf(' ') != -1) {
+                Collections.addAll(result, group.split(" "));
+            } else {
+                result.add(group);
+            }
+        }
+
+        String[] arrRes = new String[result.size()];
+        result.toArray(arrRes);
+
+        return arrRes;
+    }
+
+    public static String[] computeGoBuildCommand(String goExecName, String goBuilderArgs, String targetName, String goMainFile) {
+        String goArgs = String.format(
+                "%s %s %s %s %s",
+                "build",
+                goBuilderArgs,
+                "-o",
+                targetName,
+                goMainFile
+        );
+
+        return computeGoCommand(goExecName, goArgs);
+    }
+
+    public static String[] computeGoRunCommand(String goExecName, String goBuilderArgs, String goMainFile, String appArgs) {
+        String goArgs = String.format(
+                "%s %s %s %s",
+                "run",
+                goBuilderArgs,
+                goMainFile,
+                appArgs
+        );
+
+        return computeGoCommand(goExecName, goArgs);
+    }
 }

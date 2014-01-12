@@ -19,6 +19,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
@@ -249,20 +250,13 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                     window.show(EmptyRunnable.getInstance());
 
                     String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
-
-                    String command = String.format(
-                            "%s build %s -o %s %s",
-                            goExecName,
-                            builderArguments,
-                            execName,
-                            scriptName
-                    );
+                    String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, builderArguments, execName, scriptName);
 
                     Runtime rt = Runtime.getRuntime();
                     Process proc = rt.exec(command, goEnv);
                     OSProcessHandler handler = new OSProcessHandler(proc, null);
                     consoleView.attachToProcess(handler);
-                    consoleView.print(String.format("%s%n", command), ConsoleViewContentType.NORMAL_OUTPUT);
+                    consoleView.print(String.format("%s%n", StringUtil.join(command, " ")), ConsoleViewContentType.NORMAL_OUTPUT);
                     handler.startNotify();
 
                     if (proc.waitFor() == 0) {

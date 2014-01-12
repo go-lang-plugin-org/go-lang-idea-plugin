@@ -1,8 +1,15 @@
 package uk.co.cwspencer.gdb;
 
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.Sdk;
+import org.apache.commons.lang.StringUtils;
+import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 import uk.co.cwspencer.gdb.gdbmi.*;
 import uk.co.cwspencer.gdb.messages.*;
+import uk.co.cwspencer.ideagdb.debug.GdbDebugProcess;
 
 import java.io.File;
 import java.io.InputStream;
@@ -246,21 +253,38 @@ public class Gdb {
             // Launch the process
             final String[] commandLine = {
                     gdbPath,
-                    "--interpreter=mi2"};
+                    "--interpreter=mi",
+            };
+
+            ((GdbDebugProcess) m_listener).m_console.print(StringUtils.join(commandLine, " ") + "\n", ConsoleViewContentType.NORMAL_OUTPUT);
+
             File workingDirectoryFile = null;
             if (workingDirectory != null) {
                 workingDirectoryFile = new File(workingDirectory);
             }
-            Process process = Runtime.getRuntime().exec(commandLine, null, workingDirectoryFile);
-            InputStream stream = process.getInputStream();
 
-            // Queue startup commands
-            sendCommand("-list-features", new GdbEventCallback() {
-                @Override
-                public void onGdbCommandCompleted(GdbEvent event) {
-                    onGdbCapabilitiesReady(event);
-                }
-            });
+            Project project = ((GdbDebugProcess) m_listener).m_project;
+
+            Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
+            if ( sdk == null ) {
+                return;
+            }
+
+            final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
+            if ( sdkData == null ) {
+                return;
+            }
+
+            String projectDir = project.getBasePath();
+
+            if (projectDir == null) {
+                return;
+            }
+
+            String[] goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
+
+            Process process = Runtime.getRuntime().exec(commandLine, goEnv, workingDirectoryFile);
+            InputStream stream = process.getInputStream();
 
             // Save a reference to the process and launch the writer thread
             synchronized (this) {

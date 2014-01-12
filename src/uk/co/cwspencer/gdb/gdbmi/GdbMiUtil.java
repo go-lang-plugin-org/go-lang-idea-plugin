@@ -14,9 +14,11 @@ public class GdbMiUtil {
      * @param string The string to format.
      * @return The formatted string.
      */
-    public static String formatGdbString(String string) {
+    public static String formatGdbString(String string, Boolean autoQuote) {
         StringBuilder sb = new StringBuilder();
-        sb.append("\"");
+        if (autoQuote) {
+            sb.append("\"");
+        }
         for (int i = 0; i < string.length(); ++i) {
             char ch = string.charAt(i);
 
@@ -37,7 +39,13 @@ public class GdbMiUtil {
                 sb.append(ch);
             }
         }
-        sb.append("\"");
+        if (autoQuote) {
+            sb.append("\"");
+        }
         return sb.toString();
+    }
+
+    public static String formatGdbString(String string) {
+        return formatGdbString(string, true);
     }
 }
