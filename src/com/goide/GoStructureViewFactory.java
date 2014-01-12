@@ -100,6 +100,16 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         for (GoFunctionDeclaration o : ((GoFile)myElement).getFunctions()) result.add(new Element(o));
         for (GoMethodDeclaration o : ((GoFile)myElement).getMethods()) result.add(new Element(o));
       }
+      else if (myElement instanceof GoTypeSpec) {
+        GoType type = ((GoTypeSpec)myElement).getType();
+        if (type instanceof GoStructType) {
+          for (GoFieldDeclaration field : ((GoStructType)type).getFieldDeclarationList()) {
+            for (GoFieldDefinition definition : field.getFieldDefinitionList()) {
+              result.add(new Element(definition));
+            }
+          }
+        }
+      }
       return result.toArray(new TreeElement[result.size()]);
     }
 
@@ -116,7 +126,8 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       }
       else if (myElement instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)myElement).getType();
-        return ((GoTypeSpec)myElement).getIdentifier().getText() + ":" + (type != null ? type.getText() : "");
+        String appendix = type instanceof GoStructType ? "" : (type != null ? ":" + type.getText().replaceAll("\\s+", " ") : "");
+        return ((GoTypeSpec)myElement).getIdentifier().getText() + appendix;
       }
       else if (myElement instanceof GoNamedElement) {
         return ((GoNamedElement)myElement).getName();
@@ -138,6 +149,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       if (myElement instanceof GoTypeSpec) return GoIcons.TYPE;
       if (myElement instanceof GoVarDefinition) return GoIcons.VARIABLE;
       if (myElement instanceof GoConstDefinition) return GoIcons.CONST;
+      if (myElement instanceof GoFieldDefinition) return GoIcons.FIELD;
       return myElement.getIcon(0);
     }
   }
