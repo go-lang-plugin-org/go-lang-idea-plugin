@@ -14,6 +14,8 @@ public interface GoIcons {
   Icon VARIABLE = AllIcons.Nodes.Variable;
   Icon CONST = new LayeredIcon(AllIcons.Nodes.Field, AllIcons.Nodes.FinalMark);  // todo: another icon
   Icon PARAMETER = AllIcons.Nodes.Parameter;
+  Icon FIELD = AllIcons.Nodes.Field;
+  Icon RECEIVER = AllIcons.Nodes.Parameter;
   Icon PACKAGE = AllIcons.Nodes.Package;
   Icon MODULE_ICON = IconLoader.findIcon("/icons/goModule.png");
 }

@@ -67,8 +67,8 @@
 
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param)Definition|Receiver")="com.goide.psi.GoNamedElement"
-  extends("FunctionDeclaration|(Type|Import)Spec|(Var|Const|Param)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl"
+  implements("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
+  extends("FunctionDeclaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl"
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -105,7 +105,10 @@ ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
 
 StructType ::= struct '{' Fields? '}' {pin=1}
 private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
-FieldDeclaration ::= (IdentifierList Type | AnonymousField) Tag?
+FieldDeclaration ::= (FieldDefinitionList Type | AnonymousField) Tag?
+private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
+FieldDefinition ::= identifier
+
 AnonymousField ::= '*'? TypeName
 Tag ::= string
 

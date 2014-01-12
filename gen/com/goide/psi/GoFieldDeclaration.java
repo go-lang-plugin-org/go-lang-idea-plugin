@@ -10,6 +10,9 @@ public interface GoFieldDeclaration extends GoCompositeElement {
   @Nullable
   GoAnonymousField getAnonymousField();
 
+  @NotNull
+  List<GoFieldDefinition> getFieldDefinitionList();
+
   @Nullable
   GoTag getTag();
 

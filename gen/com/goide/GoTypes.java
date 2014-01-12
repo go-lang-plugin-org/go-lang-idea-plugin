@@ -41,6 +41,7 @@ public interface GoTypes {
   IElementType EXPR_SWITCH_STATEMENT = new GoCompositeElementType("EXPR_SWITCH_STATEMENT");
   IElementType FALLTHROUGH_STATEMENT = new GoCompositeElementType("FALLTHROUGH_STATEMENT");
   IElementType FIELD_DECLARATION = new GoCompositeElementType("FIELD_DECLARATION");
+  IElementType FIELD_DEFINITION = new GoCompositeElementType("FIELD_DEFINITION");
   IElementType FIELD_NAME = new GoCompositeElementType("FIELD_NAME");
   IElementType FOR_CLAUSE = new GoCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new GoCompositeElementType("FOR_STATEMENT");
@@ -285,6 +286,9 @@ public interface GoTypes {
       }
       else if (type == FIELD_DECLARATION) {
         return new GoFieldDeclarationImpl(node);
+      }
+      else if (type == FIELD_DEFINITION) {
+        return new GoFieldDefinitionImpl(node);
       }
       else if (type == FIELD_NAME) {
         return new GoFieldNameImpl(node);

@@ -79,8 +79,12 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createVariableLikeLookupElement(GoNamedElement v) {
-    Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE : v instanceof GoParamDefinition ?
-                                                                  GoIcons.PARAMETER : v instanceof GoConstDefinition ? GoIcons.CONST : null;
+    Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
+                v instanceof GoParamDefinition ? GoIcons.PARAMETER :
+                v instanceof GoFieldDefinition ? GoIcons.FIELD :
+                v instanceof GoReceiver ? GoIcons.RECEIVER :
+                v instanceof GoConstDefinition ? GoIcons.CONST :
+                null;
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(v).withIcon(icon), GoCompletionContributor.VAR_PRIORITY);
   }
 

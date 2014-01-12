@@ -35,7 +35,7 @@ public class GoReference extends GoReferenceBase {
   @Override
   protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {
     String id = myIdentifier.getText();
-    GoVarProcessor processor = new GoVarProcessor(id, myRefExpression, false);
+    GoVarProcessor processor = createProcessor();
     ResolveUtil.treeWalkUp(myRefExpression, processor);
     for (GoConstDefinition definition : file.getConsts()) {
       if (isPublic(definition) || localResolve) processor.execute(definition, ResolveState.initial());
@@ -54,6 +54,12 @@ public class GoReference extends GoReferenceBase {
     if (RESERVED_NAMES.contains(id)) return myElement;
 
     return resolveImportOrPackage(file, id);
+  }
+
+  @Override
+  @NotNull
+  protected GoVarProcessor createProcessor() {
+    return new GoVarProcessor(myIdentifier.getText(), myRefExpression, false);
   }
 
   private void processFunctionParameters(@NotNull GoVarProcessor processor) {

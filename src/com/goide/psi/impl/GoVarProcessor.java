@@ -31,6 +31,7 @@ public class GoVarProcessor extends BaseScopeProcessor {
     if (!(psiElement instanceof GoVarDefinition) &&
         !(psiElement instanceof GoParamDefinition) &&
         !(psiElement instanceof GoReceiver) &&
+        !(psiElement instanceof GoFieldDefinition) &&
         !(psiElement instanceof GoConstDefinition)) return true;
     if (!myIsCompletion && !myRequestedName.equals(((GoNamedElement)psiElement).getName())) return true;
     if (psiElement.equals(myOrigin)) return true;

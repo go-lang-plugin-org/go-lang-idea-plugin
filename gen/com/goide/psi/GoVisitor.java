@@ -126,6 +126,10 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitFieldDefinition(@NotNull GoFieldDefinition o) {
+    visitNamedElement(o);
+  }
+
   public void visitFieldName(@NotNull GoFieldName o) {
     visitCompositeElement(o);
   }

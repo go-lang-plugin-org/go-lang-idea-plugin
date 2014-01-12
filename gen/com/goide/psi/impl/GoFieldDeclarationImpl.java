@@ -28,6 +28,12 @@ public class GoFieldDeclarationImpl extends GoCompositeElementImpl implements Go
   }
 
   @Override
+  @NotNull
+  public List<GoFieldDefinition> getFieldDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoFieldDefinition.class);
+  }
+
+  @Override
   @Nullable
   public GoTag getTag() {
     return findChildByClass(GoTag.class);

@@ -111,6 +111,9 @@ public class GoParser implements PsiParser {
     else if (root_ == FIELD_DECLARATION) {
       result_ = FieldDeclaration(builder_, 0);
     }
+    else if (root_ == FIELD_DEFINITION) {
+      result_ = FieldDefinition(builder_, 0);
+    }
     else if (root_ == FIELD_NAME) {
       result_ = FieldName(builder_, 0);
     }
@@ -1143,7 +1146,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (IdentifierList Type | AnonymousField) Tag?
+  // (FieldDefinitionList Type | AnonymousField) Tag?
   public static boolean FieldDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FieldDeclaration")) return false;
     if (!nextTokenIs(builder_, "<field declaration>", MUL, IDENTIFIER)) return false;
@@ -1155,7 +1158,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // IdentifierList Type | AnonymousField
+  // FieldDefinitionList Type | AnonymousField
   private static boolean FieldDeclaration_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FieldDeclaration_0")) return false;
     boolean result_ = false;
@@ -1166,12 +1169,12 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // IdentifierList Type
+  // FieldDefinitionList Type
   private static boolean FieldDeclaration_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FieldDeclaration_0_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = IdentifierList(builder_, level_ + 1);
+    result_ = FieldDefinitionList(builder_, level_ + 1);
     result_ = result_ && Type(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
@@ -1182,6 +1185,58 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "FieldDeclaration_1")) return false;
     Tag(builder_, level_ + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // identifier
+  public static boolean FieldDefinition(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FieldDefinition")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, IDENTIFIER);
+    exit_section_(builder_, marker_, FIELD_DEFINITION, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // FieldDefinition (',' FieldDefinition)*
+  static boolean FieldDefinitionList(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FieldDefinitionList")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = FieldDefinition(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && FieldDefinitionList_1(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // (',' FieldDefinition)*
+  private static boolean FieldDefinitionList_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FieldDefinitionList_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!FieldDefinitionList_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "FieldDefinitionList_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // ',' FieldDefinition
+  private static boolean FieldDefinitionList_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FieldDefinitionList_1_0")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, COMMA);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && FieldDefinition(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
