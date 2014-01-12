@@ -49,10 +49,10 @@ public class GoParser implements PsiParser {
       result_ = BuiltinArgs(builder_, 0);
     }
     else if (root_ == BUILTIN_CALL_EXPR) {
-      result_ = Expression(builder_, 0, 7);
+      result_ = Expression(builder_, 0, 6);
     }
     else if (root_ == CALL_EXPR) {
-      result_ = Expression(builder_, 0, 7);
+      result_ = Expression(builder_, 0, 6);
     }
     else if (root_ == CHANNEL_TYPE) {
       result_ = ChannelType(builder_, 0);
@@ -64,7 +64,7 @@ public class GoParser implements PsiParser {
       result_ = CommClause(builder_, 0);
     }
     else if (root_ == COMPOSITE_LIT) {
-      result_ = Expression(builder_, 0, 7);
+      result_ = Expression(builder_, 0, 6);
     }
     else if (root_ == CONDITIONAL_EXPR) {
       result_ = Expression(builder_, 0, 1);
@@ -151,7 +151,7 @@ public class GoParser implements PsiParser {
       result_ = ImportString(builder_, 0);
     }
     else if (root_ == INDEX_EXPR) {
-      result_ = Expression(builder_, 0, 7);
+      result_ = Expression(builder_, 0, 6);
     }
     else if (root_ == INTERFACE_TYPE) {
       result_ = InterfaceType(builder_, 0);
@@ -232,7 +232,7 @@ public class GoParser implements PsiParser {
       result_ = SelectStatement(builder_, 0);
     }
     else if (root_ == SELECTOR_EXPR) {
-      result_ = Expression(builder_, 0, 7);
+      result_ = Expression(builder_, 0, 6);
     }
     else if (root_ == SEND_STATEMENT) {
       result_ = SendStatement(builder_, 0);
@@ -265,7 +265,7 @@ public class GoParser implements PsiParser {
       result_ = Type(builder_, 0);
     }
     else if (root_ == TYPE_ASSERTION_EXPR) {
-      result_ = Expression(builder_, 0, 7);
+      result_ = Expression(builder_, 0, 6);
     }
     else if (root_ == TYPE_CASE_CLAUSE) {
       result_ = TypeCaseClause(builder_, 0);
@@ -3652,9 +3652,8 @@ public class GoParser implements PsiParser {
   // 4: BINARY(MulExpr)
   // 5: PREFIX(UnaryExpr)
   // 6: PREFIX(ConversionExpr)
-  // 7: ATOM(MethodExpr)
-  // 8: ATOM(OperandName) ATOM(LiteralTypeExpr) POSTFIX(CallExpr) POSTFIX(BuiltinCallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) POSTFIX(IndexExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit)
-  // 9: PREFIX(ParenthesesExpr)
+  // 7: ATOM(OperandName) ATOM(LiteralTypeExpr) POSTFIX(CallExpr) POSTFIX(BuiltinCallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) ATOM(MethodExpr) POSTFIX(IndexExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit)
+  // 8: PREFIX(ParenthesesExpr)
   public static boolean Expression(PsiBuilder builder_, int level_, int priority_) {
     if (!recursion_guard_(builder_, level_, "Expression")) return false;
     boolean result_ = false;
@@ -3662,9 +3661,9 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<expression>");
     result_ = UnaryExpr(builder_, level_ + 1);
     if (!result_) result_ = ConversionExpr(builder_, level_ + 1);
-    if (!result_) result_ = MethodExpr(builder_, level_ + 1);
     if (!result_) result_ = OperandName(builder_, level_ + 1);
     if (!result_) result_ = LiteralTypeExpr(builder_, level_ + 1);
+    if (!result_) result_ = MethodExpr(builder_, level_ + 1);
     if (!result_) result_ = Literal(builder_, level_ + 1);
     if (!result_) result_ = FunctionLit(builder_, level_ + 1);
     if (!result_) result_ = ParenthesesExpr(builder_, level_ + 1);
@@ -3706,32 +3705,32 @@ public class GoParser implements PsiParser {
         marker_.drop();
         left_marker_.precede().done(MUL_EXPR);
       }
-      else if (priority_ < 8 && ArgumentList(builder_, level_ + 1)) {
+      else if (priority_ < 7 && ArgumentList(builder_, level_ + 1)) {
         result_ = true;
         marker_.drop();
         left_marker_.precede().done(CALL_EXPR);
       }
-      else if (priority_ < 8 && ((LighterASTNode)left_marker_).getTokenType() == REFERENCE_EXPRESSION && BuiltinCallExpr_0(builder_, level_ + 1)) {
+      else if (priority_ < 7 && ((LighterASTNode)left_marker_).getTokenType() == REFERENCE_EXPRESSION && BuiltinCallExpr_0(builder_, level_ + 1)) {
         result_ = true;
         marker_.drop();
         left_marker_.precede().done(BUILTIN_CALL_EXPR);
       }
-      else if (priority_ < 8 && TypeAssertionExpr_0(builder_, level_ + 1)) {
+      else if (priority_ < 7 && TypeAssertionExpr_0(builder_, level_ + 1)) {
         result_ = true;
         marker_.drop();
         left_marker_.precede().done(TYPE_ASSERTION_EXPR);
       }
-      else if (priority_ < 8 && SelectorExpr_0(builder_, level_ + 1)) {
-        result_ = report_error_(builder_, Expression(builder_, level_, 8));
+      else if (priority_ < 7 && SelectorExpr_0(builder_, level_ + 1)) {
+        result_ = report_error_(builder_, Expression(builder_, level_, 7));
         marker_.drop();
         left_marker_.precede().done(SELECTOR_EXPR);
       }
-      else if (priority_ < 8 && IndexExpr_0(builder_, level_ + 1)) {
+      else if (priority_ < 7 && IndexExpr_0(builder_, level_ + 1)) {
         result_ = true;
         marker_.drop();
         left_marker_.precede().done(INDEX_EXPR);
       }
-      else if (priority_ < 8 && LiteralValue(builder_, level_ + 1)) {
+      else if (priority_ < 7 && LiteralValue(builder_, level_ + 1)) {
         result_ = true;
         marker_.drop();
         left_marker_.precede().done(COMPOSITE_LIT);
@@ -3824,19 +3823,6 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ConversionExpr_1_0")) return false;
     consumeToken(builder_, COMMA);
     return true;
-  }
-
-  // ReceiverType '.' identifier
-  public static boolean MethodExpr(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "MethodExpr")) return false;
-    if (!nextTokenIs(builder_, "<method expr>", LPAREN, IDENTIFIER)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<method expr>");
-    result_ = ReceiverType(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, DOT);
-    result_ = result_ && consumeToken(builder_, IDENTIFIER);
-    exit_section_(builder_, level_, marker_, METHOD_EXPR, result_, false, null);
-    return result_;
   }
 
   // ReferenceExpression QualifiedReferenceExpression?
@@ -3999,6 +3985,19 @@ public class GoParser implements PsiParser {
     result_ = consumeToken(builder_, LPAREN);
     result_ = result_ && consumeToken(builder_, TYPE_);
     exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // ReceiverType '.' identifier
+  public static boolean MethodExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MethodExpr")) return false;
+    if (!nextTokenIs(builder_, "<method expr>", LPAREN, IDENTIFIER)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<method expr>");
+    result_ = ReceiverType(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, DOT);
+    result_ = result_ && consumeToken(builder_, IDENTIFIER);
+    exit_section_(builder_, level_, marker_, METHOD_EXPR, result_, false, null);
     return result_;
   }
 

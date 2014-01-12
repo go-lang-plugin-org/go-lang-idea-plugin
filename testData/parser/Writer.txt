@@ -353,15 +353,15 @@ GO_FILE
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
-              METHOD_EXPR
-                RECEIVER_TYPE
-                  TYPE_REFERENCE_EXPRESSION
-                    TYPE_REFERENCE_EXPRESSION
-                      PsiElement(identifier)('tw')
-                    PsiElement(.)('.')
-                    PsiElement(identifier)('w')
+              SELECTOR_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('tw')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('w')
                 PsiElement(.)('.')
-                PsiElement(identifier)('Write')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('Write')
               ARGUMENT_LIST
                 PsiElement(()('(')
                 INDEX_EXPR
@@ -1293,15 +1293,15 @@ GO_FILE
             UNARY_EXPR
               PsiElement(!)('!')
               CALL_EXPR
-                METHOD_EXPR
-                  RECEIVER_TYPE
-                    TYPE_REFERENCE_EXPRESSION
-                      TYPE_REFERENCE_EXPRESSION
-                        PsiElement(identifier)('hdr')
-                      PsiElement(.)('.')
-                      PsiElement(identifier)('ModTime')
+                SELECTOR_EXPR
+                  REFERENCE_EXPRESSION
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('hdr')
+                    PsiElement(.)('.')
+                    PsiElement(identifier)('ModTime')
                   PsiElement(.)('.')
-                  PsiElement(identifier)('Before')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('Before')
                 ARGUMENT_LIST
                   PsiElement(()('(')
                   REFERENCE_EXPRESSION
@@ -1311,15 +1311,15 @@ GO_FILE
             UNARY_EXPR
               PsiElement(!)('!')
               CALL_EXPR
-                METHOD_EXPR
-                  RECEIVER_TYPE
-                    TYPE_REFERENCE_EXPRESSION
-                      TYPE_REFERENCE_EXPRESSION
-                        PsiElement(identifier)('hdr')
-                      PsiElement(.)('.')
-                      PsiElement(identifier)('ModTime')
+                SELECTOR_EXPR
+                  REFERENCE_EXPRESSION
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('hdr')
+                    PsiElement(.)('.')
+                    PsiElement(identifier)('ModTime')
                   PsiElement(.)('.')
-                  PsiElement(identifier)('After')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('After')
                 ARGUMENT_LIST
                   PsiElement(()('(')
                   REFERENCE_EXPRESSION
@@ -1333,15 +1333,15 @@ GO_FILE
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
-              METHOD_EXPR
-                RECEIVER_TYPE
-                  TYPE_REFERENCE_EXPRESSION
-                    TYPE_REFERENCE_EXPRESSION
-                      PsiElement(identifier)('hdr')
-                    PsiElement(.)('.')
-                    PsiElement(identifier)('ModTime')
+              SELECTOR_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('hdr')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('ModTime')
                 PsiElement(.)('.')
-                PsiElement(identifier)('Unix')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('Unix')
               ARGUMENT_LIST
                 PsiElement(()('(')
                 PsiElement())(')')
@@ -1906,15 +1906,15 @@ GO_FILE
         ASSIGN_OP
           PsiElement(=)('=')
         CALL_EXPR
-          METHOD_EXPR
-            RECEIVER_TYPE
-              TYPE_REFERENCE_EXPRESSION
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('tw')
-                PsiElement(.)('.')
-                PsiElement(identifier)('w')
+          SELECTOR_EXPR
+            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('w')
             PsiElement(.)('.')
-            PsiElement(identifier)('Write')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('Write')
           ARGUMENT_LIST
             PsiElement(()('(')
             REFERENCE_EXPRESSION
@@ -2838,15 +2838,15 @@ GO_FILE
         ASSIGN_OP
           PsiElement(=)('=')
         CALL_EXPR
-          METHOD_EXPR
-            RECEIVER_TYPE
-              TYPE_REFERENCE_EXPRESSION
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('tw')
-                PsiElement(.)('.')
-                PsiElement(identifier)('w')
+          SELECTOR_EXPR
+            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('w')
             PsiElement(.)('.')
-            PsiElement(identifier)('Write')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('Write')
           ARGUMENT_LIST
             PsiElement(()('(')
             REFERENCE_EXPRESSION
@@ -3036,15 +3036,15 @@ GO_FILE
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
-              METHOD_EXPR
-                RECEIVER_TYPE
-                  TYPE_REFERENCE_EXPRESSION
-                    TYPE_REFERENCE_EXPRESSION
-                      PsiElement(identifier)('tw')
-                    PsiElement(.)('.')
-                    PsiElement(identifier)('w')
+              SELECTOR_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('tw')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('w')
                 PsiElement(.)('.')
-                PsiElement(identifier)('Write')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('Write')
               ARGUMENT_LIST
                 PsiElement(()('(')
                 REFERENCE_EXPRESSION

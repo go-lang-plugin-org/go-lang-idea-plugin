@@ -38,11 +38,12 @@ public class GoParserTest extends ParsingTestCase {
       Extensions.getRootArea(), "com.intellij.lang.braceMatcher", LanguageExtensionPoint.class);
   }
 
-  public void testSimple()  { doTest(true);  }
-  public void testError()   { doTest(true);  }
-  public void testWriter()  { doTest(true);  }
-  public void testPrimer()  { doTest(true);  }
-  public void testTypes()   { doTest(true);  }
-  public void testStr2Num() { doTest(true);  }
-  public void testRecover() { doTest(false); }
+  public void testSimple()      { doTest(true);  }
+  public void testError()       { doTest(true);  }
+  public void testWriter()      { doTest(true);  }
+  public void testPrimer()      { doTest(true);  }
+  public void testTypes()       { doTest(true);  }
+  public void testStr2Num()     { doTest(true);  }
+  public void testRecover()     { doTest(false); }
+  public void testMethodExpr()  { doTest(false); }
 }
