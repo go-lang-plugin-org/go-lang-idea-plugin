@@ -136,25 +136,46 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
       }
       else {
         PsiElement qualifierResolve = calcQualifierResolve(qualifier);
-        if (qualifierResolve instanceof GoReceiver) {
-          GoTypeReferenceExpression expression = ((GoReceiver)qualifierResolve).getTypeReferenceExpression();
-          PsiReference reference = expression.getReference();
-          PsiElement resolve = reference != null ? reference.resolve() : null;
-          if (resolve instanceof GoTypeSpec) {
-            GoType type = ((GoTypeSpec)resolve).getType();
-            if (type instanceof GoStructType) {
-              GoVarProcessor processor = createProcessor();
-              if (processor != null) {
-                type.processDeclarations(processor, ResolveState.initial(), null, myElement);
-                GoNamedElement result = processor.getResult();
-                if (result != null) return result;
-              }
-            }
-          }
+        if (qualifierResolve instanceof GoNamedElement) { // todo: create a separate interface, e.g. GoTypeHolder
+          GoType type = ((GoNamedElement)qualifierResolve).getGoType();
+          PsiElement fromType = processGoType(type);
+          if (fromType != null) return fromType;
         }
         PsiDirectory dir = getDirectory(qualifier);
         PsiElement result = processDirectory(dir, null, false);
         if (result != null) return result;
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  private PsiElement processGoType(@Nullable GoType type) {
+    if (type == null) return null;
+    GoTypeReferenceExpression refExpr = type.getTypeReferenceExpression();
+    PsiReference reference = refExpr != null ? refExpr.getReference() : null;
+    PsiElement resolve = reference != null ? reference.resolve() : null;
+    if (resolve instanceof GoTypeSpec) {
+      GoType resolveType = ((GoTypeSpec)resolve).getType();
+      if (resolveType instanceof GoStructType) {
+        GoVarProcessor processor = createProcessor();
+        if (processor != null) {
+          resolveType.processDeclarations(processor, ResolveState.initial(), null, myElement);
+          GoNamedElement result = processor.getResult();
+          if (result != null) return result;
+        }
+      }
+
+      PsiFile file = resolve.getContainingFile().getOriginalFile();
+      if (file instanceof GoFile) { // todo: process the whole package
+        List<GoMethodDeclaration> methods = ((GoFile)file).getMethods();
+        for (GoMethodDeclaration method : methods) {
+          if (!Comparing.equal(getIdentifier().getText(), method.getName())) continue;
+          GoTypeReferenceExpression e = method.getReceiver().getType().getTypeReferenceExpression();
+          PsiReference reference1 = e != null ? e.getReference() : null;
+          PsiElement resolve1 = reference1 != null ? reference1.resolve() : null;
+          if (resolve.equals(resolve1)) return method;
+        }
       }
     }
     return null;
@@ -188,9 +209,10 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
       }
       else {
         PsiElement qualifierResolve = calcQualifierResolve(qualifier);
-        if (qualifierResolve instanceof GoReceiver) {
-          GoTypeReferenceExpression expression = ((GoReceiver)qualifierResolve).getTypeReferenceExpression();
-          PsiReference reference = expression.getReference();
+        if (qualifierResolve instanceof GoNamedElement) {
+          GoType goType = ((GoNamedElement)qualifierResolve).getGoType();
+          GoTypeReferenceExpression expression = goType != null ? goType.getTypeReferenceExpression() : null;
+          PsiReference reference = expression != null ? expression.getReference() : null;
           PsiElement resolve = reference != null ? reference.resolve() : null;
           if (resolve instanceof GoTypeSpec) {
             GoType type = ((GoTypeSpec)resolve).getType();
@@ -198,6 +220,19 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
               for (GoFieldDeclaration declaration : ((GoStructType)type).getFieldDeclarationList()) {
                 for (GoFieldDefinition d : declaration.getFieldDefinitionList()) {
                   result.add(GoPsiImplUtil.createVariableLikeLookupElement(d));
+                }
+              }
+            }
+            
+            PsiFile typeFile = resolve.getContainingFile().getOriginalFile();
+            if (typeFile instanceof GoFile) { // todo: process the whole package
+              List<GoMethodDeclaration> methods = ((GoFile)typeFile).getMethods();
+              for (GoMethodDeclaration method : methods) {
+                GoTypeReferenceExpression e = method.getReceiver().getType().getTypeReferenceExpression();
+                PsiReference reference1 = e != null ? e.getReference() : null;
+                PsiElement resolve1 = reference1 != null ? reference1.resolve() : null;
+                if (resolve1 != null && resolve.textMatches(resolve1)) { // todo: better equality predicate
+                  result.add(GoPsiImplUtil.createFunctionLookupElement(method));
                 }
               }
             }
@@ -224,6 +259,9 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
 
   protected void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion) {
   }
+
+  @NotNull
+  public abstract PsiElement getIdentifier();
 
   @Nullable
   protected PsiElement getQualifier() {

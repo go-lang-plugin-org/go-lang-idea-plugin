@@ -23,14 +23,19 @@ public class GoReceiverImpl extends GoNamedElementImpl implements GoReceiver {
 
   @Override
   @NotNull
-  public GoTypeReferenceExpression getTypeReferenceExpression() {
-    return findNotNullChildByClass(GoTypeReferenceExpression.class);
+  public GoType getType() {
+    return findNotNullChildByClass(GoType.class);
   }
 
   @Override
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Nullable
+  public GoType getGoType() {
+    return GoPsiImplUtil.getGoType(this);
   }
 
 }

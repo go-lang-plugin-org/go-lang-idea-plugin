@@ -2,8 +2,10 @@ package com.goide.psi.impl;
 
 import com.goide.psi.GoCompositeElement;
 import com.goide.psi.GoNamedElement;
+import com.goide.psi.GoType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -40,5 +42,11 @@ public abstract class GoNamedElementImpl extends GoCompositeElementImpl implemen
       identifier.replace(GoElementFactory.createIdentifierFromText(getProject(), newName));
     }
     return this;
+  }
+
+  @Nullable
+  @Override
+  public GoType getGoType() {
+    return PsiTreeUtil.getNextSiblingOfType(this, GoType.class);
   }
 }

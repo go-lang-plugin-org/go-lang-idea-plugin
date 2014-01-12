@@ -33,7 +33,7 @@ func (tp *T) Mp(f float32) float32 { return 1 }  // pointer receiver
 var t T
 
 func bar() {
-    t.<error>Mv</error>(7)
+    t.Mv(7)
     <error>T</error>.Mv(t, 7)
     (T).Mv(t, 7)
     f1 := <error>T</error>.Mv; f1(t, 7)

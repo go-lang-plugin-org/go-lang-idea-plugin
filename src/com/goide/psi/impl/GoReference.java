@@ -16,6 +16,13 @@ import java.util.Set;
 
 public class GoReference extends GoReferenceBase {
   private static final Set RESERVED_NAMES = ContainerUtil.newHashSet("print", "println");
+
+  @NotNull
+  @Override
+  public PsiElement getIdentifier() {
+    return myIdentifier;
+  }
+
   @NotNull private final PsiElement myIdentifier;
   @NotNull private final GoReferenceExpression myRefExpression;
 
@@ -37,14 +44,14 @@ public class GoReference extends GoReferenceBase {
     String id = myIdentifier.getText();
     GoVarProcessor processor = createProcessor();
     ResolveUtil.treeWalkUp(myRefExpression, processor);
+    processReceiver(processor);
+    processFunctionParameters(processor);
     for (GoConstDefinition definition : file.getConsts()) {
       if (isPublic(definition) || localResolve) processor.execute(definition, ResolveState.initial());
     }
     for (GoVarDefinition definition : file.getVars()) {
       if (isPublic(definition) || localResolve) processor.execute(definition, ResolveState.initial());
     }
-    processReceiver(processor);
-    processFunctionParameters(processor);
     GoNamedElement result = processor.getResult();
     if (result != null) return result;
     for (GoFunctionDeclaration f : file.getFunctions()) {

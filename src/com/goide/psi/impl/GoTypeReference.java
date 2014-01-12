@@ -51,4 +51,10 @@ public class GoTypeReference extends GoReferenceBase {
     }
     processImports(result, file, localCompletion);
   }
+
+  @NotNull
+  @Override
+  public PsiElement getIdentifier() {
+    return myIdentifier;
+  }
 }

@@ -8,4 +8,7 @@ import org.jetbrains.annotations.Nullable;
 public interface GoNamedElement extends GoCompositeElement, PsiNameIdentifierOwner {
   @Nullable
   PsiElement getIdentifier();
+
+  @Nullable
+  GoType getGoType();
 }

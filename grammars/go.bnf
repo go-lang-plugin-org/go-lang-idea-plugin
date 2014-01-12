@@ -191,7 +191,8 @@ ShortVarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2 extends=Var
 
 FunctionDeclaration ::= func identifier Signature Block? {pin=2}
 MethodDeclaration ::= func Receiver identifier Signature Block? {pin=3 extends=FunctionDeclaration}
-Receiver ::= '(' identifier? '*'? TypeReferenceExpression ')'
+Receiver ::= '(' identifier? '*'? ReceiverResultType ')' {methods=[getGoType]}
+ReceiverResultType ::= TypeReferenceExpression {elementType=Type}
 
 Literal ::=
     int

@@ -21,8 +21,9 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('tv')
-      TYPE_REFERENCE_EXPRESSION
-        PsiElement(identifier)('T')
+      TYPE
+        TYPE_REFERENCE_EXPRESSION
+          PsiElement(identifier)('T')
       PsiElement())(')')
     PsiElement(identifier)('Mv')
     SIGNATURE
@@ -53,8 +54,9 @@ GO_FILE
       PsiElement(()('(')
       PsiElement(identifier)('tp')
       PsiElement(*)('*')
-      TYPE_REFERENCE_EXPRESSION
-        PsiElement(identifier)('T')
+      TYPE
+        TYPE_REFERENCE_EXPRESSION
+          PsiElement(identifier)('T')
       PsiElement())(')')
     PsiElement(identifier)('Mp')
     SIGNATURE

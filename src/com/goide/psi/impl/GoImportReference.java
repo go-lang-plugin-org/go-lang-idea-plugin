@@ -22,4 +22,10 @@ public class GoImportReference extends GoReferenceBase {
   public Object[] getVariants() {
     return new Object[0];
   }
+
+  @NotNull
+  @Override
+  public PsiElement getIdentifier() {
+    return getElement();
+  }
 }

@@ -67,7 +67,8 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createFunctionLookupElement(GoFunctionDeclaration f) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(f).withIcon(GoIcons.FUNCTION).withInsertHandler(null),
+    Icon icon = f instanceof GoMethodDeclaration ? GoIcons.METHOD : GoIcons.FUNCTION;
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(f).withIcon(icon).withInsertHandler(null),
                                                  GoCompletionContributor.FUNCTION_PRIORITY);
   }
 
@@ -92,4 +93,10 @@ public class GoPsiImplUtil {
   public static LookupElement createImportLookupElement(String i) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE), GoCompletionContributor.PACKAGE_PRIORITY);
   }
+
+  @Nullable
+  public static GoType getGoType(@NotNull GoReceiver o) {
+    return o.getType();
+  }
+
 }
