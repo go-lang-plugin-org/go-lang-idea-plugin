@@ -29,6 +29,12 @@ public class GoRangeClauseImpl extends GoCompositeElementImpl implements GoRange
 
   @Override
   @NotNull
+  public List<GoVarDefinition> getVarDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoVarDefinition.class);
+  }
+
+  @Override
+  @NotNull
   public PsiElement getRange() {
     return findNotNullChildByType(RANGE);
   }

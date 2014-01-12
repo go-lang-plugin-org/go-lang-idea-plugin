@@ -11,6 +11,9 @@ public interface GoRangeClause extends GoCompositeElement {
   List<GoExpression> getExpressionList();
 
   @NotNull
+  List<GoVarDefinition> getVarDefinitionList();
+
+  @NotNull
   PsiElement getRange();
 
 }

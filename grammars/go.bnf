@@ -296,7 +296,7 @@ private TypeList ::= Type ( ',' Type )*
 private TypeListNoPin ::= Type ( ',' Type )*
 ForStatement ::= for <<enterMode "NO_EMPTY_LITERAL">> [ ForClause | RangeClause | Expression ] <<exitMode "NO_EMPTY_LITERAL">> Block
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
-RangeClause ::= ( ExpressionList '=' | IdentifierList ':=' ) range Expression {pin=2}
+RangeClause ::= ( ExpressionList '=' | VarDefinitionList ':=' ) range Expression {pin=2}
 GoStatement ::= go Expression
 SelectStatement ::= select '{' ( CommClause )* '}'
 CommClause ::= CommCase ':' Statements? {pin=1}

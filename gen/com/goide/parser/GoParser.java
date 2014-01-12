@@ -2158,7 +2158,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ( ExpressionList '=' | IdentifierList ':=' ) range Expression
+  // ( ExpressionList '=' | VarDefinitionList ':=' ) range Expression
   public static boolean RangeClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RangeClause")) return false;
     boolean result_ = false;
@@ -2172,7 +2172,7 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ExpressionList '=' | IdentifierList ':='
+  // ExpressionList '=' | VarDefinitionList ':='
   private static boolean RangeClause_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RangeClause_0")) return false;
     boolean result_ = false;
@@ -2194,12 +2194,12 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // IdentifierList ':='
+  // VarDefinitionList ':='
   private static boolean RangeClause_0_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RangeClause_0_1")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = IdentifierList(builder_, level_ + 1);
+    result_ = VarDefinitionList(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, VAR_ASSIGN);
     exit_section_(builder_, marker_, null, result_);
     return result_;
