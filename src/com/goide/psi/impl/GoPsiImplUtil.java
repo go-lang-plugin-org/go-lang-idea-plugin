@@ -60,7 +60,7 @@ public class GoPsiImplUtil {
         o instanceof GoCommClause ||
         o instanceof GoTypeCaseClause ||
         o instanceof GoExprCaseClause) {
-      return false;
+      return processor.execute(o, state);
     }
     return GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
   }
