@@ -93,16 +93,5 @@ public class GoPsiIntegerTest extends GoPsiTestCase {
         assertEquals(GoLiteral.Type.Int, integer.getType());
         assertEquals((Integer) 0xAB, integer.getValue());
 
-        // x
-        integer =
-                getAs(GoLiteralInteger.class,
-                        getAs(GoLiteralExpression.class,
-                                childAt(0,
-                                        declarations[5].getExpressions()
-                                )
-                        ).getLiteral()
-                );
-
-        assertEquals(GoLiteral.Type.Int, integer.getType());
     }
 }
