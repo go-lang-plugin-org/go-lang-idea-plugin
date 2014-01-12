@@ -130,14 +130,6 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<PsiElement>
         }
     }
 
-    private boolean isLibraryFolder() {
-        return false;
-    }
-
-    private boolean isApplicationFolder() {
-        return false;
-    }
-
     @Override
     protected String getActionName(PsiDirectory directory, String newName,
                                    String templateName) {

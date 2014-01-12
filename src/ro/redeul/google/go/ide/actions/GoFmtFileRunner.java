@@ -12,6 +12,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkAdditionalData;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -22,8 +23,12 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import ro.redeul.google.go.GoIcons;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+
+import java.io.File;
 
 public class GoFmtFileRunner extends AnAction {
 
@@ -44,22 +49,39 @@ public class GoFmtFileRunner extends AnAction {
             consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
         }
 
-        Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
-        if ( sdk == null ) {
-            return;
-        }
-
-        final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
-        if ( sdkData == null ) {
-            return;
-        }
-
-        String goExecName = sdkData.GO_BIN_PATH;
-
         String projectDir = project.getBasePath();
 
         if (projectDir == null) {
             return;
+        }
+
+        Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
+        if (sdk == null) {
+            sdk = GoSdkUtil.getGoogleGAESdkForProject(project);
+            if (sdk == null) {
+                return;
+            }
+        }
+
+        String[] goEnv;
+        String goExecName;
+
+        if (sdk instanceof GoSdkType) {
+            GoSdkData sdkData = (GoSdkData) sdk.getSdkAdditionalData();
+            if (sdkData == null) {
+                return;
+            }
+
+            goExecName = sdkData.GO_BIN_PATH;
+            goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
+        } else {
+            GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
+            if (sdkData == null) {
+                return;
+            }
+
+            goExecName = sdkData.GOAPP_BIN_PATH;
+            goEnv = GoSdkUtil.getExtendedGAEEnv(sdkData, projectDir, "");
         }
 
         FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
@@ -85,8 +107,6 @@ public class GoFmtFileRunner extends AnAction {
 
             }
             window.show(EmptyRunnable.getInstance());
-
-            String[] goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
 
             String command = String.format(
                     "%s fmt %s",

@@ -19,9 +19,6 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class GoDebugSysEnv extends GoCommonDebugAction {
 
     @Override
@@ -47,10 +44,7 @@ public class GoDebugSysEnv extends GoCommonDebugAction {
             return;
         }
 
-        String goExecName = sdkData.GO_BIN_PATH;
-
         String projectDir = project.getBasePath();
-
         if (projectDir == null) {
             return;
         }

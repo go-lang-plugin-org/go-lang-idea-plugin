@@ -59,9 +59,12 @@
         <![CDATA[
         <h3>0.9.16 changes:</h3>
             <ul>
-                <li>[feature] Added support for running all tests in a directory</li>
+                <li>[feature] Added support for Go on Google AppEngine for non-IDEA IDEs</li>
+                <li>[bugfix] Improved support for Go on Google AppEngine</li>
+            </ul>
         <h3>0.9.15.3 changes:</h3>
             <ul>
+                <li>[feature] Added support for running all tests in a directory</li>
                 <li>[bugfix] Fix the creation of projects in IntelliJ Community again.</li>
              </ul>
         <h3>0.9.15.1 changes:</h3>
@@ -143,12 +146,12 @@
     </project-components>
 
     <actions>
-        <group id="Go.ActionGroup" popup="true" text="Go" description="GOlang actions"
+        <group id="Go.ActionGroup" popup="true" text="Go" description="Go actions"
                icon="/icons/go_16x16.png" class="ro.redeul.google.go.actions.NewGoGroup">
 
-        <action id="Go.NewApplication" text="Go application"
-                    description="Create new application in the GO language"
-                    class="ro.redeul.google.go.actions.NewGoApplicationAction">
+            <action id="Go.NewFile" text="Go file"
+                    description="Create a new Go in the current project"
+                    class="ro.redeul.google.go.actions.NewGoFileAction">
             </action>
 
             <action id="Go.NewLibrary" text="Go library"
@@ -156,18 +159,26 @@
                     class="ro.redeul.google.go.actions.NewGoLibraryAction">
             </action>
 
+            <action id="Go.NewApplication" text="Go application"
+                    description="Create new application in the GO language"
+                    class="ro.redeul.google.go.actions.NewGoApplicationAction">
+            </action>
 
             <add-to-group group-id="NewGroup" anchor="before"
                           relative-to-action="NewFile"/>
         </group>
 
-        <action id="Go.NewFile" text="Go file"
-                description="Create a new Go in the current project"
-                class="ro.redeul.google.go.actions.NewGoFileAction">
+        <group id="GAE.ActionGroup" popup="true" text="Go AppEngine" description="Go AppEngine actions"
+               icon="/icons/gae_16x16.png" class="ro.redeul.google.go.actions.NewGAEGroup">
+
+            <action id="GAE.NewFile" text="Go file"
+                    description="Create a new Go in the current project"
+                    class="ro.redeul.google.go.actions.NewGoFileAction">
+            </action>
 
             <add-to-group group-id="NewGroup" anchor="before"
-                          relative-to-action="Go.ActionGroup"/>
-        </action>
+                          relative-to-action="NewFile"/>
+        </group>
 
         <group id="Go.Tools" popup="true" text="Go Tools"
                description="Go tools support" icon="/icons/go_13x13.png" class="ro.redeul.google.go.actions.NewGoGroup">
@@ -176,16 +187,14 @@
                     class="ro.redeul.google.go.ide.actions.GoFmtFileRunner"
                     text="go fmt file" description="Format current file with go fmt"
                     icon="/icons/go_13x13.png">
-                <keyboard-shortcut first-keystroke="ctrl alt shift f"
-                                   keymap="$default"/>
+                <keyboard-shortcut first-keystroke="ctrl alt shift f" keymap="$default"/>
             </action>
 
             <action id="Go.Fmt.ProjectRunner"
                     class="ro.redeul.google.go.ide.actions.GoFmtProjectRunner"
                     text="go fmt project" description="Format current project with go fmt"
                     icon="/icons/go_13x13.png">
-                <keyboard-shortcut first-keystroke="ctrl alt shift g"
-                                   keymap="$default"/>
+                <keyboard-shortcut first-keystroke="ctrl alt shift g" keymap="$default"/>
             </action>
 
             <!--<action id="Go.Tools.AddGoSdk" text="Add Go Sdk Support"-->
@@ -193,12 +202,38 @@
             <!--class="ro.redeul.google.go.tools.actions.AddGoSdkSupport">-->
             <!--</action>-->
 
-            <action id="Go.AppEngine.Upload"
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </group>
+
+        <group id="GAE.Tools" popup="true" text="Go AppEngine Tools"
+               description="Go AppEngine tools support" icon="/icons/gae_13x13.png" class="ro.redeul.google.go.actions.NewGAEGroup">
+
+            <action id="GAE.AppEngine.Upload"
                     class="ro.redeul.google.go.ide.actions.GoAppEngineUpload"
-                    text="App Engine Upload" description="Upload to App Engine"
+                    text="Upload to AppEngine" description="Upload to AppEngine"
                     icon="/icons/gae_13x13.png">
-                <keyboard-shortcut first-keystroke="ctrl alt U"
-                                   keymap="$default"/>
+                <keyboard-shortcut first-keystroke="ctrl alt U" keymap="$default"/>
+            </action>
+
+            <action id="GAE.AppEngine.StopUpload"
+                    class="ro.redeul.google.go.ide.actions.GoAppEngineStopUpload"
+                    text="Stop upload to AppEngine" description="Stop the current upload to AppEngine"
+                    icon="/icons/gae_13x13.png">
+                <keyboard-shortcut first-keystroke="ctrl alt shift U" keymap="$default"/>
+            </action>
+
+            <action id="GAE.Fmt.FileRunner"
+                    class="ro.redeul.google.go.ide.actions.GoFmtFileRunner"
+                    text="go fmt file" description="Format current file with go fmt"
+                    icon="/icons/gae_13x13.png">
+                <keyboard-shortcut first-keystroke="ctrl alt shift f" keymap="$default"/>
+            </action>
+
+            <action id="GAE.Fmt.ProjectRunner"
+                    class="ro.redeul.google.go.ide.actions.GoFmtProjectRunner"
+                    text="go fmt project" description="Format current project with go fmt"
+                    icon="/icons/gae_13x13.png">
+                <keyboard-shortcut first-keystroke="ctrl alt shift g" keymap="$default"/>
             </action>
 
             <add-to-group group-id="ToolsMenu" anchor="last"/>
@@ -208,13 +243,13 @@
                description="Go plugin debug utilites" icon="/icons/go_13x13.png" class="ro.redeul.google.go.actions.NewGoDebugGroup">
             <action id="Go.Debug.SdkData"
                     class="ro.redeul.google.go.ide.actions.GoDebugSDK"
-                    text="go sdk data" description="Print the current go sdk data"
+                    text="go sdk data" description="Print the current sdk data"
                     icon="/icons/go_13x13.png">
             </action>
 
             <action id="Go.Debug.Env"
                     class="ro.redeul.google.go.ide.actions.GoDebugEnv"
-                    text="go env" description="Print the current go env"
+                    text="go env" description="Print the current env"
                     icon="/icons/go_13x13.png">
             </action>
 
@@ -227,6 +262,29 @@
             <add-to-group group-id="Go.Tools" anchor="last"/>
         </group>
 
+        <group id="GAE.Tools.Debug" popup="true" text="go plugin Debug internals"
+               description="Go plugin debug utilites" icon="/icons/gae_13x13.png" class="ro.redeul.google.go.actions.NewGAEDebugGroup">
+            <action id="GAE.Debug.SdkData"
+                    class="ro.redeul.google.go.ide.actions.GAEDebugSDK"
+                    text="go sdk data" description="Print the current sdk data"
+                    icon="/icons/gae_13x13.png">
+            </action>
+
+            <action id="GAE.Debug.Env"
+                    class="ro.redeul.google.go.ide.actions.GAEDebugEnv"
+                    text="go env" description="Print the current env"
+                    icon="/icons/gae_13x13.png">
+            </action>
+
+            <action id="GAE.Debug.SysEnv"
+                    class="ro.redeul.google.go.ide.actions.GAEDebugSysEnv"
+                    text="system env" description="Print the current System Env"
+                    icon="/icons/gae_13x13.png">
+            </action>
+
+            <add-to-group group-id="GAE.Tools" anchor="last"/>
+        </group>
+
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -234,9 +292,6 @@
         <applicationService
                 serviceInterface="ro.redeul.google.go.ide.GoAppEngineSettings"
                 serviceImplementation="ro.redeul.google.go.ide.GoAppEngineSettings"/>
-
-        <applicationConfigurable
-                instance="ro.redeul.google.go.ide.GoAppEngineSettingsConfigurable"/>
 
         <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
 
@@ -332,7 +387,7 @@
         <configurationType
                 implementation="ro.redeul.google.go.runner.GoTestConfigurationType"/>
         <configurationType
-                implementation="ro.redeul.google.go.runner.GoAppEngineRunConfigurationType"/>
+                implementation="ro.redeul.google.go.runner.GaeAppEngineRunConfigurationType"/>
         <runConfigurationProducer
                 implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>
         <runConfigurationProducer
@@ -469,7 +524,7 @@
         <programRunner
                 implementation="ro.redeul.google.go.runner.GoApplicationRunner"/>
         <programRunner
-                implementation="ro.redeul.google.go.runner.GoAppEngineApplicationRunner"/>
+                implementation="ro.redeul.google.go.runner.GaeLocalRunner"/>
 
         <testFinder
                 implementation="ro.redeul.google.go.testIntegration.GoTestFinder"/>

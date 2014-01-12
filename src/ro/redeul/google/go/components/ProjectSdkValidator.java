@@ -94,12 +94,56 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
             if (sdkData == null || sdkData.TARGET_ARCH == null || sdkData.TARGET_OS == null) {
                 Notifications.Bus.notify(
                         new Notification(
-                                "GoLang SDK validator",
+                                "GoLang AppEngine SDK validator",
                                 "Corrupt Go App Engine SDK",
                                 getContent("Go App Engine", sdk.getName()),
                                 NotificationType.WARNING
                         ), myProject);
+
+                continue;
             }
+
+            boolean needsUpgrade = false;
+            try {
+                sdkData.checkValid();
+            } catch (ConfigurationException ex) {
+                needsUpgrade = true;
+            }
+
+            if (!needsUpgrade)
+                continue;
+
+            needsUpgrade = false;
+            GoAppEngineSdkData data = GoSdkUtil.testGoAppEngineSdk(sdk.getHomePath());
+
+            if (data == null)
+                needsUpgrade = true;
+
+            try {
+                if (data != null) {
+                    data.checkValid();
+                }
+            } catch (ConfigurationException ex) {
+                needsUpgrade = true;
+            }
+
+            // GAE SDK auto-update needs a bit more love
+            if (data != null && !(new File(data.GOAPP_BIN_PATH)).exists()) {
+                needsUpgrade = true;
+            }
+
+            if (needsUpgrade) {
+                Notifications.Bus.notify(
+                        new Notification(
+                                "GoLang AppEngine SDK validator",
+                                "Corrupt Go App Engine SDK",
+                                getContent("Go AppEngine", sdk.getName()),
+                                NotificationType.WARNING), myProject);
+            }
+
+            SdkModificator sdkModificator = sdk.getSdkModificator();
+            sdkModificator.setSdkAdditionalData(data);
+            sdkModificator.commitChanges();
         }
 
         String sysGoRootPath = GoSdkUtil.getSysGoRootPath();

@@ -17,10 +17,12 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-public class GoDebugEnv extends GoCommonDebugAction {
+import java.io.File;
+
+public class GAEDebugEnv extends GoCommonDebugAction {
 
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
@@ -35,17 +37,15 @@ public class GoDebugEnv extends GoCommonDebugAction {
             consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
         }
 
-        Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
+        Sdk sdk = GoSdkUtil.getGoogleGAESdkForProject(project);
         if ( sdk == null ) {
             return;
         }
 
-        final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
+        final GoAppEngineSdkData sdkData = (GoAppEngineSdkData)sdk.getSdkAdditionalData();
         if ( sdkData == null ) {
             return;
         }
-
-        String goExecName = sdkData.GO_BIN_PATH;
 
         String projectDir = project.getBasePath();
 
@@ -74,11 +74,11 @@ public class GoDebugEnv extends GoCommonDebugAction {
             }
             window.show(EmptyRunnable.getInstance());
 
-            String[] goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
+            String[] goEnv = GoSdkUtil.getExtendedGAEEnv(sdkData, projectDir, "");
 
             String command = String.format(
                     "%s env",
-                    goExecName
+                    sdkData.GOAPP_BIN_PATH
             );
 
             consoleView.clear();

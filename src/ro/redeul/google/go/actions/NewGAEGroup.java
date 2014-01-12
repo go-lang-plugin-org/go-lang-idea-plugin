@@ -6,9 +6,9 @@ import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
-import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 
-public class NewGoGroup extends DefaultActionGroup
+public class NewGAEGroup extends DefaultActionGroup
 {
     @Override
     public void update(AnActionEvent e)
@@ -20,6 +20,6 @@ public class NewGoGroup extends DefaultActionGroup
         final Module data = LangDataKeys.MODULE.getData(e.getDataContext());
         e.getPresentation().setVisible(data != null &&
                 sdk != null &&
-                sdk.getSdkType() instanceof GoSdkType);
+                sdk.getSdkType() instanceof GoAppEngineSdkType);
     }
 }

@@ -18,20 +18,23 @@ import javax.swing.*;
  * Date: Aug 19, 2010
  * Time: 2:49:26 PM
  */
-public class GoAppEngineRunConfigurationType implements ConfigurationType {
+public class GaeAppEngineRunConfigurationType implements ConfigurationType {
 
     private final GoAppEngineRunConfigurationFactory myConfigurationFactory;
+    public static final String ID = "GaeLocalAppEngineServer";
+    public static final String Name = "Go Local AppEngine Server";
+    public static final String Description = "Go AppEngine Server";
 
-    public GoAppEngineRunConfigurationType() {
+    public GaeAppEngineRunConfigurationType() {
         myConfigurationFactory = new GoAppEngineRunConfigurationFactory(this);
     }
 
     public String getDisplayName() {
-        return "Application Engine Server";
+        return Name;
     }
 
     public String getConfigurationTypeDescription() {
-        return "Application Engine Server";
+        return Description;
     }
 
     public Icon getIcon() {
@@ -41,15 +44,15 @@ public class GoAppEngineRunConfigurationType implements ConfigurationType {
     @NonNls
     @NotNull
     public String getId() {
-        return "GAEApplicationRunConfiguration";
+        return ID;
     }
 
     public ConfigurationFactory[] getConfigurationFactories() {
         return new ConfigurationFactory[]{myConfigurationFactory};
     }
 
-    public static GoAppEngineRunConfigurationType getInstance() {
-        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GoAppEngineRunConfigurationType.class);
+    public static GaeAppEngineRunConfigurationType getInstance() {
+        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GaeAppEngineRunConfigurationType.class);
     }
 
     public static class GoAppEngineRunConfigurationFactory extends ConfigurationFactory {
@@ -59,7 +62,7 @@ public class GoAppEngineRunConfigurationType implements ConfigurationType {
         }
 
         public RunConfiguration createTemplateConfiguration(Project project) {
-            return new GoAppEngineApplicationConfiguration("Application Engine Server", project, getInstance());
+            return new GaeLocalConfiguration(Name, project, getInstance());
         }        
     }
 }

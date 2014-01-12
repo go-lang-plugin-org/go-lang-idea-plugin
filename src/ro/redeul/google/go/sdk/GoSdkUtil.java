@@ -235,7 +235,10 @@ public class GoSdkUtil {
 
         GoAppEngineSdkData sdkData = new GoAppEngineSdkData();
 
-        sdkData.GO_HOME_PATH = format("%s/goroot", path);
+        sdkData.SDK_HOME_PATH = path;
+        sdkData.GOAPP_BIN_PATH = getGoAppBinPath(path);
+        sdkData.GO_HOME_PATH = format("%s%sgoroot", path, File.separator);
+        sdkData.GO_GOPATH_PATH = getSysGoPathPath();
 
         GeneralCommandLine command = new GeneralCommandLine();
         if(checkFileExists(sdkData.GO_HOME_PATH + "/bin/go")) {
@@ -278,8 +281,7 @@ public class GoSdkUtil {
 
         try {
             String fileContent =
-                VfsUtil.loadText(VfsUtil.findFileByIoFile(
-                        new File(format("%s/VERSION", path)), true));
+                VfsUtil.loadText(VfsUtil.findFileByIoFile(new File(format("%s/VERSION", path)), true));
 
             Matcher matcher = RE_APP_ENGINE_VERSION_MATCHER.matcher(
                 fileContent);
@@ -299,6 +301,8 @@ public class GoSdkUtil {
 
             sdkData.API_VERSIONS = matcher.group(1);
 
+            sdkData.version = GoAppEngineSdkData.LATEST_VERSION;
+
         } catch (IOException e) {
             return null;
         }
@@ -306,31 +310,42 @@ public class GoSdkUtil {
         return sdkData;
     }
 
+    @NotNull
+    public static String getGoAppBinPath(String goAppPath) {
+        String goExecName = goAppPath + File.separator + "goapp";
+
+        if (isHostOsWindows()) {
+            goExecName = goExecName.concat(".exe");
+        }
+
+        return goExecName;
+    }
+
     private static boolean checkFileExists(String path, String child) {
         return checkFileExists(new File(path, child));
     }
 
-    private static boolean checkFileExists(String path) {
+    public static boolean checkFileExists(String path) {
         return checkFileExists(new File(path));
     }
 
-    private static boolean checkFileExists(File file) {
+    public static boolean checkFileExists(File file) {
         return file.exists() && file.isFile();
     }
 
-    private static boolean checkFolderExists(String path) {
+    public static boolean checkFolderExists(String path) {
         return checkFolderExists(new File(path));
     }
 
-    private static boolean checkFolderExists(File file) {
+    public static boolean checkFolderExists(File file) {
         return file.exists() && file.isDirectory();
     }
 
-    private static boolean checkFolderExists(String path, String child) {
+    public static boolean checkFolderExists(String path, String child) {
         return checkFolderExists(new File(path, child));
     }
 
-    private static boolean checkFolderExists(String path, String child, String child2) {
+    public static boolean checkFolderExists(String path, String child, String child2) {
         return checkFolderExists(new File(new File(path, child), child2));
     }
 
@@ -436,6 +451,17 @@ public class GoSdkUtil {
         Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
 
         if (GoSdkType.isInstance(sdk)) {
+            return sdk;
+        }
+
+        return null;
+    }
+
+    public static Sdk getGoogleGAESdkForProject(Project project) {
+
+        Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
+
+        if (GoAppEngineSdkType.isInstance(sdk)) {
             return sdk;
         }
 
@@ -698,6 +724,31 @@ public class GoSdkUtil {
         return sysEnv;
     }
 
+    public static Map<String, String> getExtendedSysEnv(GoAppEngineSdkData sdkData, String projectDir, String envVars) {
+        Map<String,String> sysEnv = new HashMap<String, String>(System.getenv());
+        String goRoot = getSdkRootPath(sdkData);
+        String goPath = appendToGoPath(projectDir);
+        sysEnv.put("GOROOT", goRoot);
+        sysEnv.put("GOPATH", goPath);
+        sysEnv.put("PATH", appendGoPathToPath(goRoot + File.pathSeparator + goPath));
+
+        if (envVars.length() > 0) {
+            String[] envVarsArray = envVars.split(";");
+            for(String envVar: envVarsArray) {
+                if (!envVar.contains("=")) {
+                    continue;
+                }
+                String[] splitEnvVars = envVar.split("=");
+                if (splitEnvVars.length != 2) {
+                    continue;
+                }
+                sysEnv.put(splitEnvVars[0], splitEnvVars[1]);
+            }
+        }
+
+        return sysEnv;
+    }
+
     public static String[] convertEnvMapToArray(Map<String, String> envMap) {
         String[] goEnv = new String[envMap.size()];
 
@@ -713,6 +764,10 @@ public class GoSdkUtil {
     }
 
     public static String[] getExtendedGoEnv(GoSdkData sdkData, String projectDir, String envVars) {
+        return convertEnvMapToArray(getExtendedSysEnv(sdkData, projectDir, envVars));
+    }
+
+    public static String[] getExtendedGAEEnv(GoAppEngineSdkData sdkData, String projectDir, String envVars) {
         return convertEnvMapToArray(getExtendedSysEnv(sdkData, projectDir, envVars));
     }
 
@@ -734,5 +789,49 @@ public class GoSdkUtil {
             }
         }
         return sdkData.GO_GOROOT_PATH;
+    }
+
+    public static String getSdkRootPath(GoAppEngineSdkData sdkData) {
+        if (sdkData.GO_HOME_PATH.isEmpty()) {
+            File possibleRoot = new File(sdkData.GO_HOME_PATH);
+            try {
+                if (new File(possibleRoot.getCanonicalPath().concat("/src")).exists()) {
+                    return possibleRoot.getCanonicalPath();
+                }
+            } catch (IOException ignored) {
+                return "";
+            }
+
+            try {
+                return possibleRoot.getParentFile().getCanonicalPath();
+            } catch (IOException e) {
+                return "";
+            }
+        }
+        return sdkData.GO_HOME_PATH;
+    }
+
+    public static Boolean isHostOsWindows() {
+        return System.getProperty("os.name").toLowerCase().indexOf("win") >= 0;
+    }
+
+    @NotNull
+    public static String getGaeExePath() {
+        String gaeExec = "goapp";
+        if (isHostOsWindows()) {
+            gaeExec += ".exe";
+        }
+
+        String[] sysPaths = getEnvVariable("PATH").split(File.pathSeparator);
+
+        for (String sysPath : sysPaths) {
+            if (!checkFileExists(sysPath + File.separator + gaeExec)) {
+                continue;
+            }
+
+            return sysPath;
+        }
+
+        return "/usr/lib/go_appengine";
     }
 }

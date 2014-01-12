@@ -13,8 +13,6 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -70,15 +68,6 @@ public class GoAppEngineModuleType extends ModuleType<GoAppEngineModuleBuilder> 
     @Override
     public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext, @NotNull GoAppEngineModuleBuilder moduleBuilder, @NotNull ModulesProvider modulesProvider)
     {
-        List<ModuleWizardStep> steps = new ArrayList<ModuleWizardStep>();
-
-//        ProjectWizardStepFactory factory = ProjectWizardStepFactory.getInstance();
-//        steps.add(factory.createSourcePathsStep(wizardContext, moduleBuilder, null, "reference.dialogs.new.project.fromScratch.source"));
-//        steps.add(factory.createProjectJdkStep(wizardContext));
-//        steps.add(new AndroidModuleWizardStep(moduleBuilder, wizardContext.getProject()));
-//        steps.add(factory.createSourcePathsStep(wizardContext, moduleBuilder, null, "reference.dialogs.new.project.fromScratch.source"));
-//        steps.add(factory.createProjectJdkStep(wizardContext, SdkType.findInstance(GoAppEngineSdkType.class), moduleBuilder, new Computable.PredefinedValueComputable<Boolean>(true), null, ""));
-//        steps.add(new GoModuleWizardStep(moduleBuilder, wizardContext.getProject()));
-        return steps.toArray(new ModuleWizardStep[steps.size()]);
+        return new ModuleWizardStep[]{};
     }
 }

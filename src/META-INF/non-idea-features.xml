@@ -3,5 +3,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <projectTemplatesFactory implementation="ro.redeul.google.go.template.GoTemplatesFactory"/>
         <directoryProjectGenerator implementation="ro.redeul.google.go.template.GoApplicationGenerator"/>
+
+        <projectTemplatesFactory implementation="ro.redeul.google.go.template.GaeTemplatesFactory"/>
+        <directoryProjectGenerator implementation="ro.redeul.google.go.template.GaeApplicationGenerator"/>
     </extensions>
 </idea-plugin>

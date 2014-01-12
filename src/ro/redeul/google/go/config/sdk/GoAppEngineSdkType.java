@@ -5,6 +5,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.vfs.StandardFileSystems;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
@@ -15,7 +16,9 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.*;
 
-import static ro.redeul.google.go.GoIcons.GO_ICON_16x16;
+import java.io.File;
+
+import static ro.redeul.google.go.GoIcons.GAE_ICON_16x16;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -25,13 +28,14 @@ import static ro.redeul.google.go.GoIcons.GO_ICON_16x16;
  */
 public class GoAppEngineSdkType extends SdkType {
 
+    public static final String GAE_SDK_NAME = "Go AppEngine SDK";
     private GoAppEngineSdkData sdkData;
 
     public GoAppEngineSdkType() {
         super("Google Go App Engine SDK");
     }
 
-    GoAppEngineSdkData getSdkData() {
+    public GoAppEngineSdkData getSdkData() {
         return sdkData;
     }
 
@@ -101,31 +105,43 @@ public class GoAppEngineSdkType extends SdkType {
             return;
 
         String libPath = String.format("goroot/pkg/%s_%s/", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName());
-        String newLibPath = String.format("goroot/pkg/%s_%s_appengine/", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName());
-
-        final VirtualFile librariesRoot = (homeDirectory.findFileByRelativePath(libPath)==null?
-                homeDirectory.findFileByRelativePath(newLibPath):
-                homeDirectory.findFileByRelativePath(libPath)
-        );
 
         final VirtualFile sourcesRoot = homeDirectory.findFileByRelativePath("goroot/src/pkg/");
-
-        if (librariesRoot != null) {
-            librariesRoot.refresh(false, false);
-        }
         if (sourcesRoot != null) {
             sourcesRoot.refresh(false, false);
         }
 
+        String goPathFirst = System.getenv("GOPATH");
+        VirtualFile goPathDirectory;
+        VirtualFile pathSourcesRoot = null;
+        if (goPathFirst != null && !goPathFirst.equals("")) {
+
+            // If there are multiple directories under GOPATH then we extract only the first one
+            if (goPathFirst.contains(File.pathSeparator)) {
+                goPathFirst = goPathFirst.split(File.pathSeparator)[0];
+            }
+
+            if ((new File(goPathFirst).exists())) {
+                goPathDirectory = StandardFileSystems.local().findFileByPath(goPathFirst);
+
+                if (goPathDirectory != null) {
+                    pathSourcesRoot = goPathDirectory.findFileByRelativePath("src/");
+                }
+            }
+        }
+        final VirtualFile finalPathSourcesRoot = pathSourcesRoot;
+
         final SdkModificator sdkModificator = sdk.getSdkModificator();
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             public void run() {
-                if (librariesRoot != null) {
-                    sdkModificator.addRoot(librariesRoot, OrderRootType.CLASSES);
-                }
                 if (sourcesRoot != null) {
                     sdkModificator.addRoot(sourcesRoot, OrderRootType.CLASSES);
                     sdkModificator.addRoot(sourcesRoot, OrderRootType.SOURCES);
+                }
+
+                // If we could detect the GOPATH properly, automatically add the first directory to the autocompletion path
+                if (finalPathSourcesRoot != null) {
+                    sdkModificator.addRoot(finalPathSourcesRoot, OrderRootType.CLASSES);
                 }
             }
         });
@@ -161,7 +177,19 @@ public class GoAppEngineSdkType extends SdkType {
 
     @Override
     public String getPresentableName() {
-        return "Go App Engine Sdk";
+        return GAE_SDK_NAME;
+    }
+
+    public String getSdkLongName() {
+        if (sdkData == null) {
+            return GAE_SDK_NAME;
+        }
+
+        if (sdkData.VERSION_MAJOR.equals("")) {
+            return GAE_SDK_NAME;
+        }
+
+        return GAE_SDK_NAME.concat(" ").concat(sdkData.VERSION_MAJOR);
     }
 
     @Override
@@ -171,19 +199,19 @@ public class GoAppEngineSdkType extends SdkType {
 
     @Override
     public Icon getIcon() {
-        return GO_ICON_16x16;
+        return GAE_ICON_16x16;
     }
 
     @Override
     public Icon getIconForAddAction() {
-        return GO_ICON_16x16;
+        return GAE_ICON_16x16;
     }
 
     public Icon getIconForExpandedTreeNode() {
-        return GO_ICON_16x16;
+        return GAE_ICON_16x16;
     }
 
-    public static SdkType getInstance() {
+    public static GoAppEngineSdkType getInstance() {
         return SdkType.findInstance(GoAppEngineSdkType.class);
     }
 
@@ -197,5 +225,9 @@ public class GoAppEngineSdkType extends SdkType {
         if (additionalData instanceof GoAppEngineSdkData) {
             XmlSerializer.serializeInto(additionalData, additional);
         }
+    }
+
+    public static boolean isInstance(Sdk sdk) {
+        return sdk != null && sdk.getSdkType() == GoAppEngineSdkType.getInstance();
     }
 }
