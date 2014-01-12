@@ -17,7 +17,7 @@ import java.io.File;
  */
 public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateComponent<GoAppEngineSdkData> {
 
-    public final static int LATEST_VERSION = 3;
+    public final static int LATEST_VERSION = 4;
 
     public String SDK_HOME_PATH = "";
     public String GOAPP_BIN_PATH = "";

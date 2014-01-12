@@ -127,6 +127,11 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
                 needsUpgrade = true;
             }
 
+            // GAE SDK auto-update needs a bit more love
+            if (data != null && !(new File(data.GOAPP_BIN_PATH)).exists()) {
+                needsUpgrade = true;
+            }
+
             if (needsUpgrade) {
                 Notifications.Bus.notify(
                         new Notification(
