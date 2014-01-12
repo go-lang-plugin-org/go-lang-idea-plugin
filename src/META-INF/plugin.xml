@@ -215,6 +215,13 @@
                 <keyboard-shortcut first-keystroke="ctrl alt U" keymap="$default"/>
             </action>
 
+            <action id="GAE.AppEngine.StopUpload"
+                    class="ro.redeul.google.go.ide.actions.GoAppEngineStopUpload"
+                    text="Stop upload to AppEngine" description="Stop the current upload to AppEngine"
+                    icon="/icons/gae_13x13.png">
+                <keyboard-shortcut first-keystroke="ctrl alt shift U" keymap="$default"/>
+            </action>
+
             <action id="GAE.Fmt.FileRunner"
                     class="ro.redeul.google.go.ide.actions.GoFmtFileRunner"
                     text="go fmt file" description="Format current file with go fmt"
@@ -285,9 +292,6 @@
         <applicationService
                 serviceInterface="ro.redeul.google.go.ide.GoAppEngineSettings"
                 serviceImplementation="ro.redeul.google.go.ide.GoAppEngineSettings"/>
-
-        <applicationConfigurable
-                instance="ro.redeul.google.go.ide.GoAppEngineSettingsConfigurable"/>
 
         <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
 

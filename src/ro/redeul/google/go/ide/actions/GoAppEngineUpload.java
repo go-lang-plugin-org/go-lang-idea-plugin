@@ -3,6 +3,7 @@ package ro.redeul.google.go.ide.actions;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -10,9 +11,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.EmptyRunnable;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.openapi.wm.*;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.Nullable;
@@ -24,14 +23,15 @@ import javax.swing.*;
 import java.io.File;
 
 /**
- * User: jhonny
- * Date: 21/07/11
+ * User: Florin Patan <florinpatan@gmail.com>
+ * Date: 12/01/14
  */
 public class GoAppEngineUpload extends AnAction {
 
     private static final String ID = "GaeConsole";
     private static final String TITLE = "Go AppEngine Upload";
-    private static ConsoleView consoleView;
+    public static ConsoleView consoleView;
+    public static Process proc = null;
 
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
@@ -58,8 +58,8 @@ public class GoAppEngineUpload extends AnAction {
             return;
         }
 
-        if (GoAppEngineUpload.consoleView == null) {
-            GoAppEngineUpload.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+        if (consoleView == null) {
+            consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
         }
 
         final File cwd = getUploadDir(projectDir);
@@ -67,22 +67,25 @@ public class GoAppEngineUpload extends AnAction {
             return;
         }
 
+        ToolWindowManager manager = ToolWindowManager.getInstance(project);
+        ToolWindow window = manager.getToolWindow(ID);
+
+        if (window == null) {
+            window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
+            ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+            Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
+            window.getContentManager().addContent(content);
+            window.setIcon(GoIcons.GAE_ICON_13x13);
+            window.setToHideOnEmptyContent(true);
+            window.setTitle(TITLE);
+        }
+        window.show(EmptyRunnable.getInstance());
+
+        if (!stopCurrentUpload()) {
+            return;
+        }
+
         try {
-            ToolWindowManager manager = ToolWindowManager.getInstance(project);
-            ToolWindow window = manager.getToolWindow(ID);
-
-            if (window == null) {
-                window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
-
-                ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-                Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
-                window.getContentManager().addContent(content);
-                window.setIcon(GoIcons.GAE_ICON_13x13);
-                window.setToHideOnEmptyContent(true);
-                window.setTitle(TITLE);
-            }
-            window.show(EmptyRunnable.getInstance());
-
             String[] goEnv = GoSdkUtil.getExtendedGAEEnv(sdkData, projectDir, "");
 
             String command = String.format(
@@ -90,8 +93,10 @@ public class GoAppEngineUpload extends AnAction {
                     sdkData.GOAPP_BIN_PATH
             );
 
+            consoleView.print(command + "\n", ConsoleViewContentType.NORMAL_OUTPUT);
+
             Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec(command, goEnv, cwd);
+            proc = rt.exec(command, goEnv, cwd);
             OSProcessHandler handler = new OSProcessHandler(proc, null);
             consoleView.attachToProcess(handler);
             handler.startNotify();
@@ -101,12 +106,46 @@ public class GoAppEngineUpload extends AnAction {
         }
     }
 
+    public static boolean stopCurrentUpload() {
+        if (proc == null) {
+            return true;
+        }
+
+        boolean stillRunning = true;
+        try {
+            GoAppEngineUpload.proc.exitValue();
+            stillRunning = false;
+        } catch (IllegalThreadStateException ignored) {
+
+        }
+
+        if (!stillRunning) {
+            return true;
+        }
+
+        if (Messages.showYesNoDialog(
+                "An upload is already in progress.\nDo you want to cancel it?",
+                "Upload to AppEngine in progress",
+                GoIcons.GAE_ICON_13x13) == Messages.NO) {
+            return false;
+        }
+
+        try {
+            GoAppEngineUpload.proc.exitValue();
+        } catch (IllegalThreadStateException ignored) {
+            proc.destroy();
+            consoleView.print("\nUpload process stopped\n", ConsoleViewContentType.NORMAL_OUTPUT);
+        }
+
+        return true;
+    }
+
     @Nullable
     private File getUploadDir(String projectDir) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select target folder");
         fileChooser.setApproveButtonText("Upload folder");
-        fileChooser.setApproveButtonMnemonic("U".charAt(0));
+        fileChooser.setApproveButtonMnemonic('U');
         fileChooser.setCurrentDirectory(new File(projectDir));
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         Integer openDialogResult = fileChooser.showOpenDialog(GoAppEngineUpload.consoleView.getComponent());
