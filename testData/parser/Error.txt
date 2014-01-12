@@ -36,22 +36,26 @@ GO_FILE
         PsiElement(struct)('struct')
         PsiElement({)('{')
         FIELD_DECLARATION
-          PsiElement(identifier)('interfaceString')
+          FIELD_DEFINITION
+            PsiElement(identifier)('interfaceString')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')
         FIELD_DECLARATION
-          PsiElement(identifier)('concreteString')
+          FIELD_DEFINITION
+            PsiElement(identifier)('concreteString')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')
         FIELD_DECLARATION
-          PsiElement(identifier)('assertedString')
+          FIELD_DEFINITION
+            PsiElement(identifier)('assertedString')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')
         FIELD_DECLARATION
-          PsiElement(identifier)('missingMethod')
+          FIELD_DEFINITION
+            PsiElement(identifier)('missingMethod')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')

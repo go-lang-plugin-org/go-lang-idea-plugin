@@ -114,7 +114,8 @@ GO_FILE
         PsiElement(struct)('struct')
         PsiElement({)('{')
         FIELD_DECLARATION
-          PsiElement(identifier)('w')
+          FIELD_DEFINITION
+            PsiElement(identifier)('w')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
@@ -122,29 +123,34 @@ GO_FILE
               PsiElement(.)('.')
               PsiElement(identifier)('Writer')
         FIELD_DECLARATION
-          PsiElement(identifier)('err')
+          FIELD_DEFINITION
+            PsiElement(identifier)('err')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('error')
         FIELD_DECLARATION
-          PsiElement(identifier)('nb')
+          FIELD_DEFINITION
+            PsiElement(identifier)('nb')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('int64')
         PsiComment(GO_LINE_COMMENT)('// number of unwritten bytes for current file entry')
         FIELD_DECLARATION
-          PsiElement(identifier)('pad')
+          FIELD_DEFINITION
+            PsiElement(identifier)('pad')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('int64')
         PsiComment(GO_LINE_COMMENT)('// amount of padding to write after current file entry')
         FIELD_DECLARATION
-          PsiElement(identifier)('closed')
+          FIELD_DEFINITION
+            PsiElement(identifier)('closed')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('bool')
         FIELD_DECLARATION
-          PsiElement(identifier)('usedBinary')
+          FIELD_DEFINITION
+            PsiElement(identifier)('usedBinary')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('bool')

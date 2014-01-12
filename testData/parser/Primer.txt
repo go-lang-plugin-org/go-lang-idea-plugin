@@ -335,12 +335,14 @@ GO_FILE
         PsiElement(struct)('struct')
         PsiElement({)('{')
         FIELD_DECLARATION
-          PsiElement(identifier)('Val')
+          FIELD_DEFINITION
+            PsiElement(identifier)('Val')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('string')
         FIELD_DECLARATION
-          PsiElement(identifier)('count')
+          FIELD_DEFINITION
+            PsiElement(identifier)('count')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('int')
@@ -440,9 +442,11 @@ GO_FILE
         PsiElement(struct)('struct')
         PsiElement({)('{')
         FIELD_DECLARATION
-          PsiElement(identifier)('x')
+          FIELD_DEFINITION
+            PsiElement(identifier)('x')
           PsiElement(,)(',')
-          PsiElement(identifier)('y')
+          FIELD_DEFINITION
+            PsiElement(identifier)('y')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('float64')
@@ -455,9 +459,11 @@ GO_FILE
         PsiElement(struct)('struct')
         PsiElement({)('{')
         FIELD_DECLARATION
-          PsiElement(identifier)('r')
+          FIELD_DEFINITION
+            PsiElement(identifier)('r')
           PsiElement(,)(',')
-          PsiElement(identifier)('θ')
+          FIELD_DEFINITION
+            PsiElement(identifier)('θ')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('float64')

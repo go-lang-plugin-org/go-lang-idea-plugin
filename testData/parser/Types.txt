@@ -27,9 +27,11 @@ GO_FILE
         PsiElement(struct)('struct')
         PsiElement({)('{')
         FIELD_DECLARATION
-          PsiElement(identifier)('a')
+          FIELD_DEFINITION
+            PsiElement(identifier)('a')
           PsiElement(,)(',')
-          PsiElement(identifier)('b')
+          FIELD_DEFINITION
+            PsiElement(identifier)('b')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('int')
@@ -40,9 +42,11 @@ GO_FILE
         PsiElement(struct)('struct')
         PsiElement({)('{')
         FIELD_DECLARATION
-          PsiElement(identifier)('a')
+          FIELD_DEFINITION
+            PsiElement(identifier)('a')
           PsiElement(,)(',')
-          PsiElement(identifier)('c')
+          FIELD_DEFINITION
+            PsiElement(identifier)('c')
           TYPE
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('int')
