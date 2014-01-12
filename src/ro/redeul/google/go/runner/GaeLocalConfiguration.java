@@ -40,6 +40,9 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
     public String builderArguments;
     public String workingDir;
     public String envVars;
+    public String hostname;
+    public String port;
+    public String adminPort;
 
     private static final String ID = "Go App Engine Console";
     private static final String TITLE = "Go App Engine Console Output";
@@ -63,7 +66,25 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
 
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
-        // @TODO Implement this
+        if (hostname == null || hostname.isEmpty()) {
+            throw new RuntimeConfigurationError("hostname cannot be empty");
+        }
+
+        if (port == null || port.isEmpty()) {
+            throw new RuntimeConfigurationError("port cannot be empty");
+        } else if (!port.matches("\\d+")) {
+            throw new RuntimeConfigurationError("port is not a valid number");
+        } else if (Integer.parseInt(port) < 1024) {
+            throw new RuntimeConfigurationError("port is below 1024 and you will need special privileges for it");
+        }
+
+        if (adminPort == null || adminPort.isEmpty()) {
+            throw new RuntimeConfigurationError("admin_port cannot be empty");
+        } else if (!adminPort.matches("\\d+")) {
+            throw new RuntimeConfigurationError("admin_port is not a valid number");
+        } else if (Integer.parseInt(adminPort) < 1024) {
+            throw new RuntimeConfigurationError("admin_port is below 1024 and you will need special privileges for it");
+        }
     }
 
     @NotNull
@@ -79,6 +100,9 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
         builderArguments = JDOMExternalizerUtil.readField(element, "builderArguments");
         workingDir = JDOMExternalizerUtil.readField(element, "workingDir");
         envVars = JDOMExternalizerUtil.readField(element, "envVars");
+        hostname = JDOMExternalizerUtil.readField(element, "hostname");
+        port = JDOMExternalizerUtil.readField(element, "adminPort");
+        adminPort = JDOMExternalizerUtil.readField(element, "adminPort");
 
         readModule(element);
     }
@@ -89,6 +113,9 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
         JDOMExternalizerUtil.writeField(element, "builderArguments", builderArguments);
         JDOMExternalizerUtil.writeField(element, "workingDir", workingDir);
         JDOMExternalizerUtil.writeField(element, "envVars", envVars);
+        JDOMExternalizerUtil.writeField(element, "hostname", hostname);
+        JDOMExternalizerUtil.writeField(element, "port", port);
+        JDOMExternalizerUtil.writeField(element, "adminPort", adminPort);
         writeModule(element);
         PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
     }
@@ -99,6 +126,18 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
 
         if (this.workingDir.isEmpty()) {
             this.workingDir = project.getBaseDir().getCanonicalPath();
+        }
+
+        if (hostname == null || hostname.isEmpty()) {
+            hostname = "localhost";
+        }
+
+        if (port == null || port.isEmpty()) {
+            port = "8080";
+        }
+
+        if (adminPort == null || adminPort.isEmpty()) {
+            adminPort = "8080";
         }
 
         CommandLineState state = new CommandLineState(env) {
@@ -132,6 +171,11 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
 
                 commandLine.setExePath(goExecName);
                 commandLine.addParameter("serve");
+
+                commandLine.addParameter("-host=" + hostname);
+                commandLine.addParameter("-port=" + port);
+                commandLine.addParameter("-admin_port=" + adminPort);
+
                 if (builderArguments != null && builderArguments.trim().length() > 0) {
                     commandLine.getParametersList().addParametersString(builderArguments);
                 }
