@@ -1,7 +1,16 @@
 <h3>0.9.16 changes:</h3>
 <ul>
-    <li>[feature] Added support for Go on GoogleAppEngine for non-IDEA IDEs</li>
-    <li>[bugfix] Improved support for Go on GoogleAppEngine</li>
+    <li>[feature] Added support for Go on Google AppEngine for non-IDEA IDEs</li>
+    <li>[bugfix] Improved support for Go on Google AppEngine</li>
+</ul>
+<h3>0.9.15.3 changes:</h3>
+<ul>
+    <li>[feature] Added support for running all tests in a directory</li>
+    <li>[bugfix] Fix the creation of projects in IntelliJ Community again.</li>
+ </ul>
+<h3>0.9.15.1 changes:</h3>
+<ul>
+    <li>[bugfix] Fix auto-complete for third-party packages</li>
 </ul>
 <h3>0.9.15 changes:</h3>
 <ul>

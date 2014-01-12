@@ -232,7 +232,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
                 // Build and run
                 String execName = goOutputDir.concat("/").concat(getProject().getName());
 
-                if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
+                if (GoSdkUtil.isHostOsWindows()) {
                     execName = execName.concat(".exe");
                 }
 

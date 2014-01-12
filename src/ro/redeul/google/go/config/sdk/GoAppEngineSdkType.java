@@ -28,13 +28,14 @@ import static ro.redeul.google.go.GoIcons.GAE_ICON_16x16;
  */
 public class GoAppEngineSdkType extends SdkType {
 
+    public static final String GAE_SDK_NAME = "Go AppEngine SDK";
     private GoAppEngineSdkData sdkData;
 
     public GoAppEngineSdkType() {
         super("Google Go App Engine SDK");
     }
 
-    GoAppEngineSdkData getSdkData() {
+    public GoAppEngineSdkData getSdkData() {
         return sdkData;
     }
 
@@ -176,7 +177,19 @@ public class GoAppEngineSdkType extends SdkType {
 
     @Override
     public String getPresentableName() {
-        return "Go App Engine Sdk";
+        return GAE_SDK_NAME;
+    }
+
+    public String getSdkLongName() {
+        if (sdkData == null) {
+            return GAE_SDK_NAME;
+        }
+
+        if (sdkData.VERSION_MAJOR.equals("")) {
+            return GAE_SDK_NAME;
+        }
+
+        return GAE_SDK_NAME.concat(" ").concat(sdkData.VERSION_MAJOR);
     }
 
     @Override
@@ -198,7 +211,7 @@ public class GoAppEngineSdkType extends SdkType {
         return GAE_ICON_16x16;
     }
 
-    public static SdkType getInstance() {
+    public static GoAppEngineSdkType getInstance() {
         return SdkType.findInstance(GoAppEngineSdkType.class);
     }
 

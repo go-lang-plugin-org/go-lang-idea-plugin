@@ -34,32 +34,26 @@ public class GoAppEngineModuleBuilder extends JavaModuleBuilder implements Sourc
     public void moduleCreated(@NotNull Module module) {
 
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        VirtualFile sourceRoots[] = moduleRootManager.getSourceRoots();
 
-        if (sourceRoots.length != 1 ) {
-            return;
-        }
+        PsiDirectory directory = PsiManager.getInstance(module.getProject()).findDirectory(module.getProject().getBaseDir());
 
-        PsiDirectory directory = PsiManager.getInstance(module.getProject()).findDirectory(sourceRoots[0]);
-
-        if (directory == null || directory.getParentDirectory() == null) {
+        if (directory == null) {
             return;
         }
 
         try {
-            directory.getParentDirectory().checkCreateFile("app.yaml");
-            GoTemplatesFactory.createFromTemplate(directory.getParentDirectory(), "yaml", "app.yaml", GoTemplatesFactory.Template.GoAppEngineConfig);
+            directory.checkCreateFile("app.yaml");
+            GoTemplatesFactory.createFromTemplate(directory, "yaml", "app.yaml", GoTemplatesFactory.Template.GoAppEngineConfig);
         } catch (Exception e) {
             LOG.error(e.getMessage());
         }
 
         try {
-            directory.getParentDirectory().checkCreateFile("app.yaml");
-            GoTemplatesFactory.createFromTemplate(directory.getParentDirectory(), "yaml", "app.yaml", GoTemplatesFactory.Template.GoAppEngineConfig);
+            directory.checkCreateFile("main.go");
+            GoTemplatesFactory.createFromTemplate(directory, "main", "main.go", GoTemplatesFactory.Template.GoAppEngineMain);
         } catch (Exception e) {
             LOG.error(e.getMessage());
         }
-
     }
 
     @Override

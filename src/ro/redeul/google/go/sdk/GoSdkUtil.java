@@ -238,6 +238,7 @@ public class GoSdkUtil {
         sdkData.SDK_HOME_PATH = path;
         sdkData.GOAPP_BIN_PATH = getGoAppBinPath(path);
         sdkData.GO_HOME_PATH = format("%s%sgoroot", path, File.separator);
+        sdkData.GO_GOPATH_PATH = getSysGoPathPath();
 
         GeneralCommandLine command = new GeneralCommandLine();
         if(checkFileExists(sdkData.GO_HOME_PATH + "/bin/go")) {
@@ -313,7 +314,7 @@ public class GoSdkUtil {
     public static String getGoAppBinPath(String goAppPath) {
         String goExecName = goAppPath + File.separator + "goapp";
 
-        if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
+        if (isHostOsWindows()) {
             goExecName = goExecName.concat(".exe");
         }
 
@@ -808,5 +809,29 @@ public class GoSdkUtil {
             }
         }
         return sdkData.GO_HOME_PATH;
+    }
+
+    public static Boolean isHostOsWindows() {
+        return System.getProperty("os.name").toLowerCase().indexOf("win") >= 0;
+    }
+
+    @NotNull
+    public static String getGaeExePath() {
+        String gaeExec = "goapp";
+        if (isHostOsWindows()) {
+            gaeExec += ".exe";
+        }
+
+        String[] sysPaths = getEnvVariable("PATH").split(File.pathSeparator);
+
+        for (String sysPath : sysPaths) {
+            if (!checkFileExists(sysPath + File.separator + gaeExec)) {
+                continue;
+            }
+
+            return sysPath;
+        }
+
+        return "/usr/lib/go_appengine";
     }
 }
