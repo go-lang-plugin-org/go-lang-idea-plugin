@@ -3,7 +3,9 @@ package com.goide.psi.impl;
 import com.goide.GoIcons;
 import com.goide.completion.GoCompletionContributor;
 import com.goide.psi.*;
+import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
+import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
@@ -68,7 +70,13 @@ public class GoPsiImplUtil {
   @NotNull
   public static LookupElement createFunctionLookupElement(GoFunctionDeclaration f) {
     Icon icon = f instanceof GoMethodDeclaration ? GoIcons.METHOD : GoIcons.FUNCTION;
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(f).withIcon(icon).withInsertHandler(null),
+    GoSignature signature = f.getSignature();
+    int paramsCount = 0;
+    if (signature != null) {
+      paramsCount = signature.getParameters().getParameterDeclarationList().size();
+    }
+    InsertHandler<LookupElement> handler = paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(f).withIcon(icon).withInsertHandler(handler),
                                                  GoCompletionContributor.FUNCTION_PRIORITY);
   }
 
