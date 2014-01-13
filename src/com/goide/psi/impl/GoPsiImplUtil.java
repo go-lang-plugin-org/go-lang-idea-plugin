@@ -68,7 +68,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static LookupElement createFunctionLookupElement(GoFunctionDeclaration f) {
+  public static LookupElement createFunctionLookupElement(@NotNull GoFunctionDeclaration f) {
     Icon icon = f instanceof GoMethodDeclaration ? GoIcons.METHOD : GoIcons.FUNCTION;
     GoSignature signature = f.getSignature();
     int paramsCount = 0;
@@ -81,13 +81,13 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static LookupElement createTypeLookupElement(GoTypeSpec t) {
+  public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(t).withIcon(GoIcons.TYPE),
                                                  GoCompletionContributor.TYPE_PRIORITY);
   }
 
   @NotNull
-  public static LookupElement createVariableLikeLookupElement(GoNamedElement v) {
+  public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v) {
     Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
                 v instanceof GoParamDefinition ? GoIcons.PARAMETER :
                 v instanceof GoFieldDefinition ? GoIcons.FIELD :
@@ -98,7 +98,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static LookupElement createImportLookupElement(String i) {
+  public static LookupElement createImportLookupElement(@NotNull String i) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE), GoCompletionContributor.PACKAGE_PRIORITY);
   }
 
@@ -106,5 +106,4 @@ public class GoPsiImplUtil {
   public static GoType getGoType(@NotNull GoReceiver o) {
     return o.getType();
   }
-
 }
