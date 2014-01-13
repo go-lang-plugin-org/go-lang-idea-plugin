@@ -17,8 +17,10 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
@@ -425,6 +427,17 @@ public class GoBlocks {
                     return Spacings.NONE;
                 }
             };
+
+        if (psi instanceof GoCallOrConvExpression)
+            return new GoExpressionBlock<GoCallOrConvExpression>((GoCallOrConvExpression) psi, settings, indent) {
+                @Nullable
+                @Override
+                public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
+                    return Spacings.NONE;
+                }
+            };
+
+        // handle expressions list
 
 //    if (psi instanceof GoShortVarDeclaration)
 //      return new GoShortVarDeclarationBlock((GoShortVarDeclaration)psi, settings, indent);

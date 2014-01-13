@@ -245,12 +245,12 @@ class PrimaryExpression implements GoElementTypes {
         ParserUtils.getToken(builder, pLPAREN);
 
         if (builder.getTokenType() != pRPAREN) {
-            PsiBuilder.Marker expressionList = builder.mark();
-            if (parser.parseExpressionList(builder) > 1) {
-                expressionList.done(GoElementTypes.EXPRESSION_LIST);
-            } else {
-                expressionList.drop();
-            }
+//            PsiBuilder.Marker expressionList = builder.mark();
+            parser.parseExpressionList(builder);
+//                expressionList.done(GoElementTypes.EXPRESSION_LIST);
+//            } else {
+//                expressionList.drop();
+//            }
         }
 
         ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");

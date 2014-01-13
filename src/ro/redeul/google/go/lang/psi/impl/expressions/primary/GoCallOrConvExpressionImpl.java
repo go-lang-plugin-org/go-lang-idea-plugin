@@ -58,18 +58,7 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
 
     @Override
     public GoExpr[] getArguments() {
-
-        GoExpressionList list = findChildByClass(GoExpressionList.class);
-        if ( list != null ) {
-            return list.getExpressions();
-        }
-
-        GoExpr []expressions = findChildrenByClass(GoExpr.class);
-
-        if (expressions.length <= 1) {
-            return GoExpr.EMPTY_ARRAY;
-        }
-
+        GoExpr[] expressions = findChildrenByClass(GoExpr.class);
         return Arrays.copyOfRange(expressions, 1, expressions.length);
     }
 

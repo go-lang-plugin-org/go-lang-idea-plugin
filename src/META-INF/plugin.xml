@@ -305,6 +305,8 @@
                 serviceInterface="ro.redeul.google.go.options.GoSettings"
                 serviceImplementation="ro.redeul.google.go.options.GoSettings"/>
         <exportable serviceInterface="ro.redeul.google.go.options.GoSettings"/>
+
+        <extendWordSelectionHandler implementation="ro.redeul.google.go.editor.selection.SelectArgumentListInCallExpressions" />
         <autoImportOptionsProvider
                 instance="ro.redeul.google.go.imports.GoAutoImportOptionsProvider"/>
 

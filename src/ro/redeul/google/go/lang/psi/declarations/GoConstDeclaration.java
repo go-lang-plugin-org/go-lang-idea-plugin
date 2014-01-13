@@ -15,5 +15,4 @@ public interface GoConstDeclaration extends GoPsiElement, GoDocumentedPsiElement
     public GoPsiType getIdentifiersType();
 
     GoExpr[] getExpressions();
-
 }
