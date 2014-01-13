@@ -2,21 +2,19 @@ package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Indent;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
 
 import java.util.Map;
 
 /**
-*
-* <p/>
-* Created on Jan-05-2014 01:06
-*
-* @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
-*/
+ * TODO: Remove this class as it's not needed.
+ * <p/>
+ * Created on Jan-05-2014 01:06
+ *
+ * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
+ */
 class GoSelectStatementBlock extends GoStatementBlock<GoSelectStatement> {
 
     private static final TokenSet HOLD_TOGETHER_TOKS = TokenSet.orSet(SELECT_CLAUSES, COMMENTS);

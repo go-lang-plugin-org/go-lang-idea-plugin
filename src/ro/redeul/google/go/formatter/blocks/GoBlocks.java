@@ -7,7 +7,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.sun.jna.platform.win32.Guid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -432,29 +431,10 @@ public class GoBlocks {
             };
 
         if (psi instanceof GoCallOrConvExpression)
-            return new GoExpressionBlock<GoCallOrConvExpression>((GoCallOrConvExpression) psi, settings, indent) {
-                @Override
-                protected Block customizeBlock(@NotNull Block childBlock, @NotNull PsiElement childPsi) {
-                    childBlock = super.customizeBlock(childBlock, childPsi);
-                    if ( getPsi().getArguments().length <= 1 )
-                        return childBlock;
+            return new GoCallOrConversionBlock((GoCallOrConvExpression) psi, settings, indent);
 
-                    if ( childBlock instanceof GoExpressionBlock ) {
-                        ((GoExpressionBlock) childBlock).setDepth(myDepth + 1);
-                    }
-
-                    return childBlock;
-                }
-            }.setCustomSpacing(CustomSpacings.CALL_OR_CONVERSION);
-
-        // handle expressions list
-
-//    if (psi instanceof GoShortVarDeclaration)
-//      return new GoShortVarDeclarationBlock((GoShortVarDeclaration)psi, settings, indent);
-
-//        if (psi instanceof GoBinaryExpression) {
-//            return new GoBinaryExpressionBlock(node, alignment, NO_WRAP, settings);
-//        }
+        if (psi instanceof GoExpressionList)
+            return new GoExpressionListBlock((GoExpressionList) psi, settings, indent);
 
 
         IElementType elementType = node.getElementType();
@@ -530,5 +510,4 @@ public class GoBlocks {
 
         return new GoBlock(node, alignment, indent, null, settings);
     }
-
 }

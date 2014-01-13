@@ -12,7 +12,8 @@ import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import java.util.Map;
 
 /**
- * TODO: Document this
+ * Basic statement formatting block. Will align trailing comments properly
+ *
  * <p/>
  * Created on Jan-04-2014 01:16
  *

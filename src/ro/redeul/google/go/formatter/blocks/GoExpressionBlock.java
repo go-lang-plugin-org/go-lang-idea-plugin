@@ -8,7 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 
 /**
- * TODO: Document this
+ * Base expression block. Knows about depth of the current expression and it will propagate it to all the childrens.
+ *
  * <p/>
  * Created on Jan-09-2014 10:21
  *

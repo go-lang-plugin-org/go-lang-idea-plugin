@@ -21,7 +21,8 @@ import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
 
 /**
- * TODO: Document this
+ * Type declaration block.
+ *
  * <p/>
  * Created on Dec-30-2013 16:58
  *

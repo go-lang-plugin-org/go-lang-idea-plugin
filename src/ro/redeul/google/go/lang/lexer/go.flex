@@ -196,7 +196,8 @@ mESCAPES = [abfnrtv]
 {mWS} ({mNL} | {mWS})*                    { return wsWS; }
 {mSL_COMMENT}                             { return( mSL_COMMENT ); }
 //{mML_COMMENT}                             { return( mML_COMMENT ); }
-"/*" ( ([^"*/"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return( mML_COMMENT ); }
+//"/*" ( ([^"*/"]|[\r\n])* ("*"+ [^"*/"] )? )* ("*" | "*"+"/")? { return( mML_COMMENT ); }
+"/*" ~"*/"                                { return mML_COMMENT; }
 
 //([^"*/"] | [\r\n])+ "*/"?
 

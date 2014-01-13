@@ -1,0 +1,6 @@
+GoFile(0,57)
+  PsiComment(SL_COMMENT)('// asdfasdf // asdfaf // adsfasdf')(0,33)
+  PsiComment(SL_COMMENT)('// adsfsa')(34,43)
+  PackageDeclaration(main)(45,57)
+    PsiElement(KEYWORD_PACKAGE)('package')(45,52)
+    PsiElement(IDENTIFIER)('main')(53,57)

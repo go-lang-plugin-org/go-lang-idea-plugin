@@ -16,7 +16,8 @@ import java.util.Map;
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
 
 /**
- * Formatting block for a labeled statement
+ * Formatting block for a labeled statement.
+ *
  * <p/>
  * Created on Jan-04-2014 23:39
  *

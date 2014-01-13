@@ -1,0 +1,7 @@
+GoFile(0,99)
+  PsiComment(ML_COMMENT)('/* afdasfd\nadf\nasdf\nasf\n*/')(0,26)
+  PsiComment(ML_COMMENT)('/* asdf\nadfa\nfas\ndfas\n/\nasdf\nadsf\naf\nasdf\n*/')(28,72)
+  PackageDeclaration(main)(74,86)
+    PsiElement(KEYWORD_PACKAGE)('package')(74,81)
+    PsiElement(IDENTIFIER)('main')(82,86)
+  PsiComment(ML_COMMENT)('/* adfas */')(88,99)

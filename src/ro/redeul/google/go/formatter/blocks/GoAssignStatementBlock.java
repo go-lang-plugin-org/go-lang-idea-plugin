@@ -1,12 +1,14 @@
 package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.Alignment;
+import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.statements.GoAssignmentStatement;
 
 import java.util.Map;
@@ -15,11 +17,20 @@ import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
 
 class GoAssignStatementBlock extends GoSyntheticBlock<GoAssignmentStatement> {
 
+    private int childDepth = 1;
+
     public GoAssignStatementBlock(GoAssignmentStatement assignStatement,
                                   CommonCodeStyleSettings settings,
                                   Indent indent,
                                   Map<Alignments.Key, Alignment> alignmentsMap) {
         super(assignStatement, settings, indent, null, alignmentsMap);
+
+        GoExpressionList leftSide = assignStatement.getLeftSideExpressions();
+        GoExpressionList rightSide = assignStatement.getRightSideExpressions();
+
+        if (leftSide != null && rightSide != null)
+            if (leftSide.getExpressions().length > 1 && rightSide.getExpressions().length > 1)
+                childDepth++;
     }
 
     @Nullable
@@ -29,5 +40,18 @@ class GoAssignStatementBlock extends GoSyntheticBlock<GoAssignmentStatement> {
             return alignments.get(Alignments.Key.Comments);
 
         return super.getChildAlignment(child, prevChild, alignments);
+    }
+
+    @Override
+    protected Block customizeBlock(@NotNull Block childBlock, @NotNull PsiElement childPsi) {
+        childBlock = super.customizeBlock(childBlock, childPsi);
+
+        if ( childBlock instanceof GoExpressionListBlock ) {
+            GoExpressionListBlock expressionListBlock = (GoExpressionListBlock) childBlock;
+
+            expressionListBlock.setDepth(childDepth);
+        }
+
+        return childBlock;
     }
 }
