@@ -247,6 +247,7 @@ public class GoBlockUtil {
 
         public static final CustomSpacing CALL_OR_CONVERSION = CustomSpacing.Builder()
             .setNone(EXPRESSIONS, pLPAREN)
+            .setNone(TYPES, pLPAREN)
             .setNone(pLPAREN, EXPRESSIONS)
             .setNone(EXPRESSIONS, pRPAREN)
             .setNone(pLPAREN, pRPAREN)

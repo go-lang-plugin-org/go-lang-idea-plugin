@@ -13,4 +13,5 @@ type (
 	d [20]interface {
 		F() int
 	}
+	x [...]int
 )

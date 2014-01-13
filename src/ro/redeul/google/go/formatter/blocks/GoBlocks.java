@@ -247,7 +247,10 @@ public class GoBlocks {
                     GoBlockUtil.CustomSpacing.Builder()
                         .setNone(pLBRACK, EXPRESSIONS)
                         .setNone(EXPRESSIONS, pRBRACK)
-                        .setNone(pRBRACK, TYPES).build());
+                        .setNone(pLBRACK, oTRIPLE_DOT)
+                        .setNone(oTRIPLE_DOT, pRBRACK)
+                        .setNone(pRBRACK, TYPES)
+                        .build());
 
         if (psi instanceof GoPsiTypePointer)
             return new GoSyntheticBlock<GoPsiTypePointer>((GoPsiTypePointer) psi, settings, null, alignment, alignmentsMap)
