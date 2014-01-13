@@ -91,12 +91,7 @@ class BuiltInCallExpression implements GoElementTypes {
         }
 
         if (builder.getTokenType() != pRPAREN) {
-            PsiBuilder.Marker expressionList = builder.mark();
-            if (parser.parseExpressionList(builder) > 1) {
-                expressionList.done(GoElementTypes.EXPRESSION_LIST);
-            } else {
-                expressionList.drop();
-            }
+            parser.parseExpressionList(builder);
         }
 
         ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");

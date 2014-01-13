@@ -430,12 +430,19 @@ public class GoBlocks {
 
         if (psi instanceof GoCallOrConvExpression)
             return new GoExpressionBlock<GoCallOrConvExpression>((GoCallOrConvExpression) psi, settings, indent) {
-                @Nullable
                 @Override
-                public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
-                    return Spacings.NONE;
+                protected Block customizeBlock(@NotNull Block childBlock, @NotNull PsiElement childPsi) {
+                    childBlock = super.customizeBlock(childBlock, childPsi);
+                    if ( getPsi().getArguments().length <= 1 )
+                        return childBlock;
+
+                    if ( childBlock instanceof GoExpressionBlock ) {
+                        ((GoExpressionBlock) childBlock).setDepth(myDepth + 1);
+                    }
+
+                    return childBlock;
                 }
-            };
+            }.setCustomSpacing(CustomSpacings.CALL_OR_CONVERSION);
 
         // handle expressions list
 

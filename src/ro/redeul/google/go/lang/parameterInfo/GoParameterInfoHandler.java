@@ -102,8 +102,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandler<GoPsiElement
             return null;
         }
 
-        PsiElement expressionList = findChildOfType(call, GoElementTypes.EXPRESSION_LIST);
-        List<PsiElement> commas = findChildrenOfType(expressionList, GoElementTypes.oCOMMA);
+        List<PsiElement> commas = findChildrenOfType(call, GoElementTypes.oCOMMA);
         int currentIndex = commas.size();
         for (int i = 0; i < commas.size(); i++) {
             if (offset < commas.get(i).getTextRange().getEndOffset()) {

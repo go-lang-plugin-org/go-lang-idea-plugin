@@ -20,8 +20,7 @@ import java.util.Arrays;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
-public class GoCallOrConvExpressionImpl extends GoExpressionBase
-    implements GoCallOrConvExpression
+public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCallOrConvExpression
 {
     public GoCallOrConvExpressionImpl(@NotNull ASTNode node) {
         super(node);
