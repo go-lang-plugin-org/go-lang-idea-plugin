@@ -33,10 +33,6 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     }
   }
 
-  public static boolean isPublic(@NotNull GoNamedElement o) {
-    return StringUtil.isCapitalized(o.getName());
-  }
-
   @Nullable
   protected PsiDirectory getDirectory(@NotNull PsiElement qualifier) {
     PsiElement resolve = calcQualifierResolve(qualifier);

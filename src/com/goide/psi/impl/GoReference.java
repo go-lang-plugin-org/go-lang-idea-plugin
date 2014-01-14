@@ -47,15 +47,15 @@ public class GoReference extends GoReferenceBase {
     processReceiver(processor);
     processFunctionParameters(processor);
     for (GoConstDefinition definition : file.getConsts()) {
-      if (isPublic(definition) || localResolve) processor.execute(definition, ResolveState.initial());
+      if (definition.isPublic() || localResolve) processor.execute(definition, ResolveState.initial());
     }
     for (GoVarDefinition definition : file.getVars()) {
-      if (isPublic(definition) || localResolve) processor.execute(definition, ResolveState.initial());
+      if (definition.isPublic() || localResolve) processor.execute(definition, ResolveState.initial());
     }
     GoNamedElement result = processor.getResult();
     if (result != null) return result;
     for (GoFunctionDeclaration f : file.getFunctions()) {
-      if ((isPublic(f) || localResolve) && id.equals(f.getName())) return f;
+      if ((f.isPublic() || localResolve) && id.equals(f.getName())) return f;
     }
 
     if (RESERVED_NAMES.contains(id)) return myElement;
@@ -89,16 +89,16 @@ public class GoReference extends GoReferenceBase {
     processReceiver(processor);
     processFunctionParameters(processor);
     for (GoNamedElement v : processor.getVariants()) {
-      if (isPublic(v) || localCompletion) result.add(GoPsiImplUtil.createVariableLikeLookupElement(v));
+      if (v.isPublic() || localCompletion) result.add(GoPsiImplUtil.createVariableLikeLookupElement(v));
     }
     for (GoConstDefinition c : file.getConsts()) {
-      if (isPublic(c) || localCompletion) result.add(GoPsiImplUtil.createVariableLikeLookupElement(c));
+      if (c.isPublic() || localCompletion) result.add(GoPsiImplUtil.createVariableLikeLookupElement(c));
     }
     for (GoVarDefinition v : file.getVars()) {
-      if (isPublic(v) || localCompletion) result.add(GoPsiImplUtil.createVariableLikeLookupElement(v));
+      if (v.isPublic() || localCompletion) result.add(GoPsiImplUtil.createVariableLikeLookupElement(v));
     }
     for (GoFunctionDeclaration f : file.getFunctions()) {
-      if (isPublic(f) || localCompletion) result.add(GoPsiImplUtil.createFunctionLookupElement(f));
+      if (f.isPublic() || localCompletion) result.add(GoPsiImplUtil.createFunctionLookupElement(f));
     }
     processImports(result, file, localCompletion);
   }
