@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeSlice;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -28,6 +29,11 @@ public class GoPsiTypeSliceImpl extends GoPsiPackagedElementBase implements
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitSliceType(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypeSlice(this, data);
     }
 
     @Override

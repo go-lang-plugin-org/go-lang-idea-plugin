@@ -11,6 +11,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionClause;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 public class GoSwitchExpressionClauseImpl extends GoPsiElementBase
     implements GoSwitchExpressionClause {
@@ -53,5 +54,10 @@ public class GoSwitchExpressionClauseImpl extends GoPsiElementBase
         }
 
         return true;
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitSwitchExpressionClause(this, data);
     }
 }

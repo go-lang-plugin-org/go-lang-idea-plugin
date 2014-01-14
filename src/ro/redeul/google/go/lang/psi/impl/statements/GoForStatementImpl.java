@@ -6,7 +6,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForStatement;
 
-public class GoForStatementImpl extends GoPsiElementBase
+public abstract class GoForStatementImpl extends GoPsiElementBase
     implements GoForStatement {
 
     GoForStatementImpl(@NotNull ASTNode node) {

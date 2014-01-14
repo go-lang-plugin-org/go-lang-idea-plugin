@@ -1,12 +1,10 @@
 package ro.redeul.google.go.lang.psi;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.TokenSet;
-import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -19,6 +17,8 @@ public interface GoPsiElement extends PsiElement {
     GoPsiElement[] EMPTY_ARRAY = new GoPsiElement[0];
 
     void accept(GoElementVisitor visitor);
+
+    <T, S> T accept(GoTypedVisitor<T, S> visitor, S data);
 
     <T> T accept(GoElementVisitorWithData<T> visitor);
 

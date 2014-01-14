@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.childAt;
 
@@ -35,6 +36,11 @@ public class GoPsiTypeMapImpl extends GoPsiPackagedElementBase implements
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitMapType(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypeMap(this, data);
     }
 
     @Override

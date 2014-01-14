@@ -34,5 +34,8 @@ public interface GoUnaryExpression extends GoExpr {
     @NotNull
     Op getOp();
 
+    /**
+     * For a unary expression it should return the expression without the operator.
+     */
     GoExpr getExpression();
 }

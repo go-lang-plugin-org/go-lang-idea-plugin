@@ -13,6 +13,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import javax.swing.*;
 import java.util.LinkedList;
@@ -71,6 +72,11 @@ public class GoTypeStructFieldImpl extends GoPsiElementBase implements GoTypeStr
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeStructField(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypeStructField(this, data);
     }
 
     @Override

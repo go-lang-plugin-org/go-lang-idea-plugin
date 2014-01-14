@@ -13,6 +13,7 @@ import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 public class GoSelectCommClauseDefaultImpl extends GoPsiElementBase
     implements GoSelectCommClauseDefault {
@@ -34,6 +35,11 @@ public class GoSelectCommClauseDefaultImpl extends GoPsiElementBase
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitSelectCommClauseDefault(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitSelectCommClauseDefault(this, data);
     }
 
     @Override

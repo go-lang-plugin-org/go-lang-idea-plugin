@@ -7,8 +7,9 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpressio
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
-public class GoParenthesisedExpressionImpl extends GoPsiElementBase implements GoParenthesisedExpression {
+public class GoParenthesisedExpressionImpl extends GoPrimaryExpressionBase implements GoParenthesisedExpression {
 
     public GoParenthesisedExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -41,5 +42,10 @@ public class GoParenthesisedExpressionImpl extends GoPsiElementBase implements G
     @Override
     public boolean hasType(GoType type) {
         return getInnerExpression().hasType(type);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionParenthesised(this, data);
     }
 }

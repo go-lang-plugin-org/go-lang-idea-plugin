@@ -21,6 +21,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePredeclared
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.string;
@@ -36,6 +37,11 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
 
     public GoPsiTypeNameImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypeName(this, data);
     }
 
     @Override
@@ -133,7 +139,7 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
     @NotNull
     @Override
     public GoLiteralIdentifier getIdentifier() {
-        return findChildByClass(GoLiteralIdentifier.class);
+        return findNotNullChildByClass(GoLiteralIdentifier.class);
     }
 
     @Override

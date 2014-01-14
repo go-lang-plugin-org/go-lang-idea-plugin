@@ -27,6 +27,7 @@ import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.util.GoUtil;
 import ro.redeul.google.go.util.LookupElementUtil;
@@ -204,6 +205,11 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitFile(this);
+    }
+
+    @Override
+    public <T, V> T accept(GoTypedVisitor<T, V> visitor, V data) {
+        return visitor.visitFile(this, data);
     }
 
     @Override

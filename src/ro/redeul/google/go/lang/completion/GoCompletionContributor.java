@@ -167,7 +167,7 @@ public class GoCompletionContributor extends CompletionContributor {
     @SuppressWarnings("unchecked")
     public GoCompletionContributor() {
 
-//        extend(CompletionType.BASIC,
+//        extend(CompletionType.SPACE,
 //               psiElement(),
 //               debuggingCompletionProvider);
 

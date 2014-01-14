@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import static ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression.Op;
 
@@ -15,6 +16,11 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
 
     public GoAdditiveExpressionImpl(@NotNull ASTNode node) {
         super(node, Op.values(), GoElementTypes.OPS_ADD);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionAdditive(this, data);
     }
 }
 

@@ -13,8 +13,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public class GoPsiTypeFunctionImpl extends GoPsiPackagedElementBase
-        implements GoPsiTypeFunction {
+public class GoPsiTypeFunctionImpl extends GoPsiPackagedElementBase implements GoPsiTypeFunction {
     public GoPsiTypeFunctionImpl(@NotNull ASTNode node) {
         super(node);
     }

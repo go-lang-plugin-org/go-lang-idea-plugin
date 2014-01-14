@@ -13,8 +13,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
  * Date: Aug 26, 2010
  * Time: 2:32:15 PM
  */
-public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOwner,
-    GoPsiTypeFunction, GoDocumentedPsiElement {
+public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOwner, GoPsiTypeFunction, GoDocumentedPsiElement {
 
     String getFunctionName();
 

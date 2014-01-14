@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 public class GoUnaryExpressionImpl extends GoExpressionBase implements GoUnaryExpression {
@@ -70,5 +71,10 @@ public class GoUnaryExpressionImpl extends GoExpressionBase implements GoUnaryEx
     public boolean isConstantExpression() {
         GoExpr expression = getExpression();
         return expression != null && expression.isConstantExpression();
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionUnary(this, data);
     }
 }

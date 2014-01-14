@@ -14,6 +14,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +46,11 @@ public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDecla
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitVarDeclaration(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitVarSpec(this, data);
     }
 
     @Override

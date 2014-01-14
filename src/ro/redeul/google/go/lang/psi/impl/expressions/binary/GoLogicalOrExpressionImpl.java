@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalOrExpression;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 public class GoLogicalOrExpressionImpl extends GoBinaryExpressionImpl<GoLogicalOrExpression.Op> implements GoLogicalOrExpression
@@ -23,6 +24,11 @@ public class GoLogicalOrExpressionImpl extends GoBinaryExpressionImpl<GoLogicalO
                         GoTypes.Builtin.Bool,
                         GoNamesCache.getInstance(getProject()))
         };
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionLogicalOr(this, data);
     }
 }
 

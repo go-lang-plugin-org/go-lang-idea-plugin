@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.psi.impl.declarations;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -10,9 +9,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-
-import java.util.LinkedList;
-import java.util.List;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -51,5 +48,10 @@ public class GoVarDeclarationsImpl extends GoPsiElementBase implements GoVarDecl
         }
 
         return true;
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitVarDeclaration(this, data);
     }
 }

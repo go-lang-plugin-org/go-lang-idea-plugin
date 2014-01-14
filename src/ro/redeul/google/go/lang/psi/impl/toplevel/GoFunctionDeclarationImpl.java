@@ -25,6 +25,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -99,8 +100,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
 
     @Override
     public GoFunctionParameter[] getParameters() {
-        GoFunctionParameterList parameterList =
-            findChildByClass(GoFunctionParameterList.class);
+        GoFunctionParameterList parameterList = findChildByClass(GoFunctionParameterList.class);
 
         if ( parameterList == null ) {
             return GoFunctionParameter.EMPTY_ARRAY;
@@ -143,6 +143,11 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitFunctionDeclaration(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitFunctionDeclaration(this, data);
     }
 
     @Override

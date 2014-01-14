@@ -112,11 +112,17 @@ class GoPsiCreator implements GoElementTypes {
         if (elementType.equals(TYPE_FUNCTION))
             return new GoPsiTypeFunctionImpl(node);
 
+        if (elementType.equals(TYPE_LIST))
+            return new GoPsiTypeListImpl(node);
+
         if (elementType.equals(FUNCTION_PARAMETER_LIST))
             return new GoFunctionParameterListImpl(node);
 
         if (elementType.equals(FUNCTION_PARAMETER))
             return new GoFunctionParameterImpl(node);
+
+        if (elementType.equals(FUNCTION_RESULT))
+            return new GoFunctionResultImpl(node);
 
         if (elementType.equals(FUNCTION_PARAMETER_VARIADIC))
             return new GoFunctionParameterImpl(node);

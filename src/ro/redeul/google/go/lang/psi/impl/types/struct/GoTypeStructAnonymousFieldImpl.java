@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +53,11 @@ public class GoTypeStructAnonymousFieldImpl extends GoPsiElementBase implements 
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeStructAnonymousField(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypeStructAnonymousField(this, data);
     }
 
     @Override

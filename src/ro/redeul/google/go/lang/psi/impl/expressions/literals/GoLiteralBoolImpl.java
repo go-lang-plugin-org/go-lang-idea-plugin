@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 public class GoLiteralBoolImpl extends GoPsiElementBase
     implements GoLiteralBool {
@@ -27,5 +28,10 @@ public class GoLiteralBoolImpl extends GoPsiElementBase
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitLiteralBool(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitLiteralBool(this, data);
     }
 }

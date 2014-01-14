@@ -15,12 +15,13 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import java.util.Arrays;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
-public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCallOrConvExpression
+public class GoCallOrConvExpressionImpl extends GoPrimaryExpressionBase implements GoCallOrConvExpression
 {
     public GoCallOrConvExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -45,9 +46,10 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
         return GoType.EMPTY_ARRAY;
     }
 
+    @NotNull
     @Override
     public GoPrimaryExpression getBaseExpression() {
-        return findChildByClass(GoPrimaryExpression.class);
+        return findNotNullChildByClass(GoPrimaryExpression.class);
     }
 
     @Override
@@ -55,6 +57,7 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
         return findChildByClass(GoPsiType.class);
     }
 
+    @NotNull
     @Override
     public GoExpr[] getArguments() {
         GoExpr[] expressions = findChildrenByClass(GoExpr.class);
@@ -64,6 +67,11 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitCallOrConvExpression(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionCallOrConversion(this, data);
     }
 
     @Override

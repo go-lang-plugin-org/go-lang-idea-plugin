@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoSendStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * // TODO: mtoader ! Please explain yourself.
@@ -34,5 +35,10 @@ public class GoSendStatementImpl extends GoPsiElementBase implements GoSendState
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitSendStatement(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitStatementSend(this, data);
     }
 }

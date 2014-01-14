@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import static ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression.Op;
@@ -26,6 +27,11 @@ public class GoRelationalExpressionImpl extends GoBinaryExpressionImpl<Op> imple
                         GoTypes.Builtin.Bool,
                         GoNamesCache.getInstance(getProject()))
         };
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionRelational(this, data);
     }
 }
 

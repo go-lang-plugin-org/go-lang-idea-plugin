@@ -8,6 +8,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePointer;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -25,6 +26,11 @@ public class GoPsiTypePointerImpl extends GoPsiPackagedElementBase implements
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitPointerType(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypePointer(this, data);
     }
 
     @Override

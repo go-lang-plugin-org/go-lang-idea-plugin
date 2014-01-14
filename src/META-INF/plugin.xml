@@ -348,7 +348,7 @@
                 implementation="ro.redeul.google.go.refactoring.inline.InlineLocalVariableActionHandler"/>
 
         <lang.formatter language="Google Go"
-                        implementationClass="ro.redeul.google.go.formatter.GoFormattingModelBuilder"/>
+                        implementationClass="ro.redeul.google.go.formatter.FormattingModelBuilder"/>
         <lang.psiStructureViewFactory language="Google Go"
                                       implementationClass="ro.redeul.google.go.ide.structureview.GoStructureView"/>
         <lang.importOptimizer language="Google Go"

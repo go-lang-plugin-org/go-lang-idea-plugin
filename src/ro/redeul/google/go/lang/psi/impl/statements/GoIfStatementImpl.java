@@ -11,6 +11,7 @@ import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 public class GoIfStatementImpl extends GoPsiElementBase
     implements GoIfStatement {
@@ -63,5 +64,10 @@ public class GoIfStatementImpl extends GoPsiElementBase
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitIfStatement(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitStatementIf(this, data);
     }
 }

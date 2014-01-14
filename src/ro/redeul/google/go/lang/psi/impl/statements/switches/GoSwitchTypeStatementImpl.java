@@ -10,12 +10,9 @@ import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeStatement;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
-public class GoSwitchTypeStatementImpl extends GoPsiElementBase
-    implements GoSwitchTypeStatement {
+public class GoSwitchTypeStatementImpl extends GoPsiElementBase implements GoSwitchTypeStatement {
 
     public GoSwitchTypeStatementImpl(@NotNull ASTNode node) {
         super(node);
@@ -58,4 +55,8 @@ public class GoSwitchTypeStatementImpl extends GoPsiElementBase
 
     }
 
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitStatementSwitchType(this, data);
+    }
 }

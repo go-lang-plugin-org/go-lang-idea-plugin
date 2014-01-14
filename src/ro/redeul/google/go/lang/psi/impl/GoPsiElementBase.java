@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.psi.GoDocumentedPsiElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.util.LookupElementUtil;
 
 import java.util.Collections;
@@ -28,7 +29,6 @@ import java.util.List;
  * Time: 10:26:02 PM
  */
 public class GoPsiElementBase extends ASTWrapperPsiElement implements GoPsiElement {
-
 
     protected PsiReference[] refs(PsiReference ... references) {
         return references;
@@ -51,6 +51,11 @@ public class GoPsiElementBase extends ASTWrapperPsiElement implements GoPsiEleme
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitElement(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitElement(this, data);
     }
 
     @Override
@@ -142,5 +147,4 @@ public class GoPsiElementBase extends ASTWrapperPsiElement implements GoPsiEleme
             return Collections.emptyList();
         }
     }
-
 }

@@ -10,11 +10,12 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.hasPrevSiblingOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceOrComment;
 
-public class GoSliceExpressionImpl extends GoExpressionBase implements GoSliceExpression {
+public class GoSliceExpressionImpl extends GoPrimaryExpressionBase implements GoSliceExpression {
 
     public GoSliceExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -23,6 +24,11 @@ public class GoSliceExpressionImpl extends GoExpressionBase implements GoSliceEx
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitSliceExpression(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionSlice(this, data);
     }
 
     @Override

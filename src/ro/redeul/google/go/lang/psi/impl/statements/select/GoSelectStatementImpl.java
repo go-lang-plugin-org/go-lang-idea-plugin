@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClause;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 public class GoSelectStatementImpl extends GoPsiElementBase
     implements GoSelectStatement {
@@ -25,5 +26,10 @@ public class GoSelectStatementImpl extends GoPsiElementBase
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitSelectStatement(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitStatementSelect(this, data);
     }
 }

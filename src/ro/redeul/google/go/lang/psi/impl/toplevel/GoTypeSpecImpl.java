@@ -16,6 +16,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -40,6 +41,11 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeSpec(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypeSpec(this, data);
     }
 
     @Override

@@ -34,7 +34,7 @@ public abstract class GoBinaryExpressionImpl<Op extends Operator> extends GoExpr
     }
 
     @Override
-    public Op getOp() {
+    public Op Op() {
         return GoPsiUtils.findOperator(this, operators, operatorTokens);
     }
 

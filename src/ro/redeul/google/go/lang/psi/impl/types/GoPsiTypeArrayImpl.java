@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeArray;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -17,8 +18,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: Aug 30, 2010
  * Time: 9:07:51 PM
  */
-public class GoPsiTypeArrayImpl extends GoPsiPackagedElementBase implements
-        GoPsiTypeArray {
+public class GoPsiTypeArrayImpl extends GoPsiPackagedElementBase implements GoPsiTypeArray {
 
     public GoPsiTypeArrayImpl(@NotNull ASTNode node) {
         super(node);
@@ -36,6 +36,11 @@ public class GoPsiTypeArrayImpl extends GoPsiPackagedElementBase implements
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitArrayType(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypeArray(this, data);
     }
 
     @Override

@@ -6,6 +6,9 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
 /**
+ * // TODO: properly embed the anonymous field declaration in here if necessary
+ * // TODO: parse the tags
+ * //
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
  * Date: 5/29/11

@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 public class GoBlockStatementImpl extends GoPsiElementBase implements GoBlockStatement {
     public GoBlockStatementImpl(@NotNull ASTNode node) {
@@ -37,5 +38,10 @@ public class GoBlockStatementImpl extends GoPsiElementBase implements GoBlockSta
         }
 
         return true;
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitStatementBlock(this, data);
     }
 }

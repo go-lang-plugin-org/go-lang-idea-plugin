@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoAssignmentStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,5 +69,10 @@ public class GoAssignmentStatementImpl extends GoPsiElementBase
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitAssignment(this);
+    }
+
+    @Override
+    public <Return, State> Return accept(GoTypedVisitor<Return, State> visitor, State data) {
+        return visitor.visitStatementAssign(this, data);
     }
 }

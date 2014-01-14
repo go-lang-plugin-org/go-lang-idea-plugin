@@ -12,8 +12,9 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeMap;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
-public class GoIndexExpressionImpl extends GoExpressionBase implements GoIndexExpression {
+public class GoIndexExpressionImpl extends GoPrimaryExpressionBase implements GoIndexExpression {
 
     public GoIndexExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -78,6 +79,11 @@ public class GoIndexExpressionImpl extends GoExpressionBase implements GoIndexEx
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitIndexExpression(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionIndex(this, data);
     }
 
     @Override

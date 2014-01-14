@@ -7,12 +7,18 @@ import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComp
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 public class GoLiteralCompositeImpl extends GoPsiElementBase
     implements GoLiteralComposite
 {
     public GoLiteralCompositeImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitLiteralComposite(this, data);
     }
 
     @Override
@@ -23,7 +29,7 @@ public class GoLiteralCompositeImpl extends GoPsiElementBase
     @NotNull
     @Override
     public GoLiteralCompositeValue getValue() {
-        return findChildByClass(GoLiteralCompositeValue.class);
+        return findNotNullChildByClass(GoLiteralCompositeValue.class);
     }
 
     @Override

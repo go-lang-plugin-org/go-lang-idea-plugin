@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +41,11 @@ public class GoTypeDeclarationImpl extends GoPsiElementBase implements GoTypeDec
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeDeclaration(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypeDeclaration(this, data);
     }
 
     @Override

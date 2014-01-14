@@ -34,14 +34,14 @@ import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.services.GoPsiManager;
 import ro.redeul.google.go.util.GoUtil;
 
 import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin;
 
-public class GoLiteralExpressionImpl extends GoExpressionBase
-        implements GoLiteralExpression {
+public class GoLiteralExpressionImpl extends GoPrimaryExpressionBase implements GoLiteralExpression {
 
     public GoLiteralExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -50,6 +50,11 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitLiteralExpression(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionLiteral(this, data);
     }
 
     @Override

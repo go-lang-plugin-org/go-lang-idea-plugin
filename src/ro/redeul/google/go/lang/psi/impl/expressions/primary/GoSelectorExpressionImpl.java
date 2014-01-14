@@ -27,11 +27,12 @@ import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.services.GoPsiManager;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
-public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSelectorExpression {
+public class GoSelectorExpressionImpl extends GoPrimaryExpressionBase implements GoSelectorExpression {
 
     public GoSelectorExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -39,6 +40,11 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitSelectorExpression(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionSelector(this, data);
     }
 
     @Override

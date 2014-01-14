@@ -11,6 +11,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 public class GoLabeledStatementImpl extends GoPsiElementBase implements GoLabeledStatement {
     public GoLabeledStatementImpl(@NotNull ASTNode node) {
@@ -32,6 +33,11 @@ public class GoLabeledStatementImpl extends GoPsiElementBase implements GoLabele
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitLabeledStatement(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitStatementLabeled(this, data);
     }
 
     @Override

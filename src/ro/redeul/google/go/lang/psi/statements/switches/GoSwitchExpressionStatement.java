@@ -6,9 +6,6 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
 public interface GoSwitchExpressionStatement extends GoStatement {
 
     @Nullable

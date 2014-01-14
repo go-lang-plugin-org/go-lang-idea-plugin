@@ -8,10 +8,11 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-public class GoTypeAssertionExpressionImpl extends GoExpressionBase
-    implements GoTypeAssertionExpression {
+public class GoTypeAssertionExpressionImpl extends GoPrimaryExpressionBase implements GoTypeAssertionExpression {
+
     public GoTypeAssertionExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -38,5 +39,10 @@ public class GoTypeAssertionExpressionImpl extends GoExpressionBase
     @Override
     public boolean isConstantExpression() {
         return false;
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionTypeAssertion(this, data);
     }
 }

@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoIncDecStatement;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * TODO: Document this
@@ -25,6 +26,11 @@ public class GoIncDecStatementImpl extends GoPsiElementBase implements GoIncDecS
     @Override
     public GoExpr getExpression() {
         return findChildByClass(GoExpr.class);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitStatementIncDec(this, data);
     }
 
     @Nullable

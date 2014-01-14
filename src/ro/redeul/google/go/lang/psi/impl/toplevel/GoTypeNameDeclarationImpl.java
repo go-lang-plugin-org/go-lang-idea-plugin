@@ -19,6 +19,7 @@ import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.util.LookupElementUtil;
 
 import javax.swing.*;
@@ -55,6 +56,11 @@ public class GoTypeNameDeclarationImpl
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeNameDeclaration(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypeNameDeclaration(this, data);
     }
 
     @Override

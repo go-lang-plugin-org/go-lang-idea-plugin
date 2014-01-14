@@ -12,12 +12,13 @@ import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeList;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import java.util.List;
 
-public class GoSwitchTypeClauseImpl extends GoPsiElementBase
-    implements GoSwitchTypeClause {
+public class GoSwitchTypeClauseImpl extends GoPsiElementBase implements GoSwitchTypeClause {
 
     public GoSwitchTypeClauseImpl(@NotNull ASTNode node) {
         super(node);
@@ -31,11 +32,9 @@ public class GoSwitchTypeClauseImpl extends GoPsiElementBase
     @NotNull
     @Override
     public GoPsiType[] getTypes() {
-        PsiElement list = findChildByType(GoElementTypes.TYPE_LIST);
+        GoPsiTypeList list = findChildByClass(GoPsiTypeList.class);
         if ( list != null ) {
-            List<GoPsiType> arguments =
-                GoPsiUtils.findChildrenOfType(list, GoPsiType.class);
-            return arguments.toArray(new GoPsiType[arguments.size()]);
+            return list.getTypes();
         }
 
         return findChildrenByClass(GoPsiType.class);
@@ -67,5 +66,10 @@ public class GoSwitchTypeClauseImpl extends GoPsiElementBase
         }
 
         return true;
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitSwitchTypeClause(this, data);
     }
 }

@@ -6,16 +6,11 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeAndVarsStatement;
-import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.typing.*;
-import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.hasPrevSiblingOfType;
 
@@ -54,6 +49,11 @@ public class GoForWithRangeAndVarsStatementImpl extends GoAbstractForWithRangeSt
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitForWithRangeAndVars(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitStatementForWithRangeAndVars(this, data);
     }
 
     @Override

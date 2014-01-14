@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.psi.resolve.references.ImportReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.Collection;
@@ -29,6 +30,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getContainingGoFile;
  * Time: 11:31:29 PM
  */
 public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImportDeclaration {
+
     public GoImportDeclarationImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -69,6 +71,11 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitImportDeclaration(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitImportSpec(this, data);
     }
 
     @Override

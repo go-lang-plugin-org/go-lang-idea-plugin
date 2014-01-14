@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.psi.impl.declarations;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -11,9 +10,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-
-import java.util.LinkedList;
-import java.util.List;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -40,6 +37,11 @@ public class GoConstDeclarationsImpl extends GoPsiElementBase implements GoConst
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitConstDeclarations(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitConstDeclaration(this, data);
     }
 
     @Override

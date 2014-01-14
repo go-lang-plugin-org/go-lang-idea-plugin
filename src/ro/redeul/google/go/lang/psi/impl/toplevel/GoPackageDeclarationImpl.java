@@ -7,6 +7,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * User: mtoader
@@ -42,5 +43,10 @@ public class GoPackageDeclarationImpl extends GoPsiElementBase implements GoPack
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitPackageDeclaration(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitPackageDeclaration(this, data);
     }
 }

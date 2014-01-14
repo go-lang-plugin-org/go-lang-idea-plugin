@@ -10,10 +10,9 @@ import ro.redeul.google.go.lang.psi.statements.GoForWithClausesStatement;
 import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
-public class GoForWithClausesStatementImpl
-    extends GoForStatementImpl
-    implements GoForWithClausesStatement
+public class GoForWithClausesStatementImpl extends GoForStatementImpl implements GoForWithClausesStatement
 {
     public GoForWithClausesStatementImpl(@NotNull ASTNode node) {
         super(node);
@@ -37,6 +36,11 @@ public class GoForWithClausesStatementImpl
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitForWithClauses(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitStatementForWithClauses(this, data);
     }
 
     @Override

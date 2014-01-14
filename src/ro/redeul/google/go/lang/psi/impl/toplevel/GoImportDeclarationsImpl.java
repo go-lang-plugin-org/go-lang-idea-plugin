@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -45,5 +46,10 @@ public class GoImportDeclarationsImpl extends GoPsiElementBase implements GoImpo
 
         // don't process recursively imported names (yet).
         return !state.get(GoResolveStates.IsOriginalPackage) || !state.get(GoResolveStates.IsOriginalFile) || GoPsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitImportDeclaration(this, data);
     }
 }

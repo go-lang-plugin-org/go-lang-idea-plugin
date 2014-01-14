@@ -1,8 +1,11 @@
 package ro.redeul.google.go.lang.psi.expressions;
 
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.GoPsiElementList;
 
-// TODO: Remove this as it's not needed in general
-public interface GoExpressionList extends GoPsiElement {
+public interface GoExpressionList extends GoPsiElement, GoPsiElementList<GoExpr> {
+
+    @NotNull
     GoExpr[] getExpressions();
 }

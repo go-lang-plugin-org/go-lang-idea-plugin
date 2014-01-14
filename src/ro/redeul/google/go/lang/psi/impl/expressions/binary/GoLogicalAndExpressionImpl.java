@@ -7,6 +7,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalAndExpression;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import static ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalAndExpression.Op;
@@ -25,6 +26,11 @@ public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl<Op>
                         GoTypes.Builtin.Bool,
                         GoNamesCache.getInstance(getProject()))
         };
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitExpressionLogicalAnd(this, data);
     }
 }
 

@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 public class GoLiteralStringImpl extends GoPsiElementBase
     implements GoLiteralString
@@ -23,5 +24,10 @@ public class GoLiteralStringImpl extends GoPsiElementBase
     public Type getType() {
         return getText().startsWith("`")
             ? Type.RawString : Type.InterpretedString;
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitLiteralString(this, data);
     }
 }

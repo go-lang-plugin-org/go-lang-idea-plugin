@@ -17,7 +17,8 @@ public class GoExpressionsFormatterTest extends GoFormatterTestCase {
     }
 
 
-    public void testCalls() throws Exception { _test(); }
+    public void testCall_binary() throws Exception { _test(); }
+    public void testCall_multiline() throws Exception { _test(); }
     public void testCombined() throws Exception { _test(); }
     public void testIndex() throws Exception { _test(); }
     public void testNormal() throws Exception { _test(); }
