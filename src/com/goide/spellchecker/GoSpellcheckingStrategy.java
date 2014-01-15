@@ -1,6 +1,6 @@
 package com.goide.spellchecker;
 
-import com.goide.inspections.GoSuppressionUtil;
+import com.goide.inspections.suppression.GoSuppressionUtil;
 import com.intellij.codeInspection.SuppressQuickFix;
 import com.intellij.psi.PsiElement;
 import com.intellij.spellchecker.tokenizer.SuppressibleSpellcheckingStrategy;

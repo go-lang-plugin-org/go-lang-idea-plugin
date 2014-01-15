@@ -1,4 +1,4 @@
-package com.goide.inspections.suppresion;
+package com.goide.inspections.suppression;
 
 import com.goide.psi.GoCompositeElement;
 import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoInspectionCommentFix;
@@ -31,12 +31,12 @@ public class GoSuppressInspectionFix extends AbstractBatchSuppressByNoInspection
   @Override
   @Nullable
   public PsiElement getContainer(PsiElement context) {
-    return PsiTreeUtil.getParentOfType(context, myContainerClass);
+    return PsiTreeUtil.getNonStrictParentOfType(context, myContainerClass);
   }
 
+  //todo: remove after formatting implementation
   @Override
-  protected void createSuppression(@NotNull Project project, @NotNull PsiElement element, @NotNull PsiElement container) throws
-                                                                                                                         IncorrectOperationException {
+  protected void createSuppression(@NotNull Project project, @NotNull PsiElement element, @NotNull PsiElement container) throws IncorrectOperationException {
     PsiParserFacade parserFacade = PsiParserFacade.SERVICE.getInstance(project);
     String text = SuppressionUtilCore.SUPPRESS_INSPECTIONS_TAG_NAME + " " + myID;
     PsiComment comment = parserFacade.createLineOrBlockCommentFromText(element.getContainingFile().getLanguage(), text);
