@@ -13,6 +13,9 @@
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
 
   <extensions defaultExtensionNs="com.intellij">
+    <internalFileTemplate name="Go Application"/>
+    <internalFileTemplate name="Go File"/>
+
     <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>
     <fileTypeFactory implementation="com.goide.GoFileTypeFactory"/>
@@ -46,5 +49,11 @@
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnresolvedReferenceInspection"/>
   </extensions>
+  <actions>
+    <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"
+                    text="Go File" description="Create new Go file">
+                <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+            </action>
+  </actions>
 
 </idea-plugin>
