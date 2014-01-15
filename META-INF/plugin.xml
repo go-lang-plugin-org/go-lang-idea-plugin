@@ -42,7 +42,7 @@
     <configurationType implementation="com.goide.runconfig.testing.GoTestRunConfigurationType"/>
     <testFinder implementation="com.goide.runconfig.testing.GoTestFinder"/>
     
-    <localInspection language="go" shortName="GoUnresolvedReference" displayName="Unresolved reference inspection"
+    <localInspection language="go" displayName="Unresolved reference inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnresolvedReferenceInspection"/>
   </extensions>
