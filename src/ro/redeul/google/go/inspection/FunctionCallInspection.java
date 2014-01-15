@@ -244,7 +244,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                 return checkValidLiteralIntExpr((GoExpr) literal);
             if (literal instanceof GoLiteralInteger || literal.getNode().getElementType() == GoElementTypes.LITERAL_CHAR)
                 return true;
-            return literal instanceof GoLiteralFloat && literal.getText().matches("^[0-9]*\\.0+$");
+            return literal instanceof GoLiteralFloat && literal.getText().matches("^[0-9]*\\.0*$");
         }
         if (expr instanceof GoBinaryExpression) {
             if (!checkValidLiteralIntExpr(((GoBinaryExpression) expr).getLeftOperand()))

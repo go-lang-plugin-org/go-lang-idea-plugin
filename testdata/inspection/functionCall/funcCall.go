@@ -109,11 +109,13 @@ func main() {
 	//ISSUE #357
 	MatchI('5')
 	MatchI(1.0 * NORMAL)
+	MatchI(1. * NORMAL)
 	MatchF(5 * NORMAL)
 	MatchF(NORMAL)
 	MatchF(45)
 	MatchF(5 * 5 * 24 * 31 * 314)
 	MatchI(1.0)
+	MatchI(1.)
 	MatchI(/*begin*/NOTNARMAL/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
 	MatchI(/*begin*/2.5/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
 	MatchI(/*begin*/-2.5/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
