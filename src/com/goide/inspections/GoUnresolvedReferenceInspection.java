@@ -108,6 +108,13 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
       if (path == null) return;
 
       ProgressManager.getInstance().run(new Task.Modal(project, "Go get '" + myPackage + "'", true) {
+        private OSProcessHandler myHandler;
+
+        @Override
+        public void onCancel() {
+          if (myHandler != null) myHandler.destroyProcess();
+        }
+
         public void run(@NotNull final ProgressIndicator indicator) {
           indicator.setIndeterminate(true);
           String executable = JpsGoSdkType.getGoExecutableFile(path).getAbsolutePath();
@@ -117,9 +124,9 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
           install.addParameter("get");
           install.addParameter(myPackage);
           try {
-            OSProcessHandler handler = new OSProcessHandler(install.createProcess(), install.getPreparedCommandLine(Platform.current()));
+            myHandler = new OSProcessHandler(install.createProcess(), install.getPreparedCommandLine(Platform.current()));
             final List<String> out = ContainerUtil.newArrayList();
-            handler.addProcessListener(new ProcessAdapter() {
+            myHandler.addProcessListener(new ProcessAdapter() {
               @Override
               public void onTextAvailable(ProcessEvent event, Key outputType) {
                 String text = event.getText();
@@ -135,9 +142,9 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
                 Notifications.Bus.notify(new Notification("Go", TITLE, message, NotificationType.WARNING), project);
               }
             });
-            ProcessTerminatedListener.attach(handler);
-            handler.startNotify();
-            handler.waitFor();
+            ProcessTerminatedListener.attach(myHandler);
+            myHandler.startNotify();
+            myHandler.waitFor();
             indicator.setText2("Refreshing");
           }
           catch (ExecutionException e) {
