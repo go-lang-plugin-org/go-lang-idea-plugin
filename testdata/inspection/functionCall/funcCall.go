@@ -116,7 +116,10 @@ func main() {
 	MatchI(1.0)
 	MatchI(/*begin*/NOTNARMAL/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
 	MatchI(/*begin*/2.5/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
+	MatchI(/*begin*/-2.5/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
+	MatchI(/*begin*/(-2.5)/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
 	MatchI(/*begin*/"5"/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
+	MatchI(/*begin*/-"5"/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
 	//PR #344
 	var invalid int = 1
 	AcceptMyInt(BBBBB * 5)

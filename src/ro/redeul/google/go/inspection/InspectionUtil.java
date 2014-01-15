@@ -9,10 +9,12 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoTypeAssertionExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -32,7 +34,9 @@ public class InspectionUtil {
     public static final int UNKNOWN_COUNT = -1;
 
     public static int getExpressionResultCount(GoExpr call) {
-        if (call instanceof GoLiteralExpression || call instanceof GoBinaryExpression) {
+        if (call instanceof GoLiteralExpression || call instanceof GoBinaryExpression
+                || call instanceof GoUnaryExpression || call instanceof GoParenthesisedExpression
+                ) {
             return 1;
         } else if (call instanceof GoTypeAssertionExpression) {
             return getTypeAssertionResultCount(
