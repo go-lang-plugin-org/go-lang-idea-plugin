@@ -5,8 +5,11 @@ import com.goide.psi.GoPackageClause;
 import com.goide.psi.impl.GoFunctionDeclarationImpl;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -49,13 +52,10 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
           configuration.setName(file.getName());
           configuration.setKind(GoTestRunConfiguration.Kind.FILE);
           configuration.setFilePath(file.getVirtualFile().getPath());
-          GoFunctionDeclarationImpl function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionDeclarationImpl.class);
-          if (function != null) {
-            String functionName = StringUtil.notNullize(function.getName());
-            if (functionName.startsWith("Test")) {
-              configuration.setName(functionName + " in " + file.getName());
-              configuration.setPattern("^" + functionName + "$");
-            }
+          String functionNameFromContext = findFunctionNameFromContext(contextElement);
+          if (functionNameFromContext != null) {
+            configuration.setName(functionNameFromContext + " in " + file.getName());
+            configuration.setPattern("^" + functionNameFromContext + "$");
           }
         }
         return true;
@@ -67,6 +67,34 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
 
   @Override
   public boolean isConfigurationFromContext(GoTestRunConfiguration configuration, ConfigurationContext context) {
+    PsiElement contextElement = getContextElement(context);
+    if (contextElement == null) {
+      return false;
+    }
+
+    Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
+    if (!Comparing.equal(module, configuration.getConfigurationModule().getModule())) {
+      return false;
+    }
+
+    PsiFile file = contextElement.getContainingFile();
+    switch (configuration.getKind()) {
+      case DIRECTORY:
+        String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
+        return FileUtil.pathsEqual(configuration.getDirectoryPath(), directoryPath) &&
+               FileUtil.pathsEqual(configuration.getWorkingDirectory(), directoryPath);
+      case PACKAGE:
+        String packageName = StringUtil.notNullize(((GoFile)file).getPackageName());
+        return packageName.equals(configuration.getPackage());
+      case FILE:
+        if (!FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath())) {
+          return false;
+        }
+        String functionNameFromContext = findFunctionNameFromContext(contextElement);
+        return functionNameFromContext != null 
+               ? configuration.getPattern().equals("^" + functionNameFromContext + "$") 
+               : configuration.getPattern().isEmpty();
+    }
     return false;
   }
 
@@ -80,5 +108,17 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
       return null;
     }
     return psiElement;
+  }
+
+  @Nullable
+  private static String findFunctionNameFromContext(PsiElement contextElement) {
+    GoFunctionDeclarationImpl function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionDeclarationImpl.class);
+    if (function != null) {
+      String functionName = StringUtil.notNullize(function.getName());
+      if (functionName.startsWith("Test")) {
+        return functionName;
+      }
+    }
+    return null;
   }
 }
