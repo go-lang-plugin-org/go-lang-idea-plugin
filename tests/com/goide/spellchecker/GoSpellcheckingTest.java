@@ -18,8 +18,8 @@ public class GoSpellcheckingTest extends GoCodeInsightFixtureTestCase {
     doTest();
   }
 
-  public void _testSuppressed() throws Exception {
-    doTest();//todo
+  public void testSuppressed() throws Exception {
+    doTest();
   }
 
   private void doTest() throws Exception {
