@@ -600,6 +600,28 @@ GO_FILE
               PsiElement(})('}')
           PsiElement(})('}')
       PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('main')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      IF_STATEMENT
+        PsiElement(if)('if')
+        SIMPLE_STATEMENT
+          CONDITIONAL_EXPR
+            LITERAL
+              PsiElement(int)('1')
+            PsiElement(!=)('!=')
+            LITERAL
+              PsiElement(int)('1')
+        BLOCK
+          PsiElement({)('{')
+          PsiElement(})('}')
+      PsiElement(})('}')
   VAR_DECLARATION
     PsiElement(var)('var')
     VAR_SPEC

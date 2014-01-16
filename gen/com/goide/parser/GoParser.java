@@ -681,13 +681,13 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // SimpleStatementOpt <<enterMode "NO_EMPTY_LITERAL">> Expression? <<exitMode "NO_EMPTY_LITERAL">>
+  // <<enterMode "NO_EMPTY_LITERAL">> SimpleStatementOpt Expression? <<exitMode "NO_EMPTY_LITERAL">>
   static boolean Condition(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Condition")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = SimpleStatementOpt(builder_, level_ + 1);
-    result_ = result_ && enterMode(builder_, level_ + 1, "NO_EMPTY_LITERAL");
+    result_ = enterMode(builder_, level_ + 1, "NO_EMPTY_LITERAL");
+    result_ = result_ && SimpleStatementOpt(builder_, level_ + 1);
     result_ = result_ && Condition_2(builder_, level_ + 1);
     result_ = result_ && exitMode(builder_, level_ + 1, "NO_EMPTY_LITERAL");
     exit_section_(builder_, marker_, null, result_);
@@ -1925,24 +1925,39 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // <<isModeOff "NO_EMPTY_LITERAL">> '{' ElementList? '}'
+  // <<isModeOff "NO_EMPTY_LITERAL">> '{' '}' | '{' ElementList '}'
   public static boolean LiteralValue(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "LiteralValue")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<literal value>");
-    result_ = isModeOff(builder_, level_ + 1, "NO_EMPTY_LITERAL");
-    result_ = result_ && consumeToken(builder_, LBRACE);
-    result_ = result_ && LiteralValue_2(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, RBRACE);
+    result_ = LiteralValue_0(builder_, level_ + 1);
+    if (!result_) result_ = LiteralValue_1(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, LITERAL_VALUE, result_, false, null);
     return result_;
   }
 
-  // ElementList?
-  private static boolean LiteralValue_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "LiteralValue_2")) return false;
-    ElementList(builder_, level_ + 1);
-    return true;
+  // <<isModeOff "NO_EMPTY_LITERAL">> '{' '}'
+  private static boolean LiteralValue_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "LiteralValue_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = isModeOff(builder_, level_ + 1, "NO_EMPTY_LITERAL");
+    result_ = result_ && consumeToken(builder_, LBRACE);
+    result_ = result_ && consumeToken(builder_, RBRACE);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // '{' ElementList '}'
+  private static boolean LiteralValue_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "LiteralValue_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, LBRACE);
+    result_ = result_ && ElementList(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, RBRACE);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
   }
 
   /* ********************************************************** */

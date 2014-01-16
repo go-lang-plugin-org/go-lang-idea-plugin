@@ -218,7 +218,7 @@ LiteralTypeExpr ::=
   | MapType
   | TypeName
 
-LiteralValue ::= <<isModeOff "NO_EMPTY_LITERAL">> '{' ElementList? '}' // todo: not a smart solution
+LiteralValue ::= <<isModeOff "NO_EMPTY_LITERAL">> '{' '}' | '{' ElementList '}' // todo: not a smart solution
 private ElementList  ::= Element ( ',' Element? )*
 Element ::= [ Key ':' ] Value
 Key ::= FieldName | ElementIndex
@@ -287,7 +287,7 @@ SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 SwitchStart ::= switch
 left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=2 extends=SwitchStatement}
 
-private Condition ::= SimpleStatementOpt <<enterMode "NO_EMPTY_LITERAL">> Expression? <<exitMode "NO_EMPTY_LITERAL">>
+private Condition ::= <<enterMode "NO_EMPTY_LITERAL">> SimpleStatementOpt Expression? <<exitMode "NO_EMPTY_LITERAL">>
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
 ExprCaseClause ::= ExprSwitchCase ':' Statements?

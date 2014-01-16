@@ -65,6 +65,12 @@ func (h extraHeader) Write(w io.Writer) {
 	}
 }
 
+func main() {
+    if 1 != 1 {
+    }
+}
+
+
 var days = [...]string{
 	"Sunday",
 	"Monday",
