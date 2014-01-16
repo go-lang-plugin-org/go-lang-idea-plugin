@@ -211,7 +211,10 @@ func main() {
 
 	HandleMyFunc(HandleMap)
 	HandleMyFunc(HandleMyMap)
+	HandleMyFunc(func(map[string]string){})
 	HandleMyFunc((func(map[string]string){}))
+	HandleMyFunc(/*begin*/(-(func(map[int]string){}))/*end.Expression type mismatch, the expected type is MyFunc|CastTypeFix*/)
+	HandleMyFunc(/*begin*/func(map[int]string){}/*end.Expression type mismatch, the expected type is MyFunc|CastTypeFix*/)
 	HandleMyFunc(MyFunc(func(map[string]string){}))
 	fn := MyFunc(func(map[string]string){})
 	HandleMyFunc(fn)
