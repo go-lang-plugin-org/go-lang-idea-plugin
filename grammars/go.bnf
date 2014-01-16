@@ -298,7 +298,7 @@ TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 private TypeList ::= Type ( ',' Type )*
 private TypeListNoPin ::= Type ( ',' Type )*
-ForStatement ::= for <<enterMode "NO_EMPTY_LITERAL">> [ ForClause | RangeClause | Expression ] <<exitMode "NO_EMPTY_LITERAL">> Block
+ForStatement ::= for ([ForClause | RangeClause] Block | <<enterMode "NO_EMPTY_LITERAL">> Expression <<exitMode "NO_EMPTY_LITERAL">> Block)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
 RangeClause ::= ( ExpressionList '=' | VarDefinitionList ':=' ) range Expression {pin=2}
 GoStatement ::= go Expression

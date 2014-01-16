@@ -1388,7 +1388,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // for <<enterMode "NO_EMPTY_LITERAL">> [ ForClause | RangeClause | Expression ] <<exitMode "NO_EMPTY_LITERAL">> Block
+  // for ([ForClause | RangeClause] Block | <<enterMode "NO_EMPTY_LITERAL">> Expression <<exitMode "NO_EMPTY_LITERAL">> Block)
   public static boolean ForStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ForStatement")) return false;
     if (!nextTokenIs(builder_, FOR)) return false;
@@ -1397,29 +1397,60 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, FOR);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, enterMode(builder_, level_ + 1, "NO_EMPTY_LITERAL"));
-    result_ = pinned_ && report_error_(builder_, ForStatement_2(builder_, level_ + 1)) && result_;
-    result_ = pinned_ && report_error_(builder_, exitMode(builder_, level_ + 1, "NO_EMPTY_LITERAL")) && result_;
-    result_ = pinned_ && Block(builder_, level_ + 1) && result_;
+    result_ = result_ && ForStatement_1(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, FOR_STATEMENT, result_, pinned_, null);
     return result_ || pinned_;
   }
 
-  // [ ForClause | RangeClause | Expression ]
-  private static boolean ForStatement_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ForStatement_2")) return false;
-    ForStatement_2_0(builder_, level_ + 1);
+  // [ForClause | RangeClause] Block | <<enterMode "NO_EMPTY_LITERAL">> Expression <<exitMode "NO_EMPTY_LITERAL">> Block
+  private static boolean ForStatement_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForStatement_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ForStatement_1_0(builder_, level_ + 1);
+    if (!result_) result_ = ForStatement_1_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // [ForClause | RangeClause] Block
+  private static boolean ForStatement_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForStatement_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ForStatement_1_0_0(builder_, level_ + 1);
+    result_ = result_ && Block(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // [ForClause | RangeClause]
+  private static boolean ForStatement_1_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForStatement_1_0_0")) return false;
+    ForStatement_1_0_0_0(builder_, level_ + 1);
     return true;
   }
 
-  // ForClause | RangeClause | Expression
-  private static boolean ForStatement_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ForStatement_2_0")) return false;
+  // ForClause | RangeClause
+  private static boolean ForStatement_1_0_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForStatement_1_0_0_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = ForClause(builder_, level_ + 1);
     if (!result_) result_ = RangeClause(builder_, level_ + 1);
-    if (!result_) result_ = Expression(builder_, level_ + 1, -1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // <<enterMode "NO_EMPTY_LITERAL">> Expression <<exitMode "NO_EMPTY_LITERAL">> Block
+  private static boolean ForStatement_1_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForStatement_1_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = enterMode(builder_, level_ + 1, "NO_EMPTY_LITERAL");
+    result_ = result_ && Expression(builder_, level_ + 1, -1);
+    result_ = result_ && exitMode(builder_, level_ + 1, "NO_EMPTY_LITERAL");
+    result_ = result_ && Block(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }

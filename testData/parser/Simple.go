@@ -54,6 +54,17 @@ func emptyClauses() {
     }
 }
 
+func (h extraHeader) Write(w io.Writer) {
+	for i, v := range []string{h.contentType, h.contentLength, h.connection, h.date, h.transferEncoding} {
+		if v != "" {
+			w.Write(extraHeaderKeys[i])
+			w.Write(colonSpace)
+			io.WriteString(w, v)
+			w.Write(crlf)
+		}
+	}
+}
+
 var days = [...]string{
 	"Sunday",
 	"Monday",

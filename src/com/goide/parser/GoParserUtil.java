@@ -31,7 +31,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     TObjectIntHashMap<String> flags = getParsingModes(builder_);
     int count = flags.get(mode);
     if (count == 1) flags.remove(mode);
-    else if (count > 1) flags.put(mode, count -1);
+    else if (count > 1) flags.put(mode, count -1 );
     else builder_.error("Could not exit inactive '" + mode + "' mode at offset " + builder_.getCurrentOffset());
     return true;
   }
