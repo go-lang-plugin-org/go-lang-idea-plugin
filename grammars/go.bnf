@@ -234,14 +234,16 @@ Expression ::=
   | ConditionalExpr
   | AddExpr
   | MulExpr
-  | UnaryExpr
+  | UnaryGroup
   | ConversionExpr
   | MaxGroup
   | ParenthesesExpr
 
 OrExpr ::= Expression '||' Expression
 AndExpr ::= Expression '&&' Expression
-UnaryExpr ::= unary_op Expression
+private UnaryGroup ::= UnaryTypeCreateExpr | UnaryExpr
+UnaryTypeCreateExpr ::= '&' TypeName LiteralValue {extends=UnaryExpr}
+UnaryExpr ::=  unary_op Expression
 ConditionalExpr ::= Expression rel_op Expression
 AddExpr ::= Expression add_op Expression
 MulExpr ::= Expression mul_op Expression

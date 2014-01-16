@@ -291,6 +291,9 @@ public class GoParser implements PsiParser {
     else if (root_ == UNARY_EXPR) {
       result_ = UnaryExpr(builder_, 0);
     }
+    else if (root_ == UNARY_TYPE_CREATE_EXPR) {
+      result_ = UnaryTypeCreateExpr(builder_, 0);
+    }
     else if (root_ == VALUE) {
       result_ = Value(builder_, 0);
     }
@@ -322,7 +325,8 @@ public class GoParser implements PsiParser {
       COMPOSITE_LIT, CONDITIONAL_EXPR, CONVERSION_EXPR, EXPRESSION,
       FUNCTION_LIT, INDEX_EXPR, LITERAL, LITERAL_TYPE_EXPR,
       METHOD_EXPR, MUL_EXPR, OR_EXPR, PARENTHESES_EXPR,
-      REFERENCE_EXPRESSION, SELECTOR_EXPR, TYPE_ASSERTION_EXPR, UNARY_EXPR),
+      REFERENCE_EXPRESSION, SELECTOR_EXPR, TYPE_ASSERTION_EXPR, UNARY_EXPR,
+      UNARY_TYPE_CREATE_EXPR),
     create_token_set_(FUNCTION_DECLARATION, METHOD_DECLARATION),
     create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, CONTINUE_STATEMENT, DEFER_STATEMENT,
       EXPR_SWITCH_STATEMENT, FALLTHROUGH_STATEMENT, FOR_STATEMENT, GOTO_STATEMENT,
@@ -333,6 +337,7 @@ public class GoParser implements PsiParser {
     create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE, INTERFACE_TYPE,
       MAP_TYPE, POINTER_TYPE, RECEIVER_TYPE, STRUCT_TYPE,
       TYPE),
+    create_token_set_(UNARY_EXPR, UNARY_TYPE_CREATE_EXPR),
     create_token_set_(SHORT_VAR_DECLARATION, VAR_SPEC),
   };
 
@@ -3708,7 +3713,7 @@ public class GoParser implements PsiParser {
   // 2: BINARY(ConditionalExpr)
   // 3: BINARY(AddExpr)
   // 4: BINARY(MulExpr)
-  // 5: PREFIX(UnaryExpr)
+  // 5: ATOM(UnaryTypeCreateExpr) PREFIX(UnaryExpr)
   // 6: PREFIX(ConversionExpr)
   // 7: ATOM(OperandName) ATOM(LiteralTypeExpr) POSTFIX(CallExpr) POSTFIX(BuiltinCallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) ATOM(MethodExpr) POSTFIX(IndexExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit)
   // 8: PREFIX(ParenthesesExpr)
@@ -3717,7 +3722,8 @@ public class GoParser implements PsiParser {
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<expression>");
-    result_ = UnaryExpr(builder_, level_ + 1);
+    result_ = UnaryTypeCreateExpr(builder_, level_ + 1);
+    if (!result_) result_ = UnaryExpr(builder_, level_ + 1);
     if (!result_) result_ = ConversionExpr(builder_, level_ + 1);
     if (!result_) result_ = OperandName(builder_, level_ + 1);
     if (!result_) result_ = LiteralTypeExpr(builder_, level_ + 1);
@@ -3798,6 +3804,19 @@ public class GoParser implements PsiParser {
         break;
       }
     }
+    return result_;
+  }
+
+  // '&' TypeName LiteralValue
+  public static boolean UnaryTypeCreateExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "UnaryTypeCreateExpr")) return false;
+    if (!nextTokenIs(builder_, BIT_AND)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, BIT_AND);
+    result_ = result_ && TypeName(builder_, level_ + 1);
+    result_ = result_ && LiteralValue(builder_, level_ + 1);
+    exit_section_(builder_, marker_, UNARY_TYPE_CREATE_EXPR, result_);
     return result_;
   }
 

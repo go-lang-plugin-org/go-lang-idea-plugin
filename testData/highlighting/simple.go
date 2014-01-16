@@ -23,6 +23,7 @@ func foo() {
 
 type int int
 type float32 float32
+type string string
 
 type T struct {
 	a int
@@ -38,4 +39,27 @@ func bar() {
     (T).Mv(t, 7)
     f1 := <error>T</error>.Mv; f1(t, 7)
     f2 := (T).Mv; f2(t, 7)
+}
+
+
+func foo() {
+    a := &A{}
+    b := &B{b:"bbb"}
+
+    a.<error>hola</error>() // todo
+    b.<error>hola</error>() // todo
+    b.<error>b</error> = "jj"
+}
+
+type B struct {
+    *A
+    b string
+}
+type A struct {
+    *Empty
+    a int
+}
+type Empty struct {
+}
+func (this *Empty) hola() {
 }

@@ -183,22 +183,21 @@ GO_FILE
       PsiElement({)('{')
       RETURN_STATEMENT
         PsiElement(return)('return')
-        UNARY_EXPR
+        UNARY_TYPE_CREATE_EXPR
           PsiElement(&)('&')
-          COMPOSITE_LIT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('Writer')
-            LITERAL_VALUE
-              PsiElement({)('{')
-              ELEMENT
-                KEY
-                  FIELD_NAME
-                    PsiElement(identifier)('w')
-                PsiElement(:)(':')
-                VALUE
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('w')
-              PsiElement(})('}')
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('Writer')
+          LITERAL_VALUE
+            PsiElement({)('{')
+            ELEMENT
+              KEY
+                FIELD_NAME
+                  PsiElement(identifier)('w')
+              PsiElement(:)(':')
+              VALUE
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('w')
+            PsiElement(})('}')
       PsiElement(})('}')
   PsiComment(GO_LINE_COMMENT)('// Flush finishes writing the current file (optional).')
   METHOD_DECLARATION

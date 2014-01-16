@@ -366,6 +366,10 @@ public class GoVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitUnaryTypeCreateExpr(@NotNull GoUnaryTypeCreateExpr o) {
+    visitUnaryExpr(o);
+  }
+
   public void visitValue(@NotNull GoValue o) {
     visitCompositeElement(o);
   }

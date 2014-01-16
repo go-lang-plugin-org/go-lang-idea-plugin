@@ -101,6 +101,7 @@ public interface GoTypes {
   IElementType TYPE_SWITCH_GUARD = new GoCompositeElementType("TYPE_SWITCH_GUARD");
   IElementType TYPE_SWITCH_STATEMENT = new GoCompositeElementType("TYPE_SWITCH_STATEMENT");
   IElementType UNARY_EXPR = new GoCompositeElementType("UNARY_EXPR");
+  IElementType UNARY_TYPE_CREATE_EXPR = new GoCompositeElementType("UNARY_TYPE_CREATE_EXPR");
   IElementType VALUE = new GoCompositeElementType("VALUE");
   IElementType VAR_DECLARATION = new GoCompositeElementType("VAR_DECLARATION");
   IElementType VAR_DEFINITION = new GoCompositeElementType("VAR_DEFINITION");
@@ -466,6 +467,9 @@ public interface GoTypes {
       }
       else if (type == UNARY_EXPR) {
         return new GoUnaryExprImpl(node);
+      }
+      else if (type == UNARY_TYPE_CREATE_EXPR) {
+        return new GoUnaryTypeCreateExprImpl(node);
       }
       else if (type == VALUE) {
         return new GoValueImpl(node);
