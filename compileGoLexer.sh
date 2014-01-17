@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ -z "$IDEA_HOME" ]; then
-    IDEA_HOME=/Users/mtoader/Work/Personal/idea/
+    IDEA_HOME=~/workspace-personal/intellij-community/
 fi
 
 ${IDEA_HOME}/tools/lexer/jflex-1.4/bin/jflex \

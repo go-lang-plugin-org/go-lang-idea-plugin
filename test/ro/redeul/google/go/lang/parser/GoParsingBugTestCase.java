@@ -32,4 +32,6 @@ public class GoParsingBugTestCase extends GoParsingTestCase {
     public void testStatements_lineBreakAfterLiteral() throws Throwable { doTest(); }
 
     public void testImports_packageWithDigits() throws Throwable { doTest(); }
+
+    public void testLiterals_wrongRune() throws Throwable { doTest(); }
 }
