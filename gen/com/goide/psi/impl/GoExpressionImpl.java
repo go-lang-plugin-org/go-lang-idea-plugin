@@ -21,4 +21,9 @@ public class GoExpressionImpl extends GoCompositeElementImpl implements GoExpres
     else super.accept(visitor);
   }
 
+  @Nullable
+  public GoType getGoType() {
+    return GoPsiImplUtil.getGoType(this);
+  }
+
 }

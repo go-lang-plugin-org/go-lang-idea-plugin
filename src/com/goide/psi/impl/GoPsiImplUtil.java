@@ -14,10 +14,12 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.List;
 
 public class GoPsiImplUtil {
   @Nullable
@@ -105,5 +107,33 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType getGoType(@NotNull GoReceiver o) {
     return o.getType();
+  }
+
+  @Nullable
+  public static GoType getGoType(@NotNull GoExpression o) {
+    if (o instanceof GoUnaryTypeCreateExpr) {
+      GoTypeReferenceExpression expression = ((GoUnaryTypeCreateExpr)o).getTypeReferenceExpression();
+      PsiReference reference = expression.getReference();
+      PsiElement resolve = reference != null ? reference.resolve() : null;
+      if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getType();
+    }
+    return null;
+  }
+
+  @Nullable
+  public static GoType getGoType(@NotNull GoVarDefinition o) {
+    PsiElement parent = o.getParent();
+    if (parent instanceof GoShortVarDeclaration) {
+      List<GoVarDefinition> defList = ((GoShortVarDeclaration)parent).getVarDefinitionList();
+      int i = 0;
+      for (GoVarDefinition d : defList) {
+        if (d.equals(o)) break;
+        i++;
+      }
+      List<GoExpression> exprs = ((GoShortVarDeclaration)parent).getExpressionList();
+      if (exprs.size() < i) return null;
+      return exprs.get(i).getGoType();
+    }
+    return GoNamedElementImpl.getType(o);
   }
 }

@@ -27,4 +27,9 @@ public class GoVarDefinitionImpl extends GoNamedElementImpl implements GoVarDefi
     return findNotNullChildByType(IDENTIFIER);
   }
 
+  @Nullable
+  public GoType getGoType() {
+    return GoPsiImplUtil.getGoType(this);
+  }
+
 }

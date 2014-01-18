@@ -52,6 +52,11 @@ public abstract class GoNamedElementImpl extends GoCompositeElementImpl implemen
   @Nullable
   @Override
   public GoType getGoType() {
-    return PsiTreeUtil.getNextSiblingOfType(this, GoType.class);
+    return getType(this);
+  }
+
+  @Nullable
+  public static GoType getType(GoNamedElement o) {
+    return PsiTreeUtil.getNextSiblingOfType(o, GoType.class);
   }
 }

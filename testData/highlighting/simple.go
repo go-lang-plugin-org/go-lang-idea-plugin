@@ -45,10 +45,12 @@ func bar() {
 func foo() {
     a := &A{}
     b := &B{b:"bbb"}
+    e := &Empty{}
 
     a.<error>hola</error>() // todo
     b.<error>hola</error>() // todo
-    b.<error>b</error> = "jj"
+    e.hola()
+    b.b = "jj"
 }
 
 type B struct {

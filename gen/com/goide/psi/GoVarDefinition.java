@@ -10,4 +10,7 @@ public interface GoVarDefinition extends GoNamedElement {
   @NotNull
   PsiElement getIdentifier();
 
+  @Nullable
+  GoType getGoType();
+
 }

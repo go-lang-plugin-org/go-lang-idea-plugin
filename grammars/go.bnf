@@ -185,7 +185,7 @@ VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
 VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
-VarDefinition ::= identifier
+VarDefinition ::= identifier {methods=[getGoType]}
 
 ShortVarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2 extends=VarSpec}
 
@@ -237,7 +237,7 @@ Expression ::=
   | UnaryGroup
   | ConversionExpr
   | MaxGroup
-  | ParenthesesExpr
+  | ParenthesesExpr {methods=[getGoType]}
 
 OrExpr ::= Expression '||' Expression
 AndExpr ::= Expression '&&' Expression

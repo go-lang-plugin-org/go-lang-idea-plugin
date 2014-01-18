@@ -148,30 +148,41 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   @Nullable
   private PsiElement processGoType(@Nullable GoType type) {
     if (type == null) return null;
+
+    PsiElement fromExistingType = processExistingType(type);
+    if (fromExistingType != null) return fromExistingType;
+
     GoTypeReferenceExpression refExpr = type.getTypeReferenceExpression();
     PsiReference reference = refExpr != null ? refExpr.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
     if (resolve instanceof GoTypeSpec) {
       GoType resolveType = ((GoTypeSpec)resolve).getType();
-      if (resolveType instanceof GoStructType) {
-        GoVarProcessor processor = createProcessor();
-        if (processor != null) {
-          resolveType.processDeclarations(processor, ResolveState.initial(), null, myElement);
-          GoNamedElement result = processor.getResult();
-          if (result != null) return result;
-        }
-      }
+      PsiElement element = processExistingType(resolveType);
+      return element != null ? element : null;
+    }
+    return null;
+  }
 
-      PsiFile file = resolve.getContainingFile().getOriginalFile();
-      if (file instanceof GoFile) { // todo: process the whole package
-        List<GoMethodDeclaration> methods = ((GoFile)file).getMethods();
-        for (GoMethodDeclaration method : methods) {
-          if (!Comparing.equal(getIdentifier().getText(), method.getName())) continue;
-          GoTypeReferenceExpression e = method.getReceiver().getType().getTypeReferenceExpression();
-          PsiReference reference1 = e != null ? e.getReference() : null;
-          PsiElement resolve1 = reference1 != null ? reference1.resolve() : null;
-          if (resolve.equals(resolve1)) return method;
-        }
+  @Nullable
+  private PsiElement processExistingType(@Nullable GoType type) {
+    if (type == null) return null;
+    if (type instanceof GoStructType) {
+      GoVarProcessor processor = createProcessor();
+      if (processor != null) {
+        type.processDeclarations(processor, ResolveState.initial(), null, myElement);
+        GoNamedElement result = processor.getResult();
+        if (result != null) return result;
+      }
+    }
+    PsiFile file = type.getContainingFile().getOriginalFile();
+    if (file instanceof GoFile) { // todo: process the whole package
+      List<GoMethodDeclaration> methods = ((GoFile)file).getMethods();
+      for (GoMethodDeclaration method : methods) {
+        if (!Comparing.equal(getIdentifier().getText(), method.getName())) continue;
+        GoTypeReferenceExpression e = method.getReceiver().getType().getTypeReferenceExpression();
+        PsiReference reference1 = e != null ? e.getReference() : null;
+        PsiElement resolve1 = reference1 != null ? reference1.resolve() : null;
+        if (type.getParent().equals(resolve1)) return method;
       }
     }
     return null;
