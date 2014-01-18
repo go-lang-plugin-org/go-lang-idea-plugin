@@ -30,7 +30,7 @@ public class GoTypeReference extends GoReferenceBase {
 
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    myRefExpression.replace(GoElementFactory.createTypeReferenceFromText(myElement.getProject(), newElementName));
+    myIdentifier.replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
     return myRefExpression;
   }
 

@@ -106,7 +106,7 @@ public class GoReference extends GoReferenceBase {
   @NotNull
   @Override
   public PsiElement handleElementRename(@NotNull String newElementName) throws IncorrectOperationException {
-    myRefExpression.replace(GoElementFactory.createReferenceFromText(myElement.getProject(), newElementName));
+    myIdentifier.replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
     return myRefExpression;
   }
 }
