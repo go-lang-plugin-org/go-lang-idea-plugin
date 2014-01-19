@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.goide.stubs.GoFunctionDeclarationStub;
 
-public interface GoFunctionDeclaration extends GoNamedElement, StubBasedPsiElement<GoFunctionDeclarationStub> {
+public interface GoFunctionDeclaration extends GoFunctionOrMethodDeclaration, StubBasedPsiElement<GoFunctionDeclarationStub> {
 
   @Nullable
   GoBlock getBlock();

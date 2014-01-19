@@ -67,9 +67,11 @@
 
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
-  extends("FunctionDeclaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
-  elementTypeFactory("FunctionDeclaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
+  implements("(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
+  implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
+  extends("(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
+  extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
+  elementTypeFactory("FunctionDeclaration|MethodDeclaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -207,7 +209,10 @@ FunctionDeclaration ::= func identifier Signature Block? {
   pin=2
   stubClass="com.goide.stubs.GoFunctionDeclarationStub"
 }
-MethodDeclaration ::= func Receiver identifier Signature Block? {pin=3 extends=FunctionDeclaration}
+MethodDeclaration ::= func Receiver identifier Signature Block? {
+  pin=3 
+  stubClass="com.goide.stubs.GoMethodDeclarationStub"
+}
 Receiver ::= '(' identifier? '*'? ReceiverResultType ')' {
   methods=[getGoType]
   stubClass="com.goide.stubs.GoReceiverStub"

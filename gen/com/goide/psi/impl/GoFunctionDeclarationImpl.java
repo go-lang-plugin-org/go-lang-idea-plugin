@@ -12,7 +12,7 @@ import com.goide.stubs.GoFunctionDeclarationStub;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class GoFunctionDeclarationImpl extends GoNamedElementImpl<GoFunctionDeclarationStub> implements GoFunctionDeclaration {
+public class GoFunctionDeclarationImpl extends GoFunctionOrMethodDeclarationImpl<GoFunctionDeclarationStub> implements GoFunctionDeclaration {
 
   public GoFunctionDeclarationImpl(ASTNode node) {
     super(node);

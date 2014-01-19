@@ -78,7 +78,7 @@ public class GoFile extends PsiFileBase {
   }
 
   private static boolean isPureFunction(PsiElement e) {
-    return e instanceof GoFunctionDeclaration && !(e instanceof GoMethodDeclaration);
+    return e instanceof GoFunctionDeclaration;
   }
 
   @NotNull

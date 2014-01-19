@@ -69,7 +69,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static LookupElement createFunctionLookupElement(@NotNull GoFunctionDeclaration f) {
+  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoFunctionOrMethodDeclaration f) {
     Icon icon = f instanceof GoMethodDeclaration ? GoIcons.METHOD : GoIcons.FUNCTION;
     GoSignature signature = f.getSignature();
     int paramsCount = 0;

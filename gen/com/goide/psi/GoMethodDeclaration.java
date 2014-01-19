@@ -4,8 +4,10 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import com.goide.stubs.GoMethodDeclarationStub;
 
-public interface GoMethodDeclaration extends GoFunctionDeclaration {
+public interface GoMethodDeclaration extends GoFunctionOrMethodDeclaration, StubBasedPsiElement<GoMethodDeclarationStub> {
 
   @Nullable
   GoBlock getBlock();

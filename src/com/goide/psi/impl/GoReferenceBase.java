@@ -239,7 +239,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
                 PsiReference reference1 = e != null ? e.getReference() : null;
                 PsiElement resolve1 = reference1 != null ? reference1.resolve() : null;
                 if (resolve1 != null && resolve.textMatches(resolve1)) { // todo: better equality predicate
-                  result.add(GoPsiImplUtil.createFunctionLookupElement(method));
+                  result.add(GoPsiImplUtil.createFunctionOrMethodLookupElement(method));
                 }
               }
             }

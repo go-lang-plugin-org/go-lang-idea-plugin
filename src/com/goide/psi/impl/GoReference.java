@@ -98,7 +98,7 @@ public class GoReference extends GoReferenceBase {
       if (v.isPublic() || localCompletion) result.add(GoPsiImplUtil.createVariableLikeLookupElement(v));
     }
     for (GoFunctionDeclaration f : file.getFunctions()) {
-      if (f.isPublic() || localCompletion) result.add(GoPsiImplUtil.createFunctionLookupElement(f));
+      if (f.isPublic() || localCompletion) result.add(GoPsiImplUtil.createFunctionOrMethodLookupElement(f));
     }
     processImports(result, file, localCompletion);
   }

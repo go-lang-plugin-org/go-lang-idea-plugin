@@ -10,6 +10,7 @@ public class GoStubElementTypeFactory {
     if (name.equals("CONST_DEFINITION")) return new GoConstDefinitionStubElementType(name);
     if (name.equals("FIELD_DEFINITION")) return new GoFieldDefinitionStubElementType(name);
     if (name.equals("FUNCTION_DECLARATION")) return new GoFunctionDeclarationStubElementType(name);
+    if (name.equals("METHOD_DECLARATION")) return new GoMethodDeclarationStubElementType(name);
     if (name.equals("IMPORT_SPEC")) return new GoImportSpecStubElementType(name);
     if (name.equals("PARAM_DEFINITION")) return new GoParamDefinitionStubElementType(name);
     if (name.equals("RECEIVER")) return new GoReceiverStubElementType(name);

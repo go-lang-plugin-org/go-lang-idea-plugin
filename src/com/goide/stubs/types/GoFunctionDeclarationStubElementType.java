@@ -1,5 +1,6 @@
 package com.goide.stubs.types;
 
+import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.impl.GoFunctionDeclarationImpl;
 import com.goide.stubs.GoFunctionDeclarationStub;
 import com.intellij.psi.stubs.StubElement;
@@ -9,18 +10,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public class GoFunctionDeclarationStubElementType extends GoNamedStubElementType<GoFunctionDeclarationStub, GoFunctionDeclarationImpl> {
+public class GoFunctionDeclarationStubElementType extends GoNamedStubElementType<GoFunctionDeclarationStub, GoFunctionDeclaration> {
   public GoFunctionDeclarationStubElementType(@NotNull String name) {
     super(name);
   }
 
   @Override
-  public GoFunctionDeclarationImpl createPsi(@NotNull GoFunctionDeclarationStub stub) {
+  public GoFunctionDeclaration createPsi(@NotNull GoFunctionDeclarationStub stub) {
     return new GoFunctionDeclarationImpl(stub, this);
   }
 
   @Override
-  public GoFunctionDeclarationStub createStub(@NotNull GoFunctionDeclarationImpl psi, StubElement parentStub) {
+  public GoFunctionDeclarationStub createStub(@NotNull GoFunctionDeclaration psi, StubElement parentStub) {
     return new GoFunctionDeclarationStub(parentStub, this, psi.getName(), psi.isPublic());
   }
 
