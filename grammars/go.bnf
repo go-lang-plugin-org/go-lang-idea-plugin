@@ -202,7 +202,10 @@ FunctionDeclaration ::= func identifier Signature Block? {
   stubClass="com.goide.stubs.GoFunctionDeclarationStub"
 }
 MethodDeclaration ::= func Receiver identifier Signature Block? {pin=3 extends=FunctionDeclaration}
-Receiver ::= '(' identifier? '*'? ReceiverResultType ')' {methods=[getGoType]}
+Receiver ::= '(' identifier? '*'? ReceiverResultType ')' {
+  methods=[getGoType]
+  stubClass="com.goide.stubs.GoReceiverStub"
+}
 ReceiverResultType ::= TypeReferenceExpression {elementType=Type}
 
 Literal ::=

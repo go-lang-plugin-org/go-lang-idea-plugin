@@ -8,16 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
+import com.goide.stubs.GoReceiverStub;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class GoReceiverImpl extends GoNamedElementImpl<?> implements GoReceiver {
+public class GoReceiverImpl extends GoNamedElementImpl<GoReceiverStub> implements GoReceiver {
 
   public GoReceiverImpl(ASTNode node) {
     super(node);
   }
 
-  public GoReceiverImpl(? stub, IStubElementType nodeType) {
+  public GoReceiverImpl(GoReceiverStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 

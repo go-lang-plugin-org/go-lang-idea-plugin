@@ -12,7 +12,7 @@ public class GoStubElementTypeFactory {
     if (name.equals("FUNCTION_DECLARATION")) return new GoFunctionDeclarationStubElementType(name);
     if (name.equals("IMPORT_SPEC")) return new GoImportSpecStubElementType(name);
     if (name.equals("PARAM_DEFINITION")) return new GoParamDefinitionStubElementType(name);
-    if (name.equals("RECEIVER")) return new GoReveiverStubElementType(name);
+    if (name.equals("RECEIVER")) return new GoReceiverStubElementType(name);
     if (name.equals("TYPE_SPEC")) return new GoTypeSpecStubElementType(name);
     if (name.equals("VAR_DEFINITION")) return new GoVarDefinitionStubElementType(name);
 
