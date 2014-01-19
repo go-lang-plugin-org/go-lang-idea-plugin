@@ -1,12 +1,13 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide;
 
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.PsiElement;
-import com.intellij.lang.ASTNode;
 import com.goide.psi.GoCompositeElementType;
 import com.goide.psi.GoTokenType;
 import com.goide.psi.impl.*;
+import com.goide.stubs.GoStubElementTypeFactory;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 
 public interface GoTypes {
 
@@ -45,7 +46,7 @@ public interface GoTypes {
   IElementType FIELD_NAME = new GoCompositeElementType("FIELD_NAME");
   IElementType FOR_CLAUSE = new GoCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new GoCompositeElementType("FOR_STATEMENT");
-  IElementType FUNCTION_DECLARATION = new GoCompositeElementType("FUNCTION_DECLARATION");
+  IElementType FUNCTION_DECLARATION = GoStubElementTypeFactory.factory("FUNCTION_DECLARATION");
   IElementType FUNCTION_LIT = new GoCompositeElementType("FUNCTION_LIT");
   IElementType FUNCTION_TYPE = new GoCompositeElementType("FUNCTION_TYPE");
   IElementType GOTO_STATEMENT = new GoCompositeElementType("GOTO_STATEMENT");
