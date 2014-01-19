@@ -76,13 +76,14 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
       if (myFailed) {
         if (!StringUtil.isEmptyOrSpaces(text) && !FINISHED.matcher(text).find()) {
           myStdOut.append(text);
+          return true;
         }
         else {
           return processFailedMessage(outputType, visitor);
         }
       }
 
-      return true;
+      return super.processServiceMessages(text, outputType, visitor);
     }
 
     private boolean processNotFinishedMessage(String message, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
