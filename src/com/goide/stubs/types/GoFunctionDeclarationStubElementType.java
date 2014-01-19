@@ -1,16 +1,22 @@
 package com.goide.stubs.types;
 
 import com.goide.psi.GoFunctionDeclaration;
+import com.goide.psi.GoNamedElement;
 import com.goide.psi.impl.GoFunctionDeclarationImpl;
 import com.goide.stubs.GoFunctionDeclarationStub;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.stubs.StubInputStream;
-import com.intellij.psi.stubs.StubOutputStream;
+import com.goide.stubs.index.GoFunctionIndex;
+import com.intellij.psi.stubs.*;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.generate.tostring.util.StringUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class GoFunctionDeclarationStubElementType extends GoNamedStubElementType<GoFunctionDeclarationStub, GoFunctionDeclaration> {
+  private static final ArrayList<StubIndexKey<String, GoNamedElement>> EXTRA_KEYS = ContainerUtil.newArrayList(GoFunctionIndex.KEY);
+
   public GoFunctionDeclarationStubElementType(@NotNull String name) {
     super(name);
   }
@@ -35,5 +41,22 @@ public class GoFunctionDeclarationStubElementType extends GoNamedStubElementType
   @Override
   public GoFunctionDeclarationStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new GoFunctionDeclarationStub(parentStub, this, dataStream.readName(), dataStream.readBoolean());
+  }
+
+  @Override
+  public void indexStub(@NotNull GoFunctionDeclarationStub stub, @NotNull IndexSink sink) {
+    super.indexStub(stub, sink);
+
+    String name = stub.getName();
+    if (StringUtil.isNotEmpty(name)) {
+      //noinspection ConstantConditions
+      sink.occurrence(GoFunctionIndex.KEY, name);
+    }
+  }
+
+  @NotNull
+  @Override
+  protected Collection<StubIndexKey<String, GoNamedElement>> getExtraIndexKeys() {
+    return EXTRA_KEYS;
   }
 }
