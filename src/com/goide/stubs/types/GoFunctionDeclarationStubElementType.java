@@ -2,13 +2,10 @@ package com.goide.stubs.types;
 
 import com.goide.psi.impl.GoFunctionDeclarationImpl;
 import com.goide.stubs.GoFunctionDeclarationStub;
-import com.goide.stubs.index.GoFunctionNameIndex;
-import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.generate.tostring.util.StringUtil;
 
 import java.io.IOException;
 
@@ -37,13 +34,5 @@ public class GoFunctionDeclarationStubElementType extends GoNamedStubElementType
   @Override
   public GoFunctionDeclarationStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new GoFunctionDeclarationStub(parentStub, this, dataStream.readName(), dataStream.readBoolean());
-  }
-
-  public void indexStub(@NotNull final GoFunctionDeclarationStub stub, @NotNull final IndexSink sink) {
-    String name = stub.getName();
-    if (StringUtil.isNotEmpty(name)) {
-      //noinspection ConstantConditions
-      sink.occurrence(GoFunctionNameIndex.KEY, name);
-    }
   }
 }

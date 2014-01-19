@@ -172,7 +172,9 @@ ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
 ConstSpec ::= ConstDefinitionList [ Type? '=' ExpressionList ]
 private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
-ConstDefinition ::= identifier
+ConstDefinition ::= identifier {
+  stubClass="com.goide.stubs.GoConstDefinitionStub"
+}
 
 private IdentifierList ::= identifier ( ',' identifier )*
 private ExpressionList ::= Expression ( ',' Expression )*
