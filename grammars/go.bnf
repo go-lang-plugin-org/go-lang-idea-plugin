@@ -125,7 +125,9 @@ Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {pin=1}
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
 ParameterDeclaration ::= IdentifierListNoPin? '...'? Type
 private IdentifierListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
-ParamDefinition ::= identifier
+ParamDefinition ::= identifier {
+  stubClass="com.goide.stubs.GoParamDefinitionStub"
+}
 
 InterfaceType ::= interface '{' MethodSpecs? '}' {pin(".*")=1}
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}

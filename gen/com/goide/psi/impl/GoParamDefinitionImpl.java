@@ -8,16 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
+import com.goide.stubs.GoParamDefinitionStub;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class GoParamDefinitionImpl extends GoNamedElementImpl<?> implements GoParamDefinition {
+public class GoParamDefinitionImpl extends GoNamedElementImpl<GoParamDefinitionStub> implements GoParamDefinition {
 
   public GoParamDefinitionImpl(ASTNode node) {
     super(node);
   }
 
-  public GoParamDefinitionImpl(? stub, IStubElementType nodeType) {
+  public GoParamDefinitionImpl(GoParamDefinitionStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
