@@ -59,7 +59,8 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
 
       if ((matcher = RUN.matcher(text)).find()) {
         String testName = StringUtil.notNullize(matcher.group(1), "<test>");
-        return processNotFinishedMessage(ServiceMessageBuilder.testStarted(testName).toString(), outputType, visitor);
+        ServiceMessageBuilder testStarted = ServiceMessageBuilder.testStarted(testName).addAttribute("locationHint", "gotest://" + testName);
+        return processNotFinishedMessage(testStarted.toString(), outputType, visitor);
       }
 
       if ((matcher = PASSED.matcher(text)).find()) {
