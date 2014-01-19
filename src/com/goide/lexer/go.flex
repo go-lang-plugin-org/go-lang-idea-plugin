@@ -6,6 +6,7 @@ import com.goide.GoTypes;
 import java.util.*;
 import java.lang.reflect.Field;
 import org.jetbrains.annotations.NotNull;
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.goide.GoParserDefinition.*;
 
 %%
@@ -144,11 +145,12 @@ ESCAPES = [abfnrtv]
 "..."                                     { return TRIPLE_DOT; }
 "."                                       { return DOT; }
 
-"'" . "'"                                               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'" [^\\] "'"                                           { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "'" \n "'"                                              { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "'\\" [abfnrtv\\\'] "'"                                 { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\" {OCT_DIGIT} {OCT_DIGIT} {OCT_DIGIT} "'"        { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\x" {HEX_DIGIT} {HEX_DIGIT} "'"                    { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'\\'"                                                  { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
+"'\\" {OCT_DIGIT} {OCT_DIGIT} {OCT_DIGIT} "'"           { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'\\x" {HEX_DIGIT} {HEX_DIGIT} "'"                      { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "'\\u" {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} "'"
                                                         { yybegin(MAYBE_SEMICOLON); return CHAR; }
 "'\\U" {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} "'"
@@ -260,7 +262,7 @@ ESCAPES = [abfnrtv]
 {NUM_HEX}                                {  yybegin(MAYBE_SEMICOLON); return HEX; }
 {NUM_INT}                                {  yybegin(MAYBE_SEMICOLON); return INT; }
 
-.                                         {  return com.intellij.psi.TokenType.BAD_CHARACTER; }
+.                                        {  return BAD_CHARACTER; }
 }
 
 <MAYBE_SEMICOLON> {

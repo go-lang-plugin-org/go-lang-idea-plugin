@@ -23,6 +23,7 @@ public class GoLexerTest extends LexerTestCase {
   public void testSlices() { doTest(); }
   public void testStructs() { doTest(); }
   public void testVariables() { doTest(); }
+  public void testEscapedQuote() { doTest(); }
 
   private void doTest() {
     try {
