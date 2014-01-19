@@ -42,7 +42,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
     else {
       PsiFile file = contextElement.getContainingFile();
       if (GoTestFinder.isTestFile(file)) {
-        if (PsiTreeUtil.getNonStrictParentOfType(contextElement, GoPackageClause.class) != null) {
+        if (isPackageContext(contextElement)) {
           String packageName = StringUtil.notNullize(((GoFile)file).getPackageName());
           configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
           configuration.setPackage(packageName);
@@ -80,15 +80,14 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
     PsiFile file = contextElement.getContainingFile();
     switch (configuration.getKind()) {
       case DIRECTORY:
-        if (!(contextElement instanceof PsiDirectory)) {
-          return false;
+        if (contextElement instanceof PsiDirectory) {
+          String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
+          return FileUtil.pathsEqual(configuration.getDirectoryPath(), directoryPath) &&
+                 FileUtil.pathsEqual(configuration.getWorkingDirectory(), directoryPath);
         }
-        String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
-        return FileUtil.pathsEqual(configuration.getDirectoryPath(), directoryPath) &&
-               FileUtil.pathsEqual(configuration.getWorkingDirectory(), directoryPath);
       case PACKAGE:
-        String packageName = StringUtil.notNullize(((GoFile)file).getPackageName());
-        return packageName.equals(configuration.getPackage());
+        return isPackageContext(contextElement) && 
+               StringUtil.notNullize(((GoFile)file).getPackageName()).equals(configuration.getPackage());
       case FILE:
         if (!FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath())) {
           return false;
@@ -111,6 +110,10 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
       return null;
     }
     return psiElement;
+  }
+
+  private static boolean isPackageContext(PsiElement contextElement) {
+    return PsiTreeUtil.getNonStrictParentOfType(contextElement, GoPackageClause.class) != null;
   }
 
   @Nullable
