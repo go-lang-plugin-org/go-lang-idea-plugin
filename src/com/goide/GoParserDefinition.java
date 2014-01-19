@@ -52,7 +52,7 @@ public class GoParserDefinition implements ParserDefinition {
 
   @Override
   public IFileElementType getFileNodeType() {
-    return GoElementTypes.FILE;
+    return GoFileElementType.INSTANCE;
   }
 
   @NotNull
