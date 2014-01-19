@@ -6,6 +6,20 @@ const (
 	CCCCC
 )
 
+const (
+	ZERO = iota
+	ONE
+	TWO = iota
+	THREE
+	THREE2 = iota - 1
+	FOUR
+	THREE3 = TWO + 1
+	THREE4 = GOOD_ARRAY
+	THREE5 = BAD_ARRAY - 1
+	THREE6 = ZERO + ONE + TWO
+	THREE7 = THREE
+)
+
 type MyInt int64
 
 type MyMap map[string]string
@@ -21,6 +35,16 @@ type MyFunc2 MyFunc
 const (
 	NORMAL = 45
 	NOTNARMAL = BBBBB
+	GOOD_ARRAY = 1 + 1 + 2 - 1 // 3
+	BAD_ARRAY = 2 + 2 // 4
+	UNTYPED_INT = 15 / 4 // 3
+	FLOAT_CONST = 15 / 4.0 // 3.75
+	FLOAT_CONST2 = 12 / 4.0 // 3
+)
+
+const (
+	GOOD_ARRAY1, BAD_ARRAY1 = 3 , 4
+	GOOD_ARRAY2, BAD_ARRAY2
 )
 
 func HandleFunc(pa string, handler func(int, *string)bool) {
@@ -105,6 +129,30 @@ func MatchI(arg int64) {
 
 }
 
+func MatchByte(arg byte){
+
+}
+
+func MatchUint8(arg uint8){
+
+}
+
+func MatchInt16(arg int16){
+
+}
+
+func MatchUint16(arg uint16){
+
+}
+
+func MatchInt32(arg int32){
+
+}
+
+func MatchRune(arg rune){
+
+}
+
 func main() {
 	//ISSUE #357
 	MatchI('5')
@@ -116,6 +164,9 @@ func main() {
 	MatchF(5 * 5 * 24 * 31 * 314)
 	MatchI(1.0)
 	MatchI(1.)
+	MatchI(0.5 + 0.5)
+	MatchI(UNTYPED_INT)
+	MatchI(/*begin*/FLOAT_CONST/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
 	MatchI(/*begin*/NOTNARMAL/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
 	MatchI(/*begin*/2.5/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
 	MatchI(/*begin*/-2.5/*end.Expression type mismatch, the expected type is int64|CastTypeFix*/)
@@ -132,6 +183,53 @@ func main() {
 	AcceptMyInt(NORMAL)
 	AcceptMyInt(/*begin*/invalid/*end.Expression type mismatch, the expected type is MyInt|CastTypeFix*/)
 	//END
+
+	MatchByte(1)
+	MatchByte(/*begin*/-128/*end.Expression type mismatch, the expected type is byte|CastTypeFix*/)
+	MatchByte(128)
+	MatchByte(10.0)
+	MatchByte(0.5 + 0.5)
+	MatchByte(/*begin*/0.5 - 1.5/*end.Expression type mismatch, the expected type is byte|CastTypeFix*/)
+
+	MatchUint8(1)
+	MatchUint8(/*begin*/-128/*end.Expression type mismatch, the expected type is uint8|CastTypeFix*/)
+	MatchUint8(128)
+	MatchUint8(10.0)
+	MatchUint8(/*begin*/0.5 - 1.5/*end.Expression type mismatch, the expected type is uint8|CastTypeFix*/)
+
+	MatchInt16(0)
+	MatchInt16(-32768)
+	MatchInt16(32767)
+	MatchInt16(10.0)
+	MatchInt16(/*begin*/1.1/*end.Expression type mismatch, the expected type is int16|CastTypeFix*/)
+	MatchInt16(/*begin*/-32769/*end.Expression type mismatch, the expected type is int16|CastTypeFix*/)
+	MatchInt16(/*begin*/32769/*end.Expression type mismatch, the expected type is int16|CastTypeFix*/)
+
+	MatchUint16(0)
+	MatchUint16(/*begin*/-128/*end.Expression type mismatch, the expected type is uint16|CastTypeFix*/)
+	MatchUint16(65535)
+	MatchUint16(10.0)
+	MatchUint16(/*begin*/0.5 - 1.5/*end.Expression type mismatch, the expected type is uint16|CastTypeFix*/)
+
+	MatchInt32(0)
+	MatchInt32(-2147483648)
+	MatchInt32(2147483647)
+	MatchInt32(10.0)
+	MatchInt32(/*begin*/1.1/*end.Expression type mismatch, the expected type is int32|CastTypeFix*/)
+
+	// GoLiteralIntegerImpl does not return proper value now
+//	MatchInt32(-2147483649)
+//	MatchInt32(2147483649)
+
+	MatchRune(0)
+	MatchRune(-2147483648)
+	MatchRune(2147483647)
+	MatchRune(10.0)
+	MatchRune(/*begin*/1.1/*end.Expression type mismatch, the expected type is rune|CastTypeFix*/)
+
+	// GoLiteralIntegerImpl does not return proper value now
+//	MatchRune(-2147483649)
+//	MatchRune(2147483649)
 
 	var interfacE = interface{}
 	HandleIFunc(func() iFunc {return true})
@@ -190,6 +288,33 @@ func main() {
 	HandleArray(MyArray{})
 	HandleArray(/*begin*/[4]string{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
 	HandleArray(/*begin*/[3]int{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+
+	HandleArray([1 + 2]string{})
+	HandleArray([3.0]string{})
+	HandleArray(/*begin*/[1 + 2 + 2]string{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+	HandleArray([GOOD_ARRAY]string{})
+	HandleArray([GOOD_ARRAY + 1 - 1]string{})
+	HandleArray([BAD_ARRAY - 1]string{})
+	HandleArray(/*begin*/[BAD_ARRAY]string{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+	HandleArray([GOOD_ARRAY1]string{})
+	HandleArray(/*begin*/[BAD_ARRAY1]string{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+	HandleArray([GOOD_ARRAY2]string{})
+	HandleArray(/*begin*/[BAD_ARRAY2]string{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+	HandleArray([THREE]string{})
+	HandleArray([THREE2]string{})
+	HandleArray([THREE3]string{})
+	HandleArray([THREE4]string{})
+	HandleArray([THREE5]string{})
+	HandleArray([THREE6]string{})
+	HandleArray([THREE7]string{})
+	HandleArray([TWO + 1]string{})
+	HandleArray(/*begin*/[TWO]string{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+	HandleArray(/*begin*/[FOUR]string{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+
+	HandleArray([UNTYPED_INT]string{})
+	HandleArray(/*begin*/[FLOAT_CONST]string{}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
+	HandleArray([FLOAT_CONST2]string{})
+
 
 	HandleMyArray(MyArray{})
 	HandleMyArray([3]string{})

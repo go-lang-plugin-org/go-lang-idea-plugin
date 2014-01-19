@@ -2,9 +2,9 @@ package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.inspection.InspectionUtil;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeValueImpl;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
@@ -16,6 +16,7 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
+import static ro.redeul.google.go.inspection.FunctionCallInspection.getNumberValueFromLiteralExpr;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -32,21 +33,19 @@ public class GoPsiTypeArrayImpl extends GoPsiPackagedElementBase implements
 
     @Override
     public int getArrayLength() {
-        GoLiteralExpression child = GoPsiUtils.findChildOfClass(this, GoLiteralExpression.class);
+        GoExpr child = GoPsiUtils.findChildOfClass(this, GoExpr.class);
         if (child != null) {
-            GoLiteral literal = child.getLiteral();
-            String length = literal.getText();
-            try {
-                return Integer.parseInt(length);
-            } catch (NumberFormatException e){
-                // return default value
-            }
+            Number value = getNumberValueFromLiteralExpr(child);
+            if (value != null && (value instanceof Integer || value.intValue() == value.floatValue()))
+                return value.intValue();
+
         } else {
+            // for this case [...]type{el1, el2, el3}
             GoLiteralCompositeValue compositeValue = GoPsiUtils.findChildOfClass(this.getParent(), GoLiteralCompositeValueImpl.class);
             if (compositeValue != null)
                 return compositeValue.getChildren().length;
         }
-        return 0;
+        return InspectionUtil.UNKNOWN_COUNT;
     }
 
     public GoPsiType getElementType() {

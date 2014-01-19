@@ -155,8 +155,33 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                 return false;
             }
             String resolvedTypeName = resolved.getText();
-            if (resolvedTypeName.startsWith("int")) {
-                return checkValidLiteralIntExpr(expr);
+            if (resolvedTypeName.startsWith("int") || resolvedTypeName.startsWith("uint")
+                    || resolvedTypeName.equals("byte") || resolvedTypeName.equals("rune")) {
+                    Number numValue = getNumberValueFromLiteralExpr(expr);
+                    if (numValue == null)
+                        return checkValidLiteralIntExpr(expr);
+                    if (numValue instanceof Integer || numValue.intValue() == numValue.floatValue()){
+                        Integer value = numValue.intValue();
+                        if (resolvedTypeName.equals("int8"))
+                            return value >= -128 && value <= 127;
+                        if (resolvedTypeName.equals("int16"))
+                            return value >= -32768 && value <= 32767;
+                        if (resolvedTypeName.equals("int32") || resolvedTypeName.equals("rune"))
+                            return value >= -2147483648 && value <= 2147483647;
+                        if (resolvedTypeName.equals("int64") || resolvedTypeName.equals("int"))
+                            return true;
+
+                        if (resolvedTypeName.equals("uint8") || resolvedTypeName.equals("byte"))
+                            return value >= 0 && value <= 255;
+                        if (resolvedTypeName.equals("uint16"))
+                            return value >= 0 && value <= 65535;
+                        if (resolvedTypeName.equals("uint32"))
+                            return value >= 0;
+                        if (resolvedTypeName.equals("uint64") || resolvedTypeName.equals("uint"))
+                            return value >= 0;
+                    } else {
+                        return false;
+                    }
             }
             if (resolvedTypeName.startsWith("float")) {
                 return checkValidLiteralFloatExpr(expr);

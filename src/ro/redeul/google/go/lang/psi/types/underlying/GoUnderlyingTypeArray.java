@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.types.underlying;
 
+import ro.redeul.google.go.inspection.InspectionUtil;
+
 public class GoUnderlyingTypeArray implements GoUnderlyingType {
 
     private final GoUnderlyingType elementType;
@@ -15,7 +17,8 @@ public class GoUnderlyingTypeArray implements GoUnderlyingType {
         if ( other instanceof GoUnderlyingTypeArray) {
             GoUnderlyingTypeArray otherArray =
                 (GoUnderlyingTypeArray) other;
-
+            if (this.length == InspectionUtil.UNKNOWN_COUNT || otherArray.length == InspectionUtil.UNKNOWN_COUNT)
+                return false;
             return length == otherArray.length &&
                 otherArray.elementType.isIdentical(elementType);
         }
