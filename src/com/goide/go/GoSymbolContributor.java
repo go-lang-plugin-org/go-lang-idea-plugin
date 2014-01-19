@@ -26,7 +26,7 @@ public class GoSymbolContributor implements ChooseByNameContributor {
   @Override
   public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
     GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
-    Collection<GoNamedElement> result = StubIndex.getElements(GoAllNamesIndex.ALL_NAMES, name, project, scope, GoNamedElement.class);
+    Collection<GoNamedElement> result = StubIndex.getInstance().get(GoAllNamesIndex.ALL_NAMES, name, project, scope);
     List<NavigationItem> items = ContainerUtil.newArrayListWithExpectedSize(result.size());
     for (final GoNamedElement element : result) {
       items.add(new GoStructureViewFactory.Element(element) {
