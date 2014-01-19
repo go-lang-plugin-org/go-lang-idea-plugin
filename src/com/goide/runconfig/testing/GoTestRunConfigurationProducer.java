@@ -89,7 +89,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
         return isPackageContext(contextElement) && 
                StringUtil.notNullize(((GoFile)file).getPackageName()).equals(configuration.getPackage());
       case FILE:
-        if (!FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath())) {
+        if (file == null || !FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath())) {
           return false;
         }
         String functionNameFromContext = findFunctionNameFromContext(contextElement);
