@@ -34,13 +34,17 @@ public abstract class GoNamedStubElementType<S extends NamedStubBase<T>, T exten
 
   public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {
     String name = stub.getName();
-    if (StringUtil.isNotEmpty(name)) {
+    if (shouldIndex() && StringUtil.isNotEmpty(name)) {
       //noinspection ConstantConditions
       sink.occurrence(GoAllNamesIndex.ALL_NAMES, name);
       for (StubIndexKey<String, ? extends GoNamedElement> key : getExtraIndexKeys()) {
         sink.occurrence(key, name);
       }
     }
+  }
+
+  protected boolean shouldIndex() {
+    return true;
   }
 
   @NotNull

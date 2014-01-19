@@ -36,4 +36,9 @@ public class GoReceiverStubElementType extends GoNamedStubElementType<GoReceiver
   public GoReceiverStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new GoReceiverStub(parentStub, this, dataStream.readName(), dataStream.readBoolean());
   }
+
+  @Override
+  protected boolean shouldIndex() {
+    return false;
+  }
 }
