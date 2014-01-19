@@ -1,13 +1,13 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide;
 
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.PsiElement;
+import com.intellij.lang.ASTNode;
 import com.goide.psi.GoCompositeElementType;
+import com.goide.stubs.GoStubElementTypeFactory;
 import com.goide.psi.GoTokenType;
 import com.goide.psi.impl.*;
-import com.goide.stubs.GoStubElementTypeFactory;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
 
 public interface GoTypes {
 
@@ -29,7 +29,7 @@ public interface GoTypes {
   IElementType COMPOSITE_LIT = new GoCompositeElementType("COMPOSITE_LIT");
   IElementType CONDITIONAL_EXPR = new GoCompositeElementType("CONDITIONAL_EXPR");
   IElementType CONST_DECLARATION = new GoCompositeElementType("CONST_DECLARATION");
-  IElementType CONST_DEFINITION = new GoCompositeElementType("CONST_DEFINITION");
+  IElementType CONST_DEFINITION = GoStubElementTypeFactory.factory("CONST_DEFINITION");
   IElementType CONST_SPEC = new GoCompositeElementType("CONST_SPEC");
   IElementType CONTINUE_STATEMENT = new GoCompositeElementType("CONTINUE_STATEMENT");
   IElementType CONVERSION_EXPR = new GoCompositeElementType("CONVERSION_EXPR");
@@ -42,7 +42,7 @@ public interface GoTypes {
   IElementType EXPR_SWITCH_STATEMENT = new GoCompositeElementType("EXPR_SWITCH_STATEMENT");
   IElementType FALLTHROUGH_STATEMENT = new GoCompositeElementType("FALLTHROUGH_STATEMENT");
   IElementType FIELD_DECLARATION = new GoCompositeElementType("FIELD_DECLARATION");
-  IElementType FIELD_DEFINITION = new GoCompositeElementType("FIELD_DEFINITION");
+  IElementType FIELD_DEFINITION = GoStubElementTypeFactory.factory("FIELD_DEFINITION");
   IElementType FIELD_NAME = new GoCompositeElementType("FIELD_NAME");
   IElementType FOR_CLAUSE = new GoCompositeElementType("FOR_CLAUSE");
   IElementType FOR_STATEMENT = new GoCompositeElementType("FOR_STATEMENT");
@@ -53,7 +53,7 @@ public interface GoTypes {
   IElementType GO_STATEMENT = new GoCompositeElementType("GO_STATEMENT");
   IElementType IF_STATEMENT = new GoCompositeElementType("IF_STATEMENT");
   IElementType IMPORT_DECLARATION = new GoCompositeElementType("IMPORT_DECLARATION");
-  IElementType IMPORT_SPEC = new GoCompositeElementType("IMPORT_SPEC");
+  IElementType IMPORT_SPEC = GoStubElementTypeFactory.factory("IMPORT_SPEC");
   IElementType IMPORT_STRING = new GoCompositeElementType("IMPORT_STRING");
   IElementType INDEX_EXPR = new GoCompositeElementType("INDEX_EXPR");
   IElementType INTERFACE_TYPE = new GoCompositeElementType("INTERFACE_TYPE");
@@ -71,11 +71,11 @@ public interface GoTypes {
   IElementType PACKAGE_CLAUSE = new GoCompositeElementType("PACKAGE_CLAUSE");
   IElementType PARAMETERS = new GoCompositeElementType("PARAMETERS");
   IElementType PARAMETER_DECLARATION = new GoCompositeElementType("PARAMETER_DECLARATION");
-  IElementType PARAM_DEFINITION = new GoCompositeElementType("PARAM_DEFINITION");
+  IElementType PARAM_DEFINITION = GoStubElementTypeFactory.factory("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new GoCompositeElementType("PARENTHESES_EXPR");
   IElementType POINTER_TYPE = new GoCompositeElementType("POINTER_TYPE");
   IElementType RANGE_CLAUSE = new GoCompositeElementType("RANGE_CLAUSE");
-  IElementType RECEIVER = new GoCompositeElementType("RECEIVER");
+  IElementType RECEIVER = GoStubElementTypeFactory.factory("RECEIVER");
   IElementType RECEIVER_TYPE = new GoCompositeElementType("RECEIVER_TYPE");
   IElementType RECV_STATEMENT = new GoCompositeElementType("RECV_STATEMENT");
   IElementType REFERENCE_EXPRESSION = new GoCompositeElementType("REFERENCE_EXPRESSION");
@@ -97,7 +97,7 @@ public interface GoTypes {
   IElementType TYPE_CASE_CLAUSE = new GoCompositeElementType("TYPE_CASE_CLAUSE");
   IElementType TYPE_DECLARATION = new GoCompositeElementType("TYPE_DECLARATION");
   IElementType TYPE_REFERENCE_EXPRESSION = new GoCompositeElementType("TYPE_REFERENCE_EXPRESSION");
-  IElementType TYPE_SPEC = new GoCompositeElementType("TYPE_SPEC");
+  IElementType TYPE_SPEC = GoStubElementTypeFactory.factory("TYPE_SPEC");
   IElementType TYPE_SWITCH_CASE = new GoCompositeElementType("TYPE_SWITCH_CASE");
   IElementType TYPE_SWITCH_GUARD = new GoCompositeElementType("TYPE_SWITCH_GUARD");
   IElementType TYPE_SWITCH_STATEMENT = new GoCompositeElementType("TYPE_SWITCH_STATEMENT");
@@ -105,7 +105,7 @@ public interface GoTypes {
   IElementType UNARY_TYPE_CREATE_EXPR = new GoCompositeElementType("UNARY_TYPE_CREATE_EXPR");
   IElementType VALUE = new GoCompositeElementType("VALUE");
   IElementType VAR_DECLARATION = new GoCompositeElementType("VAR_DECLARATION");
-  IElementType VAR_DEFINITION = new GoCompositeElementType("VAR_DEFINITION");
+  IElementType VAR_DEFINITION = GoStubElementTypeFactory.factory("VAR_DEFINITION");
   IElementType VAR_SPEC = new GoCompositeElementType("VAR_SPEC");
 
   IElementType ASSIGN = new GoTokenType("=");

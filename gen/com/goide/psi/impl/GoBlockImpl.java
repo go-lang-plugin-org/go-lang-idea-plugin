@@ -31,7 +31,7 @@ public class GoBlockImpl extends GoCompositeElementImpl implements GoBlock {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
   }
 
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
     return GoPsiImplUtil.processDeclarations(this, processor, state, lastParent, place);
   }
 

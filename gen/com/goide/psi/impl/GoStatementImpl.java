@@ -45,7 +45,7 @@ public class GoStatementImpl extends GoCompositeElementImpl implements GoStateme
     return findChildByClass(GoVarDeclaration.class);
   }
 
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
     return GoPsiImplUtil.processDeclarations(this, processor, state, lastParent, place);
   }
 

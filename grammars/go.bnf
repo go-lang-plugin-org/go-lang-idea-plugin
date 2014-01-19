@@ -69,13 +69,12 @@
 
   implements("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
   extends("FunctionDeclaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl"
+  elementTypeFactory("FunctionDeclaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
   extends(".*Type")=Type
   pin('.*List(?:_\d.*)?')=1
-  
-  elementTypeFactory("FunctionDeclaration")='com.goide.stubs.GoStubElementTypeFactory.factory'
 }
 
 File ::= PackageClause semi (ImportDeclaration semi)* TopLevelDeclaration* {pin(".*")=1}
