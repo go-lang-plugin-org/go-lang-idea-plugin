@@ -26,7 +26,7 @@ public class GoVarProcessor extends BaseScopeProcessor {
 
   @Override
   public boolean execute(@NotNull PsiElement psiElement, ResolveState resolveState) {
-    if (psiElement instanceof GoFunctionDeclaration) return false;
+    if (psiElement instanceof GoFunctionOrMethodDeclaration) return false;
     if (!(psiElement instanceof GoNamedElement)) return true;
     if (!(psiElement instanceof GoVarDefinition) &&
         !(psiElement instanceof GoParamDefinition) &&
