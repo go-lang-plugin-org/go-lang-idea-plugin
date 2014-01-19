@@ -80,6 +80,9 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
     PsiFile file = contextElement.getContainingFile();
     switch (configuration.getKind()) {
       case DIRECTORY:
+        if (!(contextElement instanceof PsiDirectory)) {
+          return false;
+        }
         String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
         return FileUtil.pathsEqual(configuration.getDirectoryPath(), directoryPath) &&
                FileUtil.pathsEqual(configuration.getWorkingDirectory(), directoryPath);
