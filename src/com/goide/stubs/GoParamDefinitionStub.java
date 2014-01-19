@@ -1,6 +1,5 @@
 package com.goide.stubs;
 
-import com.goide.psi.GoConstDefinition;
 import com.goide.psi.GoParamDefinition;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
