@@ -68,7 +68,7 @@
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
   implements("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
-  extends("FunctionDeclaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl"
+  extends("FunctionDeclaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
   elementTypeFactory("FunctionDeclaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
 
   pin(".*Statement")=1

@@ -8,16 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
+import com.goide.stubs.GoFunctionDeclarationStub;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class GoFunctionDeclarationImpl extends GoNamedElementImpl implements GoFunctionDeclaration {
+public class GoFunctionDeclarationImpl extends GoNamedElementImpl<GoFunctionDeclarationStub> implements GoFunctionDeclaration {
 
   public GoFunctionDeclarationImpl(ASTNode node) {
     super(node);
   }
 
-  public GoFunctionDeclarationImpl(com.goide.stubs.GoFunctionDeclarationStub stub, IStubElementType nodeType) {
+  public GoFunctionDeclarationImpl(GoFunctionDeclarationStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
