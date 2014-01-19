@@ -8,16 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
+import com.goide.stubs.GoFieldDefinitionStub;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class GoFieldDefinitionImpl extends GoNamedElementImpl<?> implements GoFieldDefinition {
+public class GoFieldDefinitionImpl extends GoNamedElementImpl<GoFieldDefinitionStub> implements GoFieldDefinition {
 
   public GoFieldDefinitionImpl(ASTNode node) {
     super(node);
   }
 
-  public GoFieldDefinitionImpl(? stub, IStubElementType nodeType) {
+  public GoFieldDefinitionImpl(GoFieldDefinitionStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 

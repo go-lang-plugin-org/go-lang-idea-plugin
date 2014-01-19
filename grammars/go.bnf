@@ -107,7 +107,9 @@ StructType ::= struct '{' Fields? '}' {pin=1}
 private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
 FieldDeclaration ::= (FieldDefinitionList Type | AnonymousField) Tag?
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
-FieldDefinition ::= identifier
+FieldDefinition ::= identifier {
+  stubClass="com.goide.stubs.GoFieldDefinitionStub"
+}
 
 AnonymousField ::= '*'? TypeName
 Tag ::= string
