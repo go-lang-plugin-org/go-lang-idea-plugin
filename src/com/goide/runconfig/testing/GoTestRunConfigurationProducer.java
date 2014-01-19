@@ -1,8 +1,8 @@
 package com.goide.runconfig.testing;
 
 import com.goide.psi.GoFile;
+import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoPackageClause;
-import com.goide.psi.impl.GoFunctionDeclarationImpl;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.openapi.module.Module;
@@ -118,7 +118,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
 
   @Nullable
   private static String findFunctionNameFromContext(PsiElement contextElement) {
-    GoFunctionDeclarationImpl function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionDeclarationImpl.class);
+    GoFunctionDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionDeclaration.class);
     if (function != null) {
       String functionName = StringUtil.notNullize(function.getName());
       if (functionName.startsWith("Test")) {

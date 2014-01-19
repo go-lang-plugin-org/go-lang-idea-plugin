@@ -2,7 +2,6 @@ package com.goide.psi;
 
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
-import com.goide.psi.impl.GoFunctionDeclarationImpl;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
@@ -265,11 +264,11 @@ public class GoFile extends PsiFileBase {
   }
 
   @Nullable
-  public GoFunctionDeclarationImpl findMainFunction() { // todo create a map for faster search
+  public GoFunctionDeclaration findMainFunction() { // todo create a map for faster search
     List<GoFunctionDeclaration> functions = getFunctions();
     for (GoFunctionDeclaration function : functions) {
       if (isPureFunction(function) && MAIN_FUNCTION_NAME.equals(function.getName())) {
-        return (GoFunctionDeclarationImpl)function;
+        return function;
       }
     }
     return null;

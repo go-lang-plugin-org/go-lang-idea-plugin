@@ -1,7 +1,7 @@
 package com.goide.runconfig.application;
 
 import com.goide.psi.GoFile;
-import com.goide.psi.impl.GoFunctionDeclarationImpl;
+import com.goide.psi.GoFunctionDeclaration;
 import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.GoRunConfigurationBase;
 import com.goide.runconfig.GoRunner;
@@ -66,7 +66,7 @@ public class GoApplicationConfiguration extends GoRunConfigurationBase<GoApplica
     if (!"main".equals(((GoFile)psiFile).getPackageName())) {
       throw new RuntimeConfigurationError("Main file has non-main package");
     }
-    GoFunctionDeclarationImpl mainFunction = ((GoFile)psiFile).findMainFunction();
+    GoFunctionDeclaration mainFunction = ((GoFile)psiFile).findMainFunction();
     if (mainFunction == null) {
       throw new RuntimeConfigurationError("Main file doesn't contain main function");
     }
