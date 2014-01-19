@@ -12,7 +12,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 
 public interface GoVarDeclarations extends GoPsiElement, GoDocumentedPsiElement {
 
-    GoVarDeclaration[] getDeclarations();
+    GoVarSpec[] getDeclarations();
 
     boolean isMulti();
 }

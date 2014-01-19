@@ -1,0 +1,6 @@
+GoFile(0,20)
+  PsiComment(SL_COMMENT)('// sdafad')(0,9)
+  PsiComment(SL_COMMENT)('// sdafad')(10,19)
+  PackageDeclaration()(20,20)
+    PsiErrorElement:"package" keyword expected(20,20)
+      <empty list>

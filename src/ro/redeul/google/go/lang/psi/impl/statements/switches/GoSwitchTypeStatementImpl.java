@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;
@@ -12,7 +13,7 @@ import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
-public class GoSwitchTypeStatementImpl extends GoPsiElementBase implements GoSwitchTypeStatement {
+public class GoSwitchTypeStatementImpl extends GoDocumentedPsiElementBase implements GoSwitchTypeStatement {
 
     public GoSwitchTypeStatementImpl(@NotNull ASTNode node) {
         super(node);

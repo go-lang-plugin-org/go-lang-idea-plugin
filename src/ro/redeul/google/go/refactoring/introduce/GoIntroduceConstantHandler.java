@@ -9,7 +9,7 @@ import com.intellij.psi.SmartPsiElementPointer;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -74,11 +74,11 @@ public class GoIntroduceConstantHandler extends GoIntroduceVariableHandlerBase {
     private void appendConstToLastDeclaration(RangeMarker[] exprMarkers, String declaration,
                                               GoConstDeclarations declarations) {
         RangeMarker originalRange = document.createRangeMarker(declarations.getTextRange());
-        GoConstDeclaration[] consts = declarations.getDeclarations();
-        GoConstDeclaration lastConst = consts[consts.length - 1];
+        GoConstSpec[] consts = declarations.getDeclarations();
+        GoConstSpec lastConst = consts[consts.length - 1];
         if (consts.length == 1 && !isEnclosedByParenthesis(consts[0])) {
             SmartPsiElementPointer<GoConstDeclarations> declPointer = createSmartElementPointer(declarations);
-            SmartPsiElementPointer<GoConstDeclaration> lastConstPointer = createSmartElementPointer(lastConst);
+            SmartPsiElementPointer<GoConstSpec> lastConstPointer = createSmartElementPointer(lastConst);
             addParentheses(declarations);
             lastConst = lastConstPointer.getElement();
             declarations = declPointer.getElement();
@@ -96,7 +96,7 @@ public class GoIntroduceConstantHandler extends GoIntroduceVariableHandlerBase {
     }
 
     private void addParentheses(GoConstDeclarations declarations) {
-        GoConstDeclaration[] consts = declarations.getDeclarations();
+        GoConstSpec[] consts = declarations.getDeclarations();
         if (consts.length == 0) {
             return;
         }

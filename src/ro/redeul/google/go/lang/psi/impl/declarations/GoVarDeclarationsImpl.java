@@ -6,9 +6,9 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
@@ -17,15 +17,15 @@ import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
  * Date: 7/16/11
  * Time: 3:22 AM
  */
-public class GoVarDeclarationsImpl extends GoPsiElementBase implements GoVarDeclarations {
+public class GoVarDeclarationsImpl extends GoDocumentedPsiElementBase implements GoVarDeclarations {
 
     public GoVarDeclarationsImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     @Override
-    public GoVarDeclaration[] getDeclarations() {
-        return findChildrenByClass(GoVarDeclaration.class);
+    public GoVarSpec[] getDeclarations() {
+        return findChildrenByClass(GoVarSpec.class);
     }
 
     @Override

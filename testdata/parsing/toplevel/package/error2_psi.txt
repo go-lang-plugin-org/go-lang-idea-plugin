@@ -1,0 +1,4 @@
+GoFile(0,1)
+  PackageDeclaration()(1,1)
+    PsiErrorElement:"package" keyword expected(1,1)
+      <empty list>

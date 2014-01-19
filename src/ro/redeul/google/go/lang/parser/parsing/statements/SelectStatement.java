@@ -4,7 +4,6 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
-import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 
 import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.*;
 
@@ -60,7 +59,7 @@ class SelectStatement implements GoElementTypes {
 
         getToken(builder, pRCURLY, "closed.curly.expected");
 
-        return completeStatement(builder, marker, SELECT_STATEMENT);
+        return completeStatement(builder, marker, SELECT_STATEMENT, false, false);
     }
 
     private static IElementType parseSendOrRecvExpression(PsiBuilder builder, GoParser parser) {

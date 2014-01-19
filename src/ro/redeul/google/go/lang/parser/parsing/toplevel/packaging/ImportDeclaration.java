@@ -5,12 +5,11 @@ import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
-import ro.redeul.google.go.lang.parser.parsing.declarations.NestedDeclarationParser;
+import ro.redeul.google.go.lang.parser.parsing.declarations.Declaration;
 import ro.redeul.google.go.lang.parser.parsing.util.ParserUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
-import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.CommentBinders;
-import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.completeStatement;
+import static ro.redeul.google.go.lang.parser.parsing.util.ParserUtils.completeNodeWithDocs;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findDefaultPackageName;
 
 /**
@@ -21,63 +20,52 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findDefaultPackageNa
  */
 public class ImportDeclaration implements GoElementTypes {
 
-  public static void parse(PsiBuilder builder, GoParser parser) {
+    public static void parse(PsiBuilder builder, GoParser parser) {
 
-    if (!ParserUtils.lookAhead(builder, kIMPORT))
-      return;
+        if (!ParserUtils.lookAhead(builder, kIMPORT))
+            return;
 
-    PsiBuilder.Marker marker = builder.mark();
-
-    ParserUtils.getToken(builder, kIMPORT);
-
-    NestedDeclarationParser.parseNestedOrBasicDeclaration(
-      builder, parser, new NestedDeclarationParser.DeclarationParser() {
-      public boolean parse(PsiBuilder builder, GoParser parser, boolean shouldComplete) {
-        return parseImportStatement(builder, parser, shouldComplete);
-      }
-    });
-
-    completeStatement(builder, marker, IMPORT_DECLARATIONS);
-  }
-
-  private static final TokenSet localImportTokens = TokenSet.create(mIDENT, oDOT, litSTRING);
-
-  private static boolean parseImportStatement(PsiBuilder builder, GoParser parser, boolean shouldComplete) {
-
-    if (!ParserUtils.lookAhead(builder, localImportTokens)) {
-      return false;
+        Declaration.parseDeclaration(builder, parser, kIMPORT, IMPORT_DECLARATIONS, ImportSpecParser);
     }
 
-    PsiBuilder.Marker importStatement = builder.mark();
+    private static final Declaration.SpecParser ImportSpecParser = new Declaration.SpecParser() {
 
-    String localPackageName = null;
-    if (ParserUtils.lookAhead(builder, mIDENT)) {
-      localPackageName = builder.getTokenText();
-      ParserUtils.eatElement(builder, PACKAGE_REFERENCE);
-    } else if (ParserUtils.lookAhead(builder, oDOT)) {
-      ParserUtils.eatElement(builder, PACKAGE_REFERENCE);
-    }
+        private final TokenSet localImportTokens = TokenSet.create(mIDENT, oDOT, litSTRING);
 
-    PsiBuilder.Marker importPathMarker = builder.mark();
-    String importPath = builder.getTokenText();
-    if (!ParserUtils.getToken(builder, litSTRING, GoBundle.message("error.import.path.expected"))) {
-      importPathMarker.drop();
-    } else {
-      importPathMarker.done(LITERAL_STRING);
-      if (localPackageName == null) {
-        localPackageName = findDefaultPackageName(GoPsiUtils.getStringLiteralValue(importPath));
-      }
-    }
+        @Override
+        public boolean parse(PsiBuilder builder, GoParser parser) {
 
-    if (localPackageName != null) {
-      parser.setKnownPackage(localPackageName);
-    }
+            if (!ParserUtils.lookAhead(builder, localImportTokens)) {
+                return false;
+            }
 
-    if (shouldComplete)
-      completeStatement(builder, importStatement, IMPORT_DECLARATION);
-    else
-      importStatement.done(IMPORT_DECLARATION);
+            PsiBuilder.Marker importStatement = builder.mark();
 
-    return true;
-  }
+            String localPackageName = null;
+            if (ParserUtils.lookAhead(builder, mIDENT)) {
+                localPackageName = builder.getTokenText();
+                ParserUtils.eatElement(builder, PACKAGE_REFERENCE);
+            } else if (ParserUtils.lookAhead(builder, oDOT)) {
+                ParserUtils.eatElement(builder, PACKAGE_REFERENCE);
+            }
+
+            PsiBuilder.Marker importPathMarker = builder.mark();
+            String importPath = builder.getTokenText();
+            if (!ParserUtils.getToken(builder, litSTRING, GoBundle.message("error.import.path.expected"))) {
+                importPathMarker.drop();
+            } else {
+                importPathMarker.done(LITERAL_STRING);
+                if (localPackageName == null) {
+                    localPackageName = findDefaultPackageName(GoPsiUtils.getStringLiteralValue(importPath));
+                }
+            }
+
+            if (localPackageName != null) {
+                parser.setKnownPackage(localPackageName);
+            }
+
+            completeNodeWithDocs(builder, importStatement, IMPORT_DECLARATION, true, true, true);
+            return true;
+        }
+    };
 }

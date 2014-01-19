@@ -7,10 +7,7 @@ import ro.redeul.google.go.formatter.blocks.*;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.*;
 
 /**
  * <p/>
@@ -18,7 +15,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
  *
  * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
  */
-abstract class Expressions extends Types {
+abstract class Expressions extends Literals {
     @Override
     public Block visitExpressionBinary(GoBinaryExpression<?> expression, State s) {
         return new ExpressionBinary(expression, s.settings, s.indent);
@@ -27,12 +24,18 @@ abstract class Expressions extends Types {
     @Override
     public Block visitExpressionUnary(GoUnaryExpression expression, State s) {
         return new ExpressionBlock<GoUnaryExpression>(expression, s.settings, s.indent)
-            .setCustomSpacing(GoBlockUtil.CustomSpacings.UNARY_EXPRESSION);
+            .withCustomSpacing(GoBlockUtil.CustomSpacings.EXPR_UNARY);
     }
 
     @Override
     public Block visitExpressionSlice(GoSliceExpression expression, State s) {
         return new ExpressionSlice(expression, s.settings, s.indent);
+    }
+
+    @Override
+    public Block visitExpressionSelector(GoSelectorExpression expression, State s) {
+        return new ExpressionBlock<GoSelectorExpression>(expression, s.settings, s.indent)
+            .withCustomSpacing(GoBlockUtil.CustomSpacings.EXPR_SELECTOR);
     }
 
     @Override
@@ -53,8 +56,13 @@ abstract class Expressions extends Types {
 
                 return childBlock;
             }
+        }.withCustomSpacing(GoBlockUtil.CustomSpacings.EXPR_PARENTHESISED);
+    }
 
-        };
+    @Override
+    public Block visitExpressionTypeAssertion(GoTypeAssertionExpression expression, State state) {
+        return new ExpressionBlock<GoTypeAssertionExpression>(expression, state.settings, state.indent)
+            .withCustomSpacing(GoBlockUtil.CustomSpacings.EXPR_TYPE_ASSERT);
     }
 
     @Override

@@ -4,15 +4,17 @@ import com.intellij.formatting.Block;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.formatter.blocks.*;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacings;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FUNCTION_PARAMETER_LIST;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.LITERAL_IDENTIFIER;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.TYPES;
 
 abstract class TopLevel extends GoTypedVisitor<Block, State> {
 
@@ -33,7 +35,8 @@ abstract class TopLevel extends GoTypedVisitor<Block, State> {
 
     @Override
     public Block visitImportSpec(GoImportDeclaration spec, State s) {
-        return new Code<GoImportDeclaration>(spec, s.settings, s.indent);
+        return new Code<GoImportDeclaration>(spec, s.settings, s.indent)
+            .withCustomSpacing(CustomSpacings.IMPORT_SPEC);
     }
 
     @Override
@@ -42,16 +45,24 @@ abstract class TopLevel extends GoTypedVisitor<Block, State> {
     }
 
     @Override
+    public Block visitMethodReceiver(GoMethodReceiver receiver, State s) {
+        return new Code<GoMethodReceiver>(receiver, s.settings, s.indent, s.alignment, s.alignmentsMap)
+            .setIndentedChildTokens(TokenSet.orSet(TYPES, TokenSet.create(LITERAL_IDENTIFIER)))
+            .withCustomSpacing(CustomSpacings.FUNCTION_METHOD_RECEIVER);
+    }
+
+    @Override
     public Block visitFunctionParameter(GoFunctionParameter parameter, State s) {
         return new Code<GoFunctionParameter>(parameter, s.settings, s.indent)
-            .setCustomSpacing(GoBlockUtil.CustomSpacings.NO_SPACE_BEFORE_COMMA)
+            .withCustomSpacing(CustomSpacings.FUNCTION_PARAMETER)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
             .setIndentedChildTokens(TokenSet.create(LITERAL_IDENTIFIER));
     }
 
     @Override
     public Block visitFunctionResult(GoFunctionResult result, State s) {
         return new Code<GoFunctionResult>(result, s.settings, s.indent)
-            .setCustomSpacing(GoBlockUtil.CustomSpacings.FUNCTION_RESULT)
+            .withCustomSpacing(CustomSpacings.FUNCTION_RESULT_SPACING)
             .setIndentedChildTokens(TokenSet.create(FUNCTION_PARAMETER_LIST));
     }
 
@@ -71,7 +82,7 @@ abstract class TopLevel extends GoTypedVisitor<Block, State> {
     }
 
     @Override
-    public Block visitConstSpec(GoConstDeclaration spec, State s) {
+    public Block visitConstSpec(GoConstSpec spec, State s) {
         return new ConstSpec(spec, s.settings, s.indent, s.alignmentsMap);
     }
 
@@ -81,7 +92,7 @@ abstract class TopLevel extends GoTypedVisitor<Block, State> {
     }
 
     @Override
-    public Block visitVarSpec(GoVarDeclaration spec, State s) {
+    public Block visitVarSpec(GoVarSpec spec, State s) {
         return new VarSpec(spec, s.settings, s.indent, s.alignmentsMap);
     }
 }

@@ -117,34 +117,4 @@ public class GoPsiElementBase extends ASTWrapperPsiElement implements GoPsiEleme
                                        @NotNull PsiElement place) {
         return true;
     }
-
-    public boolean isDocumentationPart(PsiElement child) {
-        if (this instanceof GoDocumentedPsiElement) {
-            PsiElement myChild = getFirstChild();
-            while ( myChild != null & myChild instanceof PsiComment) {
-                if ( myChild == child )
-                    return true;
-
-                myChild = myChild.getNextSibling();
-            }
-        }
-
-        return false;
-    }
-
-    public List<PsiComment> getDocumentation() {
-        if (this instanceof GoDocumentedPsiElement) {
-            List<PsiComment> documentationComments = new LinkedList<PsiComment>();
-
-            PsiElement child = getFirstChild();
-            while ( child != null & child instanceof PsiComment) {
-                documentationComments.add((PsiComment) child);
-                child = child.getNextSibling();
-            }
-            return documentationComments;
-        }
-        else {
-            return Collections.emptyList();
-        }
-    }
 }

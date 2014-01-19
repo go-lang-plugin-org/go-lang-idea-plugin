@@ -89,7 +89,7 @@ public class ExpressionSlice extends ExpressionBlock<GoSliceExpression> {
         super.setDepth(depth);
 
         if (depth <= 1) {
-            setCustomSpacing(GoBlockUtil.CustomSpacings.SLICE_EXPRESSION_EXPANDED);
+            withCustomSpacing(GoBlockUtil.CustomSpacings.EXPR_SLICE_EXPANDED);
         }
     }
 }

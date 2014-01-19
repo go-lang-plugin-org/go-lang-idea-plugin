@@ -25,6 +25,7 @@ public class Statement<Statement extends GoStatement> extends Code<Statement> {
                      CommonCodeStyleSettings settings,
                      Indent indent, @NotNull Map<GoBlockUtil.Alignments.Key, Alignment> alignsToUse) {
         super(node, settings, indent, null, alignsToUse);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
     }
 
     @Nullable

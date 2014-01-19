@@ -62,7 +62,7 @@ class IfStatement implements GoElementTypes {
         }
 
         if (complete)
-            return completeStatement(builder, marker, IF_STATEMENT);
+            return completeStatement(builder, marker, IF_STATEMENT, false, false);
         else {
             marker.done(IF_STATEMENT);
             return IF_STATEMENT;

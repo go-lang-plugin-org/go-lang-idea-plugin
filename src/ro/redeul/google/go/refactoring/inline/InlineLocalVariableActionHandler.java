@@ -34,7 +34,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
@@ -67,7 +67,7 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
             .withParent(
                 or(
                     psiElement(GoShortVarDeclaration.class),
-                    psiElement(GoVarDeclaration.class)
+                    psiElement(GoVarSpec.class)
                         .andNot(
                             psiElement().withSuperParent(2, GoFile.class)
                         )
@@ -107,7 +107,7 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
         PsiElement scope = null;
         if (statement instanceof GoShortVarDeclaration) {
             scope = statement.getParent();
-        } else if (statement instanceof GoVarDeclaration) {
+        } else if (statement instanceof GoVarSpec) {
             scope = statement.getParent().getParent();
         }
 
@@ -118,7 +118,7 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
         }
 
         GoLiteralIdentifier identifier = (GoLiteralIdentifier) element;
-        GoVarDeclaration declaration = (GoVarDeclaration) statement;
+        GoVarSpec declaration = (GoVarSpec) statement;
         try {
             inlineElement(new InlineContext(project, editor, identifier, declaration, (GoPsiElement) scope));
         } catch (GoRefactoringException e) {
@@ -341,8 +341,8 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
 
     private PsiElement getInitializer(GoLiteralIdentifier identifier) {
         PsiElement parent = identifier.getParent();
-        if (parent instanceof GoVarDeclaration) {
-            GoVarDeclaration declaration = (GoVarDeclaration) parent;
+        if (parent instanceof GoVarSpec) {
+            GoVarSpec declaration = (GoVarSpec) parent;
             GoLiteralIdentifier[] identifiers = declaration.getIdentifiers();
             GoExpr[] expressions = declaration.getExpressions();
             if (expressions.length != identifiers.length) {
@@ -377,7 +377,7 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
     private boolean identifierShouldHaveInitializer(GoLiteralIdentifier identifier) {
         PsiElement parent = identifier.getParent();
 
-        return !(parent instanceof GoVarDeclaration && ((GoVarDeclaration) parent).getExpressions().length == 0);
+        return !(parent instanceof GoVarSpec && ((GoVarSpec) parent).getExpressions().length == 0);
     }
 
     private boolean promptToInline(InlineContext ctx, Usage usage) {
@@ -433,11 +433,11 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
         final Project project;
         final Editor editor;
         final GoLiteralIdentifier identifierToInline;
-        final GoVarDeclaration statement;
+        final GoVarSpec statement;
         final GoPsiElement scope;
 
         private InlineContext(Project project, Editor editor, GoLiteralIdentifier identifierToInline,
-                              GoVarDeclaration statement, GoPsiElement scope) {
+                              GoVarSpec statement, GoPsiElement scope) {
             this.project = project;
             this.editor = editor;
             this.identifierToInline = identifierToInline;

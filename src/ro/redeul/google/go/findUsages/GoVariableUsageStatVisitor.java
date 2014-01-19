@@ -11,8 +11,8 @@ import ro.redeul.google.go.inspection.fix.RemoveVariableFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
@@ -95,13 +95,13 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitConstDeclaration(GoConstDeclaration declaration) {
+    public void visitConstDeclaration(GoConstSpec declaration) {
         visitIdentifiersAndExpressions(
             declaration.getIdentifiers(), declaration.getExpressions(), false);
     }
 
     @Override
-    public void visitVarDeclaration(GoVarDeclaration declaration) {
+    public void visitVarDeclaration(GoVarSpec declaration) {
         visitIdentifiersAndExpressions(
             declaration.getIdentifiers(), declaration.getExpressions(), false);
     }
@@ -310,11 +310,11 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
     }
 
     private void getGlobalVariables(GoFile file, HashMap<String, VariableUsage> variables) {
-        for (GoConstDeclaration cd : GoFileUtils.getConstDeclarations(file)) {
+        for (GoConstSpec cd : GoFileUtils.getConstDeclarations(file)) {
             visitConstDeclaration(cd);
         }
 
-        for (GoVarDeclaration vd : GoFileUtils.getVarDeclarations(file)) {
+        for (GoVarSpec vd : GoFileUtils.getVarDeclarations(file)) {
             visitVarDeclaration(vd);
         }
 

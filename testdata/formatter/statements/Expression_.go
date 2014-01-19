@@ -1,6 +1,7 @@
 package main
 
 func m() {
+
 	// adsfasdf
 	// adsfadsf
 	a // adsf
@@ -9,4 +10,5 @@ func m() {
 
 	-10  //
 	+100 // adsf
+
 }

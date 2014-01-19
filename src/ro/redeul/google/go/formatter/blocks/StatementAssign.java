@@ -25,6 +25,8 @@ public class StatementAssign extends Code<GoAssignmentStatement> {
                            Map<Alignments.Key, Alignment> alignmentsMap) {
         super(assignStatement, settings, indent, null, alignmentsMap);
 
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
+
         GoExpressionList leftSide = assignStatement.getLeftSideExpressions();
         GoExpressionList rightSide = assignStatement.getRightSideExpressions();
 

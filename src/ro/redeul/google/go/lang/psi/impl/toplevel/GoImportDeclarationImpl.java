@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.references.ImportReference;
@@ -29,7 +30,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getContainingGoFile;
  * Date: Jul 24, 2010
  * Time: 11:31:29 PM
  */
-public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImportDeclaration {
+public class GoImportDeclarationImpl extends GoDocumentedPsiElementBase implements GoImportDeclaration {
 
     public GoImportDeclarationImpl(@NotNull ASTNode node) {
         super(node);

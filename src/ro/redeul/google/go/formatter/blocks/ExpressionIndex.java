@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 
 /**
-* TODO: Document this
 * <p/>
 * Created on Jan-13-2014 22:01
 *
@@ -18,6 +17,8 @@ public class ExpressionIndex extends ExpressionBlock<GoIndexExpression> {
 
     public ExpressionIndex(GoIndexExpression psi, CommonCodeStyleSettings settings, Indent indent) {
         super(psi, settings, indent);
+
+        withCustomSpacing(GoBlockUtil.CustomSpacings.EXPR_INDEX);
     }
 
     @Override

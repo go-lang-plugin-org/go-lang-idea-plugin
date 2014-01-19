@@ -8,9 +8,9 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
-public class GoMethodReceiverImpl extends GoPsiElementBase
-    implements GoMethodReceiver
+public class GoMethodReceiverImpl extends GoPsiElementBase implements GoMethodReceiver
 {
     public GoMethodReceiverImpl(@NotNull ASTNode node) {
         super(node);
@@ -34,5 +34,10 @@ public class GoMethodReceiverImpl extends GoPsiElementBase
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitMethodReceiver(this);
+    }
+
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitMethodReceiver(this, data);
     }
 }

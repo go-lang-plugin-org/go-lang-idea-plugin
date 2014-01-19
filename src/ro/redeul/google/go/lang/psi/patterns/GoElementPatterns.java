@@ -3,14 +3,12 @@ package ro.redeul.google.go.lang.psi.patterns;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeAndVarsStatement;
-import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -27,19 +25,19 @@ public class GoElementPatterns {
     public static final ElementPattern<GoLiteralIdentifier> GLOBAL_CONST_DECL =
         psiElement(GoLiteralIdentifier.class)
             .withParent(
-                psiElement(GoConstDeclaration.class)
+                psiElement(GoConstSpec.class)
                     .withParent(
                         psiElement(GoConstDeclarations.class)
                             .withParent(psiElement(GoFile.class))));
 
     public static final ElementPattern<GoLiteralIdentifier> CONST_DECLARATION =
         psiElement(GoLiteralIdentifier.class)
-            .withParent(GoConstDeclaration.class);
+            .withParent(GoConstSpec.class);
 
     public static final ElementPattern<GoLiteralIdentifier> GLOBAL_VAR_DECL =
         psiElement(GoLiteralIdentifier.class)
             .withParent(
-                psiElement(GoVarDeclaration.class)
+                psiElement(GoVarSpec.class)
                     .withParent(
                         psiElement(GoVarDeclarations.class)
                             .withParent(psiElement(GoFile.class))));
@@ -58,7 +56,7 @@ public class GoElementPatterns {
             .withParent(
                 or(
                     psiElement(GoShortVarDeclaration.class),
-                    psiElement(GoVarDeclaration.class),
+                    psiElement(GoVarSpec.class),
                     psiElement(GoTypeStructField.class),
                     psiElement(GoFunctionParameter.class)
                 )

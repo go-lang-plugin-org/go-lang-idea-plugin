@@ -7,8 +7,8 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
@@ -17,13 +17,11 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeAndVarsStatement;
-import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
@@ -121,8 +119,8 @@ public class GoLiteralExpressionImpl extends GoPrimaryExpressionBase implements 
                     }
 
                     PsiElement parent = resolved.getParent();
-                    if (parent instanceof GoVarDeclaration) {
-                        GoVarDeclaration varDeclaration = (GoVarDeclaration) parent;
+                    if (parent instanceof GoVarSpec) {
+                        GoVarSpec varDeclaration = (GoVarSpec) parent;
                         GoType identifierType = varDeclaration.getIdentifierType((GoLiteralIdentifier) resolved);
 
                         if (identifierType == null)
@@ -131,8 +129,8 @@ public class GoLiteralExpressionImpl extends GoPrimaryExpressionBase implements 
                         return new GoType[]{identifierType};
                     }
 
-                    if (parent instanceof GoConstDeclaration) {
-                        GoPsiType identifiersType = ((GoConstDeclaration) parent).getIdentifiersType();
+                    if (parent instanceof GoConstSpec) {
+                        GoPsiType identifiersType = ((GoConstSpec) parent).getIdentifiersType();
                         if (identifiersType == null)
                             return GoType.EMPTY_ARRAY;
                         return new GoType[]{GoTypes.fromPsiType(identifiersType)};
@@ -231,14 +229,14 @@ public class GoLiteralExpressionImpl extends GoPrimaryExpressionBase implements 
                     return false;
 
                 PsiElement constDecl = resolved.getParent();
-                if (constDecl instanceof GoConstDeclaration) {
-                    GoPsiType identifiersType = ((GoConstDeclaration) constDecl).getIdentifiersType();
+                if (constDecl instanceof GoConstSpec) {
+                    GoPsiType identifiersType = ((GoConstSpec) constDecl).getIdentifiersType();
                     //Type was specified
                     if (identifiersType != null) {
                         return ((GoPsiTypeName) identifiersType).isPrimitive();
                     }
                     //If not check the expressions
-                    for (GoExpr goExpr : ((GoConstDeclaration) constDecl).getExpressions()) {
+                    for (GoExpr goExpr : ((GoConstSpec) constDecl).getExpressions()) {
                         if (goExpr instanceof GoBinaryExpression || goExpr instanceof GoUnaryExpression) {
                             if (!goExpr.isConstantExpression())
                                 return false;

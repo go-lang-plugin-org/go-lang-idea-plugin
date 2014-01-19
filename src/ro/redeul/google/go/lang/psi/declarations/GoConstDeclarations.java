@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
  */
 public interface GoConstDeclarations extends GoPsiElement, GoDocumentedPsiElement {
 
-    GoConstDeclaration[] getDeclarations();
+    GoConstSpec[] getDeclarations();
 
     boolean isMulti();
 }

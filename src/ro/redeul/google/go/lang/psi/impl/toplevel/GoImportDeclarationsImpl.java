@@ -6,7 +6,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
@@ -20,7 +20,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
  * Date: Jul 24, 2010
  * Time: 11:29:41 PM
  */
-public class GoImportDeclarationsImpl extends GoPsiElementBase implements GoImportDeclarations {
+public class GoImportDeclarationsImpl extends GoDocumentedPsiElementBase implements GoImportDeclarations {
 
     public GoImportDeclarationsImpl(@NotNull ASTNode node) {
         super(node);

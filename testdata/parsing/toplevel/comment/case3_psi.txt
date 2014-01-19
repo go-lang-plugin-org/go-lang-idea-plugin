@@ -1,0 +1,5 @@
+GoFile(0,3)
+  PsiComment(SL_COMMENT)('//')(0,2)
+  PackageDeclaration()(3,3)
+    PsiErrorElement:"package" keyword expected(3,3)
+      <empty list>

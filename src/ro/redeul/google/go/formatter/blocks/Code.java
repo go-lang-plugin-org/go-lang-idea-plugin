@@ -38,7 +38,7 @@ public class Code<GoPsiType extends GoPsiElement> extends Base {
 
     private final GoPsiType myPsiNode;
 
-    private Spacing myDefaultSpacing = Spacings.SPACE;
+    private Spacing myDefaultSpacing = null;
 
     private List<Block> mySubBlocks = null;
     private Map<Alignments.Key, Alignment> knownAlignments = null;
@@ -97,7 +97,7 @@ public class Code<GoPsiType extends GoPsiElement> extends Base {
         return this;
     }
 
-    protected void setAlignmentKeys(@NotNull Set<Alignments.Key> alignmentKeys) {
+    protected void withAlignmentKeys(@NotNull Set<Alignments.Key> alignmentKeys) {
         this.myAlignmentKeys = alignmentKeys;
     }
 
@@ -111,23 +111,143 @@ public class Code<GoPsiType extends GoPsiElement> extends Base {
         return this;
     }
 
-    @NotNull
-    public List<Block> getSubBlocks() {
-        if (mySubBlocks == null) {
-            List<Block> children = buildChildren();
-            if (children == null || children.isEmpty()) {
-                mySubBlocks = Collections.emptyList();
-            } else {
-                mySubBlocks = children;
-            }
-        }
-
-        return mySubBlocks;
+    public Code<GoPsiType> withDefaultSpacing(@NotNull Spacing defaultSpacing) {
+        this.myDefaultSpacing = defaultSpacing;
+        return this;
     }
 
     @NotNull
     protected Set<Alignments.Key> getAlignmentKeys() {
         return myAlignmentKeys;
+    }
+
+    protected Block customizeBlock(@NotNull Block childBlock, @NotNull PsiElement childPsi) {
+        return childBlock;
+    }
+
+    public Code<GoPsiType> withCustomSpacing(@NotNull GoBlockUtil.CustomSpacing customSpacing) {
+        this.myCustomSpacing = customSpacing;
+        return this;
+    }
+
+    @Nullable
+    protected Spacing getCustomSpacing(@Nullable IElementType typeChild1,
+                                       @Nullable IElementType typeChild2) {
+        return myCustomSpacing != null
+            ? myCustomSpacing.getSpacingBetween(typeChild1, typeChild2)
+            : null;
+    }
+
+    protected Code<GoPsiType> setLeadingCommentGroupAlignment(Alignment alignment) {
+        this.leadingCommentGroupAlign = alignment;
+        return this;
+    }
+
+    protected Code<GoPsiType> setLeadingCommentGroupIndent(Indent indent) {
+        this.leadingCommentGroupIndent = indent;
+        return this;
+    }
+
+    @Nullable
+    @Override
+    public Spacing getSpacing(@Nullable com.intellij.formatting.Block child1,
+                              @NotNull com.intellij.formatting.Block child2) {
+        IElementType typeChild1 = getASTElementType(child1);
+        IElementType typeChild2 = getASTElementType(child2);
+
+        if (child1 == null)
+            return Spacings.NONE;
+
+        if (child1 instanceof CommentGroupPart ||
+            child2 instanceof CommentGroupPart)
+            return Spacings.LINE_HOLD_BREAKS;
+
+        Spacing customSpacing = getCustomSpacing(typeChild1, typeChild2);
+        if (customSpacing != null)
+            return customSpacing;
+
+        if (typeChild1 == mSL_COMMENT)
+            return Spacings.LINE_HOLD_BREAKS;
+
+        if (!isMultiLine())
+            return myDefaultSpacing;
+
+        if (isMultiLine() && isLeftBreak(typeChild1) && isRightBreak(typeChild2))
+            return Spacings.LINE_HOLD_BREAKS;
+
+        if (isMultiLine() && (isLeftBreak(typeChild1) || isRightBreak(typeChild2)))
+            return Spacings.LINE;
+
+        if (!wantsToBreakLine(typeChild1))
+            return typeChild1 == mSL_COMMENT ? Spacings.LINE : myDefaultSpacing;
+
+        if (holdTogether(typeChild1, typeChild2, getLineCount(getTextBetween(child1, child2))))
+            return Spacings.LINE;
+
+        return Spacings.EMPTY_LINE;
+    }
+
+    protected boolean isRightBreak(IElementType typeChild) { return typeChild == myRightBreakElement; }
+
+    protected boolean isLeftBreak(IElementType typeChild) { return typeChild == myLeftBreakElement; }
+
+    protected boolean isMultiLine() { return myMultiLineMode; }
+
+    protected boolean wantsToBreakLine(IElementType child) {
+        return this.myLineBreakingTokens.contains(child);
+    }
+
+    protected boolean holdTogether(@Nullable IElementType typeChild1,
+                                   @Nullable IElementType typeChild2,
+                                   int linesBetween) {
+        if (linesBetween > 1)
+            return false;
+
+        if (typeChild1 == typeChild2)
+            return true;
+
+        if (myHoldTogetherGroups != null)
+            for (TokenSet holdTogetherGroup : myHoldTogetherGroups)
+                if (holdTogetherGroup != null &&
+                    holdTogetherGroup.contains(typeChild1) &&
+                    holdTogetherGroup.contains(typeChild2))
+                    return true;
+
+        return false;
+    }
+
+    public Code<GoPsiType> setHoldTogetherGroups(TokenSet... holdTogetherGroups) {
+        this.myHoldTogetherGroups = holdTogetherGroups;
+        return this;
+    }
+
+    @Nullable
+    protected Alignment getChildAlignment(@NotNull PsiElement child,
+                                          @Nullable PsiElement prevChild,
+                                          Map<Alignments.Key, Alignment> alignments) {
+        return null;
+    }
+
+    protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
+        return
+            prevChild != null
+                ? myIndentedChildBlocks.contains(child.getNode().getElementType())
+                    ? Indents.NORMAL
+                    : Indents.NONE
+                : Indents.NONE;
+    }
+
+    @NotNull
+    @Override
+    public ChildAttributes getChildAttributes(int newChildIndex) {
+        return newChildIndex == 0
+            ? new ChildAttributes(Indents.NONE, null)
+            : ChildAttributes.DELEGATE_TO_NEXT_CHILD;
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return false;
     }
 
     @Nullable
@@ -178,137 +298,18 @@ public class Code<GoPsiType extends GoPsiElement> extends Base {
         return children;
     }
 
-    protected Block customizeBlock(@NotNull Block childBlock, @NotNull PsiElement childPsi) {
-        return childBlock;
-    }
-
-    public Code<GoPsiType> setCustomSpacing(@NotNull GoBlockUtil.CustomSpacing customSpacing) {
-        this.myCustomSpacing = customSpacing;
-        return this;
-    }
-
-    @Nullable
-    protected Spacing getCustomSpacing(@Nullable IElementType typeChild1,
-                                       @Nullable IElementType typeChild2) {
-        return myCustomSpacing != null
-            ? myCustomSpacing.getSpacingBetween(typeChild1, typeChild2)
-            : null;
-    }
-
-    protected Code<GoPsiType> setLeadingCommentGroupAlignment(Alignment alignment) {
-        this.leadingCommentGroupAlign = alignment;
-        return this;
-    }
-
-    protected Code<GoPsiType> setLeadingCommentGroupIndent(Indent indent) {
-        this.leadingCommentGroupIndent = indent;
-        return this;
-    }
-
-    @Nullable
-    @Override
-    public Spacing getSpacing(@Nullable com.intellij.formatting.Block child1,
-                              @NotNull com.intellij.formatting.Block child2) {
-        IElementType typeChild1 = getASTElementType(child1);
-        IElementType typeChild2 = getASTElementType(child2);
-
-        if (child1 == null)
-            return Spacings.NONE;
-
-        if (child1 instanceof CommentGroupPart ||
-            child2 instanceof CommentGroupPart)
-            return Spacings.LINE_HOLD_BREAKS;
-
-        Spacing customSpacing = getCustomSpacing(typeChild1, typeChild2);
-        if (customSpacing != null)
-            return customSpacing;
-
-        if (!isMultiLine())
-            return typeChild1 == mSL_COMMENT ? Spacings.LINE : myDefaultSpacing;
-
-        if (isMultiLine() && isLeftBreak(typeChild1) && isRightBreak(typeChild2))
-            return Spacings.LINE_HOLD_BREAKS;
-
-        if (isMultiLine() && (isLeftBreak(typeChild1) || isRightBreak(typeChild2)))
-            return Spacings.LINE;
-
-        if (!wantsToBreakLine(typeChild1))
-            return typeChild1 == mSL_COMMENT ? Spacings.LINE : myDefaultSpacing;
-
-        if (holdTogether(typeChild1, typeChild2, getLineCount(getTextBetween(child1, child2))))
-            return Spacings.LINE;
-
-        return Spacings.EMPTY_LINE;
-    }
-
-    protected boolean isRightBreak(IElementType typeChild) {
-        return isMultiLine() && typeChild == myRightBreakElement;
-    }
-
-    protected boolean isLeftBreak(IElementType typeChild) {
-        return isMultiLine() && typeChild == myLeftBreakElement;
-    }
-
-    protected boolean isMultiLine() {
-        return myMultiLineMode;
-    }
-
-    protected boolean wantsToBreakLine(IElementType child) {
-        return this.myLineBreakingTokens.contains(child);
-    }
-
-    protected boolean holdTogether(@Nullable IElementType typeChild1,
-                                   @Nullable IElementType typeChild2,
-                                   int linesBetween) {
-        if (linesBetween > 1)
-            return false;
-
-        if (typeChild1 == typeChild2)
-            return true;
-
-        if (myHoldTogetherGroups != null)
-            for (TokenSet holdTogetherGroup : myHoldTogetherGroups)
-                if (holdTogetherGroup != null &&
-                    holdTogetherGroup.contains(typeChild1) &&
-                    holdTogetherGroup.contains(typeChild2))
-                    return true;
-
-        return false;
-    }
-
-    public Code<GoPsiType> setHoldTogetherGroups(TokenSet... holdTogetherGroups) {
-        this.myHoldTogetherGroups = holdTogetherGroups;
-        return this;
-    }
-
-    @Nullable
-    protected Alignment getChildAlignment(@NotNull PsiElement child,
-                                          @Nullable PsiElement prevChild,
-                                          Map<Alignments.Key, Alignment> alignments) {
-        return null;
-    }
-
-    protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
-        return
-            prevChild != null
-                ? myIndentedChildBlocks.contains(child.getNode().getElementType())
-                    ? Indents.NORMAL
-                    : Indents.NONE
-                : Indents.NONE;
-    }
-
-
     @NotNull
-    @Override
-    public ChildAttributes getChildAttributes(int newChildIndex) {
-        return newChildIndex == 0
-            ? new ChildAttributes(Indents.NONE, null)
-            : ChildAttributes.DELEGATE_TO_NEXT_CHILD;
-    }
+    public List<Block> getSubBlocks() {
+        if (mySubBlocks == null) {
+            List<Block> children = buildChildren();
+            if (children == null || children.isEmpty()) {
+                mySubBlocks = Collections.emptyList();
+            } else {
+                mySubBlocks = children;
+            }
+        }
 
-    @Override
-    public boolean isLeaf() {
-        return false;
+        return mySubBlocks;
     }
 
     protected ASTNode[] getGoChildren() {
@@ -339,9 +340,5 @@ public class Code<GoPsiType extends GoPsiElement> extends Base {
                 addChildNodes(child, childNodes, range);
             }
         }
-    }
-
-    public void setDefaultSpacing(@NotNull Spacing defaultSpacing) {
-        this.myDefaultSpacing = defaultSpacing;
     }
 }

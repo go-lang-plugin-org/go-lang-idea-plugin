@@ -76,6 +76,4 @@ public abstract class Base implements ASTBlock, GoElementTypes {
     public ChildAttributes getChildAttributes(int newChildIndex) {
         return new ChildAttributes(GoBlockUtil.Indents.NONE, null);
     }
-
-
 }

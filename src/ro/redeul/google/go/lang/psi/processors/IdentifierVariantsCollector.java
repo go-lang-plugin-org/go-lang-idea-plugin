@@ -13,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.completion.insertHandler.FunctionInsertHandler;
 import ro.redeul.google.go.lang.documentation.DocumentUtil;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
@@ -48,20 +48,20 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
             return true;
         }
 
-        if ( element instanceof GoVarDeclaration) {
-            collectVariableDeclaration((GoVarDeclaration) element, state);
+        if ( element instanceof GoVarSpec) {
+            collectVariableDeclaration((GoVarSpec) element, state);
             return true;
         }
 
-        if ( element instanceof GoConstDeclaration) {
-            collectVariableDeclaration((GoConstDeclaration) element, state);
+        if ( element instanceof GoConstSpec) {
+            collectVariableDeclaration((GoConstSpec) element, state);
             return true;
         }
 
         return true;
     }
 
-    private void collectVariableDeclaration(GoVarDeclaration declaration, ResolveState state) {
+    private void collectVariableDeclaration(GoVarSpec declaration, ResolveState state) {
 
         GoLiteralIdentifier identifiers[] = declaration.getIdentifiers();
 
@@ -74,7 +74,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
         }
     }
 
-    private void collectVariableDeclaration(GoConstDeclaration declaration, ResolveState state) {
+    private void collectVariableDeclaration(GoConstSpec declaration, ResolveState state) {
 
         GoLiteralIdentifier identifiers[] = declaration.getIdentifiers();
 

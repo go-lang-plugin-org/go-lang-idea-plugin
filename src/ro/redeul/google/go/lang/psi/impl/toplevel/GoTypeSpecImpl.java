@@ -8,6 +8,7 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
@@ -24,7 +25,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
  * Date: Aug 30, 2010
  * Time: 9:01:30 PM
  */
-public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
+public class GoTypeSpecImpl extends GoDocumentedPsiElementBase implements GoTypeSpec {
 
     public GoTypeSpecImpl(@NotNull ASTNode node) {
         super(node);

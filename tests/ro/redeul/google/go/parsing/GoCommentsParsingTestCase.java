@@ -5,7 +5,6 @@ import ro.redeul.google.go.GoParsingTestCase;
 import java.io.File;
 
 /**
- * TODO: Document this
  * <p/>
  * Created on Jan-12-2014 19:11
  *

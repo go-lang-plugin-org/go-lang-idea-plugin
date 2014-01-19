@@ -40,14 +40,18 @@ import org.jetbrains.annotations.NotNull;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 %{
+  protected void rollback() {
+    yybegin(YYINITIAL);
+    yypushback(yytext().length());
+  }
 %}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////// NewLines and spaces /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-mNL = \n            // NewLinE
-mWS = [ \t\r]*      // Whitespaces
+mNL = \n            // NewLine
+mWS = [ \t\r]+      // Whitespaces
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////// Comments ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +197,7 @@ mESCAPES = [abfnrtv]
 <YYINITIAL> {
 "|"                                       { return oBIT_OR; }
 
-{mWS} ({mNL} | {mWS})*                    { return wsWS; }
+({mNL} | {mWS})+                          { return wsWS; }
 {mSL_COMMENT}                             { return( mSL_COMMENT ); }
 //{mML_COMMENT}                             { return( mML_COMMENT ); }
 //"/*" ( ([^"*/"]|[\r\n])* ("*"+ [^"*/"] )? )* ("*" | "*"+"/")? { return( mML_COMMENT ); }
@@ -330,12 +334,10 @@ mESCAPES = [abfnrtv]
 }
 
 <MAYBE_SEMI> {
-{mWS}                                     { return wsWS; }
-"/*" [^"*/"\n]* "*/"                      { return mML_COMMENT; }
-{mNL}                                     { yybegin(YYINITIAL); yypushback(yytext().length()); return oSEMI_SYNTHETIC; }
-{mSL_COMMENT}                             { yybegin(YYINITIAL); yypushback(yytext().length()); return oSEMI_SYNTHETIC; }
-
-"/*" ([^"*/"])* \n                        { yybegin(YYINITIAL); yypushback(yytext().length()); return oSEMI_SYNTHETIC; }
-
-.                                         { yybegin(YYINITIAL); yypushback(yytext().length()); }
+(
+  {mWS} | ("/*" [^"*/"\n]* "*/")
+)* (
+  {mSL_COMMENT} | "/*" [^"*/"\n]*
+)? {mNL}                                  { rollback(); return oSEMI_SYNTHETIC; }
+.                                         { rollback(); }
 }

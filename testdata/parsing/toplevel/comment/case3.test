@@ -1,7 +1,0 @@
-//
------
-Go file
-  PsiComment(SL_COMMENT)('//')
-  PackageDeclaration()
-    PsiErrorElement:"package" keyword expected
-      <empty list>

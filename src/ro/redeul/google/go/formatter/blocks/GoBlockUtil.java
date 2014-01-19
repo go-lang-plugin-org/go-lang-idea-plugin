@@ -8,12 +8,35 @@ import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.containers.MultiMapBasedOnSet;
 import org.jetbrains.annotations.NotNull;
-import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.*;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.*;
+import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 
 import java.util.*;
 
-import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.INC_DEC_OPS;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.*;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.kCHAN;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.kDEFAULT;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.kFUNC;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.kIMPORT;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.kMAP;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.kRETURN;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.kTYPE;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.mML_COMMENT;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.oCOLON;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.oCOMMA;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.oDOT;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.oMUL;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.oSEMI;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.oSEND_CHANNEL;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.oTRIPLE_DOT;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.pLBRACK;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.pLCURLY;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.pLPAREN;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.pRBRACK;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.pRCURLY;
+import static ro.redeul.google.go.lang.lexer.GoTokenTypeSets.pRPAREN;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.*;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.COMMENTS;
 
 /**
  * TODO: Document this
@@ -44,6 +67,9 @@ public class GoBlockUtil {
 
         static final Indent NORMAL = Indent.getNormalIndent();
         static final Indent NORMAL_RELATIVE = Indent.getNormalIndent(true);
+
+        static final Indent CONTINUATION = Indent.getContinuationIndent();
+        static final Indent CONTINUATION_RELATIVE = Indent.getContinuationIndent(true);
     }
 
     public interface Wraps {
@@ -99,52 +125,68 @@ public class GoBlockUtil {
             MultiMap<IElementType, Pair<IElementType, Spacing>> entries =
                 new MultiMapBasedOnSet<IElementType, Pair<IElementType, Spacing>>();
 
-            public Builder setNone(IElementType typeChild1, IElementType typeChild2) {
+            public Builder none(IElementType typeChild1, IElementType typeChild2) {
                 return set(typeChild1, typeChild2, Spacings.NONE);
             }
 
-            public Builder setNone(TokenSet leftTypes, IElementType rightType) {
+            public Builder none(TokenSet leftTypes, IElementType rightType) {
                 return set(leftTypes, rightType, Spacings.NONE);
             }
 
-            public Builder setNone(IElementType leftType, TokenSet rightTypes) {
+            public Builder none(IElementType leftType, TokenSet rightTypes) {
                 return set(leftType, rightTypes, Spacings.NONE);
             }
 
-            public Builder setNone(TokenSet leftTypes, TokenSet rightTypes) {
+            public Builder none(TokenSet leftTypes, TokenSet rightTypes) {
                 return set(leftTypes, rightTypes, Spacings.NONE);
             }
 
-            public Builder setNoneCanBreak(IElementType typeChild1, IElementType typeChild2) {
+            public Builder noneWithBreaks(IElementType typeChild1, IElementType typeChild2) {
                 return set(typeChild1, typeChild2, Spacings.NONE_HOLD_BREAKS);
             }
 
-            public Builder setNoneCanBreak(TokenSet leftTypes, IElementType rightType) {
+            public Builder noneWithBreaks(TokenSet leftTypes, IElementType rightType) {
                 return set(leftTypes, rightType, Spacings.NONE_HOLD_BREAKS);
             }
 
-            public Builder setNoneCanBreak(IElementType leftType, TokenSet rightTypes) {
+            public Builder noneWithBreaks(IElementType leftType, TokenSet rightTypes) {
                 return set(leftType, rightTypes, Spacings.NONE_HOLD_BREAKS);
             }
 
-            public Builder setNoneCanBreak(TokenSet leftTypes, TokenSet rightTypes) {
+            public Builder noneWithBreaks(TokenSet leftTypes, TokenSet rightTypes) {
                 return set(leftTypes, rightTypes, Spacings.NONE_HOLD_BREAKS);
             }
 
-            public Builder setBasic(IElementType leftType, IElementType rightType) {
+            public Builder space(IElementType leftType, IElementType rightType) {
                 return set(leftType, rightType, Spacings.SPACE);
             }
 
-            public Builder setBasic(IElementType leftType, TokenSet rightTypes) {
+            public Builder space(IElementType leftType, TokenSet rightTypes) {
                 return set(leftType, rightTypes, Spacings.SPACE);
             }
 
-            public Builder setBasic(TokenSet leftTypes, IElementType rightType) {
+            public Builder space(TokenSet leftTypes, IElementType rightType) {
                 return set(leftTypes, rightType, Spacings.SPACE);
             }
 
-            public Builder setBasic(TokenSet leftTypes, TokenSet rightTypes) {
+            public Builder space(TokenSet leftTypes, TokenSet rightTypes) {
                 return set(leftTypes, rightTypes, Spacings.SPACE);
+            }
+
+            public Builder spaceWithBreaks(IElementType leftType, IElementType rightType) {
+                return set(leftType, rightType, Spacings.SPACE_HOLD_BREAKS);
+            }
+
+            public Builder spaceWithBreaks(IElementType leftType, TokenSet rightTypes) {
+                return set(leftType, rightTypes, Spacings.SPACE_HOLD_BREAKS);
+            }
+
+            public Builder spaceWithBreaks(TokenSet leftTypes, IElementType rightType) {
+                return set(leftTypes, rightType, Spacings.SPACE_HOLD_BREAKS);
+            }
+
+            public Builder spaceWithBreaks(TokenSet leftTypes, TokenSet rightTypes) {
+                return set(leftTypes, rightTypes, Spacings.SPACE_HOLD_BREAKS);
             }
 
             public Builder set(IElementType leftType, IElementType rightType, Spacing spacing) {
@@ -216,145 +258,288 @@ public class GoBlockUtil {
 
     public static interface CustomSpacings {
 
+        static final CustomSpacing FUNCTION = CustomSpacing.Builder()
+            .space(kFUNC, LITERAL_IDENTIFIER)               // func| a() () { }
+            .space(kFUNC, METHOD_RECEIVER)                   // func| (int) f() {}
+            .space(METHOD_RECEIVER, LITERAL_IDENTIFIER)      // func (int)| main()
+            .none(LITERAL_IDENTIFIER, pLPAREN)              // func main|() () { }
+            .none(kFUNC, pLPAREN)                           // func|() { }
+
+            .none(pLPAREN, pRPAREN)                         // func (|)
+
+            .none(pLPAREN, FUNCTION_PARAMETER_LIST)         // func (|a)
+            .none(FUNCTION_PARAMETER_LIST, pRPAREN)         // func (a|)
+
+            .space(pRPAREN, BLOCK_STATEMENT)                // func (a)| {}
+            .space(pRPAREN, FUNCTION_RESULT)                // func (a)|() {}
+            .space(FUNCTION_RESULT, BLOCK_STATEMENT)        // func (a)| {}
+            .build();
+
+        static final CustomSpacing FUNCTION_METHOD_RECEIVER = CustomSpacing.Builder()
+            .noneWithBreaks(pLPAREN, TYPES)
+            .none(TYPES, pRPAREN)
+            .noneWithBreaks(pLPAREN, LITERAL_IDENTIFIER)
+            .space(LITERAL_IDENTIFIER, TYPES)
+            .build();
+
+        static final CustomSpacing FUNCTION_RESULT_SPACING = CustomSpacing.Builder()
+            .none(pLPAREN, pRPAREN)
+            .none(pLPAREN, FUNCTION_PARAMETER_LIST)
+            .none(FUNCTION_PARAMETER_LIST, pRPAREN)
+            .build();
+
         static final CustomSpacing STMT_INC_DEC = CustomSpacing.Builder()
-            .setNone(EXPRESSIONS, INC_DEC_OPS)
-            .setNone(INC_DEC_OPS, oSEMI)
+            .none(EXPRESSIONS, INC_DEC_OPS)
+            .none(INC_DEC_OPS, oSEMI)
             .build();
 
-        static final CustomSpacing SEND_STATEMENT = CustomSpacing.Builder()
-            .setNone(EXPRESSIONS, INC_DEC_OPS)
-            .setNone(INC_DEC_OPS, oSEMI)
-            .build();
-
-        static final CustomSpacing NO_SPACE_BEFORE_COMMA = CustomSpacing.Builder()
-            .setNone(LITERAL_IDENTIFIER, oCOMMA)
-            .setNone(EXPRESSIONS, oCOMMA)
-            .setNone(oTRIPLE_DOT, TYPES)
-            .setNone(FUNCTION_PARAMETER, oCOMMA)
-            .set(oCOMMA, LITERAL_IDENTIFIER, Spacings.SPACE_HOLD_BREAKS)
-            .set(oCOMMA, FUNCTION_PARAMETER, Spacings.SPACE_HOLD_BREAKS)
-            .build();
-
-        static final CustomSpacing CLAUSES_COLON = CustomSpacing.Builder()
-            .setNone(EXPRESSIONS, oCOLON)
-            .setNone(EXPRESSIONS, oCOMMA)
-            .setNone(TYPES, oCOLON)
-            .setNone(TYPES, oCOMMA)
-            .setNone(TYPE_LIST, oCOLON)
-            .setNone(SELECT_COMM_CLAUSE_RECV_EXPR, oCOLON)
-            .setNone(kDEFAULT, oCOLON)
+        static final CustomSpacing STMT_SEND = CustomSpacing.Builder()
+            .none(EXPRESSIONS, INC_DEC_OPS)
+            .none(INC_DEC_OPS, oSEMI)
             .build();
 
         static final CustomSpacing STMT_IF = CustomSpacing.Builder()
-            .setNone(STMTS, oSEMI)
-            .setNone(EXPRESSIONS, oSEMI)
+            .none(STMTS, oSEMI)
+            .none(EXPRESSIONS, oSEMI)
             .build();
 
         static final CustomSpacing STMT_FOR = CustomSpacing.Builder()
-            .setNone(EXPRESSIONS, oCOMMA)
-            .setNone(LITERAL_IDENTIFIER, oCOMMA)
-            .setNone(STMTS, oSEMI)
-            .setNone(EXPRESSIONS, oSEMI)
+            .none(EXPRESSIONS, oCOMMA)
+            .none(LITERAL_IDENTIFIER, oCOMMA)
+            .none(STMTS, oSEMI)
+            .none(EXPRESSIONS, oSEMI)
             .build();
 
-        static final CustomSpacing UNARY_EXPRESSION = CustomSpacing.Builder()
-            .setNone(UNARY_OPERATORS, EXPRESSIONS)
+        static final CustomSpacing NO_SPACE_BEFORE_COMMA = CustomSpacing.Builder()
+            .none(LITERAL_IDENTIFIER, oCOMMA)
+            .none(EXPRESSIONS, oCOMMA)
+            .none(oTRIPLE_DOT, TYPES)
+            .none(GoElementTypes.FUNCTION_PARAMETER, oCOMMA)
+            .spaceWithBreaks(oCOMMA, LITERAL_IDENTIFIER)
+            .spaceWithBreaks(oCOMMA, GoElementTypes.FUNCTION_PARAMETER)
             .build();
 
-        static final CustomSpacing SLICE_EXPRESSION_EXPANDED = CustomSpacing.Builder()
-            .setBasic(oCOLON, EXPRESSIONS_BINARY)
-            .setBasic(EXPRESSIONS_BINARY, oCOLON)
+        static final CustomSpacing FUNCTION_PARAMETER = CustomSpacing.Builder()
+            .none(LITERAL_IDENTIFIER, oCOMMA)
+            .spaceWithBreaks(oCOMMA, LITERAL_IDENTIFIER)
+            .none(oTRIPLE_DOT, TYPES)
             .build();
 
-        static final CustomSpacing CALL_OR_CONVERSION = CustomSpacing.Builder()
-            .setNone(EXPRESSIONS, pLPAREN)
-            .setNone(TYPES, pLPAREN)
-            .setNone(pLPAREN, TYPES)
-            .setNoneCanBreak(pLPAREN, EXPRESSIONS)
-            .setNone(EXPRESSIONS, pRPAREN)
-            .setNone(pLPAREN, pRPAREN)
-            .setNone(EXPRESSIONS, oCOMMA)
-            .setNone(TYPES, oCOMMA)
-            .set(oCOMMA, EXPRESSIONS, Spacings.SPACE_HOLD_BREAKS)
+        static final CustomSpacing CLAUSES_COLON = CustomSpacing.Builder()
+            .none(EXPRESSIONS, oCOLON)
+            .none(EXPRESSIONS, oCOMMA)
+            .none(TYPES, oCOLON)
+            .none(TYPES, oCOMMA)
+            .none(TYPE_LIST, oCOLON)
+            .none(SELECT_COMM_CLAUSE_RECV_EXPR, oCOLON)
+            .none(kDEFAULT, oCOLON)
             .build();
 
         static final CustomSpacing TYPE_ARRAY = CustomSpacing.Builder()
-            .setNone(pLBRACK, EXPRESSIONS)
-            .setNone(EXPRESSIONS, pRBRACK)
-            .setNone(pLBRACK, oTRIPLE_DOT)
-            .setNone(oTRIPLE_DOT, pRBRACK)
-            .setNone(pRBRACK, TYPES)
+            .none(pLBRACK, EXPRESSIONS)
+            .none(EXPRESSIONS, pRBRACK)
+            .none(pLBRACK, oTRIPLE_DOT)
+            .none(oTRIPLE_DOT, pRBRACK)
+            .none(pRBRACK, TYPES)
             .build();
 
         static final CustomSpacing TYPE_POINTER = CustomSpacing.Builder()
-            .setNone(oMUL, TYPES)
+            .none(oMUL, TYPES)
             .build();
 
         static final CustomSpacing TYPE_SLICE = CustomSpacing.Builder()
-            .setNone(pLBRACK, pRBRACK)
-            .setNone(pRBRACK, TYPES)
+            .none(pLBRACK, pRBRACK)
+            .none(pRBRACK, TYPES)
             .build();
 
         static final CustomSpacing TYPE_MAP = CustomSpacing.Builder()
-            .setNone(kMAP, pLBRACK)
-            .setNone(pLBRACK, TYPES)
-            .setNone(TYPES, pRBRACK)
-            .setNone(pRBRACK, TYPES)
+            .none(kMAP, pLBRACK)
+            .none(pLBRACK, TYPES)
+            .none(TYPES, pRBRACK)
+            .none(pRBRACK, TYPES)
             .build();
 
         static final CustomSpacing TYPE_CHANNEL = CustomSpacing.Builder()
-            .setNone(kCHAN, oSEND_CHANNEL)
-            .setNone(oSEND_CHANNEL, kCHAN)
+            .none(kCHAN, oSEND_CHANNEL)
+            .none(oSEND_CHANNEL, kCHAN)
             .build();
 
         static final CustomSpacing TYPE_PARENTHESISED = CustomSpacing.Builder()
-            .setNone(pLPAREN, pRPAREN)
-            .setNone(pLPAREN, TYPES)
-            .setNone(TYPES, pRPAREN)
+            .none(pLPAREN, pRPAREN)
+            .none(pLPAREN, TYPES)
+            .none(TYPES, pRPAREN)
             .build();
 
-        static final CustomSpacing TYPE_FUNCTION = CustomSpacing.Builder()
-            .setNone(kFUNC, pLPAREN)
-            .setNone(pLPAREN, pRPAREN)
-            .setNone(pLPAREN, FUNCTION_PARAMETER_LIST)
-            .setNone(FUNCTION_PARAMETER_LIST, pRPAREN)
-            .build();
+        static final CustomSpacing TYPE_FUNCTION = FUNCTION;
 
-        static final CustomSpacing FUNCTION_RESULT = CustomSpacing.Builder()
-            .setNone(pLPAREN, pRPAREN)
-            .setNone(pLPAREN, FUNCTION_PARAMETER_LIST)
-            .setNone(FUNCTION_PARAMETER_LIST, pRPAREN)
+        static final CustomSpacing STMT_RETURN = CustomSpacing.Builder()
+            .space(kRETURN, EXPRESSIONS)
+            .space(EXPRESSIONS, GoTokenTypeSets.COMMENTS)
             .build();
 
         static final CustomSpacing STMT_SWITCH_EXPR = CustomSpacing.Builder()
             .set(pLCURLY, pRCURLY, Spacings.LINE_HOLD_BREAKS)
-            .setNone(STMTS, oSEMI)
+            .none(STMTS, oSEMI)
             .build();
 
         static final CustomSpacing STMT_SWITCH_TYPE = CustomSpacing.Builder()
             .set(pLCURLY, pRCURLY, Spacings.LINE_HOLD_BREAKS)
-            .setNone(STMTS, oSEMI)
+            .none(STMTS, oSEMI)
             .build();
 
         static final CustomSpacing STMT_SELECT = CustomSpacing.Builder()
-            .setNone(pLCURLY, pRCURLY)
+            .none(pLCURLY, pRCURLY)
+            .build();
+
+        static final CustomSpacing STMT_BLOCK = CustomSpacing.Builder()
+            .set(pLCURLY, pRCURLY, Spacings.LINE_HOLD_BREAKS)
+            .set(pLCURLY, STMTS, Spacings.LINE_HOLD_BREAKS)
+            .set(pLCURLY, COMMENTS, Spacings.LINE_HOLD_BREAKS)
+            .set(STMTS, pRCURLY, Spacings.LINE_HOLD_BREAKS)
+            .set(COMMENTS, pRCURLY, Spacings.LINE_HOLD_BREAKS)
+            .set(STMTS, STMTS, Spacings.LINE_HOLD_BREAKS)
+            .set(mML_COMMENT, STMTS, Spacings.SPACE_HOLD_BREAKS)
+            .build();
+
+        static final CustomSpacing STMT_BLOCK_COMPACT = CustomSpacing.Builder()
+            .set(pLCURLY, pRCURLY, Spacings.NONE_HOLD_BREAKS)
+            .set(pLCURLY, STMTS, Spacings.SPACE)
+            .set(STMTS, pRCURLY, Spacings.SPACE)
+            .set(pLCURLY, mML_COMMENT, Spacings.SPACE)
+            .set(STMTS, STMTS, Spacings.SPACE_HOLD_BREAKS)
+            .set(mML_COMMENT, STMTS, Spacings.SPACE_HOLD_BREAKS)
             .build();
 
         static final CustomSpacing SWITCH_TYPE_GUARD = CustomSpacing.Builder()
-            .setNone(EXPRESSIONS, oDOT)
-            .setNone(oDOT, pLPAREN)
-            .setNone(pLPAREN, kTYPE)
-            .setNone(kTYPE, pRPAREN)
+            .none(EXPRESSIONS, oDOT)
+            .none(oDOT, pLPAREN)
+            .none(pLPAREN, kTYPE)
+            .none(kTYPE, pRPAREN)
             .build();
 
         static final CustomSpacing LISTS = CustomSpacing.Builder()
-            .setNone(TYPES, oCOMMA)
-            .setNone(EXPRESSIONS, oCOMMA)
-            .setNone(FUNCTION_PARAMETER, oCOMMA)
-            .setNone(FUNCTION_PARAMETER_VARIADIC, oCOMMA)
+            .none(TYPES, oCOMMA)
+            .none(EXPRESSIONS, oCOMMA)
+            .none(GoElementTypes.FUNCTION_PARAMETER, oCOMMA)
+            .none(FUNCTION_PARAMETER_VARIADIC, oCOMMA)
             .set(oCOMMA, EXPRESSIONS, Spacings.SPACE_HOLD_BREAKS)
-            .set(oCOMMA, FUNCTION_PARAMETER, Spacings.SPACE_HOLD_BREAKS)
+            .set(oCOMMA, GoElementTypes.FUNCTION_PARAMETER, Spacings.SPACE_HOLD_BREAKS)
             .set(oCOMMA, FUNCTION_PARAMETER_VARIADIC, Spacings.SPACE_HOLD_BREAKS)
             .build();
+
+        static final CustomSpacing EXPR_UNARY = CustomSpacing.Builder()
+            .none(UNARY_OPERATORS, EXPRESSIONS)
+            .build();
+
+        static final CustomSpacing EXPR_SLICE_EXPANDED = CustomSpacing.Builder()
+            .space(oCOLON, EXPRESSIONS_BINARY)
+            .space(EXPRESSIONS_BINARY, oCOLON)
+            .build();
+
+        static final CustomSpacing EXPR_CALL_OR_CONVERSION = CustomSpacing.Builder()
+            .none(EXPRESSIONS, pLPAREN)
+            .none(TYPES, pLPAREN)
+            .none(pLPAREN, TYPES)
+            .noneWithBreaks(pLPAREN, EXPRESSIONS)
+            .none(EXPRESSIONS, pRPAREN)
+            .none(pLPAREN, pRPAREN)
+            .none(EXPRESSIONS, oCOMMA)
+            .none(TYPES, oCOMMA)
+            .set(oCOMMA, EXPRESSIONS, Spacings.SPACE_HOLD_BREAKS)
+            .build();
+
+        static final CustomSpacing EXPR_SELECTOR = CustomSpacing.Builder()
+            .none(EXPRESSIONS, oDOT)         // a|.s
+            .none(oDOT, LITERAL_IDENTIFIER)  // a.|s
+            .build();
+
+        static final CustomSpacing EXPR_INDEX = CustomSpacing.Builder()
+            .none(EXPRESSIONS, pLBRACK) // a|[i]
+            .none(pLBRACK, EXPRESSIONS) // a[|i]
+            .none(EXPRESSIONS, pRBRACK) // a[i|]
+            .build();
+
+        static final CustomSpacing EXPR_PARENTHESISED = CustomSpacing.Builder()
+            .none(pLPAREN, EXPRESSIONS)  // (|e)
+            .none(EXPRESSIONS, pRPAREN)  // (e|)
+            .build();
+
+        static final CustomSpacing EXPR_TYPE_ASSERT = CustomSpacing.Builder()
+            .none(EXPRESSIONS, oDOT) // a|.(type)
+            .none(oDOT, pLPAREN)     // a.|(type)
+            .none(pLPAREN, TYPES)    // a.(|type)
+            .none(TYPES, pRPAREN)    // a.(type|)
+            .build();
+
+        static final CustomSpacing EXPR_BINARY = CustomSpacing.Builder()
+            .spaceWithBreaks(OPS_ADD, EXPRESSIONS)
+            .spaceWithBreaks(OPS_MUL, EXPRESSIONS)
+            .spaceWithBreaks(OPS_REL, EXPRESSIONS)
+            .spaceWithBreaks(OPS_LOG_AND, EXPRESSIONS)
+            .spaceWithBreaks(OPS_LOG_OR, EXPRESSIONS)
+            .build();
+
+        static final CustomSpacing EXPR_BINARY_COMPACT = CustomSpacing.Builder()
+            .none(EXPRESSIONS, OPS_ADD)
+            .noneWithBreaks(OPS_ADD, EXPRESSIONS)
+            .none(EXPRESSIONS, OPS_MUL)
+            .noneWithBreaks(OPS_MUL, EXPRESSIONS)
+            .spaceWithBreaks(OPS_LOG_AND, EXPRESSIONS)
+            .spaceWithBreaks(OPS_LOG_OR, EXPRESSIONS)
+            .spaceWithBreaks(OPS_REL, EXPRESSIONS)
+            .build();
+
+        static final CustomSpacing LITERAL_FUNCTION = FUNCTION;
+
+        static final CustomSpacing IMPORT_DECL = CustomSpacing.Builder()
+            .space(kIMPORT, IMPORT_DECLARATION)
+            .none(IMPORT_DECLARATION, oSEMI)
+            .space(IMPORT_DECLARATION, COMMENTS)
+            .space(kIMPORT, pLPAREN)
+            .set(pLPAREN, IMPORT_DECLARATION, Spacings.LINE_HOLD_BREAKS)
+            .set(IMPORT_DECLARATION, IMPORT_DECLARATION, Spacings.LINE_HOLD_BREAKS)
+            .set(IMPORT_DECLARATION, pRPAREN, Spacings.LINE_HOLD_BREAKS)
+            .space(pRPAREN, COMMENTS)
+            .build();
+
+        static final CustomSpacing IMPORT_SPEC = CustomSpacing.Builder()
+            .space(PACKAGE_REFERENCE, LITERAL_STRING)
+            .space(LITERAL_STRING, COMMENTS)
+            .build();
+
+        static final CustomSpacing CONST_DECL = CustomSpacing.Builder()
+            .space(kCONST, CONST_DECLARATION)
+            .space(kCONST, pLPAREN)
+            .set(pLPAREN, CONST_DECLARATION, Spacings.LINE)
+            .set(CONST_DECLARATION, CONST_DECLARATION, Spacings.LINE_HOLD_BREAKS)
+            .build();
+
+        static final CustomSpacing CONST_SPEC = CustomSpacing.Builder()
+            .none(LITERAL_IDENTIFIER, oCOMMA)
+            .spaceWithBreaks(oCOMMA, LITERAL_IDENTIFIER)
+            .space(LITERAL_IDENTIFIER, oASSIGN)
+            .space(oASSIGN, EXPRESSIONS)
+            .none(EXPRESSIONS, oCOMMA)
+            .spaceWithBreaks(oCOMMA, EXPRESSIONS)
+            .space(EXPRESSIONS, COMMENTS)
+            .build();
+
+        static final CustomSpacing VAR_DECL = CustomSpacing.Builder()
+            .space(kCONST, VAR_DECLARATION)
+            .space(kCONST, pLPAREN)
+            .set(pLPAREN, VAR_DECLARATION, Spacings.LINE)
+            .set(VAR_DECLARATION, VAR_DECLARATION, Spacings.LINE_HOLD_BREAKS)
+            .build();
+
+        static final CustomSpacing VAR_SPEC = CustomSpacing.Builder()
+            .none(LITERAL_IDENTIFIER, oCOMMA)
+            .spaceWithBreaks(oCOMMA, LITERAL_IDENTIFIER)
+            .space(LITERAL_IDENTIFIER, oASSIGN)
+            .space(oASSIGN, EXPRESSIONS)
+            .none(EXPRESSIONS, oCOMMA)
+            .spaceWithBreaks(oCOMMA, EXPRESSIONS)
+            .space(EXPRESSIONS, COMMENTS)
+            .build();
+
     }
 }

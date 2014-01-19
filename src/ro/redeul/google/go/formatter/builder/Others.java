@@ -3,6 +3,7 @@ package ro.redeul.google.go.formatter.builder;
 import com.intellij.formatting.Block;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.formatter.blocks.Code;
+import ro.redeul.google.go.formatter.blocks.GoBlockUtil;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.GoPsiElementList;
@@ -21,9 +22,10 @@ abstract class Others extends Expressions {
     @Override
     public Block visitElementList(GoPsiElementList<? extends GoPsiElement> list, State s) {
         return new Code<GoPsiElement>(list, s.settings)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
             .setIndentedChildTokens(TokenSet.create(
                 GoElementTypes.FUNCTION_PARAMETER,
                 GoElementTypes.FUNCTION_PARAMETER_VARIADIC))
-            .setCustomSpacing(CustomSpacings.LISTS);
+            .withCustomSpacing(CustomSpacings.LISTS);
     }
 }

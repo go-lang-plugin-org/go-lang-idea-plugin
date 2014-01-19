@@ -2,7 +2,6 @@ package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.Indent;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
@@ -11,25 +10,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
+import ro.redeul.google.go.lang.psi.statements.GoStatement;
 
 import java.util.EnumSet;
 import java.util.Set;
 
-import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
-import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Indents;
-import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Spacings;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.*;
 
 public class StatementBlock extends Code<GoBlockStatement> {
-
-    private static final GoBlockUtil.CustomSpacing MULTI_LINE_SPACING =
-        GoBlockUtil.CustomSpacing.Builder()
-            .set(pLCURLY, pRCURLY, Spacings.LINE_HOLD_BREAKS)
-            .build();
-
-    private static final GoBlockUtil.CustomSpacing SAME_LINE_SPACING =
-        GoBlockUtil.CustomSpacing.Builder()
-            .set(pLCURLY, pRCURLY, Spacings.LINE)
-            .build();
 
     public static final Set<Alignments.Key> ALIGNMENT_KEYS =
         EnumSet.of(Alignments.Key.Comments);
@@ -41,42 +29,58 @@ public class StatementBlock extends Code<GoBlockStatement> {
         );
 
     private final TokenSet INDENTED_STATEMENTS =
-        TokenSet.andNot(GoElementTypes.STMTS, TokenSet.create(LABELED_STATEMENT));
-
+        TokenSet.orSet(TokenSet.andNot(GoElementTypes.STMTS, TokenSet.create(LABELED_STATEMENT)), GoElementTypes.COMMENTS);
 
     public StatementBlock(GoBlockStatement blockStatement,
                           CommonCodeStyleSettings settings,
                           Indent indent) {
         super(blockStatement, settings, indent);
 
-        setMultiLineMode(
-            blockStatement.getStatements().length > 0 ||
-            StringUtil.containsLineBreak(blockStatement.getText()), pLCURLY, pRCURLY);
+        setMultiLineMode(shouldForceMultiline(), pLCURLY, pRCURLY);
 
         setLineBreakingTokens(LINE_BREAKING_TOKENS);
-        setAlignmentKeys(ALIGNMENT_KEYS);
+        withAlignmentKeys(ALIGNMENT_KEYS);
         setHoldTogetherGroups(LINE_BREAKING_TOKENS);
+        withCustomSpacing(CustomSpacings.STMT_BLOCK);
+    }
 
-        if (isMultiLine()) {
-            setCustomSpacing(MULTI_LINE_SPACING);
-        } else {
-            setCustomSpacing(SAME_LINE_SPACING);
+    private final TokenSet FORCE_MULTILINE_STATEMENTS = TokenSet.create(
+        IF_STATEMENT,
+        FOR_WITH_CLAUSES_STATEMENT, FOR_WITH_CONDITION_STATEMENT,
+        FOR_WITH_RANGE_STATEMENT, FOR_WITH_RANGE_AND_VARS_STATEMENT,
+        SWITCH_EXPR_STATEMENT, SWITCH_TYPE_STATEMENT,
+        SELECT_STATEMENT,
+        LABELED_STATEMENT
+    );
+
+    private boolean shouldForceMultiline() {
+
+        if ( StringUtil.containsLineBreak(getPsi().getText()) ) {
+            return true;
         }
+
+        for (GoStatement statement : getPsi().getStatements()) {
+            if ( FORCE_MULTILINE_STATEMENTS.contains(statement.getNode().getElementType())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
     protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
         IElementType childType = child.getNode().getElementType();
 
-        if (child instanceof PsiComment)
-            return Indents.NORMAL;
-
-        if (INDENTED_STATEMENTS.contains(childType))
-            return Indents.NORMAL;
-
-        if (childType == LABELED_STATEMENT)
+        if (childType == LABELED_STATEMENT || childType == pRCURLY || childType == pLCURLY)
             return Indents.NONE;
 
-        return super.getChildIndent(child, prevChild);
+//        if (child instanceof PsiComment)
+//            return Indents.NORMAL;
+
+//        if (INDENTED_STATEMENTS.contains(childType))
+        return Indents.NORMAL;
+
+//        return super.getChildIndent(child, prevChild);
     }
 }

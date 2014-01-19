@@ -13,8 +13,8 @@ import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.documentation.DocumentUtil;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.*;
@@ -305,13 +305,13 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
             GoPsiType type = null;
             GoLiteralIdentifier[] identifiers = GoLiteralIdentifier.EMPTY_ARRAY;
             GoExpr[] expressions = GoExpr.EMPTY_ARRAY;
-            if (parent instanceof GoVarDeclaration) {
-                GoVarDeclaration vd = (GoVarDeclaration) parent;
+            if (parent instanceof GoVarSpec) {
+                GoVarSpec vd = (GoVarSpec) parent;
                 type = vd.getIdentifiersType();
                 identifiers = vd.getIdentifiers();
                 expressions = vd.getExpressions();
-            } else if (parent instanceof GoConstDeclaration) {
-                GoConstDeclaration cd = (GoConstDeclaration) parent;
+            } else if (parent instanceof GoConstSpec) {
+                GoConstSpec cd = (GoConstSpec) parent;
                 type = cd.getIdentifiersType();
                 identifiers = cd.getIdentifiers();
                 expressions = cd.getExpressions();

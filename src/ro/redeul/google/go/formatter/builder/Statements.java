@@ -31,6 +31,11 @@ abstract class Statements extends TopLevel {
     }
 
     @Override
+    public Block visitStatementReturn(GoReturnStatement statement, State s) {
+        return new Statement<GoReturnStatement>(statement, s.settings, s.indent, s.alignmentsMap);
+    }
+
+    @Override
     public Block visitStatementBlock(GoBlockStatement statement, State s) {
         return new StatementBlock(statement, s.settings, s.indent);
     }
@@ -44,16 +49,18 @@ abstract class Statements extends TopLevel {
     public Block visitStatementSwitchExpression(GoSwitchExpressionStatement statement, State s) {
         return new Code<GoSwitchExpressionStatement>(statement, s.settings, s.indent, null, s.alignmentsMap)
             .setMultiLineMode(true, pLCURLY, pRCURLY)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
             .setLineBreakingTokens(TokenSet.create(SWITCH_EXPR_CASE))
             .setHoldTogetherGroups(TokenSet.create(SWITCH_EXPR_CASE))
-            .setCustomSpacing(CustomSpacings.STMT_SWITCH_EXPR);
+            .withCustomSpacing(CustomSpacings.STMT_SWITCH_EXPR);
     }
 
     @Override
     public Block visitSwitchExpressionClause(GoSwitchExpressionClause clause, State s) {
         return new Code<GoSwitchExpressionClause>(clause, s.settings, s.indent, null, s.alignmentsMap)
             .setMultiLineMode(true, oCOLON, null)
-            .setCustomSpacing(CustomSpacings.CLAUSES_COLON)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.CLAUSES_COLON)
             .setLineBreakingTokens(STMTS_OR_COMMENTS)
             .setIndentedChildTokens(STMTS_OR_COMMENTS);
     }
@@ -62,16 +69,18 @@ abstract class Statements extends TopLevel {
     public Block visitStatementSwitchType(GoSwitchTypeStatement statement, State s) {
         return new Code<GoSwitchTypeStatement>(statement, s.settings, s.indent, null, s.alignmentsMap)
             .setMultiLineMode(true, pLCURLY, pRCURLY)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
             .setLineBreakingTokens(TokenSet.create(SWITCH_TYPE_CASE))
             .setHoldTogetherGroups(TokenSet.create(SWITCH_TYPE_CASE))
-            .setCustomSpacing(CustomSpacings.STMT_SWITCH_TYPE);
+            .withCustomSpacing(CustomSpacings.STMT_SWITCH_TYPE);
     }
 
     @Override
     public Block visitSwitchTypeClause(GoSwitchTypeClause clause, State s) {
         return new Code<GoSwitchTypeClause>(clause, s.settings, s.indent, null, s.alignmentsMap)
             .setMultiLineMode(true, oCOLON, null)
-            .setCustomSpacing(CustomSpacings.CLAUSES_COLON)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.CLAUSES_COLON)
             .setLineBreakingTokens(STMTS_OR_COMMENTS)
             .setIndentedChildTokens(STMTS_OR_COMMENTS);
     }
@@ -79,7 +88,8 @@ abstract class Statements extends TopLevel {
     @Override
     public Block visitSwitchTypeGuard(GoSwitchTypeGuard guard, State s) {
         return new Code<GoSwitchTypeGuard>(guard, s.settings, s.indent)
-            .setCustomSpacing(CustomSpacings.SWITCH_TYPE_GUARD);
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.SWITCH_TYPE_GUARD);
     }
 
     @Override
@@ -90,19 +100,20 @@ abstract class Statements extends TopLevel {
     @Override
     public Block visitStatementIncDec(GoIncDecStatement statement, State s) {
         return new Statement<GoIncDecStatement>(statement, s.settings, s.indent, s.alignmentsMap)
-            .setCustomSpacing(CustomSpacings.STMT_INC_DEC);
+            .withCustomSpacing(CustomSpacings.STMT_INC_DEC);
     }
 
     @Override
     public Block visitStatementIf(GoIfStatement statement, State s) {
         return new Statement<GoIfStatement>(statement, s.settings, s.indent, s.alignmentsMap)
-            .setCustomSpacing(CustomSpacings.STMT_IF);
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.STMT_IF);
     }
 
     @Override
     public Block visitStatementFor(GoForStatement statement, State s) {
         return new Statement<GoForStatement>(statement, s.settings, s.indent, s.alignmentsMap)
-            .setCustomSpacing(CustomSpacings.STMT_FOR);
+            .withCustomSpacing(CustomSpacings.STMT_FOR);
     }
 
     @Override
@@ -111,14 +122,15 @@ abstract class Statements extends TopLevel {
             .setMultiLineMode(statement.getCommClauses().length > 0, pLCURLY, pRCURLY)
             .setLineBreakingTokens(TokenSets.STMT_SELECT_HOLD_TOGETHER)
             .setHoldTogetherGroups(TokenSets.STMT_SELECT_HOLD_TOGETHER)
-            .setCustomSpacing(CustomSpacings.STMT_SELECT);
+            .withCustomSpacing(CustomSpacings.STMT_SELECT);
     }
 
     @Override
     public Block visitSelectCommClause(GoSelectCommClause clause, State s) {
         return new Code<GoSelectCommClause>(clause, s.settings, s.indent, null, s.alignmentsMap)
             .setMultiLineMode(true, oCOLON, null)
-            .setCustomSpacing(CustomSpacings.CLAUSES_COLON)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.CLAUSES_COLON)
             .setLineBreakingTokens(STMTS_OR_COMMENTS)
             .setIndentedChildTokens(STMTS_OR_COMMENTS);
     }

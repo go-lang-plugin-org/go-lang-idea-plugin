@@ -11,7 +11,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
@@ -51,7 +51,7 @@ public class CreateClosureFunctionFix extends LocalQuickFixAndIntentionActionOnP
 
         GoPsiElement childOfClass = findChildOfClass(p, GoVarDeclarations.class);
         if (childOfClass == null)
-            childOfClass = findChildOfClass(p, GoVarDeclaration.class);
+            childOfClass = findChildOfClass(p, GoVarSpec.class);
         if (childOfClass == null)
             childOfClass = findChildOfClass(p, GoShortVarDeclaration.class);
 

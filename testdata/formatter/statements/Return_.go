@@ -1,6 +1,7 @@
 package main
 
 func f() {
+
 	// asdf
 	// asdf
 	return 1011, 10, 20 //

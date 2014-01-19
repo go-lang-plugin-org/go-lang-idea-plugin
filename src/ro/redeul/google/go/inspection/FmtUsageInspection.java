@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
@@ -134,11 +134,11 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
         }
 
         PsiElement parent = resolve.getParent();
-        if (!(parent instanceof GoConstDeclaration)) {
+        if (!(parent instanceof GoConstSpec)) {
             return null;
         }
 
-        GoConstDeclaration cd = ((GoConstDeclaration) parent);
+        GoConstSpec cd = ((GoConstSpec) parent);
         GoLiteralIdentifier[] ids = cd.getIdentifiers();
         GoExpr[] exprs = cd.getExpressions();
         if (ids == null || exprs == null || ids.length != exprs.length) {

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -25,7 +26,7 @@ import java.util.List;
  * Date: 5/29/11
  * Time: 12:28 PM
  */
-public class GoTypeStructFieldImpl extends GoPsiElementBase implements GoTypeStructField {
+public class GoTypeStructFieldImpl extends GoDocumentedPsiElementBase implements GoTypeStructField {
 
     public GoTypeStructFieldImpl(@NotNull ASTNode node) {
         super(node);

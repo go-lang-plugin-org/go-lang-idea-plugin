@@ -5,13 +5,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
-public class GoBlockStatementImpl extends GoPsiElementBase implements GoBlockStatement {
+public class GoBlockStatementImpl extends GoDocumentedPsiElementBase implements GoBlockStatement {
+
     public GoBlockStatementImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -28,9 +30,9 @@ public class GoBlockStatementImpl extends GoPsiElementBase implements GoBlockSta
 
         PsiElement node = lastParent != null ? lastParent.getPrevSibling() : this.getLastChild();
 
-        while ( node != null ) {
-            if ( GoElementPatterns.BLOCK_DECLARATIONS.accepts(node)) {
-                if ( ! node.processDeclarations(processor, state, null, place) ) {
+        while (node != null) {
+            if (GoElementPatterns.BLOCK_DECLARATIONS.accepts(node)) {
+                if (!node.processDeclarations(processor, state, null, place)) {
                     return false;
                 }
             }

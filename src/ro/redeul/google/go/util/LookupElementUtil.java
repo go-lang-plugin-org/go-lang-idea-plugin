@@ -5,8 +5,8 @@ import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.completion.insertHandler.FunctionInsertHandler;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
@@ -118,12 +118,12 @@ public class LookupElementUtil extends GoElementVisitor {
     }
 
     @Override
-    public void visitVarDeclaration(GoVarDeclaration declaration) {
+    public void visitVarDeclaration(GoVarSpec declaration) {
         lookupElement = lookupElement.withIcon(PlatformIcons.VARIABLE_ICON);
     }
 
     @Override
-    public void visitConstDeclaration(GoConstDeclaration declaration) {
+    public void visitConstDeclaration(GoConstSpec declaration) {
         lookupElement = lookupElement.withIcon(GoIcons.CONST_ICON);
     }
 

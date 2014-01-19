@@ -17,16 +17,35 @@ public class GoStatementsFormatterTest extends GoFormatterTestCase {
         return super.getRelativeTestDataPath() + "statements/";
     }
 
-    public void testBlockEmpty() throws Exception { _test(); }
-    public void testBlockWithComments() throws Exception { _test(); }
+    public void testBlock_empty() throws Exception { _test(); }
+    public void testBlock_nonEmpty() throws Exception { _test(); }
+    public void testBlock_withComments() throws Exception { _test(); }
+
+    public void testFor_normal() throws Exception { _test(); }
+    public void testFor_withClauses() throws Exception { _test(); }
+    public void testFor_withRanges() throws Exception { _test(); }
+
+    public void testIf_else() throws Exception { _test(); }
+    public void testIf_simple() throws Exception { _test(); }
+    public void testIf_withSimpleStmtAndComment() throws Exception { _test(); }
+
+    public void testSelect_empty() throws Exception { _test(); }
+    public void testSelect_simple() throws Exception { _test(); }
+
+    public void testSwitch_expr() throws Exception { _test(); }
+    public void testSwitch_exprEmpty() throws Exception { _test(); }
+    public void testSwitch_multipleCaseValues() throws Exception { _test(); }
+    public void testSwitch_type() throws Exception { _test(); }
+    public void testSwitch_typeEmpty() throws Exception { _test(); }
+    public void testSwitch_typeWithWhitespace() throws Exception { _test(); }
+
+    public void testAssignment() throws Exception { _test(); }
 
     public void testShortVar() throws Exception { _test(); }
 
     public void testShortVarAlignComments() throws Exception { _test(); }
 
     public void testShortVarCommentGroups() throws Exception { _test(); }
-
-    public void testAssignment() throws Exception { _test(); }
 
     public void testIncDec() throws Exception { _test(); }
 
@@ -46,24 +65,5 @@ public class GoStatementsFormatterTest extends GoFormatterTestCase {
 
     public void testDefer() throws Exception { _test(); }
 
-    public void testSelect_empty() throws Exception { _test(); }
-
-    public void testSelect_simple() throws Exception { _test(); }
-
     public void testConstVarAndTypeDeclarations() throws Exception { _test(); }
-
-    public void testIf_simple() throws Exception { _test(); }
-    public void testIf_else() throws Exception { _test(); }
-    public void testIf_withSimpleStmtAndComment() throws Exception { _test(); }
-
-    public void testFor_normal() throws Exception { _test(); }
-    public void testFor_withClauses() throws Exception { _test(); }
-    public void testFor_withRanges() throws Exception { _test(); }
-
-    public void testSwitch_expr() throws Exception { _test(); }
-    public void testSwitch_exprEmpty() throws Exception { _test(); }
-    public void testSwitch_type() throws Exception { _test(); }
-    public void testSwitch_typeEmpty() throws Exception { _test(); }
-    public void testSwitch_typeWithWhitespace() throws Exception { _test(); }
-    public void testSwitch_multipleCaseValues() throws Exception { _test(); }
 }

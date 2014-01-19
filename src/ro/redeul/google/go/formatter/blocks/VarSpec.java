@@ -7,14 +7,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 
 import java.util.Map;
 
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
-import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacing;
 
 /**
  * <p/>
@@ -22,37 +21,32 @@ import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacing;
  *
  * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
  */
-public class VarSpec extends Code<GoVarDeclaration> {
+public class VarSpec extends Code<GoVarSpec> {
 
-  public static final CustomSpacing CUSTOM_SPACING_RULES = CustomSpacing.Builder()
-    .setNone(LITERAL_IDENTIFIER, oCOMMA)
-    .setNone(EXPRESSIONS, oCOMMA)
-    .setNone(EXPRESSIONS, oSEMI)
-    .build();
+    public VarSpec(GoVarSpec psi, CommonCodeStyleSettings settings,
+                   Indent indent, Map<Alignments.Key, Alignment> alignmentsMap) {
+        super(psi, settings, indent, null, alignmentsMap);
 
-  public VarSpec(GoVarDeclaration psi, CommonCodeStyleSettings settings,
-                 Indent indent, Map<Alignments.Key, Alignment> alignmentsMap) {
-    super(psi, settings, indent, null, alignmentsMap);
+        withCustomSpacing(GoBlockUtil.CustomSpacings.VAR_SPEC);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
+    }
 
-    setCustomSpacing(CUSTOM_SPACING_RULES);
-  }
+    @Override
+    protected Alignment getChildAlignment(@NotNull PsiElement child,
+                                          @Nullable PsiElement prevChild,
+                                          Map<Alignments.Key, Alignment> alignments) {
+        if (child instanceof GoPsiType)
+            return alignments.get(Alignments.Key.Type);
 
-  @Override
-  protected Alignment getChildAlignment(@NotNull PsiElement child,
-                                        @Nullable PsiElement prevChild,
-                                        Map<Alignments.Key, Alignment> alignments) {
-    if (child instanceof GoPsiType)
-      return alignments.get(Alignments.Key.Type);
+        if (child.getNode().getElementType() == oASSIGN)
+            return alignments.get(Alignments.Key.Operator);
 
-    if (child.getNode().getElementType() == oASSIGN)
-      return alignments.get(Alignments.Key.Operator);
+        if (child instanceof PsiComment)
+            return alignments.get(Alignments.Key.Comments);
 
-    if (child instanceof PsiComment)
-      return alignments.get(Alignments.Key.Comments);
+        if (child instanceof GoExpr)
+            return alignments.get(Alignments.Key.Value);
 
-    if (child instanceof GoExpr)
-      return alignments.get(Alignments.Key.Value);
-
-    return super.getChildAlignment(child, prevChild, alignments);
-  }
+        return super.getChildAlignment(child, prevChild, alignments);
+    }
 }

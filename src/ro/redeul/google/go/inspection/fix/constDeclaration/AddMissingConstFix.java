@@ -9,7 +9,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
@@ -36,14 +36,14 @@ public class AddMissingConstFix implements LocalQuickFix {
             return;
         }
 
-        if (!(element instanceof GoConstDeclaration)) {
+        if (!(element instanceof GoConstSpec)) {
             return;
         }
 
-        addMissingConst(project, editor, (GoConstDeclaration) element);
+        addMissingConst(project, editor, (GoConstSpec) element);
     }
 
-    private void addMissingConst(Project project, Editor editor, GoConstDeclaration cd) {
+    private void addMissingConst(Project project, Editor editor, GoConstSpec cd) {
         GoLiteralIdentifier[] ids = cd.getIdentifiers();
         GoExpr[] expressions = cd.getExpressions();
         StringBuilder sb = new StringBuilder();

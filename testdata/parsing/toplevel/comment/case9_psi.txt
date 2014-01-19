@@ -1,0 +1,5 @@
+GoFile(0,7)
+  PsiComment(ML_COMMENT)('/**\n*/')(0,6)
+  PackageDeclaration()(7,7)
+    PsiErrorElement:"package" keyword expected(7,7)
+      <empty list>

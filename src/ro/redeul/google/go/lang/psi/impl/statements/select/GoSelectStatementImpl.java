@@ -5,14 +5,14 @@ package ro.redeul.google.go.lang.psi.impl.statements.select;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClause;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
-public class GoSelectStatementImpl extends GoPsiElementBase
-    implements GoSelectStatement {
+public class GoSelectStatementImpl extends GoDocumentedPsiElementBase implements GoSelectStatement {
 
     public GoSelectStatementImpl(@NotNull ASTNode node) {
         super(node);

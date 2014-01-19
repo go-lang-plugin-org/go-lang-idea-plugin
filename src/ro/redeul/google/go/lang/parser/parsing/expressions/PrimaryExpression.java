@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.AllowCompositeLiteral;
 import static ro.redeul.google.go.lang.parser.GoParser.ParsingFlag.ParseIota;
-import static ro.redeul.google.go.lang.parser.parsing.declarations.FunctionOrMethodDeclaration.parseCompleteMethodSignature;
+import static ro.redeul.google.go.lang.parser.parsing.declarations.FunctionOrMethod.parseCompleteMethodSignature;
 
 class PrimaryExpression implements GoElementTypes {
 

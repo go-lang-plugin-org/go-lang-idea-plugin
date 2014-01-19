@@ -2,10 +2,6 @@ package main
 
 
 func main() {
-
-
-
-
 	if true{}else if false {
 		fmt.Printf("a")
 	}       else if false{ fmt.Printf("a")}
@@ -19,19 +15,5 @@ func main() {
 
 	    if    true      {
 fmt.Printf("a")
-
-
-
 	} ///
-
-
-
-
-
-
-
-
-
-
-
 }

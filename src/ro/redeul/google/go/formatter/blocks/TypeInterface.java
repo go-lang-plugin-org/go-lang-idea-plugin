@@ -33,8 +33,8 @@ public class TypeInterface extends Code<GoPsiTypeInterface> {
 
     private static final GoBlockUtil.CustomSpacing EMPTY_SPACING_RULES =
         GoBlockUtil.CustomSpacing.Builder()
-            .setNone(pLCURLY, pRCURLY)
-            .setNone(kINTERFACE, pLCURLY)
+            .none(pLCURLY, pRCURLY)
+            .none(kINTERFACE, pLCURLY)
             .build();
 
     private static final GoBlockUtil.CustomSpacing NON_EMPTY_SPACING_RULES =
@@ -51,10 +51,10 @@ public class TypeInterface extends Code<GoPsiTypeInterface> {
         setMultiLineMode(StringUtil.containsLineBreak(psi.getText()), pLCURLY, pRCURLY);
         setLineBreakingTokens(LINE_BREAKING_TOKS);
         setIndentedChildTokens(LINE_BREAKING_TOKS);
-        setAlignmentKeys(ALIGNMENT_KEYS);
-        setHoldTogetherGroups(COMMENTS, SIMILAR_NODES);
-
-        setCustomSpacing(isMultiLine() ? NON_EMPTY_SPACING_RULES : EMPTY_SPACING_RULES);
+        withAlignmentKeys(ALIGNMENT_KEYS);
+        setHoldTogetherGroups(SIMILAR_NODES);
+        withCustomSpacing(isMultiLine() ? NON_EMPTY_SPACING_RULES : EMPTY_SPACING_RULES);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
     }
 
     @Nullable

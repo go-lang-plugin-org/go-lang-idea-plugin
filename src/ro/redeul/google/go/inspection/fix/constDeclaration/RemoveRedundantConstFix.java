@@ -8,7 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.DeleteStmtFix;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
@@ -33,11 +33,11 @@ public class RemoveRedundantConstFix implements LocalQuickFix {
             return;
         }
 
-        if (!(element instanceof GoConstDeclaration)) {
+        if (!(element instanceof GoConstSpec)) {
             return;
         }
 
-        GoConstDeclaration cd = (GoConstDeclaration) element;
+        GoConstSpec cd = (GoConstSpec) element;
         GoLiteralIdentifier[] ids = cd.getIdentifiers();
         GoExpr[] expressions = cd.getExpressions();
 

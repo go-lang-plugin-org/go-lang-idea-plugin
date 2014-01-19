@@ -1,0 +1,8 @@
+GoFile(0,5)
+  PackageDeclaration()(0,2)
+    PsiErrorElement:"package" keyword expected(0,1)
+      PsiElement(/)('/')(0,1)
+    PsiErrorElement:';' or newline expected(1,2)
+      PsiElement(*)('*')(1,2)
+  PsiErrorElement:unknown.token(2,3)
+    PsiElement(*)('*')(2,3)

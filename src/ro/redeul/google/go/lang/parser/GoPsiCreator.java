@@ -6,9 +6,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.declarations.GoConstSpecImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationsImpl;
-import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.declarations.GoVarSpecImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoVarDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionListImpl;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoUnaryExpressionImpl;
@@ -59,13 +59,13 @@ class GoPsiCreator implements GoElementTypes {
             return new GoVarDeclarationsImpl(node);
 
         if (elementType.equals(VAR_DECLARATION))
-            return new GoVarDeclarationImpl(node);
+            return new GoVarSpecImpl(node);
 
         if (elementType.equals(CONST_DECLARATIONS))
             return new GoConstDeclarationsImpl(node);
 
         if (elementType.equals(CONST_DECLARATION))
-            return new GoConstDeclarationImpl(node);
+            return new GoConstSpecImpl(node);
 
         if (elementType.equals(TYPE_NAME_DECLARATION))
             return new GoTypeNameDeclarationImpl(node);
@@ -248,7 +248,7 @@ class GoPsiCreator implements GoElementTypes {
             return new GoIfStatementImpl(node);
 
         if (elementType.equals(SWITCH_EXPR_STATEMENT))
-            return new GoSwitchExpressionStatementImpl(node);
+            return new GoSwitchExpressionStatementImplPsi(node);
 
         if (elementType.equals(SWITCH_EXPR_CASE))
             return new GoSwitchExpressionClauseImpl(node);

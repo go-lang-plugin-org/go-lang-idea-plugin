@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.*;
@@ -173,10 +173,10 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
         while (statement != null && !statement.equals(labeledStatement)) {
             if (statement instanceof GoShortVarDeclaration) {
                 addJumpOverProblem(label, ((GoShortVarDeclaration) statement).getIdentifiers(), result);
-            } else if (statement instanceof GoVarDeclaration) {
-                addJumpOverProblem(label, ((GoVarDeclaration) statement).getIdentifiers(), result);
-            } else if (statement instanceof GoConstDeclaration) {
-                addJumpOverProblem(label, ((GoConstDeclaration) statement).getIdentifiers(), result);
+            } else if (statement instanceof GoVarSpec) {
+                addJumpOverProblem(label, ((GoVarSpec) statement).getIdentifiers(), result);
+            } else if (statement instanceof GoConstSpec) {
+                addJumpOverProblem(label, ((GoConstSpec) statement).getIdentifiers(), result);
             }
             statement = statement.getNextSibling();
         }

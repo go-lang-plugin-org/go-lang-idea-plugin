@@ -8,7 +8,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 
 import java.util.EnumSet;
@@ -46,15 +46,17 @@ public class VarDeclaration extends Code<GoVarDeclarations> {
         super(vars, settings, indent, null, alignmentMap);
 
         setMultiLineMode(vars.isMulti(), pLPAREN, pRPAREN);
-        setAlignmentKeys(ALIGN_KEYS);
+        withAlignmentKeys(ALIGN_KEYS);
         setLineBreakingTokens(LINE_BREAKING_TOKENS);
+        withCustomSpacing(GoBlockUtil.CustomSpacings.VAR_DECL);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
     }
 
     @Nullable
     @Override
     protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
         if (isMultiLine()) {
-            if (child instanceof GoVarDeclaration || child instanceof PsiComment)
+            if (child instanceof GoVarSpec || child instanceof PsiComment)
                 return Indents.NORMAL_RELATIVE;
         }
 

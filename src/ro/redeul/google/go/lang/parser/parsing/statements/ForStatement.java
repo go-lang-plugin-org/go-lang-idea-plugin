@@ -36,7 +36,7 @@ class ForStatement implements GoElementTypes {
 
         parser.parseBody(builder);
         
-        return completeStatement(builder, marker, forType);
+        return completeStatement(builder, marker, forType, false, false);
     }
 
     private static final TokenSet RANGE_LOOKAHEAD = TokenSet.create(oCOMMA, oASSIGN, oVAR_ASSIGN);

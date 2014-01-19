@@ -23,6 +23,6 @@ public class PackageDeclaration implements GoElementTypes {
             ParserUtils.getToken(builder, mIDENT, GoBundle.message("identifier.expected"));
         }
 
-        completeStatement(builder, packageDeclaration, PACKAGE_DECLARATION);
+        completeStatement(builder, packageDeclaration, PACKAGE_DECLARATION, false, false);
     }
 }

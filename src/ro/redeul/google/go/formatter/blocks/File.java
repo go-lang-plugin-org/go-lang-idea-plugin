@@ -1,9 +1,12 @@
 package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.Indent;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
 
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
@@ -31,6 +34,7 @@ public class File extends Code<GoFile> {
         super(goFile, settings, Indents.NONE_ABSOLUTE, null, Alignments.EMPTY_MAP);
 
         setMultiLineMode(true, null, null);
+        withDefaultSpacing(GoBlockUtil.Spacings.LINE_HOLD_BREAKS);
         setLineBreakingTokens(LINE_BREAKING_TOKENS);
     }
 
@@ -38,6 +42,11 @@ public class File extends Code<GoFile> {
     @Override
     public ChildAttributes getChildAttributes(int newChildIndex) {
         return new ChildAttributes(Indents.NONE, null);
+    }
+
+    @Override
+    protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
+        return Indents.NONE;
     }
 }
 

@@ -2,9 +2,9 @@ package ro.redeul.google.go.inspection.fix;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNewLineNode;
@@ -25,12 +25,12 @@ public class FixUtil {
     }
 
     static boolean isOnlyConstDeclaration(PsiElement e) {
-        return e instanceof GoConstDeclaration && e.getParent() instanceof GoConstDeclarations &&
+        return e instanceof GoConstSpec && e.getParent() instanceof GoConstDeclarations &&
                ((GoConstDeclarations) e.getParent()).getDeclarations().length == 1;
     }
 
     static boolean isOnlyVarDeclaration(PsiElement e) {
-        return e instanceof GoVarDeclaration && e.getParent() instanceof GoVarDeclarations &&
+        return e instanceof GoVarSpec && e.getParent() instanceof GoVarDeclarations &&
                ((GoVarDeclarations) e.getParent()).getDeclarations().length == 1;
     }
 }

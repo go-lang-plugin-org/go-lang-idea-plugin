@@ -16,7 +16,8 @@ public class ExpressionList extends Code<GoExpressionList> {
     public ExpressionList(GoExpressionList psi, CommonCodeStyleSettings settings, Indent indent) {
         super(psi, settings, indent);
 
-        setCustomSpacing(CustomSpacings.NO_SPACE_BEFORE_COMMA);
+        withCustomSpacing(CustomSpacings.NO_SPACE_BEFORE_COMMA);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
         setDepth(1);
     }
 

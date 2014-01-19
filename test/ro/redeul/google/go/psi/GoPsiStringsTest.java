@@ -2,7 +2,7 @@ package ro.redeul.google.go.psi;
 
 import ro.redeul.google.go.GoPsiTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -22,7 +22,7 @@ public class GoPsiStringsTest extends GoPsiTestCase {
                       "     y = `b`\n" +
                       "}"));
 
-        GoVarDeclaration[] declarations =
+        GoVarSpec[] declarations =
             childAt(0,
                     file.getGlobalVariables()
             ).getDeclarations();

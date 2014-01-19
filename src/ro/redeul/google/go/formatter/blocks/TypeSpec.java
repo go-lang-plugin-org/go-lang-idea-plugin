@@ -22,21 +22,23 @@ import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
  * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
  */
 public class TypeSpec extends Code<GoTypeSpec> {
-  public TypeSpec(GoTypeSpec typeSpec, CommonCodeStyleSettings settings,
-                  Indent indent,
-                  Map<Alignments.Key, Alignment> alignmentsMap) {
-    super(typeSpec, settings, indent, null, alignmentsMap);
-  }
+    public TypeSpec(GoTypeSpec typeSpec, CommonCodeStyleSettings settings,
+                    Indent indent,
+                    Map<Alignments.Key, Alignment> alignmentsMap) {
+        super(typeSpec, settings, indent, null, alignmentsMap);
 
-  @Override
-  protected Alignment getChildAlignment(@NotNull PsiElement child, @Nullable PsiElement prevChild,
-                                        Map<Alignments.Key, Alignment> alignments) {
-    if (child instanceof GoPsiType)
-      return alignments.get(Alignments.Key.Type);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
+    }
 
-    if (child instanceof PsiComment)
-      return alignments.get(Alignments.Key.Comments);
+    @Override
+    protected Alignment getChildAlignment(@NotNull PsiElement child, @Nullable PsiElement prevChild,
+                                          Map<Alignments.Key, Alignment> alignments) {
+        if (child instanceof GoPsiType)
+            return alignments.get(Alignments.Key.Type);
 
-    return super.getChildAlignment(child, prevChild, alignments);
-  }
+        if (child instanceof PsiComment)
+            return alignments.get(Alignments.Key.Comments);
+
+        return super.getChildAlignment(child, prevChild, alignments);
+    }
 }

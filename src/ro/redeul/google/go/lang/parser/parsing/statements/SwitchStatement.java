@@ -78,7 +78,7 @@ class SwitchStatement implements GoElementTypes {
         parser.resetFlag(AllowCompositeLiteral, allowCompositeLiteral);
 
         IElementType switchType = isTypeSwitch ? SWITCH_TYPE_STATEMENT : SWITCH_EXPR_STATEMENT;
-        return completeStatement(builder, marker, switchType);
+        return completeStatement(builder, marker, switchType, false, false);
     }
 
     private static boolean tryParseSimpleStmt(PsiBuilder builder,

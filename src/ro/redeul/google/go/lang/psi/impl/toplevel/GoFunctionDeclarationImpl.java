@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
@@ -39,8 +40,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSear
  * Date: Aug 26, 2010
  * Time: 2:33:51 PM
  */
-public class GoFunctionDeclarationImpl extends GoPsiElementBase
-    implements GoFunctionDeclaration {
+public class GoFunctionDeclarationImpl extends GoDocumentedPsiElementBase implements GoFunctionDeclaration {
 
     @Override
     public GoUnderlyingType getUnderlyingType() {

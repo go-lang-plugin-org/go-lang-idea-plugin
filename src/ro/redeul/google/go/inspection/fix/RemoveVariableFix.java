@@ -5,8 +5,8 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 
@@ -37,11 +37,11 @@ public class RemoveVariableFix implements LocalQuickFix {
 
         GoLiteralIdentifier id = (GoLiteralIdentifier) element;
         PsiElement parent = id.getParent();
-        if (parent instanceof GoVarDeclaration) {
-            GoVarDeclaration gsvd = (GoVarDeclaration) parent;
+        if (parent instanceof GoVarSpec) {
+            GoVarSpec gsvd = (GoVarSpec) parent;
             removeIdentifier(id, parent, gsvd.getIdentifiers(), gsvd.getExpressions());
-        } else if (parent instanceof GoConstDeclaration) {
-            GoConstDeclaration gcd = (GoConstDeclaration) parent;
+        } else if (parent instanceof GoConstSpec) {
+            GoConstSpec gcd = (GoConstSpec) parent;
             removeIdentifier(id, parent, gcd.getIdentifiers(), gcd.getExpressions());
         }
     }

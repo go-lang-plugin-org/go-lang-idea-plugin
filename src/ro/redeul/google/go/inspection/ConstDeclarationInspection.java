@@ -10,7 +10,7 @@ import ro.redeul.google.go.inspection.fix.constDeclaration.AddMissingExpressionF
 import ro.redeul.google.go.inspection.fix.constDeclaration.RemoveRedundantConstFix;
 import ro.redeul.google.go.inspection.fix.constDeclaration.RemoveRedundantExpressionFix;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -30,7 +30,7 @@ public class ConstDeclarationInspection extends AbstractWholeGoFileInspection {
             }
 
             @Override
-            public void visitConstDeclaration(GoConstDeclaration declaration) {
+            public void visitConstDeclaration(GoConstSpec declaration) {
                 checkConstDeclaration(declaration, result);
             }
         }.visitFile(file);
@@ -49,7 +49,7 @@ public class ConstDeclarationInspection extends AbstractWholeGoFileInspection {
         }
     }
 
-    public static void checkConstDeclaration(GoConstDeclaration declaration,
+    public static void checkConstDeclaration(GoConstSpec declaration,
                                              InspectionResult results) {
 
         if (isNoExpressionAndConstCountMismatch(declaration)) {
@@ -82,11 +82,11 @@ public class ConstDeclarationInspection extends AbstractWholeGoFileInspection {
     private static boolean isMissingFirstExpressionDeclaration(
         GoConstDeclarations constDeclarations)
     {
-        GoConstDeclaration[] declarations = constDeclarations.getDeclarations();
+        GoConstSpec[] declarations = constDeclarations.getDeclarations();
         return declarations.length != 0 && declarations[0].getExpressions().length == 0;
     }
 
-    private static boolean isMissingExpressionInConst(GoConstDeclaration declaration) {
+    private static boolean isMissingExpressionInConst(GoConstSpec declaration) {
         GoLiteralIdentifier[] ids = declaration.getIdentifiers();
         GoExpr[] exprs = declaration.getExpressions();
 
@@ -98,15 +98,15 @@ public class ConstDeclarationInspection extends AbstractWholeGoFileInspection {
     // According to spec:
     // Omitting the list of expressions is therefore equivalent to repeating the previous list.
     // The number of identifiers must be equal to the number of expressions in the previous list
-    private static boolean isNoExpressionAndConstCountMismatch(GoConstDeclaration declaration) {
+    private static boolean isNoExpressionAndConstCountMismatch(GoConstSpec declaration) {
         if (declaration.hasInitializers()) {
             return false;
         }
 
         PsiElement element = declaration;
         while ((element = element.getPrevSibling()) != null) {
-            if (element instanceof GoConstDeclaration) {
-                GoConstDeclaration preConst = (GoConstDeclaration) element;
+            if (element instanceof GoConstSpec) {
+                GoConstSpec preConst = (GoConstSpec) element;
                 if (preConst.hasInitializers()) {
                     return declaration.getIdentifiers().length != preConst.getIdentifiers().length;
                 }
@@ -115,7 +115,7 @@ public class ConstDeclarationInspection extends AbstractWholeGoFileInspection {
         return false;
     }
 
-    private static boolean isExtraExpressionInConst(GoConstDeclaration declaration) {
+    private static boolean isExtraExpressionInConst(GoConstSpec declaration) {
         GoLiteralIdentifier[] ids = declaration.getIdentifiers();
         GoExpr[] exprs = declaration.getExpressions();
 

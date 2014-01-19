@@ -6,6 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -23,7 +24,7 @@ import java.util.List;
  * Date: Aug 30, 2010
  * Time: 8:59:20 PM
  */
-public class GoTypeDeclarationImpl extends GoPsiElementBase implements GoTypeDeclaration {
+public class GoTypeDeclarationImpl extends GoDocumentedPsiElementBase implements GoTypeDeclaration {
 
     public GoTypeDeclarationImpl(@NotNull ASTNode node) {
         super(node);

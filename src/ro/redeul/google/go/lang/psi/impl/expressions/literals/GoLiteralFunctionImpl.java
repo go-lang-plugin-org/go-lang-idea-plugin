@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -26,8 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GoLiteralFunctionImpl extends GoPsiElementBase
-    implements GoLiteralFunction {
+public class GoLiteralFunctionImpl extends GoDocumentedPsiElementBase implements GoLiteralFunction {
 
     public GoLiteralFunctionImpl(@NotNull ASTNode node) {
         super(node);
@@ -144,15 +144,5 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
         }
 
         return types.toArray(new GoPsiType[types.size()]);
-    }
-
-    @Override
-    public boolean isDocumentationPart(PsiElement child) {
-        return false;
-    }
-
-    @Override
-    public List<PsiComment> getDocumentation() {
-        return Collections.emptyList();
     }
 }

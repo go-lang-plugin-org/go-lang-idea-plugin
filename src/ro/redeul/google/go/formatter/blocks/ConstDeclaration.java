@@ -8,7 +8,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 
 import java.util.EnumSet;
@@ -43,15 +43,16 @@ public class ConstDeclaration extends Code<GoConstDeclarations> {
                             Map<Alignments.Key, Alignment> alignmentMap) {
         super(consts, settings, indent, null, alignmentMap);
         setMultiLineMode(consts.isMulti(), pLPAREN, pRPAREN);
-        setAlignmentKeys(ALIGN_KEYS);
+        withAlignmentKeys(ALIGN_KEYS);
         setLineBreakingTokens(LINE_BREAKING_TOKENS);
+        withCustomSpacing(GoBlockUtil.CustomSpacings.CONST_DECL);
     }
 
     @Nullable
     @Override
     protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
         if (isMultiLine()) {
-            if (child instanceof GoConstDeclaration || child instanceof PsiComment)
+            if (child instanceof GoConstSpec || child instanceof PsiComment)
                 return Indents.NORMAL_RELATIVE;
         }
 

@@ -2,9 +2,9 @@ package ro.redeul.google.go.lang.psi.utils;
 
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.*;
@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class GoFileUtils {
-    public static List<GoConstDeclaration> getConstDeclarations(@Nullable GoFile psiFile) {
+    public static List<GoConstSpec> getConstDeclarations(@Nullable GoFile psiFile) {
         if (psiFile == null) {
             return Collections.emptyList();
         }
@@ -25,7 +25,7 @@ public class GoFileUtils {
             return Collections.emptyList();
         }
 
-        List<GoConstDeclaration> consts = new ArrayList<GoConstDeclaration>();
+        List<GoConstSpec> consts = new ArrayList<GoConstSpec>();
         for (GoConstDeclarations cds : constDeclarations) {
             Collections.addAll(consts, cds.getDeclarations());
         }
@@ -45,7 +45,7 @@ public class GoFileUtils {
 
         List<GoLiteralIdentifier> consts = new ArrayList<GoLiteralIdentifier>();
         for (GoConstDeclarations cds : constDeclarations) {
-            for (GoConstDeclaration cd : cds.getDeclarations()) {
+            for (GoConstSpec cd : cds.getDeclarations()) {
                 Collections.addAll(consts, cd.getIdentifiers());
             }
         }
@@ -65,7 +65,7 @@ public class GoFileUtils {
 
         List<GoLiteralIdentifier> vars = new ArrayList<GoLiteralIdentifier>();
         for (GoVarDeclarations vds : varDeclarations) {
-            for (GoVarDeclaration vd : vds.getDeclarations()) {
+            for (GoVarSpec vd : vds.getDeclarations()) {
                 Collections.addAll(vars, vd.getIdentifiers());
             }
         }
@@ -99,7 +99,7 @@ public class GoFileUtils {
         return false;
     }
 
-    public static List<GoVarDeclaration> getVarDeclarations(@Nullable GoFile psiFile) {
+    public static List<GoVarSpec> getVarDeclarations(@Nullable GoFile psiFile) {
         if (psiFile == null) {
             return Collections.emptyList();
         }
@@ -109,7 +109,7 @@ public class GoFileUtils {
             return Collections.emptyList();
         }
 
-        List<GoVarDeclaration> vars = new ArrayList<GoVarDeclaration>();
+        List<GoVarSpec> vars = new ArrayList<GoVarSpec>();
         for (GoVarDeclarations vds : varDeclarations) {
             Collections.addAll(vars, vds.getDeclarations());
         }

@@ -17,44 +17,45 @@ import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacing;
 
 public class TypeStructField extends Code<GoTypeStructField> {
 
-  private static final TokenSet FIELD_TYPE_SET = TokenSet.create(
-    TYPE_SLICE,
-    TYPE_NAME,
-    TYPE_INTERFACE,
-    TYPE_CHAN_BIDIRECTIONAL,
-    TYPE_CHAN_RECEIVING,
-    TYPE_CHAN_SENDING,
-    TYPE_STRUCT,
-    TYPE_POINTER,
-    TYPE_FUNCTION,
-    TYPE_PARENTHESIZED
-  );
+    private static final TokenSet FIELD_TYPE_SET = TokenSet.create(
+        TYPE_SLICE,
+        TYPE_NAME,
+        TYPE_INTERFACE,
+        TYPE_CHAN_BIDIRECTIONAL,
+        TYPE_CHAN_RECEIVING,
+        TYPE_CHAN_SENDING,
+        TYPE_STRUCT,
+        TYPE_POINTER,
+        TYPE_FUNCTION,
+        TYPE_PARENTHESIZED
+    );
 
-  private static CustomSpacing CUSTOM_SPACING_RULES = CustomSpacing.Builder()
-    .setNone(LITERAL_IDENTIFIER, oCOMMA)  // x|, y, z int
-    .setBasic(oCOMMA, LITERAL_IDENTIFIER) // x,| y, z int
-    .build();
+    private static CustomSpacing CUSTOM_SPACING_RULES = CustomSpacing.Builder()
+        .none(LITERAL_IDENTIFIER, oCOMMA)  // x|, y, z int
+        .space(oCOMMA, LITERAL_IDENTIFIER) // x,| y, z int
+        .build();
 
-  public TypeStructField(@NotNull GoTypeStructField node,
-                         CommonCodeStyleSettings settings,
-                         Indent indent,
-                         @NotNull Map<Alignments.Key, Alignment> alignsToUse) {
-    super(node, settings, indent, null, alignsToUse);
+    public TypeStructField(@NotNull GoTypeStructField node,
+                           CommonCodeStyleSettings settings,
+                           Indent indent,
+                           @NotNull Map<Alignments.Key, Alignment> alignsToUse) {
+        super(node, settings, indent, null, alignsToUse);
 
-    setCustomSpacing(CUSTOM_SPACING_RULES);
-  }
+        withCustomSpacing(CUSTOM_SPACING_RULES);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
+    }
 
-  @Nullable
-  @Override
-  protected Alignment getChildAlignment(@NotNull PsiElement child, @Nullable PsiElement prevChild,
-                                        Map<Alignments.Key, Alignment> alignments) {
+    @Nullable
+    @Override
+    protected Alignment getChildAlignment(@NotNull PsiElement child, @Nullable PsiElement prevChild,
+                                          Map<Alignments.Key, Alignment> alignments) {
 
-    if (FIELD_TYPE_SET.contains(child.getNode().getElementType()))
-      return alignments.get(Alignments.Key.Type);
+        if (FIELD_TYPE_SET.contains(child.getNode().getElementType()))
+            return alignments.get(Alignments.Key.Type);
 
-    if (child instanceof PsiComment)
-      return alignments.get(Alignments.Key.Comments);
+        if (child instanceof PsiComment)
+            return alignments.get(Alignments.Key.Comments);
 
-    return super.getChildAlignment(child, prevChild, alignments);
-  }
+        return super.getChildAlignment(child, prevChild, alignments);
+    }
 }

@@ -11,9 +11,11 @@ import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.impl.source.tree.TreeUtil;
+import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.formatter.builder.Builder;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 /**
  * @author Mihai Claudiu Toader <mtoader@gmail.com>
@@ -53,7 +55,6 @@ public class FormattingModelBuilder implements com.intellij.formatting.Formattin
 
     public TextRange getRangeAffectingIndent(PsiFile file, int offset,
                                              ASTNode elementAtOffset) {
-
 /*
         ASTNode current = elementAtOffset;
 

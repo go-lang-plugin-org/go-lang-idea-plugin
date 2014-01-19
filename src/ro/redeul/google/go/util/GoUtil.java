@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
@@ -524,20 +524,20 @@ public class GoUtil {
     public static GoPsiElement ResolveTypeOfVarDecl(GoPsiElement element) {
         PsiElement parent = element.getParent();
 
-        if (parent instanceof GoConstDeclaration) {
-            GoPsiType identifiersType = ((GoConstDeclaration) parent).getIdentifiersType();
+        if (parent instanceof GoConstSpec) {
+            GoPsiType identifiersType = ((GoConstSpec) parent).getIdentifiersType();
             if (identifiersType != null)
                 return identifiersType;
             GoConstDeclarations parentDec = (GoConstDeclarations) parent.getParent();
-            for (GoConstDeclaration declaration : parentDec.getDeclarations()) {
+            for (GoConstSpec declaration : parentDec.getDeclarations()) {
                 identifiersType = declaration.getIdentifiersType();
                 if (identifiersType != null)
                     return identifiersType;
             }
             return (GoPsiElement) parent.getLastChild();
         }
-        if (parent instanceof GoVarDeclaration) {
-            GoPsiType identifiersType = ((GoVarDeclaration) parent).getIdentifiersType();
+        if (parent instanceof GoVarSpec) {
+            GoPsiType identifiersType = ((GoVarSpec) parent).getIdentifiersType();
             if (identifiersType != null)
                 return identifiersType;
             return (GoPsiElement) parent.getLastChild();

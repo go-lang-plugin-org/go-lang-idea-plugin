@@ -5,30 +5,23 @@ import junit.framework.TestCase;
 public class GoLexerTest extends TestCase {
 
     public void testXX() {
-        String text = "" +
-            "package main\n" +
-            "func chcopy() {\n" +
-            "for;;{\n" +
-            "\"ad\\\"sfasdf\"" +
-            "\"\\\\\"\n" +
-            "}\n" +
-            "}\n" +
+        String text = "package main\n" +
+            "var ( a,\n" +
+            " b = 1,\n" +
             "\n" +
-            "func usage() {\n" +
-            "\tfmt.Fprintf(stderr, \"usage: yacc [-o output] [-v parsetable] input\\n\")\n" +
-            "\texit(1)\n" +
-            "}\n";
+            " 2\n" +
+            " )\n";
 
         GoFlexLexer flexLexer = new GoFlexLexer();
 
         flexLexer.start(text);
         while ( flexLexer.getTokenType() != null ) {
-            flexLexer.advance();
-            if ( flexLexer.getTokenType() != GoTokenTypes.wsNLS && flexLexer.getTokenType() != GoTokenTypes.wsWS ) {
+//            if ( flexLexer.getTokenType() != GoTokenTypes.wsNLS && flexLexer.getTokenType() != GoTokenTypes.wsWS ) {
                 System.out
                       .println(
                           "" + flexLexer.getTokenType() + " -> " + flexLexer.getTokenText());
-            }
+//            }
+            flexLexer.advance();
         }
     }
 

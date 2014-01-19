@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.editor.TemplateUtil;
 import ro.redeul.google.go.lang.documentation.DocumentUtil;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
@@ -86,7 +86,7 @@ public class CreateGlobalVariableFix extends LocalQuickFixAndIntentionActionOnPs
             return createTemplateAtPosition(editor, lastChild.getTextOffset(), decl);
         }
 
-        GoVarDeclaration[] declarations = lastVar.getDeclarations();
+        GoVarSpec[] declarations = lastVar.getDeclarations();
         if (declarations.length != 1) {
             // It shouldn't happen. If there is no parentheses, there should be exactly one declaration.
             return createNewStatementTemplate(editor, (GoFile) lastVar.getContainingFile(), element);

@@ -3,7 +3,7 @@ package ro.redeul.google.go.inspection;
 import com.intellij.codeInspection.ProblemHighlightType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
@@ -17,7 +17,7 @@ public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
             @Override
-            public void visitVarDeclaration(GoVarDeclaration declaration) {
+            public void visitVarDeclaration(GoVarSpec declaration) {
                 checkVar(declaration, result);
             }
 
@@ -28,7 +28,7 @@ public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
         }.visitFile(file);
     }
 
-    public static void checkVar(GoVarDeclaration varDeclaration,
+    public static void checkVar(GoVarSpec varDeclaration,
                                 InspectionResult result) {
         GoLiteralIdentifier[] ids = varDeclaration.getIdentifiers();
         GoExpr[] exprs = varDeclaration.getExpressions();

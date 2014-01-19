@@ -1,0 +1,5 @@
+GoFile(0,23)
+  PsiComment(SL_COMMENT)('// sdafad')(0,9)
+  PackageDeclaration(main)(10,22)
+    PsiElement(KEYWORD_PACKAGE)('package')(10,17)
+    PsiElement(IDENTIFIER)('main')(18,22)

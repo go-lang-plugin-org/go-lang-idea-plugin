@@ -7,18 +7,19 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoIncDecStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 /**
- * TODO: Document this
  * <p/>
  * Created on Jan-04-2014 00:17
  *
  * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
  */
-public class GoIncDecStatementImpl extends GoPsiElementBase implements GoIncDecStatement {
+public class GoIncDecStatementImpl extends GoDocumentedPsiElementBase implements GoIncDecStatement {
+
     public GoIncDecStatementImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -37,13 +38,13 @@ public class GoIncDecStatementImpl extends GoPsiElementBase implements GoIncDecS
     @Override
     public Op getOperator() {
         PsiElement childByType = findChildByType(GoTokenTypeSets.INC_DEC_OPS);
-        if ( childByType == null )
+        if (childByType == null)
             return Op.Null;
 
-        if ( childByType.getNode().getElementType() == GoTokenTypes.oPLUS_PLUS)
+        if (childByType.getNode().getElementType() == GoTokenTypes.oPLUS_PLUS)
             return Op.Inc;
 
-        if ( childByType.getNode().getElementType() == GoTokenTypes.oMINUS_MINUS)
+        if (childByType.getNode().getElementType() == GoTokenTypes.oMINUS_MINUS)
             return Op.Dec;
 
         return Op.Null;

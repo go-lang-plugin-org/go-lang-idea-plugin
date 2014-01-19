@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
  * Time: 10:29:05 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface GoPackageDeclaration extends GoPsiElement, GoDocumentedPsiElement {
+public interface GoPackageDeclaration extends GoPsiElement {
 
     @NotNull
     String getPackageName();

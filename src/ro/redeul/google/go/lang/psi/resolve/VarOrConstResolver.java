@@ -1,11 +1,9 @@
 package ro.redeul.google.go.lang.psi.resolve;
 
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
-import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -35,7 +33,7 @@ public class VarOrConstResolver extends GoPsiReferenceResolver<VarOrConstReferen
     }
 
     @Override
-    public void visitVarDeclaration(GoVarDeclaration declaration) {
+    public void visitVarDeclaration(GoVarSpec declaration) {
         checkIdentifiers(declaration.getIdentifiers());
     }
 
@@ -50,7 +48,7 @@ public class VarOrConstResolver extends GoPsiReferenceResolver<VarOrConstReferen
     }
 
     @Override
-    public void visitConstDeclaration(GoConstDeclaration declaration) {
+    public void visitConstDeclaration(GoConstSpec declaration) {
         checkIdentifiers(declaration.getIdentifiers());
     }
 

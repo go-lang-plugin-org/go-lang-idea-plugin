@@ -7,12 +7,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 
 import java.util.Map;
 
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacings;
 
 /**
  * <p/>
@@ -20,20 +21,15 @@ import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.Alignments;
  *
  * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
  */
-public class ConstSpec extends Code<GoConstDeclaration> {
+public class ConstSpec extends Code<GoConstSpec> {
 
-    public static final GoBlockUtil.CustomSpacing CUSTOM_SPACING = GoBlockUtil.CustomSpacing.Builder()
-        .setNone(LITERAL_IDENTIFIER, oCOMMA)
-        .setNone(EXPRESSIONS, oCOMMA)
-        .setNone(EXPRESSIONS, oSEMI)
-        .build();
-
-    public ConstSpec(GoConstDeclaration psi, CommonCodeStyleSettings settings,
+    public ConstSpec(GoConstSpec psi, CommonCodeStyleSettings settings,
                      Indent indent,
                      Map<Alignments.Key, Alignment> alignmentsMap) {
         super(psi, settings, indent, null, alignmentsMap);
 
-        setCustomSpacing(CUSTOM_SPACING);
+        withCustomSpacing(CustomSpacings.CONST_SPEC);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
     }
 
     @Override

@@ -5,10 +5,17 @@ import com.intellij.psi.tree.TokenSet;
 
 public interface GoTokenTypeSets extends GoTokenTypes {
 
-    static final TokenSet EOS =
-        TokenSet.create(oSEMI, oSEMI_SYNTHETIC);
+    static final TokenSet EOS = TokenSet.create(
+        oSEMI,
+        oSEMI_SYNTHETIC
+    );
 
-    public static TokenSet EOS_CAN_SKIP_SEMI =
+    static final TokenSet oSEMI_LIKE = TokenSet.create(
+        oSEMI,
+        oSEMI_SYNTHETIC
+    );
+
+    public static TokenSet CAN_SKIP_SEMI =
         TokenSet.create(pRCURLY, pRPAREN);
 
     static final TokenSet WHITESPACES = TokenSet.create(

@@ -1,0 +1,5 @@
+GoFile(0,21)
+  PsiComment(ML_COMMENT)('/**\n**/')(0,7)
+  PackageDeclaration(main)(8,20)
+    PsiElement(KEYWORD_PACKAGE)('package')(8,15)
+    PsiElement(IDENTIFIER)('main')(16,20)

@@ -8,8 +8,6 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacings;
 
 /**
- * TODO: Document this
- * <p/>
  * Created on Jan-13-2014 22:25
  *
  * @author <a href="mailto:mtoader@gmail.com">Mihai Toader</a>
@@ -18,32 +16,37 @@ abstract class Types extends Statements {
 
     @Override
     public Block visitTypeArray(GoPsiTypeArray type, State s) {
-        return new Code<GoPsiTypeArray>(type, s.settings, null, s.alignment, s.alignmentsMap)
-            .setCustomSpacing(CustomSpacings.TYPE_ARRAY);
+        return new Code<GoPsiTypeArray>(type, s.settings, s.indent, s.alignment, s.alignmentsMap)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.TYPE_ARRAY);
     }
 
     @Override
     public Block visitTypePointer(GoPsiTypePointer type, State s) {
-        return new Code<GoPsiTypePointer>(type, s.settings, null, s.alignment, s.alignmentsMap)
-            .setCustomSpacing(CustomSpacings.TYPE_POINTER);
+        return new Code<GoPsiTypePointer>(type, s.settings, s.indent, s.alignment, s.alignmentsMap)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.TYPE_POINTER);
     }
 
     @Override
     public Block visitTypeSlice(GoPsiTypeSlice type, State s) {
-        return new Code<GoPsiTypeSlice>(type, s.settings, null, s.alignment, s.alignmentsMap)
-            .setCustomSpacing(CustomSpacings.TYPE_SLICE);
+        return new Code<GoPsiTypeSlice>(type, s.settings, s.indent, s.alignment, s.alignmentsMap)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.TYPE_SLICE);
     }
 
     @Override
     public Block visitTypeMap(GoPsiTypeMap type, State s) {
-        return new Code<GoPsiTypeMap>(type, s.settings, null, s.alignment, s.alignmentsMap)
-            .setCustomSpacing(CustomSpacings.TYPE_MAP);
+        return new Code<GoPsiTypeMap>(type, s.settings, s.indent, s.alignment, s.alignmentsMap)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.TYPE_MAP);
     }
 
     @Override
     public Block visitTypeChannel(GoPsiTypeChannel type, State s) {
-        return new Code<GoPsiTypeChannel>(type, s.settings, null, s.alignment, s.alignmentsMap)
-            .setCustomSpacing(CustomSpacings.TYPE_CHANNEL);
+        return new Code<GoPsiTypeChannel>(type, s.settings, s.indent, s.alignment, s.alignmentsMap)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.TYPE_CHANNEL);
     }
 
     @Override
@@ -61,15 +64,17 @@ abstract class Types extends Statements {
         return new TypeInterface(type, s.settings, s.alignment, s.alignmentsMap);
     }
 
-    //    if (psi instanceof GoPsiTypeFunction)
-//        return new CodeBlock<GoPsiTypeFunction>((GoPsiTypeFunction) psi, settings, null, alignment, alignmentsMap)
-//        .setCustomSpacing(
-//        CustomSpacings.TYPE_FUNCTION);
-//
     @Override
-    public Block visitTypeParenthesized(GoPsiTypeParenthesized type, State s) {
-        return new Code<GoPsiTypeParenthesized>(type, s.settings, null, s.alignment, s.alignmentsMap)
-            .setCustomSpacing(CustomSpacings.TYPE_PARENTHESISED);
+    public Block visitTypeFunction(GoPsiTypeFunction type, State s) {
+        return new Code<GoPsiTypeFunction>(type, s.settings, s.indent, s.alignment, s.alignmentsMap)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.TYPE_FUNCTION);
     }
 
+    @Override
+    public Block visitTypeParenthesized(GoPsiTypeParenthesized type, State s) {
+        return new Code<GoPsiTypeParenthesized>(type, s.settings, s.indent, s.alignment, s.alignmentsMap)
+            .withDefaultSpacing(GoBlockUtil.Spacings.SPACE)
+            .withCustomSpacing(CustomSpacings.TYPE_PARENTHESISED);
+    }
 }

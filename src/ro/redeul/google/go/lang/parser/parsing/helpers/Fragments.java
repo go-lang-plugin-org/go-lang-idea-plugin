@@ -83,7 +83,7 @@ public class Fragments implements GoElementTypes {
         }
 
         if (asStatement)
-            completeStatement(builder, block, BLOCK_STATEMENT);
+            completeStatement(builder, block, BLOCK_STATEMENT, false, false);
         else
             block.done(BLOCK_STATEMENT);
 

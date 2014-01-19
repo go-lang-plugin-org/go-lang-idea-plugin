@@ -2,7 +2,7 @@ package ro.redeul.google.go.lang.psi.resolve;
 
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
@@ -57,7 +57,7 @@ public class ShortVarDeclarationResolver {
             element = ((GoLabeledStatement) element).getStatement();
         }
 
-        if (element instanceof GoVarDeclaration) {
+        if (element instanceof GoVarSpec) {
             for (GoLiteralIdentifier identifier : ((GoShortVarDeclaration) element).getIdentifiers()) {
                 if (identifier.getUnqualifiedName().equals(identifierName)) {
                     return identifier;

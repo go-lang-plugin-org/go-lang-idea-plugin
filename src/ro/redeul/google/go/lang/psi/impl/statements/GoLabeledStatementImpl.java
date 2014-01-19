@@ -7,13 +7,15 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoLabeledStatement;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
-public class GoLabeledStatementImpl extends GoPsiElementBase implements GoLabeledStatement {
+public class GoLabeledStatementImpl extends GoDocumentedPsiElementBase implements GoLabeledStatement {
+
     public GoLabeledStatementImpl(@NotNull ASTNode node) {
         super(node);
     }

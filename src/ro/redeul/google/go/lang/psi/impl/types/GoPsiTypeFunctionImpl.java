@@ -12,6 +12,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoTypedVisitor;
 
 public class GoPsiTypeFunctionImpl extends GoPsiPackagedElementBase implements GoPsiTypeFunction {
     public GoPsiTypeFunctionImpl(@NotNull ASTNode node) {
@@ -64,6 +65,10 @@ public class GoPsiTypeFunctionImpl extends GoPsiPackagedElementBase implements G
         visitor.visitFunctionType(this);
     }
 
+    @Override
+    public <T, S> T accept(GoTypedVisitor<T, S> visitor, S data) {
+        return visitor.visitTypeFunction(this, data);
+    }
 
     @Override
     public GoFunctionParameter[] getParameters() {

@@ -3,9 +3,9 @@ package ro.redeul.google.go.lang.psi.visitors;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.GoPsiElementList;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
@@ -64,7 +64,7 @@ public class GoTypedVisitor<T, S> {
         return visitElement(declaration, s);
     }
 
-    public T visitConstSpec(GoConstDeclaration spec, S s) {
+    public T visitConstSpec(GoConstSpec spec, S s) {
         return visitElement(spec, s);
     }
 
@@ -72,7 +72,7 @@ public class GoTypedVisitor<T, S> {
         return visitElement(declaration, s);
     }
 
-    public T visitVarSpec(GoVarDeclaration spec, S s) {
+    public T visitVarSpec(GoVarSpec spec, S s) {
         return visitElement(spec, s);
     }
 
@@ -92,12 +92,16 @@ public class GoTypedVisitor<T, S> {
         return visitElement(declaration, s);
     }
 
-    public T visitFunctionParameter(GoFunctionParameter parameter, S s) {
-        return visitElement(parameter, s);
+    public T visitMethodReceiver(GoMethodReceiver receiver, S s) {
+        return visitElement(receiver, s);
     }
 
     public T visitFunctionParameterList(GoFunctionParameterList list, S s) {
         return visitElementList(list, s);
+    }
+
+    public T visitFunctionParameter(GoFunctionParameter parameter, S s) {
+        return visitElement(parameter, s);
     }
 
     public T visitFunctionResult(GoFunctionResult result, S s) {
@@ -238,6 +242,10 @@ public class GoTypedVisitor<T, S> {
         return visitElementList(list, s);
     }
 
+    public T visitTypeParenthesized(GoPsiTypeParenthesized type, S s) {
+        return visitType(type, s);
+    }
+
     public T visitTypeName(GoPsiTypeName type, S s) {
         return visitType(type, s);
     }
@@ -278,7 +286,7 @@ public class GoTypedVisitor<T, S> {
         return visitType(type, s);
     }
 
-    public T visitTypeParenthesized(GoPsiTypeParenthesized type, S s) {
+    public T visitTypeFunction(GoPsiTypeFunction type, S s) {
         return visitType(type, s);
     }
 

@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.completion.insertHandler.*;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -77,7 +77,7 @@ public class GoCompletionContributor extends CompletionContributor {
                                             psiElement(GoReturnStatement.class),
 
                                             // in variable declaration statement
-                                            psiElement(GoVarDeclaration.class)
+                                            psiElement(GoVarSpec.class)
                                     )
                             )
                     )

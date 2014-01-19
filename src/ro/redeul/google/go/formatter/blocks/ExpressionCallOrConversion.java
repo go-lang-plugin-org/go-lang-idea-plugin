@@ -23,9 +23,9 @@ public class ExpressionCallOrConversion extends ExpressionBlock<GoCallOrConvExpr
     public ExpressionCallOrConversion(GoCallOrConvExpression psi, CommonCodeStyleSettings settings, Indent indent) {
         super(psi, settings, indent);
 
-        setCustomSpacing(GoBlockUtil.CustomSpacings.CALL_OR_CONVERSION);
+        withCustomSpacing(GoBlockUtil.CustomSpacings.EXPR_CALL_OR_CONVERSION);
         setIndentedChildTokens(GoElementTypes.EXPRESSIONS);
-        setDefaultSpacing(GoBlockUtil.Spacings.SPACE);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
 
         int count = getPsi().getTypeArgument() != null ? 1 : 0;
         count += getPsi().getArguments().length;

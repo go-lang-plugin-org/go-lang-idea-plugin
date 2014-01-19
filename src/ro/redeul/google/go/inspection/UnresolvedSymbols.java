@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.fix.*;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -54,7 +54,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
             }
 
             @Override
-            public void visitVarDeclaration(GoVarDeclaration declaration) {
+            public void visitVarDeclaration(GoVarSpec declaration) {
                 for (GoExpr expr : declaration.getExpressions()) {
                     visitElement(expr);
                 }

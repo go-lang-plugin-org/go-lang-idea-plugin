@@ -2,12 +2,12 @@ package ro.redeul.google.go.lang.psi.impl.statements;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForStatement;
 
-public abstract class GoForStatementImpl extends GoPsiElementBase
-    implements GoForStatement {
+public abstract class GoForStatementImpl extends GoDocumentedPsiElementBase implements GoForStatement {
 
     GoForStatementImpl(@NotNull ASTNode node) {
         super(node);

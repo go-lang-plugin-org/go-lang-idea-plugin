@@ -10,8 +10,8 @@ import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -94,9 +94,9 @@ public class GoDocumentationProvider implements CodeDocumentationProvider,
             return getMethodDocument((GoMethodDeclaration) element);
         } else if (element instanceof GoFunctionDeclaration) {
             return getFunctionDocument((GoFunctionDeclaration) element);
-        } else if (element instanceof GoConstDeclaration) {
+        } else if (element instanceof GoConstSpec) {
             return getConstDocument(identifier);
-        } else if (element instanceof GoVarDeclaration) {
+        } else if (element instanceof GoVarSpec) {
             return getVarDocument(identifier);
         }
         return "";

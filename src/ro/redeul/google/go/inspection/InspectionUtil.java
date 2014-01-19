@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -51,12 +51,12 @@ public class InspectionUtil {
             return UNKNOWN_COUNT;
         }
 
-        if (!(parent instanceof GoVarDeclaration)) {
+        if (!(parent instanceof GoVarSpec)) {
             return 1;
         }
 
-        GoLiteralIdentifier[] identifiers = ((GoVarDeclaration) parent).getIdentifiers();
-        GoExpr[] expressions = ((GoVarDeclaration) parent).getExpressions();
+        GoLiteralIdentifier[] identifiers = ((GoVarSpec) parent).getIdentifiers();
+        GoExpr[] expressions = ((GoVarSpec) parent).getExpressions();
         // if the type assertion is the only expression, and there are two variables.
         // The result of the type assertion is a pair of values with types (T, bool)
         if (identifiers.length == 2 && expressions.length == 1) {

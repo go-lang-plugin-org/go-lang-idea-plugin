@@ -12,8 +12,8 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.highlight.GoSyntaxHighlighter;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
@@ -212,7 +212,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
         Annotation annotation =
             annotationHolder.createInfoAnnotation(identifier, null);
 
-        if (psiElement().withParent(GoConstDeclaration.class)
+        if (psiElement().withParent(GoConstSpec.class)
             .accepts(definition)) {
             annotation.setTextAttributes(GoSyntaxHighlighter.CONST);
             return;
@@ -269,7 +269,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     }
 
     @Override
-    public void visitConstDeclaration(GoConstDeclaration declaration) {
+    public void visitConstDeclaration(GoConstSpec declaration) {
         super.visitConstDeclaration(declaration);
 
         for (GoLiteralIdentifier identifier : declaration.getIdentifiers()) {
@@ -307,7 +307,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     }
 
     @Override
-    public void visitVarDeclaration(GoVarDeclaration declaration) {
+    public void visitVarDeclaration(GoVarSpec declaration) {
         super.visitVarDeclaration(declaration);
         TextAttributesKey type = GoSyntaxHighlighter.VARIABLE;
 

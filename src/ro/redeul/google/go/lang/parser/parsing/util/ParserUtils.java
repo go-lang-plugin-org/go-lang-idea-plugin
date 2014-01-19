@@ -300,9 +300,9 @@ public abstract class ParserUtils {
     }
 
     public static void skipComments(PsiBuilder builder) {
-        while (GoElementTypes.COMMENTS.contains(builder.getTokenType())) {
-            builder.advanceLexer();
-        }
+//        while (GoElementTypes.COMMENTS.contains(builder.getTokenType())) {
+//            builder.advanceLexer();
+//        }
     }
 
     public static PsiBuilder.Marker resetTo(PsiBuilder builder,
@@ -334,57 +334,93 @@ public abstract class ParserUtils {
     }
 
     public static boolean endStatement(PsiBuilder builder) {
-        return !(!builder.eof() && !ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS_CAN_SKIP_SEMI)) || getToken(builder, GoTokenTypeSets.EOS, GoBundle.message("error.semicolon.or.newline.expected"));
+        return !(!builder.eof() && !ParserUtils.lookAhead(builder, GoTokenTypeSets.CAN_SKIP_SEMI)) ||
+            getToken(builder, GoTokenTypeSets.EOS, GoBundle.message("error.semicolon.or.newline.expected"));
+    }
+
+    public static IElementType completeNodeWithDocs(PsiBuilder builder, PsiBuilder.Marker mark,
+                                                    IElementType elementType,
+                                                    boolean needsStatementClose,
+                                                    boolean markLeadingDoc, boolean markTrailingComment) {
+        if (needsStatementClose)
+            expectSemicolon(builder);
+
+        mark.done(elementType);
+        mark.setCustomEdgeTokenBinders(
+            markLeadingDoc ? CommentBinders.LEADING_DOCUMENTATION : null,
+            markTrailingComment ? CommentBinders.TRAILING_COMMENT : null
+        );
+
+        return elementType;
+    }
+
+    private static void expectSemicolon(PsiBuilder builder) {
+        if (!GoTokenTypeSets.CAN_SKIP_SEMI.contains(builder.getTokenType()))
+            getToken(builder, GoTokenTypeSets.oSEMI_LIKE, GoBundle.message("error.semicolon.or.newline.expected"));
     }
 
     public static IElementType completeStatement(PsiBuilder builder,
                                                  PsiBuilder.Marker marker,
-                                                 IElementType elementType) {
-        if (!builder.eof() && !GoTokenTypeSets.EOS_CAN_SKIP_SEMI.contains(builder.getTokenType()))
+                                                 IElementType elementType,
+                                                 boolean withLeadingDoc, boolean withTrailingComment) {
+        if (!builder.eof() && !GoTokenTypeSets.CAN_SKIP_SEMI.contains(builder.getTokenType()))
             getToken(builder, GoTokenTypeSets.EOS, GoBundle.message("error.semicolon.or.newline.expected"));
 
         marker.done(elementType);
-        marker.setCustomEdgeTokenBinders(CommentBinders.LEADING_COMMENT_GROUP, CommentBinders.TRAILING_COMMENTS);
+        marker.setCustomEdgeTokenBinders(
+            withLeadingDoc ? CommentBinders.LEADING_DOCUMENTATION : null,
+            withTrailingComment ? CommentBinders.TRAILING_COMMENT : null);
         return elementType;
     }
 
     public interface CommentBinders {
-        public WhitespacesAndCommentsBinder TRAILING_COMMENTS = new WhitespacesAndCommentsBinder() {
+
+        public WhitespacesAndCommentsBinder TRAILING_COMMENT = new WhitespacesAndCommentsBinder() {
             @Override
             public int getEdgePosition(List<IElementType> tokens, boolean atStreamEdge, TokenTextGetter getter) {
 
                 int edgePosition = 0;
-                for (IElementType elementType : tokens) {
-                    if (GoElementTypes.COMMENTS.contains(elementType))
-                        return edgePosition + 1;
-
-                    if (StringUtil.containsLineBreak(getter.get(edgePosition)) ||
-                        !GoTokenSets.WHITESPACE.contains(elementType))
-                        return 0;
-
-                    edgePosition++;
+                for (int i = 0, tokensSize = tokens.size(); i < tokensSize; i++) {
+                    IElementType elementType = tokens.get(i);
+                    if (GoElementTypes.COMMENTS.contains(elementType)) {
+                        edgePosition = i + 1;
+                    } else if (GoTokenSets.WHITESPACE.contains(elementType)
+                        && StringUtil.containsLineBreak(getter.get(edgePosition)))
+                        return edgePosition;
                 }
+
                 return edgePosition;
             }
         };
 
-        public WhitespacesAndCommentsBinder LEADING_COMMENT_GROUP = new WhitespacesAndCommentsBinder() {
+        public WhitespacesAndCommentsBinder LEADING_DOCUMENTATION = new WhitespacesAndCommentsBinder() {
             @Override
             public int getEdgePosition(List<IElementType> tokens, boolean atStreamEdge, TokenTextGetter getter) {
-                int currentToken = 0;
-                while (GoTokenSets.WHITESPACE.contains(tokens.get(currentToken)))
-                    currentToken++;
+                if (tokens.size() == 0)
+                    return tokens.size();
+
+                int currentToken = tokens.size() - 1;
+
+                int lineBreaks = 0;
+                while (currentToken >= 0 && GoTokenSets.WHITESPACE.contains(tokens.get(currentToken))) {
+                    lineBreaks += StringUtil.getLineBreakCount(getter.get(currentToken));
+                    currentToken--;
+                }
+
+                if ( lineBreaks != 1 || currentToken < 0)
+                    return tokens.size();
 
                 int edgePosition = currentToken;
-                while (currentToken < tokens.size()) {
+                while (currentToken > 0 ) {
                     IElementType tokenType = tokens.get(currentToken);
 
                     if (GoTokenSets.WHITESPACE.contains(tokenType) &&
                         StringUtil.getLineBreakCount(getter.get(currentToken)) > 1) {
-                        edgePosition = currentToken + 1;
+                        break;
                     }
 
-                    currentToken++;
+                    edgePosition = currentToken;
+                    currentToken--;
                 }
 
                 return edgePosition;

@@ -42,7 +42,7 @@ class InterfaceType implements GoElementTypes {
             PsiBuilder.Marker methodSpec = builder.mark();
             ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
             parser.parseFunctionSignature(builder);
-            completeStatement(builder, methodSpec, FUNCTION_DECLARATION);
+            completeStatement(builder, methodSpec, FUNCTION_DECLARATION, false, false);
             return true;
         }
 

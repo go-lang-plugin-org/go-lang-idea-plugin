@@ -115,7 +115,7 @@ public class Types implements GoElementTypes {
         }
 
         if ( parser.isSet(GoParser.ParsingFlag.ShouldCompleteStatement))
-            ParserUtils.completeStatement(builder, typeNameMarker, TYPE_NAME);
+            ParserUtils.completeStatement(builder, typeNameMarker, TYPE_NAME, false, false);
         else {
             typeNameMarker.done(TYPE_NAME);
         }

@@ -43,8 +43,8 @@ public class TypeDeclaration extends Code<GoTypeDeclaration> {
 
         setMultiLineMode(types.isMulti(), pLPAREN, pRPAREN);
         setLineBreakingTokens(LINE_BREAKING_TOKENS);
-        setAlignmentKeys(ALIGN_KEYS);
-        setDefaultSpacing(Spacings.SPACE);
+        withAlignmentKeys(ALIGN_KEYS);
+        withDefaultSpacing(Spacings.SPACE);
     }
 
     @Nullable

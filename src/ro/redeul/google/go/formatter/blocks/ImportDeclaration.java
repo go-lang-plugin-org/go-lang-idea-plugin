@@ -34,6 +34,7 @@ public class ImportDeclaration extends Code<GoImportDeclarations> {
 
         setLineBreakingTokens(LINE_BREAKING_TOKENS);
         setMultiLineMode(imports.isMulti(), pLPAREN, pRPAREN);
+        withCustomSpacing(GoBlockUtil.CustomSpacings.IMPORT_DECL);
     }
 
     @Nullable
@@ -41,7 +42,7 @@ public class ImportDeclaration extends Code<GoImportDeclarations> {
     protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
         if (isMultiLine()) {
             if (child instanceof GoImportDeclaration || child instanceof PsiComment)
-                return Indents.NORMAL_RELATIVE;
+                return Indents.NORMAL;
         }
 
         return Indents.NONE;

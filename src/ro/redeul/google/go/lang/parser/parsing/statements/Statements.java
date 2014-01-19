@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.parser.parsing.statements;
 
 import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.WhitespacesAndCommentsBinder;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
@@ -99,7 +98,7 @@ public class Statements implements GoElementTypes {
 
         parser.parseStatement(builder);
         marker.done(LABELED_STATEMENT);
-        marker.setCustomEdgeTokenBinders(ParserUtils.CommentBinders.LEADING_COMMENT_GROUP, null);
+        marker.setCustomEdgeTokenBinders(ParserUtils.CommentBinders.LEADING_DOCUMENTATION, null);
         return LABELED_STATEMENT;
     }
 
@@ -322,7 +321,7 @@ public class Statements implements GoElementTypes {
     private static IElementType completeStatement(PsiBuilder builder, PsiBuilder.Marker mark,
                                                IElementType elementType, boolean completeStatement) {
         if (completeStatement)
-            return ParserUtils.completeStatement(builder, mark, elementType);
+            return ParserUtils.completeStatement(builder, mark, elementType, false, false);
         else {
             mark.done(elementType);
             return elementType;

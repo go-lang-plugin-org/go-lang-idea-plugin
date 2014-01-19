@@ -17,12 +17,19 @@ public class GoExpressionsFormatterTest extends GoFormatterTestCase {
     }
 
 
+    public void testBinary_combined() throws Exception { _test(); }
+    public void testBinary_multiline() throws Exception { _test(); }
+    public void testBinary_normal() throws Exception { _test(); }
+
     public void testCall_binary() throws Exception { _test(); }
     public void testCall_multiline() throws Exception { _test(); }
-    public void testCombined() throws Exception { _test(); }
+
     public void testIndex() throws Exception { _test(); }
-    public void testNormal() throws Exception { _test(); }
+    public void testInsideAssignments() throws Exception { _test(); }
+
     public void testParenthesized() throws Exception { _test(); }
+
+    public void testSelector() throws Exception { _test(); }
     public void testSlice() throws Exception { _test(); }
 
     public void testTypeAssertion() throws Exception { _test(); }

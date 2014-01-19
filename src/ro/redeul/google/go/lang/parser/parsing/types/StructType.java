@@ -73,7 +73,7 @@ class StructType implements GoElementTypes {
 
         completeStatement(builder, fieldDeclaration, isAnonymous
             ? TYPE_STRUCT_FIELD_ANONYMOUS
-            : TYPE_STRUCT_FIELD);
+            : TYPE_STRUCT_FIELD, true, true);
         return true;
     }
 

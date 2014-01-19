@@ -4,7 +4,7 @@ import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -21,18 +21,18 @@ public class GoReadWriteAccessDetector extends ReadWriteAccessDetector {
             return false;
         }
 
-        if (element.getParent() instanceof GoVarDeclaration) {
+        if (element.getParent() instanceof GoVarSpec) {
             return true;
         }
 
         PsiElement resolve = resolveSafely(element, PsiElement.class);
-        return resolve instanceof GoLiteralIdentifier && resolve.getParent() instanceof GoVarDeclaration;
+        return resolve instanceof GoLiteralIdentifier && resolve.getParent() instanceof GoVarSpec;
 
     }
 
     @Override
     public boolean isDeclarationWriteAccess(PsiElement element) {
-        return element instanceof GoLiteralIdentifier && element.getParent() instanceof GoVarDeclaration;
+        return element instanceof GoLiteralIdentifier && element.getParent() instanceof GoVarSpec;
     }
 
     @Override
@@ -47,8 +47,8 @@ public class GoReadWriteAccessDetector extends ReadWriteAccessDetector {
             parent = parent.getParent();
         }
 
-        if (parent instanceof GoVarDeclaration) {
-            for (GoLiteralIdentifier id : ((GoVarDeclaration) parent).getIdentifiers()) {
+        if (parent instanceof GoVarSpec) {
+            for (GoLiteralIdentifier id : ((GoVarSpec) parent).getIdentifiers()) {
                 if (id.getTextRange().equals(expression.getTextRange())) {
                     return Access.Write;
                 }

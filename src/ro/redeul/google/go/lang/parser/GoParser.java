@@ -7,7 +7,7 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.parsing.declarations.Declaration;
-import ro.redeul.google.go.lang.parser.parsing.declarations.FunctionOrMethodDeclaration;
+import ro.redeul.google.go.lang.parser.parsing.declarations.FunctionOrMethod;
 import ro.redeul.google.go.lang.parser.parsing.expressions.Expressions;
 import ro.redeul.google.go.lang.parser.parsing.helpers.Fragments;
 import ro.redeul.google.go.lang.parser.parsing.statements.Statements;
@@ -94,14 +94,13 @@ public class GoParser extends ParserUtils implements PsiParser {
             if ( parseTopLevelDeclaration(builder) == null ) {
                 ParserUtils.wrapError(builder, "unknown.token");
             }
-//            ParserUtils.endStatement(builder);
         }
     }
 
     private IElementType parseTopLevelDeclaration(PsiBuilder builder) {
 
         if (lookAhead(builder, GoTokenTypes.kFUNC))
-            return FunctionOrMethodDeclaration.parse(builder, this);
+            return FunctionOrMethod.parse(builder, this);
 
         return Declaration.parse(builder, this);
     }
@@ -139,7 +138,7 @@ public class GoParser extends ParserUtils implements PsiParser {
     }
 
     public void parseMethodSignature(PsiBuilder builder) {
-        FunctionOrMethodDeclaration.parseSignature(builder, this);
+        FunctionOrMethod.parseSignature(builder, this);
     }
 
     public int parseExpressionList(PsiBuilder builder) {
@@ -163,7 +162,7 @@ public class GoParser extends ParserUtils implements PsiParser {
     }
 
     public void parseFunctionSignature(PsiBuilder builder) {
-        FunctionOrMethodDeclaration.parseCompleteMethodSignature(builder, this);
+        FunctionOrMethod.parseCompleteMethodSignature(builder, this);
     }
 
     public void parseTypeList(PsiBuilder builder) {

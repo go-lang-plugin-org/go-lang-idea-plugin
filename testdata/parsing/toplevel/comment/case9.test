@@ -1,8 +1,0 @@
-/**
-*/
------
-Go file
-  PsiComment(ML_COMMENT)('/**\n*/')
-  PackageDeclaration()
-    PsiErrorElement:"package" keyword expected
-      <empty list>

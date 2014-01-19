@@ -27,7 +27,7 @@ public class StatementLabeled extends Code<GoLabeledStatement> {
 
     private final static GoBlockUtil.CustomSpacing CUSTOM_SPACING =
         GoBlockUtil.CustomSpacing.Builder()
-            .setNone(LITERAL_IDENTIFIER, oCOLON)
+            .none(LITERAL_IDENTIFIER, oCOLON)
             .build();
 
     public static final TokenSet LINE_BREAKING_TOKENS =
@@ -47,7 +47,7 @@ public class StatementLabeled extends Code<GoLabeledStatement> {
         setLeadingCommentGroupIndent(Indents.NORMAL);
         setLineBreakingTokens(LINE_BREAKING_TOKENS);
         setHoldTogetherGroups(HOLD_TOGETHER_GROUP1, HOLD_TOGETHER_GROUP2);
-        setCustomSpacing(CUSTOM_SPACING);
+        withCustomSpacing(CUSTOM_SPACING);
         setMultiLineMode(true, null, null);
     }
 

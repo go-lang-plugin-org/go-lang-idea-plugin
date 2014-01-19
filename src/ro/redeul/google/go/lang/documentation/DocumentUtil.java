@@ -9,9 +9,9 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.*;
@@ -131,7 +131,7 @@ public class DocumentUtil {
         }
 
         PsiElement parent = original.getParent();
-        if (!(parent instanceof GoVarDeclaration)) {
+        if (!(parent instanceof GoVarSpec)) {
             return "";
         }
 
@@ -163,7 +163,7 @@ public class DocumentUtil {
         }
 
         PsiElement parent = original.getParent();
-        if (!(parent instanceof GoConstDeclaration)) {
+        if (!(parent instanceof GoConstSpec)) {
             return "";
         }
 

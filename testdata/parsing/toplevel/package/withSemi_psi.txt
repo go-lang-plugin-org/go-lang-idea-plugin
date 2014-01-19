@@ -1,0 +1,5 @@
+GoFile(0,9)
+  PackageDeclaration()(0,8)
+    PsiElement(KEYWORD_PACKAGE)('package')(0,7)
+    PsiErrorElement:Identifier expected(7,8)
+      PsiElement(;)(';')(7,8)

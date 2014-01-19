@@ -8,7 +8,7 @@ import ro.redeul.google.go.inspection.fix.CastTypeFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
@@ -204,8 +204,8 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             if (literal instanceof GoLiteralIdentifier) {
                 //Never will be null
                 PsiElement goPsiElement = GoUtil.ResolveReferece(literal).getParent();
-                if (goPsiElement instanceof GoConstDeclaration) {
-                    for (GoExpr goExpr : ((GoConstDeclaration) goPsiElement).getExpressions()) {
+                if (goPsiElement instanceof GoConstSpec) {
+                    for (GoExpr goExpr : ((GoConstSpec) goPsiElement).getExpressions()) {
                         if (!checkValidLiteralFloatExpr(goExpr))
                             return false;
                     }
@@ -232,8 +232,8 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             if (literal instanceof GoLiteralIdentifier) {
                 //Never will be null
                 PsiElement goPsiElement = GoUtil.ResolveReferece(literal).getParent();
-                if (goPsiElement instanceof GoConstDeclaration) {
-                    for (GoExpr goExpr : ((GoConstDeclaration) goPsiElement).getExpressions()) {
+                if (goPsiElement instanceof GoConstSpec) {
+                    for (GoExpr goExpr : ((GoConstSpec) goPsiElement).getExpressions()) {
                         if (!checkValidLiteralIntExpr(goExpr))
                             return false;
                     }

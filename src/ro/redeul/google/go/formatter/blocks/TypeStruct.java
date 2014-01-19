@@ -28,8 +28,8 @@ public class TypeStruct extends Code<GoPsiTypeStruct> {
 
     private static final GoBlockUtil.CustomSpacing EMPTY_SPACING_RULES =
         GoBlockUtil.CustomSpacing.Builder()
-            .setNone(pLCURLY, pRCURLY)
-            .setNone(kSTRUCT, pLCURLY)
+            .none(pLCURLY, pRCURLY)
+            .none(kSTRUCT, pLCURLY)
             .build();
 
     private static final GoBlockUtil.CustomSpacing NON_EMPTY_SPACING_RULES =
@@ -49,9 +49,10 @@ public class TypeStruct extends Code<GoPsiTypeStruct> {
         setMultiLineMode(StringUtil.containsLineBreak(node.getText()), pLCURLY, pRCURLY);
         setLineBreakingTokens(LINE_BREAKING_TOKS);
         setIndentedChildTokens(LINE_BREAKING_TOKS);
-        setAlignmentKeys(ALIGNMENT_KEYS);
+        withAlignmentKeys(ALIGNMENT_KEYS);
         setHoldTogetherGroups(COMMENTS, TYPE_STRUCT_FIELDS);
-        setCustomSpacing(isMultiLine() ? NON_EMPTY_SPACING_RULES : EMPTY_SPACING_RULES);
+        withCustomSpacing(isMultiLine() ? NON_EMPTY_SPACING_RULES : EMPTY_SPACING_RULES);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
     }
 
     @Nullable

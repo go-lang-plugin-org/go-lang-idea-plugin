@@ -6,6 +6,7 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
+import ro.redeul.google.go.lang.psi.impl.GoDocumentedPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoAssignmentStatement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -16,9 +17,9 @@ import java.util.Map;
 
 import static ro.redeul.google.go.lang.lexer.GoTokenTypes.*;
 
-public class GoAssignmentStatementImpl extends GoPsiElementBase
-    implements GoAssignmentStatement {
+public class GoAssignmentStatementImpl extends GoDocumentedPsiElementBase implements GoAssignmentStatement {
 
+    // TODO replace this with normal operator enum
     private static final Map<IElementType, Op> operatorsMap =
         new HashMap<IElementType, Op>() {
             {

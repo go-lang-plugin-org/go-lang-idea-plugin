@@ -15,29 +15,24 @@ import ro.redeul.google.go.lang.psi.expressions.binary.GoMultiplicativeExpressio
 
 import java.util.List;
 
-import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacing;
+import static ro.redeul.google.go.formatter.blocks.GoBlockUtil.CustomSpacings;
 
 public class ExpressionBinary extends ExpressionBlock<GoBinaryExpression<?>> {
 
     int cutoff = 0;
 
-    private final CustomSpacing COMPACT_MODE_SPACING =
-        CustomSpacing.Builder()
-            .setNone(EXPRESSIONS, OPS_ADD)
-            .setNone(OPS_ADD, EXPRESSIONS)
-            .setNone(EXPRESSIONS, OPS_MUL)
-            .setNone(OPS_MUL, EXPRESSIONS)
-            .build();
-
     public ExpressionBinary(@NotNull GoBinaryExpression node, CommonCodeStyleSettings settings,
                             Indent indent) {
         super(node, settings, indent);
+
+        withCustomSpacing(CustomSpacings.EXPR_BINARY);
+        withDefaultSpacing(GoBlockUtil.Spacings.SPACE);
     }
 
     protected void setCutoff(int cutoff) {
         this.cutoff = cutoff;
         if (getPsi().Op().precedence() >= cutoff)
-            setCustomSpacing(COMPACT_MODE_SPACING);
+            withCustomSpacing(CustomSpacings.EXPR_BINARY_COMPACT);
     }
 
     @Nullable
@@ -61,6 +56,11 @@ public class ExpressionBinary extends ExpressionBlock<GoBinaryExpression<?>> {
     private class BinaryExpressionInfo {
         boolean has4 = false, has5 = false;
         int maxProblem = 0;
+    }
+
+    @Override
+    protected Indent getChildIndent(@NotNull PsiElement child, @Nullable PsiElement prevChild) {
+        return child == getPsi().getRightOperand() ? GoBlockUtil.Indents.NORMAL : super.getChildIndent(child, prevChild);
     }
 
     private int findCutoff(GoBinaryExpression expr, int depth) {

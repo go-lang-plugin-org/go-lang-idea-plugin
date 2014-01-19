@@ -8,8 +8,8 @@ import ro.redeul.google.go.inspection.fix.RemoveVariableFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstSpec;
+import ro.redeul.google.go.lang.psi.declarations.GoVarSpec;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -118,7 +118,7 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
     private final Set<GoPsiElement> usages = new HashSet<GoPsiElement>();
 
     @Override
-    public void visitConstDeclaration(GoConstDeclaration declaration) {
+    public void visitConstDeclaration(GoConstSpec declaration) {
         Collections.addAll(declarations, declaration.getIdentifiers());
         for (GoExpr goExpr : declaration.getExpressions()) {
             goExpr.accept(this);
@@ -126,7 +126,7 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
     }
 
     @Override
-    public void visitVarDeclaration(GoVarDeclaration declaration) {
+    public void visitVarDeclaration(GoVarSpec declaration) {
         Collections.addAll(declarations, declaration.getIdentifiers());
         for (GoExpr goExpr : declaration.getExpressions()) {
             goExpr.accept(this);
