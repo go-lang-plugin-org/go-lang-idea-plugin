@@ -75,6 +75,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
         }
         break;
       case PACKAGE:
+        // todo: package index is required
         break;
       case FILE:
         VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(myFilePath);
