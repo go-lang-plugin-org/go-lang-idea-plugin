@@ -36,6 +36,8 @@
     <lang.findUsagesProvider language="go" implementationClass="com.goide.GoFindUsagesProvider"/>
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
 
+    <gotoSymbolContributor implementation="com.goide.go.GoSymbolContributor"/>
+
     <sdkType implementation="com.goide.GoSdkType"/>
     
     <!-- run -->
