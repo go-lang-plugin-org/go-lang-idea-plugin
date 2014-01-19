@@ -71,7 +71,7 @@
   implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
   extends("(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
-  elementTypeFactory("FunctionDeclaration|MethodDeclaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
+  elementTypeFactory("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
