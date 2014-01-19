@@ -187,7 +187,10 @@ private ExpressionList ::= Expression ( ',' Expression )*
 
 TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
-TypeSpec ::= identifier Type {pin=1}
+TypeSpec ::= identifier Type {
+  pin=1
+  stubClass="com.goide.stubs.GoTypeSpecStub"
+}
 
 VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}

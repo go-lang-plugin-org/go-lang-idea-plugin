@@ -4,8 +4,10 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import com.goide.stubs.GoTypeSpecStub;
 
-public interface GoTypeSpec extends GoNamedElement {
+public interface GoTypeSpec extends GoNamedElement, StubBasedPsiElement<GoTypeSpecStub> {
 
   @Nullable
   GoType getType();
