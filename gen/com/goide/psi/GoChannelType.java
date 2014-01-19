@@ -10,6 +10,9 @@ public interface GoChannelType extends GoType {
   @NotNull
   GoType getType();
 
+  @Nullable
+  PsiElement getSendChannel();
+
   @NotNull
   PsiElement getChan();
 

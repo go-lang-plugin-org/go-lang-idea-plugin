@@ -13,4 +13,10 @@ public interface GoSimpleStatement extends GoStatement {
   @Nullable
   GoShortVarDeclaration getShortVarDeclaration();
 
+  @Nullable
+  PsiElement getMinusMinus();
+
+  @Nullable
+  PsiElement getPlusPlus();
+
 }

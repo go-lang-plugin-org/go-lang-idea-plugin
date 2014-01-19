@@ -10,6 +10,12 @@ public interface GoConstDeclaration extends GoCompositeElement {
   @NotNull
   List<GoConstSpec> getConstSpecList();
 
+  @Nullable
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getRparen();
+
   @NotNull
   PsiElement getConst();
 

@@ -21,4 +21,76 @@ public class GoAssignOpImpl extends GoCompositeElementImpl implements GoAssignOp
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getBitAndAssign() {
+    return findChildByType(BIT_AND_ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getBitClearAssign() {
+    return findChildByType(BIT_CLEAR_ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getBitOrAssign() {
+    return findChildByType(BIT_OR_ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getBitXorAssign() {
+    return findChildByType(BIT_XOR_ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMinusAssign() {
+    return findChildByType(MINUS_ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMulAssign() {
+    return findChildByType(MUL_ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getPlusAssign() {
+    return findChildByType(PLUS_ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getQuotientAssign() {
+    return findChildByType(QUOTIENT_ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRemainderAssign() {
+    return findChildByType(REMAINDER_ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getShiftLeftAssign() {
+    return findChildByType(SHIFT_LEFT_ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getShiftRightAssign() {
+    return findChildByType(SHIFT_RIGHT_ASSIGN);
+  }
+
 }

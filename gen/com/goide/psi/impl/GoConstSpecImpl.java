@@ -39,4 +39,10 @@ public class GoConstSpecImpl extends GoCompositeElementImpl implements GoConstSp
     return findChildByClass(GoType.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
+  }
+
 }

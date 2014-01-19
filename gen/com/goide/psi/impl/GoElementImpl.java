@@ -33,4 +33,10 @@ public class GoElementImpl extends GoCompositeElementImpl implements GoElement {
     return findNotNullChildByClass(GoValue.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getColon() {
+    return findChildByType(COLON);
+  }
+
 }

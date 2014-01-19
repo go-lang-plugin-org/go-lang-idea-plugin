@@ -27,4 +27,10 @@ public class GoAndExprImpl extends GoExpressionImpl implements GoAndExpr {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getCondAnd() {
+    return findNotNullChildByType(COND_AND);
+  }
+
 }

@@ -33,4 +33,10 @@ public class GoExprCaseClauseImpl extends GoCompositeElementImpl implements GoEx
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getColon() {
+    return findNotNullChildByType(COLON);
+  }
+
 }

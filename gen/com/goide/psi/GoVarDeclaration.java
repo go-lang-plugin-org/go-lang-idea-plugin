@@ -10,6 +10,12 @@ public interface GoVarDeclaration extends GoCompositeElement {
   @NotNull
   List<GoVarSpec> getVarSpecList();
 
+  @Nullable
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getRparen();
+
   @NotNull
   PsiElement getVar();
 

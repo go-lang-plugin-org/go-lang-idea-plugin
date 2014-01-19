@@ -13,4 +13,13 @@ public interface GoConversionExpr extends GoExpression {
   @NotNull
   GoType getType();
 
+  @Nullable
+  PsiElement getComma();
+
+  @NotNull
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getRparen();
+
 }

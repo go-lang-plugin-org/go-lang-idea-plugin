@@ -28,6 +28,18 @@ public class GoStructTypeImpl extends GoTypeImpl implements GoStructType {
   }
 
   @Override
+  @Nullable
+  public PsiElement getLbrace() {
+    return findChildByType(LBRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRbrace() {
+    return findChildByType(RBRACE);
+  }
+
+  @Override
   @NotNull
   public PsiElement getStruct() {
     return findNotNullChildByType(STRUCT);

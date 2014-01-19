@@ -45,4 +45,22 @@ public class GoTypeSwitchStatementImpl extends GoSwitchStatementImpl implements 
     return findNotNullChildByClass(GoTypeSwitchGuard.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLbrace() {
+    return findChildByType(LBRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRbrace() {
+    return findChildByType(RBRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
 }

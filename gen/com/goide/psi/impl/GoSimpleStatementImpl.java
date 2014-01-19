@@ -33,4 +33,16 @@ public class GoSimpleStatementImpl extends GoStatementImpl implements GoSimpleSt
     return findChildByClass(GoShortVarDeclaration.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getMinusMinus() {
+    return findChildByType(MINUS_MINUS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getPlusPlus() {
+    return findChildByType(PLUS_PLUS);
+  }
+
 }

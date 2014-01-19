@@ -13,6 +13,12 @@ public interface GoRangeClause extends GoCompositeElement {
   @NotNull
   List<GoVarDefinition> getVarDefinitionList();
 
+  @Nullable
+  PsiElement getAssign();
+
+  @Nullable
+  PsiElement getVarAssign();
+
   @NotNull
   PsiElement getRange();
 

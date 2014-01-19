@@ -13,4 +13,10 @@ public interface GoParameters extends GoCompositeElement {
   @NotNull
   List<GoType> getTypeList();
 
+  @NotNull
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getRparen();
+
 }

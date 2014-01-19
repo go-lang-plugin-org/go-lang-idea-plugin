@@ -27,4 +27,40 @@ public class GoConditionalExprImpl extends GoExpressionImpl implements GoConditi
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getEq() {
+    return findChildByType(EQ);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getGreater() {
+    return findChildByType(GREATER);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getGreaterOrEqual() {
+    return findChildByType(GREATER_OR_EQUAL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLess() {
+    return findChildByType(LESS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLessOrEqual() {
+    return findChildByType(LESS_OR_EQUAL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getNotEq() {
+    return findChildByType(NOT_EQ);
+  }
+
 }

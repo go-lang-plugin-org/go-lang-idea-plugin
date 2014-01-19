@@ -9,8 +9,8 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
-import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 
 public class GoStatementImpl extends GoCompositeElementImpl implements GoStatement {
 

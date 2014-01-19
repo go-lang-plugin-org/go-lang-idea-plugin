@@ -10,4 +10,13 @@ public interface GoArgumentList extends GoCompositeElement {
   @NotNull
   List<GoExpression> getExpressionList();
 
+  @NotNull
+  PsiElement getLparen();
+
+  @NotNull
+  PsiElement getRparen();
+
+  @Nullable
+  PsiElement getTripleDot();
+
 }

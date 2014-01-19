@@ -10,4 +10,7 @@ public interface GoSelectorExpr extends GoExpression {
   @NotNull
   List<GoExpression> getExpressionList();
 
+  @NotNull
+  PsiElement getDot();
+
 }

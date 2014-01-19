@@ -16,4 +16,7 @@ public interface GoConstSpec extends GoCompositeElement {
   @Nullable
   GoType getType();
 
+  @Nullable
+  PsiElement getAssign();
+
 }

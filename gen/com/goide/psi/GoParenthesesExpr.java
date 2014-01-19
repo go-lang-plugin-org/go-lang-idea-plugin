@@ -10,4 +10,10 @@ public interface GoParenthesesExpr extends GoExpression {
   @Nullable
   GoExpression getExpression();
 
+  @NotNull
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getRparen();
+
 }

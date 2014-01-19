@@ -13,4 +13,13 @@ public interface GoTypeAssertionExpr extends GoExpression {
   @NotNull
   GoType getType();
 
+  @NotNull
+  PsiElement getDot();
+
+  @NotNull
+  PsiElement getLparen();
+
+  @NotNull
+  PsiElement getRparen();
+
 }

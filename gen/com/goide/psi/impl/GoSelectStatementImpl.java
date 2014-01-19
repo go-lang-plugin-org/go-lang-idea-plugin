@@ -28,6 +28,18 @@ public class GoSelectStatementImpl extends GoStatementImpl implements GoSelectSt
   }
 
   @Override
+  @Nullable
+  public PsiElement getLbrace() {
+    return findChildByType(LBRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRbrace() {
+    return findChildByType(RBRACE);
+  }
+
+  @Override
   @NotNull
   public PsiElement getSelect() {
     return findNotNullChildByType(SELECT);

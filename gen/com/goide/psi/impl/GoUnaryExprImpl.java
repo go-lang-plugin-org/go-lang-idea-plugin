@@ -27,4 +27,46 @@ public class GoUnaryExprImpl extends GoExpressionImpl implements GoUnaryExpr {
     return findChildByClass(GoExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getBitAnd() {
+    return findChildByType(BIT_AND);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getBitXor() {
+    return findChildByType(BIT_XOR);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMinus() {
+    return findChildByType(MINUS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMul() {
+    return findChildByType(MUL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getNot() {
+    return findChildByType(NOT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getPlus() {
+    return findChildByType(PLUS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSendChannel() {
+    return findChildByType(SEND_CHANNEL);
+  }
+
 }

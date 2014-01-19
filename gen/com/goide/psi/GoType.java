@@ -10,4 +10,10 @@ public interface GoType extends GoCompositeElement {
   @Nullable
   GoTypeReferenceExpression getTypeReferenceExpression();
 
+  @Nullable
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getRparen();
+
 }

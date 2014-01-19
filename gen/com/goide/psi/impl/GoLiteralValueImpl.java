@@ -27,4 +27,16 @@ public class GoLiteralValueImpl extends GoCompositeElementImpl implements GoLite
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoElement.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLbrace() {
+    return findNotNullChildByType(LBRACE);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRbrace() {
+    return findNotNullChildByType(RBRACE);
+  }
+
 }

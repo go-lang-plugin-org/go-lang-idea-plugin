@@ -19,4 +19,13 @@ public interface GoExprSwitchStatement extends GoSwitchStatement {
   @NotNull
   GoSwitchStart getSwitchStart();
 
+  @NotNull
+  PsiElement getLbrace();
+
+  @Nullable
+  PsiElement getRbrace();
+
+  @Nullable
+  PsiElement getSemicolon();
+
 }

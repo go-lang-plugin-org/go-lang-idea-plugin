@@ -33,4 +33,16 @@ public class GoResultImpl extends GoCompositeElementImpl implements GoResult {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoType.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLparen() {
+    return findChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
+  }
+
 }

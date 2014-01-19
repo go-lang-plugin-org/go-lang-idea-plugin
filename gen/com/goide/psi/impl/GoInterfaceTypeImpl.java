@@ -28,6 +28,18 @@ public class GoInterfaceTypeImpl extends GoTypeImpl implements GoInterfaceType {
   }
 
   @Override
+  @Nullable
+  public PsiElement getLbrace() {
+    return findChildByType(LBRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRbrace() {
+    return findChildByType(RBRACE);
+  }
+
+  @Override
   @NotNull
   public PsiElement getInterface() {
     return findNotNullChildByType(INTERFACE);

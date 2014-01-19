@@ -13,4 +13,10 @@ public interface GoResult extends GoCompositeElement {
   @NotNull
   List<GoType> getTypeList();
 
+  @Nullable
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getRparen();
+
 }

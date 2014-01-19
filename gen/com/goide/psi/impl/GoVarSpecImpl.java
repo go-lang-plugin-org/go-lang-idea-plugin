@@ -39,4 +39,10 @@ public class GoVarSpecImpl extends GoCompositeElementImpl implements GoVarSpec {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoVarDefinition.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
+  }
+
 }

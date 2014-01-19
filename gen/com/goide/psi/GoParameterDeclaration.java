@@ -13,4 +13,7 @@ public interface GoParameterDeclaration extends GoCompositeElement {
   @NotNull
   GoType getType();
 
+  @Nullable
+  PsiElement getTripleDot();
+
 }

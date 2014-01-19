@@ -33,4 +33,10 @@ public class GoCommClauseImpl extends GoCompositeElementImpl implements GoCommCl
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getColon() {
+    return findChildByType(COLON);
+  }
+
 }

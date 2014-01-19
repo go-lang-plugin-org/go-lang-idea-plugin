@@ -29,6 +29,12 @@ public class GoLabeledStatementImpl extends GoStatementImpl implements GoLabeled
 
   @Override
   @NotNull
+  public PsiElement getColon() {
+    return findNotNullChildByType(COLON);
+  }
+
+  @Override
+  @NotNull
   public PsiElement getIdentifier() {
     return findNotNullChildByType(IDENTIFIER);
   }

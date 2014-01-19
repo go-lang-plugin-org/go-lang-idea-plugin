@@ -33,4 +33,10 @@ public class GoShortVarDeclarationImpl extends GoVarSpecImpl implements GoShortV
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoVarDefinition.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getVarAssign() {
+    return findNotNullChildByType(VAR_ASSIGN);
+  }
+
 }

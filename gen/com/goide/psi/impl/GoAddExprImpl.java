@@ -27,4 +27,28 @@ public class GoAddExprImpl extends GoExpressionImpl implements GoAddExpr {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getBitOr() {
+    return findChildByType(BIT_OR);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getBitXor() {
+    return findChildByType(BIT_XOR);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMinus() {
+    return findChildByType(MINUS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getPlus() {
+    return findChildByType(PLUS);
+  }
+
 }

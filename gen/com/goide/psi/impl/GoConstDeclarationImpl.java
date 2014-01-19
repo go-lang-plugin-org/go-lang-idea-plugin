@@ -28,6 +28,18 @@ public class GoConstDeclarationImpl extends GoCompositeElementImpl implements Go
   }
 
   @Override
+  @Nullable
+  public PsiElement getLparen() {
+    return findChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
+  }
+
+  @Override
   @NotNull
   public PsiElement getConst() {
     return findNotNullChildByType(CONST);

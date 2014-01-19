@@ -28,6 +28,18 @@ public class GoMapTypeImpl extends GoTypeImpl implements GoMapType {
   }
 
   @Override
+  @Nullable
+  public PsiElement getLbrack() {
+    return findChildByType(LBRACK);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRbrack() {
+    return findChildByType(RBRACK);
+  }
+
+  @Override
   @NotNull
   public PsiElement getMap() {
     return findNotNullChildByType(MAP);

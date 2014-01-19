@@ -10,6 +10,12 @@ public interface GoInterfaceType extends GoType {
   @NotNull
   List<GoMethodSpec> getMethodSpecList();
 
+  @Nullable
+  PsiElement getLbrace();
+
+  @Nullable
+  PsiElement getRbrace();
+
   @NotNull
   PsiElement getInterface();
 

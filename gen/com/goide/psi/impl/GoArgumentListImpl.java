@@ -27,4 +27,22 @@ public class GoArgumentListImpl extends GoCompositeElementImpl implements GoArgu
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLparen() {
+    return findNotNullChildByType(LPAREN);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRparen() {
+    return findNotNullChildByType(RPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getTripleDot() {
+    return findChildByType(TRIPLE_DOT);
+  }
+
 }

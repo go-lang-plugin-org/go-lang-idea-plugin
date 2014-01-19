@@ -27,4 +27,10 @@ public class GoSendStatementImpl extends GoStatementImpl implements GoSendStatem
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getSendChannel() {
+    return findNotNullChildByType(SEND_CHANNEL);
+  }
+
 }

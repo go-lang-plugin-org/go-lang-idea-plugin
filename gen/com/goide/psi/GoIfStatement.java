@@ -17,6 +17,9 @@ public interface GoIfStatement extends GoStatement {
   List<GoStatement> getStatementList();
 
   @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
   PsiElement getElse();
 
   @NotNull

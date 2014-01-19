@@ -19,4 +19,13 @@ public interface GoTypeSwitchStatement extends GoSwitchStatement {
   @NotNull
   GoTypeSwitchGuard getTypeSwitchGuard();
 
+  @Nullable
+  PsiElement getLbrace();
+
+  @Nullable
+  PsiElement getRbrace();
+
+  @Nullable
+  PsiElement getSemicolon();
+
 }

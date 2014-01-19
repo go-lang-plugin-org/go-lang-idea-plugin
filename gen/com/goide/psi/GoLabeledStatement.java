@@ -11,6 +11,9 @@ public interface GoLabeledStatement extends GoStatement {
   GoStatement getStatement();
 
   @NotNull
+  PsiElement getColon();
+
+  @NotNull
   PsiElement getIdentifier();
 
 }

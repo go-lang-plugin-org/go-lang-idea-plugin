@@ -10,4 +10,10 @@ public interface GoIndexExpr extends GoExpression {
   @NotNull
   List<GoExpression> getExpressionList();
 
+  @NotNull
+  PsiElement getLbrack();
+
+  @NotNull
+  PsiElement getRbrack();
+
 }

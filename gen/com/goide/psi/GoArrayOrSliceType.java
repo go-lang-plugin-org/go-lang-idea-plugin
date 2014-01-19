@@ -13,4 +13,13 @@ public interface GoArrayOrSliceType extends GoType {
   @Nullable
   GoType getType();
 
+  @NotNull
+  PsiElement getLbrack();
+
+  @Nullable
+  PsiElement getRbrack();
+
+  @Nullable
+  PsiElement getTripleDot();
+
 }

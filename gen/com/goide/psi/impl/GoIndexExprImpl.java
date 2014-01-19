@@ -27,4 +27,16 @@ public class GoIndexExprImpl extends GoExpressionImpl implements GoIndexExpr {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLbrack() {
+    return findNotNullChildByType(LBRACK);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRbrack() {
+    return findNotNullChildByType(RBRACK);
+  }
+
 }

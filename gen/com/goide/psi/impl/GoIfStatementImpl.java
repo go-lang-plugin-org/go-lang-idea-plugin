@@ -41,6 +41,12 @@ public class GoIfStatementImpl extends GoStatementImpl implements GoIfStatement 
 
   @Override
   @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getElse() {
     return findChildByType(ELSE);
   }

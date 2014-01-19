@@ -13,4 +13,13 @@ public interface GoBuiltinCallExpr extends GoExpression {
   @NotNull
   GoReferenceExpression getReferenceExpression();
 
+  @Nullable
+  PsiElement getComma();
+
+  @NotNull
+  PsiElement getLparen();
+
+  @NotNull
+  PsiElement getRparen();
+
 }

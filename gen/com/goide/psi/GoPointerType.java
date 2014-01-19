@@ -10,4 +10,7 @@ public interface GoPointerType extends GoType {
   @Nullable
   GoType getType();
 
+  @NotNull
+  PsiElement getMul();
+
 }

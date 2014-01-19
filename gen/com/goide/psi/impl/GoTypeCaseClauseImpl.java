@@ -33,4 +33,10 @@ public class GoTypeCaseClauseImpl extends GoCompositeElementImpl implements GoTy
     return findNotNullChildByClass(GoTypeSwitchCase.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getColon() {
+    return findNotNullChildByType(COLON);
+  }
+
 }

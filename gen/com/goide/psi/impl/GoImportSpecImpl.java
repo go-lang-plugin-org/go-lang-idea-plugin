@@ -35,6 +35,12 @@ public class GoImportSpecImpl extends GoNamedElementImpl<GoImportSpecStub> imple
 
   @Override
   @Nullable
+  public PsiElement getDot() {
+    return findChildByType(DOT);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
   }

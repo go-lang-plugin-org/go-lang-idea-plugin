@@ -10,4 +10,10 @@ public interface GoLiteralValue extends GoCompositeElement {
   @NotNull
   List<GoElement> getElementList();
 
+  @NotNull
+  PsiElement getLbrace();
+
+  @NotNull
+  PsiElement getRbrace();
+
 }

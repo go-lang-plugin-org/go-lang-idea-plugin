@@ -13,4 +13,7 @@ public interface GoUnaryTypeCreateExpr extends GoUnaryExpr {
   @NotNull
   GoTypeReferenceExpression getTypeReferenceExpression();
 
+  @NotNull
+  PsiElement getBitAnd();
+
 }

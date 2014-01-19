@@ -28,6 +28,18 @@ public class GoVarDeclarationImpl extends GoCompositeElementImpl implements GoVa
   }
 
   @Override
+  @Nullable
+  public PsiElement getLparen() {
+    return findChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
+  }
+
+  @Override
   @NotNull
   public PsiElement getVar() {
     return findNotNullChildByType(VAR);

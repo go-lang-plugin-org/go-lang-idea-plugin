@@ -13,4 +13,7 @@ public interface GoTypeCaseClause extends GoCompositeElement {
   @NotNull
   GoTypeSwitchCase getTypeSwitchCase();
 
+  @NotNull
+  PsiElement getColon();
+
 }

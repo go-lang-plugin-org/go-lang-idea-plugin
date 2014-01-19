@@ -77,6 +77,8 @@
   extends(".*Statement")=Statement
   extends(".*Type")=Type
   pin('.*List(?:_\d.*)?')=1
+
+  generateTokenAccessors=true
 }
 
 File ::= PackageClause semi (ImportDeclaration semi)* TopLevelDeclaration* {pin(".*")=1}

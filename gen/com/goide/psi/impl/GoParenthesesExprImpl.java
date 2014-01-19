@@ -27,4 +27,16 @@ public class GoParenthesesExprImpl extends GoExpressionImpl implements GoParenth
     return findChildByClass(GoExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLparen() {
+    return findNotNullChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
+  }
+
 }

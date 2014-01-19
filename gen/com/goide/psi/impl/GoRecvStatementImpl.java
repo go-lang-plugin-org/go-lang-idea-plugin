@@ -27,4 +27,16 @@ public class GoRecvStatementImpl extends GoStatementImpl implements GoRecvStatem
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getVarAssign() {
+    return findChildByType(VAR_ASSIGN);
+  }
+
 }

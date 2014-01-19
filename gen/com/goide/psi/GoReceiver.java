@@ -12,6 +12,15 @@ public interface GoReceiver extends GoNamedElement, StubBasedPsiElement<GoReceiv
   @NotNull
   GoType getType();
 
+  @NotNull
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getMul();
+
+  @NotNull
+  PsiElement getRparen();
+
   @Nullable
   PsiElement getIdentifier();
 

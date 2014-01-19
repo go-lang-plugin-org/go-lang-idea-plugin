@@ -27,4 +27,22 @@ public class GoTypeDeclarationImpl extends GoCompositeElementImpl implements GoT
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoTypeSpec.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLparen() {
+    return findChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getType() {
+    return findNotNullChildByType(TYPE_);
+  }
+
 }

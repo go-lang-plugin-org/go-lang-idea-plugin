@@ -27,4 +27,10 @@ public class GoAnonymousFieldImpl extends GoCompositeElementImpl implements GoAn
     return findNotNullChildByClass(GoTypeReferenceExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getMul() {
+    return findChildByType(MUL);
+  }
+
 }

@@ -10,6 +10,12 @@ public interface GoImportDeclaration extends GoCompositeElement {
   @NotNull
   List<GoImportSpec> getImportSpecList();
 
+  @Nullable
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getRparen();
+
   @NotNull
   PsiElement getImport();
 

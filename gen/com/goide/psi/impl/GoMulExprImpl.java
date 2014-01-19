@@ -27,4 +27,46 @@ public class GoMulExprImpl extends GoExpressionImpl implements GoMulExpr {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getBitAnd() {
+    return findChildByType(BIT_AND);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getBitClear() {
+    return findChildByType(BIT_CLEAR);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMul() {
+    return findChildByType(MUL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getQuotient() {
+    return findChildByType(QUOTIENT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRemainder() {
+    return findChildByType(REMAINDER);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getShiftLeft() {
+    return findChildByType(SHIFT_LEFT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getShiftRight() {
+    return findChildByType(SHIFT_RIGHT);
+  }
+
 }

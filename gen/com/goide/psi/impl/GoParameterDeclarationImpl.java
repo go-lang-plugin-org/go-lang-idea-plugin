@@ -33,4 +33,10 @@ public class GoParameterDeclarationImpl extends GoCompositeElementImpl implement
     return findNotNullChildByClass(GoType.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getTripleDot() {
+    return findChildByType(TRIPLE_DOT);
+  }
+
 }

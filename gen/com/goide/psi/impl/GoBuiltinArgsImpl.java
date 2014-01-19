@@ -33,4 +33,10 @@ public class GoBuiltinArgsImpl extends GoCompositeElementImpl implements GoBuilt
     return findChildByClass(GoType.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getTripleDot() {
+    return findChildByType(TRIPLE_DOT);
+  }
+
 }

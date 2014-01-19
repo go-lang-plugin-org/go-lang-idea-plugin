@@ -33,4 +33,22 @@ public class GoConversionExprImpl extends GoExpressionImpl implements GoConversi
     return findNotNullChildByClass(GoType.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getComma() {
+    return findChildByType(COMMA);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getLparen() {
+    return findNotNullChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
+  }
+
 }

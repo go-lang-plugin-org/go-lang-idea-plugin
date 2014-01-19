@@ -27,4 +27,10 @@ public class GoPointerTypeImpl extends GoTypeImpl implements GoPointerType {
     return findChildByClass(GoType.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getMul() {
+    return findNotNullChildByType(MUL);
+  }
+
 }

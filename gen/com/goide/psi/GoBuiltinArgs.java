@@ -13,4 +13,7 @@ public interface GoBuiltinArgs extends GoCompositeElement {
   @Nullable
   GoType getType();
 
+  @Nullable
+  PsiElement getTripleDot();
+
 }

@@ -10,4 +10,22 @@ public interface GoConditionalExpr extends GoExpression {
   @NotNull
   List<GoExpression> getExpressionList();
 
+  @Nullable
+  PsiElement getEq();
+
+  @Nullable
+  PsiElement getGreater();
+
+  @Nullable
+  PsiElement getGreaterOrEqual();
+
+  @Nullable
+  PsiElement getLess();
+
+  @Nullable
+  PsiElement getLessOrEqual();
+
+  @Nullable
+  PsiElement getNotEq();
+
 }

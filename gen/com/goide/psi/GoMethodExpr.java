@@ -11,6 +11,9 @@ public interface GoMethodExpr extends GoExpression {
   GoReceiverType getReceiverType();
 
   @NotNull
+  PsiElement getDot();
+
+  @NotNull
   PsiElement getIdentifier();
 
 }

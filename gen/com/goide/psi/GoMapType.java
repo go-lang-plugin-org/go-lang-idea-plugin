@@ -10,6 +10,12 @@ public interface GoMapType extends GoType {
   @NotNull
   List<GoType> getTypeList();
 
+  @Nullable
+  PsiElement getLbrack();
+
+  @Nullable
+  PsiElement getRbrack();
+
   @NotNull
   PsiElement getMap();
 

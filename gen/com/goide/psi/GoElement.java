@@ -13,4 +13,7 @@ public interface GoElement extends GoCompositeElement {
   @NotNull
   GoValue getValue();
 
+  @Nullable
+  PsiElement getColon();
+
 }

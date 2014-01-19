@@ -33,4 +33,16 @@ public class GoParametersImpl extends GoCompositeElementImpl implements GoParame
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoType.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLparen() {
+    return findNotNullChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
+  }
+
 }

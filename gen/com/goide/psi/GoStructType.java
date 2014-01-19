@@ -10,6 +10,12 @@ public interface GoStructType extends GoType {
   @NotNull
   List<GoFieldDeclaration> getFieldDeclarationList();
 
+  @Nullable
+  PsiElement getLbrace();
+
+  @Nullable
+  PsiElement getRbrace();
+
   @NotNull
   PsiElement getStruct();
 

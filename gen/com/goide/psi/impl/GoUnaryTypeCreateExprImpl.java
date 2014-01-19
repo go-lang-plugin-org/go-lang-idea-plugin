@@ -33,4 +33,10 @@ public class GoUnaryTypeCreateExprImpl extends GoUnaryExprImpl implements GoUnar
     return findNotNullChildByClass(GoTypeReferenceExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getBitAnd() {
+    return findNotNullChildByType(BIT_AND);
+  }
+
 }

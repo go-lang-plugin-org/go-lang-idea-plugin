@@ -10,4 +10,16 @@ public interface GoAddExpr extends GoExpression {
   @NotNull
   List<GoExpression> getExpressionList();
 
+  @Nullable
+  PsiElement getBitOr();
+
+  @Nullable
+  PsiElement getBitXor();
+
+  @Nullable
+  PsiElement getMinus();
+
+  @Nullable
+  PsiElement getPlus();
+
 }

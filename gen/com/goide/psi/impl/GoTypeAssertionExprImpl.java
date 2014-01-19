@@ -33,4 +33,22 @@ public class GoTypeAssertionExprImpl extends GoExpressionImpl implements GoTypeA
     return findNotNullChildByClass(GoType.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getDot() {
+    return findNotNullChildByType(DOT);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getLparen() {
+    return findNotNullChildByType(LPAREN);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRparen() {
+    return findNotNullChildByType(RPAREN);
+  }
+
 }

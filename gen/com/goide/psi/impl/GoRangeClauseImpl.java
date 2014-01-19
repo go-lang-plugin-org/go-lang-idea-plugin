@@ -34,6 +34,18 @@ public class GoRangeClauseImpl extends GoCompositeElementImpl implements GoRange
   }
 
   @Override
+  @Nullable
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getVarAssign() {
+    return findChildByType(VAR_ASSIGN);
+  }
+
+  @Override
   @NotNull
   public PsiElement getRange() {
     return findNotNullChildByType(RANGE);

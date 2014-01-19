@@ -28,6 +28,12 @@ public class GoChannelTypeImpl extends GoTypeImpl implements GoChannelType {
   }
 
   @Override
+  @Nullable
+  public PsiElement getSendChannel() {
+    return findChildByType(SEND_CHANNEL);
+  }
+
+  @Override
   @NotNull
   public PsiElement getChan() {
     return findNotNullChildByType(CHAN);

@@ -10,4 +10,25 @@ public interface GoMulExpr extends GoExpression {
   @NotNull
   List<GoExpression> getExpressionList();
 
+  @Nullable
+  PsiElement getBitAnd();
+
+  @Nullable
+  PsiElement getBitClear();
+
+  @Nullable
+  PsiElement getMul();
+
+  @Nullable
+  PsiElement getQuotient();
+
+  @Nullable
+  PsiElement getRemainder();
+
+  @Nullable
+  PsiElement getShiftLeft();
+
+  @Nullable
+  PsiElement getShiftRight();
+
 }

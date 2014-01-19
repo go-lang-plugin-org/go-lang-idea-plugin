@@ -10,4 +10,13 @@ public interface GoTypeDeclaration extends GoCompositeElement {
   @NotNull
   List<GoTypeSpec> getTypeSpecList();
 
+  @Nullable
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getRparen();
+
+  @NotNull
+  PsiElement getType();
+
 }

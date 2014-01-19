@@ -28,6 +28,36 @@ public class GoTypeSwitchGuardImpl extends GoCompositeElementImpl implements GoT
   }
 
   @Override
+  @NotNull
+  public PsiElement getDot() {
+    return findNotNullChildByType(DOT);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getLparen() {
+    return findNotNullChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getType() {
+    return findNotNullChildByType(TYPE_);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getVarAssign() {
+    return findChildByType(VAR_ASSIGN);
+  }
+
+  @Override
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);

@@ -10,4 +10,13 @@ public interface GoReceiverType extends GoType {
   @Nullable
   GoTypeReferenceExpression getTypeReferenceExpression();
 
+  @Nullable
+  PsiElement getLparen();
+
+  @Nullable
+  PsiElement getMul();
+
+  @Nullable
+  PsiElement getRparen();
+
 }

@@ -13,4 +13,7 @@ public interface GoCommClause extends GoCompositeElement {
   @NotNull
   List<GoStatement> getStatementList();
 
+  @Nullable
+  PsiElement getColon();
+
 }

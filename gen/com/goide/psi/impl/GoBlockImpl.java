@@ -9,8 +9,8 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
-import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 
 public class GoBlockImpl extends GoCompositeElementImpl implements GoBlock {
 
@@ -27,6 +27,18 @@ public class GoBlockImpl extends GoCompositeElementImpl implements GoBlock {
   @NotNull
   public List<GoStatement> getStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getLbrace() {
+    return findNotNullChildByType(LBRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRbrace() {
+    return findChildByType(RBRACE);
   }
 
   public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {

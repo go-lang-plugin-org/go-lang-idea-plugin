@@ -10,6 +10,12 @@ public interface GoSelectStatement extends GoStatement {
   @NotNull
   List<GoCommClause> getCommClauseList();
 
+  @Nullable
+  PsiElement getLbrace();
+
+  @Nullable
+  PsiElement getRbrace();
+
   @NotNull
   PsiElement getSelect();
 

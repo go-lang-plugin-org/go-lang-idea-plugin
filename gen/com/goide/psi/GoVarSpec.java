@@ -16,4 +16,7 @@ public interface GoVarSpec extends GoCompositeElement {
   @NotNull
   List<GoVarDefinition> getVarDefinitionList();
 
+  @Nullable
+  PsiElement getAssign();
+
 }

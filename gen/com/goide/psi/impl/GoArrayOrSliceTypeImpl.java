@@ -33,4 +33,22 @@ public class GoArrayOrSliceTypeImpl extends GoTypeImpl implements GoArrayOrSlice
     return findChildByClass(GoType.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLbrack() {
+    return findNotNullChildByType(LBRACK);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRbrack() {
+    return findChildByType(RBRACK);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getTripleDot() {
+    return findChildByType(TRIPLE_DOT);
+  }
+
 }

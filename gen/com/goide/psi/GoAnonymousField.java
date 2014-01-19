@@ -10,4 +10,7 @@ public interface GoAnonymousField extends GoCompositeElement {
   @NotNull
   GoTypeReferenceExpression getTypeReferenceExpression();
 
+  @Nullable
+  PsiElement getMul();
+
 }

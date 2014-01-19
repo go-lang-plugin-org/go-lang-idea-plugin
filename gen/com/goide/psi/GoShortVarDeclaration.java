@@ -13,4 +13,7 @@ public interface GoShortVarDeclaration extends GoVarSpec {
   @NotNull
   List<GoVarDefinition> getVarDefinitionList();
 
+  @NotNull
+  PsiElement getVarAssign();
+
 }

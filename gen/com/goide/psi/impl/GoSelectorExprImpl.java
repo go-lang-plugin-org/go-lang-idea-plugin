@@ -27,4 +27,10 @@ public class GoSelectorExprImpl extends GoExpressionImpl implements GoSelectorEx
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getDot() {
+    return findNotNullChildByType(DOT);
+  }
+
 }

@@ -10,4 +10,7 @@ public interface GoAndExpr extends GoExpression {
   @NotNull
   List<GoExpression> getExpressionList();
 
+  @NotNull
+  PsiElement getCondAnd();
+
 }

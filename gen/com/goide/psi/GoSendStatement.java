@@ -10,4 +10,7 @@ public interface GoSendStatement extends GoStatement {
   @NotNull
   List<GoExpression> getExpressionList();
 
+  @NotNull
+  PsiElement getSendChannel();
+
 }
