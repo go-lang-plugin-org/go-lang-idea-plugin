@@ -8,16 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
+import com.goide.stubs.GoImportSpecStub;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class GoImportSpecImpl extends GoNamedElementImpl<?> implements GoImportSpec {
+public class GoImportSpecImpl extends GoNamedElementImpl<GoImportSpecStub> implements GoImportSpec {
 
   public GoImportSpecImpl(ASTNode node) {
     super(node);
   }
 
-  public GoImportSpecImpl(? stub, IStubElementType nodeType) {
+  public GoImportSpecImpl(GoImportSpecStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
