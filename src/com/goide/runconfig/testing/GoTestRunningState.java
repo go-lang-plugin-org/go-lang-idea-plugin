@@ -17,7 +17,12 @@ import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 public class GoTestRunningState extends GoRunningState {
   private GoTestRunConfiguration myConfiguration;
@@ -53,22 +58,49 @@ public class GoTestRunningState extends GoRunningState {
     installDependencies.setExePath(executable);
     installDependencies.addParameter("test");
     installDependencies.addParameter("-i");
-    installDependencies.setWorkDirectory(myConfiguration.getWorkingDirectory());
+    fillCommandLineWithParameters(installDependencies);
     try {
       installDependencies.createProcess().waitFor();
+      VirtualFileManager.getInstance().syncRefresh();
     }
     catch (InterruptedException ignore) {
+      Thread.currentThread().interrupt();
     }
 
     GeneralCommandLine runTests = new GeneralCommandLine();
     runTests.setExePath(executable);
     runTests.addParameter("test");
     runTests.addParameter("-v");
-    runTests.addParameter("-run=" + myConfiguration.getPattern().trim());
+    fillCommandLineWithParameters(runTests);
     runTests.getParametersList().addParametersString(myConfiguration.getParams());
-    runTests.setWorkDirectory(myConfiguration.getWorkingDirectory());
-
-
     return runTests;
+  }
+
+  private void fillCommandLineWithParameters(@NotNull GeneralCommandLine commandLine) {
+    commandLine.setWorkDirectory(myConfiguration.getWorkingDirectory());
+    switch (myConfiguration.getKind()) {
+      case DIRECTORY:
+        String relativePath = FileUtil.getRelativePath(myConfiguration.getWorkingDirectory(),
+                                                       myConfiguration.getDirectoryPath(),
+                                                       File.separatorChar);
+        if (relativePath != null) {
+          commandLine.addParameter("./" + relativePath);
+        }
+        else {
+          commandLine.addParameter(myConfiguration.getDirectoryPath());
+          commandLine.setWorkDirectory(myConfiguration.getDirectoryPath());
+        }
+        break;
+      case PACKAGE:
+        commandLine.addParameter(myConfiguration.getPackage());
+        break;
+      case FILE:
+        commandLine.addParameter(myConfiguration.getFilePath());
+        break;
+    }
+    String pattern = myConfiguration.getPattern();
+    if (!StringUtil.isEmpty(pattern)) {
+      commandLine.addParameter("--run='" + pattern + "'");
+    }
   }
 }
