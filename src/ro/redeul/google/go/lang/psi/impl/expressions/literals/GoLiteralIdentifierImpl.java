@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
@@ -26,6 +28,7 @@ import ro.redeul.google.go.lang.psi.resolve.references.LabelReference;
 import ro.redeul.google.go.lang.psi.resolve.references.ShortVarDeclarationReference;
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.*;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -52,6 +55,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         implements GoLiteralIdentifier {
 
     private final boolean isIota;
+    private Integer iotaValue;
 
     public GoLiteralIdentifierImpl(@NotNull ASTNode node) {
         this(node, false);
@@ -327,5 +331,18 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         }
 
         return getLocalElementSearchScope(this);
+    }
+
+    @Override
+    public void setIotaValue(int value) {
+        iotaValue = value;
+    }
+
+    @Override
+    public Integer getIotaValue() {
+        if (isIota()){
+            return iotaValue;
+        }
+        return null;
     }
 }

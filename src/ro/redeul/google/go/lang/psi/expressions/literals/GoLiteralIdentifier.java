@@ -27,4 +27,9 @@ public interface GoLiteralIdentifier extends GoLiteral<String>,
 
     @NotNull
     String getCanonicalName();
+
+    Integer getIotaValue();
+
+    public void setIotaValue(int value);
+
 }
