@@ -13,6 +13,9 @@
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
 
   <extensions defaultExtensionNs="com.intellij">
+    <stubIndex implementation="com.goide.stubs.index.GoAllNamesIndex"/>
+    <stubIndex implementation="com.goide.stubs.index.GoFunctionIndex"/>
+    
     <internalFileTemplate name="Go Application"/>
     <internalFileTemplate name="Go File"/>
 
