@@ -11,6 +11,11 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +60,33 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   public void checkConfiguration() throws RuntimeConfigurationException {
     GoModuleBasedConfiguration configurationModule = getConfigurationModule();
     configurationModule.checkForWarning();
-    // todo
+    if (myWorkingDirectory.isEmpty()) {
+      throw new RuntimeConfigurationError("Working directory is not specified");
+    }
+
+    switch (myKind) {
+      case DIRECTORY:
+        if (!FileUtil.isAncestor(myWorkingDirectory, myDirectoryPath, false)) {
+          throw new RuntimeConfigurationError("Working directory should be ancestor of testing directory");
+        }
+        VirtualFile testingDirectory = LocalFileSystem.getInstance().findFileByPath(myDirectoryPath);
+        if (testingDirectory == null) {
+          throw new RuntimeConfigurationError("Testing directory doesn't exist");
+        }
+        break;
+      case PACKAGE:
+        break;
+      case FILE:
+        VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(myFilePath);
+        if (virtualFile == null) {
+          throw new RuntimeConfigurationError("Test file doesn't exist");
+        }
+        PsiFile file = PsiManager.getInstance(getProject()).findFile(virtualFile);
+        if (file == null || !GoTestFinder.isTestFile(file)) {
+          throw new RuntimeConfigurationError("File '" +  myFilePath + "' is not test");
+        }
+        break;
+    }
   }
 
   @NotNull
