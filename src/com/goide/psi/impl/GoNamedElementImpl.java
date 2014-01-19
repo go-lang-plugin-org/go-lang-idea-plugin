@@ -72,4 +72,9 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends StubB
   public static GoType getType(GoNamedElement o) {
     return PsiTreeUtil.getNextSiblingOfType(o, GoType.class);
   }
+  
+  @Override
+  public String toString() {
+    return getNode().getElementType().toString();
+  }
 }
