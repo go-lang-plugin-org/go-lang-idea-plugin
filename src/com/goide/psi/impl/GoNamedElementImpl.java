@@ -8,6 +8,8 @@ import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -76,5 +78,13 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends StubB
   @Override
   public String toString() {
     return getNode().getElementType().toString();
+  }
+
+  @Override
+  public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                     @NotNull ResolveState state,
+                                     PsiElement lastParent,
+                                     @NotNull PsiElement place) {
+    return GoCompositeElementImpl.precessDeclarationDefault(this, processor, state, lastParent, place);
   }
 }
