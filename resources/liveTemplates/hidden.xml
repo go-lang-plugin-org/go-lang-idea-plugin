@@ -1,16 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <templateSet group="Go">
-  <template description='Package declaration' id='go_lang_package' name='package' toReformat='true' toShortenFQNames='true' value='package $END$&#10;'>
+  <!-- KEYWORDS -->
+  <template description='Package declaration' id='go_lang_package' name='package' toReformat='true' toShortenFQNames='true'
+            value='package $END$&#10;'>
     <context>
       <option name='GO' value='true'/>
     </context>
   </template>
-  <template description='Import declaration' id='go_lang_import' name='import' toReformat='true' toShortenFQNames='true' value='import "$END$"'>
+  <template description='Import declaration' id='go_lang_import' name='import' toReformat='true' toShortenFQNames='true'
+            value='import "$END$"'>
     <context>
       <option name='GO' value='true'/>
     </context>
   </template>
-  <template description='Constant declaration' id='go_lang_const' name='const' toReformat='true' toShortenFQNames='true' value='const $NAME$ $TYPE$ = $VALUE$'>
+  <template description='Constant declaration' id='go_lang_const' name='const' toReformat='true' toShortenFQNames='true'
+            value='const $NAME$ $TYPE$ = $VALUE$'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
@@ -64,6 +68,22 @@
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+
+  <!-- TEST GENERATOR -->
+  <template description='Test' id='go_lang_test' name='test' toReformat='true' toShortenFQNames='true'
+            value='func Test$NAME$(t *testing.T) {&#10;   $END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;Name&quot;' expression='' name='NAME'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Benchmark' id='go_lang_benchmark' name='benchmark' toReformat='true' toShortenFQNames='true'
+            value='func Benchmark$NAME$(b *testing.B) {&#10;   for i := 0; i &lt; b.N; i++ {&#10;    $END$ &#10;  }&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;Name&quot;' expression='' name='NAME'/>
     <context>
       <option name='GO' value='true'/>
     </context>
