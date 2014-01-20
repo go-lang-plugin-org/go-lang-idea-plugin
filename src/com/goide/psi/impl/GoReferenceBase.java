@@ -78,10 +78,12 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     return sdk == null ? null : LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/src/pkg");
   }
 
-  protected void processDirectory(@NotNull List<LookupElement> result, @Nullable PsiDirectory dir, @Nullable String packageName, boolean localCompletion) {
+  protected void processDirectory(@NotNull List<LookupElement> result, @Nullable PsiDirectory dir, @Nullable GoFile file, boolean localCompletion) {
+    String packageName = file != null ? file.getPackageName() : null;
+    String name = file != null ? file.getName() : null;
     if (dir != null) {
       for (PsiFile psiFile : dir.getFiles()) {
-        if (psiFile instanceof GoFile) {
+        if (psiFile instanceof GoFile && !psiFile.getName().equals(name)) {
           if (packageName != null && !Comparing.equal(((GoFile)psiFile).getPackageName(), packageName)) continue;
           processFile(result, (GoFile)psiFile, localCompletion);
         }
@@ -203,7 +205,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         VirtualFile vfile = file.getOriginalFile().getVirtualFile();
         VirtualFile localDir = vfile == null ? null : vfile.getParent();
         PsiDirectory localPsiDir = localDir == null ? null : PsiManager.getInstance(myElement.getProject()).findDirectory(localDir);
-        processDirectory(result, localPsiDir, ((GoFile)file).getPackageName(), true);
+        processDirectory(result, localPsiDir, (GoFile)file, true);
 
         if (!file.getName().equals("builtin.go")) {
           VirtualFile home = getSdkHome();

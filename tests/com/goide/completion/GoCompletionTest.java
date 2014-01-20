@@ -2,7 +2,9 @@ package com.goide.completion;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.testFramework.TreePrintCondition;
 import com.intellij.testFramework.UsefulTestCase;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,6 +60,13 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
 
   public void testKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "continue");
+  }
+
+  public void testNoDuplicates() throws Exception {
+    doTestInclude("package foo; type a struct {<caret>", "a");
+    List<String> stringList = myFixture.getLookupElementStrings();
+    assertNotNull(stringList);
+    assertSize(1, ContainerUtil.filter(stringList, new TreePrintCondition.Include("a")));
   }
 
   @Override

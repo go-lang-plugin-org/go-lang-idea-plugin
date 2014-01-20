@@ -8,11 +8,11 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 public class GoVarProcessor extends BaseScopeProcessor {
-  private List<GoNamedElement> myVarList = new ArrayList<GoNamedElement>(0);
+  private LinkedHashSet<GoNamedElement> myVarList = ContainerUtil.newLinkedHashSet();
 
   private final String myRequestedName;
   private final PsiElement myOrigin;
@@ -46,7 +46,7 @@ public class GoVarProcessor extends BaseScopeProcessor {
   }
 
   @NotNull
-  public List<GoNamedElement> getVariants() {
+  public Collection<GoNamedElement> getVariants() {
     return myVarList;
   }
 }
