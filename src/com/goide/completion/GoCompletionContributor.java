@@ -16,6 +16,7 @@ import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
@@ -39,7 +40,7 @@ public class GoCompletionContributor extends CompletionContributor {
   public static final int PACKAGE_PRIORITY = 5;
 
   public GoCompletionContributor() {
-    extend(CompletionType.BASIC, psiElement().inFile(instanceOf(GoFile.class)), new CompletionProvider<CompletionParameters>() {
+    extend(CompletionType.BASIC, inGoFile(), new CompletionProvider<CompletionParameters>() {
       @Override
       protected void addCompletions(@NotNull CompletionParameters parameters,
                                     ProcessingContext context,
@@ -54,8 +55,7 @@ public class GoCompletionContributor extends CompletionContributor {
       }
     });
 
-    extend(CompletionType.BASIC,
-           psiElement().inFile(instanceOf(GoFile.class)).inside(GoImportString.class), new CompletionProvider<CompletionParameters>() {
+    extend(CompletionType.BASIC, inGoFile().inside(GoImportString.class), new CompletionProvider<CompletionParameters>() {
       @Override
       protected void addCompletions(@NotNull CompletionParameters parameters,
                                     ProcessingContext context,
@@ -77,6 +77,10 @@ public class GoCompletionContributor extends CompletionContributor {
 
       }
     });
+  }
+
+  private static PsiElementPattern.Capture<PsiElement> inGoFile() {
+    return psiElement().inFile(instanceOf(GoFile.class));
   }
 
   @NotNull
