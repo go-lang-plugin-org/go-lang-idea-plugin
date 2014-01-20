@@ -11,7 +11,7 @@
       <option name='GO' value='true'/>
     </context>
   </template>
-  <template description='Constant declaration' name='con' toReformat='true' toShortenFQNames='true' value='$NAME$ $TYPE$ = $VALUE$'>
+  <template description='Constant declaration' name='con' toReformat='true' toShortenFQNames='true' value='const $NAME$ $TYPE$ = $VALUE$'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
@@ -19,7 +19,7 @@
       <option name='GO' value='true'/>
     </context>
   </template>
-  <template description='Iota constant declaration' name='iota' toReformat='true' toShortenFQNames='true' value='$NAME$ $TYPE$ = iota'>
+  <template description='Iota constant declaration' name='iota' toReformat='true' toShortenFQNames='true' value='const $NAME$ $TYPE$ = iota'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
     <context>
