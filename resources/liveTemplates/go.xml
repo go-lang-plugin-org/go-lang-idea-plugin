@@ -89,7 +89,7 @@
 
   <!--FUNCTIONS-->
   <template description='Main function' name='main' toReformat='true' toShortenFQNames='true'
-            value='func main() &#10;   $END$&#10;'>
+            value='func main() {&#10;   $END$&#10;}'>
     <context>
       <option name='GO' value='true'/>
     </context>
