@@ -9,8 +9,8 @@ import javax.swing.*;
 public interface GoIcons {
   Icon ICON = IconLoader.findIcon("/icons/go.png");
   Icon TYPE = IconLoader.findIcon("/icons/type.png");
-  Icon APPLICATION_RUN = Helper.createIconWithShift(AllIcons.Nodes.RunnableMark);
-  Icon TEST_RUN = Helper.createIconWithShift(AllIcons.Nodes.JunitTestMark);
+  Icon APPLICATION_RUN = Helper.createIconWithShift(ICON, AllIcons.Nodes.RunnableMark);
+  Icon TEST_RUN = Helper.createIconWithShift(ICON, AllIcons.Nodes.JunitTestMark);
   Icon METHOD = AllIcons.Nodes.Method;
   Icon FUNCTION = AllIcons.Nodes.Function;
   Icon VARIABLE = AllIcons.Nodes.Variable;
@@ -22,15 +22,15 @@ public interface GoIcons {
   Icon MODULE_ICON = IconLoader.findIcon("/icons/goModule.png");
 
   class Helper {
-    public static LayeredIcon createIconWithShift(Icon mark) {
+    public static LayeredIcon createIconWithShift(final Icon base, Icon mark) {
       LayeredIcon icon = new LayeredIcon(2) {
         @Override
         public int getIconHeight() {
-          return ICON.getIconHeight();
+          return base.getIconHeight();
         }
       };
-      icon.setIcon(ICON, 0);
-      icon.setIcon(mark, 1, 0, 8);
+      icon.setIcon(base, 0);
+      icon.setIcon(mark, 1, 0, base.getIconWidth() / 2);
       return icon;
     }
   }
