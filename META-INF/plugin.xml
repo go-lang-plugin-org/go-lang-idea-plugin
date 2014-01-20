@@ -15,7 +15,8 @@
   <extensions defaultExtensionNs="com.intellij">
     <stubIndex implementation="com.goide.stubs.index.GoAllNamesIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoFunctionIndex"/>
-    
+    <stubIndex implementation="com.goide.stubs.index.GoTypesIndex"/>
+
     <internalFileTemplate name="Go Application"/>
     <internalFileTemplate name="Go File"/>
 
@@ -37,6 +38,7 @@
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
 
     <gotoSymbolContributor implementation="com.goide.go.GoSymbolContributor"/>
+    <gotoClassContributor implementation="com.goide.go.GoTypeContributor"/>
 
     <sdkType implementation="com.goide.GoSdkType"/>
     
