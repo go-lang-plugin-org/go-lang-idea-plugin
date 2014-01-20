@@ -181,7 +181,7 @@ private TopLevelDeclarationRecover ::= !(';' |'type' | const | func | var)
 
 ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
-ConstSpec ::= ConstDefinitionList [ Type? '=' ExpressionList ] {pin(".*")=1}
+ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionList) ] {pin(".*")=1}
 private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
 ConstDefinition ::= identifier {
   stubClass="com.goide.stubs.GoConstDefinitionStub"

@@ -805,7 +805,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ConstDefinitionList [ Type? '=' ExpressionList ]
+  // ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionList) ]
   public static boolean ConstSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
@@ -819,32 +819,49 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // [ Type? '=' ExpressionList ]
+  // [ ('=' ExpressionList | Type '=' ExpressionList) ]
   private static boolean ConstSpec_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec_1")) return false;
     ConstSpec_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // Type? '=' ExpressionList
+  // '=' ExpressionList | Type '=' ExpressionList
   private static boolean ConstSpec_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec_1_0")) return false;
     boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ConstSpec_1_0_0(builder_, level_ + 1);
+    if (!result_) result_ = ConstSpec_1_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // '=' ExpressionList
+  private static boolean ConstSpec_1_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConstSpec_1_0_0")) return false;
+    boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = ConstSpec_1_0_0(builder_, level_ + 1);
+    result_ = consumeToken(builder_, ASSIGN);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && ExpressionList(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // Type '=' ExpressionList
+  private static boolean ConstSpec_1_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConstSpec_1_0_1")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = Type(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, consumeToken(builder_, ASSIGN));
     result_ = pinned_ && ExpressionList(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
-  }
-
-  // Type?
-  private static boolean ConstSpec_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConstSpec_1_0_0")) return false;
-    Type(builder_, level_ + 1);
-    return true;
   }
 
   /* ********************************************************** */
