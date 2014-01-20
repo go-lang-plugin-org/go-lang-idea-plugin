@@ -39,8 +39,8 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testNoCompletionInsideStrings() {
-      doTestEquals("package foo; func main(){\"<caret>\"}");
-    }
+    doTestEquals("package foo; func main(){\"<caret>\"}");
+  }
 
   public void testKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "continue");
