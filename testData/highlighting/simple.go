@@ -1,5 +1,7 @@
 package main
 
+import <error>""</error>
+
 type aaa aaa
 
 type Boom struct {

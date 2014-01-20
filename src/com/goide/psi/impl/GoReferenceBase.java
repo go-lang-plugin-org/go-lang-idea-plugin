@@ -54,7 +54,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
 
   @Nullable
   protected PsiDirectory resolvePackage(@NotNull String str) {
-    if (str.startsWith("/")) return null;
+    if (str.startsWith("/") || str.isEmpty()) return null;
     for (VirtualFile file : getPathsToLookup()) {
       VirtualFile child = file != null ? file.findFileByRelativePath(str) : null;
       if (child != null) return PsiManager.getInstance(myElement.getProject()).findDirectory(child);
