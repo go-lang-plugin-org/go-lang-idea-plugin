@@ -220,6 +220,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         PsiElement qualifierResolve = calcQualifierResolve(qualifier);
         if (qualifierResolve instanceof GoNamedElement) {
           GoType goType = ((GoNamedElement)qualifierResolve).getGoType();
+          if (goType instanceof GoPointerType) goType = ((GoPointerType)goType).getType();
           GoTypeReferenceExpression expression = goType != null ? goType.getTypeReferenceExpression() : null;
           PsiReference reference = expression != null ? expression.getReference() : null;
           PsiElement resolve = reference != null ? reference.resolve() : null;

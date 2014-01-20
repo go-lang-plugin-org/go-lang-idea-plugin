@@ -42,6 +42,14 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
     doTestEquals("package foo; func main(){\"<caret>\"}");
   }
 
+  public void testStructTypes() throws Exception {
+    doTestInclude("package foo; type AA struct {N AA}; func foo(a AA) {a.<caret>}", "N");
+  }
+
+  public void testStructTypes2() throws Exception {
+    doTestInclude("package foo; type AA struct {N AA}; func foo(a *AA) {a.<caret>}", "N");
+  }
+
   public void testKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "continue");
   }
