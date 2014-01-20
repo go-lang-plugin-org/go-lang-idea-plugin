@@ -19,6 +19,9 @@
 
     <internalFileTemplate name="Go Application"/>
     <internalFileTemplate name="Go File"/>
+    
+    <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
+    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateGenericContextType"/>
 
     <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>
