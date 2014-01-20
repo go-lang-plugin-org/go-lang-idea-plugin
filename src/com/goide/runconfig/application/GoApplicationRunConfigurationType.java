@@ -11,7 +11,7 @@ import com.intellij.openapi.project.Project;
 public class GoApplicationRunConfigurationType extends ConfigurationTypeBase {
 
   public GoApplicationRunConfigurationType() {
-    super("GoApplicationRunConfiguration", "Go Application", "Go application run configuration", GoIcons.ICON);
+    super("GoApplicationRunConfiguration", "Go Application", "Go application run configuration", GoIcons.APPLICATION_RUN);
     addFactory(new GoFactory(this));
   }
 

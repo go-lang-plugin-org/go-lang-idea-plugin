@@ -11,7 +11,7 @@ import com.intellij.openapi.project.Project;
 public class GoTestRunConfigurationType extends ConfigurationTypeBase {
 
   public GoTestRunConfigurationType() {
-    super("GoTestRunConfiguration", "Go Test", "Go test run configuration", GoIcons.ICON);
+    super("GoTestRunConfiguration", "Go Test", "Go test run configuration", GoIcons.TEST_RUN);
     addFactory(new GoFactory(this));
   }
 
