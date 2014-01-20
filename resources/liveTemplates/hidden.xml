@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<templateSet group="Go">
+  <template description='Package declaration' id='go_lang_package' name='package' toReformat='true' toShortenFQNames='true' value='package $END$&#10;'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Import declaration' id='go_lang_import' name='import' toReformat='true' toShortenFQNames='true' value='import "$END$"'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Constant declaration' id='go_lang_const' name='const' toReformat='true' toShortenFQNames='true' value='const $NAME$ $TYPE$ = $VALUE$'>
+    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='For loop' id='go_lang_for' name='for' toReformat='true' toShortenFQNames='true'
+            value='for $CONDITION$ {&#10;   $END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;condition&quot;' expression='' name='CONDITION'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='If statement' id='go_lang_if' name='if' toReformat='true' toShortenFQNames='true'
+            value='if $CONDITION$ {&#10;   $END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;condition&quot;' expression='' name='CONDITION'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description="Switch statement" name="switch" toReformat="true" toShortenFQNames="true"
+            value="switch $EXPRESSION$ {&#10;   $END$&#10;}">
+    <variable alwaysStopAt='true' defaultValue='&quot;expr&quot;' expression='' name='EXPRESSION'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Case clause' id='go_lang_case' name='case' toReformat='true' toShortenFQNames='true'
+            value='case $CONDITION$: &#10;   $END$&#10;'>
+    <variable alwaysStopAt='true' defaultValue='&quot;condition&quot;' expression='' name='CONDITION'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Default clause' id='go_lang_default' name='default' toReformat='true' toShortenFQNames='true'
+            value='default: &#10;   $END$&#10;'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Function or method' id='go_lang_func' name='func' toReformat='true' toShortenFQNames='true'
+            value='func $SIGNATURE$ {   &#10;   $END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='SIGNATURE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Variable declaration' id='go_lang_var' name='var' toReformat='true' toShortenFQNames='true'
+            value='var $NAME$ $TYPE$ = $VALUE$'>
+    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+</templateSet>

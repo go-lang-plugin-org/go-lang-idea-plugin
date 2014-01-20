@@ -19,14 +19,6 @@
       <option name='GO' value='true'/>
     </context>
   </template>
-  <template description='Constant declaration' name='const' toReformat='true' toShortenFQNames='true' value='const $NAME$ $TYPE$ = $VALUE$'>
-    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
-    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
   <template description='Iota constant declaration' name='iota' toReformat='true' toShortenFQNames='true'
             value='const $NAME$ $TYPE$ = iota'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
@@ -37,13 +29,6 @@
   </template>
 
   <!--STATEMENTS-->
-  <template description='For loop' name='for' toReformat='true' toShortenFQNames='true'
-            value='for $CONDITION$ {&#10;   $END$&#10;}'>
-    <variable alwaysStopAt='true' defaultValue='&quot;condition&quot;' expression='' name='CONDITION'/>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
   <template description='For range loop' name='forr' toReformat='true' toShortenFQNames='true'
             value='for $NAME$ := range $COLLECTION$ {&#10;   $END$&#10;}'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
@@ -52,44 +37,10 @@
       <option name='GO' value='true'/>
     </context>
   </template>
-  <template description='If statement' name='if' toReformat='true' toShortenFQNames='true'
-            value='if $CONDITION$ {&#10;   $END$&#10;}'>
-    <variable alwaysStopAt='true' defaultValue='&quot;condition&quot;' expression='' name='CONDITION'/>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
-  <template description="Switch statement" name="switch" toReformat="true" toShortenFQNames="true"
-            value="switch $EXPRESSION$ {&#10;   $END$&#10;}">
-    <variable alwaysStopAt='true' defaultValue='&quot;expr&quot;' expression='' name='EXPRESSION'/>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
-  <template description='Case clause' name='case' toReformat='true' toShortenFQNames='true'
-            value='case $CONDITION$: &#10;   $END$&#10;'>
-    <variable alwaysStopAt='true' defaultValue='&quot;condition&quot;' expression='' name='CONDITION'/>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
-  <template description='Default clause' name='default' toReformat='true' toShortenFQNames='true'
-            value='default: &#10;   $END$&#10;'>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
 
   <!--FUNCTIONS-->
   <template description='Main function' name='main' toReformat='true' toShortenFQNames='true'
             value='func main() {&#10;   $END$&#10;}'>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
-  <template description='Function or method' name='func' toReformat='true' toShortenFQNames='true'
-            value='func $SIGNATURE$ {   &#10;   $END$&#10;}'>
-    <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='SIGNATURE'/>
     <context>
       <option name='GO' value='true'/>
     </context>
@@ -127,15 +78,6 @@
   <template description='Variable declaration :=' name=':' toReformat='true' toShortenFQNames='true'
             value='$NAME$ := $VALUE$'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
-  <template description='Variable declaration' name='var' toReformat='true' toShortenFQNames='true'
-            value='var $NAME$ $TYPE$ = $VALUE$'>
-    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
     <context>
       <option name='GO' value='true'/>

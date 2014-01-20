@@ -12,6 +12,6 @@ public class GoLiveTemplatesProvider implements DefaultLiveTemplatesProvider {
   @Nullable
   @Override
   public String[] getHiddenLiveTemplateFiles() {
-    return null;
+    return new String[]{"/liveTemplates/hidden"};
   }
 }
