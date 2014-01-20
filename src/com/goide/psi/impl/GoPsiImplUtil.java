@@ -10,6 +10,7 @@ import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
@@ -104,6 +105,12 @@ public class GoPsiImplUtil {
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE).withInsertHandler(new SingleCharInsertHandler('.')),
       GoCompletionContributor.PACKAGE_PRIORITY);
+  }
+
+  @NotNull
+  public static LookupElementBuilder createDirectoryLookupElement(@NotNull PsiDirectory dir) {
+    int files = dir.getFiles().length;
+    return LookupElementBuilder.create(dir).withIcon(GoIcons.PACKAGE).withInsertHandler(files == 0 ? new SingleCharInsertHandler('/') : null);
   }
 
   @Nullable

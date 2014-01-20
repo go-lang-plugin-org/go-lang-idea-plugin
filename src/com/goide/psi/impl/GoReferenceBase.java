@@ -63,7 +63,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   }
 
   @NotNull
-  private List<VirtualFile> getPathsToLookup() {
+  protected List<VirtualFile> getPathsToLookup() {
     List<VirtualFile> result = ContainerUtil.newArrayList();
     VirtualFile sdkHome = getSdkHome();
     ContainerUtil.addIfNotNull(result, sdkHome);
