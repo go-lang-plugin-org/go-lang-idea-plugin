@@ -94,8 +94,10 @@ public class GoApplicationGenerator extends WebProjectTemplate {
                     }
 
                     try {
+                        directory.checkCreateFile(module.getProject().getName().concat(".go"));
                         GoTemplatesFactory.createFromTemplate(directory, "main", project.getName().concat(".go"), GoTemplatesFactory.Template.GoAppMain);
-                    } catch (IncorrectOperationException e) {
+                    } catch (IncorrectOperationException ignored) {
+                    } catch (Exception e) {
                         LOG.error(e.getMessage());
                     }
 

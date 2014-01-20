@@ -12,6 +12,7 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
+import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.actions.GoTemplatesFactory;
 import ro.redeul.google.go.config.sdk.GoSdkType;
@@ -61,7 +62,9 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
         });
 
         try {
+            directory.checkCreateFile(module.getProject().getName().concat(".go"));
             GoTemplatesFactory.createFromTemplate(directory, "main", module.getProject().getName().concat(".go"), GoTemplatesFactory.Template.GoAppMain);
+        } catch (IncorrectOperationException ignored) {
         } catch (Exception e) {
             LOG.error(e.getMessage());
         }
