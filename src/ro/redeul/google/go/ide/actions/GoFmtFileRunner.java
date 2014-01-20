@@ -12,7 +12,6 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkAdditionalData;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -28,8 +27,6 @@ import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
-
-import java.io.File;
 
 public class GoFmtFileRunner extends AnAction {
 
@@ -67,7 +64,7 @@ public class GoFmtFileRunner extends AnAction {
         String[] goEnv;
         String goExecName;
 
-        if (sdk.getSdkType() == GoSdkType.getInstance()) {
+        if (sdk.getSdkType() instanceof GoSdkType) {
             GoSdkData sdkData = (GoSdkData) sdk.getSdkAdditionalData();
             if (sdkData == null) {
                 return;
@@ -75,7 +72,7 @@ public class GoFmtFileRunner extends AnAction {
 
             goExecName = sdkData.GO_BIN_PATH;
             goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
-        } else if (sdk.getSdkType() == GoAppEngineSdkType.getInstance()) {
+        } else if (sdk.getSdkType() instanceof GoAppEngineSdkType) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
             if (sdkData == null) {
                 return;
