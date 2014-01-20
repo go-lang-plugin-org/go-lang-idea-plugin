@@ -43,11 +43,11 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testStructTypes() throws Exception {
-    doTestInclude("package foo; type AA struct {N AA}; func foo(a AA) {a.<caret>}", "N");
+    doTestEquals("package foo; type AA struct {N AA}; func foo(a AA) {a.<caret>}", "N");
   }
 
   public void testStructTypes2() throws Exception {
-    doTestInclude("package foo; type AA struct {N AA}; func foo(a *AA) {a.<caret>}", "N");
+    doTestEquals("package foo; type AA struct {N AA}; func foo(a *AA) {a.<caret>}", "N");
   }
 
   public void testKeywords() {
