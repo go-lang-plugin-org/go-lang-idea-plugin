@@ -152,6 +152,8 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     PsiElement fromExistingType = processExistingType(type);
     if (fromExistingType != null) return fromExistingType;
 
+    if (type instanceof GoPointerType) type = ((GoPointerType)type).getType();
+
     GoTypeReferenceExpression refExpr = type.getTypeReferenceExpression();
     PsiReference reference = refExpr != null ? refExpr.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;

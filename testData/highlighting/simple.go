@@ -65,3 +65,10 @@ type Empty struct {
 }
 func (this *Empty) hola() {
 }
+
+type AA struct {
+    N int
+}
+func BenchmarkName(b *AA) {
+     b.N
+}
