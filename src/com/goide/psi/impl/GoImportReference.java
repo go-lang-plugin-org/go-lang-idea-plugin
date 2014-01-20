@@ -11,6 +11,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 public class GoImportReference extends GoReferenceBase {
@@ -26,6 +27,7 @@ public class GoImportReference extends GoReferenceBase {
 
   @NotNull
   public List<LookupElement> complete(@NotNull String str) {
+    if (!str.isEmpty() && !str.endsWith("/")) return Collections.emptyList();
     PsiManager instance = PsiManager.getInstance(getElement().getProject());
     List<LookupElement> result = ContainerUtil.newArrayList();
     for (VirtualFile base : getPathsToLookup()) {
