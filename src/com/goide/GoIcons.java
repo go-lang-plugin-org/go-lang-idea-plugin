@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public interface GoIcons {
   Icon ICON = IconLoader.findIcon("/icons/go.png");
-  Icon TYPE = IconLoader.findIcon("/icons/type.png"); // todo: retina support
+  Icon TYPE = IconLoader.findIcon("/icons/type.png");
   Icon APPLICATION_RUN = Helper.createIconWithShift(AllIcons.Nodes.RunnableMark);
   Icon TEST_RUN = Helper.createIconWithShift(AllIcons.Nodes.JunitTestMark);
   Icon METHOD = AllIcons.Nodes.Method;
