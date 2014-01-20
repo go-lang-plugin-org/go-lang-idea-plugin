@@ -649,6 +649,10 @@ public class GoSdkUtil {
     }
 
     @NotNull
+    public static String getAppEngineDevServer() {
+        return getEnvVariable("APPENGINE_DEV_APPSERVER");
+    }
+    @NotNull
     public static String getSysGoRootPath() {
         return getEnvVariable("GOROOT");
     }

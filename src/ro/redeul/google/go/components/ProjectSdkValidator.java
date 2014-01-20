@@ -75,7 +75,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
 
             if (needsUpgrade) {
                 Notifications.Bus.notify(
-                        new Notification("GoLang SDK validator", "Corrupt Go SDK",
+                        new Notification("Go SDK validator", "Corrupt Go SDK",
                                 getContent("Go", sdk.getName()),
                                 NotificationType.WARNING), myProject);
             }
@@ -88,13 +88,15 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
         sdkList.clear();
         sdkList.addAll(GoSdkUtil.getSdkOfType(GoAppEngineSdkType.getInstance(), jdkTable));
 
+        Boolean hasGAESdk = sdkList.size() > 0;
+
         for (Sdk sdk : sdkList) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
 
             if (sdkData == null || sdkData.TARGET_ARCH == null || sdkData.TARGET_OS == null) {
                 Notifications.Bus.notify(
                         new Notification(
-                                "GoLang AppEngine SDK validator",
+                                "Go AppEngine SDK validator",
                                 "Corrupt Go App Engine SDK",
                                 getContent("Go App Engine", sdk.getName()),
                                 NotificationType.WARNING
@@ -135,7 +137,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
             if (needsUpgrade) {
                 Notifications.Bus.notify(
                         new Notification(
-                                "GoLang AppEngine SDK validator",
+                                "Go AppEngine SDK validator",
                                 "Corrupt Go App Engine SDK",
                                 getContent("Go AppEngine", sdk.getName()),
                                 NotificationType.WARNING), myProject);
@@ -200,6 +202,20 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
             }
         }
 
+        if (hasGAESdk) {
+            String sysAppEngineDevServerPath = GoSdkUtil.getAppEngineDevServer();
+            if (sysAppEngineDevServerPath.isEmpty())
+                Notifications.Bus.notify(
+                        new Notification(
+                                "Go AppEngine SDK validator",
+                                "Problem with env variables",
+                                getInvalidAPPENGINE_DEV_APPSERVEREnvMessage(),
+                                NotificationType.WARNING,
+                                NotificationListener.URL_OPENING_LISTENER),
+                        myProject);
+
+        }
+
         super.initComponent();
     }
 
@@ -224,5 +240,11 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
         return "<html><em>GOPATH</em> environment variable seems to be inside <em>GOROOT</em>.<br/>" +
                 "This means that your system settings are not correct.<br/>" +
                 "See <a href='http://golang.org/doc/code.html#GOPATH'>instructions</a> on how to set it properly.";
+    }
+
+    private String getInvalidAPPENGINE_DEV_APPSERVEREnvMessage() {
+        return "<html><em>APPENGINE_DEV_APPSERVER</em> environment variable is empty or could not be detected properly.<br/>" +
+                "This means that some you might not be able to run properly <code>goapp serve</code> to serve the files while developing.<br/>" +
+                "See <a href='http://git.io/_bt0Hg'>instructions</a> on how to fix this.";
     }
 }
