@@ -45,7 +45,7 @@
     </context>
   </template>
   <template description='For range loop' name='forr' toReformat='true' toShortenFQNames='true'
-            value='for $NAME$ := range $COLLECTIONS$ {&#10;   $END$&#10;}'>
+            value='for $NAME$ := range $COLLECTION$ {&#10;   $END$&#10;}'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='&quot;collection&quot;' expression='' name='COLLECTION'/>
     <context>
