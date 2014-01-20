@@ -7,7 +7,11 @@ import com.goide.psi.GoFile;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.codeInsight.template.TemplateManager;
+import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
+import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -45,7 +49,15 @@ public class GoCompletionContributor extends CompletionContributor {
 
   @NotNull
   private static LookupElement createKeywordLookupElement(@NotNull String keyword) {
-    return LookupElementBuilder.create(keyword).withBoldness(true);
+    return LookupElementBuilder.create(keyword).withBoldness(true).withInsertHandler(new InsertHandler<LookupElement>() {
+      @Override
+      public void handleInsert(InsertionContext context, LookupElement item) {
+        Editor editor = context.getEditor();
+        TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(context.getProject());
+        Runnable expandTemplate = templateManager.prepareTemplate(editor, TemplateSettings.TAB_CHAR, null);
+        if (expandTemplate != null) expandTemplate.run();
+      }
+    });
   }
 
   @NotNull
