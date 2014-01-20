@@ -26,10 +26,19 @@ changing the path to ```idea.sh``` to the appropriate path of course.
 --
 
 If you are launching the IDE the normal application launcher and you get the error message
-about missing paths then you need to add ``` GOROOT ``` and ``` GOPATH ``` to your ``` ~/.profile ```
-and then use: ```` launchctl setenv GOPATH $GOPATH ````.
+about missing paths then you need to add ```GOPATH``` and ```GOROOT``` in ```/etc/launchd.conf``` to match the
+values from your ```.bashrc``` or ```.zshrc```.
+
+Please note that ```/etc/launchd.conf``` does not exist by default, so you will need to create it with the following:
+
+```bash
+setenv GOROOT /usr/local/go
+setenv GOPATH /Users/yourname/go
+```
+
 You can view more [details here](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/318#issuecomment-31303939).
 
+You can get more details about launchd.conf in its respective [launchd.conf(5) Mac OS X Manual Page](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man5/launchd.conf.5.html).
 
 NOTE
 ===
