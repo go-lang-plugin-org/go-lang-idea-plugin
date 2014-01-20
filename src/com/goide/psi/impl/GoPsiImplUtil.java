@@ -3,6 +3,7 @@ package com.goide.psi.impl;
 import com.goide.GoIcons;
 import com.goide.completion.GoCompletionContributor;
 import com.goide.psi.*;
+import com.goide.util.SingleCharInsertHandler;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
@@ -100,7 +101,9 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createImportLookupElement(@NotNull String i) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE), GoCompletionContributor.PACKAGE_PRIORITY);
+    return PrioritizedLookupElement.withPriority(
+      LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE).withInsertHandler(new SingleCharInsertHandler('.')),
+      GoCompletionContributor.PACKAGE_PRIORITY);
   }
 
   @Nullable

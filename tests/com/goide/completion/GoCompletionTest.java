@@ -3,6 +3,8 @@ package com.goide.completion;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.testFramework.UsefulTestCase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +50,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
 
   public void testStructTypes2() throws Exception {
     doTestEquals("package foo; type AA struct {N AA}; func foo(a *AA) {a.<caret>}", "N");
+  }
+
+  public void testImports() throws Exception {
+    doCheckResult("package foo; import imp \"\"; func foo(a im<caret>) {}", "package foo; import imp \"\"; func foo(a imp.) {}");
   }
 
   public void testKeywords() {
@@ -99,5 +105,14 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
 
   protected void doTestEquals(String txt, String... variants) {
     doTestVariants(txt, CompletionType.BASIC, 1, CheckType.EQUALS, variants);
+  }
+
+  protected void doCheckResult(@NotNull String before, @NotNull String after) { doCheckResult(before, after, null); }
+
+  protected void doCheckResult(@NotNull String before, @NotNull String after, @Nullable Character c) {
+    myFixture.configureByText("a.go", before);
+    myFixture.completeBasic();
+    if (c != null) myFixture.type(c);
+    myFixture.checkResult(after);
   }
 }
