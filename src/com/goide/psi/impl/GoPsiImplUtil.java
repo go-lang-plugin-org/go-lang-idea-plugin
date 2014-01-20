@@ -23,6 +23,11 @@ import javax.swing.*;
 import java.util.List;
 
 public class GoPsiImplUtil {
+  private static class Lazy {
+    private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
+    private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
+  }
+
   @Nullable
   public static GoTypeReferenceExpression getQualifier(@NotNull GoTypeReferenceExpression o) {
     return PsiTreeUtil.getChildOfType(o, GoTypeReferenceExpression.class);
@@ -78,7 +83,8 @@ public class GoPsiImplUtil {
     if (signature != null) {
       paramsCount = signature.getParameters().getParameterDeclarationList().size();
     }
-    InsertHandler<LookupElement> handler = paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
+    InsertHandler<LookupElement> handler =
+      paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(f).withIcon(icon).withInsertHandler(handler),
                                                  GoCompletionContributor.FUNCTION_PRIORITY);
   }
@@ -103,14 +109,14 @@ public class GoPsiImplUtil {
   @NotNull
   public static LookupElement createImportLookupElement(@NotNull String i) {
     return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE).withInsertHandler(new SingleCharInsertHandler('.')),
-      GoCompletionContributor.PACKAGE_PRIORITY);
+      LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE).withInsertHandler(
+        Lazy.PACKAGE_INSERT_HANDLER), GoCompletionContributor.PACKAGE_PRIORITY);
   }
 
   @NotNull
   public static LookupElementBuilder createDirectoryLookupElement(@NotNull PsiDirectory dir) {
     int files = dir.getFiles().length;
-    return LookupElementBuilder.create(dir).withIcon(GoIcons.PACKAGE).withInsertHandler(files == 0 ? new SingleCharInsertHandler('/') : null);
+    return LookupElementBuilder.create(dir).withIcon(GoIcons.PACKAGE).withInsertHandler(files == 0 ? Lazy.DIR_INSERT_HANDLER : null);
   }
 
   @Nullable
