@@ -20,14 +20,14 @@
   </template>
   <template description='For loop' id='go_lang_for' name='for' toReformat='true' toShortenFQNames='true'
             value='for $CONDITION$ {&#10;   $END$&#10;}'>
-    <variable alwaysStopAt='true' defaultValue='&quot;condition&quot;' expression='' name='CONDITION'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='CONDITION'/>
     <context>
       <option name='GO' value='true'/>
     </context>
   </template>
   <template description='If statement' id='go_lang_if' name='if' toReformat='true' toShortenFQNames='true'
             value='if $CONDITION$ {&#10;   $END$&#10;}'>
-    <variable alwaysStopAt='true' defaultValue='&quot;condition&quot;' expression='' name='CONDITION'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='CONDITION'/>
     <context>
       <option name='GO' value='true'/>
     </context>
@@ -41,7 +41,7 @@
   </template>
   <template description='Case clause' id='go_lang_case' name='case' toReformat='true' toShortenFQNames='true'
             value='case $CONDITION$: &#10;   $END$&#10;'>
-    <variable alwaysStopAt='true' defaultValue='&quot;condition&quot;' expression='' name='CONDITION'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='CONDITION'/>
     <context>
       <option name='GO' value='true'/>
     </context>
