@@ -810,11 +810,13 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ConstSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = ConstDefinitionList(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
     result_ = result_ && ConstSpec_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, CONST_SPEC, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, CONST_SPEC, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // [ Type? '=' ExpressionList ]
@@ -828,12 +830,14 @@ public class GoParser implements PsiParser {
   private static boolean ConstSpec_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConstSpec_1_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = ConstSpec_1_0_0(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, ASSIGN);
-    result_ = result_ && ExpressionList(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, consumeToken(builder_, ASSIGN));
+    result_ = pinned_ && ExpressionList(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // Type?
@@ -2078,6 +2082,25 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // ConstDeclaration
+  //   | TypeDeclaration
+  //   | VarDeclaration
+  //   | FunctionDeclaration
+  //   | MethodDeclaration
+  static boolean OneOfDeclarations(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "OneOfDeclarations")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ConstDeclaration(builder_, level_ + 1);
+    if (!result_) result_ = TypeDeclaration(builder_, level_ + 1);
+    if (!result_) result_ = VarDeclaration(builder_, level_ + 1);
+    if (!result_) result_ = FunctionDeclaration(builder_, level_ + 1);
+    if (!result_) result_ = MethodDeclaration(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // package identifier
   public static boolean PackageClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "PackageClause")) return false;
@@ -2915,37 +2938,17 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (ConstDeclaration
-  //   | TypeDeclaration
-  //   | VarDeclaration
-  //   | FunctionDeclaration
-  //   | MethodDeclaration) semi
+  // OneOfDeclarations semi
   static boolean TopLevelDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TopLevelDeclaration")) return false;
     boolean result_ = false;
+    boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = TopLevelDeclaration_0(builder_, level_ + 1);
+    result_ = OneOfDeclarations(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
     result_ = result_ && semi(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, false, TopLevelDeclarationRecover_parser_);
-    return result_;
-  }
-
-  // ConstDeclaration
-  //   | TypeDeclaration
-  //   | VarDeclaration
-  //   | FunctionDeclaration
-  //   | MethodDeclaration
-  private static boolean TopLevelDeclaration_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TopLevelDeclaration_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = ConstDeclaration(builder_, level_ + 1);
-    if (!result_) result_ = TypeDeclaration(builder_, level_ + 1);
-    if (!result_) result_ = VarDeclaration(builder_, level_ + 1);
-    if (!result_) result_ = FunctionDeclaration(builder_, level_ + 1);
-    if (!result_) result_ = MethodDeclaration(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, TopLevelDeclarationRecover_parser_);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */

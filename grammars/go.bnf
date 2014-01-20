@@ -170,17 +170,18 @@ SimpleStatement ::=
   | ShortVarDeclaration
   | Expression ['++' | '--']
 
-private TopLevelDeclaration ::=
-    (ConstDeclaration
+private TopLevelDeclaration ::= OneOfDeclarations semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
+private OneOfDeclarations ::=
+    ConstDeclaration
   | TypeDeclaration
   | VarDeclaration
   | FunctionDeclaration
-  | MethodDeclaration) semi {recoverWhile=TopLevelDeclarationRecover}
+  | MethodDeclaration
 private TopLevelDeclarationRecover ::= !(';' |'type' | const | func | var)
 
 ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
-ConstSpec ::= ConstDefinitionList [ Type? '=' ExpressionList ]
+ConstSpec ::= ConstDefinitionList [ Type? '=' ExpressionList ] {pin(".*")=1}
 private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
 ConstDefinition ::= identifier {
   stubClass="com.goide.stubs.GoConstDefinitionStub"
