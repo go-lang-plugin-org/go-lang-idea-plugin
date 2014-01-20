@@ -6,7 +6,7 @@
       <option name='GO' value='true'/>
     </context>
   </template>
-  <template description='Package declaration' name='p' toReformat='true' toShortenFQNames='true' value='package &#10;'>
+  <template description='Package declaration' name='p' toReformat='true' toShortenFQNames='true' value='package $END$&#10;'>
     <context>
       <option name='GO' value='true'/>
     </context>
@@ -48,13 +48,6 @@
             value='for $NAME$ := range $COLLECTION$ {&#10;   $END$&#10;}'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='&quot;collection&quot;' expression='' name='COLLECTION'/>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
-  <template description='If statement' name='if' toReformat='true' toShortenFQNames='true'
-            value='if $CONDITION$ {&#10;   $END$&#10;}'>
-    <variable alwaysStopAt='true' defaultValue='&quot;condition&quot;' expression='' name='CONDITION'/>
     <context>
       <option name='GO' value='true'/>
     </context>
