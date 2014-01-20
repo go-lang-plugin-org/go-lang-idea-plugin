@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoLiveTemplateGenericContextType extends GoLiveTemplateContextType {
   protected GoLiveTemplateGenericContextType() {
-    super("Go", "Go", EverywhereContextType.class);
+    super("GO", "Go", EverywhereContextType.class);
   }
 
   @Override
