@@ -152,7 +152,6 @@ public class GoPsiImplUtil {
       if (expression instanceof GoReferenceExpression) {
         PsiReference reference = expression.getReference();
         PsiElement resolve = reference != null ? reference.resolve() : null;
-        System.out.println(o.getText() + " " + resolve);
         if (resolve instanceof GoFunctionOrMethodDeclaration) {
           GoSignature signature = ((GoFunctionOrMethodDeclaration)resolve).getSignature();
           GoResult result = signature != null ? signature.getResult() : null;
