@@ -181,9 +181,7 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
                 }
 
                 commandLine.getEnvironment().putAll(sysEnv);
-                // TODO Confirm we can remove this
-                // https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/547#issuecomment-32808515
-                //commandLine.setWorkDirectory(workingDir);
+                commandLine.setWorkDirectory(workingDir);
 
                 return GoApplicationProcessHandler.runCommandLine(commandLine);
             }
