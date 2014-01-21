@@ -13,6 +13,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -267,6 +268,23 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
       for (GoFieldDeclaration declaration : ((GoStructType)type).getFieldDeclarationList()) {
         for (GoFieldDefinition d : declaration.getFieldDefinitionList()) {
           result.add(GoPsiImplUtil.createVariableLikeLookupElement(d));
+        }
+      }
+
+      final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
+      type.accept(new GoRecursiveVisitor() {
+        @Override
+        public void visitAnonymousField(@NotNull GoAnonymousField o) {
+          refs.add(o.getTypeReferenceExpression());
+        }
+      });
+      for (GoTypeReferenceExpression ref : refs) {
+        PsiReference reference = ref.getReference();
+        PsiElement typeSpec = reference != null ? reference.resolve() : null;
+        if (typeSpec != null && !PsiTreeUtil.isAncestor(typeSpec, type, true)) {
+          if (typeSpec instanceof GoTypeSpec) {
+            processInType(result, typeSpec, ((GoTypeSpec)typeSpec).getType());
+          }
         }
       }
     }

@@ -66,6 +66,15 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
     doTestEquals("package foo; type T interface{}; func (t T) f() {t.<caret>}", "f");
   }
 
+  public void testPreventStackOverflow() throws Exception {
+    doTestEquals("package foo; type E struct {*E}; func (e E) foo() {}; func main() {e := E{}; e.<caret>}", "foo");
+  }
+
+  public void testNestedStructures() throws Exception {
+    doTestEquals("package foo; type E struct {}; type B struct {E}; func (e E) foo() {}; func (b B) bar(){}" +
+                 "func main() {b := B{}; b.<caret>}", "foo", "bar");
+  }
+
   public void testNoDuplicates() throws Exception {
     doTestInclude("package foo; type a struct {<caret>", "a");
     List<String> stringList = myFixture.getLookupElementStrings();
