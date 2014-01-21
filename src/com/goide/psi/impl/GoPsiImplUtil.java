@@ -126,11 +126,9 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getGoType(@NotNull GoExpression o) {
-    if (o instanceof GoUnaryTypeCreateExpr) {
-      GoTypeReferenceExpression expression = ((GoUnaryTypeCreateExpr)o).getTypeReferenceExpression();
-      PsiReference reference = expression.getReference();
-      PsiElement resolve = reference != null ? reference.resolve() : null;
-      if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getType();
+    if (o instanceof GoUnaryExpr) {
+      GoExpression expression = ((GoUnaryExpr)o).getExpression();
+      return expression != null ? getGoType(expression) : null;
     }
     else if (o instanceof GoCompositeLit) {
       GoTypeReferenceExpression expression = ((GoCompositeLit)o).getLiteralTypeExpr().getTypeReferenceExpression();

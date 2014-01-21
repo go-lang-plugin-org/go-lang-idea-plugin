@@ -366,30 +366,32 @@ GO_FILE
                 PsiElement(identifier)('Send')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                UNARY_TYPE_CREATE_EXPR
+                UNARY_EXPR
                   PsiElement(&)('&')
-                  TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('Cmd')
-                  LITERAL_VALUE
-                    PsiElement({)('{')
-                    ELEMENT
-                      KEY
-                        FIELD_NAME
-                          PsiElement(identifier)('U')
-                      PsiElement(:)(':')
-                      VALUE
-                        REFERENCE_EXPRESSION
-                          PsiElement(identifier)('parsed')
-                    PsiElement(,)(',')
-                    ELEMENT
-                      KEY
-                        FIELD_NAME
-                          PsiElement(identifier)('M')
-                      PsiElement(:)(':')
-                      VALUE
-                        REFERENCE_EXPRESSION
-                          PsiElement(identifier)('method')
-                    PsiElement(})('}')
+                  COMPOSITE_LIT
+                    LITERAL_TYPE_EXPR
+                      TYPE_REFERENCE_EXPRESSION
+                        PsiElement(identifier)('Cmd')
+                    LITERAL_VALUE
+                      PsiElement({)('{')
+                      ELEMENT
+                        KEY
+                          FIELD_NAME
+                            PsiElement(identifier)('U')
+                        PsiElement(:)(':')
+                        VALUE
+                          REFERENCE_EXPRESSION
+                            PsiElement(identifier)('parsed')
+                      PsiElement(,)(',')
+                      ELEMENT
+                        KEY
+                          FIELD_NAME
+                            PsiElement(identifier)('M')
+                        PsiElement(:)(':')
+                        VALUE
+                          REFERENCE_EXPRESSION
+                            PsiElement(identifier)('method')
+                      PsiElement(})('}')
                 PsiElement())(')')
         PsiElement(;)(';')
         CONDITIONAL_EXPR
