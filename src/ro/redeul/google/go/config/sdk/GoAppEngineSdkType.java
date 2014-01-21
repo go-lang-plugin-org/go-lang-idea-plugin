@@ -171,7 +171,11 @@ public class GoAppEngineSdkType extends SdkType {
             }
         };
 
-        descriptor.setTitle(GoBundle.message("go.sdk.appengine.configure.title", getPresentableName()));
+        try {
+            descriptor.setTitle(GoBundle.message("go.sdk.appengine.configure.title", getPresentableName()));
+        } catch (NoSuchMethodError ignored) {
+
+        }
         return descriptor;
     }
 

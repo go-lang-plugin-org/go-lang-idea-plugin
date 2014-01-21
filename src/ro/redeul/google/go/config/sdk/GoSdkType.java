@@ -66,7 +66,11 @@ public class GoSdkType extends SdkType {
           }
         };
 
-        descriptor.setTitle(GoBundle.message("go.sdk.configure.title", getPresentableName()));
+        try {
+            descriptor.setTitle(GoBundle.message("go.sdk.configure.title", getPresentableName()));
+        } catch (NoSuchMethodError ignored) {
+
+        }
         return descriptor;
     }
 
