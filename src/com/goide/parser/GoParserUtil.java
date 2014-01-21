@@ -4,10 +4,7 @@ import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.util.Key;
-import com.intellij.util.containers.ContainerUtil;
 import gnu.trove.TObjectIntHashMap;
-
-import java.util.Set;
 
 public class GoParserUtil extends GeneratedParserUtilBase {
   private static final Key<TObjectIntHashMap<String>> MODES_KEY = Key.create("MODES_KEY");
