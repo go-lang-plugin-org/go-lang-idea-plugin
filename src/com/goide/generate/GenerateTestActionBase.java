@@ -35,7 +35,7 @@ abstract public class GenerateTestActionBase extends CodeInsightAction implement
   @Override
   protected boolean isValidForFile(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
     PsiElement at = file.findElementAt(editor.getCaretModel().getOffset());
-    return at != null && at.getParent() instanceof GoFile && GoTestFinder.isTestFile(file);
+    return (at == null || at.getParent() instanceof GoFile) && GoTestFinder.isTestFile(file);
   }
 
   @Nullable
