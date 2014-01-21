@@ -238,11 +238,10 @@ OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=R
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier] }
 
-CompositeLit ::= Expression LiteralValue
+CompositeLit ::= LiteralTypeExpr LiteralValue
 LiteralTypeExpr ::=
     StructType
   | ArrayOrSliceType
-  | '[' '...' ']' Type
   | MapType
   | TypeName
 
@@ -257,7 +256,7 @@ Value ::= Expression | LiteralValue
 FunctionLit ::= func Signature Block {pin=1}
 
 Expression ::=
-     OrExpr
+    OrExpr
   | AndExpr
   | ConditionalExpr
   | AddExpr
@@ -281,8 +280,8 @@ BuiltinCallExpr ::= ReferenceExpression '(' [ BuiltinArgs ','? ] ')'
 BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
 
 private MaxGroup ::=
-    OperandName
-  | LiteralTypeExpr
+    CompositeLit
+  | OperandName
   | CallExpr
   | BuiltinCallExpr
   | TypeAssertionExpr
@@ -290,8 +289,8 @@ private MaxGroup ::=
   | MethodExpr
   | IndexExpr
   | Literal
+  | LiteralTypeExpr
   | FunctionLit
-  | CompositeLit
 
 private rel_op ::= '==' | '!=' | '<' | '<=' | '>' | '>='
 private add_op ::= '+' | '-' | '|' | '^'

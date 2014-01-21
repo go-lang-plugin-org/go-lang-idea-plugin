@@ -64,7 +64,7 @@ public class GoParser implements PsiParser {
       result_ = CommClause(builder_, 0);
     }
     else if (root_ == COMPOSITE_LIT) {
-      result_ = Expression(builder_, 0, 6);
+      result_ = CompositeLit(builder_, 0);
     }
     else if (root_ == CONDITIONAL_EXPR) {
       result_ = Expression(builder_, 0, 1);
@@ -3734,7 +3734,7 @@ public class GoParser implements PsiParser {
   // 4: BINARY(MulExpr)
   // 5: ATOM(UnaryTypeCreateExpr) PREFIX(UnaryExpr)
   // 6: PREFIX(ConversionExpr)
-  // 7: ATOM(OperandName) ATOM(LiteralTypeExpr) POSTFIX(CallExpr) POSTFIX(BuiltinCallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) ATOM(MethodExpr) POSTFIX(IndexExpr) ATOM(Literal) ATOM(FunctionLit) POSTFIX(CompositeLit)
+  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(CallExpr) POSTFIX(BuiltinCallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) ATOM(MethodExpr) POSTFIX(IndexExpr) ATOM(Literal) ATOM(LiteralTypeExpr) ATOM(FunctionLit)
   // 8: PREFIX(ParenthesesExpr)
   public static boolean Expression(PsiBuilder builder_, int level_, int priority_) {
     if (!recursion_guard_(builder_, level_, "Expression")) return false;
@@ -3744,10 +3744,11 @@ public class GoParser implements PsiParser {
     result_ = UnaryTypeCreateExpr(builder_, level_ + 1);
     if (!result_) result_ = UnaryExpr(builder_, level_ + 1);
     if (!result_) result_ = ConversionExpr(builder_, level_ + 1);
+    if (!result_) result_ = CompositeLit(builder_, level_ + 1);
     if (!result_) result_ = OperandName(builder_, level_ + 1);
-    if (!result_) result_ = LiteralTypeExpr(builder_, level_ + 1);
     if (!result_) result_ = MethodExpr(builder_, level_ + 1);
     if (!result_) result_ = Literal(builder_, level_ + 1);
+    if (!result_) result_ = LiteralTypeExpr(builder_, level_ + 1);
     if (!result_) result_ = FunctionLit(builder_, level_ + 1);
     if (!result_) result_ = ParenthesesExpr(builder_, level_ + 1);
     pinned_ = result_;
@@ -3812,11 +3813,6 @@ public class GoParser implements PsiParser {
         result_ = true;
         marker_.drop();
         left_marker_.precede().done(INDEX_EXPR);
-      }
-      else if (priority_ < 7 && LiteralValue(builder_, level_ + 1)) {
-        result_ = true;
-        marker_.drop();
-        left_marker_.precede().done(COMPOSITE_LIT);
       }
       else {
         exit_section_(builder_, marker_, null, false);
@@ -3921,6 +3917,17 @@ public class GoParser implements PsiParser {
     return true;
   }
 
+  // LiteralTypeExpr LiteralValue
+  public static boolean CompositeLit(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "CompositeLit")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<composite lit>");
+    result_ = LiteralTypeExpr(builder_, level_ + 1);
+    result_ = result_ && LiteralValue(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, COMPOSITE_LIT, result_, false, null);
+    return result_;
+  }
+
   // ReferenceExpression QualifiedReferenceExpression?
   public static boolean OperandName(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "OperandName")) return false;
@@ -3938,37 +3945,6 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "OperandName_1")) return false;
     QualifiedReferenceExpression(builder_, level_ + 1);
     return true;
-  }
-
-  // StructType
-  //   | ArrayOrSliceType
-  //   | '[' '...' ']' Type
-  //   | MapType
-  //   | TypeName
-  public static boolean LiteralTypeExpr(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "LiteralTypeExpr")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<literal type expr>");
-    result_ = StructType(builder_, level_ + 1);
-    if (!result_) result_ = ArrayOrSliceType(builder_, level_ + 1);
-    if (!result_) result_ = LiteralTypeExpr_2(builder_, level_ + 1);
-    if (!result_) result_ = MapType(builder_, level_ + 1);
-    if (!result_) result_ = TypeName(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, LITERAL_TYPE_EXPR, result_, false, null);
-    return result_;
-  }
-
-  // '[' '...' ']' Type
-  private static boolean LiteralTypeExpr_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "LiteralTypeExpr_2")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, LBRACK);
-    result_ = result_ && consumeToken(builder_, TRIPLE_DOT);
-    result_ = result_ && consumeToken(builder_, RBRACK);
-    result_ = result_ && Type(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
   }
 
   // '(' [ BuiltinArgs ','? ] ')'
@@ -4134,6 +4110,22 @@ public class GoParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, STRING);
     if (!result_) result_ = consumeToken(builder_, CHAR);
     exit_section_(builder_, level_, marker_, LITERAL, result_, false, null);
+    return result_;
+  }
+
+  // StructType
+  //   | ArrayOrSliceType
+  //   | MapType
+  //   | TypeName
+  public static boolean LiteralTypeExpr(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "LiteralTypeExpr")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<literal type expr>");
+    result_ = StructType(builder_, level_ + 1);
+    if (!result_) result_ = ArrayOrSliceType(builder_, level_ + 1);
+    if (!result_) result_ = MapType(builder_, level_ + 1);
+    if (!result_) result_ = TypeName(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, LITERAL_TYPE_EXPR, result_, false, null);
     return result_;
   }
 

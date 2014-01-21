@@ -33,22 +33,4 @@ public class GoLiteralTypeExprImpl extends GoExpressionImpl implements GoLiteral
     return findChildByClass(GoTypeReferenceExpression.class);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getLbrack() {
-    return findChildByType(LBRACK);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRbrack() {
-    return findChildByType(RBRACK);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getTripleDot() {
-    return findChildByType(TRIPLE_DOT);
-  }
-
 }

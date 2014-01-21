@@ -13,13 +13,4 @@ public interface GoLiteralTypeExpr extends GoExpression {
   @Nullable
   GoTypeReferenceExpression getTypeReferenceExpression();
 
-  @Nullable
-  PsiElement getLbrack();
-
-  @Nullable
-  PsiElement getRbrack();
-
-  @Nullable
-  PsiElement getTripleDot();
-
 }
