@@ -48,6 +48,11 @@ func foo() {
     a := &A{}
     b := &B{b:"bbb"}
     e := &Empty{}
+    y := make(A, 10)
+    z := new(A)
+
+    y.hola()
+    z.hola()
 
     a.hola()
     b.hola()
@@ -75,7 +80,10 @@ func BenchmarkName(b *AA) {
      b.N
 }
 
-func make(o interface{}) {
+func make(o interface{}, args ...interface{}) {
+}
+
+func new(o interface{}) {
 }
 
 func concurrently(integers []int) []int {

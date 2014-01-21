@@ -133,10 +133,27 @@ public class GoPsiImplUtil {
     }
     else if (o instanceof GoCompositeLit) {
       GoTypeReferenceExpression expression = ((GoCompositeLit)o).getLiteralTypeExpr().getTypeReferenceExpression();
-      PsiReference reference = expression != null ? expression.getReference() : null;
-      PsiElement resolve = reference != null ? reference.resolve() : null;
-      if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getType();
+      return getType(expression);
     }
+    else if (o instanceof GoBuiltinCallExpr) {
+      String text = ((GoBuiltinCallExpr)o).getReferenceExpression().getText();
+      if ("new".equals(text) || "make".equals(text)) {
+        GoBuiltinArgs args = ((GoBuiltinCallExpr)o).getBuiltinArgs();
+        GoType type = args != null ? args.getType() : null;
+        if (type != null) {
+          GoTypeReferenceExpression expression = type.getTypeReferenceExpression();
+          return getType(expression);
+        }
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  private static GoType getType(@Nullable GoTypeReferenceExpression expression) {
+    PsiReference reference = expression != null ? expression.getReference() : null;
+    PsiElement resolve = reference != null ? reference.resolve() : null;
+    if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getType();
     return null;
   }
 
