@@ -82,13 +82,23 @@ public class GoPsiImplUtil {
     Icon icon = f instanceof GoMethodDeclaration ? GoIcons.METHOD : GoIcons.FUNCTION;
     GoSignature signature = f.getSignature();
     int paramsCount = 0;
+    String resultText = "";
+    String paramText = "";
     if (signature != null) {
       paramsCount = signature.getParameters().getParameterDeclarationList().size();
+      GoResult result = signature.getResult();
+      paramText = signature.getParameters().getText();
+      if (result != null) resultText = result.getText();
     }
-    InsertHandler<LookupElement> handler =
-      paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(f).withIcon(icon).withInsertHandler(handler),
-                                                 GoCompletionContributor.FUNCTION_PRIORITY);
+
+    InsertHandler<LookupElement> handler = paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
+    return PrioritizedLookupElement.withPriority(
+      LookupElementBuilder.create(f)
+        .withIcon(icon)
+        .withInsertHandler(handler)
+        .withTypeText(resultText, true)
+        .withPresentableText(f.getName() + paramText),
+      GoCompletionContributor.FUNCTION_PRIORITY);
   }
 
   @NotNull
