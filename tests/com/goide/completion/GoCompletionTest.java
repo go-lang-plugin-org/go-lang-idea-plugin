@@ -62,6 +62,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "continue");
   }
 
+  public void testMethods() throws Exception {
+    doTestEquals("package foo; type T interface{}; func (t T) f() {t.<caret>}", "f");
+  }
+
   public void testNoDuplicates() throws Exception {
     doTestInclude("package foo; type a struct {<caret>", "a");
     List<String> stringList = myFixture.getLookupElementStrings();

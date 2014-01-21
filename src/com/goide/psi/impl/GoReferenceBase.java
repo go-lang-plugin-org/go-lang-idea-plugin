@@ -185,7 +185,6 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         GoNamedElement result = processor.getResult();
         if (result != null) return result;
 
-
         final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
         type.accept(new GoRecursiveVisitor() {
           @Override
@@ -244,37 +243,46 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         if (qualifierResolve instanceof GoNamedElement) {
           GoType goType = ((GoNamedElement)qualifierResolve).getGoType();
           if (goType instanceof GoPointerType) goType = ((GoPointerType)goType).getType();
+
+          if (goType != null) {
+            processInType(result, goType.getParent(), goType);
+          }
+
           GoTypeReferenceExpression expression = goType != null ? goType.getTypeReferenceExpression() : null;
           PsiReference reference = expression != null ? expression.getReference() : null;
           PsiElement resolve = reference != null ? reference.resolve() : null;
           if (resolve instanceof GoTypeSpec) {
             GoType type = ((GoTypeSpec)resolve).getType();
-            if (type instanceof GoStructType) {
-              for (GoFieldDeclaration declaration : ((GoStructType)type).getFieldDeclarationList()) {
-                for (GoFieldDefinition d : declaration.getFieldDefinitionList()) {
-                  result.add(GoPsiImplUtil.createVariableLikeLookupElement(d));
-                }
-              }
-            }
-            
-            PsiFile typeFile = resolve.getContainingFile().getOriginalFile();
-            if (typeFile instanceof GoFile) { // todo: process the whole package
-              List<GoMethodDeclaration> methods = ((GoFile)typeFile).getMethods();
-              for (GoMethodDeclaration method : methods) {
-                GoTypeReferenceExpression e = method.getReceiver().getType().getTypeReferenceExpression();
-                PsiReference reference1 = e != null ? e.getReference() : null;
-                PsiElement resolve1 = reference1 != null ? reference1.resolve() : null;
-                if (resolve1 != null && resolve.textMatches(resolve1)) { // todo: better equality predicate
-                  result.add(GoPsiImplUtil.createFunctionOrMethodLookupElement(method));
-                }
-              }
-            }
+            processInType(result, resolve, type);
           }
         }
         processDirectory(result, getDirectory(qualifier), null, false);
       }
     }
     return ArrayUtil.toObjectArray(result);
+  }
+
+  private static void processInType(List<LookupElement> result, PsiElement resolve, GoType type) {
+    if (type instanceof GoStructType) {
+      for (GoFieldDeclaration declaration : ((GoStructType)type).getFieldDeclarationList()) {
+        for (GoFieldDefinition d : declaration.getFieldDefinitionList()) {
+          result.add(GoPsiImplUtil.createVariableLikeLookupElement(d));
+        }
+      }
+    }
+
+    PsiFile typeFile = resolve.getContainingFile().getOriginalFile();
+    if (typeFile instanceof GoFile) { // todo: process the whole package
+      List<GoMethodDeclaration> methods = ((GoFile)typeFile).getMethods();
+      for (GoMethodDeclaration method : methods) {
+        GoTypeReferenceExpression e = method.getReceiver().getType().getTypeReferenceExpression();
+        PsiReference reference1 = e != null ? e.getReference() : null;
+        PsiElement resolve1 = reference1 != null ? reference1.resolve() : null;
+        if (resolve1 != null && resolve.textMatches(resolve1)) { // todo: better equality predicate
+          result.add(GoPsiImplUtil.createFunctionOrMethodLookupElement(method));
+        }
+      }
+    }
   }
 
   @Nullable
