@@ -137,7 +137,7 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
         }
 
         if (adminPort == null || adminPort.isEmpty()) {
-            adminPort = "8080";
+            adminPort = "8000";
         }
 
         CommandLineState state = new CommandLineState(env) {
