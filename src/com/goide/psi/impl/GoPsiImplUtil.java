@@ -16,6 +16,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -143,6 +144,22 @@ public class GoPsiImplUtil {
         if (type != null) {
           GoTypeReferenceExpression expression = type.getTypeReferenceExpression();
           return getType(expression);
+        }
+      }
+    }
+    else if (o instanceof GoCallExpr) {
+      GoExpression expression = ((GoCallExpr)o).getExpression();
+      if (expression instanceof GoReferenceExpression) {
+        PsiReference reference = expression.getReference();
+        PsiElement resolve = reference != null ? reference.resolve() : null;
+        System.out.println(o.getText() + " " + resolve);
+        if (resolve instanceof GoFunctionOrMethodDeclaration) {
+          GoSignature signature = ((GoFunctionOrMethodDeclaration)resolve).getSignature();
+          GoResult result = signature != null ? signature.getResult() : null;
+          if (result != null) {
+            List<GoType> list = result.getTypeList();
+            return ContainerUtil.getFirstItem(list); // todo: multiply types
+          }
         }
       }
     }

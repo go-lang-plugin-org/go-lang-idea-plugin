@@ -236,7 +236,7 @@ Literal ::=
 OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
 
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
-ReferenceExpression ::= identifier { methods=[getReference getQualifier] }
+ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
 
 CompositeLit ::= LiteralTypeExpr LiteralValue
 LiteralTypeExpr ::=

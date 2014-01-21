@@ -11,7 +11,7 @@ import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 import com.intellij.psi.PsiReference;
 
-public class GoReferenceExpressionImpl extends GoCompositeElementImpl implements GoReferenceExpression {
+public class GoReferenceExpressionImpl extends GoExpressionImpl implements GoReferenceExpression {
 
   public GoReferenceExpressionImpl(ASTNode node) {
     super(node);

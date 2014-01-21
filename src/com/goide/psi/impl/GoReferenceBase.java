@@ -207,7 +207,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         GoTypeReferenceExpression e = method.getReceiver().getType().getTypeReferenceExpression();
         PsiReference reference1 = e != null ? e.getReference() : null;
         PsiElement resolve1 = reference1 != null ? reference1.resolve() : null;
-        if (type.getParent().equals(resolve1)) return method;
+        if (resolve1 != null && type.getParent().textMatches(resolve1)) return method;
       }
     }
     return null;

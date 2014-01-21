@@ -271,7 +271,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitReferenceExpression(@NotNull GoReferenceExpression o) {
-    visitCompositeElement(o);
+    visitExpression(o);
   }
 
   public void visitResult(@NotNull GoResult o) {

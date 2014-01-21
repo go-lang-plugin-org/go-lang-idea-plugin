@@ -26,6 +26,22 @@ type E struct {
 func (e E) foo() {
 }
 
+type Type int
+
+func new(Type) *Type
+
+type T int
+func (t T) name()  {
+}
+
+func foo() *T {
+    return new(T)
+}
+
+func (t T) createT() *T {
+    return new(T)
+}
+
 func main() {
     e := E{}
     e.foo()
@@ -41,4 +57,8 @@ func main() {
     a := AstonMartin{Car{4}}
     Println("An Aston Martin has this many wheels:", a.numberOfWheels())
     a.sayHiToBond()
+
+    t := foo()
+    t.name()
+    t2 := t.createT()
 }
