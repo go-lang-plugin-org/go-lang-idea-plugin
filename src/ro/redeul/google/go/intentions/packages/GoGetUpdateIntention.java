@@ -18,25 +18,21 @@ import com.intellij.psi.PsiElement;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.intentions.Intention;
 import ro.redeul.google.go.intentions.IntentionExecutionException;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.runner.GoCommonConsoleView;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-import java.io.File;
 import java.util.Collection;
 
 public class GoGetUpdateIntention extends Intention {
 
-    private static final String ID = "Go Console";
-    private static final String TITLE = "go get";
+    private static final String TITLE = "go get -u (ALL)";
 
     private static Collection<String> allPackages;
-    private static ConsoleView consoleView;
 
     @Override
     protected boolean satisfiedBy(PsiElement element) {
@@ -64,50 +60,47 @@ public class GoGetUpdateIntention extends Intention {
             return;
         }
 
+        Sdk sdk = GoSdkUtil.getProjectSdk(project);
+        if (sdk == null) {
+            return;
+        }
+
         if (!packagesToUpdate.isEmpty()) {
             if (Messages.showYesNoDialog(
                     "This will UPDATE ALL the following package(s)\n" + packagesToUpdate.replaceAll(" ", "\n") + "\n Are you sure you want to continue?",
                     "go get -u",
-                    GoIcons.GO_ICON_13x13) == Messages.NO) {
+                    GoSdkUtil.getProjectIcon(sdk)) == Messages.NO) {
                 return;
             }
         }
 
         ToolWindowManager manager = ToolWindowManager.getInstance(project);
-        ToolWindow window = manager.getToolWindow(ID);
+        ToolWindow window = manager.getToolWindow(GoCommonConsoleView.ID);
 
-        if (GoGetUpdateIntention.consoleView == null) {
-            GoGetUpdateIntention.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+        if (GoCommonConsoleView.consoleView == null) {
+            GoCommonConsoleView.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
         }
+        ConsoleView consoleView = GoCommonConsoleView.consoleView;
 
         if (window == null) {
-            window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
+            window = manager.registerToolWindow(GoCommonConsoleView.ID, false, ToolWindowAnchor.BOTTOM);
 
             ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
             Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
             window.getContentManager().addContent(content);
-            window.setIcon(GoIcons.GO_ICON_13x13);
+            window.setIcon(GoSdkUtil.getProjectIcon(sdk));
             window.setToHideOnEmptyContent(true);
-            window.setTitle(TITLE);
         }
+        window.setTitle(TITLE);
 
-        Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
-        if ( sdk == null ) {
-            Messages.showErrorDialog("Error while processing go get command.\nNo Go Sdk defined for this project", "Error on Google Go Plugin");
+        String goExecName = GoSdkUtil.getGoExecName(sdk);
+        if (goExecName == null) {
             return;
         }
-
-
-        final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
-        if ( sdkData == null ) {
-            Messages.showErrorDialog("Error while processing go get command.\nNo Go Sdk defined for this project", "Error on Google Go Plugin");
-            return;
-        }
-
 
         final String command = String.format(
                 "%s get -v -u %s",
-                sdkData.GO_BIN_PATH,
+                goExecName,
                 packagesToImport
         );
 
@@ -196,19 +189,18 @@ public class GoGetUpdateIntention extends Intention {
     }
 
     private void runGoGet(Project project, String command, String packagesToImport, String projectDir) throws CantRunException {
-        Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
-        if ( sdk == null ) {
-            throw new CantRunException("No Go Sdk defined for this project");
+        Sdk sdk = GoSdkUtil.getProjectSdk(project);
+        if (sdk == null) {
+            return;
         }
 
-        final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
-        if ( sdkData == null ) {
-            throw new CantRunException("No Go Sdk defined for this project");
+        String[] goEnv = GoSdkUtil.getGoEnv(sdk, projectDir);
+        if (goEnv == null) {
+            return;
         }
-
-        String[] goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
 
         Runtime rt = Runtime.getRuntime();
+        ConsoleView consoleView = GoCommonConsoleView.consoleView;
 
         try {
 
@@ -231,12 +223,5 @@ public class GoGetUpdateIntention extends Intention {
             e.printStackTrace();
             Messages.showErrorDialog("Error while processing go get command.", "Error on Google Go Plugin");
         }
-    }
-
-    private String getSdkHomePath(GoSdkData sdkData) {
-        if (sdkData.GO_GOROOT_PATH.isEmpty()) {
-            return new File(sdkData.GO_BIN_PATH).getParent();
-        }
-        return sdkData.GO_GOROOT_PATH;
     }
 }

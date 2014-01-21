@@ -22,10 +22,13 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.SystemProperties;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.*;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.util.GoUtil;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -837,5 +840,95 @@ public class GoSdkUtil {
         }
 
         return "/usr/lib/go_appengine";
+    }
+
+    @Nullable
+    public static Sdk getProjectSdk(Project project){
+        Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
+        if (sdk != null) {
+            return sdk;
+        }
+
+        return GoSdkUtil.getGoogleGAESdkForProject(project);
+    }
+
+    @Nullable
+    public static String getGoExecName(Sdk sdk) {
+        if (sdk.getSdkType() instanceof GoSdkType) {
+            GoSdkData sdkData = (GoSdkData) sdk.getSdkAdditionalData();
+            if (sdkData == null) {
+                return null;
+            }
+
+            return sdkData.GO_BIN_PATH;
+        } else if (sdk.getSdkAdditionalData() instanceof GoAppEngineSdkData) {
+            GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
+            if (sdkData == null) {
+                return null;
+            }
+
+            return sdkData.GOAPP_BIN_PATH;
+        }
+
+        return null;
+    }
+
+    @Nullable
+    public static String[] getGoEnv(Sdk sdk, String projectDir) {
+        if (sdk.getSdkType() instanceof GoSdkType) {
+            GoSdkData sdkData = (GoSdkData) sdk.getSdkAdditionalData();
+            if (sdkData == null) {
+                return null;
+            }
+
+            return GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
+        } else if (sdk.getSdkAdditionalData() instanceof GoAppEngineSdkData) {
+            GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
+            if (sdkData == null) {
+                return null;
+            }
+
+            return GoSdkUtil.getExtendedGAEEnv(sdkData, projectDir, "");
+        }
+
+        return null;
+    }
+
+    @Nullable
+    public static Icon getProjectIcon(Sdk sdk) {
+        return getProjectIcon(sdk, 16);
+    }
+
+    @Nullable
+    public static Icon getProjectIcon(Sdk sdk, Integer size) {
+        if (sdk.getSdkType() instanceof GoSdkType) {
+            GoSdkData sdkData = (GoSdkData) sdk.getSdkAdditionalData();
+            if (sdkData == null) {
+                return null;
+            }
+
+            switch (size) {
+                case 13: return GoIcons.GO_ICON_13x13;
+                case 24: return GoIcons.GO_ICON_24x24;
+                case 32: return GoIcons.GO_ICON_32x32;
+                case 48: return GoIcons.GO_ICON_48x48;
+                default: return GoIcons.GO_ICON_16x16;
+            }
+        } else if (sdk.getSdkAdditionalData() instanceof GoAppEngineSdkData) {
+            GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
+            if (sdkData == null) {
+                return null;
+            }
+
+            switch (size) {
+                case 13: return GoIcons.GAE_ICON_13x13;
+                case 24: return GoIcons.GAE_ICON_24x24;
+                case 32: return GoIcons.GAE_ICON_32x32;
+                case 48: return GoIcons.GAE_ICON_48x48;
+                default: return GoIcons.GAE_ICON_16x16;
+            }
+        }
+
+        return null;
     }
 }

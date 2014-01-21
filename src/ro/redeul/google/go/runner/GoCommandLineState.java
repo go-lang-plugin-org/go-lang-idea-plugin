@@ -21,7 +21,6 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.runner.ui.properties.GoTestConsoleProperties;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -32,9 +31,7 @@ import java.util.Map;
 import static com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil.createAndAttachConsole;
 
 class GoCommandLineState extends CommandLineState {
-    private static final String ID = "Go Console";
-    private static final String TITLE = "build";
-    private static ConsoleView consoleView;
+    private static final String TITLE = "go test";
 
     private final GoTestConsoleProperties consoleProperties;
 
@@ -71,23 +68,23 @@ class GoCommandLineState extends CommandLineState {
         if (testConfiguration.goVetEnabled) {
             try {
                 ToolWindowManager manager = ToolWindowManager.getInstance(project);
-                ToolWindow window = manager.getToolWindow(ID);
+                ToolWindow window = manager.getToolWindow(GoCommonConsoleView.ID);
 
-                if (consoleView == null) {
-                    consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+                if (GoCommonConsoleView.consoleView == null) {
+                    GoCommonConsoleView.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
                 }
+                ConsoleView consoleView = GoCommonConsoleView.consoleView;
 
                 if (window == null) {
-                    window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
+                    window = manager.registerToolWindow(GoCommonConsoleView.ID, false, ToolWindowAnchor.BOTTOM);
 
                     ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
                     Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
                     window.getContentManager().addContent(content);
-                    window.setIcon(GoIcons.GO_ICON_13x13);
+                    window.setIcon(GoSdkUtil.getProjectIcon(sdk));
                     window.setToHideOnEmptyContent(true);
-                    window.setTitle(TITLE);
-
                 }
+                window.setTitle(TITLE);
 
                 window.show(EmptyRunnable.getInstance());
 

@@ -8,7 +8,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
@@ -19,20 +18,14 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
-import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
-import ro.redeul.google.go.config.sdk.GoSdkData;
-import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.runner.GoCommonConsoleView;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
 
 public class GoFmtProjectRunner extends AnAction {
 
-    private static final String ID = "go fmt Console";
-    private static final String TITLE = "Output";
-    private static ConsoleView consoleView;
+    private static final String TITLE = "go fmt (project)";
 
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
@@ -43,9 +36,10 @@ public class GoFmtProjectRunner extends AnAction {
             return;
         }
 
-        if (consoleView == null) {
-            consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+        if (GoCommonConsoleView.consoleView == null) {
+            GoCommonConsoleView.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
         }
+        ConsoleView consoleView = GoCommonConsoleView.consoleView;
 
         String projectDir = project.getBasePath();
 
@@ -53,55 +47,37 @@ public class GoFmtProjectRunner extends AnAction {
             return;
         }
 
-        Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
+        Sdk sdk = GoSdkUtil.getProjectSdk(project);
         if (sdk == null) {
-            sdk = GoSdkUtil.getGoogleGAESdkForProject(project);
-            if (sdk == null) {
-                return;
-            }
+            return;
         }
 
-        String[] goEnv;
-        String goExecName;
+        String[] goEnv = GoSdkUtil.getGoEnv(sdk, projectDir);
+        if (goEnv == null) {
+            return;
+        }
 
-        if (sdk.getSdkType() instanceof GoSdkType) {
-            GoSdkData sdkData = (GoSdkData) sdk.getSdkAdditionalData();
-            if (sdkData == null) {
-                return;
-            }
-
-            goExecName = sdkData.GO_BIN_PATH;
-            goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
-        } else if (sdk.getSdkAdditionalData() instanceof GoAppEngineSdkData) {
-            GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
-            if (sdkData == null) {
-                return;
-            }
-
-            goExecName = sdkData.GOAPP_BIN_PATH;
-            goEnv = GoSdkUtil.getExtendedGAEEnv(sdkData, projectDir, "");
-        } else {
+        String goExecName = GoSdkUtil.getGoExecName(sdk);
+        if (goExecName == null) {
             return;
         }
 
         FileDocumentManager.getInstance().saveAllDocuments();
-        FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
 
         try {
             ToolWindowManager manager = ToolWindowManager.getInstance(project);
-            ToolWindow window = manager.getToolWindow(ID);
+            ToolWindow window = manager.getToolWindow(GoCommonConsoleView.ID);
 
             if (window == null) {
-                window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
+                window = manager.registerToolWindow(GoCommonConsoleView.ID, false, ToolWindowAnchor.BOTTOM);
 
                 ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
                 Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
                 window.getContentManager().addContent(content);
-                window.setIcon(GoIcons.GO_ICON_13x13);
+                window.setIcon(GoSdkUtil.getProjectIcon(sdk));
                 window.setToHideOnEmptyContent(true);
-                window.setTitle(TITLE);
-
             }
+            window.setTitle(TITLE);
             window.show(EmptyRunnable.getInstance());
 
             String command = String.format(
