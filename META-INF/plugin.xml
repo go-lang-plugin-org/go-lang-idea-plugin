@@ -19,7 +19,7 @@
 
     <internalFileTemplate name="Go Application"/>
     <internalFileTemplate name="Go File"/>
-    
+
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateGenericContextType"/>
     <liveTemplateMacro implementation="com.goide.template.DirectoryNameMacro"/>
@@ -45,27 +45,37 @@
     <gotoClassContributor implementation="com.goide.go.GoTypeContributor"/>
 
     <sdkType implementation="com.goide.GoSdkType"/>
-    
+
     <!-- run -->
     <programRunner implementation="com.goide.runconfig.GoRunner"/>
     <runConfigurationProducer implementation="com.goide.runconfig.application.GoApplicationRunConfigurationProducer"/>
     <configurationType implementation="com.goide.runconfig.application.GoApplicationRunConfigurationType"/>
-    
+
     <!-- test -->
     <runConfigurationProducer implementation="com.goide.runconfig.testing.GoTestRunConfigurationProducer"/>
     <configurationType implementation="com.goide.runconfig.testing.GoTestRunConfigurationType"/>
     <testFinder implementation="com.goide.runconfig.testing.GoTestFinder"/>
     <testSrcLocator implementation="com.goide.runconfig.testing.GoTestLocationProvider"/>
-    
+
     <localInspection language="go" displayName="Unresolved reference inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnresolvedReferenceInspection"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"
-                    text="Go File" description="Create new Go file">
-                <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
-            </action>
+            text="Go File" description="Create new Go file">
+      <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+    </action>
+
+    <group id="GoTestGenerateGroup">
+      <action id="GoGenerateTest" class="com.goide.generate.GenerateTestAction" text="Test"
+              description="Creates Go test function"/>
+      <action id="GoGenerateBenchmark" class="com.goide.generate.GenerateBenchmarkAction" text="Benchmark"
+              description="Creates Go benchmark function"/>
+      <separator/>
+      <add-to-group group-id="GenerateGroup" anchor="first"/>
+    </group>
+
   </actions>
 
 </idea-plugin>
