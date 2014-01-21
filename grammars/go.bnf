@@ -253,7 +253,7 @@ FieldName ::= identifier
 ElementIndex ::= Expression
 Value ::= Expression | LiteralValue
 
-FunctionLit ::= func Signature Block {pin=1}
+FunctionLit ::= func Signature Block {pin=1 methods=[processDeclarations]}
 
 Expression ::=
     OrExpr

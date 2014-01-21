@@ -68,6 +68,7 @@ public class GoPsiImplUtil {
         o instanceof GoSwitchStatement ||
         o instanceof GoForStatement ||
         o instanceof GoCommClause ||
+        o instanceof GoFunctionLit ||
         o instanceof GoTypeCaseClause ||
         o instanceof GoExprCaseClause) {
       return processor.execute(o, state);

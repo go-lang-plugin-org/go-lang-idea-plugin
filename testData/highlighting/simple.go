@@ -74,3 +74,22 @@ type AA struct {
 func BenchmarkName(b *AA) {
      b.N
 }
+
+func make(o interface{}) {
+}
+
+func concurrently(integers []int) []int {
+  ch := make(chan int)
+  responses := []int{}
+  for _, i := range integers {
+      go func(j int) {
+          ch <- j * j
+      }(<error>j</error>)
+  }
+  for _, i := range integers {
+      go func(j int) {
+          ch <- j * j
+      }(i)
+  }
+  return integers
+}
