@@ -157,7 +157,7 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
                 String goExecName = sdkData.SDK_HOME_PATH + File.separator + "goapp";
 
                 if (GoSdkUtil.isHostOsWindows()) {
-                    goExecName = goExecName.concat(".exe");
+                    goExecName = goExecName.concat(".bat");
                 }
 
                 String projectDir = project.getBasePath();
