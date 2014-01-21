@@ -45,7 +45,7 @@ public class GaeRunConfigurationEditorForm extends SettingsEditor<GaeLocalConfig
 
         adminPort.setText(configuration.adminPort);
         if (adminPort.getText().isEmpty()) {
-            adminPort.setText("8080");
+            adminPort.setText("8000");
         }
     }
 
@@ -117,7 +117,7 @@ public class GaeRunConfigurationEditorForm extends SettingsEditor<GaeLocalConfig
         workingDirectoryBrowser.setText(project.getBasePath());
         hostname.setText("localhost");
         port.setText("8080");
-        adminPort.setText("8080");
+        adminPort.setText("8000");
     }
 
     @NotNull
