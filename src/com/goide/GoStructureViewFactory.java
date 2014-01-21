@@ -1,6 +1,7 @@
 package com.goide;
 
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.ide.structureView.*;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.lang.PsiStructureViewFactory;
@@ -126,7 +127,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       }
       else if (myElement instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)myElement).getType();
-        String appendix = type instanceof GoStructType ? "" : (type != null ? ":" + type.getText().replaceAll("\\s+", " ") : "");
+        String appendix = type instanceof GoStructType ? "" : (type != null ? ":" + GoPsiImplUtil.getTypeText(type) : "");
         return ((GoTypeSpec)myElement).getIdentifier().getText() + appendix;
       }
       else if (myElement instanceof GoNamedElement) {

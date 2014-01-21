@@ -115,7 +115,10 @@ public class GoPsiImplUtil {
                 v instanceof GoReceiver ? GoIcons.RECEIVER :
                 v instanceof GoConstDefinition ? GoIcons.CONST :
                 null;
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(v).withIcon(icon), GoCompletionContributor.VAR_PRIORITY);
+    GoType type = v.getGoType();
+    String text = getTypeText(type);
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(v).withIcon(icon).withTypeText(text, true),
+                                                 GoCompletionContributor.VAR_PRIORITY);
   }
 
   @NotNull
@@ -198,5 +201,10 @@ public class GoPsiImplUtil {
       return exprs.get(i).getGoType();
     }
     return GoNamedElementImpl.getType(o);
+  }
+
+  @NotNull
+  public static String getTypeText(@Nullable GoType type) {
+    return type == null ? "" : type.getText().replaceAll("\\s+", " ");
   }
 }
