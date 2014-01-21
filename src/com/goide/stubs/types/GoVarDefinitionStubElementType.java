@@ -6,11 +6,22 @@ import com.goide.stubs.GoVarDefinitionStub;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
+import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class GoVarDefinitionStubElementType extends GoNamedStubElementType<GoVarDefinitionStub, GoVarDefinition> {
+  public static final GoVarDefinition[] EMPTY_ARRAY = new GoVarDefinition[0];
+
+  public static final ArrayFactory<GoVarDefinition> ARRAY_FACTORY = new ArrayFactory<GoVarDefinition>() {
+    @NotNull
+    @Override
+    public GoVarDefinition[] create(final int count) {
+      return count == 0 ? EMPTY_ARRAY : new GoVarDefinition[count];
+    }
+  };
+  
   public GoVarDefinitionStubElementType(@NotNull String name) {
     super(name);
   }

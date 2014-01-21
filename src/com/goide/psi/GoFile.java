@@ -2,6 +2,10 @@ package com.goide.psi;
 
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
+import com.goide.GoTypes;
+import com.goide.stubs.types.GoConstDefinitionStubElementType;
+import com.goide.stubs.types.GoTypeSpecStubElementType;
+import com.goide.stubs.types.GoVarDefinitionStubElementType;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
@@ -9,19 +13,20 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.stubs.StubElement;
+import com.intellij.psi.stubs.StubTree;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.util.ArrayFactory;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FilteringIterator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GoFile extends PsiFileBase {
   private static final String MAIN_FUNCTION_NAME = "main";
@@ -97,6 +102,9 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   public List<GoTypeSpec> getTypes() {
+    StubElement<GoFile> stub = getStub();
+    if (stub != null) return getChildrenByType(stub, GoTypes.TYPE_SPEC, GoTypeSpecStubElementType.ARRAY_FACTORY);
+
     if (myTypesValue == null) {
       myTypesValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoTypeSpec>>() {
         @Override
@@ -140,6 +148,8 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   public List<GoVarDefinition> getVars() {
+    StubElement<GoFile> stub = getStub();
+    if (stub != null) return getChildrenByType(stub, GoTypes.VAR_DEFINITION, GoVarDefinitionStubElementType.ARRAY_FACTORY);
     if (myVarsValue == null) {
       myVarsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoVarDefinition>>() {
         @Override
@@ -153,6 +163,8 @@ public class GoFile extends PsiFileBase {
   
   @NotNull
   public List<GoConstDefinition> getConsts() {
+    StubElement<GoFile> stub = getStub();
+    if (stub != null) return getChildrenByType(stub, GoTypes.CONST_DEFINITION, GoConstDefinitionStubElementType.ARRAY_FACTORY);
     if (myConstsValue == null) {
       myConstsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoConstDefinition>>() {
         @Override
@@ -286,7 +298,22 @@ public class GoFile extends PsiFileBase {
     return null;
   }
 
+  @Nullable
+  @Override
+  public StubElement<GoFile> getStub() {
+    return super.getStub();
+  }
+
   private static boolean processChildrenDummyAware(GoFile file, final Processor<PsiElement> processor) {
+    StubTree stubTree = file.getStubTree();
+    if (stubTree != null) {
+      List<StubElement<?>> plainList = stubTree.getPlainList();
+      for (StubElement<?> stubElement : plainList) {
+        PsiElement psi = stubElement.getPsi();
+        if (!processor.process(psi)) return false;
+      }
+      return true;
+    }
     return new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement psiElement) {
@@ -299,5 +326,9 @@ public class GoFile extends PsiFileBase {
         return true;
       }
     }.process(file);
+  }
+
+  private static <E extends PsiElement> List<E> getChildrenByType(StubElement<? extends PsiElement> stub, IElementType elementType, ArrayFactory<E> f) {
+    return Arrays.asList(stub.getChildrenByType(elementType, f));
   }
 }
