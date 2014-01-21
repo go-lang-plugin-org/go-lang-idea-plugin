@@ -2,7 +2,8 @@
 <templateSet group="Go">
   <!-- KEYWORDS -->
   <template description='Package declaration' id='go_lang_package' name='package' toReformat='true' toShortenFQNames='true'
-            value='package $END$&#10;'>
+            value='package $NAME$'>
+    <variable alwaysStopAt='true' defaultValue='' expression='directoryName()' name='NAME'/>
     <context>
       <option name='GO' value='true'/>
     </context>
@@ -68,6 +69,14 @@
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Interface or struct' id='go_lang_type' name='type' toReformat='true' toShortenFQNames='true'
+            value='type $NAME$ $TYPE$ {&#10;	$END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete' name='TYPE'/>
     <context>
       <option name='GO' value='true'/>
     </context>

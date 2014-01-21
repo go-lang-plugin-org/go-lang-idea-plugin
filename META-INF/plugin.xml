@@ -22,6 +22,7 @@
     
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateGenericContextType"/>
+    <liveTemplateMacro implementation="com.goide.template.DirectoryNameMacro"/>
 
     <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>

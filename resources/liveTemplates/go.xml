@@ -6,7 +6,9 @@
       <option name='GO' value='true'/>
     </context>
   </template>
-  <template description='Package declaration' name='p' toReformat='true' toShortenFQNames='true' value='package $END$&#10;'>
+  <template description='Package declaration' name='p' toReformat='true' toShortenFQNames='true'
+            value='package $NAME$'>
+    <variable alwaysStopAt='true' defaultValue='' expression='directoryName()' name='NAME'/>
     <context>
       <option name='GO' value='true'/>
     </context>
@@ -29,10 +31,53 @@
   </template>
 
   <!--STATEMENTS-->
+  <template description='For loop' name='for' toReformat='true' toShortenFQNames='true'
+            value='for $VAR0$; $VAR1$; $VAR2$ {&#10;	$END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='VAR0'/>
+    <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='VAR1'/>
+    <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='VAR2'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
   <template description='For range loop' name='forr' toReformat='true' toShortenFQNames='true'
-            value='for $NAME$ := range $COLLECTION$ {&#10;	$END$&#10;}'>
-    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+            value='for $KEY$, $VALUE$ := range $COLLECTION$ {&#10;	$END$&#10;}'>
     <variable alwaysStopAt='true' defaultValue='&quot;collection&quot;' expression='' name='COLLECTION'/>
+    <variable alwaysStopAt='true' defaultValue='&quot;value&quot;' expression='' name='VALUE'/>
+    <variable alwaysStopAt='true' defaultValue='&quot;key&quot;' expression='' name='KEY'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Interface or struct' name='type' toReformat='true' toShortenFQNames='true'
+            value='type $NAME$ $TYPE$ {&#10;	$END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete' name='TYPE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='printf' name='printf' toReformat='true' toShortenFQNames='true'
+            value='fmt.Printf("$END$",$VAR$)'>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VAR'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='If error' name='err' toReformat='true' toShortenFQNames='true'
+            value='if err != null {&#10;	$END$&#10;}'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='`xml:""`' name='xml' toReformat='true' toShortenFQNames='true'
+            value='`xml:"$END$"`'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='`json:""`' name='json' toReformat='true' toShortenFQNames='true'
+            value='`json:"$END$"`'>
     <context>
       <option name='GO' value='true'/>
     </context>
@@ -41,6 +86,12 @@
   <!--FUNCTIONS-->
   <template description='Main function' name='main' toReformat='true' toShortenFQNames='true'
             value='func main() {&#10;	$END$&#10;}'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Init function' name='init' toReformat='true' toShortenFQNames='true'
+            value='func init() {&#10;	$END$&#10;}'>
     <context>
       <option name='GO' value='true'/>
     </context>
