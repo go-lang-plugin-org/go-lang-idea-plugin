@@ -127,7 +127,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       }
       else if (myElement instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)myElement).getType();
-        String appendix = type instanceof GoStructType ? "" : (type != null ? ":" + GoPsiImplUtil.getTypeText(type) : "");
+        String appendix = type instanceof GoStructType ? "" : (type != null ? ":" + GoPsiImplUtil.getText(type) : "");
         return ((GoTypeSpec)myElement).getIdentifier().getText() + appendix;
       }
       else if (myElement instanceof GoNamedElement) {
