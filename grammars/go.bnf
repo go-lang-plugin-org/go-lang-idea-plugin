@@ -274,14 +274,14 @@ AddExpr ::= Expression add_op Expression
 MulExpr ::= Expression mul_op Expression
 ParenthesesExpr ::= '(' Expression ')'
 
-BuiltinCallExpr ::= ReferenceExpression '(' [ BuiltinArgs ','? ] ')'
+BuiltinCallExpr ::= ReferenceExpression <<isBuiltin>> '(' [ BuiltinArgs ','? ] ')'
 BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
 
 private MaxGroup ::=
     CompositeLit
   | OperandName
-  | CallExpr
   | BuiltinCallExpr
+  | CallExpr
   | TypeAssertionExpr
   | SelectorExpr
   | MethodExpr

@@ -599,14 +599,14 @@ GO_FILE
                 PsiElement(identifier)('nil')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            CALL_EXPR
+            BUILTIN_CALL_EXPR
               REFERENCE_EXPRESSION
                 PsiElement(identifier)('print')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+              PsiElement(()('(')
+              BUILTIN_ARGS
                 LITERAL
                   PsiElement(string)('"nil"')
-                PsiElement())(')')
+              PsiElement())(')')
         TYPE_CASE_CLAUSE
           TYPE_SWITCH_CASE
             PsiElement(case)('case')
@@ -661,14 +661,15 @@ GO_FILE
                 PsiElement(identifier)('int')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            CALL_EXPR
+            BUILTIN_CALL_EXPR
               REFERENCE_EXPRESSION
                 PsiElement(identifier)('print')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('v')
-                PsiElement())(')')
+              PsiElement(()('(')
+              BUILTIN_ARGS
+                TYPE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('v')
+              PsiElement())(')')
         TYPE_CASE_CLAUSE
           TYPE_SWITCH_CASE
             PsiElement(case)('case')
@@ -677,24 +678,25 @@ GO_FILE
                 PsiElement(identifier)('string')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            CALL_EXPR
+            BUILTIN_CALL_EXPR
               REFERENCE_EXPRESSION
                 PsiElement(identifier)('print')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('v')
-                PsiElement())(')')
+              PsiElement(()('(')
+              BUILTIN_ARGS
+                TYPE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('v')
+              PsiElement())(')')
         TYPE_CASE_CLAUSE
           TYPE_SWITCH_CASE
             PsiElement(default)('default')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
-            CALL_EXPR
+            BUILTIN_CALL_EXPR
               REFERENCE_EXPRESSION
                 PsiElement(identifier)('print')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+              PsiElement(()('(')
+              BUILTIN_ARGS
                 LITERAL
                   PsiElement(string)('"("')
                 PsiElement(,)(',')
@@ -712,7 +714,7 @@ GO_FILE
                 PsiElement(,)(',')
                 REFERENCE_EXPRESSION
                   PsiElement(identifier)('i')
-                PsiElement())(')')
+              PsiElement())(')')
         PsiElement(})('}')
       PsiElement(})('}')
   PsiComment(GO_LINE_COMMENT)('// called from generated code')
@@ -738,11 +740,11 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       SIMPLE_STATEMENT
-        CALL_EXPR
+        BUILTIN_CALL_EXPR
           REFERENCE_EXPRESSION
             PsiElement(identifier)('panic')
-          ARGUMENT_LIST
-            PsiElement(()('(')
+          PsiElement(()('(')
+          BUILTIN_ARGS
             ADD_EXPR
               ADD_EXPR
                 ADD_EXPR
@@ -777,7 +779,7 @@ GO_FILE
               PsiElement(+)('+')
               LITERAL
                 PsiElement(string)('" pointer"')
-            PsiElement())(')')
+          PsiElement())(')')
       PsiElement(})('}')
   PsiComment(GO_LINE_COMMENT)('// New returns an initialized Fetcher.')
   FUNCTION_DECLARATION

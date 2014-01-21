@@ -3729,7 +3729,7 @@ public class GoParser implements PsiParser {
   // 4: BINARY(MulExpr)
   // 5: PREFIX(UnaryExpr)
   // 6: PREFIX(ConversionExpr)
-  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(CallExpr) POSTFIX(BuiltinCallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) ATOM(MethodExpr) POSTFIX(IndexExpr) ATOM(Literal) ATOM(LiteralTypeExpr) ATOM(FunctionLit)
+  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(BuiltinCallExpr) POSTFIX(CallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) ATOM(MethodExpr) POSTFIX(IndexExpr) ATOM(Literal) ATOM(LiteralTypeExpr) ATOM(FunctionLit)
   // 8: PREFIX(ParenthesesExpr)
   public static boolean Expression(PsiBuilder builder_, int level_, int priority_) {
     if (!recursion_guard_(builder_, level_, "Expression")) return false;
@@ -3783,15 +3783,15 @@ public class GoParser implements PsiParser {
         marker_.drop();
         left_marker_.precede().done(MUL_EXPR);
       }
-      else if (priority_ < 7 && ArgumentList(builder_, level_ + 1)) {
-        result_ = true;
-        marker_.drop();
-        left_marker_.precede().done(CALL_EXPR);
-      }
       else if (priority_ < 7 && ((LighterASTNode)left_marker_).getTokenType() == REFERENCE_EXPRESSION && BuiltinCallExpr_0(builder_, level_ + 1)) {
         result_ = true;
         marker_.drop();
         left_marker_.precede().done(BUILTIN_CALL_EXPR);
+      }
+      else if (priority_ < 7 && ArgumentList(builder_, level_ + 1)) {
+        result_ = true;
+        marker_.drop();
+        left_marker_.precede().done(CALL_EXPR);
       }
       else if (priority_ < 7 && TypeAssertionExpr_0(builder_, level_ + 1)) {
         result_ = true;
@@ -3928,39 +3928,40 @@ public class GoParser implements PsiParser {
     return true;
   }
 
-  // '(' [ BuiltinArgs ','? ] ')'
+  // <<isBuiltin>> '(' [ BuiltinArgs ','? ] ')'
   private static boolean BuiltinCallExpr_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, LPAREN);
-    result_ = result_ && BuiltinCallExpr_0_1(builder_, level_ + 1);
+    result_ = isBuiltin(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, LPAREN);
+    result_ = result_ && BuiltinCallExpr_0_2(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, RPAREN);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
   // [ BuiltinArgs ','? ]
-  private static boolean BuiltinCallExpr_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_0_1")) return false;
-    BuiltinCallExpr_0_1_0(builder_, level_ + 1);
+  private static boolean BuiltinCallExpr_0_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_0_2")) return false;
+    BuiltinCallExpr_0_2_0(builder_, level_ + 1);
     return true;
   }
 
   // BuiltinArgs ','?
-  private static boolean BuiltinCallExpr_0_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_0_1_0")) return false;
+  private static boolean BuiltinCallExpr_0_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_0_2_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = BuiltinArgs(builder_, level_ + 1);
-    result_ = result_ && BuiltinCallExpr_0_1_0_1(builder_, level_ + 1);
+    result_ = result_ && BuiltinCallExpr_0_2_0_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
   // ','?
-  private static boolean BuiltinCallExpr_0_1_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_0_1_0_1")) return false;
+  private static boolean BuiltinCallExpr_0_2_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "BuiltinCallExpr_0_2_0_1")) return false;
     consumeToken(builder_, COMMA);
     return true;
   }
