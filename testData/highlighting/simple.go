@@ -49,8 +49,8 @@ func foo() {
     b := &B{b:"bbb"}
     e := &Empty{}
 
-    a.<error>hola</error>() // todo
-    b.<error>hola</error>() // todo
+    a.hola()
+    b.hola()
     e.hola()
     b.b = "jj"
 }

@@ -157,10 +157,18 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     if (type instanceof GoPointerType) type = ((GoPointerType)type).getType();
 
     GoTypeReferenceExpression refExpr = type != null ? type.getTypeReferenceExpression() : null;
+    return processInTypeRef(refExpr, type);
+  }
+
+  @Nullable
+  private PsiElement processInTypeRef(@Nullable GoTypeReferenceExpression refExpr, @Nullable GoType recursiveStopper) {
     PsiReference reference = refExpr != null ? refExpr.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
     if (resolve instanceof GoTypeSpec) {
       GoType resolveType = ((GoTypeSpec)resolve).getType();
+      if (recursiveStopper != null && resolveType != null) {
+        if (recursiveStopper.textMatches(resolveType.getText())) return null;
+      }
       PsiElement element = processExistingType(resolveType);
       return element != null ? element : null;
     }
@@ -176,6 +184,19 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         type.processDeclarations(processor, ResolveState.initial(), null, myElement);
         GoNamedElement result = processor.getResult();
         if (result != null) return result;
+
+
+        final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
+        type.accept(new GoRecursiveVisitor() {
+          @Override
+          public void visitAnonymousField(@NotNull GoAnonymousField o) {
+            refs.add(o.getTypeReferenceExpression());
+          }
+        });
+        for (GoTypeReferenceExpression ref : refs) {
+          PsiElement element = processInTypeRef(ref, type);
+          if (element != null) return element;
+        }
       }
     }
     PsiFile file = type.getContainingFile().getOriginalFile();

@@ -132,6 +132,12 @@ public class GoPsiImplUtil {
       PsiElement resolve = reference != null ? reference.resolve() : null;
       if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getType();
     }
+    else if (o instanceof GoCompositeLit) {
+      GoTypeReferenceExpression expression = ((GoCompositeLit)o).getLiteralTypeExpr().getTypeReferenceExpression();
+      PsiReference reference = expression != null ? expression.getReference() : null;
+      PsiElement resolve = reference != null ? reference.resolve() : null;
+      if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getType();
+    }
     return null;
   }
 
