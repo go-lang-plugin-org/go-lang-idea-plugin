@@ -12,11 +12,6 @@ import java.util.Set;
 public class GoParserUtil extends GeneratedParserUtilBase {
   private static final Key<TObjectIntHashMap<String>> MODES_KEY = Key.create("MODES_KEY");
 
-  private static class Lazy {
-    private static final Set<String> BUILTIN =
-      ContainerUtil.set("append", "cap", "close", "complex", "copy", "delete", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover");
-  }
-
   private static TObjectIntHashMap<String> getParsingModes(PsiBuilder builder_) {
     TObjectIntHashMap<String> flags = builder_.getUserDataUnprotected(MODES_KEY);
     if (flags == null) builder_.putUserDataUnprotected(MODES_KEY, flags = new TObjectIntHashMap<String>());
@@ -49,7 +44,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
   public static boolean isBuiltin(PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
     LighterASTNode marker = builder_.getLatestDoneMarker();
     if (marker == null) return false;
-    CharSequence text = builder_.getOriginalText().subSequence(marker.getStartOffset(), marker.getEndOffset());
-    return Lazy.BUILTIN.contains(String.valueOf(text));
+    String text = String.valueOf(builder_.getOriginalText().subSequence(marker.getStartOffset(), marker.getEndOffset()));
+    return "make".equals(text) || "new".equals(text);
   }
 }

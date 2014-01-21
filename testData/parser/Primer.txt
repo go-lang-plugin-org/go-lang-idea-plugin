@@ -66,15 +66,14 @@ GO_FILE
               PsiElement())(')')
       RETURN_STATEMENT
         PsiElement(return)('return')
-        BUILTIN_CALL_EXPR
+        CALL_EXPR
           REFERENCE_EXPRESSION
             PsiElement(identifier)('len')
-          PsiElement(()('(')
-          BUILTIN_ARGS
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('args')
-          PsiElement())(')')
+          ARGUMENT_LIST
+            PsiElement(()('(')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('args')
+            PsiElement())(')')
         PsiElement(,)(',')
         REFERENCE_EXPRESSION
           PsiElement(identifier)('err')
