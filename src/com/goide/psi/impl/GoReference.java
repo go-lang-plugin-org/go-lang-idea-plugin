@@ -100,7 +100,7 @@ public class GoReference extends GoReferenceBase {
       if (list.size() > 1 && list.get(1).isEquivalentTo(myElement)) {
         GoType type = list.get(0).getGoType();
         if (type != null) {
-          processInType(result, type, type);
+          processInType(result, type.getParent(), type);
         }
       }
       return;
