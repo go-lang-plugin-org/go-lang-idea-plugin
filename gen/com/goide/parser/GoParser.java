@@ -2024,21 +2024,21 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // identifier Signature | TypeName
+  // TypeName | identifier Signature
   public static boolean MethodSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MethodSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = MethodSpec_0(builder_, level_ + 1);
-    if (!result_) result_ = TypeName(builder_, level_ + 1);
+    result_ = TypeName(builder_, level_ + 1);
+    if (!result_) result_ = MethodSpec_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, METHOD_SPEC, result_);
     return result_;
   }
 
   // identifier Signature
-  private static boolean MethodSpec_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "MethodSpec_0")) return false;
+  private static boolean MethodSpec_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MethodSpec_1")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, IDENTIFIER);
