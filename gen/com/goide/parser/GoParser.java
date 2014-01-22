@@ -2024,15 +2024,46 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName | identifier Signature
+  // TypeName &(!'(') | identifier Signature
   public static boolean MethodSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "MethodSpec")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = TypeName(builder_, level_ + 1);
+    result_ = MethodSpec_0(builder_, level_ + 1);
     if (!result_) result_ = MethodSpec_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, METHOD_SPEC, result_);
+    return result_;
+  }
+
+  // TypeName &(!'(')
+  private static boolean MethodSpec_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MethodSpec_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = TypeName(builder_, level_ + 1);
+    result_ = result_ && MethodSpec_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // &(!'(')
+  private static boolean MethodSpec_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MethodSpec_0_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _AND_, null);
+    result_ = MethodSpec_0_1_0(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  // !'('
+  private static boolean MethodSpec_0_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "MethodSpec_0_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NOT_, null);
+    result_ = !consumeToken(builder_, LPAREN);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
     return result_;
   }
 

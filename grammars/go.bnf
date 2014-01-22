@@ -138,7 +138,7 @@ ParamDefinition ::= identifier {
 
 InterfaceType ::= interface '{' MethodSpecs? '}' {pin(".*")=1}
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
-MethodSpec ::= TypeName | identifier Signature
+MethodSpec ::= TypeName &(!'(') | identifier Signature
 
 MapType ::= map '[' Type ']' Type {pin=1}
 ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
