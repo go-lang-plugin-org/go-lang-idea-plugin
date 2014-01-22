@@ -41,7 +41,7 @@ func (sb *SmallBox) Capacity() int {
 }
 
 func (bb *BigBox) Capacity() int {
-        return bb.SmallBox.Capacity() * 3
+        return bb.SmallBox.Capacity() * 3 // todo Capacity completion here
 }
 
 type string string
