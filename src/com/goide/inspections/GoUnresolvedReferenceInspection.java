@@ -6,8 +6,7 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
@@ -38,11 +37,10 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         if (o.getTextLength() < 2) return;
         PsiReference[] references = o.getReferences();
         for (final PsiReference reference : references) {
-          if (reference instanceof FileReferenceOwner) {
-            PsiFileReference lastReference = ((FileReferenceOwner)reference).getLastFileReference();
-            if (lastReference != null && lastReference.multiResolve(false).length == 0) {
-              ProblemHighlightType type = lastReference.getRangeInElement().isEmpty() ? GENERIC_ERROR_OR_WARNING : LIKE_UNKNOWN_SYMBOL;
-              problemsHolder.registerProblem(lastReference, ProblemsHolder.unresolvedReferenceMessage(reference), type);
+          if (reference instanceof FileReference) {
+            if (((FileReference)reference).multiResolve(false).length == 0) {
+              ProblemHighlightType type = reference.getRangeInElement().isEmpty() ? GENERIC_ERROR_OR_WARNING : LIKE_UNKNOWN_SYMBOL;
+              problemsHolder.registerProblem(reference, ProblemsHolder.unresolvedReferenceMessage(reference), type);
             }
           }
         }
