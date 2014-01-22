@@ -1,6 +1,6 @@
 package main
 
-import <error>""</error>
+import "<error></error>"
 
 type aaa aaa
 
