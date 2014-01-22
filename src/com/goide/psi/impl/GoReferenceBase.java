@@ -1,16 +1,11 @@
 package com.goide.psi.impl;
 
-import com.goide.GoSdkType;
 import com.goide.psi.*;
+import com.goide.psi.impl.imports.GoImportReferenceHelper;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -56,27 +51,11 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   @Nullable
   protected PsiDirectory resolvePackage(@NotNull String str) {
     if (str.startsWith("/") || str.isEmpty()) return null;
-    for (VirtualFile file : getPathsToLookup()) {
+    for (VirtualFile file : GoImportReferenceHelper.getPathsToLookup(myElement)) {
       VirtualFile child = file != null ? file.findFileByRelativePath(str) : null;
       if (child != null) return PsiManager.getInstance(myElement.getProject()).findDirectory(child);
     }
     return null;
-  }
-
-  @NotNull
-  protected List<VirtualFile> getPathsToLookup() {
-    List<VirtualFile> result = ContainerUtil.newArrayList();
-    VirtualFile sdkHome = getSdkHome();
-    ContainerUtil.addIfNotNull(result, sdkHome);
-    result.addAll(GoSdkType.getGoPathsSources());
-    return result;
-  }
-
-  @Nullable
-  protected VirtualFile getSdkHome() {
-    Module module = ModuleUtilCore.findModuleForPsiElement(myElement);
-    Sdk sdk  = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
-    return sdk == null ? null : LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/src/pkg");
   }
 
   protected void processDirectory(@NotNull List<LookupElement> result, @Nullable PsiDirectory dir, @Nullable GoFile file, boolean localCompletion) {
@@ -124,7 +103,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         if (result != null) return result;
 
         if (!file.getName().equals("builtin.go")) {
-          VirtualFile home = getSdkHome();
+          VirtualFile home = GoImportReferenceHelper.getSdkHome(myElement);
           VirtualFile vBuiltin = home != null ? home.findFileByRelativePath("builtin/builtin.go") : null;
           if (vBuiltin != null) {
             PsiFile psiBuiltin = PsiManager.getInstance(file.getProject()).findFile(vBuiltin);
@@ -229,7 +208,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         processDirectory(result, localPsiDir, (GoFile)file, true);
 
         if (!file.getName().equals("builtin.go")) {
-          VirtualFile home = getSdkHome();
+          VirtualFile home = GoImportReferenceHelper.getSdkHome(myElement);
           VirtualFile vBuiltin = home != null ? home.findFileByRelativePath("builtin/builtin.go") : null;
           if (vBuiltin != null) {
             PsiFile psiBuiltin = PsiManager.getInstance(file.getProject()).findFile(vBuiltin);
