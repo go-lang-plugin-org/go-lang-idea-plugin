@@ -1,0 +1,30 @@
+package com.goide.psi.impl.manipulator;
+
+import com.goide.psi.GoImportString;
+import com.goide.psi.impl.GoElementFactory;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.AbstractElementManipulator;
+import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NotNull;
+
+public class GoImportStringManipulator extends AbstractElementManipulator<GoImportString> {
+  @Override
+  public GoImportString handleContentChange(GoImportString string, TextRange range, String s) throws IncorrectOperationException {
+    String newPackage = range.replace(string.getText(), s);
+    checkQuoted(string);
+    return (GoImportString)string.replace(GoElementFactory.createImportString(string.getProject(), newPackage));
+  }
+
+  @Override
+  public TextRange getRangeInElement(GoImportString element) {
+    checkQuoted(element);
+    return TextRange.create(1, element.getTextLength() - 1);
+  }
+
+  private static void checkQuoted(@NotNull GoImportString element) {
+    if (!StringUtil.isQuotedString(element.getText())) {
+      throw new IllegalStateException("import string should be quoted, given: " + element.getText());
+    }
+  }
+}

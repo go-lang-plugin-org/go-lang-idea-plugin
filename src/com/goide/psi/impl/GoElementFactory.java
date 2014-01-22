@@ -2,6 +2,7 @@ package com.goide.psi.impl;
 
 import com.goide.GoLanguage;
 import com.goide.psi.GoFile;
+import com.goide.psi.GoImportString;
 import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.GoTypeReferenceExpression;
 import com.intellij.openapi.project.Project;
@@ -27,14 +28,20 @@ public class GoElementFactory {
   }
 
   @NotNull
-  public static GoTypeReferenceExpression createTypeReferenceFromText(Project project, String text) {
+  public static GoTypeReferenceExpression createTypeReferenceFromText(@NotNull Project project, String text) {
     GoFile file = createFileFromText(project, "package f; var oo " + text + ";");
     return PsiTreeUtil.findChildOfType(file, GoTypeReferenceExpression.class);
   }
 
   @NotNull
-  public static PsiElement createIdentifierFromText(Project project, String text) {
+  public static PsiElement createIdentifierFromText(@NotNull Project project, String text) {
     GoFile file = createFileFromText(project, "package " + text);
     return PsiTreeUtil.getDeepestLast(file);
+  }
+
+  @NotNull
+  public static GoImportString createImportString(@NotNull Project project, @NotNull String importString) {
+    GoFile file = createFileFromText(project, "package main\nimport " + importString + "");
+    return PsiTreeUtil.findChildOfType(file, GoImportString.class);
   }
 }

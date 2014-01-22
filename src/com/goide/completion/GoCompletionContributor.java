@@ -4,9 +4,7 @@ import com.goide.GoLanguage;
 import com.goide.GoParserDefinition;
 import com.goide.GoTypes;
 import com.goide.psi.GoFile;
-import com.goide.psi.GoImportString;
 import com.goide.psi.GoSelectorExpr;
-import com.goide.psi.impl.imports.GoImportReference;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -21,7 +19,6 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.tree.IElementType;
@@ -29,7 +26,6 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.List;
 
 import static com.intellij.patterns.PlatformPatterns.instanceOf;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -54,29 +50,6 @@ public class GoCompletionContributor extends CompletionContributor {
         for (String keyword : suggestKeywords(position)) {
           result.addElement(createKeywordLookupElement(keyword));
         }
-      }
-    });
-
-    extend(CompletionType.BASIC, inGoFile().inside(GoImportString.class), new CompletionProvider<CompletionParameters>() {
-      @Override
-      protected void addCompletions(@NotNull CompletionParameters parameters,
-                                    ProcessingContext context,
-                                    @NotNull CompletionResultSet result) {
-        PsiElement original = parameters.getOriginalPosition();
-        PsiElement parent = original != null ? original.getParent() : null;
-
-        if (!(parent instanceof GoImportString)) return;
-        PsiReference reference = parent.getReference();
-
-        if (reference instanceof GoImportReference) {
-          String text = reference.getRangeInElement().substring(parent.getText());
-          List<LookupElement> complete = ((GoImportReference)reference).complete(text);
-          result = result.withPrefixMatcher(PrefixMatcher.ALWAYS_TRUE);
-          for (LookupElement element : complete) {
-            result.addElement(element);
-          }
-        }
-
       }
     });
   }

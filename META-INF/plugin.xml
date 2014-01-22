@@ -24,6 +24,8 @@
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateGenericContextType"/>
     <liveTemplateMacro implementation="com.goide.template.DirectoryNameMacro"/>
 
+    <lang.elementManipulator forClass="com.goide.psi.GoImportString" implementationClass="com.goide.psi.impl.manipulator.GoImportStringManipulator"/>
+
     <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>
     <fileTypeFactory implementation="com.goide.GoFileTypeFactory"/>
