@@ -25,12 +25,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,15 +64,15 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
       @Override
       public void visitImportString(@NotNull GoImportString o) {
         if (o.getTextLength() < 2) return;
-        PsiReference reference = o.getReference();
-        PsiElement resolve = reference != null ? reference.resolve() : null;
-        if (resolve == null) {
-          String text = StringUtil.unquoteString(o.getText());
-          boolean spaces = StringUtil.isEmptyOrSpaces(text);
-          ProblemHighlightType type = spaces ? GENERIC_ERROR_OR_WARNING : LIKE_UNKNOWN_SYMBOL;
-          TextRange range = spaces ? TextRange.create(0, o.getTextLength()) : TextRange.create(1, o.getTextLength() - 1);
-          problemsHolder.registerProblem(o, "Unresolved import " + "'" + text + "'", type, range,
-                                         getSdkPath(o) == null ? null : new GoGetPackageFix(text));
+        PsiReference[] references = o.getReferences();
+        for (final PsiReference reference : references) {
+          if (reference instanceof FileReferenceOwner) {
+            PsiFileReference lastReference = ((FileReferenceOwner)reference).getLastFileReference();
+            if (lastReference != null && lastReference.multiResolve(false).length == 0) {
+              ProblemHighlightType type = lastReference.getRangeInElement().isEmpty() ? GENERIC_ERROR_OR_WARNING : LIKE_UNKNOWN_SYMBOL;
+              problemsHolder.registerProblem(lastReference, ProblemsHolder.unresolvedReferenceMessage(reference), type);
+            }
+          }
         }
       }
 
