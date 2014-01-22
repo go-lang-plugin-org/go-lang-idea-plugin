@@ -18,6 +18,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceHelper;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.util.Function;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,9 +52,18 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
       context = ContainerUtil.getFirstItem(referenceSet.getDefaultContexts());
     }
 
-    return context != null && context instanceof PsiDirectory
-           ? Arrays.asList(new CreateFileFix(true, reference.getFileNameToCreate(), (PsiDirectory)context))
-           : super.registerFixes(reference);
+    String fileNameToCreate = reference.getFileNameToCreate();
+    if (context == null || !(context instanceof PsiDirectory)) {
+      return super.registerFixes(reference);
+    }
+
+    try {
+      ((PsiDirectory)context).checkCreateSubdirectory(fileNameToCreate);
+    }
+    catch (IncorrectOperationException e) {
+      return super.registerFixes(reference);
+    }
+    return Arrays.asList(new CreateFileFix(true, fileNameToCreate, (PsiDirectory)context));
   }
 
   @NotNull
