@@ -36,6 +36,7 @@ public class GoTestRunningState extends GoRunningState {
 
     GoTestConsoleProperties consoleProperties = new GoTestConsoleProperties(myConfiguration, executor);
     ConsoleView consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole("Go", processHandler, consoleProperties, getEnvironment());
+    consoleView.addMessageFilter(new GoTestConsoleFilter(myModule, myConfiguration.getWorkingDirectory()));
 
     DefaultExecutionResult executionResult = new DefaultExecutionResult(consoleView, processHandler);
     executionResult.setRestartActions(new ToggleAutoTestAction(getEnvironment()));
@@ -84,10 +85,15 @@ public class GoTestRunningState extends GoRunningState {
                                                        myConfiguration.getDirectoryPath(),
                                                        File.separatorChar);
         if (relativePath != null) {
-          commandLine.addParameter("./" + relativePath);
+          if (".".equals(relativePath)) {
+            commandLine.addParameter("./...");
+          }
+          else {
+            commandLine.addParameter("./" + relativePath);
+          }
         }
         else {
-          commandLine.addParameter(myConfiguration.getDirectoryPath());
+          commandLine.addParameter("./...");
           commandLine.setWorkDirectory(myConfiguration.getDirectoryPath());
         }
         break;
