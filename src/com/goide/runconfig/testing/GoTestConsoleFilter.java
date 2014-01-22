@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class GoTestConsoleFilter implements Filter {
-  private static final Pattern MESSAGE_PATTERN = Pattern.compile("(\\S+\\.\\w+):(\\d+)[:\\s].*\n");
+  private static final Pattern MESSAGE_PATTERN = Pattern.compile("[ \t]*(\\S+\\.\\w+):(\\d+)[:\\s].*\n");
 
   @NotNull
   private final Module myModule;
