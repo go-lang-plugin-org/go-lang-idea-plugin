@@ -23,4 +23,7 @@ public interface GoAnonymousFieldDefinition extends GoNamedElement, StubBasedPsi
 
   int getTextOffset();
 
+  @Nullable
+  GoType getGoType();
+
 }

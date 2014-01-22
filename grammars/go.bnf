@@ -119,7 +119,7 @@ FieldDefinition ::= identifier {
 
 AnonymousFieldDefinition ::= '*'? TypeName {
   stubClass="com.goide.stubs.GoAnonymousFieldDefinitionStub"
-  methods=[getIdentifier getName getTextOffset]
+  methods=[getIdentifier getName getTextOffset getGoType]
 }
 Tag ::= string
 

@@ -80,11 +80,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
                  "func main() {b := B{}; b.E.<caret>}", "foo");
   }
 
-  // todo
-  //public void testNestedStructures3() throws Exception {
-  //  doTestEquals("package foo; type E struct {}; type B struct {E}; func (e E) foo() {}; " +
-  //               "func main() {B{}.E.<caret>}", "foo");
-  //}
+  public void testNestedStructures3() throws Exception {
+    doTestEquals("package foo; type E struct {}; type B struct {E}; func (e E) foo() {}; " +
+                 "func main() {B{}.E.<caret>}", "foo");
+  }
 
   public void testInterfaceTypes() throws Exception {
     doTestInclude("package foo; type E interface {}; type B interface {<caret>}", "E");

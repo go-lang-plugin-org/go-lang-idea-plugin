@@ -67,6 +67,17 @@ public class GoReference extends GoReferenceBase {
         GoType type = list.get(0).getGoType();
         PsiElement element = processGoType(type);
         if (element != null) return element;
+        return null;
+      }
+    }
+    // todo: remove duplicate
+    PsiElement grandPa = parent.getParent();
+    if (grandPa instanceof GoSelectorExpr) {
+      List<GoExpression> list = ((GoSelectorExpr)grandPa).getExpressionList();
+      if (list.size() > 1 && list.get(1).isEquivalentTo(parent)) {
+        GoType type = list.get(0).getGoType();
+        PsiElement element = processGoType(type);
+        if (element != null) return element;
       }
     }
 

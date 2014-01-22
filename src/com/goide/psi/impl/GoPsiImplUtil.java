@@ -141,6 +141,11 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
+  public static GoType getGoType(@NotNull GoAnonymousFieldDefinition o) {
+    return getType(o.getTypeReferenceExpression());
+  }
+
+  @Nullable
   public static PsiElement getIdentifier(@SuppressWarnings("UnusedParameters") @NotNull GoAnonymousFieldDefinition o) {
     return null;
   }
@@ -193,10 +198,7 @@ public class GoPsiImplUtil {
     else if (o instanceof GoReferenceExpression) {
       PsiReference reference = o.getReference();
       PsiElement resolve = reference != null ? reference.resolve() : null;
-      if (resolve instanceof GoAnonymousFieldDefinition) {
-        return getType(((GoAnonymousFieldDefinition)resolve).getTypeReferenceExpression());
-      }
-      else if (resolve instanceof GoNamedElement) {
+      if (resolve instanceof GoNamedElement) {
         return ((GoNamedElement)resolve).getGoType();
       }
     }
