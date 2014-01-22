@@ -2,6 +2,8 @@ package com.goide.psi.impl.imports;
 
 import com.goide.GoSdkType;
 import com.goide.psi.GoFile;
+import com.intellij.codeInsight.daemon.quickFix.CreateFileFix;
+import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -9,19 +11,51 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileSystemItem;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceHelper;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class GoImportReferenceHelper extends FileReferenceHelper {
+  @NotNull
+  @Override
+  public Collection<PsiFileSystemItem> getRoots(@NotNull Module module) {
+    return super.getRoots(module);
+  }
+
+  @NotNull
+  @Override
+  public List<? extends LocalQuickFix> registerFixes(FileReference reference) {
+    int index = reference.getIndex();
+    if (!(reference instanceof GoImportReference) || !reference.isLast() || index < 0) {
+      return super.registerFixes(reference);
+    }
+
+    FileReferenceSet referenceSet = reference.getFileReferenceSet();
+    PsiFileSystemItem context;
+    if (index > 0) {
+      context = referenceSet.getReference(index - 1).resolve();
+    }
+    else {
+      context = ContainerUtil.getFirstItem(referenceSet.getDefaultContexts());
+    }
+
+    return context != null && context instanceof PsiDirectory
+           ? Arrays.asList(new CreateFileFix(true, reference.getFileNameToCreate(), (PsiDirectory)context))
+           : super.registerFixes(reference);
+  }
+
   @NotNull
   @Override
   public Collection<PsiFileSystemItem> getContexts(final Project project, @NotNull VirtualFile file) {
