@@ -1,5 +1,7 @@
-package com.goide.psi.impl;
+package com.goide.psi.impl.imports;
 
+import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.psi.impl.GoReferenceBase;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;

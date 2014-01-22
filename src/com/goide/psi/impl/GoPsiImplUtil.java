@@ -3,6 +3,7 @@ package com.goide.psi.impl;
 import com.goide.GoIcons;
 import com.goide.completion.GoCompletionContributor;
 import com.goide.psi.*;
+import com.goide.psi.impl.imports.GoImportReference;
 import com.goide.util.SingleCharInsertHandler;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
@@ -39,10 +40,11 @@ public class GoPsiImplUtil {
     return new GoTypeReference(o);
   }
 
-  @Nullable
-  public static PsiReference getReference(@NotNull GoImportString o) {
+  @NotNull
+  public static PsiReference[] getReferences(@NotNull GoImportString o) {
     if (o.getTextLength() < 2) return null;
-    return new GoImportReference(o, TextRange.from(1, o.getTextLength() - 2));
+    //return new GoImportReference(o, TextRange.from(1, o.getTextLength() - 2));
+    return PsiReference.EMPTY_ARRAY;
   }
 
   @Nullable

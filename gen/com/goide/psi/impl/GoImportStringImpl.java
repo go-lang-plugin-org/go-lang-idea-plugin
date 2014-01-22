@@ -28,9 +28,9 @@ public class GoImportStringImpl extends GoCompositeElementImpl implements GoImpo
     return findNotNullChildByType(STRING);
   }
 
-  @Nullable
-  public PsiReference getReference() {
-    return GoPsiImplUtil.getReference(this);
+  @NotNull
+  public PsiReference[] getReferences() {
+    return GoPsiImplUtil.getReferences(this);
   }
 
 }

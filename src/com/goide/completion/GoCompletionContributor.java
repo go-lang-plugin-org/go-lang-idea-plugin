@@ -6,7 +6,7 @@ import com.goide.GoTypes;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportString;
 import com.goide.psi.GoSelectorExpr;
-import com.goide.psi.impl.GoImportReference;
+import com.goide.psi.impl.imports.GoImportReference;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
