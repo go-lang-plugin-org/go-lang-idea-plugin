@@ -79,6 +79,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
     doTestInclude("package foo; type E interface {}; type B interface {<caret>}", "E");
   }
 
+  public void testInterfaceTypesNoStruct() throws Exception {
+    doTestExclude("package foo; type E struct {}; type B interface {<caret>}", "E");
+  }
+
   public void testNoDuplicates() throws Exception {
     doTestInclude("package foo; type a struct {<caret>", "a");
     List<String> stringList = myFixture.getLookupElementStrings();

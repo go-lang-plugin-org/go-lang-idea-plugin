@@ -1,8 +1,6 @@
 package com.goide.psi.impl;
 
-import com.goide.psi.GoFile;
-import com.goide.psi.GoTypeReferenceExpression;
-import com.goide.psi.GoTypeSpec;
+import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -38,7 +36,7 @@ public class GoTypeReference extends GoReferenceBase {
   @Override
   protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {
     String id = myIdentifier.getText();
-    for (GoTypeSpec t : file.getTypes()) {
+    for (GoTypeSpec t : file.getTypes()) { // todo: copy from completion or create a separate inspection
       if ((t.isPublic() || localResolve) && id.equals(t.getName())) return t;
     }
     return resolveImportOrPackage(file, id);
@@ -46,8 +44,12 @@ public class GoTypeReference extends GoReferenceBase {
 
   @Override
   protected void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion) {
+    boolean insideInterfaceType = myElement.getParent() instanceof GoMethodSpec;
     for (GoTypeSpec t : file.getTypes()) {
-      if (t.isPublic() || localCompletion) result.add(GoPsiImplUtil.createTypeLookupElement(t));
+      if (insideInterfaceType && !(t.getType() instanceof GoInterfaceType)) continue;
+      if (t.isPublic() || localCompletion) {
+        result.add(GoPsiImplUtil.createTypeLookupElement(t));
+      }
     }
     processImports(result, file, localCompletion);
   }
