@@ -41,7 +41,7 @@ public class GoElementFactory {
 
   @NotNull
   public static GoImportString createImportString(@NotNull Project project, @NotNull String importString) {
-    GoFile file = createFileFromText(project, "package main\nimport " + importString + "");
+    GoFile file = createFileFromText(project, "package main\nimport " + importString);
     return PsiTreeUtil.findChildOfType(file, GoImportString.class);
   }
 }
