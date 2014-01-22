@@ -1,5 +1,6 @@
 package com.goide.psi.impl.imports;
 
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
@@ -16,6 +17,14 @@ public class GoImportReference extends FileReference {
   public GoImportReference(@NotNull FileReferenceSet fileReferenceSet,
                            TextRange range, int index, String text) {
     super(fileReferenceSet, range, index, text);
+  }
+
+  @Override
+  protected Object createLookupItem(PsiElement candidate) {
+    if (candidate instanceof PsiDirectory) {
+      return GoPsiImplUtil.createDirectoryLookupElement((PsiDirectory)candidate);
+    }
+    return super.createLookupItem(candidate);
   }
 
   @NotNull
