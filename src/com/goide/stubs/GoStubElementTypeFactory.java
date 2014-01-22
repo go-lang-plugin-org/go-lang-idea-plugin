@@ -9,6 +9,7 @@ public class GoStubElementTypeFactory {
   public static IElementType factory(@NotNull String name) {
     if (name.equals("CONST_DEFINITION")) return new GoConstDefinitionStubElementType(name);
     if (name.equals("FIELD_DEFINITION")) return new GoFieldDefinitionStubElementType(name);
+    if (name.equals("ANONYMOUS_FIELD_DEFINITION")) return new GoAnonymousFieldDefinitionStubElementType(name);
     if (name.equals("FUNCTION_DECLARATION")) return new GoFunctionDeclarationStubElementType(name);
     if (name.equals("METHOD_DECLARATION")) return new GoMethodDeclarationStubElementType(name);
     if (name.equals("IMPORT_SPEC")) return new GoImportSpecStubElementType(name);

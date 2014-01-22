@@ -149,7 +149,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   }
 
   @Nullable
-  private PsiElement processGoType(@Nullable GoType type) {
+  protected PsiElement processGoType(@Nullable GoType type) {
     if (type == null) return null;
 
     PsiElement fromExistingType = processExistingType(type);
@@ -189,7 +189,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
         type.accept(new GoRecursiveVisitor() {
           @Override
-          public void visitAnonymousField(@NotNull GoAnonymousField o) {
+          public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
             refs.add(o.getTypeReferenceExpression());
           }
         });
@@ -263,18 +263,20 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     return ArrayUtil.toObjectArray(result);
   }
 
-  private static void processInType(List<LookupElement> result, PsiElement resolve, GoType type) {
+  protected static void processInType(List<LookupElement> result, PsiElement resolve, GoType type) {
     if (type instanceof GoStructType) {
       for (GoFieldDeclaration declaration : ((GoStructType)type).getFieldDeclarationList()) {
         for (GoFieldDefinition d : declaration.getFieldDefinitionList()) {
           result.add(GoPsiImplUtil.createVariableLikeLookupElement(d));
         }
+        GoAnonymousFieldDefinition anon = declaration.getAnonymousFieldDefinition();
+        if (anon != null) result.add(GoPsiImplUtil.createVariableLikeLookupElement(anon));
       }
 
       final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
       type.accept(new GoRecursiveVisitor() {
         @Override
-        public void visitAnonymousField(@NotNull GoAnonymousField o) {
+        public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
           refs.add(o.getTypeReferenceExpression());
         }
       });

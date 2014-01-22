@@ -60,6 +60,16 @@ public class GoReference extends GoReferenceBase {
 
     if (RESERVED_NAMES.contains(id)) return myElement;
 
+    PsiElement parent = myElement.getParent();
+    if (parent instanceof GoSelectorExpr) {
+      List<GoExpression> list = ((GoSelectorExpr)parent).getExpressionList();
+      if (list.size() > 1 && list.get(1).isEquivalentTo(myElement)) {
+        GoType type = list.get(0).getGoType();
+        PsiElement element = processGoType(type);
+        if (element != null) return element;
+      }
+    }
+
     return resolveImportOrPackage(file, id);
   }
 
@@ -84,6 +94,18 @@ public class GoReference extends GoReferenceBase {
 
   @Override
   protected void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion) {
+    PsiElement parent = myElement.getParent();
+    if (parent instanceof GoSelectorExpr) {
+      List<GoExpression> list = ((GoSelectorExpr)parent).getExpressionList();
+      if (list.size() > 1 && list.get(1).isEquivalentTo(myElement)) {
+        GoType type = list.get(0).getGoType();
+        if (type != null) {
+          processInType(result, type, type);
+        }
+      }
+      return;
+    }
+
     GoVarProcessor processor = new GoVarProcessor(myIdentifier.getText(), myRefExpression, true);
     ResolveUtil.treeWalkUp(myRefExpression, processor);
     processReceiver(processor);

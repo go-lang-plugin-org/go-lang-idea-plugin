@@ -114,6 +114,7 @@ public class GoPsiImplUtil {
                 v instanceof GoFieldDefinition ? GoIcons.FIELD :
                 v instanceof GoReceiver ? GoIcons.RECEIVER :
                 v instanceof GoConstDefinition ? GoIcons.CONST :
+                v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
                 null;
     GoType type = v.getGoType();
     String text = getText(type);
@@ -137,6 +138,20 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType getGoType(@NotNull GoReceiver o) {
     return o.getType();
+  }
+
+  @Nullable
+  public static PsiElement getIdentifier(@SuppressWarnings("UnusedParameters") @NotNull GoAnonymousFieldDefinition o) {
+    return null;
+  }
+
+  @NotNull
+  public static String getName(@NotNull GoAnonymousFieldDefinition o) {
+    return o.getTypeReferenceExpression().getIdentifier().getText();
+  }
+
+  public static int getTextOffset(@NotNull GoAnonymousFieldDefinition o) {
+    return o.getTypeReferenceExpression().getIdentifier().getTextOffset();
   }
 
   @Nullable
@@ -174,6 +189,24 @@ public class GoPsiImplUtil {
           }
         }
       }
+    }
+    else if (o instanceof GoReferenceExpression) {
+      PsiReference reference = o.getReference();
+      PsiElement resolve = reference != null ? reference.resolve() : null;
+      if (resolve instanceof GoAnonymousFieldDefinition) {
+        return getType(((GoAnonymousFieldDefinition)resolve).getTypeReferenceExpression());
+      }
+      else if (resolve instanceof GoNamedElement) {
+        return ((GoNamedElement)resolve).getGoType();
+      }
+    }
+    else if (o instanceof GoParenthesesExpr) {
+      GoExpression expression = ((GoParenthesesExpr)o).getExpression();
+      return expression != null ? expression.getGoType() : null;
+    }
+    else if (o instanceof GoSelectorExpr) {
+      GoExpression item = ContainerUtil.getLastItem(((GoSelectorExpr)o).getExpressionList());
+      return item != null ? item.getGoType() : null;
     }
     return null;
   }

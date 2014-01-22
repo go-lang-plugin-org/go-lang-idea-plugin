@@ -57,7 +57,7 @@ GO_FILE
         PsiElement(struct)('struct')
         PsiElement({)('{')
         FIELD_DECLARATION
-          ANONYMOUS_FIELD
+          ANONYMOUS_FIELD_DEFINITION
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('Car')
         PsiElement(})('}')
@@ -98,7 +98,7 @@ GO_FILE
         PsiElement(struct)('struct')
         PsiElement({)('{')
         FIELD_DECLARATION
-          ANONYMOUS_FIELD
+          ANONYMOUS_FIELD_DEFINITION
             TYPE_REFERENCE_EXPRESSION
               PsiElement(identifier)('Car')
         PsiElement(})('}')

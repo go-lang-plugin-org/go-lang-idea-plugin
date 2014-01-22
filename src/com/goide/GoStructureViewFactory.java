@@ -108,6 +108,8 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
             for (GoFieldDefinition definition : field.getFieldDefinitionList()) {
               result.add(new Element(definition));
             }
+            GoAnonymousFieldDefinition anon = field.getAnonymousFieldDefinition();
+             if (anon != null) result.add(new Element(anon));
           }
         }
       }
@@ -153,6 +155,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       if (myElement instanceof GoVarDefinition) return GoIcons.VARIABLE;
       if (myElement instanceof GoConstDefinition) return GoIcons.CONST;
       if (myElement instanceof GoFieldDefinition) return GoIcons.FIELD;
+      if (myElement instanceof GoAnonymousFieldDefinition) return GoIcons.FIELD;
       return myElement.getIcon(0);
     }
   }

@@ -52,7 +52,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends StubB
   @Override
   public int getTextOffset() {
     PsiElement identifier = getIdentifier();
-    return identifier != null ? identifier.getTextOffset() : 0;
+    return identifier != null ? identifier.getTextOffset() : super.getTextOffset();
   }
 
   @Override

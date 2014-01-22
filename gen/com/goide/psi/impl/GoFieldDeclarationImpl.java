@@ -23,8 +23,8 @@ public class GoFieldDeclarationImpl extends GoCompositeElementImpl implements Go
 
   @Override
   @Nullable
-  public GoAnonymousField getAnonymousField() {
-    return findChildByClass(GoAnonymousField.class);
+  public GoAnonymousFieldDefinition getAnonymousFieldDefinition() {
+    return findChildByClass(GoAnonymousFieldDefinition.class);
   }
 
   @Override

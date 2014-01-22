@@ -27,8 +27,8 @@ public class GoParser implements PsiParser {
     else if (root_ == AND_EXPR) {
       result_ = Expression(builder_, 0, 0);
     }
-    else if (root_ == ANONYMOUS_FIELD) {
-      result_ = AnonymousField(builder_, 0);
+    else if (root_ == ANONYMOUS_FIELD_DEFINITION) {
+      result_ = AnonymousFieldDefinition(builder_, 0);
     }
     else if (root_ == ARGUMENT_LIST) {
       result_ = ArgumentList(builder_, 0);
@@ -337,20 +337,20 @@ public class GoParser implements PsiParser {
 
   /* ********************************************************** */
   // '*'? TypeName
-  public static boolean AnonymousField(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "AnonymousField")) return false;
-    if (!nextTokenIs(builder_, "<anonymous field>", MUL, IDENTIFIER)) return false;
+  public static boolean AnonymousFieldDefinition(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "AnonymousFieldDefinition")) return false;
+    if (!nextTokenIs(builder_, "<anonymous field definition>", MUL, IDENTIFIER)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<anonymous field>");
-    result_ = AnonymousField_0(builder_, level_ + 1);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<anonymous field definition>");
+    result_ = AnonymousFieldDefinition_0(builder_, level_ + 1);
     result_ = result_ && TypeName(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, ANONYMOUS_FIELD, result_, false, null);
+    exit_section_(builder_, level_, marker_, ANONYMOUS_FIELD_DEFINITION, result_, false, null);
     return result_;
   }
 
   // '*'?
-  private static boolean AnonymousField_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "AnonymousField_0")) return false;
+  private static boolean AnonymousFieldDefinition_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "AnonymousFieldDefinition_0")) return false;
     consumeToken(builder_, MUL);
     return true;
   }
@@ -1166,7 +1166,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (FieldDefinitionList Type | AnonymousField) Tag?
+  // (FieldDefinitionList Type | AnonymousFieldDefinition) Tag?
   public static boolean FieldDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FieldDeclaration")) return false;
     if (!nextTokenIs(builder_, "<field declaration>", MUL, IDENTIFIER)) return false;
@@ -1178,13 +1178,13 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // FieldDefinitionList Type | AnonymousField
+  // FieldDefinitionList Type | AnonymousFieldDefinition
   private static boolean FieldDeclaration_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FieldDeclaration_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = FieldDeclaration_0_0(builder_, level_ + 1);
-    if (!result_) result_ = AnonymousField(builder_, level_ + 1);
+    if (!result_) result_ = AnonymousFieldDefinition(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }

@@ -67,12 +67,12 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testPreventStackOverflow() throws Exception {
-    doTestEquals("package foo; type E struct {*E}; func (e E) foo() {}; func main() {e := E{}; e.<caret>}", "foo");
+    doTestEquals("package foo; type E struct {*E}; func (e E) foo() {}; func main() {e := E{}; e.<caret>}", "foo", "E");
   }
 
   public void testNestedStructures() throws Exception {
     doTestEquals("package foo; type E struct {}; type B struct {E}; func (e E) foo() {}; func (b B) bar(){}" +
-                 "func main() {b := B{}; b.<caret>}", "foo", "bar");
+                 "func main() {b := B{}; b.<caret>}", "foo", "bar", "E");
   }
 
   public void testNoDuplicates() throws Exception {

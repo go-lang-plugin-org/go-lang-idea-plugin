@@ -67,11 +67,11 @@
 
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
+  implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
   implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
-  extends("(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
-  elementTypeFactory("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param|Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
+  extends("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
+  elementTypeFactory("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -111,13 +111,16 @@ ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
 
 StructType ::= struct '{' Fields? '}' {pin=1}
 private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
-FieldDeclaration ::= (FieldDefinitionList Type | AnonymousField) Tag?
+FieldDeclaration ::= (FieldDefinitionList Type | AnonymousFieldDefinition) Tag?
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
 FieldDefinition ::= identifier {
   stubClass="com.goide.stubs.GoFieldDefinitionStub"
 }
 
-AnonymousField ::= '*'? TypeName
+AnonymousFieldDefinition ::= '*'? TypeName {
+  stubClass="com.goide.stubs.GoAnonymousFieldDefinitionStub"
+  methods=[getIdentifier getName getTextOffset]
+}
 Tag ::= string
 
 PointerType ::= '*' Type {pin=1}

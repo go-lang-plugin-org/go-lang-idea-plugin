@@ -14,8 +14,8 @@ public class GoVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitAnonymousField(@NotNull GoAnonymousField o) {
-    visitCompositeElement(o);
+  public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
+    visitNamedElement(o);
   }
 
   public void visitArgumentList(@NotNull GoArgumentList o) {

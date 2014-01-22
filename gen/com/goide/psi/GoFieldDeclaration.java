@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoFieldDeclaration extends GoCompositeElement {
 
   @Nullable
-  GoAnonymousField getAnonymousField();
+  GoAnonymousFieldDefinition getAnonymousFieldDefinition();
 
   @NotNull
   List<GoFieldDefinition> getFieldDefinitionList();

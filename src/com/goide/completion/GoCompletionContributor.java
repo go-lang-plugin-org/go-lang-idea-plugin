@@ -5,6 +5,7 @@ import com.goide.GoParserDefinition;
 import com.goide.GoTypes;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportString;
+import com.goide.psi.GoSelectorExpr;
 import com.goide.psi.impl.GoImportReference;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -49,6 +50,7 @@ public class GoCompletionContributor extends CompletionContributor {
         ASTNode prev = FormatterUtil.getPreviousNonWhitespaceSibling(position.getNode());
         if (prev != null && prev.getElementType() == GoTypes.DOT) return;
         if (position.getNode().getElementType() == GoTypes.STRING) return;
+        if (position.getParent().getParent() instanceof GoSelectorExpr) return;
         for (String keyword : suggestKeywords(position)) {
           result.addElement(createKeywordLookupElement(keyword));
         }

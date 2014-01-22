@@ -13,7 +13,7 @@ public interface GoTypes {
 
   IElementType ADD_EXPR = new GoCompositeElementType("ADD_EXPR");
   IElementType AND_EXPR = new GoCompositeElementType("AND_EXPR");
-  IElementType ANONYMOUS_FIELD = new GoCompositeElementType("ANONYMOUS_FIELD");
+  IElementType ANONYMOUS_FIELD_DEFINITION = GoStubElementTypeFactory.factory("ANONYMOUS_FIELD_DEFINITION");
   IElementType ARGUMENT_LIST = new GoCompositeElementType("ARGUMENT_LIST");
   IElementType ARRAY_OR_SLICE_TYPE = new GoCompositeElementType("ARRAY_OR_SLICE_TYPE");
   IElementType ASSIGNMENT_STATEMENT = new GoCompositeElementType("ASSIGNMENT_STATEMENT");
@@ -201,8 +201,8 @@ public interface GoTypes {
       else if (type == AND_EXPR) {
         return new GoAndExprImpl(node);
       }
-      else if (type == ANONYMOUS_FIELD) {
-        return new GoAnonymousFieldImpl(node);
+      else if (type == ANONYMOUS_FIELD_DEFINITION) {
+        return new GoAnonymousFieldDefinitionImpl(node);
       }
       else if (type == ARGUMENT_LIST) {
         return new GoArgumentListImpl(node);
