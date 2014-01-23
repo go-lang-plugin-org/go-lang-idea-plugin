@@ -297,19 +297,14 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     return null;
   }
 
-  protected void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion) {
-  }
+  protected abstract void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion);
 
   @NotNull
-  public abstract PsiElement getIdentifier();
+  protected abstract PsiElement getIdentifier();
 
   @Nullable
-  protected PsiElement getQualifier() {
-    return null;
-  }
+  protected abstract PsiElement getQualifier();
 
   @Nullable
-  protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {
-    return null;
-  }
+  protected abstract PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve);
 }
