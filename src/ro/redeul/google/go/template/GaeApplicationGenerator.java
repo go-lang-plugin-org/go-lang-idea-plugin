@@ -80,14 +80,18 @@ public class GaeApplicationGenerator extends WebProjectTemplate {
                     }
 
                     try {
+                        directory.checkCreateFile("app.yaml");
                         GoTemplatesFactory.createFromTemplate(directory, "yaml", "app.yaml", GoTemplatesFactory.Template.GoAppEngineConfig);
-                    } catch (IncorrectOperationException e) {
+                    } catch (IncorrectOperationException ignored) {
+                    } catch (Exception e) {
                         LOG.error(e.getMessage());
                     }
 
                     try {
+                        directory.checkCreateFile(module.getProject().getName().concat(".go"));
                         GoTemplatesFactory.createFromTemplate(directory, "main", project.getName().concat(".go"), GoTemplatesFactory.Template.GoAppEngineMain);
-                    } catch (IncorrectOperationException e) {
+                    } catch (IncorrectOperationException ignored) {
+                    } catch (Exception e) {
                         LOG.error(e.getMessage());
                     }
 

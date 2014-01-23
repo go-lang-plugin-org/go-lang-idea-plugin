@@ -137,7 +137,7 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
         }
 
         if (adminPort == null || adminPort.isEmpty()) {
-            adminPort = "8080";
+            adminPort = "8000";
         }
 
         CommandLineState state = new CommandLineState(env) {
@@ -157,7 +157,7 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
                 String goExecName = sdkData.SDK_HOME_PATH + File.separator + "goapp";
 
                 if (GoSdkUtil.isHostOsWindows()) {
-                    goExecName = goExecName.concat(".exe");
+                    goExecName = goExecName.concat(".bat");
                 }
 
                 String projectDir = project.getBasePath();

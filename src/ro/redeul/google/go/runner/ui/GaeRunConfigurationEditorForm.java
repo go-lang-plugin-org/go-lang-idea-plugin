@@ -45,7 +45,7 @@ public class GaeRunConfigurationEditorForm extends SettingsEditor<GaeLocalConfig
 
         adminPort.setText(configuration.adminPort);
         if (adminPort.getText().isEmpty()) {
-            adminPort.setText("8080");
+            adminPort.setText("8000");
         }
     }
 
@@ -85,6 +85,10 @@ public class GaeRunConfigurationEditorForm extends SettingsEditor<GaeLocalConfig
             throw new ConfigurationException("admin_port is below 1024 and you will need special privileges for it");
         }
 
+        if (port.getText().equals(adminPort.getText())) {
+            throw new ConfigurationException("port and admin_port must be different values");
+        }
+
         // @TODO validation for app.yaml would be nice
 
         configuration.builderArguments = builderArguments.getText();
@@ -102,7 +106,7 @@ public class GaeRunConfigurationEditorForm extends SettingsEditor<GaeLocalConfig
 
         configuration.adminPort = adminPort.getText();
         if (configuration.adminPort.isEmpty()) {
-            configuration.adminPort = "8080";
+            configuration.adminPort = "8000";
         }
     }
 
@@ -113,7 +117,7 @@ public class GaeRunConfigurationEditorForm extends SettingsEditor<GaeLocalConfig
         workingDirectoryBrowser.setText(project.getBasePath());
         hostname.setText("localhost");
         port.setText("8080");
-        adminPort.setText("8080");
+        adminPort.setText("8000");
     }
 
     @NotNull
