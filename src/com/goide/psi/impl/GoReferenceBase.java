@@ -284,7 +284,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   @Nullable
   protected PsiElement resolveImportOrPackage(@NotNull GoFile file, @NotNull String id) {
     Collection<PsiElement> collection = file.getImportMap().get(id);
-    for(Object o : collection) {
+    for (Object o : collection) {
       if (o instanceof GoImportSpec) return (PsiElement)o;
       if (o instanceof GoImportString) return resolvePackage((GoImportString)o);
     }
