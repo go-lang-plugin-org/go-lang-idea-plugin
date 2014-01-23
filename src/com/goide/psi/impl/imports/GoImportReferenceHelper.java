@@ -97,7 +97,7 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
   }
 
   @NotNull
-  public static List<VirtualFile> getPathsToLookup(@NotNull PsiElement element) {
+  private static List<VirtualFile> getPathsToLookup(@NotNull PsiElement element) {
     List<VirtualFile> result = ContainerUtil.newArrayList();
     VirtualFile sdkHome = getSdkHome(element);
     ContainerUtil.addIfNotNull(result, sdkHome);

@@ -132,13 +132,14 @@ public class GoFile extends PsiFileBase {
   public Map<String, Object> getImportMap() {
     HashMap<String, Object> map = ContainerUtil.newHashMap();
     for (GoImportSpec spec : getImports()) {
-      String string = StringUtil.unquoteString(spec.getImportString().getText());
+      GoImportString string = spec.getImportString();
       PsiElement identifier = spec.getIdentifier();
       if (identifier != null) {
         map.put(identifier.getText(), spec);
         continue;
       }
-      String key = ContainerUtil.getLastItem(StringUtil.split(string, "/"));
+      
+      String key = ContainerUtil.getLastItem(StringUtil.split(StringUtil.unquoteString(string.getText()), "/"));
       if (key != null) {
         map.put(key, string);
       }
@@ -301,6 +302,7 @@ public class GoFile extends PsiFileBase {
   @Nullable
   @Override
   public StubElement<GoFile> getStub() {
+    //noinspection unchecked
     return super.getStub();
   }
 

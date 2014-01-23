@@ -5,9 +5,10 @@ import com.goide.psi.impl.imports.GoImportReferenceHelper;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -35,7 +36,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
 
     PsiDirectory dir = null;
     if (resolve instanceof GoImportSpec) {
-      dir = resolvePackage(StringUtil.unquoteString(((GoImportSpec)resolve).getImportString().getText()));
+      return resolvePackage(((GoImportSpec)resolve).getImportString());
     }
     else if (resolve instanceof PsiDirectory) {
       dir = (PsiDirectory)resolve;
@@ -49,16 +50,23 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   }
 
   @Nullable
-  protected PsiDirectory resolvePackage(@NotNull String str) {
-    if (str.startsWith("/") || str.isEmpty()) return null;
-    for (VirtualFile file : GoImportReferenceHelper.getPathsToLookup(myElement)) {
-      VirtualFile child = file != null ? file.findFileByRelativePath(str) : null;
-      if (child != null) return PsiManager.getInstance(myElement.getProject()).findDirectory(child);
+  protected PsiDirectory resolvePackage(@NotNull GoImportString importString) {
+    PsiReference[] references = importString.getReferences();
+    for (PsiReference reference : references) {
+      if (reference instanceof FileReferenceOwner) {
+        PsiFileReference lastFileReference = ((FileReferenceOwner)reference).getLastFileReference();
+        PsiElement result = lastFileReference != null ? lastFileReference.resolve() : null;
+        return result instanceof PsiDirectory ? (PsiDirectory)result : null;
+      }
     }
+
     return null;
   }
 
-  protected void processDirectory(@NotNull List<LookupElement> result, @Nullable PsiDirectory dir, @Nullable GoFile file, boolean localCompletion) {
+  protected void processDirectory(@NotNull List<LookupElement> result,
+                                  @Nullable PsiDirectory dir,
+                                  @Nullable GoFile file,
+                                  boolean localCompletion) {
     String packageName = file != null ? file.getPackageName() : null;
     String name = file != null ? file.getName() : null;
     if (dir != null) {
@@ -288,7 +296,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   protected PsiElement resolveImportOrPackage(@NotNull GoFile file, @NotNull String id) {
     Object o = file.getImportMap().get(id);
     if (o instanceof GoImportSpec) return (PsiElement)o;
-    if (o instanceof String) return resolvePackage((String)o);
+    if (o instanceof GoImportString) return resolvePackage((GoImportString)o);
     return null;
   }
 
