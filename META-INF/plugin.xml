@@ -27,6 +27,7 @@
     <lang.elementManipulator forClass="com.goide.psi.GoImportString" implementationClass="com.goide.psi.impl.manipulator.GoImportStringManipulator"/>
 
     <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
+    <lang.importOptimizer language="go" implementationClass="com.goide.codeInsight.imports.GoImportOptimizer"/>
     <psi.fileReferenceHelper implementation="com.goide.psi.impl.imports.GoImportReferenceHelper"/>
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>
     <fileTypeFactory implementation="com.goide.GoFileTypeFactory"/>
