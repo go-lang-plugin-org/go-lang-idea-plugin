@@ -23,10 +23,13 @@ import com.intellij.util.ArrayFactory;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FilteringIterator;
+import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GoFile extends PsiFileBase {
   private static final String MAIN_FUNCTION_NAME = "main";
@@ -129,19 +132,19 @@ public class GoFile extends PsiFileBase {
     return myImportsValue.getValue();
   }
 
-  public Map<String, Object> getImportMap() {
-    HashMap<String, Object> map = ContainerUtil.newHashMap();
+  public MultiMap<String, PsiElement> getImportMap() {
+    MultiMap<String, PsiElement> map = MultiMap.create();
     for (GoImportSpec spec : getImports()) {
       GoImportString string = spec.getImportString();
       PsiElement identifier = spec.getIdentifier();
       if (identifier != null) {
-        map.put(identifier.getText(), spec);
+        map.putValue(identifier.getText(), spec);
         continue;
       }
-      
+
       String key = ContainerUtil.getLastItem(StringUtil.split(StringUtil.unquoteString(string.getText()), "/"));
       if (key != null) {
-        map.put(key, string);
+        map.putValue(key, string);
       }
     }
     return map;

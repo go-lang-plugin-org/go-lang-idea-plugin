@@ -15,6 +15,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
@@ -282,9 +283,11 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
 
   @Nullable
   protected PsiElement resolveImportOrPackage(@NotNull GoFile file, @NotNull String id) {
-    Object o = file.getImportMap().get(id);
-    if (o instanceof GoImportSpec) return (PsiElement)o;
-    if (o instanceof GoImportString) return resolvePackage((GoImportString)o);
+    Collection<PsiElement> collection = file.getImportMap().get(id);
+    for(Object o : collection) {
+      if (o instanceof GoImportSpec) return (PsiElement)o;
+      if (o instanceof GoImportString) return resolvePackage((GoImportString)o);
+    }
     return null;
   }
 
