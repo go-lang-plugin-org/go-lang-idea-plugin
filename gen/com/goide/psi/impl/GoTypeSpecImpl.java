@@ -39,4 +39,9 @@ public class GoTypeSpecImpl extends GoNamedElementImpl<GoTypeSpecStub> implement
     return findNotNullChildByType(IDENTIFIER);
   }
 
+  @NotNull
+  public List<GoMethodDeclaration> getMethods() {
+    return GoPsiImplUtil.getMethods(this);
+  }
+
 }

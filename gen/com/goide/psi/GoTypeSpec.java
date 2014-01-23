@@ -15,4 +15,7 @@ public interface GoTypeSpec extends GoNamedElement, StubBasedPsiElement<GoTypeSp
   @NotNull
   PsiElement getIdentifier();
 
+  @NotNull
+  List<GoMethodDeclaration> getMethods();
+
 }

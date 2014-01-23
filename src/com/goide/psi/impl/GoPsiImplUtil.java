@@ -10,11 +10,10 @@ import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.ResolveState;
+import com.intellij.psi.*;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -241,5 +240,40 @@ public class GoPsiImplUtil {
   @NotNull
   public static String getText(@Nullable PsiElement o) {
     return o == null ? "" : o.getText().replaceAll("\\s+", " ");
+  }
+
+  @NotNull
+  public static List<GoMethodDeclaration> getMethods(@NotNull final GoTypeSpec o) {
+    final PsiDirectory dir = o.getContainingFile().getParent();
+    if (dir != null) {
+      return CachedValuesManager.getCachedValue(o, new CachedValueProvider<List<GoMethodDeclaration>>() {
+        @Nullable
+        @Override
+        public Result<List<GoMethodDeclaration>> compute() {
+          return Result.create(calcMethods(o), dir);
+        }
+      });
+    }
+    return calcMethods(o);
+  }
+
+  @NotNull
+  private static List<GoMethodDeclaration> calcMethods(@NotNull GoTypeSpec o) {
+    PsiFile file = o.getContainingFile().getOriginalFile();
+    PsiDirectory dir = file.getParent();
+    if (dir == null) return ContainerUtil.emptyList();
+    List<GoMethodDeclaration> result = ContainerUtil.newArrayList();
+    for (PsiFile psiFile : dir.getFiles()) {
+      if (psiFile instanceof GoFile) { // todo: create index and process only files with methods
+        List<GoMethodDeclaration> methods = ((GoFile)psiFile).getMethods();
+        for (GoMethodDeclaration method : methods) {
+          GoTypeReferenceExpression e = method.getReceiver().getType().getTypeReferenceExpression();
+          PsiReference reference = e != null ? e.getReference() : null;
+          PsiElement resolve = reference != null ? reference.resolve() : null;
+          if (resolve != null && o.textMatches(resolve)) result.add(method); // todo: better predicate
+        }
+      }
+    }
+    return result;
   }
 }
