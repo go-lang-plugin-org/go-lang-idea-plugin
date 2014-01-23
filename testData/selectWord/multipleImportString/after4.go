@@ -1,7 +1,7 @@
 package main
 
-<selection>import (
+import (
     "database/sql/driver"
-    "database/s<caret>ql/driver"
-    "database/sql/driver"
-)</selection>
+<selection>    "database/s<caret>ql/driver"
+</selection>    "database/sql/driver"
+)
