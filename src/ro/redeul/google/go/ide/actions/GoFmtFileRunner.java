@@ -24,6 +24,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -66,7 +67,7 @@ public class GoFmtFileRunner extends AnAction {
         String[] goEnv;
         String goExecName;
 
-        if (sdk instanceof GoSdkType) {
+        if (sdk.getSdkType() == GoSdkType.getInstance()) {
             GoSdkData sdkData = (GoSdkData) sdk.getSdkAdditionalData();
             if (sdkData == null) {
                 return;
@@ -74,7 +75,7 @@ public class GoFmtFileRunner extends AnAction {
 
             goExecName = sdkData.GO_BIN_PATH;
             goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
-        } else {
+        } else if (sdk.getSdkType() == GoAppEngineSdkType.getInstance()) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
             if (sdkData == null) {
                 return;
@@ -82,6 +83,8 @@ public class GoFmtFileRunner extends AnAction {
 
             goExecName = sdkData.GOAPP_BIN_PATH;
             goEnv = GoSdkUtil.getExtendedGAEEnv(sdkData, projectDir, "");
+        } else {
+            return;
         }
 
         FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
