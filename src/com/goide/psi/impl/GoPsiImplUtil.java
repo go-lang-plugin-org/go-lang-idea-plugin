@@ -244,7 +244,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static List<GoMethodDeclaration> getMethods(@NotNull final GoTypeSpec o) {
-    final PsiDirectory dir = o.getContainingFile().getParent();
+    final PsiDirectory dir = o.getContainingFile().getOriginalFile().getParent();
     if (dir != null) {
       return CachedValuesManager.getCachedValue(o, new CachedValueProvider<List<GoMethodDeclaration>>() {
         @Nullable
@@ -259,8 +259,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   private static List<GoMethodDeclaration> calcMethods(@NotNull GoTypeSpec o) {
-    PsiFile file = o.getContainingFile().getOriginalFile();
-    PsiDirectory dir = file.getParent();
+    PsiDirectory dir = o.getContainingFile().getOriginalFile().getParent();
     if (dir == null) return ContainerUtil.emptyList();
     List<GoMethodDeclaration> result = ContainerUtil.newArrayList();
     for (PsiFile psiFile : dir.getFiles()) {
