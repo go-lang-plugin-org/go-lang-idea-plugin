@@ -139,8 +139,71 @@ public class GoPsiUtils {
             return literalText.replaceAll("(?:^`)|(?:`$)", "").replaceAll("\\\\`","`");
         }
 
-        // TODO: implemented proper rune translation to value here.
+        Integer runeValue = getRuneValue(literalText);
+        if (runeValue != null)
+            return Character.toString((char) runeValue.intValue());
+
         return literalText.replaceAll("(?:^\")|(?:\"$)", "");
+    }
+
+    public static Integer getRuneValue(String literalText) {
+        if (!literalText.startsWith("'"))
+            return null;
+        String runeText = literalText.replaceAll("(?:^')|(?:'$)", "");
+        if (runeText.isEmpty())
+            return null;
+
+        if (runeText.length() > 1){
+            if (!runeText.startsWith("\\"))
+                return null;
+
+            String firstValue = runeText.substring(1, 2);
+            if (firstValue.equals("a"))
+                return 0x07;
+            if (firstValue.equals("b"))
+                return 0x08;
+            if (firstValue.equals("f"))
+                return 0x0c;
+            if (firstValue.equals("n"))
+                return 0x0a;
+            if (firstValue.equals("r"))
+                return 0x0d;
+            if (firstValue.equals("t"))
+                return 0x09;
+            if (firstValue.equals("v"))
+                return 0x0b;
+            if (firstValue.equals("\\"))
+                return 0x5c;
+            if (firstValue.equals("'"))
+                return 0x27;
+            if (firstValue.equals("\""))
+                return 0x22;            
+            if (firstValue.equals("U") && runeText.length() == 10){
+                String uValue = runeText.substring(2, 10);
+                Integer value = Integer.parseInt(uValue, 16);
+                if (value <= 0x10FFFF)
+                    return value;
+            }
+            if (firstValue.equals("u") && runeText.length() == 6){
+                String uValue = runeText.substring(2, 6);
+                Integer value = Integer.parseInt(uValue, 16);
+                if ((value < 0xD800) || (value > 0xDFFF)) // surrogate half
+                    return value;
+            }
+            if (firstValue.equals("x") && runeText.length() == 4) {
+                String uValue = runeText.substring(2, 4);
+                return Integer.parseInt(uValue, 16);
+            }
+            if (runeText.length() == 4) { // octal
+                String uValue = runeText.substring(1, 4);
+                Integer value = Integer.parseInt(uValue, 8);
+                if (value <= 255)
+                    return value;
+            }
+            return null;
+        } else {
+            return runeText.codePointAt(0);
+        }
     }
 
     public static GoFile[] findFilesForPackage(String importPath,

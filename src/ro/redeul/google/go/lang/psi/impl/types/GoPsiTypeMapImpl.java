@@ -5,11 +5,13 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.childAt;
+import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -45,7 +47,20 @@ public class GoPsiTypeMapImpl extends GoPsiPackagedElementBase implements
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        if (goType instanceof GoPsiTypeName) {
+            goType =  resolveToFinalType(goType);
+        }
+        if (!(goType instanceof GoPsiTypeMap))
+            return false;
+        GoPsiTypeMap otherTypeMap = (GoPsiTypeMap)goType;
+        if (!(getKeyType().isIdentical(otherTypeMap.getKeyType()))){
+            return false;
+        }
+        if (!(getElementType().isIdentical(otherTypeMap.getElementType()))){
+            return false;
+        }
+
+        return true;
     }
 
     @Override

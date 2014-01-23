@@ -15,4 +15,8 @@ public interface GoConstDeclaration extends GoPsiElement {
 
     GoExpr[] getExpressions();
 
+    GoExpr getExpression(GoLiteralIdentifier identifier);
+
+    Integer getConstSpecIndex();
+
 }

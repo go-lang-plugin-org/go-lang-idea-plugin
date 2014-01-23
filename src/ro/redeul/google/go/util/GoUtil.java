@@ -25,6 +25,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
+import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralFunctionImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeArrayImpl;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
@@ -172,7 +174,7 @@ public class GoUtil {
             return String.format("[]%s", recursiveNameOrGlobalTypeImp(((GoPsiTypeSlice) type).getElementType(), currentFile));
         } else if (type instanceof GoPsiTypeArray) {
             GoPsiTypeArray elementType = (GoPsiTypeArray) type;
-            return String.format("[%s]%s", elementType.getArrayLength(), recursiveNameOrGlobalTypeImp(elementType.getElementType(), currentFile));
+            return String.format("[%d]%s", elementType.getArrayLength(), recursiveNameOrGlobalTypeImp(elementType.getElementType(), currentFile));
         } else if (type instanceof GoPsiTypeMap) {
             GoPsiTypeMap type1 = (GoPsiTypeMap) type;
             return String.format("map[%s]%s", recursiveNameOrGlobalTypeImp(type1.getKeyType(), currentFile), recursiveNameOrGlobalTypeImp(type1.getElementType(), currentFile));
@@ -300,13 +302,30 @@ public class GoUtil {
                 return ((GoPsiTypePointer) element).getTargetType().isIdentical(targetType.getPsiType());
             }
         }
+        if (element2 instanceof GoTypeArray) {
+            GoPsiType psiType = ((GoTypeArray) element2).getPsiType();
+            if (psiType != null)
+                return psiType.isIdentical(element);
+        }
+        if (element2 instanceof GoType) {
+            if (goExpr instanceof GoParenthesisedExpression)
+                goExpr = ((GoParenthesisedExpression) goExpr).getInnerExpression();
+            if (goExpr instanceof GoLiteralExpression) {
+                GoLiteral literal = ((GoLiteralExpression) goExpr).getLiteral();
+                if (literal instanceof GoLiteralFunction){
+                    return ((GoLiteralFunction) literal).isIdentical(element);
+                }
+            }
+
+        }
+
         return element.getUnderlyingType().isIdentical(((GoType) element2).getUnderlyingType());
 
 
     }
 
 
-    private static boolean CompairFnTypeToDecl(GoPsiTypeFunction psiType, GoFunctionDeclaration functionDeclaration) {
+    public static boolean CompairFnTypeToDecl(GoPsiTypeFunction psiType, GoFunctionDeclaration functionDeclaration) {
 
 
         GoFunctionParameter[] funcTypeArguments = psiType.getParameters();

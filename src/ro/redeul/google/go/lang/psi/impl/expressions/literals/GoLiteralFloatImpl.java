@@ -21,7 +21,12 @@ public class GoLiteralFloatImpl extends GoPsiElementBase
     @NotNull
     @Override
     public Float getValue() {
-        return null;
+        String textValue = getText();
+        try {
+            return Float.parseFloat(textValue);
+        } catch (NumberFormatException e){
+            return (float) 0;
+        }
     }
 
     @Override

@@ -20,15 +20,18 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.util.GoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
+import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -46,11 +49,13 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
+        if (goType instanceof GoPsiTypeName) {
+            goType = resolveToFinalType(goType);
+        }
         if ( !(goType instanceof GoPsiTypeFunction))
             return false;
 
-        // TODO: implement equality here
-        return false;
+        return GoUtil.CompairFnTypeToDecl((GoPsiTypeFunction) goType, this);
     }
 
     @Override

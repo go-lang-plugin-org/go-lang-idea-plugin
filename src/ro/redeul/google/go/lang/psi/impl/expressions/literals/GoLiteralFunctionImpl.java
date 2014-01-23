@@ -15,13 +15,18 @@ import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.util.GoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 public class GoLiteralFunctionImpl extends GoPsiElementBase
     implements GoLiteralFunction {
@@ -105,6 +110,12 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
+        if (goType instanceof GoPsiTypeName) {
+            goType = resolveToFinalType(goType);
+        }
+        if (goType instanceof GoPsiTypeFunction){
+            return GoUtil.CompairFnTypeToDecl((GoPsiTypeFunction) goType, this);
+        }
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
