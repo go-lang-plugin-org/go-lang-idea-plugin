@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiReference;
 
 public class GoImportStringImpl extends GoCompositeElementImpl implements GoImportString {
@@ -31,6 +32,11 @@ public class GoImportStringImpl extends GoCompositeElementImpl implements GoImpo
   @NotNull
   public PsiReference[] getReferences() {
     return GoPsiImplUtil.getReferences(this);
+  }
+
+  @Nullable
+  public PsiDirectory resolve() {
+    return GoPsiImplUtil.resolve(this);
   }
 
 }

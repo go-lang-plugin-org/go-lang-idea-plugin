@@ -7,8 +7,6 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -37,7 +35,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
 
     PsiDirectory dir = null;
     if (resolve instanceof GoImportSpec) {
-      return resolvePackage(((GoImportSpec)resolve).getImportString());
+      return ((GoImportSpec)resolve).getImportString().resolve();
     }
     else if (resolve instanceof PsiDirectory) {
       dir = (PsiDirectory)resolve;
@@ -48,20 +46,6 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   private static PsiElement calcQualifierResolve(PsiElement qualifier) {
     PsiReference reference = qualifier.getReference();
     return reference != null ? reference.resolve() : null;
-  }
-
-  @Nullable
-  protected PsiDirectory resolvePackage(@NotNull GoImportString importString) {
-    PsiReference[] references = importString.getReferences();
-    for (PsiReference reference : references) {
-      if (reference instanceof FileReferenceOwner) {
-        PsiFileReference lastFileReference = ((FileReferenceOwner)reference).getLastFileReference();
-        PsiElement result = lastFileReference != null ? lastFileReference.resolve() : null;
-        return result instanceof PsiDirectory ? (PsiDirectory)result : null;
-      }
-    }
-
-    return null;
   }
 
   protected void processDirectory(@NotNull List<LookupElement> result,
@@ -286,7 +270,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     Collection<PsiElement> collection = file.getImportMap().get(id);
     for (Object o : collection) {
       if (o instanceof GoImportSpec) return (PsiElement)o;
-      if (o instanceof GoImportString) return resolvePackage((GoImportString)o);
+      if (o instanceof GoImportString) return ((GoImportString)o).resolve();
     }
     return null;
   }

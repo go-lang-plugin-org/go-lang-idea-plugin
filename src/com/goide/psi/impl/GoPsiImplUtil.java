@@ -14,6 +14,8 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScopesCore;
@@ -31,13 +33,27 @@ import java.util.List;
 
 public class GoPsiImplUtil {
   private static class Lazy {
+
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
     private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
   }
-
   @Nullable
   public static GoTypeReferenceExpression getQualifier(@NotNull GoTypeReferenceExpression o) {
     return PsiTreeUtil.getChildOfType(o, GoTypeReferenceExpression.class);
+  }
+
+  @Nullable
+  public static PsiDirectory resolve(@NotNull GoImportString importString) {
+    PsiReference[] references = importString.getReferences();
+    for (PsiReference reference : references) {
+      if (reference instanceof FileReferenceOwner) {
+        PsiFileReference lastFileReference = ((FileReferenceOwner)reference).getLastFileReference();
+        PsiElement result = lastFileReference != null ? lastFileReference.resolve() : null;
+        return result instanceof PsiDirectory ? (PsiDirectory)result : null;
+      }
+    }
+
+    return null;
   }
 
   @Nullable

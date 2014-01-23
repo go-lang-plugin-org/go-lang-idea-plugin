@@ -4,6 +4,7 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiReference;
 
 public interface GoImportString extends GoCompositeElement {
@@ -13,5 +14,8 @@ public interface GoImportString extends GoCompositeElement {
 
   @NotNull
   PsiReference[] getReferences();
+
+  @Nullable
+  PsiDirectory resolve();
 
 }

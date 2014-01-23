@@ -2,7 +2,9 @@ package com.goide.codeInsight.imports;
 
 import com.goide.psi.*;
 import com.intellij.lang.ImportOptimizer;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -28,8 +30,31 @@ public class GoImportOptimizer implements ImportOptimizer {
     commit(file);
     assert file instanceof GoFile;
     final MultiMap<String, PsiElement> importMap = ((GoFile)file).getImportMap();
-    
+
     final List<PsiElement> importEntriesToDelete = ContainerUtil.newArrayList();
+    final List<PsiElement> importIdentifiersToDelete = ContainerUtil.newArrayList();
+
+    for (PsiElement importEntry : importMap.values()) {
+      GoImportSpec importSpec = getImportSpec(importEntry);
+      if (importSpec != null) {
+        PsiDirectory resolve = importSpec.getImportString().resolve();
+        if (resolve != null) {
+          PsiElement identifier = importSpec.getIdentifier();
+          if (identifier != null) {
+            String identifierName = identifier.getText();
+            if (identifierName.equals(resolve.getName())) {
+              importIdentifiersToDelete.add(identifier);
+            }
+          }
+        }
+        else {
+          if (!ApplicationManager.getApplication().isUnitTestMode()) {
+            importEntriesToDelete.add(importSpec); //todo test sdk require
+          }
+        }
+      }
+    }
+
     importEntriesToDelete.addAll(findDuplicatedEntries(importMap));
 
     GoRecursiveVisitor visitor = new GoRecursiveVisitor() {
@@ -68,10 +93,16 @@ public class GoImportOptimizer implements ImportOptimizer {
       @Override
       public void run() {
         commit(file);
-        
+
         for (PsiElement importEntry : importEntriesToDelete) {
           if (importEntry.isValid()) {
             deleteImportSpec(getImportSpec(importEntry));
+          }
+        }
+
+        for (PsiElement identifier : importIdentifiersToDelete) {
+          if (identifier.isValid()) {
+            identifier.delete();
           }
         }
       }
@@ -91,15 +122,15 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   @NotNull
-  private static Collection<PsiElement> findDuplicatedEntries(@NotNull MultiMap<String, PsiElement> importMap) {
-    Collection<PsiElement> duplicatedEntries = ContainerUtil.newArrayList();
+  private static Collection<GoImportSpec> findDuplicatedEntries(@NotNull MultiMap<String, PsiElement> importMap) {
+    Collection<GoImportSpec> duplicatedEntries = ContainerUtil.newArrayList();
     for (Map.Entry<String, Collection<PsiElement>> imports : importMap.entrySet()) {
       Collection<PsiElement> importsWithSameName = imports.getValue();
       if (importsWithSameName.size() > 1) {
-        MultiMap<String, PsiElement> importsWithSameString = collectImportsWithSameString(importsWithSameName);
-        
-        for (Map.Entry<String, Collection<PsiElement>> importWithSameString : importsWithSameString.entrySet()) {
-          List<PsiElement> duplicates = ContainerUtil.newArrayList(importWithSameString.getValue());
+        MultiMap<String, GoImportSpec> importsWithSameString = collectImportsWithSameString(importsWithSameName);
+
+        for (Map.Entry<String, Collection<GoImportSpec>> importWithSameString : importsWithSameString.entrySet()) {
+          List<GoImportSpec> duplicates = ContainerUtil.newArrayList(importWithSameString.getValue());
           if (duplicates.size() > 1) {
             duplicatedEntries.addAll(ContainerUtil.getFirstItems(duplicates, duplicates.size() - 1));
           }
@@ -110,12 +141,12 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   @NotNull
-  private static MultiMap<String, PsiElement> collectImportsWithSameString(@NotNull Collection<PsiElement> importsWithSameName) {
-    MultiMap<String, PsiElement> importsWithSameString = MultiMap.create();
+  private static MultiMap<String, GoImportSpec> collectImportsWithSameString(@NotNull Collection<PsiElement> importsWithSameName) {
+    MultiMap<String, GoImportSpec> importsWithSameString = MultiMap.create();
     for (PsiElement duplicateCandidate : importsWithSameName) {
       GoImportSpec importSpec = getImportSpec(duplicateCandidate);
       if (importSpec != null) {
-        importsWithSameString.putValue(importSpec.getImportString().getText(), duplicateCandidate);
+        importsWithSameString.putValue(importSpec.getImportString().getText(), importSpec);
       }
     }
     return importsWithSameString;
