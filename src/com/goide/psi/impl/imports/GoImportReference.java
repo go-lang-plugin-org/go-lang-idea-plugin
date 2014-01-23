@@ -40,7 +40,7 @@ public class GoImportReference extends FileReference {
         return grandParent != null ? new PsiElementResolveResult[]{new PsiElementResolveResult(grandParent)} : ResolveResult.EMPTY_ARRAY;
       }
     }
-    
+
     if (isLast()) {
       List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive), new Condition<ResolveResult>() {
         @Override
@@ -52,6 +52,22 @@ public class GoImportReference extends FileReference {
       return filtered.toArray(new ResolveResult[filtered.size()]);
     }
     return super.innerResolve(caseSensitive);
+  }
+
+  @Override
+  public boolean isReferenceTo(PsiElement element) {
+    if (super.isReferenceTo(element)) {
+      return true;
+    }
+
+    if (element instanceof PsiPackage) {
+      for (PsiDirectory directory : ((PsiPackage)element).getDirectories()) {
+        if (super.isReferenceTo(directory)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   private boolean isFirst() {
