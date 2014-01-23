@@ -1,15 +1,15 @@
 package com.goide.psi.impl.imports;
 
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveResult;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -29,9 +29,18 @@ public class GoImportReference extends FileReference {
   @NotNull
   @Override
   protected ResolveResult[] innerResolve(boolean caseSensitive) {
-    if (".".equals(getCanonicalText()) || "..".equals(getCanonicalText())) {
-      return ResolveResult.EMPTY_ARRAY;
+    if (isFirst()) {
+      if (".".equals(getCanonicalText())) {
+        PsiDirectory directory = getDirectory();
+        return directory != null ? new PsiElementResolveResult[]{new PsiElementResolveResult(directory)} : ResolveResult.EMPTY_ARRAY;
+      }
+      else if ("..".equals(getCanonicalText())) {
+        PsiDirectory directory = getDirectory();
+        PsiDirectory grandParent = directory != null ? directory.getParentDirectory() : null;
+        return grandParent != null ? new PsiElementResolveResult[]{new PsiElementResolveResult(grandParent)} : ResolveResult.EMPTY_ARRAY;
+      }
     }
+    
     if (isLast()) {
       List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive), new Condition<ResolveResult>() {
         @Override
@@ -43,5 +52,16 @@ public class GoImportReference extends FileReference {
       return filtered.toArray(new ResolveResult[filtered.size()]);
     }
     return super.innerResolve(caseSensitive);
+  }
+
+  private boolean isFirst() {
+    return getIndex() <= 0;
+  }
+
+  @Nullable
+  private PsiDirectory getDirectory() {
+    PsiElement originalElement = CompletionUtil.getOriginalElement(getElement());
+    PsiFile file = originalElement != null ? originalElement.getContainingFile() : getElement().getContainingFile();
+    return file.getParent();
   }
 }
