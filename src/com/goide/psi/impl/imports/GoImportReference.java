@@ -14,8 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class GoImportReference extends FileReference {
-  public GoImportReference(@NotNull FileReferenceSet fileReferenceSet,
-                           TextRange range, int index, String text) {
+  public GoImportReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
     super(fileReferenceSet, range, index, text);
   }
 
@@ -30,6 +29,9 @@ public class GoImportReference extends FileReference {
   @NotNull
   @Override
   protected ResolveResult[] innerResolve(boolean caseSensitive) {
+    if (".".equals(getCanonicalText()) || "..".equals(getCanonicalText())) {
+      return ResolveResult.EMPTY_ARRAY;
+    }
     if (isLast()) {
       List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive), new Condition<ResolveResult>() {
         @Override
