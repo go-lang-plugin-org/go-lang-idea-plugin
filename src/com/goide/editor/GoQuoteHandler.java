@@ -1,5 +1,6 @@
-package com.goide;
+package com.goide.editor;
 
+import com.goide.GoTypes;
 import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;

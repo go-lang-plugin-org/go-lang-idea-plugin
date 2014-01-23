@@ -34,8 +34,8 @@
     <lang.syntaxHighlighterFactory key="go" implementationClass="com.goide.highlighting.GoSyntaxHighlighterFactory"/>
     <lang.psiStructureViewFactory language="go" implementationClass="com.goide.GoStructureViewFactory"/>
     <colorSettingsPage implementation="com.goide.highlighting.GoColorsAndFontsPage"/>
-    <lang.braceMatcher language="go" implementationClass="com.goide.GoBraceMatcher"/>
-    <quoteHandler fileType="Go" className="com.goide.GoQuoteHandler"/>
+    <lang.braceMatcher language="go" implementationClass="com.goide.editor.GoBraceMatcher"/>
+    <quoteHandler fileType="Go" className="com.goide.editor.GoQuoteHandler"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
     <lang.refactoringSupport language="go" implementationClass="com.goide.refactor.GoRefactoringSupportProvider"/>

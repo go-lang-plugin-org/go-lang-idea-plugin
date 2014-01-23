@@ -1,5 +1,7 @@
-package com.goide;
+package com.goide.editor;
 
+import com.goide.GoParserDefinition;
+import com.goide.GoTypes;
 import com.intellij.lang.BracePair;
 import com.intellij.lang.PairedBraceMatcher;
 import com.intellij.psi.PsiFile;
