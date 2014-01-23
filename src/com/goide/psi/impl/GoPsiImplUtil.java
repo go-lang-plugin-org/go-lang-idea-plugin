@@ -4,14 +4,19 @@ import com.goide.GoIcons;
 import com.goide.completion.GoCompletionContributor;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
+import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.SingleCharInsertHandler;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -20,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class GoPsiImplUtil {
@@ -259,20 +266,19 @@ public class GoPsiImplUtil {
 
   @NotNull
   private static List<GoMethodDeclaration> calcMethods(@NotNull GoTypeSpec o) {
-    PsiDirectory dir = o.getContainingFile().getOriginalFile().getParent();
-    if (dir == null) return ContainerUtil.emptyList();
-    List<GoMethodDeclaration> result = ContainerUtil.newArrayList();
-    for (PsiFile psiFile : dir.getFiles()) {
-      if (psiFile instanceof GoFile) { // todo: create index and process only files with methods
-        List<GoMethodDeclaration> methods = ((GoFile)psiFile).getMethods();
-        for (GoMethodDeclaration method : methods) {
-          GoTypeReferenceExpression e = method.getReceiver().getType().getTypeReferenceExpression();
-          PsiReference reference = e != null ? e.getReference() : null;
-          PsiElement resolve = reference != null ? reference.resolve() : null;
-          if (resolve != null && o.textMatches(resolve)) result.add(method); // todo: better predicate
-        }
-      }
+    PsiElement identifier = o.getIdentifier();
+    PsiFile file = o.getContainingFile().getOriginalFile();
+    if (file instanceof GoFile) {
+      String packageName = ((GoFile)file).getPackageName();
+      String typeName = identifier.getText();
+      if (StringUtil.isEmpty(packageName) || StringUtil.isEmpty(typeName)) return Collections.emptyList();
+      String key = packageName + "." + typeName;
+      Project project = ((GoFile)file).getProject();
+      PsiDirectory parent = file.getParent();
+      GlobalSearchScope scope = parent == null ? GlobalSearchScope.allScope(project) : GlobalSearchScopesCore.directoryScope(parent, false);
+      Collection<GoMethodDeclaration> declarations = GoMethodIndex.find(key, project, scope);
+      return ContainerUtil.newArrayList(declarations);
     }
-    return result;
+    return Collections.emptyList();
   }
 }
