@@ -22,8 +22,7 @@ public class GoImportOptimizer implements ImportOptimizer {
   public Runnable processFile(final PsiFile file) {
     commit(file);
     assert file instanceof GoFile;
-    final GoFile goFile = (GoFile)file;
-    final Map<String, Object> importMap = goFile.getImportMap();
+    final Map<String, Object> importMap = ((GoFile)file).getImportMap();
     GoRecursiveVisitor visitor = new GoRecursiveVisitor() {
       @Override
       public void visitTypeReferenceExpression(@NotNull GoTypeReferenceExpression o) {
@@ -72,8 +71,8 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   private static void commit(PsiFile file) {
-    final PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
-    final Document document = manager.getDocument(file);
+    PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
+    Document document = manager.getDocument(file);
     if (document != null) {
       manager.commitDocument(document);
     }
