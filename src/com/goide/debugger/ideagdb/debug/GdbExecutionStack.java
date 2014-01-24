@@ -11,17 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GdbExecutionStack extends XExecutionStack {
-  private static final Logger m_log =
-    Logger.getInstance("#com.goide.debugger.ideagdb.debug.GdbExecutionStack");
+  private static final Logger LOG = Logger.getInstance(GdbExecutionStack.class);
 
-  // The GDB instance
-  private Gdb m_gdb;
-
-  // The thread
-  private GdbThread m_thread;
-
-  // The top of the stack
-  private GdbExecutionStackFrame m_topFrame;
+  private final Gdb myGdb;
+  private final GdbThread myThread;
+  private GdbExecutionStackFrame myTopFrame;
 
   /**
    * Constructor.
@@ -32,12 +26,12 @@ public class GdbExecutionStack extends XExecutionStack {
   public GdbExecutionStack(Gdb gdb, GdbThread thread) {
     super(thread.formatName());
 
-    m_gdb = gdb;
-    m_thread = thread;
+    myGdb = gdb;
+    myThread = thread;
 
     // Get the top of the stack
     if (thread.frame != null) {
-      m_topFrame = new GdbExecutionStackFrame(gdb, m_thread.id, thread.frame);
+      myTopFrame = new GdbExecutionStackFrame(gdb, myThread.id, thread.frame);
     }
   }
 
@@ -49,7 +43,7 @@ public class GdbExecutionStack extends XExecutionStack {
   @Nullable
   @Override
   public XStackFrame getTopFrame() {
-    return m_topFrame;
+    return myTopFrame;
   }
 
   /**
@@ -63,7 +57,7 @@ public class GdbExecutionStack extends XExecutionStack {
   public void computeStackFrames(final int firstFrameIndex, final XStackFrameContainer container) {
     // Just get the whole stack
     String command = "-stack-list-frames";
-    m_gdb.sendCommand(command, new Gdb.GdbEventCallback() {
+    myGdb.sendCommand(command, new Gdb.GdbEventCallback() {
       @Override
       public void onGdbCommandCompleted(GdbEvent event) {
         onGdbStackTraceReady(event, firstFrameIndex, container);
@@ -86,7 +80,7 @@ public class GdbExecutionStack extends XExecutionStack {
     }
     if (!(event instanceof GdbStackTrace)) {
       container.errorOccurred("Unexpected data received from GDB");
-      m_log.warn("Unexpected event " + event + " received from -stack-list-frames request");
+      LOG.warn("Unexpected event " + event + " received from -stack-list-frames request");
       return;
     }
 
@@ -101,7 +95,7 @@ public class GdbExecutionStack extends XExecutionStack {
     List<GdbExecutionStackFrame> stack = new ArrayList<GdbExecutionStackFrame>();
     for (int i = firstFrameIndex; i < stackTrace.stack.size(); ++i) {
       GdbStackFrame frame = stackTrace.stack.get(i);
-      stack.add(new GdbExecutionStackFrame(m_gdb, m_thread.id, frame));
+      stack.add(new GdbExecutionStackFrame(myGdb, myThread.id, frame));
     }
 
     // Pass the data on
