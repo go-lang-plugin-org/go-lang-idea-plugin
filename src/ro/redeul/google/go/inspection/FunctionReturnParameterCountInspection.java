@@ -5,16 +5,16 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
-import ro.redeul.google.go.lang.psi.statements.*;
+import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+import ro.redeul.google.go.util.GoTypeInspectUtil;
 
 import static ro.redeul.google.go.inspection.InspectionUtil.*;
 
-public class FunctionReturnParameterCountInspection extends AbstractWholeGoFileInspection
-{
+public class FunctionReturnParameterCountInspection extends AbstractWholeGoFileInspection {
     @Override
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
 
@@ -82,7 +82,7 @@ public class FunctionReturnParameterCountInspection extends AbstractWholeGoFileI
             // when a method specifies named return parameters it's ok to have
             // an empty return statement.
             if (returnCount == UNKNOWN_COUNT ||
-                returnCount == 0 && hasNamedReturns ) {
+                    returnCount == 0 && hasNamedReturns) {
                 return;
             }
 
@@ -92,6 +92,8 @@ public class FunctionReturnParameterCountInspection extends AbstractWholeGoFileI
                 result.addProblem(statement, GoBundle.message("error.too.many.arguments.to.return"));
             } else if (expectedResCount > returnCount) {
                 result.addProblem(statement, GoBundle.message("error.not.enough.arguments.to.return"));
+            } else {
+                GoTypeInspectUtil.checkFunctionTypeReturns(statement, result);
             }
         }
     }

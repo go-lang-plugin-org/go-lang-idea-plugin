@@ -1,22 +1,20 @@
 package ro.redeul.google.go.inspection;
 
+<<<<<<< HEAD
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
+=======
+>>>>>>> Add inspection on return stmt
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
-import ro.redeul.google.go.inspection.fix.CastTypeFix;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.*;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
+<<<<<<< HEAD
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -25,8 +23,14 @@ import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+=======
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
+>>>>>>> Add inspection on return stmt
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-import ro.redeul.google.go.util.GoUtil;
+import ro.redeul.google.go.util.GoTypeInspectUtil;
 
 import static ro.redeul.google.go.inspection.InspectionUtil.*;
 import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.getCallFunctionIdentifier;
@@ -125,6 +129,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         }
     }
 
+<<<<<<< HEAD
     private static boolean checkIsInterface(GoPsiType psiType) {
         if (psiType instanceof GoPsiTypeInterface)
             return true;
@@ -439,6 +444,8 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         }
 
     }
+=======
+>>>>>>> Add inspection on return stmt
 
     private static void checkFunctionCallArguments(GoCallOrConvExpression call, InspectionResult result) {
         if (call == null) {
@@ -475,7 +482,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         } else if (argumentCount > expectedCount) {
             result.addProblem(call, GoBundle.message("error.too.many.arguments.in.call", name));
         } else {
-            checkFunctionTypeArguments(call, result);
+            GoTypeInspectUtil.checkFunctionTypeArguments(call, result);
         }
     }
 }
