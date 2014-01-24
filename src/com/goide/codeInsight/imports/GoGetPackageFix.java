@@ -13,6 +13,7 @@ import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -53,7 +54,7 @@ public class GoGetPackageFix extends LocalQuickFixBase {
     final String path = getSdkPath(element);
     if (path == null) return;
 
-    ProgressManager.getInstance().run(new Task.Modal(project, "Go get '" + myPackage + "'", true) {
+    final Task.Modal task = new Task.Modal(project, "Go get '" + myPackage + "'", true) {
       private OSProcessHandler myHandler;
 
       @Override
@@ -65,7 +66,7 @@ public class GoGetPackageFix extends LocalQuickFixBase {
         indicator.setIndeterminate(true);
         String executable = JpsGoSdkType.getGoExecutableFile(path).getAbsolutePath();
 
-        GeneralCommandLine install = new GeneralCommandLine();
+        final GeneralCommandLine install = new GeneralCommandLine();
         install.setExePath(executable);
         install.addParameter("get");
         install.addParameter(myPackage);
@@ -77,13 +78,16 @@ public class GoGetPackageFix extends LocalQuickFixBase {
             public void onTextAvailable(ProcessEvent event, Key outputType) {
               String text = event.getText();
               out.add(text);
-              //indicator.setText2(text); // todo: look ugly
+              indicator.setText2(text); // todo: look ugly
             }
 
             @Override
             public void processTerminated(ProcessEvent event) {
               int code = event.getExitCode();
-              if (code == 0) return;
+              if (code == 0) {
+                LocalFileSystem.getInstance().refresh(false);
+                return;
+              }
               String message = StringUtil.join(out.size() > 1 ? ContainerUtil.subList(out, 1) : out, "\n");
               Notifications.Bus.notify(new Notification("Go", TITLE, message, NotificationType.WARNING), project);
             }
@@ -96,9 +100,12 @@ public class GoGetPackageFix extends LocalQuickFixBase {
         catch (ExecutionException e) {
           Notifications.Bus.notify(new Notification("Go", TITLE, StringUtil.notNullize(e.getMessage()), NotificationType.WARNING), project);
         }
-        finally {
-          LocalFileSystem.getInstance().refresh(false);
-        }
+      }
+    };
+    CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
+      @Override
+      public void run() {
+        ProgressManager.getInstance().run(task);
       }
     });
   }
