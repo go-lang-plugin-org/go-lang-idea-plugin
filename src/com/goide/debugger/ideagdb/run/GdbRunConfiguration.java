@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class GdbRunConfiguration extends ModuleBasedConfiguration<GdbRunConfigurationModule> implements RunConfigurationWithSuppressedDefaultRunAction, RunConfigurationWithSuppressedDefaultDebugAction {
+public class GdbRunConfiguration extends ModuleBasedConfiguration<RunConfigurationModule> implements RunConfigurationWithSuppressedDefaultRunAction, RunConfigurationWithSuppressedDefaultDebugAction {
   private static final Logger LOG = Logger.getInstance(GdbRunConfiguration.class);
 
   public String GDB_PATH = "gdb";
@@ -26,7 +26,7 @@ public class GdbRunConfiguration extends ModuleBasedConfiguration<GdbRunConfigur
   public String STARTUP_COMMANDS = "";
 
   public GdbRunConfiguration(String name, Project project, ConfigurationFactory factory) {
-    super(name, new GdbRunConfigurationModule(project), factory);
+    super(name, new RunConfigurationModule(project), factory);
   }
 
   @Override
