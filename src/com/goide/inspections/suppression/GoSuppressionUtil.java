@@ -1,7 +1,7 @@
 package com.goide.inspections.suppression;
 
-import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoFunctionOrMethodDeclaration;
+import com.goide.psi.GoImportDeclaration;
 import com.goide.psi.GoStatement;
 import com.intellij.codeInspection.SuppressQuickFix;
 import com.intellij.codeInspection.SuppressionUtil;
@@ -16,7 +16,8 @@ public class GoSuppressionUtil {
     }
 
     return SuppressionUtil.isSuppressedInStatement(element, toolId, GoStatement.class) ||
-           SuppressionUtil.isSuppressedInStatement(element, toolId, GoFunctionOrMethodDeclaration.class);
+           SuppressionUtil.isSuppressedInStatement(element, toolId, GoFunctionOrMethodDeclaration.class) ||
+           SuppressionUtil.isSuppressedInStatement(element, toolId, GoImportDeclaration.class);
   }
 
   @NotNull
@@ -25,7 +26,9 @@ public class GoSuppressionUtil {
       new GoSuppressInspectionFix("Suppress all inspections for function", GoFunctionOrMethodDeclaration.class),
       new GoSuppressInspectionFix(inspectionShortName, "Suppress for function", GoFunctionOrMethodDeclaration.class),
       new GoSuppressInspectionFix("Suppress all inspections for statement", GoStatement.class),
-      new GoSuppressInspectionFix(inspectionShortName, "Suppress for statement", GoStatement.class)
+      new GoSuppressInspectionFix(inspectionShortName, "Suppress for statement", GoStatement.class),
+      new GoSuppressInspectionFix("Suppress all inspections for import", GoImportDeclaration.class),
+      new GoSuppressInspectionFix(inspectionShortName, "Suppress for import", GoImportDeclaration.class),
     };
   }
 
