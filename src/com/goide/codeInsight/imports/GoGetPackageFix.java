@@ -1,4 +1,4 @@
-package com.goide.psi.impl.imports;
+package com.goide.codeInsight.imports;
 
 import com.goide.jps.model.JpsGoSdkType;
 import com.intellij.codeInspection.LocalQuickFixBase;

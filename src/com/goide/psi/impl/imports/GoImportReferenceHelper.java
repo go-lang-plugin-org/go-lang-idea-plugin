@@ -1,6 +1,7 @@
 package com.goide.psi.impl.imports;
 
 import com.goide.GoSdkType;
+import com.goide.codeInsight.imports.GoGetPackageFix;
 import com.goide.psi.GoFile;
 import com.intellij.codeInsight.daemon.quickFix.CreateFileFix;
 import com.intellij.codeInspection.LocalQuickFix;
