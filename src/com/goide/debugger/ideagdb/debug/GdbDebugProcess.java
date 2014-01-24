@@ -34,29 +34,14 @@ import java.util.Date;
 import java.util.List;
 
 public class GdbDebugProcess extends XDebugProcess implements GdbListener {
-  private static final Logger m_log =
-    Logger.getInstance("#com.goide.debugger.ideagdb.debug.GdbDebugProcess");
+  private static final Logger LOG = Logger.getInstance(GdbDebugProcess.class);
 
-  private GdbDebuggerEditorsProvider m_editorsProvider = new GdbDebuggerEditorsProvider();
-  private ConsoleView m_console;
-
-  // The run configuration
-  private GdbRunConfiguration m_configuration;
-
-  // The GDB console
-  private GdbConsoleView m_gdbConsole;
-
-  public Gdb getGdb() {
-    return m_gdb;
-  }
-
-  // The GDB instance
-  private Gdb m_gdb;
-
-  // The breakpoint handler
+  private GdbDebuggerEditorsProvider myEditorsProvider = new GdbDebuggerEditorsProvider();
+  private ConsoleView myConsole;
+  private GdbRunConfiguration myConfiguration;
+  private GdbConsoleView myGdbConsole;
+  private Gdb myGdb;
   private GdbBreakpointHandler m_breakpointHandler;
-
-  // Time formatter
   private SimpleDateFormat m_timeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
 
   /**
@@ -64,24 +49,15 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    */
   public GdbDebugProcess(XDebugSession session, GdbExecutionResult executionResult) {
     super(session);
-    m_configuration = executionResult.getConfiguration();
-    m_console = (ConsoleView)executionResult.getExecutionConsole();
+    myConfiguration = executionResult.getConfiguration();
+    myConsole = (ConsoleView)executionResult.getExecutionConsole();
 
-    // Get the working directory
     // TODO: Make this an option on the run configuration
-    String workingDirectory = new File(m_configuration.APP_PATH).getParent();
-
-    // Prepare GDB
-    m_gdb = new Gdb(m_configuration.GDB_PATH, workingDirectory, this);
-
-    // Create the GDB console
-    m_gdbConsole = new GdbConsoleView(m_gdb, session.getProject());
-
-    // Create the breakpoint handler
-    m_breakpointHandler = new GdbBreakpointHandler(m_gdb, this);
-
-    // Launch the process
-    m_gdb.start();
+    String workingDirectory = new File(myConfiguration.APP_PATH).getParent();
+    myGdb = new Gdb(myConfiguration.GDB_PATH, workingDirectory, this);
+    myGdbConsole = new GdbConsoleView(myGdb, session.getProject());
+    m_breakpointHandler = new GdbBreakpointHandler(myGdb, this);
+    myGdb.start();
   }
 
   @Override
@@ -92,7 +68,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
   @NotNull
   @Override
   public XDebuggerEditorsProvider getEditorsProvider() {
-    return m_editorsProvider;
+    return myEditorsProvider;
   }
 
   /**
@@ -100,7 +76,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    */
   @Override
   public void startStepOver() {
-    m_gdb.sendCommand("-exec-next");
+    myGdb.sendCommand("-exec-next");
   }
 
   @Override
@@ -108,7 +84,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
     // TODO: GDB doesn't support handling commands when the target is running; we should use
     // asynchronous mode if the target supports it. I'm not really sure how to deal with this on
     // other targets (e.g., Windows)
-    m_log.warn("startPausing: stub");
+    LOG.warn("startPausing: stub");
   }
 
   /**
@@ -116,7 +92,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    */
   @Override
   public void startStepInto() {
-    m_gdb.sendCommand("-exec-step");
+    myGdb.sendCommand("-exec-step");
   }
 
   /**
@@ -124,7 +100,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    */
   @Override
   public void startStepOut() {
-    m_gdb.sendCommand("-exec-finish");
+    myGdb.sendCommand("-exec-finish");
   }
 
   /**
@@ -132,7 +108,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    */
   @Override
   public void stop() {
-    m_gdb.sendCommand("-gdb-exit");
+    myGdb.sendCommand("-gdb-exit");
   }
 
   /**
@@ -140,18 +116,18 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    */
   @Override
   public void resume() {
-    m_gdb.sendCommand("-exec-continue --all");
+    myGdb.sendCommand("-exec-continue --all");
   }
 
   @Override
   public void runToPosition(@NotNull XSourcePosition position) {
-    m_log.warn("runToPosition: stub");
+    LOG.warn("runToPosition: stub");
   }
 
   @NotNull
   @Override
   public ExecutionConsole createConsole() {
-    return m_console;
+    return myConsole;
   }
 
   /**
@@ -162,18 +138,18 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
   @Override
   public void registerAdditionalContent(@NotNull RunnerLayoutUi ui) {
     Content gdbConsoleContent = ui.createContent("GdbConsoleContent",
-                                                 m_gdbConsole.getComponent(), "GDB Console", AllIcons.Debugger.Console,
-                                                 m_gdbConsole.getPreferredFocusableComponent());
+                                                 myGdbConsole.getComponent(), "GDB Console", AllIcons.Debugger.Console,
+                                                 myGdbConsole.getPreferredFocusableComponent());
     gdbConsoleContent.setCloseable(false);
 
     // Create the actions
     final DefaultActionGroup consoleActions = new DefaultActionGroup();
-    AnAction[] actions = m_gdbConsole.getConsole().createConsoleActions();
+    AnAction[] actions = myGdbConsole.getConsole().createConsoleActions();
     for (AnAction action : actions) {
       consoleActions.add(action);
     }
     gdbConsoleContent.setActions(consoleActions, ActionPlaces.DEBUGGER_TOOLBAR,
-                                 m_gdbConsole.getConsole().getPreferredFocusableComponent());
+                                 myGdbConsole.getConsole().getPreferredFocusableComponent());
 
     ui.addContent(gdbConsoleContent, 2, PlaceInGrid.bottom, false);
   }
@@ -185,7 +161,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    */
   @Override
   public void onGdbError(final Throwable ex) {
-    m_log.error("GDB error", ex);
+    LOG.error("GDB error", ex);
   }
 
   /**
@@ -194,11 +170,11 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
   @Override
   public void onGdbStarted() {
     // Send startup commands
-    String[] commandsArray = m_configuration.STARTUP_COMMANDS.split("\\r?\\n");
+    String[] commandsArray = myConfiguration.STARTUP_COMMANDS.split("\\r?\\n");
     for (String command : commandsArray) {
       command = command.trim();
       if (!command.isEmpty()) {
-        m_gdb.sendCommand(command);
+        myGdb.sendCommand(command);
       }
     }
   }
@@ -211,7 +187,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    */
   @Override
   public void onGdbCommandSent(String command, long token) {
-    m_gdbConsole.getConsole().print(m_timeFormat.format(new Date()) + " " + token + "> " +
+    myGdbConsole.getConsole().print(m_timeFormat.format(new Date()) + " " + token + "> " +
                                     command + "\n", ConsoleViewContentType.USER_INPUT);
   }
 
@@ -238,9 +214,9 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    * @param event The event
    */
   private void onGdbStoppedEvent(final GdbStoppedEvent event) {
-    if (m_gdb.hasCapability("thread-info")) {
+    if (myGdb.hasCapability("thread-info")) {
       // Get information about the threads
-      m_gdb.sendCommand("-thread-info", new Gdb.GdbEventCallback() {
+      myGdb.sendCommand("-thread-info", new Gdb.GdbEventCallback() {
         @Override
         public void onGdbCommandCompleted(GdbEvent threadInfoEvent) {
           onGdbThreadInfoReady(threadInfoEvent, event);
@@ -270,15 +246,15 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
           sb.append(" ");
         }
         sb.append(record.message);
-        m_gdbConsole.getConsole().print(sb.toString(), ConsoleViewContentType.NORMAL_OUTPUT);
+        myGdbConsole.getConsole().print(sb.toString(), ConsoleViewContentType.NORMAL_OUTPUT);
         break;
 
       case Target:
-        m_console.print(record.message, ConsoleViewContentType.NORMAL_OUTPUT);
+        myConsole.print(record.message, ConsoleViewContentType.NORMAL_OUTPUT);
         break;
 
       case Log:
-        m_gdbConsole.getConsole().print(record.message, ConsoleViewContentType.SYSTEM_OUTPUT);
+        myGdbConsole.getConsole().print(record.message, ConsoleViewContentType.SYSTEM_OUTPUT);
         break;
     }
   }
@@ -323,7 +299,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
 
     sb.append(record);
     sb.append("\n");
-    m_gdbConsole.getConsole().print(sb.toString(), ConsoleViewContentType.SYSTEM_OUTPUT);
+    myGdbConsole.getConsole().print(sb.toString(), ConsoleViewContentType.SYSTEM_OUTPUT);
   }
 
   /**
@@ -336,12 +312,12 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
     List<GdbThread> threads = null;
 
     if (threadInfoEvent instanceof GdbErrorEvent) {
-      m_log.warn("Failed to get thread information: " +
-                 ((GdbErrorEvent)threadInfoEvent).message);
+      LOG.warn("Failed to get thread information: " +
+               ((GdbErrorEvent)threadInfoEvent).message);
     }
     else if (!(threadInfoEvent instanceof GdbThreadInfo)) {
-      m_log.warn("Unexpected event " + threadInfoEvent + " received from -thread-info " +
-                 "request");
+      LOG.warn("Unexpected event " + threadInfoEvent + " received from -thread-info " +
+               "request");
     }
     else {
       threads = ((GdbThreadInfo)threadInfoEvent).threads;
@@ -358,7 +334,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    * @param threads      Thread information, if available.
    */
   private void handleTargetStopped(GdbStoppedEvent stoppedEvent, List<GdbThread> threads) {
-    GdbSuspendContext suspendContext = new GdbSuspendContext(m_gdb, stoppedEvent, threads);
+    GdbSuspendContext suspendContext = new GdbSuspendContext(myGdb, stoppedEvent, threads);
 
     // Find the breakpoint if necessary
     XBreakpoint<GdbBreakpointProperties> breakpoint = null;
@@ -379,5 +355,9 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
     else {
       getSession().positionReached(suspendContext);
     }
+  }
+
+  public Gdb getGdb() {
+    return myGdb;
   }
 }
