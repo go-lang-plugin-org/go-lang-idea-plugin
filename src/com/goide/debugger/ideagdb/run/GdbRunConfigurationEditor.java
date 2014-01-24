@@ -1,6 +1,5 @@
 package com.goide.debugger.ideagdb.run;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
@@ -9,11 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class GdbRunConfigurationEditor<T extends GdbRunConfiguration>
-  extends SettingsEditor<T> {
-  private static final Logger m_log =
-    Logger.getInstance("#com.goide.debugger.ideagdb.run.GdbRunConfigurationEditor");
-
+public class GdbRunConfigurationEditor<T extends GdbRunConfiguration> extends SettingsEditor<T> {
   private JPanel m_contentPanel;
   private TextFieldWithBrowseButton m_gdbPath;
   private TextFieldWithBrowseButton m_appPath;

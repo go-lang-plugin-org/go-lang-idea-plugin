@@ -15,10 +15,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GdbRunProfileState implements RunProfileState {
-  private GdbRunConfiguration m_configuration;
+  private GdbRunConfiguration myConfiguration;
 
   public GdbRunProfileState(GdbRunConfiguration configuration) {
-    m_configuration = configuration;
+    myConfiguration = configuration;
   }
 
   @Nullable
@@ -28,11 +28,10 @@ public class GdbRunProfileState implements RunProfileState {
     ProcessHandler processHandler = new DefaultDebugProcessHandler();
 
     // Create the console
-    Project project = m_configuration.getProject();
-    final TextConsoleBuilder builder =
-      TextConsoleBuilderFactory.getInstance().createBuilder(project);
-    ConsoleView m_console = builder.getConsole();
+    Project project = myConfiguration.getProject();
+    TextConsoleBuilder builder = TextConsoleBuilderFactory.getInstance().createBuilder(project);
+    ConsoleView console = builder.getConsole();
 
-    return new GdbExecutionResult(m_console, processHandler, m_configuration);
+    return new GdbExecutionResult(console, processHandler, myConfiguration);
   }
 }
