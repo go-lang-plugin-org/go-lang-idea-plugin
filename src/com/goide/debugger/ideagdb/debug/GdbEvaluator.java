@@ -16,15 +16,14 @@ import org.jetbrains.annotations.Nullable;
  * Expression evaluator for GDB.
  */
 public class GdbEvaluator extends XDebuggerEvaluator {
-  private static final Logger m_log =
-    Logger.getInstance("#com.goide.debugger.ideagdb.debug.GdbEvaluator");
+  private static final Logger LOG = Logger.getInstance(GdbEvaluator.class);
 
   // The GDB instance
-  private Gdb m_gdb;
+  private Gdb myGdb;
 
   // The evaluation context
-  private int m_thread;
-  private int m_frame;
+  private int myThread;
+  private int myFrame;
 
   /**
    * Constructor.
@@ -34,9 +33,9 @@ public class GdbEvaluator extends XDebuggerEvaluator {
    * @param frame  The frame to evaluate expressions in.
    */
   public GdbEvaluator(Gdb gdb, int thread, int frame) {
-    m_gdb = gdb;
-    m_thread = thread;
-    m_frame = frame;
+    myGdb = gdb;
+    myThread = thread;
+    myFrame = frame;
   }
 
   /**
@@ -47,9 +46,9 @@ public class GdbEvaluator extends XDebuggerEvaluator {
    * @param expressionPosition ??
    */
   @Override
-  public void evaluate(@NotNull String expression, final XEvaluationCallback callback,
+  public void evaluate(@NotNull String expression, @NotNull final XEvaluationCallback callback,
                        @Nullable XSourcePosition expressionPosition) {
-    m_gdb.evaluateExpression(m_thread, m_frame, expression, new Gdb.GdbEventCallback() {
+    myGdb.evaluateExpression(myThread, myFrame, expression, new Gdb.GdbEventCallback() {
       @Override
       public void onGdbCommandCompleted(GdbEvent event) {
         onGdbExpressionReady(event, callback);
@@ -66,7 +65,7 @@ public class GdbEvaluator extends XDebuggerEvaluator {
    * @param mode               Evaluation mode for the expression.
    */
   @Override
-  public void evaluate(@NotNull String expression, XEvaluationCallback callback,
+  public void evaluate(@NotNull String expression, @NotNull XEvaluationCallback callback,
                        @Nullable XSourcePosition expressionPosition, @Nullable EvaluationMode mode) {
     if (mode != null && mode != EvaluationMode.EXPRESSION) {
       throw new IllegalArgumentException("Unsupported expression evaluation mode");
@@ -99,7 +98,7 @@ public class GdbEvaluator extends XDebuggerEvaluator {
     }
     if (!(event instanceof GdbVariableObjects)) {
       callback.errorOccurred("Unexpected data received from GDB");
-      m_log.warn("Unexpected event " + event + " received from expression request");
+      LOG.warn("Unexpected event " + event + " received from expression request");
       return;
     }
 
@@ -115,6 +114,6 @@ public class GdbEvaluator extends XDebuggerEvaluator {
       return;
     }
 
-    callback.evaluated(new GdbValue(m_gdb, variableObject));
+    callback.evaluated(new GdbValue(myGdb, variableObject));
   }
 }

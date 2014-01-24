@@ -20,24 +20,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
-/**
- * Class for providing information about a stack frame.
- */
 public class GdbExecutionStackFrame extends XStackFrame {
-  private static final Logger m_log =
-    Logger.getInstance("#com.goide.debugger.ideagdb.debug.GdbExecutionStackFrame");
-
-  // The GDB instance
-  private Gdb m_gdb;
-
-  // The thread the frame is in
-  private int m_thread;
-
-  // The GDB stack frame
-  private GdbStackFrame m_frame;
-  private int m_frameNo;
-
-  // The expression evaluator
+  private static final Logger LOG = Logger.getInstance(GdbExecutionStackFrame.class);
+  private Gdb myGdb;
+  private int myThread;
+  private GdbStackFrame myFrame;
+  private int myFrameNo;
   private GdbEvaluator m_evaluator;
 
   /**
@@ -48,12 +36,12 @@ public class GdbExecutionStackFrame extends XStackFrame {
    * @param frame  The GDB stack frame to wrap.
    */
   public GdbExecutionStackFrame(Gdb gdb, int thread, GdbStackFrame frame) {
-    m_gdb = gdb;
-    m_thread = thread;
-    m_frame = frame;
+    myGdb = gdb;
+    myThread = thread;
+    myFrame = frame;
 
     // The top frame doesn't have a level set
-    m_frameNo = m_frame.level == null ? 0 : m_frame.level;
+    myFrameNo = myFrame.level == null ? 0 : myFrame.level;
   }
 
   /**
@@ -78,7 +66,7 @@ public class GdbExecutionStackFrame extends XStackFrame {
   @Override
   public XDebuggerEvaluator getEvaluator() {
     if (m_evaluator == null) {
-      m_evaluator = new GdbEvaluator(m_gdb, m_thread, m_frameNo);
+      m_evaluator = new GdbEvaluator(myGdb, myThread, myFrameNo);
     }
     return m_evaluator;
   }
@@ -91,17 +79,17 @@ public class GdbExecutionStackFrame extends XStackFrame {
   @Nullable
   @Override
   public XSourcePosition getSourcePosition() {
-    if (m_frame.fileAbsolute == null || m_frame.line == null) {
+    if (myFrame.fileAbsolute == null || myFrame.line == null) {
       return null;
     }
 
-    String path = m_frame.fileAbsolute.replace(File.separatorChar, '/');
+    String path = myFrame.fileAbsolute.replace(File.separatorChar, '/');
     VirtualFile file = LocalFileSystem.getInstance().findFileByPath(path);
     if (file == null) {
       return null;
     }
 
-    return XDebuggerUtil.getInstance().createPosition(file, m_frame.line - 1);
+    return XDebuggerUtil.getInstance().createPosition(file, myFrame.line - 1);
   }
 
   /**
@@ -111,7 +99,7 @@ public class GdbExecutionStackFrame extends XStackFrame {
    */
   @Override
   public void customizePresentation(ColoredTextContainer component) {
-    if (m_frame.address == null) {
+    if (myFrame.address == null) {
       component.append(XDebuggerBundle.message("invalid.frame"),
                        SimpleTextAttributes.ERROR_ATTRIBUTES);
       return;
@@ -119,9 +107,9 @@ public class GdbExecutionStackFrame extends XStackFrame {
 
     // Format the frame information
     XSourcePosition sourcePosition = getSourcePosition();
-    if (m_frame.function != null) {
+    if (myFrame.function != null) {
       // Strip any arguments from the function name
-      String function = m_frame.function;
+      String function = myFrame.function;
       int parenIndex = function.indexOf('(');
       if (parenIndex != -1) {
         function = function.substring(0, parenIndex);
@@ -136,11 +124,11 @@ public class GdbExecutionStackFrame extends XStackFrame {
       else {
         component.append(function + "()", SimpleTextAttributes.GRAY_ATTRIBUTES);
         component.append(" (", SimpleTextAttributes.GRAY_ITALIC_ATTRIBUTES);
-        if (m_frame.module != null) {
-          component.append(m_frame.module + ":",
+        if (myFrame.module != null) {
+          component.append(myFrame.module + ":",
                            SimpleTextAttributes.GRAY_ITALIC_ATTRIBUTES);
         }
-        component.append("0x" + Long.toHexString(m_frame.address) + ")",
+        component.append("0x" + Long.toHexString(myFrame.address) + ")",
                          SimpleTextAttributes.GRAY_ITALIC_ATTRIBUTES);
       }
     }
@@ -150,7 +138,7 @@ public class GdbExecutionStackFrame extends XStackFrame {
         SimpleTextAttributes.REGULAR_ATTRIBUTES);
     }
     else {
-      String addressStr = "0x" + Long.toHexString(m_frame.address);
+      String addressStr = "0x" + Long.toHexString(myFrame.address);
       component.append(addressStr, SimpleTextAttributes.GRAY_ITALIC_ATTRIBUTES);
     }
     component.setIcon(AllIcons.Debugger.StackFrame);
@@ -167,7 +155,7 @@ public class GdbExecutionStackFrame extends XStackFrame {
     // TODO: This can be called multiple times if the user changes the value of a variable. We
     // shouldn't really call -stack-list-variables more than once in this case (i.e., only call
     // -var-update after the first call)
-    m_gdb.getVariablesForFrame(m_thread, m_frameNo, new Gdb.GdbEventCallback() {
+    myGdb.getVariablesForFrame(myThread, myFrameNo, new Gdb.GdbEventCallback() {
       @Override
       public void onGdbCommandCompleted(GdbEvent event) {
         onGdbVariablesReady(event, node);
@@ -188,7 +176,7 @@ public class GdbExecutionStackFrame extends XStackFrame {
     }
     if (!(event instanceof GdbVariableObjects)) {
       node.setErrorMessage("Unexpected data received from GDB");
-      m_log.warn("Unexpected event " + event + " received from variable objects request");
+      LOG.warn("Unexpected event " + event + " received from variable objects request");
       return;
     }
 
@@ -202,7 +190,7 @@ public class GdbExecutionStackFrame extends XStackFrame {
     // Build a XValueChildrenList
     XValueChildrenList children = new XValueChildrenList(variables.objects.size());
     for (GdbVariableObject variable : variables.objects) {
-      children.add(variable.expression, new GdbValue(m_gdb, variable));
+      children.add(variable.expression, new GdbValue(myGdb, variable));
     }
     node.addChildren(children, true);
   }
