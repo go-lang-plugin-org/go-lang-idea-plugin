@@ -136,6 +136,7 @@ public class GdbMiLexer {
               break;
 
             case '\r':
+            case '\n':
               m_tokens.add(new GdbMiToken(GdbMiToken.Type.NewLine));
               m_state = FsmState.CrLf;
               break;
