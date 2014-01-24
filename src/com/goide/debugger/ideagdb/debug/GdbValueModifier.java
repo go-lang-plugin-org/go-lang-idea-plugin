@@ -14,14 +14,13 @@ import org.jetbrains.annotations.Nullable;
  * Value modifier for GDB variables.
  */
 public class GdbValueModifier extends XValueModifier {
-  private static final Logger m_log =
-    Logger.getInstance("#com.goide.debugger.ideagdb.debug.GdbValueModifier");
+  private static final Logger LOG = Logger.getInstance(GdbValueModifier.class);
 
   // Handle to the GDB instance
-  Gdb m_gdb;
+  Gdb myGdb;
 
   // The variable object being modified
-  GdbVariableObject m_variableObject;
+  GdbVariableObject myVariableObject;
 
   /**
    * Constructor.
@@ -30,8 +29,8 @@ public class GdbValueModifier extends XValueModifier {
    * @param variableObject The variable object to modify.
    */
   public GdbValueModifier(Gdb gdb, GdbVariableObject variableObject) {
-    m_gdb = gdb;
-    m_variableObject = variableObject;
+    myGdb = gdb;
+    myVariableObject = variableObject;
   }
 
   /**
@@ -43,7 +42,7 @@ public class GdbValueModifier extends XValueModifier {
   @Override
   public void setValue(@NotNull String expression, @NotNull final XModificationCallback callback) {
     // TODO: Format the expression properly
-    m_gdb.sendCommand("-var-assign " + m_variableObject.name + " " + expression,
+    myGdb.sendCommand("-var-assign " + myVariableObject.name + " " + expression,
                       new Gdb.GdbEventCallback() {
                         @Override
                         public void onGdbCommandCompleted(GdbEvent event) {
@@ -60,7 +59,7 @@ public class GdbValueModifier extends XValueModifier {
   @Nullable
   @Override
   public String getInitialValueEditorText() {
-    return m_variableObject.value;
+    return myVariableObject.value;
   }
 
   /**
@@ -69,14 +68,14 @@ public class GdbValueModifier extends XValueModifier {
    * @param event    The event.
    * @param callback The callback passed to setValue().
    */
-  private void onGdbNewValueReady(GdbEvent event, XModificationCallback callback) {
+  private static void onGdbNewValueReady(GdbEvent event, XModificationCallback callback) {
     if (event instanceof GdbErrorEvent) {
       callback.errorOccurred(((GdbErrorEvent)event).message);
       return;
     }
     if (!(event instanceof GdbDoneEvent)) {
       callback.errorOccurred("Unexpected data received from GDB");
-      m_log.warn("Unexpected event " + event + " received from -var-assign request");
+      LOG.warn("Unexpected event " + event + " received from -var-assign request");
       return;
     }
 
