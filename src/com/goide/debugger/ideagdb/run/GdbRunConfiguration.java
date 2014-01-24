@@ -18,11 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class GdbRunConfiguration extends ModuleBasedConfiguration<GdbRunConfigurationModule>
-  implements RunConfigurationWithSuppressedDefaultRunAction,
-             RunConfigurationWithSuppressedDefaultDebugAction {
-  private static final Logger m_log =
-    Logger.getInstance("#com.goide.debugger.ideagdb.run.GdbRunConfiguration");
+public class GdbRunConfiguration extends ModuleBasedConfiguration<GdbRunConfigurationModule> implements RunConfigurationWithSuppressedDefaultRunAction, RunConfigurationWithSuppressedDefaultDebugAction {
+  private static final Logger LOG = Logger.getInstance(GdbRunConfiguration.class);
 
   public String GDB_PATH = "gdb";
   public String APP_PATH = "";
@@ -34,7 +31,7 @@ public class GdbRunConfiguration extends ModuleBasedConfiguration<GdbRunConfigur
 
   @Override
   public Collection<Module> getValidModules() {
-    m_log.warn("getValidModules: stub");
+    LOG.warn("getValidModules: stub");
     return null;
   }
 
@@ -43,6 +40,7 @@ public class GdbRunConfiguration extends ModuleBasedConfiguration<GdbRunConfigur
     return new GdbRunConfiguration(getName(), getProject(), GdbRunConfigurationType.getInstance().getFactory());
   }
 
+  @NotNull
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
     return new GdbRunConfigurationEditor<GdbRunConfiguration>(getProject());
