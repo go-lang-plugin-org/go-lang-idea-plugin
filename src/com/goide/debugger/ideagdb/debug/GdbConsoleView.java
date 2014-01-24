@@ -2,7 +2,6 @@ package com.goide.debugger.ideagdb.debug;
 
 import com.goide.debugger.gdb.Gdb;
 import com.intellij.execution.impl.ConsoleViewImpl;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,56 +10,50 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Console tab for GDB input and output.
- */
 public class GdbConsoleView {
-  private static final Logger m_log =
-    Logger.getInstance("#com.goide.debugger.ideagdb.debug.GdbConsoleView");
+  private JPanel myContentPanel;
+  private JTextField myPrompt;
+  private JPanel myConsoleContainer;
 
-  private JPanel m_contentPanel;
-  private JTextField m_prompt;
-  private JPanel m_consoleContainer;
-
-  private Gdb m_gdb;
+  private Gdb myGdb;
 
   // The actual console
-  private ConsoleViewImpl m_console;
+  private ConsoleViewImpl mConsole;
 
   // The last command that was sent
-  private String m_lastCommand;
+  private String myLastCommand;
 
   public GdbConsoleView(Gdb gdb, @NotNull Project project) {
-    m_gdb = gdb;
-    m_console = new ConsoleViewImpl(project, true);
-    m_consoleContainer.add(m_console.getComponent(), BorderLayout.CENTER);
-    m_prompt.addActionListener(new ActionListener() {
+    myGdb = gdb;
+    mConsole = new ConsoleViewImpl(project, true);
+    myConsoleContainer.add(mConsole.getComponent(), BorderLayout.CENTER);
+    myPrompt.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent event) {
         String command = event.getActionCommand();
-        if (command.isEmpty() && m_lastCommand != null) {
+        if (command.isEmpty() && myLastCommand != null) {
           // Resend the last command
-          m_gdb.sendCommand(m_lastCommand);
+          myGdb.sendCommand(myLastCommand);
         }
         else if (!command.isEmpty()) {
           // Send the command to GDB
-          m_lastCommand = command;
-          m_prompt.setText("");
-          m_gdb.sendCommand(command);
+          myLastCommand = command;
+          myPrompt.setText("");
+          myGdb.sendCommand(command);
         }
       }
     });
   }
 
   public ConsoleViewImpl getConsole() {
-    return m_console;
+    return mConsole;
   }
 
   public JComponent getComponent() {
-    return m_contentPanel;
+    return myContentPanel;
   }
 
   public JComponent getPreferredFocusableComponent() {
-    return m_prompt;
+    return myPrompt;
   }
 }
