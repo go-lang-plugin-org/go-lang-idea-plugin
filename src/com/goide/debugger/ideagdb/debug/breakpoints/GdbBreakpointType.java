@@ -35,6 +35,7 @@ public class GdbBreakpointType extends XLineBreakpointType<GdbBreakpointProperti
          extension.equals("h") ||
          extension.equals("hpp") ||
          extension.equals("hh") ||
+         extension.equals("go") ||
          extension.equals("hxx"))) {
       return true;
     }
