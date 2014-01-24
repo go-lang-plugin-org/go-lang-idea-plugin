@@ -30,6 +30,18 @@
       <option name='GO' value='true'/>
     </context>
   </template>
+  <template description='struct' id='go_lang_struct' name='go_lang_struct' toReformat='true' toShortenFQNames='true'
+            value='struct {&#10;	$END$&#10;}'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='struct' id='go_lang_interface' name='go_lang_interface' toReformat='true' toShortenFQNames='true'
+            value='interface {$END$}'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
   <template description='If statement' id='go_lang_if' name='go_lang_if' toReformat='true' toShortenFQNames='true'
             value='if $CONDITION$ {&#10;	$END$&#10;}'>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='CONDITION'/>
