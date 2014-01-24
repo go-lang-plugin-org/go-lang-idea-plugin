@@ -36,7 +36,7 @@
       <option name='GO' value='true'/>
     </context>
   </template>
-  <template description='struct' id='go_lang_interface' name='go_lang_interface' toReformat='true' toShortenFQNames='true'
+  <template description='interface' id='go_lang_interface' name='go_lang_interface' toReformat='true' toShortenFQNames='true'
             value='interface {$END$}'>
     <context>
       <option name='GO' value='true'/>
