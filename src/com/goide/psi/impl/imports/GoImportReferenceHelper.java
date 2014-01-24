@@ -23,7 +23,6 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -38,9 +37,11 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
   @NotNull
   @Override
   public List<? extends LocalQuickFix> registerFixes(FileReference reference) {
+    LocalQuickFix goGetFix = new GoGetPackageFix(reference.getFileReferenceSet().getPathString());
+    List<LocalQuickFix> result = ContainerUtil.newArrayList(goGetFix);
     int index = reference.getIndex();
     if (!(reference instanceof GoImportReference) || !reference.isLast() || index < 0) {
-      return super.registerFixes(reference);
+      return result;
     }
 
     FileReferenceSet referenceSet = reference.getFileReferenceSet();
@@ -54,16 +55,16 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
 
     String fileNameToCreate = reference.getFileNameToCreate();
     if (context == null || !(context instanceof PsiDirectory)) {
-      return super.registerFixes(reference);
+      return result;
     }
 
     try {
       ((PsiDirectory)context).checkCreateSubdirectory(fileNameToCreate);
+      result.add(0, new CreateFileFix(true, fileNameToCreate, (PsiDirectory)context));
     }
-    catch (IncorrectOperationException e) {
-      return super.registerFixes(reference);
+    catch (IncorrectOperationException ignore) {
     }
-    return Arrays.asList(new CreateFileFix(true, fileNameToCreate, (PsiDirectory)context));
+    return result;
   }
 
   @NotNull

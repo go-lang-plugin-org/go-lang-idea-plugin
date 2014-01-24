@@ -94,8 +94,7 @@ public class GoGetPackageFix extends LocalQuickFixBase {
           indicator.setText2("Refreshing");
         }
         catch (ExecutionException e) {
-          Notifications.Bus.notify(
-            new Notification("Go", TITLE, StringUtil.notNullize(e.getMessage()), NotificationType.WARNING), project);
+          Notifications.Bus.notify(new Notification("Go", TITLE, StringUtil.notNullize(e.getMessage()), NotificationType.WARNING), project);
         }
         finally {
           LocalFileSystem.getInstance().refresh(false);
