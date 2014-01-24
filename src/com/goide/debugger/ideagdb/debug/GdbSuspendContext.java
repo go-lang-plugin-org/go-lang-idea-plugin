@@ -7,14 +7,11 @@ import com.intellij.xdebugger.frame.XExecutionStack;
 import com.intellij.xdebugger.frame.XSuspendContext;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class GdbSuspendContext extends XSuspendContext {
   private GdbExecutionStack myStack;
-  private GdbExecutionStack[] myStacks;
+  private final GdbExecutionStack[] myStacks;
 
   /**
    * @param gdb       Handle to the GDB instance.
@@ -51,8 +48,7 @@ public class GdbSuspendContext extends XSuspendContext {
       stacks.add(0, myStack);
     }
 
-    myStacks = new GdbExecutionStack[stacks.size()];
-    myStacks = stacks.toArray(myStacks);
+    myStacks = stacks.toArray(new GdbExecutionStack[stacks.size()]);
   }
 
   @Nullable
