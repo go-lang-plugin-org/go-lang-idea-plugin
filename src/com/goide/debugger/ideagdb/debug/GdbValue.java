@@ -16,14 +16,13 @@ import org.jetbrains.annotations.Nullable;
  * Class for providing information about a value from GDB.
  */
 public class GdbValue extends XValue {
-  private static final Logger m_log =
-    Logger.getInstance("#com.goide.debugger.ideagdb.debug.GdbValue");
+  private static final Logger LOG = Logger.getInstance(GdbValue.class);
 
   // The GDB instance
-  private Gdb m_gdb;
+  private Gdb myGdb;
 
   // The variable object we are showing the value of
-  private GdbVariableObject m_variableObject;
+  private GdbVariableObject myVariableObject;
 
   /**
    * Constructor.
@@ -32,8 +31,8 @@ public class GdbValue extends XValue {
    * @param variableObject The variable object to show the value of.
    */
   public GdbValue(Gdb gdb, GdbVariableObject variableObject) {
-    m_gdb = gdb;
-    m_variableObject = variableObject;
+    myGdb = gdb;
+    myVariableObject = variableObject;
   }
 
   /**
@@ -44,9 +43,9 @@ public class GdbValue extends XValue {
    */
   @Override
   public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
-    node.setPresentation(PlatformIcons.VARIABLE_ICON, m_variableObject.type,
-                         m_variableObject.value, m_variableObject.numChildren != null &&
-                                                 m_variableObject.numChildren > 0);
+    node.setPresentation(PlatformIcons.VARIABLE_ICON, myVariableObject.type,
+                         myVariableObject.value, myVariableObject.numChildren != null &&
+                                                 myVariableObject.numChildren > 0);
   }
 
   /**
@@ -58,7 +57,7 @@ public class GdbValue extends XValue {
   @Override
   public XValueModifier getModifier() {
     // TODO: Return null if we don't support editing
-    return new GdbValueModifier(m_gdb, m_variableObject);
+    return new GdbValueModifier(myGdb, myVariableObject);
   }
 
   /**
@@ -68,13 +67,13 @@ public class GdbValue extends XValue {
    */
   @Override
   public void computeChildren(@NotNull final XCompositeNode node) {
-    if (m_variableObject.numChildren == null || m_variableObject.numChildren <= 0) {
+    if (myVariableObject.numChildren == null || myVariableObject.numChildren <= 0) {
       node.addChildren(XValueChildrenList.EMPTY, true);
     }
 
     // Get the children from GDB
-    m_gdb.sendCommand("-var-list-children --all-values " +
-                      GdbMiUtil.formatGdbString(m_variableObject.name), new Gdb.GdbEventCallback() {
+    myGdb.sendCommand("-var-list-children --all-values " +
+                      GdbMiUtil.formatGdbString(myVariableObject.name), new Gdb.GdbEventCallback() {
       @Override
       public void onGdbCommandCompleted(GdbEvent event) {
         onGdbChildrenReady(event, node);
@@ -95,7 +94,7 @@ public class GdbValue extends XValue {
     }
     if (!(event instanceof GdbVariableObjects)) {
       node.setErrorMessage("Unexpected data received from GDB");
-      m_log.warn("Unexpected event " + event + " received from -var-list-children request");
+      LOG.warn("Unexpected event " + event + " received from -var-list-children request");
       return;
     }
 
@@ -109,7 +108,7 @@ public class GdbValue extends XValue {
     // Build a XValueChildrenList
     XValueChildrenList children = new XValueChildrenList(variables.objects.size());
     for (GdbVariableObject variable : variables.objects) {
-      children.add(variable.expression, new GdbValue(m_gdb, variable));
+      children.add(variable.expression, new GdbValue(myGdb, variable));
     }
     node.addChildren(children, true);
   }
