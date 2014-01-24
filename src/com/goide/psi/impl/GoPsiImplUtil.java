@@ -254,7 +254,7 @@ public class GoPsiImplUtil {
         i++;
       }
       List<GoExpression> exprs = ((GoShortVarDeclaration)parent).getExpressionList();
-      if (exprs.size() < i) return null;
+      if (exprs.size() <= i) return null;
       return exprs.get(i).getGoType();
     }
     return GoNamedElementImpl.getType(o);
