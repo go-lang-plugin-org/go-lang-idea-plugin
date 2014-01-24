@@ -6,15 +6,16 @@ import com.intellij.execution.ui.ExecutionConsole;
 import org.jetbrains.annotations.NotNull;
 
 public class GdbExecutionResult extends DefaultExecutionResult {
-  public GdbRunConfiguration m_configuration;
+  public GdbRunConfiguration myConfiguration;
 
-  public GdbExecutionResult(ExecutionConsole console, @NotNull ProcessHandler processHandler,
+  public GdbExecutionResult(ExecutionConsole console,
+                            @NotNull ProcessHandler processHandler,
                             GdbRunConfiguration configuration) {
     super(console, processHandler);
-    m_configuration = configuration;
+    myConfiguration = configuration;
   }
 
   public GdbRunConfiguration getConfiguration() {
-    return m_configuration;
+    return myConfiguration;
   }
 }

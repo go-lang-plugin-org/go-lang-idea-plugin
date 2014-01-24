@@ -40,16 +40,12 @@ public class GdbRunConfiguration extends ModuleBasedConfiguration<GdbRunConfigur
 
   @Override
   protected ModuleBasedConfiguration createInstance() {
-    return new GdbRunConfiguration(getName(), getProject(),
-                                   GdbRunConfigurationType.getInstance().getFactory());
+    return new GdbRunConfiguration(getName(), getProject(), GdbRunConfigurationType.getInstance().getFactory());
   }
 
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    Project project = getProject();
-    GdbRunConfigurationEditor<GdbRunConfiguration> editor =
-      new GdbRunConfigurationEditor<GdbRunConfiguration>(project);
-    return editor;
+    return new GdbRunConfigurationEditor<GdbRunConfiguration>(getProject());
   }
 
   @Nullable

@@ -46,6 +46,10 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
   // The GDB console
   private GdbConsoleView m_gdbConsole;
 
+  public Gdb getGdb() {
+    return m_gdb;
+  }
+
   // The GDB instance
   private Gdb m_gdb;
 

@@ -1,17 +1,17 @@
 package com.goide.debugger.ideagdb.run;
 
+import com.goide.GoIcons;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.ConfigurationTypeUtil;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
 public class GdbRunConfigurationType implements ConfigurationType {
-  private final ConfigurationFactory m_factory = new ConfigurationFactory(this) {
+  private final ConfigurationFactory myFactory = new ConfigurationFactory(this) {
     public RunConfiguration createTemplateConfiguration(Project project) {
       return new GdbRunConfiguration("", project, this);
     }
@@ -28,31 +28,31 @@ public class GdbRunConfigurationType implements ConfigurationType {
 
   @Override
   public String getDisplayName() {
-    return "GDB";
+    return "Go GDB";
   }
 
   @Override
   public String getConfigurationTypeDescription() {
-    return "GDB debug configuration";
+    return "Go GDB debug configuration";
   }
 
   @Override
   public Icon getIcon() {
-    return AllIcons.RunConfigurations.Application;
+    return GoIcons.DEBUG;
   }
 
   @NotNull
   @Override
   public String getId() {
-    return "GdbRunConfigurationType";
+    return "GoGdbRunConfigurationType";
   }
 
   @Override
   public ConfigurationFactory[] getConfigurationFactories() {
-    return new ConfigurationFactory[]{m_factory};
+    return new ConfigurationFactory[]{myFactory};
   }
 
   public ConfigurationFactory getFactory() {
-    return m_factory;
+    return myFactory;
   }
 }

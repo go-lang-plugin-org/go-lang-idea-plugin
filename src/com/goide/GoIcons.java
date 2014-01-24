@@ -20,6 +20,7 @@ public interface GoIcons {
   Icon RECEIVER = AllIcons.Nodes.Parameter;
   Icon PACKAGE = AllIcons.Nodes.Package;
   Icon MODULE_ICON = IconLoader.findIcon("/icons/goModule.png");
+  Icon DEBUG = ICON;
 
   class Helper {
     public static LayeredIcon createIconWithShift(final Icon base, Icon mark) {
