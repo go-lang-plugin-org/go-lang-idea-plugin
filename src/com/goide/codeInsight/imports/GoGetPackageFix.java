@@ -78,7 +78,7 @@ public class GoGetPackageFix extends LocalQuickFixBase {
             public void onTextAvailable(ProcessEvent event, Key outputType) {
               String text = event.getText();
               out.add(text);
-              indicator.setText2(text); // todo: look ugly
+              //indicator.setText2(text); // todo: look ugly
             }
 
             @Override
