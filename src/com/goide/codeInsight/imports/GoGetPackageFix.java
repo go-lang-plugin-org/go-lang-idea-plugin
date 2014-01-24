@@ -62,6 +62,11 @@ public class GoGetPackageFix extends LocalQuickFixBase {
         if (myHandler != null) myHandler.destroyProcess();
       }
 
+      @Override
+      public void onSuccess() {
+        LocalFileSystem.getInstance().refresh(false);
+      }
+
       public void run(@NotNull final ProgressIndicator indicator) {
         indicator.setIndeterminate(true);
         String executable = JpsGoSdkType.getGoExecutableFile(path).getAbsolutePath();
@@ -84,10 +89,7 @@ public class GoGetPackageFix extends LocalQuickFixBase {
             @Override
             public void processTerminated(ProcessEvent event) {
               int code = event.getExitCode();
-              if (code == 0) {
-                LocalFileSystem.getInstance().refresh(false);
-                return;
-              }
+              if (code == 0) return;
               String message = StringUtil.join(out.size() > 1 ? ContainerUtil.subList(out, 1) : out, "\n");
               Notifications.Bus.notify(new Notification("Go", TITLE, message, NotificationType.WARNING), project);
             }
