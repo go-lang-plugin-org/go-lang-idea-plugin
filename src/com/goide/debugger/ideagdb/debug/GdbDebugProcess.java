@@ -36,13 +36,13 @@ import java.util.List;
 public class GdbDebugProcess extends XDebugProcess implements GdbListener {
   private static final Logger LOG = Logger.getInstance(GdbDebugProcess.class);
 
-  private GdbDebuggerEditorsProvider myEditorsProvider = new GdbDebuggerEditorsProvider();
-  private ConsoleView myConsole;
-  private GdbRunConfiguration myConfiguration;
-  private GdbConsoleView myGdbConsole;
-  private Gdb myGdb;
-  private GdbBreakpointHandler m_breakpointHandler;
-  private SimpleDateFormat m_timeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+  private final GdbDebuggerEditorsProvider myEditorsProvider = new GdbDebuggerEditorsProvider();
+  private final ConsoleView myConsole;
+  private final GdbRunConfiguration myConfiguration;
+  private final GdbConsoleView myGdbConsole;
+  private final Gdb myGdb;
+  private final GdbBreakpointHandler myBreakpointHandler;
+  private final SimpleDateFormat myTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
 
   /**
    * Constructor; launches GDB.
@@ -56,13 +56,13 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
     String workingDirectory = new File(myConfiguration.APP_PATH).getParent();
     myGdb = new Gdb(myConfiguration.GDB_PATH, workingDirectory, this);
     myGdbConsole = new GdbConsoleView(myGdb, session.getProject());
-    m_breakpointHandler = new GdbBreakpointHandler(myGdb, this);
+    myBreakpointHandler = new GdbBreakpointHandler(myGdb, this);
     myGdb.start();
   }
 
   @Override
   public XBreakpointHandler<?>[] getBreakpointHandlers() {
-    return new GdbBreakpointHandler[]{m_breakpointHandler};
+    return new GdbBreakpointHandler[]{myBreakpointHandler};
   }
 
   @NotNull
@@ -187,7 +187,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    */
   @Override
   public void onGdbCommandSent(String command, long token) {
-    myGdbConsole.getConsole().print(m_timeFormat.format(new Date()) + " " + token + "> " +
+    myGdbConsole.getConsole().print(myTimeFormat.format(new Date()) + " " + token + "> " +
                                     command + "\n", ConsoleViewContentType.USER_INPUT);
   }
 
@@ -268,7 +268,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
   public void onResultRecordReceived(GdbMiResultRecord record) {
     // Log the record
     StringBuilder sb = new StringBuilder();
-    sb.append(m_timeFormat.format(new Date()));
+    sb.append(myTimeFormat.format(new Date()));
     sb.append(" ");
     if (record.userToken != null) {
       sb.append("<");
@@ -340,7 +340,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
     XBreakpoint<GdbBreakpointProperties> breakpoint = null;
     if (stoppedEvent.reason == GdbStoppedEvent.Reason.BreakpointHit &&
         stoppedEvent.breakpointNumber != null) {
-      breakpoint = m_breakpointHandler.findBreakpoint(stoppedEvent.breakpointNumber);
+      breakpoint = myBreakpointHandler.findBreakpoint(stoppedEvent.breakpointNumber);
     }
 
     if (breakpoint != null) {
