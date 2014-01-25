@@ -37,6 +37,7 @@ public class GoPsiImplUtil {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
     private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
   }
+
   @Nullable
   public static GoTypeReferenceExpression getQualifier(@NotNull GoTypeReferenceExpression o) {
     return PsiTreeUtil.getChildOfType(o, GoTypeReferenceExpression.class);
@@ -63,7 +64,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static PsiReference[] getReferences(@NotNull GoImportString o) {
-    if(o.getTextLength() < 2) return PsiReference.EMPTY_ARRAY;
+    if (o.getTextLength() < 2) return PsiReference.EMPTY_ARRAY;
     return new GoImportReferenceSet(o).getAllReferences();
   }
 
@@ -113,7 +114,8 @@ public class GoPsiImplUtil {
       if (result != null) resultText = result.getText();
     }
 
-    InsertHandler<LookupElement> handler = paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
+    InsertHandler<LookupElement> handler =
+      paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.create(f)
         .withIcon(icon)
@@ -145,10 +147,10 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static LookupElement createImportLookupElement(@NotNull String i) {
+  public static LookupElement createPackageLookupElement(@NotNull String i, boolean forType) {
     return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE).withInsertHandler(
-        Lazy.PACKAGE_INSERT_HANDLER), GoCompletionContributor.PACKAGE_PRIORITY);
+      LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
+      GoCompletionContributor.PACKAGE_PRIORITY);
   }
 
   @NotNull

@@ -24,7 +24,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   protected static void processImports(List<LookupElement> result, GoFile file, boolean localCompletion) {
     if (localCompletion) {
       for (String i : file.getImportMap().keySet()) {
-        result.add(GoPsiImplUtil.createImportLookupElement(i));
+        result.add(GoPsiImplUtil.createPackageLookupElement(i, true));
       }
     }
   }

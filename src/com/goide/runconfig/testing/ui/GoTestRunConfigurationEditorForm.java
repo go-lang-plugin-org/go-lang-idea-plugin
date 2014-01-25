@@ -1,23 +1,31 @@
 package com.goide.runconfig.testing.ui;
 
-import com.goide.GoIcons;
 import com.goide.GoModuleType;
+import com.goide.psi.GoFile;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.goide.stubs.index.GoPackagesIndex;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.impl.ProjectFileIndexImpl;
 import com.intellij.openapi.roots.ui.configuration.ModulesCombobox;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.stubs.StubIndex;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.RawCommandLineEditor;
+import com.intellij.util.PathUtil;
+import com.intellij.util.Processor;
 import com.intellij.util.TextFieldCompletionProvider;
 import org.intellij.lang.regexp.RegExpLanguage;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
 
 public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfiguration> {
   @NotNull private final Project myProject;
@@ -114,10 +121,35 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     myPatternEditor = new EditorTextField("", null, RegExpLanguage.INSTANCE.getAssociatedFileType());
     myPackageField = new TextFieldCompletionProvider() {
       @Override
-      protected void addCompletionVariants(@NotNull String text, int offset, @NotNull String prefix, @NotNull CompletionResultSet result) {
-        Collection<String> packages = GoPackagesIndex.getAllPackages(myProject);
-        for (String packageName : packages) {
-          result.addElement(LookupElementBuilder.create(packageName).withIcon(GoIcons.PACKAGE));
+      protected void addCompletionVariants(@NotNull String text,
+                                           int offset,
+                                           @NotNull String prefix,
+                                           @NotNull final CompletionResultSet result) {
+        final Module module = myComboModules.getSelectedModule();
+        if (module != null) {
+          final GlobalSearchScope scope = GlobalSearchScope.moduleScope(module);
+          StubIndex.getInstance().processAllKeys(GoPackagesIndex.KEY, new Processor<String>() {
+            @Override
+            public boolean process(final String packageName) {
+              StubIndex.getInstance().process(GoPackagesIndex.KEY, packageName, myProject, scope, new Processor<GoFile>() {
+                @Override
+                public boolean process(GoFile file) {
+                  if (file != null) {
+                    VirtualFile virtualFile = file.getVirtualFile();
+                    VirtualFile root = ProjectFileIndexImpl.SERVICE.getInstance(myProject).getSourceRootForFile(virtualFile);
+                    if (root != null) {
+                      String fullPackageName = FileUtil.getRelativePath(root.getPath(), virtualFile.getPath(), '/');
+                      if (fullPackageName != null && StringUtil.containsChar(fullPackageName, '/')) {
+                        result.addElement(GoPsiImplUtil.createPackageLookupElement(PathUtil.getParentPath(fullPackageName), false));
+                      }
+                    }
+                  }
+                  return true;
+                }
+              });
+              return true;
+            }
+          }, scope, null);
         }
       }
     }.createEditor(myProject);
