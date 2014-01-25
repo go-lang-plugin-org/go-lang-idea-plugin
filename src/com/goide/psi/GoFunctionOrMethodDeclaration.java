@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface GoFunctionOrMethodDeclaration extends GoNamedElement {
+public interface GoFunctionOrMethodDeclaration extends GoNamedElement, GoTopLevelDeclaration {
 
   @Nullable
   GoBlock getBlock();

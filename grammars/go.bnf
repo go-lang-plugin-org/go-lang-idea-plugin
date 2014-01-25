@@ -69,6 +69,7 @@
 
   implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
   implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
+  implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
   extends("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
   elementTypeFactory("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoTypeDeclaration extends GoCompositeElement {
+public interface GoTypeDeclaration extends GoTopLevelDeclaration {
 
   @NotNull
   List<GoTypeSpec> getTypeSpecList();

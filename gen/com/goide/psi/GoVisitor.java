@@ -71,7 +71,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitConstDeclaration(@NotNull GoConstDeclaration o) {
-    visitCompositeElement(o);
+    visitTopLevelDeclaration(o);
   }
 
   public void visitConstDefinition(@NotNull GoConstDefinition o) {
@@ -339,7 +339,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitTypeDeclaration(@NotNull GoTypeDeclaration o) {
-    visitCompositeElement(o);
+    visitTopLevelDeclaration(o);
   }
 
   public void visitTypeReferenceExpression(@NotNull GoTypeReferenceExpression o) {
@@ -371,7 +371,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitVarDeclaration(@NotNull GoVarDeclaration o) {
-    visitCompositeElement(o);
+    visitTopLevelDeclaration(o);
   }
 
   public void visitVarDefinition(@NotNull GoVarDefinition o) {
@@ -391,6 +391,10 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitNamedElement(@NotNull GoNamedElement o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitTopLevelDeclaration(@NotNull GoTopLevelDeclaration o) {
     visitCompositeElement(o);
   }
 

@@ -1,13 +1,23 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
+import com.intellij.codeInsight.template.Template;
+import com.intellij.codeInsight.template.TemplateManager;
+import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
+import com.intellij.codeInsight.template.impl.TemplateSettings;
+import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 import static com.intellij.codeInspection.ProblemHighlightType.LIKE_UNKNOWN_SYMBOL;
@@ -57,9 +67,50 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         if (reference == null || reference.resolve() == null) {
           PsiElement id = o.getIdentifier();
           String name = id.getText();
-          problemsHolder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL);
+          problemsHolder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, new IntroduceTypeFix(id, name));
         }
       }
     });
+  }
+
+  private static class IntroduceTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+    private final String myName;
+
+    protected IntroduceTypeFix(@NotNull PsiElement id, String name) {
+      super(id);
+      myName = name;
+    }
+
+    @Override
+    public void invoke(@NotNull Project project,
+                       @NotNull PsiFile file,
+                       @Nullable("is null when called from inspection") Editor editor,
+                       @NotNull PsiElement startElement,
+                       @NotNull PsiElement endElement) {
+      GoTopLevelDeclaration decl = PsiTreeUtil.getTopmostParentOfType(startElement, GoTopLevelDeclaration.class);
+      if (decl == null || !(decl.getParent() instanceof GoFile)) return;
+
+      if (editor == null) return;
+      TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(project);
+      Template template = TemplateSettings.getInstance().getTemplateById("go_lang_type_qf");
+      if (template != null) {
+        int start = decl.getTextRange().getStartOffset();
+        editor.getDocument().insertString(start, "\n\n");
+        editor.getCaretModel().moveToOffset(start);
+        templateManager.startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
+      }
+    }
+
+    @NotNull
+    @Override
+    public String getText() {
+      return "Create type '" + myName + "'";
+    }
+
+    @NotNull
+    @Override
+    public String getFamilyName() {
+      return "Go";
+    }
   }
 }
