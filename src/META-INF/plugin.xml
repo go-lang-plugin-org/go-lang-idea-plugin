@@ -206,7 +206,8 @@
         </group>
 
         <group id="GAE.Tools" popup="true" text="Go AppEngine Tools"
-               description="Go AppEngine tools support" icon="/icons/gae_13x13.png" class="ro.redeul.google.go.actions.NewGAEGroup">
+               description="Go AppEngine tools support" icon="/icons/gae_13x13.png"
+               class="ro.redeul.google.go.actions.NewGAEGroup">
 
             <action id="GAE.AppEngine.Upload"
                     class="ro.redeul.google.go.ide.actions.GoAppEngineUpload"
@@ -240,7 +241,8 @@
         </group>
 
         <group id="Go.Tools.Debug" popup="true" text="go plugin Debug internals"
-               description="Go plugin debug utilites" icon="/icons/go_13x13.png" class="ro.redeul.google.go.actions.NewGoDebugGroup">
+               description="Go plugin debug utilites" icon="/icons/go_13x13.png"
+               class="ro.redeul.google.go.actions.NewGoDebugGroup">
             <action id="Go.Debug.SdkData"
                     class="ro.redeul.google.go.ide.actions.GoDebugSDK"
                     text="go sdk data" description="Print the current sdk data"
@@ -263,7 +265,8 @@
         </group>
 
         <group id="GAE.Tools.Debug" popup="true" text="go plugin Debug internals"
-               description="Go plugin debug utilites" icon="/icons/gae_13x13.png" class="ro.redeul.google.go.actions.NewGAEDebugGroup">
+               description="Go plugin debug utilites" icon="/icons/gae_13x13.png"
+               class="ro.redeul.google.go.actions.NewGAEDebugGroup">
             <action id="GAE.Debug.SdkData"
                     class="ro.redeul.google.go.ide.actions.GAEDebugSDK"
                     text="go sdk data" description="Print the current sdk data"
@@ -458,7 +461,7 @@
                          shortName="FunctionReturnParameterCount"
                          displayName="Highlights incorrect function return parameter count"
                          level="ERROR"
-                         implementationClass="ro.redeul.google.go.inspection.FunctionReturnParameterCountInspection"/>
+                         implementationClass="ro.redeul.google.go.inspection.FunctionReturnParameterInspection"/>
         <localInspection groupName="Google Go" language="Google Go"
                          enabledByDefault="true"
                          shortName="FunctionRedeclareParameterInResult"

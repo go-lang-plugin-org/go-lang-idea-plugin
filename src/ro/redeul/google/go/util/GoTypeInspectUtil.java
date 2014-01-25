@@ -3,6 +3,7 @@ package ro.redeul.google.go.util;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.inspection.FunctionCallInspection;
 import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.inspection.fix.CastTypeFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
@@ -37,7 +38,9 @@ public class GoTypeInspectUtil {
             return checkIsInterface(((GoPsiTypePointer) psiType).getTargetType());
         if (psiType instanceof GoPsiTypeArray)
             return checkIsInterface(((GoPsiTypeArray) psiType).getElementType());
-        return psiType instanceof GoPsiTypeChannel && checkIsInterface(((GoPsiTypeChannel) psiType).getElementType());
+        if (psiType instanceof GoPsiTypeChannel)
+            return checkIsInterface(((GoPsiTypeChannel) psiType).getElementType());
+        return false;
     }
 
     public static boolean checkParametersExp(GoPsiType type, GoExpr expr) {
@@ -56,8 +59,33 @@ public class GoTypeInspectUtil {
                 return false;
             }
             String resolvedTypeName = resolved.getText();
-            if (resolvedTypeName.startsWith("int")) {
-                return checkValidLiteralIntExpr(expr);
+            if (resolvedTypeName.startsWith("int") || resolvedTypeName.startsWith("uint")
+                    || resolvedTypeName.equals("byte") || resolvedTypeName.equals("rune")) {
+                Number numValue = FunctionCallInspection.getNumberValueFromLiteralExpr(expr);
+                if (numValue == null)
+                    return checkValidLiteralIntExpr(expr);
+                if (numValue instanceof Integer || numValue.intValue() == numValue.floatValue()) {
+                    Integer value = numValue.intValue();
+                    if (resolvedTypeName.equals("int8"))
+                        return value >= -128 && value <= 127;
+                    if (resolvedTypeName.equals("int16"))
+                        return value >= -32768 && value <= 32767;
+                    if (resolvedTypeName.equals("int32") || resolvedTypeName.equals("rune"))
+                        return value >= -2147483648 && value <= 2147483647;
+                    if (resolvedTypeName.equals("int64") || resolvedTypeName.equals("int"))
+                        return true;
+
+                    if (resolvedTypeName.equals("uint8") || resolvedTypeName.equals("byte"))
+                        return value >= 0 && value <= 255;
+                    if (resolvedTypeName.equals("uint16"))
+                        return value >= 0 && value <= 65535;
+                    if (resolvedTypeName.equals("uint32"))
+                        return value >= 0;
+                    if (resolvedTypeName.equals("uint64") || resolvedTypeName.equals("uint"))
+                        return value >= 0;
+                } else {
+                    return false;
+                }
             }
             if (resolvedTypeName.startsWith("float")) {
                 return checkValidLiteralFloatExpr(expr);
@@ -120,9 +148,13 @@ public class GoTypeInspectUtil {
             return literal instanceof GoLiteralFloat || literal instanceof GoLiteralInteger || literal.getNode().getElementType() == GoElementTypes.LITERAL_CHAR;
         }
         if (expr instanceof GoBinaryExpression) {
-            return checkValidLiteralFloatExpr(((GoBinaryExpression) expr).getLeftOperand()) && checkValidLiteralFloatExpr(((GoBinaryExpression) expr).getRightOperand());
+            if (!checkValidLiteralFloatExpr(((GoBinaryExpression) expr).getLeftOperand()))
+                return false;
+            return checkValidLiteralFloatExpr(((GoBinaryExpression) expr).getRightOperand());
         }
-        return expr instanceof GoUnaryExpression && checkValidLiteralFloatExpr(((GoUnaryExpression) expr).getExpression());
+        if (expr instanceof GoUnaryExpression)
+            return checkValidLiteralFloatExpr(((GoUnaryExpression) expr).getExpression());
+        return false;
     }
 
     public static boolean checkValidLiteralIntExpr(GoExpr expr) {
@@ -141,16 +173,21 @@ public class GoTypeInspectUtil {
             }
             if (literal instanceof GoLiteralExpression)
                 return checkValidLiteralIntExpr((GoExpr) literal);
-            return literal instanceof GoLiteralInteger || literal.getNode().getElementType() == GoElementTypes.LITERAL_CHAR || literal instanceof GoLiteralFloat && literal.getText().matches("^[0-9]*\\.0+$");
+            if (literal instanceof GoLiteralInteger || literal.getNode().getElementType() == GoElementTypes.LITERAL_CHAR)
+                return true;
+            return literal instanceof GoLiteralFloat && literal.getText().matches("^[0-9]*\\.0*$");
         }
         if (expr instanceof GoBinaryExpression) {
-            return checkValidLiteralIntExpr(((GoBinaryExpression) expr).getLeftOperand()) && checkValidLiteralIntExpr(((GoBinaryExpression) expr).getRightOperand());
+            if (!checkValidLiteralIntExpr(((GoBinaryExpression) expr).getLeftOperand()))
+                return false;
+            return checkValidLiteralIntExpr(((GoBinaryExpression) expr).getRightOperand());
         }
         if (expr instanceof GoUnaryExpression)
             return checkValidLiteralIntExpr(((GoUnaryExpression) expr).getExpression());
-        return expr instanceof GoParenthesisedExpression && checkValidLiteralIntExpr(((GoParenthesisedExpression) expr).getInnerExpression());
+        if (expr instanceof GoParenthesisedExpression)
+            return checkValidLiteralIntExpr(((GoParenthesisedExpression) expr).getInnerExpression());
+        return false;
     }
-
 
     public static void checkFunctionTypeArguments(GoCallOrConvExpression call, InspectionResult result) {
         GoFunctionDeclaration goFunctionDeclaration = GoExpressionUtils.resolveToFunctionDeclaration(call);
@@ -202,16 +239,17 @@ public class GoTypeInspectUtil {
 
     }
 
-    public static void checkFunctionTypeReturns(GoReturnStatement statement, InspectionResult result) {
+
+    public static boolean checkFunctionTypeReturns(GoReturnStatement statement, InspectionResult result) {
         GoFunctionDeclaration goFunctionDeclaration = GoPsiUtils.findParentOfType(statement, GoFunctionDeclaration.class);
         GoExpr[] goExprs = statement.getExpressions();
         int index = 0;
         if (goFunctionDeclaration == null)
-            return;
+            return true;
 
         for (GoFunctionParameter functionParameter : goFunctionDeclaration.getResults()) {
             if (index >= goExprs.length)
-                return;
+                return false;
             GoPsiType type = functionParameter.getType();
             if (functionParameter.isVariadic()) {
                 GoExpr goExpr = goExprs[index];
@@ -221,7 +259,7 @@ public class GoTypeInspectUtil {
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
-                        return;
+                        return false;
                     }
             } else {
                 GoLiteralIdentifier[] identifiers = functionParameter.getIdentifiers();
@@ -232,7 +270,7 @@ public class GoTypeInspectUtil {
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
-                        return;
+                        return false;
                     }
                     index++;
                 } else {
@@ -243,12 +281,14 @@ public class GoTypeInspectUtil {
                                     goExpr,
                                     GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
                                     ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
-                            return;
+
+                            return false;
                         }
                         index++;
                     }
                 }
             }
         }
+        return true;
     }
 }

@@ -14,7 +14,7 @@ import ro.redeul.google.go.util.GoTypeInspectUtil;
 
 import static ro.redeul.google.go.inspection.InspectionUtil.*;
 
-public class FunctionReturnParameterCountInspection extends AbstractWholeGoFileInspection {
+public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspection {
     @Override
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
 
