@@ -22,11 +22,11 @@ import java.io.File;
 
 public class GdbExecutionStackFrame extends XStackFrame {
   private static final Logger LOG = Logger.getInstance(GdbExecutionStackFrame.class);
-  private Gdb myGdb;
-  private int myThread;
-  private GdbStackFrame myFrame;
-  private int myFrameNo;
-  private GdbEvaluator m_evaluator;
+  private final Gdb myGdb;
+  private final int myThread;
+  private final GdbStackFrame myFrame;
+  private final int myFrameNo;
+  private final GdbEvaluator myEvaluator;
 
   /**
    * Constructor.
@@ -42,6 +42,7 @@ public class GdbExecutionStackFrame extends XStackFrame {
 
     // The top frame doesn't have a level set
     myFrameNo = myFrame.level == null ? 0 : myFrame.level;
+    myEvaluator = new GdbEvaluator(myGdb, myThread, myFrameNo); // todo: was lazy, but not now, please check
   }
 
   /**
@@ -65,10 +66,7 @@ public class GdbExecutionStackFrame extends XStackFrame {
   @Nullable
   @Override
   public XDebuggerEvaluator getEvaluator() {
-    if (m_evaluator == null) {
-      m_evaluator = new GdbEvaluator(myGdb, myThread, myFrameNo);
-    }
-    return m_evaluator;
+    return myEvaluator;
   }
 
   /**

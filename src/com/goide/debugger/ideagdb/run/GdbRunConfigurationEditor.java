@@ -9,32 +9,32 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 public class GdbRunConfigurationEditor<T extends GdbRunConfiguration> extends SettingsEditor<T> {
-  private JPanel m_contentPanel;
-  private TextFieldWithBrowseButton m_gdbPath;
-  private TextFieldWithBrowseButton m_appPath;
-  private JTextArea m_startupCommands;
+  private JPanel myPanel;
+  private TextFieldWithBrowseButton myGdbPath;
+  private TextFieldWithBrowseButton myAppPath;
+  private JTextArea myStartupCommands;
 
   public GdbRunConfigurationEditor(final Project project) {
   }
 
   @Override
   protected void resetEditorFrom(T configuration) {
-    m_gdbPath.setText(configuration.GDB_PATH);
-    m_appPath.setText(configuration.APP_PATH);
-    m_startupCommands.setText(configuration.STARTUP_COMMANDS);
+    myGdbPath.setText(configuration.GDB_PATH);
+    myAppPath.setText(configuration.APP_PATH);
+    myStartupCommands.setText(configuration.STARTUP_COMMANDS);
   }
 
   @Override
   protected void applyEditorTo(T configuration) throws ConfigurationException {
-    configuration.GDB_PATH = m_gdbPath.getText();
-    configuration.APP_PATH = m_appPath.getText();
-    configuration.STARTUP_COMMANDS = m_startupCommands.getText();
+    configuration.GDB_PATH = myGdbPath.getText();
+    configuration.APP_PATH = myAppPath.getText();
+    configuration.STARTUP_COMMANDS = myStartupCommands.getText();
   }
 
   @NotNull
   @Override
   protected JComponent createEditor() {
-    return m_contentPanel;
+    return myPanel;
   }
 
   @Override

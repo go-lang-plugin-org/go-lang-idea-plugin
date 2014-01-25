@@ -1,5 +1,6 @@
 package com.goide.debugger.ideagdb.run;
 
+import com.goide.debugger.gdb.Gdb;
 import com.goide.debugger.ideagdb.debug.GdbDebugProcess;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
@@ -14,6 +15,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.xdebugger.XDebugProcess;
 import com.intellij.xdebugger.XDebugProcessStarter;
 import com.intellij.xdebugger.XDebugSession;
@@ -22,6 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GdbRunner extends DefaultProgramRunner {
+
+  public static final String SET_AUTO_LOAD_SAFE_PATH = "set auto-load safe-path ";
+
   @NotNull
   @Override
   public String getRunnerId() {
@@ -34,7 +39,10 @@ public class GdbRunner extends DefaultProgramRunner {
   }
 
   @Override
-  protected RunContentDescriptor doExecute(Project project, RunProfileState state, RunContentDescriptor contentToReuse, ExecutionEnvironment env) throws ExecutionException {
+  protected RunContentDescriptor doExecute(Project project,
+                                           RunProfileState state,
+                                           RunContentDescriptor contentToReuse,
+                                           ExecutionEnvironment env) throws ExecutionException {
     FileDocumentManager.getInstance().saveAllDocuments();
     return createContentDescriptor(project, env.getExecutor(), state, contentToReuse, env);
   }
@@ -48,13 +56,13 @@ public class GdbRunner extends DefaultProgramRunner {
     throws ExecutionException {
     final ExecutionResult result = state.execute(executor, this);
     final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(this,
-      env, contentToReuse, new XDebugProcessStarter() {
+                                                                                          env, contentToReuse, new XDebugProcessStarter() {
       @NotNull
       @Override
       public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
         session.setAutoInitBreakpoints(false);
         final ExecutionResult result = state.execute(executor, GdbRunner.this);
-        return new GdbDebugProcess(session, (GdbExecutionResult) result);
+        return new GdbDebugProcess(session, (GdbExecutionResult)result);
       }
     });
 
@@ -64,13 +72,15 @@ public class GdbRunner extends DefaultProgramRunner {
       return null;
     }
 
-    GdbDebugProcess debugProcess = ((GdbDebugProcess) debugSession.getDebugProcess());
+    GdbDebugProcess debugProcess = ((GdbDebugProcess)debugSession.getDebugProcess());
 
-    // Queue startup commands
-    //debugProcess.getGdb().sendCommand("add-auto-load-safe-path " + goRootPath); // todo: python
-    debugProcess.getGdb().sendCommand("file " + ((GdbExecutionResult) result).getConfiguration().APP_PATH);
+    Gdb gdb = debugProcess.getGdb();
+    String sdkHomePath = sdk.getHomePath();
+    if (sdkHomePath != null) gdb.sendCommand(SET_AUTO_LOAD_SAFE_PATH + sdkHomePath);
+    if (SystemInfo.isLinux) gdb.sendCommand(SET_AUTO_LOAD_SAFE_PATH + "/usr/share/go");
+    gdb.sendCommand("file " + ((GdbExecutionResult)result).getConfiguration().APP_PATH);
     debugSession.initBreakpoints();
-    debugProcess.getGdb().sendCommand("run > /dev/null"); // todo: collect all output to file and show in the console
+    gdb.sendCommand("run > /dev/null"); // todo: collect all output to file and show in the console
     return debugSession.getRunContentDescriptor();
   }
 }

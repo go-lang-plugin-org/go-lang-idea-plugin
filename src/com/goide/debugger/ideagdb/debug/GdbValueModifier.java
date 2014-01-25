@@ -17,10 +17,8 @@ public class GdbValueModifier extends XValueModifier {
   private static final Logger LOG = Logger.getInstance(GdbValueModifier.class);
 
   // Handle to the GDB instance
-  Gdb myGdb;
-
-  // The variable object being modified
-  GdbVariableObject myVariableObject;
+  private final Gdb myGdb;
+  private final GdbVariableObject myVariableObject;
 
   /**
    * Constructor.

@@ -7,21 +7,13 @@ import com.intellij.xdebugger.frame.XExecutionStack;
 import com.intellij.xdebugger.frame.XSuspendContext;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class GdbSuspendContext extends XSuspendContext {
-  // The active stack
-  private GdbExecutionStack m_stack;
-
-  // All stacks
-  private GdbExecutionStack[] m_stacks;
+  private GdbExecutionStack myStack;
+  private final GdbExecutionStack[] myStacks;
 
   /**
-   * Constructor.
-   *
    * @param gdb       Handle to the GDB instance.
    * @param stopEvent The stop event that caused the suspension.
    * @param threads   Thread information, if available.
@@ -42,42 +34,31 @@ public class GdbSuspendContext extends XSuspendContext {
         GdbExecutionStack stack = new GdbExecutionStack(gdb, thread);
         stacks.add(stack);
         if (thread.id.equals(stopEvent.threadId)) {
-          m_stack = stack;
+          myStack = stack;
         }
       }
     }
 
-    if (m_stack == null) {
+    if (myStack == null) {
       // No thread object is available so we have to construct our own
       GdbThread thread = new GdbThread();
       thread.id = stopEvent.threadId;
       thread.frame = stopEvent.frame;
-      m_stack = new GdbExecutionStack(gdb, thread);
-      stacks.add(0, m_stack);
+      myStack = new GdbExecutionStack(gdb, thread);
+      stacks.add(0, myStack);
     }
 
-    m_stacks = new GdbExecutionStack[stacks.size()];
-    m_stacks = stacks.toArray(m_stacks);
+    myStacks = stacks.toArray(new GdbExecutionStack[stacks.size()]);
   }
 
-  /**
-   * Gets the active stack.
-   *
-   * @return The active stack.
-   */
   @Nullable
   @Override
   public XExecutionStack getActiveExecutionStack() {
-    return m_stack;
+    return myStack;
   }
 
-  /**
-   * Gets all execution stacks.
-   *
-   * @return The execution stacks.
-   */
   @Override
   public XExecutionStack[] getExecutionStacks() {
-    return m_stacks;
+    return myStacks;
   }
 }
