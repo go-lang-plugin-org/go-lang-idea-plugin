@@ -25,8 +25,6 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralFunctionImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeArrayImpl;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
@@ -192,7 +190,10 @@ public class GoUtil {
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        PsiDirectory containingDirectory = type.getContainingFile().getContainingDirectory();
+        GoTypeSpec goTypeSpec = resolveTypeSpec((GoPsiTypeName) type);
+        if (goTypeSpec == null)
+            return type.getName();
+        PsiDirectory containingDirectory = goTypeSpec.getContainingFile().getContainingDirectory();
         boolean isInSameDir = currentFile.getContainingDirectory().equals(containingDirectory);
         if (((GoPsiTypeName) type).isPrimitive() || isInSameDir) {
             stringBuilder.append(type.getName());
@@ -312,7 +313,7 @@ public class GoUtil {
                 goExpr = ((GoParenthesisedExpression) goExpr).getInnerExpression();
             if (goExpr instanceof GoLiteralExpression) {
                 GoLiteral literal = ((GoLiteralExpression) goExpr).getLiteral();
-                if (literal instanceof GoLiteralFunction){
+                if (literal instanceof GoLiteralFunction) {
                     return ((GoLiteralFunction) literal).isIdentical(element);
                 }
             }

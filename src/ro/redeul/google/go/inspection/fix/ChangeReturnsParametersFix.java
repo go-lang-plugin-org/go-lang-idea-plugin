@@ -1,0 +1,102 @@
+package ro.redeul.google.go.inspection.fix;
+
+import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.util.GoUtil;
+
+import static ro.redeul.google.go.util.EditorUtil.reformatLines;
+
+public class ChangeReturnsParametersFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+
+    @Nullable
+    private GoReturnStatement element;
+    private GoExpr[] exprs;
+
+    public ChangeReturnsParametersFix(@Nullable GoReturnStatement element) {
+        super(element);
+        this.element = element;
+    }
+
+
+    @NotNull
+    @Override
+    public String getText() {
+        return "Change the function return parameters";
+    }
+
+    @NotNull
+    @Override
+    public String getFamilyName() {
+        return "Function Returning";
+    }
+
+
+    @Override
+    public void invoke(@NotNull final Project project,
+                       @NotNull PsiFile file,
+                       @Nullable("is null when called from inspection") Editor editor,
+                       @NotNull final PsiElement startElement, @NotNull PsiElement endElement) {
+
+
+        Document doc = PsiDocumentManager.getInstance(project).getDocument(file);
+
+        if (doc == null || element == null) {
+            return;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        int i = 0;
+        for (GoExpr expr : element.getExpressions()) {
+            GoType[] types = expr.getType();
+            if (i != 0) {
+                stringBuilder.append(",");
+            }
+            if (types.length > 0 && types[0] != null) {
+                if (types[0] instanceof GoTypePsiBacked) {
+                    GoTypePsiBacked psiTypeBackend = (GoTypePsiBacked) types[0];
+                    GoPsiType goPsiType = psiTypeBackend.getPsiType();
+                    stringBuilder.append(GoUtil.getNameLocalOrGlobal(goPsiType, (GoFile) element.getContainingFile()));
+                }
+            } else {
+                //As some Expression may not return a valid type, in this case will not modify anithing and exit
+                return;
+            }
+            i++;
+        }
+        GoFunctionDeclaration functionDeclaration = GoPsiUtils.findParentOfType(element, GoFunctionDeclaration.class);
+        int startOffset;
+        PsiElement result = GoPsiUtils.findChildOfType(functionDeclaration, GoElementTypes.FUNCTION_RESULT);
+        if (result != null) {
+            startOffset = result.getTextOffset();
+            doc.replaceString(startOffset, result.getTextRange().getEndOffset(),
+                    i > 1 ?
+                            "(" + stringBuilder.toString() + ")" : stringBuilder.toString());
+        } else {
+            startOffset = functionDeclaration.getBlock().getTextOffset();
+            doc.insertString(startOffset,
+                    i > 1 ?
+                            "(" + stringBuilder.toString() + ")" : stringBuilder.toString());
+        }
+
+        if (editor != null) {
+            int line = doc.getLineNumber(startOffset);
+            reformatLines(file, editor, line, line);
+        }
+
+    }
+}
