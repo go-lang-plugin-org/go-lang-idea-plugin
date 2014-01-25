@@ -1,12 +1,7 @@
 package com.goide.debugger.gdb.gdbmi;
 
-/**
- * Utility functions relating to the use of GDB/MI.
- */
-public class GdbMiUtil {
-  // Mapping from hexadecimal digits to ASCII characters
-  private static final char[] m_hexAscii =
-    {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+public class GdbMiUtil { // todo: find something from the util package
+  private static final char[] HEX_ASCII = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
   /**
    * Formats a string into the format required by GDB/MI.
@@ -35,8 +30,8 @@ public class GdbMiUtil {
       }
       else if (ch <= 0x1f || ch >= 0x7f) {
         sb.append("\\x");
-        sb.append(m_hexAscii[ch >> 4]);
-        sb.append(m_hexAscii[ch & 0x0f]);
+        sb.append(HEX_ASCII[ch >> 4]);
+        sb.append(HEX_ASCII[ch & 0x0f]);
       }
       else {
         sb.append(ch);

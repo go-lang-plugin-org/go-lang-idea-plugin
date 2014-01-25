@@ -34,27 +34,26 @@ public class GdbMiParser {
   }
 
   // State of the parser FSM
-  private Stack<FsmState> m_state;
+  private final Stack<FsmState> myState = new Stack<FsmState>();
 
   // Lexer
-  private GdbMiLexer m_lexer = new GdbMiLexer();
+  private final GdbMiLexer myLexer = new GdbMiLexer();
 
   // Partially processed record
-  private GdbMiResultRecord m_resultRecord;
-  private GdbMiStreamRecord m_streamRecord;
-  private Stack<GdbMiValue> m_valueStack = new Stack<GdbMiValue>();
-  private Long m_userToken;
-  private StringBuilder m_sb;
+  private GdbMiResultRecord myResultRecord;
+  private GdbMiStreamRecord myStreamRecord;
+  private Stack<GdbMiValue> myValueStack = new Stack<GdbMiValue>();
+  private Long myRserToken;
+  private StringBuilder myBuilder;
 
   // List of unprocessed records
-  private List<GdbMiRecord> m_records = new ArrayList<GdbMiRecord>();
+  private List<GdbMiRecord> myRecords = new ArrayList<GdbMiRecord>();
 
   /**
    * Constructor.
    */
   public GdbMiParser() {
-    m_state = new Stack<FsmState>();
-    m_state.push(FsmState.Idle);
+    myState.push(FsmState.Idle);
   }
 
   /**
@@ -64,7 +63,7 @@ public class GdbMiParser {
    * @return A list of unprocessed records.
    */
   public List<GdbMiRecord> getRecords() {
-    return m_records;
+    return myRecords;
   }
 
   /**
@@ -84,16 +83,16 @@ public class GdbMiParser {
    */
   public void process(byte[] data, int length) {
     // Run the data through the lexer first
-    m_lexer.process(data, length);
+    myLexer.process(data, length);
 
     // Parse the data
-    List<GdbMiToken> tokens = m_lexer.getTokens();
+    List<GdbMiToken> tokens = myLexer.getTokens();
     for (GdbMiToken token : tokens) {
-      if (m_state.isEmpty()) {
+      if (myState.isEmpty()) {
         throw new IllegalArgumentException("Mismatched tuple or list detected");
       }
 
-      switch (m_state.lastElement()) {
+      switch (myState.lastElement()) {
         case Idle:
           // Legal tokens:
           // UserToken
@@ -107,49 +106,49 @@ public class GdbMiParser {
           // GdbSuffix
           switch (token.type) {
             case UserToken:
-              m_userToken = Long.parseLong(token.value);
+              myRserToken = Long.parseLong(token.value);
               setState(FsmState.Record);
               break;
 
             case ResultRecordPrefix:
-              m_resultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Immediate, m_userToken);
-              m_userToken = null;
+              myResultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Immediate, myRserToken);
+              myRserToken = null;
               setState(FsmState.ResultRecord);
               break;
 
             case StatusAsyncOutputPrefix:
-              m_resultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Status, m_userToken);
-              m_userToken = null;
+              myResultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Status, myRserToken);
+              myRserToken = null;
               setState(FsmState.ResultRecord);
               break;
 
             case ExecAsyncOutputPrefix:
-              m_resultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Exec, m_userToken);
-              m_userToken = null;
+              myResultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Exec, myRserToken);
+              myRserToken = null;
               setState(FsmState.ResultRecord);
               break;
 
             case NotifyAsyncOutputPrefix:
-              m_resultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Notify, m_userToken);
-              m_userToken = null;
+              myResultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Notify, myRserToken);
+              myRserToken = null;
               setState(FsmState.ResultRecord);
               break;
 
             case ConsoleStreamOutputPrefix:
-              m_streamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Console, m_userToken);
-              m_userToken = null;
+              myStreamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Console, myRserToken);
+              myRserToken = null;
               setState(FsmState.StreamRecord);
               break;
 
             case TargetStreamOutputPrefix:
-              m_streamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Target, m_userToken);
-              m_userToken = null;
+              myStreamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Target, myRserToken);
+              myRserToken = null;
               setState(FsmState.StreamRecord);
               break;
 
             case LogStreamOutputPrefix:
-              m_streamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Log, m_userToken);
-              m_userToken = null;
+              myStreamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Log, myRserToken);
+              myRserToken = null;
               setState(FsmState.StreamRecord);
               break;
 
@@ -173,44 +172,44 @@ public class GdbMiParser {
           // LogStreamOutputPrefix
           switch (token.type) {
             case ResultRecordPrefix:
-              m_resultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Immediate, m_userToken);
-              m_userToken = null;
+              myResultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Immediate, myRserToken);
+              myRserToken = null;
               setState(FsmState.ResultRecord);
               break;
 
             case StatusAsyncOutputPrefix:
-              m_resultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Status, m_userToken);
-              m_userToken = null;
+              myResultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Status, myRserToken);
+              myRserToken = null;
               setState(FsmState.ResultRecord);
               break;
 
             case ExecAsyncOutputPrefix:
-              m_resultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Exec, m_userToken);
-              m_userToken = null;
+              myResultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Exec, myRserToken);
+              myRserToken = null;
               setState(FsmState.ResultRecord);
               break;
 
             case NotifyAsyncOutputPrefix:
-              m_resultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Notify, m_userToken);
-              m_userToken = null;
+              myResultRecord = new GdbMiResultRecord(GdbMiRecord.Type.Notify, myRserToken);
+              myRserToken = null;
               setState(FsmState.ResultRecord);
               break;
 
             case ConsoleStreamOutputPrefix:
-              m_streamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Console, m_userToken);
-              m_userToken = null;
+              myStreamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Console, myRserToken);
+              myRserToken = null;
               setState(FsmState.StreamRecord);
               break;
 
             case TargetStreamOutputPrefix:
-              m_streamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Target, m_userToken);
-              m_userToken = null;
+              myStreamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Target, myRserToken);
+              myRserToken = null;
               setState(FsmState.StreamRecord);
               break;
 
             case LogStreamOutputPrefix:
-              m_streamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Log, m_userToken);
-              m_userToken = null;
+              myStreamRecord = new GdbMiStreamRecord(GdbMiRecord.Type.Log, myRserToken);
+              myRserToken = null;
               setState(FsmState.StreamRecord);
               break;
 
@@ -224,7 +223,7 @@ public class GdbMiParser {
           // Identifier
           switch (token.type) {
             case Identifier:
-              m_resultRecord.className = token.value;
+              myResultRecord.className = token.value;
               setState(FsmState.ResultRecordResults);
               break;
 
@@ -239,12 +238,12 @@ public class GdbMiParser {
           // NewLine
           switch (token.type) {
             case ResultSeparator:
-              m_state.push(FsmState.ResultRecordResult);
+              myState.push(FsmState.ResultRecordResult);
               break;
 
             case NewLine:
-              m_records.add(m_resultRecord);
-              m_resultRecord = null;
+              myRecords.add(myResultRecord);
+              myResultRecord = null;
               setState(FsmState.Idle);
               break;
 
@@ -259,8 +258,8 @@ public class GdbMiParser {
           switch (token.type) {
             case Identifier: {
               GdbMiResult result = new GdbMiResult(token.value);
-              m_valueStack.push(result.value);
-              m_resultRecord.results.add(result);
+              myValueStack.push(result.value);
+              myResultRecord.results.add(result);
             }
             setState(FsmState.ResultRecordResultEquals);
             break;
@@ -290,20 +289,20 @@ public class GdbMiParser {
           // ListPrefix
           switch (token.type) {
             case StringPrefix:
-              m_valueStack.lastElement().type = GdbMiValue.Type.String;
-              m_sb = new StringBuilder();
+              myValueStack.lastElement().type = GdbMiValue.Type.String;
+              myBuilder = new StringBuilder();
               setState(FsmState.String);
               break;
 
             case TuplePrefix:
-              m_valueStack.lastElement().type = GdbMiValue.Type.Tuple;
-              m_valueStack.lastElement().tuple = new ArrayList<GdbMiResult>();
+              myValueStack.lastElement().type = GdbMiValue.Type.Tuple;
+              myValueStack.lastElement().tuple = new ArrayList<GdbMiResult>();
               setState(FsmState.Tuple);
               break;
 
             case ListPrefix:
-              m_valueStack.lastElement().type = GdbMiValue.Type.List;
-              m_valueStack.lastElement().list = new GdbMiList();
+              myValueStack.lastElement().type = GdbMiValue.Type.List;
+              myValueStack.lastElement().list = new GdbMiList();
               setState(FsmState.List);
               break;
 
@@ -317,7 +316,7 @@ public class GdbMiParser {
           // StringPrefix
           switch (token.type) {
             case StringPrefix:
-              m_sb = new StringBuilder();
+              myBuilder = new StringBuilder();
               setState(FsmState.String);
               break;
 
@@ -333,7 +332,7 @@ public class GdbMiParser {
           // StringSuffix
           switch (token.type) {
             case StringFragment:
-              m_sb.append(token.value);
+              myBuilder.append(token.value);
               break;
 
             case StringEscapePrefix:
@@ -341,21 +340,21 @@ public class GdbMiParser {
               break;
 
             case StringSuffix:
-              assert !m_valueStack.isEmpty() || m_streamRecord != null;
-              assert !(!m_valueStack.isEmpty() && m_streamRecord != null);
+              assert !myValueStack.isEmpty() || myStreamRecord != null;
+              assert !(!myValueStack.isEmpty() && myStreamRecord != null);
 
-              if (!m_valueStack.isEmpty()) {
+              if (!myValueStack.isEmpty()) {
                 // Currently reading a value
-                GdbMiValue value = m_valueStack.pop();
+                GdbMiValue value = myValueStack.pop();
                 assert value.type == GdbMiValue.Type.String;
-                value.string = m_sb.toString();
-                m_state.pop();
+                value.string = myBuilder.toString();
+                myState.pop();
               }
               else {
-                m_streamRecord.message = m_sb.toString();
+                myStreamRecord.message = myBuilder.toString();
                 setState(FsmState.StreamRecordSuffix);
               }
-              m_sb = null;
+              myBuilder = null;
               break;
 
             default:
@@ -380,57 +379,57 @@ public class GdbMiParser {
           // StringEscapeOctValue
           switch (token.type) {
             case StringEscapeApostrophe:
-              m_sb.append('\'');
+              myBuilder.append('\'');
               setState(FsmState.String);
               break;
 
             case StringEscapeQuote:
-              m_sb.append('"');
+              myBuilder.append('"');
               setState(FsmState.String);
               break;
 
             case StringEscapeQuestion:
-              m_sb.append('?');
+              myBuilder.append('?');
               setState(FsmState.String);
               break;
 
             case StringEscapeBackslash:
-              m_sb.append('\\');
+              myBuilder.append('\\');
               setState(FsmState.String);
               break;
 
             case StringEscapeAlarm:
-              m_sb.append('\u0007');
+              myBuilder.append('\u0007');
               setState(FsmState.String);
               break;
 
             case StringEscapeBackspace:
-              m_sb.append('\b');
+              myBuilder.append('\b');
               setState(FsmState.String);
               break;
 
             case StringEscapeFormFeed:
-              m_sb.append('\f');
+              myBuilder.append('\f');
               setState(FsmState.String);
               break;
 
             case StringEscapeNewLine:
-              m_sb.append('\n');
+              myBuilder.append('\n');
               setState(FsmState.String);
               break;
 
             case StringEscapeCarriageReturn:
-              m_sb.append('\r');
+              myBuilder.append('\r');
               setState(FsmState.String);
               break;
 
             case StringEscapeHorizontalTab:
-              m_sb.append('\t');
+              myBuilder.append('\t');
               setState(FsmState.String);
               break;
 
             case StringEscapeVerticalTab:
-              m_sb.append('\u000b');
+              myBuilder.append('\u000b');
               setState(FsmState.String);
               break;
 
@@ -444,7 +443,7 @@ public class GdbMiParser {
               // 8 bits before casting it to a 16-bit char to match the behaviour of C strings
             {
               int ch = Integer.parseInt(token.value, 8) & 0xff;
-              m_sb.append((char)ch);
+              myBuilder.append((char)ch);
             }
             setState(FsmState.String);
             break;
@@ -470,7 +469,7 @@ public class GdbMiParser {
             }
             {
               int ch = Integer.parseInt(token.value, 16);
-              m_sb.append((char)ch);
+              myBuilder.append((char)ch);
             }
             setState(FsmState.String);
             break;
@@ -486,18 +485,18 @@ public class GdbMiParser {
           // Identifier
           switch (token.type) {
             case TupleSuffix:
-              m_valueStack.pop();
-              m_state.pop();
+              myValueStack.pop();
+              myState.pop();
               break;
 
             case Identifier: {
               GdbMiResult result = new GdbMiResult(token.value);
-              m_valueStack.lastElement().tuple.add(result);
-              m_valueStack.push(result.value);
+              myValueStack.lastElement().tuple.add(result);
+              myValueStack.push(result.value);
             }
-            m_state.pop();
-            m_state.push(FsmState.TupleSeparator);
-            m_state.push(FsmState.ResultRecordResultEquals);
+            myState.pop();
+            myState.push(FsmState.TupleSeparator);
+            myState.push(FsmState.ResultRecordResultEquals);
             break;
 
             default:
@@ -511,8 +510,8 @@ public class GdbMiParser {
           // ResultSeparator
           switch (token.type) {
             case TupleSuffix:
-              m_valueStack.pop();
-              m_state.pop();
+              myValueStack.pop();
+              myState.pop();
               break;
 
             case ResultSeparator:
@@ -530,12 +529,12 @@ public class GdbMiParser {
           switch (token.type) {
             case Identifier: {
               GdbMiResult result = new GdbMiResult(token.value);
-              m_valueStack.lastElement().tuple.add(result);
-              m_valueStack.push(result.value);
+              myValueStack.lastElement().tuple.add(result);
+              myValueStack.push(result.value);
             }
-            m_state.pop();
-            m_state.push(FsmState.TupleSeparator);
-            m_state.push(FsmState.ResultRecordResultEquals);
+            myState.pop();
+            myState.push(FsmState.TupleSeparator);
+            myState.push(FsmState.ResultRecordResultEquals);
             break;
 
             default:
@@ -552,49 +551,49 @@ public class GdbMiParser {
           // Identifier
           switch (token.type) {
             case ListSuffix:
-              m_valueStack.pop();
-              m_state.pop();
+              myValueStack.pop();
+              myState.pop();
               break;
 
             case StringPrefix: {
-              GdbMiList list = m_valueStack.lastElement().list;
+              GdbMiList list = myValueStack.lastElement().list;
               list.type = GdbMiList.Type.Values;
               list.values = new ArrayList<GdbMiValue>();
               GdbMiValue value = new GdbMiValue(GdbMiValue.Type.String);
               list.values.add(value);
-              m_valueStack.push(value);
+              myValueStack.push(value);
             }
-            m_state.pop();
-            m_state.push(FsmState.ListValueSeparator);
-            m_state.push(FsmState.String);
-            m_sb = new StringBuilder();
+            myState.pop();
+            myState.push(FsmState.ListValueSeparator);
+            myState.push(FsmState.String);
+            myBuilder = new StringBuilder();
             break;
 
             case TuplePrefix: {
-              GdbMiList list = m_valueStack.lastElement().list;
+              GdbMiList list = myValueStack.lastElement().list;
               list.type = GdbMiList.Type.Values;
               list.values = new ArrayList<GdbMiValue>();
               GdbMiValue value = new GdbMiValue(GdbMiValue.Type.Tuple);
               value.tuple = new ArrayList<GdbMiResult>();
               list.values.add(value);
-              m_valueStack.push(value);
+              myValueStack.push(value);
             }
-            m_state.pop();
-            m_state.push(FsmState.ListValueSeparator);
-            m_state.push(FsmState.Tuple);
+            myState.pop();
+            myState.push(FsmState.ListValueSeparator);
+            myState.push(FsmState.Tuple);
             break;
 
             case Identifier: {
-              GdbMiList list = m_valueStack.lastElement().list;
+              GdbMiList list = myValueStack.lastElement().list;
               list.type = GdbMiList.Type.Results;
               list.results = new ArrayList<GdbMiResult>();
               GdbMiResult result = new GdbMiResult(token.value);
               list.results.add(result);
-              m_valueStack.push(result.value);
+              myValueStack.push(result.value);
             }
-            m_state.pop();
-            m_state.push(FsmState.ListResultSeparator);
-            m_state.push(FsmState.ResultRecordResultEquals);
+            myState.pop();
+            myState.push(FsmState.ListResultSeparator);
+            myState.push(FsmState.ResultRecordResultEquals);
             break;
 
             default:
@@ -608,8 +607,8 @@ public class GdbMiParser {
           // ResultSeparator
           switch (token.type) {
             case ListSuffix:
-              m_valueStack.pop();
-              m_state.pop();
+              myValueStack.pop();
+              myState.pop();
               break;
 
             case ResultSeparator:
@@ -629,35 +628,35 @@ public class GdbMiParser {
           switch (token.type) {
             case StringPrefix: {
               GdbMiValue value = new GdbMiValue(GdbMiValue.Type.String);
-              m_valueStack.lastElement().list.values.add(value);
-              m_valueStack.push(value);
+              myValueStack.lastElement().list.values.add(value);
+              myValueStack.push(value);
             }
-            m_state.pop();
-            m_state.push(FsmState.ListValueSeparator);
-            m_state.push(FsmState.String);
-            m_sb = new StringBuilder();
+            myState.pop();
+            myState.push(FsmState.ListValueSeparator);
+            myState.push(FsmState.String);
+            myBuilder = new StringBuilder();
             break;
 
             case TuplePrefix: {
               GdbMiValue value = new GdbMiValue(GdbMiValue.Type.Tuple);
               value.tuple = new ArrayList<GdbMiResult>();
-              m_valueStack.lastElement().list.values.add(value);
-              m_valueStack.push(value);
+              myValueStack.lastElement().list.values.add(value);
+              myValueStack.push(value);
             }
-            m_state.pop();
-            m_state.push(FsmState.ListValueSeparator);
-            m_state.push(FsmState.Tuple);
+            myState.pop();
+            myState.push(FsmState.ListValueSeparator);
+            myState.push(FsmState.Tuple);
             break;
 
             case ListPrefix: {
               GdbMiValue value = new GdbMiValue(GdbMiValue.Type.List);
               value.list = new GdbMiList();
-              m_valueStack.lastElement().list.values.add(value);
-              m_valueStack.push(value);
+              myValueStack.lastElement().list.values.add(value);
+              myValueStack.push(value);
             }
-            m_state.pop();
-            m_state.push(FsmState.ListValueSeparator);
-            m_state.push(FsmState.List);
+            myState.pop();
+            myState.push(FsmState.ListValueSeparator);
+            myState.push(FsmState.List);
             break;
 
             default:
@@ -671,8 +670,8 @@ public class GdbMiParser {
           // ResultSeparator
           switch (token.type) {
             case ListSuffix:
-              m_valueStack.pop();
-              m_state.pop();
+              myValueStack.pop();
+              myState.pop();
               break;
 
             case ResultSeparator:
@@ -689,14 +688,14 @@ public class GdbMiParser {
           // Identifier
           switch (token.type) {
             case Identifier: {
-              GdbMiList list = m_valueStack.lastElement().list;
+              GdbMiList list = myValueStack.lastElement().list;
               GdbMiResult result = new GdbMiResult(token.value);
               list.results.add(result);
-              m_valueStack.push(result.value);
+              myValueStack.push(result.value);
             }
-            m_state.pop();
-            m_state.push(FsmState.ListResultSeparator);
-            m_state.push(FsmState.ResultRecordResultEquals);
+            myState.pop();
+            myState.push(FsmState.ListResultSeparator);
+            myState.push(FsmState.ResultRecordResultEquals);
             break;
 
             default:
@@ -709,8 +708,8 @@ public class GdbMiParser {
           // NewLine
           switch (token.type) {
             case NewLine:
-              m_records.add(m_streamRecord);
-              m_streamRecord = null;
+              myRecords.add(myStreamRecord);
+              myStreamRecord = null;
               setState(FsmState.Idle);
               break;
 
@@ -734,7 +733,7 @@ public class GdbMiParser {
 
         default:
           throw new IllegalArgumentException("Unexpected parser FSM state: " +
-                                             m_state.lastElement());
+                                             myState.lastElement());
       }
     }
     tokens.clear();
@@ -746,7 +745,7 @@ public class GdbMiParser {
    * @param state The new state.
    */
   private void setState(FsmState state) {
-    m_state.pop();
-    m_state.push(state);
+    myState.pop();
+    myState.push(state);
   }
 }

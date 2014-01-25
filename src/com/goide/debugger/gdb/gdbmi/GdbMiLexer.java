@@ -27,13 +27,13 @@ public class GdbMiLexer {
   }
 
   // State of the lexer FSM
-  private FsmState m_state = FsmState.Idle;
+  private FsmState myState = FsmState.Idle;
 
   // Temporary store for partially read tokens
-  private StringBuilder m_partialToken;
+  private StringBuilder myPartialToken;
 
   // List of unprocessed tokens
-  private List<GdbMiToken> m_tokens = new ArrayList<GdbMiToken>();
+  private List<GdbMiToken> myTokens = new ArrayList<GdbMiToken>();
 
   /**
    * Returns a list of unprocessed tokens. The caller should erase items from this list as they
@@ -42,7 +42,7 @@ public class GdbMiLexer {
    * @return A list of unprocessed tokens.
    */
   public List<GdbMiToken> getTokens() {
-    return m_tokens;
+    return myTokens;
   }
 
   /**
@@ -53,7 +53,7 @@ public class GdbMiLexer {
    */
   public void process(byte[] data, int length) {
     for (int i = 0; i != length; ++i) {
-      switch (m_state) {
+      switch (myState) {
         case Idle:
           // Legal tokens:
           // User token (digits)
@@ -72,73 +72,73 @@ public class GdbMiLexer {
             case '7':
             case '8':
             case '9':
-              m_partialToken = new StringBuilder();
-              m_partialToken.append((char)data[i]);
-              m_state = FsmState.UserToken;
+              myPartialToken = new StringBuilder();
+              myPartialToken.append((char)data[i]);
+              myState = FsmState.UserToken;
               break;
 
             case '^':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.ResultRecordPrefix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.ResultRecordPrefix));
               break;
 
             case '*':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.ExecAsyncOutputPrefix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.ExecAsyncOutputPrefix));
               break;
 
             case '+':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StatusAsyncOutputPrefix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StatusAsyncOutputPrefix));
               break;
 
             case '=':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.NotifyAsyncOutputPrefix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.NotifyAsyncOutputPrefix));
               break;
 
             case '~':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.ConsoleStreamOutputPrefix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.ConsoleStreamOutputPrefix));
               break;
 
             case '@':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.TargetStreamOutputPrefix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.TargetStreamOutputPrefix));
               break;
 
             case '&':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.LogStreamOutputPrefix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.LogStreamOutputPrefix));
               break;
 
             case ',':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.ResultSeparator));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.ResultSeparator));
               break;
 
             case '"':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringPrefix));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringPrefix));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case '{':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.TuplePrefix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.TuplePrefix));
               break;
 
             case '}':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.TupleSuffix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.TupleSuffix));
               break;
 
             case '[':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.ListPrefix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.ListPrefix));
               break;
 
             case ']':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.ListSuffix));
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.ListSuffix));
               break;
 
             case '(':
-              m_state = FsmState.GdbSuffix1;
+              myState = FsmState.GdbSuffix1;
               break;
 
             case '\r':
             case '\n':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.NewLine));
-              m_state = FsmState.CrLf;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.NewLine));
+              myState = FsmState.CrLf;
               break;
 
             case '_':
@@ -194,9 +194,9 @@ public class GdbMiLexer {
             case 'X':
             case 'Y':
             case 'Z':
-              m_partialToken = new StringBuilder();
-              m_partialToken.append((char)data[i]);
-              m_state = FsmState.Identifier;
+              myPartialToken = new StringBuilder();
+              myPartialToken.append((char)data[i]);
+              myState = FsmState.Identifier;
               break;
 
             default:
@@ -219,13 +219,13 @@ public class GdbMiLexer {
             case '7':
             case '8':
             case '9':
-              m_partialToken.append((char)data[i]);
+              myPartialToken.append((char)data[i]);
               break;
 
             default:
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.UserToken,
-                                          m_partialToken.toString()));
-              m_state = FsmState.Idle;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.UserToken,
+                                          myPartialToken.toString()));
+              myState = FsmState.Idle;
               --i;
           }
           break;
@@ -240,20 +240,20 @@ public class GdbMiLexer {
               (data[i] >= '0' && data[i] <= '9') ||
               (data[i] >= 'a' && data[i] <= 'z') ||
               (data[i] >= 'A' && data[i] <= 'Z')) {
-            m_partialToken.append((char)data[i]);
+            myPartialToken.append((char)data[i]);
           }
           else if (data[i] == '=') {
-            m_tokens.add(new GdbMiToken(GdbMiToken.Type.Identifier,
-                                        m_partialToken.toString()));
-            m_tokens.add(new GdbMiToken(GdbMiToken.Type.Equals));
-            m_partialToken = null;
-            m_state = FsmState.Idle;
+            myTokens.add(new GdbMiToken(GdbMiToken.Type.Identifier,
+                                        myPartialToken.toString()));
+            myTokens.add(new GdbMiToken(GdbMiToken.Type.Equals));
+            myPartialToken = null;
+            myState = FsmState.Idle;
           }
           else {
-            m_tokens.add(new GdbMiToken(GdbMiToken.Type.Identifier,
-                                        m_partialToken.toString()));
-            m_partialToken = null;
-            m_state = FsmState.Idle;
+            myTokens.add(new GdbMiToken(GdbMiToken.Type.Identifier,
+                                        myPartialToken.toString()));
+            myPartialToken = null;
+            myState = FsmState.Idle;
             --i;
           }
           break;
@@ -277,23 +277,23 @@ public class GdbMiLexer {
           //   \x[hexadecimal digits]
           switch (data[i]) {
             case '"':
-              if (m_partialToken.length() != 0) {
-                m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringFragment,
-                                            m_partialToken.toString()));
+              if (myPartialToken.length() != 0) {
+                myTokens.add(new GdbMiToken(GdbMiToken.Type.StringFragment,
+                                            myPartialToken.toString()));
               }
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringSuffix));
-              m_partialToken = null;
-              m_state = FsmState.Idle;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringSuffix));
+              myPartialToken = null;
+              myState = FsmState.Idle;
               break;
 
             case '\\':
-              if (m_partialToken.length() != 0) {
-                m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringFragment,
-                                            m_partialToken.toString()));
+              if (myPartialToken.length() != 0) {
+                myTokens.add(new GdbMiToken(GdbMiToken.Type.StringFragment,
+                                            myPartialToken.toString()));
               }
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapePrefix));
-              m_state = FsmState.CStringEscape;
-              m_partialToken = null;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapePrefix));
+              myState = FsmState.CStringEscape;
+              myPartialToken = null;
               break;
 
             case '\r':
@@ -301,7 +301,7 @@ public class GdbMiLexer {
               throw new IllegalArgumentException("Unexpected character: '" + data[i] + "'");
 
             default:
-              m_partialToken.append((char)data[i]);
+              myPartialToken.append((char)data[i]);
           }
           break;
 
@@ -310,75 +310,75 @@ public class GdbMiLexer {
           // "'", """, "?", "\", "a", "b", "f", "n", "r", "t", "v", "x", 0-7
           switch (data[i]) {
             case '\'':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeApostrophe));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeApostrophe));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case '"':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeQuote));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeQuote));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case '?':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeQuestion));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeQuestion));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case '\\':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeBackslash));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeBackslash));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case 'a':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeAlarm));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeAlarm));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case 'b':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeBackspace));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeBackspace));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case 'f':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeFormFeed));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeFormFeed));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case 'n':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeNewLine));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeNewLine));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case 'r':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeCarriageReturn));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeCarriageReturn));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case 't':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeHorizontalTab));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeHorizontalTab));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case 'v':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeVerticalTab));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CString;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeVerticalTab));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CString;
               break;
 
             case 'x':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeHexPrefix));
-              m_partialToken = new StringBuilder();
-              m_state = FsmState.CStringEscapeHexHead;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeHexPrefix));
+              myPartialToken = new StringBuilder();
+              myState = FsmState.CStringEscapeHexHead;
               break;
 
             case '0':
@@ -389,9 +389,9 @@ public class GdbMiLexer {
             case '5':
             case '6':
             case '7':
-              m_partialToken = new StringBuilder();
-              m_partialToken.append((char)data[i]);
-              m_state = FsmState.CStringEscapeOct1;
+              myPartialToken = new StringBuilder();
+              myPartialToken.append((char)data[i]);
+              myState = FsmState.CStringEscapeOct1;
               break;
 
             default:
@@ -405,8 +405,8 @@ public class GdbMiLexer {
           if ((data[i] >= '0' && data[i] <= '9') ||
               (data[i] >= 'a' && data[i] <= 'f') ||
               (data[i] >= 'A' && data[i] <= 'F')) {
-            m_partialToken.append((char)data[i]);
-            m_state = FsmState.CStringEscapeHex;
+            myPartialToken.append((char)data[i]);
+            myState = FsmState.CStringEscapeHex;
           }
           else {
             throw new IllegalArgumentException("Unexpected character: '" + data[i] + "'");
@@ -420,13 +420,13 @@ public class GdbMiLexer {
           if ((data[i] >= '0' && data[i] <= '9') ||
               (data[i] >= 'a' && data[i] <= 'f') ||
               (data[i] >= 'A' && data[i] <= 'F')) {
-            m_partialToken.append((char)data[i]);
+            myPartialToken.append((char)data[i]);
           }
           else {
-            m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeHexValue,
-                                        m_partialToken.toString()));
-            m_partialToken = new StringBuilder();
-            m_state = FsmState.CString;
+            myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeHexValue,
+                                        myPartialToken.toString()));
+            myPartialToken = new StringBuilder();
+            myState = FsmState.CString;
             --i;
           }
           break;
@@ -436,14 +436,14 @@ public class GdbMiLexer {
           // Oct digits: 0-7
           // Else reprocess as normal C string character
           if (data[i] >= '0' && data[i] <= '7') {
-            m_partialToken.append((char)data[i]);
-            m_state = FsmState.CStringEscapeOct2;
+            myPartialToken.append((char)data[i]);
+            myState = FsmState.CStringEscapeOct2;
           }
           else {
-            m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeOctValue,
-                                        m_partialToken.toString()));
-            m_partialToken = new StringBuilder();
-            m_state = FsmState.CString;
+            myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeOctValue,
+                                        myPartialToken.toString()));
+            myPartialToken = new StringBuilder();
+            myState = FsmState.CString;
             --i;
           }
           break;
@@ -453,22 +453,22 @@ public class GdbMiLexer {
           // Oct digits: 0-7
           // Else reprocess as normal C string character
           if (data[i] >= '0' && data[i] <= '7') {
-            m_partialToken.append((char)data[i]);
+            myPartialToken.append((char)data[i]);
           }
           else {
             --i;
           }
-          m_tokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeOctValue,
-                                      m_partialToken.toString()));
-          m_partialToken = new StringBuilder();
-          m_state = FsmState.CString;
+          myTokens.add(new GdbMiToken(GdbMiToken.Type.StringEscapeOctValue,
+                                      myPartialToken.toString()));
+          myPartialToken = new StringBuilder();
+          myState = FsmState.CString;
           break;
 
         case GdbSuffix1:
           // Read so far: "("
           switch (data[i]) {
             case 'g':
-              m_state = FsmState.GdbSuffix2;
+              myState = FsmState.GdbSuffix2;
               break;
 
             default:
@@ -480,7 +480,7 @@ public class GdbMiLexer {
           // Read so far: "(g"
           switch (data[i]) {
             case 'd':
-              m_state = FsmState.GdbSuffix3;
+              myState = FsmState.GdbSuffix3;
               break;
 
             default:
@@ -492,7 +492,7 @@ public class GdbMiLexer {
           // Read so far: "(gd"
           switch (data[i]) {
             case 'b':
-              m_state = FsmState.GdbSuffix4;
+              myState = FsmState.GdbSuffix4;
               break;
 
             default:
@@ -504,8 +504,8 @@ public class GdbMiLexer {
           // Read so far: "(gdb"
           switch (data[i]) {
             case ')':
-              m_tokens.add(new GdbMiToken(GdbMiToken.Type.GdbSuffix));
-              m_state = FsmState.GdbSuffix5;
+              myTokens.add(new GdbMiToken(GdbMiToken.Type.GdbSuffix));
+              myState = FsmState.GdbSuffix5;
               break;
 
             default:
@@ -518,13 +518,13 @@ public class GdbMiLexer {
           // this. We just ignore it if it does
           switch (data[i]) {
             case ' ':
-              m_state = FsmState.Idle;
+              myState = FsmState.Idle;
               break;
 
             default:
               // Reprocess the character
               --i;
-              m_state = FsmState.Idle;
+              myState = FsmState.Idle;
           }
           break;
 
@@ -535,18 +535,18 @@ public class GdbMiLexer {
           // reprocessed
           switch (data[i]) {
             case '\n':
-              m_state = FsmState.Idle;
+              myState = FsmState.Idle;
               break;
 
             default:
               // Reprocess the character
-              m_state = FsmState.Idle;
+              myState = FsmState.Idle;
               --i;
           }
           break;
 
         default:
-          throw new IllegalArgumentException("Unexpected lexer FSM state: " + m_state);
+          throw new IllegalArgumentException("Unexpected lexer FSM state: " + myState);
       }
     }
   }

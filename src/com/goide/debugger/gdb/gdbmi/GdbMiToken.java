@@ -81,12 +81,6 @@ public class GdbMiToken {
    * @return A string containing the type and, if set, the value.
    */
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(type);
-    if (value != null) {
-      sb.append(": ");
-      sb.append(value);
-    }
-    return sb.toString();
+    return type + (value == null ? "" : ": " + value);
   }
 }
