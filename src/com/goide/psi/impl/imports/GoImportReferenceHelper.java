@@ -61,7 +61,7 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
 
     try {
       ((PsiDirectory)context).checkCreateSubdirectory(fileNameToCreate);
-      result.add(0, new CreateFileFix(true, fileNameToCreate, (PsiDirectory)context));
+      result.add(new CreateFileFix(true, fileNameToCreate, (PsiDirectory)context));
     }
     catch (IncorrectOperationException ignore) {
     }

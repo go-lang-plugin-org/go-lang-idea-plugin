@@ -1,7 +1,7 @@
 package main
 
-import fmt "math"
 import "fmt"
+import fmt "math"
 
 func main() {
   fmt.Printf("a2",a2)

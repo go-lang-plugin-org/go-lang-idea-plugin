@@ -11,8 +11,7 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   public void testDuplicatedImportsWithSameString() { doTest(); } 
   public void testDuplicatedImportsWithDifferentString() { doTest(); } 
   public void testUnusedDuplicatedImports() { doTest(); }
-  public void _testImportWithSameIdentifier() { doTest(); } //todo test sdk required
-  public void _testUnresolvedImports() { doTest(); } //todo test sdk required
+  public void testImportWithSameIdentifier() { doTest(); }
   
   private void doTest() {
     myFixture.configureByFile(getTestName(true) + ".go");

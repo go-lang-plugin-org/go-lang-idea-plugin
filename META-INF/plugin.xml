@@ -77,6 +77,9 @@
     <localInspection language="go" displayName="Unresolved reference inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnresolvedReferenceInspection"/>
+    <localInspection language="go" displayName="Unused import inspection"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoUnusedImportDeclaration"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"
