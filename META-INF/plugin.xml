@@ -16,6 +16,7 @@
     <stubIndex implementation="com.goide.stubs.index.GoAllNamesIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoFunctionIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoTypesIndex"/>
+    <stubIndex implementation="com.goide.stubs.index.GoPackagesIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoMethodIndex"/>
 
     <internalFileTemplate name="Go Application"/>
