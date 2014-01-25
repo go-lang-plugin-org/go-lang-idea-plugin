@@ -1,9 +1,11 @@
 package com.goide.runconfig.testing;
 
+import com.goide.psi.GoFile;
 import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.GoRunConfigurationBase;
 import com.goide.runconfig.GoRunner;
 import com.goide.runconfig.testing.ui.GoTestRunConfigurationEditorForm;
+import com.goide.stubs.index.GoPackagesIndex;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
@@ -16,8 +18,12 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunningState> {
   private String myPackage = "";
@@ -75,8 +81,15 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
         }
         break;
       case PACKAGE:
-        // todo: package index is required
-        break;
+        Module module = configurationModule.getModule();
+        assert module != null;
+        final GlobalSearchScope scope = GlobalSearchScope.moduleScope(module);
+        String packageName = PathUtil.getFileName(myPackage);
+        Collection<GoFile> files = StubIndex.getInstance().get(GoPackagesIndex.KEY, packageName, getProject(), scope);
+        for (GoFile file : files) {
+          if (file != null && file.getFullPackageName() != null) return;
+        }
+        throw new RuntimeConfigurationError("Cannot find package '" + myPackage + "'");
       case FILE:
         VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(myFilePath);
         if (virtualFile == null) {
@@ -84,7 +97,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
         }
         PsiFile file = PsiManager.getInstance(getProject()).findFile(virtualFile);
         if (file == null || !GoTestFinder.isTestFile(file)) {
-          throw new RuntimeConfigurationError("File '" +  myFilePath + "' is not test");
+          throw new RuntimeConfigurationError("File '" + myFilePath + "' is not test");
         }
         break;
     }

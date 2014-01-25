@@ -12,19 +12,15 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.impl.ProjectFileIndexImpl;
 import com.intellij.openapi.roots.ui.configuration.ModulesCombobox;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.RawCommandLineEditor;
-import com.intellij.util.PathUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.TextFieldCompletionProvider;
 import org.intellij.lang.regexp.RegExpLanguage;
@@ -134,15 +130,9 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
               StubIndex.getInstance().process(GoPackagesIndex.KEY, packageName, myProject, scope, new Processor<GoFile>() {
                 @Override
                 public boolean process(GoFile file) {
-                  if (file != null) {
-                    VirtualFile virtualFile = file.getVirtualFile();
-                    VirtualFile root = ProjectFileIndexImpl.SERVICE.getInstance(myProject).getSourceRootForFile(virtualFile);
-                    if (root != null) {
-                      String fullPackageName = FileUtil.getRelativePath(root.getPath(), virtualFile.getPath(), '/');
-                      if (fullPackageName != null && StringUtil.containsChar(fullPackageName, '/')) {
-                        result.addElement(GoPsiImplUtil.createPackageLookupElement(PathUtil.getParentPath(fullPackageName), false));
-                      }
-                    }
+                  String fullPackageName = file.getFullPackageName();
+                  if (fullPackageName != null) {
+                    result.addElement(GoPsiImplUtil.createPackageLookupElement(fullPackageName, false));
                   }
                   return true;
                 }
