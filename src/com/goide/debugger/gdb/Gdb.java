@@ -42,7 +42,7 @@ public class Gdb {
   }
 
   // Handle to the ASCII character set
-  private static Charset m_ascii = Charset.forName("US-ASCII");
+  private static Charset ourCharset = Charset.forName("US-ASCII");
 
   // The listener
   private GdbListener myListener;
@@ -345,7 +345,7 @@ public class Gdb {
         queuedCommands.clear();
 
         // Send the messages
-        byte[] message = sb.toString().getBytes(m_ascii);
+        byte[] message = sb.toString().getBytes(ourCharset);
         stream.write(message);
         stream.flush();
       }
