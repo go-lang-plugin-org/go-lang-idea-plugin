@@ -1,7 +1,11 @@
 package com.goide.runconfig.testing.ui;
 
+import com.goide.GoIcons;
 import com.goide.GoModuleType;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
+import com.goide.stubs.index.GoPackagesIndex;
+import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.ConfigurationException;
@@ -14,14 +18,17 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.RawCommandLineEditor;
+import com.intellij.util.TextFieldCompletionProvider;
 import org.intellij.lang.regexp.RegExpLanguage;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 
 public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfiguration> {
+  @NotNull private final Project myProject;
   private JPanel component;
   private ModulesCombobox myComboModules;
   private RawCommandLineEditor myParamsField;
@@ -36,8 +43,10 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private JLabel myDirectoryLabel;
   private TextFieldWithBrowseButton myDirectoryField;
 
-  public GoTestRunConfigurationEditorForm(@NotNull Project project) {
+  public GoTestRunConfigurationEditorForm(@NotNull final Project project) {
     super(null);
+    myProject = project;
+
     installTestKindComboBox();
     installFileChoosers(project);
   }
@@ -103,6 +112,15 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
 
   private void createUIComponents() {
     myPatternEditor = new EditorTextField("", null, RegExpLanguage.INSTANCE.getAssociatedFileType());
+    myPackageField = new TextFieldCompletionProvider() {
+      @Override
+      protected void addCompletionVariants(@NotNull String text, int offset, @NotNull String prefix, @NotNull CompletionResultSet result) {
+        Collection<String> packages = GoPackagesIndex.getAllPackages(myProject);
+        for (String packageName : packages) {
+          result.addElement(LookupElementBuilder.create(packageName).withIcon(GoIcons.PACKAGE));
+        }
+      }
+    }.createEditor(myProject);
   }
 
   private static ListCellRendererWrapper<GoTestRunConfiguration.Kind> getTestKindListCellRendererWrapper() {

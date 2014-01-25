@@ -62,7 +62,7 @@
           <visible value="true"/>
         </properties>
       </component>
-      <component id="d8a73" class="com.intellij.ui.EditorTextField" binding="myPackageField">
+      <component id="d8a73" class="com.intellij.ui.EditorTextField" binding="myPackageField" custom-create="true">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
