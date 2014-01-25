@@ -1,18 +1,22 @@
 package com.goide.inspections;
 
+import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateSettings;
+import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -67,7 +71,10 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         if (reference == null || reference.resolve() == null) {
           PsiElement id = o.getIdentifier();
           String name = id.getText();
-          problemsHolder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, new IntroduceTypeFix(id, name));
+          ASTNode next = FormatterUtil.getNextNonWhitespaceSibling(o.getNode());
+          boolean isDot = next != null && next.getElementType() == GoTypes.DOT;
+          LocalQuickFix[] fixes = isDot ? new LocalQuickFix[]{} : new LocalQuickFix[]{new IntroduceTypeFix(id, name)};
+          problemsHolder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
     });
