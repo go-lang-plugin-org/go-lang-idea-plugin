@@ -2377,7 +2377,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '(' (identifier '*'? ReceiverResultType|'*'? ReceiverResultType) ')'
+  // '(' (identifier ReceiverTail | ReceiverTail) ')'
   public static boolean Receiver(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Receiver")) return false;
     if (!nextTokenIs(builder_, LPAREN)) return false;
@@ -2390,52 +2390,26 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // identifier '*'? ReceiverResultType|'*'? ReceiverResultType
+  // identifier ReceiverTail | ReceiverTail
   private static boolean Receiver_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Receiver_1")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = Receiver_1_0(builder_, level_ + 1);
-    if (!result_) result_ = Receiver_1_1(builder_, level_ + 1);
+    if (!result_) result_ = ReceiverTail(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
-  // identifier '*'? ReceiverResultType
+  // identifier ReceiverTail
   private static boolean Receiver_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Receiver_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, IDENTIFIER);
-    result_ = result_ && Receiver_1_0_1(builder_, level_ + 1);
-    result_ = result_ && ReceiverResultType(builder_, level_ + 1);
+    result_ = result_ && ReceiverTail(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
-  }
-
-  // '*'?
-  private static boolean Receiver_1_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Receiver_1_0_1")) return false;
-    consumeToken(builder_, MUL);
-    return true;
-  }
-
-  // '*'? ReceiverResultType
-  private static boolean Receiver_1_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Receiver_1_1")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = Receiver_1_1_0(builder_, level_ + 1);
-    result_ = result_ && ReceiverResultType(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // '*'?
-  private static boolean Receiver_1_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Receiver_1_1_0")) return false;
-    consumeToken(builder_, MUL);
-    return true;
   }
 
   /* ********************************************************** */
@@ -2448,6 +2422,26 @@ public class GoParser implements PsiParser {
     result_ = TypeReferenceExpression(builder_, level_ + 1);
     exit_section_(builder_, marker_, TYPE, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // '*'? ReceiverResultType
+  static boolean ReceiverTail(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ReceiverTail")) return false;
+    if (!nextTokenIs(builder_, "", MUL, IDENTIFIER)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ReceiverTail_0(builder_, level_ + 1);
+    result_ = result_ && ReceiverResultType(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // '*'?
+  private static boolean ReceiverTail_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ReceiverTail_0")) return false;
+    consumeToken(builder_, MUL);
+    return true;
   }
 
   /* ********************************************************** */
