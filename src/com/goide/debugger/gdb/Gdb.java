@@ -237,7 +237,10 @@ public class Gdb {
       // Launch the process
       final String[] commandLine = {
         gdbPath,
-        "--interpreter=mi2"};
+        "--interpreter=mi2",
+        "-d",
+        "$GOROOT"
+      };
       File workingDirectoryFile = null;
       if (workingDirectory != null) {
         workingDirectoryFile = new File(workingDirectory);
