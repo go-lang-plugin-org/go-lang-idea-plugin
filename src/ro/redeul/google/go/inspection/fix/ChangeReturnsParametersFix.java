@@ -61,23 +61,30 @@ public class ChangeReturnsParametersFix extends LocalQuickFixAndIntentionActionO
         }
         StringBuilder stringBuilder = new StringBuilder();
         int i = 0;
-        for (GoExpr expr : element.getExpressions()) {
+
+
+        GoExpr[] expressions = element.getExpressions();
+
+        for (GoExpr expr : expressions) {
             GoType[] types = expr.getType();
-            if (i != 0) {
-                stringBuilder.append(",");
-            }
-            if (types.length > 0 && types[0] != null) {
-                if (types[0] instanceof GoTypePsiBacked) {
-                    GoTypePsiBacked psiTypeBackend = (GoTypePsiBacked) types[0];
-                    GoPsiType goPsiType = psiTypeBackend.getPsiType();
-                    stringBuilder.append(GoUtil.getNameLocalOrGlobal(goPsiType, (GoFile) element.getContainingFile()));
+            for (GoType type : types) {
+                if (i != 0) {
+                    stringBuilder.append(",");
                 }
-            } else {
-                //As some Expression may not return a valid type, in this case will not modify anithing and exit
-                return;
+                if (type != null) {
+                    if (type instanceof GoTypePsiBacked) {
+                        GoTypePsiBacked psiTypeBackend = (GoTypePsiBacked) type;
+                        GoPsiType goPsiType = psiTypeBackend.getPsiType();
+                        stringBuilder.append(GoUtil.getNameLocalOrGlobal(goPsiType, (GoFile) element.getContainingFile()));
+                    }
+                } else {
+                    //As some Expression may not return a valid type, in this case will not modify anithing and exit
+                    return;
+                }
+                i++;
             }
-            i++;
         }
+
         GoFunctionDeclaration functionDeclaration = GoPsiUtils.findParentOfType(element, GoFunctionDeclaration.class);
         int startOffset;
         PsiElement result = GoPsiUtils.findChildOfType(functionDeclaration, GoElementTypes.FUNCTION_RESULT);

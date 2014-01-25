@@ -6,6 +6,7 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.FunctionCallInspection;
 import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.inspection.fix.CastTypeFix;
+import ro.redeul.google.go.inspection.fix.ChangeReturnsParametersFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -241,53 +242,63 @@ public class GoTypeInspectUtil {
 
 
     public static boolean checkFunctionTypeReturns(GoReturnStatement statement, InspectionResult result) {
-        GoFunctionDeclaration goFunctionDeclaration = GoPsiUtils.findParentOfType(statement, GoFunctionDeclaration.class);
-        GoExpr[] goExprs = statement.getExpressions();
         int index = 0;
+
+        GoFunctionDeclaration goFunctionDeclaration = GoPsiUtils.findParentOfType(statement, GoFunctionDeclaration.class);
         if (goFunctionDeclaration == null)
             return true;
+        GoExpr[] goExprs = statement.getExpressions();
 
-        for (GoFunctionParameter functionParameter : goFunctionDeclaration.getResults()) {
+        GoFunctionParameter[] results = goFunctionDeclaration.getResults();
+        if (goExprs.length == 1 && goExprs[0] instanceof GoCallOrConvExpression) {
+
+            GoFunctionDeclaration goFunctionDeclarationResolved = GoExpressionUtils.resolveToFunctionDeclaration(goExprs[0]);
+            for (GoFunctionParameter resolvedParameter : goFunctionDeclarationResolved.getResults()) {
+                if (!results[index].getType().isIdentical(resolvedParameter.getType())) {
+                    result.addProblem(
+                            goExprs[0],
+                            GoBundle.message("warning.function.return.call.types.mismatch"),
+                            new ChangeReturnsParametersFix(statement));
+                    return false;
+                }
+                index++;
+            }
+            return true;
+
+        }
+
+        for (GoFunctionParameter functionParameter : results) {
             if (index >= goExprs.length)
                 return false;
             GoPsiType type = functionParameter.getType();
-            if (functionParameter.isVariadic()) {
+            GoLiteralIdentifier[] identifiers = functionParameter.getIdentifiers();
+            if (identifiers.length < 2) {
                 GoExpr goExpr = goExprs[index];
-                for (; index < goExprs.length; index++)
-                    if (!checkParametersExp(functionParameter.getType(), goExpr)) {
-                        result.addProblem(
-                                goExpr,
-                                GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
-                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
-                        return false;
-                    }
+                if (!checkParametersExp(functionParameter.getType(), goExpr)) {
+                    result.addProblem(
+                            goExpr,
+                            GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                            new CastTypeFix(goExpr, type),
+                            new ChangeReturnsParametersFix(statement));
+                    return false;
+                }
+                index++;
             } else {
-                GoLiteralIdentifier[] identifiers = functionParameter.getIdentifiers();
-                if (identifiers.length < 2) {
+                for (GoLiteralIdentifier goLiteralIdentifier : identifiers) {
                     GoExpr goExpr = goExprs[index];
                     if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                         result.addProblem(
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
-                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                                new CastTypeFix(goExpr, type),
+                                new ChangeReturnsParametersFix(statement));
+
                         return false;
                     }
                     index++;
-                } else {
-                    for (GoLiteralIdentifier goLiteralIdentifier : identifiers) {
-                        GoExpr goExpr = goExprs[index];
-                        if (!checkParametersExp(functionParameter.getType(), goExpr)) {
-                            result.addProblem(
-                                    goExpr,
-                                    GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
-                                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
-
-                            return false;
-                        }
-                        index++;
-                    }
                 }
             }
+
         }
         return true;
     }

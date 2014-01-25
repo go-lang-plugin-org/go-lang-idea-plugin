@@ -1,6 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import com.intellij.codeInspection.ProblemHighlightType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.ChangeReturnsParametersFix;
@@ -88,28 +87,14 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
                 return;
             }
 
-            //TO DO: We Could implement a change return stmt fix & inspect the type of the return stmt to match the function declaration
-
             if (expectedResCount < returnCount) {
-                result.addProblem(statement, GoBundle.message("error.too.many.arguments.to.return"));
-                result.addProblem(statement,
-                        "",
-                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                        new ChangeReturnsParametersFix(statement)
-                );
+                result.addProblem(statement, GoBundle.message("error.too.many.arguments.to.return"),
+                        new ChangeReturnsParametersFix(statement));
             } else if (expectedResCount > returnCount) {
-                result.addProblem(statement, GoBundle.message("error.not.enough.arguments.to.return"));
-                result.addProblem(statement,
-                        "",
-                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                        new ChangeReturnsParametersFix(statement)
-                );
-            } else if (!GoTypeInspectUtil.checkFunctionTypeReturns(statement, result)) {
-                result.addProblem(statement,
-                        "",
-                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                        new ChangeReturnsParametersFix(statement)
-                );
+                result.addProblem(statement, GoBundle.message("error.not.enough.arguments.to.return"),
+                        new ChangeReturnsParametersFix(statement));
+            } else {
+                GoTypeInspectUtil.checkFunctionTypeReturns(statement, result);
             }
 
 
