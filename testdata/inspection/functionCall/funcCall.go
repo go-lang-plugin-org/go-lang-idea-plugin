@@ -59,6 +59,10 @@ func HandleMap(a map[string]string) {
 
 }
 
+func HandleMapInterface(a map[string]interface{}){
+
+}
+
 func HandleSlice(a []string) {
 
 }
@@ -265,6 +269,10 @@ func main() {
 	HandleMyMap2(/*begin*/map[string]int{}/*end.Expression type mismatch, the expected type is MyMap2|CastTypeFix*/)
 	HandleMyMap2(/*begin*/[]int{}/*end.Expression type mismatch, the expected type is MyMap2|CastTypeFix*/)
 	HandleMyMap2(/*begin*/MyMap{}/*end.Expression type mismatch, the expected type is MyMap2|CastTypeFix*/)
+
+	// ISSUE 528
+	HandleMapInterface(map[string]interface{}{"x": "whatever"})
+	HandleMapInterface(/*begin*/map[int]interface{}{"x": "whatever"}/*end.Expression type mismatch, the expected type is map[string]interface{}|CastTypeFix*/)
 
 
 	HandleSlice([]string{})
