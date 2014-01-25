@@ -220,7 +220,7 @@ MethodDeclaration ::= func Receiver identifier Signature Block? {
   pin=3 
   stubClass="com.goide.stubs.GoMethodDeclarationStub"
 }
-Receiver ::= '(' identifier? '*'? ReceiverResultType ')' {
+Receiver ::= '(' (identifier '*'? ReceiverResultType|'*'? ReceiverResultType) ')' {
   methods=[getGoType]
   stubClass="com.goide.stubs.GoReceiverStub"
 }

@@ -2377,7 +2377,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '(' identifier? '*'? ReceiverResultType ')'
+  // '(' (identifier '*'? ReceiverResultType|'*'? ReceiverResultType) ')'
   public static boolean Receiver(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Receiver")) return false;
     if (!nextTokenIs(builder_, LPAREN)) return false;
@@ -2385,23 +2385,55 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, LPAREN);
     result_ = result_ && Receiver_1(builder_, level_ + 1);
-    result_ = result_ && Receiver_2(builder_, level_ + 1);
-    result_ = result_ && ReceiverResultType(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, RPAREN);
     exit_section_(builder_, marker_, RECEIVER, result_);
     return result_;
   }
 
-  // identifier?
+  // identifier '*'? ReceiverResultType|'*'? ReceiverResultType
   private static boolean Receiver_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Receiver_1")) return false;
-    consumeToken(builder_, IDENTIFIER);
-    return true;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = Receiver_1_0(builder_, level_ + 1);
+    if (!result_) result_ = Receiver_1_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // identifier '*'? ReceiverResultType
+  private static boolean Receiver_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Receiver_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, IDENTIFIER);
+    result_ = result_ && Receiver_1_0_1(builder_, level_ + 1);
+    result_ = result_ && ReceiverResultType(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
   }
 
   // '*'?
-  private static boolean Receiver_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Receiver_2")) return false;
+  private static boolean Receiver_1_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Receiver_1_0_1")) return false;
+    consumeToken(builder_, MUL);
+    return true;
+  }
+
+  // '*'? ReceiverResultType
+  private static boolean Receiver_1_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Receiver_1_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = Receiver_1_1_0(builder_, level_ + 1);
+    result_ = result_ && ReceiverResultType(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // '*'?
+  private static boolean Receiver_1_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Receiver_1_1_0")) return false;
     consumeToken(builder_, MUL);
     return true;
   }
