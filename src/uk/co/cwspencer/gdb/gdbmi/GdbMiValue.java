@@ -1,6 +1,6 @@
 package uk.co.cwspencer.gdb.gdbmi;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Class representing a variable value read from a GDB/MI stream.
@@ -46,6 +46,14 @@ public class GdbMiValue {
      */
     public GdbMiValue(Type type) {
         this.type = type;
+
+        if (type == Type.String) {
+            string = "";
+        } else if (type == Type.Tuple) {
+            tuple = new ArrayList<GdbMiResult>();
+        } else if (type == Type.List) {
+            list = new GdbMiList();
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package uk.co.cwspencer.ideagdb.debug;
 
+import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.ExecutionConsole;
@@ -30,7 +31,6 @@ import uk.co.cwspencer.ideagdb.debug.breakpoints.GdbBreakpointProperties;
 import uk.co.cwspencer.ideagdb.run.GdbExecutionResult;
 import uk.co.cwspencer.ideagdb.run.GdbRunConfiguration;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +47,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
 
     // The GDB console
     public GdbConsoleView m_gdbConsole;
+    public ConsoleViewImpl m_gdbRawConsole;
 
     // The project
     public Project m_project;
@@ -60,6 +61,8 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
     // Time formatter
     private SimpleDateFormat m_timeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
 
+    private XDebugSession debugSession;
+
     /**
      * Constructor; launches GDB.
      */
@@ -68,12 +71,17 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
         m_configuration = executionResult.getConfiguration();
         m_console = (ConsoleView) executionResult.getExecutionConsole();
         m_project = project;
+        debugSession = session;
 
         // Prepare GDB
         m_gdb = new Gdb(m_configuration.GDB_PATH, m_configuration.workingDir, this);
 
         // Create the GDB console
         m_gdbConsole = new GdbConsoleView(m_gdb, session.getProject());
+        m_gdbRawConsole = new ConsoleViewImpl(session.getProject(), true);
+
+        m_gdbConsole.getConsole().print(m_timeFormat.format(new Date()) + " 0> " +
+                m_configuration.GDB_PATH + " --interpreter=mi2\n", ConsoleViewContentType.USER_INPUT);
 
         // Create the breakpoint handler
         m_breakpointHandler = new GdbBreakpointHandler(m_gdb, this);
@@ -143,7 +151,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
 
     @Override
     public void runToPosition(@NotNull XSourcePosition position) {
-        m_log.warn("runToPosition: stub");
+        m_gdb.sendCommand(String.format("%s %s:%s", "-exec-until", position.getFile().getPath(), (position.getLine() + 1)));
     }
 
     @NotNull
@@ -161,7 +169,15 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
         return new XDebugTabLayouter() {
             @Override
             public void registerAdditionalContent(@NotNull RunnerLayoutUi ui) {
-                Content gdbConsoleContent = ui.createContent("GdbConsoleContent",
+
+                Content gdbConsoleContent = ui.createContent("GdbRawConsoleContent",
+                        m_gdbRawConsole.getComponent(), "GDB RAW Output", AllIcons.Debugger.ToolConsole,
+                        m_gdbRawConsole.getPreferredFocusableComponent());
+                gdbConsoleContent.setCloseable(false);
+
+                ui.addContent(gdbConsoleContent, 3, PlaceInGrid.bottom, true);
+
+                gdbConsoleContent = ui.createContent("GdbConsoleContent",
                         m_gdbConsole.getComponent(), "GDB Console", AllIcons.Debugger.Console,
                         m_gdbConsole.getPreferredFocusableComponent());
                 gdbConsoleContent.setCloseable(false);
@@ -195,14 +211,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
      */
     @Override
     public void onGdbStarted() {
-        // Send startup commands
-        String[] commandsArray = m_configuration.STARTUP_COMMANDS.split("\\r?\\n");
-        for (String command : commandsArray) {
-            command = command.trim();
-            if (!command.isEmpty()) {
-                m_gdb.sendCommand(command);
-            }
-        }
+        //
     }
 
     /**
@@ -374,6 +383,22 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
             }
         } else {
             getSession().positionReached(suspendContext);
+        }
+
+        if (stoppedEvent.reason != null &&
+                (stoppedEvent.reason.equals(GdbStoppedEvent.Reason.ExitedNormally) ||
+                stoppedEvent.reason.equals(GdbStoppedEvent.Reason.ExitedSignalled))) {
+                debugSession.stop();
+        }
+
+        if (stoppedEvent.reason == null &&
+                stoppedEvent.breakpointDisposition == null &&
+                stoppedEvent.breakpointNumber == null &&
+                stoppedEvent.frame == null &&
+                stoppedEvent.threadId == null &&
+                stoppedEvent.allStopped == null &&
+                stoppedEvent.stoppedThreads == null) {
+            debugSession.stop();
         }
     }
 }

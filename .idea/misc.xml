@@ -289,7 +289,7 @@
     <option name="enabled" value="false" />
   </component>
   <component name="ProjectKey">
-    <option name="state" value="git@github.com:dlsniper/google-go-lang-idea-plugin.git" />
+    <option name="state" value="git@github.com:go-lang-plugin-org/go-lang-idea-plugin.git" />
   </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>

@@ -8,6 +8,7 @@ import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.runners.DefaultProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
@@ -55,6 +56,17 @@ public class GdbRunner extends DefaultProgramRunner {
                                                            ExecutionEnvironment env) throws ExecutionException {
 
         final ExecutionResult result = state.execute(executor, GdbRunner.this);
+        if (result == null) {
+            return null;
+        }
+
+        GdbRunConfiguration configuration = ((GdbExecutionResult) result).m_configuration;
+        String execName = configuration.goOutputDir.concat("/").concat(project.getName());
+
+        if (GoSdkUtil.isHostOsWindows()) {
+            execName = execName.concat(".exe");
+        }
+
         final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(this,
                 env, contentToReuse, new XDebugProcessStarter() {
             @NotNull
@@ -88,19 +100,26 @@ public class GdbRunner extends DefaultProgramRunner {
         }
 
         // Queue startup commands
+        debugProcess.m_gdb.sendCommand("-list-features");
         debugProcess.m_gdb.sendCommand("add-auto-load-safe-path " + goRootPath);
 
-        GdbRunConfiguration configuration = ((GdbExecutionResult) result).m_configuration;
-
-        String execName = configuration.goOutputDir.concat("/").concat(project.getName());
-
-        if (GoSdkUtil.isHostOsWindows()) {
-            execName = execName.concat(".exe");
+        String pythonRuntime = goRootPath + "/src/pkg/runtime/runtime-gdb.py";
+        if (GoSdkUtil.checkFileExists(pythonRuntime)) {
+            debugProcess.m_gdb.sendCommand("source " + pythonRuntime);
         }
 
         debugProcess.m_gdb.sendCommand("file " + execName);
 
         debugSession.initBreakpoints();
+
+        // Send startup commands
+        String[] commandsArray = configuration.STARTUP_COMMANDS.split("\\r?\\n");
+        for (String command : commandsArray) {
+            command = command.trim();
+            if (!command.isEmpty()) {
+                debugProcess.m_gdb.sendCommand(command);
+            }
+        }
 
         if (configuration.autoStartGdb) {
             debugProcess.m_gdb.sendCommand("run");

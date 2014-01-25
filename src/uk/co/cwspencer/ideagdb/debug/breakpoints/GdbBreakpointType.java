@@ -15,6 +15,11 @@ public class GdbBreakpointType extends XLineBreakpointType<GdbBreakpointProperti
         super("gdb", "GDB Breakpoints");
     }
 
+    @Override
+    public boolean isSuspendThreadSupported() {
+        return false;
+    }
+
     @Nullable
     @Override
     public GdbBreakpointProperties createBreakpointProperties(@NotNull VirtualFile file, int line) {

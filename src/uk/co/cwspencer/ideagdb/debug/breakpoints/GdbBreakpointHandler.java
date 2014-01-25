@@ -76,7 +76,7 @@ public class GdbBreakpointHandler extends
                                      boolean temporary) {
         Integer number = findBreakpointNumber(breakpoint);
         if (number == null) {
-            m_log.error("Cannot remove breakpoint; could not find it in breakpoint table");
+            m_log.warn("Cannot remove breakpoint; could not find it in breakpoint table");
             return;
         }
 

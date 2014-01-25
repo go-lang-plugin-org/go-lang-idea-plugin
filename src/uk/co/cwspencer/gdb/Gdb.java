@@ -1,10 +1,8 @@
 package uk.co.cwspencer.gdb;
 
-import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import org.apache.commons.lang.StringUtils;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 import uk.co.cwspencer.gdb.gdbmi.*;
@@ -22,6 +20,9 @@ import java.util.*;
  */
 public class Gdb {
     private static final Logger m_log = Logger.getInstance("#uk.co.cwspencer.gdb.Gdb");
+
+    // Size in KB for the buffer
+    private static Integer BUFFER_SIZE = 256 * 1024;
 
     /**
      * Interface for callbacks for results from completed GDB commands.
@@ -157,6 +158,10 @@ public class Gdb {
      */
     public synchronized void sendCommand(String command, GdbEventCallback callback) {
         // Queue the command
+        if (command.equals("-gdb-exit")) {
+            m_queuedCommands.clear();
+        }
+
         m_queuedCommands.add(new CommandData(command, callback));
         notify();
     }
@@ -221,7 +226,7 @@ public class Gdb {
         GdbVariableObject variableObject = m_variableObjectsByExpression.get(expression);
         if (variableObject == null) {
             String command = "-var-create --thread " + thread + " --frame " + frame + " - @ " +
-                    GdbMiUtil.formatGdbString(expression);
+                    formatVarName(expression);
             sendCommand(command, new GdbEventCallback() {
                 @Override
                 public void onGdbCommandCompleted(GdbEvent event) {
@@ -253,10 +258,8 @@ public class Gdb {
             // Launch the process
             final String[] commandLine = {
                     gdbPath,
-                    "--interpreter=mi",
+                    "--interpreter=mi2",
             };
-
-            ((GdbDebugProcess) m_listener).m_console.print(StringUtils.join(commandLine, " ") + "\n", ConsoleViewContentType.NORMAL_OUTPUT);
 
             File workingDirectoryFile = null;
             if (workingDirectory != null) {
@@ -299,13 +302,15 @@ public class Gdb {
             }
 
             // Start listening for data
-            GdbMiParser parser = new GdbMiParser();
-            byte[] buffer = new byte[4096];
+            //GdbMiParser parser = new GdbMiParser();
+            GdbMiParser2 parser = new GdbMiParser2(((GdbDebugProcess) m_listener).m_gdbRawConsole);
+            byte[] buffer = new byte[BUFFER_SIZE];
             int bytes;
             while ((bytes = stream.read(buffer)) != -1) {
                 // Process the data
                 try {
                     parser.process(buffer, bytes);
+                    buffer = new byte[BUFFER_SIZE];
                 } catch (IllegalArgumentException ex) {
                     m_log.error("GDB/MI parsing error. Current buffer contents: \"" +
                             new String(buffer, 0, bytes) + "\"", ex);
@@ -487,7 +492,7 @@ public class Gdb {
             GdbVariableObject variableObject = m_variableObjectsByExpression.get(variable);
             if (variableObject == null) {
                 String command = "-var-create --thread " + thread + " --frame " + frame + " - @ " +
-                        variable;
+                        formatVarName(variable);
                 sendCommand(command, new GdbEventCallback() {
                     @Override
                     public void onGdbCommandCompleted(GdbEvent event) {
@@ -640,5 +645,15 @@ public class Gdb {
                 m_capabilities = capabilities;
             }
         }
+    }
+
+    private static String formatVarName(String varName) {
+        varName = GdbMiUtil.formatGdbString(varName, false);
+
+        if (varName.substring(0, 1).equals("&")) {
+            varName = String.format("`%s`", varName);
+        }
+
+        return varName;
     }
 }

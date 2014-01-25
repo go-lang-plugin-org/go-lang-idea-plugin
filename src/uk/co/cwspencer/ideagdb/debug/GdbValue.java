@@ -6,7 +6,6 @@ import com.intellij.xdebugger.frame.*;
 import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.GoIcons;
 import uk.co.cwspencer.gdb.Gdb;
 import uk.co.cwspencer.gdb.gdbmi.GdbMiUtil;
 import uk.co.cwspencer.gdb.messages.GdbErrorEvent;
@@ -48,7 +47,7 @@ public class GdbValue extends XValue {
     @Override
     public void computePresentation(@NotNull final XValueNode node, @NotNull XValuePlace place) {
         final String goType = GoGdbUtil.getGoObjectType(m_variableObject.type);
-        final boolean hasChildren = m_variableObject.numChildren != null && m_variableObject.numChildren > 0;
+        final Boolean hasChildren = m_variableObject.numChildren != null && m_variableObject.numChildren > 0;
 
         if (goType.equals("string")) {
             handleGoString(node);
@@ -139,7 +138,7 @@ public class GdbValue extends XValue {
 
     private void onGoGdbStringReady(@NotNull final XValueNode node, GdbEvent event) {
         String value;
-
+        Boolean isTrueString = false;
         if (event instanceof GdbErrorEvent) {
             value = ((GdbErrorEvent) event).message;
         } else if (!(event instanceof GdbVariableObjects)) {
@@ -155,23 +154,26 @@ public class GdbValue extends XValue {
                 value = "Unexpected data received from GDB";
                 String stringSubVar = GdbMiUtil.formatGdbString(m_variableObject.name, false) + ".str";
 
-                XValueChildrenList children = new XValueChildrenList(variables.objects.size());
                 for (GdbVariableObject variable : variables.objects) {
                     if (variable.name.equals(stringSubVar)) {
                         value = variable.value;
+                        isTrueString = true;
                         break;
                     }
                 }
             }
         }
 
-        if (value.equals("0x0")) {
-            value = "\"\"";
-        } else {
-            value = value.substring(value.indexOf(" "));
-        }
+        if (isTrueString) {
+            if (value.equals("0x0")) {
+                value = "\"\"";
+            }
 
-        node.setPresentation(getGdbVarIcon(), "string (" + (value.length() - 2) + ")", value, false);
+            node.setPresentation(getGdbVarIcon(), "string (" + value.length() + ")", value, false);
+        } else {
+            Boolean hasChildren = m_variableObject.numChildren != null && m_variableObject.numChildren > 0;
+            node.setPresentation(getGdbVarIcon(), "unknown", m_variableObject.value, hasChildren);
+        }
     }
 
     private javax.swing.Icon getGdbVarIcon() {

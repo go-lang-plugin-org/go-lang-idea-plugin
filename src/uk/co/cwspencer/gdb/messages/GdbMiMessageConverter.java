@@ -206,8 +206,8 @@ public class GdbMiMessageConverter {
             }
         }
         if (!foundValueType) {
-            m_log.warn("Annotation on " + field.getName() + " requires on of GDB/MI types " +
-                    Arrays.toString(fieldAnnotation.valueType()) + "; got " + result.value.type);
+            m_log.warn("Annotation on \"" + field.getName() + "\" requires on of GDB/MI types \"" +
+                    Arrays.toString(fieldAnnotation.valueType()) + "\"; got \"" + result.value.type + "\"");
             return;
         }
 

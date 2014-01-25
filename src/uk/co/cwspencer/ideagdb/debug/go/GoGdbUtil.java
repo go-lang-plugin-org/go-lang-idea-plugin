@@ -47,10 +47,6 @@ public class GoGdbUtil {
     }
 
     public static Boolean isValidGdbPath(String path) {
-        if (!GoSdkUtil.checkFileExists(path)) {
-            return false;
-        }
-
         try {
             GeneralCommandLine command = new GeneralCommandLine();
             command.setExePath(path);
