@@ -354,5 +354,8 @@ func main() {
 	HandleMyFunc(/*begin*/HandleSlice/*end.Expression type mismatch, the expected type is MyFunc|CastTypeFix*/)
 
 	// HandleMyFunc(MyFunc2(func(map[string]string){})) TODO: should generate "Expression type mismatch, the expected type is MyFunc|CastTypeFix"
-
+	//issue #520
+	HandleIFunc(nil)
+	HandleArray(nil)
+	HandleMap(nil)
 }
