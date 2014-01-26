@@ -8,8 +8,8 @@ type Boom struct {
    err aaa
 }
 
-func (b *Boom) Run() {
-   b.err
+func (b *Boom) Run(a aaa) {
+   b.err + a
 }
 
 func foo() {
