@@ -3,5 +3,7 @@
     <moduleType id="GO_MODULE" implementationClass="com.goide.GoModuleType"/>
     <moduleConfigurationEditorProvider implementation="com.goide.configuration.GoModuleEditorsProvider" order="first"/>
     <compileServer.plugin classpath="go-jps-plugin.jar"/>
+
+    <projectStructureDetector implementation="com.goide.project.GoProjectStructureDetector"/>
   </extensions>
 </idea-plugin>
