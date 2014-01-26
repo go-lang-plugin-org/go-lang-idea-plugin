@@ -224,7 +224,8 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
         if (pluginDescriptor != null) {
             String version = ((IdeaPluginDescriptorImpl) pluginDescriptor).getVersion();
 
-            if (version.endsWith("-dev")) {
+            if (version.endsWith("-dev") &&
+                    !System.getProperty("go.skip.dev.warn", "false").equals("true")) {
                 Notifications.Bus.notify(
                         new Notification(
                                 "Go plugin notice",
