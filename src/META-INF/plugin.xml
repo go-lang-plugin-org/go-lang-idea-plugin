@@ -61,6 +61,11 @@
             <ul>
                 <li>[feature] Added support for Go on Google AppEngine for non-IDEA IDEs</li>
                 <li>[bugfix] Improved support for Go on Google AppEngine</li>
+                <li>[enhancement] Inspection: Update "functionReturnCountInspection" to check the type of returning expressions</li>
+                <li>[feature] Fix: Change the function return parameters based on returning expressions</li>
+                <li>[feature] Fix: Covert or Assert the type of the expression to the expected type in function calls and returns</li>
+                <li>[feature] Intention: For range over expressions</li>
+                <li>[feature] Intention: Generate if block over boolean expressions</li>
             </ul>
         <h3>0.9.15.3 changes:</h3>
             <ul>
@@ -206,7 +211,8 @@
         </group>
 
         <group id="GAE.Tools" popup="true" text="Go AppEngine Tools"
-               description="Go AppEngine tools support" icon="/icons/gae_13x13.png" class="ro.redeul.google.go.actions.NewGAEGroup">
+               description="Go AppEngine tools support" icon="/icons/gae_13x13.png"
+               class="ro.redeul.google.go.actions.NewGAEGroup">
 
             <action id="GAE.AppEngine.Upload"
                     class="ro.redeul.google.go.ide.actions.GoAppEngineUpload"
@@ -240,7 +246,8 @@
         </group>
 
         <group id="Go.Tools.Debug" popup="true" text="go plugin Debug internals"
-               description="Go plugin debug utilites" icon="/icons/go_13x13.png" class="ro.redeul.google.go.actions.NewGoDebugGroup">
+               description="Go plugin debug utilites" icon="/icons/go_13x13.png"
+               class="ro.redeul.google.go.actions.NewGoDebugGroup">
             <action id="Go.Debug.SdkData"
                     class="ro.redeul.google.go.ide.actions.GoDebugSDK"
                     text="go sdk data" description="Print the current sdk data"
@@ -263,7 +270,8 @@
         </group>
 
         <group id="GAE.Tools.Debug" popup="true" text="go plugin Debug internals"
-               description="Go plugin debug utilites" icon="/icons/gae_13x13.png" class="ro.redeul.google.go.actions.NewGAEDebugGroup">
+               description="Go plugin debug utilites" icon="/icons/gae_13x13.png"
+               class="ro.redeul.google.go.actions.NewGAEDebugGroup">
             <action id="GAE.Debug.SdkData"
                     class="ro.redeul.google.go.ide.actions.GAEDebugSDK"
                     text="go sdk data" description="Print the current sdk data"
@@ -458,7 +466,7 @@
                          shortName="FunctionReturnParameterCount"
                          displayName="Highlights incorrect function return parameter count"
                          level="ERROR"
-                         implementationClass="ro.redeul.google.go.inspection.FunctionReturnParameterCountInspection"/>
+                         implementationClass="ro.redeul.google.go.inspection.FunctionReturnParameterInspection"/>
         <localInspection groupName="Google Go" language="Google Go"
                          enabledByDefault="true"
                          shortName="FunctionRedeclareParameterInResult"

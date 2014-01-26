@@ -14,7 +14,7 @@ import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
-public class CastToFix extends GoEditorAwareTestCase {
+public class CastToFixTest extends GoEditorAwareTestCase {
     public void testCastFunc() throws Exception {
         doTest();
     }

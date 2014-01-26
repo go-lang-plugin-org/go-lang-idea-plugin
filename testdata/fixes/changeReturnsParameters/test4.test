@@ -1,0 +1,26 @@
+package main
+
+type Typ struct{}
+type Typ2 struct{}
+
+func GetTyps() (Typ, Typ2, Typ) {
+    return
+}
+
+func Test() {
+    /*begin*/return GetTyps()/*end*/
+}
+
+-----
+package main
+
+type Typ struct{}
+type Typ2 struct{}
+
+func GetTyps() (Typ, Typ2, Typ) {
+    return
+}
+
+func Test() (Typ, Typ2, Typ) {
+    return GetTyps()
+}
