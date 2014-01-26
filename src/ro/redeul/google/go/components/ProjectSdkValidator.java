@@ -1,11 +1,15 @@
 package ro.redeul.google.go.components;
 
+import com.intellij.ide.plugins.IdeaPluginDescriptorImpl;
+import com.intellij.ide.plugins.PluginManager;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.extensions.PluginDescriptor;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
@@ -216,6 +220,23 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
 
         }
 
+        PluginDescriptor pluginDescriptor = PluginManager.getPlugin(PluginId.getId("ro.redeul.google.go"));
+        if (pluginDescriptor != null) {
+            String version = ((IdeaPluginDescriptorImpl) pluginDescriptor).getVersion();
+
+            if (version.endsWith("-dev") &&
+                    !System.getProperty("go.skip.dev.warn", "false").equals("true")) {
+                Notifications.Bus.notify(
+                        new Notification(
+                                "Go plugin notice",
+                                "Development version detected",
+                                getDevVersionMessage(),
+                                NotificationType.WARNING,
+                                null),
+                        myProject);
+            }
+        }
+
         super.initComponent();
     }
 
@@ -246,5 +267,11 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
         return "<html><em>APPENGINE_DEV_APPSERVER</em> environment variable is empty or could not be detected properly.<br/>" +
                 "This means that some you might not be able to run properly <code>goapp serve</code> to serve the files while developing.<br/>" +
                 "See <a href='http://git.io/_bt0Hg'>instructions</a> on how to fix this.";
+    }
+
+    private String getDevVersionMessage() {
+        return "<html>It appears that you are using the development version of the golang plugin.<br/>" +
+                "This means that some things may not work correctly for you.<br/>" +
+                "Unless you were instructed to do so, please use the latest stable version from the official plugin manager.";
     }
 }
