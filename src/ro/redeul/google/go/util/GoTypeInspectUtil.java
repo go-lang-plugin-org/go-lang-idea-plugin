@@ -54,11 +54,19 @@ public class GoTypeInspectUtil {
         if (checkIsInterface(resolved)) {
             return true;
         }
+        if (resolved == null) {
+            return false;
+        }
+        //Fix issue #520 with nil
+        if (firstChildOfExp instanceof GoLiteralIdentifier && ((GoLiteralIdentifier) firstChildOfExp).getName().equals("nil")) {
+            return resolved instanceof GoPsiTypeInterface ||
+                    resolved instanceof GoPsiTypeFunction ||
+                    resolved instanceof GoPsiTypePointer ||
+                    resolved instanceof GoPsiTypeSlice ||
+                    resolved instanceof GoPsiTypeMap ||
+                    resolved instanceof GoPsiTypeArray;
+        } else if (expr.isConstantExpression()) {
 
-        if (expr.isConstantExpression()) {
-            if (resolved == null) {
-                return false;
-            }
             String resolvedTypeName = resolved.getText();
             if (resolvedTypeName.startsWith("int") || resolvedTypeName.startsWith("uint")
                     || resolvedTypeName.equals("byte") || resolvedTypeName.equals("rune")) {
