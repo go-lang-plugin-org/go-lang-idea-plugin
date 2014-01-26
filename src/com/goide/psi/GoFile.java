@@ -3,6 +3,7 @@ package com.goide.psi;
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
 import com.goide.GoTypes;
+import com.goide.stubs.GoFileStub;
 import com.goide.stubs.types.GoConstDefinitionStubElementType;
 import com.goide.stubs.types.GoTypeSpecStubElementType;
 import com.goide.stubs.types.GoVarDefinitionStubElementType;
@@ -301,6 +302,9 @@ public class GoFile extends PsiFileBase {
 
   @Nullable
   public String getPackageName() {
+    GoFileStub stub = getStub();
+    if (stub != null) return stub.getPackageName();
+
     GoPackageClause packageClause = getPackage();
     if (packageClause != null) {
       PsiElement packageIdentifier = packageClause.getIdentifier();
@@ -313,9 +317,9 @@ public class GoFile extends PsiFileBase {
 
   @Nullable
   @Override
-  public StubElement<GoFile> getStub() {
+  public GoFileStub getStub() {
     //noinspection unchecked
-    return super.getStub();
+    return (GoFileStub)super.getStub();
   }
 
   private static boolean processChildrenDummyAware(GoFile file, final Processor<PsiElement> processor) {

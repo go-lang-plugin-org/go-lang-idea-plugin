@@ -65,11 +65,16 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   }
 
   @Nullable
-  protected PsiElement processDirectory(@Nullable PsiDirectory dir, @Nullable String packageName, boolean localResolve) {
+  protected PsiElement processDirectory(@Nullable PsiDirectory dir,
+                                        @Nullable String packageName,
+                                        @Nullable String name,
+                                        boolean localResolve) {
+    // todo: improve this algorithm
     if (dir != null) {
-      for (PsiFile psiFile : dir.getFiles()) {
-        if (psiFile instanceof GoFile) {
-          GoFile goFile = (GoFile)psiFile;
+      for (PsiFile child : dir.getFiles()) {
+        if (name != null && Comparing.equal(name, child.getName())) continue;
+        if (child instanceof GoFile) {
+          GoFile goFile = (GoFile)child;
           if (packageName != null && !Comparing.equal(goFile.getPackageName(), packageName)) continue;
           PsiElement element = processUnqualified(goFile, localResolve);
           if (element != null) return element;
@@ -89,10 +94,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         PsiElement unqualified = processUnqualified((GoFile)file, true);
         if (unqualified != null) return unqualified;
 
-        VirtualFile vfile = file.getOriginalFile().getVirtualFile();
-        VirtualFile localDir = vfile == null ? null : vfile.getParent();
-        PsiDirectory localPsiDir = localDir == null ? null : PsiManager.getInstance(myElement.getProject()).findDirectory(localDir);
-        PsiElement result = processDirectory(localPsiDir, ((GoFile)file).getPackageName(), true);
+        PsiElement result = processDirectory(file.getParent(), ((GoFile)file).getPackageName(), file.getName(), true);
         if (result != null) return result;
 
         if (!file.getName().equals("builtin.go")) {
@@ -113,7 +115,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
           if (fromType != null) return fromType;
         }
         PsiDirectory dir = getDirectory(qualifier);
-        PsiElement result = processDirectory(dir, null, false);
+        PsiElement result = processDirectory(dir, null, null, false);
         if (result != null) return result;
       }
     }
