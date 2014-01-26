@@ -94,8 +94,14 @@ public class GoReference extends GoReferenceBase {
     // todo: nested functions from FunctionLit
     GoFunctionOrMethodDeclaration function = PsiTreeUtil.getParentOfType(myRefExpression, GoFunctionOrMethodDeclaration.class);
     GoSignature signature = function != null ? function.getSignature() : null;
-    GoParameters parameters = signature != null ? signature.getParameters() : null;
-    if (parameters != null) parameters.processDeclarations(processor, ResolveState.initial(), null, myRefExpression);
+    GoParameters parameters;
+    if (signature != null) {
+      parameters = signature.getParameters();
+      parameters.processDeclarations(processor, ResolveState.initial(), null, myRefExpression);
+      GoResult result = signature.getResult();
+      GoParameters resultParameters = result != null ? result.getParameters() : null;
+      if (resultParameters!= null) resultParameters.processDeclarations(processor, ResolveState.initial(), null, myRefExpression);
+    }
   }
 
   private void processReceiver(@NotNull GoVarProcessor processor) {
