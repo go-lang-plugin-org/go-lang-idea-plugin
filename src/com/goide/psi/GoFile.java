@@ -88,21 +88,13 @@ public class GoFile extends PsiFileBase {
       myFunctionsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoFunctionDeclaration>>() {
         @Override
         public Result<List<GoFunctionDeclaration>> compute() {
-          List<GoFunctionDeclaration> calc = calc(new Condition<PsiElement>() {
-            @Override
-            public boolean value(PsiElement e) {
-              return isPureFunction(e);
-            }
-          });
+          //noinspection unchecked
+          List<GoFunctionDeclaration> calc = calc(FilteringIterator.instanceOf(GoFunctionDeclaration.class));
           return Result.create(calc, GoFile.this);
         }
       }, false);
     }
     return myFunctionsValue.getValue();
-  }
-
-  private static boolean isPureFunction(PsiElement e) {
-    return e instanceof GoFunctionDeclaration;
   }
 
   @NotNull
@@ -300,7 +292,7 @@ public class GoFile extends PsiFileBase {
   public GoFunctionDeclaration findMainFunction() { // todo create a map for faster search
     List<GoFunctionDeclaration> functions = getFunctions();
     for (GoFunctionDeclaration function : functions) {
-      if (isPureFunction(function) && MAIN_FUNCTION_NAME.equals(function.getName())) {
+      if (MAIN_FUNCTION_NAME.equals(function.getName())) {
         return function;
       }
     }
