@@ -1,0 +1,18 @@
+package main
+
+type Typ struct{}
+type Typ2 struct{}
+
+func Test() Typ {
+    /*begin*/return Typ{},Typ2{}/*end*/
+}
+
+-----
+package main
+
+type Typ struct{}
+type Typ2 struct{}
+
+func Test() (Typ, Typ2) {
+    return Typ{},Typ2{}
+}
