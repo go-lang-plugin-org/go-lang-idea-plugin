@@ -3,6 +3,7 @@ package com.goide.psi.impl;
 import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -81,6 +82,16 @@ public class GoReference extends GoReferenceBase {
       }
     }
 
+    if (myElement.getParent() instanceof GoCallExpr && StringUtil.toLowerCase(id).equals(id)) {
+      GoFile builtinFile = getBuiltinFile();
+      if (builtinFile != null) {
+        List<GoTypeSpec> types = builtinFile.getTypes();
+        for (GoTypeSpec type : types) {
+          if (id.equals(type.getName())) return type;
+        }
+      }
+    }
+
     return resolveImportOrPackage(file, id);
   }
 
@@ -140,6 +151,15 @@ public class GoReference extends GoReferenceBase {
     for (GoFunctionDeclaration f : file.getFunctions()) {
       if (f.isPublic() || localCompletion) result.add(GoPsiImplUtil.createFunctionOrMethodLookupElement(f));
     }
+
+    GoFile builtinFile = getBuiltinFile();
+    if (builtinFile != null) {
+      List<GoTypeSpec> types = builtinFile.getTypes();
+      for (GoTypeSpec type : types) {
+        if (!type.isPublic()) result.add(GoPsiImplUtil.createTypeConversionLookupElement(type));
+      }
+    }
+
     processImports(result, file, localCompletion);
   }
 

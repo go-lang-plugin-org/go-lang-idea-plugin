@@ -132,6 +132,13 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
+  public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t) {
+    return PrioritizedLookupElement.withPriority(
+      LookupElementBuilder.create(t).withInsertHandler(ParenthesesInsertHandler.WITH_PARAMETERS).withIcon(GoIcons.TYPE),
+      GoCompletionContributor.TYPE_CONVERSION);
+  }
+
+  @NotNull
   public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v) {
     Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
                 v instanceof GoParamDefinition ? GoIcons.PARAMETER :
