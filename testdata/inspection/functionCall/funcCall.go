@@ -374,4 +374,37 @@ func main() {
 	HandleInChan(nil)
 	HandleOutChan(nil)
 	Accept(nil)
+
+
+	// issue #454
+	HandleChan(make(chan string))
+
+	chStr := make(chan string)
+	chInt := make(chan int)
+	chStrIn := make(<-chan string)
+	chIntIn := make(<-chan int)
+	chStrOut := make(chan<- string)
+	chIntOut := make(chan<- int)
+
+	HandleChan(chStr)
+	HandleChan(/*begin*/chInt/*end.Expression type mismatch, the expected type is chan string|CastTypeFix*/)
+	HandleChan(/*begin*/chStrIn/*end.Expression type mismatch, the expected type is chan string|CastTypeFix*/)
+	HandleChan(/*begin*/chStrOut/*end.Expression type mismatch, the expected type is chan string|CastTypeFix*/)
+
+	HandleInChan(chStrIn)
+	HandleInChan(chStr)
+	HandleInChan(/*begin*/chInt/*end.Expression type mismatch, the expected type is <-chan string|CastTypeFix*/)
+	HandleInChan(/*begin*/chIntIn/*end.Expression type mismatch, the expected type is <-chan string|CastTypeFix*/)
+	HandleInChan(/*begin*/chIntOut/*end.Expression type mismatch, the expected type is <-chan string|CastTypeFix*/)
+	HandleInChan(/*begin*/chStrOut/*end.Expression type mismatch, the expected type is <-chan string|CastTypeFix*/)
+
+	HandleOutChan(chStrOut)
+	HandleOutChan(chStr)
+	HandleOutChan(/*begin*/chInt/*end.Expression type mismatch, the expected type is chan<- string|CastTypeFix*/)
+	HandleOutChan(/*begin*/chIntIn/*end.Expression type mismatch, the expected type is chan<- string|CastTypeFix*/)
+	HandleOutChan(/*begin*/chIntOut/*end.Expression type mismatch, the expected type is chan<- string|CastTypeFix*/)
+	HandleOutChan(/*begin*/chStrIn/*end.Expression type mismatch, the expected type is chan<- string|CastTypeFix*/)
+
+	// HandleChan(make(chan int))  TODO: should generate "Expression type mismatch, the expected type is chan int|CastTypeFix"
+
 }
