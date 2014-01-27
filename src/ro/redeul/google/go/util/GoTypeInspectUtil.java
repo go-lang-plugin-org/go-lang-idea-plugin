@@ -64,7 +64,7 @@ public class GoTypeInspectUtil {
                     resolved instanceof GoPsiTypePointer ||
                     resolved instanceof GoPsiTypeSlice ||
                     resolved instanceof GoPsiTypeMap ||
-                    resolved instanceof GoPsiTypeArray;
+                    resolved instanceof GoPsiTypeChannel;
         } else if (expr.isConstantExpression()) {
 
             String resolvedTypeName = resolved.getText();

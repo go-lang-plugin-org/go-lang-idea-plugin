@@ -99,6 +99,17 @@ func HandleMyFunc(a MyFunc) {
 
 }
 
+func HandleChan(c chan string){
+
+}
+
+func HandleInChan(c <-chan string){
+
+}
+
+func HandleOutChan(c chan<- string){
+
+}
 
 type iFunc interface {
 
@@ -356,6 +367,11 @@ func main() {
 	// HandleMyFunc(MyFunc2(func(map[string]string){})) TODO: should generate "Expression type mismatch, the expected type is MyFunc|CastTypeFix"
 	//issue #520
 	HandleIFunc(nil)
-	HandleArray(nil)
+	HandleArray(/*begin*/nil/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
 	HandleMap(nil)
+	HandleSlice(nil)
+	HandleChan(nil)
+	HandleInChan(nil)
+	HandleOutChan(nil)
+	Accept(nil)
 }
