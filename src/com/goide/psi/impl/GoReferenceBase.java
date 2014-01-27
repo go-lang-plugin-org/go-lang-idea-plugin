@@ -213,14 +213,8 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         processDirectory(result, localPsiDir, (GoFile)file, true);
 
         if (!file.getName().equals("builtin.go")) {
-          VirtualFile home = GoImportReferenceHelper.getSdkHome(myElement);
-          VirtualFile vBuiltin = home != null ? home.findFileByRelativePath("builtin/builtin.go") : null;
-          if (vBuiltin != null) {
-            PsiFile psiBuiltin = PsiManager.getInstance(file.getProject()).findFile(vBuiltin);
-            if (psiBuiltin instanceof GoFile) {
-              processFile(result, (GoFile)psiBuiltin, true);
-            }
-          }
+          GoFile builtinFile = getBuiltinFile();
+          if (builtinFile != null) processFile(result, builtinFile, true);
         }
       }
       else {
