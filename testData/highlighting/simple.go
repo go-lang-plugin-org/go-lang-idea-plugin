@@ -99,5 +99,7 @@ func concurrently(integers []int) []int {
           ch <- j * j
       }(i)
   }
+  err := 1
+  _, err = 1, 1
   return integers
 }

@@ -43,6 +43,7 @@ public class GoReference extends GoReferenceBase {
   @Override
   protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {
     String id = myIdentifier.getText();
+    if ("_".equals(id)) return myElement; // todo: need a better solution
     GoVarProcessor processor = createProcessor();
     ResolveUtil.treeWalkUp(myRefExpression, processor);
     processReceiver(processor);
