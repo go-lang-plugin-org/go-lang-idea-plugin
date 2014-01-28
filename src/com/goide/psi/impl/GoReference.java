@@ -44,7 +44,7 @@ public class GoReference extends GoReferenceBase {
   protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {
     String id = myIdentifier.getText();
     if ("_".equals(id)) return myElement; // todo: need a better solution
-    GoVarProcessor processor = createProcessor();
+    GoScopeProcessorBase processor = createProcessor(false);
     ResolveUtil.treeWalkUp(myRefExpression, processor);
     processReceiver(processor);
     processFunctionParameters(processor);
@@ -98,11 +98,11 @@ public class GoReference extends GoReferenceBase {
 
   @Override
   @NotNull
-  protected GoVarProcessor createProcessor() {
-    return new GoVarProcessor(myIdentifier.getText(), myRefExpression, false);
+  protected GoScopeProcessorBase createProcessor(boolean completion) {
+    return new GoVarProcessor(myIdentifier.getText(), myRefExpression, completion);
   }
 
-  private void processFunctionParameters(@NotNull GoVarProcessor processor) {
+  private void processFunctionParameters(@NotNull GoScopeProcessorBase processor) {
     // todo: nested functions from FunctionLit
     GoFunctionOrMethodDeclaration function = PsiTreeUtil.getParentOfType(myRefExpression, GoFunctionOrMethodDeclaration.class);
     GoSignature signature = function != null ? function.getSignature() : null;
@@ -116,7 +116,7 @@ public class GoReference extends GoReferenceBase {
     }
   }
 
-  private void processReceiver(@NotNull GoVarProcessor processor) {
+  private void processReceiver(@NotNull GoScopeProcessorBase processor) {
     GoMethodDeclaration method = PsiTreeUtil.getParentOfType(myRefExpression, GoMethodDeclaration.class); // todo: nested methods?
     GoReceiver receiver = method != null ? method.getReceiver() : null;
     if (receiver != null) receiver.processDeclarations(processor, ResolveState.initial(), null, myRefExpression);
@@ -136,7 +136,7 @@ public class GoReference extends GoReferenceBase {
       return;
     }
 
-    GoVarProcessor processor = new GoVarProcessor(myIdentifier.getText(), myRefExpression, true);
+    GoScopeProcessorBase processor = createProcessor(true);
     ResolveUtil.treeWalkUp(myRefExpression, processor);
     processReceiver(processor);
     processFunctionParameters(processor);

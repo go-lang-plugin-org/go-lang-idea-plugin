@@ -93,6 +93,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
     doTestExclude("package foo; type E struct {}; type B interface {<caret>}", "E");
   }
 
+  public void testInnerTypes() throws Exception {
+    doTestInclude("package foo; func foo() {type innerType struct {}; var i <caret>}", "innerType");
+  }
+
   public void testNoDuplicates() throws Exception {
     doTestInclude("package foo; type a struct {<caret>", "a");
     List<String> stringList = myFixture.getLookupElementStrings();

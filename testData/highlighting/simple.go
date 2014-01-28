@@ -103,3 +103,14 @@ func concurrently(integers []int) []int {
   _, err = 1, 1
   return integers
 }
+
+func Println(o ...interface{})  {
+}
+
+func innerTypes() {
+	type connError struct {
+		cn  int
+	}
+	ch := make(chan connError)
+	Println(ch)
+}

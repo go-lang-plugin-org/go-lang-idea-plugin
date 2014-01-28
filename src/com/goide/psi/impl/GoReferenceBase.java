@@ -169,23 +169,21 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   private PsiElement processExistingType(@Nullable GoType type) {
     if (type == null) return null;
     if (type instanceof GoStructType) {
-      GoVarProcessor processor = createProcessor();
-      if (processor != null) {
-        type.processDeclarations(processor, ResolveState.initial(), null, myElement);
-        GoNamedElement result = processor.getResult();
-        if (result != null) return result;
+      GoScopeProcessorBase processor = createProcessor(false);
+      type.processDeclarations(processor, ResolveState.initial(), null, myElement);
+      GoNamedElement result = processor.getResult();
+      if (result != null) return result;
 
-        final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
-        type.accept(new GoRecursiveVisitor() {
-          @Override
-          public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
-            refs.add(o.getTypeReferenceExpression());
-          }
-        });
-        for (GoTypeReferenceExpression ref : refs) {
-          PsiElement element = processInTypeRef(ref, type);
-          if (element != null) return element;
+      final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
+      type.accept(new GoRecursiveVisitor() {
+        @Override
+        public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
+          refs.add(o.getTypeReferenceExpression());
         }
+      });
+      for (GoTypeReferenceExpression ref : refs) {
+        PsiElement element = processInTypeRef(ref, type);
+        if (element != null) return element;
       }
     }
     PsiElement parent = type.getParent();
@@ -286,12 +284,10 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
     return null;
   }
 
-  @Nullable
-  protected GoVarProcessor createProcessor() {
-    return null;
-  }
-
   protected abstract void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion);
+
+  @NotNull
+  protected abstract GoScopeProcessorBase createProcessor(boolean completion);
 
   @NotNull
   protected abstract PsiElement getIdentifier();

@@ -36,6 +36,10 @@ public class GoTypeReference extends GoReferenceBase {
   @Override
   protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {
     String id = myIdentifier.getText();
+    GoScopeProcessorBase processor = createProcessor(false);
+    ResolveUtil.treeWalkUp(myRefExpression, processor);
+    GoNamedElement result = processor.getResult();
+    if (result != null) return result;
     for (GoTypeSpec t : file.getTypes()) { // todo: copy from completion or create a separate inspection
       if ((t.isPublic() || localResolve) && id.equals(t.getName())) return t;
     }
@@ -44,6 +48,13 @@ public class GoTypeReference extends GoReferenceBase {
 
   @Override
   protected void processFile(@NotNull List<LookupElement> result, @NotNull GoFile file, boolean localCompletion) {
+    GoScopeProcessorBase processor = createProcessor(true);
+    ResolveUtil.treeWalkUp(myRefExpression, processor);
+    for (GoNamedElement element : processor.getVariants()) {
+      if (element instanceof GoTypeSpec) {
+        result.add(GoPsiImplUtil.createTypeLookupElement((GoTypeSpec)element));
+      }
+    }
     boolean insideInterfaceType = myElement.getParent() instanceof GoMethodSpec;
     for (GoTypeSpec t : file.getTypes()) {
       if (insideInterfaceType && !(t.getType() instanceof GoInterfaceType)) continue;
@@ -58,5 +69,11 @@ public class GoTypeReference extends GoReferenceBase {
   @Override
   public PsiElement getIdentifier() {
     return myIdentifier;
+  }
+
+  @NotNull
+  @Override
+  protected GoScopeProcessorBase createProcessor(boolean completion) {
+    return new GoTypeProcessor(myIdentifier.getText(), myRefExpression, completion);
   }
 }
