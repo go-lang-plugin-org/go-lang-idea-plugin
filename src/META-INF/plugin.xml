@@ -66,6 +66,7 @@
                 <li>[feature] Fix: Covert or Assert the type of the expression to the expected type in function calls and returns</li>
                 <li>[feature] Intention: For range over expressions</li>
                 <li>[feature] Intention: Generate if block over boolean expressions</li>
+                <li>[feature] Inspection: Check type of index on index expressions</li>
             </ul>
         <h3>0.9.15.3 changes:</h3>
             <ul>
@@ -527,7 +528,12 @@
                          displayName="Highlights unused variable"
                          level="ERROR"
                          implementationClass="ro.redeul.google.go.inspection.UnusedVariableInspection"/>
-
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
+                         shortName="IndexExpressionType"
+                         displayName="Check the type of the index in slices,maps and array"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.IndexExpressionInspection"/>
 
         <programRunner
                 implementation="ro.redeul.google.go.runner.GoApplicationRunner"/>
