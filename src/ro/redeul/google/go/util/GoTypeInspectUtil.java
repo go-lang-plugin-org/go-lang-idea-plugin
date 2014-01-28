@@ -66,8 +66,8 @@ public class GoTypeInspectUtil {
                     resolved instanceof GoPsiTypeMap ||
                     resolved instanceof GoPsiTypeChannel;
         } else if (expr.isConstantExpression()) {
-
             String resolvedTypeName = resolved.getText();
+
             if (resolvedTypeName.startsWith("int") || resolvedTypeName.startsWith("uint")
                     || resolvedTypeName.equals("byte") || resolvedTypeName.equals("rune")) {
                 Number numValue = FunctionCallInspection.getNumberValueFromLiteralExpr(expr);
