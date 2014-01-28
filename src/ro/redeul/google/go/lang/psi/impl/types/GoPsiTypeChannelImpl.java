@@ -52,7 +52,9 @@ public class GoPsiTypeChannelImpl extends GoPsiPackagedElementBase implements
         GoPsiType elementType = this.getElementType();
         if (elementType == null)
             return false;
-        return this.getChannelType() == otherChannel.getChannelType() &&
+        GoTypeChannel.ChannelType chanType = this.getChannelType();
+        GoTypeChannel.ChannelType otherChanType = otherChannel.getChannelType();
+        return (chanType == otherChanType || chanType == GoTypeChannel.ChannelType.Bidirectional) &&
                 elementType.isIdentical(otherChannel.getElementType());
     }
 
