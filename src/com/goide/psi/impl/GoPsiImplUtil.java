@@ -191,6 +191,15 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
+  public static GoTypeReferenceExpression getTypeReference(@Nullable GoType o) {
+    if (o == null) return null;
+    if (o instanceof GoChannelType) {
+      return ((GoChannelType)o).getType().getTypeReferenceExpression();
+    }
+    return o.getTypeReferenceExpression();
+  }
+
+  @Nullable
   public static GoType getGoType(@NotNull GoExpression o) {
     if (o instanceof GoUnaryExpr) {
       GoExpression expression = ((GoUnaryExpr)o).getExpression();
@@ -206,7 +215,7 @@ public class GoPsiImplUtil {
         GoBuiltinArgs args = ((GoBuiltinCallExpr)o).getBuiltinArgs();
         GoType type = args != null ? args.getType() : null;
         if (type != null) {
-          GoTypeReferenceExpression expression = type.getTypeReferenceExpression();
+          GoTypeReferenceExpression expression = getTypeReference(type);
           return getType(expression);
         }
       }

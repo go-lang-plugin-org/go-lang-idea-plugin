@@ -112,5 +112,5 @@ func innerTypes() {
 		cn  int
 	}
 	ch := make(chan connError)
-	Println(ch)
+	Println(ch.cn)
 }

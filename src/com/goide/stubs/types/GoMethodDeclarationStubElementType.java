@@ -3,6 +3,7 @@ package com.goide.stubs.types;
 import com.goide.psi.GoMethodDeclaration;
 import com.goide.psi.GoTypeReferenceExpression;
 import com.goide.psi.impl.GoMethodDeclarationImpl;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.stubs.GoFileStub;
 import com.goide.stubs.GoMethodDeclarationStub;
 import com.goide.stubs.index.GoMethodIndex;
@@ -27,7 +28,7 @@ public class GoMethodDeclarationStubElementType extends GoNamedStubElementType<G
 
   @Override
   public GoMethodDeclarationStub createStub(@NotNull GoMethodDeclaration psi, StubElement parentStub) {
-    GoTypeReferenceExpression reference = psi.getReceiver().getType().getTypeReferenceExpression();
+    GoTypeReferenceExpression reference = GoPsiImplUtil.getTypeReference(psi.getReceiver().getType());
     String text = reference != null ? reference.getIdentifier().getText() : null;
     return new GoMethodDeclarationStub(parentStub, this, psi.getName(), psi.isPublic(), text);
   }
