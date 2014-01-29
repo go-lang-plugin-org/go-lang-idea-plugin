@@ -1,6 +1,5 @@
 package com.goide.generate;
 
-import com.goide.psi.GoFile;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.intellij.codeInsight.CodeInsightActionHandler;
 import com.intellij.codeInsight.actions.CodeInsightAction;
@@ -14,7 +13,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,8 +32,7 @@ abstract public class GenerateTestActionBase extends CodeInsightAction implement
 
   @Override
   protected boolean isValidForFile(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
-    PsiElement at = file.findElementAt(editor.getCaretModel().getOffset());
-    return (at == null || at.getParent() instanceof GoFile) && GoTestFinder.isTestFile(file);
+    return GoTestFinder.isTestFile(file);
   }
 
   @Nullable
