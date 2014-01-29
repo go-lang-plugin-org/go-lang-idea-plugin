@@ -59,6 +59,11 @@ public class GoTypeInspectUtil {
         }
         //Fix issue #520 with nil
         if (firstChildOfExp instanceof GoLiteralIdentifier && ((GoLiteralIdentifier) firstChildOfExp).getName().equals("nil")) {
+            if (resolved instanceof GoPsiTypeName) {
+                if (((GoPsiTypeName) resolved).isPrimitive() && resolved.getName().equals("error")) {
+                    return true;
+                }
+            }
             return resolved instanceof GoPsiTypeInterface ||
                     resolved instanceof GoPsiTypeFunction ||
                     resolved instanceof GoPsiTypePointer ||

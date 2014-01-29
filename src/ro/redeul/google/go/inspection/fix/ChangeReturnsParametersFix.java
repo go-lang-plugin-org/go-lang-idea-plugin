@@ -12,6 +12,9 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
@@ -66,6 +69,21 @@ public class ChangeReturnsParametersFix extends LocalQuickFixAndIntentionActionO
         GoExpr[] expressions = element.getExpressions();
 
         for (GoExpr expr : expressions) {
+
+            if (expr instanceof GoLiteralExpression) {
+                GoLiteral literal = ((GoLiteralExpression) expr).getLiteral();
+                if (literal instanceof GoLiteralFunction) {
+                    if (i != 0) {
+                        stringBuilder.append(",");
+                    }
+                    stringBuilder.append(GoUtil.getFuncDecAsParam(((GoLiteralFunction) literal).getParameters(),
+                            ((GoLiteralFunction) literal).getResults(),
+                            (GoFile) element.getContainingFile()));
+                    i++;
+                    continue;
+                }
+            }
+
             GoType[] types = expr.getType();
             for (GoType type : types) {
                 if (i != 0) {

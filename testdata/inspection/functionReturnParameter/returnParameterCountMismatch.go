@@ -71,3 +71,6 @@ func NotMatchTypeCall() (string, int64) {
 	return /*begin*/Ok2()/*end.The returned expressions don't match with the return parameters|ChangeReturnsParametersFix*/
 }
 
+func IsError() error {
+	return nil
+}

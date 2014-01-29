@@ -1,51 +1,76 @@
 <templateSet group="Google Go">
-  <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
-            key="livetemplate.description.sout"
-            name="sout" toReformat="true" value="fmt.Println(&quot;$END$&quot;)">
-    <context>
-      <option name="GO_FUNCTION" value="true"/>
-    </context>
-  </template>
+    <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
+              key="livetemplate.description.sout"
+              name="sout" toReformat="true" value="fmt.Println(&quot;$END$&quot;)">
+        <context>
+            <option name="GO_FUNCTION" value="true"/>
+        </context>
+    </template>
 
-  <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
-            key="livetemplate.description.fun"
-            name="f" toReformat="true" value="func $CONTENT$() {&#10;&#09;$END$&#10;}&#10;">
-    <variable alwaysStopAt="true" defaultValue="&quot;function_name&quot;" expression="" name="CONTENT"/>
-    <context>
-      <option name="GO" value="true"/>
-    </context>
-  </template>
 
-  <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
-            key="livetemplate.description.souf"
-            name="souf" toReformat="true" value="fmt.Printf(&quot;$CONTENT$\n&quot;$ARGS$)$END$">
-    <variable alwaysStopAt="true" defaultValue="" expression="" name="CONTENT"/>
-    <variable alwaysStopAt="true" defaultValue="" expression="" name="ARGS"/>
-    <context>
-      <option name="GO_FUNCTION" value="true"/>
-    </context>
-  </template>
+    <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
+              key="livetemplate.description.fun"
+              name="f" toReformat="true" value="func $CONTENT$($PARANS$) {&#10;&#09;$END$&#10;}&#10;">
+        <variable alwaysStopAt="true" defaultValue="&quot;method_name&quot;" expression="" name="CONTENT"/>
+        <variable alwaysStopAt="true" defaultValue="" expression="" name="PARANS"/>
+        <context>
+            <option name="GO" value="true"/>
+        </context>
+    </template>
 
-  <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
-            key="livetemplate.description.soutm"
-            name="soutm" toReformat="true" value="fmt.Println(&quot;$FUNCTION$&quot;)">
-    <variable alwaysStopAt="false" defaultValue="" expression="functionName()" name="FUNCTION"/>
-    <context>
-      <option name="GO_FUNCTION" value="true"/>
-    </context>
-  </template>
+    <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
+              key="livetemplate.description.fun"
+              name="c" toReformat="true" value="func ($PARANS$) {&#10;&#09;$END$&#10;}&#10;">
+        <variable alwaysStopAt="true" defaultValue="" expression="" name="PARANS"/>
+        <context>
+            <option name="GO" value="true"/>
+            <option name="GO_FUNCTION" value="true"/>
+            <option name="GO_EXPRESSION" value="true"/>
+        </context>
+    </template>
 
-  <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
-            key="livetemplate.description.soutp"
-            name="soutp" toReformat="true"
-            value="fmt.Printf(&quot;$FUNCTION$($PARAMETER_FORMAT$)\n&quot;$PARAMETER_LIST$)">
-    <variable alwaysStopAt="false" defaultValue="" expression="functionName()" name="FUNCTION"/>
-    <variable alwaysStopAt="false" defaultValue="" expression="parameterFormat(&quot;%#v&quot;)"
-              name="PARAMETER_FORMAT"/>
-    <variable alwaysStopAt="false" defaultValue="" expression="parameterList(&quot;, &quot;)"
-              name="PARAMETER_LIST"/>
-    <context>
-      <option name="GO_FUNCTION" value="true"/>
-    </context>
-  </template>
+
+    <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
+              key="livetemplate.description.fun"
+              name="m" toReformat="true" value="func (t *$TYPE$)$CONTENT$($PARANS$) {&#10;&#09;$END$&#10;}&#10;">
+        <variable alwaysStopAt="true" defaultValue="" expression="" name="TYPE"/>
+        <variable alwaysStopAt="true" defaultValue="&quot;method_name&quot;" expression="" name="CONTENT"/>
+        <variable alwaysStopAt="true" defaultValue="" expression="" name="PARANS"/>
+        <context>
+            <option name="GO" value="true"/>
+        </context>
+    </template>
+
+    <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
+              key="livetemplate.description.souf"
+              name="souf" toReformat="true" value="fmt.Printf(&quot;$CONTENT$\n&quot;$ARGS$)$END$">
+        <variable alwaysStopAt="true" defaultValue="" expression="" name="CONTENT"/>
+        <variable alwaysStopAt="true" defaultValue="" expression="" name="ARGS"/>
+        <context>
+            <option name="GO_FUNCTION" value="true"/>
+        </context>
+    </template>
+
+    <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
+              key="livetemplate.description.soutm"
+              name="soutm" toReformat="true" value="fmt.Println(&quot;$FUNCTION$&quot;)">
+        <variable alwaysStopAt="false" defaultValue="" expression="functionName()" name="FUNCTION"/>
+        <context>
+            <option name="GO_FUNCTION" value="true"/>
+        </context>
+    </template>
+
+    <template resource-bundle="ro.redeul.google.go.template.TemplateBundle"
+              key="livetemplate.description.soutp"
+              name="soutp" toReformat="true"
+              value="fmt.Printf(&quot;$FUNCTION$($PARAMETER_FORMAT$)\n&quot;$PARAMETER_LIST$)">
+        <variable alwaysStopAt="false" defaultValue="" expression="functionName()" name="FUNCTION"/>
+        <variable alwaysStopAt="false" defaultValue="" expression="parameterFormat(&quot;%#v&quot;)"
+                  name="PARAMETER_FORMAT"/>
+        <variable alwaysStopAt="false" defaultValue="" expression="parameterList(&quot;, &quot;)"
+                  name="PARAMETER_LIST"/>
+        <context>
+            <option name="GO_FUNCTION" value="true"/>
+        </context>
+    </template>
 </templateSet>
