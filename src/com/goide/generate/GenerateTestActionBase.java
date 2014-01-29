@@ -14,6 +14,7 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+import com.intellij.refactoring.util.CommonRefactoringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +53,8 @@ abstract public class GenerateTestActionBase extends CodeInsightAction implement
 
     @Override
     public void invoke(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
+      if (!CommonRefactoringUtil.checkReadOnlyStatus(file)) return;
+
       TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(project);
       Template template = TemplateSettings.getInstance().getTemplateById("go_lang_" + myType.name().toLowerCase());
       if (template != null) {
