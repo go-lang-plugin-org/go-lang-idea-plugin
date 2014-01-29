@@ -1,6 +1,7 @@
 package com.goide.codeInsight.imports;
 
 import com.goide.jps.model.JpsGoSdkType;
+import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.execution.ExecutionException;
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GoGetPackageFix extends LocalQuickFixBase {
+public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAction {
   private static final String TITLE = "Something went wrong with `go get`";
   @NotNull private final String myPackage;
 
