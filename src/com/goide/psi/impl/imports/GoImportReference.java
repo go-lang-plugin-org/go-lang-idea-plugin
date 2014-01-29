@@ -29,6 +29,10 @@ public class GoImportReference extends FileReference {
   @NotNull
   @Override
   protected ResolveResult[] innerResolve(boolean caseSensitive) {
+    if (isFirst() && isLast() && "builtin".equals(getFileReferenceSet().getPathString())) {
+      // import "builtin" can't be resolved
+      return ResolveResult.EMPTY_ARRAY;
+    }
     if (isFirst()) {
       if (".".equals(getCanonicalText())) {
         PsiDirectory directory = getDirectory();
