@@ -10,8 +10,6 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.EnvironmentUtil;
-import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -159,23 +157,5 @@ public class GoSdkType extends SdkType {
       modificator.addRoot(dir, OrderRootType.CLASSES);
       modificator.addRoot(dir, OrderRootType.SOURCES);
     }
-  }
-
-  @NotNull
-  public static List<VirtualFile> getGoPathsSources() {
-    List<VirtualFile> result = ContainerUtil.newArrayList();
-    String gopath = EnvironmentUtil.getValue("GOPATH");
-    String home = SystemProperties.getUserHome();
-    if (gopath != null) {
-      List<String> split = StringUtil.split(gopath, File.pathSeparator);
-      for (String s : split) {
-        if (home != null) {
-          s = s.replaceAll("\\$HOME", home);
-        }
-        VirtualFile path = LocalFileSystem.getInstance().findFileByPath(s + "/src");
-        ContainerUtil.addIfNotNull(result, path);
-      }
-    }
-    return result;
   }
 }

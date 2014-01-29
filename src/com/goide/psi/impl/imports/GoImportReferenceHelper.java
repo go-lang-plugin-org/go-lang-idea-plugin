@@ -1,6 +1,5 @@
 package com.goide.psi.impl.imports;
 
-import com.goide.GoSdkType;
 import com.goide.GoSdkUtil;
 import com.goide.codeInsight.imports.GoGetPackageFix;
 import com.goide.psi.GoFile;
@@ -92,7 +91,7 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
     List<VirtualFile> result = ContainerUtil.newArrayList();
     VirtualFile sdkHome = GoSdkUtil.getSdkHome(element);
     ContainerUtil.addIfNotNull(result, sdkHome);
-    result.addAll(GoSdkType.getGoPathsSources());
+    result.addAll(GoSdkUtil.getGoPathsSources());
     return result;
   }
 }
