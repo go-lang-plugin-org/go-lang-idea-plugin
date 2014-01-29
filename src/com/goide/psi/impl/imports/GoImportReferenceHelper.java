@@ -1,16 +1,13 @@
 package com.goide.psi.impl.imports;
 
 import com.goide.GoSdkType;
+import com.goide.GoSdkUtil;
 import com.goide.codeInsight.imports.GoGetPackageFix;
 import com.goide.psi.GoFile;
 import com.intellij.codeInsight.daemon.quickFix.CreateFileFix;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -22,7 +19,6 @@ import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -91,17 +87,10 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
     return psiFile != null && psiFile instanceof GoFile;
   }
 
-  @Nullable
-  public static VirtualFile getSdkHome(@NotNull PsiElement element) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    Sdk sdk = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
-    return sdk == null ? null : LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/src/pkg");
-  }
-
   @NotNull
   private static List<VirtualFile> getPathsToLookup(@NotNull PsiElement element) {
     List<VirtualFile> result = ContainerUtil.newArrayList();
-    VirtualFile sdkHome = getSdkHome(element);
+    VirtualFile sdkHome = GoSdkUtil.getSdkHome(element);
     ContainerUtil.addIfNotNull(result, sdkHome);
     result.addAll(GoSdkType.getGoPathsSources());
     return result;

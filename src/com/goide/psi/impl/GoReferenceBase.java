@@ -1,7 +1,7 @@
 package com.goide.psi.impl;
 
+import com.goide.GoSdkUtil;
 import com.goide.psi.*;
-import com.goide.psi.impl.imports.GoImportReferenceHelper;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
@@ -115,20 +115,9 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   }
 
   @Nullable
-  protected GoFile getBuiltinFile() {
-    VirtualFile home = GoImportReferenceHelper.getSdkHome(myElement);
-    VirtualFile vBuiltin = home != null ? home.findFileByRelativePath("builtin/builtin.go") : null;
-    if (vBuiltin != null) {
-      PsiFile psiBuiltin = PsiManager.getInstance(myElement.getProject()).findFile(vBuiltin);
-      if (psiBuiltin instanceof GoFile) return ((GoFile)psiBuiltin);
-    }
-    return null;
-  }
-
-  @Nullable
   private PsiElement processBuiltin(@NotNull PsiFile file) {
     if (!file.getName().equals("builtin.go")) {
-      GoFile builtin = getBuiltinFile();
+      GoFile builtin = GoSdkUtil.findBuiltinFile(myElement);
       if (builtin != null) {
         PsiElement r = processUnqualified(builtin, true);
         if (r != null) return r;
@@ -210,7 +199,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         processDirectory(result, localPsiDir, (GoFile)file, true);
 
         if (!file.getName().equals("builtin.go")) {
-          GoFile builtinFile = getBuiltinFile();
+          GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
           if (builtinFile != null) processFile(result, builtinFile, true);
         }
       }

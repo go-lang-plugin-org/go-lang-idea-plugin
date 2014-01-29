@@ -1,5 +1,6 @@
 package com.goide.psi.impl;
 
+import com.goide.GoSdkUtil;
 import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
@@ -84,7 +85,7 @@ public class GoReference extends GoReferenceBase {
     }
 
     if (myElement.getParent() instanceof GoCallExpr && StringUtil.toLowerCase(id).equals(id)) {
-      GoFile builtinFile = getBuiltinFile();
+      GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
       if (builtinFile != null) {
         List<GoTypeSpec> types = builtinFile.getTypes();
         for (GoTypeSpec type : types) {
@@ -153,7 +154,7 @@ public class GoReference extends GoReferenceBase {
       if (f.isPublic() || localCompletion) result.add(GoPsiImplUtil.createFunctionOrMethodLookupElement(f));
     }
 
-    GoFile builtinFile = getBuiltinFile();
+    GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
     if (builtinFile != null) {
       List<GoTypeSpec> types = builtinFile.getTypes();
       for (GoTypeSpec type : types) {
