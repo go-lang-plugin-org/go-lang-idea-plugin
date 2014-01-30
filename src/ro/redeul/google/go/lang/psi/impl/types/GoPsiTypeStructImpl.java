@@ -1,10 +1,13 @@
 package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.impl.PsiElementBase;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.impl.types.struct.PromotedFieldsDiscover;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -12,6 +15,8 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
+import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -104,8 +109,63 @@ public class GoPsiTypeStructImpl extends GoPsiPackagedElementBase implements
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
-        // TODO: implement this
-        return false;
+        if (goType instanceof GoPsiTypeName) {
+            goType = resolveToFinalType(goType);
+        }
+        if (!(goType instanceof GoPsiTypeStruct))
+            return false;
+        GoPsiTypeStruct otherStruct = (GoPsiTypeStruct) goType;
+        GoTypeStructField[] fields = getFields();
+        GoTypeStructField[] otherFields = otherStruct.getFields();
+        GoTypeStructAnonymousField[] anonymousFields = getAnonymousFields();
+        GoTypeStructAnonymousField[] otherAnonymousFields = otherStruct.getAnonymousFields();
+
+        if (anonymousFields.length != otherAnonymousFields.length)
+            return false;
+        if (fields.length != otherFields.length)
+            return false;
+
+        for (int i = 0; i < fields.length; i++) {
+            GoTypeStructField field = fields[i];
+            GoTypeStructField otherField = otherFields[i];
+            PsiElementBase tag = field.getTag();
+            PsiElementBase otherTag = otherField.getTag();
+            if ((tag == null && otherTag != null) || (otherTag == null && tag != null))
+                return false;
+            if (tag != null && !tag.getText().equals(otherTag.getText()))
+                return false;
+
+            GoLiteralIdentifier[] identifiers = field.getIdentifiers();
+            GoLiteralIdentifier[] otherIdentifiers = otherField.getIdentifiers();
+            if (identifiers.length != otherIdentifiers.length)
+                return false;
+            for (int j = 0; j < identifiers.length; j++) {
+                GoLiteralIdentifier identifier = identifiers[j];
+                GoLiteralIdentifier otherIdentifier = otherIdentifiers[j];
+                if (!identifier.getUnqualifiedName().equals(otherIdentifier.getUnqualifiedName()))
+                    return false;
+                if (!field.getType().isIdentical(otherField.getType()))
+                    return false;
+            }
+        }
+
+        for (int i = 0; i < anonymousFields.length; i++) {
+            GoTypeStructAnonymousField field = anonymousFields[i];
+            GoTypeStructAnonymousField otherField = otherAnonymousFields[i];
+            if (!field.getFieldName().equals(otherField.getFieldName()))
+                return false;
+            if (!field.getType().isIdentical(otherField.getType()))
+                return false;
+            PsiElementBase tag = field.getTag();
+            PsiElementBase otherTag = otherField.getTag();
+            if ((tag == null && otherTag != null) || (otherTag == null && tag != null))
+                return false;
+            if (tag != null && !tag.getText().equals(otherTag.getText()))
+                return false;
+        }
+
+        return true;
+
     }
 
 

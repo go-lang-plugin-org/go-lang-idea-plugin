@@ -32,6 +32,11 @@ type MyArray2 MyArray
 type MyFunc func(a map[string]string)
 type MyFunc2 MyFunc
 
+type MyStruct struct{
+	a int
+	b string
+}
+
 const (
 	NORMAL = 45
 	NOTNARMAL = BBBBB
@@ -108,6 +113,18 @@ func HandleInChan(c <-chan string){
 }
 
 func HandleOutChan(c chan<- string){
+
+}
+
+func HandleStruct(c *struct{a int; b string}){
+
+}
+
+func HandleStructWithTag(c *struct{a int `first`; b string}){
+
+}
+
+func HandleMyStruct(c MyStruct){
 
 }
 
@@ -406,5 +423,18 @@ func main() {
 	HandleOutChan(/*begin*/chStrIn/*end.Expression type mismatch, the expected type is chan<- string|CastTypeFix*/)
 
 	// HandleChan(make(chan int))  TODO: should generate "Expression type mismatch, the expected type is chan int|CastTypeFix"
+
+	// issue #522
+
+	HandleStruct(&struct{a int; b string}{})
+	HandleStruct(/*begin*/&struct{a int; b int}{}/*end.Expression type mismatch, the expected type is *struct{a int; b string}|CastTypeFix*/)
+
+	HandleStructWithTag(&struct{a int `first`; b string}{})
+	HandleStructWithTag(/*begin*/&struct{a int; b int}{}/*end.Expression type mismatch, the expected type is *struct{a int `first`; b string}|CastTypeFix*/)
+	HandleStructWithTag(/*begin*/&struct{a int `second`; b int}{}/*end.Expression type mismatch, the expected type is *struct{a int `first`; b string}|CastTypeFix*/)
+	HandleStructWithTag(/*begin*/&struct{a int; b int `first`}{}/*end.Expression type mismatch, the expected type is *struct{a int `first`; b string}|CastTypeFix*/)
+
+	HandleMyStruct(struct{a int; b string}{})
+
 
 }
