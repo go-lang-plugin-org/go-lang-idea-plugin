@@ -48,6 +48,7 @@
     <lang.namesValidator language="go" implementationClass="com.goide.GoNamesValidator"/>
     <lang.findUsagesProvider language="go" implementationClass="com.goide.GoFindUsagesProvider"/>
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
+    <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
 
     <gotoSymbolContributor implementation="com.goide.go.GoSymbolContributor"/>
     <gotoClassContributor implementation="com.goide.go.GoTypeContributor"/>
