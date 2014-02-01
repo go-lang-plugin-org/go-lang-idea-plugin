@@ -1,6 +1,7 @@
 package com.goide.formatter;
 
 import com.goide.GoLanguage;
+import com.goide.GoParserDefinition;
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
@@ -31,6 +32,8 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     return new SpacingBuilder(settings, GoLanguage.INSTANCE)
       .before(COMMA).spaceIf(false)
       .after(COMMA).spaceIf(true)
+      .after(GoParserDefinition.LINE_COMMENT).lineBreakInCodeIf(true)
+      .after(GoParserDefinition.MULTILINE_COMMENT).lineBreakInCodeIf(true)
       ;
   }
 
@@ -137,7 +140,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     }
 
     @Override
-    public Spacing getSpacing(Block child1, Block child2) {
+    public Spacing getSpacing(Block child1, @NotNull Block child2) {
       return mySpacingBuilder.getSpacing(this, child1, child2);
     }
 
