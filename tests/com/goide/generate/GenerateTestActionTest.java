@@ -8,16 +8,16 @@ public class GenerateTestActionTest extends GoCodeInsightFixtureTestCase {
   public void testTest() throws Exception {
     doTest("GoGenerateTest", "package test\n" +
                              "func TestName(t *testing.T) {\n" +
-                             " \n" +
+                             "    \n" +
                              "}");
   }
 
   public void testBenchmark() throws Exception {
     doTest("GoGenerateBenchmark", "package test\n" +
                                   "func BenchmarkName(b *testing.B) {\n" +
-                                  " for i := 0; i < b.N; i++ {\n" +
-                                  "  \n" +
-                                  " }\n" +
+                                  "    for i := 0; i < b.N; i++ {\n" +
+                                  "        \n" +
+                                  "    }\n" +
                                   "}");
   }
 
