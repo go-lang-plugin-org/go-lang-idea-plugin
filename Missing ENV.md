@@ -36,6 +36,8 @@ setenv GOROOT /usr/local/go
 setenv GOPATH /Users/yourname/go
 ```
 
+It's possible to apply these changes [without a restart](http://stackoverflow.com/a/3756686/15677). 
+
 You can view more [details here](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/318#issuecomment-31303939).
 
 You can get more details about launchd.conf in its respective [launchd.conf(5) Mac OS X Manual Page](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man5/launchd.conf.5.html).
