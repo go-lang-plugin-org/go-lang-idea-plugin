@@ -147,9 +147,6 @@ public class GoReference2 extends PsiPolyVariantReferenceBase<GoReferenceExpress
       GoType type = ((GoNamedElement)target).getGoType();
       if (type != null) processGoType(type, processor, state);
     }
-    else {
-      System.out.println(target);
-    }
     return false;
   }
 
@@ -226,6 +223,17 @@ public class GoReference2 extends PsiPolyVariantReferenceBase<GoReferenceExpress
     String id = getName();
     if ("_".equals(id)) return processSelf(processor, state);
 
+    PsiElement parent = myElement.getParent();
+
+    if (parent instanceof GoSelectorExpr) {
+      return processSelector((GoSelectorExpr)parent, processor, state, myElement);
+    }
+
+    PsiElement grandPa = parent.getParent();
+    if (grandPa instanceof GoSelectorExpr) {
+      if (!processSelector((GoSelectorExpr)grandPa, processor, state, parent)) return false;
+    }
+
     GoScopeProcessorBase delegate = createDelegate(processor);
     ResolveUtil.treeWalkUp(myElement, delegate);
     processReceiver(delegate);
@@ -253,35 +261,18 @@ public class GoReference2 extends PsiPolyVariantReferenceBase<GoReferenceExpress
         if (!definition.isPublic()) processor.execute(definition, state);
       }
     }
+    return true;
+  }
 
-    PsiElement parent = myElement.getParent();
-    if (parent instanceof GoSelectorExpr) {
-      List<GoExpression> list = ((GoSelectorExpr)parent).getExpressionList();
-      if (list.size() > 1 && list.get(1).isEquivalentTo(myElement)) {
-        GoType type = list.get(0).getGoType();
-        if (type != null && !processGoType(type, processor, state)) return false;
-      }
+  private boolean processSelector(@NotNull GoSelectorExpr parent,
+                                  @NotNull MyScopeProcessor processor,
+                                  @NotNull ResolveState state,
+                                  @Nullable PsiElement another) {
+    List<GoExpression> list = parent.getExpressionList();
+    if (list.size() > 1 && list.get(1).isEquivalentTo(another)) {
+      GoType type = list.get(0).getGoType();
+      if (type != null && !processGoType(type, processor, state)) return false;
     }
-    // todo: remove duplicate
-    PsiElement grandPa = parent.getParent();
-    if (grandPa instanceof GoSelectorExpr) {
-      List<GoExpression> list = ((GoSelectorExpr)grandPa).getExpressionList();
-      if (list.size() > 1 && list.get(1).isEquivalentTo(parent)) {
-        GoType type = list.get(0).getGoType();
-        if (type != null && !processGoType(type, processor, state)) return false;
-      }
-    }
-
-    //  if (myElement.getParent() instanceof GoCallExpr && StringUtil.toLowerCase(id).equals(id)) {
-    //    GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
-    //    if (builtinFile != null) {
-    //      List<GoTypeSpec> types = builtinFile.getTypes();
-    //      for (GoTypeSpec type : types) {
-    //        if (id.equals(type.getName())) return type;
-    //      }
-    //    }
-    //  }
-
     return true;
   }
 
