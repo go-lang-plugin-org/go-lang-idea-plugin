@@ -55,7 +55,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
         if ( !(goType instanceof GoPsiTypeFunction))
             return false;
 
-        return GoUtil.CompairFnTypeToDecl((GoPsiTypeFunction) goType, this);
+        return GoUtil.CompareFnTypeToDecl((GoPsiTypeFunction) goType, this);
     }
 
     @Override

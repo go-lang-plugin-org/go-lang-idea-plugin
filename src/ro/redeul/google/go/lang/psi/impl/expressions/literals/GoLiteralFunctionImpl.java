@@ -114,7 +114,7 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
             goType = resolveToFinalType(goType);
         }
         if (goType instanceof GoPsiTypeFunction){
-            return GoUtil.CompairFnTypeToDecl((GoPsiTypeFunction) goType, this);
+            return GoUtil.CompareFnTypeToDecl((GoPsiTypeFunction) goType, this);
         }
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }

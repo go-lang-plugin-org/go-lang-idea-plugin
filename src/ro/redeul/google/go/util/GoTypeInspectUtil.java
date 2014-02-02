@@ -2,6 +2,7 @@ package ro.redeul.google.go.util;
 
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiParenthesizedExpression;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.FunctionCallInspection;
 import ro.redeul.google.go.inspection.InspectionResult;
@@ -58,7 +59,7 @@ public class GoTypeInspectUtil {
             return false;
         }
         //Fix issue #520 with nil
-        if (firstChildOfExp instanceof GoLiteralIdentifier && ((GoLiteralIdentifier) firstChildOfExp).getName().equals("nil")) {
+        if (IsNil(expr)) {
             if (resolved instanceof GoPsiTypeName) {
                 if (((GoPsiTypeName) resolved).isPrimitive() && resolved.getName().equals("error")) {
                     return true;
@@ -114,19 +115,19 @@ public class GoTypeInspectUtil {
 
         GoType[] goTypes = expr.getType();
         if (goTypes.length != 0 && goTypes[0] != null) {
-            return GoUtil.CompairTypes(type, goTypes[0], expr);
+            return GoUtil.CompareTypes(type, goTypes[0], expr);
         }
 
         if (type instanceof GoPsiTypeFunction)
-            return GoUtil.CompairTypes(type, null, expr);
+            return GoUtil.CompareTypes(type, null, expr);
 
         if (firstChildOfExp instanceof GoLiteralIdentifier) {
             GoPsiElement goPsiElement = GoUtil.ResolveTypeOfVarDecl((GoPsiElement) firstChildOfExp);
             if (goPsiElement instanceof GoPsiType)
-                return GoUtil.CompairTypes(type, goPsiElement);
+                return GoUtil.CompareTypes(type, goPsiElement);
         }
         if (expr instanceof GoCallOrConvExpression && firstChildOfExp instanceof GoPsiTypeParenthesized) {
-            return GoUtil.CompairTypes(type, ((GoPsiTypeParenthesized) firstChildOfExp).getInnerType(), expr);
+            return GoUtil.CompareTypes(type, ((GoPsiTypeParenthesized) firstChildOfExp).getInnerType(), expr);
         }
         type = resolved;
         if (type == null) {
@@ -141,6 +142,14 @@ public class GoTypeInspectUtil {
 
         return true;
 
+    }
+
+    public static boolean IsNil(PsiElement psiElement) {
+        if (psiElement instanceof PsiParenthesizedExpression)
+            return IsNil(((PsiParenthesizedExpression) psiElement).getExpression());
+        if (psiElement instanceof GoLiteralExpression)
+            psiElement = ((GoLiteralExpression) psiElement).getLiteral();
+        return psiElement instanceof GoLiteralIdentifier && ((GoLiteralIdentifier) psiElement).getName().equals("nil");
     }
 
     public static boolean checkValidLiteralFloatExpr(GoExpr expr) {
