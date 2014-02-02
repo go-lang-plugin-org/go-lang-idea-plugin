@@ -75,7 +75,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static PsiReference getReference(@NotNull final GoReferenceExpression o) {
-    return new GoReference2(o);
+    return new GoReference(o);
   }
 
   @SuppressWarnings("UnusedParameters")
