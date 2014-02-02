@@ -74,3 +74,10 @@ func NotMatchTypeCall() (string, int64) {
 func IsError() error {
 	return nil
 }
+
+func FnRet() func(struct {Name string}) {
+	return func(arg struct {Name string}) {
+
+	}
+
+}

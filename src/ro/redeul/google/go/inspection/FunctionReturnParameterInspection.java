@@ -22,16 +22,19 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
         new GoRecursiveElementVisitor() {
             @Override
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
+                visitElement(declaration);
                 checkFunction(result, declaration);
             }
 
             @Override
             public void visitMethodDeclaration(GoMethodDeclaration declaration) {
+                visitElement(declaration);
                 checkFunction(result, declaration);
             }
 
             @Override
             public void visitFunctionLiteral(GoLiteralFunction literal) {
+                visitElement(literal);
                 checkFunction(result, literal);
             }
         }.visitFile(file);
