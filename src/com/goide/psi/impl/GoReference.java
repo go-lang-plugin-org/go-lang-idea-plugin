@@ -301,17 +301,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return processor.execute(myElement, state);
   }
 
-  //@Nullable
-  //@Override
-  //protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {
-  //  String id = myElement.getIdentifier().getText();
-  //  if ("_".equals(id)) return myElement; // todo: need a better solution
-
-
-  //
-  //  return resolveImportOrPackage(file, id);
-  //}
-
   private void processFunctionParameters(@NotNull GoScopeProcessorBase processor) {
     // todo: nested functions from FunctionLit
     GoFunctionOrMethodDeclaration function = PsiTreeUtil.getParentOfType(myElement, GoFunctionOrMethodDeclaration.class);
