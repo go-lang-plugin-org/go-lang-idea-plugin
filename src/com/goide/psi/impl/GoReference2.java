@@ -11,6 +11,7 @@ import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import org.jetbrains.annotations.NotNull;
@@ -127,23 +128,112 @@ public class GoReference2 extends PsiPolyVariantReferenceBase<GoReferenceExpress
     ResolveState state = ResolveState.initial();
     GoReferenceExpression qualifier = myElement.getQualifier();
     if (qualifier != null) {
-      return false;
+      return processQualifierExpression(((GoFile)file), qualifier, processor, state);
     }
     return processUnqualifiedResolve(((GoFile)file), processor, state, true);
   }
 
-  private boolean processUnqualifiedResolve(GoFile file, MyScopeProcessor processor, ResolveState state, boolean localResolve) {
+  private boolean processQualifierExpression(@NotNull GoFile file,
+                                             @NotNull GoReferenceExpression qualifier,
+                                             @NotNull MyScopeProcessor processor,
+                                             @NotNull ResolveState state) {
+    PsiReference reference = qualifier.getReference();
+    PsiElement target = reference != null ? reference.resolve() : null;
+    if (target == null || target == qualifier) return false;
+    if (target instanceof PsiDirectory) {
+      processDirectory((PsiDirectory)target, file, processor, state, false); // todo: local resolve or not?
+    }
+    else if (target instanceof GoNamedElement) {
+      GoType type = ((GoNamedElement)target).getGoType();
+      if (type != null) processGoType(type, processor, state);
+    }
+    else {
+      System.out.println(target);
+    }
+    return false;
+  }
+
+  private boolean processGoType(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
+    if (!processExistingType(type, processor, state)) return false;
+    if (type instanceof GoPointerType) type = ((GoPointerType)type).getType();
+
+    GoTypeReferenceExpression reference = GoPsiImplUtil.getTypeReference(type);
+    return processInTypeRef(reference, type, processor, state);
+  }
+
+  private boolean processExistingType(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
+    if (type instanceof GoStructType) {
+      GoScopeProcessorBase delegate = createDelegate(processor);
+      type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
+      Collection<? extends GoNamedElement> result = delegate.getVariants();
+      if (!processNamedElements(processor, state, true, result)) return false;
+
+      final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
+      type.accept(new GoRecursiveVisitor() {
+        @Override
+        public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
+          refs.add(o.getTypeReferenceExpression());
+        }
+      });
+      for (GoTypeReferenceExpression ref : refs) {
+        if (!processInTypeRef(ref, type, processor, state)) return false;
+      }
+    }
+    PsiElement parent = type.getParent();
+    if (parent instanceof GoTypeSpec) {
+      List<GoMethodDeclaration> methods = ((GoTypeSpec)parent).getMethods();
+      if (!processNamedElements(processor, state, true, methods)) return false;
+    }
+    return true;
+  }
+
+  private boolean processInTypeRef(@Nullable GoTypeReferenceExpression refExpr,
+                                   @Nullable GoType recursiveStopper,
+                                   @NotNull MyScopeProcessor processor,
+                                   @NotNull ResolveState state) {
+    PsiReference reference = refExpr != null ? refExpr.getReference() : null;
+    PsiElement resolve = reference != null ? reference.resolve() : null;
+    if (resolve instanceof GoTypeSpec) {
+      GoType resolveType = ((GoTypeSpec)resolve).getType();
+      if (resolveType != null && (recursiveStopper == null || !resolveType.textMatches(recursiveStopper)) &&
+          !processExistingType(resolveType, processor, state)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
+  protected void processDirectory(@Nullable PsiDirectory dir,
+                                  @Nullable GoFile file,
+                                  @NotNull MyScopeProcessor processor,
+                                  @NotNull ResolveState state,
+                                  boolean localProcessing) {
+    String name = file != null ? file.getName() : null;
+    if (dir != null) {
+      for (PsiFile psiFile : dir.getFiles()) {
+        if (psiFile instanceof GoFile && !psiFile.getName().equals(name)) {
+          processFileEntities((GoFile)psiFile, processor, state, localProcessing);
+        }
+      }
+    }
+  }
+
+  private boolean processUnqualifiedResolve(@NotNull GoFile file,
+                                            @NotNull MyScopeProcessor processor,
+                                            @NotNull ResolveState state,
+                                            boolean localResolve) {
     String id = getName();
     if ("_".equals(id)) return processSelf(processor, state);
 
-    GoScopeProcessorBase delegate = new GoVarProcessor(id, myElement, processor.isCompletion());
+    GoScopeProcessorBase delegate = createDelegate(processor);
     ResolveUtil.treeWalkUp(myElement, delegate);
     processReceiver(delegate);
     processFunctionParameters(delegate);
-    GoNamedElement result = delegate.getResult();
-    if (result != null && !processor.execute(result, state)) return false;
+    Collection<? extends GoNamedElement> result = delegate.getVariants();
+    if (!processNamedElements(processor, state, localResolve, result)) return false;
 
-    processFile(file, processor, state, localResolve);
+    processFileEntities(file, processor, state, localResolve);
 
     if (RESERVED_NAMES.contains(id)) return processSelf(processor, state);
 
@@ -158,27 +248,61 @@ public class GoReference2 extends PsiPolyVariantReferenceBase<GoReferenceExpress
 
     GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
     if (builtinFile != null) {
-      processFile(builtinFile, processor, state, true);
-      List<GoTypeSpec> types = builtinFile.getTypes();
-      processNamedElements(processor, state, true, types); // todo: remove ComplexType and others
+      processFileEntities(builtinFile, processor, state, true);
+      for (GoNamedElement definition : builtinFile.getTypes()) {
+        if (!definition.isPublic()) processor.execute(definition, state);
+      }
     }
 
-    return false;
+    PsiElement parent = myElement.getParent();
+    if (parent instanceof GoSelectorExpr) {
+      List<GoExpression> list = ((GoSelectorExpr)parent).getExpressionList();
+      if (list.size() > 1 && list.get(1).isEquivalentTo(myElement)) {
+        GoType type = list.get(0).getGoType();
+        if (type != null && !processGoType(type, processor, state)) return false;
+      }
+    }
+    // todo: remove duplicate
+    PsiElement grandPa = parent.getParent();
+    if (grandPa instanceof GoSelectorExpr) {
+      List<GoExpression> list = ((GoSelectorExpr)grandPa).getExpressionList();
+      if (list.size() > 1 && list.get(1).isEquivalentTo(parent)) {
+        GoType type = list.get(0).getGoType();
+        if (type != null && !processGoType(type, processor, state)) return false;
+      }
+    }
+
+    //  if (myElement.getParent() instanceof GoCallExpr && StringUtil.toLowerCase(id).equals(id)) {
+    //    GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
+    //    if (builtinFile != null) {
+    //      List<GoTypeSpec> types = builtinFile.getTypes();
+    //      for (GoTypeSpec type : types) {
+    //        if (id.equals(type.getName())) return type;
+    //      }
+    //    }
+    //  }
+
+    return true;
   }
 
-  private static void processFile(GoFile file, MyScopeProcessor processor, ResolveState state, boolean localResolve) {
+  private GoVarProcessor createDelegate(MyScopeProcessor processor) {
+    return new GoVarProcessor(getName(), myElement, processor.isCompletion());
+  }
+
+  private static void processFileEntities(GoFile file, MyScopeProcessor processor, ResolveState state, boolean localResolve) {
     processNamedElements(processor, state, localResolve, file.getConsts());
     processNamedElements(processor, state, localResolve, file.getVars());
     processNamedElements(processor, state, localResolve, file.getFunctions());
   }
 
-  private static void processNamedElements(PsiScopeProcessor processor,
-                                           ResolveState state,
-                                           boolean localResolve,
-                                           List<? extends GoNamedElement> elements) {
+  private static boolean processNamedElements(PsiScopeProcessor processor,
+                                              ResolveState state,
+                                              boolean localResolve,
+                                              Collection<? extends GoNamedElement> elements) {
     for (GoNamedElement definition : elements) {
-      if (definition.isPublic() || localResolve) processor.execute(definition, state);
+      if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) return false;
     }
+    return true;
   }
 
   private boolean processSelf(PsiScopeProcessor processor, ResolveState state) {
@@ -191,36 +315,7 @@ public class GoReference2 extends PsiPolyVariantReferenceBase<GoReferenceExpress
   //  String id = myElement.getIdentifier().getText();
   //  if ("_".equals(id)) return myElement; // todo: need a better solution
 
-  //  PsiElement parent = myElement.getParent();
-  //  if (parent instanceof GoSelectorExpr) {
-  //    List<GoExpression> list = ((GoSelectorExpr)parent).getExpressionList();
-  //    if (list.size() > 1 && list.get(1).isEquivalentTo(myElement)) {
-  //      GoType type = list.get(0).getGoType();
-  //      PsiElement element = processGoType(type);
-  //      if (element != null) return element;
-  //      return null;
-  //    }
-  //  }
-  //  // todo: remove duplicate
-  //  PsiElement grandPa = parent.getParent();
-  //  if (grandPa instanceof GoSelectorExpr) {
-  //    List<GoExpression> list = ((GoSelectorExpr)grandPa).getExpressionList();
-  //    if (list.size() > 1 && list.get(1).isEquivalentTo(parent)) {
-  //      GoType type = list.get(0).getGoType();
-  //      PsiElement element = processGoType(type);
-  //      if (element != null) return element;
-  //    }
-  //  }
-  //
-  //  if (myElement.getParent() instanceof GoCallExpr && StringUtil.toLowerCase(id).equals(id)) {
-  //    GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
-  //    if (builtinFile != null) {
-  //      List<GoTypeSpec> types = builtinFile.getTypes();
-  //      for (GoTypeSpec type : types) {
-  //        if (id.equals(type.getName())) return type;
-  //      }
-  //    }
-  //  }
+
   //
   //  return resolveImportOrPackage(file, id);
   //}
@@ -243,5 +338,12 @@ public class GoReference2 extends PsiPolyVariantReferenceBase<GoReferenceExpress
     GoMethodDeclaration method = PsiTreeUtil.getParentOfType(myElement, GoMethodDeclaration.class); // todo: nested methods?
     GoReceiver receiver = method != null ? method.getReceiver() : null;
     if (receiver != null) receiver.processDeclarations(processor, ResolveState.initial(), null, myElement);
+  }
+
+  @NotNull
+  @Override
+  public PsiElement handleElementRename(@NotNull String newElementName) throws IncorrectOperationException {
+    myElement.getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
+    return myElement;
   }
 }
