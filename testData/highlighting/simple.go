@@ -37,9 +37,9 @@ var t T
 
 func bar() {
     t.Mv(7)
-    <error>T</error>.Mv(t, 7)
+    T.<error>Mv</error>(t, 7) // todo: only simple type with ctors
     (T).Mv(t, 7)
-    f1 := <error>T</error>.Mv; f1(t, 7)
+    f1 := T.<error>Mv</error>; f1(t, 7) // todo: only simple type with ctors
     f2 := (T).Mv; f2(t, 7)
 }
 
