@@ -280,14 +280,15 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return new GoVarProcessor(getName(), myElement, processor.isCompletion());
   }
 
-  private static void processFileEntities(@NotNull GoFile file,
-                                          @NotNull MyScopeProcessor processor,
-                                          @NotNull ResolveState state,
-                                          boolean localResolve) {
-    processNamedElements(processor, state, localResolve, file.getConsts());
-    processNamedElements(processor, state, localResolve, file.getVars());
-    processNamedElements(processor, state, localResolve, file.getFunctions());
-    processNamedElements(processor, state, localResolve, file.getTypes());
+  private static boolean processFileEntities(@NotNull GoFile file,
+                                             @NotNull MyScopeProcessor processor,
+                                             @NotNull ResolveState state,
+                                             boolean localProcessing) {
+    if (!processNamedElements(processor, state, localProcessing, file.getConsts())) return false;
+    if (!processNamedElements(processor, state, localProcessing, file.getVars())) return false;
+    if (!processNamedElements(processor, state, localProcessing, file.getFunctions())) return false;
+    if (!processNamedElements(processor, state, localProcessing, file.getTypes())) return false;
+    return true;
   }
 
   private static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
