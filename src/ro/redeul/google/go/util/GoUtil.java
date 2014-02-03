@@ -41,6 +41,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -124,10 +126,20 @@ public class GoUtil {
         int counter = 0;
 
         for (GoFunctionParameter parameter : parameters) {
-            if (counter != 0)
-                stringBuilder.append(',');
-            stringBuilder.append(getNameLocalOrGlobal(parameter.getType(), currentPackge));
-            counter++;
+            GoLiteralIdentifier[] identifiers = parameter.getIdentifiers();
+            if (identifiers.length == 0) {
+                if (counter != 0)
+                    stringBuilder.append(',');
+                stringBuilder.append(getNameLocalOrGlobal(parameter.getType(), currentPackge));
+                counter++;
+            } else {
+                for (GoLiteralIdentifier identifier : identifiers) {
+                    if (counter != 0)
+                        stringBuilder.append(',');
+                    stringBuilder.append(getNameLocalOrGlobal(parameter.getType(), currentPackge));
+                    counter++;
+                }
+            }
         }
         stringBuilder.append(')');
 
@@ -137,11 +149,20 @@ public class GoUtil {
             stringBuilder.append('(');
 
         for (GoFunctionParameter parameter : results1) {
-            if (counter != 0) {
-                stringBuilder.append(',');
+            GoLiteralIdentifier[] identifiers = parameter.getIdentifiers();
+            if (identifiers.length == 0) {
+                if (counter != 0)
+                    stringBuilder.append(',');
+                stringBuilder.append(getNameLocalOrGlobal(parameter.getType(), currentPackge));
+                counter++;
+            } else {
+                for (GoLiteralIdentifier identifier : identifiers) {
+                    if (counter != 0)
+                        stringBuilder.append(',');
+                    stringBuilder.append(getNameLocalOrGlobal(parameter.getType(), currentPackge));
+                    counter++;
+                }
             }
-            stringBuilder.append(getNameLocalOrGlobal(parameter.getType(), currentPackge));
-            counter++;
         }
 
         if (counter > 1)
@@ -367,32 +388,40 @@ public class GoUtil {
 
 
     public static boolean CompareFnTypeToDecl(GoPsiTypeFunction psiType, GoFunctionDeclaration functionDeclaration) {
-
-
-        GoFunctionParameter[] funcTypeArguments = psiType.getParameters();
-
-        GoFunctionParameter[] funcDeclArguments = functionDeclaration.getParameters();
-
-        int idx = 0;
-        if (funcDeclArguments.length != funcTypeArguments.length)
+        if (!CompareParameterList(psiType.getParameters(), functionDeclaration.getParameters()))
             return false;
+        return CompareParameterList(psiType.getResults(), functionDeclaration.getResults());
+    }
 
-        for (GoFunctionParameter parameter : funcDeclArguments) {
-            if (!parameter.getType().isIdentical(funcTypeArguments[idx].getType()))
-                return false;
-            idx++;
+    private static boolean CompareParameterList(GoFunctionParameter[] funcTypeArguments, GoFunctionParameter[] funcDeclArguments) {
+        List<GoPsiType> list = new ArrayList<GoPsiType>();
+        for (GoFunctionParameter argument : funcDeclArguments) {
+            GoLiteralIdentifier[] identifiers = argument.getIdentifiers();
+            if (identifiers.length == 0) {
+                list.add(argument.getType());
+            } else {
+                for (GoLiteralIdentifier identifier : identifiers) {
+                    list.add(argument.getType());
+                }
+            }
         }
-        funcTypeArguments = psiType.getResults();
-        funcDeclArguments = functionDeclaration.getResults();
-
-        if (funcDeclArguments.length != funcTypeArguments.length)
-            return false;
-
-        idx = 0;
-        for (GoFunctionParameter parameter : funcDeclArguments) {
-            if (!parameter.getType().isIdentical(funcTypeArguments[idx].getType()))
-                return false;
-            idx++;
+        int i = 0;
+        for (GoFunctionParameter argument : funcTypeArguments) {
+            if (argument.getIdentifiers().length == 0) {
+                if (i >= list.size())
+                    return false;
+                if (!argument.getType().isIdentical(list.get(i)))
+                    return false;
+                i++;
+            } else {
+                for (GoLiteralIdentifier identifier : argument.getIdentifiers()) {
+                    if (i >= list.size())
+                        return false;
+                    if (!argument.getType().isIdentical(list.get(i)))
+                        return false;
+                    i++;
+                }
+            }
         }
         return true;
     }
