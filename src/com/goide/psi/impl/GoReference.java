@@ -240,6 +240,9 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
     processFileEntities(file, processor, state, localResolve);
 
+    PsiDirectory dir = file.getOriginalFile().getParent();
+    processDirectory(dir, file, processor, state, true);
+
     if (RESERVED_NAMES.contains(id)) return processSelf(processor, state);
 
     Collection<? extends PsiElement> collection = file.getImportMap().values();
@@ -277,7 +280,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private static void processFileEntities(@NotNull GoFile file,
                                           @NotNull MyScopeProcessor processor,
-                                          ResolveState state,
+                                          @NotNull ResolveState state,
                                           boolean localResolve) {
     processNamedElements(processor, state, localResolve, file.getConsts());
     processNamedElements(processor, state, localResolve, file.getVars());
@@ -286,7 +289,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
-                                              ResolveState state,
+                                              @NotNull ResolveState state,
                                               boolean localResolve,
                                               @NotNull Collection<? extends GoNamedElement> elements) {
     for (GoNamedElement definition : elements) {
