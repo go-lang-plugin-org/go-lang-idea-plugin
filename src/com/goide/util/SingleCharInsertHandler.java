@@ -1,5 +1,6 @@
 package com.goide.util;
 
+import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.BasicInsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -15,13 +16,19 @@ public class SingleCharInsertHandler extends BasicInsertHandler<LookupElement> {
 
   @Override
   public void handleInsert(InsertionContext context, LookupElement item) {
-    if (context.getCompletionChar() != myChar) {
-      final Editor editor = context.getEditor();
-      final Document document = editor.getDocument();
-      context.commitDocument();
-      int tailOffset = context.getTailOffset();
+    Editor editor = context.getEditor();
+    int tailOffset = context.getTailOffset();
+    Document document = editor.getDocument();
+    context.commitDocument();
+    boolean staysAtChar = document.getTextLength() > tailOffset &&
+                          document.getCharsSequence().charAt(tailOffset) == myChar;
+
+    context.setAddCompletionChar(false);
+    if (!staysAtChar) {
       document.insertString(tailOffset, String.valueOf(myChar));
-      editor.getCaretModel().moveToOffset(tailOffset + 1);
     }
+    editor.getCaretModel().moveToOffset(tailOffset + 1);
+
+    AutoPopupController.getInstance(context.getProject()).scheduleAutoPopup(editor);
   }
 }

@@ -100,6 +100,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
   public void testChannelType() throws Exception {
     doTestInclude("package foo; func foo() {type T struct {cn *T}; var i T; i.<caret>}", "cn");
   }
+  
+  public void testPackageBeforeDot() throws Exception {
+    doCheckResult("package foo; import imp \"\"; func foo(a im<caret>.SomeType) {}", "package foo; import imp \"\"; func foo(a imp.<caret>SomeType) {}");
+  }
 
   public void testNoDuplicates() throws Exception {
     doTestInclude("package foo; type a struct {<caret>", "a");
