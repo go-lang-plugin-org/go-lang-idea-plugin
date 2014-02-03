@@ -164,6 +164,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       if (myElement instanceof GoFieldDefinition) return GoIcons.FIELD;
       if (myElement instanceof GoMethodSpec) return GoIcons.METHOD;
       if (myElement instanceof GoAnonymousFieldDefinition) return GoIcons.FIELD;
+      if (myElement instanceof GoParamDefinition) return GoIcons.PARAMETER;
       return myElement.getIcon(0);
     }
   }
