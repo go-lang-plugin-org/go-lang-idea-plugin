@@ -67,12 +67,12 @@
 
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
+  implements("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
   implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
   implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
-  extends("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
-  elementTypeFactory("(Function|Method)Declaration|(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
+  extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
+  elementTypeFactory("(Function|Method)Declaration|(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -139,7 +139,9 @@ ParamDefinition ::= identifier {
 
 InterfaceType ::= interface '{' MethodSpecs? '}' {pin(".*")=1}
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
-MethodSpec ::= TypeName &(!'(') | identifier Signature
+MethodSpec ::= TypeName &(!'(') | identifier Signature {
+  stubClass="com.goide.stubs.GoMethodSpecStub"
+}
 
 MapType ::= map '[' Type ']' Type {pin=1}
 ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}

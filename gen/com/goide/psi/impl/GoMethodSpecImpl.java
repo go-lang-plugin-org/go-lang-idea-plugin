@@ -8,12 +8,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
+import com.goide.stubs.GoMethodSpecStub;
 import com.goide.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class GoMethodSpecImpl extends GoCompositeElementImpl implements GoMethodSpec {
+public class GoMethodSpecImpl extends GoNamedElementImpl<GoMethodSpecStub> implements GoMethodSpec {
 
   public GoMethodSpecImpl(ASTNode node) {
     super(node);
+  }
+
+  public GoMethodSpecImpl(GoMethodSpecStub stub, IStubElementType nodeType) {
+    super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

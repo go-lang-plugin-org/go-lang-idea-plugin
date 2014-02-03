@@ -219,7 +219,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitMethodSpec(@NotNull GoMethodSpec o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitMulExpr(@NotNull GoMulExpr o) {

@@ -65,7 +65,7 @@ public interface GoTypes {
   IElementType MAP_TYPE = new GoCompositeElementType("MAP_TYPE");
   IElementType METHOD_DECLARATION = GoStubElementTypeFactory.factory("METHOD_DECLARATION");
   IElementType METHOD_EXPR = new GoCompositeElementType("METHOD_EXPR");
-  IElementType METHOD_SPEC = new GoCompositeElementType("METHOD_SPEC");
+  IElementType METHOD_SPEC = GoStubElementTypeFactory.factory("METHOD_SPEC");
   IElementType MUL_EXPR = new GoCompositeElementType("MUL_EXPR");
   IElementType OR_EXPR = new GoCompositeElementType("OR_EXPR");
   IElementType PACKAGE_CLAUSE = new GoCompositeElementType("PACKAGE_CLAUSE");

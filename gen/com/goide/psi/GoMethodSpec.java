@@ -4,8 +4,10 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import com.goide.stubs.GoMethodSpecStub;
 
-public interface GoMethodSpec extends GoCompositeElement {
+public interface GoMethodSpec extends GoNamedElement, StubBasedPsiElement<GoMethodSpecStub> {
 
   @Nullable
   GoSignature getSignature();

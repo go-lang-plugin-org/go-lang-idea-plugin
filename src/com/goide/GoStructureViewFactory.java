@@ -112,6 +112,11 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
              if (anon != null) result.add(new Element(anon));
           }
         }
+        else if (type instanceof GoInterfaceType) {
+          for (GoMethodSpec spec : ((GoInterfaceType)type).getMethodSpecList()) {
+            result.add(new Element(spec));
+          }
+        }
       }
       return result.toArray(new TreeElement[result.size()]);
     }
@@ -129,7 +134,9 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       }
       else if (myElement instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)myElement).getType();
-        String appendix = type instanceof GoStructType ? "" : (type != null ? ":" + GoPsiImplUtil.getText(type) : "");
+        String appendix = type instanceof GoStructType || type instanceof GoInterfaceType ?
+                          "" :
+                          (type != null ? ":" + GoPsiImplUtil.getText(type) : "");
         return ((GoTypeSpec)myElement).getIdentifier().getText() + appendix;
       }
       else if (myElement instanceof GoNamedElement) {
@@ -155,6 +162,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       if (myElement instanceof GoVarDefinition) return GoIcons.VARIABLE;
       if (myElement instanceof GoConstDefinition) return GoIcons.CONST;
       if (myElement instanceof GoFieldDefinition) return GoIcons.FIELD;
+      if (myElement instanceof GoMethodSpec) return GoIcons.METHOD;
       if (myElement instanceof GoAnonymousFieldDefinition) return GoIcons.FIELD;
       return myElement.getIcon(0);
     }
