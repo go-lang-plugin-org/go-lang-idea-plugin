@@ -137,7 +137,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     PsiElement target = reference != null ? reference.resolve() : null;
     if (target == null || target == qualifier) return false;
     if (target instanceof PsiDirectory) {
-      processDirectory((PsiDirectory)target, file, processor, state, false); // todo: local resolve or not?
+      processDirectory((PsiDirectory)target, file, null, processor, state, false);
     }
     else if (target instanceof GoNamedElement) {
       GoType type = ((GoNamedElement)target).getGoType();
@@ -200,13 +200,15 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   protected void processDirectory(@Nullable PsiDirectory dir,
                                   @Nullable GoFile file,
+                                  @Nullable String packageName,
                                   @NotNull MyScopeProcessor processor,
                                   @NotNull ResolveState state,
                                   boolean localProcessing) {
-    String name = file != null ? file.getName() : null;
+    String fileName = file != null ? file.getName() : null;
     if (dir != null) {
       for (PsiFile psiFile : dir.getFiles()) {
-        if (psiFile instanceof GoFile && !psiFile.getName().equals(name)) {
+        if (psiFile instanceof GoFile && !psiFile.getName().equals(fileName)) {
+          if (packageName != null && !packageName.equals(((GoFile)psiFile).getPackageName())) continue;
           processFileEntities((GoFile)psiFile, processor, state, localProcessing);
         }
       }
@@ -241,7 +243,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     processFileEntities(file, processor, state, localResolve);
 
     PsiDirectory dir = file.getOriginalFile().getParent();
-    processDirectory(dir, file, processor, state, true);
+    processDirectory(dir, file, file.getPackageName(), processor, state, true);
 
     if (RESERVED_NAMES.contains(id)) return processSelf(processor, state);
 
