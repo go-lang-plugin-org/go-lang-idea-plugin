@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.resolve.references.InterfaceMethodReference;
 import ro.redeul.google.go.lang.psi.resolve.references.MethodReference;
 import ro.redeul.google.go.lang.psi.resolve.references.SelectorOfStructFieldReference;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -26,14 +27,14 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.utils.GoIdentifierUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.services.GoPsiManager;
-import sun.util.logging.resources.logging;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 public class GoSelectorExpressionImpl extends GoExpressionBase
-    implements GoSelectorExpression {
+        implements GoSelectorExpression {
 
     public GoSelectorExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -51,27 +52,36 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
                     @Override
                     public GoType[] fun(GoSelectorExpression expression) {
                         PsiElement target =
-                            resolveSafely(GoSelectorExpressionImpl.this,
-                                          PsiElement.class);
+                                resolveSafely(GoSelectorExpressionImpl.this,
+                                        PsiElement.class);
 
                         if (target != null &&
-                            target.getParent() instanceof GoTypeStructField) {
+                                target.getParent() instanceof GoTypeStructField) {
 
                             GoTypeStructField structField =
-                                (GoTypeStructField) target.getParent();
+                                    (GoTypeStructField) target.getParent();
 
                             return new GoType[]{
-                                GoTypes.fromPsiType(structField.getType())
+                                    GoTypes.fromPsiType(structField.getType())
                             };
                         }
 
                         if (target instanceof GoTypeStructAnonymousField) {
                             GoTypeStructAnonymousField structField =
-                                (GoTypeStructAnonymousField) target;
+                                    (GoTypeStructAnonymousField) target;
 
                             return new GoType[]{
-                                GoTypes.fromPsiType(structField.getType())
+                                    GoTypes.fromPsiType(structField.getType())
                             };
+                        }
+
+                        if (target instanceof GoLiteralIdentifier) {
+                            GoFunctionDeclaration functionDeclaration = GoIdentifierUtils.getFunctionDeclaration(target);
+                            if (functionDeclaration != null) {
+                                return new GoType[]{
+                                        GoTypes.fromPsiType(functionDeclaration)
+                                };
+                            }
                         }
 
                         return GoType.EMPTY_ARRAY;
@@ -99,7 +109,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
 
             if (member instanceof GoLiteralIdentifier) {
                 LookupElementBuilder presentation =
-                    getFieldPresentation(type, (GoLiteralIdentifier) member);
+                        getFieldPresentation(type, (GoLiteralIdentifier) member);
 
                 if (presentation != null)
                     presentations[i] = presentation;
@@ -132,10 +142,10 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
         }
 
         return builder
-            .bold()
-            .withTailText(String.format(" (defined by: %s)",
-                                        ownerType.getQualifiedName()))
-            .withTypeText("<field>", ownerType != type);
+                .bold()
+                .withTailText(String.format(" (defined by: %s)",
+                        ownerType.getQualifiedName()))
+                .withTypeText("<field>", ownerType != type);
     }
 
     @NotNull
@@ -164,20 +174,20 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
 
         if (x instanceof GoUnderlyingTypeStruct && getIdentifier() != null)
             return new PsiReference[]{
-                new SelectorOfStructFieldReference(this),
-                new MethodReference(this)
+                    new SelectorOfStructFieldReference(this),
+                    new MethodReference(this)
             };
 
         if (x instanceof GoUnderlyingTypePointer) {
             return new PsiReference[]{
-                new SelectorOfStructFieldReference(this),
-                new MethodReference(this)
+                    new SelectorOfStructFieldReference(this),
+                    new MethodReference(this)
             };
         }
 
         if (type instanceof GoTypeName) {
             return new PsiReference[]{
-                new MethodReference(this)
+                    new MethodReference(this)
             };
         }
 

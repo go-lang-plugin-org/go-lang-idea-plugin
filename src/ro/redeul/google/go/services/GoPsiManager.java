@@ -30,10 +30,10 @@ public class GoPsiManager {
     private static final Logger LOG = Logger.getInstance("ro.redeul.google.go.services.GoPsiManager");
 
     private final ConcurrentMap<GoPsiElement, GoType[]> myCalculatedTypes =
-        new ConcurrentWeakHashMap<GoPsiElement, GoType[]>();
+            new ConcurrentWeakHashMap<GoPsiElement, GoType[]>();
 
     private static final RecursionGuard ourGuard =
-        RecursionManager.createGuard("goPsiManager");
+            RecursionManager.createGuard("goPsiManager");
 
     private GoPsiManager(Project project) {
 
@@ -42,7 +42,7 @@ public class GoPsiManager {
                 myCalculatedTypes.clear();
             }
         });
-        ((PsiManagerEx)PsiManager.getInstance(project)).registerRunnableToRunOnChange(new Runnable() {
+        ((PsiManagerEx) PsiManager.getInstance(project)).registerRunnableToRunOnChange(new Runnable() {
             public void run() {
                 myCalculatedTypes.clear();
             }

@@ -4,6 +4,9 @@ import (
 	"io"
 )
 
+type string string
+type bool bool
+
 func Ok1() (n int) {
 	return
 }
@@ -79,5 +82,18 @@ func FnRet() func(struct {Name string}) {
 	return func(arg struct {Name string}) {
 
 	}
+}
+
+type StructT struct {
 
 }
+
+func (t *StructT) Method1(arg,arg1 string) bool {
+	return arg == arg1
+}
+
+func (t *StructT) MethodGet() func(string,string)bool {
+	return t.Method1
+}
+
+

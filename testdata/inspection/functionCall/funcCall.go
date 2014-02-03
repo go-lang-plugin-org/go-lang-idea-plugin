@@ -37,6 +37,10 @@ type MyStruct struct{
 	b string
 }
 
+func (t *MyStruct) TestHandle(arg int , arg1 *string) bool {
+	return true
+}
+
 const (
 	NORMAL = 45
 	NOTNARMAL = BBBBB
@@ -435,6 +439,7 @@ func main() {
 	HandleStructWithTag(/*begin*/&struct{a int; b int `first`}{}/*end.Expression type mismatch, the expected type is *struct{a int `first`; b string}|CastTypeFix*/)
 
 	HandleMyStruct(struct{a int; b string}{})
-
+	myStruct := MyStruct{}
+	HandleFunc("/",myStruct.TestHandle)
 
 }

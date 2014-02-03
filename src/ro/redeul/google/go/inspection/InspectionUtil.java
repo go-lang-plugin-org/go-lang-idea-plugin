@@ -12,10 +12,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoTypeAssertionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.*;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 
@@ -27,20 +24,23 @@ public class InspectionUtil {
     public static TextRange getProblemRange(ProblemDescriptor pd) {
         int start = pd.getStartElement().getTextOffset();
         int end = pd.getEndElement().getTextOffset() + pd.getEndElement()
-                                                         .getTextLength();
+                .getTextLength();
         return new TextRange(start, end);
     }
 
     public static final int UNKNOWN_COUNT = -1;
 
     public static int getExpressionResultCount(GoExpr call) {
-        if (call instanceof GoLiteralExpression || call instanceof GoBinaryExpression
-                || call instanceof GoUnaryExpression || call instanceof GoParenthesisedExpression
+        if (call instanceof GoLiteralExpression
+                || call instanceof GoBinaryExpression
+                || call instanceof GoUnaryExpression
+                || call instanceof GoParenthesisedExpression
+                || call instanceof GoSelectorExpression
                 ) {
             return 1;
         } else if (call instanceof GoTypeAssertionExpression) {
             return getTypeAssertionResultCount(
-                (GoTypeAssertionExpression) call);
+                    (GoTypeAssertionExpression) call);
         } else if (call instanceof GoCallOrConvExpression) {
             return getFunctionResultCount((GoCallOrConvExpression) call);
         }
@@ -114,9 +114,9 @@ public class InspectionUtil {
                 }
 
                 String msg = GoBundle.message(
-                    "error.multiple.value.in.single.value.context", text);
+                        "error.multiple.value.in.single.value.context", text);
                 result.addProblem(expr, msg,
-                                  ProblemHighlightType.GENERIC_ERROR);
+                        ProblemHighlightType.GENERIC_ERROR);
             }
         }
     }
