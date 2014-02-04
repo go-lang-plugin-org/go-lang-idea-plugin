@@ -122,3 +122,5 @@ type Iface interface {
 func goo(st interface {Foo()}, st1 Iface) {
     Println(st.Foo() + st1.Boo())
 }
+
+func labelsCheck() { goto Label1; Label1: 1; goto <error>Label2</error>}

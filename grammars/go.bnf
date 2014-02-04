@@ -67,13 +67,13 @@
 
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
+  implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.GoNamedElement"
   implements("MethodSpec")="com.goide.psi.GoReceiverHolder"
   implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
   implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
-  extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
-  elementTypeFactory("(Function|Method)Declaration|(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
+  extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
+  elementTypeFactory("(Function|Method)Declaration|(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -314,7 +314,10 @@ CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')' {pin=0}
 ConversionExpr ::= &('*' | '<-' | '[' | chan | func | interface | map | struct) Type '(' Expression ','? ')'
 
-LabeledStatement ::= identifier ':' Statement {pin=2}
+LabeledStatement ::= LabelDefinition ':' Statement {pin=2}
+LabelDefinition ::= identifier {
+  stubClass="com.goide.stubs.GoLabelDefinitionStub"
+}
 SendStatement ::= Expression '<-' Expression {pin=2}
 AssignmentStatement ::= ExpressionList assign_op ExpressionList {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
@@ -343,8 +346,11 @@ CommClause ::= CommCase ':' Statements? {pin=1}
 CommCase ::= case ( SendStatement | RecvStatement ) | default {pin(".*")=1}
 RecvStatement ::= [ ExpressionList '=' | IdentifierList ':=' ] Expression {pin=0}
 ReturnStatement ::= return ExpressionList?
-BreakStatement ::= break identifier?
-ContinueStatement ::= continue identifier?
-GotoStatement ::= goto identifier
+LabelRef ::= identifier {
+  methods=[getReference]
+}
+BreakStatement ::= break LabelRef?
+ContinueStatement ::= continue LabelRef?
+GotoStatement ::= goto LabelRef
 FallthroughStatement ::= fallthrough
 DeferStatement ::= defer Expression

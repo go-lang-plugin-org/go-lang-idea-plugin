@@ -190,6 +190,14 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitLabelDefinition(@NotNull GoLabelDefinition o) {
+    visitNamedElement(o);
+  }
+
+  public void visitLabelRef(@NotNull GoLabelRef o) {
+    visitCompositeElement(o);
+  }
+
   public void visitLabeledStatement(@NotNull GoLabeledStatement o) {
     visitStatement(o);
   }

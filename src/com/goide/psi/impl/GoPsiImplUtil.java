@@ -62,6 +62,11 @@ public class GoPsiImplUtil {
     return new GoTypeReference(o);
   }
 
+  @Nullable
+  public static PsiReference getReference(@NotNull GoLabelRef o) {
+    return new GoLabelReference(o);
+  }
+
   @NotNull
   public static PsiReference[] getReferences(@NotNull GoImportString o) {
     if (o.getTextLength() < 2) return PsiReference.EMPTY_ARRAY;
@@ -129,6 +134,12 @@ public class GoPsiImplUtil {
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(t).withIcon(GoIcons.TYPE),
                                                  GoCompletionContributor.TYPE_PRIORITY);
+  }
+
+  @NotNull
+  public static LookupElement createLabelLookupElement(@NotNull GoLabelDefinition l) {
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(l).withIcon(GoIcons.LABEL),
+                                                 GoCompletionContributor.LABEL_PRIORITY);
   }
 
   @NotNull

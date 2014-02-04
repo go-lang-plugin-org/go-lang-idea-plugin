@@ -22,6 +22,12 @@ public class GoLabeledStatementImpl extends GoStatementImpl implements GoLabeled
   }
 
   @Override
+  @NotNull
+  public GoLabelDefinition getLabelDefinition() {
+    return findNotNullChildByClass(GoLabelDefinition.class);
+  }
+
+  @Override
   @Nullable
   public GoStatement getStatement() {
     return findChildByClass(GoStatement.class);
@@ -31,12 +37,6 @@ public class GoLabeledStatementImpl extends GoStatementImpl implements GoLabeled
   @NotNull
   public PsiElement getColon() {
     return findNotNullChildByType(COLON);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

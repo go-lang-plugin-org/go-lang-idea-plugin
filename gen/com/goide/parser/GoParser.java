@@ -159,6 +159,12 @@ public class GoParser implements PsiParser {
     else if (root_ == KEY) {
       result_ = Key(builder_, 0);
     }
+    else if (root_ == LABEL_DEFINITION) {
+      result_ = LabelDefinition(builder_, 0);
+    }
+    else if (root_ == LABEL_REF) {
+      result_ = LabelRef(builder_, 0);
+    }
     else if (root_ == LABELED_STATEMENT) {
       result_ = LabeledStatement(builder_, 0);
     }
@@ -476,7 +482,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // break identifier?
+  // break LabelRef?
   public static boolean BreakStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BreakStatement")) return false;
     if (!nextTokenIs(builder_, BREAK)) return false;
@@ -490,10 +496,10 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // identifier?
+  // LabelRef?
   private static boolean BreakStatement_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "BreakStatement_1")) return false;
-    consumeToken(builder_, IDENTIFIER);
+    LabelRef(builder_, level_ + 1);
     return true;
   }
 
@@ -906,7 +912,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // continue identifier?
+  // continue LabelRef?
   public static boolean ContinueStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ContinueStatement")) return false;
     if (!nextTokenIs(builder_, CONTINUE)) return false;
@@ -920,10 +926,10 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // identifier?
+  // LabelRef?
   private static boolean ContinueStatement_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ContinueStatement_1")) return false;
-    consumeToken(builder_, IDENTIFIER);
+    LabelRef(builder_, level_ + 1);
     return true;
   }
 
@@ -1529,15 +1535,16 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // goto identifier
+  // goto LabelRef
   public static boolean GotoStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "GotoStatement")) return false;
     if (!nextTokenIs(builder_, GOTO)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeTokens(builder_, 1, GOTO, IDENTIFIER);
+    result_ = consumeToken(builder_, GOTO);
     pinned_ = result_; // pin = 1
+    result_ = result_ && LabelRef(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, GOTO_STATEMENT, result_, pinned_, null);
     return result_ || pinned_;
   }
@@ -1929,14 +1936,38 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // identifier ':' Statement
+  // identifier
+  public static boolean LabelDefinition(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "LabelDefinition")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, IDENTIFIER);
+    exit_section_(builder_, marker_, LABEL_DEFINITION, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // identifier
+  public static boolean LabelRef(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "LabelRef")) return false;
+    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, IDENTIFIER);
+    exit_section_(builder_, marker_, LABEL_REF, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // LabelDefinition ':' Statement
   public static boolean LabeledStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "LabeledStatement")) return false;
     if (!nextTokenIs(builder_, IDENTIFIER)) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, IDENTIFIER);
+    result_ = LabelDefinition(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLON);
     pinned_ = result_; // pin = 2
     result_ = result_ && Statement(builder_, level_ + 1);

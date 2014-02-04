@@ -9,6 +9,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -285,4 +286,10 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
 
   @Nullable
   protected abstract PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve);
+
+  @Override
+  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+    getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
+    return getElement();
+  }
 }

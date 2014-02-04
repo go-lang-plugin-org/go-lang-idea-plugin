@@ -4,13 +4,14 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
-public interface GoBreakStatement extends GoStatement {
-
-  @Nullable
-  GoLabelRef getLabelRef();
+public interface GoLabelRef extends GoCompositeElement {
 
   @NotNull
-  PsiElement getBreak();
+  PsiElement getIdentifier();
+
+  @Nullable
+  PsiReference getReference();
 
 }

@@ -109,6 +109,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
     doTestInclude("package foo; type I interface {Boo() int}; func foo(i I) {i.<caret>}", "Boo");
   }
 
+  public void testLabel() throws Exception {
+    doTestInclude("package foo; func main() { goto <caret>; Label1: 1}", "Label1");
+  }
+
   public void testPackageBeforeDot() throws Exception {
     doCheckResult("package foo; import imp \"\"; func foo(a im<caret>.SomeType) {}", "package foo; import imp \"\"; func foo(a imp.<caret>SomeType) {}");
   }

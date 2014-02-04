@@ -18,6 +18,7 @@ public class GoStubElementTypeFactory {
     if (name.equals("TYPE_SPEC")) return new GoTypeSpecStubElementType(name);
     if (name.equals("METHOD_SPEC")) return new GoMethodSpecStubElementType(name);
     if (name.equals("VAR_DEFINITION")) return new GoVarDefinitionStubElementType(name);
+    if (name.equals("LABEL_DEFINITION")) return new GoLabelDefinitionStubElementType(name);
 
     throw new RuntimeException("Unknown element type: " + name);
   }

@@ -35,6 +35,7 @@ public class GoCompletionContributor extends CompletionContributor {
   public static final int TYPE_PRIORITY = 15;
   public static final int TYPE_CONVERSION = 15;
   public static final int VAR_PRIORITY = 15;
+  public static final int LABEL_PRIORITY = 15;
   public static final int PACKAGE_PRIORITY = 5;
 
   public GoCompletionContributor() {

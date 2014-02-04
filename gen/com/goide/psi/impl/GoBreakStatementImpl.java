@@ -22,15 +22,15 @@ public class GoBreakStatementImpl extends GoStatementImpl implements GoBreakStat
   }
 
   @Override
-  @NotNull
-  public PsiElement getBreak() {
-    return findNotNullChildByType(BREAK);
+  @Nullable
+  public GoLabelRef getLabelRef() {
+    return findChildByClass(GoLabelRef.class);
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  @NotNull
+  public PsiElement getBreak() {
+    return findNotNullChildByType(BREAK);
   }
 
 }

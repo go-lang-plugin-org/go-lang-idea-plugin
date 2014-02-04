@@ -34,6 +34,7 @@ public class GoDescriptionProvider implements ElementDescriptionProvider {
       if (o instanceof GoImportSpec) return "Import alias";
       if (o instanceof GoReceiver) return "Receiver";
       if (o instanceof GoMethodSpec) return "Method specification";
+      if (o instanceof GoLabelDefinition) return "Label";
     }
     return null;
   }

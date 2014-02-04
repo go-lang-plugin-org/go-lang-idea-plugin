@@ -26,12 +26,6 @@ public class GoTypeReference extends GoReferenceBase {
     return myRefExpression.getQualifier();
   }
 
-  @Override
-  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    myIdentifier.replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
-    return myRefExpression;
-  }
-
   @Nullable
   @Override
   protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {

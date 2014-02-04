@@ -61,6 +61,15 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
       }
 
       @Override
+      public void visitLabelRef(@NotNull GoLabelRef o) {
+        PsiReference reference = o.getReference();
+        String name = o.getText();
+        if (reference == null || reference.resolve() == null) {
+          problemsHolder.registerProblem(o, "Unresolved label " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL);
+        }
+      }
+
+      @Override
       public void visitTypeReferenceExpression(@NotNull GoTypeReferenceExpression o) {
         super.visitTypeReferenceExpression(o);
         PsiReference reference = o.getReference();

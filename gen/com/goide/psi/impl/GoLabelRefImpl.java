@@ -9,28 +9,28 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.psi.PsiReference;
 
-public class GoGotoStatementImpl extends GoStatementImpl implements GoGotoStatement {
+public class GoLabelRefImpl extends GoCompositeElementImpl implements GoLabelRef {
 
-  public GoGotoStatementImpl(ASTNode node) {
+  public GoLabelRefImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitGotoStatement(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitLabelRef(this);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public GoLabelRef getLabelRef() {
-    return findChildByClass(GoLabelRef.class);
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
-  @Override
-  @NotNull
-  public PsiElement getGoto() {
-    return findNotNullChildByType(GOTO);
+  @Nullable
+  public PsiReference getReference() {
+    return GoPsiImplUtil.getReference(this);
   }
 
 }

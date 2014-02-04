@@ -22,15 +22,15 @@ public class GoContinueStatementImpl extends GoStatementImpl implements GoContin
   }
 
   @Override
-  @NotNull
-  public PsiElement getContinue() {
-    return findNotNullChildByType(CONTINUE);
+  @Nullable
+  public GoLabelRef getLabelRef() {
+    return findChildByClass(GoLabelRef.class);
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  @NotNull
+  public PsiElement getContinue() {
+    return findNotNullChildByType(CONTINUE);
   }
 
 }
