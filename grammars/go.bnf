@@ -67,7 +67,8 @@
 
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
+  implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field)Definition|Receiver")="com.goide.psi.GoNamedElement"
+  implements("MethodSpec")="com.goide.psi.GoReceiverHolder"
   implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
   implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"

@@ -101,8 +101,8 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoFunctionOrMethodDeclaration f) {
-    Icon icon = f instanceof GoMethodDeclaration ? GoIcons.METHOD : GoIcons.FUNCTION;
+  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoReceiverHolder f) {
+    Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
     GoSignature signature = f.getSignature();
     int paramsCount = 0;
     String resultText = "";

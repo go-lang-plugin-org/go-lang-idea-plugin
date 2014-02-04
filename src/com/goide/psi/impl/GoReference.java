@@ -88,11 +88,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       @Nullable
       private LookupElement createLookup(@NotNull PsiElement element) {
         // @formatter:off
-        if (element instanceof GoFunctionOrMethodDeclaration) return createFunctionOrMethodLookupElement((GoFunctionOrMethodDeclaration)element);
-        else if (element instanceof GoTypeSpec)               return createTypeConversionLookupElement((GoTypeSpec)element);
-        else if (element instanceof GoNamedElement)           return createVariableLikeLookupElement((GoNamedElement)element);
-        else if (element instanceof PsiDirectory)             return createPackageLookupElement(((PsiDirectory)element).getName(), true);
-        else if (element instanceof PsiNamedElement)          return LookupElementBuilder.create((PsiNamedElement)element);
+        if (element instanceof GoReceiverHolder)     return createFunctionOrMethodLookupElement((GoReceiverHolder)element);
+        else if (element instanceof GoTypeSpec)      return createTypeConversionLookupElement((GoTypeSpec)element);
+        else if (element instanceof GoNamedElement)  return createVariableLikeLookupElement((GoNamedElement)element);
+        else if (element instanceof PsiDirectory)    return createPackageLookupElement(((PsiDirectory)element).getName(), true);
+        else if (element instanceof PsiNamedElement) return LookupElementBuilder.create((PsiNamedElement)element);
         // @formatter:on
         return null;
       }
@@ -160,7 +160,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       GoScopeProcessorBase delegate = createDelegate(processor);
       type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
       Collection<? extends GoNamedElement> result = delegate.getVariants();
-      if (!processNamedElements(processor, state, true, result)) return false;
+      if (!processNamedElements(processor, state, result, true)) return false;
 
       final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
       type.accept(new GoRecursiveVisitor() {
@@ -173,10 +173,14 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         if (!processInTypeRef(ref, type, processor, state)) return false;
       }
     }
+    else if (type instanceof GoInterfaceType) {
+      processNamedElements(processor, state, ((GoInterfaceType)type).getMethodSpecList(), false);
+    }
+
     PsiElement parent = type.getParent();
     if (parent instanceof GoTypeSpec) {
       List<GoMethodDeclaration> methods = ((GoTypeSpec)parent).getMethods();
-      if (!processNamedElements(processor, state, true, methods)) return false;
+      if (!processNamedElements(processor, state, methods, true)) return false;
     }
     return true;
   }
@@ -238,7 +242,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     processReceiver(delegate);
     processFunctionParameters(delegate);
     Collection<? extends GoNamedElement> result = delegate.getVariants();
-    if (!processNamedElements(processor, state, localResolve, result)) return false;
+    if (!processNamedElements(processor, state, result, localResolve)) return false;
 
     processFileEntities(file, processor, state, localResolve);
 
@@ -284,17 +288,16 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                              @NotNull MyScopeProcessor processor,
                                              @NotNull ResolveState state,
                                              boolean localProcessing) {
-    if (!processNamedElements(processor, state, localProcessing, file.getConsts())) return false;
-    if (!processNamedElements(processor, state, localProcessing, file.getVars())) return false;
-    if (!processNamedElements(processor, state, localProcessing, file.getFunctions())) return false;
-    if (!processNamedElements(processor, state, localProcessing, file.getTypes())) return false;
+    if (!processNamedElements(processor, state, file.getConsts(), localProcessing)) return false;
+    if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
+    if (!processNamedElements(processor, state, file.getFunctions(), localProcessing)) return false;
+    if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
     return true;
   }
 
   private static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
                                               @NotNull ResolveState state,
-                                              boolean localResolve,
-                                              @NotNull Collection<? extends GoNamedElement> elements) {
+                                              @NotNull Collection<? extends GoNamedElement> elements, boolean localResolve) {
     for (GoNamedElement definition : elements) {
       if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) return false;
     }

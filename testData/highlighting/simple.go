@@ -114,3 +114,11 @@ func innerTypes() {
 	ch := make(chan connError)
 	Println(ch.cn)
 }
+
+type Iface interface {
+  Boo() int
+}
+
+func goo(st interface {Foo()}, st1 Iface) {
+    Println(st.Foo() + st1.Boo())
+}
