@@ -49,6 +49,7 @@
     <lang.findUsagesProvider language="go" implementationClass="com.goide.GoFindUsagesProvider"/>
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
     <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
+    <renamePsiElementProcessor implementation="com.goide.refactor.GoAnonymousFieldProcessor"/>
 
     <gotoSymbolContributor implementation="com.goide.go.GoSymbolContributor"/>
     <gotoClassContributor implementation="com.goide.go.GoTypeContributor"/>
