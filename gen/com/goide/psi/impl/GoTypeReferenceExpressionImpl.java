@@ -28,7 +28,7 @@ public class GoTypeReferenceExpressionImpl extends GoCompositeElementImpl implem
     return findNotNullChildByType(IDENTIFIER);
   }
 
-  @Nullable
+  @NotNull
   public PsiReference getReference() {
     return GoPsiImplUtil.getReference(this);
   }

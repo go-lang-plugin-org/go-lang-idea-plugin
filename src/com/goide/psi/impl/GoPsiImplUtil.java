@@ -33,7 +33,6 @@ import java.util.List;
 
 public class GoPsiImplUtil {
   private static class Lazy {
-
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
     private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
   }
@@ -53,18 +52,22 @@ public class GoPsiImplUtil {
         return result instanceof PsiDirectory ? (PsiDirectory)result : null;
       }
     }
-
     return null;
   }
 
-  @Nullable
+  @NotNull
   public static PsiReference getReference(@NotNull GoTypeReferenceExpression o) {
     return new GoTypeReference(o);
   }
 
-  @Nullable
+  @NotNull
   public static PsiReference getReference(@NotNull GoLabelRef o) {
     return new GoLabelReference(o);
+  }
+
+  @NotNull
+  public static PsiReference getReference(@NotNull final GoReferenceExpression o) {
+    return new GoReference(o);
   }
 
   @NotNull
@@ -76,11 +79,6 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoReferenceExpression getQualifier(@NotNull GoReferenceExpression o) {
     return PsiTreeUtil.getChildOfType(o, GoReferenceExpression.class);
-  }
-
-  @Nullable
-  public static PsiReference getReference(@NotNull final GoReferenceExpression o) {
-    return new GoReference(o);
   }
 
   @SuppressWarnings("UnusedParameters")

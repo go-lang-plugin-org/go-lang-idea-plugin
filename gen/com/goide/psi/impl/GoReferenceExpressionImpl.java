@@ -28,7 +28,7 @@ public class GoReferenceExpressionImpl extends GoExpressionImpl implements GoRef
     return findNotNullChildByType(IDENTIFIER);
   }
 
-  @Nullable
+  @NotNull
   public PsiReference getReference() {
     return GoPsiImplUtil.getReference(this);
   }

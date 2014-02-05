@@ -28,7 +28,7 @@ public class GoLabelRefImpl extends GoCompositeElementImpl implements GoLabelRef
     return findNotNullChildByType(IDENTIFIER);
   }
 
-  @Nullable
+  @NotNull
   public PsiReference getReference() {
     return GoPsiImplUtil.getReference(this);
   }

@@ -11,7 +11,7 @@ public interface GoLabelRef extends GoCompositeElement {
   @NotNull
   PsiElement getIdentifier();
 
-  @Nullable
+  @NotNull
   PsiReference getReference();
 
 }

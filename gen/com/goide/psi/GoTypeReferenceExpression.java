@@ -11,7 +11,7 @@ public interface GoTypeReferenceExpression extends GoCompositeElement {
   @NotNull
   PsiElement getIdentifier();
 
-  @Nullable
+  @NotNull
   PsiReference getReference();
 
   @Nullable

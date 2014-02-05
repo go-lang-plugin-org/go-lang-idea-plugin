@@ -11,7 +11,7 @@ public interface GoReferenceExpression extends GoExpression {
   @NotNull
   PsiElement getIdentifier();
 
-  @Nullable
+  @NotNull
   PsiReference getReference();
 
   @Nullable
