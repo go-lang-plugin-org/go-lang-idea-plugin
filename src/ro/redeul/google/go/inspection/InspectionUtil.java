@@ -33,7 +33,7 @@ public class InspectionUtil {
     public static int getExpressionResultCount(GoExpr call) {
         if (call instanceof GoLiteralExpression
                 || call instanceof GoBinaryExpression
-                || call instanceof GoUnaryExpression
+                || (call instanceof GoUnaryExpression && ((GoUnaryExpression) call).getUnaryOp() != GoUnaryExpression.Op.Channel)
                 || call instanceof GoParenthesisedExpression
                 || call instanceof GoSelectorExpression
                 ) {
