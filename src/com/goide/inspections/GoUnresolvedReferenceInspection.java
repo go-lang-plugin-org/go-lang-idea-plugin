@@ -82,7 +82,8 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
           String name = id.getText();
           ASTNode next = FormatterUtil.getNextNonWhitespaceSibling(o.getNode());
           boolean isDot = next != null && next.getElementType() == GoTypes.DOT;
-          LocalQuickFix[] fixes = isDot ? new LocalQuickFix[]{} : new LocalQuickFix[]{new IntroduceTypeFix(id, name)};
+          boolean isProhibited = isDot || o.getQualifier() != null; // todo: create type in the package
+          LocalQuickFix[] fixes = isProhibited ? new LocalQuickFix[]{} : new LocalQuickFix[]{new IntroduceTypeFix(id, name)};
           problemsHolder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
@@ -92,8 +93,8 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
   private static class IntroduceTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     private final String myName;
 
-    protected IntroduceTypeFix(@NotNull PsiElement id, String name) {
-      super(id);
+    protected IntroduceTypeFix(@NotNull PsiElement element, String name) {
+      super(element);
       myName = name;
     }
 
