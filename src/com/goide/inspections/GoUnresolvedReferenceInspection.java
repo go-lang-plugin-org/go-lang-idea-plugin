@@ -1,6 +1,7 @@
 package com.goide.inspections;
 
 import com.goide.GoTypes;
+import com.goide.inspections.unresolved.GoIntroduceGlobalVariableFix;
 import com.goide.inspections.unresolved.GoIntroduceLocalVariableFix;
 import com.goide.inspections.unresolved.GoIntroduceTypeFix;
 import com.goide.psi.*;
@@ -35,8 +36,12 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         if (reference.resolve() == null) {
           PsiElement id = o.getIdentifier();
           String name = id.getText();
-          LocalQuickFix[] fixes = isProhibited(o, qualifier) ? new LocalQuickFix[]{} :
-                                  new LocalQuickFix[]{new GoIntroduceLocalVariableFix(id, name)};
+          LocalQuickFix[] fixes = !isProhibited(o, qualifier) ? 
+                                  new LocalQuickFix[]{
+                                    new GoIntroduceLocalVariableFix(id, name),
+                                    new GoIntroduceGlobalVariableFix(id, name),
+                                  } :
+                                  new LocalQuickFix[]{};
           problemsHolder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
