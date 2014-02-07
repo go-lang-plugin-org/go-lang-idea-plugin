@@ -94,7 +94,7 @@
     </context>
   </template>
   <template description='Type quick fix' id='go_lang_type_qf' name='type_qf' toReformat='true' toShortenFQNames='true'
-            value='type $NAME$ $TYPE$'>
+            value='type $NAME$$END$ $TYPE$&#10;&#10;'>
     <variable alwaysStopAt='true' defaultValue='' expression='complete' name='TYPE'/>
     <context>
       <option name='GO' value='true'/>
@@ -102,7 +102,6 @@
   </template>
   <template description='Local variable quick fix' id='go_lang_local_var_qf' name='go_lang_var_qf' toReformat='true' toShortenFQNames='true'
             value='$NAME$$END$ := $VALUE$&#10;'>
-    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
     <context>
       <option name='GO' value='true'/>

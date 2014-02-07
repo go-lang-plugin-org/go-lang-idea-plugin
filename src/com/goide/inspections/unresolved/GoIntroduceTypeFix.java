@@ -29,9 +29,7 @@ public class GoIntroduceTypeFix extends GoUnresolvedFixBase {
     TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(project);
     Template template = TemplateSettings.getInstance().getTemplateById("go_lang_type_qf");
     if (template != null) {
-      int start = decl.getTextRange().getStartOffset();
-      editor.getDocument().insertString(start, "\n\n");
-      editor.getCaretModel().moveToOffset(start);
+      editor.getCaretModel().moveToOffset(decl.getTextRange().getStartOffset());
       templateManager.startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
     }
   }

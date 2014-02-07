@@ -1,6 +1,6 @@
 package foo
 
-type A <caret>
+type A<caret> 
 
 func main() {
   a := &A{}
