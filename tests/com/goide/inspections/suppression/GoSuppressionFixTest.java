@@ -2,6 +2,10 @@ package com.goide.inspections.suppression;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.inspections.GoUnresolvedReferenceInspection;
+import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.util.containers.ContainerUtil;
+
+import java.util.List;
 
 public class GoSuppressionFixTest extends GoCodeInsightFixtureTestCase {
   @Override
@@ -44,7 +48,9 @@ public class GoSuppressionFixTest extends GoCodeInsightFixtureTestCase {
 
   private void doTest(String intentionMessage) {
     myFixture.configureByFile(getTestName(true) + ".go");
-    myFixture.launchAction(myFixture.findSingleIntention(intentionMessage));
+    IntentionAction action = ContainerUtil.getFirstItem(myFixture.filterAvailableIntentions(intentionMessage));
+    assertNotNull(action);
+    myFixture.launchAction(action);
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
 

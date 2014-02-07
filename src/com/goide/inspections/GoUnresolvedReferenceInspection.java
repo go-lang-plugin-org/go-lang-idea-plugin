@@ -1,6 +1,7 @@
 package com.goide.inspections;
 
 import com.goide.GoTypes;
+import com.goide.inspections.unresolved.GoIntroduceGlobalConstantFix;
 import com.goide.inspections.unresolved.GoIntroduceGlobalVariableFix;
 import com.goide.inspections.unresolved.GoIntroduceLocalVariableFix;
 import com.goide.inspections.unresolved.GoIntroduceTypeFix;
@@ -40,6 +41,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
                                   new LocalQuickFix[]{
                                     new GoIntroduceLocalVariableFix(id, name),
                                     new GoIntroduceGlobalVariableFix(id, name),
+                                    new GoIntroduceGlobalConstantFix(id, name),
                                   } :
                                   new LocalQuickFix[]{};
           problemsHolder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);

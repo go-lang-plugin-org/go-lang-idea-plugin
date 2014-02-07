@@ -114,6 +114,13 @@
       <option name='GO' value='true'/>
     </context>
   </template>
+  <template description='Global constant quick fix' id='go_lang_global_const_qf' name='global_const_qf' toReformat='true' toShortenFQNames='true'
+            value='const $NAME$$END$ = $VALUE$&#10;&#10;'>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
 
   <!-- TEST GENERATOR -->
   <template description='Test' id='go_lang_test' name='go_lang_test' toReformat='true' toShortenFQNames='true'
