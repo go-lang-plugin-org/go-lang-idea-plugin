@@ -5,8 +5,6 @@ import com.goide.inspections.GoUnresolvedReferenceInspection;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.util.containers.ContainerUtil;
 
-import java.util.List;
-
 public class GoSuppressionFixTest extends GoCodeInsightFixtureTestCase {
   @Override
   protected void setUp() throws Exception {
