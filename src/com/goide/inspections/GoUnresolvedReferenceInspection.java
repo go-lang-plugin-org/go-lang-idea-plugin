@@ -1,25 +1,18 @@
 package com.goide.inspections;
 
 import com.goide.GoTypes;
+import com.goide.inspections.unresolved.GoIntroduceLocalVariableFix;
+import com.goide.inspections.unresolved.GoIntroduceTypeFix;
 import com.goide.psi.*;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
-import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +35,9 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         if (reference.resolve() == null) {
           PsiElement id = o.getIdentifier();
           String name = id.getText();
-          problemsHolder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL);
+          LocalQuickFix[] fixes = isProhibited(o, qualifier) ? new LocalQuickFix[]{} :
+                                  new LocalQuickFix[]{new GoIntroduceLocalVariableFix(id, name)};
+          problemsHolder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
 
@@ -80,54 +75,17 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         if (reference.resolve() == null) {
           PsiElement id = o.getIdentifier();
           String name = id.getText();
-          ASTNode next = FormatterUtil.getNextNonWhitespaceSibling(o.getNode());
-          boolean isDot = next != null && next.getElementType() == GoTypes.DOT;
-          boolean isProhibited = isDot || o.getQualifier() != null; // todo: create type in the package
-          LocalQuickFix[] fixes = isProhibited ? new LocalQuickFix[]{} : new LocalQuickFix[]{new IntroduceTypeFix(id, name)};
+          boolean isProhibited = isProhibited(o, qualifier);
+          LocalQuickFix[] fixes = isProhibited ? new LocalQuickFix[]{} : new LocalQuickFix[]{new GoIntroduceTypeFix(id, name)};
           problemsHolder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
     });
   }
 
-  private static class IntroduceTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-    private final String myName;
-
-    protected IntroduceTypeFix(@NotNull PsiElement element, String name) {
-      super(element);
-      myName = name;
-    }
-
-    @Override
-    public void invoke(@NotNull Project project,
-                       @NotNull PsiFile file,
-                       @Nullable("is null when called from inspection") Editor editor,
-                       @NotNull PsiElement startElement,
-                       @NotNull PsiElement endElement) {
-      GoTopLevelDeclaration decl = PsiTreeUtil.getTopmostParentOfType(startElement, GoTopLevelDeclaration.class);
-      if (decl == null || !(decl.getParent() instanceof GoFile)) return;
-
-      if (editor == null) return;
-      TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(project);
-      Template template = TemplateSettings.getInstance().getTemplateById("go_lang_type_qf");
-      if (template != null) {
-        int start = decl.getTextRange().getStartOffset();
-        editor.getDocument().insertString(start, "\n\n");
-        editor.getCaretModel().moveToOffset(start);
-        templateManager.startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
-      }
-    }
-
-    @NotNull
-    @Override
-    public String getText() {
-      return "Create type '" + myName + "'";
-    }
-
-    @NotNull
-    @Override
-    public String getFamilyName() {
-      return "Go";
-    }
+  private static boolean isProhibited(@NotNull GoCompositeElement o, @Nullable GoCompositeElement qualifier) {
+    ASTNode next = FormatterUtil.getNextNonWhitespaceSibling(o.getNode());
+    boolean isDot = next != null && next.getElementType() == GoTypes.DOT;
+    return isDot || qualifier != null;
   }
 }
