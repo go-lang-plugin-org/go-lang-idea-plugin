@@ -133,8 +133,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                              @NotNull GoReferenceExpression qualifier,
                                              @NotNull MyScopeProcessor processor,
                                              @NotNull ResolveState state) {
-    PsiReference reference = qualifier.getReference();
-    PsiElement target = reference != null ? reference.resolve() : null;
+    PsiElement target = qualifier.getReference().resolve();
     if (target == null || target == qualifier) return false;
     if (target instanceof PsiDirectory) {
       processDirectory((PsiDirectory)target, file, null, processor, state, false);

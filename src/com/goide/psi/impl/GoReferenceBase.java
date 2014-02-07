@@ -246,8 +246,7 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
         }
       });
       for (GoTypeReferenceExpression ref : refs) {
-        PsiReference reference = ref.getReference();
-        PsiElement typeSpec = reference != null ? reference.resolve() : null;
+        PsiElement typeSpec = ref.getReference().resolve();
         if (typeSpec != null && !PsiTreeUtil.isAncestor(typeSpec, type, true)) {
           if (typeSpec instanceof GoTypeSpec) {
             processInType(result, typeSpec, ((GoTypeSpec)typeSpec).getType());

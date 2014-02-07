@@ -39,7 +39,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         PsiReference qualifierRef = qualifier != null ? qualifier.getReference() : null;
         PsiElement qualifierResolve = qualifierRef != null ? qualifierRef.resolve() : null;
         if (qualifier != null && qualifierResolve == null) return;
-        if (reference == null || reference.resolve() == null) {
+        if (reference.resolve() == null) {
           PsiElement id = o.getIdentifier();
           String name = id.getText();
           problemsHolder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL);
@@ -64,7 +64,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
       public void visitLabelRef(@NotNull GoLabelRef o) {
         PsiReference reference = o.getReference();
         String name = o.getText();
-        if (reference == null || reference.resolve() == null) {
+        if (reference.resolve() == null) {
           problemsHolder.registerProblem(o, "Unresolved label " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL);
         }
       }
@@ -77,7 +77,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         PsiReference qualifierRef = qualifier != null ? qualifier.getReference() : null;
         PsiElement qualifierResolve = qualifierRef != null ? qualifierRef.resolve() : null;
         if (qualifier != null && qualifierResolve == null) return;
-        if (reference == null || reference.resolve() == null) {
+        if (reference.resolve() == null) {
           PsiElement id = o.getIdentifier();
           String name = id.getText();
           ASTNode next = FormatterUtil.getNextNonWhitespaceSibling(o.getNode());
