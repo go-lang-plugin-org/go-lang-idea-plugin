@@ -96,4 +96,13 @@ func (t *StructT) MethodGet() func(string,string)bool {
 	return t.Method1
 }
 
+func testChan() {
+	ch := make(chan int)
+	go func() {
+		if _, ok := <- ch; ok {
+
+		}
+	}()
+	ch <- 1
+}
 
