@@ -1,6 +1,6 @@
 package com.goide.quickfix;
 
-import com.goide.inspections.GoUnresolvedReferenceInspection;
+import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 
 public class GoCreateGlobalConstQuickFixTest extends GoQuickFixTestBase {
   @Override

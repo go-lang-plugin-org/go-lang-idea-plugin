@@ -78,7 +78,7 @@
 
     <localInspection language="go" displayName="Unresolved reference inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoUnresolvedReferenceInspection"/>
+                     implementationClass="com.goide.inspections.unresolved.GoUnresolvedReferenceInspection"/>
     <localInspection language="go" displayName="Unused import inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnusedImportDeclaration"/>

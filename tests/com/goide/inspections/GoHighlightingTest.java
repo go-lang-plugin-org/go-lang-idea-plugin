@@ -1,6 +1,7 @@
 package com.goide.inspections;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 
 public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   @Override

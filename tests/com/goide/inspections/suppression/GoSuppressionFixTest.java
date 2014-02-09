@@ -1,7 +1,7 @@
 package com.goide.inspections.suppression;
 
 import com.goide.GoCodeInsightFixtureTestCase;
-import com.goide.inspections.GoUnresolvedReferenceInspection;
+import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.util.containers.ContainerUtil;
 

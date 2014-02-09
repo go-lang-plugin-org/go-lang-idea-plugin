@@ -1,6 +1,7 @@
-package com.goide.inspections;
+package com.goide.inspections.unresolved;
 
 import com.goide.GoTypes;
+import com.goide.inspections.GoInspectionBase;
 import com.goide.inspections.unresolved.GoIntroduceGlobalConstantFix;
 import com.goide.inspections.unresolved.GoIntroduceGlobalVariableFix;
 import com.goide.inspections.unresolved.GoIntroduceLocalVariableFix;
