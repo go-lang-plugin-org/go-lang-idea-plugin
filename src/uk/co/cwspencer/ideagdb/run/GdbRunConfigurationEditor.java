@@ -36,6 +36,7 @@ public class GdbRunConfigurationEditor<T extends GdbRunConfiguration> extends Se
     private RawCommandLineEditor envVars;
     private JCheckBox runGoVetBeforeCheckBox;
     private JCheckBox autoStartGdb;
+    private JLabel gdbVersionWarning;
 
     public GdbRunConfigurationEditor(final Project project) {
         applicationName.getButton().addActionListener(
@@ -101,11 +102,15 @@ public class GdbRunConfigurationEditor<T extends GdbRunConfiguration> extends Se
 
     @Override
     protected void applyEditorTo(T configuration) throws ConfigurationException {
-        if (m_gdbPath.getText().isEmpty()) {
+        String gdbPath = m_gdbPath.getText();
+        if (gdbPath.isEmpty()) {
             throw new ConfigurationException("Please select the path to gdb.");
-        } else if (!GoGdbUtil.isValidGdbPath(m_gdbPath.getText())){
+        } else if (!GoGdbUtil.isValidGdbPath(gdbPath)){
             throw new ConfigurationException("Please select a valid path to gdb.");
+        } else {
+            gdbVersionWarning.setVisible(!GoGdbUtil.isKnownGdb(gdbPath));
         }
+
         if (applicationName.getText().length() == 0)
             throw new ConfigurationException("Please select the file to run.");
         if (!buildBeforeRunCheckBox.isSelected() || buildDirectoryPathBrowser.getText().equals("")) {
