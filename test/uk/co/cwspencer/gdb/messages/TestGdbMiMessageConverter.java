@@ -2,10 +2,9 @@ package uk.co.cwspencer.gdb.messages;
 
 import org.junit.Assert;
 import org.junit.Test;
-import uk.co.cwspencer.gdb.gdbmi.GdbMiParser;
+import uk.co.cwspencer.gdb.gdbmi.GdbMiParser2;
 import uk.co.cwspencer.gdb.gdbmi.GdbMiRecord;
 import uk.co.cwspencer.gdb.gdbmi.GdbMiResultRecord;
-import uk.co.cwspencer.gdb.messages.*;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -22,7 +21,7 @@ public class TestGdbMiMessageConverter
 	public void testConnectedEvent() throws UnsupportedEncodingException
 	{
 		// Parse the message
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"^connected,addr=\"0xfe00a300\",func=\"??\",args=[]\r\n" +
 			"(gdb)\r\n";
@@ -48,7 +47,7 @@ public class TestGdbMiMessageConverter
 	public void testErrorEvent() throws UnsupportedEncodingException
 	{
 		// Parse the message
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"^error,msg=\"mi_cmd_exec_interrupt: Inferior not executing.\"\r\n" +
 			"(gdb)\r\n";
@@ -72,7 +71,7 @@ public class TestGdbMiMessageConverter
 	public void testExitEvent() throws UnsupportedEncodingException
 	{
 		// Parse the message
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"^exit\r\n";
 		parser.process(messageStr.getBytes("US-ASCII"));
@@ -92,7 +91,7 @@ public class TestGdbMiMessageConverter
 	public void testStoppedEvent() throws UnsupportedEncodingException
 	{
 		// Parse the message
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"*stopped," +
 			"reason=\"breakpoint-hit\"," +
@@ -164,7 +163,7 @@ public class TestGdbMiMessageConverter
 	public void testRunningEvent() throws UnsupportedEncodingException
 	{
 		// Parse the message
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"*running,thread-id=\"2\"\r\n" +
 			"*running,thread-id=\"all\"\r\n" +
@@ -203,7 +202,7 @@ public class TestGdbMiMessageConverter
 	public void testStackTrace() throws UnsupportedEncodingException
 	{
 		// Parse the message
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"^done," +
 			"stack=[" +
@@ -264,7 +263,7 @@ public class TestGdbMiMessageConverter
 	public void testBreakpoint() throws UnsupportedEncodingException
 	{
 		// Parse the message
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"^done," +
 			"bkpt={" +

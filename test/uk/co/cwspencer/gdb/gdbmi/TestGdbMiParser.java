@@ -2,13 +2,12 @@ package uk.co.cwspencer.gdb.gdbmi;
 
 import org.junit.Assert;
 import org.junit.Test;
-import uk.co.cwspencer.gdb.gdbmi.*;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
- * Tests for GdbMiParser.
+ * Tests for GdbMiParser2.
  */
 public class TestGdbMiParser
 {
@@ -19,7 +18,7 @@ public class TestGdbMiParser
 	public void testBadCommand() throws UnsupportedEncodingException
 	{
 		// Input: -rubbish
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr = "^error,msg=\"Undefined MI command: rubbish\"\r\n(gdb)\r\n";
 		parser.process(messageStr.getBytes("US-ASCII"));
 
@@ -50,7 +49,7 @@ public class TestGdbMiParser
 	public void testSetBreakpoint() throws UnsupportedEncodingException
 	{
 		// Input: -break-insert main
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"^done," +
 			"bkpt={" +
@@ -184,7 +183,7 @@ public class TestGdbMiParser
 	public void testExecution() throws UnsupportedEncodingException
 	{
 		// Input: -exec-run
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		{
 			String messageStr = "^running\r\n(gdb)\r\n";
 			parser.process(messageStr.getBytes("US-ASCII"));
@@ -421,7 +420,7 @@ public class TestGdbMiParser
 	public void testToken() throws UnsupportedEncodingException
 	{
 		// Input: 12345print 1+2
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr = "12345^done\r\n(gdb)\r\n";
 		parser.process(messageStr.getBytes("US-ASCII"));
 
@@ -446,7 +445,7 @@ public class TestGdbMiParser
 	@Test
 	public void testStringEscape() throws UnsupportedEncodingException
 	{
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"~\">>\\a\\b\\f\\n\\r\\t\\v\\'||\\\"\\\\\\?\\5\\66\\777\\38\\xag\\xaf\\xbcd<<\"\r\n" +
 			"(gdb)\r\n";
@@ -473,7 +472,7 @@ public class TestGdbMiParser
 	@Test
 	public void testCr() throws UnsupportedEncodingException
 	{
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"~\"foo\"\r" +
 			"~\"bar\"\r\n" +
@@ -511,7 +510,7 @@ public class TestGdbMiParser
 	@Test
 	public void testTuplesAndLists() throws UnsupportedEncodingException
 	{
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"*stopped,test={}\r\n" +
 			"*stopped,test=[]\r\n" +
@@ -679,7 +678,7 @@ public class TestGdbMiParser
 	@Test
 	public void testMissingGdbSuffix() throws UnsupportedEncodingException
 	{
-		GdbMiParser parser = new GdbMiParser();
+		GdbMiParser2 parser = new GdbMiParser2(null);
 		String messageStr =
 			"*stopped," +
 			"reason=\"breakpoint-hit\"," +
