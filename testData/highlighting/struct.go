@@ -75,3 +75,14 @@ type inte struct {
 type aaa interface {
     String() int
 }
+
+type inte2 struct {
+    byte1 struct {
+        int
+        <error>int</error>
+    }
+    <error>byte1</error> struct {
+        int
+        <error>int</error>
+    }
+}

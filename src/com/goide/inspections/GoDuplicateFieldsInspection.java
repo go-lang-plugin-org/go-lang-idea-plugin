@@ -17,9 +17,9 @@ public class GoDuplicateFieldsInspection extends GoInspectionBase {
     if (!(file instanceof GoFile)) return;
     file.accept(new GoRecursiveVisitor() {
       @Override
-      public void visitStructType(@NotNull GoStructType o) {
+      public void visitStructType(@NotNull final GoStructType type) {
         final List<GoNamedElement> fields = ContainerUtil.newArrayList();
-        o.accept(new GoRecursiveVisitor() {
+        type.accept(new GoRecursiveVisitor() {
           @Override
           public void visitFieldDefinition(@NotNull GoFieldDefinition o) {
             fields.add(o);
@@ -28,6 +28,11 @@ public class GoDuplicateFieldsInspection extends GoInspectionBase {
           @Override
           public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
             fields.add(o);
+          }
+
+          @Override
+          public void visitType(@NotNull GoType o) {
+            if (o == type) super.visitType(o); 
           }
         });
         Set<String> names = ContainerUtil.newHashSet();
@@ -42,7 +47,7 @@ public class GoDuplicateFieldsInspection extends GoInspectionBase {
             }
           }
         }
-        super.visitStructType(o);
+        super.visitStructType(type);
       }
     });
   }
