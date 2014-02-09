@@ -261,12 +261,16 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             name = id.getText();
         }
 
-        if (argumentCount < expectedCount) {
-            result.addProblem(call, GoBundle.message("error.not.enough.arguments.in.call", name));
-        } else if (argumentCount > expectedCount) {
-            result.addProblem(call, GoBundle.message("error.too.many.arguments.in.call", name));
-        } else {
+        if (expectedCount == VARIADIC_COUNT) {
             GoTypeInspectUtil.checkFunctionTypeArguments(call, result);
+        } else {
+            if (argumentCount < expectedCount) {
+                result.addProblem(call, GoBundle.message("error.not.enough.arguments.in.call", name));
+            } else if (argumentCount > expectedCount) {
+                result.addProblem(call, GoBundle.message("error.too.many.arguments.in.call", name));
+            } else {
+                GoTypeInspectUtil.checkFunctionTypeArguments(call, result);
+            }
         }
     }
 }

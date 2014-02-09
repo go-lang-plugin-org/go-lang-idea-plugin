@@ -223,8 +223,8 @@ public class GoTypeInspectUtil {
                 return;
             GoPsiType type = functionParameter.getType();
             if (functionParameter.isVariadic()) {
-                GoExpr goExpr = goExprs[index];
-                for (; index < goExprs.length; index++)
+                for (; index < goExprs.length; index++){
+                    GoExpr goExpr = goExprs[index];
                     if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                         result.addProblem(
                                 goExpr,
@@ -232,6 +232,7 @@ public class GoTypeInspectUtil {
                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
                         return;
                     }
+                }
             } else {
                 GoLiteralIdentifier[] identifiers = functionParameter.getIdentifiers();
                 if (identifiers.length < 2) {
