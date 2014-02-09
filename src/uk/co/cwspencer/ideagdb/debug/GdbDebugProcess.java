@@ -175,7 +175,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
                         m_gdbRawConsole.getPreferredFocusableComponent());
                 gdbConsoleContent.setCloseable(false);
 
-                ui.addContent(gdbConsoleContent, 3, PlaceInGrid.bottom, true);
+                ui.addContent(gdbConsoleContent, 3, PlaceInGrid.bottom, false);
 
                 gdbConsoleContent = ui.createContent("GdbConsoleContent",
                         m_gdbConsole.getComponent(), "GDB Console", AllIcons.Debugger.Console,
