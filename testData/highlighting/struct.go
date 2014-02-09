@@ -86,3 +86,12 @@ type inte2 struct {
         <error>int</error>
     }
 }
+
+type aaa interface {
+    Str()
+    <error>Str</error>() interface {
+          A()
+          b()
+          <error>A</error>()
+    }
+}

@@ -2,6 +2,7 @@ package com.goide.inspections;
 
 import com.goide.psi.*;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 
-public class GoDuplicateFieldsInspection extends GoInspectionBase {
+public class GoDuplicateFieldsOrMethodsInspection extends GoInspectionBase {
   @Override
   protected void checkFile(PsiFile file, final ProblemsHolder problemsHolder) {
     if (!(file instanceof GoFile)) return;
@@ -35,20 +36,31 @@ public class GoDuplicateFieldsInspection extends GoInspectionBase {
             if (o == type) super.visitType(o); 
           }
         });
-        Set<String> names = ContainerUtil.newHashSet();
-        for (GoCompositeElement field : fields) {
-          if (field instanceof GoNamedElement) {
-            String name = ((GoNamedElement)field).getName();
-            if (names.contains(name)) {
-              problemsHolder.registerProblem(field, "Duplicate field " + "'" + name + "'", GENERIC_ERROR_OR_WARNING);
-            }
-            else {
-              names.add(name);
-            }
-          }
-        }
+        check(fields, problemsHolder, "field");
         super.visitStructType(type);
       }
+
+      @Override
+      public void visitInterfaceType(@NotNull GoInterfaceType o) {
+        check(o.getMethodSpecList(), problemsHolder, "method");
+        super.visitInterfaceType(o);
+      }
     });
+  }
+
+  private static void check(@NotNull List<? extends GoNamedElement> fields, @NotNull ProblemsHolder problemsHolder, @NotNull String what) {
+    Set<String> names = ContainerUtil.newHashSet();
+    for (GoCompositeElement field : fields) {
+      if (field instanceof GoNamedElement) {
+        String name = ((GoNamedElement)field).getName();
+        if (names.contains(name)) {
+          PsiElement id = ((GoNamedElement)field).getIdentifier();
+          problemsHolder.registerProblem(id != null ? id : field, "Duplicate " + what + " " + "'" + name + "'", GENERIC_ERROR_OR_WARNING);
+        }
+        else {
+          names.add(name);
+        }
+      }
+    }
   }
 }

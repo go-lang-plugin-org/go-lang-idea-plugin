@@ -82,9 +82,9 @@
     <localInspection language="go" displayName="Unused import inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnusedImportDeclaration"/>
-    <localInspection language="go" displayName="Duplicate fields inspection"
+    <localInspection language="go" displayName="Duplicate fields and methods inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR" 
-                     implementationClass="com.goide.inspections.GoDuplicateFieldsInspection"/>
+                     implementationClass="com.goide.inspections.GoDuplicateFieldsOrMethodsInspection"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"
