@@ -29,6 +29,7 @@ public class InspectionUtil {
     }
 
     public static final int UNKNOWN_COUNT = -1;
+    public static final int VARIADIC_COUNT = -2;
 
     public static int getExpressionResultCount(GoExpr call) {
         if (call instanceof GoLiteralExpression
@@ -94,7 +95,7 @@ public class InspectionUtil {
         for (GoFunctionParameter p : function.getParameters()) {
             count += Math.max(p.getIdentifiers().length, 1);
             if (p.isVariadic()) {
-                return UNKNOWN_COUNT;
+                return VARIADIC_COUNT;
             }
         }
         return count;

@@ -140,6 +140,10 @@ func HandleIFunc(fn func()iFunc) {
 
 }
 
+func HandleVariadic(c string, arg... int) {
+
+}
+
 type Foo struct {
 
 }
@@ -441,5 +445,11 @@ func main() {
 	HandleMyStruct(struct{a int; b string}{})
 	myStruct := MyStruct{}
 	HandleFunc("/",myStruct.TestHandle)
+
+	// issue #586
+	HandleVariadic("", 1, 2, 3)
+	HandleVariadic("", 1, 2, /*begin*/"4"/*end.Expression type mismatch, the expected type is int|CastTypeFix*/)
+	HandleVariadic("", /*begin*/"4"/*end.Expression type mismatch, the expected type is int|CastTypeFix*/)
+
 
 }
