@@ -62,3 +62,16 @@ func main() {
     t.name()
     t2 := t.createT()
 }
+
+type inte struct {
+    aa int
+    <error>aa</error>, bbb int
+    byte1 struct {
+        aaa
+        <error>aaa</error>
+    }
+}
+
+type aaa interface {
+    String() int
+}

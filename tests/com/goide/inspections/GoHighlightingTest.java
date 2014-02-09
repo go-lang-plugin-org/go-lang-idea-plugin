@@ -7,7 +7,10 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    myFixture.enableInspections(new GoUnresolvedReferenceInspection());
+    myFixture.enableInspections(
+      new GoUnresolvedReferenceInspection(),
+      new GoDuplicateFieldsInspection()
+    );
   }
 
   private void doTest() throws Exception {
