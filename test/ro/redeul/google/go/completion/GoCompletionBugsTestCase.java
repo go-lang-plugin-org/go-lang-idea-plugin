@@ -9,4 +9,8 @@ public class GoCompletionBugsTestCase extends GoCompletionTestCase{
         doTestVariants();
     }
 
+    public void testGH530_MissingFunctionName() {
+        doTestVariants();
+    }
+
 }
