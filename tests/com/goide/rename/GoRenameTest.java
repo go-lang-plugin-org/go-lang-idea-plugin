@@ -12,6 +12,11 @@ public class GoRenameTest extends GoCodeInsightFixtureTestCase {
     doTest("package foo; type A<caret> struct {*A}; func foo(a A) {a.A}", "B",
            "package foo; type B<caret> struct {*B}; func foo(a B) {a.B}");
   }
+  
+  public void testLabel() throws Exception {
+    doTest("package foo; func foo() {a:{}; goto <caret>a}", "b",
+           "package foo; func foo() {b:{}; goto <caret>b}");
+  }
 
   private void doTest(String before, String newName, String after) {
     myFixture.configureByText("foo.go", before);

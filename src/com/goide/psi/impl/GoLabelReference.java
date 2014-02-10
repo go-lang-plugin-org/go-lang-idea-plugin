@@ -10,6 +10,7 @@ import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,4 +53,11 @@ public class GoLabelReference extends PsiReferenceBase<GoLabelRef> {
     }
     return ArrayUtil.toObjectArray(result);
   }
+  
+  @Override
+  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+    myElement.replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
+    return myElement;
+  }
+  
 }
