@@ -156,15 +156,6 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     @Override
     public Icon getIcon(boolean open) {
       if (!myElement.isValid()) return null;
-      if (myElement instanceof GoMethodDeclaration) return GoIcons.METHOD;
-      if (myElement instanceof GoFunctionDeclaration) return GoIcons.FUNCTION;
-      if (myElement instanceof GoTypeSpec) return GoIcons.TYPE;
-      if (myElement instanceof GoVarDefinition) return GoIcons.VARIABLE;
-      if (myElement instanceof GoConstDefinition) return GoIcons.CONST;
-      if (myElement instanceof GoFieldDefinition) return GoIcons.FIELD;
-      if (myElement instanceof GoMethodSpec) return GoIcons.METHOD;
-      if (myElement instanceof GoAnonymousFieldDefinition) return GoIcons.FIELD;
-      if (myElement instanceof GoParamDefinition) return GoIcons.PARAMETER;
       return myElement.getIcon(0);
     }
   }

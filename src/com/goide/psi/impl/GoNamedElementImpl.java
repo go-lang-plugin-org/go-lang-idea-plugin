@@ -1,8 +1,7 @@
 package com.goide.psi.impl;
 
-import com.goide.psi.GoCompositeElement;
-import com.goide.psi.GoNamedElement;
-import com.goide.psi.GoType;
+import com.goide.GoIcons;
+import com.goide.psi.*;
 import com.goide.stubs.GoNamedStub;
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.lang.ASTNode;
@@ -16,6 +15,8 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 
 public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends StubBasedPsiElementBase<T> implements GoCompositeElement, GoNamedElement {
 
@@ -86,5 +87,20 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends StubB
                                      PsiElement lastParent,
                                      @NotNull PsiElement place) {
     return GoCompositeElementImpl.precessDeclarationDefault(this, processor, state, lastParent, place);
+  }
+
+  @Nullable
+  @Override
+  public Icon getIcon(int flags) {
+    if (this instanceof GoMethodDeclaration) return GoIcons.METHOD;
+    if (this instanceof GoFunctionDeclaration) return GoIcons.FUNCTION;
+    if (this instanceof GoTypeSpec) return GoIcons.TYPE;
+    if (this instanceof GoVarDefinition) return GoIcons.VARIABLE;
+    if (this instanceof GoConstDefinition) return GoIcons.CONST;
+    if (this instanceof GoFieldDefinition) return GoIcons.FIELD;
+    if (this instanceof GoMethodSpec) return GoIcons.METHOD;
+    if (this instanceof GoAnonymousFieldDefinition) return GoIcons.FIELD;
+    if (this instanceof GoParamDefinition) return GoIcons.PARAMETER;
+    return super.getIcon(flags);
   }
 }
