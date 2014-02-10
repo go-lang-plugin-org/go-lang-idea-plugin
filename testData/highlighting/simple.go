@@ -12,7 +12,7 @@ func (b *Boom) Run(a aaa) (r1 aaa, r2 aaa) {
    b.err + a + r1 + r2
 }
 
-func foo() {
+func <warning>foo</warning>() {
     i := 1
     for (i) {return 0}
     if (i) {return <error>j</error>}
@@ -35,7 +35,7 @@ func (tp *T) Mp(f float32) float32 { return 1 }  // pointer receiver
 
 var t T
 
-func bar() {
+func <warning>bar</warning>() {
     t.Mv(7)
     T.<error>Mv</error>(t, 7) // todo: only simple type with ctors
     (T).Mv(t, 7)
@@ -44,7 +44,7 @@ func bar() {
 }
 
 
-func foo() {
+func <warning>foo</warning>() {
     a := &A{}
     b := &B{b:"bbb"}
     e := &Empty{}
@@ -76,7 +76,7 @@ func (this *Empty) hola() {
 type AA struct {
     N int
 }
-func BenchmarkName(b *AA) {
+func <warning>BenchmarkName</warning>(b *AA) {
      b.N
 }
 
@@ -86,7 +86,7 @@ func make(o interface{}, args ...interface{}) {
 func new(o interface{}) {
 }
 
-func concurrently(integers []int) []int {
+func <warning>concurrently</warning>(integers []int) []int {
   ch := make(chan int)
   <error>responses</error> := []int{}
   for _, i := range integers {
@@ -107,7 +107,7 @@ func concurrently(integers []int) []int {
 func Println(o ...interface{})  {
 }
 
-func innerTypes() {
+func <warning>innerTypes</warning>() {
 	type connError struct {
 		cn  int
 	}
@@ -119,8 +119,8 @@ type Iface interface {
   Boo() int
 }
 
-func goo(st interface {Foo()}, st1 Iface) {
+func <warning>goo</warning>(st interface {Foo()}, st1 Iface) {
     Println(st.Foo() + st1.Boo())
 }
 
-func labelsCheck() { goto Label1; Label1: 1; goto <error>Label2</error>}
+func <warning>labelsCheck</warning>() { goto Label1; Label1: 1; goto <error>Label2</error>}

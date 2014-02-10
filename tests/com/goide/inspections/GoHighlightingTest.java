@@ -2,6 +2,7 @@ package com.goide.inspections;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
+import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
 import com.goide.inspections.unresolved.GoUnusedVariableInspection;
 
 public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
@@ -11,7 +12,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.enableInspections(
       new GoUnresolvedReferenceInspection(),
       new GoDuplicateFieldsOrMethodsInspection(),
-      new GoUnusedVariableInspection()
+      new GoUnusedVariableInspection(),
+      new GoUnusedFunctionInspection()
     );
   }
 
