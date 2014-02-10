@@ -187,19 +187,12 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
                         if (proc.waitFor() == 0) {
                             VirtualFileManager.getInstance().syncRefresh();
-
                             consoleView.print(String.format("%nFinished running go vet on project %s%n", projectDir), ConsoleViewContentType.NORMAL_OUTPUT);
                         } else {
                             consoleView.print(String.format("%nCouldn't vet project %s%n", projectDir), ConsoleViewContentType.ERROR_OUTPUT);
-
                             throw new CantRunException(String.format("Error while processing %s vet command.", goExecName));
                         }
-
-
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        Messages.showErrorDialog(String.format("Error while processing %s vet command.", goExecName), "Error on Google Go Plugin");
-
                         throw new CantRunException(String.format("Error while processing %s vet command.", goExecName));
                     }
                 }
@@ -274,17 +267,12 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
                     if (proc.waitFor() == 0) {
                         VirtualFileManager.getInstance().syncRefresh();
-
                         consoleView.print(String.format("%nFinished building project %s%n", execName), ConsoleViewContentType.NORMAL_OUTPUT);
                     } else {
                         consoleView.print(String.format("%nCould't build project %s%n", execName), ConsoleViewContentType.ERROR_OUTPUT);
+                        throw new CantRunException(String.format("Error while processing %s build command.", goExecName));
                     }
-
-
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    Messages.showErrorDialog(String.format("Error while processing %s build command.", goExecName), "Error on Google Go Plugin");
-
                     throw new CantRunException(String.format("Error while processing %s build command.", goExecName));
                 }
 
