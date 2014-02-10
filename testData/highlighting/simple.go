@@ -88,7 +88,7 @@ func new(o interface{}) {
 
 func concurrently(integers []int) []int {
   ch := make(chan int)
-  responses := []int{}
+  <error>responses</error> := []int{}
   for _, i := range integers {
       go func(j int) {
           ch <- j * j

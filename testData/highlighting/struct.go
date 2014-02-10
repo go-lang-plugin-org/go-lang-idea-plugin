@@ -61,6 +61,7 @@ func main() {
     t := foo()
     t.name()
     t2 := t.createT()
+    Println(t2)
 }
 
 type inte struct {

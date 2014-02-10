@@ -13,7 +13,7 @@ func main() {
     //v3:= &BigBox{}.SmallBox  // todo: should be an error
     A := v1.AnyMagicItem
     B := v2.Color()
-    bigBox.AnyMagicItem = false || A
+    bigBox.AnyMagicItem = false || A + B
     Println(v1)          // => 60
     Println(v2)          // => 60
     Println(bigBox.Capacity())          // => 60
