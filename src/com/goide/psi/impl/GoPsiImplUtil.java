@@ -66,7 +66,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static PsiReference getReference(@NotNull final GoReferenceExpression o) {
+  public static GoReference getReference(@NotNull final GoReferenceExpression o) {
     return new GoReference(o);
   }
 

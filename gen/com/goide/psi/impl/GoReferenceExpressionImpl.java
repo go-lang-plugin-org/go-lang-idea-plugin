@@ -29,7 +29,7 @@ public class GoReferenceExpressionImpl extends GoExpressionImpl implements GoRef
   }
 
   @NotNull
-  public PsiReference getReference() {
+  public GoReference getReference() {
     return GoPsiImplUtil.getReference(this);
   }
 

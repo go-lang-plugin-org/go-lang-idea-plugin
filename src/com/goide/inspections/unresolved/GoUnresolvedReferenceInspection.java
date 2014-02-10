@@ -2,11 +2,8 @@ package com.goide.inspections.unresolved;
 
 import com.goide.GoTypes;
 import com.goide.inspections.GoInspectionBase;
-import com.goide.inspections.unresolved.GoIntroduceGlobalConstantFix;
-import com.goide.inspections.unresolved.GoIntroduceGlobalVariableFix;
-import com.goide.inspections.unresolved.GoIntroduceLocalVariableFix;
-import com.goide.inspections.unresolved.GoIntroduceTypeFix;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoReference;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -14,6 +11,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveResult;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import org.jetbrains.annotations.NotNull;
@@ -30,14 +28,18 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
       @Override
       public void visitReferenceExpression(@NotNull GoReferenceExpression o) {
         super.visitReferenceExpression(o);
-        PsiReference reference = o.getReference();
+        GoReference reference = o.getReference();
         GoReferenceExpression qualifier = o.getQualifier();
-        PsiReference qualifierRef = qualifier != null ? qualifier.getReference() : null;
+        GoReference qualifierRef = qualifier != null ? qualifier.getReference() : null;
         PsiElement qualifierResolve = qualifierRef != null ? qualifierRef.resolve() : null;
         if (qualifier != null && qualifierResolve == null) return;
-        if (reference.resolve() == null) {
-          PsiElement id = o.getIdentifier();
-          String name = id.getText();
+        ResolveResult[] results = reference.multiResolve(false);
+        PsiElement id = o.getIdentifier();
+        String name = id.getText();
+        if (results.length > 1) {
+          problemsHolder.registerProblem(id, "Ambiguous reference " + "'" + name + "'", GENERIC_ERROR_OR_WARNING);
+        }
+        else if (reference.resolve() == null) {
           LocalQuickFix[] fixes = !isProhibited(o, qualifier) ? 
                                   new LocalQuickFix[]{
                                     new GoIntroduceLocalVariableFix(id, name),

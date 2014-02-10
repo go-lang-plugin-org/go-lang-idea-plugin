@@ -12,7 +12,7 @@ public interface GoReferenceExpression extends GoExpression {
   PsiElement getIdentifier();
 
   @NotNull
-  PsiReference getReference();
+  com.goide.psi.impl.GoReference getReference();
 
   @Nullable
   GoReferenceExpression getQualifier();
