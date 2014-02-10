@@ -48,7 +48,12 @@
     <lang.namesValidator language="go" implementationClass="com.goide.GoNamesValidator"/>
     <lang.findUsagesProvider language="go" implementationClass="com.goide.GoFindUsagesProvider"/>
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
+    
+    <!--formatter-->
     <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
+    <codeStyleSettingsProvider implementation="com.goide.formatter.settings.GoCodeStyleSettingsProvider"/>
+    <langCodeStyleSettingsProvider implementation="com.goide.formatter.settings.GoLanguageCodeStyleSettingsProvider"/>
+    
     <renamePsiElementProcessor implementation="com.goide.refactor.GoAnonymousFieldProcessor"/>
 
     <gotoSymbolContributor implementation="com.goide.go.GoSymbolContributor"/>
