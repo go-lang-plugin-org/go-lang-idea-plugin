@@ -119,7 +119,10 @@ type Iface interface {
   Boo() int
 }
 
+const name1 int = 10
+
 func <warning>goo</warning>(st interface {Foo()}, st1 Iface) {
+    <error>name1</error>, <error>name1</error> = 1, 2
     Println(st.Foo() + st1.Boo())
 }
 
