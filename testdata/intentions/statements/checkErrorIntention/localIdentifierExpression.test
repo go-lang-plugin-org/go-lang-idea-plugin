@@ -1,0 +1,15 @@
+package main
+
+func main() {
+    str,fn := "",func()error{return nil}
+    fn(<caret>)
+}
+-----
+package main
+
+func main() {
+    str,fn := "",func()error{return nil}
+	if fn() != nil {
+		//TODO: Handle error(s)
+	}<caret>
+}

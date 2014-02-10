@@ -7,6 +7,8 @@
     <li>[feature] Fix: Covert or Assert the type of the expression to the expected type in function calls and returns</li>
     <li>[feature] Intention: For range over expressions</li>
     <li>[feature] Intention: Generate if block over boolean expressions</li>
+    <li>[feature] Inspection: Check type of index on index expressions</li>
+    <li>[feature] Intention: Generate if block over expressions which return errors</li>
 </ul>
 <h3>0.9.15.3 changes:</h3>
 <ul>

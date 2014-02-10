@@ -67,6 +67,7 @@
                 <li>[feature] Intention: For range over expressions</li>
                 <li>[feature] Intention: Generate if block over boolean expressions</li>
                 <li>[feature] Inspection: Check type of index on index expressions</li>
+                <li>[feature] Intention: Generate if block over expressions which return errors</li>
             </ul>
         <h3>0.9.15.3 changes:</h3>
             <ul>
@@ -683,6 +684,12 @@
             <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
             <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
             <className>ro.redeul.google.go.intentions.statements.ConvertStatementToForRangeIntention</className>
+        </intentionAction>
+
+        <intentionAction>
+            <bundleName>ro.redeul.google.go.intentions.GoIntentionsBundle</bundleName>
+            <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
+            <className>ro.redeul.google.go.intentions.statements.CheckErrorIntention</className>
         </intentionAction>
 
     </extensions>
