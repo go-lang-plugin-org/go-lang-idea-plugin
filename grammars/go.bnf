@@ -335,8 +335,8 @@ left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchG
 TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' 'type' ')' {pin=5}
 TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
-private TypeList ::= Type ( ',' Type )*
-private TypeListNoPin ::= Type ( ',' Type )*
+TypeList ::= Type ( ',' Type )* {extends=Type}
+TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
 ForStatement ::= for ([ForClause | RangeClause] Block | <<enterMode "NO_EMPTY_LITERAL">> Expression <<exitMode "NO_EMPTY_LITERAL">> Block)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
 RangeClause ::= ( ExpressionList '=' | VarDefinitionList ':=' ) range Expression {pin=2}

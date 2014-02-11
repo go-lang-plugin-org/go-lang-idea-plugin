@@ -31,13 +31,14 @@ GO_FILE
         PsiElement())(')')
       RESULT
         PsiElement(()('(')
-        TYPE
-          TYPE_REFERENCE_EXPRESSION
-            PsiElement(identifier)('int')
-        PsiElement(,)(',')
-        TYPE
-          TYPE_REFERENCE_EXPRESSION
-            PsiElement(identifier)('error')
+        TYPE_LIST
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('int')
+          PsiElement(,)(',')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('error')
         PsiElement())(')')
     BLOCK
       PsiElement({)('{')

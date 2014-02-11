@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoTypeSwitchCase extends GoCompositeElement {
+public interface GoTypeList extends GoType {
 
-  @Nullable
-  GoType getType();
-
-  @Nullable
-  PsiElement getCase();
-
-  @Nullable
-  PsiElement getDefault();
+  @NotNull
+  List<GoType> getTypeList();
 
 }

@@ -20,16 +20,17 @@ GO_FILE
         PsiElement())(')')
       RESULT
         PsiElement(()('(')
-        TYPE
-          TYPE_REFERENCE_EXPRESSION
+        TYPE_LIST
+          TYPE
             TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('cipher')
-            PsiElement(.)('.')
-            PsiElement(identifier)('Block')
-        PsiElement(,)(',')
-        TYPE
-          TYPE_REFERENCE_EXPRESSION
-            PsiElement(identifier)('error')
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('cipher')
+              PsiElement(.)('.')
+              PsiElement(identifier)('Block')
+          PsiElement(,)(',')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('error')
         PsiElement())(')')
     BLOCK
       PsiElement({)('{')

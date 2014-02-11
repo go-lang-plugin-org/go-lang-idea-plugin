@@ -22,9 +22,9 @@ public class GoTypeSwitchCaseImpl extends GoCompositeElementImpl implements GoTy
   }
 
   @Override
-  @NotNull
-  public List<GoType> getTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoType.class);
+  @Nullable
+  public GoType getType() {
+    return findChildByClass(GoType.class);
   }
 
   @Override

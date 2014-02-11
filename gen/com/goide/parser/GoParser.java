@@ -279,6 +279,9 @@ public class GoParser implements PsiParser {
     else if (root_ == TYPE_DECLARATION) {
       result_ = TypeDeclaration(builder_, 0);
     }
+    else if (root_ == TYPE_LIST) {
+      result_ = TypeList(builder_, 0);
+    }
     else if (root_ == TYPE_REFERENCE_EXPRESSION) {
       result_ = TypeReferenceExpression(builder_, 0);
     }
@@ -337,7 +340,7 @@ public class GoParser implements PsiParser {
     create_token_set_(EXPR_SWITCH_STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
     create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE, INTERFACE_TYPE,
       MAP_TYPE, POINTER_TYPE, RECEIVER_TYPE, STRUCT_TYPE,
-      TYPE),
+      TYPE, TYPE_LIST),
     create_token_set_(SHORT_VAR_DECLARATION, VAR_SPEC),
   };
 
@@ -3171,15 +3174,15 @@ public class GoParser implements PsiParser {
 
   /* ********************************************************** */
   // Type ( ',' Type )*
-  static boolean TypeList(PsiBuilder builder_, int level_) {
+  public static boolean TypeList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeList")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    Marker marker_ = enter_section_(builder_, level_, _COLLAPSE_, "<type list>");
     result_ = Type(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && TypeList_1(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    exit_section_(builder_, level_, marker_, TYPE_LIST, result_, pinned_, null);
     return result_ || pinned_;
   }
 
@@ -3210,13 +3213,13 @@ public class GoParser implements PsiParser {
 
   /* ********************************************************** */
   // Type ( ',' Type )*
-  static boolean TypeListNoPin(PsiBuilder builder_, int level_) {
+  public static boolean TypeListNoPin(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TypeListNoPin")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type list no pin>");
     result_ = Type(builder_, level_ + 1);
     result_ = result_ && TypeListNoPin_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
+    exit_section_(builder_, level_, marker_, TYPE_LIST, result_, false, null);
     return result_;
   }
 

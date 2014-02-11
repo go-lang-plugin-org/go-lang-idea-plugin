@@ -24,6 +24,7 @@ func <warning>foo</warning>() {
 }
 
 type int int
+type byte byte
 type float32 float32
 type string string
 
@@ -130,3 +131,22 @@ func <warning>goo</warning>(st interface {Foo()}, st1 Iface) {
 }
 
 func <warning>labelsCheck</warning>() { goto Label1; Label1: 1; goto <error>Label2</error>}
+
+type compositeA struct { int }
+type compositeB struct { byte }
+
+func <warning>composite</warning> () {
+	a0, b0 := composite1()
+	Println(a0.int, b0.byte)
+	a1, b1 := new(compositeA), new(compositeB)
+	Println(a1.int, b1.byte)
+	a2, b2 := composite2()
+	Println(a2.int, b2.byte)
+}
+
+func composite1() (*compositeA, *compositeB) {
+	return new(compositeA), new(compositeB)
+}
+func composite2() (a *compositeA, b *compositeB) {
+	return new(compositeA), new(compositeB)
+}

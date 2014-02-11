@@ -14,6 +14,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.light.LightElement;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -238,8 +239,55 @@ public class GoPsiImplUtil {
           GoSignature signature = ((GoFunctionOrMethodDeclaration)resolve).getSignature();
           GoResult result = signature != null ? signature.getResult() : null;
           if (result != null) {
-            List<GoType> list = result.getTypeList();
-            return ContainerUtil.getFirstItem(list); // todo: multiply types
+            GoType type = result.getType();
+            if (type != null) return type;
+            final GoParameters parameters = result.getParameters();
+            if (parameters != null) {
+              GoType parametersType = parameters.getType();
+              if (parametersType != null) return parametersType;
+              List<GoType> composite = ContainerUtil.newArrayList();
+              for (GoParameterDeclaration p : parameters.getParameterDeclarationList()) {
+                composite.add(p.getType());
+              }
+              class MyGoTypeList extends LightElement implements GoTypeList {
+                private final List<GoType> myTypes;
+
+                public MyGoTypeList(@NotNull List<GoType> types) {
+                  super(parameters.getManager(), parameters.getLanguage());
+                  myTypes = types;
+                }
+
+                @NotNull
+                @Override
+                public List<GoType> getTypeList() {
+                  return myTypes;
+                }
+
+                @Nullable
+                @Override
+                public GoTypeReferenceExpression getTypeReferenceExpression() {
+                  return null;
+                }
+
+                @Nullable
+                @Override
+                public PsiElement getLparen() {
+                  return null;
+                }
+
+                @Nullable
+                @Override
+                public PsiElement getRparen() {
+                  return null;
+                }
+
+                @Override
+                public String toString() {
+                  return null;
+                }
+              }
+              return new MyGoTypeList(composite);
+            }
           }
         }
       }
@@ -281,6 +329,16 @@ public class GoPsiImplUtil {
         i++;
       }
       List<GoExpression> exprs = ((GoShortVarDeclaration)parent).getExpressionList();
+      if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
+        GoExpression call = exprs.get(0);
+        GoType type = call.getGoType();
+        if (type instanceof GoTypeList) {
+          if (((GoTypeList)type).getTypeList().size() > i) {
+            return ((GoTypeList)type).getTypeList().get(i);
+          }
+        }
+        return type;
+      }
       if (exprs.size() <= i) return null;
       return exprs.get(i).getGoType();
     }

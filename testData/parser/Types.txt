@@ -58,13 +58,14 @@ GO_FILE
         SIGNATURE
           PARAMETERS
             PsiElement(()('(')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('int')
-            PsiElement(,)(',')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('float64')
+            TYPE_LIST
+              TYPE
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('int')
+              PsiElement(,)(',')
+              TYPE
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('float64')
             PsiElement())(')')
           RESULT
             POINTER_TYPE
