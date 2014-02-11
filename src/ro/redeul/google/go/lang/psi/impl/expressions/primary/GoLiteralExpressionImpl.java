@@ -82,7 +82,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
 
                 case Float:
                     return new GoType[]{
-                            GoTypes.getBuiltin(Builtin.Float32, namesCache)
+                            GoTypes.getBuiltin(Builtin.Float64, namesCache)
                     };
 
                 case Char:
@@ -93,7 +93,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                 case ImaginaryInt:
                 case ImaginaryFloat:
                     return new GoType[]{
-                            GoTypes.getBuiltin(Builtin.Complex64, namesCache)
+                            GoTypes.getBuiltin(Builtin.Complex128, namesCache)
                     };
 
                 case RawString:

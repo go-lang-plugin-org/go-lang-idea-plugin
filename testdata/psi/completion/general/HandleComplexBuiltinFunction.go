@@ -1,6 +1,6 @@
 package main
 
-func (*complex64) Method() {
+func (*complex128) Method() {
 
 }
 

@@ -1,6 +1,6 @@
 package main
 
-func (*float32) Method() {
+func (*float64) Method() {
 
 }
 
