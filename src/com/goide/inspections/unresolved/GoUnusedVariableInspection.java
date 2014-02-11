@@ -18,6 +18,7 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
     file.accept(new GoRecursiveVisitor() {
       @Override
       public void visitVarDefinition(@NotNull GoVarDefinition o) {
+        if ("_".equals(o.getIdentifier().getText())) return;
         if (PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class) == null) return;
         Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
         if (search.findFirst() == null) {

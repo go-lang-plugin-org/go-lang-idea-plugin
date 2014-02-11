@@ -124,6 +124,9 @@ const name1 int = 10
 func <warning>goo</warning>(st interface {Foo()}, st1 Iface) {
     <error>name1</error>, <error>name1</error> = 1, 2
     Println(st.Foo() + st1.Boo())
+    if _ := 1 {
+      return
+    }
 }
 
 func <warning>labelsCheck</warning>() { goto Label1; Label1: 1; goto <error>Label2</error>}
