@@ -37,11 +37,11 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   }
 
   private static String getCommentText(List<PsiComment> comments) {
-    return StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
+    return "<pre>" + StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
       @Override
       public String fun(PsiComment c) {
         return c.getText().replaceFirst("//", "");
       }
-    }), "<br/>");
+    }), "<br/>") + "</pre>";
   }
 }
