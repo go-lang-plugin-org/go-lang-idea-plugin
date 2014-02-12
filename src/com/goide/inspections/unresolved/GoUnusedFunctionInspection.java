@@ -4,8 +4,13 @@ import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoRecursiveVisitor;
+import com.intellij.codeInspection.LocalQuickFixBase;
+import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
@@ -19,10 +24,22 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
     file.accept(new GoRecursiveVisitor() {
       @Override
       public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
-        if ("main".equals(((GoFile)file).getPackageName()) && "main".equals(o.getName())) return;
+        String name = o.getName();
+        if ("main".equals(((GoFile)file).getPackageName()) && "main".equals(name)) return;
         Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
         if (search.findFirst() == null) {
-          problemsHolder.registerProblem(o.getIdentifier(), "Unused function " + "'" + o.getName() + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+          PsiElement id = o.getIdentifier();
+          TextRange range = TextRange.from(id.getStartOffsetInParent(), id.getTextLength());
+          problemsHolder.registerProblem(o, "Unused function " + "'" + name + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
+            new LocalQuickFixBase("Delete function '" + name + "'") {
+              @Override
+              public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+                PsiElement element = descriptor.getPsiElement();
+                if (element != null) {
+                  element.delete();
+                }
+              }
+            });
         }
       }
     });
