@@ -224,6 +224,10 @@ func main() {
 	AcceptMyInt(/*begin*/invalid/*end.Expression type mismatch, the expected type is MyInt|CastTypeFix*/)
 	//END
 
+	// issue #474
+	fVal := 0.1
+	MatchF(fVal)
+
 	MatchByte(1)
 	MatchByte(/*begin*/-128/*end.Expression type mismatch, the expected type is byte|CastTypeFix*/)
 	MatchByte(128)
