@@ -10,6 +10,9 @@ public interface GoRecvStatement extends GoStatement {
   @NotNull
   List<GoExpression> getExpressionList();
 
+  @NotNull
+  List<GoVarDefinition> getVarDefinitionList();
+
   @Nullable
   PsiElement getAssign();
 

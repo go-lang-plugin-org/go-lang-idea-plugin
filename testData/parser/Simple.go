@@ -68,6 +68,13 @@ func (h extraHeader) Write(w io.Writer) {
 func main() {
     if 1 != 1 {
     }
+    
+	select {
+	case ce := <-ch:
+		return ce.cn, ce.err
+	case <-time.After(c.netTimeout()):
+		// Too slow. Fall through.
+	}
 }
 
 

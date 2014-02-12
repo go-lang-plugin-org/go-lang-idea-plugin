@@ -28,6 +28,12 @@ public class GoRecvStatementImpl extends GoStatementImpl implements GoRecvStatem
   }
 
   @Override
+  @NotNull
+  public List<GoVarDefinition> getVarDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoVarDefinition.class);
+  }
+
+  @Override
   @Nullable
   public PsiElement getAssign() {
     return findChildByType(ASSIGN);

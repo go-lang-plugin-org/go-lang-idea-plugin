@@ -344,7 +344,7 @@ GoStatement ::= go Expression
 SelectStatement ::= select '{' ( CommClause )* '}'
 CommClause ::= CommCase ':' Statements? {pin=1}
 CommCase ::= case ( SendStatement | RecvStatement ) | default {pin(".*")=1}
-RecvStatement ::= [ ExpressionList '=' | IdentifierList ':=' ] Expression {pin=0}
+RecvStatement ::= [ ExpressionList '=' | VarDefinitionList ':=' ] Expression {pin=0}
 ReturnStatement ::= return ExpressionList?
 LabelRef ::= identifier {
   methods=[getReference]

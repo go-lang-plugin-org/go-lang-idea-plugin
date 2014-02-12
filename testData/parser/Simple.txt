@@ -623,6 +623,61 @@ GO_FILE
         BLOCK
           PsiElement({)('{')
           PsiElement(})('}')
+      SELECT_STATEMENT
+        PsiElement(select)('select')
+        PsiElement({)('{')
+        COMM_CLAUSE
+          COMM_CASE
+            PsiElement(case)('case')
+            RECV_STATEMENT
+              VAR_DEFINITION
+                PsiElement(identifier)('ce')
+              PsiElement(:=)(':=')
+              UNARY_EXPR
+                PsiElement(<-)('<-')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('ch')
+          PsiElement(:)(':')
+          RETURN_STATEMENT
+            PsiElement(return)('return')
+            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('ce')
+              PsiElement(.)('.')
+              PsiElement(identifier)('cn')
+            PsiElement(,)(',')
+            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('ce')
+              PsiElement(.)('.')
+              PsiElement(identifier)('err')
+        COMM_CLAUSE
+          COMM_CASE
+            PsiElement(case)('case')
+            RECV_STATEMENT
+              UNARY_EXPR
+                PsiElement(<-)('<-')
+                CALL_EXPR
+                  REFERENCE_EXPRESSION
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('time')
+                    PsiElement(.)('.')
+                    PsiElement(identifier)('After')
+                  ARGUMENT_LIST
+                    PsiElement(()('(')
+                    CALL_EXPR
+                      REFERENCE_EXPRESSION
+                        REFERENCE_EXPRESSION
+                          PsiElement(identifier)('c')
+                        PsiElement(.)('.')
+                        PsiElement(identifier)('netTimeout')
+                      ARGUMENT_LIST
+                        PsiElement(()('(')
+                        PsiElement())(')')
+                    PsiElement())(')')
+          PsiElement(:)(':')
+        PsiComment(GO_LINE_COMMENT)('// Too slow. Fall through.')
+        PsiElement(})('}')
       PsiElement(})('}')
   VAR_DECLARATION
     PsiElement(var)('var')
