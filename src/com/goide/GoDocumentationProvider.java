@@ -36,7 +36,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     return result;
   }
 
-  private static String getCommentText(List<PsiComment> comments) {
+  @NotNull
+  private static String getCommentText(@NotNull List<PsiComment> comments) {
     return "<pre>" + StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
       @Override
       public String fun(PsiComment c) {
