@@ -2,7 +2,6 @@ package ro.redeul.google.go.util;
 
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiParenthesizedExpression;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.FunctionCallInspection;
 import ro.redeul.google.go.inspection.InspectionResult;
@@ -145,8 +144,8 @@ public class GoTypeInspectUtil {
     }
 
     public static boolean IsNil(PsiElement psiElement) {
-        if (psiElement instanceof PsiParenthesizedExpression)
-            return IsNil(((PsiParenthesizedExpression) psiElement).getExpression());
+        if (psiElement instanceof GoParenthesisedExpression)
+            return IsNil(((GoParenthesisedExpression) psiElement).getInnerExpression());
         if (psiElement instanceof GoLiteralExpression)
             psiElement = ((GoLiteralExpression) psiElement).getLiteral();
         return psiElement instanceof GoLiteralIdentifier && ((GoLiteralIdentifier) psiElement).getName().equals("nil");
