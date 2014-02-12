@@ -130,13 +130,13 @@ public class GoUtil {
             if (identifiers.length == 0) {
                 if (counter != 0)
                     stringBuilder.append(',');
-                stringBuilder.append(getNameLocalOrGlobal(parameter.getType(), currentPackge));
+                stringBuilder.append(getNameLocalOrGlobalAsParameter(parameter.getType(), currentPackge));
                 counter++;
             } else {
                 for (GoLiteralIdentifier identifier : identifiers) {
                     if (counter != 0)
                         stringBuilder.append(',');
-                    stringBuilder.append(getNameLocalOrGlobal(parameter.getType(), currentPackge));
+                    stringBuilder.append(getNameLocalOrGlobalAsParameter(parameter.getType(), currentPackge));
                     counter++;
                 }
             }
@@ -153,13 +153,13 @@ public class GoUtil {
             if (identifiers.length == 0) {
                 if (counter != 0)
                     stringBuilder.append(',');
-                stringBuilder.append(getNameLocalOrGlobal(parameter.getType(), currentPackge));
+                stringBuilder.append(getNameLocalOrGlobalAsParameter(parameter.getType(), currentPackge));
                 counter++;
             } else {
                 for (GoLiteralIdentifier identifier : identifiers) {
                     if (counter != 0)
                         stringBuilder.append(',');
-                    stringBuilder.append(getNameLocalOrGlobal(parameter.getType(), currentPackge));
+                    stringBuilder.append(getNameLocalOrGlobalAsParameter(parameter.getType(), currentPackge));
                     counter++;
                 }
             }
@@ -169,6 +169,12 @@ public class GoUtil {
             stringBuilder.append(')');
 
         return stringBuilder.toString();
+    }
+
+    private static String getNameLocalOrGlobalAsParameter(GoPsiType type, GoFile currentFile) {
+        if (type.getParent().getNode().getElementType().equals(GoElementTypes.FUNCTION_PARAMETER_VARIADIC))
+            return String.format("...%s", recursiveNameOrGlobalTypeImp(type, currentFile));
+        return recursiveNameOrGlobalTypeImp(type, currentFile);
     }
 
     public static boolean isFunctionNameIdentifier(PsiElement e) {
@@ -279,10 +285,6 @@ public class GoUtil {
     }
 
     public static String getNameLocalOrGlobal(GoPsiType type, GoFile currentFile) {
-
-        if (type.getParent().getNode().getElementType().equals(GoElementTypes.FUNCTION_PARAMETER_VARIADIC))
-            return String.format("...%s", recursiveNameOrGlobalTypeImp(type, currentFile));
-
         return recursiveNameOrGlobalTypeImp(type, currentFile);
     }
 
@@ -560,6 +562,7 @@ public class GoUtil {
              * will generate:
              *          func myIndexHandle(arg0 http.ResponseWriter, arg1 *http.Request){}
              */
+            //TODO: separate this block in another method, improve to be able to generate the function from an generated template, and generate the results
             GoCallOrConvExpression parentOfTypeCallOrConvExpression = findParentOfType(e, GoCallOrConvExpression.class);
             GoFunctionDeclaration goFunctionDeclaration = GoExpressionUtils.resolveToFunctionDeclaration(parentOfTypeCallOrConvExpression);
 
@@ -592,7 +595,7 @@ public class GoUtil {
                                         stringBuilder.append("...");
                                     stringBuilder.append('*').append(getNameLocalOrGlobal(((GoPsiTypePointer) type1).getTargetType(), currentFile));
                                 } else {
-                                    stringBuilder.append(getNameLocalOrGlobal(type1, currentFile));
+                                    stringBuilder.append(getNameLocalOrGlobalAsParameter(type1, currentFile));
                                 }
                                 arg++;
                             }
@@ -645,6 +648,25 @@ public class GoUtil {
 
     public static boolean TestDeclVar(PsiElement expr, String k) {
         return !GoPsiScopesUtil.treeWalkUp(new GoVariableScopeCheck(k), expr, expr.getContainingFile(), GoResolveStates.variables());
+    }
+
+    public static GoType[] getFuncCallTypes(GoPsiTypeFunction psiTypeFunction) {
+        GoFunctionParameter[] results = psiTypeFunction.getResults();
+        List<GoPsiType> types = new ArrayList<GoPsiType>();
+        for (GoFunctionParameter result : results) {
+
+            GoLiteralIdentifier[] identifiers = result.getIdentifiers();
+            if (identifiers == null || identifiers.length == 0) {
+                types.add(result.getType());
+            } else {
+                for (GoLiteralIdentifier identifier : identifiers) {
+                    types.add(result.getType());
+                }
+            }
+
+        }
+
+        return GoTypes.fromPsiType(types.toArray(new GoPsiType[types.size()]));
     }
 
     private static class GoVariableScopeCheck implements PsiScopeProcessor {

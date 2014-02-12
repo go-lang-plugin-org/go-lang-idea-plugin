@@ -26,6 +26,9 @@ public class CastToFixTest extends GoEditorAwareTestCase {
     public void testCastString() throws Exception {
         doTest();
     }
+    public void testCastVariadicsString() throws Exception {
+        doTest();
+    }
 
     public void testCastInterface() throws Exception {
         doTest();

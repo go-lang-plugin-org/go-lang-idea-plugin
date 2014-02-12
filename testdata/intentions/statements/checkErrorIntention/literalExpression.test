@@ -1,0 +1,13 @@
+package main
+
+func main() {
+    func()error{return nil}(<caret>)
+}
+-----
+package main
+
+func main() {
+	if func() error {return nil}() != nil {
+		//TODO: Handle error(s)
+	}<caret>
+}

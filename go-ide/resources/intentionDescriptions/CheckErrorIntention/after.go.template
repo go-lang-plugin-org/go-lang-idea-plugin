@@ -1,0 +1,11 @@
+package main
+
+func HasErrors()(error,string,error,string){
+    return nil,"",nil,""
+}
+
+func main(){
+	if err, _, err0, _ := <spot>HasErrors()</spot>; err != nil || err0 != nil {
+		//TODO: Handle error(s)
+	}
+}

@@ -20,9 +20,6 @@ import ro.redeul.google.go.util.GoUtil;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
-/**
- * Created by josesantos on 20/12/13.
- */
 public abstract class BaseBoolStatement extends Intention {
 
     protected GoExpressionStatement statement;

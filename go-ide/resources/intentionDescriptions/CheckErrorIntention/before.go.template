@@ -1,0 +1,9 @@
+package main
+
+func HasErrors()(error,string,error,string){
+    return nil,"",nil,""
+}
+
+func main(){
+	<spot>HasErrors()</spot>
+}

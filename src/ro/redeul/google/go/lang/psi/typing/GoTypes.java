@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.typing;
 import com.intellij.util.Function;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
@@ -159,6 +160,11 @@ public class GoTypes {
 
         @Override
         public void visitMethodDeclaration(GoMethodDeclaration declaration) {
+            visitFunctionType(declaration);
+        }
+
+        @Override
+        public void visitFunctionLiteral(GoLiteralFunction declaration) {
             visitFunctionType(declaration);
         }
     }
