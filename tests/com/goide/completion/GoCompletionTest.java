@@ -45,6 +45,10 @@ public class GoCompletionTest extends GoCodeInsightFixtureTestCase {
   public void testNoCompletionInsideStrings() {
     doTestEquals("package foo; func main(){\"<caret>\"}");
   }
+  
+  public void testNoCompletionInsideComments() {
+    doTestEquals("package foo; func main(){/*<caret>*/}");
+  }
 
   public void testStructTypes() throws Exception {
     doTestEquals("package foo; type AA struct {N AA}; func foo(a AA) {a.<caret>}", "N");

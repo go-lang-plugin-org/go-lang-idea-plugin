@@ -16,6 +16,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.PsiElementPattern;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
@@ -49,6 +50,7 @@ public class GoCompletionContributor extends CompletionContributor {
         if (prev != null && prev.getElementType() == GoTypes.DOT) return;
         if (position.getNode().getElementType() == GoTypes.STRING) return;
         if (position.getParent().getParent() instanceof GoSelectorExpr) return;
+        if (position instanceof PsiComment) return;
         for (String keyword : suggestKeywords(position)) {
           result.addElement(createKeywordLookupElement(keyword));
         }
