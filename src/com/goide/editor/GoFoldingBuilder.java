@@ -27,6 +27,7 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
   public FoldingDescriptor[] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick) {
     if (!(root instanceof GoFile)) return FoldingDescriptor.EMPTY;
     GoFile file = (GoFile)root;
+    if (!file.isContentsLoaded()) return FoldingDescriptor.EMPTY;
 
     final List<FoldingDescriptor> result = ContainerUtil.newArrayList();
 
