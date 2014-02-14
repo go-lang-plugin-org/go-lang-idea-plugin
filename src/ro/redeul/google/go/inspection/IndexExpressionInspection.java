@@ -17,11 +17,14 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
 import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.util.GoTypeInspectUtil;
 import ro.redeul.google.go.util.GoUtil;
+
+import static ro.redeul.google.go.util.GoTypeInspectUtil.checkValidLiteralIntExpr;
 
 public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
     @Override
@@ -56,6 +59,9 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
                     checkIndexMap(((GoPsiTypeMap) psiType).getKeyType(), indexExpr, result);
                 }
             }
+            if (goType != null && goType instanceof GoTypeArray) {
+                checkIndexSliceArray(indexExpr, result);
+            }
         }
     }
 
@@ -85,12 +91,38 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
                 }
                 return;
             }
-            if (literal instanceof GoLiteralString)
+            if (literal instanceof GoLiteralString) {
                 result.addProblem(
                         index,
                         GoBundle.message("warning.functioncall.type.mismatch", "int"));
-            return;
+                return;
+            }
 
+        }
+        if (index.isConstantExpression()) {
+            Number numValue = FunctionCallInspection.getNumberValueFromLiteralExpr(index);
+            if (numValue == null){
+                if (!checkValidLiteralIntExpr(index)) {
+                    result.addProblem(
+                            index,
+                            GoBundle.message("warning.functioncall.type.mismatch", "int"));
+                }
+            } else {
+                if (numValue instanceof Integer || numValue.intValue() == numValue.floatValue()) {
+                    Integer value = numValue.intValue();
+                    if (value < 0) {
+                        result.addProblem(
+                                index,
+                                GoBundle.message("warning.index.invalid", value, "(index must be non-negative)"));
+                    }
+
+                } else {
+                    result.addProblem(
+                            index,
+                            GoBundle.message("warning.functioncall.type.mismatch", "int"));
+                }
+            }
+            return;
         }
 
         for (GoType goType : index.getType()) {
