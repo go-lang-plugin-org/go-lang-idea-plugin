@@ -201,21 +201,22 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
 
-  protected void processDirectory(@Nullable PsiDirectory dir,
-                                  @Nullable GoFile file,
-                                  @Nullable String packageName,
-                                  @NotNull MyScopeProcessor processor,
-                                  @NotNull ResolveState state,
-                                  boolean localProcessing) {
+  protected boolean processDirectory(@Nullable PsiDirectory dir,
+                                     @Nullable GoFile file,
+                                     @Nullable String packageName,
+                                     @NotNull MyScopeProcessor processor,
+                                     @NotNull ResolveState state,
+                                     boolean localProcessing) {
     String fileName = file != null ? file.getName() : null;
     if (dir != null) {
       for (PsiFile psiFile : dir.getFiles()) {
         if (psiFile instanceof GoFile && !psiFile.getName().equals(fileName)) {
           if (packageName != null && !packageName.equals(((GoFile)psiFile).getPackageName())) continue;
-          processFileEntities((GoFile)psiFile, processor, state, localProcessing);
+          if (!processFileEntities((GoFile)psiFile, processor, state, localProcessing)) return false;
         }
       }
     }
+    return true;
   }
 
   private boolean processUnqualifiedResolve(@NotNull GoFile file,
@@ -243,26 +244,24 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     Collection<? extends GoNamedElement> result = delegate.getVariants();
     if (!processNamedElements(processor, state, result, localResolve)) return false;
 
-    processFileEntities(file, processor, state, localResolve);
+    if (!processFileEntities(file, processor, state, localResolve)) return false;
 
     PsiDirectory dir = file.getOriginalFile().getParent();
-    processDirectory(dir, file, file.getPackageName(), processor, state, true);
+    if (!processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
 
     if (RESERVED_NAMES.contains(id)) return processSelf(processor, state);
 
     Collection<? extends PsiElement> collection = file.getImportMap().values();
     for (Object o : collection) {
-      if (o instanceof GoImportSpec) processor.execute((PsiElement)o, state);
+      if (o instanceof GoImportSpec && !processor.execute((PsiElement)o, state)) return false;
       if (o instanceof GoImportString) {
         PsiDirectory resolve = ((GoImportString)o).resolve();
-        if (resolve != null) processor.execute(resolve, state);
+        if (resolve != null && !processor.execute(resolve, state)) return false;
       }
     }
 
     GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
-    if (builtinFile != null) {
-      processFileEntities(builtinFile, processor, state, true);
-    }
+    if (builtinFile != null && !processFileEntities(builtinFile, processor, state, true)) return false;
     return true;
   }
 
