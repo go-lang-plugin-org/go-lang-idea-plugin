@@ -40,7 +40,6 @@ public class GoPsiTypePointerImpl extends GoPsiPackagedElementBase implements
     @Override
     public boolean isIdentical(GoPsiType goType) {
         return goType instanceof GoPsiTypePointer && this.getTargetType().isIdentical(((GoPsiTypePointer) goType).getTargetType());
-
     }
 
     @Override

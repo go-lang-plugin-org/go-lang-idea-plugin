@@ -20,5 +20,5 @@ func main() {
 }
 
 func indexHandler(arg0 int, arg1 *string) {
-	<caret>
+	//TODO: implements indexHandler<caret>
 }

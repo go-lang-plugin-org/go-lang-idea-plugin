@@ -171,7 +171,7 @@ public class GoUtil {
         return stringBuilder.toString();
     }
 
-    private static String getNameLocalOrGlobalAsParameter(GoPsiType type, GoFile currentFile) {
+    public static String getNameLocalOrGlobalAsParameter(GoPsiType type, GoFile currentFile) {
         if (type.getParent().getNode().getElementType().equals(GoElementTypes.FUNCTION_PARAMETER_VARIADIC))
             return String.format("...%s", recursiveNameOrGlobalTypeImp(type, currentFile));
         return recursiveNameOrGlobalTypeImp(type, currentFile);
@@ -361,10 +361,11 @@ public class GoUtil {
         //Resolve Issue In PR #330
         if (element instanceof GoPsiTypePointer && element2 instanceof GoTypePointer) {
             GoType targetType1 = ((GoTypePointer) element2).getTargetType();
-            if (targetType1 instanceof GoTypePsiBacked) {
-                GoTypePsiBacked targetType = (GoTypePsiBacked) targetType1;
-                return ((GoPsiTypePointer) element).getTargetType().isIdentical(targetType.getPsiType());
-            }
+            return CompareTypes(((GoPsiTypePointer) element).getTargetType(), targetType1);
+//            if (targetType1 instanceof GoTypePsiBacked) {
+//                GoTypePsiBacked targetType = (GoTypePsiBacked) targetType1;
+//                return ((GoPsiTypePointer) element).getTargetType().isIdentical(targetType.getPsiType());
+//            }
         }
         if (element2 instanceof GoTypeArray) {
             GoPsiType psiType = ((GoTypeArray) element2).getPsiType();
@@ -426,191 +427,6 @@ public class GoUtil {
             }
         }
         return true;
-    }
-
-    /**
-     * Helper method to generate function arguments type, based on param being passed to the function
-     *
-     * @param e -> parent -> GoCallOrConvExpression
-     * @return the generated arugment list ex: arg0 int, arg1 string
-     */
-    public static String InspectionGenFuncArgs(PsiElement e) {
-        StringBuilder stringBuilder = new StringBuilder();
-        int arg = 0;
-        final GoFile currentFile = (GoFile) e.getContainingFile();
-
-        if (isFunctionNameIdentifier(e)) {
-
-            for (GoExpr argument : ((GoCallOrConvExpression) e.getParent()).getArguments()) {
-                if (arg != 0)
-                    stringBuilder.append(',');
-
-                stringBuilder.append("arg").append(arg).append(" ");
-                PsiElement firstChildExp = argument.getFirstChild();
-                GoType[] goTypes = argument.getType();
-
-
-                // FIX TEST ##321
-                // Check first Relational is alwais boolean
-                if (argument instanceof GoRelationalExpression) {
-                    stringBuilder.append("bool");
-                } else if (goTypes.length > 0 && goTypes[0] != null) {
-                    GoType goType = goTypes[0];
-
-                    if (goType instanceof GoTypePointer) {
-                        /*
-                         * Detects when a reference is being passed
-                         */
-                        //Fix: Now go we are receiving the right typ
-                        stringBuilder.append('*');
-                        goType = ((GoTypePointer) goType).getTargetType();
-                    }
-
-                    if (goType instanceof GoTypePsiBacked) {
-                         /*
-                          * Using the psiType,
-                          */
-                        String type = getNameLocalOrGlobal(((GoTypePsiBacked) goType).getPsiType(), currentFile);
-                        stringBuilder.append(type);
-                    } else if (goType instanceof GoTypeArray) {
-                         /*
-                          * Using the psiType,
-                          */
-                        String type = getNameLocalOrGlobal(((GoTypeArray) goType).getPsiType(), currentFile);
-                        stringBuilder.append(type);
-                    } else if (firstChildExp instanceof GoLiteralFunction) {
-                         /*
-                          * Resolves the type of a function decl
-                          * ex: the type of http.HandleFunc is func(string,func(http.ResponseWriter,*http.Request))
-                          */
-                        GoFunctionDeclaration functionDeclaration = (GoFunctionDeclaration) firstChildExp;
-                        stringBuilder.append(getFuncDecAsParam(functionDeclaration.getParameters(), functionDeclaration.getResults(), currentFile));
-                    } else {
-
-                        /*
-                         * This block try to resolve a closure variable
-                         * ex: var myClosure=func()int{return 25*4}
-                         *      unresolvedFn(myClosure)
-                         * will generate:
-                         * func unresolvedFn(arg0 func()int){}
-                         */
-
-                        final PsiReference[] references = firstChildExp.getReferences();
-                        if (references.length > 0) {
-                            PsiElement resolve = references[0].resolve();
-                            if (resolve != null) {
-                                GoPsiElement resl_element = (GoPsiElement) resolve.getParent().getLastChild();
-                                GoLiteralFunction fn = (GoLiteralFunction) resl_element.getFirstChild();
-                                stringBuilder.append(getFuncDecAsParam(fn.getParameters(), fn.getResults(), currentFile));
-                            } else {
-                                stringBuilder.append("interface{}");
-                            }
-                        } else {
-                            stringBuilder.append("interface{}");
-                        }
-
-                    }
-                } else if (firstChildExp instanceof GoLiteral) {
-                    /*
-                     * Resolves the type of a literal
-                     */
-                    //GoPsiElement resolveTo = null;
-                    //if (firstChildExp instanceof GoLiteralIdentifier) {
-                    //   resolveTo = ResolveTypeOfVarDecl(firstChildExp);
-                    //}
-                    //if (resolveTo instanceof GoPsiType) {
-                    //    stringBuilder.append(getNameLocalOrGlobal((GoPsiType) resolveTo, currentFile));
-                    //} else {
-                    stringBuilder.append(((GoLiteral) firstChildExp).getType().name().toLowerCase());
-                    //}
-                } else {
-
-                    /*
-                     * This block try to resolve the return type of a closure being called on the paramenter list
-                     * ex: unresolvedFn(func()int{return 25*4}())
-                     * will generate:
-                     * func unresolvedFn(arg0 int){}
-                     * @note i think any one will do that, but we never know :D
-                     */
-                    PsiElement firstChild = firstChildExp.getFirstChild();
-                    if (firstChild instanceof GoLiteralFunction) {
-
-                        GoPsiType[] returnType = ((GoLiteralFunction) firstChild).getReturnType();
-                        if (returnType.length > 0) {
-                            stringBuilder.append(returnType[0].getName());
-                        } else {
-                            stringBuilder.append("interface{}");
-                        }
-                    } else if (firstChild instanceof GoLiteral) {
-                        GoLiteral.Type type = ((GoLiteral) firstChild).getType();
-                        //Fix TEST PR ##321 this only happens on test. i don't know why
-                        if (type == GoLiteral.Type.Float || type == GoLiteral.Type.ImaginaryFloat) {
-                            stringBuilder.append("float32");
-                        } else {
-                            stringBuilder.append(type.name().toLowerCase());
-                        }
-                    } else {
-                        stringBuilder.append("interface{}");
-                    }
-                }
-                arg++;
-            }
-        } else {
-            /*
-             * Try to resolve the type declaration for the generated function based on called function
-             * ex: when http.HandleFunc("/",myIndexHandle)
-             * will generate:
-             *          func myIndexHandle(arg0 http.ResponseWriter, arg1 *http.Request){}
-             */
-            //TODO: separate this block in another method, improve to be able to generate the function from an generated template, and generate the results
-            GoCallOrConvExpression parentOfTypeCallOrConvExpression = findParentOfType(e, GoCallOrConvExpression.class);
-            GoFunctionDeclaration goFunctionDeclaration = GoExpressionUtils.resolveToFunctionDeclaration(parentOfTypeCallOrConvExpression);
-
-            if (goFunctionDeclaration != null) {
-
-                int myIndex = 0;
-
-                for (GoExpr argum : parentOfTypeCallOrConvExpression.getArguments()) {
-                    if (argum.equals(e) || argum.getFirstChild().equals(e))
-                        break;
-                    myIndex++;
-                }
-
-                GoFunctionParameter[] parameter = goFunctionDeclaration.getParameters();
-
-                if (myIndex < parameter.length) {
-                    GoPsiType type = parameter[myIndex].getType();
-                    if (type instanceof GoPsiTypeFunction) {
-                        GoFunctionParameterList goFunctionParameterList = findChildOfClass(type, GoFunctionParameterList.class);
-                        if (goFunctionParameterList != null) {
-                            for (GoFunctionParameter parameter1 : goFunctionParameterList.getFunctionParameters()) {
-                                if (arg > 0)
-                                    stringBuilder.append(',');
-
-                                stringBuilder.append("arg").append(arg).append(' ');
-
-                                final GoPsiType type1 = parameter1.getType();
-                                if (type1 instanceof GoPsiTypePointer) {
-                                    if (type1.getParent().getNode().getElementType().equals(GoElementTypes.FUNCTION_PARAMETER_VARIADIC))
-                                        stringBuilder.append("...");
-                                    stringBuilder.append('*').append(getNameLocalOrGlobal(((GoPsiTypePointer) type1).getTargetType(), currentFile));
-                                } else {
-                                    stringBuilder.append(getNameLocalOrGlobalAsParameter(type1, currentFile));
-                                }
-                                arg++;
-                            }
-                        }
-
-                    }
-                }
-
-            } else {
-                return "";
-            }
-
-        }
-
-        return stringBuilder.toString();
     }
 
     public static GoPsiElement ResolveTypeOfVarDecl(GoPsiElement element) {

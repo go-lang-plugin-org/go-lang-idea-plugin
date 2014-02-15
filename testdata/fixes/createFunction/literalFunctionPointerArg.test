@@ -22,5 +22,5 @@ func main() {
 }
 
 func Foo(arg0 *Person) {
-	<caret>
+	//TODO: implements Foo<caret>
 }

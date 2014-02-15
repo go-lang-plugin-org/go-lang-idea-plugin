@@ -28,5 +28,5 @@ func main() {
 }
 
 func myMediaProcess(arg0 ...Person) {
-	<caret>
+	//TODO: implements myMediaProcess<caret>
 }
