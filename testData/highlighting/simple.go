@@ -150,3 +150,7 @@ func composite1() (*compositeA, *compositeB) {
 func composite2() (a *compositeA, b *compositeB) {
 	return new(compositeA), new(compositeB)
 }
+
+func <warning>do</warning>(o interface {test1() int}) {
+	Println(o.test1())
+}

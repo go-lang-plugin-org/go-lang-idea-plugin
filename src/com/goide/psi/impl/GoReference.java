@@ -4,6 +4,7 @@ import com.goide.GoSdkUtil;
 import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
@@ -155,11 +156,17 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private boolean processExistingType(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
+    PsiFile file = type.getContainingFile();
+    if (!(file instanceof GoFile)) return true;
+    PsiFile myFile = myElement.getContainingFile();
+    if (!(myFile instanceof GoFile)) return true;
+    boolean localResolve = Comparing.equal(((GoFile)myFile).getFullPackageName(), ((GoFile)file).getFullPackageName());
+
     if (type instanceof GoStructType) {
       GoScopeProcessorBase delegate = createDelegate(processor);
       type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
       Collection<? extends GoNamedElement> result = delegate.getVariants();
-      if (!processNamedElements(processor, state, result, true)) return false;
+      if (!processNamedElements(processor, state, result, localResolve)) return false;
 
       final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
       type.accept(new GoRecursiveVisitor() {
@@ -173,14 +180,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       }
     }
     else if (type instanceof GoInterfaceType) {
-      processNamedElements(processor, state, ((GoInterfaceType)type).getMethodSpecList(), false);
+      if (!processNamedElements(processor, state, ((GoInterfaceType)type).getMethodSpecList(), localResolve)) return false;
     }
 
     PsiElement parent = type.getParent();
-    if (parent instanceof GoTypeSpec) {
-      List<GoMethodDeclaration> methods = ((GoTypeSpec)parent).getMethods();
-      if (!processNamedElements(processor, state, methods, true)) return false;
-    }
+    if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve)) return false;
     return true;
   }
 

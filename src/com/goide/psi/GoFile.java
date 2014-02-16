@@ -53,7 +53,7 @@ public class GoFile extends PsiFileBase {
 
   @Nullable
   public String getFullPackageName() {
-    VirtualFile virtualFile = getVirtualFile();
+    VirtualFile virtualFile = getOriginalFile().getVirtualFile();
     VirtualFile root = ProjectFileIndexImpl.SERVICE.getInstance(getProject()).getSourceRootForFile(virtualFile);
     if (root != null) {
       String fullPackageName = FileUtil.getRelativePath(root.getPath(), virtualFile.getPath(), '/');
