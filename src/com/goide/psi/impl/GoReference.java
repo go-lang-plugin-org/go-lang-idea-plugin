@@ -228,14 +228,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
     PsiElement parent = myElement.getParent();
 
-    if (parent instanceof GoSelectorExpr) {
-      return processSelector((GoSelectorExpr)parent, processor, state, myElement);
-    }
+    if (parent instanceof GoSelectorExpr) return processSelector((GoSelectorExpr)parent, processor, state, myElement);
 
     PsiElement grandPa = parent.getParent();
-    if (grandPa instanceof GoSelectorExpr) {
-      if (!processSelector((GoSelectorExpr)grandPa, processor, state, parent)) return false;
-    }
+    if (grandPa instanceof GoSelectorExpr && !processSelector((GoSelectorExpr)grandPa, processor, state, parent)) return false;
 
     GoScopeProcessorBase delegate = createDelegate(processor);
     ResolveUtil.treeWalkUp(myElement, delegate);
@@ -251,10 +247,9 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
     if (RESERVED_NAMES.contains(id)) return processSelf(processor, state);
 
-    Collection<? extends PsiElement> collection = file.getImportMap().values();
-    for (Object o : collection) {
-      if (o instanceof GoImportSpec && !processor.execute((PsiElement)o, state)) return false;
+    for (Object o : file.getImportMap().values()) {
       if (o instanceof GoImportString) {
+      if (o instanceof GoImportSpec && !processor.execute((PsiElement)o, state)) return false;
         PsiDirectory resolve = ((GoImportString)o).resolve();
         if (resolve != null && !processor.execute(resolve, state)) return false;
       }
