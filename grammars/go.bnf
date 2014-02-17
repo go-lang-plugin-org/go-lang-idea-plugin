@@ -194,7 +194,7 @@ ConstDefinition ::= identifier {
   stubClass="com.goide.stubs.GoConstDefinitionStub"
 }
 
-private ExpressionList ::= Expression ( ',' Expression )*
+private ExpressionList ::= Expression (',' (Expression | &')' | &'...'))* {pin(".*")=1}
 
 TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
@@ -310,7 +310,7 @@ IndexExpr ::= Expression '[' IndexExprBody ']'
 private IndexExprBody ::= (Expression? ':' Expression ':' Expression) | (Expression? ':' Expression?) | Expression
 TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
-ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')' {pin=0}
+ArgumentList ::= '(' [ ExpressionList '...'? ] ')' {pin=0}
 ConversionExpr ::= &('*' | '<-' | '[' | chan | func | interface | map | struct) Type '(' Expression ','? ')'
 
 LabeledStatement ::= LabelDefinition ':' Statement {pin=2}

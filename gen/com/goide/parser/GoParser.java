@@ -365,7 +365,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '(' [ ExpressionList '...'? ','? ] ')'
+  // '(' [ ExpressionList '...'? ] ')'
   public static boolean ArgumentList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ArgumentList")) return false;
     if (!nextTokenIs(builder_, LPAREN)) return false;
@@ -378,21 +378,20 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ ExpressionList '...'? ','? ]
+  // [ ExpressionList '...'? ]
   private static boolean ArgumentList_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ArgumentList_1")) return false;
     ArgumentList_1_0(builder_, level_ + 1);
     return true;
   }
 
-  // ExpressionList '...'? ','?
+  // ExpressionList '...'?
   private static boolean ArgumentList_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ArgumentList_1_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = ExpressionList(builder_, level_ + 1);
     result_ = result_ && ArgumentList_1_0_1(builder_, level_ + 1);
-    result_ = result_ && ArgumentList_1_0_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -401,13 +400,6 @@ public class GoParser implements PsiParser {
   private static boolean ArgumentList_1_0_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ArgumentList_1_0_1")) return false;
     consumeToken(builder_, TRIPLE_DOT);
-    return true;
-  }
-
-  // ','?
-  private static boolean ArgumentList_1_0_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ArgumentList_1_0_2")) return false;
-    consumeToken(builder_, COMMA);
     return true;
   }
 
@@ -1124,7 +1116,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Expression ( ',' Expression )*
+  // Expression (',' (Expression | &')' | &'...'))*
   static boolean ExpressionList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ExpressionList")) return false;
     boolean result_ = false;
@@ -1137,7 +1129,7 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // ( ',' Expression )*
+  // (',' (Expression | &')' | &'...'))*
   private static boolean ExpressionList_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ExpressionList_1")) return false;
     int pos_ = current_position_(builder_);
@@ -1149,7 +1141,7 @@ public class GoParser implements PsiParser {
     return true;
   }
 
-  // ',' Expression
+  // ',' (Expression | &')' | &'...')
   private static boolean ExpressionList_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ExpressionList_1_0")) return false;
     boolean result_ = false;
@@ -1157,9 +1149,41 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, COMMA);
     pinned_ = result_; // pin = 1
-    result_ = result_ && Expression(builder_, level_ + 1, -1);
+    result_ = result_ && ExpressionList_1_0_1(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  // Expression | &')' | &'...'
+  private static boolean ExpressionList_1_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExpressionList_1_0_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = Expression(builder_, level_ + 1, -1);
+    if (!result_) result_ = ExpressionList_1_0_1_1(builder_, level_ + 1);
+    if (!result_) result_ = ExpressionList_1_0_1_2(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // &')'
+  private static boolean ExpressionList_1_0_1_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExpressionList_1_0_1_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _AND_, null);
+    result_ = consumeToken(builder_, RPAREN);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  // &'...'
+  private static boolean ExpressionList_1_0_1_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExpressionList_1_0_1_2")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _AND_, null);
+    result_ = consumeToken(builder_, TRIPLE_DOT);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
   }
 
   /* ********************************************************** */

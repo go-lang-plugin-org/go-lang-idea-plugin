@@ -732,3 +732,50 @@ GO_FILE
                 PsiElement(string)('"Saturday"')
           PsiElement(,)(',')
           PsiElement(})('}')
+  VAR_DECLARATION
+    PsiElement(var)('var')
+    VAR_SPEC
+      VAR_DEFINITION
+        PsiElement(identifier)('htmlReplacer')
+      PsiElement(=)('=')
+      CALL_EXPR
+        REFERENCE_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('strings')
+          PsiElement(.)('.')
+          PsiElement(identifier)('NewReplacer')
+        ARGUMENT_LIST
+          PsiElement(()('(')
+          LITERAL
+            PsiElement(string)('"&"')
+          PsiElement(,)(',')
+          LITERAL
+            PsiElement(string)('"&amp;"')
+          PsiElement(,)(',')
+          LITERAL
+            PsiElement(string)('"<"')
+          PsiElement(,)(',')
+          LITERAL
+            PsiElement(string)('"&lt;"')
+          PsiElement(,)(',')
+          LITERAL
+            PsiElement(string)('">"')
+          PsiElement(,)(',')
+          LITERAL
+            PsiElement(string)('"&gt;"')
+          PsiElement(,)(',')
+          PsiComment(GO_LINE_COMMENT)('// "&#34;" is shorter than "&quot;".')
+          LITERAL
+            PsiElement(string)('`"`')
+          PsiElement(,)(',')
+          LITERAL
+            PsiElement(string)('"&#34;"')
+          PsiElement(,)(',')
+          PsiComment(GO_LINE_COMMENT)('// "&#39;" is shorter than "&apos;" and apos was not in HTML until HTML5.')
+          LITERAL
+            PsiElement(string)('"'"')
+          PsiElement(,)(',')
+          LITERAL
+            PsiElement(string)('"&#39;"')
+          PsiElement(,)(',')
+          PsiElement())(')')
