@@ -4,6 +4,7 @@ import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoRecursiveVisitor;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -26,6 +27,7 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
       public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
         String name = o.getName();
         if ("main".equals(((GoFile)file).getPackageName()) && "main".equals(name)) return;
+        if (GoTestFinder.isTestFile(file) && name != null && (name.startsWith("Test") || name.startsWith("Benchmark"))) return;
         Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
         if (search.findFirst() == null) {
           PsiElement id = o.getIdentifier();
