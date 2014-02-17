@@ -154,3 +154,12 @@ func composite2() (a *compositeA, b *compositeB) {
 func <warning>do</warning>(o interface {test1() int}) {
 	Println(o.test1())
 }
+
+func <warning>dial</warning>() (int) {
+	 type connError struct { err int }
+	ch := make(chan connError)
+  select {
+		case ce  := <-ch:
+		return ce.err
+	}
+}

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoRecvStatement extends GoStatement {
+public interface GoRecvStatement extends GoVarSpec {
 
   @NotNull
   List<GoExpression> getExpressionList();

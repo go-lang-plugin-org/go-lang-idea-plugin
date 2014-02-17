@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoRecvStatementImpl extends GoStatementImpl implements GoRecvStatement {
+public class GoRecvStatementImpl extends GoVarSpecImpl implements GoRecvStatement {
 
   public GoRecvStatementImpl(ASTNode node) {
     super(node);

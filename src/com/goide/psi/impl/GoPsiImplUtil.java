@@ -321,14 +321,14 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType getGoType(@NotNull GoVarDefinition o) {
     PsiElement parent = o.getParent();
-    if (parent instanceof GoShortVarDeclaration) {
-      List<GoVarDefinition> defList = ((GoShortVarDeclaration)parent).getVarDefinitionList();
+    if (parent instanceof GoShortVarDeclaration || parent instanceof GoRecvStatement) {
+      List<GoVarDefinition> defList = ((GoVarSpec)parent).getVarDefinitionList();
       int i = 0;
       for (GoVarDefinition d : defList) {
         if (d.equals(o)) break;
         i++;
       }
-      List<GoExpression> exprs = ((GoShortVarDeclaration)parent).getExpressionList();
+      List<GoExpression> exprs = ((GoVarSpec)parent).getExpressionList();
       if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
         GoExpression call = exprs.get(0);
         GoType type = call.getGoType();

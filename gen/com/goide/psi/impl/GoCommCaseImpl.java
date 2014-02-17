@@ -23,8 +23,14 @@ public class GoCommCaseImpl extends GoCompositeElementImpl implements GoCommCase
 
   @Override
   @Nullable
-  public GoStatement getStatement() {
-    return findChildByClass(GoStatement.class);
+  public GoRecvStatement getRecvStatement() {
+    return findChildByClass(GoRecvStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GoSendStatement getSendStatement() {
+    return findChildByClass(GoSendStatement.class);
   }
 
   @Override

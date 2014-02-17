@@ -275,7 +275,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitRecvStatement(@NotNull GoRecvStatement o) {
-    visitStatement(o);
+    visitVarSpec(o);
   }
 
   public void visitReferenceExpression(@NotNull GoReferenceExpression o) {
