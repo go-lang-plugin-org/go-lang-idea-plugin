@@ -240,6 +240,9 @@ public class GoPsiImplUtil {
           GoResult result = signature != null ? signature.getResult() : null;
           if (result != null) {
             GoType type = result.getType();
+            if (type instanceof GoTypeList && ((GoTypeList)type).getTypeList().size() == 1) {
+              return ((GoTypeList)type).getTypeList().get(0);
+            }
             if (type != null) return type;
             final GoParameters parameters = result.getParameters();
             if (parameters != null) {

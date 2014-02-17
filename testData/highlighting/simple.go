@@ -173,6 +173,7 @@ func <warning>main2</warning>() {
 	m := GetMulti()
 	v := m["AA"].Value
 	Println(v)
+	Println(GetMulti()["AA"].Key)
 }
 
 func GetMulti() (map[string]*Item) {
