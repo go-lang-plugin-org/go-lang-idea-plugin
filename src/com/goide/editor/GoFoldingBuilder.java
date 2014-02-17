@@ -44,7 +44,7 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
     for (GoFunctionOrMethodDeclaration method : ContainerUtil.concat(file.getMethods(), file.getFunctions())) {
       GoBlock block = method.getBlock();
-      if (block != null) result.add(new FoldingDescriptor(block, block.getTextRange()));
+      if (block != null && block.getTextRange().getLength() > 1) result.add(new FoldingDescriptor(block, block.getTextRange()));
     }
 
     if (!quick) {
