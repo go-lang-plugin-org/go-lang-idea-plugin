@@ -307,6 +307,16 @@ public class GoPsiImplUtil {
       GoExpression item = ContainerUtil.getLastItem(((GoSelectorExpr)o).getExpressionList());
       return item != null ? item.getGoType() : null;
     }
+    else if (o instanceof GoIndexExpr) {
+      GoExpression first = ContainerUtil.getFirstItem(((GoIndexExpr)o).getExpressionList());
+      GoType type = first == null ? null : getGoType(first);
+      if (type instanceof GoMapType) {
+        List<GoType> list = ((GoMapType)type).getTypeList();
+        if (list.size() == 2) {
+          return list.get(1);
+        }
+      }
+    }
     return null;
   }
 

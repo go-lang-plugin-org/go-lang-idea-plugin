@@ -163,3 +163,20 @@ func <warning>dial</warning>() (int) {
 		return ce.err
 	}
 }
+
+type Item struct {
+	Key string
+	Value []byte
+}
+
+func <warning>main2</warning>() {
+	m := GetMulti()
+	v := m["AA"].Value
+	Println(v)
+}
+
+func GetMulti() (map[string]*Item) {
+	m := make(map[string]*Item)
+	m["AA"] = &Item{}
+	return m
+}
