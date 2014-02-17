@@ -1187,6 +1187,40 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // ExpressionList '=' | VarDefinitionList ':='
+  static boolean ExpressionsOrVariables(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExpressionsOrVariables")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ExpressionsOrVariables_0(builder_, level_ + 1);
+    if (!result_) result_ = ExpressionsOrVariables_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // ExpressionList '='
+  private static boolean ExpressionsOrVariables_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExpressionsOrVariables_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ExpressionList(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, ASSIGN);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // VarDefinitionList ':='
+  private static boolean ExpressionsOrVariables_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ExpressionsOrVariables_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = VarDefinitionList(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, VAR_ASSIGN);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // fallthrough
   public static boolean FallthroughStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FallthroughStatement")) return false;
@@ -2347,51 +2381,18 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ( ExpressionList '=' | VarDefinitionList ':=' ) range Expression
+  // ExpressionsOrVariables range Expression
   public static boolean RangeClause(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RangeClause")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<range clause>");
-    result_ = RangeClause_0(builder_, level_ + 1);
+    result_ = ExpressionsOrVariables(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, RANGE);
     pinned_ = result_; // pin = 2
     result_ = result_ && Expression(builder_, level_ + 1, -1);
     exit_section_(builder_, level_, marker_, RANGE_CLAUSE, result_, pinned_, null);
     return result_ || pinned_;
-  }
-
-  // ExpressionList '=' | VarDefinitionList ':='
-  private static boolean RangeClause_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "RangeClause_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = RangeClause_0_0(builder_, level_ + 1);
-    if (!result_) result_ = RangeClause_0_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ExpressionList '='
-  private static boolean RangeClause_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "RangeClause_0_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = ExpressionList(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, ASSIGN);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // VarDefinitionList ':='
-  private static boolean RangeClause_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "RangeClause_0_1")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = VarDefinitionList(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, VAR_ASSIGN);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
   }
 
   /* ********************************************************** */
@@ -2502,7 +2503,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // [ ExpressionList '=' | VarDefinitionList ':=' ] Expression
+  // ExpressionsOrVariables? Expression
   public static boolean RecvStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RecvStatement")) return false;
     boolean result_ = false;
@@ -2513,44 +2514,11 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // [ ExpressionList '=' | VarDefinitionList ':=' ]
+  // ExpressionsOrVariables?
   private static boolean RecvStatement_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RecvStatement_0")) return false;
-    RecvStatement_0_0(builder_, level_ + 1);
+    ExpressionsOrVariables(builder_, level_ + 1);
     return true;
-  }
-
-  // ExpressionList '=' | VarDefinitionList ':='
-  private static boolean RecvStatement_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "RecvStatement_0_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = RecvStatement_0_0_0(builder_, level_ + 1);
-    if (!result_) result_ = RecvStatement_0_0_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ExpressionList '='
-  private static boolean RecvStatement_0_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "RecvStatement_0_0_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = ExpressionList(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, ASSIGN);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // VarDefinitionList ':='
-  private static boolean RecvStatement_0_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "RecvStatement_0_0_1")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = VarDefinitionList(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, VAR_ASSIGN);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
   }
 
   /* ********************************************************** */

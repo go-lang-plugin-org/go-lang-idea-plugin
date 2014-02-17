@@ -338,12 +338,13 @@ TypeList ::= Type ( ',' Type )* {extends=Type}
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
 ForStatement ::= for ([ForClause | RangeClause] Block | <<enterMode "NO_EMPTY_LITERAL">> Expression <<exitMode "NO_EMPTY_LITERAL">> Block)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
-RangeClause ::= ( ExpressionList '=' | VarDefinitionList ':=' ) range Expression {pin=2}
+RangeClause ::= ExpressionsOrVariables range Expression {pin=2}
+private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='
 GoStatement ::= go Expression
 SelectStatement ::= select '{' ( CommClause )* '}'
 CommClause ::= CommCase ':' Statements? {pin=1}
 CommCase ::= case ( SendStatement | RecvStatement ) | default {pin(".*")=1}
-RecvStatement ::= [ ExpressionList '=' | VarDefinitionList ':=' ] Expression {pin=0 extends=VarSpec}
+RecvStatement ::= ExpressionsOrVariables? Expression {pin=0 extends=VarSpec}
 ReturnStatement ::= return ExpressionList?
 LabelRef ::= identifier {
   methods=[getReference]
