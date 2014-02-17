@@ -1553,46 +1553,6 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // identifier ( ',' identifier )*
-  static boolean IdentifierList(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IdentifierList")) return false;
-    if (!nextTokenIs(builder_, IDENTIFIER)) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, IDENTIFIER);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && IdentifierList_1(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
-  }
-
-  // ( ',' identifier )*
-  private static boolean IdentifierList_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IdentifierList_1")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!IdentifierList_1_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "IdentifierList_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
-  }
-
-  // ',' identifier
-  private static boolean IdentifierList_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "IdentifierList_1_0")) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = consumeToken(builder_, COMMA);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && consumeToken(builder_, IDENTIFIER);
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
-  }
-
-  /* ********************************************************** */
   // ParamDefinition &(!('.' | ')')) (',' ParamDefinition)*
   static boolean IdentifierListNoPin(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "IdentifierListNoPin")) return false;

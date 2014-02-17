@@ -194,7 +194,6 @@ ConstDefinition ::= identifier {
   stubClass="com.goide.stubs.GoConstDefinitionStub"
 }
 
-private IdentifierList ::= identifier ( ',' identifier )*
 private ExpressionList ::= Expression ( ',' Expression )*
 
 TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
