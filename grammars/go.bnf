@@ -272,7 +272,7 @@ Expression ::=
   | UnaryExpr
   | ConversionExpr
   | MaxGroup
-  | ParenthesesExpr {methods=[getGoType]}
+  | ParenthesesExpr {methods=[getGoType] implements="com.goide.psi.GoTypeOwner"}
 
 OrExpr ::= Expression '||' Expression
 AndExpr ::= Expression '&&' Expression

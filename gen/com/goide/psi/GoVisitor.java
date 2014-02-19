@@ -115,7 +115,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitExpression(@NotNull GoExpression o) {
-    visitCompositeElement(o);
+    visitTypeOwner(o);
   }
 
   public void visitFallthroughStatement(@NotNull GoFallthroughStatement o) {
@@ -411,6 +411,10 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitTopLevelDeclaration(@NotNull GoTopLevelDeclaration o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitTypeOwner(@NotNull GoTypeOwner o) {
     visitCompositeElement(o);
   }
 
