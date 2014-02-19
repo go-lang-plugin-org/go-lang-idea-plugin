@@ -334,7 +334,7 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType getGoType(@NotNull GoVarDefinition o) {
     PsiElement parent = o.getParent();
-    if (parent instanceof GoShortVarDeclaration || parent instanceof GoRecvStatement) {
+    if (parent instanceof GoShortVarDeclaration || parent instanceof GoRecvStatement) { // todo: range processing
       List<GoVarDefinition> defList = ((GoVarSpec)parent).getVarDefinitionList();
       int i = 0;
       for (GoVarDefinition d : defList) {
