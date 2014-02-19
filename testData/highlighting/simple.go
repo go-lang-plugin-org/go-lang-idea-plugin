@@ -181,3 +181,16 @@ func GetMulti() (map[string]*Item) {
 	m["AA"] = &Item{}
 	return m
 }
+
+type Response struct { ResponseWriter }
+type ResponseWriter interface { Header() Header }
+type Header int
+
+func (h Header) Add(key, value string) { }
+
+func (r Response) AddHeader(header string, value string) Response {
+	rr := r.Header()
+	rr.Add()
+	r.Header().Add(header, value)
+	return r
+}
