@@ -3,6 +3,7 @@ package com.goide.psi.impl;
 import com.goide.psi.GoBlock;
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoSignature;
+import com.goide.psi.GoType;
 import com.goide.stubs.GoFunctionOrMethodDeclarationStub;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
@@ -41,5 +42,11 @@ abstract public class GoFunctionOrMethodDeclarationImpl<T extends GoFunctionOrMe
   @NotNull
   public PsiElement getIdentifier() {
     return findNotNullChildByType(IDENTIFIER);
+  }
+
+  @Nullable
+  @Override
+  public GoType getGoType() {
+    return GoPsiImplUtil.getGoType(this);
   }
 }

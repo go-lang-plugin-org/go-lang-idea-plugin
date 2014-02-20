@@ -142,6 +142,7 @@ InterfaceType ::= interface '{' MethodSpecs? '}' {pin(".*")=1}
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
 MethodSpec ::= TypeName &(!'(') | identifier Signature {
   stubClass="com.goide.stubs.GoMethodSpecStub"
+  methods=[getGoType]
 }
 
 MapType ::= map '[' Type ']' Type {pin=1}

@@ -45,4 +45,9 @@ public class GoMethodSpecImpl extends GoNamedElementImpl<GoMethodSpecStub> imple
     return findChildByType(IDENTIFIER);
   }
 
+  @Nullable
+  public GoType getGoType() {
+    return GoPsiImplUtil.getGoType(this);
+  }
+
 }

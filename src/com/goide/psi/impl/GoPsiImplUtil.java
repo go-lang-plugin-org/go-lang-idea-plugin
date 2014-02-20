@@ -231,75 +231,13 @@ public class GoPsiImplUtil {
       }
     }
     else if (o instanceof GoCallExpr) {
-      GoExpression expression = ((GoCallExpr)o).getExpression();
-      if (expression instanceof GoReferenceExpression) {
-        PsiReference reference = expression.getReference();
-        PsiElement resolve = reference != null ? reference.resolve() : null;
-        if (resolve instanceof GoReceiverHolder) {
-          GoSignature signature = ((GoReceiverHolder)resolve).getSignature();
-          GoResult result = signature != null ? signature.getResult() : null;
-          if (result != null) {
-            GoType type = result.getType();
-            if (type instanceof GoTypeList && ((GoTypeList)type).getTypeList().size() == 1) {
-              return ((GoTypeList)type).getTypeList().get(0);
-            }
-            if (type != null) return type;
-            final GoParameters parameters = result.getParameters();
-            if (parameters != null) {
-              GoType parametersType = parameters.getType();
-              if (parametersType != null) return parametersType;
-              List<GoType> composite = ContainerUtil.newArrayList();
-              for (GoParameterDeclaration p : parameters.getParameterDeclarationList()) {
-                composite.add(p.getType());
-              }
-              class MyGoTypeList extends LightElement implements GoTypeList {
-                private final List<GoType> myTypes;
-
-                public MyGoTypeList(@NotNull List<GoType> types) {
-                  super(parameters.getManager(), parameters.getLanguage());
-                  myTypes = types;
-                }
-
-                @NotNull
-                @Override
-                public List<GoType> getTypeList() {
-                  return myTypes;
-                }
-
-                @Nullable
-                @Override
-                public GoTypeReferenceExpression getTypeReferenceExpression() {
-                  return null;
-                }
-
-                @Nullable
-                @Override
-                public PsiElement getLparen() {
-                  return null;
-                }
-
-                @Nullable
-                @Override
-                public PsiElement getRparen() {
-                  return null;
-                }
-
-                @Override
-                public String toString() {
-                  return null;
-                }
-              }
-              return new MyGoTypeList(composite);
-            }
-          }
-        }
-      }
+      return ((GoCallExpr)o).getExpression().getGoType();
     }
     else if (o instanceof GoReferenceExpression) {
       PsiReference reference = o.getReference();
       PsiElement resolve = reference != null ? reference.resolve() : null;
-      if (resolve instanceof GoNamedElement) {
-        return ((GoNamedElement)resolve).getGoType();
+      if (resolve instanceof GoTypeOwner) {
+        return ((GoTypeOwner)resolve).getGoType();
       }
     }
     else if (o instanceof GoParenthesesExpr) {
@@ -395,4 +333,66 @@ public class GoPsiImplUtil {
     }
     return Collections.emptyList();
   }
+  
+  @Nullable
+  public static GoType getGoType(@NotNull GoReceiverHolder o) {
+    GoSignature signature = o.getSignature();
+    GoResult result = signature != null ? signature.getResult() : null;
+    if (result != null) {
+      GoType type = result.getType();
+      if (type instanceof GoTypeList && ((GoTypeList)type).getTypeList().size() == 1) {
+        return ((GoTypeList)type).getTypeList().get(0);
+      }
+      if (type != null) return type;
+      final GoParameters parameters = result.getParameters();
+      if (parameters != null) {
+        GoType parametersType = parameters.getType();
+        if (parametersType != null) return parametersType;
+        List<GoType> composite = ContainerUtil.newArrayList();
+        for (GoParameterDeclaration p : parameters.getParameterDeclarationList()) {
+          composite.add(p.getType());
+        }
+        class MyGoTypeList extends LightElement implements GoTypeList {
+          private final List<GoType> myTypes;
+
+          public MyGoTypeList(@NotNull List<GoType> types) {
+            super(parameters.getManager(), parameters.getLanguage());
+            myTypes = types;
+          }
+
+          @NotNull
+          @Override
+          public List<GoType> getTypeList() {
+            return myTypes;
+          }
+
+          @Nullable
+          @Override
+          public GoTypeReferenceExpression getTypeReferenceExpression() {
+            return null;
+          }
+
+          @Nullable
+          @Override
+          public PsiElement getLparen() {
+            return null;
+          }
+
+          @Nullable
+          @Override
+          public PsiElement getRparen() {
+            return null;
+          }
+
+          @Override
+          public String toString() {
+            return null;
+          }
+        }
+        return new MyGoTypeList(composite);
+      }
+    }
+    return null;
+  }
+  
 }

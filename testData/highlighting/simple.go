@@ -25,6 +25,7 @@ func <warning>foo</warning>() {
 
 type int int
 type byte byte
+type bool bool
 type float32 float32
 type string string
 
@@ -193,4 +194,15 @@ func (r Response) AddHeader(header string, value string) Response {
 	rr.Add()
 	r.Header().Add(header, value)
 	return r
+}
+
+type WebService struct { rootPath string }
+func (w *WebService) Path(root string) *WebService { return w }
+func (w *WebService) GET(subPath string) *RouteBuilder { return new(RouteBuilder) }
+type RouteBuilder struct { bool }
+func (w *WebService) Route(builder *RouteBuilder) *WebService { return w }
+func <warning>WebServiceTest</warning>() {
+	ws1 := new(WebService).Path("/")
+	ws1.GET().bool
+	ws1.Route(ws1.GET("/{type}/{id}"))
 }
