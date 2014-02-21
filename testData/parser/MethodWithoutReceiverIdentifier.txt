@@ -2,6 +2,8 @@ GO_FILE
   PACKAGE_CLAUSE
     PsiElement(package)('package')
     PsiElement(identifier)('main')
+  IMPORT_LIST
+    <empty list>
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER

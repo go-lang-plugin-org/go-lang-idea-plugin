@@ -2,16 +2,17 @@ GO_FILE
   PACKAGE_CLAUSE
     PsiElement(package)('package')
     PsiElement(identifier)('main')
-  IMPORT_DECLARATION
-    PsiElement(import)('import')
-    IMPORT_SPEC
-      IMPORT_STRING
-        PsiElement(string)('"fmt"')
-  IMPORT_DECLARATION
-    PsiElement(import)('import')
-    IMPORT_SPEC
-      IMPORT_STRING
-        PsiElement(string)('"strconv"')
+  IMPORT_LIST
+    IMPORT_DECLARATION
+      PsiElement(import)('import')
+      IMPORT_SPEC
+        IMPORT_STRING
+          PsiElement(string)('"fmt"')
+    IMPORT_DECLARATION
+      PsiElement(import)('import')
+      IMPORT_SPEC
+        IMPORT_STRING
+          PsiElement(string)('"strconv"')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     PsiElement(identifier)('main')

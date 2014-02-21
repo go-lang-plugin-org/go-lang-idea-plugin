@@ -170,6 +170,10 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitImportList(@NotNull GoImportList o) {
+    visitCompositeElement(o);
+  }
+
   public void visitImportSpec(@NotNull GoImportSpec o) {
     visitNamedElement(o);
   }

@@ -1,10 +1,7 @@
 package com.goide.editor;
 
 import com.goide.GoParserDefinition;
-import com.goide.psi.GoBlock;
-import com.goide.psi.GoFile;
-import com.goide.psi.GoFunctionOrMethodDeclaration;
-import com.goide.psi.GoImportDeclaration;
+import com.goide.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;
@@ -31,7 +28,8 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
     final List<FoldingDescriptor> result = ContainerUtil.newArrayList();
 
-    GoImportDeclaration[] imports = PsiTreeUtil.getChildrenOfType(file, GoImportDeclaration.class);
+    GoImportList importList = PsiTreeUtil.getChildOfType(file, GoImportList.class);
+    GoImportDeclaration[] imports = PsiTreeUtil.getChildrenOfType(importList, GoImportDeclaration.class);
     if (imports != null) {
       for (GoImportDeclaration imp : imports) {
         PsiElement l = imp.getLparen();

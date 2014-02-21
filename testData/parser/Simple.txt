@@ -2,6 +2,8 @@ GO_FILE
   PACKAGE_CLAUSE
     PsiElement(package)('package')
     PsiElement(identifier)('foo')
+  IMPORT_LIST
+    <empty list>
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     PsiElement(identifier)('NewCipher')

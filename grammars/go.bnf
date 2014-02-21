@@ -83,7 +83,8 @@
   generateTokenAccessors=true
 }
 
-File ::= PackageClause semi (ImportDeclaration semi)* TopLevelDeclaration* {pin(".*")=1}
+File ::= PackageClause semi ImportList TopLevelDeclaration* {pin(".*")=1}
+ImportList ::= (ImportDeclaration semi)*
 private semi ::= '<NL>' | ';' | <<eof>>
 
 PackageClause ::= package identifier {pin=1}

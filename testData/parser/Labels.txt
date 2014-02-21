@@ -9,6 +9,8 @@ GO_FILE
   PACKAGE_CLAUSE
     PsiElement(package)('package')
     PsiElement(identifier)('main')
+  IMPORT_LIST
+    <empty list>
   VAR_DECLARATION
     PsiElement(var)('var')
     VAR_SPEC

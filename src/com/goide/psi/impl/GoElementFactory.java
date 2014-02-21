@@ -36,7 +36,7 @@ public class GoElementFactory {
   @NotNull
   public static PsiElement createIdentifierFromText(@NotNull Project project, String text) {
     GoFile file = createFileFromText(project, "package " + text);
-    return PsiTreeUtil.getDeepestLast(file);
+    return file.getPackage().getIdentifier();
   }
 
   @NotNull

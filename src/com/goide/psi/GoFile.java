@@ -213,9 +213,11 @@ public class GoFile extends PsiFileBase {
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
-        if (e instanceof GoImportDeclaration) {
-          for (GoImportSpec spec : ((GoImportDeclaration)e).getImportSpecList()) {
-            result.add(spec);
+        if (e instanceof GoImportList) {
+          for (GoImportDeclaration declaration : ((GoImportList)e).getImportDeclarationList()) {
+            for (GoImportSpec spec : declaration.getImportSpecList()) {
+              result.add(spec);
+            }
           }
         }
         return true;

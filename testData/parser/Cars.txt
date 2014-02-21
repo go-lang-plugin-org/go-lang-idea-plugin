@@ -2,11 +2,12 @@ GO_FILE
   PACKAGE_CLAUSE
     PsiElement(package)('package')
     PsiElement(identifier)('main')
-  IMPORT_DECLARATION
-    PsiElement(import)('import')
-    IMPORT_SPEC
-      IMPORT_STRING
-        PsiElement(string)('"fmt"')
+  IMPORT_LIST
+    IMPORT_DECLARATION
+      PsiElement(import)('import')
+      IMPORT_SPEC
+        IMPORT_STRING
+          PsiElement(string)('"fmt"')
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC

@@ -144,6 +144,9 @@ public class GoParser implements PsiParser {
     else if (root_ == IMPORT_DECLARATION) {
       result_ = ImportDeclaration(builder_, 0);
     }
+    else if (root_ == IMPORT_LIST) {
+      result_ = ImportList(builder_, 0);
+    }
     else if (root_ == IMPORT_SPEC) {
       result_ = ImportSpec(builder_, 0);
     }
@@ -1374,7 +1377,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // PackageClause semi (ImportDeclaration semi)* TopLevelDeclaration*
+  // PackageClause semi ImportList TopLevelDeclaration*
   static boolean File(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "File")) return false;
     if (!nextTokenIs(builder_, PACKAGE)) return false;
@@ -1384,33 +1387,8 @@ public class GoParser implements PsiParser {
     result_ = PackageClause(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, semi(builder_, level_ + 1));
-    result_ = pinned_ && report_error_(builder_, File_2(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && report_error_(builder_, ImportList(builder_, level_ + 1)) && result_;
     result_ = pinned_ && File_3(builder_, level_ + 1) && result_;
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
-    return result_ || pinned_;
-  }
-
-  // (ImportDeclaration semi)*
-  private static boolean File_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "File_2")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!File_2_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "File_2", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
-  }
-
-  // ImportDeclaration semi
-  private static boolean File_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "File_2_0")) return false;
-    boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = ImportDeclaration(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && semi(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
     return result_ || pinned_;
   }
@@ -1760,6 +1738,34 @@ public class GoParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "ImportDeclaration_1_1_1")) return false;
     ImportSpecs(builder_, level_ + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // (ImportDeclaration semi)*
+  public static boolean ImportList(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ImportList")) return false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<import list>");
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!ImportList_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "ImportList", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    exit_section_(builder_, level_, marker_, IMPORT_LIST, true, false, null);
+    return true;
+  }
+
+  // ImportDeclaration semi
+  private static boolean ImportList_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ImportList_0")) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = ImportDeclaration(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && semi(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
