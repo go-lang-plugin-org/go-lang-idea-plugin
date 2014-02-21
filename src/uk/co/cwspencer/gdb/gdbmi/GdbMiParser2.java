@@ -329,6 +329,12 @@ public class GdbMiParser2 {
         } else if (line.startsWith("features=")) {
             result.results.add(parseFeaturesLine(line));
             return result;
+        } else if (line.startsWith("value")) {
+            GdbMiResult valueVal = new GdbMiResult("value");
+            valueVal.value = new GdbMiValue(GdbMiValue.Type.String);
+            valueVal.value.string = line.substring(7, line.length()-1);
+            result.results.add(valueVal);
+            return result;
         }
 
         printUnhandledLine(line);
@@ -837,72 +843,81 @@ public class GdbMiParser2 {
     private static Collection<GdbMiResult> parseFrameLine(String line) {
         Collection<GdbMiResult> result = new ArrayList<GdbMiResult>();
 
-        Pattern p = Pattern.compile(
-                "\\{" +
-                        "(?:level=\"(\\d+)\")?,?" +
-                        "(?:addr=\"([^\"]+)\")?,?" +
-                        "(?:func=\"([^\"]+)\")?,?" +
-                        "(?:args=\\[([^\\]]*)\\])?,?" +
-                        "(?:file=\"([^\"]+)\")?,?" +
-                        "(?:fullname=\"([^\"]+)\")?,?" +
-                        "(?:line=\"(\\d+)\")?" +
-                        "\\}"
-        );
+        Pattern p = Pattern.compile("args=\\[");
         Matcher m = p.matcher(line);
+        Boolean hasArgs = m.find();
+
+        String pattern = "\\{" +
+                "(?:level=\"(\\d+)\")?,?" +
+                "(?:addr=\"([^\"]+)\")?,?" +
+                "(?:func=\"([^\"]+)\")?,?";
+
+        if (hasArgs) {
+            pattern += "(?:args=\\[(.*?)\\])?,";
+        }
+
+        pattern += "(?:file=\"([^\"]+)\")?,?" +
+                "(?:fullname=\"([^\"]+)\")?,?" +
+                "(?:line=\"(\\d+)\")?" +
+                "\\}";
+
+        p = Pattern.compile(pattern);
+        m = p.matcher(line);
 
         while (m.find()) {
+            Integer matchGroup = 0;
             GdbMiResult subRes = new GdbMiResult("frame");
             GdbMiValue frameVal = new GdbMiValue(GdbMiValue.Type.Tuple);
 
             // level="0"
-            if (m.group(1) != null) {
+            if (m.group(++matchGroup) != null) {
                 GdbMiResult levelVal = new GdbMiResult("level");
                 levelVal.value.type = GdbMiValue.Type.String;
-                levelVal.value.string = m.group(1);
+                levelVal.value.string = m.group(matchGroup);
                 frameVal.tuple.add(levelVal);
             }
 
             // addr="0x0000000000400c57"
-            if (m.group(2) != null) {
+            if (m.group(++matchGroup) != null) {
                 GdbMiResult addrVal = new GdbMiResult("addr");
                 addrVal.value.type = GdbMiValue.Type.String;
-                addrVal.value.string = m.group(2);
+                addrVal.value.string = m.group(matchGroup);
                 frameVal.tuple.add(addrVal);
             }
 
             // func="main.main"
-            if (m.group(3) != null) {
+            if (m.group(++matchGroup) != null) {
                 GdbMiResult funcVal = new GdbMiResult("func");
                 funcVal.value.type = GdbMiValue.Type.String;
-                funcVal.value.string = m.group(3);
+                funcVal.value.string = m.group(matchGroup);
                 frameVal.tuple.add(funcVal);
             }
 
-            if (m.group(4) != null) {
-                frameVal.tuple.add(parseArgsLine(m.group(4)));
+            if (hasArgs && m.group(++matchGroup) != null) {
+                frameVal.tuple.add(parseArgsLine(m.group(matchGroup)));
             }
 
             // file="/var/www/personal/untitled4/src/untitled4.go"
-            if (m.group(5) != null) {
+            if (m.group(++matchGroup) != null) {
                 GdbMiResult fileVal = new GdbMiResult("file");
                 fileVal.value.type = GdbMiValue.Type.String;
-                fileVal.value.string = m.group(5);
+                fileVal.value.string = m.group(matchGroup);
                 frameVal.tuple.add(fileVal);
             }
 
             // fullname="/var/www/personal/untitled4/src/untitled4.go"
-            if (m.group(6) != null) {
+            if (m.group(++matchGroup) != null) {
                 GdbMiResult fullnameVal = new GdbMiResult("fullname");
                 fullnameVal.value.type = GdbMiValue.Type.String;
-                fullnameVal.value.string = m.group(6);
+                fullnameVal.value.string = m.group(matchGroup);
                 frameVal.tuple.add(fullnameVal);
             }
 
             // line="17"
-            if (m.group(7) != null) {
+            if (m.group(++matchGroup) != null) {
                 GdbMiResult lineVal = new GdbMiResult("line");
                 lineVal.value.type = GdbMiValue.Type.String;
-                lineVal.value.string = m.group(7);
+                lineVal.value.string = m.group(matchGroup);
                 frameVal.tuple.add(lineVal);
             }
 
