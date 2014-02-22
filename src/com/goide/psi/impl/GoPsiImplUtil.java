@@ -14,7 +14,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiParserFacadeImpl;
 import com.intellij.psi.impl.light.LightElement;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
@@ -419,8 +418,9 @@ public class GoPsiImplUtil {
   private static GoImportSpec addImportDeclaration(@NotNull GoImportList importList,
                                                    @NotNull GoImportDeclaration newImportDeclaration,
                                                    @Nullable PsiElement anchor) {
-    anchor = importList.addAfter(createNewLine(importList.getProject()), anchor);
     GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, anchor);
+    importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
+    importList.addBefore(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
     GoImportSpec result = ContainerUtil.getFirstItem(importDeclaration.getImportSpecList());
     assert result != null;
     return result;
@@ -430,12 +430,7 @@ public class GoPsiImplUtil {
   public static GoImportSpec addImportSpec(@NotNull GoImportDeclaration declaration, @NotNull String packagePath, @Nullable String alias) {
     PsiElement rParen = declaration.getRparen();
     assert rParen != null;
-    declaration.addBefore(createNewLine(declaration.getProject()), rParen);
+    declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), rParen);
     return (GoImportSpec)declaration.addBefore(GoElementFactory.createImportSpec(declaration.getProject(), packagePath, alias), rParen);
-  }
-
-  @NotNull
-  public static PsiElement createNewLine(@NotNull Project project) {
-    return PsiParserFacadeImpl.SERVICE.getInstance(project).createWhiteSpaceFromText("\n");
   }
 }

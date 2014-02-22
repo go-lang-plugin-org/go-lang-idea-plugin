@@ -19,6 +19,10 @@ public class ImportListTest extends GoCodeInsightFixtureTestCase {
     doAddImportTest();
   }
 
+  public void testAddImportToEmptyListBeforeFunction() {
+    doAddImportTest();
+  }
+
   private void doAddImportTest() {
     myFixture.configureByFile(getTestName(true) + ".go");
     //noinspection ConstantConditions

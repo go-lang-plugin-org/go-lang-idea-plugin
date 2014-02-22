@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.impl.PsiParserFacadeImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -52,5 +53,10 @@ public class GoElementFactory {
   public static GoImportString createImportString(@NotNull Project project, @NotNull String importString) {
     GoImportSpec importSpec = createImportSpec(project, importString, null);
     return importSpec.getImportString();
+  }
+
+  @NotNull
+  public static PsiElement createNewLine(@NotNull Project project) {
+    return PsiParserFacadeImpl.SERVICE.getInstance(project).createWhiteSpaceFromText("\n");
   }
 }
