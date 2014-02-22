@@ -12,6 +12,8 @@ import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.keymap.KeymapUtil;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -124,7 +126,10 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   }
 
   private static GlobalSearchScope scope(@NotNull PsiElement element) {
-    return GlobalSearchScope.projectScope(element.getProject());
+    Module module = ModuleUtilCore.findModuleForPsiElement(element);
+    return module != null 
+           ? GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module) 
+           : GlobalSearchScope.projectScope(element.getProject());
   }
 
   private static void applyFix(@NotNull Collection<String> packagesToImport, @NotNull PsiFile file) {
