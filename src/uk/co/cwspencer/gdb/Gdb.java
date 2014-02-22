@@ -627,7 +627,7 @@ public class Gdb {
      *
      * @param event The event.
      */
-    private void onGdbCapabilitiesReady(GdbEvent event) {
+    public void onGdbCapabilitiesReady(GdbEvent event) {
         if (event instanceof GdbErrorEvent) {
             m_log.warn("Failed to get GDB capabilities list: " + ((GdbErrorEvent) event).message);
             return;

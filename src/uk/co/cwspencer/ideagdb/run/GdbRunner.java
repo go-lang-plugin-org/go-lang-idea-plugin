@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.sdk.GoSdkUtil;
+import uk.co.cwspencer.gdb.Gdb;
+import uk.co.cwspencer.gdb.messages.GdbEvent;
 import uk.co.cwspencer.ideagdb.debug.GdbDebugProcess;
 
 import java.io.File;
@@ -99,16 +101,23 @@ public class GdbRunner extends DefaultProgramRunner {
             return null;
         }
 
+        final Gdb gdbProcess = debugProcess.m_gdb;
+
         // Queue startup commands
-        debugProcess.m_gdb.sendCommand("-list-features");
-        debugProcess.m_gdb.sendCommand("add-auto-load-safe-path " + goRootPath);
+        gdbProcess.sendCommand("-list-features", new Gdb.GdbEventCallback() {
+            @Override
+            public void onGdbCommandCompleted(GdbEvent event) {
+                gdbProcess.onGdbCapabilitiesReady(event);
+            }
+        });
+        gdbProcess.sendCommand("add-auto-load-safe-path " + goRootPath);
 
         String pythonRuntime = goRootPath + "/src/pkg/runtime/runtime-gdb.py";
         if (GoSdkUtil.checkFileExists(pythonRuntime)) {
-            debugProcess.m_gdb.sendCommand("source " + pythonRuntime);
+            gdbProcess.sendCommand("source " + pythonRuntime);
         }
 
-        debugProcess.m_gdb.sendCommand("file " + execName);
+        gdbProcess.sendCommand("file " + execName);
 
         debugSession.initBreakpoints();
 
@@ -117,12 +126,12 @@ public class GdbRunner extends DefaultProgramRunner {
         for (String command : commandsArray) {
             command = command.trim();
             if (!command.isEmpty()) {
-                debugProcess.m_gdb.sendCommand(command);
+                gdbProcess.sendCommand(command);
             }
         }
 
         if (configuration.autoStartGdb) {
-            debugProcess.m_gdb.sendCommand("run");
+            gdbProcess.sendCommand("run");
         }
 
         return debugSession.getRunContentDescriptor();
