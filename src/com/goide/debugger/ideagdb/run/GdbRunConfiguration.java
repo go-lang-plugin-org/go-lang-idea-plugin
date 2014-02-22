@@ -9,16 +9,17 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class GdbRunConfiguration extends ModuleBasedConfiguration<RunConfigurationModule> implements RunConfigurationWithSuppressedDefaultRunAction, RunConfigurationWithSuppressedDefaultDebugAction {
+public class GdbRunConfiguration extends ModuleBasedConfiguration<RunConfigurationModule>
+  implements RunConfigurationWithSuppressedDefaultRunAction, RunConfigurationWithSuppressedDefaultDebugAction {
   private static final Logger LOG = Logger.getInstance(GdbRunConfiguration.class);
 
   public String GDB_PATH = "gdb";
@@ -57,13 +58,13 @@ public class GdbRunConfiguration extends ModuleBasedConfiguration<RunConfigurati
   public void readExternal(Element element) throws InvalidDataException {
     super.readExternal(element);
     readModule(element);
-    DefaultJDOMExternalizer.readExternal(this, element);
+    XmlSerializer.deserializeInto(this, element);
   }
 
   @Override
   public void writeExternal(Element element) throws WriteExternalException {
     super.writeExternal(element);
     writeModule(element);
-    DefaultJDOMExternalizer.writeExternal(this, element);
+    XmlSerializer.serializeInto(this, element);
   }
 }
