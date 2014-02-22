@@ -338,6 +338,9 @@ public class GdbMiParser2 {
         } else if (line.startsWith("thread-ids=")) {
             result.results.addAll(parseThreadIdsLine(line));
             return result;
+        }  else if (line.startsWith("new-thread-id=")) {
+            result.results.addAll(parseNewThreadIdLine(line));
+            return result;
         }
 
         printUnhandledLine(line);
@@ -1549,6 +1552,29 @@ public class GdbMiParser2 {
             numberOfThreads.value.string = m.group(2);
             result.add(numberOfThreads);
         }
+
+        return result;
+    }
+
+    private Collection<GdbMiResult> parseNewThreadIdLine(String line) {
+        // new-thread-id="4",frame={level="0",addr="0x00007ffff7bc3cd0",func="__GI___nptl_create_event",args=[],file="events.c",fullname="/build/buildd/eglibc-2.17/nptl/events.c",line="25"}
+        Collection<GdbMiResult> result = new ArrayList<GdbMiResult>();
+
+        Pattern p = Pattern.compile("new-thread-id=\"(\\d+)\",(?:frame=\\{([^\\}].+)\\})");
+        Matcher m = p.matcher(line);
+
+        if (!m.find()) {
+            printUnhandledLine(line);
+            return result;
+        }
+
+        GdbMiResult newThreadId = new GdbMiResult("new-thread-id");
+        newThreadId.value.type = GdbMiValue.Type.String;
+        newThreadId.value.string = m.group(1);
+        result.add(newThreadId);
+
+        // frame={*}
+        result.add(parseBreakpointHitLineFrameLine(m.group(2)));
 
         return result;
     }
