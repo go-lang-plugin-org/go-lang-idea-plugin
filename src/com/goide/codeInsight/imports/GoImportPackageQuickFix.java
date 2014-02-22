@@ -78,7 +78,12 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
       new QuestionAction() {
         @Override
         public boolean execute() {
-          applyFix(packagesToImport, element.getContainingFile());
+          ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            @Override
+            public void run() {
+              applyFix(packagesToImport, element.getContainingFile());
+            }
+          });
           return true;
         }
       }
