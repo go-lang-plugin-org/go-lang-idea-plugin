@@ -82,6 +82,11 @@ public class GoFile extends PsiFileBase {
     }
     return myPackage.getValue();
   }
+  
+  @Nullable
+  public GoImportList getImportList() {
+    return findChildByClass(GoImportList.class);
+  }
 
   @NotNull
   public List<GoFunctionDeclaration> getFunctions() {

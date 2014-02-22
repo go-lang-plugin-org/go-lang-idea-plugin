@@ -28,8 +28,7 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
     final List<FoldingDescriptor> result = ContainerUtil.newArrayList();
 
-    GoImportList importList = PsiTreeUtil.getChildOfType(file, GoImportList.class);
-    GoImportDeclaration[] imports = PsiTreeUtil.getChildrenOfType(importList, GoImportDeclaration.class);
+    GoImportDeclaration[] imports = PsiTreeUtil.getChildrenOfType(file.getImportList(), GoImportDeclaration.class);
     if (imports != null) {
       for (GoImportDeclaration imp : imports) {
         PsiElement l = imp.getLparen();
