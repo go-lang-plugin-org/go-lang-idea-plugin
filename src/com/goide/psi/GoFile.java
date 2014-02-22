@@ -156,7 +156,10 @@ public class GoFile extends PsiFileBase {
         map.putValue(identifier.getText(), spec);
         continue;
       }
-
+      if (spec.getDot() != null) {
+        map.putValue(".", spec);
+        continue;
+      }
       String key = PathUtil.getFileName(StringUtil.unquoteString(string.getText()));
       if (!StringUtil.isEmpty(key)) {
         map.putValue(key, string);

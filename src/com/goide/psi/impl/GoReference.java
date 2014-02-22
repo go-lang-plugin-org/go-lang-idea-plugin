@@ -251,9 +251,15 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
     if (RESERVED_NAMES.contains(id)) return processSelf(processor, state);
 
-    for (Object o : file.getImportMap().values()) {
+    for (PsiElement o : file.getImportMap().values()) {
+      if (o instanceof GoImportSpec) {
+        if (((GoImportSpec)o).getDot() != null) {
+          PsiDirectory implicitDir = ((GoImportSpec)o).getImportString().resolve();
+          if (!processDirectory(implicitDir, file, null, processor, state, false)) return false;
+        }
+        else if (!processor.execute(o, state)) return false;
+      }
       if (o instanceof GoImportString) {
-      if (o instanceof GoImportSpec && !processor.execute((PsiElement)o, state)) return false;
         PsiDirectory resolve = ((GoImportString)o).resolve();
         if (resolve != null && !processor.execute(resolve, state)) return false;
       }
