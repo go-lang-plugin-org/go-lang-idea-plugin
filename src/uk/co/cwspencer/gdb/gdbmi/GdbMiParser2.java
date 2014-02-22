@@ -1509,7 +1509,7 @@ public class GdbMiParser2 {
 
         while (m.find()) {
             GdbMiValue varVal = new GdbMiValue(GdbMiValue.Type.String);
-            varVal.string = m.group(0);
+            varVal.string = m.group(1);
             result.value.list.values.add(varVal);
         }
 
