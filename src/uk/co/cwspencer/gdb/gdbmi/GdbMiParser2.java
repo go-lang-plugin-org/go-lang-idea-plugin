@@ -329,11 +329,14 @@ public class GdbMiParser2 {
         } else if (line.startsWith("features=")) {
             result.results.add(parseFeaturesLine(line));
             return result;
-        } else if (line.startsWith("value")) {
+        } else if (line.startsWith("value=")) {
             GdbMiResult valueVal = new GdbMiResult("value");
             valueVal.value = new GdbMiValue(GdbMiValue.Type.String);
             valueVal.value.string = line.substring(7, line.length()-1);
             result.results.add(valueVal);
+            return result;
+        } else if (line.startsWith("thread-ids=")) {
+            result.results.addAll(parseThreadIdsLine(line));
             return result;
         }
 
@@ -1493,7 +1496,7 @@ public class GdbMiParser2 {
         return result;
     }
 
-    private static GdbMiResult parseFeaturesLine(String line) {
+    private GdbMiResult parseFeaturesLine(String line) {
         GdbMiResult result = new GdbMiResult("features");
         result.value.type = GdbMiValue.Type.List;
         result.value.list = new GdbMiList();
@@ -1508,6 +1511,43 @@ public class GdbMiParser2 {
             GdbMiValue varVal = new GdbMiValue(GdbMiValue.Type.String);
             varVal.string = m.group(0);
             result.value.list.values.add(varVal);
+        }
+
+        return result;
+    }
+
+    private Collection<GdbMiResult> parseThreadIdsLine(String line) {
+        //thread-ids={thread-id="4",thread-id="3",thread-id="2",thread-id="1"},current-thread-id="1",number-of-threads="4"
+        Collection<GdbMiResult> result = new ArrayList<GdbMiResult>();
+
+        Pattern p = Pattern.compile("thread-id=\"(\\d+)\"");
+        Matcher m = p.matcher(line);
+
+        GdbMiResult threadIds = new GdbMiResult("thread-ids");
+        threadIds.value.type = GdbMiValue.Type.Tuple;
+        threadIds.value.tuple = new ArrayList<GdbMiResult>();
+
+        while (m.find()) {
+            GdbMiResult threadId = new GdbMiResult("thread-id");
+            threadId.value.type = GdbMiValue.Type.String;
+            threadId.value.string = m.group(1);
+            threadIds.value.tuple.add(threadId);
+        }
+        result.add(threadIds);
+
+        p = Pattern.compile("current-thread-id=\"(\\d+)\",number-of-threads=\"(\\d+)\"");
+        m = p.matcher(line);
+
+        if (m.find()) {
+            GdbMiResult currentThreadId = new GdbMiResult("current-thread-id");
+            currentThreadId.value.type = GdbMiValue.Type.String;
+            currentThreadId.value.string = m.group(1);
+            result.add(currentThreadId);
+
+            GdbMiResult numberOfThreads = new GdbMiResult("number-of-threads");
+            numberOfThreads.value.type = GdbMiValue.Type.String;
+            numberOfThreads.value.string = m.group(2);
+            result.add(numberOfThreads);
         }
 
         return result;
