@@ -1,14 +1,16 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.goide.psi.GoImportDeclaration;
+import com.goide.psi.GoImportList;
+import com.goide.psi.GoImportSpec;
+import com.goide.psi.GoVisitor;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static com.goide.GoTypes.*;
-import com.goide.psi.*;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class GoImportListImpl extends GoCompositeElementImpl implements GoImportList {
 
@@ -25,6 +27,11 @@ public class GoImportListImpl extends GoCompositeElementImpl implements GoImport
   @NotNull
   public List<GoImportDeclaration> getImportDeclarationList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GoImportDeclaration.class);
+  }
+
+  @NotNull
+  public GoImportSpec addImport(String packagePath, String alias) {
+    return GoPsiImplUtil.addImport(this, packagePath, alias);
   }
 
 }

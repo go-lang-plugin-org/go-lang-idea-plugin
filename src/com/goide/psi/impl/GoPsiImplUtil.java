@@ -333,7 +333,7 @@ public class GoPsiImplUtil {
     }
     return Collections.emptyList();
   }
-  
+
   @Nullable
   public static GoType getGoType(@NotNull GoReceiverHolder o) {
     GoSignature signature = o.getSignature();
@@ -394,5 +394,35 @@ public class GoPsiImplUtil {
     }
     return null;
   }
-  
+
+  @NotNull
+  public static GoImportSpec addImport(@NotNull GoImportList importList, @NotNull String packagePath, @Nullable String alias) {
+    Project project = importList.getProject();
+    GoImportDeclaration lastImportDeclaration = ContainerUtil.getLastItem(importList.getImportDeclarationList());
+    if (lastImportDeclaration != null) {
+      List<GoImportSpec> importSpecList = lastImportDeclaration.getImportSpecList();
+      if (lastImportDeclaration.getRparen() == null && importSpecList.size() == 1) {
+        GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(GoElementFactory.createImportDeclaration(project, packagePath, alias, true), lastImportDeclaration);
+        GoImportSpec result = ContainerUtil.getFirstItem(importDeclaration.getImportSpecList());
+        assert result != null;
+        return result;
+      }
+      else {
+        return lastImportDeclaration.addImportSpec(packagePath, alias);
+      }
+    }
+    else {
+      GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.add(GoElementFactory.createImportDeclaration(project, packagePath, alias, true));
+      GoImportSpec result = ContainerUtil.getFirstItem(importDeclaration.getImportSpecList());
+      assert result != null;
+      return result;
+    }
+  }
+
+  @NotNull
+  public static GoImportSpec addImportSpec(@NotNull GoImportDeclaration declaration, @NotNull String packagePath, @Nullable String alias) {
+    PsiElement rParen = declaration.getRparen();
+    assert rParen != null;
+    return (GoImportSpec)declaration.addBefore(GoElementFactory.createImportSpec(declaration.getProject(), packagePath, alias), rParen);
+  }
 }

@@ -84,12 +84,17 @@
 }
 
 File ::= PackageClause semi ImportList TopLevelDeclaration* {pin(".*")=1}
-ImportList ::= (ImportDeclaration semi)*
+ImportList ::= (ImportDeclaration semi)* {
+  methods=[addImport]
+}
 private semi ::= '<NL>' | ';' | <<eof>>
 
 PackageClause ::= package identifier {pin=1}
 
-ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {pin(".*")=1}
+ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {
+  pin(".*")=1
+  methods=[addImportSpec]
+}
 private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
 ImportSpec ::= [ '.' | identifier ] ImportString {
   stubClass="com.goide.stubs.GoImportSpecStub"

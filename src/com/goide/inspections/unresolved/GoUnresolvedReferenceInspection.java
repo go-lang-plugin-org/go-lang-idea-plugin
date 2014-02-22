@@ -1,6 +1,7 @@
 package com.goide.inspections.unresolved;
 
 import com.goide.GoTypes;
+import com.goide.codeInsight.imports.GoImportPackageQuickFix;
 import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoReference;
@@ -40,13 +41,13 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
           problemsHolder.registerProblem(id, "Ambiguous reference " + "'" + name + "'", GENERIC_ERROR_OR_WARNING);
         }
         else if (reference.resolve() == null) {
-          LocalQuickFix[] fixes = !isProhibited(o, qualifier) ? 
+          LocalQuickFix[] fixes = !isProhibited(o, qualifier) ?
                                   new LocalQuickFix[]{
                                     new GoIntroduceLocalVariableFix(id, name),
                                     new GoIntroduceGlobalVariableFix(id, name),
                                     new GoIntroduceGlobalConstantFix(id, name),
                                   } :
-                                  new LocalQuickFix[]{};
+                                  new LocalQuickFix[]{new GoImportPackageQuickFix(reference)};
           problemsHolder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
@@ -86,7 +87,9 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
           PsiElement id = o.getIdentifier();
           String name = id.getText();
           boolean isProhibited = isProhibited(o, qualifier);
-          LocalQuickFix[] fixes = isProhibited ? new LocalQuickFix[]{} : new LocalQuickFix[]{new GoIntroduceTypeFix(id, name)};
+          LocalQuickFix[] fixes = isProhibited
+                                  ? new LocalQuickFix[]{new GoImportPackageQuickFix(reference)}
+                                  : new LocalQuickFix[]{new GoIntroduceTypeFix(id, name)};
           problemsHolder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
