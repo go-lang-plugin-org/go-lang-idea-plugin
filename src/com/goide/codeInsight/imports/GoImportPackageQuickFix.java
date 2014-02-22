@@ -113,8 +113,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   }
 
   private Collection<String> getPackagesToImport(@NotNull PsiElement element) {
-    return ContainerUtil.map2Set(StubIndex.getInstance().get(GoPackagesIndex.KEY, myPackageName,
-                                                             element.getProject(), GlobalSearchScope.projectScope(element.getProject())),
+    return ContainerUtil.map2Set(StubIndex.getInstance().get(GoPackagesIndex.KEY, myPackageName, element.getProject(), scope(element)),
                                  new Function<GoFile, String>() {
                                    @Override
                                    public String fun(GoFile file) {
@@ -122,6 +121,10 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                                    }
                                  }
     );
+  }
+
+  private static GlobalSearchScope scope(@NotNull PsiElement element) {
+    return GlobalSearchScope.projectScope(element.getProject());
   }
 
   private static void applyFix(@NotNull Collection<String> packagesToImport, @NotNull PsiFile file) {
