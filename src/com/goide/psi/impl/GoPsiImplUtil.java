@@ -14,6 +14,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.PsiParserFacadeImpl;
 import com.intellij.psi.impl.light.LightElement;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
@@ -126,7 +127,8 @@ public class GoPsiImplUtil {
         .withInsertHandler(handler)
         .withTypeText(resultText, true)
         .withPresentableText(f.getName() + paramText),
-      GoCompletionContributor.FUNCTION_PRIORITY);
+      GoCompletionContributor.FUNCTION_PRIORITY
+    );
   }
 
   @NotNull
@@ -402,27 +404,38 @@ public class GoPsiImplUtil {
     if (lastImportDeclaration != null) {
       List<GoImportSpec> importSpecList = lastImportDeclaration.getImportSpecList();
       if (lastImportDeclaration.getRparen() == null && importSpecList.size() == 1) {
-        GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(GoElementFactory.createImportDeclaration(project, packagePath, alias, true), lastImportDeclaration);
-        GoImportSpec result = ContainerUtil.getFirstItem(importDeclaration.getImportSpecList());
-        assert result != null;
-        return result;
+        return addImportDeclaration(importList, GoElementFactory.createImportDeclaration(project, packagePath, alias, false), lastImportDeclaration);
       }
       else {
         return lastImportDeclaration.addImportSpec(packagePath, alias);
       }
     }
     else {
-      GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.add(GoElementFactory.createImportDeclaration(project, packagePath, alias, true));
-      GoImportSpec result = ContainerUtil.getFirstItem(importDeclaration.getImportSpecList());
-      assert result != null;
-      return result;
+      return addImportDeclaration(importList, GoElementFactory.createImportDeclaration(project, packagePath, alias, false), null);
     }
+  }
+
+  @NotNull
+  private static GoImportSpec addImportDeclaration(@NotNull GoImportList importList,
+                                                   @NotNull GoImportDeclaration newImportDeclaration,
+                                                   @Nullable PsiElement anchor) {
+    anchor = importList.addAfter(createNewLine(importList.getProject()), anchor);
+    GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, anchor);
+    GoImportSpec result = ContainerUtil.getFirstItem(importDeclaration.getImportSpecList());
+    assert result != null;
+    return result;
   }
 
   @NotNull
   public static GoImportSpec addImportSpec(@NotNull GoImportDeclaration declaration, @NotNull String packagePath, @Nullable String alias) {
     PsiElement rParen = declaration.getRparen();
     assert rParen != null;
+    declaration.addBefore(createNewLine(declaration.getProject()), rParen);
     return (GoImportSpec)declaration.addBefore(GoElementFactory.createImportSpec(declaration.getProject(), packagePath, alias), rParen);
+  }
+
+  @NotNull
+  public static PsiElement createNewLine(@NotNull Project project) {
+    return PsiParserFacadeImpl.SERVICE.getInstance(project).createWhiteSpaceFromText("\n");
   }
 }

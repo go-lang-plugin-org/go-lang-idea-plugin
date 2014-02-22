@@ -35,9 +35,10 @@ public class GoElementFactory {
   public static GoImportDeclaration createImportDeclaration(@NotNull Project project, @NotNull String importString,
                                                             @Nullable String alias, boolean withParens) {
     importString = StringUtil.isQuotedString(importString) ? importString : StringUtil.wrapWithDoubleQuote(importString);
+    alias = alias != null ? alias + " " : "";
     GoFile file = withParens
-                  ? createFileFromText(project, "package main\nimport (\n" + StringUtil.notNullize(alias) + " " + importString + "\n)")
-                  : createFileFromText(project, "package main\nimport " + StringUtil.notNullize(alias) + " " + importString);
+                  ? createFileFromText(project, "package main\nimport (\n" + alias + importString + "\n)")
+                  : createFileFromText(project, "package main\nimport " + alias + importString);
     return PsiTreeUtil.findChildOfType(file, GoImportDeclaration.class);
   }
 
