@@ -1,7 +1,6 @@
 package newmath
 
-//noinspection SomeInspection
-//noinspection GoUnresolvedReference
+//noinspection SomeInspection,GoUnresolvedReference
 func TestFunction() {
     Te<caret>st("Sqrt(%v) = %v, want %v")
 }
