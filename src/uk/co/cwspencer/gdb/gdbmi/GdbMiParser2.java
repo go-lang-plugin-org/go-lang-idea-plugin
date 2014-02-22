@@ -341,6 +341,9 @@ public class GdbMiParser2 {
         }  else if (line.startsWith("new-thread-id=")) {
             result.results.addAll(parseNewThreadIdLine(line));
             return result;
+        }  else if (line.startsWith("threads=")) {
+            result.results.addAll(parseThreadsLine(line));
+            return result;
         }
 
         printUnhandledLine(line);
@@ -1575,6 +1578,95 @@ public class GdbMiParser2 {
 
         // frame={*}
         result.add(parseBreakpointHitLineFrameLine(m.group(2)));
+
+        return result;
+    }
+
+    private Collection<GdbMiResult> parseThreadsLine(String line) {
+        // threads=[
+        //      {id="4",target-id="Thread 0x7fffe67e7700 (LWP 25320)",name="seraph",frame={level="0",addr="0x00000000004356e3",func="runtime.futex",args=[],file="/usr/local/go/src/pkg/runtime/sys_linux_amd64.s",fullname="/usr/lib/go1.2/src/pkg/runtime/sys_linux_amd64.s",line="267"},state="stopped",core="7"},
+        //      {id="3",target-id="Thread 0x7fffe6fe8700 (LWP 25319)",name="seraph",frame={level="0",addr="0x00000000004356e3",func="runtime.futex",args=[],file="/usr/local/go/src/pkg/runtime/sys_linux_amd64.s",fullname="/usr/lib/go1.2/src/pkg/runtime/sys_linux_amd64.s",line="267"},state="stopped",core="2"},
+        //      {id="2",target-id="Thread 0x7fffe77e9700 (LWP 25318)",name="seraph",frame={level="0",addr="0x000000000043541d",func="runtime.usleep",args=[{name="usec",value="void"}],file="/usr/local/go/src/pkg/runtime/sys_linux_amd64.s",fullname="/usr/lib/go1.2/src/pkg/runtime/sys_linux_amd64.s",line="76"},state="stopped",core="5"},
+        //      {id="1",target-id="Thread 0x7ffff7fd0740 (LWP 25314)",name="seraph",frame={level="0",addr="0x0000000000408462",func="main.checkAudioConfigStream",args=[{name="langChan",value="0xc2000c2060"}],file="/var/www/fork/seraph/src/seraph.go",fullname="/var/www/fork/seraph/src/seraph.go",line="984"},state="stopped",core="7"}
+        // ],
+        // current-thread-id="1"
+        Collection<GdbMiResult> result = new ArrayList<GdbMiResult>();
+
+        Pattern p = Pattern.compile(
+                "\\{(?:id=\"(\\d+)\"),"+
+                        "(?:target-id=\"([^\"]+)\"),"+
+                        "(?:name=\"([^\"]+)\"),"+
+                        "(?:frame=\\{([^\\}].+?)\\})," +
+                        "(?:state=\"([^\"]+)\"),"+
+                        "(?:core=\"(\\d+)\")" +
+                        "\\}"
+        );
+        Matcher m = p.matcher(line);
+
+        if (!m.find()) {
+            printUnhandledLine(line);
+            return result;
+        }
+
+        GdbMiResult threads = new GdbMiResult("threads");
+        threads.value.type = GdbMiValue.Type.List;
+        threads.value.list = new GdbMiList();
+        threads.value.list.type = GdbMiList.Type.Results;
+        threads.value.list.results = new ArrayList<GdbMiResult>();
+
+        m.reset();
+        while(m.find()) {
+            GdbMiResult thread = new GdbMiResult("thread");
+            GdbMiValue threadVal = new GdbMiValue(GdbMiValue.Type.Tuple);
+
+            // id="4"
+            GdbMiResult idVal = new GdbMiResult("id");
+            idVal.value.type = GdbMiValue.Type.String;
+            idVal.value.string = m.group(1);
+            threadVal.tuple.add(idVal);
+
+            // target-id="Thread 0x7fffe67e7700 (LWP 25320)"
+            GdbMiResult targetId = new GdbMiResult("target-id");
+            targetId.value.type = GdbMiValue.Type.String;
+            targetId.value.string = m.group(2);
+            threadVal.tuple.add(targetId);
+
+            // name="seraph"
+            GdbMiResult nameVal = new GdbMiResult("name");
+            nameVal.value.type = GdbMiValue.Type.String;
+            nameVal.value.string = m.group(3);
+            threadVal.tuple.add(nameVal);
+
+            // frame={*}
+            threadVal.tuple.add(parseBreakpointHitLineFrameLine(m.group(4)));
+
+            // state="stopped"
+            GdbMiResult stateVal = new GdbMiResult("state");
+            stateVal.value.type = GdbMiValue.Type.String;
+            stateVal.value.string = m.group(5);
+            threadVal.tuple.add(stateVal);
+
+            // core="7"
+            GdbMiResult coreVal = new GdbMiResult("core");
+            coreVal.value.type = GdbMiValue.Type.String;
+            coreVal.value.string = m.group(6);
+            threadVal.tuple.add(coreVal);
+
+            thread.value = threadVal;
+            threads.value.list.results.add(thread);
+        }
+
+        result.add(threads);
+
+        p = Pattern.compile("current-thread-id=\"(\\d+)\"");
+        m = p.matcher(line);
+
+        if (m.find()) {
+            GdbMiResult currentThreadId = new GdbMiResult("current-thread-id");
+            currentThreadId.value.type = GdbMiValue.Type.String;
+            currentThreadId.value.string = m.group(1);
+            result.add(currentThreadId);
+        }
 
         return result;
     }
