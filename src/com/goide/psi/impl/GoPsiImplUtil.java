@@ -419,7 +419,9 @@ public class GoPsiImplUtil {
                                                    @NotNull GoImportDeclaration newImportDeclaration,
                                                    @Nullable PsiElement anchor) {
     GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, anchor);
-    importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
+    if (!(importList.getNextSibling() instanceof PsiWhiteSpace)) {
+      importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
+    }
     importList.addBefore(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
     GoImportSpec result = ContainerUtil.getFirstItem(importDeclaration.getImportSpecList());
     assert result != null;

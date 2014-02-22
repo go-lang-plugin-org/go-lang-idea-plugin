@@ -33,6 +33,7 @@ import static com.intellij.openapi.actionSystem.IdeActions.ACTION_SHOW_INTENTION
 public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HintAction, HighPriorityAction {
   @NotNull private final String myPackageName;
   @NotNull private final TextRange myRangeInElement;
+  private Collection<String> myPackagesToImport;
 
   public GoImportPackageQuickFix(@NotNull PsiReference reference) {
     super(reference.getElement());
@@ -66,8 +67,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     }
 
     String shortcutText = KeymapUtil.getFirstKeyboardShortcutText(ActionManager.getInstance().getAction(ACTION_SHOW_INTENTION_ACTIONS));
-    String message = ContainerUtil.getFirstItem(packagesToImport, "") + "? " +
-                     (packagesToImport.size() > 1 ? "(multiple choices...) " : "") + shortcutText;
+    String message = getText(packagesToImport) + shortcutText;
 
     TextRange referenceRange = myRangeInElement.shiftRight(element.getTextRange().getStartOffset());
     HintManager.getInstance().showQuestionHint(
@@ -89,13 +89,21 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   @NotNull
   @Override
   public String getText() {
+    PsiElement element = getStartElement();
+    if (element != null) {
+      return "Import " + getText(getPackagesToImport(element));
+    }
     return "Import package";
+  }
+
+  private static String getText(@NotNull Collection<String> packagesToImport) {
+    return ContainerUtil.getFirstItem(packagesToImport, "") + "? " + (packagesToImport.size() > 1 ? "(multiple choices...) " : "");
   }
 
   @NotNull
   @Override
   public String getFamilyName() {
-    return getText();
+    return "Import package";
   }
 
   @Override
@@ -114,21 +122,26 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     return file instanceof GoFile && file.getManager().isInProject(file) && !getPackagesToImport(startElement).isEmpty();
   }
 
+  @NotNull
   private Collection<String> getPackagesToImport(@NotNull PsiElement element) {
-    return ContainerUtil.map2Set(StubIndex.getInstance().get(GoPackagesIndex.KEY, myPackageName, element.getProject(), scope(element)),
-                                 new Function<GoFile, String>() {
-                                   @Override
-                                   public String fun(GoFile file) {
-                                     return file.getFullPackageName();
-                                   }
-                                 }
-    );
+    if (myPackagesToImport == null) {
+      myPackagesToImport = ContainerUtil.map2Set(StubIndex.getInstance().get(GoPackagesIndex.KEY, myPackageName, element.getProject(),
+                                                                             scope(element)),
+                                                 new Function<GoFile, String>() {
+                                                   @Override
+                                                   public String fun(GoFile file) {
+                                                     return file.getFullPackageName();
+                                                   }
+                                                 }
+      );
+    }
+    return myPackagesToImport;
   }
 
   private static GlobalSearchScope scope(@NotNull PsiElement element) {
     Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    return module != null 
-           ? GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module) 
+    return module != null
+           ? GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
            : GlobalSearchScope.projectScope(element.getProject());
   }
 
