@@ -1147,17 +1147,10 @@ public class GdbMiParser2 {
     }
 
     private static GdbMiResult parseMsgLine(String line) {
-        Pattern p = Pattern.compile("(?:msg=\"([^\"]+)\")");
-
-        Matcher m = p.matcher(line);
-
         // msg="No frames found."
         GdbMiResult result = new GdbMiResult("msg");
         result.value.type = GdbMiValue.Type.String;
-
-        if (m.find()) {
-            result.value.string = m.group(1);
-        }
+        result.value.string = line.substring(5, line.length() - 1);
 
         return result;
     }

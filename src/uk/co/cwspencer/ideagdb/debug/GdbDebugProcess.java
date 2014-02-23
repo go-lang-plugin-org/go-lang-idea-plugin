@@ -90,6 +90,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
         m_gdb.start();
     }
 
+    @NotNull
     @Override
     public XBreakpointHandler<?>[] getBreakpointHandlers() {
         return new GdbBreakpointHandler[]{m_breakpointHandler};
