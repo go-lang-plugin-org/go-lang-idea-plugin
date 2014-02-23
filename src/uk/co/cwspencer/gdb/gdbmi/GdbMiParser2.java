@@ -1076,9 +1076,11 @@ public class GdbMiParser2 {
             regex += "value=\"(.*?)\",";
         }
 
-        regex += "in_scope=\"([^\"]+)\"," +
-                "type_changed=\"([^\"]+)\"," +
-                "has_more=\"([^\"]+)\"\\})+";
+        regex += "in_scope=\"([^\"]+?)\"," +
+                "type_changed=\"([^\"].+?)\"," +
+                "(?:new_type=\"([^\"]+?)\")?,?" +
+                "(?:new_num_children=\"([^\"]+?)\")?,?" +
+                "has_more=\"([^\"]+?)\"\\})";
 
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
@@ -1112,6 +1114,22 @@ public class GdbMiParser2 {
             typeChangedVal.value.type = GdbMiValue.Type.String;
             typeChangedVal.value.string = m.group(++matchGroup);
             changeVal.tuple.add(typeChangedVal);
+
+            if (m.group(++matchGroup) != null) {
+                // new_type="error"
+                GdbMiResult newTypeVal = new GdbMiResult("new_type");
+                newTypeVal.value.type = GdbMiValue.Type.String;
+                newTypeVal.value.string = m.group(matchGroup);
+                changeVal.tuple.add(newTypeVal);
+            }
+
+            if (m.group(++matchGroup) != null) {
+                // new_num_children="2"
+                GdbMiResult newNumChildrenVal = new GdbMiResult("new_num_children");
+                newNumChildrenVal.value.type = GdbMiValue.Type.String;
+                newNumChildrenVal.value.string = m.group(matchGroup);
+                changeVal.tuple.add(newNumChildrenVal);
+            }
 
             // has_more: "0"
             GdbMiResult hasMoreVal = new GdbMiResult("has_more");
@@ -1591,6 +1609,10 @@ public class GdbMiParser2 {
         // ],
         // current-thread-id="1"
         Collection<GdbMiResult> result = new ArrayList<GdbMiResult>();
+
+        if (line.equals("threads=[]")) {
+            return result;
+        }
 
         Pattern p = Pattern.compile(
                 "\\{(?:id=\"(\\d+)\"),"+
