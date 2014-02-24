@@ -1,5 +1,6 @@
 package com.goide.codeInsight.imports;
 
+import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.editor.Document;
@@ -138,6 +139,10 @@ public class GoImportOptimizer implements ImportOptimizer {
     GoImportDeclaration importDeclaration = PsiTreeUtil.getParentOfType(importSpec, GoImportDeclaration.class);
     if (importSpec != null && importDeclaration != null) {
       if (importDeclaration.getImportSpecList().size() == 1) {
+        PsiElement nextSibling = importDeclaration.getNextSibling();
+        if (nextSibling != null && nextSibling.getNode().getElementType() == GoTypes.SEMICOLON) {
+          nextSibling.delete();
+        }
         importDeclaration.delete();
       }
       else {
