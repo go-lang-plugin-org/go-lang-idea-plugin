@@ -33,7 +33,8 @@ import static com.intellij.openapi.actionSystem.IdeActions.ACTION_SHOW_INTENTION
 public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HintAction, HighPriorityAction {
   @NotNull private final String myPackageName;
   @NotNull private final TextRange myRangeInElement;
-  private Collection<String> myPackagesToImport;
+  @Nullable private Collection<String> myPackagesToImport;
+  private boolean isPerformed = false;
 
   public GoImportPackageQuickFix(@NotNull PsiReference reference) {
     super(reference.getElement());
@@ -48,8 +49,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
       return false;
     }
 
-    PsiReference reference = element.getReference();
-    if (reference != null && reference.resolve() != null) {
+    if (isPerformed) {
       return false;
     }
 
@@ -124,7 +124,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                              @NotNull PsiFile file,
                              @NotNull PsiElement startElement,
                              @NotNull PsiElement endElement) {
-    return file instanceof GoFile && file.getManager().isInProject(file) && !getPackagesToImport(startElement).isEmpty();
+    return !isPerformed && file instanceof GoFile && file.getManager().isInProject(file) && !getPackagesToImport(startElement).isEmpty();
   }
 
   @NotNull
@@ -150,7 +150,8 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
            : GlobalSearchScope.projectScope(element.getProject());
   }
 
-  private static void applyFix(@NotNull Collection<String> packagesToImport, @NotNull PsiFile file) {
+  private void applyFix(@NotNull Collection<String> packagesToImport, @NotNull PsiFile file) {
+    isPerformed = true;
     String firstItem = ContainerUtil.getFirstItem(packagesToImport);
     if (file instanceof GoFile && firstItem != null) {
       GoImportList importList = ((GoFile)file).getImportList();
