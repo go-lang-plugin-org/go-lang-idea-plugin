@@ -419,7 +419,7 @@ public class GoPsiImplUtil {
                                                    @NotNull GoImportDeclaration newImportDeclaration,
                                                    @Nullable PsiElement anchor) {
     GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, anchor);
-    if (!(importDeclaration.getNextSibling() instanceof PsiWhiteSpace)) {
+    if (!(importList.getNextSibling() instanceof PsiWhiteSpace)) {
       importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
     }
     importList.addBefore(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
