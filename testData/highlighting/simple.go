@@ -1,6 +1,11 @@
 package main
 
 import "<error></error>"
+import fmt "<error></error>"
+
+func  main() {
+	fmt.<EOLError></EOLError>
+}
 
 type aaa aaa
 
