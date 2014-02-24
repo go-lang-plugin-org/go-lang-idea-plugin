@@ -12,7 +12,7 @@ Google go language plugin is an attempt to build an outstanding IDE for
     + <http://golang.org/>
 + Intellij IDEA homepage:
     + <http://www.jetbrains.com/idea/>
-    + <http://plugins.intellij.net/plugin/?idea&id=5047> (plugin page at the intellij plugin repository).
+    + <http://plugins.intellij.net/plugin/5047> (plugin page at the intellij plugin repository).
 
 ## What it does
 
@@ -85,23 +85,27 @@ Please ensure that the bug is not reported.
     + Sdk indexing
     + Reference Resolving & Completions
 
-+ [leojay](https://github.com/leojay)
++ [leojay (@leojay)](https://github.com/leojay)
     + folding improvement
     + refactorings
         + introduce variable
     + inspections
         + unused imports
 
-+ [Alexandre Normand](https://github.com/alexandre-normand)
++ [Alexandre Normand (@alexandre-normand)](https://github.com/alexandre-normand)
     + gomake integration
 
-+ [Jhonny](https://github.com/khronnuz)
++ [Jhonny (@khronnuz)](https://github.com/khronnuz)
     +  gofmt integration
     +  simple Structure View for Go files.
 
-+ [Florin Patan (dlsniper)](https://github.com/dlsniper)
++ [Florin Patan (@dlsniper)](https://github.com/dlsniper)
     +  Cardea support
     +  Non-IntelliJ IDEs plugin support
+    +  GDB debug support integration
+
++ [Chris Spencer (@spencercw)](https://bitbucket.org/spencercw/ideagdb/overview)
+    + IDEA GDB support
 
 ## Contributing
 

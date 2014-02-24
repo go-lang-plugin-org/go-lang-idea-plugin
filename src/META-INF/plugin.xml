@@ -52,6 +52,7 @@
             <li>Makefile based build system (bring your own Makefile). Experimental. Configured in project settings.</li>
             <li>Always use tabs instead of spaces (but configurable if desired).</li>
             <li>go fmt integration via Tools -> Go menu options (default CTRL+ALT+SHIFT+F for file and CTRL+ALT+SHIFT+G for project)</li>
+            <li>Debugging support via GDB</li>
         </ul>
     ]]>
     </description>
@@ -59,6 +60,7 @@
         <![CDATA[
         <h3>0.9.16 changes:</h3>
             <ul>
+                <li>[feature] Added debugging support via GDB</li>
                 <li>[feature] Added support for Go on Google AppEngine for non-IDEA IDEs</li>
                 <li>[bugfix] Improved support for Go on Google AppEngine</li>
                 <li>[enhancement] Inspection: Update "functionReturnCountInspection" to check the type of returning expressions</li>
@@ -691,6 +693,10 @@
             <categoryKey>intention.category.go/intention.category.control.flow</categoryKey>
             <className>ro.redeul.google.go.intentions.statements.CheckErrorIntention</className>
         </intentionAction>
+
+        <configurationType implementation="uk.co.cwspencer.ideagdb.run.GoGdbRunConfigurationType"/>
+        <programRunner implementation="uk.co.cwspencer.ideagdb.run.GdbRunner"/>
+        <xdebugger.breakpointType implementation="uk.co.cwspencer.ideagdb.debug.breakpoints.GdbBreakpointType"/>
 
     </extensions>
 

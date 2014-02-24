@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="uk.co.cwspencer.ideagdb.run.GdbRunConfigurationEditor">
+  <grid id="27dc6" binding="component" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="891" height="461"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="38d58" layout-manager="GridLayoutManager" row-count="16" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="64bb5" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="5363"/>
+              <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.run.script"/>
+            </properties>
+          </component>
+          <component id="5363" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="applicationName">
+            <constraints>
+              <grid row="9" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="6b8ab" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="c0788"/>
+              <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.run.parameters"/>
+            </properties>
+          </component>
+          <component id="c0788" class="com.intellij.ui.RawCommandLineEditor" binding="appArguments">
+            <constraints>
+              <grid row="10" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="e7c46" class="javax.swing.JCheckBox" binding="buildBeforeRunCheckBox" default-binding="true">
+            <constraints>
+              <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="false"/>
+              <selected value="true"/>
+              <text value="Build before run"/>
+              <toolTipText value="Sould the application be compiled before running?"/>
+            </properties>
+          </component>
+          <component id="4aaac" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="1bda6"/>
+              <text value="&amp;Output directory"/>
+            </properties>
+          </component>
+          <component id="1bda6" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="buildDirectoryPathBrowser">
+            <constraints>
+              <grid row="13" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="false"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="dbadc" class="javax.swing.JSeparator">
+            <constraints>
+              <grid row="12" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="a2ea1" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="696e8"/>
+              <text value="&amp;Go builder arguments"/>
+            </properties>
+          </component>
+          <component id="696e8" class="com.intellij.ui.RawCommandLineEditor" binding="builderArguments">
+            <constraints>
+              <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="9b32d" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="df317"/>
+              <text value="&amp;Working directory"/>
+            </properties>
+          </component>
+          <component id="df317" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="workingDirectoryBrowser">
+            <constraints>
+              <grid row="11" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="29729" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="a7b64"/>
+              <text value="&amp;Environment variables"/>
+            </properties>
+          </component>
+          <component id="a7b64" class="com.intellij.ui.RawCommandLineEditor" binding="envVars">
+            <constraints>
+              <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <dialogCaption value="Environment variables"/>
+              <toolTipText value="You must use &quot;;&quot; in order to separate values. Ex. GOROOT=/usr/lib/go/;GOPATH=/home/Usr/go/"/>
+            </properties>
+          </component>
+          <component id="3465" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <icon value="ide/info_notifications.png"/>
+              <text value="You must use &quot;;&quot; in order to separate values. Ex. GOROOT=/usr/lib/go/;GOPATH=/home/Usr/go/"/>
+            </properties>
+          </component>
+          <scrollpane id="eca4d">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <minimum-size width="-1" height="36"/>
+                <preferred-size width="-1" height="56"/>
+              </grid>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="75cb2" class="javax.swing.JTextArea" binding="m_startupCommands">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <component id="b1336" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="d1437"/>
+              <text value="gd&amp;b executable:"/>
+            </properties>
+          </component>
+          <component id="d1437" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="m_gdbPath">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="3ae67" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="75cb2"/>
+              <text value="gdb start&amp;up commands:"/>
+              <verticalAlignment value="0"/>
+              <verticalTextPosition value="0"/>
+            </properties>
+          </component>
+          <component id="9f869" class="javax.swing.JCheckBox" binding="runGoVetBeforeCheckBox" default-binding="true">
+            <constraints>
+              <grid row="15" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Run go &amp;vet before running anything else"/>
+            </properties>
+          </component>
+          <component id="ef89d" class="javax.swing.JSeparator">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="9e0f9" class="javax.swing.JSeparator">
+            <constraints>
+              <grid row="14" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="b8dd8" class="javax.swing.JCheckBox" binding="autoStartGdb">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <selected value="true"/>
+              <text value="gdb starts debugg&amp;ing automatically"/>
+            </properties>
+          </component>
+          <component id="ae5fa" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <icon value="ide/info_notifications.png"/>
+              <text value="If you uncheck this you must run the &quot;run&quot; command in the &quot;GDB console&quot; manually"/>
+            </properties>
+          </component>
+          <component id="16894" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="8" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <icon value="ide/info_notifications.png"/>
+              <text value="In order to improve debugging capabilities of go binaries, it is highly recommended to have these flags always set: -gcflags &quot;-N -l&quot;"/>
+            </properties>
+          </component>
+          <component id="873d8" class="javax.swing.JLabel" binding="gdbVersionWarning">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+              <icon value="ide/warning_notifications.png"/>
+              <text value="Your GDB version is not among those tested. Support may vary. Please see the plugin GitHub tracker for more details"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>
