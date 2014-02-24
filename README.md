@@ -111,3 +111,13 @@ Please ensure that the bug is not reported.
 
 If you want to contribute to this effort you should read the following page:
 [how to contribute](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/blob/master/contributing.md).
+
+## Thank you
+
+We would like to thank [YourKit](http://www.yourkit.com) for supporting the development
+of this plugin by providing us licenses to their full-featured [Yourkit Java Profiler](http://www.yourkit.com/java/profiler/index.jsp).
+YourKit, LLC is the creator of innovative and intelligent tools for profiling
+Java and .NET applications. Take a look at YourKit's leading software products:
+
+- [YourKit Java Profiler](http://www.yourkit.com/java/profiler/index.jsp)
+- [YourKit .NET Profiler](http://www.yourkit.com/.net/profiler/index.jsp)
