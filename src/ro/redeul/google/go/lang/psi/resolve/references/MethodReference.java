@@ -89,6 +89,10 @@ public class MethodReference
             protected boolean addDeclaration(PsiElement declaration, PsiElement child) {
                 String name = PsiUtilCore.getName(declaration);
 
+                if (child == null) {
+                    return true;
+                }
+
                 variants.add(LookupElementUtil.createLookupElement(
                     (GoPsiElement) declaration, name,
                     (GoPsiElement) child));
