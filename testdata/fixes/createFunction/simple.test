@@ -12,5 +12,5 @@ func main() {
 }
 
 func Foo() {
-	<caret>
+	//TODO: implements Foo<caret>
 }

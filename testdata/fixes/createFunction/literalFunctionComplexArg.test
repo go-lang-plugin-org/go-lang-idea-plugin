@@ -32,5 +32,5 @@ func main() {
 }
 
 func Foo(arg0 []string, arg1 func(*Person) bool, arg2 bool, arg3 int, arg4 int, arg5 float32, arg6 bool) {
-	<caret>
+	//TODO: implements Foo<caret>
 }

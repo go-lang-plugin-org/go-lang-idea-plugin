@@ -12,6 +12,6 @@ func CheckError()error{
 }
 func main() {
 	if CheckError() != nil {
-		//TODO: Handle error(s)
-	}<caret>
+		//TODO: Handle error(s)<caret>
+	}
 }

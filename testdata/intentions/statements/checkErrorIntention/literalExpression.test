@@ -8,6 +8,6 @@ package main
 
 func main() {
 	if func() error {return nil}() != nil {
-		//TODO: Handle error(s)
-	}<caret>
+		//TODO: Handle error(s)<caret>
+	}
 }

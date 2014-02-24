@@ -22,5 +22,5 @@ func main() {
 }
 
 func Foo(arg0 int, arg1 <-chan int, arg2 chan <- int, arg3 chan int, arg4 [100]int) {
-	<caret>
+	//TODO: implements Foo<caret>
 }

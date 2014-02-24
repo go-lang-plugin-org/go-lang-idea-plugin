@@ -19,6 +19,8 @@ import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
+import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.util.GoUtil;
@@ -90,9 +92,22 @@ public class ChangeReturnsParametersFix extends LocalQuickFixAndIntentionActionO
                     stringBuilder.append(",");
                 }
                 if (type != null) {
+
+                    while (!(type instanceof GoTypePsiBacked)) {
+                        if (type instanceof GoTypePointer) {
+                            type = ((GoTypePointer) type).getTargetType();
+                            stringBuilder.append("*");
+                            continue;
+                        }
+                        break;
+                    }
+
+
                     if (type instanceof GoTypePsiBacked) {
-                        GoTypePsiBacked psiTypeBackend = (GoTypePsiBacked) type;
-                        GoPsiType goPsiType = psiTypeBackend.getPsiType();
+                        GoPsiType goPsiType = ((GoTypePsiBacked) type).getPsiType();
+                        stringBuilder.append(GoUtil.getNameLocalOrGlobal(goPsiType, (GoFile) element.getContainingFile()));
+                    } else if (type instanceof GoTypeArray) {
+                        GoPsiType goPsiType = ((GoTypeArray) type).getPsiType();
                         stringBuilder.append(GoUtil.getNameLocalOrGlobal(goPsiType, (GoFile) element.getContainingFile()));
                     }
                 } else {
@@ -110,12 +125,14 @@ public class ChangeReturnsParametersFix extends LocalQuickFixAndIntentionActionO
             startOffset = result.getTextOffset();
             doc.replaceString(startOffset, result.getTextRange().getEndOffset(),
                     i > 1 ?
-                            "(" + stringBuilder.toString() + ")" : stringBuilder.toString());
+                            "(" + stringBuilder.toString() + ")" : stringBuilder.toString()
+            );
         } else {
             startOffset = functionDeclaration.getBlock().getTextOffset();
             doc.insertString(startOffset,
                     i > 1 ?
-                            "(" + stringBuilder.toString() + ")" : stringBuilder.toString());
+                            "(" + stringBuilder.toString() + ")" : stringBuilder.toString()
+            );
         }
 
         if (editor != null) {

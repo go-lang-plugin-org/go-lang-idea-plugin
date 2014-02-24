@@ -1,10 +1,6 @@
 package ro.redeul.google.go.intentions.statements;
 
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateImpl;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
@@ -40,7 +36,6 @@ public class CheckErrorIntention extends Intention {
         if (statement != null) {
             expr = statement.getExpression();
             if (expr != null) {
-
                 for (GoType goType : expr.getType()) {
                     if (goType != null) {
                         if (goType instanceof GoTypePsiBacked) {
@@ -59,10 +54,7 @@ public class CheckErrorIntention extends Intention {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, Editor editor) throws IntentionExecutionException {
-        Document document = editor.getDocument();
         TextRange textRange = statement.getTextRange();
-        RangeMarker range = document.createRangeMarker(textRange.getStartOffset(), textRange.getEndOffset());
-        document.deleteString(textRange.getStartOffset(), textRange.getEndOffset());
 
         StringBuilder ifString = new StringBuilder();
 
@@ -130,14 +122,10 @@ public class CheckErrorIntention extends Intention {
 
         }
 
-        ifString.append(String.format("\n$v%d$\n}", j));
+        ifString.append(String.format("\n$v%d$$END$\n}", j));
         stringList.add("//TODO: Handle error(s)");
         //stringList.add("panic(\"Unhandled error!\")");
-        TemplateImpl template = TemplateUtil.createTemplate(ifString.toString());
-        TemplateUtil.setTemplateVariableValues(template, stringList);
-        String text = editor.getDocument().getText(textRange);
-        editor.getDocument().deleteString(range.getStartOffset(), range.getEndOffset());
-        TemplateManager.getInstance(editor.getProject()).startTemplate(editor, "", template);
-
+        TemplateUtil.runTemplate(editor, textRange, stringList, TemplateUtil.createTemplate(ifString.toString()));
     }
+
 }
