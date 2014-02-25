@@ -218,20 +218,14 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   private List<GoImportSpec> calcImports() {
-    final List<GoImportSpec> result = ContainerUtil.newArrayList();
-    processChildrenDummyAware(this, new Processor<PsiElement>() {
-      @Override
-      public boolean process(PsiElement e) {
-        if (e instanceof GoImportList) {
-          for (GoImportDeclaration declaration : ((GoImportList)e).getImportDeclarationList()) {
-            for (GoImportSpec spec : declaration.getImportSpecList()) {
-              result.add(spec);
-            }
-          }
-        }
-        return true;
+    List<GoImportSpec> result = ContainerUtil.newArrayList();
+    GoImportList list = getImportList();
+    if (list == null) return ContainerUtil.emptyList();
+    for (GoImportDeclaration declaration : list.getImportDeclarationList()) {
+      for (GoImportSpec spec : declaration.getImportSpecList()) {
+        result.add(spec);
       }
-    });
+    }
     return result;
   }
 
