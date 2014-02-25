@@ -135,6 +135,8 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   public List<GoImportSpec> getImports() {
+    StubElement<GoFile> stub = getStub();
+    if (stub != null) return ContainerUtil.emptyList();
     if (myImportsValue == null) {
       myImportsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoImportSpec>>() {
         @Override
