@@ -1,5 +1,6 @@
 package com.goide.completion;
 
+import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.stubs.index.GoFunctionIndex;
@@ -8,17 +9,13 @@ import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
-import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.PsiElementPattern;
+import com.intellij.patterns.PsiFilePattern;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
@@ -27,11 +24,13 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.PlatformPatterns.psiFile;
+import static com.intellij.patterns.StandardPatterns.or;
+import static com.intellij.patterns.StandardPatterns.string;
 
 public class GoCompletionContributor extends CompletionContributor {
   public static final int FUNCTION_PRIORITY = 10;
@@ -43,68 +42,42 @@ public class GoCompletionContributor extends CompletionContributor {
   public static final int PACKAGE_PRIORITY = 5;
 
   public GoCompletionContributor() {
-    extend(CompletionType.BASIC, packagePattern(), new KeywordCompletionProvider(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE, "package"));
-    extend(CompletionType.BASIC, importPattern(), new KeywordCompletionProvider("import"));
-    extend(CompletionType.BASIC, topLevelPattern(), new KeywordCompletionProvider("const", "var", "func", "type", "interface"));
+    extend(CompletionType.BASIC, packagePattern(), new GoKeywordCompletionProvider(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE, "package"));
+    extend(CompletionType.BASIC, importPattern(), new GoKeywordCompletionProvider("import"));
+    extend(CompletionType.BASIC, topLevelPattern(), new GoKeywordCompletionProvider("const", "var", "func", "type"));
   }
-  
+
   private static PsiElementPattern.Capture<PsiElement> inGoFile() {
     return psiElement().inFile(psiElement(GoFile.class));
   }
 
   private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {
-    return psiElement().withParent(psiElement(PsiErrorElement.class).withParent(GoFile.class));
+    return onNewLine().withParent(psiElement(PsiErrorElement.class).withParent(goFileWithPackage()));
   }
 
 
   private static PsiElementPattern.Capture<PsiElement> importPattern() {
-    return psiElement().withParent(psiElement(PsiErrorElement.class).afterSiblingSkipping(psiElement().whitespace(),
-                                                                                          psiElement(GoImportList.class)));
+    return onNewLine().withParent(psiElement(PsiErrorElement.class).afterSiblingSkipping(psiElement().whitespace(),
+                                                                                         psiElement(GoImportList.class)));
   }
 
   private static PsiElementPattern.Capture<PsiElement> packagePattern() {
-    return psiElement().withParent(psiElement(PsiErrorElement.class).withParent(GoFile.class).isFirstAcceptedChild(psiElement()));
+    return psiElement().withParent(psiElement(PsiErrorElement.class).withParent(goFileWithoutPackage()).isFirstAcceptedChild(psiElement()));
   }
 
-  private static class KeywordCompletionProvider extends CompletionProvider<CompletionParameters> {
-    @Nullable private final AutoCompletionPolicy myCompletionPolicy;
-    private final String[] myKeywords;
-
-    private KeywordCompletionProvider(String... keywords) {
-      this(null, keywords);
-    }
-
-    private KeywordCompletionProvider(@Nullable AutoCompletionPolicy completionPolicy, String... keywords) {
-      myCompletionPolicy = completionPolicy;
-      myKeywords = keywords;
-    }
-
-    @Override
-    protected void addCompletions(@NotNull CompletionParameters parameters,
-                                  ProcessingContext context,
-                                  @NotNull CompletionResultSet result) {
-      for (String keyword : myKeywords) {
-        result.addElement(createKeywordLookupElement(keyword));
-      }
-    }
-
-    private LookupElement createKeywordLookupElement(final String keyword) {
-      LookupElementBuilder result =
-        LookupElementBuilder.create(keyword).withBoldness(true).withInsertHandler(new InsertHandler<LookupElement>() {
-          @Override
-          public void handleInsert(InsertionContext context, LookupElement item) {
-            TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(context.getProject());
-            Template template = TemplateSettings.getInstance().getTemplateById("go_lang_" + keyword);
-            if (template != null) {
-              context.getEditor().getDocument().deleteString(context.getStartOffset(), context.getTailOffset());
-              templateManager.startTemplate(context.getEditor(), template);
-            }
-          }
-        });
-      return myCompletionPolicy != null ? myCompletionPolicy.applyPolicy(result) : result;
-    }
+  private static PsiElementPattern.Capture<PsiElement> onNewLine() {
+    return psiElement().afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().contains("\n")),
+                                          or(psiElement(GoTypes.SEMICOLON), psiElement().withText(string().contains("\n"))));
   }
-  
+
+  private static PsiFilePattern.Capture<GoFile> goFileWithPackage() {
+    return psiFile(GoFile.class).withFirstNonWhitespaceChild(psiElement(GoTypes.PACKAGE_CLAUSE));
+  }
+
+  private static PsiFilePattern.Capture<GoFile> goFileWithoutPackage() {
+    return psiFile(GoFile.class).andNot(psiElement().withFirstNonWhitespaceChild(psiElement(GoTypes.PACKAGE_CLAUSE)));
+  }
+
   public static class AutoImport extends CompletionContributor {
 
     private static final ParenthesesWithImport FUNC_IMPORT_INSERT_HANDLER = new ParenthesesWithImport();
@@ -145,7 +118,7 @@ public class GoCompletionContributor extends CompletionContributor {
         }
       });
     }
-    
+
     private static class ParenthesesWithImport extends ParenthesesInsertHandler<LookupElement> {
       @Override
       public void handleInsert(InsertionContext context, LookupElement item) {
