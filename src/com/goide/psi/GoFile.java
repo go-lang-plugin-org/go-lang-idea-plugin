@@ -32,7 +32,6 @@ import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -200,7 +199,7 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   private List<GoTypeSpec> calcTypes() {
-    final List<GoTypeSpec> result = new ArrayList<GoTypeSpec>();
+    final List<GoTypeSpec> result = ContainerUtil.newArrayList();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
@@ -217,7 +216,7 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   private List<GoImportSpec> calcImports() {
-    final List<GoImportSpec> result = new ArrayList<GoImportSpec>();
+    final List<GoImportSpec> result = ContainerUtil.newArrayList();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
@@ -236,7 +235,7 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   private List<GoVarDefinition> calcVars() {
-    final List<GoVarDefinition> result = new ArrayList<GoVarDefinition>();
+    final List<GoVarDefinition> result = ContainerUtil.newArrayList();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
@@ -255,7 +254,7 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   private List<GoConstDefinition> calcConsts() {
-    final List<GoConstDefinition> result = new ArrayList<GoConstDefinition>();
+    final List<GoConstDefinition> result = ContainerUtil.newArrayList();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
@@ -274,7 +273,7 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   private <T extends PsiElement> List<T> calc(final Condition<PsiElement> condition) {
-    final List<T> result = new ArrayList<T>();
+    final List<T> result = ContainerUtil.newArrayList();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
