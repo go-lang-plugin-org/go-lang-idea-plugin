@@ -148,6 +148,7 @@ public class GoFile extends PsiFileBase {
     return myImportsValue.getValue();
   }
 
+  @NotNull
   public MultiMap<String, PsiElement> getImportMap() {
     MultiMap<String, PsiElement> map = MultiMap.create();
     for (GoImportSpec spec : getImports()) {
