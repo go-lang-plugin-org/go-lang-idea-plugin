@@ -2,7 +2,7 @@ Fix missing environment paths
 ===
 
 Sometimes IDEA won't properly detect the environment paths properly.
-This can happen becuase of many reasons, especially on Mac OS X and Linux,
+This can happen because of many reasons, especially on Mac OS X and Linux,
 Windows is not reported to have similar issues.
 
 Usually, the simplest way to fix this is to launch IDEA from the command line.
