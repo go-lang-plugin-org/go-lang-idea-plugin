@@ -1,6 +1,7 @@
 package com.goide.inspections;
 
 import com.goide.codeInsight.imports.GoImportOptimizer;
+import com.goide.psi.GoCompositeElement;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportSpec;
 import com.intellij.codeInspection.*;
@@ -50,7 +51,8 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
       GoImportSpec spec = GoImportOptimizer.getImportSpec(importEntry);
       if (spec != null) {
         if (spec.getImportString().resolve() != null) {
-          problemsHolder.registerProblem(spec, "Unused import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX);
+          GoCompositeElement element = spec.getDot() == null ? spec : spec.getImportString();
+          problemsHolder.registerProblem(element, "Unused import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX);
         }
       }
     }
