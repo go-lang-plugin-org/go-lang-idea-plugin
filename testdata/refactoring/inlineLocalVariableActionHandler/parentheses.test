@@ -2,10 +2,12 @@ package main
 func main() {
     var <caret>a = (5+2)
     println(a)
+    println((a))
 }
 
 -----
 package main
 func main() {
 	println(5 + 2)
+	println((5 + 2))
 }
