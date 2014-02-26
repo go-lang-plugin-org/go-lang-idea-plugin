@@ -33,6 +33,8 @@ public class GoTypeInspectUtil {
     public static boolean checkIsInterface(GoPsiType psiType) {
         if (psiType instanceof GoPsiTypeInterface)
             return true;
+        if (psiType instanceof GoPsiTypeName)
+            return psiType.getName().equals("error") && ((GoPsiTypeName) psiType).isPrimitive();
         if (psiType instanceof GoPsiTypeSlice)
             return checkIsInterface(((GoPsiTypeSlice) psiType).getElementType());
         if (psiType instanceof GoPsiTypePointer)
@@ -215,19 +217,22 @@ public class GoTypeInspectUtil {
         GoFunctionDeclaration goFunctionDeclaration = GoExpressionUtils.resolveToFunctionDeclaration(call);
         GoExpr[] goExprs = call.getArguments();
         int index = 0;
+
         if (goFunctionDeclaration == null)
             return;
+
         for (GoFunctionParameter functionParameter : goFunctionDeclaration.getParameters()) {
             if (index >= goExprs.length)
                 return;
             GoPsiType type = functionParameter.getType();
+            String typeName = type != null ? type.getText() : "";
             if (functionParameter.isVariadic()) {
-                for (; index < goExprs.length; index++){
+                for (; index < goExprs.length; index++) {
                     GoExpr goExpr = goExprs[index];
                     if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                         result.addProblem(
                                 goExpr,
-                                GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                                GoBundle.message("warning.functioncall.type.mismatch", typeName),
                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
                         return;
                     }
@@ -239,7 +244,7 @@ public class GoTypeInspectUtil {
                     if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                         result.addProblem(
                                 goExpr,
-                                GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                                GoBundle.message("warning.functioncall.type.mismatch", typeName),
                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
                         return;
                     }
@@ -250,7 +255,7 @@ public class GoTypeInspectUtil {
                         if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                             result.addProblem(
                                     goExpr,
-                                    GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                                    GoBundle.message("warning.functioncall.type.mismatch", typeName),
                                     ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
                             return;
                         }
@@ -294,12 +299,13 @@ public class GoTypeInspectUtil {
                 return false;
             GoPsiType type = functionParameter.getType();
             GoLiteralIdentifier[] identifiers = functionParameter.getIdentifiers();
+            String typeName = type != null ? type.getText() : "";
             if (identifiers.length < 2) {
                 GoExpr goExpr = goExprs[index];
                 if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                     result.addProblem(
                             goExpr,
-                            GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                            GoBundle.message("warning.functioncall.type.mismatch", typeName),
                             new CastTypeFix(goExpr, type),
                             new ChangeReturnsParametersFix(statement));
                     return false;
@@ -311,7 +317,7 @@ public class GoTypeInspectUtil {
                     if (!checkParametersExp(functionParameter.getType(), goExpr)) {
                         result.addProblem(
                                 goExpr,
-                                GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                                GoBundle.message("warning.functioncall.type.mismatch", typeName),
                                 new CastTypeFix(goExpr, type),
                                 new ChangeReturnsParametersFix(statement));
 

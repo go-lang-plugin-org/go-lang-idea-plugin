@@ -21,7 +21,6 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.util.GoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.List;
 import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 public class GoLiteralFunctionImpl extends GoPsiElementBase
-    implements GoLiteralFunction {
+        implements GoLiteralFunction {
 
     public GoLiteralFunctionImpl(@NotNull ASTNode node) {
         super(node);
@@ -63,7 +62,7 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
 
     @Override
     public PsiElement setName(@NonNls @NotNull String name)
-        throws IncorrectOperationException {
+            throws IncorrectOperationException {
         return null;
     }
 
@@ -95,7 +94,7 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
         for (GoFunctionParameter functionParameter : getParameters()) {
-            if ( ! processor.execute(functionParameter, state) )  {
+            if (!processor.execute(functionParameter, state)) {
                 return false;
             }
         }
@@ -113,10 +112,39 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
         if (goType instanceof GoPsiTypeName) {
             goType = resolveToFinalType(goType);
         }
-        if (goType instanceof GoPsiTypeFunction){
-            return GoUtil.CompareFnTypeToDecl((GoPsiTypeFunction) goType, this);
+
+        if (!(goType instanceof GoPsiTypeFunction))
+            return false;
+
+        GoPsiTypeFunction functionDeclaration = (GoPsiTypeFunction) goType;
+
+        GoFunctionParameter[] funcTypeArguments = getParameters();
+        GoFunctionParameter[] funcDeclArguments = functionDeclaration.getParameters();
+
+        int idx = 0;
+
+        if (funcDeclArguments.length != funcTypeArguments.length)
+            return false;
+
+        for (GoFunctionParameter parameter : funcDeclArguments) {
+            if (!parameter.getType().isIdentical(funcTypeArguments[idx].getType()))
+                return false;
+            idx++;
         }
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+
+        funcTypeArguments = this.getResults();
+        funcDeclArguments = functionDeclaration.getResults();
+
+        if (funcDeclArguments.length != funcTypeArguments.length)
+            return false;
+
+        idx = 0;
+        for (GoFunctionParameter parameter : funcDeclArguments) {
+            if (!parameter.getType().isIdentical(funcTypeArguments[idx].getType()))
+                return false;
+            idx++;
+        }
+        return true;
     }
 
     @Override
