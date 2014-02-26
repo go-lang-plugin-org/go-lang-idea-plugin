@@ -11,7 +11,9 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 
 class GoCallOrConvExpressionBlock extends GoBlock {
     public GoCallOrConvExpressionBlock(ASTNode node, Alignment alignment, Indent indent, Wrap wrap,
@@ -22,7 +24,11 @@ class GoCallOrConvExpressionBlock extends GoBlock {
     @Override
     protected Indent getChildIndent(@Nullable PsiElement child) {
         if (child instanceof GoExpressionList || child instanceof GoLiteralIdentifier) {
+            if (child instanceof GoExpressionList && containsLiteralFunction((GoExpressionList) child)) {
+                return CONTINUATION_WITHOUT_FIRST;
+            }
             return NORMAL_INDENT_TO_CHILDREN;
+
         }
         return super.getChildIndent(child);
     }
@@ -39,5 +45,19 @@ class GoCallOrConvExpressionBlock extends GoBlock {
             return GoBlock.EMPTY_SPACING;
 
         return EMPTY_SPACING_KEEP_LINE_BREAKS;
+    }
+
+    private Boolean containsLiteralFunction(GoExpressionList expressionList) {
+        for (PsiElement element : expressionList.getChildren()) {
+            if (isLiteralFunction(element)) return true;
+        }
+        return false;
+    }
+
+    private boolean isLiteralFunction(PsiElement element) {
+        if (element instanceof GoLiteralExpression && element.getLastChild() instanceof GoLiteralFunction) {
+            return true;
+        }
+        return false;
     }
 }

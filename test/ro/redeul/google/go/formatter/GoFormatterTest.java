@@ -19,7 +19,7 @@ public class GoFormatterTest extends GoEditorAwareTestCase {
     public void testCastFunc() throws Exception { doTest(); }
     public void testFunctionCall() throws Exception { 
         // TODO: Fix Formatter Test
-        // doTest(); 
+        // doTest();
     }
     public void testInterfaceType() throws Exception { doTest(); }
     public void testCallParameters() throws Exception { doTest(); }
@@ -29,6 +29,8 @@ public class GoFormatterTest extends GoEditorAwareTestCase {
     public void testSlices1() throws Exception { doTest(); }
     public void testSlices2() throws Exception { doTest(); }
     public void testFunctionDeclaration() throws Exception { doTest(); }
+    public void testFunctionLiteral() throws  Exception { doTest(); }
+
     // @TODO These tests are not passing yet due to refactoring done automatically by gofmt
     /*
     public void testImport() throws Exception { doTest(); }
