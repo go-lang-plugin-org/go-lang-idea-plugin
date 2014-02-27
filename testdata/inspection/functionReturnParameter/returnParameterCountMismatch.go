@@ -106,3 +106,13 @@ func testChan() {
 	ch <- 1
 }
 
+//Issue #630
+type MyError struct {}
+
+func (m MyError)Error() string {
+	return "foo"
+}
+
+func foo() error {
+	return MyError{}
+}

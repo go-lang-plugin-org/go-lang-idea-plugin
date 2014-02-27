@@ -72,6 +72,11 @@ func HandleMapInterface(a map[string]interface{}){
 
 }
 
+func TestLiteralFunc(arg func(string,string)(bool,bool)) {
+
+}
+
+
 func HandleSlice(a []string) {
 
 }
@@ -262,8 +267,8 @@ func main() {
 	MatchInt32(/*begin*/1.1/*end.Expression type mismatch, the expected type is int32|CastTypeFix*/)
 
 	// GoLiteralIntegerImpl does not return proper value now
-//	MatchInt32(-2147483649)
-//	MatchInt32(2147483649)
+	//	MatchInt32(-2147483649)
+	//	MatchInt32(2147483649)
 
 	MatchRune(0)
 	MatchRune(-2147483648)
@@ -272,8 +277,8 @@ func main() {
 	MatchRune(/*begin*/1.1/*end.Expression type mismatch, the expected type is rune|CastTypeFix*/)
 
 	// GoLiteralIntegerImpl does not return proper value now
-//	MatchRune(-2147483649)
-//	MatchRune(2147483649)
+	//	MatchRune(-2147483649)
+	//	MatchRune(2147483649)
 
 	var interfacE = interface{}
 	HandleIFunc(func() iFunc {return true})
@@ -434,7 +439,7 @@ func main() {
 	HandleOutChan(/*begin*/chIntOut/*end.Expression type mismatch, the expected type is chan<- string|CastTypeFix*/)
 	HandleOutChan(/*begin*/chStrIn/*end.Expression type mismatch, the expected type is chan<- string|CastTypeFix*/)
 
-	// HandleChan(make(chan int))  TODO: should generate "Expression type mismatch, the expected type is chan int|CastTypeFix"
+	 HandleChan(make(chan int))  //TODO: should generate "Expression type mismatch, the expected type is chan int|CastTypeFix"
 
 	// issue #522
 
@@ -454,6 +459,11 @@ func main() {
 	HandleVariadic("", 1, 2, 3)
 	HandleVariadic("", 1, 2, /*begin*/"4"/*end.Expression type mismatch, the expected type is int|CastTypeFix*/)
 	HandleVariadic("", /*begin*/"4"/*end.Expression type mismatch, the expected type is int|CastTypeFix*/)
+	wrongTypeFunctionTest := func(a string) bool {return false}
+	TestLiteralFunc(/*begin*/wrongTypeFunctionTest/*end.Expression type mismatch, the expected type is func(string,string)(bool,bool)|CastTypeFix*/)
+	myNewFnForTest := func(a string, b string) (bool,bool,bool) {return false,false,false}
+	TestLiteralFunc(/*begin*/myNewFnForTest/*end.Expression type mismatch, the expected type is func(string,string)(bool,bool)|CastTypeFix*/)
+	TestLiteralFunc(func(a string,b string)(bool,bool) {return false,true})
 
 
 }
