@@ -73,10 +73,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
       List production = (List)field.get(builder_);
       return (PsiBuilder.Marker)ContainerUtil.getLastItem(production);
     }
-    catch (NoSuchFieldException e) {
-      return null;
-    }
-    catch (IllegalAccessException e) {
+    catch (Exception e) {
       return null;
     }
   }
