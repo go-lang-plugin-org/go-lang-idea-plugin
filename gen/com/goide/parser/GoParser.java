@@ -1741,23 +1741,36 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (ImportDeclaration semi)*
+  // ((ImportDeclaration semi)+)|<<emptyImportList>>
   public static boolean ImportList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ImportList")) return false;
+    boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<import list>");
+    result_ = ImportList_0(builder_, level_ + 1);
+    if (!result_) result_ = emptyImportList(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, IMPORT_LIST, result_, false, null);
+    return result_;
+  }
+
+  // (ImportDeclaration semi)+
+  private static boolean ImportList_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ImportList_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ImportList_0_0(builder_, level_ + 1);
     int pos_ = current_position_(builder_);
-    while (true) {
-      if (!ImportList_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "ImportList", pos_)) break;
+    while (result_) {
+      if (!ImportList_0_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "ImportList_0", pos_)) break;
       pos_ = current_position_(builder_);
     }
-    exit_section_(builder_, level_, marker_, IMPORT_LIST, true, false, null);
-    return true;
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
   }
 
   // ImportDeclaration semi
-  private static boolean ImportList_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ImportList_0")) return false;
+  private static boolean ImportList_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ImportList_0_0")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);

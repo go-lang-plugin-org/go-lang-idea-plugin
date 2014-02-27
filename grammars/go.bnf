@@ -84,7 +84,7 @@
 }
 
 File ::= PackageClause semi ImportList TopLevelDeclaration* {pin(".*")=1}
-ImportList ::= (ImportDeclaration semi)* {
+ImportList ::= ((ImportDeclaration semi)+)|<<emptyImportList>> {
   methods=[addImport]
 }
 private semi ::= '<NL>' | ';' | <<eof>>
@@ -250,7 +250,7 @@ Literal ::=
   | char
 OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
 
-left QualifiedReferenceExpression ::= '.' identifier {pin=1 elementType=ReferenceExpression}
+left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
 
 CompositeLit ::= LiteralTypeExpr LiteralValue

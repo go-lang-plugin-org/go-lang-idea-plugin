@@ -5,9 +5,9 @@ GO_FILE
   PACKAGE_CLAUSE
     PsiElement(package)('package')
     PsiElement(identifier)('runtime')
-  PsiComment(GO_LINE_COMMENT)('// The Error interface identifies a run time error.')
   IMPORT_LIST
     <empty list>
+  PsiComment(GO_LINE_COMMENT)('// The Error interface identifies a run time error.')
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
