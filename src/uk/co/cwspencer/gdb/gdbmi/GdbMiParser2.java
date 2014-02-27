@@ -862,7 +862,7 @@ public class GdbMiParser2 {
                 "(?:func=\"([^\"]+)\")?,?";
 
         if (hasArgs) {
-            pattern += "(?:args=\\[(.*?)\\])?,";
+            pattern += "(?:args=\\[(.*?)\\])?,?";
         }
 
         pattern += "(?:file=\"([^\"]+)\")?,?" +
