@@ -19,7 +19,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.runner.ui.GoApplicationConfigurationEditor;
 import ro.redeul.google.go.sdk.GoSdkUtil;
-import uk.co.cwspencer.ideagdb.run.GdbRunProfileState;
+import uk.co.cwspencer.ideagdb.run.GoDebugProfileState;
 
 import java.io.File;
 import java.util.Arrays;
@@ -120,7 +120,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
 
 	    //If the user wants to debug the program, we return a different RunProfileState
 	    if(executor.getClass().equals(DefaultDebugExecutor.class)) {
-		    return new GdbRunProfileState(getProject(), env, this);
+		    return new GoDebugProfileState(getProject(), env, this);
 	    }
 
 	    //Else run it

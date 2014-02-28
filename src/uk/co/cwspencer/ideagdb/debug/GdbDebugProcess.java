@@ -21,6 +21,7 @@ import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
 import com.intellij.xdebugger.ui.XDebugTabLayouter;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.runner.GoApplicationConfiguration;
 import uk.co.cwspencer.gdb.Gdb;
 import uk.co.cwspencer.gdb.GdbListener;
 import uk.co.cwspencer.gdb.gdbmi.GdbMiResultRecord;
@@ -29,7 +30,6 @@ import uk.co.cwspencer.gdb.messages.*;
 import uk.co.cwspencer.ideagdb.debug.breakpoints.GdbBreakpointHandler;
 import uk.co.cwspencer.ideagdb.debug.breakpoints.GdbBreakpointProperties;
 import uk.co.cwspencer.ideagdb.run.GdbExecutionResult;
-import uk.co.cwspencer.ideagdb.run.GdbRunConfiguration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,7 +43,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
     public ConsoleView m_console;
 
     // The run configuration
-    public GdbRunConfiguration m_configuration;
+    public GoApplicationConfiguration m_configuration;
 
     // The GDB console
     public GdbConsoleView m_gdbConsole;

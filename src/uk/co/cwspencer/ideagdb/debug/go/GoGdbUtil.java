@@ -10,8 +10,8 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.CapturingProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
 import com.intellij.openapi.diagnostic.Logger;
-import ro.redeul.google.go.sdk.GoSdkUtil;
 
+import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Map;
 
@@ -92,5 +92,18 @@ public class GoGdbUtil {
             LOG.error("Exception while executing the process:", e);
             return false;
         }
+    }
+
+    public static boolean doesExecutableExist(String executablePath) {
+        String systempath = System.getenv("PATH");
+        String[] paths = systempath.split(File.pathSeparator);
+
+        for(String path : paths) {
+            if(new File(path, executablePath).exists()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -32,13 +32,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.runner.GoApplicationConfiguration;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
 import java.util.Map;
 
-public class GdbRunProfileState implements RunProfileState {
-    private static final Logger m_log = Logger.getInstance("#uk.co.cwspencer.ideagdb.run.GdbRunProfileState");
+public class GoDebugProfileState implements RunProfileState {
+    private static final Logger m_log = Logger.getInstance("#uk.co.cwspencer.ideagdb.run.GoDebugProfileState");
 
     private static final String ID = "Go Console";
     private static final String TITLE = "build";
@@ -46,9 +47,9 @@ public class GdbRunProfileState implements RunProfileState {
 
     private Project project;
     private ExecutionEnvironment m_env;
-    private GdbRunConfiguration m_configuration;
+    private GoApplicationConfiguration m_configuration;
 
-    public GdbRunProfileState(Project _project, @NotNull ExecutionEnvironment env, GdbRunConfiguration configuration) {
+    public GoDebugProfileState(Project _project, @NotNull ExecutionEnvironment env, GoApplicationConfiguration configuration) {
         project = _project;
         m_env = env;
         m_configuration = configuration;
@@ -165,7 +166,7 @@ public class GdbRunProfileState implements RunProfileState {
             window.show(EmptyRunnable.getInstance());
 
             String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
-            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.builderArguments, execName, m_configuration.scriptName);
+            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.debugBuilderArguments, execName, m_configuration.scriptName);
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv);
