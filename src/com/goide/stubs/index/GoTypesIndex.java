@@ -10,7 +10,7 @@ public class GoTypesIndex extends StringStubIndexExtension<GoTypeSpec> {
 
   @Override
   public int getVersion() {
-    return 1;
+    return 2;
   }
 
   @NotNull
