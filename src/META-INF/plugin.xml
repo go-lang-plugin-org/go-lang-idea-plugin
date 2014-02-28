@@ -395,13 +395,13 @@
                 implementation="ro.redeul.google.go.config.sdk.GoAppEngineSdkType"/>
 
         <configurationType
-                implementation="ro.redeul.google.go.runner.GoRunConfigurationType"/>
+                implementation="ro.redeul.google.go.runner.GoApplicationConfigurationType"/>
         <configurationType
                 implementation="ro.redeul.google.go.runner.GoTestConfigurationType"/>
         <configurationType
                 implementation="ro.redeul.google.go.runner.GaeAppEngineRunConfigurationType"/>
         <runConfigurationProducer
-                implementation="ro.redeul.google.go.runner.GoRunConfigurationProducer"/>
+                implementation="ro.redeul.google.go.runner.GoApplicationConfigurationProducer"/>
         <runConfigurationProducer
                 implementation="ro.redeul.google.go.runner.GoTestConfigurationProducer"/>
 

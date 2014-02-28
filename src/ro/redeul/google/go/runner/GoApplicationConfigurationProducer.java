@@ -5,16 +5,15 @@ import com.intellij.execution.RunManagerEx;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.util.text.StringUtilRt;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -30,17 +29,17 @@ import java.util.List;
  * Date: Aug 19, 2010
  * Time: 2:49:31 PM
  */
-public class GoRunConfigurationProducer extends RunConfigurationProducer {
+public class GoApplicationConfigurationProducer extends RunConfigurationProducer {
 
     private PsiElement element;
 
-    private static final Logger LOG = Logger.getInstance(GoRunConfigurationProducer.class);
+    private static final Logger LOG = Logger.getInstance(GoApplicationConfigurationProducer.class);
 
-    public GoRunConfigurationProducer() {
-        super(GoRunConfigurationType.getInstance());
+    public GoApplicationConfigurationProducer() {
+        super(GoApplicationConfigurationType.getInstance());
     }
 
-    protected GoRunConfigurationProducer(ConfigurationFactory configurationFactory) {
+    protected GoApplicationConfigurationProducer(ConfigurationFactory configurationFactory) {
         super(configurationFactory);
     }
 
@@ -104,11 +103,18 @@ public class GoRunConfigurationProducer extends RunConfigurationProducer {
             Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
             String name = file.getVirtualFile().getCanonicalPath();
 
+
             ((GoApplicationConfiguration) configuration).workingDir = project.getBasePath();
             ((GoApplicationConfiguration) configuration).goBuildBeforeRun = false;
-            ((GoApplicationConfiguration) configuration).builderArguments = "";
+            ((GoApplicationConfiguration) configuration).runBuilderArguments = "";
             ((GoApplicationConfiguration) configuration).scriptName = name;
             ((GoApplicationConfiguration) configuration).scriptArguments = "";
+
+            ((GoApplicationConfiguration) configuration).autoStartGdb = true;
+            ((GoApplicationConfiguration) configuration).GDB_PATH = "gdb";
+            ((GoApplicationConfiguration) configuration).debugBuilderArguments = "-gcflags \"-N -I\"";
+
+
             ((GoApplicationConfiguration) configuration).setModule(module);
             configuration.setName(((GoApplicationConfiguration) configuration).suggestedName());
 

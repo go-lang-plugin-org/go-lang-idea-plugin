@@ -20,11 +20,11 @@ import javax.swing.*;
  * Date: Aug 19, 2010
  * Time: 2:49:26 PM
  */
-public class GoRunConfigurationType implements ConfigurationType {
+public class GoApplicationConfigurationType implements ConfigurationType {
 
     private final GoFactory myConfigurationFactory;
 
-    public GoRunConfigurationType() {
+    public GoApplicationConfigurationType() {
         myConfigurationFactory = new GoFactory(this);
     }
 
@@ -50,8 +50,8 @@ public class GoRunConfigurationType implements ConfigurationType {
         return new ConfigurationFactory[]{myConfigurationFactory};
     }
 
-    public static GoRunConfigurationType getInstance() {
-        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GoRunConfigurationType.class);
+    public static GoApplicationConfigurationType getInstance() {
+        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), GoApplicationConfigurationType.class);
     }
 
     public static class GoFactory extends ConfigurationFactory {
