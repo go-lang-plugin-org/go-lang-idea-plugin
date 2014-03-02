@@ -1,0 +1,29 @@
+package main
+
+func GetSomeInt() int {return 1}
+
+func main() {
+    var a = GetSomeInt()
+    println(<caret>a)
+    if true {
+        var a = 3
+        println(a)
+    } else {
+        println(a)
+    }
+}
+
+-----
+package main
+
+func GetSomeInt() int {return 1}
+
+func main() {
+	println(GetSomeInt())
+	if true {
+		var a = 3
+		println(a)
+	} else {
+		println(GetSomeInt())
+	}
+}

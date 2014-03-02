@@ -41,6 +41,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
@@ -63,16 +64,16 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
 
     @SuppressWarnings("unchecked")
     private static final ElementPattern<GoLiteralIdentifier> LOCAL_VAR_DECLARATION =
-        psiElement(GoLiteralIdentifier.class)
-            .withParent(
-                or(
-                    psiElement(GoShortVarDeclaration.class),
-                    psiElement(GoVarDeclaration.class)
-                        .andNot(
-                            psiElement().withSuperParent(2, GoFile.class)
-                        )
-                )
-            );
+            psiElement(GoLiteralIdentifier.class)
+                    .withParent(
+                            or(
+                                    psiElement(GoShortVarDeclaration.class),
+                                    psiElement(GoVarDeclaration.class)
+                                            .andNot(
+                                                    psiElement().withSuperParent(2, GoFile.class)
+                                            )
+                            )
+                    );
 
     @Override
     public boolean isEnabledForLanguage(Language l) {
@@ -152,13 +153,13 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
     private void removeIdentifierDeclaration(InlineContext ctx) throws GoRefactoringException {
         PsiElement parent = ctx.statement.getParent();
         if (ctx.statement.getIdentifiers().length > 1 ||
-            parent instanceof GoVarDeclarations ||
-            parent instanceof GoBlockStatement) {
+                parent instanceof GoVarDeclarations ||
+                parent instanceof GoBlockStatement) {
             applyRemoveVariableFix(ctx);
         } else if (parent instanceof GoIfStatement) {
             deleteIfSimpleStatement(ctx.editor.getDocument(), (GoIfStatement) parent);
         } else if (parent instanceof GoSwitchExpressionStatement ||
-            parent instanceof GoSwitchTypeStatement) {
+                parent instanceof GoSwitchTypeStatement) {
             deleteSwitchSimpleStatement(ctx.editor.getDocument(), (GoStatement) parent);
         } else {
             applyRemoveVariableFix(ctx);
@@ -180,8 +181,8 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
         PsiElement initializer = getInitializer(ctx.identifierToInline);
         boolean shouldHaveInitializer = identifierShouldHaveInitializer(ctx.identifierToInline);
         if (shouldHaveInitializer && initializer == null ||
-            usage.writeUsages.length == 0 && !shouldHaveInitializer) {
-            throw new GoRefactoringException(RefactoringBundle.message("variable.has.no.initializer"));
+                usage.writeUsages.length == 0 && !shouldHaveInitializer) {
+            throw new GoRefactoringException(RefactoringBundle.message("variable.has.no.initializer", ctx.identifierToInline.getText()));
         }
 
         if (usage.readUsages.length == 0) {
@@ -197,14 +198,13 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
 
             initializer = getInitializer((GoLiteralIdentifier) usage.writeUsages[0]);
             if (initializer == null) {
-                throw new GoRefactoringException(RefactoringBundle.message("variable.has.no.initializer"));
+                throw new GoRefactoringException(RefactoringBundle.message("variable.has.no.initializer", ctx.identifierToInline.getText()));
             }
         }
 
         if (usage.writeUsages.length >= 2 ||
-            usage.writeUsages.length == 1 && shouldHaveInitializer) {
-            String message = RefactoringBundle.message("variable.is.accessed.for.writing", name);
-            throw new GoRefactoringException(message);
+                usage.writeUsages.length == 1 && shouldHaveInitializer) {
+            throw new GoRefactoringException(RefactoringBundle.message("variable.is.accessed.for.writing", name));
         }
 
         while (initializer instanceof GoParenthesisedExpression) {
@@ -219,29 +219,29 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
     }
 
     private static final TokenSet MUL_TOKENS = TokenSet.create(
-        GoTokenTypes.oMUL,
-        GoTokenTypes.oQUOTIENT,
-        GoTokenTypes.oREMAINDER,
-        GoTokenTypes.oSHIFT_LEFT,
-        GoTokenTypes.oSHIFT_RIGHT,
-        GoTokenTypes.oBIT_AND,
-        GoTokenTypes.oBIT_CLEAR
+            GoTokenTypes.oMUL,
+            GoTokenTypes.oQUOTIENT,
+            GoTokenTypes.oREMAINDER,
+            GoTokenTypes.oSHIFT_LEFT,
+            GoTokenTypes.oSHIFT_RIGHT,
+            GoTokenTypes.oBIT_AND,
+            GoTokenTypes.oBIT_CLEAR
     );
 
     private static final TokenSet ADD_TOKENS = TokenSet.create(
-        GoTokenTypes.oPLUS,
-        GoTokenTypes.oMINUS,
-        GoTokenTypes.oBIT_OR,
-        GoTokenTypes.oBIT_XOR
+            GoTokenTypes.oPLUS,
+            GoTokenTypes.oMINUS,
+            GoTokenTypes.oBIT_OR,
+            GoTokenTypes.oBIT_XOR
     );
 
     private static final TokenSet REL_TOKENS = TokenSet.create(
-        GoTokenTypes.oEQ,
-        GoTokenTypes.oNOT_EQ,
-        GoTokenTypes.oLESS,
-        GoTokenTypes.oLESS_OR_EQUAL,
-        GoTokenTypes.oGREATER,
-        GoTokenTypes.oGREATER_OR_EQUAL
+            GoTokenTypes.oEQ,
+            GoTokenTypes.oNOT_EQ,
+            GoTokenTypes.oLESS,
+            GoTokenTypes.oLESS_OR_EQUAL,
+            GoTokenTypes.oGREATER,
+            GoTokenTypes.oGREATER_OR_EQUAL
     );
 
     private static int getExpressionPrecedence(PsiElement element) {
@@ -264,7 +264,8 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
             return 10;
         } else if (element instanceof GoSelectorExpression) {
             return 15;
-        } else if (element instanceof GoLiteralIdentifier || element instanceof GoLiteralExpression) {
+        } else if (element instanceof GoLiteralIdentifier ||
+                element instanceof GoLiteralExpression) {
             return 20;
         }
 
@@ -278,13 +279,13 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
         }
         int usagePrecedence = getExpressionPrecedence(usageParent);
         int initializerPrecedence = getExpressionPrecedence(initializer);
-        if (initializerPrecedence == -1) {
-            unknownCase();
-            return;
-        }
-
         String text = initializer.getText();
-        if (initializerPrecedence < usagePrecedence) {
+
+        if (initializerPrecedence == -1) {
+            if (!(usageParent instanceof GoCallOrConvExpression) &&
+                    !(usageParent instanceof GoParenthesisedExpression))
+                unknownCase();
+        } else if (initializerPrecedence < usagePrecedence) {
             text = "(" + text + ")";
         }
         DocumentUtil.replaceElementWithText(document, usage, text);
@@ -302,7 +303,7 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
     }
 
     private void deleteSwitchSimpleStatement(Document document, GoStatement statement)
-        throws GoRefactoringException {
+            throws GoRefactoringException {
         GoSimpleStatement simpleStatement;
         if (statement instanceof GoSwitchExpressionStatement) {
             simpleStatement = ((GoSwitchExpressionStatement) statement).getSimpleStatement();
@@ -392,12 +393,12 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
         String name = ctx.identifierToInline.getText();
         String question = RefactoringBundle.message("inline.local.variable.prompt", name) + " " + occurrencesString;
         RefactoringMessageDialog dialog = new RefactoringMessageDialog(
-            RefactoringBundle.message("inline.variable.title"),
-            question,
-            HelpID.INLINE_VARIABLE,
-            "OptionPane.questionIcon",
-            true,
-            ctx.project);
+                RefactoringBundle.message("inline.variable.title"),
+                question,
+                HelpID.INLINE_VARIABLE,
+                "OptionPane.questionIcon",
+                true,
+                ctx.project);
         dialog.show();
         if (!dialog.isOK()) {
             StatusBar statusBar = WindowManager.getInstance().getStatusBar(ctx.project);
