@@ -225,6 +225,7 @@ public class GoPsiImplUtil {
       if ("new".equals(text) || "make".equals(text)) {
         GoBuiltinArgs args = ((GoBuiltinCallExpr)o).getBuiltinArgs();
         GoType type = args != null ? args.getType() : null;
+        if (type instanceof GoMapType) return type;
         if (type != null) {
           GoTypeReferenceExpression expression = getTypeReference(type);
           return getType(expression);
@@ -258,6 +259,9 @@ public class GoPsiImplUtil {
           return list.get(1);
         }
       }
+      else if (type instanceof GoArrayOrSliceType) {
+        return ((GoArrayOrSliceType)type).getType();
+      }
     }
     return null;
   }
@@ -272,14 +276,15 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getGoType(@NotNull GoVarDefinition o) {
+    // see http://golang.org/ref/spec#RangeClause
     PsiElement parent = o.getParent();
+    if (parent instanceof GoRangeClause) {
+      return processRangeClause(o, (GoRangeClause)parent);
+    }
     if (parent instanceof GoShortVarDeclaration || parent instanceof GoRecvStatement) { // todo: range processing
-      List<GoVarDefinition> defList = ((GoVarSpec)parent).getVarDefinitionList();
-      int i = 0;
-      for (GoVarDefinition d : defList) {
-        if (d.equals(o)) break;
-        i++;
-      }
+      List<GoVarDefinition> varList = ((GoVarSpec)parent).getVarDefinitionList();
+      int i = varList.indexOf(o);
+      i = i == -1 ? 0 : i;
       List<GoExpression> exprs = ((GoVarSpec)parent).getExpressionList();
       if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
         GoExpression call = exprs.get(0);
@@ -295,6 +300,28 @@ public class GoPsiImplUtil {
       return exprs.get(i).getGoType();
     }
     return GoNamedElementImpl.getType(o);
+  }
+
+  @Nullable
+  private static GoType processRangeClause(@NotNull GoVarDefinition o, @NotNull GoRangeClause parent) {
+    List<GoExpression> exprs = parent.getExpressionList();
+    GoExpression last = ContainerUtil.getLastItem(exprs);
+    int rangeOffset = parent.getRange().getTextOffset();
+    last = last != null && last.getTextOffset() > rangeOffset ? last : null;
+
+    if (last != null) {
+      List<GoVarDefinition> varList = parent.getVarDefinitionList();
+      int i = varList.indexOf(o);
+      i = i == -1 ? 0 : i;
+      GoType type = last.getGoType();
+      if (type instanceof GoArrayOrSliceType && i == 1) return ((GoArrayOrSliceType)type).getType();
+      if (type instanceof GoMapType) {
+        List<GoType> list = ((GoMapType)type).getTypeList();
+        if (i == 0) return ContainerUtil.getFirstItem(list);
+        if (i == 1) return ContainerUtil.getLastItem(list);
+      }
+    }
+    return null;
   }
 
   @NotNull

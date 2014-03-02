@@ -36,4 +36,5 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testSimple() throws Exception { doTest(); }
   public void testStruct() throws Exception { doTest(); }
   public void testBoxes()  throws Exception { doTest(); }
+  public void testRanges() throws Exception { doTest(); }
 }
