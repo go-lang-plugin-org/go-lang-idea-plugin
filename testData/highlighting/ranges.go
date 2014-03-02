@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func append(slice []Type, elems ...Type) []Type
 func make(Type, size int) Type
 type Type int
@@ -7,7 +9,7 @@ type int int
 type string string
 
 func println(o... interface {}) {
-    // fmt.Println(o)
+    fmt.Println(o)
 }
 type Person struct {
     Name  string
