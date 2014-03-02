@@ -1,2 +1,4 @@
 out/
 bin/
+system-test/
+config-test/
