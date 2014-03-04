@@ -13,6 +13,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeFunctionImpl;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -91,6 +92,10 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
                     }
                     continue;
                 }
+            }
+
+            if (declaration.getParent().getParent().getParent() instanceof GoPsiTypeFunctionImpl) {
+                continue;
             }
 
             if (PARAMETER_DECLARATION.accepts(declaration)) {
