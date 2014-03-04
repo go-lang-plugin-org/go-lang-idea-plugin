@@ -5,6 +5,20 @@ Google go language plugin is an attempt to build an outstanding IDE for
 
 [![Build Status](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin.png?branch=master)](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin)
 
+## TOC
+
++ [Links](#links)
++ [What it does](#what-it-does)
++ [How to use it](#how-to-use-it)
++ [Tutorials](#tutorials)
++ [Bugs](#bugs)
++ [EAP downloads](#eap-downloads)
++ [Authors](#authors)
++ [Contributing](#contributing)
++ [Thank you](#thank-you)
+
+## Links
+
 + Project pages on github:
     + <http://github.com/go-lang-plugin-org/go-lang-idea-plugin>
     + <http://wiki.github.com/go-lang-plugin-org/go-lang-idea-plugin/> (wiki)
@@ -76,7 +90,19 @@ When reporting a bug, please include the following:
 - OS version
 - JDK version
 
-Please ensure that the bug is not reported.
+Please ensure that the bug is not reported already.
+
+## EAP download
+
+There will always be at least one EAP downloadable on [@dlsniper's dropbox](https://www.dropbox.com/sh/kzcmavr2cmqqdqw/j8wjp8SdNH) built from master.
+The folder may contain other builds as well such as issue prefixed builds that attempt to fix a specific issue and have not been merged to master yet.
+They are meant to be a convenient way to quickly test upcoming changes without the hasle of building the plugin but it also means that you should take them with a grain of salt, they are after all, beta builds.
+Also, after you've done testing, please remember to check the official plugin repository in order to ensure you always have the latest stable build or that there's no new release as automatic updates won't work with EAP releases of the plugin.
+
+## Contributing
+
+If you want to contribute to this effort you should read the following page:
+[how to contribute](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/blob/master/contributing.md).
 
 ## Authors
 
@@ -106,11 +132,6 @@ Please ensure that the bug is not reported.
 
 + [Chris Spencer (@spencercw)](https://bitbucket.org/spencercw/ideagdb/overview)
     + IDEA GDB support
-
-## Contributing
-
-If you want to contribute to this effort you should read the following page:
-[how to contribute](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/blob/master/contributing.md).
 
 ## Thank you
 
