@@ -38,8 +38,8 @@ Google go language plugin is an attempt to build an outstanding IDE for
 
 * Download and install Intellij IDEA (Ultimate or Community edition) or any other IntelliJ IDE
 that is build on the IDEA 133.326+ platform
-* Open the Plugins installation page: File -> Settings -> Plugins -> Available Plugins
-* Search for google go
+* Open the Plugins installation page: File -> Settings -> Plugins -> Browse Repositories...
+* Search for "golang"
 * Right click on the proper plugin and install
 * Download [latest release of the Google Go language](http://golang.org/doc/install.html).
 * Build and install it.
