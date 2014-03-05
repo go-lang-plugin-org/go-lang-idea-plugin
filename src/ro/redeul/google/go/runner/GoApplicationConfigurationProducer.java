@@ -21,6 +21,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -105,7 +106,13 @@ public class GoApplicationConfigurationProducer extends RunConfigurationProducer
 
 
             ((GoApplicationConfiguration) configuration).workingDir = project.getBasePath();
-            ((GoApplicationConfiguration) configuration).goBuildBeforeRun = false;
+            ((GoApplicationConfiguration) configuration).goOutputDir = project.getBasePath();
+
+            //Append bin-folder, if it exists
+            if(new File(project.getBasePath(), "bin").exists()) {
+                ((GoApplicationConfiguration) configuration).goOutputDir += File.separatorChar + "bin";
+            }
+            ((GoApplicationConfiguration) configuration).goBuildBeforeRun = true;
             ((GoApplicationConfiguration) configuration).runBuilderArguments = "";
             ((GoApplicationConfiguration) configuration).scriptName = name;
             ((GoApplicationConfiguration) configuration).scriptArguments = "";
