@@ -1,23 +1,15 @@
 package ro.redeul.google.go.ide.actions;
 
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
-import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 public class GoDebugEnv extends GoCommonDebugAction {
@@ -29,10 +21,6 @@ public class GoDebugEnv extends GoCommonDebugAction {
 
         if (project == null) {
             return;
-        }
-
-        if (consoleView == null) {
-            consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
         }
 
         Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
@@ -58,21 +46,9 @@ public class GoDebugEnv extends GoCommonDebugAction {
         String fileName = selectedFile.getCanonicalPath();
 
         try {
-            ToolWindowManager manager = ToolWindowManager.getInstance(project);
-            ToolWindow window = manager.getToolWindow(ID);
-
-            if (window == null) {
-                window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
-
-                ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-                Content content = contentFactory.createContent(consoleView.getComponent(), "go env", false);
-                window.getContentManager().addContent(content);
-                window.setIcon(GoIcons.GO_ICON_13x13);
-                window.setToHideOnEmptyContent(true);
-                window.setTitle(TITLE);
-
-            }
-            window.show(EmptyRunnable.getInstance());
+            GoToolWindow toolWindow = this.getGoToolWindow(project);
+            toolWindow.show();
+            toolWindow.clearConsoleView();
 
             String[] goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
 
@@ -81,14 +57,13 @@ public class GoDebugEnv extends GoCommonDebugAction {
                     goExecName
             );
 
-            consoleView.clear();
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv);
             OSProcessHandler handler = new OSProcessHandler(proc, null);
-            consoleView.attachToProcess(handler);
-            consoleView.print(String.format("%s -> %s%n", "Project dir", projectDir), ConsoleViewContentType.NORMAL_OUTPUT);
-            consoleView.print(String.format("%s%n", command), ConsoleViewContentType.NORMAL_OUTPUT);
+            toolWindow.attachConsoleViewToProcess(handler);
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "Project dir", projectDir));
+            toolWindow.printNormalMessage(String.format("%s%n", command));
             handler.startNotify();
         } catch (Exception e) {
             e.printStackTrace();

@@ -14,24 +14,17 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
 import com.intellij.xdebugger.DefaultDebugProcessHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.runner.GoApplicationConfiguration;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -42,8 +35,7 @@ public class GoDebugProfileState implements RunProfileState {
     private static final Logger m_log = Logger.getInstance("#uk.co.cwspencer.ideagdb.run.GoDebugProfileState");
 
     private static final String ID = "Go Console";
-    private static final String TITLE = "build";
-    private static ConsoleView consoleView;
+    private static final String TITLE = "Debug";
 
     private Project project;
     private ExecutionEnvironment m_env;
@@ -80,29 +72,11 @@ public class GoDebugProfileState implements RunProfileState {
 
         Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, m_configuration.envVars);
 
+        GoToolWindow toolWindow = GoToolWindow.getInstance(project);
+        toolWindow.setTitle(TITLE);
+
         if (m_configuration.goVetEnabled) {
             try {
-                ToolWindowManager manager = ToolWindowManager.getInstance(project);
-                ToolWindow window = manager.getToolWindow(ID);
-
-                if (consoleView == null) {
-                    consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
-                }
-
-                if (window == null) {
-                    window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
-
-                    ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-                    Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
-                    window.getContentManager().addContent(content);
-                    window.setIcon(GoIcons.GO_ICON_13x13);
-                    window.setToHideOnEmptyContent(true);
-                    window.setTitle(TITLE);
-
-                }
-
-                window.show(EmptyRunnable.getInstance());
-
                 String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
 
                 String command = String.format(
@@ -113,17 +87,16 @@ public class GoDebugProfileState implements RunProfileState {
                 Runtime rt = Runtime.getRuntime();
                 Process proc = rt.exec(command, goEnv, new File(projectDir));
                 OSProcessHandler handler = new OSProcessHandler(proc, null);
-                consoleView.attachToProcess(handler);
-                consoleView.print(String.format("%s%n", command), ConsoleViewContentType.NORMAL_OUTPUT);
+                toolWindow.attachConsoleViewToProcess(handler);
+                toolWindow.printNormalMessage(String.format("%s%n", command));
                 handler.startNotify();
 
                 if (proc.waitFor() == 0) {
                     VirtualFileManager.getInstance().syncRefresh();
 
-                    consoleView.print(String.format("%nFinished running go vet on project %s%n", projectDir), ConsoleViewContentType.NORMAL_OUTPUT);
+                    toolWindow.printNormalMessage(String.format("%nFinished running go vet on project %s%n", projectDir));
                 } else {
-                    consoleView.print(String.format("%nCouldn't vet project %s%n", projectDir), ConsoleViewContentType.ERROR_OUTPUT);
-
+                    toolWindow.printErrorMessage(String.format("%nCouldn't vet project %s%n", projectDir));
                     throw new CantRunException(String.format("Error while processing %s vet command.", goExecName));
                 }
 
@@ -144,43 +117,22 @@ public class GoDebugProfileState implements RunProfileState {
         }
 
         try {
-            ToolWindowManager manager = ToolWindowManager.getInstance(project);
-            ToolWindow window = manager.getToolWindow(ID);
-
-            if (consoleView == null) {
-                consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
-            }
-
-            if (window == null) {
-                window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
-
-                ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-                Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
-                window.getContentManager().addContent(content);
-                window.setIcon(GoIcons.GO_ICON_13x13);
-                window.setToHideOnEmptyContent(true);
-                window.setTitle(TITLE);
-
-            }
-
-            window.show(EmptyRunnable.getInstance());
-
             String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
             String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.debugBuilderArguments, execName, m_configuration.scriptName);
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv);
             OSProcessHandler handler = new OSProcessHandler(proc, null);
-            consoleView.attachToProcess(handler);
-            consoleView.print(String.format("%s%n", StringUtil.join(command, " ")), ConsoleViewContentType.NORMAL_OUTPUT);
+            toolWindow.attachConsoleViewToProcess(handler);
+            toolWindow.printNormalMessage(String.format("%s%n", StringUtil.join(command, " ")));
             handler.startNotify();
 
             if (proc.waitFor() == 0) {
                 VirtualFileManager.getInstance().syncRefresh();
 
-                consoleView.print(String.format("%nFinished building project %s%n", execName), ConsoleViewContentType.NORMAL_OUTPUT);
+                toolWindow.printNormalMessage(String.format("%nFinished building project %s%n", execName));
             } else {
-                consoleView.print(String.format("%nCould't build project %s%n", execName), ConsoleViewContentType.ERROR_OUTPUT);
+                toolWindow.printErrorMessage(String.format("%nCould't build project %s%n", execName));
             }
 
 
@@ -195,7 +147,6 @@ public class GoDebugProfileState implements RunProfileState {
         ProcessHandler processHandler = new DefaultDebugProcessHandler();
 
         // Create the console
-        Project project = m_configuration.getProject();
         final TextConsoleBuilder builder = TextConsoleBuilderFactory.getInstance().createBuilder(project);
         ConsoleView m_console = builder.getConsole();
 

@@ -1,22 +1,14 @@
 package ro.redeul.google.go.ide.actions;
 
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
-import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
-import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 public class GoDebugSDK extends GoCommonDebugAction {
@@ -28,10 +20,6 @@ public class GoDebugSDK extends GoCommonDebugAction {
 
         if (project == null) {
             return;
-        }
-
-        if (consoleView == null) {
-            consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
         }
 
         Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
@@ -57,38 +45,24 @@ public class GoDebugSDK extends GoCommonDebugAction {
         String fileName = selectedFile.getCanonicalPath();
 
         try {
-            ToolWindowManager manager = ToolWindowManager.getInstance(project);
-            ToolWindow window = manager.getToolWindow(ID);
+            GoToolWindow toolWindow = this.getGoToolWindow(project);
+            toolWindow.show();
+            toolWindow.clearConsoleView();
 
-            if (window == null) {
-                window = manager.registerToolWindow(ID, false, ToolWindowAnchor.BOTTOM);
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "Project dir", projectDir));
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_GOROOT_PATH", sdkData.GO_GOROOT_PATH));
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_BIN_PATH", sdkData.GO_BIN_PATH));
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_GOPATH_PATH", sdkData.GO_GOPATH_PATH));
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "TARGET_OS", sdkData.TARGET_OS));
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "TARGET_ARCH", sdkData.TARGET_ARCH));
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "VERSION_MAJOR", sdkData.VERSION_MAJOR));
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "VERSION_MINOR", sdkData.VERSION_MINOR));
 
-                ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-                Content content = contentFactory.createContent(consoleView.getComponent(), "go env", false);
-                window.getContentManager().addContent(content);
-                window.setIcon(GoIcons.GO_ICON_13x13);
-                window.setToHideOnEmptyContent(true);
-                window.setTitle(TITLE);
-
-            }
-            window.show(EmptyRunnable.getInstance());
-
-            consoleView.clear();
-
-            consoleView.print(String.format("%s -> %s%n", "Project dir", projectDir), ConsoleViewContentType.NORMAL_OUTPUT);
-            consoleView.print(String.format("%s -> %s%n", "GO_GOROOT_PATH", sdkData.GO_GOROOT_PATH), ConsoleViewContentType.NORMAL_OUTPUT);
-            consoleView.print(String.format("%s -> %s%n", "GO_BIN_PATH", sdkData.GO_BIN_PATH), ConsoleViewContentType.NORMAL_OUTPUT);
-            consoleView.print(String.format("%s -> %s%n", "GO_GOPATH_PATH", sdkData.GO_GOPATH_PATH), ConsoleViewContentType.NORMAL_OUTPUT);
-            consoleView.print(String.format("%s -> %s%n", "TARGET_OS", sdkData.TARGET_OS), ConsoleViewContentType.NORMAL_OUTPUT);
-            consoleView.print(String.format("%s -> %s%n", "TARGET_ARCH", sdkData.TARGET_ARCH), ConsoleViewContentType.NORMAL_OUTPUT);
-            consoleView.print(String.format("%s -> %s%n", "VERSION_MAJOR", sdkData.VERSION_MAJOR), ConsoleViewContentType.NORMAL_OUTPUT);
-            consoleView.print(String.format("%s -> %s%n", "VERSION_MINOR", sdkData.VERSION_MINOR), ConsoleViewContentType.NORMAL_OUTPUT);
-
-            consoleView.print(String.format("%s -> %n", "Extended Go Env"), ConsoleViewContentType.NORMAL_OUTPUT);
+            toolWindow.printNormalMessage(String.format("%s -> %n", "Extended Go Env"));
 
             String[] goEnv = GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
             for (String goenv : goEnv) {
-                consoleView.print(String.format("%s%n", goenv), ConsoleViewContentType.NORMAL_OUTPUT);
+                toolWindow.printNormalMessage(String.format("%s%n", goenv));
             }
         } catch (Exception e) {
             e.printStackTrace();
