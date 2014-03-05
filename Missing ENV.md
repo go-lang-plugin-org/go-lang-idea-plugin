@@ -36,6 +36,13 @@ setenv GOROOT /usr/local/go
 setenv GOPATH /Users/yourname/go
 ```
 
+if setenv returns "Command not found" then the launchctrl command can be used:
+
+```zsh
+launchctl setenv GOROOT /usr/local/go
+launchctl setenv GOPATH /Users/yourname/go
+```
+
 It's possible to apply these changes [without a restart](http://stackoverflow.com/a/3756686/15677). 
 
 You can view more [details here](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/318#issuecomment-31303939).
