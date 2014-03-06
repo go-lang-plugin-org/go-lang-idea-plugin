@@ -263,6 +263,9 @@ public class GoPsiImplUtil {
         return ((GoArrayOrSliceType)type).getType();
       }
     }
+    else if (o instanceof GoTypeAssertionExpr) {
+      return ((GoTypeAssertionExpr)o).getType();
+    }
     return null;
   }
 

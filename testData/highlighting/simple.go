@@ -28,6 +28,8 @@ func <warning>foo</warning>() {
     }
 }
 
+var nil int
+
 type int int
 type byte byte
 type bool bool
@@ -210,4 +212,20 @@ func <warning>WebServiceTest</warning>() {
 	ws1 := new(WebService).Path("/")
 	ws1.GET().bool
 	ws1.Route(ws1.GET("/{type}/{id}"))
+}
+
+type ServiceError struct {
+	Code    int
+	Message string
+}
+
+
+func <warning>typeAssert</warning>() {
+  err := nil
+  switch err.(type) {
+    case ServiceError:
+            ser := err.(ServiceError)
+            Println(ser.Code)
+            Println([]byte(ser.Message))
+    }
 }
