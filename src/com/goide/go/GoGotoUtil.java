@@ -21,7 +21,7 @@ public class GoGotoUtil {
       items.add(new GoStructureViewFactory.Element(element) {
         @Override
         public String getLocationString() {
-          return "(in " + element.getContainingFile().getName() + ")";
+          return "(in " + element.getContainingFile().getFullPackageName() + ")";
         }
       });
     }

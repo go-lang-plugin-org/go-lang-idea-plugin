@@ -2,6 +2,7 @@ package com.goide.psi;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface GoNamedElement extends GoCompositeElement, GoTypeOwner, PsiNameIdentifierOwner {
@@ -9,4 +10,7 @@ public interface GoNamedElement extends GoCompositeElement, GoTypeOwner, PsiName
 
   @Nullable
   PsiElement getIdentifier();
+
+  @NotNull
+  GoFile getContainingFile();
 }

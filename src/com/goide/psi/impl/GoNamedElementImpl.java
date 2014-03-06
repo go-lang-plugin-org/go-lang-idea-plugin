@@ -8,7 +8,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -103,5 +102,11 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends StubB
     if (this instanceof GoAnonymousFieldDefinition) return GoIcons.FIELD;
     if (this instanceof GoParamDefinition) return GoIcons.PARAMETER;
     return super.getIcon(flags);
+  }
+
+  @NotNull
+  @Override
+  public GoFile getContainingFile() {
+    return (GoFile)super.getContainingFile();
   }
 }
