@@ -13,6 +13,7 @@ import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightElement;
@@ -343,6 +344,28 @@ public class GoPsiImplUtil {
   @NotNull
   public static String getText(@Nullable PsiElement o) {
     return o == null ? "" : o.getText().replaceAll("\\s+", " ");
+  }
+
+  @NotNull
+  public static List<GoMethodSpec> getMethods(@NotNull final GoInterfaceType o) {
+    return ContainerUtil.filter(o.getMethodSpecList(), new Condition<GoMethodSpec>() {
+      @Override
+      public boolean value(GoMethodSpec spec) {
+        return spec.getIdentifier() != null;
+      }
+    });
+  }
+
+  @NotNull
+  public static List<GoTypeReferenceExpression> getBaseTypesReferences(@NotNull final GoInterfaceType o) {
+    final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
+    o.accept(new GoRecursiveVisitor() {
+      @Override
+      public void visitMethodSpec(@NotNull GoMethodSpec o) {
+        ContainerUtil.addIfNotNull(refs, o.getTypeReferenceExpression());
+      }
+    });
+    return refs;
   }
 
   @NotNull

@@ -19,4 +19,10 @@ public interface GoInterfaceType extends GoType {
   @NotNull
   PsiElement getInterface();
 
+  @NotNull
+  List<GoMethodSpec> getMethods();
+
+  @NotNull
+  List<GoTypeReferenceExpression> getBaseTypesReferences();
+
 }

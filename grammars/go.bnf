@@ -144,7 +144,10 @@ ParamDefinition ::= identifier {
   stubClass="com.goide.stubs.GoParamDefinitionStub"
 }
 
-InterfaceType ::= interface '{' MethodSpecs? '}' {pin(".*")=1}
+InterfaceType ::= interface '{' MethodSpecs? '}' {
+  pin(".*")=1
+  methods=[getMethods getBaseTypesReferences]
+}
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
 MethodSpec ::= TypeName &(!'(') | identifier Signature {
   stubClass="com.goide.stubs.GoMethodSpecStub"

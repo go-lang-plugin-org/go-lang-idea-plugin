@@ -45,4 +45,14 @@ public class GoInterfaceTypeImpl extends GoTypeImpl implements GoInterfaceType {
     return findNotNullChildByType(INTERFACE);
   }
 
+  @NotNull
+  public List<GoMethodSpec> getMethods() {
+    return GoPsiImplUtil.getMethods(this);
+  }
+
+  @NotNull
+  public List<GoTypeReferenceExpression> getBaseTypesReferences() {
+    return GoPsiImplUtil.getBaseTypesReferences(this);
+  }
+
 }
