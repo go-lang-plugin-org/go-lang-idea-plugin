@@ -5,6 +5,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -31,6 +32,10 @@ public class GoSdkUtil {
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
     VirtualFile home = getSdkHome(context);
+    if (home == null) {
+      VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
+      home = ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile); // maybe it's a file from sdk?
+    }
     VirtualFile vBuiltin = home != null ? home.findFileByRelativePath("builtin/builtin.go") : null;
     if (vBuiltin != null) {
       PsiFile psiBuiltin = PsiManager.getInstance(context.getProject()).findFile(vBuiltin);
