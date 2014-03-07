@@ -102,14 +102,15 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
       }
       else {
         PsiElement qualifierResolve = calcQualifierResolve(qualifier);
+        if (qualifierResolve instanceof PsiDirectory) {
+          PsiElement result = processDirectory((PsiDirectory)qualifierResolve, null, null, false);
+          if (result != null) return result;
+        }
         if (qualifierResolve instanceof GoTypeOwner) {
           GoType type = ((GoTypeOwner)qualifierResolve).getGoType();
           PsiElement fromType = processGoType(type);
           if (fromType != null) return fromType;
         }
-        PsiDirectory dir = getDirectory(qualifier);
-        PsiElement result = processDirectory(dir, null, null, false);
-        if (result != null) return result;
       }
     }
     return null;

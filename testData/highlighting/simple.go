@@ -2,6 +2,7 @@ package main
 
 import "<error></error>"
 import fmt "<error></error>"
+import "net/http"
 
 func  main() {
 	fmt.<EOLError></EOLError>
@@ -228,4 +229,12 @@ func <warning>typeAssert</warning>() {
             Println(ser.Code)
             Println([]byte(ser.Message))
     }
+}
+
+type Request struct {
+    Request *http.Request
+}
+
+func <warning>typeClashes</warning>(r *Request)  {
+    r.Request.URL
 }

@@ -4,7 +4,6 @@ import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,10 +29,12 @@ public class GoTypeReference extends GoReferenceBase {
   @Override
   protected PsiElement processUnqualified(@NotNull GoFile file, boolean localResolve) {
     String id = myIdentifier.getText();
-    GoScopeProcessorBase processor = createProcessor(false);
-    ResolveUtil.treeWalkUp(myRefExpression, processor);
-    GoNamedElement result = processor.getResult();
-    if (result != null) return result;
+    if (getQualifier() == null) {
+      GoScopeProcessorBase processor = createProcessor(false);
+      ResolveUtil.treeWalkUp(myRefExpression, processor);
+      GoNamedElement result = processor.getResult();
+      if (result != null) return result;
+    }
     for (GoTypeSpec t : file.getTypes()) { // todo: copy from completion or create a separate inspection
       if ((t.isPublic() || localResolve) && id.equals(t.getName())) return t;
     }
