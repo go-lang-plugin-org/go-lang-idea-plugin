@@ -1,11 +1,14 @@
 package com.goide.stubs.types;
 
+import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoVarDefinition;
 import com.goide.psi.impl.GoVarDefinitionImpl;
 import com.goide.stubs.GoVarDefinitionStub;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,5 +49,10 @@ public class GoVarDefinitionStubElementType extends GoNamedStubElementType<GoVar
   @Override
   public GoVarDefinitionStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new GoVarDefinitionStub(parentStub, this, dataStream.readName(), dataStream.readBoolean());
+  }
+
+  @Override
+  public boolean shouldCreateStub(ASTNode node) {
+    return super.shouldCreateStub(node) && PsiTreeUtil.getParentOfType(node.getPsi(), GoFunctionOrMethodDeclaration.class) == null;
   }
 }
