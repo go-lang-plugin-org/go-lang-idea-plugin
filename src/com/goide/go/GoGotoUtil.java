@@ -1,12 +1,14 @@
 package com.goide.go;
 
 import com.goide.GoStructureViewFactory;
+import com.goide.psi.GoFile;
 import com.goide.psi.GoNamedElement;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 
 import java.util.Collection;
@@ -21,7 +23,8 @@ public class GoGotoUtil {
       items.add(new GoStructureViewFactory.Element(element) {
         @Override
         public String getLocationString() {
-          return "(in " + element.getContainingFile().getFullPackageName() + ")";
+          GoFile file = element.getContainingFile();
+          return "(in " + ObjectUtils.notNull(file.getFullPackageName(), ObjectUtils.notNull(file.getPackageName(), file.getName())) + ")";
         }
       });
     }
