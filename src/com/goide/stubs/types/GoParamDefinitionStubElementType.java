@@ -36,4 +36,9 @@ public class GoParamDefinitionStubElementType extends GoNamedStubElementType<GoP
   public GoParamDefinitionStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new GoParamDefinitionStub(parentStub, this, dataStream.readName(), dataStream.readBoolean());
   }
+
+  @Override
+  protected boolean shouldIndex() {
+    return false;
+  }
 }
