@@ -244,3 +244,8 @@ type ReadCloser interface {
     io.Reader
     io.Closer
 }
+
+func <warning>processReadCloser</warning>(b ReadCloser)  {
+    b.<error>Closer</error>()
+    b.Close()
+}

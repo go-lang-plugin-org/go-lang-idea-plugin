@@ -5,6 +5,7 @@ import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
@@ -176,16 +177,39 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
           refs.add(o.getTypeReferenceExpression());
         }
       });
-      for (GoTypeReferenceExpression ref : refs) {
-        if (!processInTypeRef(ref, type, processor, state)) return false;
-      }
+      if (!processCollectedRefs(type, refs, processor, state)) return false;
     }
     else if (type instanceof GoInterfaceType) {
-      if (!processNamedElements(processor, state, ((GoInterfaceType)type).getMethodSpecList(), localResolve)) return false;
+      List<GoMethodSpec> list = ((GoInterfaceType)type).getMethodSpecList();
+      List<GoMethodSpec> onlyMethods = ContainerUtil.filter(list, new Condition<GoMethodSpec>() {
+        @Override
+        public boolean value(GoMethodSpec spec) {
+          return spec.getIdentifier() != null;
+        }
+      });
+      if (!processNamedElements(processor, state, onlyMethods, localResolve)) return false;
+      final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
+      type.accept(new GoRecursiveVisitor() {
+        @Override
+        public void visitMethodSpec(@NotNull GoMethodSpec o) {
+          ContainerUtil.addIfNotNull(refs, o.getTypeReferenceExpression());
+        }
+      });
+      if (!processCollectedRefs(type, refs, processor, state)) return false;
     }
 
     PsiElement parent = type.getParent();
     if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve)) return false;
+    return true;
+  }
+
+  private boolean processCollectedRefs(@NotNull GoType type,
+                                       @NotNull List<GoTypeReferenceExpression> refs,
+                                       @NotNull MyScopeProcessor processor,
+                                       @NotNull ResolveState state) {
+    for (GoTypeReferenceExpression ref : refs) {
+      if (!processInTypeRef(ref, type, processor, state)) return false;
+    }
     return true;
   }
 
