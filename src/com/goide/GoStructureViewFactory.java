@@ -55,6 +55,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
   public static class Element implements StructureViewTreeElement, ItemPresentation, NavigationItem {
     private final PsiElement myElement;
+    public static final int TRIM_LENGTH = 20;
 
     public Element(PsiElement element) {
       this.myElement = element;
@@ -130,21 +131,26 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
                           "";
         GoSignature signature = ((GoFunctionOrMethodDeclaration)myElement).getSignature();
         String signatureText = signature != null ? signature.getText() : "";
-        return receiver + ((GoFunctionOrMethodDeclaration)myElement).getIdentifier().getText() + StringUtil.first(signatureText, 20, true);
+        return receiver + ((GoFunctionOrMethodDeclaration)myElement).getIdentifier().getText() + trim(signatureText);
       }
       else if (myElement instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)myElement).getType();
         String appendix = type instanceof GoStructType || type instanceof GoInterfaceType ?
                           "" :
-                          (type != null ? ":" + GoPsiImplUtil.getText(type) : "");
+                          (type != null ? ":" + trim(GoPsiImplUtil.getText(type)) : "");
         return ((GoTypeSpec)myElement).getIdentifier().getText() + appendix;
       }
       else if (myElement instanceof GoNamedElement) {
         GoType type = ((GoNamedElement)myElement).getGoType();
-        String typeText = type == null ? "" : ":" + GoPsiImplUtil.getText(type);
+        String typeText = type == null ? "" : ":" + trim(GoPsiImplUtil.getText(type));
         return ((GoNamedElement)myElement).getName() + typeText;
       }
       throw new AssertionError(myElement.getClass().getName());
+    }
+
+    @NotNull
+    private static String trim(@NotNull String text) {
+      return StringUtil.first(text, TRIM_LENGTH, true);
     }
 
     @Nullable
