@@ -88,9 +88,9 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
   @Nullable
   @Override
   public PsiElement resolve() {
-    PsiElement qualifier = getQualifier();
     PsiFile file = myElement.getContainingFile();
     if (file instanceof GoFile) {
+       PsiElement qualifier = getQualifier();
       if (qualifier == null) {
         PsiElement unqualified = processUnqualified((GoFile)file, true);
         if (unqualified != null) return unqualified;
@@ -102,8 +102,8 @@ public abstract class GoReferenceBase extends PsiReferenceBase<PsiElement> {
       }
       else {
         PsiElement qualifierResolve = calcQualifierResolve(qualifier);
-        if (qualifierResolve instanceof GoNamedElement) { // todo: create a separate interface, e.g. GoTypeHolder
-          GoType type = ((GoNamedElement)qualifierResolve).getGoType();
+        if (qualifierResolve instanceof GoTypeOwner) {
+          GoType type = ((GoTypeOwner)qualifierResolve).getGoType();
           PsiElement fromType = processGoType(type);
           if (fromType != null) return fromType;
         }
