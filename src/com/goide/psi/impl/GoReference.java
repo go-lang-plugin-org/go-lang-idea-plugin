@@ -205,7 +205,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
-
   protected boolean processDirectory(@Nullable PsiDirectory dir,
                                      @Nullable GoFile file,
                                      @Nullable String packageName,
