@@ -140,8 +140,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (target instanceof PsiDirectory) {
       processDirectory((PsiDirectory)target, file, null, processor, state, false);
     }
-    else if (target instanceof GoNamedElement) {
-      GoType type = ((GoNamedElement)target).getGoType();
+    else if (target instanceof GoTypeOwner) {
+      GoType type = ((GoTypeOwner)target).getGoType();
       if (type != null) processGoType(type, processor, state);
     }
     return false;
