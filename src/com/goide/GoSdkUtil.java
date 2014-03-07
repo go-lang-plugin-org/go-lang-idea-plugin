@@ -26,22 +26,27 @@ public class GoSdkUtil {
   public static VirtualFile getSdkHome(@NotNull PsiElement context) {
     Module module = ModuleUtilCore.findModuleForPsiElement(context);
     Sdk sdk = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
-    return sdk == null ? null : LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/src/pkg");
+    VirtualFile result = sdk == null ? null : LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/src/pkg");
+    return result != null ? result : guessSkdHome(context);
   }
 
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
     VirtualFile home = getSdkHome(context);
-    if (home == null) {
-      VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
-      home = ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile); // maybe it's a file from sdk?
-    }
     VirtualFile vBuiltin = home != null ? home.findFileByRelativePath("builtin/builtin.go") : null;
     if (vBuiltin != null) {
       PsiFile psiBuiltin = PsiManager.getInstance(context.getProject()).findFile(vBuiltin);
       if (psiBuiltin instanceof GoFile) return ((GoFile)psiBuiltin);
     }
     return null;
+  }
+
+  @Nullable
+  private static VirtualFile guessSkdHome(@NotNull PsiElement context) {
+    VirtualFile home;
+    VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
+    home = ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile); // maybe it's a file from sdk?
+    return home;
   }
 
   @NotNull
