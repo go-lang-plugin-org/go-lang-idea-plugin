@@ -11,7 +11,11 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
+import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
@@ -71,6 +75,67 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
         return GoType.EMPTY_ARRAY;
     }
 
+    @Override
+    public GoPsiType[] getArgumentsType() {
+        PsiElement reference = resolveSafely(getBaseExpression(),
+                PsiElement.class);
+
+        if (reference == null) {
+            return processArgumentsType(this.getBaseExpression().getText());
+        }
+
+        if (reference.getParent() instanceof GoFunctionDeclaration) {
+            GoFunctionDeclaration declaration =
+                    (GoFunctionDeclaration) reference.getParent();
+
+            if (BUILTIN_FUNCTION.accepts(declaration))
+                return processArgumentsType(declaration.getFunctionName());
+        }
+
+        return GoPsiType.EMPTY_ARRAY;
+    }
+
+    private GoPsiType[] processArgumentsType(String functionName) {
+        GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
+
+        GoExpr[] args = getArguments();
+        GoPsiType typeArg = getTypeArgument();
+
+        if (functionName.equals("append")) {
+            if (args.length > 1) {
+                GoType[] types = args[0].getType();
+                if (types.length > 0 && types[0] instanceof GoTypeSlice) {
+                    GoPsiTypeSlice appendedSlice = ((GoTypeSlice) types[0]).getPsiType();
+                    GoPsiType[] result = new GoPsiType[args.length];
+                    result[0] = appendedSlice;
+                    GoPsiType elem = appendedSlice.getElementType();
+                    for (int i = 1; i < args.length; i++){
+                        result[i] = elem;
+                    }
+                    return result;
+                }
+            }
+        } else if (functionName.equals("copy")) {
+            if (args.length == 2) {
+                GoType[] types = args[0].getType();
+                if (types.length > 0 && types[0] instanceof GoTypeSlice) {
+                    GoPsiTypeSlice copiedSlice = ((GoTypeSlice) types[0]).getPsiType();
+                    return new GoPsiType[]{copiedSlice, copiedSlice};
+                }
+            }
+        } else if (functionName.equals("delete")) {
+            if (args.length == 2) {
+                GoType[] types = args[0].getType();
+                if (types.length > 0 && types[0] instanceof GoTypeMap) {
+                    GoPsiTypeMap map = ((GoTypeMap) types[0]).getPsiType();
+                    return new GoPsiType[]{map, map.getKeyType()};
+                }
+            }
+        }
+
+        return GoPsiType.EMPTY_ARRAY;
+    }
+
     private GoType[] processBuiltinFunction(String functionName) {
 
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
@@ -120,7 +185,7 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
         } else if (functionName.equals("append")) {
             if (args.length > 1) {
                 GoType[] types = args[0].getType();
-                if (types.length > 1) {
+                if (types.length > 0) {
                     return new GoType[]{types[0]};
                 }
             }

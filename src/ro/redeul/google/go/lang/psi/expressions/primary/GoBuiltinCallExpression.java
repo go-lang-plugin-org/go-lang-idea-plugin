@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.expressions.primary;
 
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
@@ -8,4 +10,5 @@ package ro.redeul.google.go.lang.psi.expressions.primary;
  */
 public interface GoBuiltinCallExpression extends GoCallOrConvExpression {
 
+    public GoPsiType[] getArgumentsType();
 }
