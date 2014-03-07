@@ -58,7 +58,7 @@ public class GoDuplicateFieldsOrMethodsInspection extends GoInspectionBase {
           problemsHolder.registerProblem(id != null ? id : field, "Duplicate " + what + " " + "'" + name + "'", GENERIC_ERROR_OR_WARNING);
         }
         else {
-          names.add(name);
+          ContainerUtil.addIfNotNull(names, name);
         }
       }
     }

@@ -21,4 +21,7 @@ public interface GoMethodSpec extends GoReceiverHolder, StubBasedPsiElement<GoMe
   @Nullable
   GoType getGoType();
 
+  @Nullable
+  String getName();
+
 }

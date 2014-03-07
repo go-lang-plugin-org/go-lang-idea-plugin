@@ -3,6 +3,7 @@ package main
 import "<error></error>"
 import fmt "<error></error>"
 import "net/http"
+import "io"
 
 func  main() {
 	fmt.<EOLError></EOLError>
@@ -237,4 +238,9 @@ type Request struct {
 
 func <warning>typeClashes</warning>(r *Request)  {
     r.Request.URL
+}
+
+type ReadCloser interface {
+    io.Reader
+    io.Closer
 }

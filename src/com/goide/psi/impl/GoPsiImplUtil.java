@@ -4,6 +4,7 @@ import com.goide.GoIcons;
 import com.goide.completion.GoCompletionContributor;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
+import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.SingleCharInsertHandler;
 import com.intellij.codeInsight.completion.InsertHandler;
@@ -199,6 +200,18 @@ public class GoPsiImplUtil {
 
   public static int getTextOffset(@NotNull GoAnonymousFieldDefinition o) {
     return o.getTypeReferenceExpression().getIdentifier().getTextOffset();
+  }
+
+  @Nullable
+  public static String getName(@NotNull GoMethodSpec o) {
+    GoNamedStub<GoMethodSpec> stub = o.getStub();
+    if (stub != null) {
+      return stub.getName();
+    }
+    PsiElement identifier = o.getIdentifier();
+    if (identifier != null) return identifier.getText();
+    GoTypeReferenceExpression typeRef = o.getTypeReferenceExpression();
+    return typeRef != null ? typeRef.getIdentifier().getText() : null;
   }
 
   @Nullable

@@ -50,4 +50,9 @@ public class GoMethodSpecImpl extends GoNamedElementImpl<GoMethodSpecStub> imple
     return GoPsiImplUtil.getGoType(this);
   }
 
+  @Nullable
+  public String getName() {
+    return GoPsiImplUtil.getName(this);
+  }
+
 }
