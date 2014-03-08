@@ -95,6 +95,9 @@ public class GoGdbUtil {
     }
 
     public static boolean doesExecutableExist(String executablePath) {
+        if(new File(executablePath).exists()) {
+          return true;
+        }
         String systempath = System.getenv("PATH");
         String[] paths = systempath.split(File.pathSeparator);
 
