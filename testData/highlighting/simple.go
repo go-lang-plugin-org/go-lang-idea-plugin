@@ -249,3 +249,18 @@ func <warning>processReadCloser</warning>(b ReadCloser)  {
     b.<error>Closer</error>()
     b.Close()
 }
+
+func <warning>TestTemplateToRegularExpression</warning>() {
+var tempregexs = []struct {
+    template, regex         string
+    literalCount, varCount int
+}{
+    {"", "^(/.*)?$", 0, 0},
+    {"/a/{b}/c/", "^/a/([^/]+?)/c(/.*)?$", 2, 1},
+    {"/{a}/{b}/{c-d-e}/", "^/([^/]+?)/([^/]+?)/([^/]+?)(/.*)?$", 0, 3},
+    {"/{p}/abcde", "^/([^/]+?)/abcde(/.*)?$", 5, 1},
+}
+    for i, fixture := range tempregexs {
+          fixture.regex
+    }
+}

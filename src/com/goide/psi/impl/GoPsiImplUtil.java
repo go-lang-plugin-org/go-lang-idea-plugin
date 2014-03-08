@@ -316,6 +316,10 @@ public class GoPsiImplUtil {
       if (exprs.size() <= i) return null;
       return exprs.get(i).getGoType();
     }
+    GoCompositeLit literal = PsiTreeUtil.getNextSiblingOfType(o, GoCompositeLit.class);
+    if (literal != null) {
+      return literal.getLiteralTypeExpr().getType();
+    }
     return GoNamedElementImpl.getType(o);
   }
 
