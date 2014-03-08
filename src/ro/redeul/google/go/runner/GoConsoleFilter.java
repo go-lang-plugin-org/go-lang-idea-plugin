@@ -6,8 +6,6 @@ import com.intellij.execution.filters.OpenFileHyperlinkInfo;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import java.io.File;
-import java.nio.file.FileSystem;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
