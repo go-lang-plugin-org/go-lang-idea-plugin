@@ -2,6 +2,7 @@ package com.goide.codeInsight.imports;
 
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportList;
+import com.goide.psi.GoReferenceExpression;
 import com.goide.stubs.index.GoPackagesIndex;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.codeInsight.hint.QuestionAction;
@@ -124,7 +125,12 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                              @NotNull PsiFile file,
                              @NotNull PsiElement startElement,
                              @NotNull PsiElement endElement) {
-    return !isPerformed && file instanceof GoFile && file.getManager().isInProject(file) && !getPackagesToImport(startElement).isEmpty();
+    return !isPerformed && file instanceof GoFile && file.getManager().isInProject(file) && !getPackagesToImport(startElement).isEmpty()
+           && notQualified(startElement);
+  }
+
+  private static boolean notQualified(@Nullable PsiElement startElement) {
+    return startElement instanceof GoReferenceExpression && ((GoReferenceExpression)startElement).getQualifier() == null;
   }
 
   @NotNull
