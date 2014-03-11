@@ -231,6 +231,8 @@ public class GoPsiImplUtil {
       return expression != null ? getGoType(expression) : null;
     }
     else if (o instanceof GoCompositeLit) {
+      GoType type = ((GoCompositeLit)o).getLiteralTypeExpr().getType();
+      if (type != null) return type;
       GoTypeReferenceExpression expression = ((GoCompositeLit)o).getLiteralTypeExpr().getTypeReferenceExpression();
       return getType(expression);
     }

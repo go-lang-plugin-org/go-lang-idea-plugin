@@ -264,3 +264,17 @@ var tempregexs = []struct {
           fixture.regex
     }
 }
+
+type Route struct {
+}
+
+func (r Route) matchesContentType() {
+}
+
+func <warning>eachProcessing</warning>() {
+    rs := []Route{}
+    for _, each := range rs {
+        if each.matchesContentType() {
+        }
+    }
+}
