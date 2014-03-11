@@ -119,6 +119,11 @@ public class GoApplicationRunner extends DefaultProgramRunner {
 
             gdbProcess.sendCommand("file " + execName);
 
+            //If we got any script arguments, pass them into gdb
+            if(!configuration.scriptArguments.equals("")) {
+                gdbProcess.sendCommand("set args " + configuration.scriptArguments);
+            }
+
             debugSession.initBreakpoints();
 
             // Send startup commands
