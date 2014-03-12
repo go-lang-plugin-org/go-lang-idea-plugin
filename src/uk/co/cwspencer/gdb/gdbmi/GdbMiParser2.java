@@ -126,10 +126,11 @@ public class GdbMiParser2 {
     }
 
     private Boolean isGdbMiLine(String line) {
-        if (line.length() < 1) {
+        if (line.length() < 2) {
             return false;
         }
-        if (START_TOKENS.contains(line.substring(0, 1))) {
+        if (START_TOKENS.contains(line.substring(0, 1)) &&
+                !line.substring(0, 1).equals(line.substring(1, 2))) {
             return true;
         }
 
