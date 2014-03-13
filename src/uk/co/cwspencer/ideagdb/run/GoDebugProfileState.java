@@ -75,40 +75,6 @@ public class GoDebugProfileState implements RunProfileState {
         GoToolWindow toolWindow = GoToolWindow.getInstance(project);
         toolWindow.setTitle(TITLE);
 
-        if (m_configuration.goVetEnabled) {
-            try {
-                String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
-
-                String command = String.format(
-                        "%s vet ./...",
-                        goExecName
-                );
-
-                Runtime rt = Runtime.getRuntime();
-                Process proc = rt.exec(command, goEnv, new File(projectDir));
-                OSProcessHandler handler = new OSProcessHandler(proc, null);
-                toolWindow.attachConsoleViewToProcess(handler);
-                toolWindow.printNormalMessage(String.format("%s%n", command));
-                handler.startNotify();
-
-                if (proc.waitFor() == 0) {
-                    VirtualFileManager.getInstance().syncRefresh();
-
-                    toolWindow.printNormalMessage(String.format("%nFinished running go vet on project %s%n", projectDir));
-                } else {
-                    toolWindow.printErrorMessage(String.format("%nCouldn't vet project %s%n", projectDir));
-                    throw new CantRunException(String.format("Error while processing %s vet command.", goExecName));
-                }
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                Messages.showErrorDialog(String.format("Error while processing %s vet command.", goExecName), "Error on Google Go Plugin");
-
-                throw new CantRunException(String.format("Error while processing %s vet command.", goExecName));
-            }
-        }
-
         // Build and run
         String execName = m_configuration.goOutputDir.concat("/").concat(project.getName());
 

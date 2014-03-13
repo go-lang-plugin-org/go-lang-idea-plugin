@@ -32,7 +32,6 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
     private RawCommandLineEditor m_debugBuilderArguments;
     private TextFieldWithBrowseButton workingDirectoryBrowser;
     private RawCommandLineEditor envVars;
-    private JCheckBox runGoVetBeforeCheckBox;
 	private JTabbedPane tabbedPane1;
 	private JLabel gdbVersionWarning;
 	private TextFieldWithBrowseButton m_gdbPath;
@@ -54,7 +53,6 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
         }
 
         envVars.setText(configuration.envVars);
-        runGoVetBeforeCheckBox.setSelected(configuration.goVetEnabled);
 
 		//Debug stuff
         if (configuration.debugBuilderArguments.isEmpty()) {
@@ -81,7 +79,6 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
         configuration.goOutputDir = buildDirectoryPathBrowser.getText();
         configuration.workingDir = workingDirectoryBrowser.getText();
         configuration.envVars = envVars.getText();
-        configuration.goVetEnabled = runGoVetBeforeCheckBox.isSelected();
 
         //Debug stuff
         String gdbPath = m_gdbPath.getText();

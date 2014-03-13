@@ -17,7 +17,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="38d58" layout-manager="GridLayoutManager" row-count="10" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="38d58" layout-manager="GridLayoutManager" row-count="9" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Run"/>
@@ -131,14 +131,6 @@
                 <properties>
                   <dialogCaption value="Environment variables"/>
                   <toolTipText value="You must use &quot;;&quot; in order to separate values. Ex. GOROOT=/usr/lib/go/;GOPATH=/home/Usr/go/"/>
-                </properties>
-              </component>
-              <component id="9f869" class="javax.swing.JCheckBox" binding="runGoVetBeforeCheckBox" default-binding="true">
-                <constraints>
-                  <grid row="9" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Run go &amp;vet before running anything else"/>
                 </properties>
               </component>
               <component id="3465" class="javax.swing.JLabel">
