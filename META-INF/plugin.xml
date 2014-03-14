@@ -106,6 +106,12 @@
             text="Go File" description="Create new Go file">
       <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
     </action>
+    
+    <action id="GoShowTypeInternalAction"
+            class="com.goide.actions.internal.GoShowTypeInternalAction"
+            text="Show Go type info">
+      <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+    </action>
 
     <group id="GoTestGenerateGroup">
       <action id="GoGenerateTest" class="com.goide.generate.GenerateTestAction" text="Test"
