@@ -7,6 +7,7 @@ import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.execution.runners.RunConfigurationWithSuppressedDefaultRunAction;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.module.Module;
@@ -35,7 +36,8 @@ import java.util.Map;
  * Date: Aug 19, 2010
  * Time: 2:53:03 PM
  */
-public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration> {
+public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration>
+                                    implements RunConfigurationWithSuppressedDefaultDebugAction, RunConfigurationWithSuppressedDefaultRunAction {
 
     public String builderArguments;
     public String workingDir;
