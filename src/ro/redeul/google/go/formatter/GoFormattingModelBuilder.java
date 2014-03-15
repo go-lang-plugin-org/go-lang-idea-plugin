@@ -34,13 +34,6 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
         CommonCodeStyleSettings goSettings =
             settings.getCommonSettings(GoLanguage.INSTANCE);
 
-        // Here we deny what user believes about space (or tab)
-        // For more detail see: http://golang.org/doc/effective_go.html#formatting
-        if (goSettings.getIndentOptions() != null) {
-            goSettings.getIndentOptions().USE_TAB_CHARACTER = true;
-            goSettings.getIndentOptions().SMART_TABS = false;
-        }
-
         Block block = GoBlockGenerator.generateBlock(fileElement, goSettings);
 
         return FormattingModelProvider
