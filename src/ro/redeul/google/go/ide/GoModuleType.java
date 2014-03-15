@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class GoModuleType extends ModuleType<GoModuleBuilder> {
 
-    private static final String MODULE_TYPE_ID = "GO_MODULE";
+    public static final String MODULE_TYPE_ID = "GO_MODULE";
 
     public GoModuleType() {
         super(MODULE_TYPE_ID);

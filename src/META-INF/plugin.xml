@@ -311,12 +311,17 @@
 
         <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
 
+        <moduleType id="GO_MODULE" implementationClass="ro.redeul.google.go.ide.GoModuleType" />
+
         <projectService
                 serviceInterface="ro.redeul.google.go.ide.GoProjectSettings"
                 serviceImplementation="ro.redeul.google.go.ide.GoProjectSettings"/>
 
         <projectConfigurable instance="ro.redeul.google.go.ide.GoConfigurable"/>
         <applicationConfigurable instance="ro.redeul.google.go.ide.GoGlobalConfigurable"/>
+
+        <projectImportProvider implementation="ro.redeul.google.go.wizards.importWizard.GoProjectImportProvider" />
+        <projectImportBuilder implementation="ro.redeul.google.go.wizards.importWizard.GoProjectImportBuilder" />
 
         <applicationService
                 serviceInterface="ro.redeul.google.go.options.GoSettings"
