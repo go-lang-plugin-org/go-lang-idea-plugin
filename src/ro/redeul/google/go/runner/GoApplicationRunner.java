@@ -42,8 +42,19 @@ public class GoApplicationRunner extends DefaultProgramRunner {
     }
 
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        return (DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) || DefaultRunExecutor.EXECUTOR_ID.equals(executorId))
-		        && profile instanceof GoApplicationConfiguration;
+        //If it isnt a GoApplicationConfiguration, we wont run it!
+        if(!(profile instanceof GoApplicationConfiguration)) {
+            return false;
+        }
+
+        //Debugging is only available, if it will be built before run
+        GoApplicationConfiguration goConfig = (GoApplicationConfiguration)profile;
+        if(DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && goConfig.goBuildBeforeRun) {
+            return true;
+        }
+
+        //Running is always available
+        return DefaultRunExecutor.EXECUTOR_ID.equals(executorId);
     }
 
     protected RunContentDescriptor doExecute(final Project project, RunProfileState state, RunContentDescriptor contentToReuse, ExecutionEnvironment env) throws ExecutionException {
