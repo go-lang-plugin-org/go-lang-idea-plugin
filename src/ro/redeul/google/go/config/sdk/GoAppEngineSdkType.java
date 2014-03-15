@@ -111,7 +111,7 @@ public class GoAppEngineSdkType extends SdkType {
             sourcesRoot.refresh(false, false);
         }
 
-        String goPathFirst = System.getenv("GOPATH");
+        String goPathFirst = GoSdkUtil.getGoPath();
         VirtualFile goPathDirectory;
         VirtualFile pathSourcesRoot = null;
         if (goPathFirst != null && !goPathFirst.equals("")) {

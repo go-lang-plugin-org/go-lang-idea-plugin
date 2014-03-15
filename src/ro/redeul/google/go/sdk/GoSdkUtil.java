@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.*;
+import ro.redeul.google.go.ide.GoGlobalSettings;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.util.GoUtil;
 
@@ -112,7 +113,7 @@ public class GoSdkUtil {
         if (data != null) {
             data.GO_GOROOT_PATH = path;
             data.GO_BIN_PATH = goCommand;
-            data.GO_GOPATH_PATH = getSysGoPathPath();
+            data.GO_GOPATH_PATH = getGoPath();
             data.version = GoSdkData.LATEST_VERSION;
         }
 
@@ -250,7 +251,7 @@ public class GoSdkUtil {
         sdkData.SDK_HOME_PATH = path;
         sdkData.GOAPP_BIN_PATH = getGoAppBinPath(path);
         sdkData.GO_HOME_PATH = format("%s%sgoroot", path, File.separator);
-        sdkData.GO_GOPATH_PATH = getSysGoPathPath();
+        sdkData.GO_GOPATH_PATH = getGoPath();
 
         GeneralCommandLine command = new GeneralCommandLine();
         if (checkFileExists(sdkData.GO_HOME_PATH + "/bin/go")) {
@@ -631,14 +632,14 @@ public class GoSdkUtil {
     }
 
     public static String prependToGoPath(String prependedPath) {
-        String sysGoPath = getEnvVariable("GOPATH");
+        String sysGoPath = getGoPath();
         return sysGoPath.isEmpty()
                 ? prependedPath
                 : format("%s%s%s", prependedPath, File.pathSeparator, sysGoPath);
     }
 
     public static String appendToGoPath(String appendedPath) {
-        String sysGoPath = getEnvVariable("GOPATH");
+        String sysGoPath = getGoPath();
         return sysGoPath.isEmpty()
                 ? appendedPath
                 : format("%s%s%s", sysGoPath, File.pathSeparator, appendedPath);
@@ -672,6 +673,16 @@ public class GoSdkUtil {
     @NotNull
     public static String getSysGoPathPath() {
         return getEnvVariable("GOPATH");
+    }
+
+    public static String getGoPath() {
+        String savedsGoPath = GoGlobalSettings.getInstance().getGoPath();
+
+        if (!savedsGoPath.isEmpty()) {
+            return savedsGoPath;
+        }
+
+        return getSysGoPathPath();
     }
 
     @NotNull
