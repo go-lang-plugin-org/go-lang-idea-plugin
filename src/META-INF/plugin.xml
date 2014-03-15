@@ -302,8 +302,8 @@
     <extensions defaultExtensionNs="com.intellij">
 
         <applicationService
-                serviceInterface="ro.redeul.google.go.ide.GoAppEngineSettings"
-                serviceImplementation="ro.redeul.google.go.ide.GoAppEngineSettings"/>
+                serviceInterface="ro.redeul.google.go.ide.GoGlobalSettings"
+                serviceImplementation="ro.redeul.google.go.ide.GoGlobalSettings"/>
 
         <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
 
@@ -312,6 +312,7 @@
                 serviceImplementation="ro.redeul.google.go.ide.GoProjectSettings"/>
 
         <projectConfigurable instance="ro.redeul.google.go.ide.GoConfigurable"/>
+        <applicationConfigurable instance="ro.redeul.google.go.ide.GoGlobalConfigurable"/>
 
         <applicationService
                 serviceInterface="ro.redeul.google.go.options.GoSettings"
