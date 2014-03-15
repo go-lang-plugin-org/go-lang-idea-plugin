@@ -1,9 +1,6 @@
 package ro.redeul.google.go.ide.actions;
 
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -11,14 +8,8 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
-import ro.redeul.google.go.runner.GoCommonConsoleView;
+import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
@@ -36,10 +27,8 @@ public class GoFmtProjectRunner extends AnAction {
             return;
         }
 
-        if (GoCommonConsoleView.consoleView == null) {
-            GoCommonConsoleView.consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
-        }
-        ConsoleView consoleView = GoCommonConsoleView.consoleView;
+        GoToolWindow toolWindow = GoToolWindow.getInstance(project);
+        toolWindow.setTitle(TITLE);
 
         String projectDir = project.getBasePath();
 
@@ -65,21 +54,6 @@ public class GoFmtProjectRunner extends AnAction {
         FileDocumentManager.getInstance().saveAllDocuments();
 
         try {
-            ToolWindowManager manager = ToolWindowManager.getInstance(project);
-            ToolWindow window = manager.getToolWindow(GoCommonConsoleView.ID);
-
-            if (window == null) {
-                window = manager.registerToolWindow(GoCommonConsoleView.ID, false, ToolWindowAnchor.BOTTOM);
-
-                ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-                Content content = contentFactory.createContent(consoleView.getComponent(), "", false);
-                window.getContentManager().addContent(content);
-                window.setIcon(GoSdkUtil.getProjectIcon(sdk));
-                window.setToHideOnEmptyContent(true);
-            }
-            window.setTitle(TITLE);
-            window.show(EmptyRunnable.getInstance());
-
             String command = String.format(
                     "%s fmt ./...",
                     goExecName
@@ -88,8 +62,8 @@ public class GoFmtProjectRunner extends AnAction {
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv, new File(projectDir));
             OSProcessHandler handler = new OSProcessHandler(proc, null);
-            consoleView.attachToProcess(handler);
-            consoleView.print(String.format("%s%n", command), ConsoleViewContentType.NORMAL_OUTPUT);
+            toolWindow.attachConsoleViewToProcess(handler);
+            toolWindow.printNormalMessage(String.format("%s%n", command));
             handler.startNotify();
 
             if (proc.waitFor() == 0) {

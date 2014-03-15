@@ -152,6 +152,10 @@
         <component>
             <implementation-class>ro.redeul.google.go.components.ProjectSdkValidator</implementation-class>
         </component>
+
+        <component>
+            <implementation-class>ro.redeul.google.go.ide.ui.GoToolWindow</implementation-class>
+        </component>
     </project-components>
 
     <actions>
@@ -296,10 +300,10 @@
 
             <add-to-group group-id="GAE.Tools" anchor="last"/>
         </group>
-
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Go" anchor="bottom" icon="/icons/go_13x13.png" factoryClass="ro.redeul.google.go.ide.ui.GoToolWindowFactory" />
 
         <applicationService
                 serviceInterface="ro.redeul.google.go.ide.GoGlobalSettings"
