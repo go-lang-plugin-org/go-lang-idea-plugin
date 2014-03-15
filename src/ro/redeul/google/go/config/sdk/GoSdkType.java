@@ -150,13 +150,12 @@ public class GoSdkType extends SdkType {
             sdkSourcesRoot.refresh(false, false);
         }
 
-        String goPathFirst = System.getenv("GOPATH");
+        String goPathFirst = GoSdkUtil.getSysGoPathPath();
 
         VirtualFile goPathDirectory;
         VirtualFile pathSourcesRoot = null;
 
-        if (goPathFirst != null && !goPathFirst.equals("")) {
-
+        if (!goPathFirst.equals("")) {
             // If there are multiple directories under GOPATH then we extract only the first one
             if (goPathFirst.contains(File.pathSeparator)) {
                 goPathFirst = goPathFirst.split(File.pathSeparator)[0];
@@ -189,6 +188,10 @@ public class GoSdkType extends SdkType {
         sdkModificator.setVersionString(sdkData.VERSION_MAJOR);
         sdkModificator.setSdkAdditionalData(sdkData);
         sdkModificator.commitChanges();
+
+        if (GoSdkUtil.getSdkSourcesRoot(sdk) != null) {
+            GoSdkUtil.getSdkSourcesRoot(sdk).refresh(false, false);
+        }
     }
 
     @Override
