@@ -84,17 +84,24 @@ public class GoSdkUtil {
 
     public static GoSdkData testGoogleGoSdk(String path) {
 
-        if (!checkFolderExists(path))
+        if (!checkFolderExists(path)) {
+            LOG.warn("GO SDK: Could not find root directory @ "+path);
             return null;
+        }
 
-        if (!checkFolderExists(path, "src"))
+        if (!checkFolderExists(path, "src")) {
+            LOG.warn("GO SDK: Could not find src directory @ "+path+"/src");
             return null;
+        }
 
-        if (!checkFolderExists(path, "pkg"))
+        if (!checkFolderExists(path, "pkg")) {
+            LOG.warn("GO SDK: Could not find src directory @ "+path+"/pkg");
             return null;
+        }
 
         String goCommand = findGoExecutable(path);
         if (goCommand.equals("")) {
+            LOG.warn("GO SDK: Could not find go binary in expected locations.");
             return null;
         }
 
@@ -141,7 +148,7 @@ public class GoSdkUtil {
         if (checkFolderExists(homeDirectory.getPath(), "src")) {
             return homeDirectory.findFileByRelativePath("src/pkg");
         }
-
+        LOG.warn("Could not find GO SDK sources root (src/pkg)");
         return null;
     }
 
@@ -221,6 +228,7 @@ public class GoSdkUtil {
         if (data.TARGET_ARCH != null && data.TARGET_OS != null)
             return data;
 
+        LOG.warn("Could not determine Target Arch or OS");
         return null;
     }
 
