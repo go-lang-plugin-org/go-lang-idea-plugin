@@ -21,7 +21,7 @@ public class GoGlobalConfigurableForm {
     private final GoGlobalSettings goGlobalSettings = GoGlobalSettings.getInstance();
 
     GoGlobalConfigurableForm() {
-        goPath.addBrowseFolderListener("GOPATH directory", "GOPATH directory",
+        goPath.addBrowseFolderListener("GOPATH directory", "Select the GOPATH directory of your GO setup",
                 null, new FileChooserDescriptor(false, true, false, false, false, false));
 
         importSysGoPath.addActionListener(new ActionListener() {
