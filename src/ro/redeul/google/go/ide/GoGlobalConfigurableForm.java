@@ -41,11 +41,28 @@ public class GoGlobalConfigurableForm {
     }
 
     public void apply() {
-        if (!(new File(goPath.getText()).exists())) {
+        String goPathStr = goPath.getText();
+
+        if (goPathStr.endsWith(File.separator)) {
+            goPathStr = goPathStr.substring(0, goPathStr.length() - 1);
+            goPath.setText(goPathStr);
+        }
+
+        if (!(new File(goPathStr).exists())) {
             Messages.showErrorDialog("Error while saving your settings. \nGOPATH doesn't exists.", "Error on Google Go Plugin");
             return;
         }
 
-        goGlobalSettings.setGoPath(goPath.getText());
+        if (!(new File(goPathStr.concat("/bin")).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOPATH/bin doesn't exists.", "Error on Google Go Plugin");
+            return;
+        }
+
+        if (!(new File(goPathStr.concat("/src")).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOPATH/src doesn't exists.", "Error on Google Go Plugin");
+            return;
+        }
+
+        goGlobalSettings.setGoPath(goPathStr);
     }
 }
