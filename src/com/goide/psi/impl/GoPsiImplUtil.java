@@ -85,6 +85,16 @@ public class GoPsiImplUtil {
   }
 
   @SuppressWarnings("UnusedParameters")
+  public static boolean processDeclarations(@NotNull GoVarSpec o,
+                                            @NotNull PsiScopeProcessor processor,
+                                            @NotNull ResolveState state,
+                                            PsiElement lastParent,
+                                            @NotNull PsiElement place) {
+    return PsiTreeUtil.isAncestor(o, place, false) ||
+           GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
+  }
+  
+  @SuppressWarnings("UnusedParameters")
   public static boolean processDeclarations(@NotNull GoCompositeElement o,
                                             @NotNull PsiScopeProcessor processor,
                                             @NotNull ResolveState state,

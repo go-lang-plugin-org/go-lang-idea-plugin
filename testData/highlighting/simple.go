@@ -6,6 +6,8 @@ import "net/http"
 import "io"
 
 func  main() {
+	test := <error>test</error>
+	Println(test)
 	fmt.<EOLError></EOLError>
 }
 

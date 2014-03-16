@@ -216,7 +216,9 @@ TypeSpec ::= identifier Type {
 
 VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
-VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList )
+VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList ) {
+  methods=[processDeclarations]
+}
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
 VarDefinition ::= identifier {
   methods=[getGoType]
