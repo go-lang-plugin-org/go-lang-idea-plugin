@@ -159,7 +159,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
                             "Go SDK validator",
                             "Problem with env variables",
                             getInvalidGOROOTEnvMessage(),
-                            NotificationType.ERROR,
+                            NotificationType.WARNING,
                             NotificationListener.URL_OPENING_LISTENER),
                     myProject);
 
@@ -170,7 +170,7 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
                             "Go SDK validator",
                             "Problem with env variables",
                             getInvalidGOPATHEnvMessage(),
-                            NotificationType.ERROR,
+                            NotificationType.WARNING,
                             NotificationListener.URL_OPENING_LISTENER),
                     myProject);
 
