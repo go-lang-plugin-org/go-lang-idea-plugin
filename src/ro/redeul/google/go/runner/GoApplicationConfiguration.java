@@ -48,7 +48,6 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     public String goOutputDir = "";
     public String workingDir = "";
     public String envVars = "";
-    public Boolean goVetEnabled = false;
 
     public GoApplicationConfiguration(String name, Project project, GoApplicationConfigurationType configurationType) {
         super(name, new GoApplicationModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);

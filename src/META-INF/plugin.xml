@@ -305,6 +305,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Go" anchor="bottom" icon="/icons/go_13x13.png" factoryClass="ro.redeul.google.go.ide.ui.GoToolWindowFactory" />
 
+        <stepsBeforeRunProvider implementation="ro.redeul.google.go.runner.beforeRunTasks.GoVetTaskProvider" />
+
         <applicationService
                 serviceInterface="ro.redeul.google.go.ide.GoGlobalSettings"
                 serviceImplementation="ro.redeul.google.go.ide.GoGlobalSettings"/>
