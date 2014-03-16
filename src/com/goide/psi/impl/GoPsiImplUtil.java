@@ -300,7 +300,7 @@ public class GoPsiImplUtil {
     if (parent instanceof GoRangeClause) {
       return processRangeClause(o, (GoRangeClause)parent);
     }
-    if (parent instanceof GoShortVarDeclaration || parent instanceof GoRecvStatement) { // todo: range processing
+    if (parent instanceof GoShortVarDeclaration || parent instanceof GoRecvStatement) {
       List<GoVarDefinition> varList = ((GoVarSpec)parent).getVarDefinitionList();
       int i = varList.indexOf(o);
       i = i == -1 ? 0 : i;
