@@ -464,20 +464,4 @@ func main() {
 	myNewFnForTest := func(a string, b string) (bool,bool,bool) {return false,false,false}
 	TestLiteralFunc(/*begin*/myNewFnForTest/*end.Expression type mismatch, the expected type is func(string,string)(bool,bool)|CastTypeFix*/)
 	TestLiteralFunc(func(a string,b string)(bool,bool) {return false,true})
-
-
-	// issue #480
-	arr1 := []int{}
-	arr1 = append(arr1, 1)
-	arr1 = append(arr1, 1, 2, 3)
-	arr1 = append(arr1, /*begin*/1.2/*end.Expression type mismatch, the expected type is int|CastTypeFix*/)
-	arr1 = append(arr1, /*begin*/""/*end.Expression type mismatch, the expected type is int|CastTypeFix*/)
-	arr2 := []string{}
-
-	copy(arr1, arr1)
-	copy(arr1, /*begin*/arr2/*end.Expression type mismatch, the expected type is []int|CastTypeFix*/)
-
-	map1 := map[string]int{}
-	delete(map1, "key")
-	delete(map1, /*begin*/1/*end.Expression type mismatch, the expected type is string|CastTypeFix*/)
 }
