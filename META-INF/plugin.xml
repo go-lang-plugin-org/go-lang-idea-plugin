@@ -49,6 +49,7 @@
     <lang.findUsagesProvider language="go" implementationClass="com.goide.GoFindUsagesProvider"/>
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
     <lang.foldingBuilder language="go" implementationClass="com.goide.editor.GoFoldingBuilder"/>
+    <typeDeclarationProvider implementation="com.goide.editor.GoTypeDeclarationProvider"/>
     
     <!--formatter-->
     <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
