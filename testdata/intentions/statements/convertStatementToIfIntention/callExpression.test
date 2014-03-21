@@ -11,5 +11,5 @@ func IsValid()bool{
     return false
 }
 func main() {
-    if IsValid(){<caret>}
+	if IsValid() {<caret>}
 }

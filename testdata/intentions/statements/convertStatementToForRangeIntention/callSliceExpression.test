@@ -11,5 +11,5 @@ func GetSlice()[]string{
     return []string{}
 }
 func main() {
-    for k,v:= range GetSlice(){<caret>}
+	for k, v := range GetSlice() {<caret>}
 }
