@@ -7,6 +7,7 @@ import com.intellij.ide.util.importProject.ProjectDescriptor;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.ProjectJdkForModuleStep;
 import com.intellij.ide.util.projectWizard.importSources.DetectedProjectRoot;
+import com.intellij.ide.util.projectWizard.importSources.DetectedSourceRoot;
 import com.intellij.ide.util.projectWizard.importSources.ProjectFromSourcesBuilder;
 import com.intellij.ide.util.projectWizard.importSources.ProjectStructureDetector;
 import com.intellij.openapi.util.io.FileUtil;
@@ -52,7 +53,7 @@ public class GoProjectStructureDetector extends ProjectStructureDetector {
         modules = new ArrayList<ModuleDescriptor>();
         for (DetectedProjectRoot root : roots) {
           modules
-            .add(new ModuleDescriptor(root.getDirectory(), GoModuleType.getInstance(), ContainerUtil.<DetectedProjectRoot>emptyList()));
+            .add(new ModuleDescriptor(root.getDirectory(), GoModuleType.getInstance(), ContainerUtil.<DetectedSourceRoot>emptyList()));
         }
         projectDescriptor.setModules(modules);
       }

@@ -1,7 +1,7 @@
 package com.goide;
 
 import com.goide.psi.GoNamedElement;
-import com.intellij.find.impl.HelpID;
+import com.intellij.lang.HelpID;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.ElementDescriptionUtil;

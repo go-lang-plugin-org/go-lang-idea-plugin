@@ -8,7 +8,7 @@
 
   <change-notes><![CDATA[]]></change-notes>
 
-  <idea-version since-build="133"/>
+  <idea-version since-build="135"/>
   <depends>com.intellij.modules.lang</depends>
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
 
