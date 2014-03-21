@@ -9,7 +9,7 @@ import com.goide.stubs.GoReceiverStub;
 
 public interface GoReceiver extends GoNamedElement, StubBasedPsiElement<GoReceiverStub> {
 
-  @NotNull
+  @Nullable
   GoType getType();
 
   @NotNull
@@ -18,7 +18,7 @@ public interface GoReceiver extends GoNamedElement, StubBasedPsiElement<GoReceiv
   @Nullable
   PsiElement getMul();
 
-  @NotNull
+  @Nullable
   PsiElement getRparen();
 
   @Nullable

@@ -232,11 +232,12 @@ FunctionDeclaration ::= func identifier Signature Block? {
   stubClass="com.goide.stubs.GoFunctionDeclarationStub"
 }
 MethodDeclaration ::= func Receiver identifier Signature Block? {
-  pin=3 
+  pin=2
   stubClass="com.goide.stubs.GoMethodDeclarationStub"
 }
 Receiver ::= '(' (identifier ReceiverTail | ReceiverTail) ')' {
   methods=[getGoType]
+  pin=1
   stubClass="com.goide.stubs.GoReceiverStub"
 }
 private ReceiverTail ::= '*'? ReceiverResultType

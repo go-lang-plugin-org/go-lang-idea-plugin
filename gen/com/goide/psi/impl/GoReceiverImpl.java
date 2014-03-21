@@ -28,9 +28,9 @@ public class GoReceiverImpl extends GoNamedElementImpl<GoReceiverStub> implement
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoType getType() {
-    return findNotNullChildByClass(GoType.class);
+    return findChildByClass(GoType.class);
   }
 
   @Override
@@ -46,9 +46,9 @@ public class GoReceiverImpl extends GoNamedElementImpl<GoReceiverStub> implement
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRparen() {
-    return findNotNullChildByType(RPAREN);
+    return findChildByType(RPAREN);
   }
 
   @Override

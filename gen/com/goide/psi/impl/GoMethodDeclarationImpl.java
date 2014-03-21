@@ -52,9 +52,9 @@ public class GoMethodDeclarationImpl extends GoFunctionOrMethodDeclarationImpl<G
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+    return findChildByType(IDENTIFIER);
   }
 
 }
