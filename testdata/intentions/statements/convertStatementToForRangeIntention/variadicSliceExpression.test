@@ -8,7 +8,7 @@ func main() {
 -----
 package main
 func VariadicFn(str_list ...string){
-    for k,v:= range str_list{<caret>}
+	for k, v := range str_list {<caret>}
 }
 func main() {
     VariadicFn("str_1","str_2")

@@ -1,13 +1,13 @@
 package ro.redeul.google.go.intentions.statements;
 
-import com.intellij.openapi.editor.Document;
+import com.intellij.codeInsight.template.impl.TemplateImpl;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.editor.TemplateUtil;
 import ro.redeul.google.go.intentions.Intention;
 import ro.redeul.google.go.intentions.IntentionExecutionException;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -24,8 +24,9 @@ import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 import ro.redeul.google.go.util.GoUtil;
 
+import java.util.ArrayList;
+
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class ConvertStatementToForRangeIntention extends Intention {
 
@@ -78,15 +79,19 @@ public class ConvertStatementToForRangeIntention extends Intention {
     @Override
     protected void processIntention(@NotNull PsiElement element, Editor editor)
             throws IntentionExecutionException {
-        Document document = editor.getDocument();
-        TextRange textRange = statement.getTextRange();
-        RangeMarker range = document.createRangeMarker(textRange.getStartOffset(), textRange.getEndOffset());
-        document.deleteString(textRange.getStartOffset(), textRange.getEndOffset());
 
-        StringBuilder iFString = new StringBuilder();
+
+        TextRange textRange = statement.getTextRange();
+        ArrayList<String> arguments = new ArrayList<String>();
+
+
+        StringBuilder templateString = new StringBuilder();
+
         String k = "k";
         String v = "v";
+
         int i = 0;
+
         while (GoUtil.TestDeclVar(expr, k)) {
             k = String.format("k%d", i);
             i++;
@@ -98,19 +103,13 @@ public class ConvertStatementToForRangeIntention extends Intention {
             i++;
         }
 
-        iFString.append("for ")
-                .append(k)
-                .append(",")
-                .append(v)
-                .append(":= range ")
-                .append(expr.getText())
-                .append("{");
 
-        document.insertString(textRange.getStartOffset(), iFString.toString() + "}");
+        arguments.add(k);
+        arguments.add(v);
 
-        if (editor != null)
-            editor.getCaretModel().moveToOffset(textRange.getStartOffset() + 15 + v.length() + k.length() + expr.getTextLength());
-        reformatPositions(statement.getContainingFile(), range);
+        TemplateImpl template = TemplateUtil.createTemplate(String.format("for $v0$,$v1$ := range %s{$END$}", expr.getText()));
+        TemplateUtil.runTemplate(editor, textRange, arguments, template);
+
     }
 
 }

@@ -22,6 +22,6 @@ func GetSlice()Values{
 func main() {
     slice:=GetSlice()
     for k,v:= range slice{
-        for k0,v0:= range v{<caret>}
+		for k0, v0 := range v {<caret>}
     }
 }

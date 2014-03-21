@@ -9,5 +9,5 @@ package main
 
 func main() {
     var isValid = true
-    if isValid{<caret>}
+	if isValid {<caret>}
 }
