@@ -932,6 +932,24 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // '*' | '<-' | '[' | chan | func | interface | map | struct
+  static boolean ConversionStart(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionStart")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, MUL);
+    if (!result_) result_ = consumeToken(builder_, SEND_CHANNEL);
+    if (!result_) result_ = consumeToken(builder_, LBRACK);
+    if (!result_) result_ = consumeToken(builder_, CHAN);
+    if (!result_) result_ = consumeToken(builder_, FUNC);
+    if (!result_) result_ = consumeToken(builder_, INTERFACE);
+    if (!result_) result_ = consumeToken(builder_, MAP);
+    if (!result_) result_ = consumeToken(builder_, STRUCT);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // defer Expression
   public static boolean DeferStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DeferStatement")) return false;
@@ -3905,7 +3923,7 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // &('*' | '<-' | '[' | chan | func | interface | map | struct) Type '('
+  // &(ConversionStart | '(' ConversionStart) Type '('
   private static boolean ConversionExpr_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConversionExpr_0")) return false;
     boolean result_ = false;
@@ -3917,7 +3935,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // &('*' | '<-' | '[' | chan | func | interface | map | struct)
+  // &(ConversionStart | '(' ConversionStart)
   private static boolean ConversionExpr_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConversionExpr_0_0")) return false;
     boolean result_ = false;
@@ -3927,19 +3945,24 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // '*' | '<-' | '[' | chan | func | interface | map | struct
+  // ConversionStart | '(' ConversionStart
   private static boolean ConversionExpr_0_0_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConversionExpr_0_0_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, MUL);
-    if (!result_) result_ = consumeToken(builder_, SEND_CHANNEL);
-    if (!result_) result_ = consumeToken(builder_, LBRACK);
-    if (!result_) result_ = consumeToken(builder_, CHAN);
-    if (!result_) result_ = consumeToken(builder_, FUNC);
-    if (!result_) result_ = consumeToken(builder_, INTERFACE);
-    if (!result_) result_ = consumeToken(builder_, MAP);
-    if (!result_) result_ = consumeToken(builder_, STRUCT);
+    result_ = ConversionStart(builder_, level_ + 1);
+    if (!result_) result_ = ConversionExpr_0_0_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // '(' ConversionStart
+  private static boolean ConversionExpr_0_0_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionExpr_0_0_0_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, LPAREN);
+    result_ = result_ && ConversionStart(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }

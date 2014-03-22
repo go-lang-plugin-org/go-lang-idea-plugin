@@ -104,3 +104,10 @@ var htmlReplacer = strings.NewReplacer(
 // "&#39;" is shorter than "&apos;" and apos was not in HTML until HTML5.
 "'", "&#39;",       
 )
+
+func tets() {
+  v = v.assignTo("reflect.Value.Call", targ, (*interface{})(addr))
+  type test interface {}
+  t := new(test)
+  v := (interface{})(t)
+}
