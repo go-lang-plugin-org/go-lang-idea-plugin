@@ -60,11 +60,12 @@ GO_FILE
         SIGNATURE
           PARAMETERS
             PsiElement(()('(')
-            TYPE_LIST
+            PARAMETER_DECLARATION
               TYPE
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('int')
-              PsiElement(,)(',')
+            PsiElement(,)(',')
+            PARAMETER_DECLARATION
               TYPE
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('float64')

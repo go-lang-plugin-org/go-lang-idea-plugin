@@ -890,3 +890,31 @@ GO_FILE
               PsiElement(identifier)('t')
             PsiElement())(')')
       PsiElement(})('}')
+  METHOD_DECLARATION
+    PsiElement(func)('func')
+    RECEIVER
+      PsiElement(()('(')
+      PsiElement(*)('*')
+      TYPE
+        TYPE_REFERENCE_EXPRESSION
+          PsiElement(identifier)('ctx')
+      PsiElement())(')')
+    PsiElement(identifier)('Errorf')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PARAMETER_DECLARATION
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('string')
+        PsiElement(,)(',')
+        PARAMETER_DECLARATION
+          PsiElement(...)('...')
+          INTERFACE_TYPE
+            PsiElement(interface)('interface')
+            PsiElement({)('{')
+            PsiElement(})('}')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      PsiElement(})('}')

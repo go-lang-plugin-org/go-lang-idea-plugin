@@ -2259,28 +2259,39 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // IdentifierListNoPin? '...'? Type
+  // IdentifierListNoPin? '...'? Type | Type
   public static boolean ParameterDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ParameterDeclaration")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<parameter declaration>");
     result_ = ParameterDeclaration_0(builder_, level_ + 1);
-    result_ = result_ && ParameterDeclaration_1(builder_, level_ + 1);
-    result_ = result_ && Type(builder_, level_ + 1);
+    if (!result_) result_ = Type(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, PARAMETER_DECLARATION, result_, false, null);
     return result_;
   }
 
-  // IdentifierListNoPin?
+  // IdentifierListNoPin? '...'? Type
   private static boolean ParameterDeclaration_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ParameterDeclaration_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ParameterDeclaration_0_0(builder_, level_ + 1);
+    result_ = result_ && ParameterDeclaration_0_1(builder_, level_ + 1);
+    result_ = result_ && Type(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // IdentifierListNoPin?
+  private static boolean ParameterDeclaration_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ParameterDeclaration_0_0")) return false;
     IdentifierListNoPin(builder_, level_ + 1);
     return true;
   }
 
   // '...'?
-  private static boolean ParameterDeclaration_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ParameterDeclaration_1")) return false;
+  private static boolean ParameterDeclaration_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ParameterDeclaration_0_1")) return false;
     consumeToken(builder_, TRIPLE_DOT);
     return true;
   }

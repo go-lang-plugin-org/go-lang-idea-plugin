@@ -111,3 +111,5 @@ func tets() {
   t := new(test)
   v := (interface{})(t)
 }
+
+func (*ctx) Errorf(string, ...interface{}) {}

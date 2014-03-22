@@ -138,7 +138,7 @@ Signature ::= Parameters Result? {pin=1}
 Result ::= '(' TypeListNoPin ')' | Type | Parameters
 Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {pin=1}
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
-ParameterDeclaration ::= IdentifierListNoPin? '...'? Type
+ParameterDeclaration ::= IdentifierListNoPin? '...'? Type | Type
 private IdentifierListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
 ParamDefinition ::= identifier {
   stubClass="com.goide.stubs.GoParamDefinitionStub"
