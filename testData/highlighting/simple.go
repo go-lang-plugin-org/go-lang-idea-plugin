@@ -279,4 +279,13 @@ func <warning>eachProcessing</warning>() {
         if each.matchesContentType() {
         }
     }
+    var rs2, i = makeTuple()
+    for _, each := range rs2 {
+        if each.matchesContentType() {
+        }
+    }
+}
+
+func makeTuple() ([]Route, int) {
+  return []Route{}, 1
 }

@@ -310,29 +310,36 @@ public class GoPsiImplUtil {
     if (parent instanceof GoRangeClause) {
       return processRangeClause(o, (GoRangeClause)parent);
     }
-    if (parent instanceof GoShortVarDeclaration || parent instanceof GoRecvStatement) {
-      List<GoVarDefinition> varList = ((GoVarSpec)parent).getVarDefinitionList();
-      int i = varList.indexOf(o);
-      i = i == -1 ? 0 : i;
-      List<GoExpression> exprs = ((GoVarSpec)parent).getExpressionList();
-      if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
-        GoExpression call = exprs.get(0);
-        GoType type = call.getGoType();
-        if (type instanceof GoTypeList) {
-          if (((GoTypeList)type).getTypeList().size() > i) {
-            return ((GoTypeList)type).getTypeList().get(i);
-          }
-        }
-        return type;
-      }
-      if (exprs.size() <= i) return null;
-      return exprs.get(i).getGoType();
+    if (parent instanceof GoVarSpec) {
+      return processVarSpec(o, (GoVarSpec)parent);
     }
     GoCompositeLit literal = PsiTreeUtil.getNextSiblingOfType(o, GoCompositeLit.class);
     if (literal != null) {
       return literal.getLiteralTypeExpr().getType();
     }
     return GoNamedElementImpl.getType(o);
+  }
+
+  @Nullable
+  private static GoType processVarSpec(GoVarDefinition o, GoVarSpec parent) {
+    GoType commonType = parent.getType();
+    if (commonType != null) return commonType;
+    List<GoVarDefinition> varList = parent.getVarDefinitionList();
+    int i = varList.indexOf(o);
+    i = i == -1 ? 0 : i;
+    List<GoExpression> exprs = parent.getExpressionList();
+    if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
+      GoExpression call = exprs.get(0);
+      GoType type = call.getGoType();
+      if (type instanceof GoTypeList) {
+        if (((GoTypeList)type).getTypeList().size() > i) {
+          return ((GoTypeList)type).getTypeList().get(i);
+        }
+      }
+      return type;
+    }
+    if (exprs.size() <= i) return null;
+    return exprs.get(i).getGoType();
   }
 
   @Nullable
