@@ -252,6 +252,7 @@ public class GoPsiImplUtil {
         GoBuiltinArgs args = ((GoBuiltinCallExpr)o).getBuiltinArgs();
         GoType type = args != null ? args.getType() : null;
         if (type instanceof GoMapType) return type;
+        if (type instanceof GoArrayOrSliceType) return type;
         if (type != null) {
           GoTypeReferenceExpression expression = getTypeReference(type);
           return getType(expression);

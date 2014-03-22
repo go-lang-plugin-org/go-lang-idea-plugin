@@ -289,3 +289,17 @@ func <warning>eachProcessing</warning>() {
 func makeTuple() ([]Route, int) {
   return []Route{}, 1
 }
+
+type Greeting struct {
+    Author  string
+    Content string
+}
+
+func <warning>moreRanges</warning>() {
+    greetings := make([]Greeting, 0, 10)
+    for i, value := range greetings {
+        if (value.Content == "") {
+            greetings[i].Content = "<Empty>"
+        }
+    }
+}
