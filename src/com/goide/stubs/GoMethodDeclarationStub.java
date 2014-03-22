@@ -19,6 +19,6 @@ public class GoMethodDeclarationStub extends GoFunctionOrMethodDeclarationStub<G
   }
 
   public String getTypeName() {
-    return myTypeName.getString();
+    return myTypeName == null ? null : myTypeName.getString();
   }
 }
