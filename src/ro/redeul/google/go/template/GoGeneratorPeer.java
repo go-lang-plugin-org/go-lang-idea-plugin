@@ -20,6 +20,7 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class GoGeneratorPeer implements WebProjectGenerator.GeneratorPeer<GoSdkData> {
     private JPanel myMainPanel;
@@ -28,8 +29,7 @@ public class GoGeneratorPeer implements WebProjectGenerator.GeneratorPeer<GoSdkD
     private JLabel labelSdkVersion;
     private JLabel labelSdkTarget;
     private JLabel labelBinariesPath;
-    private JLabel labelGoRoot;
-    private JLabel labelGoPath;
+    private TextFieldWithBrowseButton gopathPath;
 
     public GoGeneratorPeer() {
         mySdkPath.getButton().addActionListener(new ActionListener() {
@@ -45,9 +45,27 @@ public class GoGeneratorPeer implements WebProjectGenerator.GeneratorPeer<GoSdkD
             }
         });
 
+        gopathPath.getButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FileChooser
+                        .chooseFile(FileChooserDescriptorFactory.createSingleFolderDescriptor(), null, gopathPath, null, new Consumer<VirtualFile>() {
+                            @Override
+                            public void consume(@NotNull VirtualFile file) {
+                                gopathPath.setText(FileUtil.toSystemDependentName(file.getPath()));
+                            }
+                        });
+            }
+        });
+
         mySdkPath.setText(FileUtil.toSystemDependentName(GoSettings.getInstance().goRoot));
         if (mySdkPath.getText().equals("")) {
             mySdkPath.setText(GoSdkUtil.getSysGoRootPath());
+        }
+
+        gopathPath.setText(FileUtil.toSystemDependentName(GoSettings.getInstance().goPath));
+        if (gopathPath.getText().equals("")) {
+            gopathPath.setText(GoSdkUtil.getSysGoPathPath().split(File.pathSeparator)[0]);
         }
     }
 
@@ -89,6 +107,8 @@ public class GoGeneratorPeer implements WebProjectGenerator.GeneratorPeer<GoSdkD
             return new ValidationInfo(GoBundle.message("error.invalid.sdk.path", mySdkPath.getText()));
         }
 
+        goSdkData.GO_GOPATH_PATH = gopathPath.getText();
+
         labelSdkVersion.setText(goSdkData.VERSION_MAJOR);
         if (goSdkData.TARGET_OS != null && goSdkData.TARGET_ARCH != null) {
             labelSdkTarget.setText(
@@ -103,9 +123,6 @@ public class GoGeneratorPeer implements WebProjectGenerator.GeneratorPeer<GoSdkD
         }
 
         labelBinariesPath.setText(goSdkData.GO_BIN_PATH);
-        labelGoRoot.setText(goSdkData.GO_GOROOT_PATH);
-        labelGoPath.setText(goSdkData.GO_GOPATH_PATH);
-
         return null;
     }
 

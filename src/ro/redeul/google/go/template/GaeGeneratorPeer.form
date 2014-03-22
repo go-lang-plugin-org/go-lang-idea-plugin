@@ -40,7 +40,7 @@
           </component>
           <component id="c0ecf" class="javax.swing.JLabel">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <minimum-size width="50" height="-1"/>
               </grid>
             </constraints>
@@ -50,7 +50,7 @@
           </component>
           <component id="492a2" class="javax.swing.JLabel" binding="labelSdkVersion">
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <minimum-size width="50" height="-1"/>
               </grid>
             </constraints>
@@ -61,7 +61,7 @@
           </component>
           <component id="19425" class="javax.swing.JLabel">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <minimum-size width="50" height="-1"/>
               </grid>
             </constraints>
@@ -70,28 +70,6 @@
             </properties>
           </component>
           <component id="2be57" class="javax.swing.JLabel" binding="labelSdkTarget">
-            <constraints>
-              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                <minimum-size width="50" height="-1"/>
-              </grid>
-            </constraints>
-            <properties>
-              <enabled value="true"/>
-              <font style="2"/>
-              <text value="" noi18n="true"/>
-            </properties>
-          </component>
-          <component id="cd6b3" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                <minimum-size width="50" height="-1"/>
-              </grid>
-            </constraints>
-            <properties>
-              <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.sdk.binary.path"/>
-            </properties>
-          </component>
-          <component id="85cfc" class="javax.swing.JLabel" binding="labelBinariesPath">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <minimum-size width="50" height="-1"/>
@@ -103,17 +81,17 @@
               <text value="" noi18n="true"/>
             </properties>
           </component>
-          <component id="cb0ea" class="javax.swing.JLabel">
+          <component id="cd6b3" class="javax.swing.JLabel">
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <minimum-size width="50" height="-1"/>
               </grid>
             </constraints>
             <properties>
-              <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.sdk.gopath.path"/>
+              <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.sdk.binary.path"/>
             </properties>
           </component>
-          <component id="d0bdb" class="javax.swing.JLabel" binding="labelGoPath">
+          <component id="85cfc" class="javax.swing.JLabel" binding="labelBinariesPath">
             <constraints>
               <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <minimum-size width="50" height="-1"/>
@@ -124,6 +102,21 @@
               <font style="2"/>
               <text value="" noi18n="true"/>
             </properties>
+          </component>
+          <component id="b3248" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <icon value="icons/go_16x16.png"/>
+              <text value="Select GOPATH folder"/>
+            </properties>
+          </component>
+          <component id="68811" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="gopathPath">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
           </component>
         </children>
       </grid>
