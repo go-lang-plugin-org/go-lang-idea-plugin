@@ -46,6 +46,13 @@ func emptyIf() {
   }
 }
 
+func emptyForRange() {
+      for key, value := range collection {
+
+      }
+
+}
+
 func emptyClauses() {
     verb := "1"[0]
     switch verb {

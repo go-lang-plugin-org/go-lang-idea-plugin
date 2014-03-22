@@ -409,6 +409,31 @@ GO_FILE
       PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
+    PsiElement(identifier)('emptyForRange')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      FOR_STATEMENT
+        PsiElement(for)('for')
+        RANGE_CLAUSE
+          VAR_DEFINITION
+            PsiElement(identifier)('key')
+          PsiElement(,)(',')
+          VAR_DEFINITION
+            PsiElement(identifier)('value')
+          PsiElement(:=)(':=')
+          PsiElement(range)('range')
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('collection')
+        BLOCK
+          PsiElement({)('{')
+          PsiElement(})('}')
+      PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
     PsiElement(identifier)('emptyClauses')
     SIGNATURE
       PARAMETERS
