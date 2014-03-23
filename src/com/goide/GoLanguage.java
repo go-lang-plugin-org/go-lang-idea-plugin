@@ -11,6 +11,11 @@ public class GoLanguage extends Language {
     super("go", "text/go", "text/x-go", "application/x-go");
   }
 
+  @Override
+  public String getDisplayName() {
+    return "Go";
+  }
+
   @Nullable
   @Override
   public LanguageFileType getAssociatedFileType() {
