@@ -75,7 +75,7 @@ func (h extraHeader) Write(w io.Writer) {
 func main() {
     if 1 != 1 {
     }
-    
+
 	select {
 	case ce := <-ch:
 		return ce.cn, ce.err
@@ -102,7 +102,7 @@ var htmlReplacer = strings.NewReplacer(
 // "&#34;" is shorter than "&quot;".
 `"`, "&#34;",
 // "&#39;" is shorter than "&apos;" and apos was not in HTML until HTML5.
-"'", "&#39;",       
+"'", "&#39;",
 )
 
 func tets() {
@@ -113,3 +113,12 @@ func tets() {
 }
 
 func (*ctx) Errorf(string, ...interface{}) {}
+
+var alreadyAddedErrors = map[pb.TaskQueueServiceError_ErrorCode]bool{
+  pb.TaskQueueServiceError_TASK_ALREADY_EXISTS: true,
+}
+
+var alreadyAddedErrors2 = map[pb.TaskQueueServiceError_ErrorCode]bool{
+  pb.TaskQueueServiceError_TASK_ALREADY_EXISTS: true,
+  pb.TaskQueueServiceError_TOMBSTONED_TASK:     true,
+}
