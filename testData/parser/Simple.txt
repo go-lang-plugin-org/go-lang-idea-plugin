@@ -1005,3 +1005,27 @@ GO_FILE
                 PsiElement(identifier)('true')
           PsiElement(,)(',')
           PsiElement(})('}')
+  VAR_DECLARATION
+    PsiElement(var)('var')
+    VAR_SPEC
+      VAR_DEFINITION
+        PsiElement(identifier)('a')
+      PsiElement(=)('=')
+      CONVERSION_EXPR
+        ARRAY_OR_SLICE_TYPE
+          PsiElement([)('[')
+          PsiElement(])(']')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('byte')
+        PsiElement(()('(')
+        ADD_EXPR
+          REFERENCE_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('b')
+            PsiElement(.)('.')
+            PsiElement(identifier)('Type')
+          PsiElement(+)('+')
+          LITERAL
+            PsiElement(string)('"-----\n"')
+        PsiElement())(')')

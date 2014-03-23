@@ -932,6 +932,29 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // ConversionStart | '(' ConversionStart
+  static boolean ConversionPredicate(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionPredicate")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = ConversionStart(builder_, level_ + 1);
+    if (!result_) result_ = ConversionPredicate_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // '(' ConversionStart
+  private static boolean ConversionPredicate_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionPredicate_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, LPAREN);
+    result_ = result_ && ConversionStart(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // '*' | '<-' | '[' | chan | func | interface | map | struct
   static boolean ConversionStart(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConversionStart")) return false;
@@ -947,6 +970,30 @@ public class GoParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, STRUCT);
     exit_section_(builder_, marker_, null, result_);
     return result_;
+  }
+
+  /* ********************************************************** */
+  // '(' Expression ','? ')'
+  static boolean ConversionTail(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionTail")) return false;
+    if (!nextTokenIs(builder_, LPAREN)) return false;
+    boolean result_ = false;
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeToken(builder_, LPAREN);
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, Expression(builder_, level_ + 1, -1));
+    result_ = pinned_ && report_error_(builder_, ConversionTail_2(builder_, level_ + 1)) && result_;
+    result_ = pinned_ && consumeToken(builder_, RPAREN) && result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // ','?
+  private static boolean ConversionTail_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ConversionTail_2")) return false;
+    consumeToken(builder_, COMMA);
+    return true;
   }
 
   /* ********************************************************** */
@@ -3842,7 +3889,7 @@ public class GoParser implements PsiParser {
   // 3: BINARY(AddExpr)
   // 4: BINARY(MulExpr)
   // 5: PREFIX(UnaryExpr)
-  // 6: PREFIX(ConversionExpr)
+  // 6: ATOM(ConversionExpr)
   // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(BuiltinCallExpr) POSTFIX(CallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) ATOM(MethodExpr) POSTFIX(IndexExpr) ATOM(Literal) ATOM(LiteralTypeExpr) ATOM(FunctionLit)
   // 8: PREFIX(ParenthesesExpr)
   public static boolean Expression(PsiBuilder builder_, int level_, int priority_) {
@@ -3942,79 +3989,26 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
+  // &ConversionPredicate Type ConversionTail
   public static boolean ConversionExpr(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConversionExpr")) return false;
     boolean result_ = false;
-    boolean pinned_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<conversion expr>");
     result_ = ConversionExpr_0(builder_, level_ + 1);
-    pinned_ = result_;
-    result_ = pinned_ && Expression(builder_, level_, 6);
-    result_ = pinned_ && report_error_(builder_, ConversionExpr_1(builder_, level_ + 1)) && result_;
-    exit_section_(builder_, level_, marker_, CONVERSION_EXPR, result_, pinned_, null);
-    return result_ || pinned_;
+    result_ = result_ && Type(builder_, level_ + 1);
+    result_ = result_ && ConversionTail(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, CONVERSION_EXPR, result_, false, null);
+    return result_;
   }
 
-  // &(ConversionStart | '(' ConversionStart) Type '('
+  // &ConversionPredicate
   private static boolean ConversionExpr_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ConversionExpr_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = ConversionExpr_0_0(builder_, level_ + 1);
-    result_ = result_ && Type(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, LPAREN);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // &(ConversionStart | '(' ConversionStart)
-  private static boolean ConversionExpr_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConversionExpr_0_0")) return false;
-    boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _AND_, null);
-    result_ = ConversionExpr_0_0_0(builder_, level_ + 1);
+    result_ = ConversionPredicate(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, null, result_, false, null);
     return result_;
-  }
-
-  // ConversionStart | '(' ConversionStart
-  private static boolean ConversionExpr_0_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConversionExpr_0_0_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = ConversionStart(builder_, level_ + 1);
-    if (!result_) result_ = ConversionExpr_0_0_0_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // '(' ConversionStart
-  private static boolean ConversionExpr_0_0_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConversionExpr_0_0_0_1")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, LPAREN);
-    result_ = result_ && ConversionStart(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ','? ')'
-  private static boolean ConversionExpr_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConversionExpr_1")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = ConversionExpr_1_0(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, RPAREN);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ','?
-  private static boolean ConversionExpr_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ConversionExpr_1_0")) return false;
-    consumeToken(builder_, COMMA);
-    return true;
   }
 
   // LiteralTypeExpr LiteralValue

@@ -324,7 +324,9 @@ private IndexExprBody ::= (Expression? ':' Expression ':' Expression) | (Express
 TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ] ')' {pin=0}
-ConversionExpr ::= &(ConversionStart | '(' ConversionStart) Type '(' Expression ','? ')'
+ConversionExpr ::= &ConversionPredicate Type ConversionTail
+private ConversionPredicate ::= ConversionStart | '(' ConversionStart
+private ConversionTail ::= '(' Expression ','? ')' {pin=1}
 private ConversionStart ::= '*' | '<-' | '[' | chan | func | interface | map | struct
 
 LabeledStatement ::= LabelDefinition ':' Statement {pin=2}

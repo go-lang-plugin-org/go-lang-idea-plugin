@@ -122,3 +122,5 @@ var alreadyAddedErrors2 = map[pb.TaskQueueServiceError_ErrorCode]bool{
   pb.TaskQueueServiceError_TASK_ALREADY_EXISTS: true,
   pb.TaskQueueServiceError_TOMBSTONED_TASK:     true,
 }
+
+var a =    []byte(b.Type + "-----\n")
