@@ -50,7 +50,8 @@
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
     <lang.foldingBuilder language="go" implementationClass="com.goide.editor.GoFoldingBuilder"/>
     <typeDeclarationProvider implementation="com.goide.editor.GoTypeDeclarationProvider"/>
-    
+    <codeInsight.parameterInfo language="go" implementationClass="com.goide.editor.GoParameterInfoHandler"/>
+
     <!--formatter-->
     <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
     <codeStyleSettingsProvider implementation="com.goide.formatter.settings.GoCodeStyleSettingsProvider"/>
