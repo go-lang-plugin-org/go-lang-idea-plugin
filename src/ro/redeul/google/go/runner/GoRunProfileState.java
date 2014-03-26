@@ -92,7 +92,14 @@ public class GoRunProfileState extends CommandLineState {
 
         try {
             String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
-            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.runBuilderArguments, execName, m_configuration.scriptName);
+
+            String pkg = GoSdkUtil.getPackageOfFile(projectDir, m_configuration.scriptName);
+
+            if(pkg == null) {
+                throw new CantRunException("Script is not inside the project root");
+            }
+
+            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.runBuilderArguments, execName, pkg);
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv, new File(projectDir));
