@@ -968,9 +968,9 @@ public class GoSdkUtil {
         String goArgs = String.format(
                 "%s %s %s %s %s",
                 "build",
-                goBuilderArgs,
                 "-o",
                 targetName,
+                goBuilderArgs,
                 goMainFile
         );
 
