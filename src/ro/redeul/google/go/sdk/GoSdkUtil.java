@@ -977,6 +977,31 @@ public class GoSdkUtil {
         return computeGoCommand(goExecName, goArgs);
     }
 
+    /**
+     * Returns the Package, which the file belongs to
+     * @param projectRoot Folder, where the project is located
+     * @param file The file, which package we want to find out
+     * @return
+     */
+    public static String getPackageOfFile(String projectRoot, String file) {
+        String pkg = null;
+
+        if(file.startsWith(projectRoot)) {
+            String src = File.separator + "src" + File.separator;
+
+            String fileFolder = new File(file).getParent();
+
+            String relativePath = fileFolder.substring(projectRoot.length());
+            if(relativePath.startsWith(src)) {
+                pkg = relativePath.substring(src.length());
+            } else {
+                pkg = relativePath;
+            }
+        }
+
+        return pkg;
+    }
+
     public static String[] computeGoRunCommand(String goExecName, String goBuilderArgs, String goMainFile, String appArgs) {
         String goArgs = String.format(
                 "%s %s %s %s",
