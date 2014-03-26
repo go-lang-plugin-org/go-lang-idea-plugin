@@ -87,7 +87,7 @@ public class GoDebugProfileState implements RunProfileState {
             String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.debugBuilderArguments, execName, m_configuration.scriptName);
 
             Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec(command, goEnv);
+            Process proc = rt.exec(command, goEnv, new File(projectDir));
             OSProcessHandler handler = new OSProcessHandler(proc, null);
             toolWindow.attachConsoleViewToProcess(handler);
             toolWindow.printNormalMessage(String.format("%s%n", StringUtil.join(command, " ")));
