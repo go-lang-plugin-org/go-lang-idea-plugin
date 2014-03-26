@@ -313,8 +313,6 @@
 
         <fileTypeFactory implementation="ro.redeul.google.go.GoFileTypeLoader"/>
 
-        <moduleType id="GO_MODULE" implementationClass="ro.redeul.google.go.ide.GoModuleType" />
-
         <projectService
                 serviceInterface="ro.redeul.google.go.ide.GoProjectSettings"
                 serviceImplementation="ro.redeul.google.go.ide.GoProjectSettings"/>
