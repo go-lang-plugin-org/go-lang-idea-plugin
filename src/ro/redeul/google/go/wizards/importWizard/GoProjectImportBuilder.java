@@ -64,7 +64,7 @@ public class GoProjectImportBuilder extends ProjectImportBuilder<String> {
     public List<Module> commit(final Project project, ModifiableModuleModel model, ModulesProvider modulesProvider, ModifiableArtifactModel artifactModel) {
         //Create Module and iml-file
         final ModifiableModuleModel moduleModel = model != null ? model : ModuleManager.getInstance(project).getModifiableModel();
-        Module myModule = moduleModel.newModule(project.getBasePath() + File.pathSeparator + project.getName() + ".iml", "GO_MODULE");
+        Module myModule = moduleModel.newModule(project.getBasePath() + File.separator + project.getName() + ".iml", "GO_MODULE");
         final ModifiableRootModel mrm = ModuleRootManager.getInstance(myModule).getModifiableModel();
 
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
