@@ -66,6 +66,7 @@ public class GoProjectImportBuilder extends ProjectImportBuilder<String> {
         final ModifiableModuleModel moduleModel = model != null ? model : ModuleManager.getInstance(project).getModifiableModel();
         Module myModule = moduleModel.newModule(project.getBasePath() + File.separator + project.getName() + ".iml", "GO_MODULE");
         final ModifiableRootModel mrm = ModuleRootManager.getInstance(myModule).getModifiableModel();
+        mrm.inheritSdk();
 
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
