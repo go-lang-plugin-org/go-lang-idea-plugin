@@ -125,7 +125,12 @@
     </group>
 
     <action id="com.goide.actions.GoFmtFileAction" class="com.goide.actions.GoFmtFileAction" text="Go fmt"
-            description="Format select file with go fmt util">
+            description="Format selected file with go fmt util">
+      <add-to-group group-id="CodeMenu" anchor="last"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt F"/>
+    </action>
+    <action id="com.goide.actions.GoFmtProjectAction" class="com.goide.actions.GoFmtProjectAction" text="Go fmt project"
+            description="Format project with go fmt util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F"/>
     </action>
