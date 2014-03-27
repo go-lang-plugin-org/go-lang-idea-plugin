@@ -32,16 +32,18 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
     }
 
     @Override
-    public void moduleCreated(@NotNull Module module) {
+    public void moduleCreated(@NotNull final Module module) {
 
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        VirtualFile sourceRoots[] = moduleRootManager.getSourceRoots();
+        final VirtualFile sourceRoots[] = moduleRootManager.getSourceRoots();
+        final String projectName = module.getProject().getName();
+
 
         if (sourceRoots.length != 1 ) {
             return;
         }
 
-        PsiDirectory directory = PsiManager.getInstance(module.getProject()).findDirectory(sourceRoots[0]);
+        final PsiDirectory directory = PsiManager.getInstance(module.getProject()).findDirectory(sourceRoots[0]);
 
         if (directory == null || directory.getParentDirectory() == null) {
             return;
@@ -55,19 +57,17 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
                 try {
                     baseDir.createSubdirectory("bin");
                     baseDir.createSubdirectory("pkg");
+
+                    //Create package folder under src and add main.go
+                    PsiDirectory mainPackage = directory.createSubdirectory("main");
+                    mainPackage.checkCreateFile(projectName.concat(".go"));
+                    GoTemplatesFactory.createFromTemplate(mainPackage, "main", projectName.concat(".go"), GoTemplatesFactory.Template.GoAppMain);
+                } catch (IncorrectOperationException ignored) {
                 } catch (Exception e) {
                     LOG.error(e.getMessage());
                 }
             }
         });
-
-        try {
-            directory.checkCreateFile(module.getProject().getName().concat(".go"));
-            GoTemplatesFactory.createFromTemplate(directory, "main", module.getProject().getName().concat(".go"), GoTemplatesFactory.Template.GoAppMain);
-        } catch (IncorrectOperationException ignored) {
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-        }
 
     }
 

@@ -43,10 +43,6 @@ public class GoTemplatesFactory implements FileTemplateGroupDescriptorFactory {
     public static PsiElement createFromTemplate(PsiDirectory directory, String name, String fileName, Template template) {
         String packageName = directory.getName();
 
-        if (packageName.equalsIgnoreCase("src")) {
-            packageName = "main";
-        }
-
         return createFromTemplate(directory, packageName, name, fileName, template);
     }
 
