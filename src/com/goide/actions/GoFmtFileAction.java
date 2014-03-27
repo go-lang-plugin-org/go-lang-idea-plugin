@@ -51,13 +51,12 @@ public class GoFmtFileAction extends AnAction implements DumbAware {
     assert project != null;
     assert file instanceof GoFile;
     final VirtualFile vFile = file.getVirtualFile();
-    
+
     if (vFile == null || !vFile.isInLocalFileSystem()) return;
     final Document document = PsiDocumentManager.getInstance(project).getDocument(file);
     assert document != null;
     final String filePath = vFile.getCanonicalPath();
     assert filePath != null;
-    
 
     final String groupId = e.getPresentation().getText();
     try {
@@ -111,7 +110,7 @@ public class GoFmtFileAction extends AnAction implements DumbAware {
   }
 
   private static void error(@NotNull PsiFile file, @NotNull Project project, @NotNull String groupId, @Nullable Exception ex) {
-    Notifications.Bus.notify(new Notification(groupId, file.getName() + " formatting with go fmt failed", 
+    Notifications.Bus.notify(new Notification(groupId, file.getName() + " formatting with go fmt failed",
                                               ex == null ? "" : ExceptionUtil.getUserStackTrace(ex, LOG),
                                               NotificationType.ERROR), project);
   }
