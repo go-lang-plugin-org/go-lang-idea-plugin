@@ -16,11 +16,11 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
@@ -30,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.IOException;
 
 public class GoFmtFileAction extends AnAction implements DumbAware {
   private static final String NOTIFICATION_TITLE = "Reformat code with go gmt";
@@ -75,6 +74,8 @@ public class GoFmtFileAction extends AnAction implements DumbAware {
       commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameters("fmt", filePath);
 
+      FileDocumentManager.getInstance().saveDocument(document);
+
       String commandLineString = commandLine.getCommandLineString();
       OSProcessHandler handler = new OSProcessHandler(commandLine.createProcess(), commandLineString);
       handler.addProcessListener(new ProcessAdapter() {
@@ -86,12 +87,7 @@ public class GoFmtFileAction extends AnAction implements DumbAware {
               ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 @Override
                 public void run() {
-                  try {
-                    document.setText(FileUtil.loadFile(new File(filePath)));
-                  }
-                  catch (IOException e) {
-                    error(file, project, groupId, null);
-                  }
+                  vFile.refresh(false, false);
                 }
               });
             }
