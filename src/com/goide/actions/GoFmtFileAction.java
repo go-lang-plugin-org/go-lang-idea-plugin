@@ -38,9 +38,7 @@ public class GoFmtFileAction extends AnAction implements DumbAware {
 
   @Override
   public void update(@NotNull AnActionEvent e) {
-    if (e.getProject() == null) return;
-    PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
-    e.getPresentation().setEnabled(psiFile instanceof GoFile);
+    e.getPresentation().setEnabled(e.getProject() != null && e.getData(CommonDataKeys.PSI_FILE) instanceof GoFile);
   }
 
   @Override
@@ -77,7 +75,7 @@ public class GoFmtFileAction extends AnAction implements DumbAware {
       commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameters("fmt", filePath);
 
-      final String commandLineString = commandLine.getCommandLineString();
+      String commandLineString = commandLine.getCommandLineString();
       OSProcessHandler handler = new OSProcessHandler(commandLine.createProcess(), commandLineString);
       handler.addProcessListener(new ProcessAdapter() {
         @Override
