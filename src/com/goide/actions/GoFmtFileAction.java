@@ -40,8 +40,7 @@ public class GoFmtFileAction extends AnAction implements DumbAware {
   public void update(@NotNull AnActionEvent e) {
     if (e.getProject() == null) return;
     PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
-    boolean isErlang = psiFile instanceof GoFile;
-    e.getPresentation().setEnabled(isErlang);
+    e.getPresentation().setEnabled(psiFile instanceof GoFile);
   }
 
   @Override
