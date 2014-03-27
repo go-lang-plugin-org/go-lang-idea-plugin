@@ -464,6 +464,4 @@ func main() {
 	myNewFnForTest := func(a string, b string) (bool,bool,bool) {return false,false,false}
 	TestLiteralFunc(/*begin*/myNewFnForTest/*end.Expression type mismatch, the expected type is func(string,string)(bool,bool)|CastTypeFix*/)
 	TestLiteralFunc(func(a string,b string)(bool,bool) {return false,true})
-
-
 }

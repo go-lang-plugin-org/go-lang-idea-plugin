@@ -14,6 +14,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.*;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
@@ -220,6 +221,24 @@ public class GoTypeInspectUtil {
 
         if (goFunctionDeclaration == null)
             return;
+
+        if (call instanceof GoBuiltinCallExpression) {
+            GoPsiType[] builtinTypes = ((GoBuiltinCallExpression) call).getArgumentsType();
+            if (builtinTypes.length > 0 && goExprs.length == builtinTypes.length) {
+                for (; index < goExprs.length; index++) {
+                    GoExpr goExpr = goExprs[index];
+                    GoPsiType type = builtinTypes[index];
+                    if (!checkParametersExp(type, goExpr)){
+                        result.addProblem(
+                                goExpr,
+                                GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                        return;
+                    }
+                }
+            }
+            return;
+        }
 
         for (GoFunctionParameter functionParameter : goFunctionDeclaration.getParameters()) {
             if (index >= goExprs.length)

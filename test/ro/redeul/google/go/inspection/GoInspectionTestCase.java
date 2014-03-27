@@ -68,7 +68,7 @@ public abstract class GoInspectionTestCase
 
     @Override
     protected void tearDown() throws Exception {
-        removeContentRoots();
+//        removeContentRoots();
         super.tearDown();
     }
 
