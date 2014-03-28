@@ -2,26 +2,19 @@ package com.goide.jps;
 
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.Function;
-import junit.framework.Assert;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jps.incremental.MessageHandler;
 import org.jetbrains.jps.incremental.messages.BuildMessage;
 import org.jetbrains.jps.incremental.messages.DoneSomethingNotification;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BuildResult implements MessageHandler {
-  @NotNull private final List<BuildMessage> myErrorMessages;
-  @NotNull private final List<BuildMessage> myWarnMessages;
-  @NotNull private final List<BuildMessage> myInfoMessages;
+  @NotNull private final List<BuildMessage> myErrorMessages = ContainerUtil.newArrayList();
+  @NotNull private final List<BuildMessage> myWarnMessages = ContainerUtil.newArrayList();
+  @NotNull private final List<BuildMessage> myInfoMessages = ContainerUtil.newArrayList();
   private boolean myUpToDate = true;
-
-  public BuildResult() {
-    myErrorMessages = new ArrayList<BuildMessage>();
-    myWarnMessages = new ArrayList<BuildMessage>();
-    myInfoMessages = new ArrayList<BuildMessage>();
-  }
 
   @Override
   public void processMessage(@NotNull BuildMessage msg) {
@@ -41,11 +34,11 @@ public class BuildResult implements MessageHandler {
   }
 
   public void assertUpToDate() {
-    Assert.assertTrue("Project sources weren't up to date", myUpToDate);
+    assert myUpToDate : "Project sources weren't up to date";
   }
 
   public void assertFailed() {
-    Assert.assertFalse("Build not failed as expected", isSuccessful());
+    assert !isSuccessful() : "Build not failed as expected";
   }
 
   public boolean isSuccessful() {
@@ -54,8 +47,8 @@ public class BuildResult implements MessageHandler {
 
   public void assertSuccessful() {
     final Function<BuildMessage,String> toStringFunction = StringUtil.createToStringFunction(BuildMessage.class);
-    Assert.assertTrue("Build failed. \nErrors:\n" + StringUtil.join(myErrorMessages, toStringFunction, "\n") +
-      "\nInfo messages:\n" + StringUtil.join(myInfoMessages, toStringFunction, "\n"), isSuccessful());
+    assert isSuccessful() : "Build failed. \nErrors:\n" + StringUtil.join(myErrorMessages, toStringFunction, "\n") +
+                            "\nInfo messages:\n" + StringUtil.join(myInfoMessages, toStringFunction, "\n");
   }
 
   @NotNull
