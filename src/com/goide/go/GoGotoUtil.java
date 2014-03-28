@@ -18,7 +18,7 @@ public class GoGotoUtil {
   public static NavigationItem[] getItemsByName(String name, Project project, boolean includeNonProjectItems, StubIndexKey<String, ? extends GoNamedElement> key) {
     GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
     Collection<? extends GoNamedElement> result = StubIndex.getInstance().get(key, name, project, scope);
-    List<NavigationItem> items = ContainerUtil.newArrayListWithExpectedSize(result.size());
+    List<NavigationItem> items = ContainerUtil.newArrayListWithCapacity(result.size());
     for (final GoNamedElement element : result) {
       items.add(new GoStructureViewFactory.Element(element) {
         @Override

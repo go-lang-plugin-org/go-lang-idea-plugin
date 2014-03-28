@@ -136,8 +136,8 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   @NotNull
   private Collection<String> getPackagesToImport(@NotNull PsiElement element) {
     if (myPackagesToImport == null) {
-      myPackagesToImport = ContainerUtil.map2Set(StubIndex.getInstance().get(GoPackagesIndex.KEY, myPackageName, element.getProject(),
-                                                                             scope(element)),
+      myPackagesToImport = ContainerUtil.map2Set(StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, element.getProject(),
+                                                                       scope(element), GoFile.class),
                                                  new Function<GoFile, String>() {
                                                    @Override
                                                    public String fun(GoFile file) {

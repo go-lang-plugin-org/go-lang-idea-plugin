@@ -85,7 +85,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
         assert module != null;
         final GlobalSearchScope scope = GlobalSearchScope.moduleScope(module);
         String packageName = PathUtil.getFileName(myPackage);
-        Collection<GoFile> files = StubIndex.getInstance().get(GoPackagesIndex.KEY, packageName, getProject(), scope);
+        Collection<GoFile> files = StubIndex.getElements(GoPackagesIndex.KEY, packageName, getProject(), scope, GoFile.class);
         for (GoFile file : files) {
           if (file != null && file.getFullPackageName() != null) return;
         }

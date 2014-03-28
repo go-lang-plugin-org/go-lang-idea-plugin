@@ -25,6 +25,6 @@ public class GoMethodIndex extends StringStubIndexExtension<GoMethodDeclaration>
   }
 
   public static Collection<GoMethodDeclaration> find(String name, Project project, GlobalSearchScope scope) {
-    return StubIndex.getInstance().get(KEY, name, project, scope);
+    return StubIndex.getElements(KEY, name, project, scope, GoMethodDeclaration.class);
   }
 }

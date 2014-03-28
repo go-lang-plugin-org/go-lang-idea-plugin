@@ -127,7 +127,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
           StubIndex.getInstance().processAllKeys(GoPackagesIndex.KEY, new Processor<String>() {
             @Override
             public boolean process(final String packageName) {
-              StubIndex.getInstance().process(GoPackagesIndex.KEY, packageName, myProject, scope, new Processor<GoFile>() {
+              StubIndex.getInstance().processElements(GoPackagesIndex.KEY, packageName, myProject, scope, GoFile.class, new Processor<GoFile>() {
                 @Override
                 public boolean process(GoFile file) {
                   String fullPackageName = file.getFullPackageName();
