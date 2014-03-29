@@ -47,11 +47,11 @@ public class GoFmtProjectAction extends AnAction implements DumbAware {
 
       String sdkHome = sdk != null ? sdk.getHomePath() : null;
       if (StringUtil.isEmpty(sdkHome)) {
-        notify(project, groupId, "Project sdk is empty", NotificationType.WARNING);
+        warning(project, groupId, "Project sdk is empty");
         return;
       }
       if (!(sdk.getSdkType() instanceof GoSdkType)) {
-        notify(project, groupId, "Project sdk is not valid", NotificationType.WARNING);
+        warning(project, groupId, "Project sdk is not valid");
         return;
       }
 
@@ -95,7 +95,7 @@ public class GoFmtProjectAction extends AnAction implements DumbAware {
                                               NotificationType.ERROR), project);
   }
 
-  private static void notify(@NotNull Project project, @NotNull String groupId, @NotNull String content, @NotNull NotificationType type) {
-    Notifications.Bus.notify(new Notification(groupId, NOTIFICATION_TITLE, content, type), project);
+  private static void warning(@NotNull Project project, @NotNull String groupId, @NotNull String content) {
+    Notifications.Bus.notify(new Notification(groupId, NOTIFICATION_TITLE, content, NotificationType.WARNING), project);
   }
 }
