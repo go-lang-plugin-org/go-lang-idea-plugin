@@ -5,7 +5,6 @@ import com.goide.codeInsight.imports.GoGetPackageFix;
 import com.goide.psi.GoFile;
 import com.intellij.codeInsight.daemon.quickFix.CreateFileFix;
 import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -24,12 +23,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class GoImportReferenceHelper extends FileReferenceHelper {
-  @NotNull
-  @Override
-  public Collection<PsiFileSystemItem> getRoots(@NotNull Module module) {
-    return super.getRoots(module);
-  }
-
   @NotNull
   @Override
   public List<? extends LocalQuickFix> registerFixes(FileReference reference) {
