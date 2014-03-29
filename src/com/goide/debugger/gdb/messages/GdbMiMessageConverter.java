@@ -303,7 +303,6 @@ public class GdbMiMessageConverter {
     }
     catch (IllegalAccessException ex) {
       m_log.warn("Failed to set value on field " + field, ex);
-      return;
     }
   }
 

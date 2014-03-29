@@ -30,7 +30,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     );
   }
 
-  private void doTest() throws Exception {
+  private void doTest() {
     myFixture.testHighlighting(true, false, false, getTestName(true) + ".go");
   }
 

@@ -22,7 +22,7 @@ public class GoSpellcheckingTest extends GoCodeInsightFixtureTestCase {
     doTest();
   }
 
-  private void doTest() throws Exception {
+  private void doTest() {
     myFixture.testHighlighting(false, false, true, getTestName(true) + ".go");
   }
 
