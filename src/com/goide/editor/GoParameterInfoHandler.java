@@ -93,7 +93,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
       PsiReference reference = expression.getReference();
       PsiElement resolve = reference != null ? reference.resolve() : null;
 
-      if (resolve instanceof GoReceiverHolder) {
+      if (resolve instanceof GoSignatureOwner) {
         context.setItemsToShow(new Object[]{resolve});
         context.showHint(argList, argList.getTextRange().getStartOffset(), this);
       }
@@ -137,8 +137,8 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
 
     int index = context.getCurrentParameterIndex();
 
-    if (p instanceof GoReceiverHolder) {
-      GoSignature signature = ((GoReceiverHolder)p).getSignature();
+    if (p instanceof GoSignatureOwner) {
+      GoSignature signature = ((GoSignatureOwner)p).getSignature();
       if (signature != null) {
         List<GoParameterDeclaration> list = signature.getParameters().getParameterDeclarationList();
         for (int i = 0; i < list.size(); i++) {

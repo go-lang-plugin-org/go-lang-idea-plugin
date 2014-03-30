@@ -89,7 +89,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       @Nullable
       private LookupElement createLookup(@NotNull PsiElement element) {
         // @formatter:off
-        if (element instanceof GoReceiverHolder)     return createFunctionOrMethodLookupElement((GoReceiverHolder)element);
+        if (element instanceof GoSignatureOwner)     return createFunctionOrMethodLookupElement((GoSignatureOwner)element);
         else if (element instanceof GoTypeSpec)      return createTypeConversionLookupElement((GoTypeSpec)element);
         else if (element instanceof GoNamedElement)  return createVariableLikeLookupElement((GoNamedElement)element);
         else if (element instanceof PsiDirectory)    return createPackageLookupElement(((PsiDirectory)element).getName(), true);

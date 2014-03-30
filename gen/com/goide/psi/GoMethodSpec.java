@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.goide.stubs.GoMethodSpecStub;
 
-public interface GoMethodSpec extends GoReceiverHolder, StubBasedPsiElement<GoMethodSpecStub> {
+public interface GoMethodSpec extends GoSignatureOwner, StubBasedPsiElement<GoMethodSpecStub> {
 
   @Nullable
   GoSignature getSignature();
