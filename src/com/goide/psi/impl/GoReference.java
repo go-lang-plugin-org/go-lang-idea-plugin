@@ -324,18 +324,22 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return processor.execute(myElement, state);
   }
 
+  // todo: return boolean for better performance 
   private void processFunctionParameters(@NotNull GoScopeProcessorBase processor) {
-    // todo: nested functions from FunctionLit
-    GoFunctionOrMethodDeclaration function = PsiTreeUtil.getParentOfType(myElement, GoFunctionOrMethodDeclaration.class);
-    GoSignature signature = function != null ? function.getSignature() : null;
-    GoParameters parameters;
-    if (signature != null) {
-      parameters = signature.getParameters();
-      parameters.processDeclarations(processor, ResolveState.initial(), null, myElement);
-      GoResult result = signature.getResult();
-      GoParameters resultParameters = result != null ? result.getParameters() : null;
-      if (resultParameters != null) resultParameters.processDeclarations(processor, ResolveState.initial(), null, myElement);
+    GoSignatureOwner signatureOwner = PsiTreeUtil.getParentOfType(myElement, GoSignatureOwner.class);
+    while (signatureOwner != null && processSignatureOwner(signatureOwner, processor)) {
+      signatureOwner = PsiTreeUtil.getParentOfType(signatureOwner, GoSignatureOwner.class);
     }
+  }
+
+  private boolean processSignatureOwner(@NotNull GoSignatureOwner o, @NotNull GoScopeProcessorBase processor) {
+    GoSignature signature = o.getSignature();
+    if (signature == null) return true;
+    if (!signature.getParameters().processDeclarations(processor, ResolveState.initial(), null, myElement)) return false;
+    GoResult result = signature.getResult();
+    GoParameters resultParameters = result != null ? result.getParameters() : null;
+    if (resultParameters != null) return resultParameters.processDeclarations(processor, ResolveState.initial(), null, myElement);
+    return true;
   }
 
   private void processReceiver(@NotNull GoScopeProcessorBase processor) {

@@ -97,6 +97,10 @@ func make(o interface{}, args ...interface{}) {
 }
 
 func new(o interface{}) {
+  func(i interface{}) {
+    Println(o)
+    Println(i)
+  }
 }
 
 func <warning>concurrently</warning>(integers []int) []int {
