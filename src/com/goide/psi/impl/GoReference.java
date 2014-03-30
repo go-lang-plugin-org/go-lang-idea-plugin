@@ -343,7 +343,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private void processReceiver(@NotNull GoScopeProcessorBase processor) {
-    GoMethodDeclaration method = PsiTreeUtil.getParentOfType(myElement, GoMethodDeclaration.class); // todo: nested methods?
+    GoMethodDeclaration method = PsiTreeUtil.getParentOfType(myElement, GoMethodDeclaration.class);
     GoReceiver receiver = method != null ? method.getReceiver() : null;
     if (receiver != null) receiver.processDeclarations(processor, ResolveState.initial(), null, myElement);
   }
