@@ -10,14 +10,19 @@ import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
 
 public class GoGotoUtil {
-  public static NavigationItem[] getItemsByName(String name, Project project, boolean includeNonProjectItems, StubIndexKey<String, ? extends GoNamedElement> key) {
+  @NotNull
+  public static NavigationItem[] getItemsByName(@NotNull String name,
+                                                @NotNull Project project,
+                                                boolean includeNonProjectItems,
+                                                @NotNull StubIndexKey<String, GoNamedElement> key) {
     GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
-    Collection<? extends GoNamedElement> result = StubIndex.getInstance().get(key, name, project, scope);
+    Collection<GoNamedElement> result = StubIndex.getElements(key, name, project, scope, GoNamedElement.class);
     List<NavigationItem> items = ContainerUtil.newArrayListWithCapacity(result.size());
     for (final GoNamedElement element : result) {
       items.add(new GoStructureViewFactory.Element(element) {
