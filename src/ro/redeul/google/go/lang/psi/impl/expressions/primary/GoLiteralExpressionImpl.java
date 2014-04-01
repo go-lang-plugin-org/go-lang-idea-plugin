@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
@@ -25,6 +26,9 @@ import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference
 import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeAndVarsStatement;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeStatement;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
+import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
@@ -167,6 +171,18 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                         return new GoType[]{
                                 GoTypes.fromPsiType(functionDeclaration)
                         };
+                    }
+
+                    if (parent instanceof GoSwitchTypeGuard) {
+                        GoSwitchTypeGuard guard = (GoSwitchTypeGuard) parent;
+                        GoSwitchTypeStatement switchStatement = (GoSwitchTypeStatement) guard.getParent();
+                        TextRange litRange = literal.getTextRange();
+                        for (GoSwitchTypeClause clause : switchStatement.getClauses()) {
+                            TextRange clauseTextRange = clause.getTextRange();
+                            if (clauseTextRange.contains(litRange)) {
+                                return GoTypes.fromPsiType(clause.getTypes());
+                            }
+                        }
                     }
 
                     if (GoElementPatterns.VAR_IN_FOR_RANGE.accepts(resolved)) {
