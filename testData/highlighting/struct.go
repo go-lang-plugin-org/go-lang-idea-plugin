@@ -1,6 +1,8 @@
 package main
 
-//import "fmt"
+import . "fmt"
+
+type alias Formatter
 
 type int int
 

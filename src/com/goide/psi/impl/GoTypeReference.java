@@ -92,6 +92,15 @@ public class GoTypeReference extends PsiReferenceBase<PsiElement> {
     for (GoTypeSpec t : file.getTypes()) { // todo: copy from completion or create a separate inspection
       if ((t.isPublic() || localResolve) && id.equals(t.getName())) return t;
     }
+
+    for (PsiElement o : file.getImportMap().values()) {
+      if (o instanceof GoImportSpec && ((GoImportSpec)o).getDot() != null) {
+        PsiDirectory resolve = ((GoImportSpec)o).getImportString().resolve();
+        PsiElement result = processDirectory(resolve, null, null, false);
+        if (result != null) return result;
+      }
+    }
+    
     return resolveImportOrPackage(file, id);
   }
 
@@ -287,6 +296,13 @@ public class GoTypeReference extends PsiReferenceBase<PsiElement> {
         VirtualFile localDir = vfile == null ? null : vfile.getParent();
         PsiDirectory localPsiDir = localDir == null ? null : PsiManager.getInstance(myElement.getProject()).findDirectory(localDir);
         processDirectory(result, localPsiDir, (GoFile)file, true);
+
+        for (PsiElement o : ((GoFile)file).getImportMap().values()) {
+          if (o instanceof GoImportSpec && ((GoImportSpec)o).getDot() != null) {
+            PsiDirectory resolve = ((GoImportSpec)o).getImportString().resolve();
+            processDirectory(result, resolve, null, false);
+          }
+        }
 
         if (!file.getName().equals("builtin.go")) {
           GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
