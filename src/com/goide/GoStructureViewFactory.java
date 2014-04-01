@@ -87,11 +87,13 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       return myElement.getText();
     }
 
+    @NotNull
     @Override
     public ItemPresentation getPresentation() {
       return this;
     }
 
+    @NotNull
     @Override
     public TreeElement[] getChildren() {
       ArrayList<TreeElement> result = new ArrayList<TreeElement>();
@@ -126,9 +128,8 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     public String getPresentableText() {
       if (myElement instanceof GoFile) return ((GoFile)myElement).getName();
       else if (myElement instanceof GoFunctionOrMethodDeclaration) {
-        String receiver = myElement instanceof GoMethodDeclaration ?
-                          ((GoMethodDeclaration)myElement).getReceiver().getType().getText() + "." :
-                          "";
+        GoType type = myElement instanceof GoMethodDeclaration ? ((GoMethodDeclaration)myElement).getReceiver().getType() : null;
+        String receiver = type != null ? type.getText() + "." : "";
         GoSignature signature = ((GoFunctionOrMethodDeclaration)myElement).getSignature();
         String signatureText = signature != null ? signature.getText() : "";
         return receiver + ((GoFunctionOrMethodDeclaration)myElement).getIdentifier().getText() + trim(signatureText);
