@@ -1,8 +1,6 @@
 package com.goide.stubs;
 
 import com.goide.psi.GoFunctionDeclaration;
-import com.goide.psi.impl.GoFunctionDeclarationImpl;
-import com.goide.psi.impl.GoMethodDeclarationImpl;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
