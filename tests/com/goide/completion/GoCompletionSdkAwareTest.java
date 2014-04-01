@@ -17,4 +17,8 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
   public void testFormatter() throws Exception {
     doTestInclude("package main; import . \"fmt\"; type alias <caret>", "Formatter");
   }
+  
+  public void testImports() throws Exception {
+    doTestInclude("package main; import \"<caret>", "fmt", "io");
+  }
 }
