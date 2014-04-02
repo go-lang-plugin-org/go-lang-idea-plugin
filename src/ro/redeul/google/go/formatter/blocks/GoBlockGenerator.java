@@ -69,8 +69,7 @@ public class GoBlockGenerator {
                 ASTNode nodeParent = node;
                 while (nodeParent != null) {
                     if (nodeParent.getElementType() == GoElementTypes.CALL_OR_CONVERSION_EXPRESSION) {
-                        int indentTabSize = styleSettings.getIndentOptions() == null ? 4 : styleSettings.getIndentOptions().INDENT_SIZE;
-                        return new GoLeafBlock(node, null, Indent.getSpaceIndent(indentTabSize * -1), NO_WRAP, styleSettings);
+                        return new GoLeafBlock(node, null, indent, NO_WRAP, styleSettings);
                     }
 
                     nodeParent = nodeParent.getTreeParent();

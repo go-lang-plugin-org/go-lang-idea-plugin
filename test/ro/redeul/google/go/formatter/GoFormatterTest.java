@@ -9,6 +9,7 @@ import org.junit.Ignore;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 
 public class GoFormatterTest extends GoEditorAwareTestCase {
+
     public void testTopLevel() throws Exception { doTest(); }
     public void testBinaryExpressions() throws Exception { doTest(); }
     public void testAssignment() throws Exception { 
@@ -39,6 +40,7 @@ public class GoFormatterTest extends GoEditorAwareTestCase {
 
     public void testIssue_gh255() throws  Exception { doTest(); }
     public void testIssue_gh373() throws  Exception { doTest(); }
+    public void testInitializeStruct() throws  Exception { doTest(); }
 
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {
