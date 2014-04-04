@@ -490,17 +490,18 @@ public class GoPsiImplUtil {
   public static GoImportSpec addImport(@NotNull GoImportList importList, @NotNull String packagePath, @Nullable String alias) {
     Project project = importList.getProject();
     GoImportDeclaration lastImportDeclaration = ContainerUtil.getLastItem(importList.getImportDeclarationList());
+    GoImportDeclaration newDeclaration = GoElementFactory.createImportDeclaration(project, packagePath, alias, false);
     if (lastImportDeclaration != null) {
       List<GoImportSpec> importSpecList = lastImportDeclaration.getImportSpecList();
       if (lastImportDeclaration.getRparen() == null && importSpecList.size() == 1) {
-        return addImportDeclaration(importList, GoElementFactory.createImportDeclaration(project, packagePath, alias, false), lastImportDeclaration);
+        return addImportDeclaration(importList, newDeclaration, lastImportDeclaration);
       }
       else {
         return lastImportDeclaration.addImportSpec(packagePath, alias);
       }
     }
     else {
-      return addImportDeclaration(importList, GoElementFactory.createImportDeclaration(project, packagePath, alias, false), null);
+      return addImportDeclaration(importList, newDeclaration, null);
     }
   }
 
