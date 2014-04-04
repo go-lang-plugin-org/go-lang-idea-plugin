@@ -132,7 +132,8 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         String receiver = type != null ? type.getText() + "." : "";
         GoSignature signature = ((GoFunctionOrMethodDeclaration)myElement).getSignature();
         String signatureText = signature != null ? signature.getText() : "";
-        return receiver + ((GoFunctionOrMethodDeclaration)myElement).getIdentifier().getText() + trim(signatureText);
+        PsiElement id = ((GoFunctionOrMethodDeclaration)myElement).getIdentifier();
+        return receiver + (id != null ? id.getText() : "") + trim(signatureText);
       }
       else if (myElement instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)myElement).getType();

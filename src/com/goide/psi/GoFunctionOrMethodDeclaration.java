@@ -15,6 +15,6 @@ public interface GoFunctionOrMethodDeclaration extends GoNamedElement, GoTopLeve
   @NotNull
   PsiElement getFunc();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 }

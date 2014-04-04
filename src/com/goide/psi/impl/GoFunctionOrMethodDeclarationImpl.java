@@ -39,7 +39,7 @@ abstract public class GoFunctionOrMethodDeclarationImpl<T extends GoFunctionOrMe
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
     return findNotNullChildByType(IDENTIFIER);
   }
