@@ -78,7 +78,7 @@
     <!-- debugger -->
     <xdebugger.breakpointType implementation="com.goide.debugger.ideagdb.debug.breakpoints.GdbBreakpointType"/>
 
-    <!-- temporary debugger configirations -->
+    <!-- temporary debugger configurations -->
     <!-- todo: move it to run/test configurations -->
     <configurationType implementation="com.goide.debugger.ideagdb.run.GdbRunConfigurationType"/>
     <programRunner implementation="com.goide.debugger.ideagdb.run.GdbRunner"/>
