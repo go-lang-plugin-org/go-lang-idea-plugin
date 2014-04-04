@@ -4,6 +4,7 @@ import com.goide.codeInsight.imports.GoImportOptimizer;
 import com.goide.psi.GoCompositeElement;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportSpec;
+import com.goide.psi.impl.GoReference;
 import com.intellij.codeInspection.*;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -12,6 +13,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class GoUnusedImportDeclaration extends GoInspectionBase {
   private final static LocalQuickFix OPTIMIZE_QUICK_FIX = new LocalQuickFixBase("Optimize imports") {
@@ -51,7 +54,18 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
       GoImportSpec spec = GoImportOptimizer.getImportSpec(importEntry);
       if (spec != null) {
         if (spec.getImportString().resolve() != null) {
-          GoCompositeElement element = spec.getDot() == null ? spec : spec.getImportString();
+          boolean implicit = spec.getDot() != null;
+          if (implicit) {
+            List<PsiElement> list = spec.getUserData(GoReference.IMPORT_USERS);
+            if (list != null) {
+              boolean valid = false;
+              for (PsiElement e : list) {
+                valid = e.isValid();
+              }
+              if (valid) return;
+            }
+          }
+          GoCompositeElement element = implicit ? spec.getImportString() : spec;
           problemsHolder.registerProblem(element, "Unused import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX);
         }
       }

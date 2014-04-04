@@ -97,7 +97,10 @@ public class GoTypeReference extends PsiReferenceBase<PsiElement> {
       if (o instanceof GoImportSpec && ((GoImportSpec)o).getDot() != null) {
         PsiDirectory resolve = ((GoImportSpec)o).getImportString().resolve();
         PsiElement result = processDirectory(resolve, null, null, false);
-        if (result != null) return result;
+        if (result != null) {
+          GoReference.putIfAbsent(o, myElement);
+          return result;
+        }
       }
     }
     

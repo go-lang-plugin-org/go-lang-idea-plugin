@@ -5,6 +5,7 @@ import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
@@ -35,6 +36,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         return ((GoReference)psiPolyVariantReferenceBase).resolveInner();
       }
     };
+  public static final Key<List<PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
 
   public GoReference(@NotNull GoReferenceExpression element) {
     super(element, TextRange.from(element.getIdentifier().getStartOffsetInParent(), element.getIdentifier().getTextLength()));
@@ -268,7 +270,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       if (o instanceof GoImportSpec) {
         if (((GoImportSpec)o).getDot() != null) {
           PsiDirectory implicitDir = ((GoImportSpec)o).getImportString().resolve();
-          if (!processDirectory(implicitDir, file, null, processor, state, false)) return false;
+          boolean resolved = !processDirectory(implicitDir, file, null, processor, state, false);
+          if (resolved && !processor.isCompletion()) {
+            putIfAbsent(o, myElement);
+          }
+          if (resolved) return false;
         }
         else if (!processor.execute(o, state)) return false;
       }
@@ -354,4 +360,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     myElement.getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
     return myElement;
   }
+  
+  static void putIfAbsent(@NotNull PsiElement importElement, @NotNull PsiElement usage) {
+    List<PsiElement> list = importElement.getUserData(IMPORT_USERS);
+    if (list == null) list = ContainerUtil.newArrayListWithCapacity(1);
+    list.add(usage);
+    importElement.putUserData(IMPORT_USERS, list);
+  }  
 }
