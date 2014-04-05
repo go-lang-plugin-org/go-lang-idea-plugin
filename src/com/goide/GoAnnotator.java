@@ -11,11 +11,12 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoAnnotator implements Annotator {
-
   @Override
   public void annotate(@NotNull PsiElement o, @NotNull AnnotationHolder holder) {
     if (o instanceof GoImportSpec) {
-      o.putUserData(GoReference.IMPORT_USERS, ContainerUtil.<PsiElement>newArrayListWithCapacity(0));
+      if (((GoImportSpec)o).getDot() != null) {
+        o.putUserData(GoReference.IMPORT_USERS, ContainerUtil.<PsiElement>newArrayListWithCapacity(0));
+      }
     }
     else if (o instanceof GoReferenceExpression) {
       ((GoReferenceExpression)o).getReference().resolve();
