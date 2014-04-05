@@ -3,6 +3,8 @@ package com.goide.codeInsight.imports;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.actions.OptimizeImportsAction;
 import com.intellij.ide.DataManager;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.testFramework.LightProjectDescriptor;
 
 public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
 
@@ -15,12 +17,35 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   public void testDuplicatedImportsWithDifferentString() { doTest(); } 
   public void testUnusedDuplicatedImports() { doTest(); }
   public void testImportWithSameIdentifier() { doTest(); }
-  
+
+  @Override
+  protected boolean isWriteActionRequired() {
+    return false;
+  }
+
   private void doTest() {
     myFixture.configureByFile(getTestName(true) + ".go");
-    OptimizeImportsAction.actionPerformedImpl(DataManager.getInstance().getDataContext(myFixture.getEditor().getContentComponent()));
+    myFixture.checkHighlighting(false, false, false);
+    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+      @Override
+      public void run() {
+        OptimizeImportsAction.actionPerformedImpl(DataManager.getInstance().getDataContext(myFixture.getEditor().getContentComponent()));
+      }
+    });
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
+  
+  @Override
+  public void setUp() throws Exception {
+    super.setUp();
+    setUpProjectSdk();
+  }
+
+  @Override
+  protected LightProjectDescriptor getProjectDescriptor() {
+      return createMockProjectDescriptor();
+    }
+  
 
   @Override
   protected String getBasePath() {
