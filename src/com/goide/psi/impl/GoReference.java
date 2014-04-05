@@ -339,7 +339,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private boolean processSignatureOwner(@NotNull GoSignatureOwner o, @NotNull GoScopeProcessorBase processor) {
-    GoSignature signature = o.getSignature();
+    GoSignature signature = o.getSignatureSafe();
     if (signature == null) return true;
     if (!signature.getParameters().processDeclarations(processor, ResolveState.initial(), null, myElement)) return false;
     GoResult result = signature.getResult();

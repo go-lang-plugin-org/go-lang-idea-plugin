@@ -73,8 +73,8 @@
   implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
   extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
-  extends("Parameters")="com.goide.psi.impl.GoStubbedElementImpl<?>"
-  elementTypeFactory("(Function|Method)Declaration|(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters")='com.goide.stubs.GoStubElementTypeFactory.factory'
+  extends("Parameters|Signature")="com.goide.psi.impl.GoStubbedElementImpl<?>"
+  elementTypeFactory("(Function|Method)Declaration|(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature")='com.goide.stubs.GoStubElementTypeFactory.factory'
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -135,7 +135,10 @@ Tag ::= string
 PointerType ::= '*' Type {pin=1}
 
 FunctionType ::= func Signature {pin=1}
-Signature ::= Parameters Result? {pin=1}
+Signature ::= Parameters Result? {
+  pin=1
+  stubClass="com.goide.stubs.GoSignatureStub"
+}
 Result ::= '(' TypeListNoPin ')' | Type | Parameters
 Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
   pin=1
@@ -155,7 +158,7 @@ InterfaceType ::= interface '{' MethodSpecs? '}' {
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
 MethodSpec ::= TypeName &(!'(') | identifier Signature {
   stubClass="com.goide.stubs.GoMethodSpecStub"
-  methods=[getGoType getName]
+  methods=[getGoType getName getSignatureSafe]
 }
 
 MapType ::= map '[' Type ']' Type {pin=1}

@@ -88,7 +88,7 @@ public interface GoTypes {
   IElementType SELECT_STATEMENT = new GoCompositeElementType("SELECT_STATEMENT");
   IElementType SEND_STATEMENT = new GoCompositeElementType("SEND_STATEMENT");
   IElementType SHORT_VAR_DECLARATION = new GoCompositeElementType("SHORT_VAR_DECLARATION");
-  IElementType SIGNATURE = new GoCompositeElementType("SIGNATURE");
+  IElementType SIGNATURE = GoStubElementTypeFactory.factory("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new GoCompositeElementType("SIMPLE_STATEMENT");
   IElementType STATEMENT = new GoCompositeElementType("STATEMENT");
   IElementType STRUCT_TYPE = new GoCompositeElementType("STRUCT_TYPE");

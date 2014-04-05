@@ -1,12 +1,12 @@
 package com.goide.stubs;
 
 import com.goide.stubs.types.*;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 
 public class GoStubElementTypeFactory {
   @NotNull
-  public static IElementType factory(@NotNull String name) {
+  public static IStubElementType factory(@NotNull String name) {
     if (name.equals("CONST_DEFINITION")) return new GoConstDefinitionStubElementType(name);
     if (name.equals("FIELD_DEFINITION")) return new GoFieldDefinitionStubElementType(name);
     if (name.equals("ANONYMOUS_FIELD_DEFINITION")) return new GoAnonymousFieldDefinitionStubElementType(name);
@@ -20,6 +20,7 @@ public class GoStubElementTypeFactory {
     if (name.equals("VAR_DEFINITION")) return new GoVarDefinitionStubElementType(name);
     if (name.equals("LABEL_DEFINITION")) return new GoLabelDefinitionStubElementType(name);
     if (name.equals("PARAMETERS")) return new GoParametersStubElementType(name);
+    if (name.equals("SIGNATURE")) return new GoSignatureStubElementType(name);
 
     throw new RuntimeException("Unknown element type: " + name);
   }
