@@ -2,6 +2,7 @@ package com.goide.codeInsight.imports;
 
 import com.goide.GoTypes;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoReference;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.text.StringUtil;
@@ -83,6 +84,21 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   public static void filterUnusedImports(@NotNull PsiFile file, @NotNull final MultiMap<String, PsiElement> importMap) {
+    Collection<PsiElement> implicitImports = ContainerUtil.newArrayList(importMap.get("."));
+    for (PsiElement importEntry : implicitImports) {
+      GoImportSpec spec = getImportSpec(importEntry);
+      if (spec != null && spec.getDot() != null) {
+        List<PsiElement> list = spec.getUserData(GoReference.IMPORT_USERS);
+        if (list != null) {
+          for (PsiElement e : list) {
+            if (e.isValid()) {
+              importMap.remove(".", importEntry);
+            }
+          }
+        }
+      }
+    }
+    
     file.accept(new GoRecursiveVisitor() {
       private final MultiMap<String, PsiElement> myImportMap = importMap;
 
