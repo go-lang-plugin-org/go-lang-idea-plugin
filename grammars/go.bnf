@@ -73,7 +73,8 @@
   implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
   extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
-  elementTypeFactory("(Function|Method)Declaration|(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")='com.goide.stubs.GoStubElementTypeFactory.factory'
+  extends("Parameters")="com.goide.psi.impl.GoStubbedElementImpl<?>"
+  elementTypeFactory("(Function|Method)Declaration|(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters")='com.goide.stubs.GoStubElementTypeFactory.factory'
 
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -136,7 +137,10 @@ PointerType ::= '*' Type {pin=1}
 FunctionType ::= func Signature {pin=1}
 Signature ::= Parameters Result? {pin=1}
 Result ::= '(' TypeListNoPin ')' | Type | Parameters
-Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {pin=1}
+Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
+  pin=1
+  stubClass="com.goide.stubs.GoParametersStub"
+}
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
 ParameterDeclaration ::= IdentifierListNoPin? '...'? Type | Type
 private IdentifierListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo

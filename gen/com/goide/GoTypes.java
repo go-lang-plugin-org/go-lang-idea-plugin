@@ -72,7 +72,7 @@ public interface GoTypes {
   IElementType MUL_EXPR = new GoCompositeElementType("MUL_EXPR");
   IElementType OR_EXPR = new GoCompositeElementType("OR_EXPR");
   IElementType PACKAGE_CLAUSE = new GoCompositeElementType("PACKAGE_CLAUSE");
-  IElementType PARAMETERS = new GoCompositeElementType("PARAMETERS");
+  IElementType PARAMETERS = GoStubElementTypeFactory.factory("PARAMETERS");
   IElementType PARAMETER_DECLARATION = new GoCompositeElementType("PARAMETER_DECLARATION");
   IElementType PARAM_DEFINITION = GoStubElementTypeFactory.factory("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new GoCompositeElementType("PARENTHESES_EXPR");
