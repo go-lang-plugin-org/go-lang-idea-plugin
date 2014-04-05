@@ -7,7 +7,9 @@ import com.intellij.ide.DataManager;
 public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
 
   public void testUnusedImports() { doTest(); }
-  public void testUnusedImportsWithSemicolon() { doTest(); } 
+  public void testUnusedImportsWithSemicolon() { doTest(); }
+  public void testUnusedImplicitImports() { doTest(); }
+  public void testUsedImplicitImports() { doTest(); }
   public void testUsedDuplicatedImports() { doTest(); } 
   public void testDuplicatedImportsWithSameString() { doTest(); } 
   public void testDuplicatedImportsWithDifferentString() { doTest(); } 
