@@ -3,7 +3,6 @@ package com.goide.codeInsight.imports;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.actions.OptimizeImportsAction;
 import com.intellij.ide.DataManager;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.testFramework.LightProjectDescriptor;
 
 public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
@@ -25,13 +24,8 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
 
   private void doTest() {
     myFixture.configureByFile(getTestName(true) + ".go");
-    myFixture.checkHighlighting(false, false, false);
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-      @Override
-      public void run() {
-        OptimizeImportsAction.actionPerformedImpl(DataManager.getInstance().getDataContext(myFixture.getEditor().getContentComponent()));
-      }
-    });
+    myFixture.doHighlighting();
+    OptimizeImportsAction.actionPerformedImpl(DataManager.getInstance().getDataContext(myFixture.getEditor().getContentComponent()));
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
   
