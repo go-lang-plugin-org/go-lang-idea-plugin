@@ -1,11 +1,9 @@
 package com.goide.stubs.types;
 
-import com.goide.GoLanguage;
 import com.goide.psi.GoNamedElement;
 import com.goide.stubs.index.GoAllNamesIndex;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.NamedStubBase;
 import com.intellij.psi.stubs.StubIndexKey;
@@ -16,14 +14,9 @@ import org.jetbrains.generate.tostring.util.StringUtil;
 import java.util.Collection;
 import java.util.Collections;
 
-public abstract class GoNamedStubElementType<S extends NamedStubBase<T>, T extends GoNamedElement> extends IStubElementType<S, T> {
+public abstract class GoNamedStubElementType<S extends NamedStubBase<T>, T extends GoNamedElement> extends GoStubElementType<S, T> {
   public GoNamedStubElementType(@NonNls @NotNull String debugName) {
-    super(debugName, GoLanguage.INSTANCE);
-  }
-
-  @NotNull
-  public String getExternalId() {
-    return "go." + super.toString();
+    super(debugName);
   }
 
   @Override
