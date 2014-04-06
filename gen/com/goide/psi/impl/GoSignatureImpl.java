@@ -30,7 +30,7 @@ public class GoSignatureImpl extends GoStubbedElementImpl<GoSignatureStub> imple
   @Override
   @NotNull
   public GoParameters getParameters() {
-    return findNotNullChildByClass(GoParameters.class);
+    return findNotNullChildByClass(GoParameters.class, com.goide.stubs.GoParametersStub.class);
   }
 
   @Override

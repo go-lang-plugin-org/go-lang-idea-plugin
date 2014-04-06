@@ -36,7 +36,7 @@ public class GoFunctionDeclarationImpl extends GoFunctionOrMethodDeclarationImpl
   @Override
   @Nullable
   public GoSignature getSignature() {
-    return findChildByClass(GoSignature.class);
+    return findChildByClass(GoSignature.class, com.goide.stubs.GoSignatureStub.class);
   }
 
   @Override

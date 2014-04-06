@@ -36,13 +36,13 @@ public class GoMethodDeclarationImpl extends GoFunctionOrMethodDeclarationImpl<G
   @Override
   @NotNull
   public GoReceiver getReceiver() {
-    return findNotNullChildByClass(GoReceiver.class);
+    return findNotNullChildByClass(GoReceiver.class, com.goide.stubs.GoReceiverStub.class);
   }
 
   @Override
   @Nullable
   public GoSignature getSignature() {
-    return findChildByClass(GoSignature.class);
+    return findChildByClass(GoSignature.class, com.goide.stubs.GoSignatureStub.class);
   }
 
   @Override
