@@ -145,8 +145,8 @@ Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
   stubClass="com.goide.stubs.GoParametersStub"
 }
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
-ParameterDeclaration ::= IdentifierListNoPin? '...'? Type | Type
-private IdentifierListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
+ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type
+private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
 ParamDefinition ::= identifier {
   stubClass="com.goide.stubs.GoParamDefinitionStub"
 }
