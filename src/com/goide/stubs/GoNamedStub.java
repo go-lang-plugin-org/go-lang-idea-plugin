@@ -5,8 +5,9 @@ import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.NamedStubBase;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
+import org.jetbrains.annotations.Nullable;
 
-abstract public class GoNamedStub<T extends GoNamedElement> extends NamedStubBase<T> {
+abstract public class GoNamedStub<T extends GoNamedElement> extends NamedStubBase<T> implements TextHolder {
   private final boolean myIsPublic;
 
   public GoNamedStub(StubElement parent, IStubElementType elementType, StringRef name, boolean isPublic) {
@@ -21,5 +22,11 @@ abstract public class GoNamedStub<T extends GoNamedElement> extends NamedStubBas
 
   public boolean isPublic() {
     return myIsPublic;
+  }
+
+  @Nullable
+  @Override
+  public String getText() {
+    return null;
   }
 }

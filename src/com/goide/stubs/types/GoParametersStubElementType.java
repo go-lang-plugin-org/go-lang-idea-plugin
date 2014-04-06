@@ -22,16 +22,17 @@ public class GoParametersStubElementType extends GoStubElementType<GoParametersS
 
   @Override
   public GoParametersStub createStub(@NotNull GoParameters psi, StubElement parentStub) {
-    return new GoParametersStub(parentStub, this);
+    return new GoParametersStub(parentStub, this, psi.getText());
   }
 
   @Override
   public void serialize(@NotNull GoParametersStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+    dataStream.writeName(stub.getText());
   }
 
   @NotNull
   @Override
   public GoParametersStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
-    return new GoParametersStub(parentStub, this);
+    return new GoParametersStub(parentStub, this, dataStream.readName());
   }
 }
