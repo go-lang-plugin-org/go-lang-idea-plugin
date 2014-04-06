@@ -24,7 +24,4 @@ public interface GoMethodSpec extends GoSignatureOwner, StubBasedPsiElement<GoMe
   @Nullable
   String getName();
 
-  @Nullable
-  GoSignature getSignatureSafe();
-
 }

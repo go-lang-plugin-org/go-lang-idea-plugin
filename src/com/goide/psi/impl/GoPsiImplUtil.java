@@ -119,7 +119,7 @@ public class GoPsiImplUtil {
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoSignatureOwner f) {
     Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
-    GoSignature signature = f.getSignatureSafe();
+    GoSignature signature = f.getSignature();
     int paramsCount = 0;
     String resultText = "";
     String paramText = "";
@@ -426,13 +426,8 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoSignature getSignatureSafe(@NotNull GoMethodSpec o) {
-    return o.getSignature();
-  }
-
-  @Nullable
   public static GoType getGoType(@NotNull GoSignatureOwner o) {
-    GoSignature signature = o.getSignatureSafe();
+    GoSignature signature = o.getSignature();
     GoResult result = signature != null ? signature.getResult() : null;
     if (result != null) {
       GoType type = result.getType();

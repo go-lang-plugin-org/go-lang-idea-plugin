@@ -55,9 +55,4 @@ public class GoMethodSpecImpl extends GoNamedElementImpl<GoMethodSpecStub> imple
     return GoPsiImplUtil.getName(this);
   }
 
-  @Nullable
-  public GoSignature getSignatureSafe() {
-    return GoPsiImplUtil.getSignatureSafe(this);
-  }
-
 }

@@ -4,5 +4,5 @@ import org.jetbrains.annotations.Nullable;
 
 public interface GoSignatureOwner extends GoNamedElement {
   @Nullable
-  GoSignature getSignatureSafe();
+  GoSignature getSignature();
 }
