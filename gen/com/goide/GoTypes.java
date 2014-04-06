@@ -82,7 +82,7 @@ public interface GoTypes {
   IElementType RECEIVER_TYPE = new GoCompositeElementType("RECEIVER_TYPE");
   IElementType RECV_STATEMENT = new GoCompositeElementType("RECV_STATEMENT");
   IElementType REFERENCE_EXPRESSION = new GoCompositeElementType("REFERENCE_EXPRESSION");
-  IElementType RESULT = new GoCompositeElementType("RESULT");
+  IElementType RESULT = GoStubElementTypeFactory.factory("RESULT");
   IElementType RETURN_STATEMENT = new GoCompositeElementType("RETURN_STATEMENT");
   IElementType SELECTOR_EXPR = new GoCompositeElementType("SELECTOR_EXPR");
   IElementType SELECT_STATEMENT = new GoCompositeElementType("SELECT_STATEMENT");

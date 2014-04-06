@@ -36,7 +36,7 @@ public class GoSignatureImpl extends GoStubbedElementImpl<GoSignatureStub> imple
   @Override
   @Nullable
   public GoResult getResult() {
-    return findChildByClass(GoResult.class);
+    return findChildByClass(GoResult.class, com.goide.stubs.GoResultStub.class);
   }
 
 }
