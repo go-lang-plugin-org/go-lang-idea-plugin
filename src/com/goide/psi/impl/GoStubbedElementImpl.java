@@ -43,27 +43,6 @@ public abstract class GoStubbedElementImpl<T extends StubBase<?>> extends StubBa
   }
   
   @Nullable
-  @Override
-  protected <S> S findChildByClass(Class<S> aClass) {
-    T stub = getStub();
-    if (stub != null) {
-      Type[] types = aClass.getGenericInterfaces();
-      for (Type type : types) {
-        if (type instanceof ParameterizedType && "interface com.intellij.psi.StubBasedPsiElement".equals(
-          ((ParameterizedType)type).getRawType().toString())) {
-          Type element = ArrayUtil.getFirstElement(((ParameterizedType)type).getActualTypeArguments());
-          if (element instanceof Class) {
-            for (StubElement stubElement : stub.getChildrenStubs()) {
-              if (((Class)element).isInstance(stubElement)) return (S)stubElement.getPsi();
-            }
-          }
-        }
-      }
-    }
-    return super.findChildByClass(aClass);
-  }
-  
-  @Nullable
   protected <C, S> C findChildByClass(Class<C> c, Class<S> s) {
     T stub = getStub();
     if (stub != null) {
