@@ -17,7 +17,7 @@ public class GoStructureView implements PsiStructureViewFactory {
         return new TreeBasedStructureViewBuilder() {
             @NotNull
             public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
-                return new TextEditorBasedStructureViewModel(psiFile) {
+                return new TextEditorBasedStructureViewModel(editor, psiFile) {
                     @NotNull
                     @Override
                     public StructureViewTreeElement getRoot() {
