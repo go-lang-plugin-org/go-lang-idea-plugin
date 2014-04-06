@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public class GoGoParameterDeclarationStubElementType extends GoStubElementType<GoParameterDeclarationStub, GoParameterDeclaration> {
-  public GoGoParameterDeclarationStubElementType(@NotNull String name) {
+public class GoParameterDeclarationStubElementType extends GoStubElementType<GoParameterDeclarationStub, GoParameterDeclaration> {
+  public GoParameterDeclarationStubElementType(@NotNull String name) {
     super(name);
   }
 

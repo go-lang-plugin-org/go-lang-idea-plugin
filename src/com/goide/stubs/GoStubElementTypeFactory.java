@@ -21,7 +21,7 @@ public class GoStubElementTypeFactory {
     if (name.equals("LABEL_DEFINITION")) return new GoLabelDefinitionStubElementType(name);
     if (name.equals("PARAMETERS")) return new GoParametersStubElementType(name);
     if (name.equals("SIGNATURE")) return new GoSignatureStubElementType(name);
-    if (name.equals("PARAMETER_DECLARATION")) return new GoGoParameterDeclarationStubElementType(name);
+    if (name.equals("PARAMETER_DECLARATION")) return new GoParameterDeclarationStubElementType(name);
     if (name.equals("RESULT")) return new GoResultStubElementType(name);
 
     throw new RuntimeException("Unknown element type: " + name);
