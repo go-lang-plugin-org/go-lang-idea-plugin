@@ -4,8 +4,10 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import com.goide.stubs.GoParameterDeclarationStub;
 
-public interface GoParameterDeclaration extends GoCompositeElement {
+public interface GoParameterDeclaration extends GoCompositeElement, StubBasedPsiElement<GoParameterDeclarationStub> {
 
   @NotNull
   List<GoParamDefinition> getParamDefinitionList();

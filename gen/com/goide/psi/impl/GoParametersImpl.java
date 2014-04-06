@@ -30,7 +30,7 @@ public class GoParametersImpl extends GoStubbedElementImpl<GoParametersStub> imp
   @Override
   @NotNull
   public List<GoParameterDeclaration> getParameterDeclarationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoParameterDeclaration.class);
+    return findChildrenByClass(GoParameterDeclaration.class, com.goide.stubs.GoParameterDeclarationStub.class);
   }
 
   @Override
