@@ -6,22 +6,11 @@ import com.goide.stubs.GoSignatureStub;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class GoSignatureStubElementType extends GoStubElementType<GoSignatureStub, GoSignature> {
-  public static final GoSignature[] EMPTY_ARRAY = new GoSignature[0];
-
-  public static final ArrayFactory<GoSignature> ARRAY_FACTORY = new ArrayFactory<GoSignature>() {
-    @NotNull
-    @Override
-    public GoSignature[] create(final int count) {
-      return count == 0 ? EMPTY_ARRAY : new GoSignature[count];
-    }
-  };
-
   public GoSignatureStubElementType(@NotNull String name) {
     super(name);
   }
