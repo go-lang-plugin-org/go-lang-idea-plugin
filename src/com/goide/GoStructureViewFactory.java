@@ -126,6 +126,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
     @Override
     public String getPresentableText() {
+      String separator = ": ";      
       if (myElement instanceof GoFile) return ((GoFile)myElement).getName();
       else if (myElement instanceof GoFunctionOrMethodDeclaration) {
         GoType type = myElement instanceof GoMethodDeclaration ? ((GoMethodDeclaration)myElement).getReceiver().getType() : null;
@@ -139,12 +140,12 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         GoType type = ((GoTypeSpec)myElement).getType();
         String appendix = type instanceof GoStructType || type instanceof GoInterfaceType ?
                           "" :
-                          (type != null ? ":" + trim(GoPsiImplUtil.getText(type)) : "");
+                          (type != null ? separator + trim(GoPsiImplUtil.getText(type)) : "");
         return ((GoTypeSpec)myElement).getIdentifier().getText() + appendix;
       }
       else if (myElement instanceof GoNamedElement) {
         GoType type = ((GoNamedElement)myElement).getGoType();
-        String typeText = type == null ? "" : ":" + trim(GoPsiImplUtil.getText(type));
+        String typeText = type == null || myElement instanceof GoAnonymousFieldDefinition ? "" : separator + trim(GoPsiImplUtil.getText(type));
         return ((GoNamedElement)myElement).getName() + typeText;
       }
       throw new AssertionError(myElement.getClass().getName());
