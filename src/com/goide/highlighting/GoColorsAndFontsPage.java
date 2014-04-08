@@ -6,6 +6,8 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
+import com.intellij.util.containers.ContainerUtil;
+import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -30,7 +32,14 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     new AttributesDescriptor("Braces", BRACES),
     new AttributesDescriptor("Parentheses", PARENTHESES),
     new AttributesDescriptor("Bad character", BAD_CHARACTER),
+    new AttributesDescriptor("Type specification", TYPE_SPECIFICATION),
+    new AttributesDescriptor("Type reference", TYPE_REFERENCE),
   };
+  private static final THashMap<String, TextAttributesKey> ATTRIBUTES_KEY_MAP = ContainerUtil.newTroveMap();
+  static {
+    ATTRIBUTES_KEY_MAP.put("tr", TYPE_REFERENCE);
+    ATTRIBUTES_KEY_MAP.put("ts", TYPE_SPECIFICATION);
+  }
 
   @NotNull
   public String getDisplayName() {
@@ -58,22 +67,21 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
 
   @NotNull
   public String getDemoText() {
-    return "∫∫∫\n\n" +
-           "package main\n" +
+    return "package main\n" +
            "\n" +
            "import (\n" +
            "    \"fmt\"\n" +
            "    \"math\"\n" +
            ")\n" +
            "\n" +
-           "type Abser interface {\n" +
+           "type <ts>Abser</ts> interface {\n" +
            "    Abs() float64\n" +
            "}\n" +
            "\n" +
            "func main() {\n" +
-           "    var a Abser;\n" +
-           "    f := MyFloat(-math.Sqrt2);\n" +
-           "    v := Vertex{3, 4};\n" +
+           "    var a <tr>Abser</tr>;\n" +
+           "    f := <tr>MyFloat</tr>(-math.Sqrt2);\n" +
+           "    v := <tr>Vertex</tr>{3, 4};\n" +
            "\n" +
            "    a = f  // a MyFloat implements Abser\n" +
            "    a = &v // a *Vertex implements Abser\n" +
@@ -83,25 +91,26 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            "    fmt.Println(a.Abs())\n" +
            "}\n" +
            "\n" +
-           "type MyFloat float64\n" +
+           "type <ts>MyFloat</ts> float64\n" +
            "\n" +
-           "func (f MyFloat) Abs() float64 {\n" +
+           "func (f <tr>MyFloat</tr>) Abs() float64 {\n" +
            "    if f < 0 {\n" +
            "        return float64(-f)\n" +
            "    }\n" +
            "    return float64(f)\n" +
            "}\n" +
            "\n" +
-           "type Vertex struct {\n" +
+           "type <ts>Vertex</ts> struct {\n" +
            "    X, Y float64\n" +
            "}\n" +
            "\n" +
-           "func (v *Vertex) Abs() float64 {\n" +
+           "func (v *<tr>Vertex</tr>) Abs() float64 {\n" +
            "    return math.Sqrt(v.X*v.X + v.Y*v.Y)\n" +
            "}";
   }
 
+  @NotNull
   public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
-    return null;
+    return ATTRIBUTES_KEY_MAP;
   }
 }
