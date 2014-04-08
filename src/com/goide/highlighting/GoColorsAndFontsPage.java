@@ -14,27 +14,23 @@ import java.util.Map;
 import static com.goide.highlighting.GoSyntaxHighlightingColors.*;
 
 public class GoColorsAndFontsPage implements ColorSettingsPage {
-  private static final AttributesDescriptor[] DESCRIPTORS;
-
-  static {
-    DESCRIPTORS = new AttributesDescriptor[]{
-      new AttributesDescriptor("Line comment", LINE_COMMENT),
-      new AttributesDescriptor("Block comment", BLOCK_COMMENT),
-      new AttributesDescriptor("Keyword", KEYWORD),
-      new AttributesDescriptor("Identifier", IDENTIFIER),
-      new AttributesDescriptor("String", STRING),
-      new AttributesDescriptor("Number", NUMBER),
-      new AttributesDescriptor("Semicolon", SEMICOLON),
-      new AttributesDescriptor("Colon", COLON),
-      new AttributesDescriptor("Comma", COMMA),
-      new AttributesDescriptor("Dot", DOT),
-      new AttributesDescriptor("Operator", OPERATOR),
-      new AttributesDescriptor("Brackets", BRACKETS),
-      new AttributesDescriptor("Braces", BRACES),
-      new AttributesDescriptor("Parentheses", PARENTHESES),
-      new AttributesDescriptor("Bad character", BAD_CHARACTER),
-    };
-  }
+  private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
+    new AttributesDescriptor("Line comment", LINE_COMMENT),
+    new AttributesDescriptor("Block comment", BLOCK_COMMENT),
+    new AttributesDescriptor("Keyword", KEYWORD),
+    new AttributesDescriptor("Identifier", IDENTIFIER),
+    new AttributesDescriptor("String", STRING),
+    new AttributesDescriptor("Number", NUMBER),
+    new AttributesDescriptor("Semicolon", SEMICOLON),
+    new AttributesDescriptor("Colon", COLON),
+    new AttributesDescriptor("Comma", COMMA),
+    new AttributesDescriptor("Dot", DOT),
+    new AttributesDescriptor("Operator", OPERATOR),
+    new AttributesDescriptor("Brackets", BRACKETS),
+    new AttributesDescriptor("Braces", BRACES),
+    new AttributesDescriptor("Parentheses", PARENTHESES),
+    new AttributesDescriptor("Bad character", BAD_CHARACTER),
+  };
 
   @NotNull
   public String getDisplayName() {
