@@ -7,7 +7,6 @@ import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
 import com.intellij.util.containers.ContainerUtil;
-import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -34,11 +33,13 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     new AttributesDescriptor("Bad character", BAD_CHARACTER),
     new AttributesDescriptor("Type specification", TYPE_SPECIFICATION),
     new AttributesDescriptor("Type reference", TYPE_REFERENCE),
+    new AttributesDescriptor("Builtin type", BUILTIN_TYPE_REFERENCE),
   };
-  private static final THashMap<String, TextAttributesKey> ATTRIBUTES_KEY_MAP = ContainerUtil.newTroveMap();
+  private static final Map<String, TextAttributesKey> ATTRIBUTES_KEY_MAP = ContainerUtil.newTroveMap();
   static {
     ATTRIBUTES_KEY_MAP.put("tr", TYPE_REFERENCE);
     ATTRIBUTES_KEY_MAP.put("ts", TYPE_SPECIFICATION);
+    ATTRIBUTES_KEY_MAP.put("bt", BUILTIN_TYPE_REFERENCE);
   }
 
   @NotNull
@@ -75,7 +76,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            ")\n" +
            "\n" +
            "type <ts>Abser</ts> interface {\n" +
-           "    Abs() float64\n" +
+           "    Abs() <bt>float64</bt>\n" +
            "}\n" +
            "\n" +
            "func main() {\n" +
@@ -91,20 +92,20 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            "    fmt.Println(a.Abs())\n" +
            "}\n" +
            "\n" +
-           "type <ts>MyFloat</ts> float64\n" +
+           "type <ts>MyFloat</ts> <bt>float64</bt>\n" +
            "\n" +
-           "func (f <tr>MyFloat</tr>) Abs() float64 {\n" +
+           "func (f <tr>MyFloat</tr>) Abs() <bt>float64</bt> {\n" +
            "    if f < 0 {\n" +
-           "        return float64(-f)\n" +
+           "        return <bt>float64</bt>(-f)\n" +
            "    }\n" +
-           "    return float64(f)\n" +
+           "    return <bt>float64</bt>(f)\n" +
            "}\n" +
            "\n" +
            "type <ts>Vertex</ts> struct {\n" +
-           "    X, Y float64\n" +
+           "    X, Y <bt>float64</bt>\n" +
            "}\n" +
            "\n" +
-           "func (v *<tr>Vertex</tr>) Abs() float64 {\n" +
+           "func (v *<tr>Vertex</tr>) Abs() <bt>float64</bt> {\n" +
            "    return math.Sqrt(v.X*v.X + v.Y*v.Y)\n" +
            "}";
   }

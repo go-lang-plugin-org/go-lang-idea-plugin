@@ -9,6 +9,7 @@ import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,8 +37,17 @@ public class GoAnnotator implements Annotator {
 
   private static void highlightAsTypeRefIfNeeded(@NotNull PsiElement o, @Nullable PsiElement resolve, @NotNull AnnotationHolder holder) {
     if (resolve instanceof GoTypeSpec) {
-      setHighlighting(o, holder, GoSyntaxHighlightingColors.TYPE_REFERENCE);
+      TextAttributesKey key = builtin(resolve)
+                              ? GoSyntaxHighlightingColors.BUILTIN_TYPE_REFERENCE
+                              : GoSyntaxHighlightingColors.TYPE_REFERENCE;
+      setHighlighting(o, holder, key);
     }
+  }
+
+  private static boolean builtin(@NotNull PsiElement resolve) {
+    PsiFile file = resolve.getContainingFile();
+    if (!(file instanceof GoFile)) return false;
+    return "builtin".equals(((GoFile)file).getPackageName()) && file.getName().equals("builtin.go");
   }
 
   private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
