@@ -479,6 +479,12 @@ public class GoPsiImplUtil {
           public String toString() {
             return null;
           }
+
+          @NotNull
+          @Override
+          public PsiElement getNavigationElement() {
+            return parameters;
+          }
         }
         return new MyGoTypeList(composite);
       }
