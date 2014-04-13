@@ -2,6 +2,8 @@ package com.goide.template;
 
 import com.goide.GoLanguage;
 import com.goide.highlighting.GoSyntaxHighlighter;
+import com.goide.psi.GoFile;
+import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.codeInsight.template.TemplateContextType;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.psi.PsiElement;
@@ -40,4 +42,27 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   public SyntaxHighlighter createHighlighter() {
     return new GoSyntaxHighlighter();
   }
+
+  public static class GoEverywhereContextType extends GoLiveTemplateContextType {
+    protected GoEverywhereContextType() {
+      super("GO", "Go", EverywhereContextType.class);
+    }
+  
+    @Override
+    protected boolean isInContext(@NotNull PsiElement element) {
+      return true;
+    }
+  }
+  
+  public static class GoFileContextType extends GoLiveTemplateContextType {
+    protected GoFileContextType() {
+      super("GO_FILE", "Go file", EverywhereContextType.class);
+    }
+  
+    @Override
+    protected boolean isInContext(@NotNull PsiElement element) {
+      return element.getParent() instanceof GoFile;
+    }
+  }
+  
 }

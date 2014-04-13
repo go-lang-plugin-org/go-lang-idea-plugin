@@ -3,14 +3,14 @@
   <template description='Import declaration' name='imp' toReformat='true' toShortenFQNames='true'
             value='import (&#10;	"$END$"&#10;)&#10;'>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
     </context>
   </template>
   <template description='Package declaration' name='p' toReformat='true' toShortenFQNames='true'
             value='package $NAME$'>
     <variable alwaysStopAt='true' defaultValue='' expression='directoryName()' name='NAME'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
     </context>
   </template>
   <template description='Constant declaration' name='con' toReformat='true' toShortenFQNames='true' value='const $NAME$ $TYPE$ = $VALUE$'>
@@ -87,13 +87,13 @@
   <template description='Main function' name='main' toReformat='true' toShortenFQNames='true'
             value='func main() {&#10;	$END$&#10;}'>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
     </context>
   </template>
   <template description='Init function' name='init' toReformat='true' toShortenFQNames='true'
             value='func init() {&#10;	$END$&#10;}'>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
     </context>
   </template>
   <template description='Function' name='fun' toReformat='true' toShortenFQNames='true'
@@ -102,7 +102,7 @@
     <variable alwaysStopAt='true' defaultValue='&quot;params&quot;' expression='' name='PARAMS'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
     </context>
   </template>
   <template description='Method' name='meth' toReformat='true' toShortenFQNames='true'
@@ -113,21 +113,21 @@
     <variable alwaysStopAt='true' defaultValue='&quot;params&quot;' expression='' name='PARAMS'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE_2'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
     </context>
   </template>
   <template description='Test' name='test' toReformat='true' toShortenFQNames='true'
             value='func Test$NAME$(t *testing.T) {&#10;	$END$&#10;}'>
     <variable alwaysStopAt='true' defaultValue='&quot;Name&quot;' expression='' name='NAME'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
     </context>
   </template>
   <template description='Benchmark' name='bench' toReformat='true' toShortenFQNames='true'
             value='func Benchmark$NAME$(b *testing.B) {&#10;	for i := 0; i &lt; b.N; i++ {&#10;	$END$&#10;	}&#10;}'>
     <variable alwaysStopAt='true' defaultValue='&quot;Name&quot;' expression='' name='NAME'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
     </context>
   </template>
 
