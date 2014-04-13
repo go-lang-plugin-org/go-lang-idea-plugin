@@ -25,6 +25,7 @@
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoEverywhereContextType"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoFileContextType"/>
+    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoBlockContextType"/>
     <liveTemplateMacro implementation="com.goide.template.DirectoryNameMacro"/>
 
     <lang.elementManipulator forClass="com.goide.psi.GoImportString"

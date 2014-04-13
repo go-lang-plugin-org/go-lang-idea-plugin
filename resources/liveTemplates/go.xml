@@ -18,7 +18,8 @@
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
+      <option name='GO_BLOCK' value='true'/>
     </context>
   </template>
   <template description='Iota constant declaration' name='iota' toReformat='true' toShortenFQNames='true'
@@ -26,7 +27,8 @@
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
+      <option name='GO_BLOCK' value='true'/>
     </context>
   </template>
 
@@ -37,7 +39,7 @@
     <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='VAR1'/>
     <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='VAR2'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_BLOCK' value='true'/>
     </context>
   </template>
   <template description='For range loop' name='forr' toReformat='true' toShortenFQNames='true'
@@ -46,7 +48,7 @@
     <variable alwaysStopAt='true' defaultValue='&quot;value&quot;' expression='' name='VALUE'/>
     <variable alwaysStopAt='true' defaultValue='&quot;key&quot;' expression='' name='KEY'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_BLOCK' value='true'/>
     </context>
   </template>
   <template description='Interface or struct' name='type' toReformat='true' toShortenFQNames='true'
@@ -54,20 +56,21 @@
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete' name='TYPE'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_FILE' value='true'/>
+      <option name='GO_BLOCK' value='true'/>
     </context>
   </template>
   <template description='printf' name='printf' toReformat='true' toShortenFQNames='true'
             value='fmt.Printf("$END$",$VAR$)'>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VAR'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_BLOCK' value='true'/>
     </context>
   </template>
   <template description='If error' name='err' toReformat='true' toShortenFQNames='true'
             value='if err != null {&#10;	$END$&#10;}'>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_BLOCK' value='true'/>
     </context>
   </template>
   <template description='`xml:""`' name='xml' toReformat='true' toShortenFQNames='true'
@@ -145,7 +148,7 @@
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_BLOCK' value='true'/>
     </context>
   </template>
 </templateSet>

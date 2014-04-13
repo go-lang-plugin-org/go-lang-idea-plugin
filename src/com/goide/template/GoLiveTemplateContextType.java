@@ -2,13 +2,16 @@ package com.goide.template;
 
 import com.goide.GoLanguage;
 import com.goide.highlighting.GoSyntaxHighlighter;
+import com.goide.psi.GoBlock;
 import com.goide.psi.GoFile;
+import com.goide.psi.GoSimpleStatement;
 import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.codeInsight.template.TemplateContextType;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -65,4 +68,14 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
     }
   }
   
+  public static class GoBlockContextType extends GoLiveTemplateContextType {
+    protected GoBlockContextType() {
+      super("GO_BLOCK", "Go block", EverywhereContextType.class);
+    }
+  
+    @Override
+    protected boolean isInContext(@NotNull PsiElement element) {
+      return element instanceof GoSimpleStatement && PsiTreeUtil.getParentOfType(element, GoBlock.class) != null;
+    }
+  }
 }
