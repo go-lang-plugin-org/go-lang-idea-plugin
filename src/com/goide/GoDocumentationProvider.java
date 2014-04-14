@@ -1,12 +1,12 @@
 package com.goide;
 
+import com.goide.psi.GoFile;
 import com.goide.psi.GoNamedElement;
+import com.goide.psi.GoPackageClause;
 import com.goide.psi.GoTopLevelDeclaration;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
@@ -24,6 +24,15 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       boolean alone = children != null && children.length == 1 && children[0].equals(element);
       List<PsiComment> comments = getPreviousNonWsComment(alone ? topLevel : element);
       if (!comments.isEmpty()) return getCommentText(comments);
+    }
+    else if (element instanceof PsiDirectory) {
+      PsiFile doc = ((PsiDirectory)element).findFile("doc.go");
+      if (doc instanceof GoFile) {
+        // todo: remove after correct stubbing
+        GoPackageClause pack = PsiTreeUtil.findChildOfType(doc, GoPackageClause.class);
+        List<PsiComment> comments = getPreviousNonWsComment(pack);
+        if (!comments.isEmpty()) return getCommentText(comments);
+      }
     }
     return null;
   }
@@ -46,7 +55,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     return "<pre>" + StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
       @Override
       public String fun(PsiComment c) {
-        return c.getText().replaceFirst("//", "");
+        return c.getText()
+          .replaceAll("(?m)^\\t", "")
+          .replaceFirst("//", "");
       }
     }), "<br/>") + "</pre>";
   }

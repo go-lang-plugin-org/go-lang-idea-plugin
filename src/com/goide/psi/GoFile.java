@@ -69,12 +69,8 @@ public class GoFile extends PsiFileBase {
       myPackage = getCachedValueManager().createCachedValue(new CachedValueProvider<GoPackageClause>() {
         @Override
         public Result<GoPackageClause> compute() {
-          List<GoPackageClause> packageClauses = calc(new Condition<PsiElement>() {
-            @Override
-            public boolean value(PsiElement e) {
-              return e instanceof GoPackageClause;
-            }
-          });
+          //noinspection unchecked
+          List<GoPackageClause> packageClauses = calc(FilteringIterator.instanceOf(GoPackageClause.class));
           return Result.create(ContainerUtil.getFirstItem(packageClauses), GoFile.this);
         }
       }, false);
