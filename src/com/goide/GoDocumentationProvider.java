@@ -1,9 +1,6 @@
 package com.goide;
 
-import com.goide.psi.GoFile;
-import com.goide.psi.GoNamedElement;
-import com.goide.psi.GoPackageClause;
-import com.goide.psi.GoTopLevelDeclaration;
+import com.goide.psi.*;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -18,6 +15,9 @@ import java.util.List;
 public class GoDocumentationProvider extends AbstractDocumentationProvider {
   @Override
   public String generateDoc(PsiElement element, PsiElement originalElement) {
+    if (element instanceof GoImportSpec) {
+      element = ((GoImportSpec)element).getImportString().resolve();
+    }
     if (element instanceof GoNamedElement) {
       GoTopLevelDeclaration topLevel = PsiTreeUtil.getParentOfType(element, GoTopLevelDeclaration.class);
       PsiElement[] children = PsiTreeUtil.getChildrenOfType(topLevel, element.getClass());
