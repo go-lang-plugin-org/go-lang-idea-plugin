@@ -11,6 +11,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -24,8 +25,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     }
     if (element instanceof GoNamedElement) {
       GoTopLevelDeclaration topLevel = PsiTreeUtil.getParentOfType(element, GoTopLevelDeclaration.class);
-      PsiElement[] children = PsiTreeUtil.getChildrenOfType(topLevel, element.getClass());
-      boolean alone = children != null && children.length == 1 && children[0].equals(element);
+      Collection<PsiElement> children = PsiTreeUtil.findChildrenOfType(topLevel, element.getClass());
+      boolean alone = children.size() == 1 && children.iterator().next().equals(element);
       List<PsiComment> comments = getPreviousNonWsComment(alone ? topLevel : element);
       if (!comments.isEmpty()) return getCommentText(comments);
     }
