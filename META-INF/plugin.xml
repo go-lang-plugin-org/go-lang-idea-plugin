@@ -36,6 +36,7 @@
     <annotator language="go" implementationClass="com.goide.GoAnnotator"/>
     <lang.importOptimizer language="go" implementationClass="com.goide.codeInsight.imports.GoImportOptimizer"/>
     <psi.fileReferenceHelper implementation="com.goide.psi.impl.imports.GoImportReferenceHelper"/>
+    <fileContextProvider implementation="com.goide.psi.impl.imports.GoFileContextProvider"/>
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>
     <fileTypeFactory implementation="com.goide.GoFileTypeFactory"/>
     <lang.syntaxHighlighterFactory key="go" implementationClass="com.goide.highlighting.GoSyntaxHighlighterFactory"/>
