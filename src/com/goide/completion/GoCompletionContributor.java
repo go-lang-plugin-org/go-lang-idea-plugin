@@ -39,6 +39,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class GoCompletionContributor extends CompletionContributor {
   public static final int FUNCTION_PRIORITY = 10;
+  public static final int FUNCTION_WITH_PACKAGE_PRIORITY = 0;
   public static final int TYPE_PRIORITY = 15;
   public static final int TYPE_CONVERSION = 15;
   public static final int VAR_PRIORITY = 15;
@@ -126,7 +127,7 @@ public class GoCompletionContributor extends CompletionContributor {
                 if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
                   for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, GlobalSearchScope.allScope(project))) {
                     if (!GoUtil.allowed(declaration.getContainingFile())) continue;
-                    result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, 0, true, FUNC_IMPORT_INSERT_HANDLER));
+                    result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, true, FUNC_IMPORT_INSERT_HANDLER));
                   }
                 }
               }

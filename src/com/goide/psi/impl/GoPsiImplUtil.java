@@ -84,7 +84,6 @@ public class GoPsiImplUtil {
     return PsiTreeUtil.getChildOfType(o, GoReferenceExpression.class);
   }
 
-  @SuppressWarnings("UnusedParameters")
   public static boolean processDeclarations(@NotNull GoVarSpec o,
                                             @NotNull PsiScopeProcessor processor,
                                             @NotNull ResolveState state,
@@ -94,7 +93,6 @@ public class GoPsiImplUtil {
            GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
   }
   
-  @SuppressWarnings("UnusedParameters")
   public static boolean processDeclarations(@NotNull GoCompositeElement o,
                                             @NotNull PsiScopeProcessor processor,
                                             @NotNull ResolveState state,
@@ -118,24 +116,23 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoSignatureOwner f) {
-    return createFunctionOrMethodLookupElement(f, null, false, null);
+    return createFunctionOrMethodLookupElement(f, false, null);
   }
 
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoSignatureOwner f,
-                                                                  @Nullable Integer priority,
                                                                   boolean showPkg,
                                                                   @Nullable InsertHandler<LookupElement> h) {
     Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
     GoSignature signature = f.getSignature();
     int paramsCount = 0;
-    String resultText = "";
+    String typeText = "";
     String paramText = "";
     if (signature != null) {
       paramsCount = signature.getParameters().getParameterDeclarationList().size();
       GoResult result = signature.getResult();
       paramText = signature.getParameters().getText();
-      if (result != null) resultText = result.getText();
+      if (result != null) typeText = result.getText();
     }
 
     InsertHandler<LookupElement> handler = h != null ? h : 
@@ -146,11 +143,11 @@ public class GoPsiImplUtil {
       LookupElementBuilder.create(f)
         .withIcon(icon)
         .withInsertHandler(handler)
-        .withTypeText(resultText, true)
+        .withTypeText(typeText, true)
         .withLookupString(pkg)
         .withLookupString(pkg + f.getName())
         .withPresentableText(pkg + f.getName() + paramText),
-      priority == null ? GoCompletionContributor.FUNCTION_PRIORITY : priority
+      showPkg ? GoCompletionContributor.FUNCTION_WITH_PACKAGE_PRIORITY : GoCompletionContributor.FUNCTION_PRIORITY 
     );
   }
 
