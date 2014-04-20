@@ -253,7 +253,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (matcher.matches()) {
       String os = matcher.group(1);
       String arch = matcher.group(2);
-      return os(os) && SystemInfo.OS_ARCH.contains(arch);
+      return os(os) && (SystemInfo.is64Bit && arch.contains("64") || SystemInfo.is32Bit && arch.contains("386"));
     }
     matcher = SHORT.matcher(name);
     if (matcher.matches()) {
