@@ -367,7 +367,10 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static String getText(@Nullable PsiElement o) {
-    return o == null ? "" : o.getText().replaceAll("\\s+", " ");
+    if (o == null) return "";
+    String text = o.getText();
+    if (text == null) return "";
+    return text.replaceAll("\\s+", " ");
   }
 
   @NotNull
