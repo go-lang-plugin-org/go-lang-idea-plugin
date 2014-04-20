@@ -173,15 +173,15 @@ public class GoTypeReference extends PsiReferenceBase<PsiElement> {
                                         @Nullable String name,
                                         boolean localResolve) {
     // todo: improve this algorithm
-    if (dir != null) {
-      for (PsiFile child : dir.getFiles()) {
-        if (name != null && Comparing.equal(name, child.getName())) continue;
-        if (child instanceof GoFile) {
-          GoFile goFile = (GoFile)child;
-          if (packageName != null && !Comparing.equal(goFile.getPackageName(), packageName)) continue;
-          PsiElement element = processUnqualified(goFile, localResolve);
-          if (element != null) return element;
-        }
+    if (dir == null) return null;
+    for (PsiFile child : dir.getFiles()) {
+      if (!GoReference.allowed(child)) continue;
+      if (name != null && Comparing.equal(name, child.getName())) continue;
+      if (child instanceof GoFile) {
+        GoFile goFile = (GoFile)child;
+        if (packageName != null && !Comparing.equal(goFile.getPackageName(), packageName)) continue;
+        PsiElement element = processUnqualified(goFile, localResolve);
+        if (element != null) return element;
       }
     }
     return null;
