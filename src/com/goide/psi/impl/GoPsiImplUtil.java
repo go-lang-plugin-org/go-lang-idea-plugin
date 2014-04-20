@@ -147,6 +147,8 @@ public class GoPsiImplUtil {
         .withIcon(icon)
         .withInsertHandler(handler)
         .withTypeText(resultText, true)
+        .withLookupString(pkg)
+        .withLookupString(pkg + f.getName())
         .withPresentableText(pkg + f.getName() + paramText),
       priority == null ? GoCompletionContributor.FUNCTION_PRIORITY : priority
     );
