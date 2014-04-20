@@ -107,6 +107,9 @@ public class GoCompletionContributor extends CompletionContributor {
   }
   
   public static class AutoImport extends CompletionContributor {
+
+    private static final ParenthesesWithImport FUNC_IMPORT_INSERT_HANDLER = new ParenthesesWithImport();
+
     public AutoImport() {
       extend(CompletionType.BASIC, inGoFile(), new CompletionProvider<CompletionParameters>() {
         @Override
@@ -123,7 +126,7 @@ public class GoCompletionContributor extends CompletionContributor {
                 if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
                   for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, GlobalSearchScope.allScope(project))) {
                     if (!GoUtil.allowed(declaration.getContainingFile())) continue;
-                    result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, 0, true, new ParenthesesWithImport(declaration)));
+                    result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, 0, true, FUNC_IMPORT_INSERT_HANDLER));
                   }
                 }
               }
@@ -134,39 +137,40 @@ public class GoCompletionContributor extends CompletionContributor {
     }
     
     private static class ParenthesesWithImport extends ParenthesesInsertHandler<LookupElement> {
-      private final GoFunctionDeclaration myDeclaration;
-
-      public ParenthesesWithImport(GoFunctionDeclaration declaration) {
-        myDeclaration = declaration;
-      }
-
       @Override
       public void handleInsert(InsertionContext context, LookupElement item) {
-        super.handleInsert(context, item);
-        Editor editor = context.getEditor();
-        Document document = editor.getDocument();
-        String name = myDeclaration.getContainingFile().getPackageName();
-        String full = myDeclaration.getContainingFile().getFullPackageName();
-        if (name == null || full == null) return;
-        document.insertString(context.getStartOffset(), name + ".");
-        PsiDocumentManager.getInstance(context.getProject()).commitDocument(document);
-        PsiFile file = context.getFile();
-        if (!(file instanceof GoFile)) return;
-        if (!((GoFile)file).getImportMap().get(name).isEmpty()) return;
-        GoImportList list = ((GoFile)file).getImportList();
-        if (list != null) {
-          list.addImport(full, null);
+        PsiElement myDeclaration = item.getPsiElement();
+        if (myDeclaration instanceof GoFunctionDeclaration) {
+          super.handleInsert(context, item);
+          Editor editor = context.getEditor();
+          Document document = editor.getDocument();
+          String name = ((GoFunctionDeclaration)myDeclaration).getContainingFile().getPackageName();
+          String full = ((GoFunctionDeclaration)myDeclaration).getContainingFile().getFullPackageName();
+          if (name == null || full == null) return;
+          document.insertString(context.getStartOffset(), name + ".");
+          PsiDocumentManager.getInstance(context.getProject()).commitDocument(document);
+          PsiFile file = context.getFile();
+          if (!(file instanceof GoFile)) return;
+          if (!((GoFile)file).getImportMap().get(name).isEmpty()) return;
+          GoImportList list = ((GoFile)file).getImportList();
+          if (list != null) {
+            list.addImport(full, null);
+          }
         }
       }
 
       @Override
       protected boolean placeCaretInsideParentheses(InsertionContext context, LookupElement item) {
-        GoSignature signature = myDeclaration.getSignature();
-        int paramsCount = 0;
-        if (signature != null) {
-          paramsCount = signature.getParameters().getParameterDeclarationList().size();
+        PsiElement myDeclaration = item.getPsiElement();
+        if (myDeclaration instanceof GoFunctionDeclaration) {
+          GoSignature signature = ((GoFunctionDeclaration)myDeclaration).getSignature();
+          int paramsCount = 0;
+          if (signature != null) {
+            paramsCount = signature.getParameters().getParameterDeclarationList().size();
+          }
+          return paramsCount > 0;
         }
-        return paramsCount > 0;
+        return false;
       }
     }
   }
