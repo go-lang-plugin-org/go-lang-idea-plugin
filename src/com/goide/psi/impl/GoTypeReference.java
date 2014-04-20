@@ -96,6 +96,8 @@ public class GoTypeReference extends PsiReferenceBase<PsiElement> {
     for (PsiElement o : file.getImportMap().values()) {
       if (o instanceof GoImportSpec && ((GoImportSpec)o).getDot() != null) {
         PsiDirectory resolve = ((GoImportSpec)o).getImportString().resolve();
+        PsiDirectory parent = file.getOriginalFile().getParent();
+        if (Comparing.equal(parent, resolve)) continue;
         PsiElement result = processDirectory(resolve, null, null, false);
         if (result != null) {
           GoReference.putIfAbsent(o, myElement);

@@ -247,7 +247,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
-  private static boolean allowed(@NotNull PsiFile file) {
+  static boolean allowed(@NotNull PsiFile file) {
     String name = GoUtil.replaceLast(FileUtil.getNameWithoutExtension(file.getName()), "_test");
     Matcher matcher = FULL.matcher(name);
     if (matcher.matches()) {
