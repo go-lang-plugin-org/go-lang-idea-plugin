@@ -1,6 +1,7 @@
 package com.goide;
 
 import com.goide.psi.*;
+import com.goide.util.GoUtil;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -70,22 +71,12 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
           text = text.replaceAll("//", "");
         }
         else if (type == GoParserDefinition.MULTILINE_COMMENT) {
-          text = replaceLast(text, "*/");
-          text = replaceFirst(text, "/*");
+          text = GoUtil.replaceLast(text, "*/");
+          text = GoUtil.replaceFirst(text, "/*");
           text = LEADING_TAB.matcher(text).replaceAll("");
         }
         return text;
       }
     }), "<br/>") + "</pre>";
-  }
-
-  @NotNull
-  private static String replaceLast(@NotNull String src, @NotNull String from) {
-    return src.endsWith(from) ? src.substring(0, src.length() - from.length()) : src;
-  }
-
-  @NotNull
-  private static String replaceFirst(@NotNull String src, @NotNull String from) {
-    return src.startsWith(from) ? src.substring(from.length()) : src;
   }
 }
