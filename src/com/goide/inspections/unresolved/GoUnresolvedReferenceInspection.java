@@ -58,10 +58,14 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         PsiReference[] references = o.getReferences();
         for (final PsiReference reference : references) {
           if (reference instanceof FileReference) {
-            if (((FileReference)reference).multiResolve(false).length == 0) {
+            ResolveResult[] resolveResults = ((FileReference)reference).multiResolve(false);
+            if (resolveResults.length == 0) {
               ProblemHighlightType type = reference.getRangeInElement().isEmpty() ? GENERIC_ERROR_OR_WARNING : LIKE_UNKNOWN_SYMBOL;
               problemsHolder.registerProblem(reference, ProblemsHolder.unresolvedReferenceMessage(reference), type);
             }
+            else if (resolveResults.length > 1) {
+              problemsHolder.registerProblem(reference, "Resolved to several targets", GENERIC_ERROR_OR_WARNING);
+            } 
           }
         }
       }
