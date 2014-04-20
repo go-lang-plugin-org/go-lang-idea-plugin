@@ -2,6 +2,7 @@ package com.goide.psi.impl;
 
 import com.goide.GoSdkUtil;
 import com.goide.psi.*;
+import com.goide.util.GoUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
@@ -175,7 +176,7 @@ public class GoTypeReference extends PsiReferenceBase<PsiElement> {
     // todo: improve this algorithm
     if (dir == null) return null;
     for (PsiFile child : dir.getFiles()) {
-      if (!GoReference.allowed(child)) continue;
+      if (!GoUtil.allowed(child)) continue;
       if (name != null && Comparing.equal(name, child.getName())) continue;
       if (child instanceof GoFile) {
         GoFile goFile = (GoFile)child;

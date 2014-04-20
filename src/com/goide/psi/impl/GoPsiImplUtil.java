@@ -118,6 +118,14 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoSignatureOwner f) {
+    return createFunctionOrMethodLookupElement(f, null, false, null);
+  }
+
+  @NotNull
+  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoSignatureOwner f,
+                                                                  @Nullable Integer priority,
+                                                                  boolean showPkg,
+                                                                  @Nullable InsertHandler<LookupElement> h) {
     Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
     GoSignature signature = f.getSignature();
     int paramsCount = 0;
@@ -130,15 +138,17 @@ public class GoPsiImplUtil {
       if (result != null) resultText = result.getText();
     }
 
-    InsertHandler<LookupElement> handler =
-      paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
+    InsertHandler<LookupElement> handler = h != null ? h : 
+                                           paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
+    String pkg = showPkg ? StringUtil.notNullize(f.getContainingFile().getPackageName()) : "";
+    pkg = pkg.isEmpty() ? pkg : pkg + ".";
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.create(f)
         .withIcon(icon)
         .withInsertHandler(handler)
         .withTypeText(resultText, true)
-        .withPresentableText(f.getName() + paramText),
-      GoCompletionContributor.FUNCTION_PRIORITY
+        .withPresentableText(pkg + f.getName() + paramText),
+      priority == null ? GoCompletionContributor.FUNCTION_PRIORITY : priority
     );
   }
 

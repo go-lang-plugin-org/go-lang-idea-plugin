@@ -3,9 +3,12 @@ package com.goide.completion;
 import com.goide.GoLanguage;
 import com.goide.GoParserDefinition;
 import com.goide.GoTypes;
-import com.goide.psi.GoFile;
-import com.goide.psi.GoSelectorExpr;
+import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.stubs.index.GoFunctionIndex;
+import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.template.Template;
@@ -14,14 +17,17 @@ import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.PsiElementPattern;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.*;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.tree.TreeUtil;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
@@ -44,16 +50,18 @@ public class GoCompletionContributor extends CompletionContributor {
       @Override
       protected void addCompletions(@NotNull CompletionParameters parameters,
                                     ProcessingContext context,
-                                    @NotNull CompletionResultSet result) {
+                                    @NotNull final CompletionResultSet result) {
         PsiElement position = parameters.getPosition();
         ASTNode prev = FormatterUtil.getPreviousNonWhitespaceSibling(position.getNode());
         if (prev != null && prev.getElementType() == GoTypes.DOT) return;
         if (position.getNode().getElementType() == GoTypes.STRING) return;
-        if (position.getParent().getParent() instanceof GoSelectorExpr) return;
+        PsiElement parent = position.getParent();
+        if (parent.getParent() instanceof GoSelectorExpr) return;
         if (position instanceof PsiComment) return;
         for (String keyword : suggestKeywords(position)) {
           result.addElement(createKeywordLookupElement(keyword));
         }
+        
       }
     });
   }
@@ -96,5 +104,69 @@ public class GoCompletionContributor extends CompletionContributor {
     file.putUserData(GeneratedParserUtilBase.COMPLETION_STATE_KEY, state);
     TreeUtil.ensureParsed(file.getNode());
     return state.items;
+  }
+  
+  public static class AutoImport extends CompletionContributor {
+    public AutoImport() {
+      extend(CompletionType.BASIC, inGoFile(), new CompletionProvider<CompletionParameters>() {
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters,
+                                      ProcessingContext context,
+                                      @NotNull CompletionResultSet result) {
+          PsiElement position = parameters.getPosition();
+          PsiElement parent = position.getParent();
+          if (parent instanceof GoReferenceExpression) {
+            if (((GoReferenceExpression)parent).getQualifier() == null) {
+              final Project project = parent.getProject();
+              Collection<String> println = StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project);
+              for (String s : println) {
+                if (!StringUtil.isCapitalized(s) || StringUtil.startsWith(s, "Test") || StringUtil.startsWith(s, "Benchmark")) continue;
+                for (GoFunctionDeclaration declaration : GoFunctionIndex.find(s, project, GlobalSearchScope.allScope(project))) {
+                  if (!GoUtil.allowed(declaration.getContainingFile())) continue;
+                  result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, 0, true, new ParenthesesWithImport(declaration)));
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    private static class ParenthesesWithImport extends ParenthesesInsertHandler<LookupElement> {
+      private final GoFunctionDeclaration myDeclaration;
+
+      public ParenthesesWithImport(GoFunctionDeclaration declaration) {
+        myDeclaration = declaration;
+      }
+
+      @Override
+      public void handleInsert(InsertionContext context, LookupElement item) {
+        super.handleInsert(context, item);
+        Editor editor = context.getEditor();
+        Document document = editor.getDocument();
+        String name = myDeclaration.getContainingFile().getPackageName();
+        String full = myDeclaration.getContainingFile().getFullPackageName();
+        if (name == null || full == null) return;
+        document.insertString(context.getStartOffset(), name + ".");
+        PsiDocumentManager.getInstance(context.getProject()).commitDocument(document);
+        PsiFile file = context.getFile();
+        if (!(file instanceof GoFile)) return;
+        if (!((GoFile)file).getImportMap().get(name).isEmpty()) return;
+        GoImportList list = ((GoFile)file).getImportList();
+        if (list != null) {
+          list.addImport(full, null);
+        }
+      }
+
+      @Override
+      protected boolean placeCaretInsideParentheses(InsertionContext context, LookupElement item) {
+        GoSignature signature = myDeclaration.getSignature();
+        int paramsCount = 0;
+        if (signature != null) {
+          paramsCount = signature.getParameters().getParameterDeclarationList().size();
+        }
+        return paramsCount > 0;
+      }
+    }
   }
 }

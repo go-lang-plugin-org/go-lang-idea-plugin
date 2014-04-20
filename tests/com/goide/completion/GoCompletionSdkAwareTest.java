@@ -14,8 +14,16 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     return createMockProjectDescriptor();
   }
 
-  public void testFormatter() throws Exception {
+  public void testFormatter() {
     doTestInclude("package main; import . \"fmt\"; type alias <caret>", "Formatter");
+  }
+
+  public void testAutoImport() {
+    doCheckResult("package main; \n" +
+                  "func test(){Fprintl<caret>}", 
+                  "package main;\n" +
+                  "import \"fmt\"\n" +
+                  "func test(){fmt.Fprintln()}");
   }
   
   public void testImports() throws Exception {
