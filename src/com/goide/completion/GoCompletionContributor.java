@@ -118,12 +118,13 @@ public class GoCompletionContributor extends CompletionContributor {
           if (parent instanceof GoReferenceExpression) {
             if (((GoReferenceExpression)parent).getQualifier() == null) {
               final Project project = parent.getProject();
-              Collection<String> println = StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project);
-              for (String s : println) {
-                if (!StringUtil.isCapitalized(s) || StringUtil.startsWith(s, "Test") || StringUtil.startsWith(s, "Benchmark")) continue;
-                for (GoFunctionDeclaration declaration : GoFunctionIndex.find(s, project, GlobalSearchScope.allScope(project))) {
-                  if (!GoUtil.allowed(declaration.getContainingFile())) continue;
-                  result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, 0, true, new ParenthesesWithImport(declaration)));
+              Collection<String> functionNames = StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project);
+              for (String name : functionNames) {
+                if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
+                  for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, GlobalSearchScope.allScope(project))) {
+                    if (!GoUtil.allowed(declaration.getContainingFile())) continue;
+                    result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, 0, true, new ParenthesesWithImport(declaration)));
+                  }
                 }
               }
             }
