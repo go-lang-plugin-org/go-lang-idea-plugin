@@ -164,11 +164,9 @@ public class GoCompletionContributor extends CompletionContributor {
         PsiElement myDeclaration = item.getPsiElement();
         if (myDeclaration instanceof GoFunctionDeclaration) {
           GoSignature signature = ((GoFunctionDeclaration)myDeclaration).getSignature();
-          int paramsCount = 0;
           if (signature != null) {
-            paramsCount = signature.getParameters().getParameterDeclarationList().size();
+            return signature.getParameters().getParameterDeclarationList().size() > 0;
           }
-          return paramsCount > 0;
         }
         return false;
       }
