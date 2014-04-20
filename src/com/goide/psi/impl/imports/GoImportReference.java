@@ -7,10 +7,13 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
+import com.intellij.util.ArrayUtil;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 public class GoImportReference extends FileReference {
@@ -72,6 +75,26 @@ public class GoImportReference extends FileReference {
       }
     }
     return false;
+  }
+
+  @Override
+  public PsiElement bindToElement(@NotNull PsiElement element, boolean absolute) throws IncorrectOperationException {
+    if (!absolute) {
+      FileReference firstReference = ArrayUtil.getFirstElement(getFileReferenceSet().getAllReferences());
+      if (firstReference != null) {
+        Collection<PsiFileSystemItem> contexts = getFileReferenceSet().getDefaultContexts();
+        for (ResolveResult resolveResult : firstReference.multiResolve(false)) {
+          PsiElement resolveResultElement = resolveResult.getElement();
+          if (resolveResultElement != null && resolveResultElement instanceof PsiFileSystemItem) {
+            PsiFileSystemItem parentDirectory = ((PsiFileSystemItem)resolveResultElement).getParent();
+            if (parentDirectory != null && contexts.contains(parentDirectory)) {
+              return getElement();
+            }
+          }
+        }
+      }
+    }
+    return super.bindToElement(element, absolute);
   }
 
   private boolean isFirst() {
