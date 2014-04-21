@@ -20,7 +20,10 @@ var (
     ErrNegativeCount = errors.New("bufio: negative count")
 )
 
-func main(aaa string, error) (ok, ok) {
+func main(aaa string, rd io.Reader, error) (ok, ok) {
+
+    b, ok := rd.(*Reader)
+
     fmt.Sprintln("Hello", "oghet")
 
 
