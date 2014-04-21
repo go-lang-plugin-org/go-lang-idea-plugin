@@ -147,11 +147,18 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     }
 
     private Block buildSubBlock(ASTNode child) {
-      Indent childIndent = Indent.getNoneIndent();
-      if (BLOCKS_TOKEN_SET.contains(myNode.getElementType())) {
-        childIndent = indentIfNotBrace(child);
-      }
-      return new GoBlock(child, null, childIndent, null, mySettings, mySpacingBuilder);
+      Indent indent = calcIndent(child);
+      return new GoBlock(child, null, indent, null, mySettings, mySpacingBuilder);
+    }
+
+    private Indent calcIndent(ASTNode child) {
+      IElementType parentType = myNode.getElementType();
+      IElementType type = child.getElementType();
+      if (BLOCKS_TOKEN_SET.contains(parentType)) return indentIfNotBrace(child);
+      if (parentType == IMPORT_DECLARATION && type == IMPORT_SPEC) return Indent.getNormalIndent();
+      if (parentType == CONST_DECLARATION && type == CONST_SPEC) return Indent.getNormalIndent();
+      if (parentType == VAR_DECLARATION && type == VAR_SPEC) return Indent.getNormalIndent();
+      return Indent.getNoneIndent();
     }
 
     private static Indent indentIfNotBrace(ASTNode child) {
@@ -167,7 +174,11 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     @Override
     public ChildAttributes getChildAttributes(int newChildIndex) {
       Indent childIndent = Indent.getNoneIndent();
-      if (BLOCKS_TOKEN_SET.contains(myNode.getElementType())) {
+      IElementType parentType = myNode.getElementType();
+      if (BLOCKS_TOKEN_SET.contains(parentType)) {
+        childIndent = Indent.getNormalIndent();
+      }
+      else if (parentType == IMPORT_DECLARATION || parentType == CONST_DECLARATION || parentType == VAR_DECLARATION) {
         childIndent = Indent.getNormalIndent();
       }
       return new ChildAttributes(childIndent, null);
