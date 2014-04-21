@@ -1,10 +1,7 @@
 package com.goide.psi.impl;
 
 import com.goide.GoLanguage;
-import com.goide.psi.GoFile;
-import com.goide.psi.GoImportDeclaration;
-import com.goide.psi.GoImportSpec;
-import com.goide.psi.GoImportString;
+import com.goide.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -30,7 +27,6 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package " + text);
     return file.getPackage().getIdentifier();
   }
-
 
   @NotNull
   public static GoImportDeclaration createImportDeclaration(@NotNull Project project, @NotNull String importString,
@@ -58,5 +54,10 @@ public class GoElementFactory {
   @NotNull
   public static PsiElement createNewLine(@NotNull Project project) {
     return PsiParserFacadeImpl.SERVICE.getInstance(project).createWhiteSpaceFromText("\n");
+  }
+
+  @NotNull
+  public static GoPackageClause createPackageClause(Project project, String name) {
+    return createFileFromText(project, "package " + name).getPackage();
   }
 }

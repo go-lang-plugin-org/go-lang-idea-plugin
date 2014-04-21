@@ -12,11 +12,22 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
+import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class GoMethodDeclarationStubElementType extends GoNamedStubElementType<GoMethodDeclarationStub, GoMethodDeclaration> {
+  public static final GoMethodDeclaration[] EMPTY_ARRAY = new GoMethodDeclaration[0];
+
+  public static final ArrayFactory<GoMethodDeclaration> ARRAY_FACTORY = new ArrayFactory<GoMethodDeclaration>() {
+    @NotNull
+    @Override
+    public GoMethodDeclaration[] create(int count) {
+      return count == 0 ? EMPTY_ARRAY : new GoMethodDeclaration[count];
+    }
+  };
+  
   public GoMethodDeclarationStubElementType(@NotNull String name) {
     super(name);
   }

@@ -3,10 +3,9 @@ package com.goide.psi;
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
 import com.goide.GoTypes;
+import com.goide.psi.impl.GoElementFactory;
 import com.goide.stubs.GoFileStub;
-import com.goide.stubs.types.GoConstDefinitionStubElementType;
-import com.goide.stubs.types.GoTypeSpecStubElementType;
-import com.goide.stubs.types.GoVarDefinitionStubElementType;
+import com.goide.stubs.types.*;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
@@ -65,6 +64,11 @@ public class GoFile extends PsiFileBase {
 
   @Nullable
   public GoPackageClause getPackage() {
+    GoFileStub stub = getStub();
+    if (stub != null) {
+      String name = stub.getPackageName();
+      return GoElementFactory.createPackageClause(stub.getProject(), name);
+    }
     if (myPackage == null) {
       myPackage = getCachedValueManager().createCachedValue(new CachedValueProvider<GoPackageClause>() {
         @Override
@@ -85,6 +89,9 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   public List<GoFunctionDeclaration> getFunctions() {
+    StubElement<GoFile> stub = getStub();
+    if (stub != null) return getChildrenByType(stub, GoTypes.FUNCTION_DECLARATION, GoFunctionDeclarationStubElementType.ARRAY_FACTORY);
+
     if (myFunctionsValue == null) {
       myFunctionsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoFunctionDeclaration>>() {
         @Override
@@ -100,6 +107,9 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   public List<GoMethodDeclaration> getMethods() {
+    StubElement<GoFile> stub = getStub();
+    if (stub != null) return getChildrenByType(stub, GoTypes.METHOD_DECLARATION, GoMethodDeclarationStubElementType.ARRAY_FACTORY);
+    
     if (myMethodsValue == null) {
       myMethodsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoMethodDeclaration>>() {
         @Override
