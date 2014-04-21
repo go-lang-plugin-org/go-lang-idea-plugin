@@ -60,6 +60,7 @@ public abstract class GoStubbedElementImpl<T extends StubBase<?> & TextHolder> e
           return (C)stubElement.getPsi();
         }
       }
+      return null;
     }
     return super.findChildByClass(c);
   }
