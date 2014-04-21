@@ -10,17 +10,9 @@ public class GoSpellcheckingTest extends GoCodeInsightFixtureTestCase {
     myFixture.enableInspections(new SpellCheckingInspection());
   }
 
-  public void testVariableName() throws Exception {
-    doTest();
-  }
-
-  public void testFunctionName() throws Exception {
-    doTest();
-  }
-
-  public void testSuppressed() throws Exception {
-    doTest();
-  }
+  public void testVariableName() throws Exception { doTest(); }
+  public void testFunctionName() throws Exception { doTest(); }
+  public void testSuppressed() throws Exception { doTest(); }
 
   private void doTest() {
     myFixture.testHighlighting(false, false, true, getTestName(true) + ".go");

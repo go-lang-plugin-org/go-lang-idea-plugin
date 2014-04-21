@@ -35,7 +35,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     );
   }
   
-  public void testImports() throws Exception {
+  public void testImports() {
     doTestInclude("package main; import \"<caret>", "fmt", "io");
   }
 }
