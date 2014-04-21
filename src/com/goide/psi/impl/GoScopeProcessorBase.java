@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
-  private LinkedHashSet<GoNamedElement> myVarList = ContainerUtil.newLinkedHashSet();
+  private LinkedHashSet<GoNamedElement> myResult = ContainerUtil.newLinkedHashSet();
 
   private final String myRequestedName;
   private final PsiElement myOrigin;
@@ -32,18 +32,18 @@ public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
     if (!myIsCompletion && !myRequestedName.equals(((GoNamedElement)psiElement).getName())) return true;
     if (psiElement.equals(myOrigin)) return true;
 
-    boolean add = myVarList.add((GoNamedElement)psiElement);
+    boolean add = myResult.add((GoNamedElement)psiElement);
     return myIsCompletion || !add;
   }
 
   @Nullable
   public GoNamedElement getResult() {
-    return ContainerUtil.getFirstItem(myVarList);
+    return ContainerUtil.getFirstItem(myResult);
   }
 
   @NotNull
   public Collection<GoNamedElement> getVariants() {
-    return myVarList;
+    return myResult;
   }
 
   protected abstract boolean condition(@NotNull PsiElement element);
