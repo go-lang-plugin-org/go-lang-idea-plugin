@@ -6,6 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.goide.stubs.GoVarDefinitionStub;
+import com.intellij.psi.PsiReference;
 
 public interface GoVarDefinition extends GoNamedElement, StubBasedPsiElement<GoVarDefinitionStub> {
 
@@ -14,5 +15,8 @@ public interface GoVarDefinition extends GoNamedElement, StubBasedPsiElement<GoV
 
   @Nullable
   GoType getGoType();
+
+  @Nullable
+  PsiReference getReference();
 
 }

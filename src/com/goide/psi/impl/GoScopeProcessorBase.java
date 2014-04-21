@@ -1,18 +1,19 @@
 package com.goide.psi.impl;
 
-import com.goide.psi.*;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
+import com.goide.psi.GoNamedElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.containers.OrderedSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.List;
 
 public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
-  private LinkedHashSet<GoNamedElement> myResult = ContainerUtil.newLinkedHashSet();
+  protected OrderedSet<GoNamedElement> myResult = new OrderedSet<GoNamedElement>();
 
   private final String myRequestedName;
   private final PsiElement myOrigin;
@@ -32,8 +33,12 @@ public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
     if (!myIsCompletion && !myRequestedName.equals(((GoNamedElement)psiElement).getName())) return true;
     if (psiElement.equals(myOrigin)) return true;
 
-    boolean add = myResult.add((GoNamedElement)psiElement);
+    boolean add = add((GoNamedElement)psiElement);
     return myIsCompletion || !add;
+  }
+
+  protected boolean add(@NotNull GoNamedElement psiElement) {
+    return myResult.add(psiElement);
   }
 
   @Nullable
@@ -42,7 +47,7 @@ public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
   }
 
   @NotNull
-  public Collection<GoNamedElement> getVariants() {
+  public List<GoNamedElement> getVariants() {
     return myResult;
   }
 

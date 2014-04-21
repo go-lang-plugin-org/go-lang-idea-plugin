@@ -68,6 +68,11 @@ public class GoPsiImplUtil {
     return new GoLabelReference(o);
   }
 
+  @Nullable
+  public static PsiReference getReference(@NotNull GoVarDefinition o) {
+    return PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class) != null ? new GoVarReference(o) : null;
+  }
+
   @NotNull
   public static GoReference getReference(@NotNull final GoReferenceExpression o) {
     return new GoReference(o);

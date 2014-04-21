@@ -39,6 +39,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testStruct() throws Exception { doTest(); }
   public void testBoxes()  throws Exception { doTest(); }
   public void testRanges() throws Exception { doTest(); }
+  public void testVars()   throws Exception { doTest(); }
   
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {

@@ -29,6 +29,12 @@ public class GoElementFactory {
   }
 
   @NotNull
+  public static PsiElement createVarDefinitionFromText(@NotNull Project project, String text) {
+    GoFile file = createFileFromText(project, "package p; var " + text + " = 1");
+    return file.getVars().get(0);
+  }
+
+  @NotNull
   public static GoImportDeclaration createImportDeclaration(@NotNull Project project, @NotNull String importString,
                                                             @Nullable String alias, boolean withParens) {
     importString = StringUtil.isQuotedString(importString) ? importString : StringUtil.wrapWithDoubleQuote(importString);

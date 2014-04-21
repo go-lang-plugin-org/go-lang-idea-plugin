@@ -230,7 +230,7 @@ VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList
 }
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
 VarDefinition ::= identifier {
-  methods=[getGoType]
+  methods=[getGoType getReference]
   stubClass="com.goide.stubs.GoVarDefinitionStub"
 }
 
