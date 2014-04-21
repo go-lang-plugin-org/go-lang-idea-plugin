@@ -1,5 +1,6 @@
 package com.goide.completion;
 
+import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.testFramework.LightProjectDescriptor;
 
 public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
@@ -23,7 +24,15 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){Fprintl<caret>}", 
                   "package main;\n" +
                   "import \"fmt\"\n" +
-                  "func test(){fmt.Fprintln()}");
+                  "func test(){fmt.Fprintln(<caret>)}");
+  }
+
+  public void testDoNothingInsideSelector() {
+    doTestVariants(
+      "package main\n" +
+      "import \"fmt\"\n" +
+      "func test(){fmt.Sprintln().<caret>}", CompletionType.BASIC, 1, CheckType.EQUALS
+    );
   }
   
   public void testImports() throws Exception {

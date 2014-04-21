@@ -119,6 +119,7 @@ public class GoCompletionContributor extends CompletionContributor {
                                       @NotNull CompletionResultSet result) {
           PsiElement position = parameters.getPosition();
           PsiElement parent = position.getParent();
+          if (parent.getParent() instanceof GoSelectorExpr) return;
           if (parent instanceof GoReferenceExpression) {
             if (((GoReferenceExpression)parent).getQualifier() == null) {
               final Project project = parent.getProject();
