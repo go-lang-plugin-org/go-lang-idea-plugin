@@ -121,7 +121,13 @@ public class GoCompletionContributor extends CompletionContributor {
           PsiElement parent = position.getParent();
           if (parent.getParent() instanceof GoSelectorExpr) return;
           if (parent instanceof GoReferenceExpression) {
-            if (((GoReferenceExpression)parent).getQualifier() == null) {
+            GoReferenceExpression qualifier = ((GoReferenceExpression)parent).getQualifier();
+            if (qualifier == null || qualifier.getReference().resolve() == null) {
+
+              int startOffset = parent.getTextRange().getStartOffset();
+              String newPrefix = parameters.getEditor().getDocument().getText(TextRange.create(startOffset, parameters.getOffset()));
+              result = result.withPrefixMatcher(result.getPrefixMatcher().cloneWithPrefix(newPrefix));
+              
               final Project project = parent.getProject();
               Collection<String> functionNames = StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project);
               for (String name : functionNames) {
