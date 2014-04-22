@@ -7,9 +7,11 @@ func tc(arg *Person) bool {
 	return true
 }
 
+var c complex64 = complex(2, -2)
+
 func main() {
 	f := func(n int) int {
-		return 7 + n + /*begin*/Foo/*end*/([]string{"1", "2", "3"}, tc, tc(), func() int { return 0 }(), 50/5, .5*2, .5*2 == 1)
+		return 7 + n + /*begin*/Foo/*end*/([]string{"1", "2", "3"}, tc, tc(nil), func() int { return 0 }(), 50/5, 2*.5*2, .5*2 == 1, 'w', 1.0 << 2, c, complex(2, -2))
 	}
 	println(f(5))
 }
@@ -24,13 +26,15 @@ func tc(arg *Person) bool {
 	return true
 }
 
+var c complex64 = complex(2, -2)
+
 func main() {
 	f := func(n int) int {
-		return 7 + n + Foo([]string{"1", "2", "3"}, tc, tc(), func() int { return 0 }(), 50/5, .5*2, .5*2 == 1)
+		return 7 + n + Foo([]string{"1", "2", "3"}, tc, tc(nil), func() int { return 0 }(), 50/5, 2*.5*2, .5*2 == 1, 'w', 1.0 << 2, c, complex(2, -2))
 	}
 	println(f(5))
 }
 
-func Foo(arg0 []string, arg1 func(*Person) bool, arg2 bool, arg3 int, arg4 int, arg5 float32, arg6 bool) {
+func Foo(arg0 []string, arg1 func(*Person) bool, arg2 bool, arg3 int, arg4 int, arg5 float64, arg6 bool, arg7 rune, arg8 int, arg9 complex64, arg10 complex128) {
 	//TODO: implements Foo<caret>
 }

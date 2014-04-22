@@ -7,6 +7,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -98,9 +99,15 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
 
                 case RawString:
                 case InterpretedString:
-                    return new GoType[]{
-                            GoTypes.getBuiltin(Builtin.String, namesCache)
-                    };
+                    if (literal.getNode().getElementType() == GoElementTypes.LITERAL_CHAR){
+                        return new GoType[]{
+                                GoTypes.getBuiltin(Builtin.Rune, namesCache)
+                        };
+                    } else {
+                        return new GoType[]{
+                                GoTypes.getBuiltin(Builtin.String, namesCache)
+                        };
+                    }
 
                 case Function:
                     return new GoType[]{

@@ -164,6 +164,11 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
                     return new GoType[]{
                             getBuiltin(Complex128, namesCache)
                     };
+
+                if (args[0].hasType(Int))
+                    return new GoType[]{
+                            getBuiltin(Complex128, namesCache)
+                    };
             }
         } else if (functionName.matches("^(real|imag)$")) {
             if (args.length > 0) {
