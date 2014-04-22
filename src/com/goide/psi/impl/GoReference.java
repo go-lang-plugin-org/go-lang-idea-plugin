@@ -256,7 +256,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     GoScopeProcessorBase delegate = createDelegate(processor);
     ResolveUtil.treeWalkUp(myElement, delegate);
     processReceiver(delegate);
-    processFunctionParameters(delegate);
+    processFunctionParameters(myElement, delegate);
     Collection<? extends GoNamedElement> result = delegate.getVariants();
     if (!processNamedElements(processor, state, result, localResolve)) return false;
 
@@ -332,20 +332,20 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   // todo: return boolean for better performance 
-  private void processFunctionParameters(@NotNull GoScopeProcessorBase processor) {
-    GoSignatureOwner signatureOwner = PsiTreeUtil.getParentOfType(myElement, GoSignatureOwner.class);
-    while (signatureOwner != null && processSignatureOwner(signatureOwner, processor)) {
+  public static void processFunctionParameters(@NotNull GoCompositeElement e, @NotNull GoScopeProcessorBase processor) {
+    GoSignatureOwner signatureOwner = PsiTreeUtil.getParentOfType(e, GoSignatureOwner.class);
+    while (signatureOwner != null && processSignatureOwner(e, signatureOwner, processor)) {
       signatureOwner = PsiTreeUtil.getParentOfType(signatureOwner, GoSignatureOwner.class);
     }
   }
 
-  private boolean processSignatureOwner(@NotNull GoSignatureOwner o, @NotNull GoScopeProcessorBase processor) {
+  private static boolean processSignatureOwner(@NotNull GoCompositeElement e, @NotNull GoSignatureOwner o, @NotNull GoScopeProcessorBase processor) {
     GoSignature signature = o.getSignature();
     if (signature == null) return true;
-    if (!signature.getParameters().processDeclarations(processor, ResolveState.initial(), null, myElement)) return false;
+    if (!signature.getParameters().processDeclarations(processor, ResolveState.initial(), null, e)) return false;
     GoResult result = signature.getResult();
     GoParameters resultParameters = result != null ? result.getParameters() : null;
-    if (resultParameters != null) return resultParameters.processDeclarations(processor, ResolveState.initial(), null, myElement);
+    if (resultParameters != null) return resultParameters.processDeclarations(processor, ResolveState.initial(), null, e);
     return true;
   }
 

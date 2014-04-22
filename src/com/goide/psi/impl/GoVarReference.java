@@ -20,6 +20,7 @@ public class GoVarReference extends PsiReferenceBase<GoVarDefinition> {
   public PsiElement resolve() {
     GoScopeProcessorBase p = new GoVarProcessor(myElement.getText(), myElement, false);
     ResolveUtil.treeWalkUp(myElement, p);
+    GoReference.processFunctionParameters(myElement, p);
     return ContainerUtil.getLastItem(p.getVariants());
   }
 
