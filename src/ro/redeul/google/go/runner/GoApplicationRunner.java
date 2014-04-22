@@ -78,6 +78,7 @@ public class GoApplicationRunner extends DefaultProgramRunner {
 
             if (GoSdkUtil.isHostOsWindows()) {
                 execName = execName.concat(".exe");
+                execName = execName.replaceAll("\\\\", "/");
             }
 
             final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(this,

@@ -997,7 +997,12 @@ public class GoSdkUtil {
     public static String getPackageOfFile(String projectRoot, String file) {
         String pkg = null;
 
-        if(file.startsWith(projectRoot)) {
+        // More portable solution than "file.startsWith(projectRoot)" as in Windows it creates problem
+        // due to path separator character
+        String root = new File(projectRoot).getAbsolutePath();
+        String child = new File(file).getAbsolutePath();
+
+        if(child.startsWith(root)) {
             String src = File.separator + "src" + File.separator;
 
             String fileFolder = new File(file).getParent();
