@@ -8,15 +8,15 @@ import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.ArrayList;
+import java.util.List;
 
 public class GoStructureViewFactory implements PsiStructureViewFactory {
   @Nullable
@@ -55,10 +55,9 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
   public static class Element implements StructureViewTreeElement, ItemPresentation, NavigationItem {
     private final PsiElement myElement;
-    public static final int TRIM_LENGTH = 20;
 
-    public Element(PsiElement element) {
-      this.myElement = element;
+    public Element(@NotNull PsiElement element) {
+      myElement = element;
     }
 
     @Override
@@ -96,7 +95,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     @NotNull
     @Override
     public TreeElement[] getChildren() {
-      ArrayList<TreeElement> result = new ArrayList<TreeElement>();
+      List<TreeElement> result = ContainerUtil.newArrayList();
       if (myElement instanceof GoFile) {
         for (GoTypeSpec o : ((GoFile)myElement).getTypes()) result.add(new Element(o));
         for (GoConstDefinition o : ((GoFile)myElement).getConsts()) result.add(new Element(o));
@@ -134,26 +133,21 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         GoSignature signature = ((GoFunctionOrMethodDeclaration)myElement).getSignature();
         String signatureText = signature != null ? signature.getText() : "";
         PsiElement id = ((GoFunctionOrMethodDeclaration)myElement).getIdentifier();
-        return receiver + (id != null ? id.getText() : "") + trim(signatureText);
+        return receiver + (id != null ? id.getText() : "") + signatureText;
       }
       else if (myElement instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)myElement).getType();
         String appendix = type instanceof GoStructType || type instanceof GoInterfaceType ?
                           "" :
-                          (type != null ? separator + trim(GoPsiImplUtil.getText(type)) : "");
+                          (type != null ? separator + GoPsiImplUtil.getText(type) : "");
         return ((GoTypeSpec)myElement).getIdentifier().getText() + appendix;
       }
       else if (myElement instanceof GoNamedElement) {
         GoType type = ((GoNamedElement)myElement).getGoType();
-        String typeText = type == null || myElement instanceof GoAnonymousFieldDefinition ? "" : separator + trim(GoPsiImplUtil.getText(type));
+        String typeText = type == null || myElement instanceof GoAnonymousFieldDefinition ? "" : separator + GoPsiImplUtil.getText(type);
         return ((GoNamedElement)myElement).getName() + typeText;
       }
       throw new AssertionError(myElement.getClass().getName());
-    }
-
-    @NotNull
-    private static String trim(@NotNull String text) {
-      return StringUtil.first(text, TRIM_LENGTH, true);
     }
 
     @Nullable
