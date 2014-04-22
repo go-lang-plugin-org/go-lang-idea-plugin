@@ -380,8 +380,16 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static String getText(@Nullable PsiElement o) {
+  public static String getText(@Nullable GoType o) {
     if (o == null) return "";
+    if (o instanceof GoStructType) {
+      PsiElement parent = o.getParent();
+      if (parent instanceof GoTypeSpec) {
+        String n = ((GoTypeSpec)parent).getName();
+        String p = ((GoTypeSpec)parent).getContainingFile().getPackageName();
+        if (n != null && p != null) return p + "." + n;
+      }
+    } 
     String text = o.getText();
     if (text == null) return "";
     return text.replaceAll("\\s+", " ");
