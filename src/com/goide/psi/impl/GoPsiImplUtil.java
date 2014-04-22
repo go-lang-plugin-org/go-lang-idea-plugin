@@ -149,11 +149,32 @@ public class GoPsiImplUtil {
         .withIcon(icon)
         .withInsertHandler(handler)
         .withTypeText(typeText, true)
+        .withTailText(calcTailText(f), true)
         .withLookupString(pkg)
         .withLookupString(pkg + f.getName())
         .withPresentableText(pkg + f.getName() + paramText),
-      showPkg ? GoCompletionContributor.FUNCTION_WITH_PACKAGE_PRIORITY : GoCompletionContributor.FUNCTION_PRIORITY 
+      showPkg ? GoCompletionContributor.FUNCTION_WITH_PACKAGE_PRIORITY : GoCompletionContributor.FUNCTION_PRIORITY
     );
+  }
+
+  @Nullable
+  private static String calcTailText(GoSignatureOwner m) {
+    String text = "";
+    if (m instanceof GoMethodDeclaration) {
+      text = getText(((GoMethodDeclaration)m).getReceiver().getType());
+    }
+    else if (m instanceof GoMethodSpec) {
+      PsiElement parent = m.getParent();
+      if (parent instanceof GoInterfaceType) {
+        text = getText((GoInterfaceType)parent);
+      }
+    }
+    if (!StringUtil.isEmpty(text)) return " " + arrow() + " " + text;
+    return null;
+  }
+
+  private static String arrow() {
+    return "→";
   }
 
   @NotNull
@@ -382,7 +403,7 @@ public class GoPsiImplUtil {
   @NotNull
   public static String getText(@Nullable GoType o) {
     if (o == null) return "";
-    if (o instanceof GoStructType) {
+    if (o instanceof GoStructType || o instanceof GoInterfaceType) {
       PsiElement parent = o.getParent();
       if (parent instanceof GoTypeSpec) {
         String n = ((GoTypeSpec)parent).getName();
