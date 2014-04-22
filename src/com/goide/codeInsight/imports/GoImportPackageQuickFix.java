@@ -3,6 +3,7 @@ package com.goide.codeInsight.imports;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportList;
 import com.goide.psi.GoReferenceExpression;
+import com.goide.psi.GoTypeReferenceExpression;
 import com.goide.stubs.index.GoPackagesIndex;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.codeInsight.hint.QuestionAction;
@@ -130,21 +131,22 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   }
 
   private static boolean notQualified(@Nullable PsiElement startElement) {
-    return startElement instanceof GoReferenceExpression && ((GoReferenceExpression)startElement).getQualifier() == null;
+    return 
+      startElement instanceof GoReferenceExpression && ((GoReferenceExpression)startElement).getQualifier() == null || 
+      startElement instanceof GoTypeReferenceExpression && ((GoTypeReferenceExpression)startElement).getQualifier() == null;
   }
 
   @NotNull
   private Collection<String> getPackagesToImport(@NotNull PsiElement element) {
     if (myPackagesToImport == null) {
-      myPackagesToImport = ContainerUtil.map2Set(StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, element.getProject(),
-                                                                       scope(element), GoFile.class),
-                                                 new Function<GoFile, String>() {
-                                                   @Override
-                                                   public String fun(GoFile file) {
-                                                     return file.getFullPackageName();
-                                                   }
-                                                 }
-      );
+      Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, element.getProject(), scope(element), GoFile.class);
+      myPackagesToImport = ContainerUtil.skipNulls(ContainerUtil.map2Set(es, new Function<GoFile, String>() {
+                                                                           @Override
+                                                                           public String fun(GoFile file) {
+            return file.getFullPackageName();
+          }
+        }
+      ));
     }
     return myPackagesToImport;
   }
