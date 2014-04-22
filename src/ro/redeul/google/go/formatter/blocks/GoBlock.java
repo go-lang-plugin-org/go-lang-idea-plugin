@@ -305,22 +305,6 @@ class GoBlock implements Block, GoElementTypes {
 
         ASTNode node = child.getNode();
         if (node == null || getIndentedElements().contains(node.getElementType())) {
-            if (node != null && node.getElementType() == LITERAL_COMPOSITE_ELEMENT) {
-                boolean inFunctionCall = false;
-                ASTNode nodeParent = node;
-                while (nodeParent != null) {
-                    if (nodeParent.getElementType() == CALL_OR_CONVERSION_EXPRESSION) {
-                        inFunctionCall = true;
-                        break;
-                    }
-
-                    nodeParent = nodeParent.getTreeParent();
-                }
-
-                if (inFunctionCall) {
-                    return Indent.getNoneIndent();
-                }
-            }
             return Indent.getNormalIndent();
         }
 
