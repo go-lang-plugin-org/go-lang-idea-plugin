@@ -70,20 +70,19 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
     public GoPsiType getIdentifiersType() {
         GoPsiType types = findChildByClass(GoPsiType.class);
         PsiElement parent = getParent();
-        if (types == null && parent instanceof GoConstDeclarations) {
+
+        if (types == null && parent instanceof GoConstDeclarations && !hasInitializers()) {
+            // Omitting the list of expressions is therefore equivalent to repeating the previous list
+            GoConstDeclaration previous = null;
             for (GoConstDeclaration declaration : ((GoConstDeclarations) parent).getDeclarations()) {
                 if (declaration != this) {
-                    types = ((GoConstDeclarationImpl) declaration).getType();
-                    if (types != null)
-                        return types;
+                    previous = declaration;
                 }
-            }
-        }
-        if (types == null) {
-            for (GoExpr goExpr : getExpressions()) {
-                for (GoType goType : goExpr.getType()) {
-                    if (goType instanceof GoTypePsiBacked)
-                        return ((GoTypePsiBacked) goType).getPsiType();
+                if (declaration == this) {
+                    if (previous != null){
+                        return previous.getIdentifiersType();
+                    }
+                    break;
                 }
             }
         }
@@ -93,7 +92,26 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
     @Override
     @NotNull
     public GoExpr[] getExpressions() {
-        return findChildrenByClass(GoExpr.class);
+        GoExpr[] goExprs = findChildrenByClass(GoExpr.class);
+        if (goExprs.length == 0 && !hasInitializers()) {
+            // Omitting the list of expressions is therefore equivalent to repeating the previous list
+            PsiElement parent = getParent();
+            if (parent instanceof GoConstDeclarations) {
+                GoConstDeclaration previous = null;
+                for (GoConstDeclaration declaration : ((GoConstDeclarations) parent).getDeclarations()) {
+                    if (declaration != this) {
+                        previous = declaration;
+                    }
+                    // return previous ConstSpec type
+                    if (declaration == this) {
+                        if (previous != null){
+                            return previous.getExpressions();
+                        }
+                    }
+                }
+            }
+        }
+        return goExprs;
     }
 
     private void setIotaValue(GoExpr expr, Integer iotaValue) {
