@@ -76,4 +76,8 @@ public class GoResolveCompositeTest extends GoPsiResolveTestCase {
     public void testPromotedAnonymousField4() throws Exception {
         doTest();
     }
+
+    public void testTypeSwitch() throws Exception {
+        doTest();
+    }
 }
