@@ -4,8 +4,6 @@ import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import com.goide.GoTypes;
 import java.util.*;
-import java.lang.reflect.Field;
-import org.jetbrains.annotations.NotNull;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.goide.GoParserDefinition.*;
 
