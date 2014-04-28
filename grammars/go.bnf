@@ -361,7 +361,7 @@ TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )* {extends=Type}
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
-ForStatement ::= for ([ForClause | RangeClause] Block | ExpressionNoLiteral Block)
+ForStatement ::= for ((ForClause | RangeClause) Block | ExpressionNoLiteral Block | Block) {pin(".*")=1}
 private ExpressionNoLiteral ::= <<enterMode "NO_EMPTY_LITERAL">> Expression <<exitMode "NO_EMPTY_LITERAL">>
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
 RangeClause ::= ExpressionsOrVariables range ExpressionNoLiteral {pin=2}

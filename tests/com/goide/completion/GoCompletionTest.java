@@ -118,6 +118,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
                   "package foo; import imp \"\"; func foo(a imp.<caret>SomeType) {}");
   }
 
+  public void testRanges() {
+    doTestInclude("package foo; func foo(a int) {for k := range <caret>}", "a");
+  }
+
+
   public void testNoDuplicates() {
     doTestInclude("package foo; type a struct {<caret>", "a");
     List<String> stringList = myFixture.getLookupElementStrings();

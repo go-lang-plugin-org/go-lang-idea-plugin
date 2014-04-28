@@ -1520,7 +1520,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // for ([ForClause | RangeClause] Block | ExpressionNoLiteral Block)
+  // for ((ForClause | RangeClause) Block | ExpressionNoLiteral Block | Block)
   public static boolean ForStatement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ForStatement")) return false;
     if (!nextTokenIs(builder_, FOR)) return false;
@@ -1534,38 +1534,34 @@ public class GoParser implements PsiParser {
     return result_ || pinned_;
   }
 
-  // [ForClause | RangeClause] Block | ExpressionNoLiteral Block
+  // (ForClause | RangeClause) Block | ExpressionNoLiteral Block | Block
   private static boolean ForStatement_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ForStatement_1")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = ForStatement_1_0(builder_, level_ + 1);
     if (!result_) result_ = ForStatement_1_1(builder_, level_ + 1);
+    if (!result_) result_ = Block(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
-  // [ForClause | RangeClause] Block
+  // (ForClause | RangeClause) Block
   private static boolean ForStatement_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ForStatement_1_0")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = ForStatement_1_0_0(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
     result_ = result_ && Block(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // [ForClause | RangeClause]
-  private static boolean ForStatement_1_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ForStatement_1_0_0")) return false;
-    ForStatement_1_0_0_0(builder_, level_ + 1);
-    return true;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // ForClause | RangeClause
-  private static boolean ForStatement_1_0_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ForStatement_1_0_0_0")) return false;
+  private static boolean ForStatement_1_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "ForStatement_1_0_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = ForClause(builder_, level_ + 1);
@@ -1578,11 +1574,13 @@ public class GoParser implements PsiParser {
   private static boolean ForStatement_1_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ForStatement_1_1")) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    boolean pinned_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = ExpressionNoLiteral(builder_, level_ + 1);
+    pinned_ = result_; // pin = 1
     result_ = result_ && Block(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   /* ********************************************************** */
