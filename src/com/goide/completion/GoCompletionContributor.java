@@ -133,7 +133,10 @@ public class GoCompletionContributor extends CompletionContributor {
               for (String name : functionNames) {
                 if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
                   for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, GlobalSearchScope.allScope(project))) {
-                    if (!GoUtil.allowed(declaration.getContainingFile())) continue;
+                    GoFile file = declaration.getContainingFile();
+                    if (!GoUtil.allowed(file)) continue;
+                    String packageName = file.getPackageName();
+                    if (packageName != null && StringUtil.endsWith(packageName, "_test")) continue;
                     result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, true, FUNC_IMPORT_INSERT_HANDLER));
                   }
                 }
