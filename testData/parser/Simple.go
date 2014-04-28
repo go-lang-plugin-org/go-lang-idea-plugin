@@ -124,3 +124,7 @@ var alreadyAddedErrors2 = map[pb.TaskQueueServiceError_ErrorCode]bool{
 }
 
 var a =    []byte(b.Type + "-----\n")
+
+var b = map[string]int{
+    "",
+}

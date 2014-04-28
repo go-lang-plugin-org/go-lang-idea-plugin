@@ -1029,3 +1029,29 @@ GO_FILE
           LITERAL
             PsiElement(string)('"-----\n"')
         PsiElement())(')')
+  VAR_DECLARATION
+    PsiElement(var)('var')
+    VAR_SPEC
+      VAR_DEFINITION
+        PsiElement(identifier)('b')
+      PsiElement(=)('=')
+      COMPOSITE_LIT
+        LITERAL_TYPE_EXPR
+          MAP_TYPE
+            PsiElement(map)('map')
+            PsiElement([)('[')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('string')
+            PsiElement(])(']')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('int')
+        LITERAL_VALUE
+          PsiElement({)('{')
+          ELEMENT
+            VALUE
+              LITERAL
+                PsiElement(string)('""')
+          PsiElement(,)(',')
+          PsiElement(})('}')
