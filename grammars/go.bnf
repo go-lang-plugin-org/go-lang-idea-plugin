@@ -166,7 +166,7 @@ MethodSpec ::= TypeName &(!'(') | identifier Signature {
 MapType ::= map '[' Type ']' Type {pin=1}
 ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
 
-Block ::= '{' Statements? '}' {pin(".*")=1 methods=[processDeclarations]}
+Block ::= '{' Statements? '}' {pin=1 methods=[processDeclarations]}
 private Statements ::= Statement (semi Statement)* semi? {pin=1}
 
 Statement ::=
@@ -361,7 +361,8 @@ TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )* {extends=Type}
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
-ForStatement ::= for ((ForClause | RangeClause) Block | ExpressionNoLiteral Block | Block) {pin(".*")=1}
+ForStatement ::= for (ForOrRangeClause Block | Block | ExpressionNoLiteral Block) {pin(".*")="ForOrRangeClause"}
+private ForOrRangeClause ::= ForClause | RangeClause
 private ExpressionNoLiteral ::= <<enterMode "NO_EMPTY_LITERAL">> Expression <<exitMode "NO_EMPTY_LITERAL">>
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
 RangeClause ::= ExpressionsOrVariables range ExpressionNoLiteral {pin=2}
