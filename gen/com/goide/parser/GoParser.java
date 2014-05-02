@@ -1765,7 +1765,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ((ImportDeclaration semi)+)|<<emptyImportList>>
+  // (ImportDeclaration semi)+|<<emptyImportList>>
   public static boolean ImportList(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ImportList")) return false;
     boolean result_ = false;

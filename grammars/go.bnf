@@ -85,7 +85,7 @@
 }
 
 File ::= PackageClause semi ImportList TopLevelDeclaration* {pin(".*")=1}
-ImportList ::= ((ImportDeclaration semi)+)|<<emptyImportList>> {
+ImportList ::= (ImportDeclaration semi)+|<<emptyImportList>> {
   methods=[addImport]
 }
 private semi ::= '<NL>' | ';' | <<eof>>
