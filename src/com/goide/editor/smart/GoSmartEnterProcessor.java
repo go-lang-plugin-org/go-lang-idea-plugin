@@ -19,13 +19,6 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     addEnterProcessors(new PlainEnterProcessor());
   }
 
-  @Nullable
-  public static GoStatement findStatement(@Nullable PsiElement element) {
-    GoStatement statement = PsiTreeUtil.getParentOfType(element, GoStatement.class);
-    if (statement instanceof GoSimpleStatement) statement = PsiTreeUtil.getParentOfType(statement, GoStatement.class);
-    return statement;
-  }
-
   private static void addBlockIfNeeded(GoStatement element) {
     if (element.getBlock() == null) element.add(GoElementFactory.createBlock(element.getProject()));
   }
@@ -37,8 +30,14 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
 
   @Override
   protected void collectAdditionalElements(@NotNull PsiElement element, @NotNull final List<PsiElement> result) {
-    GoStatement statement = findStatement(element);
-    if (statement != null) result.add(statement);
+    GoStatement statement = PsiTreeUtil.getParentOfType(element, GoStatement.class);
+    if (statement != null) {
+      result.add(statement);
+      PsiElement parent = statement.getParent();
+      if (parent instanceof GoStatement) {
+        result.add(parent);
+      }
+    }
   }
 
   private static class IfFixer extends Fixer<SmartEnterProcessorWithFixers> {
@@ -60,7 +59,10 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
   private static class PlainEnterProcessor extends FixEnterProcessor {
     @Nullable
     private static GoBlock findBlock(@Nullable PsiElement element) {
-      GoStatement statement = findStatement(element);
+      GoStatement statement = PsiTreeUtil.getParentOfType(element, GoStatement.class);
+      if (statement instanceof GoSimpleStatement && statement.getParent() instanceof GoStatement) {
+        statement = (GoStatement)statement.getParent();
+      }
       if (statement instanceof GoIfStatement) return statement.getBlock();
       if (statement instanceof GoForStatement) return statement.getBlock();
       if (statement instanceof GoBlock) return (GoBlock)statement;
