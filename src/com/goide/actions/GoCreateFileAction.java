@@ -15,6 +15,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.containers.ContainerUtil;
 
 import java.util.Properties;
 
@@ -26,7 +27,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
   protected PsiFile createFile(String name, String templateName, PsiDirectory dir) {
     FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
     Properties properties = new Properties();
-    properties.setProperty(PACKAGE, dir.getName());
+    properties.setProperty(PACKAGE, ContainerUtil.getLastItem(StringUtil.split(dir.getName(), "-")));
     try {
       PsiElement element = FileTemplateUtil.createFromTemplate(template, name, properties, dir);
       if (element instanceof PsiFile) return (PsiFile)element;
