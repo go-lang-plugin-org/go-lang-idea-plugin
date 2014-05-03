@@ -49,6 +49,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .afterInside(LPAREN, RESULT).none()
       .beforeInside(RPAREN, RESULT).none()
       .between(PARAMETERS, RESULT).spaces(1)
+      .before(BLOCK).spaces(1)
       .after(FUNC).spaces(1)
       .after(PACKAGE).spaces(1)
       .after(IMPORT).spaces(1)
