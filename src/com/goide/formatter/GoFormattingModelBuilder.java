@@ -24,7 +24,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
   @NotNull
   @Override
   public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
-    Block block = new GoBlock(element.getNode(), null, Indent.getNoneIndent(), null, settings, createSpacingBuilder(settings));
+    Block block = new GoFormattingBlock(element.getNode(), null, Indent.getNoneIndent(), null, settings, createSpacingBuilder(settings));
     return FormattingModelProvider.createFormattingModelForPsiFile(element.getContainingFile(), block, settings);
   }
 
@@ -66,7 +66,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     return null;
   }
 
-  public static class GoBlock implements ASTBlock {
+  public static class GoFormattingBlock implements ASTBlock {
     public static final TokenSet BLOCKS_TOKEN_SET = TokenSet.create(
       BLOCK,
       STRUCT_TYPE,
@@ -94,8 +94,8 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     private final SpacingBuilder mySpacingBuilder;
     private List<Block> mySubBlocks;
 
-    public GoBlock(ASTNode node, Alignment alignment, Indent indent, Wrap wrap, CodeStyleSettings settings,
-                   SpacingBuilder spacingBuilder) {
+    public GoFormattingBlock(ASTNode node, Alignment alignment, Indent indent, Wrap wrap, CodeStyleSettings settings,
+                             SpacingBuilder spacingBuilder) {
       myNode = node;
       myAlignment = alignment;
       myIndent = indent;
@@ -152,7 +152,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
 
     private Block buildSubBlock(ASTNode child) {
       Indent indent = calcIndent(child);
-      return new GoBlock(child, null, indent, null, mySettings, mySpacingBuilder);
+      return new GoFormattingBlock(child, null, indent, null, mySettings, mySpacingBuilder);
     }
 
     private Indent calcIndent(ASTNode child) {
