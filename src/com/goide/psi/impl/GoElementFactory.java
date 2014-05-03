@@ -63,7 +63,12 @@ public class GoElementFactory {
   }
 
   @NotNull
-  public static GoPackageClause createPackageClause(Project project, String name) {
+  public static GoPackageClause createPackageClause(@NotNull Project project, @NotNull String name) {
     return createFileFromText(project, "package " + name).getPackage();
+  }
+
+  @NotNull
+  public static GoBlock createBlock(@NotNull Project project) {
+    return createFileFromText(project, "package a; func t() {\n}").getFunctions().get(0).getBlock();
   }
 }
