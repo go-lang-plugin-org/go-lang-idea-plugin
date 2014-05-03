@@ -19,6 +19,17 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     addEnterProcessors(new PlainEnterProcessor());
   }
 
+  @Nullable
+  public static GoStatement findStatement(@Nullable PsiElement element) {
+    GoStatement statement = PsiTreeUtil.getParentOfType(element, GoStatement.class);
+    if (statement instanceof GoSimpleStatement) statement = PsiTreeUtil.getParentOfType(statement, GoStatement.class);
+    return statement;
+  }
+
+  private static void addBlockIfNeeded(GoStatement element) {
+    if (element.getBlock() == null) element.add(GoElementFactory.createBlock(element.getProject()));
+  }
+
   @Override
   public boolean doNotStepInto(PsiElement element) {
     return element instanceof GoBlock;
@@ -28,13 +39,6 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
   protected void collectAdditionalElements(@NotNull PsiElement element, @NotNull final List<PsiElement> result) {
     GoStatement statement = findStatement(element);
     if (statement != null) result.add(statement);
-  }
-
-  @Nullable
-  public static GoStatement findStatement(@Nullable PsiElement element) {
-    GoStatement statement = PsiTreeUtil.getParentOfType(element, GoStatement.class);
-    if (statement instanceof GoSimpleStatement) statement = PsiTreeUtil.getParentOfType(statement, GoStatement.class);
-    return statement;
   }
 
   private static class IfFixer extends Fixer<SmartEnterProcessorWithFixers> {
@@ -51,10 +55,6 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
       throws IncorrectOperationException {
       if (element instanceof GoForStatement) addBlockIfNeeded((GoStatement)element);
     }
-  }
-
-  private static void addBlockIfNeeded(GoStatement element) {
-    if (element.getBlock() == null) element.add(GoElementFactory.createBlock(element.getProject()));
   }
 
   private static class PlainEnterProcessor extends FixEnterProcessor {
