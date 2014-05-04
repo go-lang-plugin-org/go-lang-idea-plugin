@@ -47,6 +47,7 @@ public class GoParserTest extends ParsingTestCase {
   public void testCars()        { doTest(true);  }
   public void testIfWithNew()   { doTest(true);  }
   public void testRecover()     { doTest(false); }
+  public void testRecover2()    { doTest(false); }
   public void testMethodExpr()  { doTest(false); }
   public void testLabels()      { doTest(false); }
   public void testMethodWithoutReceiverIdentifier()  { doTest(false); }

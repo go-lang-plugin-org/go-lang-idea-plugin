@@ -457,7 +457,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '{' Statements? '}'
+  // '{' Statements '}'
   public static boolean Block(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "Block")) return false;
     if (!nextTokenIs(builder_, LBRACE)) return false;
@@ -466,17 +466,10 @@ public class GoParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = consumeToken(builder_, LBRACE);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, Block_1(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, Statements(builder_, level_ + 1));
     result_ = pinned_ && consumeToken(builder_, RBRACE) && result_;
     exit_section_(builder_, level_, marker_, BLOCK, result_, pinned_, null);
     return result_ || pinned_;
-  }
-
-  // Statements?
-  private static boolean Block_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Block_1")) return false;
-    Statements(builder_, level_ + 1);
-    return true;
   }
 
   /* ********************************************************** */
@@ -2917,12 +2910,12 @@ public class GoParser implements PsiParser {
     if (!result_) result_ = SelectStatement(builder_, level_ + 1);
     if (!result_) result_ = ForStatement(builder_, level_ + 1);
     if (!result_) result_ = DeferStatement(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, STATEMENT, result_, false, StatementRecover_parser_);
+    exit_section_(builder_, level_, marker_, STATEMENT, result_, false, null);
     return result_;
   }
 
   /* ********************************************************** */
-  // !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | case | chan | char | decimali | default | else | float | floati | func | hex | identifier | imaginary | int | interface | map | oct | rune | string | struct)
+  // !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | struct | switch | var)
   static boolean StatementRecover(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "StatementRecover")) return false;
     boolean result_ = false;
@@ -2932,7 +2925,7 @@ public class GoParser implements PsiParser {
     return result_;
   }
 
-  // '!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | case | chan | char | decimali | default | else | float | floati | func | hex | identifier | imaginary | int | interface | map | oct | rune | string | struct
+  // '!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | struct | switch | var
   private static boolean StatementRecover_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "StatementRecover_0")) return false;
     boolean result_ = false;
@@ -2979,76 +2972,93 @@ public class GoParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, RBRACK);
     if (!result_) result_ = consumeToken(builder_, BIT_XOR);
     if (!result_) result_ = consumeToken(builder_, BIT_XOR_ASSIGN);
+    if (!result_) result_ = consumeToken(builder_, TYPE_);
     if (!result_) result_ = consumeToken(builder_, LBRACE);
     if (!result_) result_ = consumeToken(builder_, BIT_OR);
     if (!result_) result_ = consumeToken(builder_, BIT_OR_ASSIGN);
     if (!result_) result_ = consumeToken(builder_, COND_OR);
     if (!result_) result_ = consumeToken(builder_, RBRACE);
+    if (!result_) result_ = consumeToken(builder_, BREAK);
     if (!result_) result_ = consumeToken(builder_, CASE);
     if (!result_) result_ = consumeToken(builder_, CHAN);
     if (!result_) result_ = consumeToken(builder_, CHAR);
+    if (!result_) result_ = consumeToken(builder_, CONST);
+    if (!result_) result_ = consumeToken(builder_, CONTINUE);
     if (!result_) result_ = consumeToken(builder_, DECIMALI);
     if (!result_) result_ = consumeToken(builder_, DEFAULT);
+    if (!result_) result_ = consumeToken(builder_, DEFER);
     if (!result_) result_ = consumeToken(builder_, ELSE);
+    if (!result_) result_ = consumeToken(builder_, FALLTHROUGH);
     if (!result_) result_ = consumeToken(builder_, FLOAT);
     if (!result_) result_ = consumeToken(builder_, FLOATI);
+    if (!result_) result_ = consumeToken(builder_, FOR);
     if (!result_) result_ = consumeToken(builder_, FUNC);
+    if (!result_) result_ = consumeToken(builder_, GO);
+    if (!result_) result_ = consumeToken(builder_, GOTO);
     if (!result_) result_ = consumeToken(builder_, HEX);
     if (!result_) result_ = consumeToken(builder_, IDENTIFIER);
+    if (!result_) result_ = consumeToken(builder_, IF);
     if (!result_) result_ = consumeToken(builder_, IMAGINARY);
     if (!result_) result_ = consumeToken(builder_, INT);
     if (!result_) result_ = consumeToken(builder_, INTERFACE);
     if (!result_) result_ = consumeToken(builder_, MAP);
     if (!result_) result_ = consumeToken(builder_, OCT);
+    if (!result_) result_ = consumeToken(builder_, RETURN);
     if (!result_) result_ = consumeToken(builder_, RUNE);
+    if (!result_) result_ = consumeToken(builder_, SELECT);
     if (!result_) result_ = consumeToken(builder_, STRING);
     if (!result_) result_ = consumeToken(builder_, STRUCT);
+    if (!result_) result_ = consumeToken(builder_, SWITCH);
+    if (!result_) result_ = consumeToken(builder_, VAR);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
   /* ********************************************************** */
-  // Statement (semi Statement)* semi?
-  static boolean Statements(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Statements")) return false;
+  // Statement (semi|&'}')
+  static boolean StatementWithSemi(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "StatementWithSemi")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = Statement(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, Statements_1(builder_, level_ + 1));
-    result_ = pinned_ && Statements_2(builder_, level_ + 1) && result_;
-    exit_section_(builder_, level_, marker_, null, result_, pinned_, null);
+    result_ = result_ && StatementWithSemi_1(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, pinned_, StatementRecover_parser_);
     return result_ || pinned_;
   }
 
-  // (semi Statement)*
-  private static boolean Statements_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Statements_1")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!Statements_1_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "Statements_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
-  }
-
-  // semi Statement
-  private static boolean Statements_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Statements_1_0")) return false;
+  // semi|&'}'
+  private static boolean StatementWithSemi_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "StatementWithSemi_1")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = semi(builder_, level_ + 1);
-    result_ = result_ && Statement(builder_, level_ + 1);
+    if (!result_) result_ = StatementWithSemi_1_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
-  // semi?
-  private static boolean Statements_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "Statements_2")) return false;
-    semi(builder_, level_ + 1);
+  // &'}'
+  private static boolean StatementWithSemi_1_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "StatementWithSemi_1_1")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_, level_, _AND_, null);
+    result_ = consumeToken(builder_, RBRACE);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // StatementWithSemi*
+  static boolean Statements(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "Statements")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!StatementWithSemi(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "Statements", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
     return true;
   }
 

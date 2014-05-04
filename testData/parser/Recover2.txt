@@ -1,0 +1,61 @@
+GO_FILE
+  PACKAGE_CLAUSE
+    PsiElement(package)('package')
+    PsiElement(identifier)('http')
+  IMPORT_LIST
+    <empty list>
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('labelsCheck')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      GOTO_STATEMENT
+        PsiElement(goto)('goto')
+        LABEL_REF
+          PsiElement(identifier)('Label1')
+      PsiElement(;)(';')
+      LABELED_STATEMENT
+        LABEL_DEFINITION
+          PsiElement(identifier)('Label1')
+        PsiElement(:)(':')
+        SIMPLE_STATEMENT
+          LITERAL
+            PsiElement(int)('1')
+      PsiElement(;)(';')
+      GOTO_STATEMENT
+        PsiElement(goto)('goto')
+        LABEL_REF
+          PsiElement(identifier)('Label2')
+      PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('serve')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      SIMPLE_STATEMENT
+        REFERENCE_EXPRESSION
+          PsiElement(identifier)('foo')
+      PsiErrorElement:'!=', '%', '%=', '&', '&&', '&=', '&^', '&^=', '(', '*', '*=', '+', '++', '+=', ',', '-', '--', '-=', '.', '/', '/=', ':', ':=', ';', <, <-, <<, <<=, <=, <NL>, <literal value>, '=', '==', '>', '>=', '>>', '>>=', '[', '^', '^=', '{', '|', '|=', '||' or '}' expected, got '('
+        <empty list>
+      SIMPLE_STATEMENT
+        PARENTHESES_EXPR
+          PsiElement(()('(')
+          PsiErrorElement:'!=', '%', '&', '&&', '&^', '(', ')', '*', '+', ',', '-', '.', '/', <, <-, <<, <=, <assign op>, <expression>, <receiver type>, '==', '>', '>=', '>>', '[', '^', chan, func, interface, map, struct, '|' or '||' expected, got 'if'
+            <empty list>
+      IF_STATEMENT
+        PsiElement(if)('if')
+        SIMPLE_STATEMENT
+          LITERAL
+            PsiElement(int)('1')
+        BLOCK
+          PsiElement({)('{')
+          PsiElement(})('}')
+      PsiElement(})('}')

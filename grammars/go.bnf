@@ -166,9 +166,10 @@ MethodSpec ::= TypeName &(!'(') | identifier Signature {
 MapType ::= map '[' Type ']' Type {pin=1}
 ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
 
-Block ::= '{' Statements? '}' {pin=1 methods=[processDeclarations]}
-private Statements ::= Statement (semi Statement)* semi? {pin=1}
+Block ::= '{' Statements '}' {pin=1 methods=[processDeclarations]}
+private Statements ::= StatementWithSemi* {pin=1}
 
+private StatementWithSemi ::= Statement (semi|&'}') { pin=1 recoverWhile=StatementRecover }
 Statement ::=
     ConstDeclaration
   | TypeDeclaration
@@ -186,9 +187,9 @@ Statement ::=
   | SwitchStatement
   | SelectStatement
   | ForStatement
-  | DeferStatement { methods=[processDeclarations] recoverWhile=StatementRecover }
+  | DeferStatement {methods=[processDeclarations]}
 
-private StatementRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | '{' | '|' | '|=' | '||' | '}' | case | chan | char | decimali | default | else | float | floati | func | hex | identifier | imaginary | int | interface | map | oct | rune | string | struct)
+private StatementRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | struct | switch | var)
 
 SimpleStatement ::=
     AssignmentStatement
