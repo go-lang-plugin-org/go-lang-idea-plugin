@@ -1,5 +1,5 @@
 package main
 
 const (
-    <caret>
+	<caret>
 )

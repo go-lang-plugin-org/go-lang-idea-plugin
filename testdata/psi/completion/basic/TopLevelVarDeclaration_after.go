@@ -1,5 +1,5 @@
 package main
 
 var (
-    <caret>
+	<caret>
 )
