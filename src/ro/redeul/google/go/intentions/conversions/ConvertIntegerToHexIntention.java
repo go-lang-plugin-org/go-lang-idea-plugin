@@ -1,5 +1,7 @@
 package ro.redeul.google.go.intentions.conversions;
 
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
@@ -25,7 +27,7 @@ public class ConvertIntegerToHexIntention extends Intention {
     }
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Editor editor)
+    protected void processIntention(@NotNull PsiElement element, final Editor editor)
             throws IncorrectOperationException {
         int value;
         try {
@@ -35,9 +37,16 @@ public class ConvertIntegerToHexIntention extends Intention {
             throw new IncorrectOperationException("Invalid integer");
         }
 
-        String result = "0x" + Integer.toString(value, 16);
-        int start = element.getTextOffset();
-        int end = start + element.getTextLength();
-        editor.getDocument().replaceString(start, end, result);
+        final String result = "0x" + Integer.toString(value, 16);
+        final int start = element.getTextOffset();
+        final int end = start + element.getTextLength();
+
+        WriteCommandAction writeCommandAction = new WriteCommandAction(element.getContainingFile().getProject()) {
+            @Override
+            protected void run(@NotNull Result res) throws Throwable {
+                editor.getDocument().replaceString(start, end, result);
+            }
+        };
+        writeCommandAction.execute();
     }
 }

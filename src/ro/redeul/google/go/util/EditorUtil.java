@@ -3,6 +3,8 @@ package ro.redeul.google.go.util;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.IdeActions;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
@@ -45,9 +47,17 @@ public class EditorUtil {
         reformatPositions(element.getContainingFile(), range.getStartOffset(), range.getEndOffset());
     }
 
-    public static void reformatPositions(@NotNull PsiFile file, int start, int end) {
-        if (start < end) {
-            CodeStyleManager.getInstance(file.getProject()).reformatText(file, start, end);
+    public static void reformatPositions(@NotNull final PsiFile file, final int start, final int end) {
+        if (start >= end) {
+            return;
         }
+
+        WriteCommandAction writeCommandAction = new WriteCommandAction(file.getProject(), file) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                CodeStyleManager.getInstance(file.getProject()).reformatText(file, start, end);
+            }
+        };
+        writeCommandAction.execute();
     }
 }

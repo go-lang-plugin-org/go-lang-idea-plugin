@@ -1,5 +1,7 @@
 package ro.redeul.google.go.intentions.control;
 
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
@@ -57,15 +59,15 @@ public class InvertIfIntention extends Intention {
             return;
         }
 
-        Document document = editor.getDocument();
+        final Document document = editor.getDocument();
         RangeMarker stmtRange = document.createRangeMarker(stmt.getTextRange());
 
         GoExpr condition = stmt.getExpression();
         boolean parentIsFunctionDeclaration = isFunctionBlock(stmt.getParent());
         GoBlockStatement thenBlock = stmt.getThenBlock();
 
-        int rightCurlyPosition = blockRightCurlyPosition(thenBlock);
-        int leftCurlyPosition = blockLeftCurlyPosition(thenBlock);
+        final int rightCurlyPosition = blockRightCurlyPosition(thenBlock);
+        final int leftCurlyPosition = blockLeftCurlyPosition(thenBlock);
         if (rightCurlyPosition < 0 || leftCurlyPosition < 0) {
             return;
         }
@@ -83,8 +85,17 @@ public class InvertIfIntention extends Intention {
                 returnDeclaration = concatenateElements(siblings);
             }
 
-            document.deleteString(rightCurlyPosition, rightCurlyPosition + 1);
-            document.insertString(leftCurlyPosition + 1, "\n" + returnDeclaration + "\n}");
+            final String finalReturnDeclaration = returnDeclaration;
+            WriteCommandAction writeCommandAction = new WriteCommandAction(element.getContainingFile().getProject()) {
+                @Override
+                protected void run(@NotNull Result result) throws Throwable {
+                    document.deleteString(rightCurlyPosition, rightCurlyPosition + 1);
+                    document.insertString(leftCurlyPosition + 1, "\n" + finalReturnDeclaration + "\n}");
+                }
+            };
+            writeCommandAction.execute();
+
+
             flipCondition(document, condition);
 
             GoSimpleStatement simpleStatement = stmt.getSimpleStatement();
@@ -92,7 +103,14 @@ public class InvertIfIntention extends Intention {
                 extractSimpleStatement(stmt, document, condition, simpleStatement);
             }
         } else {
-            document.insertString(leftCurlyPosition, "{\n} else ");
+            WriteCommandAction writeCommandAction = new WriteCommandAction(element.getContainingFile().getProject()) {
+                @Override
+                protected void run(@NotNull Result result) throws Throwable {
+                    document.insertString(leftCurlyPosition, "{\n} else ");
+                }
+            };
+            writeCommandAction.execute();
+
             flipCondition(document, condition);
         }
 
@@ -115,11 +133,18 @@ public class InvertIfIntention extends Intention {
         flipCondition(document, condition);
     }
 
-    private void extractSimpleStatement(GoIfStatement stmt, Document document, GoExpr condition,
-                                        GoSimpleStatement simpleStatement) {
-        String simpleStatementDecl = simpleStatement.getText() + "\n";
-        document.deleteString(simpleStatement.getTextOffset(), condition.getTextOffset());
-        document.insertString(stmt.getTextOffset(), simpleStatementDecl);
+    private void extractSimpleStatement(final GoIfStatement stmt, final Document document, final GoExpr condition,
+                                        final GoSimpleStatement simpleStatement) {
+        final String simpleStatementDecl = simpleStatement.getText() + "\n";
+
+        WriteCommandAction writeCommandAction = new WriteCommandAction(condition.getProject()) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                document.deleteString(simpleStatement.getTextOffset(), condition.getTextOffset());
+                document.insertString(stmt.getTextOffset(), simpleStatementDecl);
+            }
+        };
+        writeCommandAction.execute();
     }
 
     private void flipCondition(Document document, GoExpr condition) {

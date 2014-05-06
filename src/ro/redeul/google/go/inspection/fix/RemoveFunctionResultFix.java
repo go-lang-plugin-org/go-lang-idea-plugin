@@ -1,6 +1,8 @@
 package ro.redeul.google.go.inspection.fix;
 
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -25,10 +27,18 @@ public class RemoveFunctionResultFix extends LocalQuickFixAndIntentionActionOnPs
             return;
         }
 
-        PsiElement result = findChildOfType(startElement, GoElementTypes.FUNCTION_RESULT);
-        if (result != null) {
-            result.delete();
+        final PsiElement result = findChildOfType(startElement, GoElementTypes.FUNCTION_RESULT);
+        if (result == null) {
+            return;
         }
+
+        WriteCommandAction writeCommandAction = new WriteCommandAction(project) {
+            @Override
+            protected void run(@NotNull Result res) throws Throwable {
+                result.delete();
+            }
+        };
+        writeCommandAction.execute();
     }
 
     @NotNull

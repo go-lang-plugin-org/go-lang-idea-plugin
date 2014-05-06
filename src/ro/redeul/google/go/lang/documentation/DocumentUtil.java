@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.documentation;
 
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
@@ -7,6 +9,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -295,9 +298,16 @@ public class DocumentUtil {
         return sb.delete(sb.length() - 2, sb.length()).toString();
     }
 
-    public static void replaceElementWithText(Document document, PsiElement element, String text) {
-        int start = element.getTextOffset();
-        int end = start + element.getTextLength();
-        document.replaceString(start, end, text);
+    public static void replaceElementWithText(final Document document, PsiElement element, final String text) {
+        final int start = element.getTextOffset();
+        final int end = start + element.getTextLength();
+
+        WriteCommandAction writeCommandAction = new WriteCommandAction(element.getContainingFile().getProject()) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                document.replaceString(start, end, text);
+            }
+        };
+        writeCommandAction.execute();
     }
 }

@@ -1,6 +1,8 @@
 package ro.redeul.google.go.inspection.fix;
 
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -40,7 +42,7 @@ public class RemoveImportFix extends LocalQuickFixAndIntentionActionOnPsiElement
         }
 
         GoImportDeclaration declaration = (GoImportDeclaration) startElement;
-        GoImportDeclarations declarations = (GoImportDeclarations) declaration.getParent();
+        final GoImportDeclarations declarations = (GoImportDeclarations) declaration.getParent();
         String removeImport = declaration.getText();
         if (removeImport == null) {
             return;
@@ -55,9 +57,15 @@ public class RemoveImportFix extends LocalQuickFixAndIntentionActionOnPsiElement
 
         // if there are exactly 2 imports, replace the whole import to import "theOther". i.e. remove parenthesis.
         if (da.length == 2) {
-            PsiElement newImport = getNewImport(da, startElement.getText(), (GoFile) file);
+            final PsiElement newImport = getNewImport(da, startElement.getText(), (GoFile) file);
             if (newImport != null) {
-                declarations.replace(newImport);
+                WriteCommandAction writeCommandAction = new WriteCommandAction(file.getProject()) {
+                    @Override
+                    protected void run(@NotNull Result result) throws Throwable {
+                        declarations.replace(newImport);
+                    }
+                };
+                writeCommandAction.execute();
                 return;
             }
         }

@@ -2,6 +2,8 @@ package ro.redeul.google.go.inspection.fix;
 
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +48,7 @@ public class RemoveVariableFix implements LocalQuickFix {
         }
     }
 
-    private void removeIdentifier(GoLiteralIdentifier id, PsiElement parent, GoLiteralIdentifier[] ids, GoExpr[] exprs) {
+    private void removeIdentifier(GoLiteralIdentifier id, PsiElement parent, final GoLiteralIdentifier[] ids, final GoExpr[] exprs) {
         if (isIdWithBlank(id, ids)) {
             if (FixUtil.isOnlyVarDeclaration(parent) || FixUtil.isOnlyConstDeclaration(parent)) {
                 parent = parent.getParent();
@@ -55,24 +57,31 @@ public class RemoveVariableFix implements LocalQuickFix {
             return;
         }
 
-        int index = identifierIndex(ids, id);
+        final int index = identifierIndex(ids, id);
         if (index < 0) {
             return;
         }
 
-        if (index == ids.length - 1) {
-            parent.deleteChildRange(ids[index - 1].getNextSibling(), ids[index]);
-        } else {
-            parent.deleteChildRange(ids[index], ids[index + 1].getPrevSibling());
-        }
+        final PsiElement finalParent = parent;
+        WriteCommandAction writeCommandAction = new WriteCommandAction(parent.getContainingFile().getProject()) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                if (index == ids.length - 1) {
+                    finalParent.deleteChildRange(ids[index - 1].getNextSibling(), ids[index]);
+                } else {
+                    finalParent.deleteChildRange(ids[index], ids[index + 1].getPrevSibling());
+                }
 
-        if (exprs.length == ids.length) {
-            if (index == ids.length - 1) {
-                parent.deleteChildRange(exprs[index - 1].getNextSibling(), exprs[index]);
-            } else {
-                parent.deleteChildRange(exprs[index], exprs[index + 1].getPrevSibling());
+                if (exprs.length == ids.length) {
+                    if (index == ids.length - 1) {
+                        finalParent.deleteChildRange(exprs[index - 1].getNextSibling(), exprs[index]);
+                    } else {
+                        finalParent.deleteChildRange(exprs[index], exprs[index + 1].getPrevSibling());
+                    }
+                }
             }
-        }
+        };
+        writeCommandAction.execute();
     }
 
     private static boolean isIdWithBlank(GoLiteralIdentifier id, GoLiteralIdentifier[] ids) {

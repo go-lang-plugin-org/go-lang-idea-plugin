@@ -1,5 +1,7 @@
 package ro.redeul.google.go.intentions.control;
 
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
@@ -56,7 +58,7 @@ public class MergeIfAndIntention extends Intention {
     @Override
     protected void processIntention(@NotNull PsiElement element, Editor editor)
             throws IntentionExecutionException {
-        Document document = editor.getDocument();
+        final Document document = editor.getDocument();
         GoIfStatement outer = findParentOfType(element, GoIfStatement.class);
         RangeMarker reformatRange = document.createRangeMarker(outer.getTextRange());
         GoIfStatement inner = (GoIfStatement) outer.getThenBlock().getStatements()[0];
@@ -71,18 +73,27 @@ public class MergeIfAndIntention extends Intention {
         }
 
         // outer if range is text range from "if" to "{", inclusive, and surrounding whitespaces are also included.
-        RangeMarker outerIfRange = getOuterIfRange(document, outer);
-        RangeMarker rightCurlyRange = getRightCurlyRange(document, outer);
+        final RangeMarker outerIfRange = getOuterIfRange(document, outer);
+        final RangeMarker rightCurlyRange = getRightCurlyRange(document, outer);
         if (outerIfRange == null || rightCurlyRange == null) {
             return;
         }
 
-        int innerEnd = inner.getThenBlock().getTextOffset();
-        String simpleStatementAndExpression = getSimpleStatementAndExpression(outer, inner);
-        document.replaceString(inner.getTextOffset(), innerEnd, simpleStatementAndExpression);
+        final int innerEnd = inner.getThenBlock().getTextOffset();
+        final String simpleStatementAndExpression = getSimpleStatementAndExpression(outer, inner);
 
-        document.deleteString(outerIfRange.getStartOffset(), outerIfRange.getEndOffset());
-        document.deleteString(rightCurlyRange.getStartOffset(), rightCurlyRange.getEndOffset());
+        final GoIfStatement finalInner = inner;
+        WriteCommandAction writeCommandAction = new WriteCommandAction(element.getContainingFile().getProject()) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                document.replaceString(finalInner.getTextOffset(), innerEnd, simpleStatementAndExpression);
+
+                document.deleteString(outerIfRange.getStartOffset(), outerIfRange.getEndOffset());
+                document.deleteString(rightCurlyRange.getStartOffset(), rightCurlyRange.getEndOffset());
+            }
+        };
+        writeCommandAction.execute();
+
         PsiFile file = outer.getContainingFile();
         if (file != null) {
             reformatPositions(file, reformatRange);
