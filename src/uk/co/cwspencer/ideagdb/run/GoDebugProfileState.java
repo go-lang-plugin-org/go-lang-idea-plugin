@@ -62,7 +62,7 @@ public class GoDebugProfileState implements RunProfileState {
             throw new CantRunException("No Go Sdk defined for this project");
         }
 
-        String goExecName = sdkData.GO_BIN_PATH;
+        String goExecName = sdkData.GO_EXEC;
 
         String projectDir = project.getBasePath();
 
