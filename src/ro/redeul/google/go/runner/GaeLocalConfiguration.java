@@ -103,7 +103,7 @@ public class GaeLocalConfiguration extends ModuleBasedConfiguration<GoApplicatio
         workingDir = JDOMExternalizerUtil.readField(element, "workingDir");
         envVars = JDOMExternalizerUtil.readField(element, "envVars");
         hostname = JDOMExternalizerUtil.readField(element, "hostname");
-        port = JDOMExternalizerUtil.readField(element, "adminPort");
+        port = JDOMExternalizerUtil.readField(element, "port");
         adminPort = JDOMExternalizerUtil.readField(element, "adminPort");
 
         readModule(element);
