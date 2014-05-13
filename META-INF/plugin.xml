@@ -57,6 +57,7 @@
     <typeDeclarationProvider implementation="com.goide.editor.GoTypeDeclarationProvider"/>
     <codeInsight.parameterInfo language="go" implementationClass="com.goide.editor.GoParameterInfoHandler"/>
     <lang.smartEnterProcessor language="go" implementationClass="com.goide.editor.smart.GoSmartEnterProcessor"/>
+    <highlightUsagesHandlerFactory implementation="com.goide.highlighting.GoHighlightExitPointsHandlerFactory"/>
 
     <!--formatter-->
     <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
