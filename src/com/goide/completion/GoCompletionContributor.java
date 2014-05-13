@@ -173,14 +173,9 @@ public class GoCompletionContributor extends CompletionContributor {
 
       @Override
       protected boolean placeCaretInsideParentheses(InsertionContext context, LookupElement item) {
-        PsiElement myDeclaration = item.getPsiElement();
-        if (myDeclaration instanceof GoFunctionDeclaration) {
-          GoSignature signature = ((GoFunctionDeclaration)myDeclaration).getSignature();
-          if (signature != null) {
-            return signature.getParameters().getParameterDeclarationList().size() > 0;
-          }
-        }
-        return false;
+        PsiElement e = item.getPsiElement();
+        GoSignature signature = e instanceof GoFunctionDeclaration ? ((GoFunctionDeclaration)e).getSignature() : null;
+        return signature != null && signature.getParameters().getParameterDeclarationList().size() > 0;
       }
     }
   }
