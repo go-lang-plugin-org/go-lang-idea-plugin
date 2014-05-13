@@ -137,6 +137,7 @@ public class GoCompletionContributor extends CompletionContributor {
                     if (!GoUtil.allowed(file)) continue;
                     String packageName = file.getPackageName();
                     if (packageName != null && StringUtil.endsWith(packageName, "_test")) continue;
+                    if (StringUtil.equals(packageName, "main")) continue;
                     result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, true, FUNC_IMPORT_INSERT_HANDLER));
                   }
                 }
