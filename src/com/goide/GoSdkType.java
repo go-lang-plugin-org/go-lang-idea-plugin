@@ -106,7 +106,7 @@ public class GoSdkType extends SdkType {
       List<String> split = StringUtil.split(s, " ");
       String lastItem = ContainerUtil.getLastItem(split);
       if (lastItem == null) return null;
-      return lastItem.replace("go", "").replaceAll("`", "");
+      return lastItem.replace("go", "").replaceAll("`", "").replaceAll("\\(", "").replaceAll("\\)", "");
     }
     catch (IOException ignore) {
     }
