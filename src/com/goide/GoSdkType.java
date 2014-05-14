@@ -86,7 +86,14 @@ public class GoSdkType extends SdkType {
 
   @Override
   public boolean isValidSdkHome(@NotNull String path) {
+    path = adjustSdkPath(path);
     return JpsGoSdkType.getGoExecutableFile(path).canExecute();
+  }
+
+  @NotNull
+  private static String adjustSdkPath(@NotNull String path) {
+    if (new File(path, "appcfg.py").exists()) path = path + "/" + "goroot";
+    return path;
   }
 
   @NotNull
@@ -101,6 +108,7 @@ public class GoSdkType extends SdkType {
   @Override
   public String getVersionString(@NotNull String sdkHome) {
     // todo
+    sdkHome = adjustSdkPath(sdkHome);
     try {
       String s = FileUtil.loadFile(new File(sdkHome, "src/pkg/runtime/zversion.go"));
       List<String> split = StringUtil.split(s, " ");
@@ -138,10 +146,10 @@ public class GoSdkType extends SdkType {
   @Override
   public void setupSdkPaths(@NotNull Sdk sdk) {
     SdkModificator modificator = sdk.getSdkModificator();
-    add(modificator, new File(sdk.getHomePath(), "src/pkg")); // scr/pkg is enough at the moment, possible process binaries from pkg
-    //for (VirtualFile file : getGoPathsSources()) {
-    //  add(modificator, file);
-    //}
+    String path = sdk.getHomePath();
+    if (path == null) return;
+    path = adjustSdkPath(path);
+    add(modificator, new File(path, "src/pkg")); // scr/pkg is enough at the moment, possible process binaries from pkg
     modificator.commitChanges();
   }
 
