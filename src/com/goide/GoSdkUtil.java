@@ -43,10 +43,8 @@ public class GoSdkUtil {
 
   @Nullable
   private static VirtualFile guessSkdHome(@NotNull PsiElement context) {
-    VirtualFile home;
     VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
-    home = ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile); // maybe it's a file from sdk?
-    return home;
+    return ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile);
   }
 
   @NotNull
