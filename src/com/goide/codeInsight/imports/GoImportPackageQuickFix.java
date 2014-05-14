@@ -35,11 +35,13 @@ import static com.intellij.openapi.actionSystem.IdeActions.ACTION_SHOW_INTENTION
 public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HintAction, HighPriorityAction {
   @NotNull private final String myPackageName;
   @NotNull private final TextRange myRangeInElement;
+  @NotNull private final PsiReference myReference;
   @Nullable private Collection<String> myPackagesToImport;
   private boolean isPerformed = false;
 
   public GoImportPackageQuickFix(@NotNull PsiReference reference) {
     super(reference.getElement());
+    myReference = reference;
     myPackageName = reference.getCanonicalText();
     myRangeInElement = reference.getRangeInElement();
   }
@@ -50,6 +52,8 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     if (element == null || !element.isValid()) {
       return false;
     }
+
+    if (myReference.resolve() != null) return false;
 
     if (isPerformed) {
       return false;
