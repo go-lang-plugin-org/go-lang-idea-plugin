@@ -91,9 +91,14 @@ public class GoSdkType extends SdkType {
   }
 
   @NotNull
-  private static String adjustSdkPath(@NotNull String path) {
-    if (new File(path, "appcfg.py").exists()) path = path + "/" + "goroot";
+  public static String adjustSdkPath(@NotNull String path) {
+    if (isAppEngine(path)) path = path + "/" + "goroot";
     return path;
+  }
+
+  private static boolean isAppEngine(@Nullable String path) {
+    if (path == null) return false;
+    return new File(path, "appcfg.py").exists();
   }
 
   @NotNull
@@ -149,6 +154,7 @@ public class GoSdkType extends SdkType {
     String path = sdk.getHomePath();
     if (path == null) return;
     path = adjustSdkPath(path);
+    modificator.setHomePath(path);
     add(modificator, new File(path, "src/pkg")); // scr/pkg is enough at the moment, possible process binaries from pkg
     modificator.commitChanges();
   }
