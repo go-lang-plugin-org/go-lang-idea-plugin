@@ -1,5 +1,6 @@
 package com.goide.codeInsight.imports;
 
+import com.goide.GoIcons;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportList;
 import com.goide.psi.GoReferenceExpression;
@@ -12,22 +13,29 @@ import com.intellij.codeInspection.HintAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBList;
 import com.intellij.util.Function;
+import com.intellij.util.NotNullFunction;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.Collection;
 
 import static com.intellij.openapi.actionSystem.IdeActions.ACTION_SHOW_INTENTION_ACTIONS;
@@ -87,7 +95,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
           ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
-              applyFix(packagesToImport, element.getContainingFile());
+              applyFix(packagesToImport, element.getContainingFile(), editor);
             }
           });
           return true;
@@ -122,7 +130,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                      @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
     Collection<String> packagesToImport = getPackagesToImport(startElement);
     assert !packagesToImport.isEmpty();
-    applyFix(packagesToImport, file);
+    applyFix(packagesToImport, file, editor);
   }
 
   @Override
@@ -162,9 +170,42 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
            : GlobalSearchScope.projectScope(element.getProject());
   }
 
-  private void applyFix(@NotNull Collection<String> packagesToImport, @NotNull PsiFile file) {
+  private void applyFix(@NotNull final Collection<String> packagesToImport, @NotNull final PsiFile file, @Nullable Editor editor) {
     isPerformed = true;
-    String firstItem = ContainerUtil.getFirstItem(packagesToImport);
+    if (packagesToImport.size() > 1 && editor != null) {
+      final JBList list = new JBList(packagesToImport);
+      list.installCellRenderer(new NotNullFunction<Object, JComponent>() {
+        @NotNull
+        @Override
+        public JComponent fun(Object o) {
+          JBLabel label = new JBLabel(o.toString(), GoIcons.PACKAGE, SwingConstants.LEFT);
+          label.setBorder(IdeBorderFactory.createEmptyBorder(2, 4, 2, 4));
+          return label;
+        }
+      });
+      JBPopupFactory.getInstance().createListPopupBuilder(list).setRequestFocus(true).setTitle("Package to import").setItemChoosenCallback(
+        new Runnable() {
+          @Override
+          public void run() {
+            final int i = list.getSelectedIndex();
+            if (i < 0) return;
+            final String selected = ContainerUtil.newArrayList(packagesToImport).get(i);
+            new WriteCommandAction.Simple(file.getProject(), getFamilyName(), file) {
+              @Override
+              protected void run() throws Throwable {
+                perform(file, selected);
+              }
+            }.execute();
+          }
+        }
+      ).createPopup().showInBestPositionFor(editor);
+    }
+    else {
+      perform(file, ContainerUtil.getFirstItem(packagesToImport));
+    }
+  }
+
+  private static void perform(@NotNull PsiFile file, @Nullable String firstItem) {
     if (file instanceof GoFile && firstItem != null) {
       GoImportList importList = ((GoFile)file).getImportList();
       if (importList != null) {
