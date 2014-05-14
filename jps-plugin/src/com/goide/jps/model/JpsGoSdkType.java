@@ -16,14 +16,14 @@ public class JpsGoSdkType extends JpsSdkType<JpsDummyElement> implements JpsElem
   public static final JpsGoSdkType INSTANCE = new JpsGoSdkType();
 
   @NotNull
-  public static File getGoExecutableFile(@NotNull final String sdkHome) {
+  public static File getGoExecutableFile(@NotNull String sdkHome) {
     File fromSdkPath = getExecutable(new File(sdkHome, "bin").getAbsolutePath(), "go");
     File fromEnvironment = PathEnvironmentVariableUtil.findInPath("go");
     return fromSdkPath.canExecute() || fromEnvironment == null ? fromSdkPath : fromEnvironment;
   }
 
   @NotNull
-  public static String getBinaryPathByModulePath(String modulePath, String outputDirectory) {
+  public static String getBinaryPathByModulePath(@NotNull String modulePath, @NotNull String outputDirectory) {
     return outputDirectory + File.separatorChar + getBinaryFileNameForPath(modulePath);
   }
 
@@ -40,7 +40,7 @@ public class JpsGoSdkType extends JpsSdkType<JpsDummyElement> implements JpsElem
   }
 
   @NotNull
-  private static File getExecutable(@NotNull final String path, @NotNull final String command) {
+  private static File getExecutable(@NotNull String path, @NotNull String command) {
     return new File(path, getBinaryFileNameForPath(command));
   }
 }
