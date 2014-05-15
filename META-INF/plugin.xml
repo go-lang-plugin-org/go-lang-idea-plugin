@@ -109,6 +109,9 @@
     <localInspection language="go" displayName="Assignment to constant"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.unresolved.GoAssignmentToConstantInspection"/>
+    <localInspection language="go" displayName="Duplicate function"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoDuplicateFunctionInspection"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"

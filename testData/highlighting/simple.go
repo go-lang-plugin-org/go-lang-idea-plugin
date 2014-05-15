@@ -57,7 +57,7 @@ func <warning>bar</warning>() {
 }
 
 
-func <warning>foo</warning>() {
+func <error>foo</error>() {
     a := &A{}
     b := &B{b:"bbb"}
     e := &Empty{}
