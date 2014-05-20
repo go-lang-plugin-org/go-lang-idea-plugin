@@ -61,7 +61,7 @@ class GoCommandLineState extends CommandLineState {
             throw new CantRunException("Could not retrieve the project directory");
         }
 
-        String goExecName = sdkData.GO_BIN_PATH;
+        String goExecName = sdkData.GO_EXEC;
         String workingDir = testConfiguration.workingDir;
         Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, testConfiguration.envVars);
 

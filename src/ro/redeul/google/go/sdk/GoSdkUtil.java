@@ -880,7 +880,7 @@ public class GoSdkUtil {
                 return null;
             }
 
-            return sdkData.GO_BIN_PATH;
+            return sdkData.GO_EXEC;
         } else if (sdk.getSdkAdditionalData() instanceof GoAppEngineSdkData) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
             if (sdkData == null) {

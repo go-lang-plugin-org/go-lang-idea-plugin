@@ -69,7 +69,7 @@ public class GoVetRunner extends Task.Backgroundable {
             LOG.error("No Go Sdk defined for this project");
         }
 
-        String goExecName = sdkData.GO_BIN_PATH;
+        String goExecName = sdkData.GO_EXEC;
         String projectDir = myProject.getBasePath();
 
         try {

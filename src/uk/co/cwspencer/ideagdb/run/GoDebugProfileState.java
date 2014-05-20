@@ -62,7 +62,7 @@ public class GoDebugProfileState implements RunProfileState {
             throw new CantRunException("No Go Sdk defined for this project");
         }
 
-        String goExecName = sdkData.GO_BIN_PATH;
+        String goExecName = sdkData.GO_EXEC;
 
         String projectDir = project.getBasePath();
 
@@ -78,6 +78,10 @@ public class GoDebugProfileState implements RunProfileState {
         // Build and run
         String execName = m_configuration.goOutputDir.concat("/").concat(project.getName());
 
+        if (execName.endsWith(".go")) {
+            execName = execName.substring(0, execName.length() - 3);
+        }
+
         if (GoSdkUtil.isHostOsWindows()) {
             execName = execName.concat(".exe");
         }
@@ -85,12 +89,7 @@ public class GoDebugProfileState implements RunProfileState {
         try {
             String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
 
-            String pkg = GoSdkUtil.getPackageOfFile(projectDir, m_configuration.scriptName);
-
-            if(pkg == null) {
-                throw new CantRunException("Script is not inside the project root");
-            }
-            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.debugBuilderArguments, execName, pkg);
+            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.debugBuilderArguments, execName, m_configuration.scriptName);
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv, new File(projectDir));
