@@ -2,6 +2,8 @@ package ro.redeul.google.go.inspection.fix;
 
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
@@ -35,11 +37,18 @@ public class ConvertToAssignmentFix implements LocalQuickFix {
             return;
         }
 
-        Document doc = PsiDocumentManager.getInstance(e.getProject()).getDocument(e.getContainingFile());
+        final Document doc = PsiDocumentManager.getInstance(e.getProject()).getDocument(e.getContainingFile());
         if (doc == null) {
             return;
         }
 
-        doc.replaceString(e.getTextOffset(), e.getTextOffset() + e.getTextLength(), "=");
+        final PsiElement finalE = e;
+        WriteCommandAction writeCommandAction = new WriteCommandAction(project) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                doc.replaceString(finalE.getTextOffset(), finalE.getTextOffset() + finalE.getTextLength(), "=");
+            }
+        };
+        writeCommandAction.execute();
     }
 }

@@ -3,17 +3,19 @@
 # Get the current plugin directory
 pluginDir=pwd
 
+ideaVersion="13.1.2"
+
 # Get our IDEA dependency
-if [ -f ~/Tools/ideaIC-13.0.1.tar.gz ];
+if [ -f ~/Tools/ideaIC-${ideaVersion}.tar.gz ];
 then
-    cp ~/Tools/ideaIC-13.0.1.tar.gz .
+    cp ~/Tools/ideaIC-${ideaVersion}.tar.gz .
 else
-    wget http://download-ln.jetbrains.com/idea/ideaIC-13.0.1.tar.gz
+    wget http://download-cf.jetbrains.com/idea/ideaIC-${ideaVersion}.tar.gz
 fi
 
 # Unzip IDEA
-tar zxf ideaIC-13.0.1.tar.gz
-rm -rf ideaIC-13.0.1.tar.gz
+tar zxf ideaIC-${ideaVersion}.tar.gz
+rm -rf ideaIC-${ideaVersion}.tar.gz
 
 # Move the versioned IDEA folder to a known location
 ideaPath=$(find . -name 'idea-IC*' | head -n 1)

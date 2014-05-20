@@ -2,10 +2,13 @@ package ro.redeul.google.go.editor;
 
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TemplateImpl;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.util.TextRange;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -75,10 +78,16 @@ public class TemplateUtil {
     }
 
     public static void runTemplate(Editor editor, TextRange textRange, List<String> stringList, TemplateImpl template) {
-        Document document = editor.getDocument();
-        RangeMarker range = document.createRangeMarker(textRange.getStartOffset(), textRange.getEndOffset());
+        final Document document = editor.getDocument();
+        final RangeMarker range = document.createRangeMarker(textRange.getStartOffset(), textRange.getEndOffset());
         setTemplateVariableValues(template, stringList);
-        document.deleteString(range.getStartOffset(), range.getEndOffset());
+        WriteCommandAction writeCommandAction = new WriteCommandAction(editor.getProject()) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                document.deleteString(range.getStartOffset(), range.getEndOffset());
+            }
+        };
+        writeCommandAction.execute();
         TemplateManager.getInstance(editor.getProject()).startTemplate(editor, "", template);
     }
 

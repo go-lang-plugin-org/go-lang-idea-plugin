@@ -1,5 +1,7 @@
 package ro.redeul.google.go.intentions.parenthesis;
 
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -23,10 +25,10 @@ public class RemoveDeclarationParenthesesIntention extends Intention {
     }
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Editor editor)
+    protected void processIntention(@NotNull final PsiElement element, Editor editor)
             throws IncorrectOperationException {
 
-        PsiElement rightEnd = getRightParenthesis(element);
+        final PsiElement rightEnd = getRightParenthesis(element);
         if (rightEnd == null) {
             return;
         }
@@ -37,12 +39,12 @@ public class RemoveDeclarationParenthesesIntention extends Intention {
         }
         rightStart = rightStart.getNextSibling();
 
-        PsiElement leftStart = getLeftParenthesis(element);
+        final PsiElement leftStart = getLeftParenthesis(element);
         if (leftStart == null) {
             return;
         }
 
-        PsiElement leftEnd = getNextNonWhitespaceSibling(leftStart);
+        final PsiElement leftEnd = getNextNonWhitespaceSibling(leftStart);
         if (leftEnd == null) {
             return;
         }
@@ -51,8 +53,15 @@ public class RemoveDeclarationParenthesesIntention extends Intention {
         int leftLine = document.getLineNumber(leftStart.getTextOffset());
         int rightLine = document.getLineNumber(rightEnd.getTextOffset());
 
-        element.deleteChildRange(rightStart, rightEnd);
-        element.getNode().removeRange(leftStart.getNode(), leftEnd.getNode());
+        final PsiElement finalRightStart = rightStart;
+        WriteCommandAction writeCommandAction = new WriteCommandAction(editor.getProject()) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                element.deleteChildRange(finalRightStart, rightEnd);
+                element.getNode().removeRange(leftStart.getNode(), leftEnd.getNode());
+            }
+        };
+        writeCommandAction.execute();
 
         // if parentheses are not in the same line, delete line ending white space and new line
         if (leftLine != rightLine) {

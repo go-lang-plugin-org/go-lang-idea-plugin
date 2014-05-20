@@ -1,5 +1,7 @@
 package ro.redeul.google.go.intentions.statements;
 
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
@@ -147,17 +149,23 @@ public class MoveSimpleStatementOutIntention extends Intention {
         move(editor, seStmt, simpleStatement.getText(), start, end);
     }
 
-    private static void move(Editor editor, GoStatement statement, String declaration, int start, int end) {
-        Document document = editor.getDocument();
+    private static void move(Editor editor, final GoStatement statement, final String declaration, final int start, final int end) {
+        final Document document = editor.getDocument();
         RangeMarker range = document.createRangeMarker(statement.getTextOffset(), end);
-        document.deleteString(start, end);
-        document.insertString(statement.getTextOffset(), declaration + "\n");
+        WriteCommandAction writeCommandAction = new WriteCommandAction(editor.getProject()) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                document.deleteString(start, end);
+                document.insertString(statement.getTextOffset(), declaration + "\n");
+            }
+        };
+        writeCommandAction.execute();
         reformatPositions(statement.getContainingFile(), range);
     }
 
     public static void moveSimpleStatementOut(Editor editor, GoIfStatement ifStatement) {
-        GoSimpleStatement simpleStatement = ifStatement.getSimpleStatement();
-        GoExpr condition = ifStatement.getExpression();
+        final GoSimpleStatement simpleStatement = ifStatement.getSimpleStatement();
+        final GoExpr condition = ifStatement.getExpression();
         if (simpleStatement == null || condition == null) {
             return;
         }
@@ -169,10 +177,17 @@ public class MoveSimpleStatementOutIntention extends Intention {
             outermostIf = outermostIf.getParent();
         }
 
-        Document document = editor.getDocument();
+        final Document document = editor.getDocument();
         RangeMarker range = document.createRangeMarker(outermostIf.getTextOffset(), condition.getTextOffset());
-        document.deleteString(simpleStatement.getTextOffset(), condition.getTextOffset());
-        document.insertString(outermostIf.getTextOffset(), simpleStatement.getText() + "\n");
+        final PsiElement finalOutermostIf = outermostIf;
+        WriteCommandAction writeCommandAction = new WriteCommandAction(ifStatement.getContainingFile().getProject()) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                document.deleteString(simpleStatement.getTextOffset(), condition.getTextOffset());
+                document.insertString(finalOutermostIf.getTextOffset(), simpleStatement.getText() + "\n");
+            }
+        };
+        writeCommandAction.execute();
         reformatPositions(ifStatement.getContainingFile(), range);
     }
 

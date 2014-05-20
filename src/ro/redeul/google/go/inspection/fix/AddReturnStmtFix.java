@@ -1,6 +1,8 @@
 package ro.redeul.google.go.inspection.fix;
 
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
@@ -45,8 +47,8 @@ public class AddReturnStmtFix extends LocalQuickFixAndIntentionActionOnPsiElemen
         int lineNumber = doc.getLineNumber(editor.getCaretModel().getOffset());
 
         GoFile goFile = (GoFile) file;
-        PsiElement rightCurly;
-        PsiElement block;
+        final PsiElement rightCurly;
+        final PsiElement block;
         if (startElement instanceof GoFunctionDeclaration) {
             block = ((GoFunctionDeclaration) startElement).getBlock();
             rightCurly = block.getLastChild();
@@ -60,13 +62,19 @@ public class AddReturnStmtFix extends LocalQuickFixAndIntentionActionOnPsiElemen
             return;
         }
 
-        PsiElement[] elements = createStatements(goFile, "    return\n");
+        final PsiElement[] elements = createStatements(goFile, "    return\n");
         if (elements.length == 0) {
             return;
         }
 
-        block.addRangeBefore(elements[0], elements[elements.length - 1], rightCurly);
+        WriteCommandAction writeCommandAction = new WriteCommandAction(file.getProject(), file) {
+            @Override
+            protected void run(@NotNull Result result) throws Throwable {
+                block.addRangeBefore(elements[0], elements[elements.length - 1], rightCurly);
+            }
+        };
 
+        writeCommandAction.execute();
         editor.getCaretModel().moveToOffset(doc.getLineEndOffset(lineNumber));
         editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
     }
