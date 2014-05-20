@@ -135,11 +135,11 @@
               </component>
               <component id="3465" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="2" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <icon value="ide/info_notifications.png"/>
-                  <text value="You must use &quot;;&quot; in order to separate values. Ex. GOROOT=/usr/lib/go/;GOPATH=/home/Usr/go/"/>
+                  <text value="&lt;html&gt;You must use &quot;;&quot; in order to separate values. Ex. GOROOT=/usr/lib/go/;GOPATH=/home/Usr/go/&lt;/html&gt;"/>
                 </properties>
               </component>
               <component id="976bc" class="com.intellij.ui.RawCommandLineEditor" binding="m_runBuilderArguments">
@@ -200,37 +200,27 @@
                   <component id="d60a5" class="javax.swing.JTextArea" binding="m_startupCommands">
                     <constraints/>
                     <properties/>
-                    <clientProperties>
-                      <caretAspectRatio class="java.lang.Float" value="0.04"/>
-                    </clientProperties>
                   </component>
                 </children>
               </scrollpane>
               <component id="16894" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="5" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="5" column="1" row-span="1" col-span="3" vsize-policy="2" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <icon value="ide/info_notifications.png"/>
-                  <text value="In order to improve debugging capabilities of go binaries, it is highly recommended to have these flags always set: -gcflags &quot;-N -l&quot;"/>
+                  <text value="&lt;html&gt;In order to improve debugging capabilities of go binaries, it is highly recommended to have these flags always set: -gcflags &quot;-N -l&quot;&lt;/html&gt;"/>
                 </properties>
               </component>
               <component id="b8dd8" class="javax.swing.JCheckBox" binding="autoStartGdb">
                 <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <horizontalAlignment value="10"/>
+                  <horizontalTextPosition value="11"/>
                   <selected value="true"/>
                   <text value="gdb starts debugg&amp;ing automatically"/>
-                </properties>
-              </component>
-              <component id="ae5fa" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <icon value="ide/info_notifications.png"/>
-                  <text value="If you uncheck this you must run the &quot;run&quot; command in the &quot;GDB console&quot; manually"/>
                 </properties>
               </component>
               <component id="b1336" class="javax.swing.JLabel">
@@ -244,12 +234,12 @@
               </component>
               <component id="873d8" class="javax.swing.JLabel" binding="gdbVersionWarning">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="2" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <enabled value="true"/>
                   <icon value="ide/warning_notifications.png"/>
-                  <text value="Your GDB version is not among those tested. Support may vary. Please see the plugin GitHub tracker for more details"/>
+                  <text value="&lt;html&gt;Your GDB version is not among those tested. Support may vary. Please see the plugin GitHub tracker for more details&lt;/html&gt;"/>
                   <visible value="true"/>
                 </properties>
               </component>
@@ -261,6 +251,17 @@
                   <text value="gdb start&amp;up commands:"/>
                   <verticalAlignment value="0"/>
                   <verticalTextPosition value="0"/>
+                </properties>
+              </component>
+              <component id="ae5fa" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="2" hsize-policy="1" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <horizontalAlignment value="2"/>
+                  <horizontalTextPosition value="11"/>
+                  <icon value="ide/info_notifications.png"/>
+                  <text value="&lt;html&gt;If you uncheck this you must run the &quot;run&quot; command in the &quot;GDB console&quot; manually&lt;/html&gt;"/>
                 </properties>
               </component>
             </children>
