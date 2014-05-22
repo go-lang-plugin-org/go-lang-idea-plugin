@@ -31,3 +31,5 @@ func main(aaa string, rd io.Reader, error) (ok, ok) {
     const aaa = iota
     var bbb = iota
 }
+
+var b = map[string]int{    }

@@ -31,3 +31,5 @@ b,  ok  :=    rd . ( *   Reader )
 	const  aaa    = iota
 	var  bbb    = iota
 }
+
+var b = map [ string   ]  int   {    }
