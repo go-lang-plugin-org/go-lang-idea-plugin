@@ -39,8 +39,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     };
   public static final Key<List<PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
 
-  public GoReference(@NotNull GoReferenceExpression element) {
-    super(element, TextRange.from(element.getIdentifier().getStartOffsetInParent(), element.getIdentifier().getTextLength()));
+  public GoReference(@NotNull GoReferenceExpression o) {
+    super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
   }
 
   @NotNull
