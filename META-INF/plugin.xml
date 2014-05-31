@@ -74,6 +74,7 @@
 
     <!-- run single file -->
     <configurationType implementation="com.goide.runconfig.file.GoRunFileConfigurationType"/>
+    <runConfigurationProducer implementation="com.goide.runconfig.file.GoRunFileConfigurationProducer"/>
 
     <!-- run application -->
     <programRunner implementation="com.goide.runconfig.GoRunner"/>
