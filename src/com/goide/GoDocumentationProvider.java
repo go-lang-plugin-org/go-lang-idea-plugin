@@ -32,10 +32,10 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       if (!comments.isEmpty()) return getCommentText(comments);
     }
     else if (element instanceof PsiDirectory) {
-      PsiFile doc = ((PsiDirectory)element).findFile("doc.go");
-      if (doc instanceof GoFile) {
-        // todo: remove after correct stubbing
-        GoPackageClause pack = PsiTreeUtil.findChildOfType(doc, GoPackageClause.class);
+      PsiFile file = ((PsiDirectory)element).findFile("doc.go");
+      if (file instanceof GoFile) {
+        // todo: remove after correct stubbing (comments needed in stubs)
+        GoPackageClause pack = PsiTreeUtil.findChildOfType(file, GoPackageClause.class);
         List<PsiComment> comments = getPreviousNonWsComment(pack);
         if (!comments.isEmpty()) return getCommentText(comments);
       }
