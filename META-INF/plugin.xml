@@ -90,6 +90,7 @@
     <configurationType implementation="com.goide.debugger.ideagdb.run.GdbRunConfigurationType"/>
     <programRunner implementation="com.goide.debugger.ideagdb.run.GdbRunner"/>
 
+    <checkinHandlerFactory implementation="com.goide.actions.fmt.GoFmtCheckinFactory" order="last"/>
 
     <localInspection language="go" displayName="Unresolved reference inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"

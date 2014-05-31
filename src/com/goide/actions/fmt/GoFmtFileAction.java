@@ -3,6 +3,7 @@ package com.goide.actions.fmt;
 import com.goide.GoSdkType;
 import com.goide.jps.model.JpsGoSdkType;
 import com.goide.psi.GoFile;
+import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessAdapter;
@@ -48,58 +49,65 @@ public class GoFmtFileAction extends AnAction implements DumbAware {
     assert file instanceof GoFile;
     final VirtualFile vFile = file.getVirtualFile();
 
-    if (vFile == null || !vFile.isInLocalFileSystem()) return;
-    final Document document = PsiDocumentManager.getInstance(project).getDocument(file);
-    assert document != null;
-    final String filePath = vFile.getCanonicalPath();
-    assert filePath != null;
-
     final String groupId = e.getPresentation().getText();
+
     try {
-      GeneralCommandLine commandLine = new GeneralCommandLine();
-      Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
-
-      String sdkHome = sdk != null ? sdk.getHomePath() : null;
-      if (StringUtil.isEmpty(sdkHome)) {
-        warning(project, groupId, "Project sdk is empty");
-        return;
-      }
-      if (!(sdk.getSdkType() instanceof GoSdkType)) {
-        warning(project, groupId, "Project sdk is not valid");
-        return;
-      }
-
-      File executable = JpsGoSdkType.getGoExecutableFile(sdkHome);
-
-      commandLine.setExePath(executable.getAbsolutePath());
-      commandLine.addParameters("fmt", filePath);
-
-      FileDocumentManager.getInstance().saveDocument(document);
-
-      String commandLineString = commandLine.getCommandLineString();
-      OSProcessHandler handler = new OSProcessHandler(commandLine.createProcess(), commandLineString);
-      handler.addProcessListener(new ProcessAdapter() {
-        @Override
-        public void processTerminated(ProcessEvent event) {
-          ApplicationManager.getApplication().invokeLater(new Runnable() {
-            @Override
-            public void run() {
-              ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                @Override
-                public void run() {
-                  vFile.refresh(false, false);
-                }
-              });
-            }
-          });
-        }
-      });
-      handler.startNotify();
+      doFmt(file, project, vFile, groupId);
     }
     catch (Exception ex) {
       error(file, project, groupId, ex);
       LOG.error(ex);
     }
+  }
+
+  public static boolean doFmt(PsiFile file, Project project, @Nullable final VirtualFile vFile, @Nullable String groupId)
+    throws ExecutionException {
+    if (vFile == null || !vFile.isInLocalFileSystem()) return true;
+    Document document = PsiDocumentManager.getInstance(project).getDocument(file);
+    assert document != null;
+    String filePath = vFile.getCanonicalPath();
+    assert filePath != null;
+
+    GeneralCommandLine commandLine = new GeneralCommandLine();
+    Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
+
+    String sdkHome = sdk != null ? sdk.getHomePath() : null;
+    if (StringUtil.isEmpty(sdkHome)) {
+      if (groupId != null) warning(project, groupId, "Project sdk is empty");
+      return true;
+    }
+    if (!(sdk.getSdkType() instanceof GoSdkType)) {
+      if (groupId != null) warning(project, groupId, "Project sdk is not valid");
+      return true;
+    }
+
+    File executable = JpsGoSdkType.getGoExecutableFile(sdkHome);
+
+    commandLine.setExePath(executable.getAbsolutePath());
+    commandLine.addParameters("fmt", filePath);
+
+    FileDocumentManager.getInstance().saveDocument(document);
+
+    String commandLineString = commandLine.getCommandLineString();
+    OSProcessHandler handler = new OSProcessHandler(commandLine.createProcess(), commandLineString);
+    handler.addProcessListener(new ProcessAdapter() {
+      @Override
+      public void processTerminated(ProcessEvent event) {
+        ApplicationManager.getApplication().invokeLater(new Runnable() {
+          @Override
+          public void run() {
+            ApplicationManager.getApplication().runWriteAction(new Runnable() {
+              @Override
+              public void run() {
+                vFile.refresh(false, false);
+              }
+            });
+          }
+        });
+      }
+    });
+    handler.startNotify();
+    return false;
   }
 
   private static void error(@NotNull PsiFile file, @NotNull Project project, @NotNull String groupId, @Nullable Exception ex) {
