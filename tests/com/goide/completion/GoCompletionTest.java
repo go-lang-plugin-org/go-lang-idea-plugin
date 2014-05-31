@@ -62,6 +62,18 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "continue");
   }
 
+  public void testTopLevelKeywords() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "func", "import", "type", "var");
+  }
+
+  public void testTopLevelKeywords_2() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "func", "type", "var");
+  }
+
+  public void testPackageKeyword() {
+    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+  }
+  
   public void testMethods() {
     doTestEquals("package foo; type T interface{}; func (t T) f() {t.<caret>}", "f");
   }

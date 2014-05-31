@@ -46,7 +46,7 @@ public class GoCompletionContributor extends CompletionContributor {
     extend(CompletionType.BASIC, importPattern(), new GoKeywordCompletionProvider("import"));
     extend(CompletionType.BASIC, topLevelPattern(), new GoKeywordCompletionProvider("const", "var", "func", "type"));
   }
-
+  
   private static PsiElementPattern.Capture<PsiElement> inGoFile() {
     return psiElement().inFile(psiElement(GoFile.class));
   }
@@ -78,7 +78,7 @@ public class GoCompletionContributor extends CompletionContributor {
     return psiFile(GoFile.class).andNot(psiElement().withFirstNonWhitespaceChild(psiElement(GoTypes.PACKAGE_CLAUSE)));
   }
 
-  public static class AutoImport extends CompletionContributor {
+ public static class AutoImport extends CompletionContributor {
 
     private static final ParenthesesWithImport FUNC_IMPORT_INSERT_HANDLER = new ParenthesesWithImport();
 
@@ -118,7 +118,7 @@ public class GoCompletionContributor extends CompletionContributor {
         }
       });
     }
-
+    
     private static class ParenthesesWithImport extends ParenthesesInsertHandler<LookupElement> {
       @Override
       public void handleInsert(InsertionContext context, LookupElement item) {
