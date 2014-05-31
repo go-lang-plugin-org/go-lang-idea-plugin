@@ -53,6 +53,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testImports() {
     doCheckResult("package foo; import imp \"\"; func foo(a im<caret>) {}", "package foo; import imp \"\"; func foo(a imp.) {}");
   }
+  
+  public void testImportsForRefs() {
+    doCheckResult("package foo; import imp \"\"; func foo() {im<caret>.foo}", "package foo; import imp \"\"; func foo() {imp.<caret>foo}");
+  }
 
   public void testKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "continue");
@@ -121,7 +125,6 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testRanges() {
     doTestInclude("package foo; func foo(a int) {for k := range <caret>}", "a");
   }
-
 
   public void testNoDuplicates() {
     doTestInclude("package foo; type a struct {<caret>", "a");

@@ -211,10 +211,16 @@ public class GoPsiImplUtil {
                                                  GoCompletionContributor.VAR_PRIORITY);
   }
 
+  @Nullable
+  public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec) {
+    PsiElement id = spec.getIdentifier();
+    return id != null ? createPackageLookupElement(id.getText(), true) : null;
+  }
+
   @NotNull
-  public static LookupElement createPackageLookupElement(@NotNull String i, boolean forType) {
+  public static LookupElement createPackageLookupElement(@NotNull String str, boolean forType) {
     return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(i).withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
+      LookupElementBuilder.create(str).withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
       GoCompletionContributor.PACKAGE_PRIORITY);
   }
 
