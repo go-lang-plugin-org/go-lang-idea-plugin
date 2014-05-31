@@ -134,7 +134,7 @@
       <add-to-group group-id="GenerateGroup" anchor="first"/>
     </group>
 
-    <action id="GoFmtFileAction" class="com.goide.actions.fmt.GoFmtFileAction" text="Go fmt"
+    <action id="GoFmtFileAction" class="com.goide.actions.fmt.GoFmtFileAction" text="Go fmt file"
             description="Format selected file with go fmt util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F"/>
