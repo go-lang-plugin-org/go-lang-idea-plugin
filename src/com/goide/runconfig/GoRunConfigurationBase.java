@@ -16,9 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Collection;
 
-public abstract class GoRunConfigurationBase<RunningState extends GoRunningState> extends ModuleBasedConfiguration<GoModuleBasedConfiguration>
-  implements RunConfigurationWithSuppressedDefaultRunAction {
-  protected String myFilePath = "";
+public abstract class GoRunConfigurationBase<RunningState extends GoRunningState>
+  extends ModuleBasedConfiguration<GoModuleBasedConfiguration> implements RunConfigurationWithSuppressedDefaultRunAction {
   protected String myParams = "";
 
   public GoRunConfigurationBase(String name, GoModuleBasedConfiguration configurationModule, ConfigurationFactory factory) {
@@ -27,8 +26,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
 
   @Override
   public Collection<Module> getValidModules() {
-    Module[] modules = ModuleManager.getInstance(getProject()).getModules();
-    return Arrays.asList(modules);
+    return Arrays.asList(ModuleManager.getInstance(getProject()).getModules());
   }
 
   @Override
@@ -63,14 +61,5 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
 
   public void setParams(@NotNull String params) {
     myParams = params;
-  }
-
-  @NotNull
-  public String getFilePath() {
-    return myFilePath;
-  }
-
-  public void setFilePath(@NotNull String filePath) {
-    myFilePath = filePath;
   }
 }

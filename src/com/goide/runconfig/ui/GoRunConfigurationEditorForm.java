@@ -1,7 +1,7 @@
 package com.goide.runconfig.ui;
 
 import com.goide.GoModuleType;
-import com.goide.runconfig.GoRunConfigurationBase;
+import com.goide.runconfig.GoRunConfigurationWithMain;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.ConfigurationException;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurationBase> {
+public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurationWithMain> {
   private JPanel component;
   private ModulesCombobox myComboModules;
   private RawCommandLineEditor myParamsField;
@@ -31,7 +31,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurat
   }
 
   @Override
-  protected void resetEditorFrom(@NotNull GoRunConfigurationBase configuration) {
+  protected void resetEditorFrom(@NotNull GoRunConfigurationWithMain configuration) {
     myComboModules.fillModules(configuration.getProject(), GoModuleType.getInstance());
     myComboModules.setSelectedModule(configuration.getConfigurationModule().getModule());
     myParamsField.setText(configuration.getParams());
@@ -43,7 +43,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurat
   }
 
   @Override
-  protected void applyEditorTo(@NotNull GoRunConfigurationBase configuration) throws ConfigurationException {
+  protected void applyEditorTo(@NotNull GoRunConfigurationWithMain configuration) throws ConfigurationException {
     configuration.setModule(myComboModules.getSelectedModule());
     configuration.setParams(myParamsField.getText());
     configuration.setFilePath(myFilePathField.getText());
