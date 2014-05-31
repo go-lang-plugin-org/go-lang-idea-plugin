@@ -33,18 +33,23 @@ public class GoKeywordCompletionProvider extends CompletionProvider<CompletionPa
   }
 
   private LookupElement createKeywordLookupElement(final String keyword) {
-    LookupElementBuilder result =
-      LookupElementBuilder.create(keyword).withBoldness(true).withInsertHandler(new InsertHandler<LookupElement>() {
-        @Override
-        public void handleInsert(InsertionContext context, LookupElement item) {
-          TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(context.getProject());
-          Template template = TemplateSettings.getInstance().getTemplateById("go_lang_" + keyword);
-          if (template != null) {
-            context.getEditor().getDocument().deleteString(context.getStartOffset(), context.getTailOffset());
-            templateManager.startTemplate(context.getEditor(), template);
-          }
-        }
-      });
+    InsertHandler<LookupElement> insertHandler = createTemplateBasedInsertHandler("go_lang_" + keyword);
+    LookupElementBuilder result = LookupElementBuilder.create(keyword).withBoldness(true).withInsertHandler(insertHandler);
     return myCompletionPolicy != null ? myCompletionPolicy.applyPolicy(result) : result;
+  }
+
+  public static InsertHandler<LookupElement> createTemplateBasedInsertHandler(@NotNull final String templateId) {
+    // todo: add space after keyword if there are no template with given id
+    return new InsertHandler<LookupElement>() {
+      @Override
+      public void handleInsert(InsertionContext context, LookupElement item) {
+        TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(context.getProject());
+        Template template = TemplateSettings.getInstance().getTemplateById(templateId);
+        if (template != null) {
+          context.getEditor().getDocument().deleteString(context.getStartOffset(), context.getTailOffset());
+          templateManager.startTemplate(context.getEditor(), template);
+        }
+      }
+    };
   }
 }

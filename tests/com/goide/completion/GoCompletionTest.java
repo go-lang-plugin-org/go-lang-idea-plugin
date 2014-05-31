@@ -58,16 +58,24 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doCheckResult("package foo; import imp \"\"; func foo() {im<caret>.foo}", "package foo; import imp \"\"; func foo() {imp.<caret>foo}");
   }
 
-  public void testKeywords() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "continue");
-  }
-
   public void testTopLevelKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "func", "import", "type", "var");
   }
 
   public void testTopLevelKeywords_2() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "func", "type", "var");
+  }
+
+  public void testBlockKeywords() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select", "main");
+  }
+
+  public void testFunctionInDefer() {
+    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+  }
+
+  public void testFunctionInGo() {
+    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
   }
 
   public void testPackageKeyword() {

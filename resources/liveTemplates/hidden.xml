@@ -76,6 +76,12 @@
       <option name='GO' value='true'/>
     </context>
   </template>
+  <template description='Anonymous function' id='go_lang_anonymous_func' name='go_lang_anonymous_func' toReformat='true' toShortenFQNames='true'
+            value='func() { $END$ }'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
   <template description='Variable declaration' id='go_lang_var' name='go_lang_var' toReformat='true' toShortenFQNames='true'
             value='var $NAME$ $TYPE$ = $VALUE$'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>

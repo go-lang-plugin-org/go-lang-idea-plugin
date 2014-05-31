@@ -9,6 +9,7 @@ import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -45,8 +46,28 @@ public class GoCompletionContributor extends CompletionContributor {
     extend(CompletionType.BASIC, packagePattern(), new GoKeywordCompletionProvider(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE, "package"));
     extend(CompletionType.BASIC, importPattern(), new GoKeywordCompletionProvider("import"));
     extend(CompletionType.BASIC, topLevelPattern(), new GoKeywordCompletionProvider("const", "var", "func", "type"));
+    extend(CompletionType.BASIC, insideBlockPattern(), new GoKeywordCompletionProvider("for", "const", "var", "return", "if", "switch", "go", "defer", "select"));
+    //todo extend(CompletionType.BASIC, insideSwitchStatement(), new GoKeywordCompletionProvider("case", "default"));
+    //  todo: "interface", "struct", "continue"
   }
-  
+
+  @Override
+  public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
+    super.fillCompletionVariants(parameters, result);
+    if (insideGoOrDeferStatements().accepts(parameters.getPosition())) {
+      InsertHandler<LookupElement> insertHandler = GoKeywordCompletionProvider.createTemplateBasedInsertHandler("go_lang_anonymous_func");
+      result.addElement(LookupElementBuilder.create("func").withInsertHandler(insertHandler));
+    }
+  }
+
+  private static PsiElementPattern.Capture<PsiElement> insideGoOrDeferStatements() {
+    return psiElement().withParent(psiElement(GoExpression.class).withParent(or(psiElement(GoDeferStatement.class), psiElement(GoGoStatement.class))));
+  }
+
+  private static PsiElementPattern.Capture<PsiElement> insideBlockPattern() {
+    return onNewLine().withParent(psiElement(GoExpression.class).withParent(psiElement(GoStatement.class).withParent(GoBlock.class)));
+  }
+
   private static PsiElementPattern.Capture<PsiElement> inGoFile() {
     return psiElement().inFile(psiElement(GoFile.class));
   }
@@ -78,8 +99,7 @@ public class GoCompletionContributor extends CompletionContributor {
     return psiFile(GoFile.class).andNot(psiElement().withFirstNonWhitespaceChild(psiElement(GoTypes.PACKAGE_CLAUSE)));
   }
 
- public static class AutoImport extends CompletionContributor {
-
+  public static class AutoImport extends CompletionContributor {
     private static final ParenthesesWithImport FUNC_IMPORT_INSERT_HANDLER = new ParenthesesWithImport();
 
     public AutoImport() {
