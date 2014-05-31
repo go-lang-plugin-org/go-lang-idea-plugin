@@ -34,16 +34,18 @@ public class GoKeywordCompletionProvider extends CompletionProvider<CompletionPa
     }
   }
 
-  private LookupElement createKeywordLookupElement(final String keyword) {
+  @NotNull
+  private LookupElement createKeywordLookupElement(@NotNull final String keyword) {
     InsertHandler<LookupElement> insertHandler = createTemplateBasedInsertHandler("go_lang_" + keyword);
     LookupElementBuilder result = LookupElementBuilder.create(keyword).withBoldness(true).withInsertHandler(insertHandler);
     return myCompletionPolicy != null ? myCompletionPolicy.applyPolicy(result) : result;
   }
 
+  @Nullable
   public static InsertHandler<LookupElement> createTemplateBasedInsertHandler(@NotNull final String templateId) {
     return new InsertHandler<LookupElement>() {
       @Override
-      public void handleInsert(InsertionContext context, LookupElement item) {
+      public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
         TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(context.getProject());
         Template template = TemplateSettings.getInstance().getTemplateById(templateId);
         Editor editor = context.getEditor();

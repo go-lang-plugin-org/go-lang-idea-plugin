@@ -18,7 +18,7 @@ public class GoRunConfigurationProducerBase<T extends GoRunConfigurationWithMain
   }
 
   @Override
-  protected boolean setupConfigurationFromContext(T configuration, ConfigurationContext context, Ref<PsiElement> sourceElement) {
+  protected boolean setupConfigurationFromContext(@NotNull T configuration, @NotNull ConfigurationContext context, Ref<PsiElement> sourceElement) {
     PsiFile file = getFileFromContext(context);
     if (file != null) {
       if ("main".equals(((GoFile)file).getPackageName()) && ((GoFile)file).findMainFunction() != null) {
@@ -39,7 +39,7 @@ public class GoRunConfigurationProducerBase<T extends GoRunConfigurationWithMain
   }
 
   @Override
-  public boolean isConfigurationFromContext(T configuration, ConfigurationContext context) {
+  public boolean isConfigurationFromContext(@NotNull T configuration, ConfigurationContext context) {
     GoFile file = getFileFromContext(context);
     return file != null && FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath());
   }

@@ -12,6 +12,7 @@ public class GoSpellcheckingStrategy extends SuppressibleSpellcheckingStrategy {
     return GoSuppressionUtil.isSuppressedFor(element, name);
   }
 
+  @NotNull
   @Override
   public SuppressQuickFix[] getSuppressActions(@NotNull PsiElement element, @NotNull String name) {
     return GoSuppressionUtil.getSuppressQuickFixes(name);

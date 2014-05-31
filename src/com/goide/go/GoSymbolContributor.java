@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoSymbolContributor implements ChooseByNameContributor {
   @NotNull
   @Override
-  public String[] getNames(Project project, boolean includeNonProjectItems) {
+  public String[] getNames(@NotNull Project project, boolean includeNonProjectItems) {
     return ArrayUtil.toStringArray(StubIndex.getInstance().getAllKeys(GoAllNamesIndex.ALL_NAMES, project));
   }
 

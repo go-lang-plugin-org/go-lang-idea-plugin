@@ -15,11 +15,13 @@ public class GoSignatureStubElementType extends GoStubElementType<GoSignatureStu
     super(name);
   }
 
+  @NotNull
   @Override
   public GoSignature createPsi(@NotNull GoSignatureStub stub) {
     return new GoSignatureImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoSignatureStub createStub(@NotNull GoSignature psi, StubElement parentStub) {
     return new GoSignatureStub(parentStub, this);

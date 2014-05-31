@@ -7,6 +7,8 @@ import com.goide.debugger.gdb.messages.annotations.GdbMiConversionRule;
 import com.goide.debugger.gdb.messages.annotations.GdbMiEnum;
 import com.goide.debugger.gdb.messages.annotations.GdbMiObject;
 import com.intellij.openapi.diagnostic.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
@@ -27,9 +29,10 @@ public class GdbMiValueConversionRules {
   /**
    * Converts results where the target type has a GdbMiObject annotation.
    */
+  @Nullable
   @GdbMiConversionRule
-  public static Object convertValueToTypeWithGdbMiObjectAnnotation(Class<?> type,
-                                                                   ParameterizedType genericType, GdbMiValue value) {
+  public static Object convertValueToTypeWithGdbMiObjectAnnotation(@NotNull Class<?> type,
+                                                                   ParameterizedType genericType, @NotNull GdbMiValue value) {
     // If the field type class has a GdbMiObject annotation then recursively process it
     GdbMiObject objectAnnotation = type.getAnnotation(GdbMiObject.class);
     if (objectAnnotation != null) {
@@ -73,9 +76,10 @@ public class GdbMiValueConversionRules {
   /**
    * Converts string results to enums.
    */
+  @Nullable
   @GdbMiConversionRule
-  public static Object convertStringToEnum(Class<?> type, ParameterizedType genericType,
-                                           GdbMiValue value) {
+  public static Object convertStringToEnum(@NotNull Class<?> type, ParameterizedType genericType,
+                                           @NotNull GdbMiValue value) {
     // Check if the field type is an enum
     if (type.isEnum()) {
       // Only strings can be converted
@@ -137,9 +141,10 @@ public class GdbMiValueConversionRules {
   /**
    * Converts strings to simple types.
    */
+  @Nullable
   @GdbMiConversionRule
-  public static Object convertStringToSimple(Class<?> type, ParameterizedType genericType,
-                                             GdbMiValue value) {
+  public static Object convertStringToSimple(@NotNull Class<?> type, ParameterizedType genericType,
+                                             @NotNull GdbMiValue value) {
     if (value.type == GdbMiValue.Type.String) {
       if (type.equals(String.class)) {
         return value.string;
@@ -173,10 +178,11 @@ public class GdbMiValueConversionRules {
   /**
    * Converts a list to a list. If it is a list of results then the variable name is discarded.
    */
+  @Nullable
   @SuppressWarnings("unchecked")
   @GdbMiConversionRule
-  public static Object convertListOfValuesToList(Class<?> type, ParameterizedType genericType,
-                                                 GdbMiValue value) throws InvocationTargetException, IllegalAccessException {
+  public static Object convertListOfValuesToList(@NotNull Class<?> type, @Nullable ParameterizedType genericType,
+                                                 @NotNull GdbMiValue value) throws InvocationTargetException, IllegalAccessException {
     if (value.type != GdbMiValue.Type.List || genericType == null ||
         !type.equals(List.class)) {
       return null;
@@ -226,10 +232,11 @@ public class GdbMiValueConversionRules {
    * tuples only have one value then that value is used as the key and the value will be null. The
    * variable names of the tuples are discarded.
    */
+  @Nullable
   @SuppressWarnings("unchecked")
   @GdbMiConversionRule
-  public static Object convertListOfTuplesToMap(Class<?> type, ParameterizedType genericType,
-                                                GdbMiValue value) throws InvocationTargetException, IllegalAccessException {
+  public static Object convertListOfTuplesToMap(@NotNull Class<?> type, @Nullable ParameterizedType genericType,
+                                                @NotNull GdbMiValue value) throws InvocationTargetException, IllegalAccessException {
     if (value.type != GdbMiValue.Type.List || genericType == null ||
         !type.equals(Map.class)) {
       return null;

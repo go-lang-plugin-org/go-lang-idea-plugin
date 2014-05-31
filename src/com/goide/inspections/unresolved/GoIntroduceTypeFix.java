@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoIntroduceTypeFix extends GoUnresolvedFixBase {
-  public GoIntroduceTypeFix(@NotNull PsiElement element, String name) {
+  public GoIntroduceTypeFix(@NotNull PsiElement element, @NotNull String name) {
     super(element, name, "type");
   }
 

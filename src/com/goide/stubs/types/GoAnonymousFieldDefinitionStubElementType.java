@@ -15,11 +15,13 @@ public class GoAnonymousFieldDefinitionStubElementType extends GoNamedStubElemen
     super(name);
   }
 
+  @NotNull
   @Override
   public GoAnonymousFieldDefinition createPsi(@NotNull GoAnonymousFieldDefinitionStub stub) {
     return new GoAnonymousFieldDefinitionImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoAnonymousFieldDefinitionStub createStub(@NotNull GoAnonymousFieldDefinition psi, StubElement parentStub) {
     return new GoAnonymousFieldDefinitionStub(parentStub, this, psi.getName(), psi.isPublic());

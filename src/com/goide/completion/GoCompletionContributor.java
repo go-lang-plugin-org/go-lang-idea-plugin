@@ -54,7 +54,7 @@ public class GoCompletionContributor extends CompletionContributor {
   }
 
   @Override
-  public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
+  public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
     super.fillCompletionVariants(parameters, result);
     if (insideGoOrDeferStatements().accepts(parameters.getPosition())) {
       InsertHandler<LookupElement> insertHandler = GoKeywordCompletionProvider.createTemplateBasedInsertHandler("go_lang_anonymous_func");
@@ -143,7 +143,7 @@ public class GoCompletionContributor extends CompletionContributor {
     
     private static class ParenthesesWithImport extends ParenthesesInsertHandler<LookupElement> {
       @Override
-      public void handleInsert(InsertionContext context, LookupElement item) {
+      public void handleInsert(@NotNull InsertionContext context, @NotNull LookupElement item) {
         PsiElement myDeclaration = item.getPsiElement();
         if (myDeclaration instanceof GoFunctionDeclaration) {
           super.handleInsert(context, item);
@@ -165,7 +165,7 @@ public class GoCompletionContributor extends CompletionContributor {
       }
 
       @Override
-      protected boolean placeCaretInsideParentheses(InsertionContext context, LookupElement item) {
+      protected boolean placeCaretInsideParentheses(InsertionContext context, @NotNull LookupElement item) {
         PsiElement e = item.getPsiElement();
         GoSignature signature = e instanceof GoFunctionDeclaration ? ((GoFunctionDeclaration)e).getSignature() : null;
         return signature != null && signature.getParameters().getParameterDeclarationList().size() > 0;

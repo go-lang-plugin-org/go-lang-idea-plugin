@@ -4,6 +4,8 @@ import com.goide.debugger.gdb.gdbmi.GdbMiValue;
 import com.goide.debugger.gdb.messages.annotations.GdbMiDoneEvent;
 import com.goide.debugger.gdb.messages.annotations.GdbMiEnum;
 import com.goide.debugger.gdb.messages.annotations.GdbMiField;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -252,7 +254,8 @@ public class GdbBreakpoint extends GdbDoneEvent {
   /**
    * Value processor for number.
    */
-  public Integer processNumber(GdbMiValue value) {
+  @Nullable
+  public Integer processNumber(@NotNull GdbMiValue value) {
     if (value.type != GdbMiValue.Type.String) {
       return null;
     }
@@ -269,7 +272,8 @@ public class GdbBreakpoint extends GdbDoneEvent {
   /**
    * Value processor for instanceNumber.
    */
-  public Integer processInstanceNumber(GdbMiValue value) {
+  @Nullable
+  public Integer processInstanceNumber(@NotNull GdbMiValue value) {
     if (value.type != GdbMiValue.Type.String) {
       return null;
     }
@@ -286,7 +290,8 @@ public class GdbBreakpoint extends GdbDoneEvent {
   /**
    * Value processor for addressAvailability.
    */
-  public AddressAvailability processAddressAvailability(GdbMiValue value) {
+  @Nullable
+  public AddressAvailability processAddressAvailability(@NotNull GdbMiValue value) {
     if (value.type != GdbMiValue.Type.String) {
       return null;
     }
@@ -315,7 +320,8 @@ public class GdbBreakpoint extends GdbDoneEvent {
   /**
    * Value processor for address.
    */
-  public Long processAddress(GdbMiValue value) {
+  @Nullable
+  public Long processAddress(@NotNull GdbMiValue value) {
     if (value.type != GdbMiValue.Type.String || value.string.equals("<PENDING>") ||
         value.string.equals("<MULTIPLE>")) {
       return null;

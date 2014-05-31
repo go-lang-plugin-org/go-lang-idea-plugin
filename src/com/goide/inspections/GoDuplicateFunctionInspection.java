@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GoDuplicateFunctionInspection extends GoInspectionBase {
   @Override
-  protected void checkFile(PsiFile file, final ProblemsHolder problemsHolder) {
+  protected void checkFile(PsiFile file, @NotNull final ProblemsHolder problemsHolder) {
     if (!(file instanceof GoFile)) return;
 
     List<GoFunctionDeclaration> functions = ((GoFile)file).getFunctions();

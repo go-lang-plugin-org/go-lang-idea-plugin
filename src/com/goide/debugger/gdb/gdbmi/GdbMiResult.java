@@ -1,5 +1,7 @@
 package com.goide.debugger.gdb.gdbmi;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Class representing a single result from a GDB/MI result record.
  */
@@ -12,7 +14,7 @@ public class GdbMiResult {
   /**
    * Value of the variable.
    */
-  public GdbMiValue value = new GdbMiValue();
+  @NotNull public GdbMiValue value = new GdbMiValue();
 
   /**
    * Constructor.
@@ -28,6 +30,7 @@ public class GdbMiResult {
    *
    * @return A string containing the name of the variable and its value.
    */
+  @NotNull
   public String toString() {
     return variable + ": " + value;
   }

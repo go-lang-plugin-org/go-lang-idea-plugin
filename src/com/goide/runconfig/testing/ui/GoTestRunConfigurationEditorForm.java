@@ -25,6 +25,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.TextFieldCompletionProvider;
 import org.intellij.lang.regexp.RegExpLanguage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -35,7 +36,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private JPanel component;
   private ModulesCombobox myComboModules;
   private RawCommandLineEditor myParamsField;
-  private EditorTextField myPatternEditor;
+  @Nullable private EditorTextField myPatternEditor;
   private TextFieldWithBrowseButton myWorkingDirectoryField;
 
   private JComboBox myTestKindComboBox;
@@ -72,7 +73,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   @Override
-  protected void resetEditorFrom(GoTestRunConfiguration configuration) {
+  protected void resetEditorFrom(@NotNull GoTestRunConfiguration configuration) {
     myTestKindComboBox.setSelectedItem(configuration.getKind());
     myPackageField.setText(configuration.getPackage());
 
@@ -90,7 +91,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   @Override
-  protected void applyEditorTo(GoTestRunConfiguration configuration) throws ConfigurationException {
+  protected void applyEditorTo(@NotNull GoTestRunConfiguration configuration) throws ConfigurationException {
     configuration.setKind((GoTestRunConfiguration.Kind)myTestKindComboBox.getSelectedItem());
     configuration.setPackage(myPackageField.getText());
     configuration.setDirectoryPath(myDirectoryField.getText());
@@ -126,10 +127,10 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
           final GlobalSearchScope scope = GlobalSearchScope.moduleScope(module);
           StubIndex.getInstance().processAllKeys(GoPackagesIndex.KEY, new Processor<String>() {
             @Override
-            public boolean process(final String packageName) {
+            public boolean process(@NotNull final String packageName) {
               StubIndex.getInstance().processElements(GoPackagesIndex.KEY, packageName, myProject, scope, GoFile.class, new Processor<GoFile>() {
                 @Override
-                public boolean process(GoFile file) {
+                public boolean process(@NotNull GoFile file) {
                   String fullPackageName = file.getFullPackageName();
                   if (fullPackageName != null) {
                     result.addElement(GoPsiImplUtil.createPackageLookupElement(fullPackageName, false));
@@ -145,10 +146,11 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     }.createEditor(myProject);
   }
 
+  @Nullable
   private static ListCellRendererWrapper<GoTestRunConfiguration.Kind> getTestKindListCellRendererWrapper() {
     return new ListCellRendererWrapper<GoTestRunConfiguration.Kind>() {
       @Override
-      public void customize(JList list, GoTestRunConfiguration.Kind kind, int index, boolean selected, boolean hasFocus) {
+      public void customize(JList list, @Nullable GoTestRunConfiguration.Kind kind, int index, boolean selected, boolean hasFocus) {
         if (kind != null) {
           String kindName = StringUtil.capitalize(kind.toString().toLowerCase());
           setText(kindName);
@@ -157,7 +159,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     };
   }
 
-  private void installFileChoosers(Project project) {
+  private void installFileChoosers(@NotNull Project project) {
     FileChooserDescriptor chooseFileDescriptor = FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
     chooseFileDescriptor.setRoots(project.getBaseDir());
     chooseFileDescriptor.setShowFileSystemRoots(false);

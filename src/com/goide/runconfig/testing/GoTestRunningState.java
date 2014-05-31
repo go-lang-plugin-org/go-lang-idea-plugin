@@ -43,11 +43,12 @@ public class GoTestRunningState extends GoRunningState {
     return executionResult;
   }
 
-  public GoTestRunningState(ExecutionEnvironment env, Module module, GoTestRunConfiguration configuration) {
+  public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, GoTestRunConfiguration configuration) {
     super(env, module);
     myConfiguration = configuration;
   }
 
+  @NotNull
   @Override
   protected GeneralCommandLine getCommand(@NotNull Sdk sdk) throws ExecutionException {
     String homePath = sdk.getHomePath();

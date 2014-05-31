@@ -142,6 +142,7 @@ public class GoSdkType extends SdkType {
   public void saveAdditionalData(@NotNull SdkAdditionalData additionalData, @NotNull Element additional) {
   }
 
+  @NotNull
   @NonNls
   @Override
   public String getPresentableName() {

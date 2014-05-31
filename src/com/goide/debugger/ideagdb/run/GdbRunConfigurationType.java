@@ -12,6 +12,7 @@ import javax.swing.*;
 
 public class GdbRunConfigurationType implements ConfigurationType {
   private final ConfigurationFactory myFactory = new ConfigurationFactory(this) {
+    @NotNull
     public RunConfiguration createTemplateConfiguration(Project project) {
       return new GdbRunConfiguration("", project, this);
     }
@@ -26,11 +27,13 @@ public class GdbRunConfigurationType implements ConfigurationType {
     return ConfigurationTypeUtil.findConfigurationType(GdbRunConfigurationType.class);
   }
 
+  @NotNull
   @Override
   public String getDisplayName() {
     return "Go GDB";
   }
 
+  @NotNull
   @Override
   public String getConfigurationTypeDescription() {
     return "Go GDB debug configuration";
@@ -47,11 +50,13 @@ public class GdbRunConfigurationType implements ConfigurationType {
     return "GoGdbRunConfigurationType";
   }
 
+  @NotNull
   @Override
   public ConfigurationFactory[] getConfigurationFactories() {
     return new ConfigurationFactory[]{myFactory};
   }
 
+  @NotNull
   public ConfigurationFactory getFactory() {
     return myFactory;
   }

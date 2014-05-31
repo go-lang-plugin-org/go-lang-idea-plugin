@@ -17,6 +17,7 @@ import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -65,6 +66,7 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
     }
     Collection<PsiFileSystemItem> result = ContainerUtil.newArrayList();
     ContainerUtil.addAllNotNull(result, ContainerUtil.map(getPathsToLookup(psiFile), new Function<VirtualFile, PsiFileSystemItem>() {
+      @Nullable
       @Override
       public PsiFileSystemItem fun(VirtualFile file) {
         return getPsiFileSystemItem(project, file);

@@ -18,14 +18,14 @@ public class GdbRunConfigurationEditor<T extends GdbRunConfiguration> extends Se
   }
 
   @Override
-  protected void resetEditorFrom(T configuration) {
+  protected void resetEditorFrom(@NotNull T configuration) {
     myGdbPath.setText(configuration.GDB_PATH);
     myAppPath.setText(configuration.APP_PATH);
     myStartupCommands.setText(configuration.STARTUP_COMMANDS);
   }
 
   @Override
-  protected void applyEditorTo(T configuration) throws ConfigurationException {
+  protected void applyEditorTo(@NotNull T configuration) throws ConfigurationException {
     configuration.GDB_PATH = myGdbPath.getText();
     configuration.APP_PATH = myAppPath.getText();
     configuration.STARTUP_COMMANDS = myStartupCommands.getText();

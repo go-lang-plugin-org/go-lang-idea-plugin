@@ -173,6 +173,7 @@ public class GoPsiImplUtil {
     return null;
   }
 
+  @NotNull
   private static String arrow() {
     return "→";
   }
@@ -363,7 +364,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType processVarSpec(GoVarDefinition o, GoVarSpec parent) {
+  private static GoType processVarSpec(GoVarDefinition o, @NotNull GoVarSpec parent) {
     GoType commonType = parent.getType();
     if (commonType != null) return commonType;
     List<GoVarDefinition> varList = parent.getVarDefinitionList();
@@ -426,7 +427,7 @@ public class GoPsiImplUtil {
   public static List<GoMethodSpec> getMethods(@NotNull final GoInterfaceType o) {
     return ContainerUtil.filter(o.getMethodSpecList(), new Condition<GoMethodSpec>() {
       @Override
-      public boolean value(GoMethodSpec spec) {
+      public boolean value(@NotNull GoMethodSpec spec) {
         return spec.getIdentifier() != null;
       }
     });
@@ -496,7 +497,7 @@ public class GoPsiImplUtil {
           composite.add(p.getType());
         }
         class MyGoTypeList extends LightElement implements GoTypeList {
-          private final List<GoType> myTypes;
+          @NotNull private final List<GoType> myTypes;
 
           public MyGoTypeList(@NotNull List<GoType> types) {
             super(parameters.getManager(), parameters.getLanguage());
@@ -527,6 +528,7 @@ public class GoPsiImplUtil {
             return null;
           }
 
+          @Nullable
           @Override
           public String toString() {
             return null;

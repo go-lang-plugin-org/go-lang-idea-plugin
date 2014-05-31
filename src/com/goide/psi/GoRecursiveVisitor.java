@@ -15,7 +15,7 @@ public class GoRecursiveVisitor extends GoVisitor {
   }
 
   @Override
-  public void visitFile(PsiFile file) {
+  public void visitFile(@NotNull PsiFile file) {
     for (PsiElement psiElement : file.getChildren()) {
       if (psiElement instanceof GoCompositeElement) {
         psiElement.accept(this);

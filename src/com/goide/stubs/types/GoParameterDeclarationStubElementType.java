@@ -15,11 +15,13 @@ public class GoParameterDeclarationStubElementType extends GoStubElementType<GoP
     super(name);
   }
 
+  @NotNull
   @Override
   public GoParameterDeclaration createPsi(@NotNull GoParameterDeclarationStub stub) {
     return new GoParameterDeclarationImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoParameterDeclarationStub createStub(@NotNull GoParameterDeclaration psi, StubElement parentStub) {
     return new GoParameterDeclarationStub(parentStub, this);

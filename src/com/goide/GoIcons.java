@@ -3,6 +3,7 @@ package com.goide;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.LayeredIcon;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -24,7 +25,8 @@ public interface GoIcons {
   Icon DEBUG = ICON;
 
   class Helper {
-    public static LayeredIcon createIconWithShift(final Icon base, Icon mark) {
+    @NotNull
+    public static LayeredIcon createIconWithShift(@NotNull final Icon base, Icon mark) {
       LayeredIcon icon = new LayeredIcon(2) {
         @Override
         public int getIconHeight() {

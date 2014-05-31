@@ -13,7 +13,7 @@ public class GoCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
 
   @NotNull
   @Override
-  public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
+  public Configurable createSettingsPage(@NotNull CodeStyleSettings settings, CodeStyleSettings originalSettings) {
     return new GoCodeStyleConfigurable(settings, originalSettings);
   }
 }

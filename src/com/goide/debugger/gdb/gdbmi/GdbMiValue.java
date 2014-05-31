@@ -1,5 +1,7 @@
 package com.goide.debugger.gdb.gdbmi;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -53,6 +55,7 @@ public class GdbMiValue {
    *
    * @return A string containing the value.
    */
+  @NotNull
   public String toString() {
     StringBuilder sb = new StringBuilder();
     switch (type) {

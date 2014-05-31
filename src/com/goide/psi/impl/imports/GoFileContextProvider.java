@@ -12,7 +12,7 @@ import java.util.Collections;
 
 public class GoFileContextProvider extends FileContextProvider {
   @Override
-  protected boolean isAvailable(PsiFile file) {
+  protected boolean isAvailable(@NotNull PsiFile file) {
     VirtualFile virtualFile = file.getVirtualFile();
     return virtualFile != null && new GoImportReferenceHelper().isMine(file.getProject(), virtualFile);
   }

@@ -15,6 +15,7 @@ public class GoLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
     return GoLanguage.INSTANCE;
   }
 
+  @NotNull
   @Override
   public String getCodeSample(@NotNull SettingsType settingsType) {
     return DEFAULT_CODE_SAMPLE;

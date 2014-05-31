@@ -5,11 +5,12 @@ import com.goide.psi.GoFile;
 import com.intellij.psi.stubs.PsiFileStubImpl;
 import com.intellij.psi.tree.IStubFileElementType;
 import com.intellij.util.io.StringRef;
+import org.jetbrains.annotations.NotNull;
 
 public class GoFileStub extends PsiFileStubImpl<GoFile> {
   private final StringRef myPackageName;
 
-  public GoFileStub(GoFile file) {
+  public GoFileStub(@NotNull GoFile file) {
     super(file);
     myPackageName = StringRef.fromNullableString(file.getPackageName());
   }

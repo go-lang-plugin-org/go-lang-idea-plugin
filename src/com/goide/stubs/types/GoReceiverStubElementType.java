@@ -15,11 +15,13 @@ public class GoReceiverStubElementType extends GoNamedStubElementType<GoReceiver
     super(name);
   }
 
+  @NotNull
   @Override
   public GoReceiver createPsi(@NotNull GoReceiverStub stub) {
     return new GoReceiverImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoReceiverStub createStub(@NotNull GoReceiver psi, StubElement parentStub) {
     return new GoReceiverStub(parentStub, this, psi.getName(), psi.isPublic());

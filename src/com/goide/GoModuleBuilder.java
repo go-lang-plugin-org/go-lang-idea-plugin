@@ -18,6 +18,7 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
     super.setupRootModel(modifiableRootModel);
   }
 
+  @NotNull
   @Override
   public ModuleType getModuleType() {
     return GoModuleType.getInstance();

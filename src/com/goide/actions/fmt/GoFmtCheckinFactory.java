@@ -33,6 +33,7 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
       public RefreshableOnComponent getBeforeCheckinConfigurationPanel() {
         final JCheckBox checkBox = new JCheckBox("Go fmt");
         return new RefreshableOnComponent() {
+          @NotNull
           public JComponent getComponent() {
             JPanel panel = new JPanel(new BorderLayout());
             panel.add(checkBox, BorderLayout.WEST);

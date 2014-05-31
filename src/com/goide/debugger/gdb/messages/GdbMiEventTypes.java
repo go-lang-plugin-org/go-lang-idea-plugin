@@ -1,5 +1,7 @@
 package com.goide.debugger.gdb.messages;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Class which holds a reference to all the available GDB event type wrappers.
  */
@@ -7,7 +9,7 @@ public class GdbMiEventTypes {
   /**
    * An array of the event classes.
    */
-  public static Class<?>[] classes = {
+  @NotNull public static Class<?>[] classes = {
     GdbDoneEvent.class,
     GdbConnectedEvent.class,
     GdbErrorEvent.class,
@@ -18,7 +20,7 @@ public class GdbMiEventTypes {
   /**
    * An array of types of 'done' events.
    */
-  public static Class<?>[] doneEventTypes = {
+  @NotNull public static Class<?>[] doneEventTypes = {
     GdbBreakpoint.class,
     GdbFeatures.class,
     GdbStackTrace.class,

@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoIntroduceLocalVariableFix extends GoUnresolvedFixBase {
-  public GoIntroduceLocalVariableFix(PsiElement element, String name) {
+  public GoIntroduceLocalVariableFix(@NotNull PsiElement element, @NotNull String name) {
     super(element, name, "local variable");
   }
 

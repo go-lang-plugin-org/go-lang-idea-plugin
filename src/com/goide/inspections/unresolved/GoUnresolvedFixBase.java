@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActionOnPsiElement {
-  protected final String myName;
-  protected final String myWhat;
+  @NotNull protected final String myName;
+  @NotNull protected final String myWhat;
 
   public GoUnresolvedFixBase(@NotNull PsiElement element, @NotNull String name, @NotNull String what) {
     super(element);

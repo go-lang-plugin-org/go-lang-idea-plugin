@@ -21,7 +21,7 @@ public class GoAnonymousFieldProcessor extends RenamePsiElementProcessor {
   }
 
   @Override
-  public void prepareRenaming(PsiElement element, String newName, Map<PsiElement, String> allRenames, SearchScope scope) {
+  public void prepareRenaming(PsiElement element, String newName, @NotNull Map<PsiElement, String> allRenames, @NotNull SearchScope scope) {
     if (element instanceof GoTypeSpec) {
       Query<PsiReference> search = ReferencesSearch.search(element, scope);
       for (PsiReference ref : search) {

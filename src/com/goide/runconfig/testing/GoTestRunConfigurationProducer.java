@@ -15,6 +15,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoTestRunConfiguration> implements Cloneable {
@@ -24,7 +25,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
   }
 
   @Override
-  protected boolean setupConfigurationFromContext(GoTestRunConfiguration configuration, ConfigurationContext context, Ref sourceElement) {
+  protected boolean setupConfigurationFromContext(@NotNull GoTestRunConfiguration configuration, ConfigurationContext context, Ref sourceElement) {
     PsiElement contextElement = getContextElement(context);
     if (contextElement == null) {
       return false;
@@ -66,7 +67,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
   }
 
   @Override
-  public boolean isConfigurationFromContext(GoTestRunConfiguration configuration, ConfigurationContext context) {
+  public boolean isConfigurationFromContext(@NotNull GoTestRunConfiguration configuration, ConfigurationContext context) {
     PsiElement contextElement = getContextElement(context);
     if (contextElement == null) {
       return false;

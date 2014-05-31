@@ -27,6 +27,7 @@ public class GoPackagesIndex extends StringStubIndexExtension<GoFile> {
 
   public static Collection<String> getAllPackages(@NotNull final Project project) {
     return ApplicationManager.getApplication().runReadAction(new Computable<Collection<String>>() {
+      @NotNull
       public Collection<String> compute() {
         return StubIndex.getInstance().getAllKeys(KEY, project);
       }

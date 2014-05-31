@@ -15,11 +15,13 @@ public class GoImportSpecStubElementType extends GoNamedStubElementType<GoImport
     super(name);
   }
 
+  @NotNull
   @Override
   public GoImportSpec createPsi(@NotNull GoImportSpecStub stub) {
     return new GoImportSpecImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoImportSpecStub createStub(@NotNull GoImportSpec psi, StubElement parentStub) {
     return new GoImportSpecStub(parentStub, this, psi.getName(), psi.isPublic());

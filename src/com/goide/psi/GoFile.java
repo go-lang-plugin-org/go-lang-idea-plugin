@@ -275,7 +275,7 @@ public class GoFile extends PsiFileBase {
   }
 
   @NotNull
-  private <T extends PsiElement> List<T> calc(final Condition<PsiElement> condition) {
+  private <T extends PsiElement> List<T> calc(@NotNull final Condition<PsiElement> condition) {
     final List<T> result = ContainerUtil.newArrayList();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
@@ -334,7 +334,7 @@ public class GoFile extends PsiFileBase {
     return (GoFileStub)super.getStub();
   }
 
-  private static boolean processChildrenDummyAware(GoFile file, final Processor<PsiElement> processor) {
+  private static boolean processChildrenDummyAware(@NotNull GoFile file, @NotNull final Processor<PsiElement> processor) {
     StubTree stubTree = file.getStubTree();
     if (stubTree != null) {
       List<StubElement<?>> plainList = stubTree.getPlainList();
@@ -346,7 +346,7 @@ public class GoFile extends PsiFileBase {
     }
     return new Processor<PsiElement>() {
       @Override
-      public boolean process(PsiElement psiElement) {
+      public boolean process(@NotNull PsiElement psiElement) {
         for (PsiElement child = psiElement.getFirstChild(); child != null; child = child.getNextSibling()) {
           if (child instanceof GeneratedParserUtilBase.DummyBlock) {
             if (!process(child)) return false;
@@ -358,7 +358,8 @@ public class GoFile extends PsiFileBase {
     }.process(file);
   }
 
-  private static <E extends PsiElement> List<E> getChildrenByType(StubElement<? extends PsiElement> stub,
+  @NotNull
+  private static <E extends PsiElement> List<E> getChildrenByType(@NotNull StubElement<? extends PsiElement> stub,
                                                                   IElementType elementType,
                                                                   ArrayFactory<E> f) {
     return Arrays.asList(stub.getChildrenByType(elementType, f));

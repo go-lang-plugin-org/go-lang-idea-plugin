@@ -23,12 +23,12 @@ import static com.goide.GoTypes.*;
 public class GoFormattingModelBuilder implements FormattingModelBuilder {
   @NotNull
   @Override
-  public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
+  public FormattingModel createModel(@NotNull PsiElement element, @NotNull CodeStyleSettings settings) {
     Block block = new GoFormattingBlock(element.getNode(), null, Indent.getNoneIndent(), null, settings, createSpacingBuilder(settings));
     return FormattingModelProvider.createFormattingModelForPsiFile(element.getContainingFile(), block, settings);
   }
 
-  private static SpacingBuilder createSpacingBuilder(CodeStyleSettings settings) {
+  private static SpacingBuilder createSpacingBuilder(@NotNull CodeStyleSettings settings) {
     return new SpacingBuilder(settings, GoLanguage.INSTANCE)
       .before(COMMA).spaceIf(false)
       .after(COMMA).spaceIf(true)
@@ -155,12 +155,13 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       return Collections.unmodifiableList(blocks);
     }
 
-    private Block buildSubBlock(ASTNode child) {
+    @Nullable
+    private Block buildSubBlock(@NotNull ASTNode child) {
       Indent indent = calcIndent(child);
       return new GoFormattingBlock(child, null, indent, null, mySettings, mySpacingBuilder);
     }
 
-    private Indent calcIndent(ASTNode child) {
+    private Indent calcIndent(@NotNull ASTNode child) {
       IElementType parentType = myNode.getElementType();
       IElementType type = child.getElementType();
       if (type == SWITCH_START) return Indent.getNoneIndent();
@@ -171,7 +172,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       return Indent.getNoneIndent();
     }
 
-    private static Indent indentIfNotBrace(ASTNode child) {
+    private static Indent indentIfNotBrace(@NotNull ASTNode child) {
       return BRACES_TOKEN_SET.contains(child.getElementType()) ? Indent.getNoneIndent() : Indent.getNormalIndent();
     }
 

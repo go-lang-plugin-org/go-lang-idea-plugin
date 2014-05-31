@@ -26,12 +26,13 @@ public class GoFunctionIndex extends StringStubIndexExtension<GoFunctionDeclarat
     return KEY;
   }
 
-  public static Collection<GoFunctionDeclaration> find(String name, Project project, GlobalSearchScope scope) {
+  public static Collection<GoFunctionDeclaration> find(@NotNull String name, @NotNull Project project, GlobalSearchScope scope) {
     return StubIndex.getElements(KEY, name, project, scope, GoFunctionDeclaration.class);
   }
 
-  public static Collection<String> findAllNames(final Project project) {
+  public static Collection<String> findAllNames(@NotNull final Project project) {
     return ApplicationManager.getApplication().runReadAction(new Computable<Collection<String>>() {
+      @NotNull
       public Collection<String> compute() {
         return StubIndex.getInstance().getAllKeys(KEY, project);
       }

@@ -5,6 +5,7 @@ import com.goide.debugger.gdb.messages.annotations.GdbMiDoneEvent;
 import com.goide.debugger.gdb.messages.annotations.GdbMiEnum;
 import com.goide.debugger.gdb.messages.annotations.GdbMiField;
 import com.goide.debugger.gdb.messages.annotations.GdbMiObject;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A GDB variable object. This is returned from a -var-create request.
@@ -46,7 +47,7 @@ public class GdbVariableObject extends GdbDoneEvent {
    * The scalar value of the variable. This should not be relied upon for aggregate types
    * (structs, etc.) or for dynamic variable objects.
    */
-  @GdbMiField(name = "value", valueType = GdbMiValue.Type.String)
+  @Nullable @GdbMiField(name = "value", valueType = GdbMiValue.Type.String)
   public String value;
 
   /**

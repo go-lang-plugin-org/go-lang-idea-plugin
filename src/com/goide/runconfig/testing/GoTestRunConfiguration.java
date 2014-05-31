@@ -26,20 +26,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunningState> {
-  private String myPackage = "";
-  private String myFilePath = "";
-  private String myDirectoryPath = "";
+  @NotNull private String myPackage = "";
+  @NotNull private String myFilePath = "";
+  @NotNull private String myDirectoryPath = "";
 
-  private String myPattern = "";
+  @NotNull private String myPattern = "";
   private String myWorkingDirectory;
-  private Kind myKind = Kind.DIRECTORY;
+  @NotNull private Kind myKind = Kind.DIRECTORY;
 
-  public GoTestRunConfiguration(Project project, String name, ConfigurationType configurationType) {
+  public GoTestRunConfiguration(@NotNull Project project, String name, @NotNull ConfigurationType configurationType) {
     super(name, new GoModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
     Module module = getConfigurationModule().getModule();
     myWorkingDirectory = module != null ? PathUtil.getParentPath(module.getModuleFilePath()) : project.getBasePath();
   }
 
+  @NotNull
   @Override
   protected ModuleBasedConfiguration createInstance() {
     return new GoTestRunConfiguration(getProject(), getName(), GoTestRunConfigurationType.getInstance());
@@ -56,8 +57,9 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
     return GoRunner.EMPTY_RUN_STATE;
   }
 
+  @NotNull
   @Override
-  protected GoTestRunningState newRunningState(ExecutionEnvironment env, Module module) {
+  protected GoTestRunningState newRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module) {
     return new GoTestRunningState(env, module, this);
   }
 

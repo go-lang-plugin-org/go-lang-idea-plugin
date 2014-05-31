@@ -15,11 +15,13 @@ public class GoParamDefinitionStubElementType extends GoNamedStubElementType<GoP
     super(name);
   }
 
+  @NotNull
   @Override
   public GoParamDefinition createPsi(@NotNull GoParamDefinitionStub stub) {
     return new GoParamDefinitionImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoParamDefinitionStub createStub(@NotNull GoParamDefinition psi, StubElement parentStub) {
     return new GoParamDefinitionStub(parentStub, this, psi.getName(), psi.isPublic());

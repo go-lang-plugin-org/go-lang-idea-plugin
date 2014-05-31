@@ -45,11 +45,13 @@ public class GoParserDefinition implements ParserDefinition {
     return new GoLexer();
   }
 
+  @NotNull
   @Override
   public PsiParser createParser(Project project) {
     return new GoParser();
   }
 
+  @NotNull
   @Override
   public IFileElementType getFileNodeType() {
     return GoFileElementType.INSTANCE;
@@ -79,11 +81,13 @@ public class GoParserDefinition implements ParserDefinition {
     return GoTypes.Factory.createElement(node);
   }
 
+  @NotNull
   @Override
-  public PsiFile createFile(FileViewProvider viewProvider) {
+  public PsiFile createFile(@NotNull FileViewProvider viewProvider) {
     return new GoFile(viewProvider);
   }
 
+  @NotNull
   @Override
   public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
     return SpaceRequirements.MAY;

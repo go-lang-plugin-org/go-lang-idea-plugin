@@ -29,11 +29,13 @@ public class GoConstDefinitionStubElementType extends GoNamedStubElementType<GoC
     super(name);
   }
 
+  @NotNull
   @Override
   public GoConstDefinition createPsi(@NotNull GoConstDefinitionStub stub) {
     return new GoConstDefinitionImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoConstDefinitionStub createStub(@NotNull GoConstDefinition psi, StubElement parentStub) {
     return new GoConstDefinitionStub(parentStub, this, psi.getName(), psi.isPublic());
@@ -52,7 +54,7 @@ public class GoConstDefinitionStubElementType extends GoNamedStubElementType<GoC
   }
 
   @Override
-  public boolean shouldCreateStub(ASTNode node) {
+  public boolean shouldCreateStub(@NotNull ASTNode node) {
     return super.shouldCreateStub(node) && PsiTreeUtil.getParentOfType(node.getPsi(), GoFunctionOrMethodDeclaration.class) == null;
   }
 }

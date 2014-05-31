@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoUnusedFunctionInspection extends GoInspectionBase {
   @Override
-  protected void checkFile(final PsiFile file, final ProblemsHolder problemsHolder) {
+  protected void checkFile(final PsiFile file, @NotNull final ProblemsHolder problemsHolder) {
     if (!(file instanceof GoFile)) return;
     file.accept(new GoRecursiveVisitor() {
       @Override

@@ -11,9 +11,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoUnusedImportDeclaration extends GoInspectionBase {
-  private final static LocalQuickFix OPTIMIZE_QUICK_FIX = new LocalQuickFixBase("Optimize imports") {
+  @Nullable private final static LocalQuickFix OPTIMIZE_QUICK_FIX = new LocalQuickFixBase("Optimize imports") {
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
       PsiElement element = descriptor.getPsiElement();
@@ -33,7 +34,7 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
   };
 
   @Override
-  protected void checkFile(PsiFile file, ProblemsHolder problemsHolder) {
+  protected void checkFile(PsiFile file, @NotNull ProblemsHolder problemsHolder) {
     if (!(file instanceof GoFile)) return;
     MultiMap<String, PsiElement> importMap = ((GoFile)file).getImportMap();
 

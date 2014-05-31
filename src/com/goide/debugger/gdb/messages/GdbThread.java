@@ -4,6 +4,7 @@ import com.goide.debugger.gdb.gdbmi.GdbMiValue;
 import com.goide.debugger.gdb.messages.annotations.GdbMiEnum;
 import com.goide.debugger.gdb.messages.annotations.GdbMiField;
 import com.goide.debugger.gdb.messages.annotations.GdbMiObject;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class representing information about an execution thread from GDB.
@@ -74,6 +75,7 @@ public class GdbThread {
    *
    * @return The formatted thread name.
    */
+  @NotNull
   public String formatName() {
     StringBuilder sb = new StringBuilder();
     sb.append("[");

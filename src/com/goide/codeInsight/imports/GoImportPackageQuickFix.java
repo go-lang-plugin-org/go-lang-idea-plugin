@@ -115,6 +115,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     return "Import package";
   }
 
+  @NotNull
   private static String getText(@NotNull Collection<String> packagesToImport) {
     return ContainerUtil.getFirstItem(packagesToImport, "") + "? " + (packagesToImport.size() > 1 ? "(multiple choices...) " : "");
   }
@@ -153,8 +154,9 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     if (myPackagesToImport == null) {
       Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, element.getProject(), scope(element), GoFile.class);
       myPackagesToImport = ContainerUtil.skipNulls(ContainerUtil.map2Set(es, new Function<GoFile, String>() {
+                                                                           @Nullable
                                                                            @Override
-                                                                           public String fun(GoFile file) {
+                                                                           public String fun(@NotNull GoFile file) {
             return file.getFullPackageName();
           }
         }
@@ -163,6 +165,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     return myPackagesToImport;
   }
 
+  @NotNull
   private static GlobalSearchScope scope(@NotNull PsiElement element) {
     Module module = ModuleUtilCore.findModuleForPsiElement(element);
     return module != null
@@ -177,7 +180,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
       list.installCellRenderer(new NotNullFunction<Object, JComponent>() {
         @NotNull
         @Override
-        public JComponent fun(Object o) {
+        public JComponent fun(@NotNull Object o) {
           JBLabel label = new JBLabel(o.toString(), GoIcons.PACKAGE, SwingConstants.LEFT);
           label.setBorder(IdeBorderFactory.createEmptyBorder(2, 4, 2, 4));
           return label;

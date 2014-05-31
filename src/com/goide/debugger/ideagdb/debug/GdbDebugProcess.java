@@ -37,17 +37,17 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
   private static final Logger LOG = Logger.getInstance(GdbDebugProcess.class);
 
   private final GdbDebuggerEditorsProvider myEditorsProvider = new GdbDebuggerEditorsProvider();
-  private final ConsoleView myConsole;
+  @NotNull private final ConsoleView myConsole;
   private final GdbRunConfiguration myConfiguration;
-  private final GdbConsoleView myGdbConsole;
-  private final Gdb myGdb;
-  private final GdbBreakpointHandler myBreakpointHandler;
+  @NotNull private final GdbConsoleView myGdbConsole;
+  @NotNull private final Gdb myGdb;
+  @NotNull private final GdbBreakpointHandler myBreakpointHandler;
   private final SimpleDateFormat myTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
 
   /**
    * Constructor; launches GDB.
    */
-  public GdbDebugProcess(XDebugSession session, GdbExecutionResult executionResult) {
+  public GdbDebugProcess(@NotNull XDebugSession session, @NotNull GdbExecutionResult executionResult) {
     super(session);
     myConfiguration = executionResult.getConfiguration();
     myConsole = (ConsoleView)executionResult.getExecutionConsole();
@@ -60,6 +60,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
     myGdb.start();
   }
 
+  @NotNull
   @Override
   public XBreakpointHandler<?>[] getBreakpointHandlers() {
     return new GdbBreakpointHandler[]{myBreakpointHandler};
@@ -213,7 +214,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    *
    * @param event The event
    */
-  private void onGdbStoppedEvent(final GdbStoppedEvent event) {
+  private void onGdbStoppedEvent(@NotNull final GdbStoppedEvent event) {
     if (myGdb.hasCapability("thread-info")) {
       // Get information about the threads
       myGdb.sendCommand("-thread-info", new Gdb.GdbEventCallback() {
@@ -235,7 +236,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    * @param record The record.
    */
   @Override
-  public void onStreamRecordReceived(GdbMiStreamRecord record) {
+  public void onStreamRecordReceived(@NotNull GdbMiStreamRecord record) {
     // Log the record
     switch (record.type) {
       case Console:
@@ -265,7 +266,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    * @param record The record.
    */
   @Override
-  public void onResultRecordReceived(GdbMiResultRecord record) {
+  public void onResultRecordReceived(@NotNull GdbMiResultRecord record) {
     // Log the record
     StringBuilder sb = new StringBuilder();
     sb.append(myTimeFormat.format(new Date()));
@@ -308,7 +309,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    * @param threadInfoEvent The event.
    * @param stoppedEvent    The 'target stopped' event that caused us to make the request.
    */
-  private void onGdbThreadInfoReady(GdbEvent threadInfoEvent, GdbStoppedEvent stoppedEvent) {
+  private void onGdbThreadInfoReady(GdbEvent threadInfoEvent, @NotNull GdbStoppedEvent stoppedEvent) {
     List<GdbThread> threads = null;
 
     if (threadInfoEvent instanceof GdbErrorEvent) {
@@ -333,7 +334,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    * @param stoppedEvent The event.
    * @param threads      Thread information, if available.
    */
-  private void handleTargetStopped(GdbStoppedEvent stoppedEvent, List<GdbThread> threads) {
+  private void handleTargetStopped(@NotNull GdbStoppedEvent stoppedEvent, List<GdbThread> threads) {
     GdbSuspendContext suspendContext = new GdbSuspendContext(myGdb, stoppedEvent, threads);
 
     // Find the breakpoint if necessary
@@ -357,6 +358,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
     }
   }
 
+  @NotNull
   public Gdb getGdb() {
     return myGdb;
   }

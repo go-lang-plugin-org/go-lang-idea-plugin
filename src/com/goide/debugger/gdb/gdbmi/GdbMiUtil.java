@@ -1,5 +1,7 @@
 package com.goide.debugger.gdb.gdbmi;
 
+import org.jetbrains.annotations.NotNull;
+
 public class GdbMiUtil { // todo: find something from the util package
   private static final char[] HEX_ASCII = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
@@ -9,7 +11,8 @@ public class GdbMiUtil { // todo: find something from the util package
    * @param string The string to format.
    * @return The formatted string.
    */
-  public static String formatGdbString(String string) {
+  @NotNull
+  public static String formatGdbString(@NotNull String string) {
     StringBuilder sb = new StringBuilder();
     sb.append("\"");
     for (int i = 0; i < string.length(); ++i) {

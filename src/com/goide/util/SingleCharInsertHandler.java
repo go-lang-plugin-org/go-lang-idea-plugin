@@ -6,6 +6,7 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import org.jetbrains.annotations.NotNull;
 
 public class SingleCharInsertHandler extends BasicInsertHandler<LookupElement> {
   private char myChar;
@@ -15,7 +16,7 @@ public class SingleCharInsertHandler extends BasicInsertHandler<LookupElement> {
   }
 
   @Override
-  public void handleInsert(InsertionContext context, LookupElement item) {
+  public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
     Editor editor = context.getEditor();
     int tailOffset = context.getTailOffset();
     Document document = editor.getDocument();

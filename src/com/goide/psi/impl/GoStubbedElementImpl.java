@@ -32,6 +32,7 @@ public abstract class GoStubbedElementImpl<T extends StubBase<?> & TextHolder> e
     return getNode().getElementType().toString();
   }
 
+  @Nullable
   @Override
   public String getText() {
     T stub = getStub();

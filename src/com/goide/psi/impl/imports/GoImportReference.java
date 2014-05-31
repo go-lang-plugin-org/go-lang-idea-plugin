@@ -51,7 +51,7 @@ public class GoImportReference extends FileReference {
     if (isLast()) {
       List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive), new Condition<ResolveResult>() {
         @Override
-        public boolean value(ResolveResult resolveResult) {
+        public boolean value(@NotNull ResolveResult resolveResult) {
           PsiElement element = resolveResult.getElement();
           return element != null && element instanceof PsiDirectory;
         }

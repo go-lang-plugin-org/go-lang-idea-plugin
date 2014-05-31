@@ -31,11 +31,13 @@ public class GoTypeSpecStubElementType extends GoNamedStubElementType<GoTypeSpec
     super(name);
   }
 
+  @NotNull
   @Override
   public GoTypeSpec createPsi(@NotNull GoTypeSpecStub stub) {
     return new GoTypeSpecImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoTypeSpecStub createStub(@NotNull GoTypeSpec psi, StubElement parentStub) {
     return new GoTypeSpecStub(parentStub, this, psi.getName(), psi.isPublic());

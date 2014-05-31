@@ -8,7 +8,7 @@ import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.Nullable;
 
 abstract public class StubWithText<T extends PsiElement> extends StubBase<T> implements TextHolder {
-  protected final StringRef myText;
+  @Nullable protected final StringRef myText;
 
   protected StubWithText(StubElement parent, IStubElementType elementType) {
     super(parent, elementType);

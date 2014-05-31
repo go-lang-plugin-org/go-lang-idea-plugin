@@ -25,6 +25,7 @@ public class GoFileElementType extends IStubFileElementType<GoFileStub> {
     return VERSION;
   }
 
+  @NotNull
   @Override
   public StubBuilder getBuilder() {
     return new DefaultStubBuilder() {

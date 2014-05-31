@@ -1,5 +1,8 @@
 package com.goide.debugger.gdb.gdbmi;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -40,14 +43,14 @@ public class GdbMiParser {
   private final GdbMiLexer myLexer = new GdbMiLexer();
 
   // Partially processed record
-  private GdbMiResultRecord myResultRecord;
-  private GdbMiStreamRecord myStreamRecord;
-  private Stack<GdbMiValue> myValueStack = new Stack<GdbMiValue>();
-  private Long myRserToken;
-  private StringBuilder myBuilder;
+  @Nullable private GdbMiResultRecord myResultRecord;
+  @Nullable private GdbMiStreamRecord myStreamRecord;
+  @NotNull private Stack<GdbMiValue> myValueStack = new Stack<GdbMiValue>();
+  @Nullable private Long myRserToken;
+  @Nullable private StringBuilder myBuilder;
 
   // List of unprocessed records
-  private List<GdbMiRecord> myRecords = new ArrayList<GdbMiRecord>();
+  @NotNull private List<GdbMiRecord> myRecords = new ArrayList<GdbMiRecord>();
 
   /**
    * Constructor.
@@ -62,6 +65,7 @@ public class GdbMiParser {
    *
    * @return A list of unprocessed records.
    */
+  @NotNull
   public List<GdbMiRecord> getRecords() {
     return myRecords;
   }
@@ -71,7 +75,7 @@ public class GdbMiParser {
    *
    * @param data Data read from the GDB process.
    */
-  public void process(byte[] data) {
+  public void process(@NotNull byte[] data) {
     process(data, data.length);
   }
 

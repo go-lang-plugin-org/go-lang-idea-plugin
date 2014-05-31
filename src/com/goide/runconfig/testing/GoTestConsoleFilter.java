@@ -26,7 +26,7 @@ class GoTestConsoleFilter implements Filter {
   }
 
   @Override
-  public Result applyFilter(String line, int entireLength) {
+  public Result applyFilter(@NotNull String line, int entireLength) {
     Matcher matcher = MESSAGE_PATTERN.matcher(line);
     if (!matcher.matches()) {
       return null;

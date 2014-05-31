@@ -16,11 +16,12 @@ import org.jetbrains.annotations.NotNull;
 public class GoRunFileRunningState extends GoRunningState {
   private GoRunFileConfiguration myConfiguration;
 
-  public GoRunFileRunningState(ExecutionEnvironment env, Module module, GoRunFileConfiguration configuration) {
+  public GoRunFileRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, GoRunFileConfiguration configuration) {
     super(env, module);
     myConfiguration = configuration;
   }
 
+  @NotNull
   @Override
   protected GeneralCommandLine getCommand(@NotNull Sdk sdk) throws ExecutionException {
     GeneralCommandLine commandLine = new GeneralCommandLine();

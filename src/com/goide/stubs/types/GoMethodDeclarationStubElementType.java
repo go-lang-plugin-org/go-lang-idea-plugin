@@ -14,6 +14,7 @@ import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -32,11 +33,13 @@ public class GoMethodDeclarationStubElementType extends GoNamedStubElementType<G
     super(name);
   }
 
+  @NotNull
   @Override
   public GoMethodDeclaration createPsi(@NotNull GoMethodDeclarationStub stub) {
     return new GoMethodDeclarationImpl(stub, this);
   }
 
+  @Nullable
   @Override
   public GoMethodDeclarationStub createStub(@NotNull GoMethodDeclaration psi, StubElement parentStub) {
     GoTypeReferenceExpression reference = GoPsiImplUtil.getTypeReference(psi.getReceiver().getType());

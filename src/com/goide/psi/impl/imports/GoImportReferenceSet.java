@@ -36,6 +36,7 @@ public class GoImportReferenceSet extends FileReferenceSet {
     return false;
   }
 
+  @NotNull
   @Override
   public FileReference createFileReference(TextRange range, int index, String text) {
     return new GoImportReference(this, range, index, text);

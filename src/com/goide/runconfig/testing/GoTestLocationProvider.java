@@ -16,7 +16,7 @@ import java.util.List;
 public class GoTestLocationProvider implements TestLocationProvider {
   @NotNull
   @Override
-  public List<Location> getLocation(@NotNull String protocolId, @NotNull String locationData, final Project project) {
+  public List<Location> getLocation(@NotNull String protocolId, @NotNull String locationData, @NotNull final Project project) {
     return ContainerUtil.map(GoFunctionIndex.find(locationData, project, GlobalSearchScope.projectScope(project)), new Function<GoFunctionDeclaration, Location>() {
       @Override
       public Location fun(GoFunctionDeclaration declaration) {

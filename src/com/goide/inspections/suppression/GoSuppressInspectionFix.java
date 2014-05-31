@@ -5,18 +5,19 @@ import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoIns
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoSuppressInspectionFix extends AbstractBatchSuppressByNoInspectionCommentFix {
   private Class<? extends GoCompositeElement> myContainerClass;
 
-  public GoSuppressInspectionFix(String text, Class<? extends GoCompositeElement> containerClass) {
+  public GoSuppressInspectionFix(@NotNull String text, Class<? extends GoCompositeElement> containerClass) {
     super(SuppressionUtil.ALL, true);
     setText(text);
     myContainerClass = containerClass;
   }
 
-  public GoSuppressInspectionFix(String ID, String text, Class<? extends GoCompositeElement> containerClass) {
+  public GoSuppressInspectionFix(@NotNull String ID, @NotNull String text, Class<? extends GoCompositeElement> containerClass) {
     super(ID, false);
     setText(text);
     myContainerClass = containerClass;

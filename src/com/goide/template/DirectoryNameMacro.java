@@ -8,18 +8,20 @@ import org.jetbrains.annotations.Nullable;
 
 public class DirectoryNameMacro extends Macro {
 
+  @NotNull
   @Override
   public String getName() {
     return "directoryName";
   }
 
+  @NotNull
   @Override
   public String getPresentableName() {
     return "directoryName";
   }
 
   @Override
-  public Result calculateResult(@NotNull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(@NotNull Expression[] params, @NotNull ExpressionContext context) {
     PsiElement psiEle = context.getPsiElementAtStartOffset();
     if (psiEle != null) {
       VirtualFile file = psiEle.getContainingFile().getVirtualFile();

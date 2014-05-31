@@ -78,6 +78,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     return getList(context);
   }
 
+  @Nullable
   private static GoArgumentList getList(@NotNull ParameterInfoContext context) {
     PsiElement at = context.getFile().findElementAt(context.getOffset());
     return PsiTreeUtil.getParentOfType(at, GoArgumentList.class);
@@ -123,7 +124,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
   }
 
   @Override
-  public void updateUI(Object p, @NotNull ParameterInfoUIContext context) {
+  public void updateUI(@Nullable Object p, @NotNull ParameterInfoUIContext context) {
     if (p == null) {
       context.setUIComponentEnabled(false);
       return;

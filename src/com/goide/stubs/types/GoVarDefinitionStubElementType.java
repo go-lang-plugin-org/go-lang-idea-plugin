@@ -29,11 +29,13 @@ public class GoVarDefinitionStubElementType extends GoNamedStubElementType<GoVar
     super(name);
   }
 
+  @NotNull
   @Override
   public GoVarDefinition createPsi(@NotNull GoVarDefinitionStub stub) {
     return new GoVarDefinitionImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoVarDefinitionStub createStub(@NotNull GoVarDefinition psi, StubElement parentStub) {
     return new GoVarDefinitionStub(parentStub, this, psi.getName(), psi.isPublic());
@@ -52,7 +54,7 @@ public class GoVarDefinitionStubElementType extends GoNamedStubElementType<GoVar
   }
 
   @Override
-  public boolean shouldCreateStub(ASTNode node) {
+  public boolean shouldCreateStub(@NotNull ASTNode node) {
     return super.shouldCreateStub(node) && PsiTreeUtil.getParentOfType(node.getPsi(), GoFunctionOrMethodDeclaration.class) == null;
   }
 }

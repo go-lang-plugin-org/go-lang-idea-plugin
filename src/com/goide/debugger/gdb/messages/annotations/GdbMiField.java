@@ -1,6 +1,7 @@
 package com.goide.debugger.gdb.messages.annotations;
 
 import com.goide.debugger.gdb.gdbmi.GdbMiValue;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -13,17 +14,17 @@ public @interface GdbMiField {
   /**
    * The name of the field.
    */
-  String name();
+  @NotNull String name();
 
   /**
    * The supported GDB/MI value types.
    */
-  GdbMiValue.Type[] valueType();
+  @NotNull GdbMiValue.Type[] valueType();
 
   /**
    * Name of the function to use to convert the value from the GDB format to the variable format.
    * May be the name of a function on the parent class, or a fully-qualified name to a static
    * function.
    */
-  String valueProcessor() default "";
+  @NotNull String valueProcessor() default "";
 }

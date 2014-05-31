@@ -16,6 +16,7 @@ public class GoBraceMatcher implements PairedBraceMatcher {
     new BracePair(GoTypes.LBRACK, GoTypes.RBRACK, false),
   };
 
+  @NotNull
   @Override
   public BracePair[] getPairs() {
     return PAIRS;

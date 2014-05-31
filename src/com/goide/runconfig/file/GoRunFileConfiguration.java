@@ -17,10 +17,11 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 public class GoRunFileConfiguration extends GoRunConfigurationWithMain<GoRunFileRunningState> {
-  public GoRunFileConfiguration(Project project, String name, ConfigurationType configurationType) {
+  public GoRunFileConfiguration(Project project, String name, @NotNull ConfigurationType configurationType) {
     super(name, new GoModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
   }
 
+  @NotNull
   @Override
   protected ModuleBasedConfiguration createInstance() {
     return new GoRunFileConfiguration(getProject(), getName(), GoRunFileConfigurationType.getInstance());
@@ -37,8 +38,9 @@ public class GoRunFileConfiguration extends GoRunConfigurationWithMain<GoRunFile
     return GoRunner.EMPTY_RUN_STATE;
   }
 
+  @NotNull
   @Override
-  protected GoRunFileRunningState newRunningState(ExecutionEnvironment env, Module module) {
+  protected GoRunFileRunningState newRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module) {
     return new GoRunFileRunningState(env, module, this);
   }
 }

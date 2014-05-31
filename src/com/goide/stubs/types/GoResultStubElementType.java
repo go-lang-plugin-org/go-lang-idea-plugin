@@ -15,11 +15,13 @@ public class GoResultStubElementType extends GoStubElementType<GoResultStub, GoR
     super(name);
   }
 
+  @NotNull
   @Override
   public GoResult createPsi(@NotNull GoResultStub stub) {
     return new GoResultImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoResultStub createStub(@NotNull GoResult psi, StubElement parentStub) {
     return new GoResultStub(parentStub, this, psi.getText());

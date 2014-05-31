@@ -39,20 +39,20 @@ public class GdbRunner extends DefaultProgramRunner {
   }
 
   @Override
-  protected RunContentDescriptor doExecute(Project project,
-                                           RunProfileState state,
+  protected RunContentDescriptor doExecute(@NotNull Project project,
+                                           @NotNull RunProfileState state,
                                            RunContentDescriptor contentToReuse,
-                                           ExecutionEnvironment env) throws ExecutionException {
+                                           @NotNull ExecutionEnvironment env) throws ExecutionException {
     FileDocumentManager.getInstance().saveAllDocuments();
     return createContentDescriptor(project, env.getExecutor(), state, contentToReuse, env);
   }
 
   @Nullable
-  protected RunContentDescriptor createContentDescriptor(Project project,
+  protected RunContentDescriptor createContentDescriptor(@NotNull Project project,
                                                          final Executor executor,
-                                                         final RunProfileState state,
+                                                         @NotNull final RunProfileState state,
                                                          RunContentDescriptor contentToReuse,
-                                                         ExecutionEnvironment env)
+                                                         @NotNull ExecutionEnvironment env)
     throws ExecutionException {
     final ExecutionResult result = state.execute(executor, this);
     final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(this,

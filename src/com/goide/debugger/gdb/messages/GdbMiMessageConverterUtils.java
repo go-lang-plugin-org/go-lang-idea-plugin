@@ -1,6 +1,8 @@
 package com.goide.debugger.gdb.messages;
 
 import com.goide.debugger.gdb.gdbmi.GdbMiValue;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Utility functions for use with the message converter.
@@ -10,7 +12,8 @@ public class GdbMiMessageConverterUtils {
   /**
    * Converts a hexadecimal string to a long.
    */
-  public static Long hexStringToLong(GdbMiValue value) {
+  @Nullable
+  public static Long hexStringToLong(@NotNull GdbMiValue value) {
     Long longValue = null;
     if (value.type == GdbMiValue.Type.String && value.string.substring(0, 2).equals("0x")) {
       longValue = Long.parseLong(value.string.substring(2), 16);
@@ -21,7 +24,8 @@ public class GdbMiMessageConverterUtils {
   /**
    * Returns true if value is equal to "all".
    */
-  public static Boolean valueIsAll(GdbMiValue value) {
+  @NotNull
+  public static Boolean valueIsAll(@NotNull GdbMiValue value) {
     return value.type == GdbMiValue.Type.String && value.string.equals("all");
   }
 
@@ -29,7 +33,8 @@ public class GdbMiMessageConverterUtils {
    * Returns null if value is equal to "all", or otherwise requests normal processing for the
    * value.
    */
-  public static Object passThroughIfNotAll(GdbMiValue value) {
+  @Nullable
+  public static Object passThroughIfNotAll(@NotNull GdbMiValue value) {
     if (valueIsAll(value)) {
       return null;
     }
@@ -40,7 +45,8 @@ public class GdbMiMessageConverterUtils {
    * Returns null if value is equal to "??", or otherwise requests normal processing for the
    * value.
    */
-  public static Object passThroughIfNotQQ(GdbMiValue value) {
+  @Nullable
+  public static Object passThroughIfNotQQ(@NotNull GdbMiValue value) {
     if (value.type == GdbMiValue.Type.String && value.string.equals("??")) {
       return null;
     }

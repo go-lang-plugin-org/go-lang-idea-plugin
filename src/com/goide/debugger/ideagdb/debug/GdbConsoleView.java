@@ -29,7 +29,7 @@ public class GdbConsoleView {
     myConsoleContainer.add(mConsole.getComponent(), BorderLayout.CENTER);
     myPrompt.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent event) {
+      public void actionPerformed(@NotNull ActionEvent event) {
         String command = event.getActionCommand();
         if (command.isEmpty() && myLastCommand != null) {
           // Resend the last command

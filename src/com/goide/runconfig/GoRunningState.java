@@ -12,7 +12,7 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class GoRunningState extends CommandLineState {
-  protected final Module myModule;
+  @NotNull protected final Module myModule;
 
   public GoRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module) {
     super(env);
@@ -28,5 +28,6 @@ public abstract class GoRunningState extends CommandLineState {
     return new OSProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
   }
 
+  @NotNull
   protected abstract GeneralCommandLine getCommand(@NotNull Sdk sdk) throws ExecutionException;
 }

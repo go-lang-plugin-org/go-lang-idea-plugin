@@ -14,12 +14,13 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class GoHighlightExitPointsHandlerFactory implements HighlightUsagesHandlerFactory {
   @Override
-  public HighlightUsagesHandlerBase createHighlightUsagesHandler(Editor editor, PsiFile file) {
+  public HighlightUsagesHandlerBase createHighlightUsagesHandler(@NotNull Editor editor, @NotNull PsiFile file) {
     int offset = editor.getCaretModel().getOffset();
     PsiElement target = file.findElementAt(offset);
     return MyHandler.createForElement(editor, file, target);
@@ -35,13 +36,14 @@ public class GoHighlightExitPointsHandlerFactory implements HighlightUsagesHandl
       myFunction = function;
     }
 
+    @NotNull
     @Override
     public List<PsiElement> getTargets() {
       return ContainerUtil.newSmartList(myTarget);
     }
 
     @Override
-    protected void selectTargets(List<PsiElement> targets, Consumer<List<PsiElement>> selectionConsumer) {
+    protected void selectTargets(List<PsiElement> targets, @NotNull Consumer<List<PsiElement>> selectionConsumer) {
       selectionConsumer.consume(targets);
     }
 
@@ -65,7 +67,7 @@ public class GoHighlightExitPointsHandlerFactory implements HighlightUsagesHandl
       }.visitTypeOwner(myFunction);
     }
 
-    private static boolean isPanic(GoCallExpr o) {
+    private static boolean isPanic(@NotNull GoCallExpr o) {
       GoExpression e = o.getExpression();
       if (StringUtil.equals("panic", e.getText()) && e instanceof GoReferenceExpression) {
         PsiReference reference = e.getReference();
@@ -77,6 +79,7 @@ public class GoHighlightExitPointsHandlerFactory implements HighlightUsagesHandl
       return false;
     }
 
+    @Nullable
     public static MyHandler createForElement(@NotNull Editor editor, PsiFile file, PsiElement element) {
       GoTypeOwner function = PsiTreeUtil.getParentOfType(element, GoFunctionLit.class, GoFunctionOrMethodDeclaration.class);
       if (function == null) return null;

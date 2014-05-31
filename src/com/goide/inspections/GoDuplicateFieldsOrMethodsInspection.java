@@ -14,7 +14,7 @@ import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_
 
 public class GoDuplicateFieldsOrMethodsInspection extends GoInspectionBase {
   @Override
-  protected void checkFile(PsiFile file, final ProblemsHolder problemsHolder) {
+  protected void checkFile(PsiFile file, @NotNull final ProblemsHolder problemsHolder) {
     if (!(file instanceof GoFile)) return;
     file.accept(new GoRecursiveVisitor() {
       @Override

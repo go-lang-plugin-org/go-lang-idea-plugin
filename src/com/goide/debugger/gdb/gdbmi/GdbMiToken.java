@@ -1,5 +1,7 @@
 package com.goide.debugger.gdb.gdbmi;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Class representing a token read from a GDB/MI stream.
  */
@@ -53,7 +55,7 @@ public class GdbMiToken {
   /**
    * The token value, if any.
    */
-  public String value = null;
+  @Nullable public String value = null;
 
   /**
    * Constructor; sets the values.
@@ -80,6 +82,7 @@ public class GdbMiToken {
    *
    * @return A string containing the type and, if set, the value.
    */
+  @Nullable
   public String toString() {
     return type + (value == null ? "" : ": " + value);
   }

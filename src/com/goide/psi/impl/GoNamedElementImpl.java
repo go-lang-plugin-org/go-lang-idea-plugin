@@ -56,6 +56,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?> & TextHolder> 
     return identifier != null ? identifier.getTextOffset() : super.getTextOffset();
   }
 
+  @NotNull
   @Override
   public PsiElement setName(@NonNls @NotNull String newName) throws IncorrectOperationException {
     PsiElement identifier = getIdentifier();

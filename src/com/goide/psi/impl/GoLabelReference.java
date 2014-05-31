@@ -29,6 +29,7 @@ public class GoLabelReference extends PsiReferenceBase<GoLabelRef> {
     super(element, TextRange.from(0, element.getTextLength()));
   }
 
+  @NotNull
   private Collection<GoLabelDefinition> getLabelDefinitions() {
     GoBlock block = PsiTreeUtil.getTopmostParentOfType(myElement, GoBlock.class);
     return PsiTreeUtil.findChildrenOfType(block, GoLabelDefinition.class);

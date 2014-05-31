@@ -3,6 +3,8 @@ package com.goide.debugger.gdb;
 import com.goide.debugger.gdb.gdbmi.*;
 import com.goide.debugger.gdb.messages.*;
 import com.intellij.openapi.diagnostic.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.InputStream;
@@ -42,7 +44,7 @@ public class Gdb {
   }
 
   // Handle to the ASCII character set
-  private static Charset ourCharset = Charset.forName("US-ASCII");
+  @NotNull private static Charset ourCharset = Charset.forName("US-ASCII");
 
   // The listener
   private GdbListener myListener;
@@ -55,7 +57,7 @@ public class Gdb {
   private Thread myWriteThread;
 
   // Flag indicating whether we are stopping
-  private Boolean myStopping = false;
+  @NotNull private Boolean myStopping = false;
 
   // Flag indicating whether we have received the first record from GDB yet
   private boolean myFirstRecord = true;
@@ -177,7 +179,7 @@ public class Gdb {
    *                 or GdbErrorEvent on failure.
    */
   public void getVariablesForFrame(final int thread, final int frame,
-                                   final GdbEventCallback callback) {
+                                   @NotNull final GdbEventCallback callback) {
     // Get a list of local variables
     String command = "-stack-list-variables --thread " + thread + " --frame " + frame +
                      " --no-values";
@@ -197,8 +199,8 @@ public class Gdb {
    * @param expression The expression to evaluate.
    * @param callback   The callback function.
    */
-  public void evaluateExpression(int thread, int frame, final String expression,
-                                 final GdbEventCallback callback) {
+  public void evaluateExpression(int thread, int frame, @NotNull final String expression,
+                                 @NotNull final GdbEventCallback callback) {
     // TODO: Make this more efficient
 
     // Create a new variable object if necessary
@@ -232,7 +234,7 @@ public class Gdb {
    * @param gdbPath          Path to the GDB executable.
    * @param workingDirectory Working directory to launch the GDB process in. May be null.
    */
-  private void runGdb(String gdbPath, String workingDirectory) {
+  private void runGdb(String gdbPath, @Nullable String workingDirectory) {
     try {
       // Launch the process
       final String[] commandLine = {
@@ -363,7 +365,7 @@ public class Gdb {
    *
    * @param record The record.
    */
-  private void handleRecord(GdbMiRecord record) {
+  private void handleRecord(@NotNull GdbMiRecord record) {
     switch (record.type) {
       case Target:
       case Console:
@@ -402,7 +404,7 @@ public class Gdb {
    *
    * @param record The record.
    */
-  private void handleResultRecord(GdbMiResultRecord record) {
+  private void handleResultRecord(@NotNull GdbMiResultRecord record) {
     // Notify the listener
     myListener.onResultRecordReceived(record);
 
@@ -441,7 +443,7 @@ public class Gdb {
    * @param callback The user-provided callback function.
    */
   private void onGdbVariablesReady(GdbEvent event, int thread, int frame,
-                                   final GdbEventCallback callback) {
+                                   @NotNull final GdbEventCallback callback) {
     if (event instanceof GdbErrorEvent) {
       callback.onGdbCommandCompleted(event);
       return;
@@ -489,7 +491,7 @@ public class Gdb {
    * @param callback   The user-provided callback function.
    */
   private void onGdbNewVariableObjectReady(GdbEvent event, String expression,
-                                           GdbEventCallback callback) {
+                                           @NotNull GdbEventCallback callback) {
     if (event instanceof GdbErrorEvent) {
       callback.onGdbCommandCompleted(event);
       return;
@@ -524,8 +526,8 @@ public class Gdb {
    * @param variables The variables the user requested.
    * @param callback  The user-provided callback function.
    */
-  private void onGdbVariableObjectsUpdated(GdbEvent event, Set<String> variables,
-                                           GdbEventCallback callback) {
+  private void onGdbVariableObjectsUpdated(GdbEvent event, @NotNull Set<String> variables,
+                                           @NotNull GdbEventCallback callback) {
     if (event instanceof GdbErrorEvent) {
       callback.onGdbCommandCompleted(event);
       return;

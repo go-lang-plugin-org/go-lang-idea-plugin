@@ -60,7 +60,7 @@ public class GoFmtFileAction extends AnAction implements DumbAware {
     }
   }
 
-  public static boolean doFmt(PsiFile file, Project project, @Nullable final VirtualFile vFile, @Nullable String groupId)
+  public static boolean doFmt(@NotNull PsiFile file, @NotNull Project project, @Nullable final VirtualFile vFile, @Nullable String groupId)
     throws ExecutionException {
     if (vFile == null || !vFile.isInLocalFileSystem()) return true;
     Document document = PsiDocumentManager.getInstance(project).getDocument(file);

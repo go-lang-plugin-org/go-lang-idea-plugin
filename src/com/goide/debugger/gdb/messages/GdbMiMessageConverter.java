@@ -9,6 +9,8 @@ import com.goide.debugger.gdb.messages.annotations.GdbMiDoneEvent;
 import com.goide.debugger.gdb.messages.annotations.GdbMiEvent;
 import com.goide.debugger.gdb.messages.annotations.GdbMiField;
 import com.intellij.openapi.diagnostic.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.*;
 import java.util.Arrays;
@@ -33,7 +35,8 @@ public class GdbMiMessageConverter {
    * @param record The GDB result record.
    * @return The new object, or null if it could not be created.
    */
-  public static GdbEvent processRecord(GdbMiResultRecord record) {
+  @Nullable
+  public static GdbEvent processRecord(@NotNull GdbMiResultRecord record) {
     return processRecord(record, null);
   }
 
@@ -46,7 +49,8 @@ public class GdbMiMessageConverter {
    *                    type.
    * @return The new object, or null if it could not be created.
    */
-  public static GdbEvent processRecord(GdbMiResultRecord record, String commandType) {
+  @Nullable
+  public static GdbEvent processRecord(@NotNull GdbMiResultRecord record, @Nullable String commandType) {
     // Iterate through the list of event types
     GdbEvent event = null;
     for (Class<?> clazz : GdbMiEventTypes.classes) {
@@ -126,8 +130,9 @@ public class GdbMiMessageConverter {
    * @param doneEventAnnotation The annotation on the class.
    * @return The new list of results, or null if it could not be transposed.
    */
-  private static List<GdbMiResult> transposeDoneEvent(GdbMiResultRecord record,
-                                                      GdbMiDoneEvent doneEventAnnotation) {
+  @Nullable
+  private static List<GdbMiResult> transposeDoneEvent(@NotNull GdbMiResultRecord record,
+                                                      @NotNull GdbMiDoneEvent doneEventAnnotation) {
     // Search for the requested result
     for (GdbMiResult result : record.results) {
       if (result.variable.equals(doneEventAnnotation.transpose())) {
@@ -154,7 +159,8 @@ public class GdbMiMessageConverter {
    * @param results The results from GDB.
    * @return The new object, or null if it could not be created.
    */
-  public static Object processObject(Class<?> clazz, List<GdbMiResult> results) {
+  @Nullable
+  public static Object processObject(@NotNull Class<?> clazz, @NotNull List<GdbMiResult> results) {
     try {
       Object object = clazz.newInstance();
 
@@ -196,8 +202,8 @@ public class GdbMiMessageConverter {
    * @param fieldAnnotation The GdbMiField annotation on the field.
    * @param result          The result to get the data from.
    */
-  private static void convertField(Object event, Class<?> clazz, Field field,
-                                   GdbMiField fieldAnnotation, GdbMiResult result) throws InvocationTargetException,
+  private static void convertField(Object event, @NotNull Class<?> clazz, @NotNull Field field,
+                                   @NotNull GdbMiField fieldAnnotation, @NotNull GdbMiResult result) throws InvocationTargetException,
                                                                                           IllegalAccessException {
     // Check the result type is supported by the field
     boolean foundValueType = false;
@@ -233,8 +239,8 @@ public class GdbMiMessageConverter {
    * @param fieldAnnotation The GdbMiField annotation on the field.
    * @param result          The result to get the data from.
    */
-  private static void convertFieldUsingValueProcessor(Object event, Class<?> clazz, Field field,
-                                                      GdbMiField fieldAnnotation, GdbMiResult result) throws InvocationTargetException,
+  private static void convertFieldUsingValueProcessor(Object event, @NotNull Class<?> clazz, @NotNull Field field,
+                                                      @NotNull GdbMiField fieldAnnotation, @NotNull GdbMiResult result) throws InvocationTargetException,
                                                                                                              IllegalAccessException {
     // Get the value processor function
     Method valueProcessor;
@@ -314,7 +320,7 @@ public class GdbMiMessageConverter {
    * @param field  The field on the object to put the value into.
    * @param result The result to get the data from.
    */
-  static void convertFieldManually(Object event, Field field, GdbMiResult result) throws
+  static void convertFieldManually(Object event, @NotNull Field field, @NotNull GdbMiResult result) throws
                                                                                   InvocationTargetException, IllegalAccessException {
     ParameterizedType genericType = null;
     {
@@ -342,6 +348,7 @@ public class GdbMiMessageConverter {
    * @param value             The value to get the data from.
    * @return The new object, or null if it could not be created.
    */
+  @Nullable
   static Object applyConversionRules(Class<?> targetType, ParameterizedType genericTargetType,
                                      GdbMiValue value) throws InvocationTargetException, IllegalAccessException {
     // Apply the conversion rules until we get a match

@@ -27,6 +27,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
     myConfiguration = configuration;
   }
 
+  @NotNull
   @Override
   public OutputToGeneralTestEventsConverter createTestEventsConverter(@NotNull String testFrameworkName,
                                                                       @NotNull TestConsoleProperties consoleProperties) {
@@ -45,8 +46,8 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
     private static final Pattern FINISHED = Pattern.compile("^(PASS)|(FAIL)$");
 
     private boolean myFailed = false;
-    private StringBuilder myStdOut = new StringBuilder();
-    private String myCurrentTest = "<test>";
+    @NotNull private StringBuilder myStdOut = new StringBuilder();
+    @NotNull private String myCurrentTest = "<test>";
 
     public GoOutputToGeneralTestEventsConverter(@NotNull String testFrameworkName,
                                                 @NotNull TestConsoleProperties consoleProperties) {
@@ -54,7 +55,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
     }
 
     @Override
-    protected boolean processServiceMessages(String text, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
+    protected boolean processServiceMessages(@NotNull String text, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
       Matcher matcher;
 
       if ((matcher = RUN.matcher(text)).find()) {

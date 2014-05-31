@@ -35,11 +35,13 @@ public class GoFunctionDeclarationStubElementType extends GoNamedStubElementType
     super(name);
   }
 
+  @NotNull
   @Override
   public GoFunctionDeclaration createPsi(@NotNull GoFunctionDeclarationStub stub) {
     return new GoFunctionDeclarationImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoFunctionDeclarationStub createStub(@NotNull GoFunctionDeclaration psi, StubElement parentStub) {
     return new GoFunctionDeclarationStub(parentStub, this, psi.getName(), psi.isPublic());

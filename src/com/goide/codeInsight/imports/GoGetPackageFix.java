@@ -81,14 +81,14 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
           final List<String> out = ContainerUtil.newArrayList();
           myHandler.addProcessListener(new ProcessAdapter() {
             @Override
-            public void onTextAvailable(ProcessEvent event, Key outputType) {
+            public void onTextAvailable(@NotNull ProcessEvent event, Key outputType) {
               String text = event.getText();
               out.add(text);
               //indicator.setText2(text); // todo: look ugly
             }
 
             @Override
-            public void processTerminated(ProcessEvent event) {
+            public void processTerminated(@NotNull ProcessEvent event) {
               int code = event.getExitCode();
               if (code == 0) return;
               String message = StringUtil.join(out.size() > 1 ? ContainerUtil.subList(out, 1) : out, "\n");

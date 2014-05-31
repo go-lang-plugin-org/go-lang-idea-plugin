@@ -9,8 +9,9 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 
 public class GoImportStringManipulator extends AbstractElementManipulator<GoImportString> {
+  @NotNull
   @Override
-  public GoImportString handleContentChange(GoImportString string, TextRange range, String s) throws IncorrectOperationException {
+  public GoImportString handleContentChange(@NotNull GoImportString string, TextRange range, String s) throws IncorrectOperationException {
     String newPackage = range.replace(string.getText(), s);
     checkQuoted(string);
     return (GoImportString)string.replace(GoElementFactory.createImportString(string.getProject(), newPackage));

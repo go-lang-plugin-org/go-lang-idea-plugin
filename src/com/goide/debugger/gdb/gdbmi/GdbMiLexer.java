@@ -1,5 +1,8 @@
 package com.goide.debugger.gdb.gdbmi;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +30,13 @@ public class GdbMiLexer {
   }
 
   // State of the lexer FSM
-  private FsmState myState = FsmState.Idle;
+  @NotNull private FsmState myState = FsmState.Idle;
 
   // Temporary store for partially read tokens
-  private StringBuilder myPartialToken;
+  @Nullable private StringBuilder myPartialToken;
 
   // List of unprocessed tokens
-  private List<GdbMiToken> myTokens = new ArrayList<GdbMiToken>();
+  @NotNull private List<GdbMiToken> myTokens = new ArrayList<GdbMiToken>();
 
   /**
    * Returns a list of unprocessed tokens. The caller should erase items from this list as they
@@ -41,6 +44,7 @@ public class GdbMiLexer {
    *
    * @return A list of unprocessed tokens.
    */
+  @NotNull
   public List<GdbMiToken> getTokens() {
     return myTokens;
   }

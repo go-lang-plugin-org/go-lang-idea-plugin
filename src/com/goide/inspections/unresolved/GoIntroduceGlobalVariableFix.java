@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoIntroduceGlobalVariableFix extends GoUnresolvedFixBase {
-  public GoIntroduceGlobalVariableFix(PsiElement element, String name) {
+  public GoIntroduceGlobalVariableFix(@NotNull PsiElement element, @NotNull String name) {
     super(element, name, "global variable");
   }
 

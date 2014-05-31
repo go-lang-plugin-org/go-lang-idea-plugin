@@ -17,10 +17,11 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 public class GoApplicationConfiguration extends GoRunConfigurationWithMain<GoApplicationRunningState> {
-  public GoApplicationConfiguration(Project project, String name, ConfigurationType configurationType) {
+  public GoApplicationConfiguration(Project project, String name, @NotNull ConfigurationType configurationType) {
     super(name, new GoModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
   }
 
+  @NotNull
   @Override
   protected ModuleBasedConfiguration createInstance() {
     return new GoApplicationConfiguration(getProject(), getName(), GoApplicationRunConfigurationType.getInstance());
@@ -37,8 +38,9 @@ public class GoApplicationConfiguration extends GoRunConfigurationWithMain<GoApp
     return GoRunner.EMPTY_RUN_STATE;
   }
 
+  @NotNull
   @Override
-  protected GoApplicationRunningState newRunningState(ExecutionEnvironment env, Module module) {
+  protected GoApplicationRunningState newRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module) {
     return new GoApplicationRunningState(env, module, this);
   }
 }

@@ -60,8 +60,9 @@ public class GoProjectStructureDetector extends ProjectStructureDetector {
     }
   }
 
+  @NotNull
   @Override
-  public List<ModuleWizardStep> createWizardSteps(ProjectFromSourcesBuilder builder, ProjectDescriptor projectDescriptor, Icon stepIcon) {
+  public List<ModuleWizardStep> createWizardSteps(@NotNull ProjectFromSourcesBuilder builder, ProjectDescriptor projectDescriptor, Icon stepIcon) {
     ProjectJdkForModuleStep projectJdkForModuleStep = new ProjectJdkForModuleStep(builder.getContext(), GoSdkType.getInstance());
     return Collections.<ModuleWizardStep>singletonList(projectJdkForModuleStep);
   }

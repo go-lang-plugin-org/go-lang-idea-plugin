@@ -87,7 +87,7 @@ public class GdbValue extends XValue {
    * @param event The event.
    * @param node  The node passed to computeChildren().
    */
-  private void onGdbChildrenReady(GdbEvent event, final XCompositeNode node) {
+  private void onGdbChildrenReady(GdbEvent event, @NotNull final XCompositeNode node) {
     if (event instanceof GdbErrorEvent) {
       node.setErrorMessage(((GdbErrorEvent)event).message);
       return;

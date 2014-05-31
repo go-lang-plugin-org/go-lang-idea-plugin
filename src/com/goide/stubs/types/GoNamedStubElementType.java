@@ -20,7 +20,7 @@ public abstract class GoNamedStubElementType<S extends NamedStubBase<T>, T exten
   }
 
   @Override
-  public boolean shouldCreateStub(ASTNode node) {
+  public boolean shouldCreateStub(@NotNull ASTNode node) {
     PsiElement psi = node.getPsi();
     return psi instanceof GoNamedElement && StringUtil.isNotEmpty(((GoNamedElement)psi).getName());
   }

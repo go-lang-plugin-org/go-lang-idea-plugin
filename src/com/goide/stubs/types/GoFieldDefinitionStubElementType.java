@@ -15,11 +15,13 @@ public class GoFieldDefinitionStubElementType extends GoNamedStubElementType<GoF
     super(name);
   }
 
+  @NotNull
   @Override
   public GoFieldDefinition createPsi(@NotNull GoFieldDefinitionStub stub) {
     return new GoFieldDefinitionImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoFieldDefinitionStub createStub(@NotNull GoFieldDefinition psi, StubElement parentStub) {
     return new GoFieldDefinitionStub(parentStub, this, psi.getName(), psi.isPublic());

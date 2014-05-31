@@ -1,5 +1,8 @@
 package com.goide.debugger.gdb.gdbmi;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,12 +13,12 @@ public class GdbMiResultRecord extends GdbMiRecord {
   /**
    * The result/async class.
    */
-  public String className;
+  @Nullable public String className;
 
   /**
    * The results.
    */
-  public List<GdbMiResult> results = new ArrayList<GdbMiResult>();
+  @NotNull public List<GdbMiResult> results = new ArrayList<GdbMiResult>();
 
   /**
    * Constructor.
@@ -33,6 +36,7 @@ public class GdbMiResultRecord extends GdbMiRecord {
    *
    * @return A string containing the class name and any results.
    */
+  @NotNull
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append(className);

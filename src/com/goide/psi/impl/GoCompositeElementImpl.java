@@ -26,7 +26,7 @@ public class GoCompositeElementImpl extends ASTWrapperPsiElement implements GoCo
     return precessDeclarationDefault(this, processor, state, lastParent, place);
   }
 
-  public static boolean precessDeclarationDefault(GoCompositeElement o,
+  public static boolean precessDeclarationDefault(@NotNull GoCompositeElement o,
                                                   PsiScopeProcessor processor,
                                                   ResolveState state,
                                                   PsiElement lastParent,

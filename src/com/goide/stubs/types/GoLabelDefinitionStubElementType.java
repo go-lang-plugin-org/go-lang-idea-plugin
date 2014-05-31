@@ -15,11 +15,13 @@ public class GoLabelDefinitionStubElementType extends GoNamedStubElementType<GoL
     super(name);
   }
 
+  @NotNull
   @Override
   public GoLabelDefinition createPsi(@NotNull GoLabelDefinitionStub stub) {
     return new GoLabelDefinitionImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoLabelDefinitionStub createStub(@NotNull GoLabelDefinition psi, StubElement parentStub) {
     return new GoLabelDefinitionStub(parentStub, this, psi.getName(), psi.isPublic());

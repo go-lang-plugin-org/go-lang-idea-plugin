@@ -5,6 +5,7 @@ import com.goide.debugger.gdb.messages.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.xdebugger.frame.XExecutionStack;
 import com.intellij.xdebugger.frame.XStackFrame;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class GdbExecutionStack extends XExecutionStack {
   private static final Logger LOG = Logger.getInstance(GdbExecutionStack.class);
 
   private final Gdb myGdb;
-  private final GdbThread myThread;
+  @NotNull private final GdbThread myThread;
   private GdbExecutionStackFrame myTopFrame;
 
   /**
@@ -23,7 +24,7 @@ public class GdbExecutionStack extends XExecutionStack {
    * @param gdb    Handle to the GDB instance.
    * @param thread The thread.
    */
-  public GdbExecutionStack(Gdb gdb, GdbThread thread) {
+  public GdbExecutionStack(Gdb gdb, @NotNull GdbThread thread) {
     super(thread.formatName());
 
     myGdb = gdb;
@@ -54,7 +55,7 @@ public class GdbExecutionStack extends XExecutionStack {
    * @param container       Container into which the stack frames are inserted.
    */
   @Override
-  public void computeStackFrames(final int firstFrameIndex, final XStackFrameContainer container) {
+  public void computeStackFrames(final int firstFrameIndex, @NotNull final XStackFrameContainer container) {
     // Just get the whole stack
     String command = "-stack-list-frames";
     myGdb.sendCommand(command, new Gdb.GdbEventCallback() {
@@ -73,7 +74,7 @@ public class GdbExecutionStack extends XExecutionStack {
    * @param container       The container passed to computeStackFrames().
    */
   private void onGdbStackTraceReady(GdbEvent event, int firstFrameIndex,
-                                    XStackFrameContainer container) {
+                                    @NotNull XStackFrameContainer container) {
     if (event instanceof GdbErrorEvent) {
       container.errorOccurred(((GdbErrorEvent)event).message);
       return;

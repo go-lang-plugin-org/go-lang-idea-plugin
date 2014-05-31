@@ -26,11 +26,13 @@ public class GoMethodSpecStubElementType extends GoNamedStubElementType<GoMethod
     super(name);
   }
 
+  @NotNull
   @Override
   public GoMethodSpec createPsi(@NotNull GoMethodSpecStub stub) {
     return new GoMethodSpecImpl(stub, this);
   }
 
+  @NotNull
   @Override
   public GoMethodSpecStub createStub(@NotNull GoMethodSpec psi, StubElement parentStub) {
     return new GoMethodSpecStub(parentStub, this, psi.getName(), psi.isPublic());

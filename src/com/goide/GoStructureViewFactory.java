@@ -21,7 +21,7 @@ import java.util.List;
 public class GoStructureViewFactory implements PsiStructureViewFactory {
   @Nullable
   @Override
-  public StructureViewBuilder getStructureViewBuilder(final PsiFile psiFile) {
+  public StructureViewBuilder getStructureViewBuilder(@NotNull final PsiFile psiFile) {
     return new TreeBasedStructureViewBuilder() {
       @NotNull
       @Override
@@ -54,12 +54,13 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
   }
 
   public static class Element implements StructureViewTreeElement, ItemPresentation, NavigationItem {
-    private final PsiElement myElement;
+    @NotNull private final PsiElement myElement;
 
     public Element(@NotNull PsiElement element) {
       myElement = element;
     }
 
+    @NotNull
     @Override
     public Object getValue() {
       return myElement;

@@ -6,13 +6,14 @@ import com.intellij.openapi.module.ModuleConfigurationEditor;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ui.configuration.*;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GoModuleEditorsProvider implements ModuleConfigurationEditorProvider {
-  public ModuleConfigurationEditor[] createEditors(ModuleConfigurationState state) {
+  public ModuleConfigurationEditor[] createEditors(@NotNull ModuleConfigurationState state) {
     ModifiableRootModel rootModel = state.getRootModel();
     Module module = rootModel.getModule();
     if (!(ModuleType.get(module) instanceof GoModuleType)) {

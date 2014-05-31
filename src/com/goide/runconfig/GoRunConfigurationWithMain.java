@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
 public abstract class GoRunConfigurationWithMain<T extends GoRunningState> extends GoRunConfigurationBase<T> {
-  protected String myFilePath = "";
+  @NotNull protected String myFilePath = "";
 
   public GoRunConfigurationWithMain(String name,
                                     GoModuleBasedConfiguration configurationModule,

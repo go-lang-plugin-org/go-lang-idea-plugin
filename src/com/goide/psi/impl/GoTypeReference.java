@@ -18,7 +18,7 @@ import java.util.List;
 public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReferenceExpression> {
   private final boolean myInsideInterfaceType;
 
-  public GoTypeReference(GoTypeReferenceExpression o) {
+  public GoTypeReference(@NotNull GoTypeReferenceExpression o) {
     super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
     myInsideInterfaceType = myElement.getParent() instanceof GoMethodSpec;
   }

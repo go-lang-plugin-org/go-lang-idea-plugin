@@ -12,6 +12,7 @@ public class GoCodeStyleConfigurable extends CodeStyleAbstractConfigurable {
     super(settings, cloneSettings, "Go");
   }
 
+  @NotNull
   @Override
   protected CodeStyleAbstractPanel createPanel(CodeStyleSettings settings) {
     return new GoCodeStyleMainPanel(getCurrentSettings(), settings);

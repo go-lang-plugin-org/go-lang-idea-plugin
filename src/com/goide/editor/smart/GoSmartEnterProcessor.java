@@ -19,7 +19,7 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     addEnterProcessors(new PlainEnterProcessor());
   }
 
-  private static void addBlockIfNeeded(GoStatement element) {
+  private static void addBlockIfNeeded(@NotNull GoStatement element) {
     if (element.getBlock() == null) element.add(GoElementFactory.createBlock(element.getProject()));
   }
 

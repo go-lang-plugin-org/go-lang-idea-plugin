@@ -18,12 +18,13 @@ import java.util.Collection;
 
 public abstract class GoRunConfigurationBase<RunningState extends GoRunningState>
   extends ModuleBasedConfiguration<GoModuleBasedConfiguration> implements RunConfigurationWithSuppressedDefaultRunAction {
-  protected String myParams = "";
+  @NotNull protected String myParams = "";
 
   public GoRunConfigurationBase(String name, GoModuleBasedConfiguration configurationModule, ConfigurationFactory factory) {
     super(name, configurationModule, factory);
   }
 
+  @NotNull
   @Override
   public Collection<Module> getValidModules() {
     return Arrays.asList(ModuleManager.getInstance(getProject()).getModules());
@@ -37,12 +38,13 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   }
 
   @Override
-  public void readExternal(final Element element) throws InvalidDataException {
+  public void readExternal(@NotNull final Element element) throws InvalidDataException {
     super.readExternal(element);
     readModule(element);
     XmlSerializer.deserializeInto(this, element);
   }
 
+  @NotNull
   public final RunningState createRunningState(ExecutionEnvironment env) throws ExecutionException {
     GoModuleBasedConfiguration configuration = getConfigurationModule();
     Module module = configuration.getModule();
@@ -52,6 +54,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     return newRunningState(env, module);
   }
 
+  @NotNull
   protected abstract RunningState newRunningState(ExecutionEnvironment env, Module module);
 
   @NotNull

@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class GoRunner extends DefaultProgramRunner {
   public static final String GO_RUNNER_ID = "GoRunner";
 
-  public static final RunProfileState EMPTY_RUN_STATE = new RunProfileState() {
+  @Nullable public static final RunProfileState EMPTY_RUN_STATE = new RunProfileState() {
     @Override
     public ExecutionResult execute(final Executor executor, @NotNull final ProgramRunner runner) throws ExecutionException {
       return null;

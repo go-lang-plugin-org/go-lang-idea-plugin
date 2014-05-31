@@ -16,6 +16,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Properties;
 
@@ -24,7 +25,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
   private static final String PACKAGE = "PACKAGE";
 
   @Override
-  protected PsiFile createFile(String name, String templateName, PsiDirectory dir) {
+  protected PsiFile createFile(String name, @NotNull String templateName, @NotNull PsiDirectory dir) {
     FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
     Properties properties = new Properties();
     properties.setProperty(PACKAGE, ContainerUtil.getLastItem(StringUtil.split(dir.getName(), "-")));
@@ -44,7 +45,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
   }
 
   @Override
-  protected void buildDialog(final Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
+  protected void buildDialog(final Project project, PsiDirectory directory, @NotNull CreateFileFromTemplateDialog.Builder builder) {
     // todo: check that file already exists
     builder.
       setTitle(NEW_GO_FILE).
@@ -57,12 +58,12 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
         }
 
         @Override
-        public boolean canClose(String inputString) {
+        public boolean canClose(@NotNull String inputString) {
           return !StringUtil.isEmptyOrSpaces(inputString) && getErrorText(inputString) == null;
         }
 
         @Override
-        public String getErrorText(String inputString) {
+        public String getErrorText(@NotNull String inputString) {
           String error = " is not a valid Go file name";
           if (StringUtil.isEmpty(inputString)) return null;
           boolean ok = new GoNamesValidator().isIdentifier(inputString, project);
@@ -76,6 +77,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
     ;
   }
 
+  @NotNull
   @Override
   protected String getActionName(PsiDirectory directory, String newName, String templateName) {
     return NEW_GO_FILE;

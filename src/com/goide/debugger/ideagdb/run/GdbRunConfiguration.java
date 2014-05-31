@@ -30,12 +30,14 @@ public class GdbRunConfiguration extends ModuleBasedConfiguration<RunConfigurati
     super(name, new RunConfigurationModule(project), factory);
   }
 
+  @Nullable
   @Override
   public Collection<Module> getValidModules() {
     LOG.warn("getValidModules: stub");
     return null;
   }
 
+  @NotNull
   @Override
   protected ModuleBasedConfiguration createInstance() {
     return new GdbRunConfiguration(getName(), getProject(), GdbRunConfigurationType.getInstance().getFactory());
@@ -55,7 +57,7 @@ public class GdbRunConfiguration extends ModuleBasedConfiguration<RunConfigurati
   }
 
   @Override
-  public void readExternal(Element element) throws InvalidDataException {
+  public void readExternal(@NotNull Element element) throws InvalidDataException {
     super.readExternal(element);
     readModule(element);
     XmlSerializer.deserializeInto(this, element);
