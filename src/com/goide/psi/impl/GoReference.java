@@ -87,6 +87,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return new MyScopeProcessor() {
       @Override
       public boolean execute(@NotNull PsiElement element, ResolveState state) {
+        if ("_".equals(element.getText())) return true;
         LookupElement lookup = createLookup(element);
         if (lookup != null) variants.add(lookup);
         return true;

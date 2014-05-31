@@ -145,6 +145,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doCheckResult("package foo; import imp \"\"; func foo(a im<caret>.SomeType) {}",
                   "package foo; import imp \"\"; func foo(a imp.<caret>SomeType) {}");
   }
+  
+  public void testNoUnderscore() {
+    String theSame = "package foo; func foo() {_ := 1; <caret>}";
+    doCheckResult(theSame, theSame);
+  }
 
   public void testRanges() {
     doTestInclude("package foo; func foo(a int) {for k := range <caret>}", "a");
