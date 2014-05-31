@@ -48,7 +48,9 @@ public class GoCompletionContributor extends CompletionContributor {
     extend(CompletionType.BASIC, topLevelPattern(), new GoKeywordCompletionProvider("const", "var", "func", "type"));
     extend(CompletionType.BASIC, insideBlockPattern(), new GoKeywordCompletionProvider("for", "const", "var", "return", "if", "switch", "go", "defer", "select"));
     //todo extend(CompletionType.BASIC, insideSwitchStatement(), new GoKeywordCompletionProvider("case", "default"));
-    //  todo: "interface", "struct", "continue"
+    //  todo: "interface", "struct"
+    //  todo: "break", "continue"
+    //  todo: "chan", "fallthrough", "goto", "map", "range", "select" 
   }
 
   @Override
