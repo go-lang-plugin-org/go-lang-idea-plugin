@@ -69,6 +69,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testBlockKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select", "main");
   }
+  
+  public void testAddSpaceAfterKeyword() {
+    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+  }
 
   public void testFunctionInDefer() {
     myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
