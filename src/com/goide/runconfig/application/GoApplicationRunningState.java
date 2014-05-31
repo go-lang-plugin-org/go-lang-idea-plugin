@@ -28,6 +28,7 @@ public class GoApplicationRunningState extends GoRunningState {
     String homePath = sdk.getHomePath();
     assert homePath != null;
     String outputDirectory = CompilerPaths.getModuleOutputPath(myModule, false);
+    assert outputDirectory != null;
     String modulePath = PathUtil.getParentPath(myModule.getModuleFilePath());
     String executable = FileUtil.toSystemDependentName(JpsGoSdkType.getBinaryPathByModulePath(modulePath, outputDirectory));
     commandLine.setExePath(executable);
