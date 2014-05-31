@@ -47,6 +47,7 @@
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
     <completion.contributor language="go" order="last" implementationClass="com.goide.completion.GoCompletionContributor$AutoImport"/>
+    <completion.confidence language="go" order="last" implementationClass="com.goide.completion.GoCompletionConfidence"/>
     <lang.refactoringSupport language="go" implementationClass="com.goide.refactor.GoRefactoringSupportProvider"/>
     <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
     <spellchecker.support language="go" implementationClass="com.goide.spellchecker.GoSpellcheckingStrategy"/>
