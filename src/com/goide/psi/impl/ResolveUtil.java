@@ -7,10 +7,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ResolveUtil {
-  private ResolveUtil() {
-  }
-
+public final class ResolveUtil {
   public static boolean treeWalkUp(@Nullable PsiElement place, @NotNull PsiScopeProcessor processor) {
     PsiElement lastParent = null;
     PsiElement run = place;
