@@ -128,7 +128,7 @@ public class GoCompletionContributor extends CompletionContributor {
               String newPrefix = parameters.getEditor().getDocument().getText(TextRange.create(startOffset, parameters.getOffset()));
               result = result.withPrefixMatcher(result.getPrefixMatcher().cloneWithPrefix(newPrefix));
               
-              final Project project = parent.getProject();
+              Project project = parent.getProject();
               Collection<String> functionNames = StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project);
               for (String name : functionNames) {
                 if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
