@@ -37,10 +37,10 @@ public class GoRunner extends DefaultProgramRunner {
   }
 
   @Override
-  protected RunContentDescriptor doExecute(Project project,
-                                           RunProfileState state,
+  protected RunContentDescriptor doExecute(@NotNull Project project,
+                                           @NotNull RunProfileState state,
                                            RunContentDescriptor contentToReuse,
-                                           ExecutionEnvironment env) throws ExecutionException {
+                                           @NotNull ExecutionEnvironment env) throws ExecutionException {
     final GoRunConfigurationBase configuration = (GoRunConfigurationBase) env.getRunProfile();
     final GoRunningState runningState = configuration.createRunningState(env);
     FileDocumentManager.getInstance().saveAllDocuments();
