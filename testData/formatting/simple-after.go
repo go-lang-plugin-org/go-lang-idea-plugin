@@ -30,6 +30,11 @@ func main(aaa string, rd io.Reader, error) (ok, ok) {
     sql.DB()
     const aaa = iota
     var bbb = iota
+
+
+    switch name {
+
+    }
 }
 
 var b = map[string]int{    }

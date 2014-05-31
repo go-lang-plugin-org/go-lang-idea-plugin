@@ -11,10 +11,10 @@ import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -141,11 +141,11 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       if (mySubBlocks == null) {
         mySubBlocks = buildSubBlocks();
       }
-      return new ArrayList<Block>(mySubBlocks);
+      return ContainerUtil.newArrayList(mySubBlocks);
     }
 
     private List<Block> buildSubBlocks() {
-      List<Block> blocks = new ArrayList<Block>();
+      List<Block> blocks = ContainerUtil.newArrayList();
       for (ASTNode child = myNode.getFirstChildNode(); child != null; child = child.getTreeNext()) {
         IElementType childType = child.getElementType();
         if (child.getTextRange().getLength() == 0) continue;
@@ -163,6 +163,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     private Indent calcIndent(ASTNode child) {
       IElementType parentType = myNode.getElementType();
       IElementType type = child.getElementType();
+      if (type == SWITCH_START) return Indent.getNoneIndent();
       if (BLOCKS_TOKEN_SET.contains(parentType)) return indentIfNotBrace(child);
       if (parentType == IMPORT_DECLARATION && type == IMPORT_SPEC) return Indent.getNormalIndent();
       if (parentType == CONST_DECLARATION && type == CONST_SPEC) return Indent.getNormalIndent();
