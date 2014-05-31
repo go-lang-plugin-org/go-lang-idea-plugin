@@ -1,7 +1,7 @@
-package com.goide.runconfig.application.ui;
+package com.goide.runconfig.ui;
 
 import com.goide.GoModuleType;
-import com.goide.runconfig.application.GoApplicationConfiguration;
+import com.goide.runconfig.GoRunConfigurationBase;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.ConfigurationException;
@@ -10,33 +10,28 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.ModulesCombobox;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.Factory;
 import com.intellij.ui.RawCommandLineEditor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationConfiguration> {
+public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurationBase> {
   private JPanel component;
   private ModulesCombobox myComboModules;
   private RawCommandLineEditor myParamsField;
   private TextFieldWithBrowseButton myFilePathField;
 
-  public GoRunConfigurationEditorForm(@NotNull Project project) {
-    this(project, null);
-  }
-
-  public GoRunConfigurationEditorForm(@NotNull Project project, @Nullable Factory<GoApplicationConfiguration> factory) {
-    super(factory);
+  public GoRunConfigurationEditorForm(@NotNull Project project, boolean showPath) {
+    super(null);
     FileChooserDescriptor chooseFileDescriptor = FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
     chooseFileDescriptor.setRoots(project.getBaseDir());
     chooseFileDescriptor.setShowFileSystemRoots(false);
+    myParamsField.setVisible(showPath);
     myFilePathField.addBrowseFolderListener(new TextBrowseFolderListener(chooseFileDescriptor));
   }
 
   @Override
-  protected void resetEditorFrom(GoApplicationConfiguration configuration) {
+  protected void resetEditorFrom(@NotNull GoRunConfigurationBase configuration) {
     myComboModules.fillModules(configuration.getProject(), GoModuleType.getInstance());
     myComboModules.setSelectedModule(configuration.getConfigurationModule().getModule());
     myParamsField.setText(configuration.getParams());
@@ -48,7 +43,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoApplicationCo
   }
 
   @Override
-  protected void applyEditorTo(GoApplicationConfiguration configuration) throws ConfigurationException {
+  protected void applyEditorTo(@NotNull GoRunConfigurationBase configuration) throws ConfigurationException {
     configuration.setModule(myComboModules.getSelectedModule());
     configuration.setParams(myParamsField.getText());
     configuration.setFilePath(myFilePathField.getText());

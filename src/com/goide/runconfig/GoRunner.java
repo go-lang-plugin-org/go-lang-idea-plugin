@@ -14,6 +14,7 @@ import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoRunner extends DefaultProgramRunner {
   public static final String GO_RUNNER_ID = "GoRunner";
@@ -37,12 +38,13 @@ public class GoRunner extends DefaultProgramRunner {
   }
 
   @Override
+  @NotNull
   protected RunContentDescriptor doExecute(@NotNull Project project,
                                            @NotNull RunProfileState state,
-                                           RunContentDescriptor contentToReuse,
+                                           @Nullable RunContentDescriptor contentToReuse,
                                            @NotNull ExecutionEnvironment env) throws ExecutionException {
-    final GoRunConfigurationBase configuration = (GoRunConfigurationBase) env.getRunProfile();
-    final GoRunningState runningState = configuration.createRunningState(env);
+    GoRunConfigurationBase configuration = (GoRunConfigurationBase)env.getRunProfile();
+    GoRunningState runningState = configuration.createRunningState(env);
     FileDocumentManager.getInstance().saveAllDocuments();
     ExecutionResult executionResult = runningState.execute(env.getExecutor(), this);
     return new RunContentBuilder(this, executionResult, env).showRunContent(contentToReuse);

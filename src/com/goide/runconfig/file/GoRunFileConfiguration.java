@@ -1,4 +1,4 @@
-package com.goide.runconfig.application;
+package com.goide.runconfig.file;
 
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
@@ -21,20 +21,22 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-public class GoApplicationConfiguration extends GoRunConfigurationBase<GoApplicationRunningState> {
-  public GoApplicationConfiguration(Project project, String name, ConfigurationType configurationType) {
+public class GoRunFileConfiguration extends GoRunConfigurationBase<GoRunFileRunningState> {
+  private String myFilePath = "";
+
+  public GoRunFileConfiguration(Project project, String name, ConfigurationType configurationType) {
     super(name, new GoModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
   }
 
   @Override
   protected ModuleBasedConfiguration createInstance() {
-    return new GoApplicationConfiguration(getProject(), getName(), GoApplicationRunConfigurationType.getInstance());
+    return new GoRunFileConfiguration(getProject(), getName(), GoRunFileConfigurationType.getInstance());
   }
 
   @NotNull
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    return new GoRunConfigurationEditorForm(getProject(), true);
+    return new GoRunConfigurationEditorForm(getProject(), false);
   }
 
   @Override
@@ -43,8 +45,8 @@ public class GoApplicationConfiguration extends GoRunConfigurationBase<GoApplica
   }
 
   @Override
-  protected GoApplicationRunningState newRunningState(ExecutionEnvironment env, Module module) {
-    return new GoApplicationRunningState(env, module, this);
+  protected GoRunFileRunningState newRunningState(ExecutionEnvironment env, Module module) {
+    return new GoRunFileRunningState(env, module, this);
   }
 
   @Override
@@ -52,9 +54,10 @@ public class GoApplicationConfiguration extends GoRunConfigurationBase<GoApplica
     GoModuleBasedConfiguration configurationModule = getConfigurationModule();
     configurationModule.checkForWarning();
 
+    // todo: use the same code from GoApplicationConfiguration#checkConfiguration()
     Module module = configurationModule.getModule();
     if (module == null) return;
-    VirtualFile file = VfsUtil.findFileByIoFile(new File(getFilePath()), false);
+    VirtualFile file = VfsUtil.findFileByIoFile(new File(myFilePath), false);
     if (file == null) throw new RuntimeConfigurationError("Main file is not specified");
     PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(file);
     if (psiFile == null || !(psiFile instanceof GoFile)) {
@@ -67,5 +70,14 @@ public class GoApplicationConfiguration extends GoRunConfigurationBase<GoApplica
     if (mainFunction == null) {
       throw new RuntimeConfigurationError("Main file doesn't contain main function");
     }
+  }
+
+  @NotNull
+  public String getFilePath() {
+    return myFilePath;
+  }
+
+  public void setFilePath(@NotNull String filePath) {
+    myFilePath = filePath;
   }
 }

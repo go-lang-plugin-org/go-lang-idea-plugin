@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class GoRunningState extends CommandLineState {
   protected final Module myModule;
 
-  public GoRunningState(ExecutionEnvironment env, Module module) {
+  public GoRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module) {
     super(env);
     myModule = module;
   }

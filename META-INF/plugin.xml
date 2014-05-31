@@ -72,7 +72,10 @@
 
     <sdkType implementation="com.goide.GoSdkType"/>
 
-    <!-- run -->
+    <!-- run single file -->
+    <configurationType implementation="com.goide.runconfig.file.GoRunFileConfigurationType"/>
+
+    <!-- run application -->
     <programRunner implementation="com.goide.runconfig.GoRunner"/>
     <runConfigurationProducer implementation="com.goide.runconfig.application.GoApplicationRunConfigurationProducer"/>
     <configurationType implementation="com.goide.runconfig.application.GoApplicationRunConfigurationType"/>

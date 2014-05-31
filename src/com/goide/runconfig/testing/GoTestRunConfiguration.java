@@ -30,7 +30,6 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   private String myFilePath = "";
   private String myDirectoryPath = "";
 
-  private String myParams = "";
   private String myPattern = "";
   private String myWorkingDirectory;
   private Kind myKind = Kind.DIRECTORY;
@@ -101,15 +100,6 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
         }
         break;
     }
-  }
-
-  @NotNull
-  public String getParams() {
-    return myParams;
-  }
-
-  public void setParams(@NotNull String params) {
-    this.myParams = params;
   }
 
   @NotNull
