@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoRunFileConfigurationType extends ConfigurationTypeBase {
   public GoRunFileConfigurationType() {
-    super("GoRunFileConfiguration", "Go File", "Go run file configuration", GoIcons.ICON);
+    super("GoRunFileConfiguration", "Go Single File", "Go single run file configuration", GoIcons.APPLICATION_RUN);
     addFactory(new ConfigurationFactory(this) {
       @NotNull
       public RunConfiguration createTemplateConfiguration(Project project) {
