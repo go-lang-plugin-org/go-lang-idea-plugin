@@ -1,5 +1,6 @@
 package com.goide.psi.impl;
 
+import com.goide.GoSdkUtil;
 import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
@@ -94,8 +95,15 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     PsiDirectory dir = file.getOriginalFile().getParent();
     if (!GoReference.processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
     if (GoReference.processImports(file, processor, state, myElement)) return false;
-    if (GoReference.processBuiltin(processor, state, myElement)) return false;
+    if (processBuiltin(processor, state, myElement)) return false;
     return true;
+  }
+
+  // unify references, extract base class
+  private boolean processBuiltin(@NotNull GoReference.MyScopeProcessor processor, @NotNull ResolveState state, @NotNull GoCompositeElement element) {
+    GoFile builtinFile = GoSdkUtil.findBuiltinFile(element);
+    if (builtinFile != null && !processFileEntities(builtinFile, processor, state, true)) return true;
+    return false;
   }
 
   @NotNull
