@@ -132,7 +132,6 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
 
     StringBuilder builder = new StringBuilder();
 
-    boolean disabled = false;
     int start = 0;
     int end = 0;
 
@@ -151,6 +150,6 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
         }
       }
     }
-    context.setupUIComponentPresentation(builder.toString(), start, end, disabled, false, false, context.getDefaultParameterColor());
+    context.setupUIComponentPresentation(builder.toString(), start, end, false, false, false, context.getDefaultParameterColor());
   }
 }
