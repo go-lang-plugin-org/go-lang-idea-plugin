@@ -99,7 +99,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     return true;
   }
 
-  // unify references, extract base class
+  // todo: unify references, extract base class
   private boolean processBuiltin(@NotNull GoReference.MyScopeProcessor processor, @NotNull ResolveState state, @NotNull GoCompositeElement element) {
     GoFile builtinFile = GoSdkUtil.findBuiltinFile(element);
     if (builtinFile != null && !processFileEntities(builtinFile, processor, state, true)) return true;
