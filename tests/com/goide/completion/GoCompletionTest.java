@@ -69,7 +69,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testBlockKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select", "main");
   }
-  
+
   public void testAddSpaceAfterKeyword() {
     myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
   }
@@ -152,10 +152,8 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testCaseInsensitiveVariable() {
-    doCheckResult(
-      "package main; func test(BBA int){b<caret>}",
-      "package main; func test(BBA int){BBA<caret>}"
-    );
+    doCheckResult("package main; func test(BBA int){b<caret>}",
+                  "package main; func test(BBA int){BBA<caret>}");
   }
 
   public void testRanges() {

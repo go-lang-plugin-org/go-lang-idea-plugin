@@ -21,7 +21,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
 
   public void testAutoImport() {
     doCheckResult("package main; \n" +
-                  "func test(){Fprintl<caret>}", 
+                  "func test(){Fprintl<caret>}",
                   "package main;\n" +
                   "import \"fmt\"\n" +
                   "func test(){fmt.Fprintln(<caret>)}");
@@ -34,29 +34,23 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
       "func test(){fmt.Sprintln().<caret>}", CompletionType.BASIC, 1, CheckType.EQUALS
     );
   }
-  
+
   public void testImports() {
     doTestInclude("package main; import \"<caret>", "fmt", "io");
   }
 
   public void testCaseInsensitiveTypeConversion() {
-    doCheckResult(
-      "package main; import \"fmt\"; func test(){fmt.form<caret>}",
-      "package main; import \"fmt\"; func test(){fmt.Formatter(<caret>)}"
-    );
+    doCheckResult("package main; import \"fmt\"; func test(){fmt.form<caret>}",
+                  "package main; import \"fmt\"; func test(){fmt.Formatter(<caret>)}");
   }
 
   public void testCaseInsensitiveFunction() {
-    doCheckResult(
-      "package main; import \"fmt\"; func test(){fmt.err<caret>}",
-      "package main; import \"fmt\"; func test(){fmt.Errorf(<caret>)}"
-    );
+    doCheckResult("package main; import \"fmt\"; func test(){fmt.err<caret>}",
+                  "package main; import \"fmt\"; func test(){fmt.Errorf(<caret>)}");
   }
-  
+
   public void testCaseInsensitiveType() {
-    doCheckResult(
-      "package main; import \"fmt\"; func test(fmt.form<caret>}",
-      "package main; import \"fmt\"; func test(fmt.Formatter<caret>}"
-    );
+    doCheckResult("package main; import \"fmt\"; func test(fmt.form<caret>}",
+                  "package main; import \"fmt\"; func test(fmt.Formatter<caret>}");
   }
 }
