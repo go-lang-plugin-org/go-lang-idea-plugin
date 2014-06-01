@@ -1,9 +1,7 @@
 package com.goide.stubs.index;
 
 import com.goide.psi.GoFunctionDeclaration;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StringStubIndexExtension;
 import com.intellij.psi.stubs.StubIndex;
@@ -28,14 +26,5 @@ public class GoFunctionIndex extends StringStubIndexExtension<GoFunctionDeclarat
 
   public static Collection<GoFunctionDeclaration> find(@NotNull String name, @NotNull Project project, GlobalSearchScope scope) {
     return StubIndex.getElements(KEY, name, project, scope, GoFunctionDeclaration.class);
-  }
-
-  public static Collection<String> findAllNames(@NotNull final Project project) {
-    return ApplicationManager.getApplication().runReadAction(new Computable<Collection<String>>() {
-      @NotNull
-      public Collection<String> compute() {
-        return StubIndex.getInstance().getAllKeys(KEY, project);
-      }
-    });
   }
 }
