@@ -31,7 +31,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
       public ResolveResult[] resolve(@NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase, boolean incompleteCode) {
         return ((GoTypeReference)psiPolyVariantReferenceBase).resolveInner();
       }
-    };
+  };
 
   @NotNull
   private ResolveResult[] resolveInner() {
@@ -133,5 +133,9 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     myElement.getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
     return myElement;
+  }
+
+  public boolean isInsideInterfaceType() {
+    return myInsideInterfaceType;
   }
 }

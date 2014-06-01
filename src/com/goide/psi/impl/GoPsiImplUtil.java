@@ -180,7 +180,20 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(t).withIcon(GoIcons.TYPE),
+    return createTypeLookupElement(t, false, null);
+  }
+
+  @NotNull
+  public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t, boolean showPkg, @Nullable InsertHandler<LookupElement> handler) {
+    String pkg = showPkg ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
+    pkg = pkg.isEmpty() ? pkg : pkg + ".";
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.
+                                                   create(t)
+                                                   .withLookupString(pkg)
+                                                   .withLookupString(pkg + t.getName())
+                                                   .withPresentableText(pkg + t.getName())
+                                                   .withInsertHandler(handler)
+                                                   .withIcon(GoIcons.TYPE),
                                                  GoCompletionContributor.TYPE_PRIORITY);
   }
 
