@@ -24,6 +24,7 @@ public class GoFunctionIndex extends StringStubIndexExtension<GoFunctionDeclarat
     return KEY;
   }
 
+  @NotNull
   public static Collection<GoFunctionDeclaration> find(@NotNull String name, @NotNull Project project, GlobalSearchScope scope) {
     return StubIndex.getElements(KEY, name, project, scope, GoFunctionDeclaration.class);
   }
