@@ -123,13 +123,13 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
                                       @NotNull ResolveState state,
                                       @NotNull Collection<? extends GoNamedElement> elements, boolean localResolve) {
     for (GoNamedElement definition : elements) {
-      if (definition instanceof GoTypeSpec && !allow((GoTypeSpec)definition)) continue;
+      if (definition instanceof GoTypeSpec && !allowed((GoTypeSpec)definition)) continue;
       if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) return false;
     }
     return true;
   }
 
-  public boolean allow(@NotNull GoTypeSpec definition) {
+  public boolean allowed(@NotNull GoTypeSpec definition) {
     return !myInsideInterfaceType || (definition.getType() instanceof GoInterfaceType);
   }
 

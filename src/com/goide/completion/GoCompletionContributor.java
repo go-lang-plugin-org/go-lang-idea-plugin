@@ -144,7 +144,7 @@ public class GoCompletionContributor extends CompletionContributor {
                 if (StringUtil.isCapitalized(name)) {
                   for (GoTypeSpec declaration : GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project))) {
                     PsiReference reference = parent.getReference();
-                    if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allow(declaration)) continue;
+                    if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allowed(declaration)) continue;
                     if (!allowed(declaration)) continue;
                     result.addElement(GoPsiImplUtil.createTypeLookupElement(declaration, true, TYPE_INSERT_HANDLER));
                   }
