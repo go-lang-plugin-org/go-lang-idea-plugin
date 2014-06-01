@@ -151,6 +151,13 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doCheckResult(theSame, theSame);
   }
 
+  public void testCaseInsensitiveVariable() {
+    doCheckResult(
+      "package main; func test(BBA int){b<caret>}",
+      "package main; func test(BBA int){BBA<caret>}"
+    );
+  }
+
   public void testRanges() {
     doTestInclude("package foo; func foo(a int) {for k := range <caret>}", "a");
   }

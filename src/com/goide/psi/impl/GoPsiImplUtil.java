@@ -97,7 +97,7 @@ public class GoPsiImplUtil {
     return PsiTreeUtil.isAncestor(o, place, false) ||
            GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
   }
-  
+
   public static boolean processDeclarations(@NotNull GoCompositeElement o,
                                             @NotNull PsiScopeProcessor processor,
                                             @NotNull ResolveState state,
@@ -140,17 +140,21 @@ public class GoPsiImplUtil {
       if (result != null) typeText = result.getText();
     }
 
-    InsertHandler<LookupElement> handler = h != null ? h : 
-                                           paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
+    InsertHandler<LookupElement> handler = h != null ? h :
+                                           paramsCount == 0
+                                           ? ParenthesesInsertHandler.NO_PARAMETERS
+                                           : ParenthesesInsertHandler.WITH_PARAMETERS;
     String pkg = showPkg ? StringUtil.notNullize(f.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
     return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(f)
+      LookupElementBuilder
+        .create(f)
         .withIcon(icon)
         .withInsertHandler(handler)
         .withTypeText(typeText, true)
         .withTailText(calcTailText(f), true)
         .withLookupString(pkg)
+        .withLookupString(StringUtil.notNullize(f.getName(), "").toLowerCase())
         .withLookupString(pkg + f.getName())
         .withPresentableText(pkg + f.getName() + paramText),
       showPkg ? GoCompletionContributor.FUNCTION_WITH_PACKAGE_PRIORITY : GoCompletionContributor.FUNCTION_PRIORITY
@@ -184,17 +188,21 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t, boolean showPkg, @Nullable InsertHandler<LookupElement> handler) {
+  public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t,
+                                                      boolean showPkg,
+                                                      @Nullable InsertHandler<LookupElement> handler) {
     String pkg = showPkg ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.
-                                                   create(t)
-                                                   .withLookupString(pkg)
-                                                   .withLookupString(pkg + t.getName())
-                                                   .withPresentableText(pkg + t.getName())
-                                                   .withInsertHandler(handler)
-                                                   .withIcon(GoIcons.TYPE),
-                                                 GoCompletionContributor.TYPE_PRIORITY);
+    return PrioritizedLookupElement.withPriority(
+      LookupElementBuilder.
+        create(t)
+        .withLookupString(pkg)
+        .withLookupString(StringUtil.notNullize(t.getName(), "").toLowerCase())
+        .withLookupString(pkg + t.getName())
+        .withPresentableText(pkg + t.getName())
+        .withInsertHandler(handler)
+        .withIcon(GoIcons.TYPE),
+      GoCompletionContributor.TYPE_PRIORITY);
   }
 
   @NotNull
@@ -206,7 +214,10 @@ public class GoPsiImplUtil {
   @NotNull
   public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t) {
     return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(t).withInsertHandler(ParenthesesInsertHandler.WITH_PARAMETERS).withIcon(GoIcons.TYPE),
+      LookupElementBuilder
+        .create(t)
+        .withLookupString(StringUtil.notNullize(t.getName(), "").toLowerCase())
+        .withInsertHandler(ParenthesesInsertHandler.WITH_PARAMETERS).withIcon(GoIcons.TYPE),
       GoCompletionContributor.TYPE_CONVERSION);
   }
 
@@ -221,8 +232,13 @@ public class GoPsiImplUtil {
                 null;
     GoType type = v.getGoType();
     String text = getText(type);
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(v).withIcon(icon).withTypeText(text, true),
-                                                 GoCompletionContributor.VAR_PRIORITY);
+    return PrioritizedLookupElement.withPriority(
+      LookupElementBuilder
+        .create(v)
+        .withLookupString(StringUtil.notNullize(v.getName(), "").toLowerCase())
+        .withIcon(icon)
+        .withTypeText(text, true),
+      GoCompletionContributor.VAR_PRIORITY);
   }
 
   @Nullable
@@ -430,7 +446,7 @@ public class GoPsiImplUtil {
         String p = ((GoTypeSpec)parent).getContainingFile().getPackageName();
         if (n != null && p != null) return p + "." + n;
       }
-    } 
+    }
     String text = o.getText();
     if (text == null) return "";
     return text.replaceAll("\\s+", " ");
