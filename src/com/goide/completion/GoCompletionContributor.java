@@ -17,6 +17,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.PsiFilePattern;
 import com.intellij.psi.*;
@@ -157,6 +158,12 @@ public class GoCompletionContributor extends CompletionContributor {
         private boolean allowed(@NotNull GoNamedElement declaration) {
           GoFile file = declaration.getContainingFile();
           if (!GoUtil.allowed(file)) return false;
+          PsiDirectory directory = file.getContainingDirectory();
+          if (directory != null) {
+            VirtualFile vFile = directory.getVirtualFile();
+            if (vFile.getPath().endsWith("go/doc/testdata")) return false;
+          }
+
           String packageName = file.getPackageName();
           if (packageName != null && StringUtil.endsWith(packageName, "_test")) return false;
           if (StringUtil.equals(packageName, "main")) return false;
