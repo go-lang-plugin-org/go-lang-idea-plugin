@@ -1,9 +1,6 @@
 package com.goide.editor;
 
-import com.goide.psi.GoFile;
-import com.goide.psi.GoImportDeclaration;
-import com.goide.psi.GoImportSpec;
-import com.goide.psi.GoImportString;
+import com.goide.psi.*;
 import com.intellij.codeInsight.editorActions.wordSelection.AbstractWordSelectioner;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
@@ -28,14 +25,26 @@ public class GoWordSelectioner extends AbstractWordSelectioner {
       result.add(ElementManipulators.getValueTextRange(parent).shiftRight(parent.getTextRange().getStartOffset()));
     }
     else if (parent instanceof GoImportDeclaration) {
-      List<GoImportSpec> specs = ((GoImportDeclaration)parent).getImportSpecList();
-      GoImportSpec firstSpec = ContainerUtil.getFirstItem(specs);
-      GoImportSpec lastSpec = ContainerUtil.getLastItem(specs);
-      if (firstSpec != null && lastSpec != null) {
-        result.add(TextRange.create(firstSpec.getTextRange().getStartOffset(),
-                                    lastSpec.getTextRange().getEndOffset()));
-      }
+      result.addAll(extend(editorText, ((GoImportDeclaration)parent).getImportSpecList(), false));
+    }
+    else if (e instanceof GoSimpleStatement) {
+      result.addAll(expandToWholeLine(editorText, e.getTextRange()));
+    }
+    else if (e instanceof GoBlock) {
+      result.addAll(extend(editorText, ((GoBlock)e).getStatementList(), true));
     }
     return result;
+  }
+
+  @NotNull
+  private static List<TextRange> extend(@NotNull CharSequence editorText, @NotNull List<? extends PsiElement> list, boolean expand) {
+    PsiElement first = ContainerUtil.getFirstItem(list);
+    PsiElement last = ContainerUtil.getLastItem(list);
+    if (first != null && last != null) {
+      TextRange range = TextRange.create(first.getTextRange().getStartOffset(), last.getTextRange().getEndOffset());
+      if (!expand) return ContainerUtil.newSmartList(range);
+      return expandToWholeLine(editorText, range);
+    }
+    return ContainerUtil.emptyList();
   }
 }
