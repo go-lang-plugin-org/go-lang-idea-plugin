@@ -43,6 +43,7 @@ public class GoCompletionContributor extends CompletionContributor {
   public static final int PACKAGE_PRIORITY = 5;
 
   public GoCompletionContributor() {
+    // todo: move it away to GoKeywordCompletionContributor
     extend(CompletionType.BASIC, packagePattern(), new GoKeywordCompletionProvider(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE, "package"));
     extend(CompletionType.BASIC, importPattern(), new GoKeywordCompletionProvider("import"));
     extend(CompletionType.BASIC, topLevelPattern(), new GoKeywordCompletionProvider("const", "var", "func", "type"));
@@ -77,7 +78,6 @@ public class GoCompletionContributor extends CompletionContributor {
   private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {
     return onNewLine().withParent(psiElement(PsiErrorElement.class).withParent(goFileWithPackage()));
   }
-
 
   private static PsiElementPattern.Capture<PsiElement> importPattern() {
     return onNewLine().withParent(psiElement(PsiErrorElement.class).afterSiblingSkipping(psiElement().whitespace(),
