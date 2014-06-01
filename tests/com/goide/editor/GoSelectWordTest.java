@@ -7,8 +7,12 @@ public class GoSelectWordTest extends GoCodeInsightFixtureTestCase {
   public void testImportString() {
     doTest();
   }
-  
+
   public void testMultipleImportString() {
+    doTest();
+  }
+
+  public void testBlock() {
     doTest();
   }
 
