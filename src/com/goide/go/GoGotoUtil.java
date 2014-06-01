@@ -17,12 +17,13 @@ import java.util.List;
 
 public class GoGotoUtil {
   @NotNull
-  public static NavigationItem[] getItemsByName(@NotNull String name,
-                                                @NotNull Project project,
-                                                boolean includeNonProjectItems,
-                                                @NotNull StubIndexKey<String, GoNamedElement> key) {
+  public static <T extends GoNamedElement> NavigationItem[] getItemsByName(@NotNull String name,
+                                                                           @NotNull Project project,
+                                                                           boolean includeNonProjectItems,
+                                                                           @NotNull StubIndexKey<String, T> key, 
+                                                                           @NotNull Class<T> clazz) {
     GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
-    Collection<GoNamedElement> result = StubIndex.getElements(key, name, project, scope, GoNamedElement.class);
+    Collection<T> result = StubIndex.getElements(key, name, project, scope, clazz);
     List<NavigationItem> items = ContainerUtil.newArrayListWithCapacity(result.size());
     for (final GoNamedElement element : result) {
       items.add(new GoStructureViewFactory.Element(element) {

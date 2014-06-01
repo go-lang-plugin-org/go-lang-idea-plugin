@@ -142,12 +142,11 @@ public class GoCompletionContributor extends CompletionContributor {
               Project project = parent.getProject();
               for (String name : StubIndex.getInstance().getAllKeys(GoTypesIndex.KEY, project)) {
                 if (StringUtil.isCapitalized(name)) {
-                  for (GoNamedElement declaration : GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project))) {
-                    if (!(declaration instanceof GoTypeSpec)) continue; // todo
+                  for (GoTypeSpec declaration : GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project))) {
                     PsiReference reference = parent.getReference();
-                    if (reference instanceof GoTypeReference && ((GoTypeReference)reference).isInsideInterfaceType() && !(((GoTypeSpec)declaration).getType() instanceof GoInterfaceType)) continue;
+                    if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allow(declaration)) continue;
                     if (!allowed(declaration)) continue;
-                    result.addElement(GoPsiImplUtil.createTypeLookupElement((GoTypeSpec)declaration, true, TYPE_INSERT_HANDLER));
+                    result.addElement(GoPsiImplUtil.createTypeLookupElement(declaration, true, TYPE_INSERT_HANDLER));
                   }
                 }
               }

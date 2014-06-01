@@ -123,19 +123,19 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
                                       @NotNull ResolveState state,
                                       @NotNull Collection<? extends GoNamedElement> elements, boolean localResolve) {
     for (GoNamedElement definition : elements) {
-      if (myInsideInterfaceType && definition instanceof GoTypeSpec && !(((GoTypeSpec)definition).getType() instanceof GoInterfaceType)) continue;
+      if (definition instanceof GoTypeSpec && !allow((GoTypeSpec)definition)) continue;
       if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) return false;
     }
     return true;
+  }
+
+  public boolean allow(@NotNull GoTypeSpec definition) {
+    return !myInsideInterfaceType || (definition.getType() instanceof GoInterfaceType);
   }
 
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     myElement.getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
     return myElement;
-  }
-
-  public boolean isInsideInterfaceType() {
-    return myInsideInterfaceType;
   }
 }

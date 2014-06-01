@@ -1,5 +1,6 @@
 package com.goide.go;
 
+import com.goide.psi.GoTypeSpec;
 import com.goide.stubs.index.GoTypesIndex;
 import com.intellij.navigation.ChooseByNameContributor;
 import com.intellij.navigation.NavigationItem;
@@ -18,6 +19,6 @@ public class GoTypeContributor implements ChooseByNameContributor {
   @NotNull
   @Override
   public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
-    return GoGotoUtil.getItemsByName(name, project, includeNonProjectItems, GoTypesIndex.KEY);
+    return GoGotoUtil.getItemsByName(name, project, includeNonProjectItems, GoTypesIndex.KEY, GoTypeSpec.class);
   }
 }

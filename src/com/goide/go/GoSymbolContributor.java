@@ -1,5 +1,6 @@
 package com.goide.go;
 
+import com.goide.psi.GoNamedElement;
 import com.goide.stubs.index.GoAllNamesIndex;
 import com.intellij.navigation.ChooseByNameContributor;
 import com.intellij.navigation.NavigationItem;
@@ -18,6 +19,6 @@ public class GoSymbolContributor implements ChooseByNameContributor {
   @NotNull
   @Override
   public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
-    return GoGotoUtil.getItemsByName(name, project, includeNonProjectItems, GoAllNamesIndex.ALL_NAMES);
+    return GoGotoUtil.getItemsByName(name, project, includeNonProjectItems, GoAllNamesIndex.ALL_NAMES, GoNamedElement.class);
   }
 }
