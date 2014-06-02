@@ -35,6 +35,8 @@ package   main
              switch name {
              
                  }
+                 
+                 return   1   ,   1
     }
     
     var b = map [ string   ]  int   {    }

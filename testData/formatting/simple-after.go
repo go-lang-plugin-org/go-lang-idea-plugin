@@ -35,6 +35,8 @@ func main(aaa string, rd io.Reader, error) (ok, ok) {
     switch name {
 
     }
+
+    return 1, 1
 }
 
 var b = map[string]int{    }
