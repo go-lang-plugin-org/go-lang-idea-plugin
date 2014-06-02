@@ -38,7 +38,15 @@ func main(aaa string, rd io.Reader, error) (ok, ok) {
 
     go foo()
 
+    for 1; 1; 1 {
+
+    }
+
+    if ascii85.Decode() {
+
+    }
+
     return 1, 1
 }
 
-var b = map[string]int{    }
+var b = map[string]int{}

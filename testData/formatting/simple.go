@@ -38,6 +38,14 @@ package   main
                  
                  go     foo()
                  
+                 for   1;  1;    1 {
+                 
+                     }
+                 
+                     if          ascii85.Decode()    {
+                         
+                     }
+                 
                  return   1   ,   1
     }
     
