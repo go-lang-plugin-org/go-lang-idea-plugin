@@ -36,6 +36,8 @@ package   main
              
                  }
                  
+                 go     foo()
+                 
                  return   1   ,   1
     }
     

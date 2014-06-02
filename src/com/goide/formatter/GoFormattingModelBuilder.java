@@ -57,6 +57,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .after(VAR).spaces(1)
       .after(STRUCT).spaces(1)
       .after(RETURN).spaces(1)
+      .after(GO).spaces(1)
       .afterInside(MAP, MAP_TYPE).none()
       .aroundInside(LBRACK, MAP_TYPE).none()
       .aroundInside(RBRACK, MAP_TYPE).none()

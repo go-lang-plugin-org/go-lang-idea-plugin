@@ -36,6 +36,8 @@ func main(aaa string, rd io.Reader, error) (ok, ok) {
 
     }
 
+    go foo()
+
     return 1, 1
 }
 
