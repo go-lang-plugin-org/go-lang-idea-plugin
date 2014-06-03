@@ -29,7 +29,7 @@ public class GoLexerTest extends LexerTestCase {
     try {
       String text = FileUtil.loadFile(new File("./testData/lexer/" + getTestName(true) + ".go"));
       String actual = printTokens(StringUtil.convertLineSeparators(text.trim()), 0);
-      assertSameLinesWithFile("testData/lexer/" + getTestName(true) + ".txt", actual);
+      assertSameLinesWithFile(new File("testData/lexer/" + getTestName(true) + ".txt").getAbsolutePath(), actual);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -38,5 +38,7 @@ public class GoLexerTest extends LexerTestCase {
   @Override
   protected Lexer createLexer() { return new GoLexer(); }
   @Override
-  protected String getDirPath() { return "../testData/lexer"; }
+  protected String getDirPath() { 
+    return "../testData/lexer"; 
+  }
 }

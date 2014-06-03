@@ -10,10 +10,12 @@ import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
   @Override
   protected String getTestDataPath() {
-    return "testData/" + getBasePath();
+    return new File("testData/lexer/" + getTestName(true) + ".txt").getAbsolutePath();
   }
 
   protected static DefaultLightProjectDescriptor createMockProjectDescriptor() {
