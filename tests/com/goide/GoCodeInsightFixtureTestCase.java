@@ -15,7 +15,7 @@ import java.io.File;
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
   @Override
   protected String getTestDataPath() {
-    return new File("testData/lexer/" + getTestName(true) + ".txt").getAbsolutePath();
+    return new File("testData/" + getBasePath()).getAbsolutePath();
   }
 
   protected static DefaultLightProjectDescriptor createMockProjectDescriptor() {
