@@ -79,6 +79,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .afterInside(LBRACE, LITERAL_VALUE).none()
       .beforeInside(LBRACE, LITERAL_VALUE).none()
       .afterInside(BIT_AND, UNARY_EXPR).none()
+      .beforeInside(TYPE, VAR_SPEC).spaces(1)
       .after(GoParserDefinition.LINE_COMMENT).lineBreakInCodeIf(true)
       .after(GoParserDefinition.MULTILINE_COMMENT).lineBreakInCodeIf(true)
       ;

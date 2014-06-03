@@ -60,6 +60,6 @@ func f(n int) {
 
 func main() {
     go f(0)
-    var input  string
+    var input string
     fmt.Scanln(&input)
 }
