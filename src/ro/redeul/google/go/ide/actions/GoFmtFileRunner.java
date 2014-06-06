@@ -10,6 +10,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
@@ -60,17 +61,13 @@ public class GoFmtFileRunner extends AnAction {
             FileDocumentManager.getInstance().saveDocument(doc);
         }
         try {
-            String command = String.format(
-                    "%s fmt %s",
-                    goExecName,
-                    fileName
-            );
+            String[] command = {goExecName, "fmt", fileName};
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv);
             OSProcessHandler handler = new OSProcessHandler(proc, null);
             toolWindow.attachConsoleViewToProcess(handler);
-            toolWindow.printNormalMessage(String.format("%s%n", command));
+            toolWindow.printNormalMessage(String.format("%s%n", StringUtil.join(command, " ")));
             handler.startNotify();
 
             if (proc.waitFor() == 0) {
