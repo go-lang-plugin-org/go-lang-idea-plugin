@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.stubs;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -20,8 +23,8 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -36,25 +39,85 @@ public class GoNamesCache {
 
     private static GoSdkData sdkData;
 
-    private static Collection<String> allOsNames;
+    private static final ImmutableSet<String> goDefaultPackages = ImmutableSet.of(
+            "archive",
+            "bufio",
+            "builtin",
+            "bytes",
+            "compress",
+            "container",
+            "crypto",
+            "database",
+            "debug",
+            "encoding",
+            "errors",
+            "expvar",
+            "flag",
+            "fmt",
+            "go",
+            "hash",
+            "html",
+            "image",
+            "index",
+            "io",
+            "log",
+            "math",
+            "mime",
+            "net",
+            "os",
+            "path",
+            "reflect",
+            "regexp",
+            "runtime",
+            "sort",
+            "strconv",
+            "strings",
+            "sync",
+            "syscall",
+            "testing",
+            "text",
+            "time",
+            "unicode",
+            "unsafe"
+    );
 
-    private static Collection<String> linuxExcludeNames;
-    private static Collection<String> windowsExcludeNames;
-    private static Collection<String> darwinExcludeNames;
-    private static Collection<String> freeBsdExcludeNames;
+    private static final Set<String> allOsNames = ImmutableSet.of(
+            "_unix",
+            "_linux",
+            "_darwin",
+            "_bsd",
+            "_netbsd",
+            "_freebsd",
+            "_openbsd",
+            "_dragonfly",
+            "_windows",
+            "_plan9"
+    );
+    private static final Set<String> linuxExcludeNames = ImmutableSet.copyOf(
+            Sets.difference(allOsNames, ImmutableSet.of("_linux", "_unix")));
+    private static final Set<String> windowsExcludeNames = ImmutableSet.copyOf(
+            Sets.difference(allOsNames, ImmutableSet.of("_windows")));
+    private static final Set<String> darwinExcludeNames = ImmutableSet.copyOf(
+            Sets.difference(allOsNames, ImmutableSet.of("_darwin", "_unix")));
+    private static final Set<String> freeBsdExcludeNames = ImmutableSet.copyOf(
+            Sets.difference(allOsNames, ImmutableSet.of("_freebsd", "_bsd", "_unix")));
 
-    private static Collection<String> allArchNames;
+    private static final Set<String> allArchNames = ImmutableSet.of(
+            "_386",
+            "_amd64",
+            "_arm"
+    );
+    private static final Set<String> _386ExcludeNames = ImmutableSet.copyOf(
+            Sets.difference(allArchNames, ImmutableSet.of("_386")));
+    private static final Set<String> _amd64ExcludeNames = ImmutableSet.copyOf(
+            Sets.difference(allArchNames, ImmutableSet.of("_amd64")));
+    private static final Set<String> _armExcludeNames = ImmutableSet.copyOf(
+            Sets.difference(allArchNames, ImmutableSet.of("_arm")));
 
-    private static Collection<String> _386ExcludeNames;
-    private static Collection<String> _amd64ExcludeNames;
-    private static Collection<String> _armExcludeNames;
-
-    // TODO: Make this a singleton ?!
     @NotNull
     public static GoNamesCache getInstance(Project project) {
-        if (allOsNames == null) {
-            initExcludeNames();
-        }
+        // Not using a singleton here; calls should faily inexpensive and most of the data is now static;
+        // only the call to ProjectRootManager.getInstance(project).getProjectSdk() does any work on construction.
         if (sdkData == null) {
             Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
             if (sdk != null) {
@@ -74,55 +137,11 @@ public class GoNamesCache {
 
     public Collection<String> getSdkPackages() {
         return getPackagesInScope(GlobalSearchScope.notScope(
-            GlobalSearchScope.projectScope(project)));
-    }
-
-    public String[] getGoDefaultPackagesArray() {
-        return new String[] {
-                "archive",
-                "bufio",
-                "builtin",
-                "bytes",
-                "compress",
-                "container",
-                "crypto",
-                "database",
-                "debug",
-                "encoding",
-                "errors",
-                "expvar",
-                "flag",
-                "fmt",
-                "go",
-                "hash",
-                "html",
-                "image",
-                "index",
-                "io",
-                "log",
-                "math",
-                "mime",
-                "net",
-                "os",
-                "path",
-                "reflect",
-                "regexp",
-                "runtime",
-                "sort",
-                "strconv",
-                "strings",
-                "sync",
-                "syscall",
-                "testing",
-                "text",
-                "time",
-                "unicode",
-                "unsafe"
-        };
+                GlobalSearchScope.projectScope(project)));
     }
 
     public Collection<String> getGoDefaultPackages() {
-        return Arrays.asList(getGoDefaultPackagesArray());
+        return goDefaultPackages;
     }
 
     public boolean isGoDefaultPackage(String packageName) {
@@ -247,28 +266,7 @@ public class GoNamesCache {
         if (sdkData == null) {
             return;
         }
-        String goos = System.getenv("GOOS");
-        GoTargetOs targetOs = GoTargetOs.fromString(goos);
-        if (targetOs == null) {
-            targetOs = sdkData.TARGET_OS;
-        }
-        Collection<String> excludeOsNames;
-        switch (targetOs) {
-            case Windows:
-                excludeOsNames = windowsExcludeNames;
-                break;
-            case Linux:
-                excludeOsNames = linuxExcludeNames;
-                break;
-            case Darwin:
-                excludeOsNames = darwinExcludeNames;
-                break;
-            case FreeBsd:
-                excludeOsNames = freeBsdExcludeNames;
-                break;
-            default:
-                excludeOsNames = new ArrayList<String>();
-        }
+        Collection<String> excludeOsNames = getExcludeOsNames(getGoTargetOs());
         Collection<GoFile> osExcluded = new ArrayList<GoFile>();
         for (GoFile file:files) {
             String filename = file.getName();
@@ -280,26 +278,7 @@ public class GoNamesCache {
         }
         files.removeAll(osExcluded);
 
-        String goarch = System.getenv("GOARCH");
-        GoTargetArch targetArch = GoTargetArch.fromString(goarch);
-        if (targetArch == null) {
-            targetArch = sdkData.TARGET_ARCH;
-        }
-        Collection<String> excludeArchNames;
-        switch (targetArch) {
-            case _386:
-                excludeArchNames = _386ExcludeNames;
-                break;
-            case _amd64:
-                excludeArchNames = _amd64ExcludeNames;
-                break;
-            case _arm:
-                excludeArchNames = _armExcludeNames;
-                break;
-            default:
-                excludeArchNames = new ArrayList<String>();
-        }
-
+        Collection<String> excludeArchNames = getExcludeArchNames(getGoTargetArch());
         Collection<GoFile> archExcluded = new ArrayList<GoFile>();
         for (GoFile file:files) {
             String filename = file.getName();
@@ -312,47 +291,50 @@ public class GoNamesCache {
         files.removeAll(archExcluded);
     }
 
-    private static void initExcludeNames() {
-        allOsNames = new HashSet<String>();
-        allOsNames.add("_unix");
-        allOsNames.add("_linux");
-        allOsNames.add("_darwin");
-        allOsNames.add("_bsd");
-        allOsNames.add("_netbsd");
-        allOsNames.add("_freebsd");
-        allOsNames.add("_openbsd");
-        allOsNames.add("_dragonfly");
-        allOsNames.add("_windows");
-        allOsNames.add("_plan9");
+    private static GoTargetOs getGoTargetOs() {
+        GoTargetOs targetOs = GoTargetOs.fromString(System.getenv("GOOS"));
+        if (targetOs == null && sdkData != null) {
+            targetOs = sdkData.TARGET_OS;
+        }
+        return targetOs;
+    }
 
-        linuxExcludeNames = new HashSet<String>(allOsNames);
-        linuxExcludeNames.remove("_linux");
-        linuxExcludeNames.remove("_unix");
+    private static GoTargetArch getGoTargetArch() {
+        GoTargetArch targetArch = GoTargetArch.fromString(System.getenv("GOARCH"));
+        if (targetArch == null) {
+            targetArch = sdkData.TARGET_ARCH;
+        }
+        return targetArch;
+    }
 
-        windowsExcludeNames = new HashSet<String>(allOsNames);
-        windowsExcludeNames.remove("_windows");
+    @VisibleForTesting
+    static Set<String> getExcludeOsNames(GoTargetOs targetOs) {
+        Collection<String> excludeOsNames;
+        switch (targetOs) {
+            case Windows:
+                return windowsExcludeNames;
+            case Linux:
+                return linuxExcludeNames;
+            case Darwin:
+                return darwinExcludeNames;
+            case FreeBsd:
+                return freeBsdExcludeNames;
+            default:
+                return Collections.emptySet();
+        }
+    }
 
-        darwinExcludeNames = new HashSet<String>(allOsNames);
-        darwinExcludeNames.remove("_darwin");
-        darwinExcludeNames.remove("_unix");
-
-        freeBsdExcludeNames = new HashSet<String>(allOsNames);
-        freeBsdExcludeNames.remove("_freebsd");
-        freeBsdExcludeNames.remove("_bsd");
-        freeBsdExcludeNames.remove("_unix");
-
-        allArchNames = new HashSet<String>();
-        allArchNames.add("_386");
-        allArchNames.add("_amd64");
-        allArchNames.add("_arm");
-
-        _386ExcludeNames = new HashSet<String>(allArchNames);
-        _386ExcludeNames.remove("_386");
-
-        _amd64ExcludeNames = new HashSet<String>(allArchNames);
-        _amd64ExcludeNames.remove("_amd64");
-
-        _armExcludeNames = new HashSet<String>(allArchNames);
-        _armExcludeNames.remove("_arm");
+    @VisibleForTesting
+    static Set<String> getExcludeArchNames(GoTargetArch targetArch) {
+        switch (targetArch) {
+            case _386:
+                return _386ExcludeNames;
+            case _amd64:
+                return _amd64ExcludeNames;
+            case _arm:
+                return _armExcludeNames;
+            default:
+                return Collections.emptySet();
+        }
     }
 }
