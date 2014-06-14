@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.psi.resolve.references;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -11,6 +10,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
+import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +63,8 @@ public class CallOrConversionReference extends AbstractCallOrConversionReference
                                 getState().get(GoResolveStates.VisiblePackageName);
 
                         if (visiblePackageName != null) {
-                            name = visiblePackageName + "." + name;
+                            name = "".equals(visiblePackageName) ?
+                                    name : visiblePackageName + "." + name;
                         }
                         if (name == null) {
                             return true;
@@ -71,15 +72,15 @@ public class CallOrConversionReference extends AbstractCallOrConversionReference
 
                         GoPsiElement goPsi = (GoPsiElement) declaration;
                         GoPsiElement goChildPsi = (GoPsiElement) child;
-                    variants.add(createLookupElement(goPsi, name, goChildPsi));
-                    return true;
-                }
-            };
+                        variants.add(createLookupElement(goPsi, name, goChildPsi));
+                        return true;
+                    }
+                };
 
         GoPsiScopesUtil.treeWalkUp(
-            processor,
-            expression, expression.getContainingFile(),
-            GoResolveStates.initial());
+                processor,
+                expression, expression.getContainingFile(),
+                GoResolveStates.initial());
 
         return variants.toArray();
     }

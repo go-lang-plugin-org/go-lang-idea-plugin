@@ -20,4 +20,7 @@ public class GoTypeCompletionTestCase extends GoCompletionTestCase {
     public void testFromImportedPackages() {
         doTestVariants();
     }
+    public void testFromDotImportedPackages() {
+        doTestVariants();
+    }
 }

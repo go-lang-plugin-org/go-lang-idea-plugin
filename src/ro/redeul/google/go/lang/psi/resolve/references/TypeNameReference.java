@@ -4,7 +4,6 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -18,6 +17,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
+import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +30,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class TypeNameReference
-    extends GoPsiReference.Single<GoPsiTypeName, TypeNameReference> {
+        extends GoPsiReference.Single<GoPsiTypeName, TypeNameReference> {
     public static final ElementPattern<GoPsiTypeName> MATCHER =
             psiElement(GoPsiTypeName.class);
 
@@ -103,29 +103,30 @@ public class TypeNameReference
                                 getState().get(GoResolveStates.VisiblePackageName);
 
                         if (visiblePackageName != null) {
-                            name = visiblePackageName + "." + name;
+                            name = "".equals(visiblePackageName) ?
+                                    name : visiblePackageName + "." + name;
                         }
                         if (name == null) {
+                            return true;
+                        }
+
+                        GoPsiElement goDeclaration = (GoPsiElement) declaration;
+                        GoPsiElement goChildDeclaration = (GoPsiElement) childDeclaration;
+
+                        variants.add(
+                                createLookupElement(
+                                        goDeclaration,
+                                        name,
+                                        goChildDeclaration));
                         return true;
+
                     }
-
-                    GoPsiElement goDeclaration = (GoPsiElement) declaration;
-                    GoPsiElement goChildDeclaration = (GoPsiElement) childDeclaration;
-
-                    variants.add(
-                        createLookupElement(
-                            goDeclaration,
-                            name,
-                            goChildDeclaration));
-                    return true;
-
-                }
-            };
+                };
 
         GoPsiScopesUtil.treeWalkUp(
-            processor,
-            getElement(), getElement().getContainingFile(),
-            GoResolveStates.initial());
+                processor,
+                getElement(), getElement().getContainingFile(),
+                GoResolveStates.initial());
 
         return variants.toArray();
     }

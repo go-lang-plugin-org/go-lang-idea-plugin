@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class GoCompletionTestCase
-    extends GoLightCodeInsightFixtureTestCase {
+        extends GoLightCodeInsightFixtureTestCase {
 
     protected String getTestDataRelativePath() {
         return "psi/completion/";
@@ -26,8 +26,8 @@ public abstract class GoCompletionTestCase
     protected void doTestVariants(String... additionalFiles) {
         LocalFileSystem fileSystem = LocalFileSystem.getInstance();
         final VirtualFile testRoot =
-            fileSystem.findFileByPath(
-                getTestDataPath() + File.separator + getTestName(false));
+                fileSystem.findFileByPath(
+                        getTestDataPath() + File.separator + getTestName(false));
 
         List<String> files = new LinkedList<String>();
 
@@ -53,10 +53,10 @@ public abstract class GoCompletionTestCase
 
         // find the expected outcome
         String fileText = myFixture.getFile().getText();
-        List<String> expected = new ArrayList<String>(10);
+        List<String> expected = new ArrayList<String>();
         int dataPos = fileText.indexOf("/**---");
         if (dataPos != -1) {
-            String[] parts = fileText.substring(dataPos + 6).split("[\r\n]+");
+            String[] parts = fileText.substring(dataPos + 6).trim().split("[\r\n]+");
             for (String part : parts) {
                 part = part.trim();
                 if (!part.isEmpty()) {
@@ -68,8 +68,12 @@ public abstract class GoCompletionTestCase
         // do the completion
         myFixture.completeBasic();
 
+
         // validate assertions
-        assertOrderedEquals(myFixture.getLookupElementStrings(), expected);
+        List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+        if (lookupElementStrings.get(0).equals(""))
+            lookupElementStrings = lookupElementStrings.subList(1, lookupElementStrings.size());
+        assertOrderedEquals(lookupElementStrings, expected);
     }
 
     protected void doTest(String... additionalFiles) {
