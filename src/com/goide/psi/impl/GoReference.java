@@ -88,6 +88,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       @Override
       public boolean execute(@NotNull PsiElement element, ResolveState state) {
         if ("_".equals(element.getText())) return true;
+        if (element instanceof GoFunctionDeclaration && RESERVED_NAMES.contains(((GoFunctionDeclaration)element).getName()) && builtin(element)) return true;
         LookupElement lookup = createLookup(element);
         if (lookup != null) variants.add(lookup);
         return true;
@@ -247,7 +248,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                             @NotNull ResolveState state,
                                             boolean localResolve) {
     String id = getName();
-    if ("_".equals(id)) return processSelf(processor, state);
+    if ("_".equals(id)) return processor.execute(myElement, state);
 
     PsiElement parent = myElement.getParent();
 
@@ -269,7 +270,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (!processFileEntities(file, processor, state, localResolve)) return false;
     PsiDirectory dir = file.getOriginalFile().getParent();
     if (!processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
-    if (RESERVED_NAMES.contains(id)) return processSelf(processor, state);
     if (processImports(file, processor, state, myElement)) return false;
     if (processBuiltin(processor, state, myElement)) return false;
     return true;
@@ -340,10 +340,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) return false;
     }
     return true;
-  }
-
-  private boolean processSelf(@NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
-    return processor.execute(myElement, state);
   }
 
   // todo: return boolean for better performance 

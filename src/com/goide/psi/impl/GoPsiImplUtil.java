@@ -35,6 +35,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class GoPsiImplUtil {
+  public static boolean builtin(@NotNull PsiElement resolve) {
+    PsiFile file = resolve.getContainingFile();
+    if (!(file instanceof GoFile)) return false;
+    return "builtin".equals(((GoFile)file).getPackageName()) && file.getName().equals("builtin.go");
+  }
+
   private static class Lazy {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
     private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
