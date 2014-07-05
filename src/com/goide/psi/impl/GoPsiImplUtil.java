@@ -314,8 +314,13 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType getGoType(@NotNull GoExpression o) {
     if (o instanceof GoUnaryExpr) {
-      GoExpression expression = ((GoUnaryExpr)o).getExpression(); // todo: check for <- chan
-      return expression != null ? getGoType(expression) : null;
+      GoExpression expression = ((GoUnaryExpr)o).getExpression();
+      if (expression != null) {
+        GoType type = expression.getGoType();
+        if (type instanceof GoChannelType && ((GoUnaryExpr)o).getSendChannel() != null) return ((GoChannelType)type).getType();
+        return type;
+      }
+      return null;
     }
     else if (o instanceof GoCompositeLit) {
       GoType type = ((GoCompositeLit)o).getLiteralTypeExpr().getType();
