@@ -2,6 +2,7 @@ package com.goide.formatter;
 
 import com.goide.GoLanguage;
 import com.goide.GoParserDefinition;
+import com.goide.psi.GoStatement;
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
@@ -185,10 +186,13 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       IElementType parentType = myNode.getElementType();
       IElementType type = child.getElementType();
       if (type == SWITCH_START) return Indent.getNoneIndent();
+      if (parentType == BLOCK && type == SELECT_STATEMENT) return Indent.getNoneIndent();
+      if (parentType == SELECT_STATEMENT && type == RBRACE) return Indent.getNormalIndent();
       if (BLOCKS_TOKEN_SET.contains(parentType)) return indentIfNotBrace(child);
       if (parentType == IMPORT_DECLARATION && type == IMPORT_SPEC) return Indent.getNormalIndent();
       if (parentType == CONST_DECLARATION && type == CONST_SPEC) return Indent.getNormalIndent();
       if (parentType == VAR_DECLARATION && type == VAR_SPEC) return Indent.getNormalIndent();
+      if (parentType == COMM_CLAUSE && child.getPsi() instanceof GoStatement) return Indent.getNormalIndent();
       return Indent.getNoneIndent();
     }
 
