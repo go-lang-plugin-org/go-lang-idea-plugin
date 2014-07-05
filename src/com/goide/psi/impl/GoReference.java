@@ -29,7 +29,7 @@ import static com.goide.psi.impl.GoPsiImplUtil.*;
 public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpression> {
   public static final Key<List<PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
   
-  private static final Set<String> RESERVED_NAMES = ContainerUtil.newHashSet("print", "println");
+  private static final Set<String> BUILTIN_PRINT_FUNCTIONS = ContainerUtil.newHashSet("print", "println");
 
   private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
     new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
@@ -86,12 +86,15 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   static MyScopeProcessor createCompletionProcessor(@NotNull final Collection<LookupElement> variants, final boolean forTypes) {
     return new MyScopeProcessor() {
       @Override
-      public boolean execute(@NotNull PsiElement element, ResolveState state) {
-        if ("_".equals(element.getText())) return true;
-        if (element instanceof GoFunctionDeclaration && RESERVED_NAMES.contains(((GoFunctionDeclaration)element).getName()) && builtin(element)) return true;
-        LookupElement lookup = createLookup(element);
-        if (lookup != null) variants.add(lookup);
+      public boolean execute(@NotNull PsiElement o, ResolveState state) {
+        if ("_".equals(o.getText())) return true;
+        if (printOrPrintln(o)) return true;
+        ContainerUtil.addIfNotNull(variants, createLookup(o));
         return true;
+      }
+      
+      private boolean printOrPrintln(@NotNull PsiElement o) {
+        return o instanceof GoFunctionDeclaration && BUILTIN_PRINT_FUNCTIONS.contains(((GoFunctionDeclaration)o).getName()) && builtin(o);
       }
 
       @Nullable
