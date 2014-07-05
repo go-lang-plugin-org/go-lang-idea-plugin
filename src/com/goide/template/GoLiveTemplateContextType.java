@@ -8,6 +8,7 @@ import com.goide.psi.GoSimpleStatement;
 import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.codeInsight.template.TemplateContextType;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
@@ -32,7 +33,8 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   }
 
   @Nullable
-  private static PsiElement getFirstCompositeElement(PsiElement at) {
+  private static PsiElement getFirstCompositeElement(@Nullable PsiElement at) {
+    if (at instanceof PsiComment) return at;
     PsiElement result = at;
     while (result != null && (result instanceof PsiWhiteSpace || result.getChildren().length == 0)) {
       result = result.getParent();
@@ -53,7 +55,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
-      return true;
+      return !(element instanceof PsiComment);
     }
   }
   
