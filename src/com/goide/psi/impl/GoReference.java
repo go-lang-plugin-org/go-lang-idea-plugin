@@ -114,18 +114,18 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   @Override
-     @NotNull
-     public ResolveResult[] multiResolve(final boolean incompleteCode) {
-       return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false);
-     }
+  @NotNull
+  public ResolveResult[] multiResolve(final boolean incompleteCode) {
+    return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false);
+  }
 
   @NotNull
-     @Override
-     public Object[] getVariants() {
-       List<LookupElement> variants = ContainerUtil.newArrayList();
-       processResolveVariants(createCompletionProcessor(variants, false));
-       return ArrayUtil.toObjectArray(variants);
-     }
+  @Override
+  public Object[] getVariants() {
+    List<LookupElement> variants = ContainerUtil.newArrayList();
+    processResolveVariants(createCompletionProcessor(variants, false));
+    return ArrayUtil.toObjectArray(variants);
+  }
 
   private boolean processResolveVariants(@NotNull MyScopeProcessor processor) {
     PsiFile file = myElement.getContainingFile();
