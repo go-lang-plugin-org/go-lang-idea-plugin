@@ -84,7 +84,7 @@ func main() {
     }
 
 
-    response := make(   chan *http.Response, 1)
+    response := make(chan *http.Response, 1)
     errors := make(chan *error)
 
     go func() {

@@ -42,6 +42,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .around(VAR_ASSIGN).spaces(1)
       .aroundInside(MUL, POINTER_TYPE).none()
       .before(ARGUMENT_LIST).none()
+      .around(BUILTIN_ARGS).none()
       .afterInside(LPAREN, ARGUMENT_LIST).none()
       .beforeInside(RPAREN, ARGUMENT_LIST).none()
       .before(SIGNATURE).none()
