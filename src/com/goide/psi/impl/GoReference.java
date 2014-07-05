@@ -163,6 +163,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (!processExistingType(type, processor, state)) return false;
     GoType returnType = type;
     if (type instanceof GoPointerType) returnType = ((GoPointerType)type).getType();
+    if (type instanceof GoChannelType) {
+      returnType = ((GoChannelType)type).getType();
+      if (returnType instanceof GoPointerType) returnType = ((GoPointerType)returnType).getType();
+    }
 
     GoTypeReferenceExpression reference = getTypeReference(returnType);
     return processInTypeRef(reference, returnType, processor, state);

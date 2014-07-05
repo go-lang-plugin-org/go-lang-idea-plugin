@@ -307,3 +307,13 @@ func <warning>moreRanges</warning>() {
         }
     }
 }
+
+type R struct {
+    Body int 
+}
+
+func <warning>main123</warning>() {
+    response := make(chan *R, 1)
+    r := <- response
+    Println(r.Body)
+}

@@ -314,7 +314,7 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType getGoType(@NotNull GoExpression o) {
     if (o instanceof GoUnaryExpr) {
-      GoExpression expression = ((GoUnaryExpr)o).getExpression();
+      GoExpression expression = ((GoUnaryExpr)o).getExpression(); // todo: check for <- chan
       return expression != null ? getGoType(expression) : null;
     }
     else if (o instanceof GoCompositeLit) {
@@ -328,8 +328,7 @@ public class GoPsiImplUtil {
       if ("new".equals(text) || "make".equals(text)) {
         GoBuiltinArgs args = ((GoBuiltinCallExpr)o).getBuiltinArgs();
         GoType type = args != null ? args.getType() : null;
-        if (type instanceof GoMapType) return type;
-        if (type instanceof GoArrayOrSliceType) return type;
+        if (type instanceof GoMapType || type instanceof GoArrayOrSliceType || type instanceof GoChannelType) return type;
         if (type != null) {
           GoTypeReferenceExpression expression = getTypeReference(type);
           return getType(expression);
