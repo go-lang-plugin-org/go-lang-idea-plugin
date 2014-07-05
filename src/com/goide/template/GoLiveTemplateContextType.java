@@ -1,6 +1,7 @@
 package com.goide.template;
 
 import com.goide.GoLanguage;
+import com.goide.GoTypes;
 import com.goide.highlighting.GoSyntaxHighlighter;
 import com.goide.psi.GoBlock;
 import com.goide.psi.GoFile;
@@ -12,6 +13,7 @@ import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NonNls;
@@ -34,7 +36,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
 
   @Nullable
   private static PsiElement getFirstCompositeElement(@Nullable PsiElement at) {
-    if (at instanceof PsiComment) return at;
+    if (at instanceof PsiComment || at instanceof LeafPsiElement && ((LeafPsiElement)at).getElementType() == GoTypes.STRING) return at;
     PsiElement result = at;
     while (result != null && (result instanceof PsiWhiteSpace || result.getChildren().length == 0)) {
       result = result.getParent();
@@ -55,7 +57,8 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
-      return !(element instanceof PsiComment);
+      return !(element instanceof PsiComment ||
+               element instanceof LeafPsiElement && ((LeafPsiElement)element).getElementType() == GoTypes.STRING);
     }
   }
   
