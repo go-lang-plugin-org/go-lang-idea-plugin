@@ -1,6 +1,7 @@
 package com.goide;
 
 import com.goide.psi.GoFile;
+import com.intellij.openapi.application.PathMacros;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -22,6 +23,9 @@ import java.io.File;
 import java.util.List;
 
 public class GoSdkUtil {
+
+  public static final String GOPATH = "GOPATH";
+
   @Nullable
   public static VirtualFile getSdkHome(@NotNull PsiElement context) {
     Module module = ModuleUtilCore.findModuleForPsiElement(context);
@@ -50,7 +54,10 @@ public class GoSdkUtil {
   @NotNull
   public static List<VirtualFile> getGoPathsSources() {
     List<VirtualFile> result = ContainerUtil.newArrayList();
-    String gopath = EnvironmentUtil.getValue("GOPATH");
+    String gopath = EnvironmentUtil.getValue(GOPATH);
+    if (gopath == null) {
+      gopath = PathMacros.getInstance().getValue(GOPATH);
+    }
     if (gopath != null) {
       List<String> split = StringUtil.split(gopath, File.pathSeparator);
       String home = SystemProperties.getUserHome();
