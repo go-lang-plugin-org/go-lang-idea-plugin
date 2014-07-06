@@ -22,7 +22,7 @@
     <ConfigurationWrapper RunnerId="Run" />
     <method>
       <option name="BuildArtifacts" enabled="true">
-        <artifact name="jps-plugin:jar" />
+        <artifact name="jps-plugin.jar" />
       </option>
     </method>
   </configuration>
