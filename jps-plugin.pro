@@ -1,6 +1,6 @@
 -ignorewarnings
--injars bin/intellij-go.jar
--outjars bin/proguard/intellij-go.jar
+-injars bin/jps-plugin.jar
+-outjars bin/proguard/jps-plugin.jar
 -libraryjars '/Applications/IntelliJ IDEA 13 CE.app/lib/idea.jar'
 -libraryjars '/Applications/IntelliJ IDEA 13 CE.app/lib/openapi.jar'
 -libraryjars '/Applications/IntelliJ IDEA 13 CE.app/lib/util.jar'
