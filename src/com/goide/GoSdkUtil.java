@@ -51,9 +51,9 @@ public class GoSdkUtil {
   public static List<VirtualFile> getGoPathsSources() {
     List<VirtualFile> result = ContainerUtil.newArrayList();
     String gopath = EnvironmentUtil.getValue("GOPATH");
-    String home = SystemProperties.getUserHome();
     if (gopath != null) {
       List<String> split = StringUtil.split(gopath, File.pathSeparator);
+      String home = SystemProperties.getUserHome();
       for (String s : split) {
         if (home != null) {
           s = s.replaceAll("\\$HOME", home);
