@@ -74,10 +74,7 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
         String executable = JpsGoSdkType.getGoExecutableFile(path).getAbsolutePath();
 
         final GeneralCommandLine install = new GeneralCommandLine();
-        String gopath = GoSdkUtil.retrieveGoPath();
-        if (gopath != null) {
-          install.getEnvironment().put(GoSdkUtil.GOPATH, gopath);
-        }
+        ContainerUtil.putIfNotNull(GoSdkUtil.GOPATH, GoSdkUtil.retrieveGoPath(), install.getEnvironment());
         install.setExePath(executable);
         install.addParameter("get");
         install.addParameter(myPackage);
