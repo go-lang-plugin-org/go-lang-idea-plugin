@@ -54,10 +54,7 @@ public class GoSdkUtil {
   @NotNull
   public static List<VirtualFile> getGoPathsSources() {
     List<VirtualFile> result = ContainerUtil.newArrayList();
-    String gopath = EnvironmentUtil.getValue(GOPATH);
-    if (gopath == null) {
-      gopath = PathMacros.getInstance().getValue(GOPATH);
-    }
+    String gopath = retrieveGoPath();
     if (gopath != null) {
       List<String> split = StringUtil.split(gopath, File.pathSeparator);
       String home = SystemProperties.getUserHome();
@@ -70,5 +67,11 @@ public class GoSdkUtil {
       }
     }
     return result;
+  }
+
+  @Nullable
+  public static String retrieveGoPath() {
+    String path = EnvironmentUtil.getValue(GOPATH);
+    return path != null ? path : PathMacros.getInstance().getValue(GOPATH);
   }
 }

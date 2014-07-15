@@ -1,5 +1,6 @@
 package com.goide.codeInsight.imports;
 
+import com.goide.GoSdkUtil;
 import com.goide.jps.model.JpsGoSdkType;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixBase;
@@ -73,6 +74,10 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
         String executable = JpsGoSdkType.getGoExecutableFile(path).getAbsolutePath();
 
         final GeneralCommandLine install = new GeneralCommandLine();
+        String gopath = GoSdkUtil.retrieveGoPath();
+        if (gopath != null) {
+          install.getEnvironment().put(GoSdkUtil.GOPATH, gopath);
+        }
         install.setExePath(executable);
         install.addParameter("get");
         install.addParameter(myPackage);
