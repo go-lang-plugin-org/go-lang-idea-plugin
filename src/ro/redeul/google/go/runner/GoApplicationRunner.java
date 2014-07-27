@@ -74,7 +74,13 @@ public class GoApplicationRunner extends DefaultProgramRunner {
         } else {
             GoApplicationConfiguration configuration = ((GdbExecutionResult)executionResult).m_configuration;
 
-            String execName = configuration.goOutputDir.concat("/").concat(project.getName());
+            String execName;
+            if (configuration.runExecutableName != null && configuration.runExecutableName.trim().length() > 0) {
+                execName = configuration.goOutputDir.concat("/").concat(configuration.runExecutableName);
+            }
+            else {
+                execName = configuration.goOutputDir.concat("/").concat(configuration.getName());
+            }
 
             if (GoSdkUtil.isHostOsWindows()) {
                 execName = execName.concat(".exe");

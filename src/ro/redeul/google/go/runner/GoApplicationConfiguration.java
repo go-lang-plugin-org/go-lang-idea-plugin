@@ -44,6 +44,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     public String scriptName = "";
     public String scriptArguments = "";
     public String runBuilderArguments = "";
+    public String runExecutableName = "";
     public Boolean goBuildBeforeRun = false;
     public String goOutputDir = "";
     public String workingDir = "";

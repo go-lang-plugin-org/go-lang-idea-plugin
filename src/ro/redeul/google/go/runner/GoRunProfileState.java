@@ -71,7 +71,7 @@ public class GoRunProfileState extends CommandLineState {
                 commandLine.getParametersList().addParametersString(m_configuration.runBuilderArguments);
             }
 
-            commandLine.addParameter(m_configuration.scriptName);
+            commandLine.addParameter(m_configuration.scriptName); // TODO: this should only be possible if a go-script was selected and not a whole directory
             if (m_configuration.scriptArguments != null && m_configuration.scriptArguments.trim().length() > 0) {
                 commandLine.getParametersList().addParametersString(m_configuration.scriptArguments);
             }
@@ -83,14 +83,22 @@ public class GoRunProfileState extends CommandLineState {
         }
 
         // Build and run
-        String execName = m_configuration.goOutputDir.concat("/").concat(m_configuration.getName());
+        String execName;
+        if (m_configuration.runExecutableName != null && m_configuration.runExecutableName.trim().length() > 0) {
+            execName = m_configuration.goOutputDir.concat("/").concat(m_configuration.runExecutableName);
+        }
+        else {
+            execName = m_configuration.goOutputDir.concat("/").concat(m_configuration.getName());
+        }
 
         if (execName.endsWith(".go")) {
             execName = execName.substring(0, execName.length() - 3);
         }
 
         if (GoSdkUtil.isHostOsWindows()) {
-            execName = execName.concat(".exe");
+            if (!execName.endsWith(".exe")) {
+                execName = execName.concat(".exe");
+            }
         }
 
         try {

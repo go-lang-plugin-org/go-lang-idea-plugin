@@ -114,13 +114,13 @@ public class GoApplicationConfigurationProducer extends RunConfigurationProducer
             }
             ((GoApplicationConfiguration) configuration).goBuildBeforeRun = true;
             ((GoApplicationConfiguration) configuration).runBuilderArguments = "";
+            ((GoApplicationConfiguration) configuration).runExecutableName = "";
             ((GoApplicationConfiguration) configuration).scriptName = name;
             ((GoApplicationConfiguration) configuration).scriptArguments = "";
 
             ((GoApplicationConfiguration) configuration).autoStartGdb = true;
             ((GoApplicationConfiguration) configuration).GDB_PATH = "gdb";
-            ((GoApplicationConfiguration) configuration).debugBuilderArguments = "-gcflags \"-N -I\"";
-
+            ((GoApplicationConfiguration) configuration).debugBuilderArguments = "-gcflags \"-N -l\"";
 
             ((GoApplicationConfiguration) configuration).setModule(module);
             configuration.setName(((GoApplicationConfiguration) configuration).suggestedName());

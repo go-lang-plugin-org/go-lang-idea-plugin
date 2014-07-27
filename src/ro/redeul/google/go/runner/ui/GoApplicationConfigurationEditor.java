@@ -37,13 +37,15 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
 	private TextFieldWithBrowseButton m_gdbPath;
 	private JCheckBox autoStartGdb;
 	private JTextArea m_startupCommands;
-	private RawCommandLineEditor m_runBuilderArguments;
+    private RawCommandLineEditor m_runBuilderArguments;
+    private RawCommandLineEditor m_runExecutableName;
 
 	@Override
     protected void resetEditorFrom(GoApplicationConfiguration configuration) {
         applicationName.setText(configuration.scriptName);
         appArguments.setText(configuration.scriptArguments);
         m_runBuilderArguments.setText(configuration.runBuilderArguments);
+        m_runExecutableName.setText(configuration.runExecutableName);
         buildBeforeRunCheckBox.setSelected(configuration.goBuildBeforeRun);
         buildDirectoryPathBrowser.setEnabled(configuration.goBuildBeforeRun);
         buildDirectoryPathBrowser.setText(configuration.goOutputDir);
@@ -75,6 +77,7 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
         configuration.scriptName = applicationName.getText();
         configuration.scriptArguments = appArguments.getText();
         configuration.runBuilderArguments = m_runBuilderArguments.getText();
+        configuration.runExecutableName = m_runExecutableName.getText();
         configuration.goBuildBeforeRun = buildBeforeRunCheckBox.isSelected();
         configuration.goOutputDir = buildDirectoryPathBrowser.getText();
         configuration.workingDir = workingDirectoryBrowser.getText();
@@ -98,22 +101,41 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
 
     public GoApplicationConfigurationEditor(final Project project) {
 
+
         applicationName.getButton().addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
 
-                        TreeFileChooser fileChooser =
+                        FileChooserDescriptor chooseFileOrDirectory = new FileChooserDescriptor(true, true, false, false, false, false);
+                        VirtualFile file = com.intellij.openapi.fileChooser.FileChooser.chooseFile(chooseFileOrDirectory, project, null);
+
+                        if (file != null) {
+
+                            if (file.getFileType() instanceof GoFileType) {
+                                applicationName.setText(file.getPath());
+                            }
+                            else if (file.isDirectory()) {
+                                String relativePath = new java.io.File(project.getBaseDir().getPath().concat("/src")).toURI().relativize(new java.io.File(file.getPath()).toURI()).getPath();
+                                applicationName.setText(relativePath);
+                            }
+
+                        }
+
+                        /*TreeFileChooser fileChooser =
                                 TreeFileChooserFactory.getInstance(project).createFileChooser(
-                                        "Go Application Chooser", null,
-                                        GoFileType.INSTANCE,
+                                        "Go Application Chooser", null, null,
+                                        //GoFileType.INSTANCE,
                                         new TreeFileChooser.PsiFileFilter() {
                                             public boolean accept(PsiFile file) {
-
-                                                if (!(file instanceof GoFile)) {
+                                                if (file instanceof GoFile) {
+                                                    return ((GoFile) file).getMainFunction() != null;
+                                                }
+                                                else if (file instanceof com.intellij.psi.PsiDirectory) {
+                                                    return true;
+                                                }
+                                                else {
                                                     return false;
                                                 }
-
-                                                return ((GoFile) file).getMainFunction() != null;
                                             }
                                         }, true, false);
 
@@ -122,7 +144,7 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
                         PsiFile selectedFile = fileChooser.getSelectedFile();
                         if (selectedFile != null) {
                             setChosenFile(selectedFile.getVirtualFile());
-                        }
+                        }*/
                     }
                 });
 
@@ -143,9 +165,9 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
                 project, new FileChooserDescriptor(true, false, false, false, false, false));
     }
 
-    private void setChosenFile(VirtualFile virtualFile) {
+    /*private void setChosenFile(VirtualFile virtualFile) {
         applicationName.setText(virtualFile.getPath());
-    }
+    }*/
 
     @NotNull
     @Override

@@ -76,7 +76,13 @@ public class GoDebugProfileState implements RunProfileState {
         toolWindow.setTitle(TITLE);
 
         // Build and run
-        String execName = m_configuration.goOutputDir.concat("/").concat(project.getName());
+        String execName;
+        if (m_configuration.runExecutableName != null && m_configuration.runExecutableName.trim().length() > 0) {
+            execName = m_configuration.goOutputDir.concat("/").concat(m_configuration.runExecutableName);
+        }
+        else {
+            execName = m_configuration.goOutputDir.concat("/").concat(m_configuration.getName());
+        }
 
         if (execName.endsWith(".go")) {
             execName = execName.substring(0, execName.length() - 3);
