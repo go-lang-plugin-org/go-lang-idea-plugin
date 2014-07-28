@@ -61,7 +61,7 @@ public class GoRunProfileState extends CommandLineState {
         GoToolWindow toolWindow = GoToolWindow.getInstance(m_project);
         toolWindow.setTitle(TITLE);
 
-        if (!m_configuration.goBuildBeforeRun) {
+        if (!m_configuration.goBuildBeforeRun && !m_configuration.runPackage) {
             // Just run
             GeneralCommandLine commandLine = new GeneralCommandLine();
 
@@ -71,7 +71,7 @@ public class GoRunProfileState extends CommandLineState {
                 commandLine.getParametersList().addParametersString(m_configuration.runBuilderArguments);
             }
 
-            commandLine.addParameter(m_configuration.scriptName); // TODO: this should only be possible if a go-script was selected and not a whole directory
+            commandLine.addParameter(m_configuration.scriptName);
             if (m_configuration.scriptArguments != null && m_configuration.scriptArguments.trim().length() > 0) {
                 commandLine.getParametersList().addParametersString(m_configuration.scriptArguments);
             }
@@ -104,7 +104,14 @@ public class GoRunProfileState extends CommandLineState {
         try {
             String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
 
-            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.runBuilderArguments, execName, m_configuration.scriptName);
+            String scriptOrPackage;
+            if (m_configuration.runPackage) {
+                scriptOrPackage = new java.io.File(m_configuration.getProject().getBaseDir().getPath().concat("/src")).toURI().relativize(new java.io.File(m_configuration.packageName).toURI()).getPath();
+            }
+            else {
+                scriptOrPackage = m_configuration.scriptName;
+            }
+            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.runBuilderArguments, execName, scriptOrPackage);
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv, new File(projectDir));

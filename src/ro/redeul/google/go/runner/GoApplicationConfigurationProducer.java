@@ -180,6 +180,7 @@ public class GoApplicationConfigurationProducer extends RunConfigurationProducer
         }
 
         applicationConfiguration.scriptName = scriptFile.getCanonicalPath();
+        applicationConfiguration.runPackage = false;
         applicationConfiguration.setModule(module);
 
         return settings;

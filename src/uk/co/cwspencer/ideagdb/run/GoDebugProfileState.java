@@ -95,7 +95,14 @@ public class GoDebugProfileState implements RunProfileState {
         try {
             String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
 
-            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.debugBuilderArguments, execName, m_configuration.scriptName);
+            String scriptOrPackage;
+            if (m_configuration.runPackage) {
+                scriptOrPackage = new java.io.File(m_configuration.getProject().getBaseDir().getPath().concat("/src")).toURI().relativize(new java.io.File(m_configuration.packageName).toURI()).getPath();
+            }
+            else {
+                scriptOrPackage = m_configuration.scriptName;
+            }
+            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.debugBuilderArguments, execName, scriptOrPackage);
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv, new File(projectDir));
