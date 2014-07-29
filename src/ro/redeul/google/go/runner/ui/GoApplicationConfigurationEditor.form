@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="component" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="1213" height="468"/>
+      <xy x="20" y="20" width="1213" height="474"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -27,8 +27,9 @@
             <children>
               <component id="6b8ab" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="296" height="15"/>
+                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="15"/>
+                    <maximum-size width="180" height="-1"/>
                   </grid>
                 </constraints>
                 <properties>
@@ -38,7 +39,7 @@
               </component>
               <component id="c0788" class="com.intellij.ui.RawCommandLineEditor" binding="appArguments">
                 <constraints>
-                  <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <dialogCaption value="Arguments"/>
@@ -47,7 +48,8 @@
               <component id="e7c46" class="javax.swing.JCheckBox" binding="buildBeforeRunCheckBox" default-binding="true">
                 <constraints>
                   <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="296" height="24"/>
+                    <preferred-size width="-1" height="24"/>
+                    <maximum-size width="180" height="-1"/>
                   </grid>
                 </constraints>
                 <properties>
@@ -58,8 +60,9 @@
               </component>
               <component id="a2ea1" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="296" height="15"/>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="15"/>
+                    <maximum-size width="180" height="-1"/>
                   </grid>
                 </constraints>
                 <properties>
@@ -68,8 +71,9 @@
               </component>
               <component id="9b32d" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="296" height="15"/>
+                  <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="15"/>
+                    <maximum-size width="180" height="-1"/>
                   </grid>
                 </constraints>
                 <properties>
@@ -79,7 +83,7 @@
               </component>
               <component id="df317" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="workingDirectoryBrowser">
                 <constraints>
-                  <grid row="8" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="8" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <enabled value="true"/>
@@ -88,8 +92,9 @@
               </component>
               <component id="29729" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="296" height="15"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="15"/>
+                    <maximum-size width="180" height="-1"/>
                   </grid>
                 </constraints>
                 <properties>
@@ -99,7 +104,7 @@
               </component>
               <component id="a7b64" class="com.intellij.ui.RawCommandLineEditor" binding="envVars">
                 <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <dialogCaption value="Environment variables"/>
@@ -117,7 +122,7 @@
               </component>
               <component id="976bc" class="com.intellij.ui.RawCommandLineEditor" binding="m_runBuilderArguments">
                 <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <dialogCaption value="Go Builder Arguments"/>
@@ -125,7 +130,7 @@
               </component>
               <component id="3e389" class="com.intellij.ui.RawCommandLineEditor" binding="m_runExecutableName">
                 <constraints>
-                  <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <dialogCaption value="Executable Filename"/>
@@ -133,8 +138,9 @@
               </component>
               <component id="26c52" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="296" height="15"/>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="15"/>
+                    <maximum-size width="180" height="-1"/>
                   </grid>
                 </constraints>
                 <properties>
@@ -142,114 +148,9 @@
                   <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.run.executablename"/>
                 </properties>
               </component>
-              <component id="64bb5" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="296" height="15"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <labelFor value="5363"/>
-                  <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.run.package"/>
-                </properties>
-              </component>
-              <component id="8b9cb" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="applicationPackage">
-                <constraints>
-                  <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <enabled value="true"/>
-                </properties>
-              </component>
-              <component id="5363" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="applicationName">
-                <constraints>
-                  <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <enabled value="true"/>
-                </properties>
-              </component>
-              <component id="c84f" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="296" height="15"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <labelFor value="5363"/>
-                  <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.run.script"/>
-                </properties>
-              </component>
-              <component id="bb24a" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="296" height="15"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <labelFor value="5363"/>
-                  <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.run.runPackage"/>
-                </properties>
-              </component>
-              <grid id="5ad0b" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-                <border type="none"/>
-                <children>
-                  <component id="a0c86" class="javax.swing.JRadioButton" binding="goFileRadioButton" default-binding="true">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Go &amp;file"/>
-                    </properties>
-                  </component>
-                  <component id="63953" class="javax.swing.JRadioButton" binding="goPackageRadioButton" default-binding="true">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Go &amp;package"/>
-                    </properties>
-                  </component>
-                </children>
-              </grid>
-              <grid id="3f44b" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="10" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-                <border type="none"/>
-                <children>
-                  <component id="4aaac" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                        <preferred-size width="106" height="15"/>
-                      </grid>
-                    </constraints>
-                    <properties>
-                      <labelFor value="1bda6"/>
-                      <text value="&amp;Output directory"/>
-                    </properties>
-                  </component>
-                  <component id="1bda6" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="buildDirectoryPathBrowser">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <enabled value="false"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                </children>
-              </grid>
               <component id="1b441" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="11" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+                  <grid row="11" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <horizontalTextPosition value="11"/>
@@ -259,11 +160,103 @@
               </component>
               <component id="dbadc" class="javax.swing.JSeparator">
                 <constraints>
-                  <grid row="9" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <preferred-size width="0" height="91"/>
+                  <grid row="9" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <minimum-size width="180" height="-1"/>
+                    <preferred-size width="180" height="91"/>
+                    <maximum-size width="180" height="-1"/>
                   </grid>
                 </constraints>
                 <properties/>
+              </component>
+              <component id="a0c86" class="javax.swing.JRadioButton" binding="goFileRadioButton" default-binding="true">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="28"/>
+                    <maximum-size width="180" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value="Go &amp;file"/>
+                </properties>
+              </component>
+              <component id="63953" class="javax.swing.JRadioButton" binding="goPackageRadioButton" default-binding="true">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="28"/>
+                    <maximum-size width="180" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value="Go &amp;package"/>
+                </properties>
+              </component>
+              <component id="c84f" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="100" height="15"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <labelFor value="5363"/>
+                  <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.run.script"/>
+                </properties>
+              </component>
+              <component id="5363" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="applicationName">
+                <constraints>
+                  <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                </properties>
+              </component>
+              <component id="64bb5" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="100" height="15"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <labelFor value=""/>
+                  <text resource-bundle="ro/redeul/google/go/GoBundle" key="go.run.package"/>
+                </properties>
+              </component>
+              <component id="8b9cb" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="applicationPackage">
+                <constraints>
+                  <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                </properties>
+              </component>
+              <component id="4aaac" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="106" height="15"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <labelFor value="1bda6"/>
+                  <text value="&amp;Output directory"/>
+                </properties>
+              </component>
+              <component id="1bda6" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="buildDirectoryPathBrowser">
+                <constraints>
+                  <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value=""/>
+                </properties>
+              </component>
+              <component id="d1906" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="2" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <horizontalTextPosition value="11"/>
+                  <icon value="ide/info_notifications.png"/>
+                  <text value="The package directory must be a subdirectory below the PROJECT_ROOT/src folder"/>
+                </properties>
               </component>
             </children>
           </grid>

@@ -122,9 +122,8 @@ public class GoDebugProfileState implements RunProfileState {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Messages.showErrorDialog(String.format("Error while processing %s build command.", goExecName), "Error on Google Go Plugin");
-
-            throw new CantRunException(String.format("Error while processing %s build command.", goExecName));
+            Messages.showErrorDialog(String.format("Error while processing %s build command: %s.", goExecName, e.getMessage()), "Error on Google Go Plugin");
+            throw new CantRunException(String.format("Error while processing %s build command: %s.", goExecName, e.getMessage()));
         }
 
 
