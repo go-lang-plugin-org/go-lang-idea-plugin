@@ -12,7 +12,7 @@ Google go language plugin is an attempt to build an outstanding IDE for
 + [How to use it](#how-to-use-it)
 + [Tutorials](#tutorials)
 + [Bugs](#bugs)
-+ [EAP downloads](#eap-downloads)
++ [EAP downloads](#eap-download)
 + [Authors](#authors)
 + [Contributing](#contributing)
 + [Thank you](#thank-you)
