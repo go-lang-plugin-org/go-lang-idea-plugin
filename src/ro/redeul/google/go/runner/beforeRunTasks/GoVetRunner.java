@@ -25,6 +25,7 @@ import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.runner.GoApplicationConfiguration;
 import ro.redeul.google.go.runner.GoCommonConsoleView;
@@ -73,7 +74,8 @@ public class GoVetRunner extends Task.Backgroundable {
         String projectDir = myProject.getBasePath();
 
         try {
-            Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, goConfig.envVars);
+            GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(myProject).getState();
+            Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, goConfig.envVars, settings.prependSysGoPath, settings.appendSysGoPath);
             String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
 
             String command = String.format(

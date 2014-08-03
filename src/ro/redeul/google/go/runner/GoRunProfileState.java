@@ -13,6 +13,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -56,7 +57,8 @@ public class GoRunProfileState extends CommandLineState {
             throw new CantRunException("Could not retrieve the project directory");
         }
 
-        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, m_configuration.envVars);
+        GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(m_project).getState();
+        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, m_configuration.envVars, settings.prependSysGoPath, settings.appendSysGoPath);
 
         GoToolWindow toolWindow = GoToolWindow.getInstance(m_project);
         toolWindow.setTitle(TITLE);

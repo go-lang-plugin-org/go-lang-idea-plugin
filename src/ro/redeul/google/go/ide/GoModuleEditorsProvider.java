@@ -23,7 +23,7 @@ public class GoModuleEditorsProvider implements ModuleConfigurationEditorProvide
 
         final ModuleType moduleType = ModuleType.get(module);
 
-        if (!(moduleType instanceof GoModuleType) &&
+        if (!(moduleType instanceof GoModuleType || moduleType instanceof GoPackageModuleType) &&
                 !(moduleType instanceof GoAppEngineModuleType)) {
               return ModuleConfigurationEditor.EMPTY;
         }

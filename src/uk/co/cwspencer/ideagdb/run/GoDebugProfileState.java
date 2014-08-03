@@ -24,6 +24,7 @@ import com.intellij.xdebugger.DefaultDebugProcessHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.runner.GoApplicationConfiguration;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -70,7 +71,8 @@ public class GoDebugProfileState implements RunProfileState {
             throw new CantRunException("Could not retrieve the project directory");
         }
 
-        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, m_configuration.envVars);
+        GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(project).getState();
+        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, m_configuration.envVars, settings.prependSysGoPath, settings.appendSysGoPath);
 
         GoToolWindow toolWindow = GoToolWindow.getInstance(project);
         toolWindow.setTitle(TITLE);

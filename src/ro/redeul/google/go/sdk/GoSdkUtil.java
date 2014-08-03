@@ -645,6 +645,20 @@ public class GoSdkUtil {
                 : format("%s%s%s", sysGoPath, File.pathSeparator, appendedPath);
     }
 
+    public static String getProjectGoPath(String projectDir, boolean prependSysGoPath, boolean appendSysGoPath) {
+        String goPath = projectDir;
+        String sysGoPath = getGoPath();
+        if (!sysGoPath.isEmpty()) {
+            if (prependSysGoPath) {
+                goPath = format("%s%s%s", sysGoPath, File.pathSeparator, goPath);
+            }
+            if (appendSysGoPath) {
+                goPath = format("%s%s%s", goPath, File.pathSeparator, sysGoPath);
+            }
+        }
+        return goPath;
+    }
+
     public static String appendGoPathToPath(String goPath) {
         String binarizedPath = "";
         String[] splitGoPath = goPath.split(File.pathSeparator);
@@ -676,6 +690,8 @@ public class GoSdkUtil {
     }
 
     public static String getGoPath() {
+
+
         String savedsGoPath = GoGlobalSettings.getInstance().getGoPath();
 
         if (!savedsGoPath.isEmpty()) {
@@ -727,9 +743,13 @@ public class GoSdkUtil {
     }
 
     public static Map<String, String> getExtendedSysEnv(GoSdkData sdkData, String projectDir, String envVars) {
+        return getExtendedSysEnv(sdkData, projectDir, envVars, true, false);
+    }
+
+    public static Map<String, String> getExtendedSysEnv(GoSdkData sdkData, String projectDir, String envVars, boolean prependSysGoPath, boolean appendSysGoPath) {
         Map<String, String> sysEnv = new HashMap<String, String>(System.getenv());
         String goRoot = getSdkRootPath(sdkData);
-        String goPath = appendToGoPath(projectDir);
+        String goPath = getProjectGoPath(projectDir, prependSysGoPath, appendSysGoPath);
         sysEnv.put("GOROOT", goRoot);
         sysEnv.put("GOPATH", goPath);
         sysEnv.put("PATH", appendGoPathToPath(goRoot + File.pathSeparator + goPath));
@@ -752,9 +772,14 @@ public class GoSdkUtil {
     }
 
     public static Map<String, String> getExtendedSysEnv(GoAppEngineSdkData sdkData, String projectDir, String envVars) {
+        return getExtendedSysEnv(sdkData, projectDir, envVars, true, false);
+    }
+
+    public static Map<String, String> getExtendedSysEnv(GoAppEngineSdkData sdkData, String projectDir, String envVars, boolean prependSysGoPath, boolean appendSysGoPath) {
         Map<String, String> sysEnv = new HashMap<String, String>(System.getenv());
         String goRoot = getSdkRootPath(sdkData);
-        String goPath = appendToGoPath(projectDir);
+        String goPath = getProjectGoPath(projectDir, prependSysGoPath, appendSysGoPath);
+
         sysEnv.put("GOROOT", goRoot);
         sysEnv.put("GOPATH", goPath);
         sysEnv.put("PATH", appendGoPathToPath(goRoot + File.pathSeparator + goPath));
@@ -796,6 +821,14 @@ public class GoSdkUtil {
 
     public static String[] getExtendedGAEEnv(GoAppEngineSdkData sdkData, String projectDir, String envVars) {
         return convertEnvMapToArray(getExtendedSysEnv(sdkData, projectDir, envVars));
+    }
+
+    public static String[] getExtendedGoEnv(GoSdkData sdkData, String projectDir, String envVars, boolean prependSysGoPath, boolean appendSysGoPath ) {
+        return convertEnvMapToArray(getExtendedSysEnv(sdkData, projectDir, envVars, prependSysGoPath, appendSysGoPath));
+    }
+
+    public static String[] getExtendedGAEEnv(GoAppEngineSdkData sdkData, String projectDir, String envVars, boolean prependSysGoPath, boolean appendSysGoPath) {
+        return convertEnvMapToArray(getExtendedSysEnv(sdkData, projectDir, envVars, prependSysGoPath, appendSysGoPath));
     }
 
     public static String getSdkRootPath(GoSdkData sdkData) {
@@ -983,6 +1016,17 @@ public class GoSdkUtil {
                 targetName,
                 goBuilderArgs,
                 goMainFile
+        );
+
+        return computeGoCommand(goExecName, goArgs);
+    }
+
+    public static String[] computeGoGetCommand(String goExecName, String goGetArgs, String packageName) {
+        String goArgs = String.format(
+                "%s %s %s",
+                "get",
+                goGetArgs,
+                packageName
         );
 
         return computeGoCommand(goExecName, goArgs);

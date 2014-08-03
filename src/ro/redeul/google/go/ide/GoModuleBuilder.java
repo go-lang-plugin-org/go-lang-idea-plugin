@@ -16,6 +16,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.actions.GoTemplatesFactory;
 import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.runner.GoApplicationConfigurationProducer;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -62,6 +63,7 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
                     PsiDirectory mainPackage = directory.createSubdirectory("main");
                     mainPackage.checkCreateFile(projectName.concat(".go"));
                     GoTemplatesFactory.createFromTemplate(mainPackage, "main", projectName.concat(".go"), GoTemplatesFactory.Template.GoAppMain);
+
                 } catch (IncorrectOperationException ignored) {
                 } catch (Exception e) {
                     LOG.error(e.getMessage());
