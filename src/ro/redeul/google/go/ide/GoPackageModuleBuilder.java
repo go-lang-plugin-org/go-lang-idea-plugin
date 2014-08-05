@@ -1,6 +1,10 @@
 package ro.redeul.google.go.ide;
 
 import com.intellij.execution.CantRunException;
+import com.intellij.execution.RunManagerEx;
+import com.intellij.execution.RunnerAndConfigurationSettings;
+import com.intellij.execution.actions.ConfigurationContext;
+import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
@@ -9,10 +13,13 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -24,6 +31,10 @@ import ro.redeul.google.go.actions.GoTemplatesFactory;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
+import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.runner.GoApplicationConfiguration;
+import ro.redeul.google.go.runner.GoApplicationConfigurationProducer;
+import ro.redeul.google.go.runner.GoApplicationConfigurationType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
@@ -41,6 +52,8 @@ public class GoPackageModuleBuilder extends JavaModuleBuilder implements SourceP
     private static final Logger LOG = Logger.getInstance(GoPackageModuleBuilder.class);
     private static final String TITLE = "go get package";
     private String packageURL;
+    public String packageName;
+    public boolean isNew;
 
     public GoPackageModuleBuilder() {
         addListener(this);
@@ -52,7 +65,6 @@ public class GoPackageModuleBuilder extends JavaModuleBuilder implements SourceP
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
         final VirtualFile sourceRoots[] = moduleRootManager.getSourceRoots();
         final String projectName = module.getProject().getName();
-
 
         GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(module.getProject()).getState();
         settings.prependSysGoPath = false;
@@ -87,41 +99,64 @@ public class GoPackageModuleBuilder extends JavaModuleBuilder implements SourceP
             final GoToolWindow toolWindow = GoToolWindow.getInstance(module.getProject());
             toolWindow.setTitle(TITLE);
 
-            final String packageName = this.packageURL;
+            if (isNew) {
 
-            final String[] goEnv = GoSdkUtil.convertEnvMapToArray(projectEnv);
+                final PsiDirectory directory = PsiManager.getInstance(module.getProject()).findDirectory(sourceRoots[0]);
+                final PsiDirectory baseDir = directory.getParentDirectory();
+                ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            baseDir.createSubdirectory("bin");
+                            baseDir.createSubdirectory("pkg");
 
-            final String[] command = GoSdkUtil.computeGoGetCommand(goExecName, "-u -v", packageName);
+                            //Create package folder under src and add main.go
+                            PsiDirectory mainPackage = directory.createSubdirectory(packageName);
+                            mainPackage.checkCreateFile(projectName.concat(".go"));
+                            GoTemplatesFactory.createFromTemplate(mainPackage, "main", packageName.concat(".go"), GoTemplatesFactory.Template.GoAppMain);
 
-            Runnable r = new Runnable() {
-                public void run() {
-                    try {
-                        Runtime rt = Runtime.getRuntime();
-                        Process proc = rt.exec(command, goEnv, new File(projectDir));
-                        OSProcessHandler handler = new OSProcessHandler(proc, null);
-                        toolWindow.attachConsoleViewToProcess(handler);
-                        toolWindow.printNormalMessage(String.format("%s%n", StringUtil.join(command, " ")));
-                        toolWindow.show();
-
-                        handler.startNotify();
-
-                        if (proc.waitFor() == 0) {
-                            //VirtualFileManager.getInstance().syncRefresh();
-                            toolWindow.printNormalMessage(String.format("%nFinished go get package %s%n", packageName));
-
-                        } else {
-                            toolWindow.printErrorMessage(String.format("%nCould't go get package %s%n", packageName));
+                            sourceRoots[0].refresh(true, true);
+                        } catch (IncorrectOperationException ignored) {
+                        } catch (Exception e) {
+                            LOG.error(e.getMessage());
                         }
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Messages.showErrorDialog(String.format("Error while processing %s get command: %s.", goExecName, e.getMessage()), "Error on Google Go Plugin");
                     }
-                }
-            };
+                });
 
-            new Thread(r).start();
+            } else {
+                final String packageURL = this.packageURL;
+                final String[] goEnv = GoSdkUtil.convertEnvMapToArray(projectEnv);
+                final String[] command = GoSdkUtil.computeGoGetCommand(goExecName, "-u -v", packageURL);
+                Runnable r = new Runnable() {
+                    public void run() {
+                        try {
+                            Runtime rt = Runtime.getRuntime();
+                            Process proc = rt.exec(command, goEnv, new File(projectDir));
+                            OSProcessHandler handler = new OSProcessHandler(proc, null);
+                            toolWindow.attachConsoleViewToProcess(handler);
+                            toolWindow.printNormalMessage(String.format("%s%n", StringUtil.join(command, " ")));
+                            toolWindow.show();
+
+                            handler.startNotify();
+
+                            if (proc.waitFor() == 0) {
+                                //VirtualFileManager.getInstance().syncRefresh();
+                                toolWindow.printNormalMessage(String.format("%nFinished go get package %s%n", packageURL));
+                            } else {
+                                toolWindow.printErrorMessage(String.format("%nCould't go get package %s%n", packageURL));
+                            }
+                            sourceRoots[0].refresh(true, true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Messages.showErrorDialog(String.format("Error while processing %s get command: %s.", goExecName, e.getMessage()), "Error on Google Go Plugin");
+                        }
+                    }
+                };
+
+                new Thread(r).start();
+            }
+
+
 
 
         } catch (CantRunException e) {
