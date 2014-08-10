@@ -4,6 +4,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Comparing;
+import ro.redeul.google.go.options.GoSettings;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.*;
@@ -18,7 +19,9 @@ public class GoGlobalConfigurableForm {
    public JPanel componentPanel;
     private TextFieldWithBrowseButton goPath;
     private JButton importSysGoPath;
+    private JCheckBox enableOnTheFlyImportOptimization;
     private final GoGlobalSettings goGlobalSettings = GoGlobalSettings.getInstance();
+    private final GoSettings goSettings = GoSettings.getInstance();
 
     GoGlobalConfigurableForm() {
         goPath.addBrowseFolderListener("GOPATH directory", "Select the GOPATH directory of your GO setup",
@@ -34,10 +37,14 @@ public class GoGlobalConfigurableForm {
 
     public void reset() {
         goPath.setText(goGlobalSettings.getGoPath());
+        enableOnTheFlyImportOptimization.setSelected(goSettings.getState().OPTIMIZE_IMPORTS_ON_THE_FLY);
     }
 
     public boolean isModified() {
-        return ! (Comparing.equal(goPath.getText(), goGlobalSettings.getGoPath()));
+        if (enableOnTheFlyImportOptimization.isSelected() != goSettings.getState().OPTIMIZE_IMPORTS_ON_THE_FLY) {
+            return true;
+        }
+        return !Comparing.equal(goPath.getText(), goGlobalSettings.getGoPath());
     }
 
     public void apply() {
@@ -64,5 +71,6 @@ public class GoGlobalConfigurableForm {
         }
 
         goGlobalSettings.setGoPath(goPathStr);
+        goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY = enableOnTheFlyImportOptimization.isSelected();
     }
 }

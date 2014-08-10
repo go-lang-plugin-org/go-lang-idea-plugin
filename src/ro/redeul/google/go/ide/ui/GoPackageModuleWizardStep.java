@@ -1,7 +1,9 @@
 package ro.redeul.google.go.ide.ui;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
+import ro.redeul.google.go.ide.GoConfigurableForm;
 import ro.redeul.google.go.ide.GoPackageModuleBuilder;
+import ro.redeul.google.go.ide.GoProjectSettings;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -16,10 +18,19 @@ public class GoPackageModuleWizardStep extends ModuleWizardStep {
     private JRadioButton radioNewPackage;
     private JRadioButton radioDownloadPackage;
     private JTextField txtNewPackageName;
+    private JCheckBox enablePrependSysGoPath;
+    private JCheckBox enableAppendSysGoPath;
+    private JButton buttonProjectSettings;
+    private JPanel panelTest;
     private GoPackageModuleBuilder moduleBuilder;
+    private GoConfigurableForm form;
+    private GoProjectSettings.GoProjectSettingsBean settingsBean;
 
     public GoPackageModuleWizardStep(GoPackageModuleBuilder moduleBuilder) {
         this.moduleBuilder = moduleBuilder;
+
+
+
         radioNewPackage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -49,6 +60,7 @@ public class GoPackageModuleWizardStep extends ModuleWizardStep {
 
     }
 
+
     @Override
     public boolean validate() {
         if (radioDownloadPackage.isSelected()) {
@@ -69,5 +81,13 @@ public class GoPackageModuleWizardStep extends ModuleWizardStep {
         this.moduleBuilder.setPackageURL(this.txtPackageURL.getText());
         this.moduleBuilder.isNew = this.radioNewPackage.isSelected();
         this.moduleBuilder.packageName = this.txtNewPackageName.getText();
+    }
+
+    private void createUIComponents() {
+        form = new GoConfigurableForm();
+        form.enableShowHide();
+        panelTest = new JPanel();
+        panelTest.add(form.componentPanel);
+
     }
 }

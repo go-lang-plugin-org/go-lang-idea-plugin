@@ -1,10 +1,6 @@
 package ro.redeul.google.go.ide;
 
 import com.intellij.execution.CantRunException;
-import com.intellij.execution.RunManagerEx;
-import com.intellij.execution.RunnerAndConfigurationSettings;
-import com.intellij.execution.actions.ConfigurationContext;
-import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
@@ -13,16 +9,12 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.IncorrectOperationException;
@@ -31,10 +23,6 @@ import ro.redeul.google.go.actions.GoTemplatesFactory;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
-import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.runner.GoApplicationConfiguration;
-import ro.redeul.google.go.runner.GoApplicationConfigurationProducer;
-import ro.redeul.google.go.runner.GoApplicationConfigurationType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import java.io.File;
@@ -54,9 +42,11 @@ public class GoPackageModuleBuilder extends JavaModuleBuilder implements SourceP
     private String packageURL;
     public String packageName;
     public boolean isNew;
+    public GoProjectSettings.GoProjectSettingsBean settings;
 
     public GoPackageModuleBuilder() {
         addListener(this);
+        settings = new GoProjectSettings.GoProjectSettingsBean();
     }
 
     @Override
@@ -66,9 +56,11 @@ public class GoPackageModuleBuilder extends JavaModuleBuilder implements SourceP
         final VirtualFile sourceRoots[] = moduleRootManager.getSourceRoots();
         final String projectName = module.getProject().getName();
 
-        GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(module.getProject()).getState();
-        settings.prependSysGoPath = false;
-        settings.appendSysGoPath = false;
+        //GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(module.getProject()).getState();
+        //settings.prependSysGoPath = this.prependSysGoPath;
+        //settings.appendSysGoPath = this.appendSysGoPath;
+
+        GoProjectSettings.getInstance(module.getProject()).loadState(settings);
 
         try {
             Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(module.getProject());
@@ -89,12 +81,14 @@ public class GoPackageModuleBuilder extends JavaModuleBuilder implements SourceP
                 throw new CantRunException("Could not retrieve the project directory");
             }
 
-            Map<String, String> projectEnv = new HashMap<String, String>(System.getenv());
+            Map<String, String> projectEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, "", settings.prependSysGoPath, settings.appendSysGoPath);
+
+            /*Map<String, String> projectEnv = new HashMap<String, String>(System.getenv());
             String goRoot = GoSdkUtil.getSdkRootPath(sdkData);
             String goPath = projectDir;
             projectEnv.put("GOROOT", goRoot);
             projectEnv.put("GOPATH", goPath);
-            projectEnv.put("PATH", GoSdkUtil.appendGoPathToPath(goRoot + File.pathSeparator + goPath));
+            projectEnv.put("PATH", GoSdkUtil.appendGoPathToPath(goRoot + File.pathSeparator + goPath));*/
 
             final GoToolWindow toolWindow = GoToolWindow.getInstance(module.getProject());
             toolWindow.setTitle(TITLE);
@@ -113,7 +107,7 @@ public class GoPackageModuleBuilder extends JavaModuleBuilder implements SourceP
                             //Create package folder under src and add main.go
                             PsiDirectory mainPackage = directory.createSubdirectory(packageName);
                             mainPackage.checkCreateFile(projectName.concat(".go"));
-                            GoTemplatesFactory.createFromTemplate(mainPackage, "main", packageName.concat(".go"), GoTemplatesFactory.Template.GoAppMain);
+                            GoTemplatesFactory.createFromTemplate(mainPackage, "main", "main", packageName.concat(".go"), GoTemplatesFactory.Template.GoAppMain);
 
                             sourceRoots[0].refresh(true, true);
                         } catch (IncorrectOperationException ignored) {

@@ -80,6 +80,8 @@ public class GoPackageModuleType extends ModuleType<GoPackageModuleBuilder> {
 
         GoPackageModuleWizardStep myStep = new GoPackageModuleWizardStep(moduleBuilder);
         steps.add(myStep);
+        GoPackageModuleWizardSettings myStep2 = new GoPackageModuleWizardSettings(moduleBuilder);
+        steps.add(myStep2);
         //steps.add(factory.createSourcePathsStep(wizardContext, moduleBuilder, null, "reference.dialogs.new.project.fromScratch.source"));
         steps.add(factory.createProjectJdkStep(wizardContext, SdkType.findInstance(GoSdkType.class), moduleBuilder, new Computable.PredefinedValueComputable<Boolean>(true), null, ""));
         return steps.toArray(new ModuleWizardStep[steps.size()]);
