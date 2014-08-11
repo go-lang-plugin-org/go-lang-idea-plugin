@@ -5,12 +5,15 @@ import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.ide.projectView.impl.ProjectViewToolWindowFactory;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowId;
+import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +45,15 @@ public class GoToolWindow extends AbstractProjectComponent {
     public void show() {
         if(this.window != null) {
             this.window.activate(EmptyRunnable.getInstance());
+            this.window.show(null);
         }
+    }
+
+    public void showAndCreate(Project project) {
+        if(this.window == null) {
+            this.window = ToolWindowManager.getInstance(project).getToolWindow("Go");
+        }
+        this.show();
     }
 
     public void setTitle(String title) {

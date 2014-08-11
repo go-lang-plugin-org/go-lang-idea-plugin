@@ -45,7 +45,7 @@ public class GAEDebugEnv extends GoCommonDebugAction {
 
         try {
             GoToolWindow toolWindow = this.getGoToolWindow(project);
-            toolWindow.show();
+            toolWindow.showAndCreate(project);
             toolWindow.clearConsoleView();
 
             String[] goEnv = GoSdkUtil.getExtendedGAEEnv(sdkData, projectDir, "");

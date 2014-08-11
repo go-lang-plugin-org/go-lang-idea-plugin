@@ -105,7 +105,7 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
                             OSProcessHandler handler = new OSProcessHandler(proc, null);
                             toolWindow.attachConsoleViewToProcess(handler);
                             toolWindow.printNormalMessage(String.format("%s%n", StringUtil.join(command, " ")));
-                            toolWindow.show();
+                            toolWindow.showAndCreate(module.getProject());
                             handler.startNotify();
                             if (proc.waitFor() == 0) {
                                 toolWindow.printNormalMessage(String.format("%nFinished go get package %s%n", packageURL));

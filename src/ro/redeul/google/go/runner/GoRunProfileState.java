@@ -120,6 +120,7 @@ public class GoRunProfileState extends CommandLineState {
             OSProcessHandler handler = new OSProcessHandler(proc, null);
             toolWindow.attachConsoleViewToProcess(handler);
             toolWindow.printNormalMessage(String.format("%s%n", StringUtil.join(command, " ")));
+            toolWindow.showAndCreate(m_project);
             handler.startNotify();
 
             if (proc.waitFor() == 0) {

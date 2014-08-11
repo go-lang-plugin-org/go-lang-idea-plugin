@@ -111,6 +111,7 @@ public class GoDebugProfileState implements RunProfileState {
             OSProcessHandler handler = new OSProcessHandler(proc, null);
             toolWindow.attachConsoleViewToProcess(handler);
             toolWindow.printNormalMessage(String.format("%s%n", StringUtil.join(command, " ")));
+            toolWindow.showAndCreate(project);
             handler.startNotify();
 
             if (proc.waitFor() == 0) {

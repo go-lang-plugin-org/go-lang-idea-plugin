@@ -43,7 +43,7 @@ public class GAEDebugSysEnv extends GoCommonDebugAction {
 
         try {
             GoToolWindow toolWindow = this.getGoToolWindow(project);
-            toolWindow.show();
+            toolWindow.showAndCreate(project);
             toolWindow.clearConsoleView();
 
             String[] sysEnv = GoSdkUtil.convertEnvMapToArray(System.getenv());

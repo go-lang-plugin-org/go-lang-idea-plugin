@@ -88,6 +88,7 @@ public class GoVetRunner extends Task.Backgroundable {
             OSProcessHandler handler = new OSProcessHandler(proc, null);
             toolWindow.attachConsoleViewToProcess(handler);
             toolWindow.printNormalMessage(String.format("%s%n", command));
+            toolWindow.showAndCreate(myProject);
             handler.startNotify();
 
             if (proc.waitFor() == 0) {
