@@ -97,7 +97,7 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
                             GoTemplatesFactory.createFromTemplate(mainPackage, "main", "main", packageName.concat(".go"), GoTemplatesFactory.Template.GoAppMain);
                         } else {
                             //Download a go package and the dependencies from URL:
-                            Map<String, String> projectEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, "", settings.prependSysGoPath, settings.appendSysGoPath);
+                            Map<String, String> projectEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, "", false, false);
                             String[] goEnv = GoSdkUtil.convertEnvMapToArray(projectEnv);
                             String[] command = GoSdkUtil.computeGoGetCommand(goExecName, "-u -v", packageURL);
                             Runtime rt = Runtime.getRuntime();
@@ -113,6 +113,8 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
                                 toolWindow.printErrorMessage(String.format("%nCould't go get package %s%n", packageURL));
                             }
                             packageDir = sourceRoots[0].getCanonicalPath()  + File.separatorChar +  packageURL;
+                            File packageDirFile = new File(packageDir);
+                            packageName = packageDirFile.getName();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
