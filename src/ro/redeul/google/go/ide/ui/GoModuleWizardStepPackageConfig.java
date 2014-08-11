@@ -2,7 +2,7 @@ package ro.redeul.google.go.ide.ui;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import ro.redeul.google.go.ide.GoConfigurableForm;
-import ro.redeul.google.go.ide.GoPackageModuleBuilder;
+import ro.redeul.google.go.ide.GoModuleBuilder;
 import ro.redeul.google.go.ide.GoProjectSettings;
 
 import javax.swing.*;
@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by holgerfinger on 03.08.14.
  */
-public class GoPackageModuleWizardStep extends ModuleWizardStep {
+public class GoModuleWizardStepPackageConfig extends ModuleWizardStep {
     private JTextField txtPackageURL;
     private JPanel panelGoPackageSettings;
     private JRadioButton radioNewPackage;
@@ -22,11 +22,11 @@ public class GoPackageModuleWizardStep extends ModuleWizardStep {
     private JCheckBox enableAppendSysGoPath;
     private JButton buttonProjectSettings;
     private JPanel panelTest;
-    private GoPackageModuleBuilder moduleBuilder;
+    private GoModuleBuilder moduleBuilder;
     private GoConfigurableForm form;
     private GoProjectSettings.GoProjectSettingsBean settingsBean;
 
-    public GoPackageModuleWizardStep(GoPackageModuleBuilder moduleBuilder) {
+    public GoModuleWizardStepPackageConfig(GoModuleBuilder moduleBuilder) {
         this.moduleBuilder = moduleBuilder;
 
 
@@ -78,7 +78,7 @@ public class GoPackageModuleWizardStep extends ModuleWizardStep {
 
     @Override
     public void updateDataModel() {
-        this.moduleBuilder.setPackageURL(this.txtPackageURL.getText());
+        this.moduleBuilder.packageURL = this.txtPackageURL.getText();
         this.moduleBuilder.isNew = this.radioNewPackage.isSelected();
         this.moduleBuilder.packageName = this.txtNewPackageName.getText();
     }

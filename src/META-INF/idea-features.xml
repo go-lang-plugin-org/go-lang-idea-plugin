@@ -2,7 +2,6 @@
              url="http://github.com/go-lang-plugin-org/go-lang-idea-plugin">
     <extensions defaultExtensionNs="com.intellij">
         <moduleType id="GO_MODULE" implementationClass="ro.redeul.google.go.ide.GoModuleType"/>
-        <moduleType id="GO_PACKAGE_MODULE" implementationClass="ro.redeul.google.go.ide.GoPackageModuleType"/>
         <moduleType id="GO_APP_ENGINE_MODULE" implementationClass="ro.redeul.google.go.ide.GoAppEngineModuleType"/>
         <moduleConfigurationEditorProvider implementation="ro.redeul.google.go.ide.GoModuleEditorsProvider"/>
     </extensions>
