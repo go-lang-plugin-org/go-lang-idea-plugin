@@ -65,11 +65,9 @@ public class GoConfigurable implements SearchableConfigurable {
     @Override
     public void apply() throws ConfigurationException {
         GoProjectSettings.GoProjectSettingsBean projectSettings = new GoProjectSettings.GoProjectSettingsBean();
-        //GoSettings settings = GoSettings.getInstance().getState();
 
         if ( form != null ) {
             form.apply(projectSettings);
-            //GoSettings.getInstance().loadState(settings);
             getProjectSettings().loadState(projectSettings);
         }
     }
