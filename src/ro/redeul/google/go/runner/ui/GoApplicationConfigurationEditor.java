@@ -46,7 +46,7 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
     @Override
     protected void resetEditorFrom(GoApplicationConfiguration configuration) {
         applicationName.setText(configuration.scriptName);
-        applicationPackage.setText(configuration.packageName);
+        applicationPackage.setText(configuration.packageDir);
         appArguments.setText(configuration.scriptArguments);
         m_runBuilderArguments.setText(configuration.runBuilderArguments);
         m_runExecutableName.setText(configuration.runExecutableName);
@@ -88,7 +88,7 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
         }
 
         configuration.scriptName = applicationName.getText();
-        configuration.packageName = applicationPackage.getText();
+        configuration.packageDir = applicationPackage.getText();
         configuration.runPackage = goPackageRadioButton.isSelected();
         configuration.scriptArguments = appArguments.getText();
         configuration.runBuilderArguments = m_runBuilderArguments.getText();

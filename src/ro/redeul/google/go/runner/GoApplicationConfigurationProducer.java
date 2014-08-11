@@ -116,7 +116,7 @@ public class GoApplicationConfigurationProducer extends RunConfigurationProducer
 
                 ((GoApplicationConfiguration) configuration).runPackage = true;
 
-                ((GoApplicationConfiguration) configuration).packageName = name;
+                ((GoApplicationConfiguration) configuration).packageDir = name;
 
                 ((GoApplicationConfiguration) configuration).workingDir = project.getBasePath();
                 ((GoApplicationConfiguration) configuration).goOutputDir = project.getBasePath();

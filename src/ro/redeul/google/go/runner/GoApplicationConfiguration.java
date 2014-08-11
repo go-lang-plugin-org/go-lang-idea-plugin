@@ -42,7 +42,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     public String debugBuilderArguments = "";
 
     public String scriptName = "";
-    public String packageName = "";
+    public String packageDir = "";
     public boolean runPackage = false;
     public String scriptArguments = "";
     public String runBuilderArguments = "";
@@ -71,7 +71,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     public void checkConfiguration() throws RuntimeConfigurationException {
         if (!runPackage && (scriptName == null || scriptName.length() == 0))
             throw new RuntimeConfigurationException("Please select the file to run.");
-        if (runPackage && (packageName == null || packageName.length() == 0))
+        if (runPackage && (packageDir == null || packageDir.length() == 0))
             throw new RuntimeConfigurationException("Please select the package to run.");
         if (goBuildBeforeRun != null &&
                 goBuildBeforeRun &&

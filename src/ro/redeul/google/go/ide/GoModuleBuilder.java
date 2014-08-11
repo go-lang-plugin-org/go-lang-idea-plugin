@@ -19,14 +19,12 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.actions.GoTemplatesFactory;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.runner.GoApplicationConfiguration;
-import ro.redeul.google.go.runner.GoApplicationConfigurationProducer;
 import ro.redeul.google.go.runner.GoApplicationConfigurationType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -78,24 +76,36 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
             }
             final GoToolWindow toolWindow = GoToolWindow.getInstance(module.getProject());
             toolWindow.setTitle(TITLE);
+            toolWindow.showAndCreate(module.getProject());
 
+            final String packageDir;
 
-            ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                @Override
-                public void run() {
-                    String packageDir = "";
-                    try {
-                        if (isNew) {
-                            //Create folders bin and pkg and add main.go to src folder:
-                            PsiDirectory srcDir = PsiManager.getInstance(module.getProject()).findDirectory(sourceRoots[0]);
-                            PsiDirectory baseDir = srcDir.getParentDirectory();
-                            baseDir.createSubdirectory("bin");
-                            baseDir.createSubdirectory("pkg");
-                            PsiDirectory mainPackage = srcDir.createSubdirectory(packageName);
-                            packageDir = mainPackage.getVirtualFile().getPath();
-                            mainPackage.checkCreateFile(projectName.concat(".go"));
-                            GoTemplatesFactory.createFromTemplate(mainPackage, "main", "main", packageName.concat(".go"), GoTemplatesFactory.Template.GoAppMain);
-                        } else {
+            if (isNew) {
+                //Create folders bin and pkg and add main.go to src folder:
+                PsiDirectory srcDir = PsiManager.getInstance(module.getProject()).findDirectory(sourceRoots[0]);
+                PsiDirectory baseDir = srcDir.getParentDirectory();
+                baseDir.createSubdirectory("bin");
+                baseDir.createSubdirectory("pkg");
+                final PsiDirectory mainPackage = srcDir.createSubdirectory(packageName);
+                packageDir = mainPackage.getVirtualFile().getPath();
+
+                ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainPackage.checkCreateFile(projectName.concat(".go"));
+                        GoTemplatesFactory.createFromTemplate(mainPackage, "main", "main", packageName.concat(".go"), GoTemplatesFactory.Template.GoAppMain);
+                        toolWindow.printNormalMessage(String.format("%nFinished creating package %s from template.%n", packageName));
+                        sourceRoots[0].refresh(true, true);
+                    }
+                });
+
+            } else {
+                packageDir = sourceRoots[0].getCanonicalPath() + File.separatorChar + packageURL;
+
+                Runnable r = new Runnable() {
+                    public void run() {
+
+                        try {
                             //Download a go package and the dependencies from URL:
                             Map<String, String> projectEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, "", false, false);
                             String[] goEnv = GoSdkUtil.convertEnvMapToArray(projectEnv);
@@ -105,51 +115,52 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
                             OSProcessHandler handler = new OSProcessHandler(proc, null);
                             toolWindow.attachConsoleViewToProcess(handler);
                             toolWindow.printNormalMessage(String.format("%s%n", StringUtil.join(command, " ")));
-                            toolWindow.showAndCreate(module.getProject());
+                            toolWindow.show();
                             handler.startNotify();
                             if (proc.waitFor() == 0) {
                                 toolWindow.printNormalMessage(String.format("%nFinished go get package %s%n", packageURL));
                             } else {
                                 toolWindow.printErrorMessage(String.format("%nCould't go get package %s%n", packageURL));
                             }
-                            packageDir = sourceRoots[0].getCanonicalPath()  + File.separatorChar +  packageURL;
-                            File packageDirFile = new File(packageDir);
-                            packageName = packageDirFile.getName();
+                            sourceRoots[0].refresh(true, true);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Messages.showErrorDialog(String.format("Error while processing go get command: %s.", e.getMessage()), "Error on Google Go Plugin");
+                            LOG.error(e.getMessage());
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Messages.showErrorDialog(String.format("Error while processing go get command: %s.", e.getMessage()), "Error on Google Go Plugin");
-                        LOG.error(e.getMessage());
-                        return;
                     }
+                };
+                new Thread(r).start();
 
-                    sourceRoots[0].refresh(true, true);
+            }
 
-                    // Now add a new run configuration:
-                    RunManager runManager = RunManager.getInstance(module.getProject());
-                    GoApplicationConfigurationType goAppConfigType = new GoApplicationConfigurationType();
-                    GoApplicationConfigurationType.GoFactory goConfigFactory = new GoApplicationConfigurationType.GoFactory(new GoApplicationConfigurationType());
-                    GoApplicationConfiguration configuration = new GoApplicationConfiguration("name", module.getProject(), goAppConfigType);
-                    configuration.runPackage = true;
-                    configuration.packageName = packageDir;
-                    configuration.workingDir = module.getProject().getBasePath();
-                    configuration.goOutputDir = module.getProject().getBasePath() + File.separatorChar + "bin";
-                    configuration.goBuildBeforeRun = true;
-                    configuration.runBuilderArguments = "";
-                    configuration.runExecutableName = packageName;
-                    configuration.scriptName = "";
-                    configuration.scriptArguments = "";
-                    configuration.autoStartGdb = true;
-                    configuration.GDB_PATH = "gdb";
-                    configuration.debugBuilderArguments = "-gcflags \"-N -l\"";
-                    configuration.setModule(module);
-                    configuration.setName(packageName);
-                    RunnerAndConfigurationSettings runAndConfig = runManager.createConfiguration(configuration, goConfigFactory);
-                    runManager.addConfiguration(runAndConfig, false);
-                    runManager.setSelectedConfiguration(runAndConfig);
+            final String configName = (new File(packageDir)).getName();
 
-                }
-            });
+            // Now add a new run configuration:
+            RunManager runManager = RunManager.getInstance(module.getProject());
+            GoApplicationConfigurationType goAppConfigType = new GoApplicationConfigurationType();
+            GoApplicationConfigurationType.GoFactory goConfigFactory = new GoApplicationConfigurationType.GoFactory(new GoApplicationConfigurationType());
+            GoApplicationConfiguration configuration = new GoApplicationConfiguration("name", module.getProject(), goAppConfigType);
+            configuration.runPackage = true;
+            configuration.packageDir = packageDir;
+            configuration.workingDir = module.getProject().getBasePath();
+            configuration.goOutputDir = module.getProject().getBasePath() + File.separatorChar + "bin";
+            configuration.goBuildBeforeRun = true;
+            configuration.runBuilderArguments = "";
+            configuration.runExecutableName = configName;
+            configuration.scriptName = "";
+            configuration.scriptArguments = "";
+            configuration.autoStartGdb = true;
+            configuration.GDB_PATH = "gdb";
+            configuration.debugBuilderArguments = "-gcflags \"-N -l\"";
+            configuration.setModule(module);
+            configuration.setName(configName);
+            RunnerAndConfigurationSettings runAndConfig = runManager.createConfiguration(configuration, goConfigFactory);
+            runManager.addConfiguration(runAndConfig, false);
+            runManager.setSelectedConfiguration(runAndConfig);
+
+            toolWindow.showAndCreate(module.getProject());
 
 
         } catch (CantRunException e) {

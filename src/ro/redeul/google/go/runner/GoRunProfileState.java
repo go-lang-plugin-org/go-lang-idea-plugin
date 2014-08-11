@@ -108,7 +108,7 @@ public class GoRunProfileState extends CommandLineState {
 
             String scriptOrPackage;
             if (m_configuration.runPackage) {
-                scriptOrPackage = new java.io.File(m_configuration.getProject().getBaseDir().getPath().concat("/src")).toURI().relativize(new java.io.File(m_configuration.packageName).toURI()).getPath();
+                scriptOrPackage = new java.io.File(m_configuration.getProject().getBaseDir().getPath().concat("/src")).toURI().relativize(new java.io.File(m_configuration.packageDir).toURI()).getPath();
             }
             else {
                 scriptOrPackage = m_configuration.scriptName;
