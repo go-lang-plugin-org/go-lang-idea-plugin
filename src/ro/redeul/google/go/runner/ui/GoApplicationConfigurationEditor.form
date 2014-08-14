@@ -55,7 +55,7 @@
                 <properties>
                   <selected value="false"/>
                   <text value="&amp;Build before run"/>
-                  <toolTipText value="Sould the application be compiled before running?"/>
+                  <toolTipText value="Should the application be compiled before running?"/>
                 </properties>
               </component>
               <component id="a2ea1" class="javax.swing.JLabel">
