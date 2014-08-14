@@ -85,49 +85,110 @@ public class GoApplicationConfigurationProducer extends RunConfigurationProducer
             return false;
         }
 
-        PsiFile file = context.getPsiLocation().getContainingFile();
-        if (!(file instanceof GoFile)) {
-            return false;
-        }
+        if (context.getPsiLocation() instanceof PsiDirectory) {
+            PsiDirectory psiDir = (PsiDirectory) context.getPsiLocation();
+            PsiFile[] filesInDir = psiDir.getFiles();
 
-        if (((GoFile) file).getMainFunction() == null) {
-            return false;
-        }
-
-        try {
-            VirtualFile virtualFile = file.getVirtualFile();
-            if (virtualFile == null) {
+            boolean found = false;
+            for(int i = 0; i < filesInDir.length; i++) {
+                if (!(filesInDir[i] instanceof GoFile)) {
+                    continue;
+                }
+                else {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
                 return false;
             }
 
-            Project project = file.getProject();
-            Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
-            String name = file.getVirtualFile().getCanonicalPath();
+            String dirName = psiDir.getName();
+            try {
+                VirtualFile virtualFile = psiDir.getVirtualFile();
+                if (virtualFile == null) {
+                    return false;
+                }
 
+                Project project = psiDir.getProject();
+                Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
+                String name = psiDir.getVirtualFile().getCanonicalPath();
 
-            ((GoApplicationConfiguration) configuration).workingDir = project.getBasePath();
-            ((GoApplicationConfiguration) configuration).goOutputDir = project.getBasePath();
+                ((GoApplicationConfiguration) configuration).runPackage = true;
 
-            //Append bin-folder, if it exists
-            if(new File(project.getBasePath(), "bin").exists()) {
-                ((GoApplicationConfiguration) configuration).goOutputDir += File.separatorChar + "bin";
+                ((GoApplicationConfiguration) configuration).packageDir = name;
+
+                ((GoApplicationConfiguration) configuration).workingDir = project.getBasePath();
+                ((GoApplicationConfiguration) configuration).goOutputDir = project.getBasePath();
+
+                //Append bin-folder, if it exists
+                if (new File(project.getBasePath(), "bin").exists()) {
+                    ((GoApplicationConfiguration) configuration).goOutputDir += File.separatorChar + "bin";
+                }
+                ((GoApplicationConfiguration) configuration).goBuildBeforeRun = true;
+                ((GoApplicationConfiguration) configuration).runBuilderArguments = "";
+                ((GoApplicationConfiguration) configuration).runExecutableName = dirName;
+                ((GoApplicationConfiguration) configuration).scriptName = "";
+                ((GoApplicationConfiguration) configuration).scriptArguments = "";
+
+                ((GoApplicationConfiguration) configuration).autoStartGdb = true;
+                ((GoApplicationConfiguration) configuration).GDB_PATH = "gdb";
+                ((GoApplicationConfiguration) configuration).debugBuilderArguments = "-gcflags \"-N -l\"";
+
+                ((GoApplicationConfiguration) configuration).setModule(module);
+                configuration.setName(dirName);
+
+                return true;
+            } catch (Exception ex) {
+                LOG.error(ex);
             }
-            ((GoApplicationConfiguration) configuration).goBuildBeforeRun = true;
-            ((GoApplicationConfiguration) configuration).runBuilderArguments = "";
-            ((GoApplicationConfiguration) configuration).scriptName = name;
-            ((GoApplicationConfiguration) configuration).scriptArguments = "";
+        }
+        else {
 
-            ((GoApplicationConfiguration) configuration).autoStartGdb = true;
-            ((GoApplicationConfiguration) configuration).GDB_PATH = "gdb";
-            ((GoApplicationConfiguration) configuration).debugBuilderArguments = "-gcflags \"-N -I\"";
+            PsiFile file = context.getPsiLocation().getContainingFile();
+            if (!(file instanceof GoFile)) {
+                return false;
+            }
+
+            if (((GoFile) file).getMainFunction() == null) {
+                return false;
+            }
+
+            try {
+                VirtualFile virtualFile = file.getVirtualFile();
+                if (virtualFile == null) {
+                    return false;
+                }
+
+                Project project = file.getProject();
+                Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
+                String name = file.getVirtualFile().getCanonicalPath();
 
 
-            ((GoApplicationConfiguration) configuration).setModule(module);
-            configuration.setName(((GoApplicationConfiguration) configuration).suggestedName());
+                ((GoApplicationConfiguration) configuration).workingDir = project.getBasePath();
+                ((GoApplicationConfiguration) configuration).goOutputDir = project.getBasePath();
 
-            return true;
-        } catch (Exception ex) {
-            LOG.error(ex);
+                //Append bin-folder, if it exists
+                if (new File(project.getBasePath(), "bin").exists()) {
+                    ((GoApplicationConfiguration) configuration).goOutputDir += File.separatorChar + "bin";
+                }
+                ((GoApplicationConfiguration) configuration).goBuildBeforeRun = true;
+                ((GoApplicationConfiguration) configuration).runBuilderArguments = "";
+                ((GoApplicationConfiguration) configuration).runExecutableName = "";
+                ((GoApplicationConfiguration) configuration).scriptName = name;
+                ((GoApplicationConfiguration) configuration).scriptArguments = "";
+
+                ((GoApplicationConfiguration) configuration).autoStartGdb = true;
+                ((GoApplicationConfiguration) configuration).GDB_PATH = "gdb";
+                ((GoApplicationConfiguration) configuration).debugBuilderArguments = "-gcflags \"-N -l\"";
+
+                ((GoApplicationConfiguration) configuration).setModule(module);
+                configuration.setName(((GoApplicationConfiguration) configuration).suggestedName());
+
+                return true;
+            } catch (Exception ex) {
+                LOG.error(ex);
+            }
         }
 
         return false;
@@ -180,6 +241,7 @@ public class GoApplicationConfigurationProducer extends RunConfigurationProducer
         }
 
         applicationConfiguration.scriptName = scriptFile.getCanonicalPath();
+        applicationConfiguration.runPackage = false;
         applicationConfiguration.setModule(module);
 
         return settings;

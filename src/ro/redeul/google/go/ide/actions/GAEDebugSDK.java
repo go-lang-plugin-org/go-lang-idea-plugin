@@ -47,7 +47,7 @@ public class GAEDebugSDK extends GoCommonDebugAction {
 
         try {
             GoToolWindow toolWindow = this.getGoToolWindow(project);
-            toolWindow.show();
+            toolWindow.showAndCreate(project);
             toolWindow.clearConsoleView();
 
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "Project dir", projectDir));

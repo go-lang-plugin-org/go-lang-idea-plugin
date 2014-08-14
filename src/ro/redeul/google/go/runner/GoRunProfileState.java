@@ -13,6 +13,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -56,12 +57,13 @@ public class GoRunProfileState extends CommandLineState {
             throw new CantRunException("Could not retrieve the project directory");
         }
 
-        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, m_configuration.envVars);
+        GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(m_project).getState();
+        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, m_configuration.envVars, settings.prependSysGoPath, settings.appendSysGoPath);
 
         GoToolWindow toolWindow = GoToolWindow.getInstance(m_project);
         toolWindow.setTitle(TITLE);
 
-        if (!m_configuration.goBuildBeforeRun) {
+        if (!m_configuration.goBuildBeforeRun && !m_configuration.runPackage) {
             // Just run
             GeneralCommandLine commandLine = new GeneralCommandLine();
 
@@ -83,26 +85,42 @@ public class GoRunProfileState extends CommandLineState {
         }
 
         // Build and run
-        String execName = m_configuration.goOutputDir.concat("/").concat(m_configuration.getName());
+        String execName;
+        if (m_configuration.runExecutableName != null && m_configuration.runExecutableName.trim().length() > 0) {
+            execName = m_configuration.goOutputDir.concat("/").concat(m_configuration.runExecutableName);
+        }
+        else {
+            execName = m_configuration.goOutputDir.concat("/").concat(m_configuration.getName());
+        }
 
         if (execName.endsWith(".go")) {
             execName = execName.substring(0, execName.length() - 3);
         }
 
         if (GoSdkUtil.isHostOsWindows()) {
-            execName = execName.concat(".exe");
+            if (!execName.endsWith(".exe")) {
+                execName = execName.concat(".exe");
+            }
         }
 
         try {
             String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
 
-            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.runBuilderArguments, execName, m_configuration.scriptName);
+            String scriptOrPackage;
+            if (m_configuration.runPackage) {
+                scriptOrPackage = new java.io.File(m_configuration.getProject().getBaseDir().getPath().concat("/src")).toURI().relativize(new java.io.File(m_configuration.packageDir).toURI()).getPath();
+            }
+            else {
+                scriptOrPackage = m_configuration.scriptName;
+            }
+            String[] command = GoSdkUtil.computeGoBuildCommand(goExecName, m_configuration.runBuilderArguments, execName, scriptOrPackage);
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv, new File(projectDir));
             OSProcessHandler handler = new OSProcessHandler(proc, null);
             toolWindow.attachConsoleViewToProcess(handler);
             toolWindow.printNormalMessage(String.format("%s%n", StringUtil.join(command, " ")));
+            toolWindow.showAndCreate(m_project);
             handler.startNotify();
 
             if (proc.waitFor() == 0) {

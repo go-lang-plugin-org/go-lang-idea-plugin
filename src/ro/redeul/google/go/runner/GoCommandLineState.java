@@ -22,6 +22,8 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.ide.GoConfigurable;
+import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.runner.ui.properties.GoTestConsoleProperties;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -63,7 +65,9 @@ class GoCommandLineState extends CommandLineState {
 
         String goExecName = sdkData.GO_EXEC;
         String workingDir = testConfiguration.workingDir;
-        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, testConfiguration.envVars);
+
+        GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(project).getState();
+        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, testConfiguration.envVars, settings.prependSysGoPath, settings.appendSysGoPath);
 
         if (testConfiguration.goVetEnabled) {
             try {

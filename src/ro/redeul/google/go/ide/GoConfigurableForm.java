@@ -17,7 +17,9 @@ public class GoConfigurableForm {
     public JPanel componentPanel;
 
     private JCheckBox enableImportsOptimizer;
-    private JCheckBox enableOnTheFlyImportOptimization;
+    private JRadioButton radioGOPATHproject;
+    private JRadioButton enablePrependSysGoPath;
+    private JRadioButton enableAppendSysGoPath;
 
     public void enableShowHide(){
         componentPanel.addComponentListener(new ComponentAdapter() {
@@ -40,25 +42,37 @@ public class GoConfigurableForm {
     public boolean isModified(GoProjectSettings.GoProjectSettingsBean settingsBean,
                               GoSettings goSettings) {
 
-        if (goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY != enableOnTheFlyImportOptimization.isSelected()) {
+        //if (goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY != enableOnTheFlyImportOptimization.isSelected()) {
+        //    return true;
+        //}
+
+        if ( settingsBean.enableOptimizeImports != enableImportsOptimizer.isSelected() ) {
             return true;
         }
 
-        if ( settingsBean.enableOptimizeImports != enableImportsOptimizer.isSelected() ) {
+        if ( settingsBean.appendSysGoPath != enableAppendSysGoPath.isSelected() ) {
+            return true;
+        }
+
+        if ( settingsBean.prependSysGoPath != enablePrependSysGoPath.isSelected() ) {
             return true;
         }
 
         return false;
     }
 
-    public void apply(GoProjectSettings.GoProjectSettingsBean settingsBean, GoSettings goSettings) {
+    public void apply(GoProjectSettings.GoProjectSettingsBean settingsBean) {
         settingsBean.enableOptimizeImports = enableImportsOptimizer.isSelected();
-        goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY = enableOnTheFlyImportOptimization.isSelected();
+        //goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY = enableOnTheFlyImportOptimization.isSelected();
+        settingsBean.appendSysGoPath = enableAppendSysGoPath.isSelected();
+        settingsBean.prependSysGoPath = enablePrependSysGoPath.isSelected();
     }
 
     public void reset(GoProjectSettings.GoProjectSettingsBean settingsBean, GoSettings goSettings) {
-        enableOnTheFlyImportOptimization.setSelected(goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY);
+        //enableOnTheFlyImportOptimization.setSelected(goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY);
         enableImportsOptimizer.setSelected(settingsBean.enableOptimizeImports);
+        enableAppendSysGoPath.setSelected(settingsBean.appendSysGoPath);
+        enablePrependSysGoPath.setSelected(settingsBean.prependSysGoPath);
     }
 
 }
