@@ -60,10 +60,13 @@ public class GoGlobalConfigurableForm {
             return;
         }
 
+        /* The error check of a bin folder is not necessary because bin folder is created automatically and the
+         * error seems to confuse more then it helps because GOROOT also has a bin folder (i.e. https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/752)
         if (!(new File(goPathStr.concat("/bin")).exists())) {
             Messages.showErrorDialog("Error while saving your settings. \nGOPATH/bin doesn't exists.", "Error on Google Go Plugin");
             return;
         }
+        */
 
         if (!(new File(goPathStr.concat("/src")).exists())) {
             Messages.showErrorDialog("Error while saving your settings. \nGOPATH/src doesn't exists.", "Error on Google Go Plugin");
