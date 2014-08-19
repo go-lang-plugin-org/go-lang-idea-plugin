@@ -590,12 +590,14 @@ public class GoSdkUtil {
     private static boolean isSdkRegistered(String homePath, SdkType sdkType) {
 
         VirtualFile homePathAsVirtualFile;
+        homePathAsVirtualFile = VfsUtil.findFileByIoFile(new File(homePath),true);
+        /* Use the above because the following does not work on Windows:
         try {
             homePathAsVirtualFile = VfsUtil.findFileByURL(
                     new URL(VfsUtil.pathToUrl(homePath)));
         } catch (MalformedURLException e) {
             return true;
-        }
+        }*/
 
         if (homePathAsVirtualFile == null || !homePathAsVirtualFile.isDirectory()) {
             return true;
