@@ -152,60 +152,6 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
             sdkModificator.commitChanges();
         }
 
-        String sysGoRootPath = GoSdkUtil.getSysGoRootPath();
-        if (sysGoRootPath.isEmpty())
-            Notifications.Bus.notify(
-                    new Notification(
-                            "Go SDK validator",
-                            "Problem with env variables",
-                            getInvalidGOROOTEnvMessage(),
-                            NotificationType.WARNING,
-                            NotificationListener.URL_OPENING_LISTENER),
-                    myProject);
-
-        String systemGOPATH = GoSdkUtil.getSysGoPathPath();
-        if (systemGOPATH.isEmpty())
-            Notifications.Bus.notify(
-                    new Notification(
-                            "Go SDK validator",
-                            "Problem with env variables",
-                            getInvalidGOPATHEnvMessage(),
-                            NotificationType.WARNING,
-                            NotificationListener.URL_OPENING_LISTENER),
-                    myProject);
-
-        if (!sysGoRootPath.isEmpty() &&
-                !systemGOPATH.isEmpty()) {
-
-            // Ensure we always have the path separator at the end of it
-            if (!sysGoRootPath.endsWith(File.separator)) {
-                sysGoRootPath += File.separator;
-            }
-
-            // Get all the individual paths
-            String[] goPaths = systemGOPATH.split(File.pathSeparator);
-
-            for (String goPath : goPaths) {
-                if (!goPath.endsWith(File.separator)) {
-                    goPath += File.separator;
-                }
-
-                if (goPath.contains(sysGoRootPath)) {
-                    Notifications.Bus.notify(
-                            new Notification(
-                                    "Go SDK validator",
-                                    "Problem with env variables",
-                                    getGOPATHinGOROOTEnvMessage(),
-                                    NotificationType.ERROR,
-                                    NotificationListener.URL_OPENING_LISTENER),
-                            myProject);
-
-                    // Only show the message once
-                    break;
-                }
-            }
-        }
-
         if (hasGAESdk) {
             String sysAppEngineDevServerPath = GoSdkUtil.getAppEngineDevServer();
             if (sysAppEngineDevServerPath.isEmpty())
