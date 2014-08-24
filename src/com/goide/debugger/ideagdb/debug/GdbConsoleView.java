@@ -15,10 +15,10 @@ public class GdbConsoleView {
   private JTextField myPrompt;
   private JPanel myConsoleContainer;
 
-  private Gdb myGdb;
+  private final Gdb myGdb;
 
   // The actual console
-  private ConsoleViewImpl mConsole;
+  private final ConsoleViewImpl mConsole;
 
   // The last command that was sent
   private String myLastCommand;

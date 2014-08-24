@@ -36,7 +36,7 @@ public class GdbMiLexer {
   @Nullable private StringBuilder myPartialToken;
 
   // List of unprocessed tokens
-  @NotNull private List<GdbMiToken> myTokens = new ArrayList<GdbMiToken>();
+  @NotNull private final List<GdbMiToken> myTokens = new ArrayList<GdbMiToken>();
 
   /**
    * Returns a list of unprocessed tokens. The caller should erase items from this list as they

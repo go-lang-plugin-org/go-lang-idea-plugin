@@ -15,7 +15,7 @@ import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoApplicationRunningState extends GoRunningState {
-  private GoApplicationConfiguration myConfiguration;
+  private final GoApplicationConfiguration myConfiguration;
 
   public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, GoApplicationConfiguration configuration) {
     super(env, module);

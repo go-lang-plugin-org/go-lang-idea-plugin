@@ -45,12 +45,12 @@ public class GdbMiParser {
   // Partially processed record
   @Nullable private GdbMiResultRecord myResultRecord;
   @Nullable private GdbMiStreamRecord myStreamRecord;
-  @NotNull private Stack<GdbMiValue> myValueStack = new Stack<GdbMiValue>();
+  @NotNull private final Stack<GdbMiValue> myValueStack = new Stack<GdbMiValue>();
   @Nullable private Long myRserToken;
   @Nullable private StringBuilder myBuilder;
 
   // List of unprocessed records
-  @NotNull private List<GdbMiRecord> myRecords = new ArrayList<GdbMiRecord>();
+  @NotNull private final List<GdbMiRecord> myRecords = new ArrayList<GdbMiRecord>();
 
   /**
    * Constructor.

@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class GoTestConsoleProperties extends TestConsoleProperties implements SMCustomMessagesParsing {
 
-  private RunConfiguration myConfiguration;
+  private final RunConfiguration myConfiguration;
 
   public GoTestConsoleProperties(@NotNull GoTestRunConfiguration configuration, @NotNull Executor executor) {
     super(new Storage.PropertiesComponentStorage("GoTestSupport.", PropertiesComponent.getInstance()), configuration.getProject(),

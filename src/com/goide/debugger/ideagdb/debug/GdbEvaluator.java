@@ -19,11 +19,11 @@ public class GdbEvaluator extends XDebuggerEvaluator {
   private static final Logger LOG = Logger.getInstance(GdbEvaluator.class);
 
   // The GDB instance
-  private Gdb myGdb;
+  private final Gdb myGdb;
 
   // The evaluation context
-  private int myThread;
-  private int myFrame;
+  private final int myThread;
+  private final int myFrame;
 
   /**
    * Constructor.

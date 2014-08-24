@@ -116,11 +116,11 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       RPAREN
     );
 
-    private ASTNode myNode;
-    private Alignment myAlignment;
-    private Indent myIndent;
-    private Wrap myWrap;
-    private CodeStyleSettings mySettings;
+    private final ASTNode myNode;
+    private final Alignment myAlignment;
+    private final Indent myIndent;
+    private final Wrap myWrap;
+    private final CodeStyleSettings mySettings;
     private final SpacingBuilder mySpacingBuilder;
     private List<Block> mySubBlocks;
 

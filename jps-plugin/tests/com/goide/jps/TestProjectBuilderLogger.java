@@ -17,8 +17,8 @@ import java.util.Set;
 import static com.intellij.util.ObjectUtils.assertNotNull;
 
 public class TestProjectBuilderLogger extends ProjectBuilderLoggerBase {
-  @NotNull private MultiMap<String, File> myCompiledFiles = new MultiMap<String, File>();
-  @NotNull private Set<File> myDeletedFiles = new THashSet<File>(FileUtil.FILE_HASHING_STRATEGY);
+  @NotNull private final MultiMap<String, File> myCompiledFiles = new MultiMap<String, File>();
+  @NotNull private final Set<File> myDeletedFiles = new THashSet<File>(FileUtil.FILE_HASHING_STRATEGY);
   
   @Override
   public void logDeletedFiles(@NotNull Collection<String> paths) {

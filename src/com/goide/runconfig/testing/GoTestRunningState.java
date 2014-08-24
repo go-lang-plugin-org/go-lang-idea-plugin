@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
 public class GoTestRunningState extends GoRunningState {
-  private GoTestRunConfiguration myConfiguration;
+  private final GoTestRunConfiguration myConfiguration;
 
   @NotNull
   @Override

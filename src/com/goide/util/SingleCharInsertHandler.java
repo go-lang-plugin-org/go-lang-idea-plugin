@@ -9,7 +9,7 @@ import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
 
 public class SingleCharInsertHandler extends BasicInsertHandler<LookupElement> {
-  private char myChar;
+  private final char myChar;
 
   public SingleCharInsertHandler(char aChar) {
     myChar = aChar;

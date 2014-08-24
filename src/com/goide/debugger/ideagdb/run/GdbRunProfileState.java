@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GdbRunProfileState implements RunProfileState {
-  private GdbRunConfiguration myConfiguration;
+  private final GdbRunConfiguration myConfiguration;
 
   public GdbRunProfileState(GdbRunConfiguration configuration) {
     myConfiguration = configuration;

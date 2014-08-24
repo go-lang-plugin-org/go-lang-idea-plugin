@@ -16,7 +16,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoRunFileRunningState extends GoRunningState {
-  private GoRunFileConfiguration myConfiguration;
+  private final GoRunFileConfiguration myConfiguration;
 
   public GoRunFileRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, GoRunFileConfiguration configuration) {
     super(env, module);

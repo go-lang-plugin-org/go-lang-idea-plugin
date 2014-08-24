@@ -44,16 +44,16 @@ public class Gdb {
   }
 
   // Handle to the ASCII character set
-  @NotNull private static Charset ourCharset = Charset.forName("US-ASCII");
+  @NotNull private static final Charset ourCharset = Charset.forName("US-ASCII");
 
   // The listener
-  private GdbListener myListener;
+  private final GdbListener myListener;
 
   // Handle for the GDB process
   private Process myProcess;
 
   // Threads which read/write data from GDB
-  private Thread myReadThread;
+  private final Thread myReadThread;
   private Thread myWriteThread;
 
   // Flag indicating whether we are stopping

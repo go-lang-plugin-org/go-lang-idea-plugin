@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileFilter;
 
 public class GoSourceRootDescriptor extends BuildRootDescriptor {
-  private File myRoot;
+  private final File myRoot;
   private final GoTarget myGoTarget;
 
   public GoSourceRootDescriptor(File root, GoTarget goTarget) {

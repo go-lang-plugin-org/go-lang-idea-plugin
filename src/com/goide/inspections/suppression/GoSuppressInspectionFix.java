@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoSuppressInspectionFix extends AbstractBatchSuppressByNoInspectionCommentFix {
-  private Class<? extends GoCompositeElement> myContainerClass;
+  private final Class<? extends GoCompositeElement> myContainerClass;
 
   public GoSuppressInspectionFix(@NotNull String text, Class<? extends GoCompositeElement> containerClass) {
     super(SuppressionUtil.ALL, true);
