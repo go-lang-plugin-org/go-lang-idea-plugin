@@ -34,7 +34,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private JPanel component;
   private ModulesCombobox myComboModules;
   private RawCommandLineEditor myParamsField;
-  @Nullable private EditorTextField myPatternEditor;
+  private EditorTextField myPatternEditor;
   private TextFieldWithBrowseButton myWorkingDirectoryField;
 
   private JComboBox myTestKindComboBox;
