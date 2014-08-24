@@ -1,5 +1,6 @@
 package com.goide.debugger.ideagdb.debug;
 
+import com.goide.GoIcons;
 import com.goide.debugger.gdb.Gdb;
 import com.goide.debugger.gdb.gdbmi.GdbMiUtil;
 import com.goide.debugger.gdb.messages.GdbErrorEvent;
@@ -7,52 +8,47 @@ import com.goide.debugger.gdb.messages.GdbEvent;
 import com.goide.debugger.gdb.messages.GdbVariableObject;
 import com.goide.debugger.gdb.messages.GdbVariableObjects;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.util.PlatformIcons;
+import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.xdebugger.frame.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Class for providing information about a value from GDB.
- */
+import javax.swing.*;
+
 public class GdbValue extends XValue {
+  private static final Icon VAR_ICON = GoIcons.VARIABLE; // todo: detect GoIcons.CONST?
   private static final Logger LOG = Logger.getInstance(GdbValue.class);
 
-  // The GDB instance
-  private Gdb myGdb;
+  private final Gdb myGdb;
+  private final GdbVariableObject myVariableObject;
 
-  // The variable object we are showing the value of
-  private GdbVariableObject myVariableObject;
-
-  /**
-   * Constructor.
-   *
-   * @param gdb            Handle to the GDB instance.
-   * @param variableObject The variable object to show the value of.
-   */
-  public GdbValue(Gdb gdb, GdbVariableObject variableObject) {
+  public GdbValue(@NotNull Gdb gdb, @NotNull GdbVariableObject o) {
     myGdb = gdb;
-    myVariableObject = variableObject;
+    myVariableObject = o;
   }
 
-  /**
-   * Computes the presentation for the variable.
-   *
-   * @param node  The node to display the value in.
-   * @param place Where the node will be shown.
-   */
   @Override
   public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
-    node.setPresentation(PlatformIcons.VARIABLE_ICON, myVariableObject.type,
-                         myVariableObject.value, myVariableObject.numChildren != null &&
-                                                 myVariableObject.numChildren > 0);
+    String goType = getGoObjectType(myVariableObject.type);
+    Boolean hasChildren = myVariableObject.numChildren != null && myVariableObject.numChildren > 0;
+
+    if (goType.equals("string")) {
+      handleGoString(node);
+      return;
+    }
+
+    node.setPresentation(VAR_ICON, goType, notNull(myVariableObject.value), hasChildren);
   }
 
-  /**
-   * Returns a modifier which can be used to change the value.
-   *
-   * @return The modifier, or null if the value cannot be modified.
-   */
+  public static String getGoObjectType(String originalType) {
+    if (originalType.contains("struct string")) {
+      return originalType.replace("struct ", "");
+    }
+
+    return originalType;
+  }
+
   @Nullable
   @Override
   public XValueModifier getModifier() {
@@ -60,11 +56,6 @@ public class GdbValue extends XValue {
     return new GdbValueModifier(myGdb, myVariableObject);
   }
 
-  /**
-   * Computes the children on this value, if any.
-   *
-   * @param node The node to display the children in.
-   */
   @Override
   public void computeChildren(@NotNull final XCompositeNode node) {
     if (myVariableObject.numChildren == null || myVariableObject.numChildren <= 0) {
@@ -81,15 +72,9 @@ public class GdbValue extends XValue {
     });
   }
 
-  /**
-   * Callback function for when GDB has responded to our children request.
-   *
-   * @param event The event.
-   * @param node  The node passed to computeChildren().
-   */
-  private void onGdbChildrenReady(GdbEvent event, @NotNull final XCompositeNode node) {
+  private void onGdbChildrenReady(GdbEvent event, XCompositeNode node) {
     if (event instanceof GdbErrorEvent) {
-      node.setErrorMessage(((GdbErrorEvent)event).message);
+      node.setErrorMessage(((GdbErrorEvent) event).message);
       return;
     }
     if (!(event instanceof GdbVariableObjects)) {
@@ -99,7 +84,7 @@ public class GdbValue extends XValue {
     }
 
     // Inspect the data
-    GdbVariableObjects variables = (GdbVariableObjects)event;
+    GdbVariableObjects variables = (GdbVariableObjects) event;
     if (variables.objects == null || variables.objects.isEmpty()) {
       // No data
       node.addChildren(XValueChildrenList.EMPTY, true);
@@ -111,5 +96,58 @@ public class GdbValue extends XValue {
       children.add(variable.expression, new GdbValue(myGdb, variable));
     }
     node.addChildren(children, true);
+  }
+
+  private void handleGoString(@NotNull final XValueNode node) {
+    myGdb.sendCommand("-var-list-children --all-values " + GdbMiUtil.formatGdbString(myVariableObject.name), new Gdb.GdbEventCallback() {
+      @Override
+      public void onGdbCommandCompleted(GdbEvent event) {
+        onGoGdbStringReady(node, event);
+      }
+    });
+  }
+
+  private void onGoGdbStringReady(@NotNull XValueNode node, @NotNull GdbEvent event) {
+    Pair<String, Boolean> pair = strValue(event);
+    String value = pair.first;
+    Boolean isString = pair.second;
+    if (isString) {
+      if (value.equals("0x0")) value = "\"\"";
+      node.setPresentation(VAR_ICON, "string (" + value.length() + ")", value, false);
+    }
+    else {
+      Boolean hasChildren = myVariableObject.numChildren != null && myVariableObject.numChildren > 0;
+      node.setPresentation(VAR_ICON, "unknown", notNull(myVariableObject.value), hasChildren);
+    }
+  }
+
+  private static String notNull(@Nullable String value) {
+    return StringUtil.notNullize(value, "<null>");
+  }
+
+  @NotNull
+  private Pair<String, Boolean> strValue(@NotNull GdbEvent event) {
+    String value = "Unexpected data received from GDB";
+    if (event instanceof GdbErrorEvent) {
+      return Pair.create(((GdbErrorEvent)event).message, false);
+    }
+    else if (!(event instanceof GdbVariableObjects)) {
+      LOG.warn("Unexpected event " + event + " received from -var-list-children request");
+      return Pair.create(value, false);
+    }
+    else {
+      // Inspect the data
+      GdbVariableObjects variables = (GdbVariableObjects)event;
+      if (variables.objects != null && !variables.objects.isEmpty()) {
+        String stringSubVar = GdbMiUtil.formatGdbString(myVariableObject.name, false) + ".str";
+
+        for (GdbVariableObject variable : variables.objects) {
+          if (variable.name.equals(stringSubVar)) {
+            return Pair.create(variable.value, true);
+          }
+        }
+      }
+    }
+    return Pair.create(value, false);
   }
 }

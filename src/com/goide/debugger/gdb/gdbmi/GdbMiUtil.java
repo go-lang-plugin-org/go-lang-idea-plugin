@@ -1,20 +1,13 @@
 package com.goide.debugger.gdb.gdbmi;
 
-import org.jetbrains.annotations.NotNull;
-
-public class GdbMiUtil { // todo: find something from the util package
+public class GdbMiUtil {
   private static final char[] HEX_ASCII = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-  /**
-   * Formats a string into the format required by GDB/MI.
-   *
-   * @param string The string to format.
-   * @return The formatted string.
-   */
-  @NotNull
-  public static String formatGdbString(@NotNull String string) {
+  public static String formatGdbString(String string, Boolean autoQuote) {
     StringBuilder sb = new StringBuilder();
-    sb.append("\"");
+    if (autoQuote) {
+      sb.append("\"");
+    }
     for (int i = 0; i < string.length(); ++i) {
       char ch = string.charAt(i);
 
@@ -40,7 +33,13 @@ public class GdbMiUtil { // todo: find something from the util package
         sb.append(ch);
       }
     }
-    sb.append("\"");
+    if (autoQuote) {
+      sb.append("\"");
+    }
     return sb.toString();
+  }
+
+  public static String formatGdbString(String string) {
+    return formatGdbString(string, true);
   }
 }
