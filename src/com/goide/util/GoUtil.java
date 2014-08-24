@@ -1,5 +1,10 @@
 package com.goide.util;
 
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.TextBrowseFolderListener;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
@@ -58,5 +63,12 @@ public class GoUtil {
   @NotNull
   private static THashSet<CharSequence> set(@NotNull String... strings) {
     return ContainerUtil.newTroveSet(CharSequenceHashingStrategy.CASE_INSENSITIVE, strings);
+  }
+
+  public static void installFileChooser(@NotNull Project project, @NotNull TextFieldWithBrowseButton field) {
+    FileChooserDescriptor chooseDirectoryDescriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
+    chooseDirectoryDescriptor.setRoots(project.getBaseDir());
+    chooseDirectoryDescriptor.setShowFileSystemRoots(false);
+    field.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));
   }
 }

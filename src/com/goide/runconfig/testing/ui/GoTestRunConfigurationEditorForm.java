@@ -5,15 +5,13 @@ import com.goide.psi.GoFile;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.goide.stubs.index.GoPackagesIndex;
+import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.ModulesCombobox;
-import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -160,15 +158,9 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   private void installFileChoosers(@NotNull Project project) {
-    FileChooserDescriptor chooseFileDescriptor = FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
-    chooseFileDescriptor.setRoots(project.getBaseDir());
-    chooseFileDescriptor.setShowFileSystemRoots(false);
-    myFileField.addBrowseFolderListener(new TextBrowseFolderListener(chooseFileDescriptor));
-
-    FileChooserDescriptor chooseDirectoryDescriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
-    chooseDirectoryDescriptor.setRoots(project.getBaseDir());
-    chooseDirectoryDescriptor.setShowFileSystemRoots(false);
-    myDirectoryField.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));
+    GoUtil.installFileChooser(project, myFileField);
+    GoUtil.installFileChooser(project, myDirectoryField);
+    GoUtil.installFileChooser(project, myWorkingDirectoryField);
   }
 
   private void installTestKindComboBox() {
