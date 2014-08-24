@@ -46,7 +46,7 @@ public class GdbRunConfiguration extends ModuleBasedConfiguration<RunConfigurati
   @NotNull
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    return new GdbRunConfigurationEditor<GdbRunConfiguration>(getProject());
+    return new GdbRunConfigurationEditor(getProject());
   }
 
   @Nullable

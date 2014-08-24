@@ -65,8 +65,12 @@ public class GoUtil {
     return ContainerUtil.newTroveSet(CharSequenceHashingStrategy.CASE_INSENSITIVE, strings);
   }
 
-  public static void installFileChooser(@NotNull Project project, @NotNull TextFieldWithBrowseButton field) {
-    FileChooserDescriptor chooseDirectoryDescriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
+  public static void installFileChooser(@NotNull Project project, @NotNull TextFieldWithBrowseButton field, boolean directory) {
+    FileChooserDescriptor chooseDirectoryDescriptor =
+      directory ?
+      FileChooserDescriptorFactory.createSingleFolderDescriptor() :
+      FileChooserDescriptorFactory.createSingleLocalFileDescriptor()
+      ;
     chooseDirectoryDescriptor.setRoots(project.getBaseDir());
     chooseDirectoryDescriptor.setShowFileSystemRoots(false);
     field.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));

@@ -158,9 +158,9 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   private void installFileChoosers(@NotNull Project project) {
-    GoUtil.installFileChooser(project, myFileField);
-    GoUtil.installFileChooser(project, myDirectoryField);
-    GoUtil.installFileChooser(project, myWorkingDirectoryField);
+    GoUtil.installFileChooser(project, myFileField, false);
+    GoUtil.installFileChooser(project, myDirectoryField, true);
+    GoUtil.installFileChooser(project, myWorkingDirectoryField, true);
   }
 
   private void installTestKindComboBox() {
