@@ -86,7 +86,19 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
                 PsiDirectory baseDir = srcDir.getParentDirectory();
                 baseDir.createSubdirectory("bin");
                 baseDir.createSubdirectory("pkg");
-                final PsiDirectory mainPackage = srcDir.createSubdirectory(packageName);
+
+                String packageNameLeafTemp = packageName;
+                PsiDirectory currentDir = srcDir;
+                if (packageName.contains("/") || packageName.contains("\\")) {
+                    String[] parts = packageName.split("[\\\\/]");
+                    for (int i = 0; i < parts.length-1; ++i) {
+                        currentDir = currentDir.createSubdirectory(parts[i]);
+                    }
+                    packageNameLeafTemp = parts[parts.length-1];
+                }
+
+                final String packageNameLeaf = packageNameLeafTemp;
+                final PsiDirectory mainPackage = currentDir.createSubdirectory(packageNameLeaf);
                 packageDir = mainPackage.getVirtualFile().getPath();
 
                 ApplicationManager.getApplication().runWriteAction(new Runnable() {
