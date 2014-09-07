@@ -104,8 +104,9 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
                 ApplicationManager.getApplication().runWriteAction(new Runnable() {
                     @Override
                     public void run() {
-                        mainPackage.checkCreateFile(projectName.concat(".go"));
-                        GoTemplatesFactory.createFromTemplate(mainPackage, "main", "main", packageName.concat(".go"), GoTemplatesFactory.Template.GoAppMain);
+                        String mainFileName = projectName.concat(".go");
+                        mainPackage.checkCreateFile(mainFileName);
+                        GoTemplatesFactory.createFromTemplate(mainPackage, "main", "main", mainFileName, GoTemplatesFactory.Template.GoAppMain);
                         toolWindow.printNormalMessage(String.format("%nFinished creating package %s from template.%n", packageName));
                         sourceRoots[0].refresh(true, true);
                     }
