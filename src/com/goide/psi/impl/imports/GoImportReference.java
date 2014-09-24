@@ -31,7 +31,7 @@ public class GoImportReference extends FileReference {
 
   @NotNull
   @Override
-  protected ResolveResult[] innerResolve(boolean caseSensitive) {
+  protected ResolveResult[] innerResolve(boolean caseSensitive, @NotNull PsiFile file) {
     if (isFirst() && isLast() && "builtin".equals(getFileReferenceSet().getPathString())) {
       // import "builtin" can't be resolved
       return ResolveResult.EMPTY_ARRAY;
@@ -49,7 +49,7 @@ public class GoImportReference extends FileReference {
     }
 
     if (isLast()) {
-      List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive), new Condition<ResolveResult>() {
+      List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
         @Override
         public boolean value(@NotNull ResolveResult resolveResult) {
           PsiElement element = resolveResult.getElement();
@@ -58,7 +58,7 @@ public class GoImportReference extends FileReference {
       });
       return filtered.toArray(new ResolveResult[filtered.size()]);
     }
-    return super.innerResolve(caseSensitive);
+    return super.innerResolve(caseSensitive, file);
   }
 
   @Override

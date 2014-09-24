@@ -26,7 +26,6 @@ import com.intellij.util.ArrayFactory;
 import com.intellij.util.PathUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.FilteringIterator;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -73,8 +72,12 @@ public class GoFile extends PsiFileBase {
       myPackage = getCachedValueManager().createCachedValue(new CachedValueProvider<GoPackageClause>() {
         @Override
         public Result<GoPackageClause> compute() {
-          //noinspection unchecked
-          List<GoPackageClause> packageClauses = calc(FilteringIterator.instanceOf(GoPackageClause.class));
+          List<GoPackageClause> packageClauses = calc(new Condition<PsiElement>() {
+            @Override
+            public boolean value(PsiElement element) {
+              return GoPackageClause.class.isInstance(element);
+            }
+          });
           return Result.create(ContainerUtil.getFirstItem(packageClauses), GoFile.this);
         }
       }, false);
@@ -96,8 +99,12 @@ public class GoFile extends PsiFileBase {
       myFunctionsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoFunctionDeclaration>>() {
         @Override
         public Result<List<GoFunctionDeclaration>> compute() {
-          //noinspection unchecked
-          List<GoFunctionDeclaration> calc = calc(FilteringIterator.instanceOf(GoFunctionDeclaration.class));
+          List<GoFunctionDeclaration> calc = calc(new Condition<PsiElement>() {
+            @Override
+            public boolean value(PsiElement element) {
+              return GoFunctionDeclaration.class.isInstance(element);
+            }
+          });
           return Result.create(calc, GoFile.this);
         }
       }, false);
@@ -114,8 +121,12 @@ public class GoFile extends PsiFileBase {
       myMethodsValue = getCachedValueManager().createCachedValue(new CachedValueProvider<List<GoMethodDeclaration>>() {
         @Override
         public Result<List<GoMethodDeclaration>> compute() {
-          //noinspection unchecked
-          List<GoMethodDeclaration> calc = calc(FilteringIterator.instanceOf(GoMethodDeclaration.class));
+          List<GoMethodDeclaration> calc = calc(new Condition<PsiElement>() {
+            @Override
+            public boolean value(PsiElement element) {
+              return GoMethodDeclaration.class.isInstance(element);
+            }
+          });
           return Result.create(calc, GoFile.this);
         }
       }, false);
