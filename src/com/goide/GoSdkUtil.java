@@ -39,7 +39,7 @@ public class GoSdkUtil {
     VirtualFile home = getSdkHome(context);
     VirtualFile vBuiltin = home != null ? home.findFileByRelativePath("builtin/builtin.go") : null;
     if (vBuiltin != null) {
-      PsiFile psiBuiltin = PsiManager.getInstance(context.getProject()).findFile(vBuiltin);
+      PsiFile psiBuiltin = context.getManager().findFile(vBuiltin);
       if (psiBuiltin instanceof GoFile) return ((GoFile)psiBuiltin);
     }
     return null;
