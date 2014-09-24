@@ -2,12 +2,12 @@ package com.goide.runconfig.ui;
 
 import com.goide.GoModuleType;
 import com.goide.runconfig.GoRunConfigurationWithMain;
+import com.intellij.application.options.ModulesComboBox;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ui.configuration.ModulesCombobox;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.RawCommandLineEditor;
@@ -17,7 +17,7 @@ import javax.swing.*;
 
 public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurationWithMain> {
   private JPanel component;
-  private ModulesCombobox myComboModules;
+  private ModulesComboBox myComboModules;
   private RawCommandLineEditor myParamsField;
   private TextFieldWithBrowseButton myFilePathField;
 

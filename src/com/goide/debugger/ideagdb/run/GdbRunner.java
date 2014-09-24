@@ -39,12 +39,9 @@ public class GdbRunner extends DefaultProgramRunner {
   }
 
   @Override
-  protected RunContentDescriptor doExecute(@NotNull Project project,
-                                           @NotNull RunProfileState state,
-                                           RunContentDescriptor contentToReuse,
-                                           @NotNull ExecutionEnvironment env) throws ExecutionException {
+  protected RunContentDescriptor doExecute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException {
     FileDocumentManager.getInstance().saveAllDocuments();
-    return createContentDescriptor(project, env.getExecutor(), state, contentToReuse, env);
+    return createContentDescriptor(env.getProject(), env.getExecutor(), state, env.getContentToReuse(), env);
   }
 
   @Nullable
