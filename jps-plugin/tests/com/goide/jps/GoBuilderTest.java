@@ -1,19 +1,15 @@
 package com.goide.jps;
 
-import com.goide.jps.model.JpsGoModuleType;
 import com.goide.jps.model.JpsGoSdkType;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.PathUtilRt;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jps.incremental.messages.BuildMessage;
 import org.jetbrains.jps.model.JpsDummyElement;
-import org.jetbrains.jps.model.JpsElement;
 import org.jetbrains.jps.model.library.JpsOrderRootType;
 import org.jetbrains.jps.model.library.JpsTypedLibrary;
 import org.jetbrains.jps.model.library.sdk.JpsSdk;
-import org.jetbrains.jps.model.module.JpsModule;
 import org.jetbrains.jps.util.JpsPathUtil;
 
 import java.io.File;
@@ -79,15 +75,5 @@ public class GoBuilderTest extends JpsBuildTestCase {
     if (SystemInfo.isLinux) return GO_LINUX_SDK_PATH;
     if (SystemInfo.isMac) return GO_MAC_SDK_PATH;
     throw new RuntimeException("Only mac & linux supported");
-  }
-
-  @NotNull
-  @Override
-  protected <T extends JpsElement> JpsModule addModule(@NotNull String moduleName,
-                                                       @NotNull String[] srcPaths,
-                                                       @Nullable String outputPath,
-                                                       @Nullable String testOutputPath,
-                                                       @NotNull JpsSdk<T> sdk) {
-    return addModule(moduleName, srcPaths, outputPath, testOutputPath, sdk, JpsGoModuleType.INSTANCE);
   }
 }

@@ -6,6 +6,7 @@ import com.intellij.openapi.util.io.FileSystemUtil;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.testFramework.UsefulTestCase;
+import com.intellij.util.TimeoutUtil;
 import com.intellij.util.containers.hash.HashMap;
 import com.intellij.util.io.TestFileSystemBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,7 @@ import org.jetbrains.jps.api.CanceledStatus;
 import org.jetbrains.jps.builders.impl.BuildDataPathsImpl;
 import org.jetbrains.jps.builders.impl.BuildRootIndexImpl;
 import org.jetbrains.jps.builders.impl.BuildTargetIndexImpl;
+import org.jetbrains.jps.builders.impl.BuildTargetRegistryImpl;
 import org.jetbrains.jps.builders.logging.BuildLoggingManager;
 import org.jetbrains.jps.builders.storage.BuildDataPaths;
 import org.jetbrains.jps.cmdline.ClasspathBootstrap;
@@ -33,9 +35,9 @@ import org.jetbrains.jps.model.java.*;
 import org.jetbrains.jps.model.library.JpsOrderRootType;
 import org.jetbrains.jps.model.library.JpsTypedLibrary;
 import org.jetbrains.jps.model.library.sdk.JpsSdk;
+import org.jetbrains.jps.model.library.sdk.JpsSdkReference;
 import org.jetbrains.jps.model.library.sdk.JpsSdkType;
 import org.jetbrains.jps.model.module.JpsModule;
-import org.jetbrains.jps.model.module.JpsModuleType;
 import org.jetbrains.jps.model.module.JpsSdkReferencesTable;
 import org.jetbrains.jps.model.serialization.JpsProjectLoader;
 import org.jetbrains.jps.model.serialization.PathMacroUtil;
@@ -133,12 +135,7 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
     //we need this to ensure that the file won't be treated as changed by user during compilation and therefore marked for recompilation
     long delta;
     while ((delta = time - System.currentTimeMillis()) > 0) {
-      try {
-        //noinspection BusyWait
-        Thread.sleep(delta);
-      }
-      catch (InterruptedException ignored) {
-      }
+      TimeoutUtil.sleep(delta);
     }
   }
 
@@ -180,11 +177,12 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
   @NotNull
   protected ProjectDescriptor createProjectDescriptor(final BuildLoggingManager buildLoggingManager) {
     try {
-      BuildTargetIndexImpl targetIndex = new BuildTargetIndexImpl(myModel);
+      BuildTargetRegistryImpl targetRegistry = new BuildTargetRegistryImpl(myModel);
       ModuleExcludeIndex index = new ModuleExcludeIndexImpl(myModel);
       IgnoredFileIndexImpl ignoredFileIndex = new IgnoredFileIndexImpl(myModel);
       BuildDataPaths dataPaths = new BuildDataPathsImpl(myDataStorageRoot);
-      BuildRootIndexImpl buildRootIndex = new BuildRootIndexImpl(targetIndex, myModel, index, dataPaths, ignoredFileIndex);
+      BuildRootIndexImpl buildRootIndex = new BuildRootIndexImpl(targetRegistry, myModel, index, dataPaths, ignoredFileIndex);
+      BuildTargetIndexImpl targetIndex = new BuildTargetIndexImpl(targetRegistry, buildRootIndex);
       BuildTargetsState targetsState = new BuildTargetsState(dataPaths, myModel, buildRootIndex);
       ProjectTimestamps timestamps = new ProjectTimestamps(myDataStorageRoot, targetsState);
       BuildDataManager dataManager = new BuildDataManager(dataPaths, targetsState, true);
@@ -208,7 +206,7 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
       Map<String, String> allPathVariables = new HashMap<String, String>(pathVariables.size() + 1);
       allPathVariables.putAll(pathVariables);
       allPathVariables.put(PathMacroUtil.APPLICATION_HOME_DIR, PathManager.getHomePath());
-      addPathVariables(allPathVariables);
+      allPathVariables.putAll(getAdditionalPathVariables());
       JpsProjectLoader.loadProject(myProject, allPathVariables, fullProjectPath);
     }
     catch (IOException e) {
@@ -216,7 +214,9 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
     }
   }
 
-  protected void addPathVariables(Map<String, String> pathVariables) {
+  @NotNull
+  protected Map<String, String> getAdditionalPathVariables() {
+    return Collections.emptyMap();
   }
 
   @Nullable
@@ -230,21 +230,16 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
                                                        @Nullable String outputPath,
                                                        @Nullable String testOutputPath,
                                                        @NotNull JpsSdk<T> sdk) {
-    return addModule(moduleName, srcPaths, outputPath, testOutputPath, sdk, JpsJavaModuleType.INSTANCE);
-  }
-
-  @NotNull
-  protected <T extends JpsElement, M extends JpsModuleType & JpsElementTypeWithDefaultProperties> JpsModule addModule(@NotNull String moduleName,
-                                                       @NotNull String[] srcPaths,
-                                                       @Nullable String outputPath,
-                                                       @Nullable String testOutputPath,
-                                                       @NotNull JpsSdk<T> sdk,
-                                                       @NotNull M moduleType) {
-    JpsModule module = myProject.addModule(moduleName, moduleType);
+    JpsModule module = myProject.addModule(moduleName, JpsJavaModuleType.INSTANCE);
     final JpsSdkType<T> sdkType = sdk.getSdkType();
     final JpsSdkReferencesTable sdkTable = module.getSdkReferencesTable();
     sdkTable.setSdkReference(sdkType, sdk.createReference());
 
+    if (sdkType instanceof JpsJavaSdkTypeWrapper) {
+      final JpsSdkReference<T> wrapperRef = sdk.createReference();
+      sdkTable.setSdkReference(JpsJavaSdkType.INSTANCE, JpsJavaExtensionService.
+        getInstance().createWrappedJavaSdkReference((JpsJavaSdkTypeWrapper)sdkType, wrapperRef));
+    }
     module.getDependenciesList().addSdkDependency(sdkType);
     if (srcPaths.length > 0 || outputPath != null) {
       for (String srcPath : srcPaths) {
@@ -285,17 +280,26 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
   }
 
   @NotNull
-  protected BuildResult doBuild(final ProjectDescriptor descriptor, @NotNull CompileScopeTestBuilder scopeBuilder) {
+  protected BuildResult doBuild(@NotNull final ProjectDescriptor descriptor, @NotNull CompileScopeTestBuilder scopeBuilder) {
     IncProjectBuilder builder = new IncProjectBuilder(descriptor, BuilderRegistry.getInstance(), myBuildParams, CanceledStatus.NULL, null, true);
     BuildResult result = new BuildResult();
     builder.addMessageHandler(result);
     try {
+      beforeBuildStarted(descriptor);
       builder.build(scopeBuilder.build(), false);
     }
     catch (RebuildRequestedException e) {
       throw new RuntimeException(e);
     }
     return result;
+  }
+
+  protected void beforeBuildStarted(@NotNull ProjectDescriptor descriptor) {
+  }
+
+  @NotNull
+  protected String createFile(@NotNull String relativePath) {
+    return createFile(relativePath, "");
   }
 
   @NotNull
@@ -310,7 +314,8 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
     }
   }
 
-  protected File findFindUnderProjectHome(String relativeSourcePath) {
+  @NotNull
+  protected File findFindUnderProjectHome(@NotNull String relativeSourcePath) {
     return PathManagerEx.findFileUnderProjectHome(relativeSourcePath, getClass());
   }
 
