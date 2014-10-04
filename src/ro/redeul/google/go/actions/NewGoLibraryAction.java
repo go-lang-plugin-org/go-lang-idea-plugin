@@ -113,12 +113,7 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<PsiElement
             }
         }
 
-        for (String packageName : packages) {
-            builder.addKind("New: " + packageName + " library file", GoIcons.GO_ICON_16x16, "lib." + packageName);
-        }
-
-        builder.addKind("New library (child folder)", GoIcons.GO_ICON_16x16, "multiple");
-        builder.addKind("New library (this folder)", GoIcons.GO_ICON_16x16, "single");
+        builder.addKind("New library", GoIcons.GO_ICON_16x16, "multiple");
     }
 
     private boolean isLibraryFolder() {
