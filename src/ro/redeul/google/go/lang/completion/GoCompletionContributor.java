@@ -39,6 +39,7 @@ import java.util.*;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.not;
 import static com.intellij.patterns.StandardPatterns.or;
+import static com.intellij.patterns.StandardPatterns.and;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.*;
 
 /**
@@ -270,6 +271,21 @@ public class GoCompletionContributor extends CompletionContributor {
         extend(CompletionType.BASIC,
                BLOCK_STATEMENT,
                 blockStatementsCompletionProvider);
+
+        CompletionProvider<CompletionParameters> forStatementsCompletionProvider = new CompletionProvider<CompletionParameters>() {
+            @Override
+            protected void addCompletions(
+                    @NotNull CompletionParameters parameters,
+                    ProcessingContext context,
+                    @NotNull CompletionResultSet result) {
+                result.addElement(keyword("continue"));
+                result.addElement(keyword("break"));
+                addPackageAutoCompletion(parameters, result);
+            }
+        };
+        extend(CompletionType.BASIC,
+                and(BLOCK_STATEMENT,psiElement().inside(GoForStatement.class)),
+                forStatementsCompletionProvider);
 
         CompletionProvider<CompletionParameters> topLevelKeywordsProvider = new CompletionProvider<CompletionParameters>() {
             @Override
