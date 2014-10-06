@@ -447,10 +447,16 @@
                          implementationClass="ro.redeul.google.go.inspection.UnresolvedSymbols"/>
         <localInspection groupName="Google Go" language="Google Go"
                          enabledByDefault="true"
-                         shortName="ImportDeclaration"
+                         shortName="ImportUnused"
+                         displayName="Highlights unused import"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.ImportUnusedInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
+                         shortName="ImportPath"
                          displayName="Highlights incorrect import declarations"
                          level="ERROR"
-                         implementationClass="ro.redeul.google.go.inspection.ImportDeclarationInspection"/>
+                         implementationClass="ro.redeul.google.go.inspection.ImportPathInspection"/>
         <localInspection groupName="Google Go" language="Google Go"
                          enabledByDefault="true"
                          shortName="InvalidPackageName"
