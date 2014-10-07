@@ -46,7 +46,8 @@ public class GaeLocalRunner extends DefaultProgramRunner {
             return null;
         }
 
-        env = RunContentBuilder.fix(env, this);
-        return new RunContentBuilder(executionResult, env).showRunContent(env.getContentToReuse());
+        // TODO idea14: Migrate to proper API once idea 14 is released
+        // env = RunContentBuilder.fix(env, this);
+        return new RunContentBuilder(this, executionResult, env).showRunContent(env.getContentToReuse());
     }
 }

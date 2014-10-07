@@ -65,12 +65,13 @@ public class GoApplicationRunner extends DefaultProgramRunner {
             return null;
         }
 
-
+        // TODO idea14: migrate to proper API once 14 is released
         env = RunContentBuilder.fix(env, this);
         final Project project = env.getProject();
 
         if(env.getExecutor().getClass().equals(DefaultRunExecutor.class)) {
-            final RunContentBuilder contentBuilder = new RunContentBuilder(executionResult, env);
+            // TODO idea14: migrate to proper API once 14 is released
+            final RunContentBuilder contentBuilder = new RunContentBuilder(this, executionResult, env);
             return contentBuilder.showRunContent(env.getContentToReuse());
         } else {
             GoApplicationConfiguration configuration = ((GdbExecutionResult)executionResult).m_configuration;
