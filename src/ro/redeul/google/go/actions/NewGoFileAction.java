@@ -123,11 +123,6 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<PsiElement>
         }
 
         builder.addKind("New file", GoIcons.GO_ICON_16x16, "single.go");
-
-        for (String packageName : packages) {
-            builder.addKind("New file in library: " + packageName,
-                            GoIcons.GO_ICON_16x16, "lib." + packageName);
-        }
     }
 
     @Override

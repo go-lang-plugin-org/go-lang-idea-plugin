@@ -159,27 +159,25 @@
     </project-components>
 
     <actions>
-        <group id="Go.ActionGroup" popup="true" text="Go" description="Go actions"
-               icon="/icons/go_16x16.png" class="ro.redeul.google.go.actions.NewGoGroup">
-
-            <action id="Go.NewFile" text="Go file"
-                    description="Create a new Go in the current project"
-                    class="ro.redeul.google.go.actions.NewGoFileAction">
-            </action>
-
-            <action id="Go.NewLibrary" text="Go library"
-                    description="Create new library in the GO language"
-                    class="ro.redeul.google.go.actions.NewGoLibraryAction">
-            </action>
-
-            <action id="Go.NewApplication" text="Go application"
-                    description="Create new application in the GO language"
-                    class="ro.redeul.google.go.actions.NewGoApplicationAction">
-            </action>
-
+        <action id="Go.NewFile" text="Go file"
+                description="Create a new Go in the current project"
+                class="ro.redeul.google.go.actions.NewGoFileAction">
             <add-to-group group-id="NewGroup" anchor="before"
                           relative-to-action="NewFile"/>
-        </group>
+        </action>
+        <action id="Go.NewLibrary" text="Go library"
+                description="Create new library in the GO language"
+                class="ro.redeul.google.go.actions.NewGoLibraryAction">
+            <add-to-group group-id="NewGroup" anchor="before"
+                          relative-to-action="NewFile"/>
+        </action>
+
+        <action id="Go.NewApplication" text="Go application"
+                description="Create new application in the GO language"
+                class="ro.redeul.google.go.actions.NewGoApplicationAction">
+            <add-to-group group-id="NewGroup" anchor="before"
+                          relative-to-action="NewFile"/>
+        </action>
 
         <group id="GAE.ActionGroup" popup="true" text="Go AppEngine" description="Go AppEngine actions"
                icon="/icons/gae_16x16.png" class="ro.redeul.google.go.actions.NewGAEGroup">
