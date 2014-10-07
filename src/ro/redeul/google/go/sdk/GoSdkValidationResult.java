@@ -10,7 +10,7 @@ public class GoSdkValidationResult {
 
     public enum Os {
 
-        Windows, Linux, Darwin, FreeBsd;
+        Windows, Linux, Darwin, FreeBsd, OpenBsd;
 
         public static Os fromString(String name) {
 
@@ -30,6 +30,9 @@ public class GoSdkValidationResult {
 
             if ( name.equals("freebsd") )
                 return FreeBsd;
+
+            if ( name.equals("openbsd") )
+                return OpenBsd;
 
             return null;
         }
