@@ -14,7 +14,6 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ReflectionCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
@@ -301,7 +300,7 @@ public class GoPsiUtils {
     public static <T extends PsiElement> T findParentOfType(
         @Nullable PsiElement node,
         Class<? extends T> type) {
-        while (node != null && !ReflectionCache.isInstance(node, type)) {
+        while (node != null && !type.isInstance(node)) {
             node = node.getParent();
         }
 
@@ -346,7 +345,7 @@ public class GoPsiUtils {
 
         List<T> children = new ArrayList<T>();
         for (PsiElement element : node.getChildren()) {
-            if (ReflectionCache.isInstance(element, type)) {
+            if (type.isInstance(element)) {
                 children.add(type.cast(element));
             }
         }
@@ -449,14 +448,13 @@ public class GoPsiUtils {
 
         for (PsiElement cur = node.getFirstChild(); cur != null;
              cur = cur.getNextSibling()) {
-            if (ReflectionCache.isInstance(cur, type)) return (Psi) cur;
+            if (type.isInstance(cur)) return (Psi) cur;
         }
         return null;
     }
 
-    public static boolean psiIsA(PsiElement node,
-                                 Class<? extends GoPsiElement> psiType) {
-        return ReflectionCache.isInstance(node, psiType);
+    public static boolean psiIsA(PsiElement node, Class<? extends GoPsiElement> psiType) {
+        return psiType.isInstance(node);
     }
 
     public static boolean hasParentAs(PsiElement node, TokenSet...tokens) {

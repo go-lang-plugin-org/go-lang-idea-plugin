@@ -68,8 +68,6 @@ public class GoApplicationRunner extends DefaultProgramRunner {
 
         if(env.getExecutor().getClass().equals(DefaultRunExecutor.class)) {
             final RunContentBuilder contentBuilder = new RunContentBuilder(this, executionResult, env);
-            contentBuilder.setEnvironment(env);
-
             return contentBuilder.showRunContent(contentToReuse);
         } else {
             GoApplicationConfiguration configuration = ((GdbExecutionResult)executionResult).m_configuration;

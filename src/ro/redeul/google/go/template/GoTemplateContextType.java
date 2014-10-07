@@ -6,7 +6,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiUtilBase;
-import com.intellij.util.ReflectionCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
@@ -42,7 +41,7 @@ public abstract class GoTemplateContextType extends TemplateContextType {
         protected boolean isInContext(PsiElement element) {
             return element != null && element.getParent() != null &&
                     element.getParent().getParent() != null &&
-                    ReflectionCache.isInstance(element.getParent().getParent(), GoFile.class);
+                    GoFile.class.isInstance(element.getParent().getParent());
         }
     }
 

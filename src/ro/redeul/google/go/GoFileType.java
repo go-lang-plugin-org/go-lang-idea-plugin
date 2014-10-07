@@ -44,10 +44,6 @@ public class GoFileType extends LanguageFileType {
         return GoIcons.GO_ICON_16x16;
     }
 
-    public boolean isJVMDebuggingSupported() {
-        return false;
-    }
-
     @Override
     public String getCharset(@NotNull VirtualFile file, byte[] content) {
         return CharsetToolkit.UTF8;
