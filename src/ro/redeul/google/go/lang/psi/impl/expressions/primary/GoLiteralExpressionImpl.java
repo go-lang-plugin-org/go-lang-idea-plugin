@@ -139,9 +139,16 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
 
                     if (parent instanceof GoConstDeclaration) {
                         GoPsiType identifiersType = ((GoConstDeclaration) parent).getIdentifiersType();
-                        if (identifiersType == null)
-                            return GoType.EMPTY_ARRAY;
-                        return new GoType[]{GoTypes.fromPsiType(identifiersType)};
+                        if (identifiersType != null){
+                            return new GoType[]{GoTypes.fromPsiType(identifiersType)};
+                        }
+                        // if there is no type, then take type from expression
+                        if (resolved instanceof GoLiteralIdentifier){
+                            GoExpr expr = ((GoConstDeclaration) parent).getExpression((GoLiteralIdentifier) resolved);
+                            if (expr != null)
+                                return expr.getType();
+                        }
+                        return GoType.EMPTY_ARRAY;
                     }
 
                     if (parent instanceof GoFunctionParameter) {
@@ -257,7 +264,8 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                     }
                     //If not check the expressions
                     for (GoExpr goExpr : ((GoConstDeclaration) constDecl).getExpressions()) {
-                        if (goExpr instanceof GoBinaryExpression || goExpr instanceof GoUnaryExpression) {
+                        if (goExpr instanceof GoBinaryExpression || goExpr instanceof GoUnaryExpression
+                                || goExpr instanceof GoLiteralExpression) {
                             if (!goExpr.isConstantExpression())
                                 return false;
                         }

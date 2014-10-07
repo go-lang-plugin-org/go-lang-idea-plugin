@@ -56,6 +56,16 @@ const (
 	GOOD_ARRAY2, BAD_ARRAY2
 )
 
+const (
+	StringVal = "string"
+	IntVal int = 10
+)
+
+const (
+	A, B = "string", 10
+	C, D
+)
+
 func HandleFunc(pa string, handler func(int, *string)bool) {
 
 }
@@ -439,7 +449,7 @@ func main() {
 	HandleOutChan(/*begin*/chIntOut/*end.Expression type mismatch, the expected type is chan<- string|CastTypeFix*/)
 	HandleOutChan(/*begin*/chStrIn/*end.Expression type mismatch, the expected type is chan<- string|CastTypeFix*/)
 
-	 HandleChan(make(chan int))  //TODO: should generate "Expression type mismatch, the expected type is chan int|CastTypeFix"
+	HandleChan(/*begin*/make(chan int)/*end.Expression type mismatch, the expected type is chan string|CastTypeFix*/)
 
 	// issue #522
 
@@ -464,4 +474,12 @@ func main() {
 	myNewFnForTest := func(a string, b string) (bool,bool,bool) {return false,false,false}
 	TestLiteralFunc(/*begin*/myNewFnForTest/*end.Expression type mismatch, the expected type is func(string,string)(bool,bool)|CastTypeFix*/)
 	TestLiteralFunc(func(a string,b string)(bool,bool) {return false,true})
+
+	AcceptMyInt(CCCCC)
+	HandleVariadic(/*begin*/CCCCC/*end.Expression type mismatch, the expected type is string|CastTypeFix*/)
+	HandleVariadic(StringVal, 1)
+	HandleVariadic(A, B)
+	HandleVariadic(C, D)
+	HandleVariadic(A, /*begin*/C/*end.Expression type mismatch, the expected type is int|CastTypeFix*/)
+	HandleVariadic(/*begin*/B/*end.Expression type mismatch, the expected type is string|CastTypeFix*/, D)
 }
