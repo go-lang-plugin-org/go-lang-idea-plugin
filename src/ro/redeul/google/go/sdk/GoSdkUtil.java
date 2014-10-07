@@ -237,11 +237,11 @@ public class GoSdkUtil {
 
     public static GoAppEngineSdkData testGoAppEngineSdk(String path) {
 
-        if (!checkFolderExists(path) || !checkFileExists(path,
-                "dev_appserver.py")
-                || !checkFolderExists(path, "goroot") || !checkFolderExists(path,
-                "goroot",
-                "pkg"))
+        if (!checkFolderExists(path)
+                || !checkFileExists(path, "dev_appserver.py")
+                || !(checkFileExists(path, "goapp") || checkFileExists(path, "goapp.bat"))
+                || !checkFolderExists(path, "goroot")
+                || !checkFolderExists(path, "goroot", "pkg"))
             return null;
 
         if (!checkFileExists(path, "VERSION"))
@@ -258,11 +258,12 @@ public class GoSdkUtil {
         GeneralCommandLine command = new GeneralCommandLine();
         if (checkFileExists(sdkData.GO_HOME_PATH + "/bin/go")) {
             command.setExePath(sdkData.GO_HOME_PATH + "/bin/go");
+            command.setWorkDirectory(sdkData.GO_HOME_PATH + "/bin");
         } else {
-            command.setExePath(sdkData.GO_HOME_PATH + "/bin/goapp");
+            command.setExePath(sdkData.GO_HOME_PATH + "/../goapp");
+            command.setWorkDirectory(sdkData.GO_HOME_PATH + "/..");
         }
         command.addParameter("env");
-        command.setWorkDirectory(sdkData.GO_HOME_PATH + "/bin");
 
         sdkData.TARGET_ARCH = GoTargetArch._amd64;
         sdkData.TARGET_OS = GoTargetOs.Linux;
