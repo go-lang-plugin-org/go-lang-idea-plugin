@@ -20,6 +20,9 @@ public class GoConfigurableForm {
     private JRadioButton radioGOPATHproject;
     private JRadioButton enablePrependSysGoPath;
     private JRadioButton enableAppendSysGoPath;
+    private JRadioButton doNothingOnSave;
+    private JRadioButton goFmtOnSave;
+    private JRadioButton goimportsOnSave;
 
     public void enableShowHide(){
         componentPanel.addComponentListener(new ComponentAdapter() {
@@ -41,11 +44,6 @@ public class GoConfigurableForm {
 
     public boolean isModified(GoProjectSettings.GoProjectSettingsBean settingsBean,
                               GoSettings goSettings) {
-
-        //if (goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY != enableOnTheFlyImportOptimization.isSelected()) {
-        //    return true;
-        //}
-
         if ( settingsBean.enableOptimizeImports != enableImportsOptimizer.isSelected() ) {
             return true;
         }
@@ -58,21 +56,37 @@ public class GoConfigurableForm {
             return true;
         }
 
+        if ( settingsBean.goFmtOnSave != goFmtOnSave.isSelected() ) {
+            return true;
+        }
+
+        if ( settingsBean.goimportsOnSave != goimportsOnSave.isSelected() ) {
+            return true;
+        }
+
         return false;
     }
 
     public void apply(GoProjectSettings.GoProjectSettingsBean settingsBean) {
-        settingsBean.enableOptimizeImports = enableImportsOptimizer.isSelected();
-        //goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY = enableOnTheFlyImportOptimization.isSelected();
         settingsBean.appendSysGoPath = enableAppendSysGoPath.isSelected();
         settingsBean.prependSysGoPath = enablePrependSysGoPath.isSelected();
+
+        settingsBean.enableOptimizeImports = enableImportsOptimizer.isSelected();
+
+        settingsBean.goFmtOnSave = goFmtOnSave.isSelected();
+        settingsBean.goimportsOnSave = goimportsOnSave.isSelected();
     }
 
     public void reset(GoProjectSettings.GoProjectSettingsBean settingsBean, GoSettings goSettings) {
-        //enableOnTheFlyImportOptimization.setSelected(goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY);
-        enableImportsOptimizer.setSelected(settingsBean.enableOptimizeImports);
+        radioGOPATHproject.setSelected(!settingsBean.appendSysGoPath && !settingsBean.prependSysGoPath);
         enableAppendSysGoPath.setSelected(settingsBean.appendSysGoPath);
         enablePrependSysGoPath.setSelected(settingsBean.prependSysGoPath);
+
+        enableImportsOptimizer.setSelected(settingsBean.enableOptimizeImports);
+
+        doNothingOnSave.setSelected(!settingsBean.goFmtOnSave && !settingsBean.goimportsOnSave);
+        goFmtOnSave.setSelected(settingsBean.goFmtOnSave);
+        goimportsOnSave.setSelected(settingsBean.goimportsOnSave);
     }
 
 }
