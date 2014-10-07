@@ -89,7 +89,8 @@ public class GoApplicationRunner extends DefaultProgramRunner {
                 execName = execName.replaceAll("\\\\", "/");
             }
 
-            final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(env, new XDebugProcessStarter() {
+            final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(this,
+                    env, env.getContentToReuse(), new XDebugProcessStarter() {
                      @NotNull
                      @Override
                      public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
