@@ -45,6 +45,14 @@ public class GoStatementsCompletionTestCase extends GoCompletionTestCase {
         doTest();
     }
 
+    public void testContinue() {
+        doTest();
+    }
+
+    public void testBreak() {
+        doTest();
+    }
+
     public void testFieldsViaForRangeWithArray() {
         doTestVariants();
     }
