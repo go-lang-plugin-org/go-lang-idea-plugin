@@ -11,19 +11,22 @@ import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.services.GoCodeManager;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import static ro.redeul.google.go.GoBundle.message;
 
-public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
+public class ImportUnusedInspection extends AbstractWholeGoFileInspection {
     @Nls
     @NotNull
     @Override
     public String getDisplayName() {
-        return "Import Declaration";
+        return "Import Unused";
     }
 
     @Override
@@ -35,36 +38,7 @@ public class ImportDeclarationInspection extends AbstractWholeGoFileInspection {
                 super.visitFile(file);
                 checkUnusedImport(file, result);
             }
-
-            @Override
-            public void visitImportDeclaration(GoImportDeclaration declaration) {
-                super.visitImportDeclaration(declaration);
-                checkImportPath(declaration, result);
-            }
         }.visitFile(file);
-    }
-
-    private static void checkImportPath(GoImportDeclaration declaration, InspectionResult result) {
-        String importPathValue = null;
-        GoLiteralString importPath = declaration.getImportPath();
-        if ( importPath != null ) {
-            importPathValue = importPath.getValue();
-        }
-
-        if (importPathValue == null)
-            return;
-
-        if (importPathValue.isEmpty()) {
-            result.addProblem(declaration, GoBundle.message("error.import.path.is.empty"));
-        }
-
-        if (importPathValue.contains(" ") || importPathValue.contains("\t")) {
-            result.addProblem(declaration, GoBundle.message("error.import.path.contains.space"));
-        }
-
-        if (importPathValue.contains("\\")) {
-            result.addProblem(declaration, GoBundle.message("error.import.path.contains.backslash"));
-        }
     }
 
     private static void checkUnusedImport(GoFile file, InspectionResult result) {
