@@ -2,7 +2,7 @@ package ro.redeul.google.go.runner;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.ColoredProcessHandler;
 import com.intellij.execution.process.ProcessTerminatedListener;
 
 /**
@@ -12,7 +12,7 @@ import com.intellij.execution.process.ProcessTerminatedListener;
  * Time: 4:56:51 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GoApplicationProcessHandler extends OSProcessHandler {
+public class GoApplicationProcessHandler extends ColoredProcessHandler {
 
     private GoApplicationProcessHandler(Process process, String commandLineString) {
         super(process, commandLineString);
