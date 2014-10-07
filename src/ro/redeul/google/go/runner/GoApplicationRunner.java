@@ -66,7 +66,7 @@ public class GoApplicationRunner extends DefaultProgramRunner {
         }
 
         // TODO idea14: migrate to proper API once 14 is released
-        env = RunContentBuilder.fix(env, this);
+        // env = RunContentBuilder.fix(env, this);
         final Project project = env.getProject();
 
         if(env.getExecutor().getClass().equals(DefaultRunExecutor.class)) {
