@@ -220,6 +220,10 @@ public class GoElementVisitor  {
         visitElement(statement);
     }
 
+    public void visitBlockStatement(GoBlockStatement statement) {
+        visitElement(statement);
+    }
+
     public void visitBreakStatement(GoBreakStatement statement) {
         visitElement(statement);
     }

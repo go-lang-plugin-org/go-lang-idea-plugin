@@ -523,6 +523,12 @@
                          implementationClass="ro.redeul.google.go.inspection.ConstantExpressionsInConstDeclarationsInspection"/>
         <localInspection groupName="Google Go" language="Google Go"
                          enabledByDefault="true"
+                         shortName="ShadowedDuringReturn"
+                         displayName="Highlights shadowed during return error"
+                         level="ERROR"
+                         implementationClass="ro.redeul.google.go.inspection.ShadowedDuringReturnInspection"/>
+        <localInspection groupName="Google Go" language="Google Go"
+                         enabledByDefault="true"
                          shortName="MismatchedTypes"
                          displayName="Highlights mismatched types"
                          level="ERROR"
