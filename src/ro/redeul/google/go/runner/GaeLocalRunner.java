@@ -35,7 +35,10 @@ public class GaeLocalRunner extends DefaultProgramRunner {
         return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof GaeLocalConfiguration;
     }
 
-    protected RunContentDescriptor doExecute(Project project, RunProfileState state, RunContentDescriptor contentToReuse, ExecutionEnvironment env) throws ExecutionException {
+    // TODO: check why this exists here. It shouldn't be here.
+
+    protected RunContentDescriptor doExecute(@NotNull RunProfileState state,
+                                             @NotNull ExecutionEnvironment env) throws ExecutionException {
         FileDocumentManager.getInstance().saveAllDocuments();
 
         ExecutionResult executionResult = state.execute(env.getExecutor(), this);
@@ -43,7 +46,7 @@ public class GaeLocalRunner extends DefaultProgramRunner {
             return null;
         }
 
-        final RunContentBuilder contentBuilder = new RunContentBuilder(this, executionResult, env);
-        return contentBuilder.showRunContent(contentToReuse);
+        env = RunContentBuilder.fix(env, this);
+        return new RunContentBuilder(executionResult, env).showRunContent(env.getContentToReuse());
     }
 }

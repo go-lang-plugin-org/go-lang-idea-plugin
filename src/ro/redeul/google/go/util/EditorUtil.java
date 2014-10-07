@@ -28,7 +28,7 @@ public class EditorUtil {
         EditorActionManager manager = EditorActionManager.getInstance();
         EditorActionHandler enterHandler = manager.getActionHandler(IdeActions.ACTION_EDITOR_START_NEW_LINE);
         DataContext dc = DataManager.getInstance().getDataContext(editor.getContentComponent());
-        enterHandler.execute(editor, dc);
+        enterHandler.execute(editor, editor.getCaretModel().getCurrentCaret(), dc);
     }
 
     public static void reformatLines(@NotNull PsiFile file, Editor editor, int startLine, int endLine) {

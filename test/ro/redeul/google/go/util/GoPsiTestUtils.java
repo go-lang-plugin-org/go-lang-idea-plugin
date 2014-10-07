@@ -3,9 +3,9 @@ package ro.redeul.google.go.util;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import static com.intellij.testFramework.UsefulTestCase.assertInstanceOf;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 public class GoPsiTestUtils {
 

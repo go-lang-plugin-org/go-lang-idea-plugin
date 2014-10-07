@@ -57,7 +57,7 @@ public class GoApplicationRunner extends DefaultProgramRunner {
         return DefaultRunExecutor.EXECUTOR_ID.equals(executorId);
     }
 
-    protected RunContentDescriptor doExecute(final Project project, RunProfileState state, RunContentDescriptor contentToReuse, ExecutionEnvironment env) throws ExecutionException {
+    protected RunContentDescriptor doExecute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException {
         FileDocumentManager.getInstance().saveAllDocuments();
 
         final ExecutionResult executionResult = state.execute(env.getExecutor(), this);
@@ -66,9 +66,12 @@ public class GoApplicationRunner extends DefaultProgramRunner {
         }
 
 
+        env = RunContentBuilder.fix(env, this);
+        final Project project = env.getProject();
+
         if(env.getExecutor().getClass().equals(DefaultRunExecutor.class)) {
-            final RunContentBuilder contentBuilder = new RunContentBuilder(this, executionResult, env);
-            return contentBuilder.showRunContent(contentToReuse);
+            final RunContentBuilder contentBuilder = new RunContentBuilder(executionResult, env);
+            return contentBuilder.showRunContent(env.getContentToReuse());
         } else {
             GoApplicationConfiguration configuration = ((GdbExecutionResult)executionResult).m_configuration;
 
@@ -85,8 +88,7 @@ public class GoApplicationRunner extends DefaultProgramRunner {
                 execName = execName.replaceAll("\\\\", "/");
             }
 
-            final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(this,
-                env, contentToReuse, new XDebugProcessStarter() {
+            final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(env, new XDebugProcessStarter() {
                      @NotNull
                      @Override
                      public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
