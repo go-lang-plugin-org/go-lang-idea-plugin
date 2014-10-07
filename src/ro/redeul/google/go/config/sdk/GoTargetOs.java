@@ -8,7 +8,7 @@ package ro.redeul.google.go.config.sdk;
 */
 public enum GoTargetOs {
 
-    Windows("windows"), Linux("linux"), Darwin("darwin"), FreeBsd("freebsd");
+    Windows("windows"), Linux("linux"), Darwin("darwin"), FreeBsd("freebsd"), OpenBsd("openbsd");
 
     private final String name;
 

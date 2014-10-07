@@ -35,8 +35,6 @@ import ro.redeul.google.go.util.GoUtil;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -75,7 +73,7 @@ public class GoSdkUtil {
                     Pattern.MULTILINE);
 
     private static final Pattern RE_HOSTOS_MATCHER =
-            Pattern.compile("^(?:set )?GOHOSTOS=\"?(darwin|freebsd|linux|windows)\"?$",
+            Pattern.compile("^(?:set )?GOHOSTOS=\"?(darwin|freebsd|openbsd|linux|windows)\"?$",
                     Pattern.MULTILINE);
 
     private static final Pattern RE_HOSTARCH_MATCHER =
