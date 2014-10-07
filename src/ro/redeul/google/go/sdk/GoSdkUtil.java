@@ -8,6 +8,7 @@ import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkType;
@@ -27,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.sdk.*;
 import ro.redeul.google.go.ide.GoGlobalSettings;
+import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.util.GoUtil;
 
@@ -745,7 +747,26 @@ public class GoSdkUtil {
     }
 
     public static Map<String, String> getExtendedSysEnv(GoSdkData sdkData, String projectDir, String envVars) {
-        return getExtendedSysEnv(sdkData, projectDir, envVars, true, false);
+        boolean prependSysGoPath = false;
+        boolean appendSysGoPath = false;
+
+        Project[] projects = ProjectManager.getInstance().getOpenProjects();
+        Project project = null;
+
+        for (Project p : projects) {
+            if (p.getBasePath().equals(projectDir)) {
+                project = p;
+                break;
+            }
+        }
+
+        if (project != null) {
+            GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(project).getState();
+            prependSysGoPath = settings.prependSysGoPath;
+            appendSysGoPath = settings.appendSysGoPath;
+        }
+
+        return getExtendedSysEnv(sdkData, projectDir, envVars, prependSysGoPath, appendSysGoPath);
     }
 
     public static Map<String, String> getExtendedSysEnv(GoSdkData sdkData, String projectDir, String envVars, boolean prependSysGoPath, boolean appendSysGoPath) {
