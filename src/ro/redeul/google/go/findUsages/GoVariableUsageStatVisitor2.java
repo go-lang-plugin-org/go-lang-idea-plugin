@@ -102,7 +102,7 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
                 result.addProblem(declaration,
                                   GoBundle.message("error.parameter.not.used",
                                                    declaration.getText()),
-                                  ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+                                  ProblemHighlightType.WEAK_WARNING);
             } else if (CONST_DECLARATION.accepts(declaration)) {
                 result.addProblem(declaration,
                                   GoBundle.message("error.constant.not.used",
