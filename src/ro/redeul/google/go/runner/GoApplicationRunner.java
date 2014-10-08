@@ -65,13 +65,11 @@ public class GoApplicationRunner extends DefaultProgramRunner {
             return null;
         }
 
-        // TODO idea14: migrate to proper API once 14 is released
-        // env = RunContentBuilder.fix(env, this);
         final Project project = env.getProject();
 
         if(env.getExecutor().getClass().equals(DefaultRunExecutor.class)) {
-            // TODO idea14: migrate to proper API once 14 is released
-            final RunContentBuilder contentBuilder = new RunContentBuilder(this, executionResult, env);
+            env = RunContentBuilder.fix(env, this);
+            final RunContentBuilder contentBuilder = new RunContentBuilder(executionResult, env);
             return contentBuilder.showRunContent(env.getContentToReuse());
         } else {
             GoApplicationConfiguration configuration = ((GdbExecutionResult)executionResult).m_configuration;
@@ -89,12 +87,11 @@ public class GoApplicationRunner extends DefaultProgramRunner {
                 execName = execName.replaceAll("\\\\", "/");
             }
 
-            final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(this,
-                    env, env.getContentToReuse(), new XDebugProcessStarter() {
+            env = RunContentBuilder.fix(env, this);
+            final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(env, new XDebugProcessStarter() {
                      @NotNull
                      @Override
                      public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
-                            session.setAutoInitBreakpoints(false);
                             return new GdbDebugProcess(project, session, (GdbExecutionResult) executionResult);
                      }
             });

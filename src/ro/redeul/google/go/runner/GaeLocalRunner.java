@@ -11,7 +11,6 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.RunContentBuilder;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -46,8 +45,7 @@ public class GaeLocalRunner extends DefaultProgramRunner {
             return null;
         }
 
-        // TODO idea14: Migrate to proper API once idea 14 is released
-        // env = RunContentBuilder.fix(env, this);
-        return new RunContentBuilder(this, executionResult, env).showRunContent(env.getContentToReuse());
+        env = RunContentBuilder.fix(env, this);
+        return new RunContentBuilder(executionResult, env).showRunContent(env.getContentToReuse());
     }
 }

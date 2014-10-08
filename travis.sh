@@ -3,7 +3,7 @@
 # Get the current plugin directory
 pluginDir=pwd
 
-ideaVersion="13.1.5"
+ideaVersion="14-PublicPreview"
 
 # Get our IDEA dependency
 if [ -f ~/Tools/ideaIC-${ideaVersion}.tar.gz ];
