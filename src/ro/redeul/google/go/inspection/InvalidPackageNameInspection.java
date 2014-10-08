@@ -43,7 +43,7 @@ public class InvalidPackageNameInspection
         VirtualFile srcRoot =
             projectFileIndex.getSourceRootForFile(virtualFile);
 
-        if (srcRoot == virtualFile.getParent()) {
+        if (srcRoot != null && srcRoot.equals(virtualFile.getParent())) {
             result.addProblem(packageDeclaration,
                               "File should be inside a folder named '" + packageName + "'",
                               ProblemHighlightType.GENERIC_ERROR,

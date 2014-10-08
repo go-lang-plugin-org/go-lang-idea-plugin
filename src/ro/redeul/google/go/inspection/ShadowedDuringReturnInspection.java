@@ -1,6 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import com.intellij.psi.impl.DebugUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
