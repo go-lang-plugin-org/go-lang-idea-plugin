@@ -397,7 +397,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
         public void unusedParameter(VariableUsage variableUsage) {
             if (!variableUsage.isBlank()) {
                 addProblem(variableUsage, "Unused parameter",
-                           ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+                           ProblemHighlightType.WEAK_WARNING);
             }
         }
 
