@@ -20,10 +20,11 @@ gedit build-package.xml
 Change the value of location to the installation directory of IDEA ide.
 Example:
 
-```
+```xml
 <property name="idea.community.build" location="${user.home}/Downloads/idea-IC-133.193/" />
 Build the project with ant.
-
+```
+And then run
 ```bash
 ant -f build-package.xml
 ```
