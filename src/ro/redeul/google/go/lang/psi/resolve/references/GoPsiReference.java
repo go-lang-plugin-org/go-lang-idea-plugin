@@ -107,7 +107,7 @@ public abstract class GoPsiReference<
     }
 
     private boolean matchesPackageName(String currentPackageName, String targetQualifiedName, String elementName) {
-        if (targetQualifiedName.contains(".")) {
+        if (!currentPackageName.equals("")) {
             elementName = currentPackageName + "." + elementName;
         }
 
