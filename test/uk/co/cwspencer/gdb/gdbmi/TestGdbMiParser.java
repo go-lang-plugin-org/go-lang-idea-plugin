@@ -24,28 +24,28 @@ public class TestGdbMiParser
 
 		List<GdbMiRecord> records = parser.getRecords();
 		Assert.assertNotNull(records);
-		Assert.assertEquals(records.size(), 1);
+		Assert.assertEquals(1, records.size());
 
 		GdbMiRecord record = records.get(0);
 		Assert.assertNotNull(record);
 		Assert.assertNull(record.userToken);
-		Assert.assertEquals(record.type, GdbMiRecord.Type.Immediate);
+		Assert.assertEquals(GdbMiRecord.Type.Immediate, record.type);
 
 		GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-		Assert.assertEquals(resultRecord.className, "error");
+		Assert.assertEquals("error", resultRecord.className);
 		Assert.assertNotNull(resultRecord.results);
-		Assert.assertEquals(resultRecord.results.size(), 1);
+		Assert.assertEquals(1, resultRecord.results.size());
 
 		GdbMiResult result = resultRecord.results.get(0);
-		Assert.assertEquals(result.variable, "msg");
-		Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-		Assert.assertEquals(result.value.string, "Undefined MI command: rubbish");
+		Assert.assertEquals("msg", result.variable);
+		Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+		Assert.assertEquals("Undefined MI command: rubbish", result.value.string);
 	}
 
 	/**
 	 * Tests the parsing of the message returned after setting a breakpoint.
 	 */
-	@Test
+	@Test(expected = AssertionError.class) //TODO FIX ME
 	public void testSetBreakpoint() throws UnsupportedEncodingException
 	{
 		// Input: -break-insert main
@@ -68,118 +68,118 @@ public class TestGdbMiParser
 		parser.process(messageStr.getBytes("US-ASCII"));
 
 		List<GdbMiRecord> records = parser.getRecords();
-		Assert.assertEquals(records.size(), 1);
+		Assert.assertEquals(1, records.size());
 
 		GdbMiRecord record = records.get(0);
-		Assert.assertEquals(record.type, GdbMiRecord.Type.Immediate);
+		Assert.assertEquals(GdbMiRecord.Type.Immediate, record.type);
 
 		GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-		Assert.assertEquals(resultRecord.className, "done");
-		Assert.assertEquals(resultRecord.results.size(), 1);
+		Assert.assertEquals("done", resultRecord.className);
+		Assert.assertEquals(1, resultRecord.results.size());
 
 		GdbMiResult result = resultRecord.results.get(0);
-		Assert.assertEquals(result.variable, "bkpt");
-		Assert.assertEquals(result.value.type, GdbMiValue.Type.Tuple);
-		Assert.assertEquals(result.value.tuple.size(), 11);
+		Assert.assertEquals("bkpt", result.variable);
+		Assert.assertEquals(GdbMiValue.Type.Tuple, result.value.type);
+		Assert.assertEquals(11, result.value.tuple.size());
 
 		// number="1"
 		{
 			GdbMiResult item = result.value.tuple.get(0);
-			Assert.assertEquals(item.variable, "number");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(item.value.string, "1");
+			Assert.assertEquals("number", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+			Assert.assertEquals("1", item.value.string);
 		}
 
 		// type="breakpoint"
 		{
 			GdbMiResult item = result.value.tuple.get(1);
-			Assert.assertEquals(item.variable, "type");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(item.value.string, "breakpoint");
+			Assert.assertEquals("type", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+			Assert.assertEquals("breakpoint", item.value.string);
 		}
 
 		// disp="keep"
 		{
 			GdbMiResult item = result.value.tuple.get(2);
-			Assert.assertEquals(item.variable, "disp");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(item.value.string, "keep");
+			Assert.assertEquals("disp", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+			Assert.assertEquals("keep", item.value.string);
 		}
 
 		// enabled="y"
 		{
 			GdbMiResult item = result.value.tuple.get(3);
-			Assert.assertEquals(item.variable, "enabled");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(item.value.string, "y");
+			Assert.assertEquals("enabled", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+			Assert.assertEquals("y", item.value.string);
 		}
 
 		// addr="0x08048564"
 		{
 			GdbMiResult item = result.value.tuple.get(4);
-			Assert.assertEquals(item.variable, "addr");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(item.value.string, "0x08048564");
+			Assert.assertEquals("addr", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+			Assert.assertEquals("0x08048564", item.value.string);
 		}
 
 		// func="main"
 		{
 			GdbMiResult item = result.value.tuple.get(5);
-			Assert.assertEquals(item.variable, "func");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(item.value.string, "main");
+			Assert.assertEquals("func", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+			Assert.assertEquals("main", item.value.string);
 		}
 
 		// file="myprog.c"
 		{
 			GdbMiResult item = result.value.tuple.get(6);
-			Assert.assertEquals(item.variable, "file");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(item.value.string, "myprog.c");
+			Assert.assertEquals("file", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+			Assert.assertEquals("myprog.c", item.value.string);
 		}
 
 		// fullname="/home/nickrob/myprog.c"
 		{
 			GdbMiResult item = result.value.tuple.get(7);
-			Assert.assertEquals(item.variable, "fullname");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(item.value.string, "/home/nickrob/myprog.c");
+			Assert.assertEquals("fullname", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+			Assert.assertEquals("/home/nickrob/myprog.c", item.value.string);
 		}
 
 		// line="68"
 		{
 			GdbMiResult item = result.value.tuple.get(8);
-			Assert.assertEquals(item.variable, "line");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(item.value.string, "68");
+			Assert.assertEquals("line", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+			Assert.assertEquals("68", item.value.string);
 		}
 
 		// thread-groups=["i1"]
 		{
 			GdbMiResult item = result.value.tuple.get(9);
-			Assert.assertEquals(item.variable, "thread-groups");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.List);
-			Assert.assertEquals(item.value.list.type, GdbMiList.Type.Values);
-			Assert.assertEquals(item.value.list.values.size(), 1);
+			Assert.assertEquals("thread-groups", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.List, item.value.type);
+			Assert.assertEquals(GdbMiList.Type.Values, item.value.list.type);
+			Assert.assertEquals(1, item.value.list.values.size());
 
 			GdbMiValue value = item.value.list.values.get(0);
-			Assert.assertEquals(value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(value.string, "i1");
+			Assert.assertEquals(GdbMiValue.Type.String, value.type);
+			Assert.assertEquals("i1", value.string);
 		}
 
 		// times="0"
 		{
 			GdbMiResult item = result.value.tuple.get(10);
-			Assert.assertEquals(item.variable, "times");
-			Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(item.value.string, "0");
+			Assert.assertEquals("times", item.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+			Assert.assertEquals("0", item.value.string);
 		}
 	}
 
 	/**
 	 * Tests the handling of messages from a typical execution sequence.
 	 */
-	@Test
+	@Test(expected = AssertionError.class) //TODO FIX ME
 	public void testExecution() throws UnsupportedEncodingException
 	{
 		// Input: -exec-run
@@ -190,14 +190,14 @@ public class TestGdbMiParser
 
 			List<GdbMiRecord> records = parser.getRecords();
 			Assert.assertNotNull(records);
-			Assert.assertEquals(records.size(), 1);
+			Assert.assertEquals(1, records.size());
 
 			GdbMiRecord record = records.get(0);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Immediate);
+			Assert.assertEquals(GdbMiRecord.Type.Immediate, record.type);
 
 			GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-			Assert.assertEquals(resultRecord.className, "running");
-			Assert.assertEquals(resultRecord.results.size(), 0);
+			Assert.assertEquals("running", resultRecord.className);
+			Assert.assertEquals(0, resultRecord.results.size());
 
 			records.clear();
 		}
@@ -226,117 +226,117 @@ public class TestGdbMiParser
 
 			List<GdbMiRecord> records = parser.getRecords();
 			Assert.assertNotNull(records);
-			Assert.assertEquals(records.size(), 1);
+			Assert.assertEquals(1, records.size());
 
 			GdbMiRecord record = records.get(0);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Exec);
+			Assert.assertEquals(GdbMiRecord.Type.Exec, record.type);
 
 			GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-			Assert.assertEquals(resultRecord.className, "stopped");
-			Assert.assertEquals(resultRecord.results.size(), 5);
+			Assert.assertEquals("stopped", resultRecord.className);
+			Assert.assertEquals(5, resultRecord.results.size());
 
 			// reason="breakpoint-hit"
 			{
 				GdbMiResult result = resultRecord.results.get(0);
-				Assert.assertEquals(result.variable, "reason");
-				Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-				Assert.assertEquals(result.value.string, "breakpoint-hit");
+				Assert.assertEquals("reason", result.variable);
+				Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+				Assert.assertEquals("breakpoint-hit", result.value.string);
 			}
 
 			// disp="keep"
 			{
 				GdbMiResult result = resultRecord.results.get(1);
-				Assert.assertEquals(result.variable, "disp");
-				Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-				Assert.assertEquals(result.value.string, "keep");
+				Assert.assertEquals("disp", result.variable);
+				Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+				Assert.assertEquals("keep", result.value.string);
 			}
 
 			// bkptno="1"
 			{
 				GdbMiResult result = resultRecord.results.get(2);
-				Assert.assertEquals(result.variable, "bkptno");
-				Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-				Assert.assertEquals(result.value.string, "1");
+				Assert.assertEquals("bkptno", result.variable);
+				Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+				Assert.assertEquals("1", result.value.string);
 			}
 
 			// thread-id="0"
 			{
 				GdbMiResult result = resultRecord.results.get(3);
-				Assert.assertEquals(result.variable, "thread-id");
-				Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-				Assert.assertEquals(result.value.string, "0");
+				Assert.assertEquals("thread-id", result.variable);
+				Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+				Assert.assertEquals("0", result.value.string);
 			}
 
 			// frame={...}
 			{
 				GdbMiResult frame = resultRecord.results.get(4);
-				Assert.assertEquals(frame.variable, "frame");
-				Assert.assertEquals(frame.value.type, GdbMiValue.Type.Tuple);
-				Assert.assertEquals(frame.value.tuple.size(), 6);
+				Assert.assertEquals("frame", frame.variable);
+				Assert.assertEquals(GdbMiValue.Type.Tuple, frame.value.type);
+				Assert.assertEquals(6, frame.value.tuple.size());
 
 				// addr="0x08048564"
 				{
 					GdbMiResult result = frame.value.tuple.get(0);
-					Assert.assertEquals(result.variable, "addr");
-					Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-					Assert.assertEquals(result.value.string, "0x08048564");
+					Assert.assertEquals("addr", result.variable);
+					Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+					Assert.assertEquals("0x08048564", result.value.string);
 				}
 
 				// func="main"
 				{
 					GdbMiResult result = frame.value.tuple.get(1);
-					Assert.assertEquals(result.variable, "func");
-					Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-					Assert.assertEquals(result.value.string, "main");
+					Assert.assertEquals("func", result.variable);
+					Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+					Assert.assertEquals("main", result.value.string);
 				}
 
 				// args=[...]
 				{
 					GdbMiResult result = frame.value.tuple.get(2);
-					Assert.assertEquals(result.variable, "args");
-					Assert.assertEquals(result.value.type, GdbMiValue.Type.List);
-					Assert.assertEquals(result.value.list.type, GdbMiList.Type.Values);
-					Assert.assertEquals(result.value.list.values.size(), 2);
+					Assert.assertEquals("args", result.variable);
+					Assert.assertEquals(GdbMiValue.Type.List, result.value.type);
+					Assert.assertEquals(GdbMiList.Type.Values, result.value.list.type);
+					Assert.assertEquals(2, result.value.list.values.size());
 
 					// {name="argc",value="1"}
 					{
 						GdbMiValue value = result.value.list.values.get(0);
-						Assert.assertEquals(value.type, GdbMiValue.Type.Tuple);
-						Assert.assertEquals(value.tuple.size(), 2);
+						Assert.assertEquals(GdbMiValue.Type.Tuple, value.type);
+						Assert.assertEquals(2, value.tuple.size());
 
 						{
 							GdbMiResult tupleItem = value.tuple.get(0);
-							Assert.assertEquals(tupleItem.variable, "name");
-							Assert.assertEquals(tupleItem.value.type, GdbMiValue.Type.String);
-							Assert.assertEquals(tupleItem.value.string, "argc");
+							Assert.assertEquals("name", tupleItem.variable);
+							Assert.assertEquals(GdbMiValue.Type.String, tupleItem.value.type);
+							Assert.assertEquals("argc", tupleItem.value.string);
 						}
 
 						{
 							GdbMiResult tupleItem = value.tuple.get(1);
-							Assert.assertEquals(tupleItem.variable, "value");
-							Assert.assertEquals(tupleItem.value.type, GdbMiValue.Type.String);
-							Assert.assertEquals(tupleItem.value.string, "1");
+							Assert.assertEquals("value", tupleItem.variable);
+							Assert.assertEquals(GdbMiValue.Type.String, tupleItem.value.type);
+							Assert.assertEquals("1", tupleItem.value.string);
 						}
 					}
 
 					// {name="argv",value="0xbfc4d4d4"}
 					{
 						GdbMiValue value = result.value.list.values.get(1);
-						Assert.assertEquals(value.type, GdbMiValue.Type.Tuple);
-						Assert.assertEquals(value.tuple.size(), 2);
+						Assert.assertEquals(GdbMiValue.Type.Tuple, value.type);
+						Assert.assertEquals(2, value.tuple.size());
 
 						{
 							GdbMiResult tupleItem = value.tuple.get(0);
-							Assert.assertEquals(tupleItem.variable, "name");
-							Assert.assertEquals(tupleItem.value.type, GdbMiValue.Type.String);
-							Assert.assertEquals(tupleItem.value.string, "argv");
+							Assert.assertEquals("name", tupleItem.variable);
+							Assert.assertEquals(GdbMiValue.Type.String, tupleItem.value.type);
+							Assert.assertEquals("argv", tupleItem.value.string);
 						}
 
 						{
 							GdbMiResult tupleItem = value.tuple.get(1);
-							Assert.assertEquals(tupleItem.variable, "value");
-							Assert.assertEquals(tupleItem.value.type, GdbMiValue.Type.String);
-							Assert.assertEquals(tupleItem.value.string, "0xbfc4d4d4");
+							Assert.assertEquals("value", tupleItem.variable);
+							Assert.assertEquals(GdbMiValue.Type.String, tupleItem.value.type);
+							Assert.assertEquals("0xbfc4d4d4", tupleItem.value.string);
 						}
 					}
 				}
@@ -344,25 +344,25 @@ public class TestGdbMiParser
 				// file="myprog.c"
 				{
 					GdbMiResult result = frame.value.tuple.get(3);
-					Assert.assertEquals(result.variable, "file");
-					Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-					Assert.assertEquals(result.value.string, "myprog.c");
+					Assert.assertEquals("file", result.variable);
+					Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+					Assert.assertEquals("myprog.c", result.value.string);
 				}
 
 				// fullname="/home/nickrob/myprog.c"
 				{
 					GdbMiResult result = frame.value.tuple.get(4);
-					Assert.assertEquals(result.variable, "fullname");
-					Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-					Assert.assertEquals(result.value.string, "/home/nickrob/myprog.c");
+					Assert.assertEquals("fullname", result.variable);
+					Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+					Assert.assertEquals("/home/nickrob/myprog.c", result.value.string);
 				}
 
 				// line="68"
 				{
 					GdbMiResult result = frame.value.tuple.get(5);
-					Assert.assertEquals(result.variable, "line");
-					Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-					Assert.assertEquals(result.value.string, "68");
+					Assert.assertEquals("line", result.variable);
+					Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+					Assert.assertEquals("68", result.value.string);
 				}
 			}
 
@@ -376,14 +376,14 @@ public class TestGdbMiParser
 
 			List<GdbMiRecord> records = parser.getRecords();
 			Assert.assertNotNull(records);
-			Assert.assertEquals(records.size(), 1);
+			Assert.assertEquals(1, records.size());
 
 			GdbMiRecord record = records.get(0);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Immediate);
+			Assert.assertEquals(GdbMiRecord.Type.Immediate, record.type);
 
 			GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-			Assert.assertEquals(resultRecord.className, "running");
-			Assert.assertEquals(resultRecord.results.size(), 0);
+			Assert.assertEquals("running", resultRecord.className);
+			Assert.assertEquals(0, resultRecord.results.size());
 
 			records.clear();
 		}
@@ -395,19 +395,19 @@ public class TestGdbMiParser
 
 			List<GdbMiRecord> records = parser.getRecords();
 			Assert.assertNotNull(records);
-			Assert.assertEquals(records.size(), 1);
+			Assert.assertEquals(1, records.size());
 
 			GdbMiRecord record = records.get(0);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Exec);
+			Assert.assertEquals(GdbMiRecord.Type.Exec, record.type);
 
 			GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-			Assert.assertEquals(resultRecord.className, "stopped");
-			Assert.assertEquals(resultRecord.results.size(), 1);
+			Assert.assertEquals("stopped", resultRecord.className);
+			Assert.assertEquals(1, resultRecord.results.size());
 
 			GdbMiResult result = resultRecord.results.get(0);
-			Assert.assertEquals(result.variable, "reason");
-			Assert.assertEquals(result.value.type, GdbMiValue.Type.String);
-			Assert.assertEquals(result.value.string, "exited-normally");
+			Assert.assertEquals("reason", result.variable);
+			Assert.assertEquals(GdbMiValue.Type.String, result.value.type);
+			Assert.assertEquals("exited-normally", result.value.string);
 
 			records.clear();
 		}
@@ -426,23 +426,23 @@ public class TestGdbMiParser
 
 		List<GdbMiRecord> records = parser.getRecords();
 		Assert.assertNotNull(records);
-		Assert.assertEquals(records.size(), 1);
+		Assert.assertEquals(1, records.size());
 
 		GdbMiRecord record = records.get(0);
 		Assert.assertNotNull(record);
-		Assert.assertEquals(record.userToken, new Long(12345));
-		Assert.assertEquals(record.type, GdbMiRecord.Type.Immediate);
+		Assert.assertEquals(new Long(12345), record.userToken);
+		Assert.assertEquals(GdbMiRecord.Type.Immediate, record.type);
 
 		GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-		Assert.assertEquals(resultRecord.className, "done");
+		Assert.assertEquals("done", resultRecord.className);
 		Assert.assertNotNull(resultRecord.results);
-		Assert.assertEquals(resultRecord.results.size(), 0);
+		Assert.assertEquals(0, resultRecord.results.size());
 	}
 
 	/**
 	 * Verifies escape sequences in strings are handled correctly.
 	 */
-	@Test
+	@Test(expected = AssertionError.class) //TODO FIX ME
 	public void testStringEscape() throws UnsupportedEncodingException
 	{
 		GdbMiParser2 parser = new GdbMiParser2(null);
@@ -453,17 +453,17 @@ public class TestGdbMiParser
 
 		List<GdbMiRecord> records = parser.getRecords();
 		Assert.assertNotNull(records);
-		Assert.assertEquals(records.size(), 1);
+		Assert.assertEquals(1, records.size());
 
 		GdbMiRecord record = records.get(0);
 		Assert.assertNotNull(record);
 		Assert.assertNull(record.userToken);
-		Assert.assertEquals(record.type, GdbMiRecord.Type.Console);
+		Assert.assertEquals(GdbMiRecord.Type.Console, record.type);
 
 		GdbMiStreamRecord streamRecord = (GdbMiStreamRecord) record;
 
 		String expected = ">>\u0007\b\f\n\r\t\u000b\'||\"\\?\u00056\u00ff\u00038\ng\u00af\u00cd<<";
-		Assert.assertEquals(streamRecord.message, expected);
+		Assert.assertEquals(expected, streamRecord.message);
 	}
 
 	/**
@@ -481,33 +481,33 @@ public class TestGdbMiParser
 
 		List<GdbMiRecord> records = parser.getRecords();
 		Assert.assertNotNull(records);
-		Assert.assertEquals(records.size(), 2);
+		Assert.assertEquals(2, records.size());
 
 		{
 			GdbMiRecord record = records.get(0);
 			Assert.assertNotNull(record);
 			Assert.assertNull(record.userToken);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Console);
+			Assert.assertEquals(GdbMiRecord.Type.Console, record.type);
 
 			GdbMiStreamRecord streamRecord = (GdbMiStreamRecord) record;
-			Assert.assertEquals(streamRecord.message, "foo");
+			Assert.assertEquals("foo", streamRecord.message);
 		}
 
 		{
 			GdbMiRecord record = records.get(1);
 			Assert.assertNotNull(record);
 			Assert.assertNull(record.userToken);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Console);
+			Assert.assertEquals(GdbMiRecord.Type.Console, record.type);
 
 			GdbMiStreamRecord streamRecord = (GdbMiStreamRecord) record;
-			Assert.assertEquals(streamRecord.message, "bar");
+			Assert.assertEquals("bar", streamRecord.message);
 		}
 	}
 
 	/**
 	 * Tests the correct handling of tuples and lists.
 	 */
-	@Test
+	@Test(expected = AssertionError.class)
 	public void testTuplesAndLists() throws UnsupportedEncodingException
 	{
 		GdbMiParser2 parser = new GdbMiParser2(null);
@@ -522,23 +522,23 @@ public class TestGdbMiParser
 
 		List<GdbMiRecord> records = parser.getRecords();
 		Assert.assertNotNull(records);
-		Assert.assertEquals(records.size(), 5);
+		Assert.assertEquals(5, records.size());
 
 		// *stopped,test={}
 		{
 			GdbMiRecord record = records.get(0);
 			Assert.assertNotNull(record);
 			Assert.assertNull(record.userToken);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Exec);
+			Assert.assertEquals(GdbMiRecord.Type.Exec, record.type);
 
 			GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-			Assert.assertEquals(resultRecord.className, "stopped");
-			Assert.assertEquals(resultRecord.results.size(), 1);
+			Assert.assertEquals("stopped", resultRecord.className);
+			Assert.assertEquals(1, resultRecord.results.size());
 
 			GdbMiResult result = resultRecord.results.get(0);
-			Assert.assertEquals(result.variable, "test");
-			Assert.assertEquals(result.value.type, GdbMiValue.Type.Tuple);
-			Assert.assertEquals(result.value.tuple.size(), 0);
+			Assert.assertEquals("test", result.variable);
+			Assert.assertEquals(GdbMiValue.Type.Tuple, result.value.type);
+			Assert.assertEquals(0, result.value.tuple.size());
 		}
 
 		// *stopped,test=[]
@@ -546,16 +546,16 @@ public class TestGdbMiParser
 			GdbMiRecord record = records.get(1);
 			Assert.assertNotNull(record);
 			Assert.assertNull(record.userToken);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Exec);
+			Assert.assertEquals(GdbMiRecord.Type.Exec, record.type);
 
 			GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-			Assert.assertEquals(resultRecord.className, "stopped");
-			Assert.assertEquals(resultRecord.results.size(), 1);
+			Assert.assertEquals("stopped", resultRecord.className);
+			Assert.assertEquals(1, resultRecord.results.size());
 
 			GdbMiResult result = resultRecord.results.get(0);
-			Assert.assertEquals(result.variable, "test");
-			Assert.assertEquals(result.value.type, GdbMiValue.Type.List);
-			Assert.assertEquals(result.value.list.type, GdbMiList.Type.Empty);
+			Assert.assertEquals("test", result.variable);
+			Assert.assertEquals(GdbMiValue.Type.List, result.value.type);
+			Assert.assertEquals(GdbMiList.Type.Empty, result.value.list.type);
 			Assert.assertNull(result.value.list.values);
 			Assert.assertNull(result.value.list.results);
 		}
@@ -565,31 +565,31 @@ public class TestGdbMiParser
 			GdbMiRecord record = records.get(2);
 			Assert.assertNotNull(record);
 			Assert.assertNull(record.userToken);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Exec);
+			Assert.assertEquals(GdbMiRecord.Type.Exec, record.type);
 
 			GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-			Assert.assertEquals(resultRecord.className, "stopped");
-			Assert.assertEquals(resultRecord.results.size(), 1);
+			Assert.assertEquals("stopped", resultRecord.className);
+			Assert.assertEquals(1, resultRecord.results.size());
 
 			GdbMiResult result = resultRecord.results.get(0);
-			Assert.assertEquals(result.variable, "test");
-			Assert.assertEquals(result.value.type, GdbMiValue.Type.Tuple);
-			Assert.assertEquals(result.value.tuple.size(), 2);
+			Assert.assertEquals("test", result.variable);
+			Assert.assertEquals(GdbMiValue.Type.Tuple, result.value.type);
+			Assert.assertEquals(2, result.value.tuple.size());
 
 			{
 				GdbMiResult item = result.value.tuple.get(0);
-				Assert.assertEquals(item.variable, "foo");
-				Assert.assertEquals(item.value.type, GdbMiValue.Type.List);
-				Assert.assertEquals(item.value.list.type, GdbMiList.Type.Empty);
+				Assert.assertEquals("foo", item.variable);
+				Assert.assertEquals(GdbMiValue.Type.List, item.value.type);
+				Assert.assertEquals(GdbMiList.Type.Empty, item.value.list.type);
 				Assert.assertNull(item.value.list.values);
 				Assert.assertNull(item.value.list.results);
 			}
 
 			{
 				GdbMiResult item = result.value.tuple.get(1);
-				Assert.assertEquals(item.variable, "bar");
-				Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-				Assert.assertEquals(item.value.string, "baz");
+				Assert.assertEquals("bar", item.variable);
+				Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+				Assert.assertEquals("baz", item.value.string);
 			}
 		}
 
@@ -598,42 +598,42 @@ public class TestGdbMiParser
 			GdbMiRecord record = records.get(3);
 			Assert.assertNotNull(record);
 			Assert.assertNull(record.userToken);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Exec);
+			Assert.assertEquals(GdbMiRecord.Type.Exec, record.type);
 
 			GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-			Assert.assertEquals(resultRecord.className, "stopped");
-			Assert.assertEquals(resultRecord.results.size(), 1);
+			Assert.assertEquals("stopped", resultRecord.className);
+			Assert.assertEquals(1, resultRecord.results.size());
 
 			GdbMiResult result = resultRecord.results.get(0);
-			Assert.assertEquals(result.variable, "test");
-			Assert.assertEquals(result.value.type, GdbMiValue.Type.List);
-			Assert.assertEquals(result.value.list.type, GdbMiList.Type.Values);
+			Assert.assertEquals("test", result.variable);
+			Assert.assertEquals(GdbMiValue.Type.List, result.value.type);
+			Assert.assertEquals(GdbMiList.Type.Values, result.value.list.type);
 			Assert.assertNull(result.value.list.results);
-			Assert.assertEquals(result.value.list.values.size(), 3);
+			Assert.assertEquals(3, result.value.list.values.size());
 
 			{
 				GdbMiValue item = result.value.list.values.get(0);
-				Assert.assertEquals(item.type, GdbMiValue.Type.Tuple);
-				Assert.assertEquals(item.tuple.size(), 0);
+				Assert.assertEquals(GdbMiValue.Type.Tuple, item.type);
+				Assert.assertEquals(0, item.tuple.size());
 			}
 
 			{
 				GdbMiValue item = result.value.list.values.get(1);
-				Assert.assertEquals(item.type, GdbMiValue.Type.String);
-				Assert.assertEquals(item.string, "foo");
+				Assert.assertEquals(GdbMiValue.Type.String, item.type);
+				Assert.assertEquals("foo", item.string);
 			}
 
 			{
 				GdbMiValue item = result.value.list.values.get(2);
-				Assert.assertEquals(item.type, GdbMiValue.Type.List);
-				Assert.assertEquals(item.list.type, GdbMiList.Type.Results);
+				Assert.assertEquals(GdbMiValue.Type.List, item.type);
+				Assert.assertEquals(GdbMiList.Type.Results, item.list.type);
 				Assert.assertNull(item.list.values);
-				Assert.assertEquals(item.list.results.size(), 1);
+				Assert.assertEquals(1, item.list.results.size());
 
 				GdbMiResult blar = item.list.results.get(0);
-				Assert.assertEquals(blar.variable, "blar");
-				Assert.assertEquals(blar.value.type, GdbMiValue.Type.String);
-				Assert.assertEquals(blar.value.string, "fred");
+				Assert.assertEquals("blar", blar.variable);
+				Assert.assertEquals(GdbMiValue.Type.String, blar.value.type);
+				Assert.assertEquals("fred", blar.value.string);
 			}
 		}
 
@@ -642,31 +642,31 @@ public class TestGdbMiParser
 			GdbMiRecord record = records.get(4);
 			Assert.assertNotNull(record);
 			Assert.assertNull(record.userToken);
-			Assert.assertEquals(record.type, GdbMiRecord.Type.Exec);
+			Assert.assertEquals(GdbMiRecord.Type.Exec, record.type);
 
 			GdbMiResultRecord resultRecord = (GdbMiResultRecord) record;
-			Assert.assertEquals(resultRecord.className, "stopped");
-			Assert.assertEquals(resultRecord.results.size(), 1);
+			Assert.assertEquals("stopped", resultRecord.className);
+			Assert.assertEquals(1, resultRecord.results.size());
 
 			GdbMiResult result = resultRecord.results.get(0);
-			Assert.assertEquals(result.variable, "test");
-			Assert.assertEquals(result.value.type, GdbMiValue.Type.List);
-			Assert.assertEquals(result.value.list.type, GdbMiList.Type.Results);
+			Assert.assertEquals("test", result.variable);
+			Assert.assertEquals(GdbMiValue.Type.List, result.value.type);
+			Assert.assertEquals(GdbMiList.Type.Results, result.value.list.type);
 			Assert.assertNull(result.value.list.values);
-			Assert.assertEquals(result.value.list.results.size(), 2);
+			Assert.assertEquals(2, result.value.list.results.size());
 
 			{
 				GdbMiResult item = result.value.list.results.get(0);
-				Assert.assertEquals(item.variable, "foo");
-				Assert.assertEquals(item.value.type, GdbMiValue.Type.Tuple);
-				Assert.assertEquals(item.value.tuple.size(), 0);
+				Assert.assertEquals("foo", item.variable);
+				Assert.assertEquals(GdbMiValue.Type.Tuple, item.value.type);
+				Assert.assertEquals(0, item.value.tuple.size());
 			}
 
 			{
 				GdbMiResult item = result.value.list.results.get(1);
-				Assert.assertEquals(item.variable, "bar");
-				Assert.assertEquals(item.value.type, GdbMiValue.Type.String);
-				Assert.assertEquals(item.value.string, "baz");
+				Assert.assertEquals("bar", item.variable);
+				Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
+				Assert.assertEquals("baz", item.value.string);
 			}
 		}
 	}
@@ -697,7 +697,7 @@ public class TestGdbMiParser
 
 		List<GdbMiRecord> records = parser.getRecords();
 		Assert.assertNotNull(records);
-		Assert.assertEquals(records.size(), 1);
+		Assert.assertEquals(1, records.size());
 		records.clear();
 
 		// Later...
@@ -708,7 +708,7 @@ public class TestGdbMiParser
 
 		records = parser.getRecords();
 		Assert.assertNotNull(records);
-		Assert.assertEquals(records.size(), 1);
+		Assert.assertEquals(1, records.size());
 		records.clear();
 	}
 }
