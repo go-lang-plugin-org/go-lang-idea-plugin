@@ -48,4 +48,8 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
     public void testCompositeExpressionKey() throws Exception {
         doTest();
     }
+
+    public void testClosuresResultParameterUnsolveBug() throws Exception {
+        doTest();
+    }
 }
