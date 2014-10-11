@@ -32,11 +32,12 @@
     </path>
 
     <path id="classpath.test">
-        <pathelement location="${idea.community.build}/lib/junit-4.10.jar" />
-        <fileset dir="${idea.community.build}" includes="**/*.jar" />
+        <pathelement location="${idea.community.build}/lib/junit-4.11.jar" />
         <fileset dir="${java.home}/../lib" includes="**/*.jar" />
         <pathelement location="${build}"/>
         <pathelement location="${test.build}"/>
+        <fileset dir="${idea.community.build}/lib" includes="**/*.jar" />
+        <fileset dir="${idea.community.build}/plugins" includes="**/*.jar" />
     </path>
 
     <taskdef name="javac2" classname="com.intellij.ant.Javac2">
@@ -75,10 +76,8 @@
     <target name="compile" depends="clean,init" description="Compile the source code">
         <taskdef name="javac2" classname="com.intellij.ant.Javac2">
             <classpath>
-                <pathelement location="${idea.community.build}/redist/javac2.jar"/>
-                <pathelement location="${idea.community.build}/redist/forms_rt.jar"/>
-                <pathelement location="${idea.community.build}/build/lib/javac2.jar"/>
-                <pathelement location="${idea.community.build}/build/lib/forms_rt.jar"/>
+                <pathelement location="${idea.community.build}/lib/javac2.jar"/>
+                <pathelement location="${idea.community.build}/lib/forms_rt.jar"/>
                 <path refid="idea.classpath"/>
             </classpath>
         </taskdef>
@@ -112,6 +111,7 @@
             <jvmarg value="-Dfile.encoding=UTF-8"/>
             <jvmarg value="-ea"/>
             <jvmarg line="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=${suspend},address=43251"/>
+            <jvmarg value="-Didea.paths.selector=IntelliJIdea14"/>
             <jvmarg value="-Didea.plugins.path=${idea.community.build}/plugins"/>
             <jvmarg value="-Didea.launcher.bin.path=${idea.community.build}/bin"/>
             <classpath refid="classpath.test"/>
