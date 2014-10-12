@@ -7,10 +7,8 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
-import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-import java.util.Collection;
 import java.util.HashSet;
 
 public class ImportPathInspection extends AbstractWholeGoFileInspection {
@@ -24,19 +22,7 @@ public class ImportPathInspection extends AbstractWholeGoFileInspection {
     @Override
     protected void doCheckFile(@NotNull GoFile file,
                                @NotNull final InspectionResult result) {
-        new GoRecursiveElementVisitor() {
-            @Override
-            public void visitFile(GoFile file) {
-                super.visitFile(file);
-                checkImportPath(file, result);
-            }
-        }.visitFile(file);
-    }
-
-    private static void checkImportPath(GoFile file,InspectionResult result){
         GoNamesCache namecache = GoNamesCache.getInstance(file.getProject());
-        Collection<String> allPackage = namecache.getAllPackages();
-        allPackage.add("C");
         String selfPackageName = file.getFullPackageName();
 
         HashSet<String> hasVisitImportPath = new HashSet<String>();
@@ -66,7 +52,7 @@ public class ImportPathInspection extends AbstractWholeGoFileInspection {
                     continue;
                 }
 
-                if (!allPackage.contains(importPathValue)) {
+                if (!importPathValue.equals("C") && !namecache.isPackageImportPathExist(importPathValue)){
                     result.addProblem(declaration, GoBundle.message("error.import.path.notfound", importPathValue));
                     continue;
                 }
