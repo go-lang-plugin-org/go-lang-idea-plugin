@@ -4,7 +4,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import ro.redeul.google.go.GoEditorAwareTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
-import org.junit.Ignore;
 
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
 

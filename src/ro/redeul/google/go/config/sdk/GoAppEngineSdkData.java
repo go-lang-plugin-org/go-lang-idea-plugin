@@ -4,10 +4,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.SdkAdditionalData;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.sdk.GoSdkUtil;
-
-import java.io.File;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

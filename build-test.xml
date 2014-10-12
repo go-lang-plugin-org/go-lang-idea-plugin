@@ -23,7 +23,6 @@
 
     <path id="my.classpath">
         <pathelement location="${build}"/>
-        <pathelement path="${java.home}/../lib/tools.jar"/>
     </path>
 
     <path id="classpath">
@@ -32,17 +31,23 @@
     </path>
 
     <path id="classpath.test">
-        <pathelement location="${idea.community.build}/lib/junit-4.10.jar" />
-        <fileset dir="${idea.community.build}" includes="**/*.jar" />
-        <fileset dir="${java.home}/../lib" includes="**/*.jar" />
         <pathelement location="${build}"/>
         <pathelement location="${test.build}"/>
+        <fileset dir="${idea.community.build}/lib">
+            <include name="**/*.jar" />
+        </fileset>
+        <fileset dir="${idea.community.build}/plugins">
+            <include name="**/*.jar" />
+        </fileset>
+        <fileset dir="${java.home}/../lib">
+            <include name="**/*.jar" />
+        </fileset>
     </path>
 
     <taskdef name="javac2" classname="com.intellij.ant.Javac2">
         <classpath>
             <pathelement location="${idea.community.build}/lib/javac2.jar"/>
-            <fileset dir="${idea.community.build}" includes="**/*.jar" />
+            <pathelement location="${idea.community.build}/lib/asm-all.jar" />
         </classpath>
     </taskdef>
 
@@ -51,7 +56,7 @@
         <attribute name="dest"/>
         <sequential>
 
-            <javac2 srcdir="@{src}" destdir="@{dest}" classpathref="classpath" verbose="false" debug="true" target="1.7" />
+            <javac2 srcdir="@{src}" destdir="@{dest}" classpathref="classpath" verbose="false" debug="true" target="1.7" includeantruntime="false" />
 
             <copy toDir="@{dest}">
                 <fileset dir="@{src}">
@@ -75,10 +80,8 @@
     <target name="compile" depends="clean,init" description="Compile the source code">
         <taskdef name="javac2" classname="com.intellij.ant.Javac2">
             <classpath>
-                <pathelement location="${idea.community.build}/redist/javac2.jar"/>
-                <pathelement location="${idea.community.build}/redist/forms_rt.jar"/>
-                <pathelement location="${idea.community.build}/build/lib/javac2.jar"/>
-                <pathelement location="${idea.community.build}/build/lib/forms_rt.jar"/>
+                <pathelement location="${idea.community.build}/lib/javac2.jar"/>
+                <pathelement location="${idea.community.build}/lib/forms_rt.jar"/>
                 <path refid="idea.classpath"/>
             </classpath>
         </taskdef>
@@ -103,7 +106,7 @@
         <property name="suspend" value="n"/>
 
         <junit printsummary="yes"
-               haltonfailure="false" showoutput="yes"
+               haltonfailure="true" showoutput="yes"
                failureProperty="failure_found"
                fork="yes" forkmode="once" reloading="no">
 
@@ -112,6 +115,7 @@
             <jvmarg value="-Dfile.encoding=UTF-8"/>
             <jvmarg value="-ea"/>
             <jvmarg line="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=${suspend},address=43251"/>
+            <jvmarg value="-Didea.paths.selector=IntelliJIdea14"/>
             <jvmarg value="-Didea.plugins.path=${idea.community.build}/plugins"/>
             <jvmarg value="-Didea.launcher.bin.path=${idea.community.build}/bin"/>
             <classpath refid="classpath.test"/>

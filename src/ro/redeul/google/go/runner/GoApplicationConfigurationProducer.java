@@ -90,11 +90,8 @@ public class GoApplicationConfigurationProducer extends RunConfigurationProducer
             PsiFile[] filesInDir = psiDir.getFiles();
 
             boolean found = false;
-            for(int i = 0; i < filesInDir.length; i++) {
-                if (!(filesInDir[i] instanceof GoFile)) {
-                    continue;
-                }
-                else {
+            for (PsiFile aFilesInDir : filesInDir) {
+                if (aFilesInDir instanceof GoFile) {
                     found = true;
                     break;
                 }
@@ -106,9 +103,6 @@ public class GoApplicationConfigurationProducer extends RunConfigurationProducer
             String dirName = psiDir.getName();
             try {
                 VirtualFile virtualFile = psiDir.getVirtualFile();
-                if (virtualFile == null) {
-                    return false;
-                }
 
                 Project project = psiDir.getProject();
                 Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);

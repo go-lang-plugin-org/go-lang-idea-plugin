@@ -12,7 +12,6 @@ import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.wm.ToolWindow;
@@ -22,7 +21,6 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
-import ro.redeul.google.go.ide.GoConfigurable;
 import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.runner.ui.properties.GoTestConsoleProperties;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -137,7 +135,7 @@ class GoCommandLineState extends CommandLineState {
         }
 
         testInstallDependencies.getEnvironment().putAll(sysEnv);
-        testInstallDependencies.setWorkDirectory(workingDir);
+        testInstallDependencies.withWorkDirectory(workingDir);
         try {
             if (testInstallDependencies.createProcess().waitFor() == 0) {
                 VirtualFileManager.getInstance().syncRefresh();
@@ -183,7 +181,7 @@ class GoCommandLineState extends CommandLineState {
         }
 
         commandLine.getEnvironment().putAll(sysEnv);
-        commandLine.setWorkDirectory(workingDir);
+        commandLine.withWorkDirectory(workingDir);
 
         if (testConfiguration.testArgs != null && testConfiguration.testArgs.trim().length() > 0) {
             commandLine.getParametersList().addParametersString(testConfiguration.testArgs);

@@ -162,7 +162,7 @@ public class GoSdkUtil {
             GeneralCommandLine command = new GeneralCommandLine();
             command.setExePath(goCommand);
             command.addParameter("version");
-            command.setWorkDirectory(path);
+            command.withWorkDirectory(path);
             command.getEnvironment().put("GOROOT", path);
 
             ProcessOutput output = new CapturingProcessHandler(
@@ -193,7 +193,7 @@ public class GoSdkUtil {
             GeneralCommandLine command = new GeneralCommandLine();
             command.setExePath(goCommand);
             command.addParameter("env");
-            command.setWorkDirectory(path);
+            command.withWorkDirectory(path);
             command.getEnvironment().put("GOROOT", path);
 
             ProcessOutput output = new CapturingProcessHandler(
@@ -256,10 +256,10 @@ public class GoSdkUtil {
         GeneralCommandLine command = new GeneralCommandLine();
         if (checkFileExists(sdkData.GO_HOME_PATH + "/bin/go")) {
             command.setExePath(sdkData.GO_HOME_PATH + "/bin/go");
-            command.setWorkDirectory(sdkData.GO_HOME_PATH + "/bin");
+            command.withWorkDirectory(sdkData.GO_HOME_PATH + "/bin");
         } else {
             command.setExePath(sdkData.GO_HOME_PATH + "/../goapp");
-            command.setWorkDirectory(sdkData.GO_HOME_PATH + "/..");
+            command.withWorkDirectory(sdkData.GO_HOME_PATH + "/..");
         }
         command.addParameter("env");
 
