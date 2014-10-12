@@ -199,6 +199,11 @@ public class GoNamesCache {
         return files;
     }
 
+    public boolean isPackageImportPathExist(String importPath){
+        Collection<GoFile> files = StubIndex.getElements(GoPackageImportPath.KEY,
+                importPath, project, GlobalSearchScope.allScope(project), GoFile.class);
+        return files.size()>0;
+    }
 
     private GlobalSearchScope getSearchScope(boolean allScope) {
         return
