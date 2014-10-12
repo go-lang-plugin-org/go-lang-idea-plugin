@@ -98,6 +98,11 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
                 return false;
             }
         }
+        for (GoFunctionParameter functionParameter : getResults()) {
+            if (!processor.execute(functionParameter, state)) {
+                return false;
+            }
+        }
 
         return processor.execute(this, state);
     }

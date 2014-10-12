@@ -41,4 +41,7 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
+    public void testClosuresResultParameterUnsolveBug() throws Exception {
+        doTest();
+    }
 }
