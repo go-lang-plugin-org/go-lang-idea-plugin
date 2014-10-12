@@ -116,7 +116,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="135.690"/>
+    <idea-version since-build="139.1.20" until-build="140.0.0" />
 
     <category>Custom Languages</category>
     <resource-bundle>ro.redeul.google.go.GoBundle</resource-bundle>
@@ -124,6 +124,7 @@
     <depends>com.intellij</depends>
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
     <depends optional="true" config-file="idea-features.xml">com.intellij.modules.java</depends>
     <!--depends optional="true" config-file="non-idea-features.xml">com.intellij.modules.xml</depends-->
 
