@@ -94,7 +94,7 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
         }
 
         try {
-            String[] command = {"goimports", "-w", fileName};
+            String[] command = {GoSdkUtil.getGoImportsExec(), "-w", fileName};
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv);
@@ -135,7 +135,7 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
         }
 
         try {
-            String[] command = {"gofmt", "-w", fileName};
+            String[] command = {"go", "fmt", fileName};
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv);
