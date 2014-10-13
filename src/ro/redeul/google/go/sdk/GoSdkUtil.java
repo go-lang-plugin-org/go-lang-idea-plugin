@@ -1095,4 +1095,13 @@ public class GoSdkUtil {
 
         return computeGoCommand(goExecName, goArgs);
     }
+
+    public static String getGoImportsExec() {
+        String execPath = GoSdkUtil.getGoPath() + File.separator + "bin" + File.separator + "goimports";
+        if (isHostOsWindows()) {
+            execPath += ".exe";
+        }
+
+        return execPath;
+    }
 }
