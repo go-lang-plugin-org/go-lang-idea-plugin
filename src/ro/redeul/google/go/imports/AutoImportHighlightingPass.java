@@ -152,7 +152,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                 packageFiles.add(p);
             }
         }
-        packageFiles.sort(null);
+        //packageFiles.sort(null);
         return  packageFiles;
     }
 

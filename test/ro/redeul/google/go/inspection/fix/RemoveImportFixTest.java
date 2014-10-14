@@ -37,7 +37,7 @@ public class RemoveImportFixTest extends GoEditorAwareTestCase {
         }
 
         assertNotNull(element);
-        System.out.println(DebugUtil.psiToString(file, false, true));
+        //System.out.println(DebugUtil.psiToString(file, false, true));
         InspectionManager im = InspectionManager.getInstance(project);
         LocalQuickFix fix = null;
         ProblemDescriptor pd = im.createProblemDescriptor(element, "", fix, ProblemHighlightType.ERROR, true);

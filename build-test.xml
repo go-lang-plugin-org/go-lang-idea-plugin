@@ -18,9 +18,6 @@
         <fileset dir="${idea.community.build}/lib">
             <include name="*.jar"/>
         </fileset>
-        <fileset dir="${idea.community.build}/plugins">
-            <include name="*Integration/lib/*.jar"/>
-        </fileset>
     </path>
 
     <path id="my.classpath">
@@ -37,9 +34,7 @@
         <pathelement location="${test.build}"/>
         <fileset dir="${idea.community.build}/lib">
             <include name="**/*.jar" />
-        </fileset>
-        <fileset dir="${idea.community.build}/plugins">
-            <include name="**/*.jar" />
+            <exclude name="ant/lib/**/*.jar" />
         </fileset>
         <fileset dir="${java.home}/../lib">
             <include name="**/*.jar" />
@@ -108,7 +103,7 @@
         <property name="suspend" value="n"/>
 
         <junit printsummary="yes"
-               haltonfailure="true" showoutput="yes"
+               haltonfailure="false" showoutput="yes"
                failureProperty="failure_found"
                fork="yes" forkmode="once" reloading="no">
 
@@ -117,8 +112,6 @@
             <jvmarg value="-Dfile.encoding=UTF-8"/>
             <jvmarg value="-ea"/>
             <jvmarg line="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=${suspend},address=43251"/>
-            <jvmarg value="-Didea.paths.selector=IntelliJIdea14"/>
-            <jvmarg value="-Didea.plugins.path=${idea.community.build}/plugins"/>
             <jvmarg value="-Didea.launcher.bin.path=${idea.community.build}/bin"/>
             <classpath refid="classpath.test"/>
 

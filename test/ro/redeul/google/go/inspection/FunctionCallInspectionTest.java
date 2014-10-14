@@ -1,6 +1,7 @@
 package ro.redeul.google.go.inspection;
 
 import com.intellij.openapi.vfs.LocalFileSystem;
+import org.junit.Ignore;
 
 import java.io.File;
 import java.util.Collections;
@@ -28,7 +29,10 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
     public void testSimple() throws Exception{ doTest(); }
     public void testMake() throws Exception{ doTest(); }
     public void testNew() throws Exception{ doTest(); }
-    // TODO FIX ME
-    //public void testFuncCall() throws Exception{ doTest(); }
-    //public void testBuiltinCall() throws Exception{ doTest(); }
+
+    @Ignore("not ready yet")
+    public void testFuncCall() throws Exception{ doTest(); }
+
+    @Ignore("not ready yet")
+    public void testBuiltinCall() throws Exception{ doTest(); }
 }
