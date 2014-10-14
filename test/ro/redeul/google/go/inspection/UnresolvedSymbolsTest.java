@@ -47,9 +47,9 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("not ready yet")
+/*    @Ignore("not ready yet")
     public void testStructField() throws Exception {
         doTest();
-    }
+    }*/
 
 }

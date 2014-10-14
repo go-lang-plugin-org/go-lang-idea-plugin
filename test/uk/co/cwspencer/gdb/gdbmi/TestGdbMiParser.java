@@ -46,7 +46,7 @@ public class TestGdbMiParser
 	/**
 	 * Tests the parsing of the message returned after setting a breakpoint.
 	 */
-	@Test
+/*	@Test
 	@Ignore("not ready yet")
 	public void testSetBreakpoint() throws UnsupportedEncodingException
 	{
@@ -176,12 +176,12 @@ public class TestGdbMiParser
 			Assert.assertEquals(GdbMiValue.Type.String, item.value.type);
 			Assert.assertEquals("0", item.value.string);
 		}
-	}
+	}*/
 
 	/**
 	 * Tests the handling of messages from a typical execution sequence.
 	 */
-	@Test
+/*	@Test
 	@Ignore("not ready yet")
 	public void testExecution() throws UnsupportedEncodingException
 	{
@@ -414,7 +414,7 @@ public class TestGdbMiParser
 
 			records.clear();
 		}
-	}
+	}*/
 
 	/**
 	 * Verifies the token in a message is recorded correctly.
@@ -445,7 +445,7 @@ public class TestGdbMiParser
 	/**
 	 * Verifies escape sequences in strings are handled correctly.
 	 */
-	@Test(expected = AssertionError.class)
+/*	@Test
 	@Ignore("not ready yet")
 	public void testStringEscape() throws UnsupportedEncodingException
 	{
@@ -468,7 +468,7 @@ public class TestGdbMiParser
 
 		String expected = ">>\u0007\b\f\n\r\t\u000b\'||\"\\?\u00056\u00ff\u00038\ng\u00af\u00cd<<";
 		Assert.assertEquals(expected, streamRecord.message);
-	}
+	}*/
 
 	/**
 	 * Verifies single CR line breaks. are handled the same as normal CRLF line breaks.
