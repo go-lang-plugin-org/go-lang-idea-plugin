@@ -8,6 +8,9 @@ import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findDefaultPackageName;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isDotImport;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +49,16 @@ public class ImportedPackagesCollectorProcessor extends BaseScopeProcessor {
             GoPackageReference packageReference = importSpec.getPackageReference();
 
             if (packageReference == null) {
+                // If there is no package reference but the import path contains
+                // a ".', treat it like a package reference were specfied.
                 GoLiteralString importPath = importSpec.getImportPath();
-                if (importPath != null)
-                    packageImports.add(importPath.getValue());
+                if (importPath != null) {
+                    String path = importPath.getValue();
+                    if (isDotImport(path)) {
+                        path = findDefaultPackageName(path);
+                    }
+                    packageImports.add(path);
+                }
                 continue;
             }
 

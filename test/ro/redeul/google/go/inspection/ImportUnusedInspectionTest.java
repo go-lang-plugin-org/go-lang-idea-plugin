@@ -4,6 +4,7 @@ public class ImportUnusedInspectionTest extends GoInspectionTestCase {
 
     public void testSimple() throws Exception{ doTest(); }
     public void testOnlyOneImport() throws Exception{ doTest(); }
+    public void testDotImport() throws Exception{ doTest(); }
     public void testBlankImport() throws Exception{ doTest(); }
     public void testMixedCaseImport() throws Exception{ doTest(); }
     public void testCgo() throws Exception{ doTest(); }

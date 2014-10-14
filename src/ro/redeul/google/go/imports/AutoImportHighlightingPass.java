@@ -26,6 +26,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.options.GoSettings;
 
@@ -145,12 +146,14 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                                                  String expectedName) {
         List<String> packageFiles = new ArrayList<String>();
         for (String p : allPackages) {
-            if (expectedName.equals(p) || p.endsWith(
+            String importPath = GoPsiUtils.findRealImportPathValue(p);
+            if (expectedName.equals(p) || importPath.endsWith(
                 "/" + expectedName)) {
                 packageFiles.add(p);
             }
         }
-        return packageFiles;
+        packageFiles.sort(null);
+        return  packageFiles;
     }
 
     private RangeHighlighter[] getAllHighlighters(Project project) {
