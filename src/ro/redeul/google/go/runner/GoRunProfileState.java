@@ -103,6 +103,8 @@ public class GoRunProfileState extends CommandLineState {
             }
         }
 
+        (new File(execName)).delete();
+
         try {
             String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
 
