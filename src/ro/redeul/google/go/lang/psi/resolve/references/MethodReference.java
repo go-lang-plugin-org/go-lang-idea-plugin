@@ -4,13 +4,13 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.MethodResolver;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
@@ -38,7 +38,7 @@ public class MethodReference
                             processor,
                             element.getContainingFile().getLastChild(),
                             element.getContainingFile(),
-                            GoResolveStates.initial());
+                            ResolveStates.initial());
 
                     return GoResolveResult.fromElement(processor.getChildDeclaration());
                 }
@@ -104,7 +104,7 @@ public class MethodReference
             processor,
             getElement().getContainingFile().getLastChild(),
             getElement().getContainingFile(),
-            GoResolveStates.initial());
+            ResolveStates.initial());
 
         return variants.toArray(new LookupElementBuilder[variants.size()]);
     }

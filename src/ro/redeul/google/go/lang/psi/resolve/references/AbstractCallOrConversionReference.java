@@ -8,7 +8,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -66,7 +66,7 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
 
             if (funcDeclaration.getNameIdentifier() != null) {
                 return matchesVisiblePackageName(
-                    funcDeclaration.getUserData(GoResolveStates.VisiblePackageName),
+                    "" /*funcDeclaration.getUserData(ResolveStates.VisiblePackageName)*/,
                     funcDeclaration.getNameIdentifier(), myName);
             }
         }

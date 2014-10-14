@@ -7,7 +7,7 @@ import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
@@ -53,7 +53,7 @@ public class TypeNameReference
                             processor,
                             reference.getElement(),
                             reference.getElement().getContainingFile(),
-                            GoResolveStates.initial());
+                            ResolveStates.initial());
 
                     return GoResolveResult.fromElement(processor.getDeclaration());
                 }
@@ -99,8 +99,10 @@ public class TypeNameReference
 
                         String name = PsiUtilCore.getName(declaration);
 
-                        String visiblePackageName =
-                                getState().get(GoResolveStates.VisiblePackageName);
+//                        String visiblePackageName =
+//                                getState().get(ResolveStates.VisiblePackageName);
+
+                        String visiblePackageName = null;
 
                         if (visiblePackageName != null) {
                             name = "".equals(visiblePackageName) ?
@@ -126,7 +128,7 @@ public class TypeNameReference
         GoPsiScopesUtil.treeWalkUp(
                 processor,
                 getElement(), getElement().getContainingFile(),
-                GoResolveStates.initial());
+                ResolveStates.initial());
 
         return variants.toArray();
     }

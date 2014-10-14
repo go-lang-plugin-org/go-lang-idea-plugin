@@ -2,7 +2,7 @@ package ro.redeul.google.go.lang.psi.resolve;
 
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.references.AbstractCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -26,7 +26,7 @@ public class MethodOrTypeNameResolver
     @Override
     public void visitTypeSpec(GoTypeSpec type) {
 
-        if ("builtin".equals(getState().get(GoResolveStates.PackageName))) {
+        if (ResolveStates.get(getState(), ResolveStates.Key.IsPackageBuiltin)) {
             String typeName = type.getName();
             GoPsiType typeDeclaration = type.getType();
             if (typeName != null && typeDeclaration != null) {

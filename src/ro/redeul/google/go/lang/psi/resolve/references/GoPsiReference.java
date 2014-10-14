@@ -8,7 +8,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.completion.GoCompletionContributor;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -88,11 +88,11 @@ public abstract class GoPsiReference<
 
     boolean matchesVisiblePackageName(PsiElement element,
                                       String targetQualifiedName) {
-        String visiblePackageName =
-            element.getUserData(GoResolveStates.VisiblePackageName);
+//        String visiblePackageName = element.getUserData(ResolveStates.VisiblePackageName);
 
-        return matchesVisiblePackageName(visiblePackageName, element,
-                                         targetQualifiedName);
+//        return matchesVisiblePackageName(visiblePackageName, element,
+//                                         targetQualifiedName);
+        return false;
     }
 
     public boolean matchesVisiblePackageName(String currentPackageName,

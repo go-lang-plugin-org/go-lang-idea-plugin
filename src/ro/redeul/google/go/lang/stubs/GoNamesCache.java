@@ -156,8 +156,7 @@ public class GoNamesCache {
 
         StubIndex index = StubIndex.getInstance();
 
-        Collection<String> keys = index.getAllKeys(GoPackageImportPath.KEY,
-                                                   project);
+        Collection<String> keys = index.getAllKeys(GoPackageImportPath.KEY, project);
 
         Collection<String> packagesCollection = new ArrayList<String>();
 
@@ -189,8 +188,9 @@ public class GoNamesCache {
 
     public Collection<GoFile> getFilesByPackageImportPath(@NotNull String importPath,
                                                           @NotNull GlobalSearchScope scope) {
-        Collection<GoFile> files = StubIndex.getElements(GoPackageImportPath.KEY,
-                importPath, project, scope, GoFile.class);
+        StubIndex index = StubIndex.getInstance();
+
+        Collection<GoFile> files = StubIndex.getElements(GoPackageImportPath.KEY, importPath, project, scope, GoFile.class);
         removeExcludedFiles(files);
         return files;
     }

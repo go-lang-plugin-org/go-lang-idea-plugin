@@ -9,6 +9,8 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
@@ -50,7 +52,11 @@ public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDecla
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        return  processor.execute(this, state);
+        //noinspection ConstantConditions
+        if ( !GoNamesUtil.isExportedName(getName()) && ! ResolveStates.get(state, ResolveStates.Key.JustExports) )
+            return true;
+
+        return processor.execute(this, state);
     }
 
     @Override

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
@@ -47,7 +47,9 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        return !"builtin".equals(state.get(GoResolveStates.PackageName)) && !state.get(GoResolveStates.IsOriginalPackage) && !GoNamesUtil.isExportedName(getName()) || processor.execute(this, state);
+        return !ResolveStates.get(state, ResolveStates.Key.IsPackageBuiltin) &&
+                !ResolveStates.get(state, ResolveStates.Key.IsOriginalPackage) &&
+                !GoNamesUtil.isExportedName(getName()) || processor.execute(this, state);
 
     }
 

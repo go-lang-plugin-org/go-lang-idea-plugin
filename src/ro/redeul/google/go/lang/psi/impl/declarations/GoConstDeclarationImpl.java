@@ -16,6 +16,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -177,6 +179,10 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
+        //noinspection ConstantConditions
+        if ( !GoNamesUtil.isExportedName(getName()) && ! ResolveStates.get(state, ResolveStates.Key.JustExports) )
+            return true;
+
         return processor.execute(this, state);
     }
 }

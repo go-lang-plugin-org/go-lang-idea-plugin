@@ -2,12 +2,10 @@ package ro.redeul.google.go.lang.psi.typing;
 
 import com.intellij.util.Function;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
@@ -45,6 +43,11 @@ public class GoTypes {
 
     public static GoType makePointer(GoPsiType argumentType) {
         return new GoTypePointer(fromPsiType(argumentType));
+    }
+
+    public static GoType[] getPackageType(GoImportDeclaration declaration) {
+        GoPackage goPackage = declaration.getPackage();
+        return goPackage != null ? new GoType[] { new GoTypePackage(goPackage) } : GoType.EMPTY_ARRAY;
     }
 
     public enum Builtin {

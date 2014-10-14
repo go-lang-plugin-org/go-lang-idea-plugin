@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
@@ -54,8 +54,7 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
                 Collection<GoFile> files = namesCache.getBuiltinPackageFiles();
 
                 for (GoFile file : files) {
-                    ResolveState newState = GoResolveStates.imported("builtin", "");
-                    if (!file.processDeclarations(processor, newState, null, element))  {
+                    if (!file.processDeclarations(processor, ResolveStates.builtins(), null, element))  {
                         break;
                     }
                 }
@@ -99,8 +98,7 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
         Collection<GoFile> files = namesCache.getBuiltinPackageFiles();
 
         for (GoFile file : files) {
-            ResolveState newState = GoResolveStates.imported("builtin", "");
-            if (!file.processDeclarations(processor, newState, null, element))  {
+            if (!file.processDeclarations(processor, ResolveStates.builtins(), null, element))  {
                 break;
             }
         }

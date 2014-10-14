@@ -81,6 +81,10 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
+    public void testDefaultImportDifferentPackage() throws Exception {
+        doTest();
+    }
+
     public void testFromCustomImportedPackage() throws Exception {
         doTest();
     }

@@ -24,7 +24,6 @@ import ro.redeul.google.go.util.LookupElementUtil;
 public class GoPsiElementBase extends ASTWrapperPsiElement
     implements GoPsiElement {
 
-
     protected PsiReference[] refs(PsiReference ... references) {
         return references;
     }

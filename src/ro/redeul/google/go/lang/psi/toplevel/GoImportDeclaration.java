@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.toplevel;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
@@ -26,4 +27,7 @@ public interface GoImportDeclaration extends GoPsiElement {
     String getVisiblePackageName();
 
     boolean isValidImport();
+
+    @Nullable
+    GoPackage getPackage();
 }

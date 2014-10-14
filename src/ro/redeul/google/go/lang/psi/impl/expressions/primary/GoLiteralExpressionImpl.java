@@ -20,6 +20,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationImpl;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
@@ -30,6 +32,7 @@ import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
@@ -124,6 +127,12 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                     if (resolved == null) {
                         return GoType.EMPTY_ARRAY;
                     }
+
+                    if (resolved instanceof GoImportDeclaration) {
+                        GoImportDeclaration importDeclaration = (GoImportDeclaration) resolved;
+                        return GoTypes.getPackageType(importDeclaration);
+                    }
+
                     PsiElement parent = resolved.getParent();
                     if (parent instanceof GoVarDeclaration) {
                         GoVarDeclaration varDeclaration = (GoVarDeclaration) parent;
@@ -221,8 +230,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
     @NotNull
     @Override
     public GoType[] getType() {
-        return GoPsiManager.getInstance(getProject())
-                .getType(this, TYPE_CALCULATOR);
+        return GoPsiManager.getInstance(getProject()).getType(this, TYPE_CALCULATOR);
     }
 
     @Override
@@ -300,6 +308,6 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                     new CallOrConversionReference(this),
                     new VarOrConstReference((GoLiteralIdentifier) this.getLiteral()));
 
-        return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.
+        return super.getReferences();
     }
 }

@@ -207,7 +207,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             return refs(new ShortVarDeclarationReference(this));
 
         if (VarOrConstReference.MATCHER.accepts(this))
-            return refs(new VarOrConstReference(this));
+//            return refs(new VarOrConstReference(this), new PackageReference(this));
+            return refs(new PackageReference(this));
 
         if (SelectorOfStructFieldReference.MATCHER.accepts(this))
             return findParentOfType(this, GoSelectorExpression.class).getReferences();

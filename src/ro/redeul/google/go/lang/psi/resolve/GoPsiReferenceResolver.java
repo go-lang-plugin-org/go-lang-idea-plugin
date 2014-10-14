@@ -10,14 +10,13 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.completion.GoCompletionContributor;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-import static ro.redeul.google.go.lang.psi.processors.GoResolveStates.VisiblePackageName;
 
 public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
-    extends GoElementVisitor
-    implements PsiScopeProcessor {
+        extends GoElementVisitor
+        implements PsiScopeProcessor {
 
     private PsiElement declaration;
     private PsiElement childDeclaration;
@@ -40,16 +39,15 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
     }
 
     boolean checkReference(PsiElement element) {
-        if ( element == null )
+        if (element == null)
             return false;
 
         try {
-            element.putUserData(VisiblePackageName,
-                                getState().get(VisiblePackageName));
+//            element.putUserData(VisiblePackageName, getState().get(VisiblePackageName));
             return getReference().isReferenceTo(element);
 
         } finally {
-            element.putUserData(VisiblePackageName, null);
+//            element.putUserData(VisiblePackageName, null);
         }
     }
 
@@ -98,11 +96,11 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
 
     protected void checkIdentifiers(PsiElement... identifiers) {
         String refName = getReference().getElement().getText();
-        String currentPackageName = getState().get(GoResolveStates.VisiblePackageName);
-        if (currentPackageName == null) {
-            currentPackageName = "";
-        }
-        boolean isOriginalPackage = getState().get(GoResolveStates.IsOriginalPackage);
+//        String currentPackageName = getState().get(GoResolveStates.VisiblePackageName);
+//        if (currentPackageName == null) {
+//            currentPackageName = "";
+//        }
+        boolean isOriginalPackage = ResolveStates.get(getState(), ResolveStates.Key.IsOriginalPackage);
         boolean incomplete = refName.contains(GoCompletionContributor.DUMMY_IDENTIFIER);
         if (incomplete) {
             int completionPosition = refName.indexOf(GoCompletionContributor.DUMMY_IDENTIFIER);
@@ -115,7 +113,7 @@ public abstract class GoPsiReferenceResolver<Reference extends PsiReference>
             String name = id.getText();
             if (isOriginalPackage || GoNamesUtil.isExportedName(name)) {
                 if (refName.contains(".")) {
-                    name = currentPackageName + "." + name;
+//                    name = currentPackageName + "." + name;
                 }
                 if (incomplete && name.toLowerCase().startsWith(refName.toLowerCase())) {
                     addDeclaration(id);

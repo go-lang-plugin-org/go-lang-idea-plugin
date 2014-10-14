@@ -417,8 +417,7 @@ class PrimaryExpression implements GoElementTypes {
             return true;
         }
 
-        if (IOTA_LITERAL.matcher(identifier).matches() && parser.isSet(
-            ParseIota)) {
+        if (IOTA_LITERAL.matcher(identifier).matches() && parser.isSet(ParseIota)) {
             ParserUtils.eatElement(builder, LITERAL_IOTA);
             return true;
         }

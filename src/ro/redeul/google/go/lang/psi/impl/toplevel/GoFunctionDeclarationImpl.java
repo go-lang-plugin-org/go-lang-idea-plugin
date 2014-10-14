@@ -13,7 +13,8 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates.Key;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -40,7 +41,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
  * Time: 2:33:51 PM
  */
 public class GoFunctionDeclarationImpl extends GoPsiElementBase
-    implements GoFunctionDeclaration {
+        implements GoFunctionDeclaration {
 
     @Override
     public GoUnderlyingType getUnderlyingType() {
@@ -52,7 +53,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
         if (goType instanceof GoPsiTypeName) {
             goType = resolveToFinalType(goType);
         }
-        if ( !(goType instanceof GoPsiTypeFunction))
+        if (!(goType instanceof GoPsiTypeFunction))
             return false;
 
         return GoUtil.CompareFnTypeToDecl((GoPsiTypeFunction) goType, this);
@@ -60,13 +61,13 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
 
     @Override
     public String getPackageName() {
-       return ((GoFile)getContainingFile()).getPackageName();
+        return ((GoFile) getContainingFile()).getPackageName();
     }
 
     @Override
     public String getQualifiedName() {
         String packageName = getPackageName();
-        if ( packageName == null || packageName.trim().equals("") )
+        if (packageName == null || packageName.trim().equals(""))
             return getName();
 
         return String.format("%s.%s", packageName, getName());
@@ -88,7 +89,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
 
     @Override
     public PsiElement setName(@NonNls @NotNull String name)
-        throws IncorrectOperationException {
+            throws IncorrectOperationException {
         return null;
     }
 
@@ -103,9 +104,9 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     @Override
     public GoFunctionParameter[] getParameters() {
         GoFunctionParameterList parameterList =
-            findChildByClass(GoFunctionParameterList.class);
+                findChildByClass(GoFunctionParameterList.class);
 
-        if ( parameterList == null ) {
+        if (parameterList == null) {
             return GoFunctionParameter.EMPTY_ARRAY;
         }
 
@@ -154,9 +155,9 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
 
-        if (! "builtin".equals(state.get(GoResolveStates.PackageName)) &&
-            ! state.get(GoResolveStates.IsOriginalPackage) &&
-            ! GoNamesUtil.isExportedName(getName()))
+        if (!ResolveStates.get(state, Key.IsPackageBuiltin) &&
+                !ResolveStates.get(state, Key.JustExports) &&
+                !GoNamesUtil.isExportedName(getName()))
             return true;
 
         if (!processor.execute(this, state))
@@ -172,7 +173,6 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
                 return false;
             }
         }
-
 
         for (GoFunctionParameter returnParameter : getResults()) {
             if (!processor.execute(returnParameter, state)) {
@@ -209,7 +209,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
         for (int i = 0; i < parameters.length; i++) {
             GoFunctionParameter parameter = parameters[i];
             presentationText.append(parameter.getPresentationTailText());
-            if ( i < parameters.length - 1) {
+            if (i < parameters.length - 1) {
                 presentationText.append(",");
             }
         }
@@ -225,7 +225,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
         for (int i = 0; i < results.length; i++) {
             GoFunctionParameter parameter = results[i];
             presentationText.append(parameter.getPresentationTailText());
-            if ( i < results.length - 1) {
+            if (i < results.length - 1) {
                 presentationText.append(",");
             }
         }

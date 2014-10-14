@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.TypeNameResolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
@@ -30,11 +30,8 @@ public class BuiltinTypeNameReference extends TypeNameReference {
         // get the file included in the imported package name
         Collection<GoFile> files = namesCache.getBuiltinPackageFiles();
 
-
         for (GoFile file : files) {
-            ResolveState newState = GoResolveStates.imported("builtin", "");
-
-            if (!file.processDeclarations(processor, newState, null, element))  {
+            if (!file.processDeclarations(processor, ResolveStates.builtins(), null, element))  {
                 break;
             }
         }

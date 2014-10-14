@@ -104,7 +104,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
     }
 
     private boolean isImported(ResolveState state) {
-        return !(state.get(GoResolveStates.IsOriginalFile) || state.get(GoResolveStates.IsOriginalPackage));
+        return !(ResolveStates.get(state, ResolveStates.Key.IsOriginalFile) || ResolveStates.get(state, ResolveStates.Key.IsOriginalPackage));
     }
 
     private void addVariant(PsiNamedElement target, String presentableText, ResolveState state, Icon icon) {
@@ -115,7 +115,9 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
                             @Nullable InsertHandler<LookupElement> insertHandler) {
         boolean isImported = isImported(state);
 
-        String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
+//        String visiblePackageName = state.get(ResolveStates.VisiblePackageName);
+        String visiblePackageName = null;
+
 
         String lookupString = target.getName();
         if (lookupString == null || presentableText == null) {
@@ -128,7 +130,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
         }
 
         if (!names.contains(presentableText)) {
-            String type = isImported ? state.get(GoResolveStates.PackageName) : "<current>";
+            String type = isImported ? null /*state.get(ResolveStates.PackageName)*/ : "<current>";
             variants.add(LookupElementBuilder.create(target, lookupString)
                                              .withIcon(icon)
                                              .withTypeText(type)
