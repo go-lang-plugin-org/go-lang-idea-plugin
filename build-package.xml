@@ -1,5 +1,7 @@
 <project name="Idea Google Go language scripted build file" default="package" basedir=".">
 
+    <property file="build.properties" />
+
     <!-- set global properties for this build -->
     <property name="src" location="src"/>
 
