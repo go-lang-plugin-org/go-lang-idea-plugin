@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
+import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
 import ro.redeul.google.go.lang.psi.resolve.ShortVarDeclarationResolver;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 
@@ -19,7 +19,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
  * returns the identifier where it's declared. Otherwise, null is returned.
  */
 public class ShortVarDeclarationReference
-        extends GoPsiReference.Single<GoLiteralIdentifier, ShortVarDeclarationReference> {
+        extends Reference.Single<GoLiteralIdentifier, ShortVarDeclarationResolver, ShortVarDeclarationReference> {
 
     public static final ElementPattern<GoLiteralIdentifier> MATCHER =
             psiElement(GoLiteralIdentifier.class)
@@ -27,22 +27,22 @@ public class ShortVarDeclarationReference
                             psiElement(GoShortVarDeclaration.class)
                     );
 
-    private static final ResolveCache.AbstractResolver<ShortVarDeclarationReference, GoResolveResult> RESOLVER =
-            new ResolveCache.AbstractResolver<ShortVarDeclarationReference, GoResolveResult>() {
+    private static final ResolveCache.AbstractResolver<ShortVarDeclarationReference, ResolvingCache.Result> RESOLVER =
+            new ResolveCache.AbstractResolver<ShortVarDeclarationReference, ResolvingCache.Result>() {
                 @Override
-                public GoResolveResult resolve(@NotNull ShortVarDeclarationReference reference, boolean incompleteCode) {
+                public ResolvingCache.Result resolve(@NotNull ShortVarDeclarationReference reference, boolean incompleteCode) {
                     GoLiteralIdentifier element = reference.getElement();
                     PsiElement parent = element.getParent();
                     if (!(parent instanceof GoShortVarDeclaration)) {
-                        return GoResolveResult.NULL;
+                        return ResolvingCache.Result.NULL;
                     }
 
                     GoLiteralIdentifier identifier = reference.getElement();
                     PsiElement resolve = ShortVarDeclarationResolver.resolve(identifier);
                     if (resolve == null) {
-                        return GoResolveResult.NULL;
+                        return ResolvingCache.Result.NULL;
                     }
-                    return GoResolveResult.fromElement(resolve);
+                    return ResolvingCache.Result.fromElement(resolve);
                 }
             };
 

@@ -6,7 +6,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 
 public class TypeNameDeclarationReference
-        extends GoPsiReference.Single<GoTypeNameDeclaration, TypeNameDeclarationReference> {
+        extends Reference.Single<GoTypeNameDeclaration, TypeNameDeclarationReference> {
 
     public TypeNameDeclarationReference(@NotNull GoTypeNameDeclaration element) {
         super(element);

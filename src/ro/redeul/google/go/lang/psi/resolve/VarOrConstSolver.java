@@ -16,49 +16,50 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
  * Date: 5/22/11
  * Time: 8:35 PM
  */
-public class VarOrConstResolver extends GoPsiReferenceResolver<VarOrConstReference> {
+public class VarOrConstSolver extends RefSolver<VarOrConstReference, VarOrConstSolver> {
 
-    public VarOrConstResolver(VarOrConstReference reference) {
+    public VarOrConstSolver(VarOrConstReference reference) {
         super(reference);
     }
 
     @Override
     public void visitMethodReceiver(GoMethodReceiver receiver) {
-        checkIdentifiers(receiver.getIdentifier());
+        checkIdentifiers(getReferenceName(), receiver.getIdentifier());
     }
 
     @Override
     public void visitFunctionParameter(GoFunctionParameter parameter) {
-        checkIdentifiers(parameter.getIdentifiers());
+        checkIdentifiers(getReferenceName(), parameter.getIdentifiers());
     }
 
     @Override
     public void visitVarDeclaration(GoVarDeclaration declaration) {
-        checkIdentifiers(declaration.getIdentifiers());
+        checkIdentifiers(getReferenceName(), declaration.getIdentifiers());
     }
 
     @Override
     public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
-        checkIdentifiers(declaration.getDeclarations());
+        checkIdentifiers(getReferenceName(), declaration.getDeclarations());
     }
 
     @Override
     public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
-        checkIdentifiers(identifier);
+        checkIdentifiers(getReferenceName(), identifier);
     }
 
     @Override
     public void visitConstDeclaration(GoConstDeclaration declaration) {
-        checkIdentifiers(declaration.getIdentifiers());
+        checkIdentifiers(getReferenceName(), declaration.getIdentifiers());
     }
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-        checkIdentifiers(declaration.getNameIdentifier());
+        if ( matchNames(getReferenceName(), declaration.getFunctionName()))
+            addTarget(declaration);
     }
 
     @Override
     public void visitSwitchTypeGuard(GoSwitchTypeGuard typeGuard) {
-        checkIdentifiers(typeGuard.getIdentifier());
+        checkIdentifiers(getReferenceName(), typeGuard.getIdentifier());
     }
 }

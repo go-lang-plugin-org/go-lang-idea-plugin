@@ -8,8 +8,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.processors.ResolveStates;
-import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
+import ro.redeul.google.go.lang.psi.resolve.RefSolver;
+import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -20,8 +20,10 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
-public abstract class AbstractCallOrConversionReference<Reference extends AbstractCallOrConversionReference<Reference>>
-    extends GoPsiReference.Single<GoLiteralExpression, Reference> {
+public abstract class AbstractCallOrConversionReference<
+        Solver extends RefSolver<Reference, Solver>,
+        Reference extends AbstractCallOrConversionReference<Solver, Reference>>
+    extends ro.redeul.google.go.lang.psi.resolve.references.Reference.Single<GoLiteralExpression, Solver, Reference> {
 
     public static final ElementPattern<GoLiteralExpression> MATCHER =
         psiElement(GoLiteralExpression.class)
@@ -31,7 +33,7 @@ public abstract class AbstractCallOrConversionReference<Reference extends Abstra
 
 
     AbstractCallOrConversionReference(GoLiteralExpression identifier,
-                                      ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
+                                      ResolveCache.AbstractResolver<Reference, ResolvingCache.Result> resolver) {
         super(identifier, resolver);
     }
 

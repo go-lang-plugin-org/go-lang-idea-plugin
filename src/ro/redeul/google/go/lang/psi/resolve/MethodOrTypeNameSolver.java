@@ -11,16 +11,18 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 
-public class MethodOrTypeNameResolver
-    extends GoPsiReferenceResolver<AbstractCallOrConversionReference> {
-    public MethodOrTypeNameResolver(AbstractCallOrConversionReference reference) {
+public class MethodOrTypeNameSolver<
+        Ref extends AbstractCallOrConversionReference<Solver, Ref>,
+        Solver extends MethodOrTypeNameSolver<Ref, Solver>>
+    extends RefSolver<Ref, Solver> {
+    public MethodOrTypeNameSolver(Ref reference) {
         super(reference);
     }
 
     @Override
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
         if (checkReference(declaration))
-            addDeclaration(declaration, declaration.getNameIdentifier());
+            addTarget(declaration, declaration.getNameIdentifier());
     }
 
     @Override
@@ -36,19 +38,19 @@ public class MethodOrTypeNameResolver
         }
 
         if (checkReference(type.getTypeNameDeclaration()))
-            addDeclaration(type);
+            addTarget(type);
     }
 
     @Override
     public void visitVarDeclaration(GoVarDeclaration declaration) {
         if (checkReference(declaration))
-            addDeclaration(declaration);
+            addTarget(declaration);
     }
 
     @Override
     public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
         GoLiteralIdentifier ids[] = declaration.getDeclarations();
-        checkIdentifiers(ids);
+        checkIdentifiers(getReferenceName(), ids);
     }
 
     private boolean checkVarDeclaration(GoShortVarDeclaration declaration) {
@@ -67,7 +69,7 @@ public class MethodOrTypeNameResolver
                 continue;
             }
 
-            if (!addDeclaration(identifier)) {
+            if (!addTarget(identifier)) {
                 return;
             }
         }

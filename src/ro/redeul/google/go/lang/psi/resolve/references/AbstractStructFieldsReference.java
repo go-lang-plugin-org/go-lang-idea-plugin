@@ -9,7 +9,8 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
-import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
+import ro.redeul.google.go.lang.psi.resolve.RefSolver;
+import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -21,16 +22,15 @@ import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
-abstract class AbstractStructFieldsReference
-    <
+abstract class AbstractStructFieldsReference<
         T extends GoPsiElement,
-        Ref extends AbstractStructFieldsReference<T, Ref>
-    >
-    extends GoPsiReference<T, GoLiteralIdentifier, Ref> {
+        Solver extends RefSolver<Ref, Solver>,
+        Ref extends AbstractStructFieldsReference<T, Solver, Ref>
+        > extends Reference<T, GoLiteralIdentifier, Solver, Ref> {
 
     AbstractStructFieldsReference(T element,
                                   GoLiteralIdentifier name,
-                                  ResolveCache.AbstractResolver<Ref, GoResolveResult> RESOLVER) {
+                                  ResolveCache.AbstractResolver<Ref, ResolvingCache.Result> RESOLVER) {
         super(element, name, RESOLVER);
     }
 
@@ -57,13 +57,13 @@ abstract class AbstractStructFieldsReference
 
         for (GoTypeStructField field : psiType.getFields()) {
             for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
-                if ( !isImportedStruct || GoNamesUtil.isExportedName(identifier.getName()))
+                if (!isImportedStruct || GoNamesUtil.isExported(identifier.getName()))
                     variants.add(field.getCompletionPresentation(identifier));
             }
         }
 
         for (GoTypeStructAnonymousField field : psiType.getAnonymousFields()) {
-            if ( !isImportedStruct || GoNamesUtil.isExportedName(field.getFieldName()))
+            if (!isImportedStruct || GoNamesUtil.isExported(field.getFieldName()))
                 variants.add(field.getCompletionPresentation());
         }
 
@@ -71,26 +71,26 @@ abstract class AbstractStructFieldsReference
         for (GoLiteralIdentifier identifier : promotedFields.getNamedFields()) {
             GoTypeStructField field = findParentOfType(identifier, GoTypeStructField.class);
             if (field != null) {
-                if ( !isImportedStruct || GoNamesUtil.isExportedName(identifier.getName()))
+                if (!isImportedStruct || GoNamesUtil.isExported(identifier.getName()))
                     variants.add(field.getCompletionPresentation(identifier));
             }
         }
 
         for (GoTypeStructAnonymousField field : promotedFields.getAnonymousFields()) {
-            if ( !isImportedStruct || GoNamesUtil.isExportedName(field.getFieldName()))
+            if (!isImportedStruct || GoNamesUtil.isExported(field.getFieldName()))
                 variants.add(field.getCompletionPresentation());
         }
         return variants.toArray(new LookupElementBuilder[variants.size()]);
     }
 
     private boolean targetIsImportedStruct(GoPsiTypeStruct targetStruct) {
-        if ( getReferenceElement().getContainingFile() == null ||
+        if (getReferenceElement().getContainingFile() == null ||
                 targetStruct == null ||
-                targetStruct.getContainingFile() == null )
+                targetStruct.getContainingFile() == null)
             return false;
 
-        if ( ! (getReferenceElement().getContainingFile() instanceof GoFile) ||
-                ! (targetStruct.getContainingFile() instanceof GoFile))
+        if (!(getReferenceElement().getContainingFile() instanceof GoFile) ||
+                !(targetStruct.getContainingFile() instanceof GoFile))
             return false;
 
         GoFile referenceFile = (GoFile) getReferenceElement().getContainingFile();

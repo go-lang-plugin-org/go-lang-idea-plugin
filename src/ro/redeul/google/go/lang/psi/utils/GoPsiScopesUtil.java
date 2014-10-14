@@ -72,9 +72,9 @@ public class GoPsiScopesUtil {
         return true;
     }
 
-    public static boolean processExportedIdentifiers(@NotNull PsiScopeProcessor processor,
-                                                     @NotNull PsiElement entrance,
-                                                     @NotNull GoPackage goPackage) {
+    public static boolean walkPackage(@NotNull PsiScopeProcessor processor,
+                                      @NotNull PsiElement entrance,
+                                      @NotNull GoPackage goPackage) {
         return goPackage.processDeclarations(processor, ResolveStates.packageExports(), null, entrance);
     }
 

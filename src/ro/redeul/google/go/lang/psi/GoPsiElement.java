@@ -30,5 +30,7 @@ public interface GoPsiElement extends PsiElement {
     String getPresentationTailText();
 
     String getPresentationTypeText();
+
+    GoPsiElement getReferenceContext();
 }
 

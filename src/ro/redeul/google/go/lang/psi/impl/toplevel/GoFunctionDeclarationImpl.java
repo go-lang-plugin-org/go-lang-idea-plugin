@@ -157,7 +157,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
 
         if (!ResolveStates.get(state, Key.IsPackageBuiltin) &&
                 !ResolveStates.get(state, Key.JustExports) &&
-                !GoNamesUtil.isExportedName(getName()))
+                !GoNamesUtil.isExported(getName()))
             return true;
 
         if (!processor.execute(this, state))

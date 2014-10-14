@@ -8,46 +8,42 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.completion.GoCompletionContributor;
-import ro.redeul.google.go.lang.psi.processors.ResolveStates;
-import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
+import ro.redeul.google.go.lang.psi.resolve.RefSolver;
+import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
 
-import java.util.concurrent.atomic.AtomicInteger;
+public abstract class Reference<
+    ParentElement extends PsiElement,
+    Element extends PsiElement,
+    Solver extends RefSolver<Ref, Solver>,
+    Ref extends Reference<ParentElement, Element, Solver, Ref>
+    > implements PsiReference {
 
-public abstract class GoPsiReference<
-    GoPsi extends PsiElement,
-    GoPsiRefElement extends PsiElement,
-    Reference extends GoPsiReference<GoPsi, GoPsiRefElement, Reference>
-    >
-    implements PsiReference {
+    final ParentElement element;
+    private final Element reference;
+    private ResolveCache.AbstractResolver<Ref, ResolvingCache.Result> resolver;
 
-    public static AtomicInteger counts = new AtomicInteger(0);
+    protected abstract Ref self();
 
-    final GoPsi element;
-    private final GoPsiRefElement reference;
-    private ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver;
-
-    protected abstract Reference self();
-
-    GoPsiReference(@NotNull GoPsi element,
-                   @NotNull GoPsiRefElement reference,
-                   @NotNull ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
+    Reference(@NotNull ParentElement element,
+              @NotNull Element reference,
+              @NotNull ResolveCache.AbstractResolver<Ref, ResolvingCache.Result> resolver) {
         this(element, reference);
         this.resolver = resolver;
     }
 
-    GoPsiReference(@NotNull GoPsi element, @NotNull GoPsiRefElement reference) {
+    Reference(@NotNull ParentElement element, @NotNull Element reference) {
         this.element = element;
         this.reference = reference;
     }
 
     @Override
     @NotNull
-    public GoPsi getElement() {
+    public ParentElement getElement() {
         return element;
     }
 
     @NotNull
-    GoPsiRefElement getReferenceElement() {
+    public Element getReferenceElement() {
         return reference;
     }
 
@@ -59,7 +55,7 @@ public abstract class GoPsiReference<
     @Override
     public PsiElement resolve() {
         if (resolver != null) {
-            GoResolveResult result = ResolveCache
+            ResolvingCache.Result result = ResolveCache
                 .getInstance(getElement().getProject())
                 .resolveWithCaching(self(), resolver, true, false);
 
@@ -71,6 +67,18 @@ public abstract class GoPsiReference<
         return null;
     }
 
+    @NotNull
+    @Override
+    public Object[] getVariants() {
+        Solver resolver = newSolver();
+        resolver.setCollectVariants(true);
+        walkSolver(resolver);
+        return resolver.getVariants();
+    }
+
+    public abstract Solver newSolver();
+
+    public abstract void walkSolver(RefSolver<?, ?> processor);
 
     @Override
     public PsiElement handleElementRename(String newElementName)
@@ -123,12 +131,14 @@ public abstract class GoPsiReference<
         return elementName.equals(targetQualifiedName);
     }
 
+
     abstract static class Single<
         GoPsi extends PsiElement,
-        Reference extends Single<GoPsi, Reference>
-    > extends GoPsiReference<GoPsi, GoPsi, Reference> {
+        Solver extends RefSolver<Ref, Solver>,
+        Ref extends Single<GoPsi, Solver, Ref>
+    > extends Reference<GoPsi, GoPsi, Solver, Ref> {
 
-        Single(@NotNull GoPsi element, @NotNull ResolveCache.AbstractResolver<Reference, GoResolveResult> resolver) {
+        Single(@NotNull GoPsi element, @NotNull ResolveCache.AbstractResolver<Ref, ResolvingCache.Result> resolver) {
             super(element, element, resolver);
         }
 

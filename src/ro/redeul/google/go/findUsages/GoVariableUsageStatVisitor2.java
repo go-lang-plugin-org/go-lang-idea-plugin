@@ -71,7 +71,7 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
 
                 if (GLOBAL_CONST_DECL.accepts(ident) ||
                     GLOBAL_VAR_DECL.accepts(ident)) {
-                    if (GoNamesUtil.isExportedName(ident.getName())) {
+                    if (GoNamesUtil.isExported(ident.getName())) {
                         continue;
                     }
 

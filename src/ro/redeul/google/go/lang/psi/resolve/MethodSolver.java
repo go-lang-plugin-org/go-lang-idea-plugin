@@ -12,16 +12,16 @@ import java.util.Set;
 
 import static ro.redeul.google.go.lang.completion.GoCompletionContributor.DUMMY_IDENTIFIER;
 
-public class MethodResolver extends GoPsiReferenceResolver<MethodReference>
+public class MethodSolver extends RefSolver<MethodReference, MethodSolver>
 {
-    public MethodResolver(MethodReference reference) {
+    public MethodSolver(MethodReference reference) {
         super(reference);
     }
 
     @Override
     public void visitMethodDeclaration(GoMethodDeclaration declaration) {
         if (isReferenceTo(declaration))
-            addDeclaration(declaration, declaration.getNameIdentifier());
+            addTarget(declaration, declaration.getNameIdentifier());
     }
 
     boolean isReferenceTo(GoMethodDeclaration declaration) {

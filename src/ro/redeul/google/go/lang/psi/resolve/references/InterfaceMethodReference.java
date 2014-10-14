@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.types.interfaces.MethodSetDiscover;
-import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
+import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.interfaces.GoTypeInterfaceMethodSet;
 import ro.redeul.google.go.lang.psi.typing.GoType;
@@ -19,26 +19,25 @@ import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InterfaceMethodReference extends
-                                      GoPsiReference.Single<GoSelectorExpression, InterfaceMethodReference> {
+public class InterfaceMethodReference extends Reference.Single<GoSelectorExpression, InterfaceMethodReference> {
 
     private final GoTypeInterface type;
     private final GoSelectorExpression selector;
 
-    private static final ResolveCache.AbstractResolver<InterfaceMethodReference, GoResolveResult> RESOLVER =
-        new ResolveCache.AbstractResolver<InterfaceMethodReference, GoResolveResult>() {
+    private static final ResolveCache.AbstractResolver<InterfaceMethodReference, ResolvingCache.Result> RESOLVER =
+        new ResolveCache.AbstractResolver<InterfaceMethodReference, ResolvingCache.Result>() {
             @Override
-            public GoResolveResult resolve(@NotNull InterfaceMethodReference intfMethodRef,
+            public ResolvingCache.Result resolve(@NotNull InterfaceMethodReference intfMethodRef,
                                            boolean incompleteCode) {
                 GoSelectorExpression selector = intfMethodRef.selector;
 
                 GoLiteralIdentifier identifier = selector.getIdentifier();
                 if (identifier == null)
-                    return GoResolveResult.NULL;
+                    return ResolvingCache.Result.NULL;
 
                 String name = identifier.getName();
                 if (name == null)
-                    return GoResolveResult.NULL;
+                    return ResolvingCache.Result.NULL;
 
                 GoTypeInterface type = intfMethodRef.type;
 
@@ -47,11 +46,11 @@ public class InterfaceMethodReference extends
 
                 for (GoFunctionDeclaration declaration : methodSet.getMethods()) {
                     if (name.equals(declaration.getFunctionName())) {
-                        return GoResolveResult.fromElement(declaration.getNameIdentifier());
+                        return ResolvingCache.Result.fromElement(declaration.getNameIdentifier());
                     }
                 }
 
-                return GoResolveResult.NULL;
+                return ResolvingCache.Result.NULL;
             }
         };
 

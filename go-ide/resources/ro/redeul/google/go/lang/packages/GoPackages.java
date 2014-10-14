@@ -69,4 +69,8 @@ public class GoPackages extends AbstractProjectComponent {
 
         return null;
     }
+
+    public GoPackage getBuiltinPackage() {
+        return getPackage("builtin");
+    }
 }

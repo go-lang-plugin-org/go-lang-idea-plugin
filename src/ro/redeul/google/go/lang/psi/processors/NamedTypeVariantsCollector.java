@@ -59,7 +59,7 @@ class NamedTypeVariantsCollector extends BaseScopeProcessor {
         String typeText = null; // state.get(ResolveStates.PackageName);
 
         boolean isCandidate = false;
-        if ( GoNamesUtil.isPublicType(typeName) ) {
+        if ( GoNamesUtil.isExported(typeName) ) {
             isCandidate = true;
         }
 

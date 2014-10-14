@@ -84,6 +84,11 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
     }
 
     @Override
+    public GoPsiElement getReferenceContext() {
+        return this;
+    }
+
+    @Override
     final public LookupElementBuilder getCompletionPresentation() {
         return LookupElementUtil.createLookupElement(this);
     }

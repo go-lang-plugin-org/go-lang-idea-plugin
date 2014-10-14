@@ -68,7 +68,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
         boolean isImported = isImported(state);
 
         for (GoLiteralIdentifier identifier : identifiers) {
-            if ( ! isImported || GoNamesUtil.isPublicType(identifier.getName()) ) {
+            if ( ! isImported || GoNamesUtil.isExported(identifier.getName()) ) {
                 addVariant(identifier, identifier.getName(), state, PlatformIcons.VARIABLE_ICON);
             }
         }
@@ -81,7 +81,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
         boolean isImported = isImported(state);
 
         for (GoLiteralIdentifier identifier : identifiers) {
-            if ( ! isImported || GoNamesUtil.isPublicType(identifier.getName()) ) {
+            if ( ! isImported || GoNamesUtil.isExported(identifier.getName()) ) {
                 addVariant(identifier, identifier.getName(), state, GoIcons.CONST_ICON);
             }
         }
@@ -97,7 +97,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
             return;
         }
 
-        if ( ! isImported(state) || GoNamesUtil.isPublicType(function.getFunctionName()) ) {
+        if ( ! isImported(state) || GoNamesUtil.isExported(function.getFunctionName()) ) {
             String text = DocumentUtil.getFunctionPresentationText(function);
             addVariant(function, text, state, PlatformIcons.FUNCTION_ICON, new FunctionInsertHandler());
         }

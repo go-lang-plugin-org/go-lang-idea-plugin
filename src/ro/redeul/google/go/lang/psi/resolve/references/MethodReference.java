@@ -3,46 +3,26 @@ package ro.redeul.google.go.lang.psi.resolve.references;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
+import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
-import com.intellij.psi.util.PsiUtilCore;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
-import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
-import ro.redeul.google.go.lang.psi.resolve.MethodResolver;
+import ro.redeul.google.go.lang.psi.resolve.MethodSolver;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.typing.*;
-import ro.redeul.google.go.util.LookupElementUtil;
 
 import java.util.*;
 
-public class MethodReference
-    extends GoPsiReference.Single<GoSelectorExpression, MethodReference> {
+public class MethodReference extends Reference.Single<GoSelectorExpression, MethodSolver, MethodReference> {
 
     private Set<GoTypeName> receiverTypes;
 
-    private static final ResolveCache.AbstractResolver<MethodReference, GoResolveResult> RESOLVER =
-            new ResolveCache.AbstractResolver<MethodReference, GoResolveResult>() {
-                @Override
-                public GoResolveResult resolve(@NotNull MethodReference methodReference, boolean incompleteCode) {
-                    MethodResolver processor = new MethodResolver(methodReference);
-
-                    GoSelectorExpression element = methodReference.getElement();
-
-                    GoPsiScopesUtil.treeWalkUp(
-                            processor,
-                            element.getContainingFile().getLastChild(),
-                            element.getContainingFile(),
-                            ResolveStates.initial());
-
-                    return GoResolveResult.fromElement(processor.getChildDeclaration());
-                }
-            };
+    private static final com.intellij.psi.impl.source.resolve.ResolveCache.AbstractResolver<MethodReference, ResolvingCache.Result> RESOLVER =
+            ResolvingCache.<MethodReference, MethodSolver>makeDefault();
 
     public MethodReference(@NotNull GoSelectorExpression element) {
         super(element, RESOLVER);
@@ -51,6 +31,20 @@ public class MethodReference
     @Override
     protected MethodReference self() {
         return this;
+    }
+
+    @Override
+    public MethodSolver newSolver() {
+        return new MethodSolver(self());
+    }
+
+    @Override
+    public void walkSolver(MethodSolver solver) {
+        GoPsiScopesUtil.treeWalkUp(
+                solver,
+                element.getContainingFile().getLastChild(),
+                element.getContainingFile(),
+                ResolveStates.initial());
     }
 
     @Override
@@ -82,31 +76,7 @@ public class MethodReference
         if (resolverTypeNames.size() == 0)
             return LookupElementBuilder.EMPTY_ARRAY;
 
-        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
-
-        MethodResolver processor = new MethodResolver(this) {
-            @Override
-            protected boolean addDeclaration(PsiElement declaration, PsiElement child) {
-                String name = PsiUtilCore.getName(declaration);
-
-                if (child == null) {
-                    return true;
-                }
-
-                variants.add(LookupElementUtil.createLookupElement(
-                    (GoPsiElement) declaration, name,
-                    (GoPsiElement) child));
-                return true;
-            }
-        };
-
-        GoPsiScopesUtil.treeWalkUp(
-            processor,
-            getElement().getContainingFile().getLastChild(),
-            getElement().getContainingFile(),
-            ResolveStates.initial());
-
-        return variants.toArray(new LookupElementBuilder[variants.size()]);
+        return super.getVariants();
     }
 
     @NotNull

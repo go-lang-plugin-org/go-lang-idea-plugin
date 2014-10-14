@@ -530,7 +530,7 @@ public class GoPsiUtils {
     }
 
     public static SearchScope getGlobalElementSearchScope(GoPsiElement element, String name) {
-        if (GoNamesUtil.isExportedName(name)) {
+        if (GoNamesUtil.isExported(name)) {
             return GlobalSearchScope.projectScope(element.getProject());
         }
 

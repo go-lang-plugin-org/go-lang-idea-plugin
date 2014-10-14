@@ -1,29 +1,18 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.ElementPattern;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.util.PsiUtilCore;
-import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.packages.GoPackages;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
-import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
-import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameResolver;
-import ro.redeul.google.go.lang.stubs.GoNamesCache;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameSolver;
+import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
+import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
-public class BuiltinCallOrConversionReference extends AbstractCallOrConversionReference<BuiltinCallOrConversionReference> {
+public class BuiltinCallOrConversionReference extends AbstractCallOrConversionReference<BuiltinCallOrConversionReference.Solver, BuiltinCallOrConversionReference> {
 
     public static final ElementPattern<GoLiteralExpression> MATCHER =
                 psiElement(GoLiteralExpression.class)
@@ -39,30 +28,8 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
         return this;
     }
 
-    private static final ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, GoResolveResult> RESOLVER =
-        new ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, GoResolveResult>() {
-            @Override
-            public GoResolveResult resolve(@NotNull BuiltinCallOrConversionReference psiReference, boolean incompleteCode) {
-                PsiElement element = psiReference.getElement();
-
-                MethodOrTypeNameResolver processor =
-                    new MethodOrTypeNameResolver(psiReference);
-
-                GoNamesCache namesCache = GoNamesCache.getInstance(element.getProject());
-
-                // get the file included in the imported package name
-                Collection<GoFile> files = namesCache.getBuiltinPackageFiles();
-
-                for (GoFile file : files) {
-                    if (!file.processDeclarations(processor, ResolveStates.builtins(), null, element))  {
-                        break;
-                    }
-                }
-
-                return GoResolveResult.fromElement(processor.getChildDeclaration());
-            }
-
-        };
+    private static final com.intellij.psi.impl.source.resolve.ResolveCache.AbstractResolver<BuiltinCallOrConversionReference, ResolvingCache.Result> RESOLVER =
+            ResolvingCache.<BuiltinCallOrConversionReference, BuiltinCallOrConversionReference.Solver>makeDefault();
 
 //    @Override
 //    public PsiElement resolve() {
@@ -71,43 +38,61 @@ public class BuiltinCallOrConversionReference extends AbstractCallOrConversionRe
 //    }
 
 
-    @NotNull
-    @Override
-    public Object[] getVariants() {
-
-        PsiElement element = getElement();
-
-        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
-
-        MethodOrTypeNameResolver processor = new MethodOrTypeNameResolver(this) {
-            @Override
-            protected boolean addDeclaration(PsiElement declaration, PsiElement child) {
-
-                String name = PsiUtilCore.getName(child);
-
-                GoPsiElement goPsi = (GoPsiElement) declaration;
-                GoPsiElement goChildPsi = (GoPsiElement) child;
-                variants.add(createLookupElement(goPsi, name, goChildPsi).withTypeText("builtin", true));
-                return true;
-            }
-        };
-
-        GoNamesCache namesCache = GoNamesCache.getInstance(element.getProject());
-
-        // get the file included in the imported package name
-        Collection<GoFile> files = namesCache.getBuiltinPackageFiles();
-
-        for (GoFile file : files) {
-            if (!file.processDeclarations(processor, ResolveStates.builtins(), null, element))  {
-                break;
-            }
-        }
-
-        return variants.toArray(new LookupElementBuilder[variants.size()]);
-    }
+//    @NotNull
+//    @Override
+//    public Object[] getVariants() {
+//
+//        PsiElement element = getElement();
+//
+//        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
+//
+//        MethodOrTypeNameSolver processor = new Solver();
+//
+//        GoNamesCache namesCache = GoNamesCache.getInstance(element.getProject());
+//
+//        // get the file included in the imported package name
+//        Collection<GoFile> files = namesCache.getBuiltinPackageFiles();
+//
+//        for (GoFile file : files) {
+//            if (!file.processDeclarations(processor, ResolveStates.builtins(), null, element))  {
+//                break;
+//            }
+//        }
+//
+//        return variants.toArray(new LookupElementBuilder[variants.size()]);
+//    }
 
     @Override
     public boolean isSoft() {
         return false;
+    }
+
+    @Override
+    public Solver newSolver() {
+        return new Solver(this);
+    }
+
+    @Override
+    public void walkSolver(Solver solver) {
+        GoPackage builtIn = GoPackages.getInstance(element.getProject()).getBuiltinPackage();
+
+        GoPsiScopesUtil.packageWalk(builtIn, solver, element, ResolveStates.builtins());
+    }
+
+    class Solver extends MethodOrTypeNameSolver<BuiltinCallOrConversionReference, Solver> {
+
+        public Solver(BuiltinCallOrConversionReference ref) {
+            super(ref);
+        }
+//        @Override
+//        protected boolean addTarget(PsiElement declaration, PsiElement child) {
+//
+//            String name = PsiUtilCore.getName(child);
+//
+//            GoPsiElement goPsi = (GoPsiElement) declaration;
+//            GoPsiElement goChildPsi = (GoPsiElement) child;
+//            variants.add(createLookupElement(goPsi, name, goChildPsi).withTypeText("builtin", true));
+//            return true;
+//        }
     }
 }

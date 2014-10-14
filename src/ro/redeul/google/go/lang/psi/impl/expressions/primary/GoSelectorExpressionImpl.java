@@ -13,10 +13,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
-import ro.redeul.google.go.lang.psi.resolve.references.InterfaceMethodReference;
-import ro.redeul.google.go.lang.psi.resolve.references.MethodReference;
-import ro.redeul.google.go.lang.psi.resolve.references.SelectorOfStructFieldReference;
-import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
+import ro.redeul.google.go.lang.psi.resolve.references.*;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
@@ -50,9 +47,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
                 new Function<GoSelectorExpression, GoType[]>() {
                     @Override
                     public GoType[] fun(GoSelectorExpression expression) {
-                        PsiElement target =
-                                resolveSafely(GoSelectorExpressionImpl.this,
-                                        PsiElement.class);
+                        PsiElement target = resolveSafely(GoSelectorExpressionImpl.this, PsiElement.class);
 
                         if (target != null &&
                                 target.getParent() instanceof GoTypeStructField) {
@@ -166,8 +161,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
         if (type instanceof GoTypePackage) {
             GoPackage goPackage = ((GoTypePackage) type).getPackage();
             return new PsiReference[]{
-                    new VarOrConstReference(getIdentifier(), goPackage),
-                    new MethodReference(this)
+                    new PackageSymbolReference(this, getIdentifier(), goPackage),
             };
         }
 

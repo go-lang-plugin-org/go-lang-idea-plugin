@@ -27,7 +27,7 @@ import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import javax.swing.*;
 import java.util.*;
 
-import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isExportedName;
+import static ro.redeul.google.go.lang.psi.processors.GoNamesUtil.isExported;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 /**
@@ -92,7 +92,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
 
     @Override
     public Icon getIcon(boolean open) {
-        if (info.getName() == null || isExportedName(info.getName())) {
+        if (info.getName() == null || isExported(info.getName())) {
             return info.getBaseIcon();
         }
 
@@ -249,8 +249,8 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
     private static int compareElementName(PsiNamedElement lhs, PsiNamedElement rhs) {
         String lhsName = String.valueOf(lhs != null ? lhs.getName() : "");
         String rhsName = String.valueOf(rhs != null ? rhs.getName() : "");
-        boolean lhsExported = isExportedName(lhsName);
-        boolean rhsExported = isExportedName(rhsName);
+        boolean lhsExported = isExported(lhsName);
+        boolean rhsExported = isExported(rhsName);
         if (lhsExported != rhsExported) {
             return lhsExported ? -1 : 1;
         }

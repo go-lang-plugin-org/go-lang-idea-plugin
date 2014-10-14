@@ -13,16 +13,16 @@ import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
  * Date: Sep 21, 2010
  * Time: 4:47:46 AM
  */
-public class TypeNameResolver extends GoPsiReferenceResolver<TypeNameReference> {
+public class TypeNameSolver extends RefSolver<TypeNameReference, TypeNameSolver> {
 
-    public TypeNameResolver(TypeNameReference reference) {
+    public TypeNameSolver(TypeNameReference reference) {
         super(reference);
     }
 
     @Override
     public void visitTypeSpec(GoTypeSpec type) {
         if (checkReference(type.getTypeNameDeclaration())){
-            addDeclaration(type.getTypeNameDeclaration());
+            addTarget(type.getTypeNameDeclaration());
         }
     }
 

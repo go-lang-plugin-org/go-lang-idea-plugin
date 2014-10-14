@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.visitors;
 
+import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -34,6 +35,7 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 public class GoElementVisitor  {
 
     public void visitElement(GoPsiElement element) {
+        ProgressIndicatorProvider.checkCanceled();
     }
 
     public void visitFile(GoFile file) {

@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ImportReference extends GoPsiReference.Single<GoImportDeclaration, ImportReference>
+public class ImportReference extends Reference.Single<GoImportDeclaration, ImportSolver, ImportReference>
         implements PsiPolyVariantReference {
 
     public ImportReference(GoImportDeclaration element) {
