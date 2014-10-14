@@ -166,15 +166,15 @@
             <add-to-group group-id="NewGroup" anchor="before"
                           relative-to-action="NewFile"/>
         </action>
-        <action id="Go.NewLibrary" text="Go library"
-                description="Create new library in the GO language"
+        <action id="Go.NewLibrary" text="Go package"
+                description="Create new Go package"
                 class="ro.redeul.google.go.actions.NewGoLibraryAction">
             <add-to-group group-id="NewGroup" anchor="before"
                           relative-to-action="NewFile"/>
         </action>
 
         <action id="Go.NewApplication" text="Go application"
-                description="Create new application in the GO language"
+                description="Create new Go application"
                 class="ro.redeul.google.go.actions.NewGoApplicationAction">
             <add-to-group group-id="NewGroup" anchor="before"
                           relative-to-action="NewFile"/>

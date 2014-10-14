@@ -56,35 +56,7 @@ public class NewGoApplicationAction extends CreateTemplateInPackageAction<PsiEle
 
     @Override
     protected boolean isAvailable(DataContext dataContext) {
-        return
-                super.isAvailable(dataContext)
-                        && isNotIsSourceRoot(dataContext);
-    }
-
-    private boolean isNotIsSourceRoot(DataContext dataContext) {
-
-        final Project project = PlatformDataKeys.PROJECT.getData(dataContext);
-        final IdeView view = LangDataKeys.IDE_VIEW.getData(dataContext);
-
-        if ( view == null )
-            return false;
-
-        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-        for (PsiDirectory dir : view.getDirectories()) {
-
-            VirtualFile dirVirtualFile = dir.getVirtualFile();
-
-            if (projectFileIndex.isInSourceContent(dirVirtualFile)) {
-                VirtualFile sourceRoot = projectFileIndex.getSourceRootForFile(dirVirtualFile);
-
-                if (sourceRoot != null
-                    && sourceRoot.getUrl().compareTo(dirVirtualFile.getUrl()) == 0) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return true;
     }
 
     protected void doCheckCreate(PsiDirectory dir, String className) throws IncorrectOperationException {
