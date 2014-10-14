@@ -2,6 +2,7 @@ package ro.redeul.google.go.actions;
 
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.actions.CreateTemplateInPackageAction;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -40,6 +41,11 @@ public class NewGoFileAction extends CreateTemplateInPackageAction<PsiElement>
     @Override
     protected String getErrorTitle() {
         return "New Go file creation";
+    }
+
+    @Override
+    protected boolean isAvailable(DataContext dataContext) {
+        return true;
     }
 
     //    @Override
