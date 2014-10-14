@@ -11,6 +11,7 @@ import ro.redeul.google.go.inspection.fix.ChangePackageNameFix;
 import ro.redeul.google.go.inspection.fix.RepackageFileFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 public class InvalidPackageNameInspection
     extends AbstractWholeGoFileInspection {
@@ -52,6 +53,8 @@ public class InvalidPackageNameInspection
         }
 
         String targetPackageName = virtualFile.getParent().getName();
+        // We are only interested in the package name without any "."
+        targetPackageName = GoPsiUtils.findRealImportPathValue(targetPackageName);
 
         if (virtualFile.getNameWithoutExtension().endsWith("_test") ) {
             packageName = packageName.replaceAll("_test$", "");

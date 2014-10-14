@@ -25,6 +25,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.*;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
@@ -90,7 +91,8 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         if (path == null || path.equals(""))
             path = getPackageName();
 
-        if (path != null && !isApplicationPart() && !path.endsWith(getPackageName()) && !path.toLowerCase().endsWith(getPackageName())) {
+        String pathCheck = GoPsiUtils.findRealImportPathValue(path);
+        if (path != null && !isApplicationPart() && !pathCheck.endsWith(getPackageName()) && !pathCheck.toLowerCase().endsWith(getPackageName())) {
             path = path + "/" + getPackageName();
         }
 

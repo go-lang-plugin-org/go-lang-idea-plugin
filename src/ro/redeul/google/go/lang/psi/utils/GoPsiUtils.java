@@ -263,9 +263,30 @@ public class GoPsiUtils {
     }
 
     public static String findDefaultPackageName(String importPath) {
-        return importPath != null
-            ? importPath.replaceAll("(?:[^/]+/)+", "")
-            : null;
+        if ( importPath == null ) {
+            return null;
+        }
+        // Ensure any part of the package name after a "." is stripped.
+        String realPath = findRealImportPathValue(importPath);
+        return realPath.replaceAll("(?:[^/]+/)+", "");
+    }
+
+    private static final Pattern dotImport = Pattern.compile("[^/]+.+\\.[^/]+");
+
+    public static boolean isDotImport(String importPath) {
+        return importPath != null && dotImport.matcher(importPath).matches();
+    }
+
+    /**
+     * For import paths containing ".", strips out the "." and
+     * following text, as this is ignored by Go.
+     * eg github.com/foo/bar.v1 -> github.com/foo/bar
+     * @param importPath
+     * @return importPath wih the dotted text removed.
+     */
+    public static String findRealImportPathValue(String importPath) {
+        return isDotImport(importPath)
+                ? importPath.replaceAll("\\.[^\\.]+$", ""): importPath;
     }
 
     public static boolean isNodeOfType(PsiElement node, TokenSet tokenSet) {

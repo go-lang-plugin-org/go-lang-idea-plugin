@@ -10,6 +10,7 @@ public class AddImportFixTest extends GoEditorAwareTestCase {
     public void testSimple() throws Exception{ doTest(); }
     public void testOneExistingImport() throws Exception{ doTest(); }
     public void testMultipleExistingImport() throws Exception{ doTest(); }
+    public void testDotImport() throws Exception{ doTest(); }
 
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {

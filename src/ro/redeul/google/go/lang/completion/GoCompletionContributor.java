@@ -458,6 +458,11 @@ public class GoCompletionContributor extends CompletionContributor {
             if (visibleName.contains("/")) {
                 visibleName = visibleName.substring(visibleName.lastIndexOf('/') + 1);
             }
+            // Exclude any package names containing "." as these
+            // will be included in the values list for the corresponding
+            // package name without the "."
+            if (visibleName.contains("."))
+                continue;
             if (!importedPackages.contains(visibleName)) {
                 List<String> packages = packageMap.get(visibleName);
                 if (packages == null) {
