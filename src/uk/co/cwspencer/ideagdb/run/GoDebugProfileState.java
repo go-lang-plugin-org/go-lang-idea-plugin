@@ -120,6 +120,7 @@ public class GoDebugProfileState implements RunProfileState {
                 toolWindow.printNormalMessage(String.format("%nFinished building project %s%n", execName));
             } else {
                 toolWindow.printErrorMessage(String.format("%nCould't build project %s%n", execName));
+                throw new Exception("Unable to build executable file");
             }
 
 
