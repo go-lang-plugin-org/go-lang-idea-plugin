@@ -1,6 +1,7 @@
 package uk.co.cwspencer.gdb.gdbmi;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
@@ -45,7 +46,8 @@ public class TestGdbMiParser
 	/**
 	 * Tests the parsing of the message returned after setting a breakpoint.
 	 */
-	@Test(expected = AssertionError.class) //TODO FIX ME
+	@Test
+	@Ignore("not ready yet")
 	public void testSetBreakpoint() throws UnsupportedEncodingException
 	{
 		// Input: -break-insert main
@@ -179,7 +181,8 @@ public class TestGdbMiParser
 	/**
 	 * Tests the handling of messages from a typical execution sequence.
 	 */
-	@Test(expected = AssertionError.class) //TODO FIX ME
+	@Test
+	@Ignore("not ready yet")
 	public void testExecution() throws UnsupportedEncodingException
 	{
 		// Input: -exec-run
@@ -442,7 +445,8 @@ public class TestGdbMiParser
 	/**
 	 * Verifies escape sequences in strings are handled correctly.
 	 */
-	@Test(expected = AssertionError.class) //TODO FIX ME
+	@Test(expected = AssertionError.class)
+	@Ignore("not ready yet")
 	public void testStringEscape() throws UnsupportedEncodingException
 	{
 		GdbMiParser2 parser = new GdbMiParser2(null);
