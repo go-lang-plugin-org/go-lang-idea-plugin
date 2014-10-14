@@ -1,6 +1,8 @@
 <project name="Idea Google Go language scripted build file" default="assemble"
          basedir=".">
 
+    <property file="build.properties" />
+
     <!-- set global properties for this build -->
     <property name="work" location="build"/>
     <property name="dist" location="dist"/>
