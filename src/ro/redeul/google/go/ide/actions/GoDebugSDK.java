@@ -32,7 +32,7 @@ public class GoDebugSDK extends GoCommonDebugAction {
             return;
         }
 
-        String goExecName = sdkData.GO_EXEC;
+        String goExecName = sdkData.GO_BIN_PATH;
 
         String projectDir = project.getBasePath();
 
@@ -51,7 +51,7 @@ public class GoDebugSDK extends GoCommonDebugAction {
 
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "Project dir", projectDir));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_GOROOT_PATH", sdkData.GO_GOROOT_PATH));
-            toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_BIN_PATH", sdkData.GO_EXEC));
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_BIN_PATH", sdkData.GO_BIN_PATH));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_GOPATH_PATH", sdkData.GO_GOPATH_PATH));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "TARGET_OS", sdkData.TARGET_OS));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "TARGET_ARCH", sdkData.TARGET_ARCH));
