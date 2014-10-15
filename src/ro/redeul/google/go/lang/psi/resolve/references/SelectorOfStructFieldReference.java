@@ -1,10 +1,12 @@
 package ro.redeul.google.go.lang.psi.resolve.references;
 
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.resolve.GoResolveResult;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
@@ -14,10 +16,17 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.psi.typing.GoTypes.resolveToStruct;
 
 public class SelectorOfStructFieldReference
     extends AbstractStructFieldsReference<GoSelectorExpression, SelectorOfStructFieldReference> {
+
+    public static final ElementPattern<GoLiteralIdentifier> MATCHER =
+            psiElement(GoLiteralIdentifier.class)
+                    .withParent(
+                            psiElement(GoSelectorExpression.class)
+                    );
 
     public SelectorOfStructFieldReference(GoSelectorExpression expression) {
         super(expression, expression.getIdentifier(), RESOLVER);
