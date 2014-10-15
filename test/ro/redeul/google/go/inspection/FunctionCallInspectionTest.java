@@ -30,9 +30,9 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
     public void testMake() throws Exception{ doTest(); }
     public void testNew() throws Exception{ doTest(); }
 
-    @Ignore("not ready yet")
+/*    @Ignore("not ready yet")
     public void testFuncCall() throws Exception{ doTest(); }
 
     @Ignore("not ready yet")
-    public void testBuiltinCall() throws Exception{ doTest(); }
+    public void testBuiltinCall() throws Exception{ doTest(); }*/
 }
