@@ -33,7 +33,7 @@ public class GoDebugEnv extends GoCommonDebugAction {
             return;
         }
 
-        String goExecName = sdkData.GO_EXEC;
+        String goExecName = sdkData.GO_BIN_PATH;
 
         String projectDir = project.getBasePath();
 
