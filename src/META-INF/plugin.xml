@@ -124,9 +124,8 @@
     <depends>com.intellij</depends>
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.java</depends>
     <depends optional="true" config-file="idea-features.xml">com.intellij.modules.java</depends>
-    <!--depends optional="true" config-file="non-idea-features.xml">com.intellij.modules.xml</depends-->
+    <depends optional="true" config-file="non-idea-features.xml">com.intellij.modules.xml</depends>
 
     <application-components>
         <component>
