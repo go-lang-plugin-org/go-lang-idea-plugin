@@ -9,7 +9,7 @@ Google go language plugin is an attempt to build an outstanding IDE for
 
 ## TOC
 
-+ [Current Work In Progress](#wip)
++ [Current WIP](#current-wip)
 + [Links](#links)
 + [What it does](#what-it-does)
 + [How to use it](#how-to-use-it)
@@ -20,7 +20,7 @@ Google go language plugin is an attempt to build an outstanding IDE for
 + [Contributing](#contributing)
 + [Thank you](#thank-you)
 
-## Current Work In Progress
+## Current WIP
 
 We are working towards 0.9.16 release (https://github.com/go-lang-plugin-org/go-lang-idea-plugin/milestones/0.9.16) and
 the main things we want to fix are:
