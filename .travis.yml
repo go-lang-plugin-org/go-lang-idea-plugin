@@ -5,7 +5,7 @@ language: java
 jdk:
 - openjdk7
 - oraclejdk7
-script: if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then ./travis.sh ; fi
+script: ./travis.sh
 notifications:
   webhooks:
     urls:
