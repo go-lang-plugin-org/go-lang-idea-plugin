@@ -4,19 +4,16 @@
 
     <!-- set global properties for this build -->
     <property name="src" location="src"/>
-
     <property name="build" location="build"/>
-    <property name="dist" location="dist"/>
-
-    <property name="go.plugin.name" value="ro.redeul.google.go" />
-    <property name="idea.community.build" location="${user.home}/Tools/idea-IU-133.193/" />
+    <property name="go.plugin.name" value="google-go-language" />
+    <property name="idea.community.build" location="${basedir}/idea-IC/" />
 
 
     <taskdef name="javac2" classname="com.intellij.ant.Javac2">
         <classpath>
-            <pathelement location="${idea.community.build}/redist/forms_rt.jar"/>
-            <pathelement location="${idea.community.build}/redist/javac2.jar"/>
-            <pathelement location="${idea.community.build}/redist/annotations.jar"/>
+            <pathelement location="${idea.community.build}/lib/javac2.jar"/>
+            <pathelement location="${idea.community.build}/lib/asm-all.jar" />
+            <pathelement location="${idea.community.build}/lib/forms_rt.jar"/>
             <fileset dir="${idea.community.build}" includes="**/*.jar" />
         </classpath>
 
@@ -27,14 +24,13 @@
         <tstamp/>
         <!-- Create the build directory structure used by compile -->
         <mkdir dir="${build}"/>
-        <mkdir dir="${dist}"/>
 
         <echo message="Using IDEA build from: ${idea.community.build}" />
     </target>
 
     <target name="compile" depends="clean,init" description="compile the source ">
         <!-- Compile the java code from ${src} into ${build} -->
-        <javac2 srcdir="${src}" destdir="${build}" includeantruntime="false" >
+        <javac2 srcdir="${src}" destdir="${build}" verbose="false" debug="false" target="1.7" includeantruntime="false" >
             <classpath>
                 <fileset dir="${idea.community.build}" includes="**/*.jar" />
             </classpath>
@@ -45,7 +41,7 @@
     <target name="package" depends="compile" description="generate the distribution">
 
         <!-- Create the distribution archive -->
-        <jar jarfile="${dist}/${go.plugin.name}.jar" update="false">
+        <jar jarfile="${basedir}/${go.plugin.name}.jar" update="true">
             <fileset dir="${build}" includes="**/*.*" />
             <fileset dir="${src}" excludes="**/*.java" />
         </jar>
@@ -54,7 +50,7 @@
 
     <target name="clean" description="clean up">
         <delete dir="${build}" />
-        <delete file="${dist}/${go.plugin.name}.jar" />
+        <delete file="${basedir}/${go.plugin.name}.jar" />
     </target>
 
 </project>
