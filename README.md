@@ -1,13 +1,15 @@
 # Google Go language plugin for IntelliJ Idea
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Google go language plugin is an attempt to build an outstanding IDE for
 [Google Go language](http://golang.org) using Intellij IDEA.
+
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build Status](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin.png?branch=master)](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin)
 
 ## TOC
 
++ [Current Work In Progress](#wip)
 + [Links](#links)
 + [What it does](#what-it-does)
 + [How to use it](#how-to-use-it)
@@ -17,6 +19,16 @@ Google go language plugin is an attempt to build an outstanding IDE for
 + [Authors](#authors)
 + [Contributing](#contributing)
 + [Thank you](#thank-you)
+
+## Current Work In Progress
+
+We are working towards 0.9.16 release (https://github.com/go-lang-plugin-org/go-lang-idea-plugin/milestones/0.9.16) and
+the main things we want to fix are:
+* [ ] fix default imports of packages where the last part of the import path differs from the package name
+* [ ] add a supported alpha/beta channel so we don't have to push people to dropbox
+* [ ] improve the documentation of what the plugin can/can't do
+** [ ] improve the usage docs for what it can do
+* [ ] various type inference fixes
 
 ## Links
 
