@@ -24,11 +24,12 @@ Google go language plugin is an attempt to build an outstanding IDE for
 
 We are working towards 0.9.16 release (https://github.com/go-lang-plugin-org/go-lang-idea-plugin/milestones/0.9.16) and
 the main things we want to fix are:
-* [ ] fix default imports of packages where the last part of the import path differs from the package name
-* [ ] add a supported alpha/beta channel so we don't have to push people to dropbox
-* [ ] improve the documentation of what the plugin can/can't do
-** [ ] improve the usage docs for what it can do
-* [ ] various type inference fixes
+
++ [ ] fix default imports of packages where the last part of the import path differs from the package name
++ [ ] add a supported alpha/beta channel so we don't have to push people to dropbox
++ [ ] improve the documentation of what the plugin can/can't do
+    + [ ] improve the usage docs for what it can do
++ [ ] various type inference fixes
 
 ## Links
 
