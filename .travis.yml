@@ -1,12 +1,31 @@
+env:
+  global:
+   - secure: "JyvGwUQQn56FZ+zl5vLPXuL9809KOqTJeWwl8P434tBlfzTq7yKv/5ZmwRJ/HJy8LfrndBcKM5rmhCtAgpqoX9HnA0Zjga1EU/tDJRrYLNsYiuNS39X0qY09mv2NE8Xj2Q9dnm6fHM9dyQBpROTv8/sXwuioyyG406vSBmLZc8k="
 language: java
 jdk:
-  - openjdk7
-  - oraclejdk7
-script: "./travis.sh"
+- openjdk7
+- oraclejdk7
+script: if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then ./travis.sh ; fi
 notifications:
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/d50931f8bba3694960c2
-    on_success: change  # options: [always|never|change] default: always
-    on_failure: always  # options: [always|never|change] default: always
-    on_start: false     # default: false
+    - https://webhooks.gitter.im/e/d50931f8bba3694960c2
+    on_success: change
+    on_failure: always
+addons:
+  coverity_scan:
+    project:
+      name: "go-lang-plugin-org/go-lang-idea-plugin"
+    notification_email: "florinpatan@gmail.com"
+    build_command_prepend: ""
+    build_command:   "./coverity.sh"
+    branch_pattern: coverity_scan
+deploy:
+  provider: releases
+  api_key:
+    secure: k6VXuuD1dZyaisrulNuUSWHZr8C3c9cBjYDIbXESl/Ost+gox8SvxsEhYdfJJsKS8uQNWJVeAt5WlmHysOL9TpSEV1nL72PYbPJpqB9sCOa89QvMBwrp49wsSOux3s4lWviWUAKF2NXrU4uFpAXDuhLc11BlHJhvetqYftd8F8s=
+  file: ./google-go-language.jar
+  on:
+    tags: true
+    branch: true
+    jdk: oraclejdk7
