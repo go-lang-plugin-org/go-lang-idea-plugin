@@ -1,6 +1,7 @@
 package ro.redeul.google.go.util;
 
 import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.FunctionCallInspection;
@@ -18,14 +19,18 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.*;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
+import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 public class GoTypeInspectUtil {
@@ -246,14 +251,44 @@ public class GoTypeInspectUtil {
             GoPsiType type = functionParameter.getType();
             String typeName = type != null ? type.getText() : "";
             if (functionParameter.isVariadic()) {
-                for (; index < goExprs.length; index++) {
+                if (call.isCallWithVariadicParameter()){
                     GoExpr goExpr = goExprs[index];
-                    if (!checkParametersExp(functionParameter.getType(), goExpr)) {
+                    GoType[] types = goExpr.getType();
+                    if (types.length!=1){
                         result.addProblem(
                                 goExpr,
-                                GoBundle.message("warning.functioncall.type.mismatch", typeName),
-                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                                GoBundle.message("warning.functioncall.type.mismatch", "[]"+typeName),
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
                         return;
+                    }
+                    GoUnderlyingType exprType = types[0].getUnderlyingType();
+                    if (!(exprType instanceof GoUnderlyingTypeSlice)){
+                        result.addProblem(
+                                goExpr,
+                                GoBundle.message("warning.functioncall.type.mismatch", "[]"+typeName),
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+                        return;
+                    }
+
+                    //TODO test with assignable
+                    if (!((GoUnderlyingTypeSlice) exprType).getElementType()
+                            .isIdentical(type.getUnderlyingType()) ) {
+                        result.addProblem(
+                                goExpr,
+                                GoBundle.message("warning.functioncall.type.mismatch", "[]"+typeName),
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+                        return;
+                    }
+                }else {
+                    for (; index < goExprs.length; index++) {
+                        GoExpr goExpr = goExprs[index];
+                        if (!checkParametersExp(functionParameter.getType(), goExpr)) {
+                            result.addProblem(
+                                    goExpr,
+                                    GoBundle.message("warning.functioncall.type.mismatch", typeName),
+                                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                            return;
+                        }
                     }
                 }
             } else {
@@ -283,9 +318,7 @@ public class GoTypeInspectUtil {
                 }
             }
         }
-
     }
-
 
     public static boolean checkFunctionTypeReturns(GoReturnStatement statement, InspectionResult result) {
         int index = 0;

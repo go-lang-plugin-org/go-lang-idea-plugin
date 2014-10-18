@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
@@ -12,6 +13,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
@@ -164,5 +166,17 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
         }
 
         return false;
+    }
+
+    public boolean isCallWithVariadicParameter(){
+        PsiElement psi1 = findLastChildByType(GoTokenTypes.oTRIPLE_DOT);
+        if (psi1!=null){
+            return true;
+        }
+        GoExpressionList list = findChildByClass(GoExpressionList.class);
+        if (list == null) {
+            return false;
+        }
+        return list.getLastChild().getText().equals("...");
     }
 }
