@@ -23,4 +23,8 @@ public class GoUnderlyingTypeSlice implements GoUnderlyingType{
     public String toString() {
         return String.format("[]%s", memberType.toString());
     }
+
+    public GoUnderlyingType getElementType(){
+        return memberType;
+    }
 }
