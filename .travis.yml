@@ -24,7 +24,7 @@ before_deploy: "./coverity.sh"
 deploy:
   provider: releases
   api_key:
-    secure: k6VXuuD1dZyaisrulNuUSWHZr8C3c9cBjYDIbXESl/Ost+gox8SvxsEhYdfJJsKS8uQNWJVeAt5WlmHysOL9TpSEV1nL72PYbPJpqB9sCOa89QvMBwrp49wsSOux3s4lWviWUAKF2NXrU4uFpAXDuhLc11BlHJhvetqYftd8F8s=
+    secure: "CarNkSYvanezbODN15okGoixi2XQOtcvCN0XBK9zTgic8D91grXIwZkoEdrOevQ8HKsb9XdR9PHnk4cSmanALtPT56wLFwc+VTpasZDnxM+WHS0GBCI49ZMV3ekK1QdKVLhUPYRQEWDY2CZXOZ0yhY7CI9eeiY3ju52bS5HtsWU="
   skip_cleanup: true
   file: ./google-go-language.jar
   on:
