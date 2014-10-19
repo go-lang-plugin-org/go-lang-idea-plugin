@@ -52,4 +52,10 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
     public void testClosuresResultParameterUnsolveBug() throws Exception {
         doTest();
     }
+
+    /*
+    public void testIssue438() throws Exception {
+        doTestWithDirectory();
+    }
+    */
 }

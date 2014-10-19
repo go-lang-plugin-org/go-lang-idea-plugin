@@ -7,7 +7,7 @@ public class ImportPathInspectionTest extends GoInspectionTestCase {
     public void testEmptyImportPath() throws Exception{ doTest(); }
     public void testCgo() throws Exception{ doTest(); }
     public void testRepeat() throws Exception{ doTest(); }
-    public void testNotFound() throws Exception{ doTest(); }
+    public void testNotFound() throws Exception{ doTestWithDirectory(); }
     public void testSelf() throws Exception{ doTest(); }
 
 }
