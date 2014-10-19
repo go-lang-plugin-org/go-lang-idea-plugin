@@ -1,6 +1,5 @@
 package ro.redeul.google.go.intentions.packages;
 
-import com.intellij.execution.CantRunException;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
@@ -102,11 +101,7 @@ public class GoGetIntention extends Intention {
         window.activate(new Runnable() {
             @Override
             public void run() {
-                try {
-                    runGoGet(project, command, finalPackagesToImport, projectDir);
-                } catch (CantRunException e) {
-                    Messages.showErrorDialog("Error while processing go get command.\n" + e.getMessage(), "Error on Google Go Plugin");
-                }
+                runGoGet(project, command, finalPackagesToImport, projectDir);
             }
         });
     }
@@ -141,7 +136,7 @@ public class GoGetIntention extends Intention {
         return missingPackages.trim();
     }
 
-    private void runGoGet(Project project, String command, String packagesToImport, String projectDir) throws CantRunException {
+    private void runGoGet(Project project, String command, String packagesToImport, String projectDir) {
         Sdk sdk = GoSdkUtil.getProjectSdk(project);
         if (sdk == null) {
             return;

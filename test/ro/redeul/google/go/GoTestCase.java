@@ -135,11 +135,6 @@ public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> ext
                 modificator.setVersionString("1");
                 modificator.setSdkAdditionalData(goSdkData);
                 modificator.commitChanges();
-
-                ContentEntry contentEntries[] = model.getContentEntries();
-                for (ContentEntry entry : contentEntries) {
-                    int a = 10;
-                }
             }
         };
 

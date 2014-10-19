@@ -82,7 +82,6 @@ public class ConvertStatementToIfIntention extends Intention {
 
         TextRange textRange = statement.getTextRange();
 
-        GoType[] types = expr.getType();
         TemplateImpl template;
 
         template = TemplateUtil.createTemplate(String.format("%s %s {$END$}", getKeyword(), expr.getText()));

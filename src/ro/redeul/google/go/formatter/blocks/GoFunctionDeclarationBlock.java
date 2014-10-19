@@ -17,7 +17,6 @@ class GoFunctionDeclarationBlock extends GoBlock {
     @Override
     protected Spacing getGoBlockSpacing(GoBlock child1, GoBlock child2) {
         IElementType child1ElementType = child1.getNode().getElementType();
-        IElementType child2ElementType = child2.getNode().getElementType();
 
         if (child1ElementType == GoElementTypes.pRPAREN) {
             return BASIC_SPACING;

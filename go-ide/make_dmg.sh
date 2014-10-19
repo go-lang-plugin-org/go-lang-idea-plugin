@@ -13,7 +13,7 @@ IMAGE_FILE=${IMAGE_FILE:-$FOLDER_DIST/goide-mac.dmg}
 echo "Cleaning out old $IMAGE_FILE"
 test -f "$IMAGE_FILE" && rm -f "$IMAGE_FILE"
 echo "Adding symlink Applications to $SRC_FOLDER ..."
-ln -fs /Applications $SRC_FOLDER
+ln -fs /Applications ${SRC_FOLDER}
 
 echo "Creating disk image..."
 test -f "${DMG_TEMP_NAME}" && rm -f "${DMG_TEMP_NAME}"

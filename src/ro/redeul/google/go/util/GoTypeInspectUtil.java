@@ -1,7 +1,6 @@
 package ro.redeul.google.go.util;
 
 import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.FunctionCallInspection;
@@ -19,7 +18,6 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
-import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
@@ -30,7 +28,6 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 public class GoTypeInspectUtil {

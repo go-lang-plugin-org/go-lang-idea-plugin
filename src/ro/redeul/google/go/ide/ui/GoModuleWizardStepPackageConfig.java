@@ -1,7 +1,6 @@
 package ro.redeul.google.go.ide.ui;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
-import ro.redeul.google.go.ide.GoConfigurableForm;
 import ro.redeul.google.go.ide.GoModuleBuilder;
 import ro.redeul.google.go.ide.GoProjectSettings;
 
@@ -21,9 +20,7 @@ public class GoModuleWizardStepPackageConfig extends ModuleWizardStep {
     private JCheckBox enablePrependSysGoPath;
     private JCheckBox enableAppendSysGoPath;
     private JButton buttonProjectSettings;
-    private JPanel panelTest;
     private GoModuleBuilder moduleBuilder;
-    private GoConfigurableForm form;
     private GoProjectSettings.GoProjectSettingsBean settingsBean;
 
     public GoModuleWizardStepPackageConfig(GoModuleBuilder moduleBuilder) {
@@ -81,13 +78,5 @@ public class GoModuleWizardStepPackageConfig extends ModuleWizardStep {
         this.moduleBuilder.packageURL = this.txtPackageURL.getText();
         this.moduleBuilder.isNew = this.radioNewPackage.isSelected();
         this.moduleBuilder.packageName = this.txtNewPackageName.getText();
-    }
-
-    private void createUIComponents() {
-        form = new GoConfigurableForm();
-        form.enableShowHide();
-        panelTest = new JPanel();
-        panelTest.add(form.componentPanel);
-
     }
 }

@@ -1,7 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import org.junit.Ignore;
-
 public class UnresolvedSymbolsTest extends GoInspectionTestCase {
     public void testIfScope() throws Exception {
         doTest();

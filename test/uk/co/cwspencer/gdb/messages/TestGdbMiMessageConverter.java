@@ -17,7 +17,7 @@ public class TestGdbMiMessageConverter
 	/**
 	 * Verifies the correct conversion of a 'connected' message.
 	 */
-	@Test(expected = AssertionError.class) //TODO FIX ME
+	@Test(expected = AssertionError.class) //TODO FIX TEST
 	public void testConnectedEvent() throws UnsupportedEncodingException
 	{
 		// Parse the message
@@ -87,7 +87,7 @@ public class TestGdbMiMessageConverter
 	/**
 	 * Verifies the correct conversion of a 'stopped' message.
 	 */
-	@Test(expected = AssertionError.class) //TODO FIX ME
+	@Test(expected = AssertionError.class) // TODO FIX TEST
 	public void testStoppedEvent() throws UnsupportedEncodingException
 	{
 		// Parse the message
@@ -259,7 +259,7 @@ public class TestGdbMiMessageConverter
 	/**
 	 * Verifies the correct conversion of a breakpoint message.
 	 */
-	@Test(expected = AssertionError.class) //TODO FIX ME
+	@Test(expected = AssertionError.class) // TODO FIX TEST
 	public void testBreakpoint() throws UnsupportedEncodingException
 	{
 		// Parse the message

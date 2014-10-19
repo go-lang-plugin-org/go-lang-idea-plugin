@@ -119,8 +119,6 @@ public abstract class GoInspectionTestCase
             }
         });
 
-        Logger logger = Logger.getInstance("intellijjjj");
-
         StringBuilder sb = new StringBuilder();
         for (ProblemDescriptor pd : problems) {
             TextRange range;

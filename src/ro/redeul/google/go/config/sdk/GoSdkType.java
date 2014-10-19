@@ -150,7 +150,7 @@ public class GoSdkType extends SdkType {
             sdkSourcesRoot.refresh(false, false);
         }
 
-        String goPathFirst = GoSdkUtil.getSysGoPathPath();
+        String goPathFirst = GoSdkUtil.getGoPath();
 
         VirtualFile goPathDirectory;
         VirtualFile pathSourcesRoot = null;

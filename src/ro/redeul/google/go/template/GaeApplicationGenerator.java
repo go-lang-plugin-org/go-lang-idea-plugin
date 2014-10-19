@@ -71,8 +71,6 @@ public class GaeApplicationGenerator extends WebProjectTemplate {
             public void run() {ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 @Override
                 public void run() {
-                    ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
-
                     PsiDirectory directory = PsiManager.getInstance(project).findDirectory(GoSdkUtil.getVirtualFile(baseDir.getCanonicalPath()));
 
                     if (directory == null) {

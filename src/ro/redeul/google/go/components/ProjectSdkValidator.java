@@ -3,7 +3,6 @@ package ro.redeul.google.go.components;
 import com.intellij.ide.plugins.IdeaPluginDescriptorImpl;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.AbstractProjectComponent;
@@ -92,8 +91,6 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
         sdkList.clear();
         sdkList.addAll(GoSdkUtil.getSdkOfType(GoAppEngineSdkType.getInstance(), jdkTable));
 
-        Boolean hasGAESdk = sdkList.size() > 0;
-
         for (Sdk sdk : sdkList) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
 
@@ -152,20 +149,6 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
             sdkModificator.commitChanges();
         }
 
-        if (hasGAESdk) {
-            String sysAppEngineDevServerPath = GoSdkUtil.getAppEngineDevServer();
-            if (sysAppEngineDevServerPath.isEmpty())
-                Notifications.Bus.notify(
-                        new Notification(
-                                "Go AppEngine SDK validator",
-                                "Problem with env variables",
-                                getInvalidAPPENGINE_DEV_APPSERVEREnvMessage(),
-                                NotificationType.WARNING,
-                                NotificationListener.URL_OPENING_LISTENER),
-                        myProject);
-
-        }
-
         PluginDescriptor pluginDescriptor = PluginManager.getPlugin(PluginId.getId("ro.redeul.google.go"));
         if (pluginDescriptor != null) {
             String version = ((IdeaPluginDescriptorImpl) pluginDescriptor).getVersion();
@@ -189,30 +172,6 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
     private String getContent(String type, String name) {
         return "<html>The attached " + type + " SDK named: <em>" + name + "</em> seems to be corrupt." +
                 "<br/>Please update it by going to the project sdk editor remove it and add it again.</html>";
-    }
-
-    private String getInvalidGOROOTEnvMessage() {
-        return "<html><em>GOROOT</em> environment variable is empty or could not be detected properly.<br/>" +
-                "This means that some tools like <code>go run</code> or <code>go fmt</code> might not run properly.<br/>" +
-                "See <a href='http://git.io/_bt0Hg'>instructions</a> on how to fix this.";
-    }
-
-    private String getInvalidGOPATHEnvMessage() {
-        return "<html><em>GOPATH</em> environment variable is empty or could not be detected properly.<br/>" +
-                "This means that some tools like <code>go run</code> or <code>go fmt</code> might not run properly.<br/>" +
-                "See <a href='http://git.io/_bt0Hg'>instructions</a> on how to fix this.";
-    }
-
-    private String getGOPATHinGOROOTEnvMessage() {
-        return "<html><em>GOPATH</em> environment variable seems to be inside <em>GOROOT</em>.<br/>" +
-                "This means that your system settings are not correct.<br/>" +
-                "See <a href='http://golang.org/doc/code.html#GOPATH'>instructions</a> on how to set it properly.";
-    }
-
-    private String getInvalidAPPENGINE_DEV_APPSERVEREnvMessage() {
-        return "<html><em>APPENGINE_DEV_APPSERVER</em> environment variable is empty or could not be detected properly.<br/>" +
-                "This means that some you might not be able to run properly <code>goapp serve</code> to serve the files while developing.<br/>" +
-                "See <a href='http://git.io/_bt0Hg'>instructions</a> on how to fix this.";
     }
 
     private String getDevVersionMessage() {

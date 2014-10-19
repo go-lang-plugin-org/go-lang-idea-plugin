@@ -96,10 +96,7 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
     }
 
     private GoPsiType[] processArgumentsType(String functionName) {
-        GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
-
         GoExpr[] args = getArguments();
-        GoPsiType typeArg = getTypeArgument();
 
         if (functionName.equals("append")) {
             if (args.length > 1) {

@@ -62,8 +62,6 @@ public class GoPsiTypingTestCase extends GoFileBasedPsiTestCase
 
         for (GoType[] expressionsType : expressionsTypes) {
             for (int i = 0; i < baseTypes.length; i++) {
-                GoType baseType = baseTypes[i];
-
                 assertNotNull(baseTypes[i]);
                 assertNotNull(expressionsType[i]);
                 assertTrue("We should have the same underlying type",

@@ -3,7 +3,6 @@ package uk.co.cwspencer.ideagdb.debug;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.PlatformIcons;
 import com.intellij.xdebugger.frame.*;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.co.cwspencer.gdb.Gdb;
@@ -126,8 +125,6 @@ public class GdbValue extends XValue {
     }
 
     private void handleGoString(@NotNull final XValueNode node) {
-        final String nodeName = ((XValueNodeImpl) node).getName();
-
         m_gdb.sendCommand("-var-list-children --all-values " + GdbMiUtil.formatGdbString(m_variableObject.name), new Gdb.GdbEventCallback() {
             @Override
             public void onGdbCommandCompleted(GdbEvent event) {

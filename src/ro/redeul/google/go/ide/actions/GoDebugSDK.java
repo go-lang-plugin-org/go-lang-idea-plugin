@@ -6,7 +6,6 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vfs.VirtualFile;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -32,8 +31,6 @@ public class GoDebugSDK extends GoCommonDebugAction {
             return;
         }
 
-        String goExecName = sdkData.GO_BIN_PATH;
-
         String projectDir = project.getBasePath();
 
         if (projectDir == null) {
@@ -41,8 +38,6 @@ public class GoDebugSDK extends GoCommonDebugAction {
         }
 
         FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
-        VirtualFile selectedFile = fileEditorManager.getSelectedFiles()[0];
-        String fileName = selectedFile.getCanonicalPath();
 
         try {
             GoToolWindow toolWindow = this.getGoToolWindow(project);

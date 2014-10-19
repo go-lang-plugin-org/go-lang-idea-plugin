@@ -176,8 +176,6 @@ public class GoNamesCache {
     }
 
     public Collection<GoFile> getFilesByPackageName(String packageName) {
-        StubIndex index = StubIndex.getInstance();
-
         Collection<GoFile> files = StubIndex.getElements(GoPackageName.KEY, packageName, project,
                 GlobalSearchScope.allScope(project), GoFile.class);
 
@@ -191,8 +189,6 @@ public class GoNamesCache {
 
     public Collection<GoFile> getFilesByPackageImportPath(@NotNull String importPath,
                                                           @NotNull GlobalSearchScope scope) {
-        StubIndex index = StubIndex.getInstance();
-
         Collection<GoFile> files = StubIndex.getElements(GoPackageImportPath.KEY,
                 importPath, project, scope, GoFile.class);
         removeExcludedFiles(files);
@@ -219,7 +215,6 @@ public class GoNamesCache {
             return new NavigationItem[0];
         }
 
-        StubIndex index = StubIndex.getInstance();
         GlobalSearchScope scope = getSearchScope(includeNonProjectItems);
         Collection<NavigationItem> items = new ArrayList<NavigationItem>();
         for (GoTypeNameDeclaration type : StubIndex.getElements(GoTypeName.KEY, name,
@@ -315,7 +310,6 @@ public class GoNamesCache {
 
     @VisibleForTesting
     static Set<String> getExcludeOsNames(GoTargetOs targetOs) {
-        Collection<String> excludeOsNames;
         switch (targetOs) {
             case Windows:
                 return windowsExcludeNames;

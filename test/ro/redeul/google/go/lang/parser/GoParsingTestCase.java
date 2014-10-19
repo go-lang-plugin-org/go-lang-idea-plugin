@@ -25,7 +25,7 @@ public abstract class GoParsingTestCase
 
     private void doTest(String fileName) throws IOException {
 
-        List<String> list = null;
+        List<String> list;
 
         try {
             list = GoTestUtils.readInput(getTestDataPath() + File.separator + fileName + ".go");

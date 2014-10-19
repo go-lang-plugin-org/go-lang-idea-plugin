@@ -7,7 +7,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.projectRoots.SdkTypeId;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.IncorrectOperationException;
@@ -31,8 +30,6 @@ public class GoAppEngineModuleBuilder extends JavaModuleBuilder implements Sourc
 
     @Override
     public void moduleCreated(@NotNull Module module) {
-
-        ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
 
         PsiDirectory directory = PsiManager.getInstance(module.getProject()).findDirectory(module.getProject().getBaseDir());
 

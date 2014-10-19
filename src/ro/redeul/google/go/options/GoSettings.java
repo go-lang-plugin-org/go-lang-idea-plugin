@@ -19,8 +19,6 @@ import java.io.File;
 public class GoSettings implements PersistentStateComponent<GoSettings>, ExportableComponent {
     public boolean SHOW_IMPORT_POPUP = true;
     public boolean OPTIMIZE_IMPORTS_ON_THE_FLY = true;
-    public String goRoot = "";
-    public String goPath = "";
 
     public GoSettings() {
         CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();

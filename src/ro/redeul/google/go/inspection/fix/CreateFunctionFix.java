@@ -62,7 +62,7 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
      * Helper method to generate function arguments type, based on param being passed to the function
      *
      * @param e          -> parent -> GoCallOrConvExpression
-     * @param stringList
+     * @param stringList List<String>
      * @return the generated arugment list ex: arg0 int, arg1 string
      */
     public static String InspectionGenFuncArgs(PsiElement e, List<String> stringList) {

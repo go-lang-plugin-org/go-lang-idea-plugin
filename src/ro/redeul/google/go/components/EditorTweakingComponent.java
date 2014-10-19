@@ -1,6 +1,5 @@
 package ro.redeul.google.go.components;
 
-import com.intellij.execution.CantRunException;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
@@ -16,7 +15,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
-import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -44,7 +42,8 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
 
         Project project = null;
         for (Project possibleProject : projects) {
-            if (ProjectRootManager.getInstance(possibleProject).getFileIndex().getSourceRootForFile(file) != null) {
+            if (ProjectRootManager.getInstance(possibleProject).getFileIndex().getSourceRootForFile(file) != null ||
+                    ProjectRootManager.getInstance(possibleProject).getFileIndex().getContentRootForFile(file) != null) {
                project = possibleProject;
                 break;
             }
@@ -131,19 +130,15 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
             return;
         }
 
-        final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
-        if (sdkData == null) {
-            return;
-        }
-        final String goExecName = sdkData.GO_BIN_PATH;
-
         String[] goEnv = GoSdkUtil.getGoEnv(sdk, projectDir);
         if (goEnv == null) {
             return;
         }
 
+        String goExec = GoSdkUtil.getGoExecName(sdk);
+
         try {
-            String[] command = {sdkData.GO_BIN_PATH, "fmt", fileName};
+            String[] command = {goExec, "fmt", fileName};
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv);

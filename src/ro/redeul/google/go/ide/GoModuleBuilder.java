@@ -69,7 +69,10 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
             if ( sdkData == null ) {
                 throw new CantRunException("No Go Sdk defined for this project");
             }
-            final String goExecName = sdkData.GO_BIN_PATH;
+            final String goExecName = GoSdkUtil.getGoExecName(sdk);
+            if (goExecName == null) {
+                return;
+            }
             final String projectDir = module.getProject().getBasePath();
             if (projectDir == null) {
                 throw new CantRunException("Could not retrieve the project directory");

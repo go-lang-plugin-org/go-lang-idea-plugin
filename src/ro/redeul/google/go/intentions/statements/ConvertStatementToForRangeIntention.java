@@ -84,9 +84,6 @@ public class ConvertStatementToForRangeIntention extends Intention {
         TextRange textRange = statement.getTextRange();
         ArrayList<String> arguments = new ArrayList<String>();
 
-
-        StringBuilder templateString = new StringBuilder();
-
         String k = "k";
         String v = "v";
 

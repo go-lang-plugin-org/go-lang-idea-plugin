@@ -10,7 +10,6 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeInterface;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
@@ -76,8 +75,6 @@ public abstract class GoBinaryExpressionImpl extends GoExpressionBase
                     boolean shift = operator.equals("<<")||operator.equals(">>");
                     GoType leftType = leftTypes[0];
                     GoType rightType = rightTypes[0];
-                    GoUnderlyingType leftUnder = leftType.getUnderlyingType();
-                    GoUnderlyingType rightUnder = rightType.getUnderlyingType();
                     if (!equality) {
                         if (shift){
                             // shift operation returns untyped int
