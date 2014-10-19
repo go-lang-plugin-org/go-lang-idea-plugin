@@ -16,40 +16,158 @@ import java.io.File;
  * Author: Florin Patan <florinpatan@gmail.com>
  */
 public class GoGlobalConfigurableForm {
-   public JPanel componentPanel;
+    public JPanel componentPanel;
     private TextFieldWithBrowseButton goPath;
-    private JButton importSysGoPath;
+    private JButton importSysGo;
     private JCheckBox enableOnTheFlyImportOptimization;
+    private TextFieldWithBrowseButton goRoot;
+    private TextFieldWithBrowseButton goAppEngineRoot;
     private final GoGlobalSettings goGlobalSettings = GoGlobalSettings.getInstance();
     private final GoSettings goSettings = GoSettings.getInstance();
 
     GoGlobalConfigurableForm() {
+        goRoot.addBrowseFolderListener("GOROOT directory", "Select the GOROOT directory of your GO setup",
+                null, new FileChooserDescriptor(false, true, false, false, false, false));
+        goAppEngineRoot.addBrowseFolderListener("GOAPPENGINEROOT directory", "Select the GOAPPENGINEROOT directory of your GO setup",
+                null, new FileChooserDescriptor(false, true, false, false, false, false));
         goPath.addBrowseFolderListener("GOPATH directory", "Select the GOPATH directory of your GO setup",
                 null, new FileChooserDescriptor(false, true, false, false, false, false));
 
-        importSysGoPath.addActionListener(new ActionListener() {
+        importSysGo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                goRoot.setText(GoSdkUtil.getSysGoRootPath());
+                goAppEngineRoot.setText(GoSdkUtil.getAppEngineDevServer());
                 goPath.setText(GoSdkUtil.getSysGoPathPath().split(File.pathSeparator)[0]);
             }
         });
     }
 
     public void reset() {
+        goRoot.setText(goGlobalSettings.getGoRoot());
+        goAppEngineRoot.setText(goGlobalSettings.getGoAppEngineRoot());
         goPath.setText(goGlobalSettings.getGoPath());
-        enableOnTheFlyImportOptimization.setSelected(goSettings.getState().OPTIMIZE_IMPORTS_ON_THE_FLY);
+
+        if (goSettings.getState() != null) {
+            enableOnTheFlyImportOptimization.setSelected(goSettings.getState().OPTIMIZE_IMPORTS_ON_THE_FLY);
+        }
     }
 
     public boolean isModified() {
-        if (enableOnTheFlyImportOptimization.isSelected() != goSettings.getState().OPTIMIZE_IMPORTS_ON_THE_FLY) {
+        if (goSettings.getState() != null) {
+            if (enableOnTheFlyImportOptimization.isSelected() != goSettings.getState().OPTIMIZE_IMPORTS_ON_THE_FLY) {
+                return true;
+            }
+        }
+
+        if (!Comparing.equal(goRoot.getText(), goGlobalSettings.getGoRoot())) {
             return true;
         }
+
+        if (!Comparing.equal(goAppEngineRoot.getText(), goGlobalSettings.getGoAppEngineRoot())) {
+            return true;
+        }
+
         return !Comparing.equal(goPath.getText(), goGlobalSettings.getGoPath());
     }
 
     public void apply() {
-        String goPathStr = goPath.getText();
+        String goRootStr = handleGoRoot(goRoot.getText());
+        String goAppEngineRootStr = handleGoAppEngineRoot(goAppEngineRoot.getText());
+        String goPathStr = handleGoPath(goPath.getText());
 
+
+        if (goRootStr.equals("") && !goRoot.getText().equals("")) {
+            return;
+        }
+
+        if (goAppEngineRootStr.equals("") && !goAppEngineRoot.getText().equals("")) {
+            return;
+        }
+
+        if (goPathStr.equals("")) {
+            return;
+        }
+
+        goGlobalSettings.setPaths(goRootStr, goAppEngineRootStr, goPathStr);
+        goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY = enableOnTheFlyImportOptimization.isSelected();
+    }
+
+    private String handleGoRoot(String goRootStr) {
+        if (goRootStr.equals("")) {
+            return "";
+        }
+
+        if (goRootStr.endsWith(File.separator)) {
+            goRootStr = goRootStr.substring(0, goRootStr.length() - 1);
+            goRoot.setText(goRootStr);
+        }
+
+        if (!(new File(goRootStr).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOROOT doesn't exists.", "Error on Google Go Plugin");
+            return "";
+        }
+
+        if (!(new File(goRootStr.concat("/bin")).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOROOT/bin doesn't exists.", "Error on Google Go Plugin");
+            return "";
+        }
+
+        String goExecName = GoSdkUtil.isHostOsWindows() ? "/bin/go.exe" : "/bin/go";
+        if (!new File(goRootStr.concat(goExecName)).exists()) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOROOT" + goExecName + " doesn't exists.", "Error on Google Go Plugin");
+            return "";
+        }
+
+        if (!(new File(goRootStr.concat("/src")).exists()) ||
+                !(new File(goRootStr.concat("/src/pkg")).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOROOT/src/pkg doesn't exists.", "Error on Google Go Plugin");
+            return "";
+        }
+
+        return goRootStr;
+    }
+
+    private String handleGoAppEngineRoot(String goAppEngineRootStr) {
+        if (goAppEngineRootStr.equals("")) {
+            return "";
+        }
+
+        if (goAppEngineRootStr.endsWith(File.separator)) {
+            goAppEngineRootStr = goAppEngineRootStr.substring(0, goAppEngineRootStr.length() - 1);
+            goAppEngineRoot.setText(goAppEngineRootStr);
+        }
+
+        if (!(new File(goAppEngineRootStr).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOAPPENGINEROOT doesn't exists.", "Error on Google Go Plugin");
+            return "";
+        }
+
+        if (!(new File(goAppEngineRootStr.concat("/appcfg.py")).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOAPPENGINEROOT/appcfg.py doesn't exists.", "Error on Google Go Plugin");
+            return "";
+        }
+
+        if (!(new File(goAppEngineRootStr.concat("/goroot/bin")).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nnGOAPPENGINEROOT/goroot/bin doesn't exists.", "Error on Google Go Plugin");
+            return "";
+        }
+
+        String goExecName = GoSdkUtil.isHostOsWindows() ? "/goroot/bin/go.exe" : "/goroot/bin/go";
+        if (new File(goAppEngineRootStr.concat(goExecName)).exists()) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOAPPENGINEROOT/goroot" + goExecName + " doesn't exists.", "Error on Google Go Plugin");
+            return "";
+        }
+
+        if (!(new File(goAppEngineRootStr.concat("/goroot/src/pkg")).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOAPPENGINEROOT/src/pkg doesn't exists.", "Error on Google Go Plugin");
+            return "";
+        }
+
+        return goAppEngineRootStr;
+    }
+
+    private String handleGoPath(String goPathStr) {
         if (goPathStr.endsWith(File.separator)) {
             goPathStr = goPathStr.substring(0, goPathStr.length() - 1);
             goPath.setText(goPathStr);
@@ -57,23 +175,25 @@ public class GoGlobalConfigurableForm {
 
         if (!(new File(goPathStr).exists())) {
             Messages.showErrorDialog("Error while saving your settings. \nGOPATH doesn't exists.", "Error on Google Go Plugin");
-            return;
+            return "";
         }
 
-        /* The error check of a bin folder is not necessary because bin folder is created automatically and the
-         * error seems to confuse more then it helps because GOROOT also has a bin folder (i.e. https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/752)
         if (!(new File(goPathStr.concat("/bin")).exists())) {
             Messages.showErrorDialog("Error while saving your settings. \nGOPATH/bin doesn't exists.", "Error on Google Go Plugin");
-            return;
+            return "";
         }
-        */
+
+        String goExecName = GoSdkUtil.isHostOsWindows() ? "/bin/go.exe" : "/bin/go";
+        if (new File(goPathStr.concat(goExecName)).exists()) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOPATH/bin/go exists. Are you sure this is not GOROOT?", "Error on Google Go Plugin");
+            return "";
+        }
 
         if (!(new File(goPathStr.concat("/src")).exists())) {
             Messages.showErrorDialog("Error while saving your settings. \nGOPATH/src doesn't exists.", "Error on Google Go Plugin");
-            return;
+            return "";
         }
 
-        goGlobalSettings.setGoPath(goPathStr);
-        goSettings.OPTIMIZE_IMPORTS_ON_THE_FLY = enableOnTheFlyImportOptimization.isSelected();
+        return goPathStr;
     }
 }

@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
+import ro.redeul.google.go.ide.GoGlobalSettings;
 import ro.redeul.google.go.options.GoSettings;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -58,12 +59,12 @@ public class GaeGeneratorPeer implements WebProjectGenerator.GeneratorPeer<GoApp
             }
         });
 
-        mySdkPath.setText(FileUtil.toSystemDependentName(GoSettings.getInstance().goRoot));
+        mySdkPath.setText(FileUtil.toSystemDependentName(GoGlobalSettings.getInstance().getGoAppEngineRoot()));
         if (mySdkPath.getText().equals("")) {
             mySdkPath.setText(GoSdkUtil.getGaeExePath());
         }
 
-        gopathPath.setText(FileUtil.toSystemDependentName(GoSettings.getInstance().goPath));
+        gopathPath.setText(FileUtil.toSystemDependentName(GoGlobalSettings.getInstance().getGoPath()));
         if (gopathPath.getText().equals("")) {
             gopathPath.setText(GoSdkUtil.getSysGoPathPath().split(File.pathSeparator)[0]);
         }

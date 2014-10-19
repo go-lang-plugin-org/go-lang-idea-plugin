@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.config.ui.GoSdkConfigurable;
+import ro.redeul.google.go.ide.GoGlobalSettings;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.*;
@@ -150,7 +151,7 @@ public class GoSdkType extends SdkType {
             sdkSourcesRoot.refresh(false, false);
         }
 
-        String goPathFirst = GoSdkUtil.getSysGoPathPath();
+        String goPathFirst = GoSdkUtil.getGoPath();
 
         VirtualFile goPathDirectory;
         VirtualFile pathSourcesRoot = null;

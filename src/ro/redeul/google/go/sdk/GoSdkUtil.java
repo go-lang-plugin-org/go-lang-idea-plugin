@@ -643,8 +643,6 @@ public class GoSdkUtil {
     }
 
     public static String getGoPath() {
-
-
         String savedsGoPath = GoGlobalSettings.getInstance().getGoPath();
 
         if (!savedsGoPath.isEmpty()) {
