@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceWithSolver;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
@@ -17,6 +18,8 @@ public class PackageReference extends ReferenceWithSolver<GoLiteralIdentifier, P
             psiElement(GoLiteralIdentifier.class)
                     .withParent(
                             psiElement(GoLiteralExpression.class)
+                                    .withParent(
+                                            psiElement(GoSelectorExpression.class))
                     );
 
     public PackageReference(@NotNull GoLiteralIdentifier element) {

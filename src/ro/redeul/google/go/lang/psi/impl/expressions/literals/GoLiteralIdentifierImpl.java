@@ -210,8 +210,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             return goPackage != null ? refs(new PackageSymbolReference(this, goPackage)) : PsiReference.EMPTY_ARRAY;
         }
 
-
-        if (VarOrConstReference.MATCHER.accepts(this))
+        if (PackageReference.MATCHER.accepts(this))
 //            return refs(new VarOrConstReference(this), new PackageReference(this));
             return refs(new PackageReference(this));
 
