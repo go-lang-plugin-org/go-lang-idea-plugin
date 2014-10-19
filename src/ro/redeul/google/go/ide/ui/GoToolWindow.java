@@ -7,6 +7,7 @@ import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -108,5 +109,12 @@ public class GoToolWindow extends AbstractProjectComponent {
      */
     public void attachConsoleViewToProcess(ProcessHandler processHandler) {
         consoleViewImpl.attachToProcess(processHandler);
+    }
+
+    @Override
+    public void disposeComponent() {
+        consoleViewImpl.dispose();
+        Disposer.dispose(consoleViewImpl);
+        consoleViewImpl = null;
     }
 }
