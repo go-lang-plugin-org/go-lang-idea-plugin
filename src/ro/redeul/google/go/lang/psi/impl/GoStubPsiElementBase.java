@@ -58,4 +58,9 @@ public abstract class GoStubPsiElementBase<T extends StubElement> extends StubBa
     public LookupElementBuilder getCompletionPresentation() {
         return null;
     }
+
+    @Override
+    public GoPsiElement getReferenceContext() {
+        return this;
+    }
 }

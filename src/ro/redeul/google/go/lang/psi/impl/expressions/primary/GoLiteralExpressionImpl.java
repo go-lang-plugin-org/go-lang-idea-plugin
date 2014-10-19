@@ -20,12 +20,10 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
-import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationImpl;
-import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationsImpl;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
-import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
-import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
-import ro.redeul.google.go.lang.psi.resolve.references.VarOrConstReference;
+//import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
+//import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
+import ro.redeul.google.go.lang.psi.resolve.refs.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeAndVarsStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
@@ -296,17 +294,17 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
     @Override
     public PsiReference[] getReferences() {
 
-        if (BuiltinCallOrConversionReference.MATCHER.accepts(this)) {
-            if (getLiteral().getText().matches("print|println"))
-                return refs(PsiReference.EMPTY_ARRAY);
-
-            return refs(new BuiltinCallOrConversionReference(this));
-        }
-
-        if (CallOrConversionReference.MATCHER.accepts(this))
-            return refs(
-                    new CallOrConversionReference(this),
-                    new VarOrConstReference((GoLiteralIdentifier) this.getLiteral()));
+//        if (BuiltinCallOrConversionReference.MATCHER.accepts(this)) {
+//            if (getLiteral().getText().matches("print|println"))
+//                return refs(PsiReference.EMPTY_ARRAY);
+//
+//            return refs(new BuiltinCallOrConversionReference(this));
+//        }
+//
+//        if (CallOrConversionReference.MATCHER.accepts(this))
+//            return refs(
+//                    new CallOrConversionReference(this),
+//                    new VarOrConstReference((GoLiteralIdentifier) this.getLiteral()));
 
         return super.getReferences();
     }

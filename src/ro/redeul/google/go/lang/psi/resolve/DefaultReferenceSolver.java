@@ -21,8 +21,7 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
 
     @Override
     public PsiElement resolve(R reference) {
-        reference.walkSolver(self());
-        return target;
+        return resolveFromCache(reference);
     }
 
     @Override
@@ -41,6 +40,24 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
         }
     }
 
+    public boolean collectingVariants() {
+        return variants != null;
+    }
+
+    /**
+     * @return false to stop processing
+     */
+    @Override
+    public boolean shouldContinueSolving() {
+        return collectingVariants() || target == null;
+    }
+
+    @Override
+    public PsiElement resolve(@NotNull R reference, boolean incompleteCode) {
+        reference.walkSolver(self());
+        return target;
+    }
+
     @Nullable
     @Override
     public <T> T getHint(@NotNull Key<T> hintKey) { return null; }
@@ -50,10 +67,14 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
 
     @Override
     public PsiElement resolveFromCache(R reference) {
-        ResolvingCache.Result cachedResolvingResult = ResolveCache
+        boolean incompleteCode = false;
+
+        // uncomment if we want to skip cache
+        // return resolve(reference, false);
+
+        // this will go via the cache
+        return ResolveCache
                 .getInstance(reference.getElement().getProject())
                 .resolveWithCaching(reference, self(), true, false);
-
-        return cachedResolvingResult != null && cachedResolvingResult.isValidResult() ? cachedResolvingResult.getElement() : null;
     }
 }

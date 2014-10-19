@@ -1,7 +1,9 @@
 package ro.redeul.google.go.lang.psi.resolve;
 
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 
@@ -10,6 +12,10 @@ public abstract class Reference<
         Self extends Reference<E, Self>> implements PsiReference {
 
     E element;
+
+    protected Reference(E element) {
+        this.element = element;
+    }
 
     @Override
     public PsiElement getElement() {
@@ -29,4 +35,23 @@ public abstract class Reference<
         return getElement().getText();
     }
 
+    @Override
+    public TextRange getRangeInElement() {
+        return getElement().getTextRange().shiftRight(-getElement().getTextOffset());
+    }
+
+    @Override
+    public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+        return null;
+    }
+
+    @Override
+    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+        return null;
+    }
+
+    @Override
+    public boolean isReferenceTo(PsiElement element) {
+        return getElement().getManager().areElementsEquivalent(resolve(), element);
+    }
 }

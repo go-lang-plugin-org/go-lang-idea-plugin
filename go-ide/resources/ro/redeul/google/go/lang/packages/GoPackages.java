@@ -3,6 +3,8 @@ package ro.redeul.google.go.lang.packages;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ex.ProjectRootManagerEx;
 import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -61,6 +63,19 @@ public class GoPackages extends AbstractProjectComponent {
         VirtualFile sourceRoots[] = ProjectRootManagerEx.getInstanceEx(myProject).getContentSourceRoots();
 
         for (VirtualFile sourceRoot : sourceRoots) {
+            VirtualFile packagePath = sourceRoot.findFileByRelativePath(path);
+            if ( packagePath != null && packagePath.isDirectory()) {
+                return new GoPackageImpl(packagePath, sourceRoot, PsiManager.getInstance(myProject));
+            }
+        }
+
+        Sdk projectSdk = ProjectRootManagerEx.getInstanceEx(myProject).getProjectSdk();
+        if ( projectSdk == null )
+            return null;
+
+        VirtualFile[] sdkSourceRoots = projectSdk.getRootProvider().getFiles(OrderRootType.SOURCES);
+
+        for (VirtualFile sourceRoot : sdkSourceRoots) {
             VirtualFile packagePath = sourceRoot.findFileByRelativePath(path);
             if ( packagePath != null && packagePath.isDirectory()) {
                 return new GoPackageImpl(packagePath, sourceRoot, PsiManager.getInstance(myProject));

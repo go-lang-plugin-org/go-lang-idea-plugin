@@ -268,7 +268,7 @@ public class GoUtil {
                     String canonicalPath = containingDirectory.getVirtualFile().getCanonicalPath();
                     GoLiteralString importPath = declaration.getImportPath();
                     if (importPath != null && canonicalPath != null && canonicalPath.endsWith(importPath.getValue())) {
-                        String visiblePackageName = declaration.getVisiblePackageName();
+                        String visiblePackageName = declaration.getPackageAlias();
                         if (visiblePackageName.equals(".")) {
                             stringBuilder.append(type.getName());
                         } else {

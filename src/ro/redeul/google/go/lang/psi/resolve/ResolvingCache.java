@@ -10,6 +10,7 @@ public class ResolvingCache {
 
     public interface SolverBasedResolver<R extends ReferenceWithSolver<?, S, R>, S extends ReferenceSolver<R, S>> extends ResolveCache.AbstractResolver<R, Result> {
     }
+/*
 
     public static <R extends ReferenceWithSolver<?, S, R>, S extends ReferenceSolver<R, S>> SolverBasedResolver<R, S> makeDefault() {
         return new SolverBasedResolver<R, S>() {
@@ -30,6 +31,7 @@ public class ResolvingCache {
             }
         };
     }
+*/
 //
 //    public static <R extends ReferenceWithSolver<?, S, R>, S extends ReferenceSolver<R, S>> S makeSolver() {
 //        return new ReferenceSolver<R, S>() {

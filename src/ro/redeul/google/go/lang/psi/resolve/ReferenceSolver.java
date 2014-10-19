@@ -9,7 +9,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 * Created by mihai on 10/14/14.
 */
 interface ReferenceSolver<R extends ReferenceWithSolver<?, S, R>, S extends ReferenceSolver<R, S>>
-        extends PsiScopeProcessor, ResolveCache.AbstractResolver<R, ResolvingCache.Result> {
+        extends PsiScopeProcessor, ResolveCache.AbstractResolver<R, PsiElement> {
 
     PsiElement resolveFromCache(R reference);
 
@@ -20,5 +20,9 @@ interface ReferenceSolver<R extends ReferenceWithSolver<?, S, R>, S extends Refe
     public void addTarget(GoPsiElement targetPsi);
 
     S self();
+
+    public boolean shouldContinueSolving();
+
+    public boolean collectingVariants();
 }
 

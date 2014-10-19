@@ -11,8 +11,8 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
-import ro.redeul.google.go.lang.psi.resolve.references.BuiltinTypeNameReference;
-import ro.redeul.google.go.lang.psi.resolve.references.TypeNameReference;
+//import ro.redeul.google.go.lang.psi.resolve.references.BuiltinTypeNameReference;
+//import ro.redeul.google.go.lang.psi.resolve.references.TypeNameReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
@@ -73,13 +73,14 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
     @Override
     public PsiReference getReference() {
 
-        if (PRIMITIVE_TYPES.accepts(this))
-            return new BuiltinTypeNameReference(this);
+//        if (PRIMITIVE_TYPES.accepts(this))
+//            return new BuiltinTypeNameReference(this);
 
         if (NIL_TYPE.accepts(this))
             return null;
 
-        return new TypeNameReference(this);
+//        return new TypeNameReference(this);
+        return null;
     }
 
     public void accept(GoElementVisitor visitor) {

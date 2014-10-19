@@ -177,13 +177,15 @@ public class GoPackageImpl extends PsiElementBase implements GoPackage {
         return VfsUtil.getRelativePath(myPackageFile, mySourceRootFile, '/');
     }
 
+    @NotNull
     public String getName() {
 
+        // fix this to handle test packages and other things.
         for (GoFile file : getFiles()) {
             return file.getPackage().getPackageName();
         }
 
-        return super.getName();
+        return "";
     }
 
     @Override
@@ -234,6 +236,11 @@ public class GoPackageImpl extends PsiElementBase implements GoPackage {
 
     @Override
     public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
+        return this;
+    }
+
+    @Override
+    public GoPsiElement getReferenceContext() {
         return this;
     }
 }

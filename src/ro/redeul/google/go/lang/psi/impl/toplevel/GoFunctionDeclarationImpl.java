@@ -155,9 +155,10 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
 
-        if (!ResolveStates.get(state, Key.IsPackageBuiltin) &&
-                !ResolveStates.get(state, Key.JustExports) &&
-                !GoNamesUtil.isExported(getName()))
+        if ( ResolveStates.get(state, Key.IsPackageBuiltin) )
+            return true;
+
+        if ((ResolveStates.get(state, Key.JustExports) && !GoNamesUtil.isExported(getName())))
             return true;
 
         if (!processor.execute(this, state))

@@ -19,10 +19,14 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
+import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
@@ -31,6 +35,8 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypePackage;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -576,5 +582,22 @@ public class GoPsiUtils {
         }
 
         return fileImportPath.isEmpty() ? value : fileImportPath + "/" + value;
+    }
+
+    @Nullable
+    public static GoPackage findSelectorPackage(GoSelectorExpression selectorExpression) {
+        GoLiteralExpression literalExpression = getAs(GoLiteralExpression.class, selectorExpression.getBaseExpression());
+
+        if ( literalExpression == null )
+            return null;
+
+        GoType types[] = literalExpression.getType();
+
+        if ( types.length == 0 || types[0] == null || !(types[0] instanceof GoTypePackage) )
+            return null;
+
+        GoTypePackage typePackage = (GoTypePackage)types[0];
+
+        return typePackage.getPackage();
     }
 }

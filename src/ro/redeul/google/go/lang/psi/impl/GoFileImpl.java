@@ -26,6 +26,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
@@ -246,12 +247,15 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         PsiElement child = this.getLastChild();
 
         while (child != null) {
-            if (!(child instanceof GoImportDeclarations) && !child.processDeclarations(processor, state, null, place))
+            while ( child != null && (child instanceof PsiWhiteSpace || child instanceof GoImportDeclaration))
+                child = child.getPrevSibling();
+
+            if (child != null && !child.processDeclarations(processor, state, null, place))
                 return false;
 
             do {
                 child = child.getPrevSibling();
-            } while (child != null && child instanceof PsiWhiteSpace);
+            } while (child != null && (child instanceof PsiWhiteSpace || child instanceof GoImportDeclaration));
         }
 
         if (ResolveStates.get(state, ResolveStates.Key.IsOriginalFile)) {
@@ -311,4 +315,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     public String getPresentationTypeText() {
         return "";
     }
+
+    @Override
+    public GoPsiElement getReferenceContext() { return this; }
 }

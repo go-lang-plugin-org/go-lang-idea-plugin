@@ -28,6 +28,7 @@ import ro.redeul.google.go.util.GoUtil;
 
 import java.util.Arrays;
 
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 public class GoCallOrConvExpressionImpl extends GoExpressionBase

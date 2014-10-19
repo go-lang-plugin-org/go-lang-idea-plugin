@@ -14,7 +14,6 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoStubPsiElementBase;
-import ro.redeul.google.go.lang.psi.resolve.references.TypeNameDeclarationReference;
 import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
@@ -126,6 +125,8 @@ public class GoTypeNameDeclarationImpl
     @NotNull
     @Override
     public PsiReference[] getReferences() {
-        return new PsiReference[]{(new TypeNameDeclarationReference(this))};
+        return new PsiReference[]{
+//                new TypeNameDeclarationReference(this))
+        };
     }
 }

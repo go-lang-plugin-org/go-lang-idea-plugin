@@ -12,26 +12,23 @@ public abstract class ReferenceWithSolver<
         R extends ReferenceWithSolver<E, S, R>
         > extends Reference<E, R> {
 
+    public ReferenceWithSolver(E element) {
+        super(element);
+    }
+
     protected abstract S newSolver();
 
     protected abstract void walkSolver(S solver);
+
+    @Nullable
+    @Override
+    public PsiElement resolve() {
+        return newSolver().resolve(self());
+    }
 
     @NotNull
     @Override
     public Object[] getVariants() {
         return newSolver().getVariants(self());
-    }
-
-    @Nullable
-    @Override
-    public PsiElement resolve() {
-
-        S solver = newSolver();
-
-        ResolvingCache.Result result = ResolveCache
-                .getInstance(getElement().getProject())
-                .resolveWithCaching(self(), reference.newSolver(), true, false);
-
-        return newSolver().resolve(self());
     }
 }

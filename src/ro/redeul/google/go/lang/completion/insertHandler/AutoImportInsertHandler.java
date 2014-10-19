@@ -25,7 +25,7 @@ public class AutoImportInsertHandler implements InsertHandler<LookupElement> {
         }
 
         for (GoImportDeclaration id : GoFileUtils.getImportDeclarations((GoFile) file)) {
-            if (packageName.equals(id.getVisiblePackageName())) {
+            if (packageName.equals(id.getPackageAlias())) {
                 return;
             }
         }

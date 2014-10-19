@@ -14,6 +14,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.resolve.references.*;
+import ro.redeul.google.go.lang.psi.resolve.refs.PackageSymbolReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
@@ -158,37 +159,37 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
 
         GoType type = baseTypes[0];
 
-        if (type instanceof GoTypePackage) {
-            GoPackage goPackage = ((GoTypePackage) type).getPackage();
-            return new PsiReference[]{
-                    new PackageSymbolReference(this, getIdentifier(), goPackage),
-            };
-        }
+//        if (type instanceof GoTypePackage) {
+//            GoPackage goPackage = ((GoTypePackage) type).getPackage();
+//            return getIdentifier() != null
+//                    ? new PsiReference[]{new PackageSymbolReference(getIdentifier(), goPackage)}
+//                    : PsiReference.EMPTY_ARRAY;
+//        }
 
         if (type instanceof GoTypePointer)
             type = ((GoTypePointer) type).getTargetType();
 
         GoUnderlyingType x = type.getUnderlyingType();
 
-        if (x instanceof GoUnderlyingTypeInterface)
-            return new PsiReference[]{new InterfaceMethodReference(this)};
+//        if (x instanceof GoUnderlyingTypeInterface)
+//            return new PsiReference[]{new InterfaceMethodReference(this)};
 
         if (x instanceof GoUnderlyingTypeStruct && getIdentifier() != null)
             return new PsiReference[]{
-                    new SelectorOfStructFieldReference(this),
-                    new MethodReference(this)
+//                    new SelectorOfStructFieldReference(this),
+//                    new MethodReference(this)
             };
 
         if (x instanceof GoUnderlyingTypePointer) {
             return new PsiReference[]{
-                    new SelectorOfStructFieldReference(this),
-                    new MethodReference(this)
+//                    new SelectorOfStructFieldReference(this),
+//                    new MethodReference(this)
             };
         }
 
         if (type instanceof GoTypeName) {
             return new PsiReference[]{
-                    new MethodReference(this)
+//                    new MethodReference(this)
             };
         }
 

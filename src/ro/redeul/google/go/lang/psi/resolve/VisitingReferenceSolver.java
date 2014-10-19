@@ -12,7 +12,7 @@ public abstract class VisitingReferenceSolver<
 
     GoElementVisitorWithData<ResolveState> visitor = null;
 
-    protected void setVisitor(GoElementVisitorWithData<ResolveState> visitor) {
+    protected void solveWithVisitor(GoElementVisitorWithData<ResolveState> visitor) {
         this.visitor = visitor;
     }
 
@@ -22,9 +22,9 @@ public abstract class VisitingReferenceSolver<
             GoPsiElement psiElement = (GoPsiElement) element;
             visitor.setData(state);
             psiElement.accept(visitor);
-            return variants != null || target == null;
+            return shouldContinueSolving();
         }
 
-        return false;
+        return true;
     }
 }

@@ -7,26 +7,25 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
-import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
-import ro.redeul.google.go.lang.psi.resolve.references.*;
 import ro.redeul.google.go.lang.psi.resolve.refs.PackageReference;
+import ro.redeul.google.go.lang.psi.resolve.refs.PackageSymbolReference;
+import ro.redeul.google.go.lang.psi.resolve.refs.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -39,7 +38,6 @@ import static ro.redeul.google.go.lang.lexer.GoTokenTypes.mIDENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_CLAUSES_STATEMENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_RANGE_STATEMENT;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
-import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -175,8 +173,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
     @NotNull
     @Override
     public PsiReference[] getReferences() {
-//        if (references != null)
-//            return references;
+        if (myReferences != null)
+            return myReferences;
 
         if (NO_REFERENCE.accepts(this))
             return refs(PsiReference.EMPTY_ARRAY);
@@ -184,28 +182,34 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 //        if (BuiltinCallOrConversionReference.MATCHER.accepts(this))
 //            return refs(new BuiltinCallOrConversionReference(this));
 
-        if (LabelReference.MATCHER.accepts(this))
-            return refs(new LabelReference(this));
+//        if (LabelReference.MATCHER.accepts(this))
+//            return refs(new LabelReference(this));
 
-        if (CompositeElementOfStructFieldReference.MATCHER_KEY.accepts(this)) {
-            GoLiteralComposite composite = findParentOfType(this, GoLiteralComposite.class);
-            if (resolveToFinalType(composite.getLiteralType()) instanceof GoPsiTypeStruct) {
-                return refs(
-                        new CompositeElementOfStructFieldReference(this, this)
-                );
-            }
+//        if (CompositeElementOfStructFieldReference.MATCHER_KEY.accepts(this)) {
+//            GoLiteralComposite composite = findParentOfType(this, GoLiteralComposite.class);
+//            if (resolveToFinalType(composite.getLiteralType()) instanceof GoPsiTypeStruct) {
+//                return refs(
+//                        new CompositeElementOfStructFieldReference(this, this)
+//                );
+//            }
+//
+//            return refs(
+//                    new CompositeElementOfStructFieldReference(this, this),
+//                    new VarOrConstReference(this)
+//            );
+//        }
 
-            return refs(
-                    new CompositeElementOfStructFieldReference(this, this),
-                    new VarOrConstReference(this)
-            );
+//        if (CompositeElementOfStructFieldReference.MATCHER_ELEMENT.accepts(this))
+//            return refs(new VarOrConstReference(this));
+
+//        if (ShortVarDeclarationReference.MATCHER.accepts(this))
+//            return refs(new ShortVarDeclarationReference(this));
+
+        if (PackageSymbolReference.MATCHER.accepts(this)) {
+            GoPackage goPackage = findSelectorPackage(getAs(GoSelectorExpression.class, getParent()));
+            return goPackage != null ? refs(new PackageSymbolReference(this, goPackage)) : PsiReference.EMPTY_ARRAY;
         }
 
-        if (CompositeElementOfStructFieldReference.MATCHER_ELEMENT.accepts(this))
-            return refs(new VarOrConstReference(this));
-
-        if (ShortVarDeclarationReference.MATCHER.accepts(this))
-            return refs(new ShortVarDeclarationReference(this));
 
         if (VarOrConstReference.MATCHER.accepts(this))
 //            return refs(new VarOrConstReference(this), new PackageReference(this));
@@ -292,7 +296,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         GoImportDeclarations[] goImportDeclarations = goFile.getImportDeclarations();
         for (GoImportDeclarations importDeclarations : goImportDeclarations) {
             for (GoImportDeclaration importDeclaration : importDeclarations.getDeclarations()) {
-                if (importDeclaration.getVisiblePackageName().toLowerCase()
+                if (importDeclaration.getPackageAlias().toLowerCase()
                         .equals(packageName.toLowerCase())) {
                     GoLiteralString importPath = importDeclaration.getImportPath();
                     if (importPath != null)
@@ -324,11 +328,11 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             return getGlobalElementSearchScope(this, getName());
         }
 
-        if (isNodeOfType(getParent(), GoElementTypes.LABELED_STATEMENT) ||
-                LabelReference.MATCHER.accepts(this)) {
-            return new LocalSearchScope(
-                    findParentOfType(this, GoFunctionDeclaration.class));
-        }
+//        if (isNodeOfType(getParent(), GoElementTypes.LABELED_STATEMENT) ||
+//                LabelReference.MATCHER.accepts(this)) {
+//            return new LocalSearchScope(
+//                    findParentOfType(this, GoFunctionDeclaration.class));
+//        }
 
         return getLocalElementSearchScope(this);
     }

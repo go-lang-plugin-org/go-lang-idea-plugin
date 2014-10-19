@@ -1,15 +1,12 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
-import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceWithSolver;
-import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -22,10 +19,8 @@ public class PackageReference extends ReferenceWithSolver<GoLiteralIdentifier, P
                             psiElement(GoLiteralExpression.class)
                     );
 
-    private static final ResolvingCache.Resolver<PackageReference> RESOLVER = ResolvingCache.makeDefault();
-
     public PackageReference(@NotNull GoLiteralIdentifier element) {
-//        super(element, element, RESOLVER);
+        super(element);
     }
 
     @Override
@@ -34,22 +29,7 @@ public class PackageReference extends ReferenceWithSolver<GoLiteralIdentifier, P
     }
 
     @Override
-    protected PackageSolver newSolver() { return new PackageSolver(); }
-
-    @Override
-    public TextRange getRangeInElement() {
-        return null;
-    }
-
-    @Override
-    public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        return null;
-    }
-
-    @Override
-    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
-        return null;
-    }
+    protected PackageSolver newSolver() { return new PackageSolver(self()); }
 
     @Override
     public void walkSolver(PackageSolver solver) {

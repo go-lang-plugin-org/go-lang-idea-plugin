@@ -25,7 +25,7 @@ public interface GoImportDeclaration extends GoPsiElement, PsiNamedElement {
     String getPackageName();
 
     @NotNull
-    String getVisiblePackageName();
+    String getPackageAlias();
 
     boolean isValidImport();
 

@@ -1,23 +1,17 @@
-package ro.redeul.google.go.lang.psi.resolve.references;
+package ro.redeul.google.go.lang.psi.resolve.refs;
 
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
-import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
-import ro.redeul.google.go.lang.psi.resolve.VarOrConstSolver;
+import ro.redeul.google.go.lang.psi.resolve.ReferenceWithSolver;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static ro.redeul.google.go.util.LookupElementUtil.createLookupElement;
 
 public class VarOrConstReference
-        extends Reference.Single<GoLiteralIdentifier, VarOrConstSolver, VarOrConstReference> {
-
-    GoPackage targetPackage;
+        extends ReferenceWithSolver<GoLiteralIdentifier, VarOrConstSolver, VarOrConstReference> {
 
     public static final ElementPattern<GoLiteralIdentifier> MATCHER =
             psiElement(GoLiteralIdentifier.class)
@@ -25,16 +19,8 @@ public class VarOrConstReference
                             psiElement(GoLiteralExpression.class)
                     );
 
-    private static final com.intellij.psi.impl.source.resolve.ResolveCache.AbstractResolver<VarOrConstReference, ResolvingCache.Result> RESOLVER =
-            ResolvingCache.<VarOrConstReference, VarOrConstSolver>makeDefault();
-
     public VarOrConstReference(GoLiteralIdentifier element) {
-        this(element, null);
-    }
-
-    public VarOrConstReference(GoLiteralIdentifier element, GoPackage targetPackage) {
-        super(element, RESOLVER);
-        this.targetPackage = targetPackage;
+        super(element);
     }
 
     @Override
@@ -54,12 +40,6 @@ public class VarOrConstReference
                 getElement().getParent().getParent(),
                 getElement().getContainingFile(),
                 ResolveStates.initial());
-    }
-
-    @NotNull
-    @Override
-    public String getCanonicalText() {
-        return getElement().getCanonicalName();
     }
 
     @Override
@@ -105,8 +85,4 @@ public class VarOrConstReference
 //        return variants.toArray();
 //    }
 //
-    @Override
-    public boolean isSoft() {
-        return false;
-    }
 }

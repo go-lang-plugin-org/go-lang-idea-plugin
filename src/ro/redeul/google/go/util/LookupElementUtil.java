@@ -8,10 +8,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -26,8 +23,7 @@ public class LookupElementUtil extends GoElementVisitor {
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element) {
-        return createLookupElement(element, element.getPresentationText(),
-                                   element);
+        return createLookupElement(element, element.getPresentationText(), element);
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element, GoPsiElement child) {
@@ -135,6 +131,11 @@ public class LookupElementUtil extends GoElementVisitor {
     @Override
     public void visitTypeStructAnonymousField(GoTypeStructAnonymousField field) {
         lookupElement = lookupElement.withIcon(PlatformIcons.FIELD_ICON);
+    }
+
+    @Override
+    public void visitImportDeclaration(GoImportDeclaration declaration) {
+        super.visitImportDeclaration(declaration);
     }
 
     LookupElementBuilder getLookupElement() {

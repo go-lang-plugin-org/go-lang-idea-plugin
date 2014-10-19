@@ -130,26 +130,26 @@ public class GoCompletionContributor extends CompletionContributor {
     );
 
 
-    CompletionProvider<CompletionParameters> localImportsCompletion =
-        new CompletionProvider<CompletionParameters>() {
-            @Override
-            protected void addCompletions(@NotNull CompletionParameters parameters,
-                                          ProcessingContext context,
-                                          @NotNull CompletionResultSet result) {
-                PsiFile originalFile = parameters.getOriginalFile();
-                if (!(originalFile instanceof GoFile))
-                    return;
-
-                GoFile file = (GoFile) originalFile;
-
-                for (GoImportDeclarations imports : file.getImportDeclarations()) {
-                    for (GoImportDeclaration importDecl : imports.getDeclarations()) {
-                        result.addElement(LookupElementBuilder.create(
-                            importDecl.getVisiblePackageName() + "."));
-                    }
-                }
-            }
-        };
+//    CompletionProvider<CompletionParameters> localImportsCompletion =
+//        new CompletionProvider<CompletionParameters>() {
+//            @Override
+//            protected void addCompletions(@NotNull CompletionParameters parameters,
+//                                          ProcessingContext context,
+//                                          @NotNull CompletionResultSet result) {
+//                PsiFile originalFile = parameters.getOriginalFile();
+//                if (!(originalFile instanceof GoFile))
+//                    return;
+//
+//                GoFile file = (GoFile) originalFile;
+//
+//                for (GoImportDeclarations imports : file.getImportDeclarations()) {
+//                    for (GoImportDeclaration importDecl : imports.getDeclarations()) {
+//                        result.addElement(LookupElementBuilder.create(
+//                            importDecl.getPackageAlias() + "."));
+//                    }
+//                }
+//            }
+//        };
 
     CompletionProvider<CompletionParameters> debuggingCompletionProvider =
         new CompletionProvider<CompletionParameters>() {
