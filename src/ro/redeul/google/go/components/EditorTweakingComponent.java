@@ -43,7 +43,8 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
 
         Project project = null;
         for (Project possibleProject : projects) {
-            if (ProjectRootManager.getInstance(possibleProject).getFileIndex().getSourceRootForFile(file) != null) {
+            if (ProjectRootManager.getInstance(possibleProject).getFileIndex().getSourceRootForFile(file) != null ||
+                    ProjectRootManager.getInstance(possibleProject).getFileIndex().getContentRootForFile(file) != null) {
                project = possibleProject;
                 break;
             }
@@ -127,11 +128,6 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
 
         Sdk sdk = GoSdkUtil.getProjectSdk(project);
         if (sdk == null) {
-            return;
-        }
-
-        final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();
-        if (sdkData == null) {
             return;
         }
 
