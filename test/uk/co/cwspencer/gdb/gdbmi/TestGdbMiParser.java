@@ -45,7 +45,8 @@ public class TestGdbMiParser
 	/**
 	 * Tests the parsing of the message returned after setting a breakpoint.
 	 */
-/*	@Test
+/*  TODO FIX TEST
+	@Test
 	@Ignore("not ready yet")
 	public void testSetBreakpoint() throws UnsupportedEncodingException
 	{
@@ -180,7 +181,8 @@ public class TestGdbMiParser
 	/**
 	 * Tests the handling of messages from a typical execution sequence.
 	 */
-/*	@Test
+/*  TODO FIX TEST
+	@Test
 	@Ignore("not ready yet")
 	public void testExecution() throws UnsupportedEncodingException
 	{
@@ -444,7 +446,8 @@ public class TestGdbMiParser
 	/**
 	 * Verifies escape sequences in strings are handled correctly.
 	 */
-/*	@Test
+/*  TODO FIX TEST
+	@Test
 	@Ignore("not ready yet")
 	public void testStringEscape() throws UnsupportedEncodingException
 	{

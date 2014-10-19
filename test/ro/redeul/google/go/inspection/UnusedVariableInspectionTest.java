@@ -53,7 +53,7 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
         doTest();
     }
 
-    /*
+    /* TODO FIX TEST
     public void testIssue438() throws Exception {
         doTestWithDirectory();
     }
