@@ -7,7 +7,6 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.DebugUtil;
 import ro.redeul.google.go.GoEditorAwareTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;

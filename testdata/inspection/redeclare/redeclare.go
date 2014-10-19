@@ -73,3 +73,29 @@ const (
 	c3 = 1
 	/*begin*/c3/*end.Redeclare in this block*/ = 1
 )
+
+type t1 int
+
+func (t t1) a1() {
+
+}
+
+func (t t1) ta1() {
+
+}
+
+func (t t1) /*begin*/ta1/*end.Redeclare in this block*/() {
+
+}
+
+type t2 int
+
+func (t t2) ta1() {
+
+}
+func (t t2) ta2() {
+
+}
+func (t *t2) /*begin*/ta2/*end.Redeclare in this block*/() {
+
+}
