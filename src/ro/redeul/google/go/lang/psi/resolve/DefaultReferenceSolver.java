@@ -3,12 +3,11 @@ package ro.redeul.google.go.lang.psi.resolve;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,7 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
         this.target = target;
 
         if ( variants != null ) {
-            variants.add(target.getCompletionPresentation());
+            variants.add(target.getLookupPresentation());
         }
     }
 
@@ -70,7 +69,7 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
         boolean incompleteCode = false;
 
         // uncomment if we want to skip cache
-        // return resolve(reference, false);
+//        return resolve(reference, false);
 
         // this will go via the cache
         return ResolveCache

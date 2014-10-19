@@ -57,12 +57,12 @@ public class GoTypeNameDeclarationImpl
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation() {
+    public LookupElementBuilder getLookupPresentation() {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
+    public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
         return LookupElementUtil.createLookupElement(this, child);
     }
 
@@ -108,17 +108,17 @@ public class GoTypeNameDeclarationImpl
     }
 
     @Override
-    public String getPresentationText() {
+    public String getLookupText() {
         return "";
     }
 
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return "";
     }
 
     @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         return "";
     }
 

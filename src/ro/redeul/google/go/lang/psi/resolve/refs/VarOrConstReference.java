@@ -41,48 +41,4 @@ public class VarOrConstReference
                 getElement().getContainingFile(),
                 ResolveStates.initial());
     }
-
-    @Override
-    public boolean isReferenceTo(PsiElement element) {
-        return getElement().getManager().areElementsEquivalent(resolve(), element);
-    }
-
-    //    @NotNull
-//    @Override
-//    public Object[] getVariants() {
-//
-//        final List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
-//
-//        VarOrConstSolver processor = new VarOrConstSolver(this) {
-//            @Override
-//            protected boolean addTarget(PsiElement declaration, PsiElement childDeclaration) {
-//                String name = PsiUtilCore.getName(declaration);
-//
-//                String visiblePackageName = "";
-////                        getState().get(ResolveStates.VisiblePackageName);
-//
-//                if (visiblePackageName != null) {
-//                    name = "".equals(visiblePackageName) ?
-//                            name : visiblePackageName + "." + name;
-//                }
-//                if (name == null) {
-//                    return true;
-//                }
-//
-//                GoPsiElement goPsi = (GoPsiElement) declaration;
-//                GoPsiElement goChildPsi = (GoPsiElement) childDeclaration;
-//                variants.add(createLookupElement(goPsi, name, goChildPsi));
-//                return true;
-//            }
-//        };
-//
-//        GoPsiScopesUtil.treeWalkUp(
-//                processor,
-//                getElement().getParent().getParent(),
-//                getElement().getContainingFile(),
-//                ResolveStates.initial());
-//
-//        return variants.toArray();
-//    }
-//
 }

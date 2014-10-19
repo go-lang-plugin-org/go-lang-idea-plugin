@@ -89,11 +89,11 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
-    public void testResolveToMethod() throws Exception {
+    public void testResolveToMethodName() throws Exception {
         doTest();
     }
 
-    public void testResolveToFunction() throws Exception {
+    public void testResolveToFunctionName() throws Exception {
         doTest();
     }
 

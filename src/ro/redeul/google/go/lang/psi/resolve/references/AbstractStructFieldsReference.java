@@ -58,13 +58,13 @@ abstract class AbstractStructFieldsReference<
         for (GoTypeStructField field : psiType.getFields()) {
             for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                 if (!isImportedStruct || GoNamesUtil.isExported(identifier.getName()))
-                    variants.add(field.getCompletionPresentation(identifier));
+                    variants.add(field.getLookupPresentation(identifier));
             }
         }
 
         for (GoTypeStructAnonymousField field : psiType.getAnonymousFields()) {
             if (!isImportedStruct || GoNamesUtil.isExported(field.getFieldName()))
-                variants.add(field.getCompletionPresentation());
+                variants.add(field.getLookupPresentation());
         }
 
         GoTypeStructPromotedFields promotedFields = psiType.getPromotedFields();
@@ -72,13 +72,13 @@ abstract class AbstractStructFieldsReference<
             GoTypeStructField field = findParentOfType(identifier, GoTypeStructField.class);
             if (field != null) {
                 if (!isImportedStruct || GoNamesUtil.isExported(identifier.getName()))
-                    variants.add(field.getCompletionPresentation(identifier));
+                    variants.add(field.getLookupPresentation(identifier));
             }
         }
 
         for (GoTypeStructAnonymousField field : promotedFields.getAnonymousFields()) {
             if (!isImportedStruct || GoNamesUtil.isExported(field.getFieldName()))
-                variants.add(field.getCompletionPresentation());
+                variants.add(field.getLookupPresentation());
         }
         return variants.toArray(new LookupElementBuilder[variants.size()]);
     }

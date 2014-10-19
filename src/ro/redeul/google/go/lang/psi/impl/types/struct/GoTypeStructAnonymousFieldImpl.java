@@ -58,12 +58,12 @@ public class GoTypeStructAnonymousFieldImpl extends GoPsiElementBase implements 
     }
 
     @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         return getType().getText();
     }
 
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return " (anonymous)";
     }
 }

@@ -143,18 +143,18 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     public GoFunctionDeclaration[] getFunctions() {
         return
             ContainerUtil.mapNotNull(
-                findChildrenByClass(GoFunctionDeclaration.class),
-                new Function<GoFunctionDeclaration, GoFunctionDeclaration>() {
-                    @Override
-                    public GoFunctionDeclaration fun(
-                        GoFunctionDeclaration functionDeclaration) {
-                        if (functionDeclaration instanceof GoMethodDeclaration) {
-                            return null;
-                        }
+                    findChildrenByClass(GoFunctionDeclaration.class),
+                    new Function<GoFunctionDeclaration, GoFunctionDeclaration>() {
+                        @Override
+                        public GoFunctionDeclaration fun(
+                                GoFunctionDeclaration functionDeclaration) {
+                            if (functionDeclaration instanceof GoMethodDeclaration) {
+                                return null;
+                            }
 
-                        return functionDeclaration;
-                    }
-                }, new GoFunctionDeclaration[]{});
+                            return functionDeclaration;
+                        }
+                    }, new GoFunctionDeclaration[]{});
     }
 
     public GoMethodDeclaration[] getMethods() {
@@ -292,27 +292,27 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     }
 
     @Override
-    final public LookupElementBuilder getCompletionPresentation() {
+    final public LookupElementBuilder getLookupPresentation() {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
+    public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
-    public String getPresentationText() {
+    public String getLookupText() {
         return "";
     }
 
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return "";
     }
 
     @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         return "";
     }
 

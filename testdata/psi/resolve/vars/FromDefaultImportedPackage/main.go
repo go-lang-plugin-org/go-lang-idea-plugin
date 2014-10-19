@@ -2,4 +2,4 @@ package main
 
 import "test"
 
-var x = /*ref*/test.Var
+var x = test1./*ref*/Var

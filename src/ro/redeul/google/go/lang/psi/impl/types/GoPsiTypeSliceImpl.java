@@ -53,7 +53,7 @@ public class GoPsiTypeSliceImpl extends GoPsiPackagedElementBase implements
 
     @NotNull
     @Override
-    public String getPresentationTailText() {
-        return String.format("[]%s", getElementType().getPresentationTailText());
+    public String getLookupTailText() {
+        return String.format("[]%s", getElementType().getLookupTailText());
     }
 }

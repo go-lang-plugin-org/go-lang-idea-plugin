@@ -76,7 +76,7 @@ public class GoPsiTypeArrayImpl extends GoPsiPackagedElementBase implements
 
     @NotNull
     @Override
-    public String getPresentationText() {
-        return String.format("[]%s", getElementType().getPresentationText());
+    public String getLookupText() {
+        return String.format("[]%s", getElementType().getLookupText());
     }
 }

@@ -52,7 +52,7 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
     @Override
     public <T> T accept(GoElementVisitorWithData<T> visitor) {
-        accept((GoElementVisitor)visitor);
+        accept((GoElementVisitor) visitor);
         return visitor.getData();
     }
 
@@ -69,7 +69,7 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
     @NotNull
     @Override
-    public String getPresentationText() {
+    public String getLookupText() {
         String name = getName();
 
         return name != null ? name : "";
@@ -77,12 +77,12 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
     @Nullable
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return "";
     }
 
     @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         return "";
     }
 
@@ -92,12 +92,12 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
     }
 
     @Override
-    final public LookupElementBuilder getCompletionPresentation() {
+    public LookupElementBuilder getLookupPresentation() {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
+    public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
         return LookupElementUtil.createLookupElement(this, child);
     }
 

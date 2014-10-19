@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
@@ -195,21 +196,15 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
         return getGlobalElementSearchScope(this, getName());
     }
 
-    @NotNull
     @Override
-    public String getPresentationText() {
-        return getName() == null ? "" : getName();
-    }
-
-    @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         StringBuilder presentationText = new StringBuilder();
 
         presentationText.append("(");
         GoFunctionParameter[] parameters = getParameters();
         for (int i = 0; i < parameters.length; i++) {
             GoFunctionParameter parameter = parameters[i];
-            presentationText.append(parameter.getPresentationTailText());
+            presentationText.append(parameter.getLookupTailText());
             if (i < parameters.length - 1) {
                 presentationText.append(",");
             }
@@ -225,7 +220,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
         presentationText.append(" (");
         for (int i = 0; i < results.length; i++) {
             GoFunctionParameter parameter = results[i];
-            presentationText.append(parameter.getPresentationTailText());
+            presentationText.append(parameter.getLookupTailText());
             if (i < results.length - 1) {
                 presentationText.append(",");
             }
@@ -237,12 +232,24 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     }
 
     @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         return "func";
     }
 
+    @Override
+    public LookupElementBuilder getLookupPresentation() {
+        return getLookupPresentation(getNameIdentifier());
+    }
+
+    @NotNull
+    @Override
+    public PsiElement getNavigationElement() {
+        GoLiteralIdentifier nameIdentifier = getNameIdentifier();
+        return nameIdentifier != null ? nameIdentifier : this;
+    }
+
     //    @Override
-//    public LookupElementBuilder getCompletionPresentation() {
+//    public LookupElementBuilder getLookupPresentation() {
 //
 //        StringBuilder presentationText = new StringBuilder();
 //

@@ -117,7 +117,7 @@ public class InterfaceMethodReference extends Reference.Single<GoSelectorExpress
 
         List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
         for (GoFunctionDeclaration functionDeclaration : methodSet.getMethods()) {
-            variants.add(functionDeclaration.getCompletionPresentation());
+            variants.add(functionDeclaration.getLookupPresentation());
         }
 
         return variants.toArray();

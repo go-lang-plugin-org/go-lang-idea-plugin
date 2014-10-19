@@ -62,7 +62,7 @@ public class GoPsiTypeInterfaceImpl extends GoPsiPackagedElementBase implements
 
 
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return "interface{}";
     }
 }

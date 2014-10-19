@@ -78,7 +78,7 @@ public class GoTypeStructFieldImpl extends GoPsiElementBase implements GoTypeStr
     }
 
     @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         return getType().getText();
     }
 }

@@ -161,7 +161,7 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
     }
 
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return getText();
     }
 }

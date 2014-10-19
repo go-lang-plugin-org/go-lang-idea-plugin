@@ -23,19 +23,19 @@ public class LookupElementUtil extends GoElementVisitor {
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element) {
-        return createLookupElement(element, element.getPresentationText(), element);
+        return createLookupElement(element, element.getLookupText(), element);
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element, GoPsiElement child) {
-        return createLookupElement(element, child.getPresentationText(), child);
+        return createLookupElement(element, child.getLookupText(), child);
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element, String text, GoPsiElement child) {
 
         LookupElementBuilder lookup =
             LookupElementBuilder.create(child, text)
-                                .withTailText(element.getPresentationTailText())
-                                .withTypeText( element.getPresentationTypeText());
+                                .withTailText(element.getLookupTailText())
+                                .withTypeText( element.getLookupTypeText());
 
         LookupElementUtil visitor = new LookupElementUtil(lookup);
         element.accept(visitor);

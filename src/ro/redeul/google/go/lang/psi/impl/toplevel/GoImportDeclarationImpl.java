@@ -2,7 +2,6 @@ package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
@@ -126,12 +125,12 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
 
     @NotNull
     @Override
-    public String getPresentationText() {
+    public String getLookupText() {
         return getPackageAlias();
     }
 
     @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         GoPackageReference packageReference = getPackageReference();
 
         if (packageReference != null && !packageReference.isBlank() && !packageReference.isLocal()) {
@@ -143,7 +142,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
 
     @Nullable
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         GoLiteralString importPathLiteral = getImportPath();
         GoPackage goPackage = getPackage();
 
@@ -158,8 +157,8 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
-        return super.getCompletionPresentation(child);
+    public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
+        return super.getLookupPresentation(child);
     }
 
     @Override

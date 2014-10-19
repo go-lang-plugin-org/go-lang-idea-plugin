@@ -64,9 +64,9 @@ public class GoPsiTypeMapImpl extends GoPsiPackagedElementBase implements
     }
 
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return String.format("map[%s]%s",
-                             getKeyType().getPresentationTailText(),
-                             getElementType().getPresentationTailText());
+                             getKeyType().getLookupTailText(),
+                             getElementType().getLookupTailText());
     }
 }

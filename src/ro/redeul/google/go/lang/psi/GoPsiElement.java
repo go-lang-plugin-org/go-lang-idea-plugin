@@ -21,15 +21,15 @@ public interface GoPsiElement extends PsiElement {
 
     void acceptChildren(GoElementVisitor visitor);
 
-    LookupElementBuilder getCompletionPresentation();
+    LookupElementBuilder getLookupPresentation();
 
-    LookupElementBuilder getCompletionPresentation(GoPsiElement child);
+    LookupElementBuilder getLookupPresentation(GoPsiElement child);
 
-    String getPresentationText();
+    String getLookupText();
 
-    String getPresentationTailText();
+    String getLookupTailText();
 
-    String getPresentationTypeText();
+    String getLookupTypeText();
 
     GoPsiElement getReferenceContext();
 }

@@ -9,6 +9,7 @@ import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 
 public class VarOrConstSolver extends VisitingReferenceSolver<VarOrConstReference, VarOrConstSolver> {
@@ -20,7 +21,8 @@ public class VarOrConstSolver extends VisitingReferenceSolver<VarOrConstReferenc
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
             @Override
             public void visitMethodReceiver(GoMethodReceiver receiver) {
-                checkIdentifiers(referenceName(), receiver.getIdentifier());
+                if ( receiver.getIdentifier() != null )
+                    checkIdentifiers(referenceName(), receiver.getIdentifier());
             }
 
             @Override
@@ -52,6 +54,11 @@ public class VarOrConstSolver extends VisitingReferenceSolver<VarOrConstReferenc
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
                 if (matchNames(referenceName(), declaration.getFunctionName()))
                     addTarget(declaration);
+            }
+
+            @Override
+            public void visitMethodDeclaration(GoMethodDeclaration declaration) {
+                visitFunctionDeclaration(declaration);
             }
 
             @Override

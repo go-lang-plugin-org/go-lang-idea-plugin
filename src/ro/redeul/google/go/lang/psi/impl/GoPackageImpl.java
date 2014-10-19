@@ -22,6 +22,7 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.util.LookupElementUtil;
 
 import java.util.*;
 
@@ -51,31 +52,30 @@ public class GoPackageImpl extends PsiElementBase implements GoPackage {
 
     @Override
     public void acceptChildren(GoElementVisitor visitor) {
-
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation() {
+    public LookupElementBuilder getLookupPresentation() {
+        return LookupElementUtil.createLookupElement(this);
+    }
+
+    @Override
+    public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
+        return LookupElementUtil.createLookupElement(this, child);
+    }
+
+    @Override
+    public String getLookupText() {
         return null;
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
+    public String getLookupTailText() {
         return null;
     }
 
     @Override
-    public String getPresentationText() {
-        return null;
-    }
-
-    @Override
-    public String getPresentationTailText() {
-        return null;
-    }
-
-    @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         return null;
     }
 

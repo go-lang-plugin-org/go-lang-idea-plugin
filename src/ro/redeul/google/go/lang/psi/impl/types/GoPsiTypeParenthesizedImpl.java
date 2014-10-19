@@ -31,7 +31,7 @@ public class GoPsiTypeParenthesizedImpl extends GoPsiPackagedElementBase
     }
 
     @Override
-    public String getPresentationTailText() {
-        return String.format("(%s)", getInnerType().getPresentationTailText());
+    public String getLookupTailText() {
+        return String.format("(%s)", getInnerType().getLookupTailText());
     }
 }

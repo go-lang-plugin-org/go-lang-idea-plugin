@@ -43,7 +43,7 @@ public class GoPsiTypePointerImpl extends GoPsiPackagedElementBase implements
     }
 
     @Override
-    public String getPresentationTailText() {
-        return String.format("*%s", getTargetType().getPresentationTailText());
+    public String getLookupTailText() {
+        return String.format("*%s", getTargetType().getLookupTailText());
     }
 }
