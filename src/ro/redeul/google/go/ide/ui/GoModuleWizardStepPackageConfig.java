@@ -1,7 +1,6 @@
 package ro.redeul.google.go.ide.ui;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
-import ro.redeul.google.go.ide.GoConfigurableForm;
 import ro.redeul.google.go.ide.GoModuleBuilder;
 import ro.redeul.google.go.ide.GoProjectSettings;
 

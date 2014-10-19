@@ -15,7 +15,6 @@ import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
 import ro.redeul.google.go.ide.GoGlobalSettings;
-import ro.redeul.google.go.options.GoSettings;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.*;

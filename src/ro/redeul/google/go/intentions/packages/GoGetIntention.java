@@ -1,6 +1,5 @@
 package ro.redeul.google.go.intentions.packages;
 
-import com.intellij.execution.CantRunException;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
