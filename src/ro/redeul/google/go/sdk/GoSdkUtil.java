@@ -363,56 +363,6 @@ public class GoSdkUtil {
         return checkFolderExists(new File(new File(path, child), child2));
     }
 
-
-    /**
-     * Uses the following to get the go sdk for tests:
-     * 1. Uses the path given by the system property go.test.sdk.home, if given
-     * 2. Uses the path given by the GOROOT environment variable, if available
-     * 3. Uses HOMEPATH/go/default
-     *
-     * @return the go sdk parameters or array of zero elements if error
-     */
-    public static GoSdkData getMockGoogleSdk() {
-        // Fallback to default home path / default mock path
-        String sdkPath = PathManager.getHomePath() + "/" + DEFAULT_MOCK_PATH;
-
-        String testSdkHome = System.getProperty(TEST_SDK_PATH);
-        String goRoot = resolvePotentialGoogleGoHomePath();
-
-        // Use the test sdk path before anything else, if available
-        if (testSdkHome != null) {
-            sdkPath = testSdkHome;
-        } else if (goRoot != null) {
-            sdkPath = goRoot;
-        }
-
-        return getMockGoogleSdk(sdkPath);
-    }
-
-    private static GoSdkData getMockGoogleSdk(String path) {
-        GoSdkData sdkData = testGoogleGoSdk(path);
-        /* TODO: I'm not really sure why we need this.
-        if (sdkData != null) {
-            new File(
-                sdkData.GO_BIN_PATH,
-                getCompilerName(sdkData.TARGET_ARCH)
-            ).setExecutable(true);
-
-            new File(
-                sdkData.GO_BIN_PATH,
-                getLinkerName(sdkData.TARGET_ARCH)
-            ).setExecutable(true);
-
-            new File(
-                sdkData.GO_BIN_PATH,
-                getArchivePackerName()
-            ).setExecutable(true);
-        }
-        */
-
-        return sdkData;
-    }
-
     private static String getArchivePackerName() {
         return "gopack";
     }
@@ -938,10 +888,6 @@ public class GoSdkUtil {
             return sdkData.GO_BIN_PATH;
         } else if (sdk.getSdkAdditionalData() instanceof GoAppEngineSdkData) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
-            if (sdkData == null) {
-                return null;
-            }
-
             return sdkData.GOAPP_BIN_PATH;
         }
 
@@ -959,10 +905,6 @@ public class GoSdkUtil {
             return GoSdkUtil.getExtendedGoEnv(sdkData, projectDir, "");
         } else if (sdk.getSdkAdditionalData() instanceof GoAppEngineSdkData) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
-            if (sdkData == null) {
-                return null;
-            }
-
             return GoSdkUtil.getExtendedGAEEnv(sdkData, projectDir, "");
         }
 
@@ -991,9 +933,6 @@ public class GoSdkUtil {
             }
         } else if (sdk.getSdkAdditionalData() instanceof GoAppEngineSdkData) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
-            if (sdkData == null) {
-                return null;
-            }
 
             switch (size) {
                 case 13: return GoIcons.GAE_ICON_13x13;
