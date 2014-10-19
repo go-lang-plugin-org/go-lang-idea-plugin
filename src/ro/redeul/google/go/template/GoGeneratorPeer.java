@@ -20,7 +20,6 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 public class GoGeneratorPeer implements WebProjectGenerator.GeneratorPeer<GoSdkData> {
     private JPanel myMainPanel;
@@ -63,10 +62,7 @@ public class GoGeneratorPeer implements WebProjectGenerator.GeneratorPeer<GoSdkD
             mySdkPath.setText(GoSdkUtil.getSysGoRootPath());
         }
 
-        gopathPath.setText(FileUtil.toSystemDependentName(GoGlobalSettings.getInstance().getGoPath()));
-        if (gopathPath.getText().equals("")) {
-            gopathPath.setText(GoSdkUtil.getSysGoPathPath().split(File.pathSeparator)[0]);
-        }
+        gopathPath.setText(GoSdkUtil.getGoPath());
     }
 
     @NotNull

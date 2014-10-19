@@ -639,7 +639,7 @@ public class GoSdkUtil {
 
     @NotNull
     public static String getSysGoPathPath() {
-        return getEnvVariable("GOPATH");
+        return getEnvVariable("GOPATH").split(File.pathSeparator)[0];
     }
 
     public static String getGoPath() {
@@ -669,8 +669,7 @@ public class GoSdkUtil {
             return false;
         }
 
-        String goPath = getSysGoPathPath().split(File.pathSeparator)[0];
-        return checkFolderExists(goPath + File.separator + "src" + File.separator + topPackageName);
+        return checkFolderExists(getGoPath() + File.separator + "src" + File.separator + topPackageName);
     }
 
     @NotNull
