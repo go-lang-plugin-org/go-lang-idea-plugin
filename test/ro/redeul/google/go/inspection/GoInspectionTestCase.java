@@ -14,6 +14,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 import org.junit.Assert;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
@@ -53,17 +55,18 @@ public abstract class GoInspectionTestCase
     }
 
     protected void doTest() throws Exception {
-        List<String> data;
-        // TODO: remove this once all the inheritors of this class have
-        //      been updated to use .go test cases instead of .test
-        try {
-            data = readInput(getTestDataPath() + getTestName(true) + ".go");
-        } catch (IOException e) {
-            data = readInput(getTestDataPath() + getTestName(true) + ".test");
-        }
+        doTestWithOneFile(myFixture.configureByFile(getTestName(true) + ".go"));
+    }
 
-        String expected = data.get(1).trim();
-        Assert.assertEquals(expected, processFile(data.get(0)).trim());
+    protected void doTestWithDirectory() throws Exception{
+        VirtualFile directory = myFixture.copyDirectoryToProject(getTestName(true), "/" + getTestName(true));
+        for(VirtualFile file:directory.getChildren()){
+            if (file.getExtension()==null || !file.getExtension().equals("go")){
+                continue;
+            }
+            myFixture.configureFromExistingVirtualFile(file);
+            doTestWithOneFile(myFixture.getFile());
+        }
     }
 
     @Override
@@ -71,11 +74,17 @@ public abstract class GoInspectionTestCase
 //        removeContentRoots();
         super.tearDown();
     }
+    private void doTestWithOneFile(PsiFile file) throws Exception {
+        Document document = myFixture.getDocument(file);
+        List<String> data = readInput(document.getText());
 
-    private List<String> readInput(String filePath) throws IOException {
+        String expected = data.get(1).trim();
+        Assert.assertEquals(expected, processFile(data.get(0).trim(), (GoFile)file,document));
+    }
+
+    private List<String> readInput(String content) throws IOException {
         List<String> data = new ArrayList<String>();
         StringBuilder sb = new StringBuilder();
-        String content = new String(FileUtil.loadFileText(new File(filePath)));
 
         Assert.assertNotNull(content);
         int pos = -1;
@@ -95,11 +104,8 @@ public abstract class GoInspectionTestCase
         return data;
     }
 
-    protected String processFile(String fileText)
+    protected String processFile(String fileText,GoFile file,Document document)
         throws InstantiationException, IllegalAccessException {
-        GoFile file = (GoFile) myFixture.configureByText(GoFileType.INSTANCE,
-                                                         fileText);
-        Document document = myFixture.getDocument(file);
         InspectionResult result = new InspectionResult(getProject());
         detectProblems(file, result);
         List<ProblemDescriptor> problems = result.getProblems();
@@ -146,6 +152,6 @@ public abstract class GoInspectionTestCase
             }
             sb.append("\n");
         }
-        return sb.toString();
+        return sb.toString().trim();
     }
 }
