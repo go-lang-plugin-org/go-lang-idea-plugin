@@ -1,15 +1,16 @@
 <h3>0.9.16 changes:</h3>
 <ul>
+    <li>[feature] Removed the need to set environment variables for the plugin to work correctly</li>
     <li>[feature] Added debugging support via GDB</li>
     <li>[feature] Added support for Go on Google AppEngine for non-IDEA IDEs</li>
-    <li>[bugfix] Improved support for Go on Google AppEngine</li>
-    <li>[enhancement] Inspection: Update "functionReturnCountInspection" to check the type of returning expressions</li>
     <li>[feature] Fix: Change the function return parameters based on returning expressions</li>
     <li>[feature] Fix: Covert or Assert the type of the expression to the expected type in function calls and returns</li>
     <li>[feature] Intention: For range over expressions</li>
     <li>[feature] Intention: Generate if block over boolean expressions</li>
     <li>[feature] Inspection: Check type of index on index expressions</li>
     <li>[feature] Intention: Generate if block over expressions which return errors</li>
+    <li>[enhancement] Inspection: Update "functionReturnCountInspection" to check the type of returning expressions</li>
+    <li>[bugfix] Improved support for Go on Google AppEngine</li>
 </ul>
 <h3>0.9.15.3 changes:</h3>
 <ul>
