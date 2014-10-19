@@ -3,7 +3,6 @@ package ro.redeul.google.go.components;
 import com.intellij.ide.plugins.IdeaPluginDescriptorImpl;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.AbstractProjectComponent;
@@ -91,8 +90,6 @@ public class ProjectSdkValidator extends AbstractProjectComponent {
 
         sdkList.clear();
         sdkList.addAll(GoSdkUtil.getSdkOfType(GoAppEngineSdkType.getInstance(), jdkTable));
-
-        Boolean hasGAESdk = sdkList.size() > 0;
 
         for (Sdk sdk : sdkList) {
             GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();

@@ -66,9 +66,6 @@ public class GoPsiTypesTest extends GoPsiTestCase {
         GoTypeStructAnonymousField field =
             childAt(0, structType.getAnonymousFields());
 
-        GoPsiTypePointer typePointer =
-            getAs(GoPsiTypePointer.class, field.getType());
-
         assertEquals("Reader", field.getFieldName());
     }
 }

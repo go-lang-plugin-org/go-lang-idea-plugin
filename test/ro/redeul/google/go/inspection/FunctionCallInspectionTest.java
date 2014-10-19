@@ -1,7 +1,6 @@
 package ro.redeul.google.go.inspection;
 
 import com.intellij.openapi.vfs.LocalFileSystem;
-import org.junit.Ignore;
 
 import java.io.File;
 import java.util.Collections;

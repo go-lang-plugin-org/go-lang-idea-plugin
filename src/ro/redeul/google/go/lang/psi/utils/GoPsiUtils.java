@@ -281,7 +281,7 @@ public class GoPsiUtils {
      * For import paths containing ".", strips out the "." and
      * following text, as this is ignored by Go.
      * eg github.com/foo/bar.v1 -> github.com/foo/bar
-     * @param importPath
+     * @param importPath String
      * @return importPath wih the dotted text removed.
      */
     public static String findRealImportPathValue(String importPath) {

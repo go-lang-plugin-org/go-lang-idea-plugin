@@ -38,8 +38,6 @@ public class GAEDebugSysEnv extends GoCommonDebugAction {
         }
 
         FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
-        VirtualFile selectedFile = fileEditorManager.getSelectedFiles()[0];
-        String fileName = selectedFile.getCanonicalPath();
 
         try {
             GoToolWindow toolWindow = this.getGoToolWindow(project);

@@ -932,8 +932,6 @@ public class GoSdkUtil {
                 default: return GoIcons.GO_ICON_16x16;
             }
         } else if (sdk.getSdkAdditionalData() instanceof GoAppEngineSdkData) {
-            GoAppEngineSdkData sdkData = (GoAppEngineSdkData) sdk.getSdkAdditionalData();
-
             switch (size) {
                 case 13: return GoIcons.GAE_ICON_13x13;
                 case 24: return GoIcons.GAE_ICON_24x24;
@@ -997,7 +995,7 @@ public class GoSdkUtil {
      * Returns the Package, which the file belongs to
      * @param projectRoot Folder, where the project is located
      * @param file The file, which package we want to find out
-     * @return
+     * @return String
      */
     public static String getPackageOfFile(String projectRoot, String file) {
         String pkg = null;

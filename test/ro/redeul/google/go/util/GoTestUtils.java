@@ -121,7 +121,6 @@ public abstract class GoTestUtils {
 
         List<String> input = new ArrayList<String>();
 
-        int separatorIndex;
         content = StringUtil.replace(content, "\r", ""); // for MACs
 
         // Adding input  before -----

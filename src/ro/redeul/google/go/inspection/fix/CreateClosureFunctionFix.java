@@ -46,8 +46,7 @@ public class CreateClosureFunctionFix extends LocalQuickFixAndIntentionActionOnP
                        @Nullable("is null when called from inspection") final Editor editor,
                        @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
 
-        final PsiElement e = startElement;
-        final PsiElement p = findChildOfClass(findParentOfType(e, GoFunctionDeclaration.class), GoBlockStatement.class);
+        final PsiElement p = findChildOfClass(findParentOfType(startElement, GoFunctionDeclaration.class), GoBlockStatement.class);
 
         GoPsiElement childOfClass = findChildOfClass(p, GoVarDeclarations.class);
         if (childOfClass == null)
@@ -56,7 +55,7 @@ public class CreateClosureFunctionFix extends LocalQuickFixAndIntentionActionOnP
             childOfClass = findChildOfClass(p, GoShortVarDeclaration.class);
 
         ArrayList<String> arguments = new ArrayList<String>();
-        final String fnArguments = CreateFunctionFix.InspectionGenFuncArgs(e, arguments);
+        final String fnArguments = CreateFunctionFix.InspectionGenFuncArgs(startElement, arguments);
 
         final int insertPoint;
 
@@ -67,14 +66,14 @@ public class CreateClosureFunctionFix extends LocalQuickFixAndIntentionActionOnP
         }
 
 
-        Document doc = PsiDocumentManager.getInstance(e.getProject()).getDocument(file);
+        Document doc = PsiDocumentManager.getInstance(startElement.getProject()).getDocument(file);
 
         if (doc == null) {
             return;
         }
 
-        TemplateImpl template = TemplateUtil.createTemplate(String.format("\n\n%s := func (%s) { \n$v%d$$END$\n}", e.getText(), fnArguments, arguments.size()));
-        arguments.add("//TODO: implements " + e.getText());
+        TemplateImpl template = TemplateUtil.createTemplate(String.format("\n\n%s := func (%s) { \n$v%d$$END$\n}", startElement.getText(), fnArguments, arguments.size()));
+        arguments.add("//TODO: implements " + startElement.getText());
         TemplateUtil.runTemplate(editor, insertPoint, arguments, template);
     }
 }

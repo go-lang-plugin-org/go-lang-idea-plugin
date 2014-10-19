@@ -21,9 +21,7 @@ public class GoModuleWizardStepPackageConfig extends ModuleWizardStep {
     private JCheckBox enablePrependSysGoPath;
     private JCheckBox enableAppendSysGoPath;
     private JButton buttonProjectSettings;
-    private JPanel panelTest;
     private GoModuleBuilder moduleBuilder;
-    private GoConfigurableForm form;
     private GoProjectSettings.GoProjectSettingsBean settingsBean;
 
     public GoModuleWizardStepPackageConfig(GoModuleBuilder moduleBuilder) {
@@ -81,13 +79,5 @@ public class GoModuleWizardStepPackageConfig extends ModuleWizardStep {
         this.moduleBuilder.packageURL = this.txtPackageURL.getText();
         this.moduleBuilder.isNew = this.radioNewPackage.isSelected();
         this.moduleBuilder.packageName = this.txtNewPackageName.getText();
-    }
-
-    private void createUIComponents() {
-        form = new GoConfigurableForm();
-        form.enableShowHide();
-        panelTest = new JPanel();
-        panelTest.add(form.componentPanel);
-
     }
 }

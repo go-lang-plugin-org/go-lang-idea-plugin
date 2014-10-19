@@ -33,8 +33,6 @@ public class GAEDebugSDK extends GoCommonDebugAction {
             return;
         }
 
-        String goExecName = sdkData.GO_HOME_PATH + "/../goapp";
-
         String projectDir = project.getBasePath();
 
         if (projectDir == null) {
@@ -42,8 +40,6 @@ public class GAEDebugSDK extends GoCommonDebugAction {
         }
 
         FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
-        VirtualFile selectedFile = fileEditorManager.getSelectedFiles()[0];
-        String fileName = selectedFile.getCanonicalPath();
 
         try {
             GoToolWindow toolWindow = this.getGoToolWindow(project);

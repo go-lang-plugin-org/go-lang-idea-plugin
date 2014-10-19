@@ -46,7 +46,7 @@ class ForStatement implements GoElementTypes {
         PsiBuilder.Marker clause = builder.mark();
 
         IElementType statementType = parser.parseStatementSimple(builder);
-        IElementType forStatementType = null;
+        IElementType forStatementType;
 
         if (statementType == EXPRESSION_STATEMENT && ParserUtils.lookAhead(builder,
                                                                            pLCURLY)) {

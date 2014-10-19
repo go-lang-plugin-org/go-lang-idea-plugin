@@ -1,6 +1,5 @@
 package ro.redeul.google.go.components;
 
-import com.intellij.execution.CantRunException;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
@@ -135,7 +134,6 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
         if (sdkData == null) {
             return;
         }
-        final String goExecName = sdkData.GO_BIN_PATH;
 
         String[] goEnv = GoSdkUtil.getGoEnv(sdk, projectDir);
         if (goEnv == null) {
