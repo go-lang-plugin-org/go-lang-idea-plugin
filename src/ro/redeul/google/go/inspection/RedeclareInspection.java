@@ -2,7 +2,6 @@ package ro.redeul.google.go.inspection;
 
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.DebugUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -19,13 +18,14 @@ import java.util.Stack;
 
 public class RedeclareInspection extends AbstractWholeGoFileInspection {
     private Stack<HashSet<String>> blockNameStack = new Stack<HashSet<String>>();
-
+    private HashSet<String> methodNameSet = new HashSet<String>();
     @Override
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
             @Override
             public void visitFile(GoFile file) {
                 blockNameStack.push(new HashSet<String>());
+                methodNameSet = new HashSet<String>();
                 super.visitFile(file);
                 blockNameStack.pop();
             }
@@ -40,6 +40,16 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             @Override
             public void visitMethodDeclaration(GoMethodDeclaration declaration) {
                 super.visitMethodDeclaration(declaration);
+                String name = declaration.getMethodReceiver().getType().getText()+"."+declaration.getName();
+                if (name.startsWith("*")){
+                    name = name.substring(1);
+                }
+                if (methodNameSet.contains(name)){
+                    result.addProblem(declaration.getNameIdentifier(), GoBundle.message("error.redeclare"),
+                            ProblemHighlightType.GENERIC_ERROR);
+                    return;
+                }
+                methodNameSet.add(name);
             }
 
             @Override
@@ -72,7 +82,6 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
 
             @Override
             public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
-                System.out.println(DebugUtil.psiToString(declaration, false));
                 GoLiteralIdentifier[] ids = declaration.getIdentifiers();
                 boolean isAllRepeat = true;
                 for(GoLiteralIdentifier id: ids){
