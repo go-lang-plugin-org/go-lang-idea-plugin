@@ -39,10 +39,12 @@ Go file
       PsiWhiteSpace('    ')
       ExpressionStmtImpl
         CallOrConversionExpressionImpl
-          LiteralExpressionImpl
+          SelectorExpressionImpl
+            LiteralExpressionImpl
+              LiteralIdentifierImpl
+                PsiElement(IDENTIFIER)('fmt')
+            PsiElement(.)('.')
             LiteralIdentifierImpl
-              PsiElement(IDENTIFIER)('fmt')
-              PsiElement(.)('.')
               PsiElement(IDENTIFIER)('Printf')
           PsiElement(()('(')
           LiteralExpressionImpl
