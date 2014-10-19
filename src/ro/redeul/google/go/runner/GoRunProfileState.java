@@ -49,7 +49,10 @@ public class GoRunProfileState extends CommandLineState {
             throw new CantRunException("No Go Sdk defined for this project");
         }
 
-        String goExecName = sdkData.GO_BIN_PATH;
+        String goExecName = GoSdkUtil.getGoExecName(sdk);
+        if (goExecName == null) {
+            throw new CantRunException("Could not determine the go binary path");
+        }
 
         String projectDir = m_project.getBasePath();
 

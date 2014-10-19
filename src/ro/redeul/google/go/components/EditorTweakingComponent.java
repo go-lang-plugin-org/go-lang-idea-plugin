@@ -140,8 +140,10 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
             return;
         }
 
+        String goExec = GoSdkUtil.getGoExecName(sdk);
+
         try {
-            String[] command = {sdkData.GO_BIN_PATH, "fmt", fileName};
+            String[] command = {goExec, "fmt", fileName};
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv);

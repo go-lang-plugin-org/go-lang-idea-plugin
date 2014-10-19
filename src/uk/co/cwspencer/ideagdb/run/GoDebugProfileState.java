@@ -64,6 +64,9 @@ public class GoDebugProfileState implements RunProfileState {
         }
 
         String goExecName = sdkData.GO_BIN_PATH;
+        if (goExecName == null) {
+            throw new CantRunException("Could not determine the go binary path");
+        }
 
         String projectDir = project.getBasePath();
 

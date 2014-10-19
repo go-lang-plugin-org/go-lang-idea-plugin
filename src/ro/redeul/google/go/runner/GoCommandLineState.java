@@ -61,7 +61,11 @@ class GoCommandLineState extends CommandLineState {
             throw new CantRunException("Could not retrieve the project directory");
         }
 
-        String goExecName = sdkData.GO_BIN_PATH;
+        String goExecName = GoSdkUtil.getGoExecName(sdk);
+        if (goExecName == null) {
+            throw new CantRunException("Could not determine the go binary path");
+        }
+
         String workingDir = testConfiguration.workingDir;
 
         GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(project).getState();
