@@ -23,7 +23,9 @@ import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressio
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.resolve.refs.PackageReference;
 import ro.redeul.google.go.lang.psi.resolve.refs.PackageSymbolReference;
+import ro.redeul.google.go.lang.psi.resolve.refs.ShortVarReference;
 import ro.redeul.google.go.lang.psi.resolve.refs.VarOrConstReference;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.stubs.index.GoTypeName;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
@@ -201,6 +203,10 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
 
 //        if (ShortVarDeclarationReference.MATCHER.accepts(this))
 //            return refs(new ShortVarDeclarationReference(this));
+
+        if (psiElement().withParent(psiElement(GoShortVarDeclaration.class)).accepts(this)) {
+            return new PsiReference[]{new ShortVarReference(this)};
+        }
 
         if (PackageSymbolReference.MATCHER.accepts(this)) {
             GoPackage goPackage = findSelectorPackage(getAs(GoSelectorExpression.class, getParent()));

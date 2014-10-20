@@ -28,11 +28,12 @@ import org.junit.Ignore;
 
 @Ignore
 public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
+
+
     protected void doTest() throws Exception {
         final String fullPath =
                 new File((getTestDataPath() + getTestName(false))
                 .replace(File.separatorChar, '/')).getCanonicalPath();
-
 
         VirtualFile vFile;
 
@@ -48,7 +49,6 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
             return;
         }
 
-
         fail("no test files found in \"" + vFile + "\"");
     }
 
@@ -59,11 +59,11 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
 
         parseFile(vFile, vFile.getParent(), vModuleDir);
 
+        addBuiltinPackage(vModuleDir);
+
         for (Map.Entry<PsiFile, String> fileEntry : files.entrySet()) {
             postProcessFilePsi(fileEntry.getKey(), fileEntry.getValue());
         }
-
-        addBuiltinPackage(vModuleDir);
 
         assertTest();
     }
@@ -93,11 +93,11 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
                 )
         );
 
+        addBuiltinPackage(contentRoot);
+
         for (Map.Entry<PsiFile, String> fileEntry : files.entrySet()) {
             postProcessFilePsi(fileEntry.getKey(), fileEntry.getValue());
         }
-
-        addBuiltinPackage(contentRoot);
 
         assertTest();
     }
@@ -132,15 +132,6 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
                 PsiTestUtil.addSourceContentToRoots(module, vDir);
             }
         }.execute();
-    }
-
-    private void addBuiltinPackage(VirtualFile contentRoot) throws IOException {
-        VirtualFile builtin =
-                LocalFileSystem.getInstance()
-                        .findFileByPath(getTestDataPath() + "/builtin.go");
-
-        if ( builtin != null )
-            createFile(getModule(), contentRoot, "builtin.go", VfsUtil.loadText(builtin));
     }
 
     private Map<PsiFile, String> files = new HashMap<PsiFile, String>();

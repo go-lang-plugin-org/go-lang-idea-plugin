@@ -2,7 +2,7 @@ package main
 
 import "test"
 
-var x /*ref*/test.ExportedType
+var x test./*ref*/ExportedType
 
 func main() {
 

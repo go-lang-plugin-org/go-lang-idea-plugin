@@ -75,6 +75,9 @@ public class GoPsiUtils {
         return type.cast(node);
     }
 
+    public static PsiElement resolveSafely(PsiElement element) {
+        return resolveSafely(element, PsiElement.class);
+    }
 
     public static <T extends PsiElement> T resolveSafely(PsiElement element, Class<T> expectedType) {
         if (element == null) {

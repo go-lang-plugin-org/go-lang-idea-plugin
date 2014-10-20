@@ -31,7 +31,7 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
     public GoPsiElementBase(@NotNull ASTNode node) {
         super(node);
-        System.out.println("" + hashCode() + " constructor: " + node.getText());
+//        System.out.println("" + hashCode() + " constructor: " + node.getText());
     }
 
     protected IElementType getTokenType() {
@@ -78,7 +78,7 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
     @NotNull
     @Override
     final public PsiReference[] getReferences() {
-        System.out.println("" + hashCode() + ", refs: " + myReferences + " text: " + getText() + " ");
+//        System.out.println("" + hashCode() + ", refs: " + myReferences + " text: " + getText() + " ");
 //        if (myReferences == null)
             myReferences = defineReferences();
 

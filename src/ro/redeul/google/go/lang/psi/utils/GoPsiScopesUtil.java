@@ -94,7 +94,7 @@ public class GoPsiScopesUtil {
         }
 
         while (child != null) {
-            if (!child.processDeclarations(processor, state, null, place)) return false;
+            if (!child.processDeclarations(processor, state, lastParent, place)) return false;
             child = child.getPrevSibling();
         }
 

@@ -19,7 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.components.GoSdkParsingHelper;
+import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
@@ -34,6 +36,8 @@ import ro.redeul.google.go.util.GoUtil;
 import ro.redeul.google.go.util.LookupElementUtil;
 
 import java.util.Collection;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class GoFileImpl extends PsiFileBase implements GoFile {
 
@@ -247,15 +251,20 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         PsiElement child = this.getLastChild();
 
         while (child != null) {
-            while ( child != null && (child instanceof PsiWhiteSpace || child instanceof GoImportDeclaration))
+            while ( child != null && (child instanceof PsiWhiteSpace || child instanceof PsiComment))
                 child = child.getPrevSibling();
 
-            if (child != null && !child.processDeclarations(processor, state, null, place))
+            if (child != null && !child.processDeclarations(processor, state, lastParent, place))
                 return false;
 
             do {
                 child = child.getPrevSibling();
-            } while (child != null && (child instanceof PsiWhiteSpace || child instanceof GoImportDeclaration));
+            } while (child != null && (child instanceof PsiWhiteSpace || child instanceof PsiComment));
+        }
+
+        if ( ResolveStates.get(state, ResolveStates.Key.IsOriginalFile)) {
+            GoPackage builtinPackage = GoPackages.getInstance(getProject()).getBuiltinPackage();
+            return builtinPackage.processDeclarations(processor, ResolveStates.builtins(), lastParent, place);
         }
 
         if (ResolveStates.get(state, ResolveStates.Key.IsOriginalFile)) {

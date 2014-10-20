@@ -37,7 +37,7 @@ public class VarOrConstSolver extends VisitingReferenceSolver<VarOrConstReferenc
 
             @Override
             public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
-                checkIdentifiers(referenceName(), declaration.getDeclarations());
+                checkIdentifiers(referenceName(), declaration.getIdentifiers());
             }
 
             @Override

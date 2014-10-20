@@ -50,9 +50,6 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
         if (ResolveStates.get(state, ResolveStates.Key.JustExports) && !GoNamesUtil.isExported(getName()))
             return true;
 
-        if (ResolveStates.get(state, ResolveStates.Key.IsPackageBuiltin))
-            return true;
-
         return processor.execute(this, state);
     }
 

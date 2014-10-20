@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -81,6 +82,13 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         GoPackageReference packageReference = getPackageReference();
         if (packageReference != null && packageReference.isBlank()) {
             return true;
+        }
+
+        // import . "asdfaf" -> exports in the target package should act as declaration in the current one (but only if this is the initial state)
+        if ( packageReference != null && packageReference.isLocal() && lastParent != null ) {
+            GoPackage goPackage = getPackage();
+            if ( goPackage != null )
+                return goPackage.processDeclarations(processor, ResolveStates.packageExports(), null,  place);
         }
 
         return processor.execute(this, state);

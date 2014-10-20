@@ -1,3 +1,3 @@
 package main
 
-type t /*ref*/imported.Type
+type t imported./*ref*/Type
