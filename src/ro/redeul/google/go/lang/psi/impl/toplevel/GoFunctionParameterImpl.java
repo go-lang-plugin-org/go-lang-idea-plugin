@@ -6,7 +6,6 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralIdentifierImpl;
-import ro.redeul.google.go.lang.psi.impl.types.GoFunctionParameterVariadicSliceImpl;
 import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeSliceImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
