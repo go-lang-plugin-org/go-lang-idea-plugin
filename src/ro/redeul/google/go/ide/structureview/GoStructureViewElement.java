@@ -298,7 +298,7 @@ public class GoStructureViewElement implements StructureViewTreeElement, ItemPre
         private String getTypeName() {
             if (element instanceof GoPsiTypeName) {
                 GoPsiTypeName typeName = (GoPsiTypeName) element;
-                return typeName.getQualifiedName();
+                return typeName.getName();
             }
 
             PsiElement parent = element.getParent();

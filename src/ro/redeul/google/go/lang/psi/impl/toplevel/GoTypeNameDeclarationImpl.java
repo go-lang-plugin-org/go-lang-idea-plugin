@@ -109,17 +109,17 @@ public class GoTypeNameDeclarationImpl
 
     @Override
     public String getLookupText() {
-        return "";
+        return getName();
     }
 
     @Override
     public String getLookupTailText() {
-        return "";
+        return null;
     }
 
     @Override
     public String getLookupTypeText() {
-        return "";
+        return "type";
     }
 
     @NotNull

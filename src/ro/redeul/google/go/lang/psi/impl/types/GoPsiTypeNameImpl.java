@@ -8,11 +8,14 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
-//import ro.redeul.google.go.lang.psi.resolve.references.BuiltinTypeNameReference;
-//import ro.redeul.google.go.lang.psi.resolve.references.TypeNameReference;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.toplevel.GoImportDeclarationImpl;
+import ro.redeul.google.go.lang.psi.resolve.refs.PackageSymbolReference;
+import ro.redeul.google.go.lang.psi.resolve.refs.TypeNameReference;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
@@ -35,8 +38,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
  * Date: Aug 30, 2010
  * Time: 7:12:16 PM
  */
-public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
-        implements GoPsiTypeName {
+public class GoPsiTypeNameImpl extends GoPsiElementBase implements GoPsiTypeName {
 
     public GoPsiTypeNameImpl(@NotNull ASTNode node) {
         super(node);
@@ -45,10 +47,27 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
     @Override
     @NotNull
     public String getName() {
-        GoLiteralIdentifier identifier =
-                findChildByClass(GoLiteralIdentifier.class);
+        GoLiteralIdentifier identifiers[] =
+                findChildrenByClass(GoLiteralIdentifier.class);
 
-        return identifier != null ? identifier.getUnqualifiedName() : getText();
+        String name = null;
+        if ( identifiers.length > 0)
+            name = identifiers[identifiers.length - 1].getName();
+
+        return name != null ? name : getText();
+    }
+
+    @NotNull
+    @Override
+    public PsiElement getNavigationElement() {
+        GoLiteralIdentifier identifiers[] =
+                findChildrenByClass(GoLiteralIdentifier.class);
+
+        GoLiteralIdentifier identifier = null;
+        if (identifiers.length > 0)
+            identifier = identifiers[identifiers.length - 1];
+
+        return identifier == null ? this : identifier;
     }
 
     @Override
@@ -71,16 +90,22 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
                     .withText(string().matches("nil"));
 
     @Override
-    public PsiReference getReference() {
-
+    protected PsiReference[] defineReferences() {
 //        if (PRIMITIVE_TYPES.accepts(this))
 //            return new BuiltinTypeNameReference(this);
+//        return PsiReference.EMPTY_ARRAY;
 
         if (NIL_TYPE.accepts(this))
-            return null;
+            return PsiReference.EMPTY_ARRAY;
 
-//        return new TypeNameReference(this);
-        return null;
+        GoPackage goPackage = null;
+        if (findChildByType(GoTokenTypes.oDOT) != null) {
+            GoLiteralIdentifier identifiers[] = findChildrenByClass(GoLiteralIdentifier.class);
+            GoImportDeclaration importDeclaration = GoPsiUtils.resolveSafely(identifiers[0], GoImportDeclaration.class);
+            goPackage = importDeclaration != null ? importDeclaration.getPackage() : null;
+        }
+
+        return new PsiReference[] { goPackage != null ? new TypeNameReference(this, goPackage) : new TypeNameReference(this) };
     }
 
     public void accept(GoElementVisitor visitor) {
@@ -116,7 +141,7 @@ public class GoPsiTypeNameImpl extends GoPsiPackagedElementBase
     public boolean isIdentical(GoPsiType goType) {
         if (goType instanceof GoPsiTypeName) {
 
-            if (!getName().equals(goType.getName()))
+            if (!getName().equals(((GoPsiTypeName) goType).getName()))
                 return false;
 
             if (isPrimitive())

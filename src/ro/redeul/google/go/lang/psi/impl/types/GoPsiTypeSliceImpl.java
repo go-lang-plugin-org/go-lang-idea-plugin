@@ -18,8 +18,8 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
  * Date: Sep 2, 2010
  * Time: 12:50:44 PM
  */
-public class GoPsiTypeSliceImpl extends GoPsiPackagedElementBase implements
-                                                              GoPsiTypeSlice {
+public class GoPsiTypeSliceImpl extends GoPsiTypeImpl implements GoPsiTypeSlice {
+
     public GoPsiTypeSliceImpl(@NotNull ASTNode node) {
         super(node);
     }

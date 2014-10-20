@@ -4,10 +4,13 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLock;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.SharedPsiElementImplUtil;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.IElementType;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -26,13 +29,9 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
     protected PsiReference[] myReferences = null;
 
-    protected PsiReference[] refs(PsiReference ... references) {
-        this.myReferences = references;
-        return myReferences;
-    }
-
     public GoPsiElementBase(@NotNull ASTNode node) {
         super(node);
+        System.out.println("" + hashCode() + " constructor: " + node.getText());
     }
 
     protected IElementType getTokenType() {
@@ -65,6 +64,34 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
             child = child.getNextSibling();
         }
+    }
+
+    /**
+     * Always implement {@link #defineReferences()}
+     * @return a null reference
+     */
+    @Override
+    final public PsiReference getReference() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    final public PsiReference[] getReferences() {
+        System.out.println("" + hashCode() + ", refs: " + myReferences + " text: " + getText() + " ");
+//        if (myReferences == null)
+            myReferences = defineReferences();
+
+        return myReferences;
+    }
+
+    @NonNls
+    protected PsiReference[] defineReferences() {
+        return PsiReference.EMPTY_ARRAY;
+    }
+
+    protected PsiReference[] refs(PsiReference ... references) {
+        return myReferences;
     }
 
     @NotNull
@@ -113,5 +140,16 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
         return true;
+    }
+
+    @Override
+    protected Object clone() {
+        GoPsiElementBase clone = (GoPsiElementBase)super.clone();
+        synchronized (PsiLock.LOCK) {
+            clone.myReferences = null;
+        }
+
+        return clone;
+
     }
 }

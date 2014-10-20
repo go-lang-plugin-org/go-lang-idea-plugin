@@ -37,7 +37,8 @@ public abstract class Reference<
 
     @Override
     public TextRange getRangeInElement() {
-        return getElement().getTextRange().shiftRight(-getElement().getTextOffset());
+        PsiElement navigationElement = getElement().getNavigationElement();
+        return navigationElement.getTextRange().shiftRight(-getElement().getTextOffset());
     }
 
     @Override

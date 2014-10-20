@@ -15,11 +15,9 @@
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/ShortVarDeclarationReference.java" />
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/BuiltinCallOrConversionReference.java" />
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/BuiltinTypeNameReference.java" />
-      <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/TypeNameReference.java" />
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/MethodReference.java" />
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/CallOrConversionReference.java" />
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/MethodSolver.java" />
-      <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/TypeNameSolver.java" />
     </excludeFromCompile>
     <resourceExtensions>
       <entry name=".+\.(properties|xml|html|dtd|tld)" />

@@ -290,6 +290,12 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
         return GoPsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
     }
 
+    @Override
+    protected PsiReference[] defineReferences() {
+        return PsiReference.EMPTY_ARRAY;
+    }
+
+    /*
     @NotNull
     @Override
     public PsiReference[] getReferences() {
@@ -308,4 +314,5 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
 
         return super.getReferences();
     }
+*/
 }

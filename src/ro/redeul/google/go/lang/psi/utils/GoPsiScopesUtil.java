@@ -101,6 +101,7 @@ public class GoPsiScopesUtil {
         return true;
     }
 
+    @Deprecated
     public static boolean packageWalk(GoPackage goPackage, PsiScopeProcessor processor, GoPsiElement entrance, ResolveState state) {
         return goPackage.processDeclarations(processor, state, entrance.getContainingFile(), entrance);
     }

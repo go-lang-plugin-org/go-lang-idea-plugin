@@ -29,7 +29,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
  * Date: 5/27/11
  * Time: 12:17 AM
  */
-public class GoPsiTypeStructImpl extends GoPsiPackagedElementBase implements
+public class GoPsiTypeStructImpl extends GoPsiTypeImpl implements
         GoPsiTypeStruct {
 
     public GoPsiTypeStructImpl(@NotNull ASTNode node) {

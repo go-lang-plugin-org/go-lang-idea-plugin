@@ -19,8 +19,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
  * Date: Sep 2, 2010
  * Time: 12:53:17 PM
  */
-public class GoPsiTypeMapImpl extends GoPsiPackagedElementBase implements
-                                                            GoPsiTypeMap {
+public class GoPsiTypeMapImpl extends GoPsiTypeImpl implements GoPsiTypeMap {
 
     public GoPsiTypeMapImpl(@NotNull ASTNode node) {
         super(node);

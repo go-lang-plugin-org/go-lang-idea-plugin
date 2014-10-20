@@ -12,10 +12,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralInteger;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
+import ro.redeul.google.go.lang.psi.stubs.index.GoTypeName;
+import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
 import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
@@ -131,7 +129,7 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
                 GoPsiType resolvedType = GoTypeUtils.resolveToFinalType(psiType);
                 if (resolvedType != null)
                     psiType = resolvedType;
-                String name = psiType.getName();
+                String name = (psiType instanceof GoPsiTypeName) ? ((GoPsiTypeName)psiType).getName() : null;
                 if (name != null && !name.startsWith("int"))
                     result.addProblem(
                             index,

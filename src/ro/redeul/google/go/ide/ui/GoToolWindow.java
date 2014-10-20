@@ -17,9 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-/**
- * Created by d3xter on 03.03.14.
- */
 public class GoToolWindow extends AbstractProjectComponent {
     private ConsoleViewImpl consoleViewImpl;
     private JPanel mainPanel;

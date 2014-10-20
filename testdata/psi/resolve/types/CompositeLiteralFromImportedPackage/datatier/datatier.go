@@ -1,3 +1,3 @@
 package datatier
 
-type /*def*/MyType struct {}
+type /*def*/MyType string

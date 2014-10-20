@@ -151,9 +151,4 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
         visitor.visitLiteralCompositeElement(this);
     }
 
-
-    @Override
-    public PsiReference getReference() {
-        return null;
-    }
 }

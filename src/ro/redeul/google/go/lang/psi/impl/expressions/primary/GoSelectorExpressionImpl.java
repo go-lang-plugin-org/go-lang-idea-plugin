@@ -139,13 +139,13 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
         return builder
                 .bold()
                 .withTailText(String.format(" (defined by: %s)",
-                        ownerType.getQualifiedName()))
+                        ownerType.getName()))
                 .withTypeText("<field>", ownerType != type);
     }
 
     @NotNull
     @Override
-    public PsiReference[] getReferences() {
+    public PsiReference[] defineReferences() {
         GoPrimaryExpression baseExpression = getBaseExpression();
 
         if (baseExpression == null) {
@@ -197,7 +197,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
 //        if ( type instanceof GoPsiTypeStruct) {
 //            return new StructFieldReference(this);
 
-        return super.getReferences();    //To change body of overridden methods use File | Settings | File Templates.
+        return PsiReference.EMPTY_ARRAY;
     }
 
     @Override

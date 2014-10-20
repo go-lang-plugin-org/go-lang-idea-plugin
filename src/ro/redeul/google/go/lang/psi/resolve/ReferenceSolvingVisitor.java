@@ -5,6 +5,7 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;

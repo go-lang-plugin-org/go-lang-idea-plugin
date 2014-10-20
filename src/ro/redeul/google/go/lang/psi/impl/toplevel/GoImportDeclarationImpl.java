@@ -117,12 +117,6 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         throw new IncorrectOperationException("Not implemented");
     }
 
-    @Override
-    public PsiReference getReference() {
-//        return new ImportReference(this);
-        return null;
-    }
-
     @NotNull
     @Override
     public String getLookupText() {

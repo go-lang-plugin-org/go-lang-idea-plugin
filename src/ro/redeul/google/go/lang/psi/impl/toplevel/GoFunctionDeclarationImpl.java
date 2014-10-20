@@ -60,20 +60,6 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
         return GoUtil.CompareFnTypeToDecl((GoPsiTypeFunction) goType, this);
     }
 
-    @Override
-    public String getPackageName() {
-        return ((GoFile) getContainingFile()).getPackageName();
-    }
-
-    @Override
-    public String getQualifiedName() {
-        String packageName = getPackageName();
-        if (packageName == null || packageName.trim().equals(""))
-            return getName();
-
-        return String.format("%s.%s", packageName, getName());
-    }
-
     public GoFunctionDeclarationImpl(@NotNull ASTNode node) {
         super(node);
     }

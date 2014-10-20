@@ -24,6 +24,7 @@ import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.resolve.refs.PackageReference;
 import ro.redeul.google.go.lang.psi.resolve.refs.PackageSymbolReference;
 import ro.redeul.google.go.lang.psi.resolve.refs.VarOrConstReference;
+import ro.redeul.google.go.lang.psi.stubs.index.GoTypeName;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -45,8 +46,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
  * Date: Jul 24, 2010
  * Time: 10:43:49 PM
  */
-public class GoLiteralIdentifierImpl extends GoPsiElementBase
-        implements GoLiteralIdentifier {
+public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiteralIdentifier {
 
     private final boolean isIota;
     private Integer iotaValue;
@@ -172,12 +172,9 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
     @NotNull
     @Override
-    public PsiReference[] getReferences() {
-        if (myReferences != null)
-            return myReferences;
-
-        if (NO_REFERENCE.accepts(this))
-            return refs(PsiReference.EMPTY_ARRAY);
+    public PsiReference[] defineReferences() {
+//        if (NO_REFERENCE.accepts(this))
+//            return PsiReference.EMPTY_ARRAY;
 
 //        if (BuiltinCallOrConversionReference.MATCHER.accepts(this))
 //            return refs(new BuiltinCallOrConversionReference(this));
@@ -207,20 +204,26 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
         if (PackageSymbolReference.MATCHER.accepts(this)) {
             GoPackage goPackage = findSelectorPackage(getAs(GoSelectorExpression.class, getParent()));
-            return goPackage != null ? refs(new PackageSymbolReference(this, goPackage)) : PsiReference.EMPTY_ARRAY;
+
+            return goPackage == null
+                    ? PsiReference.EMPTY_ARRAY
+                    : new PsiReference[]{new PackageSymbolReference(this, goPackage)};
         }
 
         if (VarOrConstReference.MATCHER.accepts(this)) {
             if (PackageReference.MATCHER.accepts(this))
-                return refs(new VarOrConstReference(this), new PackageReference(this));
+                return new PsiReference[] { new VarOrConstReference(this), new PackageReference(this) };
             else
-                return refs(new VarOrConstReference(this));
+                return new PsiReference[] { new VarOrConstReference(this) };
         }
 
-        if (SelectorOfStructFieldReference.MATCHER.accepts(this))
-            return findParentOfType(this, GoSelectorExpression.class).getReferences();
+        if (psiElement(GoLiteralIdentifier.class)
+                .insideStarting(psiElement(GoPsiTypeName.class))
+                .accepts(this)) {
+            return new PsiReference[] { new PackageReference(this) };
+        }
 
-        return refs(PsiReference.EMPTY_ARRAY);
+        return PsiReference.EMPTY_ARRAY;
     }
 
 //    @Override

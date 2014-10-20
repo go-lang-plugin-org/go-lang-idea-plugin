@@ -2,7 +2,7 @@ package main
 
 import "imported"
 
-var x /*ref*/imported.ImportedType = 10
+var x imported./*ref*/ImportedType = 10
 
 func main() {
 

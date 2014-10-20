@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.types;
 
+import com.intellij.psi.PsiNamedElement;
 import ro.redeul.google.go.lang.psi.GoPackagedElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
@@ -10,7 +11,7 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
  * Date: Aug 30, 2010
  * Time: 8:58:40 PM
  */
-public interface GoPsiType extends GoPsiElement, GoPackagedElement {
+public interface GoPsiType extends GoPsiElement, PsiNamedElement {
 
     public static final GoPsiType[] EMPTY_ARRAY = new GoPsiType[0];
 
