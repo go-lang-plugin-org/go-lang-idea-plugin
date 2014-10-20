@@ -105,8 +105,12 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
                     GoPsiTypeSlice appendedSlice = ((GoTypeSlice) types[0]).getPsiType();
                     GoPsiType[] result = new GoPsiType[args.length];
                     result[0] = appendedSlice;
+                    if (isCallWithVariadicParameter()){
+                        result[1] = appendedSlice;
+                        return result;
+                    }
                     GoPsiType elem = appendedSlice.getElementType();
-                    for (int i = 1; i < args.length; i++){
+                    for (int i = 1; i < args.length; i++) {
                         result[i] = elem;
                     }
                     return result;

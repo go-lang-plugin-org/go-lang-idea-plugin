@@ -17,8 +17,7 @@ func main() {
 	delete(map1, "key")
 	delete(map1, /*begin*/1/*end.Expression type mismatch, the expected type is string|CastTypeFix*/)
 
-	// This test will be broken when issue #609 is fixed
-	arr1 = append(arr1, /*begin*/arr1/*end.Expression type mismatch, the expected type is int|CastTypeFix*/...)
-	arr3 = append(arr3, /*begin*/"test"/*end.Expression type mismatch, the expected type is byte|CastTypeFix*/...)
+	arr1 = append(arr1, arr1...)
+	arr3 = append(arr3, /*begin*/"test"/*end.Expression type mismatch, the expected type is []byte|CastTypeFix*/...)
 
 }
