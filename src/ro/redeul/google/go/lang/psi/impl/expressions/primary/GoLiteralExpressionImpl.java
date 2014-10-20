@@ -124,7 +124,6 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                     if (resolved == null) {
                         return GoType.EMPTY_ARRAY;
                     }
-
                     PsiElement parent = resolved.getParent();
                     if (parent instanceof GoVarDeclaration) {
                         GoVarDeclaration varDeclaration = (GoVarDeclaration) parent;
@@ -152,9 +151,9 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
 
                     if (parent instanceof GoFunctionParameter) {
                         GoFunctionParameter functionParameter = (GoFunctionParameter) parent;
-                        if (functionParameter.getType() != null) {
+                        if (functionParameter.getTypeForBody() != null) {
                             return new GoType[]{
-                                    GoTypes.fromPsiType(functionParameter.getType())
+                                    GoTypes.fromPsiType(functionParameter.getTypeForBody())
                             };
                         }
                     }

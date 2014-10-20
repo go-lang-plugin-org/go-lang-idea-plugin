@@ -34,4 +34,6 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
     public void testBuiltinCall() throws Exception{ doTest(); }
 
     public void testIssue812() throws Exception{ doTest(); }
+
+    public void testIssue856() throws Exception{ doTest(); }
 }

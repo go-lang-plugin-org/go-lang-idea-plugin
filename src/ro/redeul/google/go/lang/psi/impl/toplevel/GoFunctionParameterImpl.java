@@ -6,6 +6,8 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralIdentifierImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoFunctionParameterVariadicSliceImpl;
+import ro.redeul.google.go.lang.psi.impl.types.GoPsiTypeSliceImpl;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -38,8 +40,15 @@ public class GoFunctionParameterImpl extends GoPsiElementBase implements GoFunct
     }
 
     @Override
-    public GoPsiType getType() {
-        return findChildByClass(GoPsiType.class);
+    public GoPsiType getType() { return findChildByClass(GoPsiType.class); }
+
+    @Override
+    public GoPsiType getTypeForBody() {
+        if (isVariadic()) {
+            return new GoPsiTypeSliceImpl(getNode());
+        }else{
+            return findChildByClass(GoPsiType.class);
+        }
     }
 
     @Override

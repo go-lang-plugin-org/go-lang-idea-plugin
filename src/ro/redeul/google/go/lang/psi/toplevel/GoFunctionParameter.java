@@ -14,4 +14,6 @@ public interface GoFunctionParameter extends GoPsiElement {
     GoLiteralIdentifier[] getIdentifiers();
 
     GoPsiType getType();
+
+    GoPsiType getTypeForBody();
 }

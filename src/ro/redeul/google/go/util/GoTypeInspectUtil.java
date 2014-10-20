@@ -50,7 +50,6 @@ public class GoTypeInspectUtil {
     }
 
     public static boolean checkParametersExp(GoPsiType type, GoExpr expr) {
-
         GoPsiType resolved = resolveToFinalType(type);
         if (resolved instanceof GoPsiTypeInterface)
             return true;
