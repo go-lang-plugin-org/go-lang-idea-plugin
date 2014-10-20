@@ -1,0 +1,3 @@
+package redeclare
+
+func ()

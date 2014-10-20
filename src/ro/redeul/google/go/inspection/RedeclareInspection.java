@@ -40,6 +40,10 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             @Override
             public void visitMethodDeclaration(GoMethodDeclaration declaration) {
                 super.visitMethodDeclaration(declaration);
+                if (declaration.getMethodReceiver()==null ||
+                        declaration.getMethodReceiver().getType()==null){
+                    return;
+                }
                 String name = declaration.getMethodReceiver().getType().getText()+"."+declaration.getName();
                 if (name.startsWith("*")){
                     name = name.substring(1);
