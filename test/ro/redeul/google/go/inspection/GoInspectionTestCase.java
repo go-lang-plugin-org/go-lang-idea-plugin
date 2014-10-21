@@ -1,12 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.QuickFix;
 import com.intellij.codeInspection.ex.ProblemDescriptorImpl;
@@ -20,6 +13,13 @@ import org.junit.Assert;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public abstract class GoInspectionTestCase
     extends GoLightCodeInsightFixtureTestCase {
@@ -113,8 +113,14 @@ public abstract class GoInspectionTestCase
         return data;
     }
 
-    protected String processFile(String fileText,GoFile file,Document document)
-        throws InstantiationException, IllegalAccessException {
+    protected String processFile(String fileText)
+            throws InstantiationException, IllegalAccessException, IOException {
+
+        addBuiltinPackage();
+
+        GoFile file = (GoFile) myFixture.configureByText(GoFileType.INSTANCE,
+                                                         fileText);
+        Document document = myFixture.getDocument(file);
         InspectionResult result = new InspectionResult(getProject());
         detectProblems(file, result);
         List<ProblemDescriptor> problems = result.getProblems();

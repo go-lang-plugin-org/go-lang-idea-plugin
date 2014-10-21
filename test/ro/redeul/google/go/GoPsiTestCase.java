@@ -13,7 +13,7 @@ import java.io.IOException;
 public abstract class GoPsiTestCase extends PsiTestCase {
 
     protected void addBuiltinPackage(VirtualFile contentRoot) throws IOException {
-        VirtualFile builtin = LocalFileSystem.getInstance().findFileByPath("testdata/psi/resolve/builtin.go");
+        VirtualFile builtin = LocalFileSystem.getInstance().findFileByPath("testdata/builtin/builtin.go");
 
         if ( builtin != null ) {
             createFile(myModule, createChildDirectory(contentRoot, "builtin"), "builtin.go", VfsUtil.loadText(builtin));

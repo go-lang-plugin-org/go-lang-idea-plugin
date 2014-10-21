@@ -1,14 +1,16 @@
 package ro.redeul.google.go;
 
-import java.io.File;
-
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
+
+import java.io.File;
+import java.io.IOException;
 
 @Ignore
 public abstract class GoLightCodeInsightFixtureTestCase
@@ -26,6 +28,10 @@ public abstract class GoLightCodeInsightFixtureTestCase
         return (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
     }
 
+    protected void addBuiltinPackage() throws IOException {
+        String builtinContent = FileUtil.loadFile(new File(testDataRoot + "builtin/builtin.go"));
+        myFixture.addFileToProject("builtin/builtin.go", builtinContent);
+    }
 
     @Override
     protected String getTestDataPath() {
