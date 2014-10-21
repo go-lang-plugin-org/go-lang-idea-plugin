@@ -49,4 +49,12 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
+    /* TODO FIX TEST
+    public void testGH865() throws Exception {
+        doTest();
+    }
+    public void testGH858() throws Exception {
+        doTestWithDirectory();
+    }
+    */
 }
