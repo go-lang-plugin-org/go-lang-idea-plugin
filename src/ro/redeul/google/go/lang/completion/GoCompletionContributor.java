@@ -208,7 +208,7 @@ public class GoCompletionContributor extends CompletionContributor {
 
                 for (String goPackage : goSdkPackages) {
                     result.addElement(
-                            LookupElementBuilder.create("\"" + goPackage + "\"")
+                            LookupElementBuilder.create("\"" + goPackage)
                                     .withIcon(PlatformIcons.PACKAGE_ICON)
                                     .withTypeText("via sdk"));
                 }
@@ -217,7 +217,7 @@ public class GoCompletionContributor extends CompletionContributor {
 
                 for (String goPackage : goProjectPackages) {
                     result.addElement(
-                            LookupElementBuilder.create("\"" + goPackage + "\"")
+                            LookupElementBuilder.create("\"" + goPackage)
                                     .withIcon(PlatformIcons.PACKAGE_ICON)
                                     .bold()
                                     .withTypeText("via project"));

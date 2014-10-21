@@ -13,4 +13,5 @@ public class GoCompletionBugsTestCase extends GoCompletionTestCase{
         doTestVariants();
     }
 
+    public void testGH749() {doTestVariants("net.go");}
 }
