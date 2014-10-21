@@ -16,6 +16,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.Processor;
 import org.junit.Assert;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
@@ -59,13 +60,23 @@ public abstract class GoInspectionTestCase
     }
 
     protected void doTestWithDirectory() throws Exception{
-        VirtualFile directory = myFixture.copyDirectoryToProject(getTestName(true), "/" + getTestName(true));
-        for(VirtualFile file:directory.getChildren()){
-            if (file.getExtension()==null || !file.getExtension().equals("go")){
-                continue;
+        final ArrayList<PsiFile> list = new ArrayList<PsiFile>();
+        String FolderPath = getTestDataPath() + getTestName(true);
+        FileUtil.visitFiles(new File(FolderPath), new Processor<File>() {
+            @Override
+            public boolean process(File file) {
+                String path = file.getPath();
+                String ext = FileUtil.getExtension(path);
+                if (!ext.equals("go")){
+                    return true;
+                }
+                PsiFile psi= myFixture.configureByFile(FileUtil.getRelativePath(getTestDataPath(),path,'/'));
+                list.add(psi);
+                return true;
             }
-            myFixture.configureFromExistingVirtualFile(file);
-            doTestWithOneFile(myFixture.getFile());
+        });
+        for(PsiFile psi:list){
+            doTestWithOneFile(psi);
         }
     }
 
@@ -79,7 +90,7 @@ public abstract class GoInspectionTestCase
         List<String> data = readInput(document.getText());
 
         String expected = data.get(1).trim();
-        Assert.assertEquals(expected, processFile(data.get(0).trim(), (GoFile)file,document));
+        Assert.assertEquals("fail at "+file.getVirtualFile().getPath(),expected, processFile(data.get(0).trim(), (GoFile)file,document));
     }
 
     private List<String> readInput(String content) throws IOException {
