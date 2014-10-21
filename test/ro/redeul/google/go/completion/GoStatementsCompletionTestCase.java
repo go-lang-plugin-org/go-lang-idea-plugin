@@ -1,79 +1,69 @@
 package ro.redeul.google.go.completion;
 
+import java.io.IOException;
+
 public class GoStatementsCompletionTestCase extends GoCompletionTestCase {
     protected String getTestDataRelativePath() {
         return super.getTestDataRelativePath() + "statements";
     }
 
-    public void testConstDeclaration() {
+    public void testConstDeclaration() throws IOException { doTest(); }
+
+    public void testVarDeclaration() throws IOException { doTest(); }
+
+    public void testSwitch() throws IOException { doTest(); }
+
+    public void testFor() throws IOException {
         doTest();
     }
 
-    public void testVarDeclaration() {
+    public void testIf() throws IOException {
         doTest();
     }
 
-    public void testSwitch() {
+    public void testGo() throws IOException { doTest(); }
+
+    public void testGoFunc() throws IOException { doTest(); }
+
+    public void testDefer() throws IOException { doTest(); }
+
+    public void testDeferFunc() throws IOException {
         doTest();
     }
 
-    public void testFor() {
+    public void testSelect() throws IOException {
         doTest();
     }
 
-    public void testIf() {
+    public void testContinue() throws IOException {
         doTest();
     }
 
-    public void testGo() {
+    public void testBreak() throws IOException {
         doTest();
     }
 
-    public void testGoFunc() {
-        doTest();
-    }
-
-    public void testDefer() {
-        doTest();
-    }
-
-    public void testDeferFunc() {
-        doTest();
-    }
-
-    public void testSelect() {
-        doTest();
-    }
-
-    public void testContinue() {
-        doTest();
-    }
-
-    public void testBreak() {
-        doTest();
-    }
-
-    public void testFieldsViaForRangeWithArray() {
+    public void testFieldsViaForRangeWithArray() throws IOException {
         doTestVariants();
     }
 
-    public void testFieldsViaForRangeWithArrayPointer() {
+    public void testFieldsViaForRangeWithArrayPointer() throws IOException {
         doTestVariants();
     }
 
-    public void testFieldsViaForRangeWithSlice() {
+    public void testFieldsViaForRangeWithSlice() throws IOException {
         doTestVariants();
     }
 
-    public void testMapKeyViaForRange() {
+    public void testMapKeyViaForRange() throws IOException {
         doTestVariants();
     }
 
-    public void testMapValueViaForRange() {
+    public void testMapValueViaForRange() throws IOException {
         doTestVariants();
     }
 
-    public void testChannelTypeViaForRange() {
+    public void testChannelTypeViaForRange() throws IOException {
         doTestVariants();
     }
 }

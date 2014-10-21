@@ -1,56 +1,58 @@
 package ro.redeul.google.go.completion;
 
+import java.io.IOException;
+
 public class GoPackageCompletionTestCase extends GoCompletionTestCase {
     @Override
     protected String getTestDataRelativePath() {
         return super.getTestDataRelativePath() + "package";
     }
 
-    public void testPackageInTypeDeclaration() {
+    public void testPackageInTypeDeclaration() throws IOException {
         doTestVariants("net.go");
     }
 
-    public void testPackageInExpression() {
+    public void testPackageInExpression() throws IOException {
         doTestVariants("net.go");
     }
 
-    public void testPackageInFunctionParameter1() {
+    public void testPackageInFunctionParameter1() throws IOException {
         doTestVariants("net.go");
     }
 
-    public void testPackageInFunctionParameter2() {
+    public void testPackageInFunctionParameter2() throws IOException {
         doTestVariants("net.go");
     }
 
-    public void testPackageInAssignment1() {
+    public void testPackageInAssignment1() throws IOException {
         doTestVariants("net.go");
     }
 
-    public void testPackageInAssignment2() {
+    public void testPackageInAssignment2() throws IOException {
         doTestVariants("net.go");
     }
 
-    public void testPackageInReturnStatement() {
+    public void testPackageInReturnStatement() throws IOException {
         doTestVariants("net.go");
     }
 
-    public void testPackageInGoStatement() {
+    public void testPackageInGoStatement() throws IOException {
         doTest("net.go");
     }
 
-    public void testPackageInDeferStatement() {
+    public void testPackageInDeferStatement() throws IOException {
         doTest("net.go");
     }
 
-    public void testPackageInFunctionParameterType() {
+    public void testPackageInFunctionParameterType() throws IOException {
         doTestVariants("net.go");
     }
 
-    public void testPackageInFunctionResultType() {
+    public void testPackageInFunctionResultType() throws IOException {
         doTestVariants("net.go");
     }
 
-    public void testPackageInVarDeclaration() {
+    public void testPackageInVarDeclaration() throws IOException {
         doTestVariants("net.go");
     }
 }

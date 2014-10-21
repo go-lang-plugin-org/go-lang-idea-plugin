@@ -25,7 +25,7 @@ public abstract class GoCompletionTestCase
         return LocalFileSystem.getInstance().findFileByPath(absName) != null;
     }
 
-    protected void doTestVariants(String... additionalFiles) {
+    protected void doTestVariants(String... additionalFiles) throws IOException {
         // @TODO Fix this. Hack way to allow test to run
         try {
             String testDataRootDir = new File(GoCompletionTestCase.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "../../../" + testDataRoot).getCanonicalPath();
@@ -58,6 +58,7 @@ public abstract class GoCompletionTestCase
 
         Collections.reverse(files);
         myFixture.configureByFiles(files.toArray(new String[files.size()]));
+        addBuiltinPackage();
 
         // find the expected outcome
         String fileText = myFixture.getFile().getText();
@@ -84,7 +85,7 @@ public abstract class GoCompletionTestCase
         assertOrderedEquals(lookupElementStrings, expected);
     }
 
-    protected void doTest(String... additionalFiles) {
+    protected void doTest(String... additionalFiles) throws IOException {
         List<String> files = new ArrayList<String>();
         for (String file : additionalFiles) {
             if (testDataFileExists(file)) {
@@ -94,7 +95,9 @@ public abstract class GoCompletionTestCase
         files.add(getTestName(false) + ".go");
         Collections.reverse(files);
 
+
         myFixture.configureByFiles(files.toArray(new String[files.size()]));
+        addBuiltinPackage();
         myFixture.complete(CompletionType.BASIC);
         myFixture.checkResultByFile(getTestName(false) + "_after.go", true);
     }
