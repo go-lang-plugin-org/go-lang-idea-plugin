@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.patterns.ElementPattern;
+import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -16,15 +17,14 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoSelectorExpressionImpl;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
-import ro.redeul.google.go.lang.psi.resolve.refs.PackageReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.PackageSymbolReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.ShortVarReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.VarOrConstReference;
+import ro.redeul.google.go.lang.psi.resolve.refs.*;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.stubs.index.GoTypeName;
 import ro.redeul.google.go.lang.psi.toplevel.*;
@@ -204,6 +204,21 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
 //        if (ShortVarDeclarationReference.MATCHER.accepts(this))
 //            return refs(new ShortVarDeclarationReference(this));
 
+        if (psiElement()
+                .withParent(
+                        psiElement(GoLiteralExpression.class)
+                                .atStartOf(
+                                        or(
+                                                psiElement(GoBuiltinCallExpression.class),
+                                                psiElement(GoCallOrConvExpression.class))))
+                .withSuperParent(2,
+                        or(
+                                psiElement(GoBuiltinCallExpression.class),
+                                psiElement(GoCallOrConvExpression.class))
+                ).accepts(this)) {
+            return new PsiReference[]{new MethodOrTypeNameReference(this)};
+        }
+
         if (psiElement().withParent(psiElement(GoShortVarDeclaration.class)).accepts(this)) {
             return new PsiReference[]{new ShortVarReference(this)};
         }
@@ -218,15 +233,15 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
 
         if (VarOrConstReference.MATCHER.accepts(this)) {
             if (PackageReference.MATCHER.accepts(this))
-                return new PsiReference[] { new VarOrConstReference(this), new PackageReference(this) };
+                return new PsiReference[]{new VarOrConstReference(this), new PackageReference(this)};
             else
-                return new PsiReference[] { new VarOrConstReference(this) };
+                return new PsiReference[]{new VarOrConstReference(this)};
         }
 
         if (psiElement(GoLiteralIdentifier.class)
                 .insideStarting(psiElement(GoPsiTypeName.class))
                 .accepts(this)) {
-            return new PsiReference[] { new PackageReference(this) };
+            return new PsiReference[]{new PackageReference(this)};
         }
 
         return PsiReference.EMPTY_ARRAY;
@@ -355,7 +370,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
 
     @Override
     public Integer getIotaValue() {
-        if (isIota()){
+        if (isIota()) {
             return iotaValue;
         }
         return null;

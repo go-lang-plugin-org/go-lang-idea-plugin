@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
@@ -28,7 +27,6 @@ import ro.redeul.google.go.util.GoUtil;
 
 import java.util.Arrays;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findChildOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 public class GoCallOrConvExpressionImpl extends GoExpressionBase

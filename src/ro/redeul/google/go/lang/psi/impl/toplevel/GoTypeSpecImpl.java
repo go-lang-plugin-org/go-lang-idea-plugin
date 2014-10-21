@@ -14,6 +14,7 @@ import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -47,7 +48,25 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        if (ResolveStates.get(state, ResolveStates.Key.JustExports) && !GoNamesUtil.isExported(getName()))
+
+        String name = getName();
+        if ( name == null )
+            return true;
+
+        if ( ResolveStates.get(state, ResolveStates.Key.IsPackageBuiltin)) {
+
+            // we check if the builtin type is defined as type name name and we only process them as a declarations
+            GoPsiType type = getType();
+
+            if ( type != null && type instanceof GoPsiTypeName ) {
+                GoPsiTypeName typeName = (GoPsiTypeName) type;
+                if ( ! typeName.getIdentifier().getText().equals(name)) {
+                    return true;
+                }
+            }
+        }
+
+        if (ResolveStates.get(state, ResolveStates.Key.JustExports) && !GoNamesUtil.isExported(name))
             return true;
 
         return processor.execute(this, state);
@@ -60,11 +79,9 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
 
     @Override
     public String getName() {
-        if (getTypeNameDeclaration() == null) {
-            return "";
-        }
+        GoTypeNameDeclaration declaration = getTypeNameDeclaration();
 
-        return getTypeNameDeclaration().getName();
+        return declaration == null ? "" : declaration.getName();
     }
 
     @NotNull

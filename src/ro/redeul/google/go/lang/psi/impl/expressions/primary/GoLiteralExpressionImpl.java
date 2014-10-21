@@ -22,7 +22,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 //import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
-//import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
+//import ro.redeul.google.go.lang.psi.resolve.refs.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.resolve.refs.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.statements.GoForWithRangeAndVarsStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;

@@ -6,7 +6,7 @@ import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
-import ro.redeul.google.go.lang.psi.resolve.MethodOrTypeNameSolver;
+import ro.redeul.google.go.lang.psi.resolve.refs.MethodOrTypeNameSolver;
 import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 

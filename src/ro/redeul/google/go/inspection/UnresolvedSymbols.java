@@ -20,7 +20,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 //import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
-//import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
+//import ro.redeul.google.go.lang.psi.resolve.refs.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;

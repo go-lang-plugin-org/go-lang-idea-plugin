@@ -3,5 +3,5 @@ package main
 import "test"
 
 func main() {
-    println(/*ref*/test.Type(10))
+    println(test./*ref*/Type(10))
 }
