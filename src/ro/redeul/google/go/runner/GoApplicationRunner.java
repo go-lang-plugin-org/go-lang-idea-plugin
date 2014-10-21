@@ -49,7 +49,7 @@ public class GoApplicationRunner extends DefaultProgramRunner {
 
         //Debugging is only available, if it will be built before run
         GoApplicationConfiguration goConfig = (GoApplicationConfiguration)profile;
-        if(DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && goConfig.goBuildBeforeRun) {
+        if(DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && goConfig.runDebugger && goConfig.goBuildBeforeRun) {
             return true;
         }
 

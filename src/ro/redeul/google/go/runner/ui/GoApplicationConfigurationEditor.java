@@ -32,16 +32,18 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
     private RawCommandLineEditor m_debugBuilderArguments;
     private TextFieldWithBrowseButton workingDirectoryBrowser;
     private RawCommandLineEditor envVars;
-	private JTabbedPane tabbedPane1;
-	private JLabel gdbVersionWarning;
-	private TextFieldWithBrowseButton m_gdbPath;
-	private JCheckBox autoStartGdb;
-	private JTextArea m_startupCommands;
+    private JLabel gdbVersionWarning;
+    private TextFieldWithBrowseButton m_gdbPath;
+    private JCheckBox autoStartGdb;
+    private JTextArea m_startupCommands;
     private RawCommandLineEditor m_runBuilderArguments;
     private RawCommandLineEditor m_runExecutableName;
     private JRadioButton goFileRadioButton;
     private JRadioButton goPackageRadioButton;
     private TextFieldWithBrowseButton applicationPackage;
+    private JCheckBox enableDebuggingCheckBox;
+    private JPanel runPanel;
+    private JPanel debugPanel;
 
     @Override
     protected void resetEditorFrom(GoApplicationConfiguration configuration) {
@@ -55,6 +57,7 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
         applicationName.setEnabled(!configuration.runPackage);
         applicationPackage.setEnabled(configuration.runPackage);
         buildBeforeRunCheckBox.setSelected(configuration.goBuildBeforeRun);
+        enableDebuggingCheckBox.setSelected(configuration.runDebugger);
         buildDirectoryPathBrowser.setEnabled(configuration.goBuildBeforeRun);
         buildDirectoryPathBrowser.setText(configuration.goOutputDir);
         workingDirectoryBrowser.setText(configuration.workingDir);
@@ -64,7 +67,8 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
 
         envVars.setText(configuration.envVars);
 
-		//Debug stuff
+        //Debug stuff
+        debugPanel.setEnabled(configuration.runDebugger);
         if (configuration.debugBuilderArguments.isEmpty()) {
             configuration.debugBuilderArguments = "-gcflags \"-N -l\"";
         }
@@ -94,18 +98,21 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
         configuration.runBuilderArguments = m_runBuilderArguments.getText();
         configuration.runExecutableName = m_runExecutableName.getText();
         configuration.goBuildBeforeRun = buildBeforeRunCheckBox.isSelected();
+        configuration.runDebugger = enableDebuggingCheckBox.isSelected();
         configuration.goOutputDir = buildDirectoryPathBrowser.getText();
         configuration.workingDir = workingDirectoryBrowser.getText();
         configuration.envVars = envVars.getText();
 
         //Debug stuff
         String gdbPath = m_gdbPath.getText();
-        if (gdbPath.isEmpty()) {
-            throw new ConfigurationException("Please select the path to gdb.");
-        } else if (!GoGdbUtil.doesExecutableExist(gdbPath) || !GoGdbUtil.isValidGdbPath(gdbPath)){
-            throw new ConfigurationException("Please select a valid path to gdb.");
-        } else {
-            gdbVersionWarning.setVisible(!GoGdbUtil.isKnownGdb(gdbPath));
+        if (enableDebuggingCheckBox.isSelected()) {
+            if (gdbPath.isEmpty()) {
+                throw new ConfigurationException("Please select the path to gdb.");
+            } else if (!GoGdbUtil.doesExecutableExist(gdbPath) || !GoGdbUtil.isValidGdbPath(gdbPath)) {
+                throw new ConfigurationException("Please select a valid path to gdb.");
+            } else {
+                gdbVersionWarning.setVisible(!GoGdbUtil.isKnownGdb(gdbPath));
+            }
         }
 
         configuration.GDB_PATH = m_gdbPath.getText();
@@ -115,26 +122,9 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
     }
 
     public GoApplicationConfigurationEditor(final Project project) {
-
-
         applicationName.getButton().addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-
-                        /*FileChooserDescriptor chooseFileOrDirectory = new FileChooserDescriptor(true, true, false, false, false, false);
-                        VirtualFile file = com.intellij.openapi.fileChooser.FileChooser.chooseFile(chooseFileOrDirectory, project, null);
-
-                        if (file != null) {
-
-                            if (file.getFileType() instanceof GoFileType) {
-                                applicationName.setText(file.getPath());
-                            }
-                            else if (file.isDirectory()) {
-                                String relativePath = new java.io.File(project.getBaseDir().getPath().concat("/src")).toURI().relativize(new java.io.File(file.getPath()).toURI()).getPath();
-                                applicationName.setText(relativePath);
-                            }
-
-                        }*/
 
                         TreeFileChooser fileChooser =
                                 TreeFileChooserFactory.getInstance(project).createFileChooser(
@@ -145,9 +135,8 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
                                                 if (file instanceof GoFile) {
                                                     return ((GoFile) file).getMainFunction() != null;
                                                 }
-                                                else {
-                                                    return false;
-                                                }
+
+                                                return false;
                                             }
                                         }, true, false);
 
@@ -155,7 +144,7 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
 
                         PsiFile selectedFile = fileChooser.getSelectedFile();
                         if (selectedFile != null) {
-                            setChosenFile(selectedFile.getVirtualFile());
+                            applicationName.setText(selectedFile.getVirtualFile().getPath());
                         }
                     }
                 });
@@ -173,6 +162,7 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
             @Override
             public void actionPerformed(ActionEvent e) {
                 buildDirectoryPathBrowser.setEnabled(buildBeforeRunCheckBox.isSelected());
+                enableDebuggingCheckBox.setEnabled(buildBeforeRunCheckBox.isSelected());
             }
         });
 
@@ -194,10 +184,8 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
 
         m_gdbPath.addBrowseFolderListener("GDB executable path", "GDB executable path",
                 project, new FileChooserDescriptor(true, false, false, false, false, false));
-    }
 
-    private void setChosenFile(VirtualFile virtualFile) {
-        applicationName.setText(virtualFile.getPath());
+        debugPanel.setEnabled(enableDebuggingCheckBox.isSelected());
     }
 
     @NotNull
