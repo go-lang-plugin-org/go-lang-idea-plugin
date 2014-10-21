@@ -32,8 +32,7 @@ import java.util.Collection;
  * Time: 2:53:03 PM
  */
 public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoApplicationModuleBasedConfiguration>
-												implements RunConfigurationWithSuppressedDefaultDebugAction, RunConfigurationWithSuppressedDefaultRunAction {
-
+        implements RunConfigurationWithSuppressedDefaultDebugAction, RunConfigurationWithSuppressedDefaultRunAction {
 
 
     public String GDB_PATH = "gdb";
@@ -44,6 +43,7 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
     public String scriptName = "";
     public String packageDir = "";
     public boolean runPackage = false;
+    public boolean runDebugger = false;
     public String scriptArguments = "";
     public String runBuilderArguments = "";
     public String runExecutableName = "";
@@ -122,12 +122,12 @@ public class GoApplicationConfiguration extends ModuleBasedConfiguration<GoAppli
             this.workingDir = project.getBaseDir().getCanonicalPath();
         }
 
-	    //If the user wants to debug the program, we return a different RunProfileState
-	    if(executor.getClass().equals(DefaultDebugExecutor.class)) {
-		    return new GoDebugProfileState(getProject(), env, this);
-	    }
+        //If the user wants to debug the program, we return a different RunProfileState
+        if (executor.getClass().equals(DefaultDebugExecutor.class)) {
+            return new GoDebugProfileState(getProject(), env, this);
+        }
 
-	    //Else run it
+        //Else run it
         CommandLineState state = new GoRunProfileState(getProject(), env, this);
 
         state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(project));
