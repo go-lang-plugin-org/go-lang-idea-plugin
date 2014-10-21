@@ -253,14 +253,27 @@ public class GoSdkUtil {
         sdkData.GO_HOME_PATH = format("%s%sgoroot", path, File.separator);
         sdkData.GO_GOPATH_PATH = getGoPath();
 
-        GeneralCommandLine command = new GeneralCommandLine();
-        if (checkFileExists(sdkData.GO_HOME_PATH + "/bin/go")) {
-            command.setExePath(sdkData.GO_HOME_PATH + "/bin/go");
-            command.withWorkDirectory(sdkData.GO_HOME_PATH + "/bin");
-        } else {
-            command.setExePath(sdkData.GO_HOME_PATH + "/../goapp");
-            command.withWorkDirectory(sdkData.GO_HOME_PATH + "/..");
+        String execName = sdkData.GO_HOME_PATH + "/bin/go";
+        if (isHostOsWindows()) {
+            execName += ".exe";
         }
+        String homePath = sdkData.GO_HOME_PATH + "/bin";
+
+        GeneralCommandLine command = new GeneralCommandLine();
+        if (checkFileExists(execName)) {
+            execName = sdkData.GO_HOME_PATH + "/../goapp";
+            if (isHostOsWindows()) {
+                execName += ".bat";
+            }
+            homePath = sdkData.GO_HOME_PATH + "/..";
+
+            if (!checkFileExists(execName)) {
+                return null;
+            }
+        }
+
+        command.setExePath(execName);
+        command.withWorkDirectory(homePath);
         command.addParameter("env");
 
         sdkData.TARGET_ARCH = GoTargetArch._amd64;
