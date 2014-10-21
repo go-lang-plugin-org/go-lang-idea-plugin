@@ -50,7 +50,8 @@ Go file
                   TypeNameImpl
                     LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('http')
-                      PsiElement(.)('.')
+                    PsiElement(.)('.')
+                    LiteralIdentifierImpl
                       PsiElement(IDENTIFIER)('ResponseWriter')
                 PsiElement(,)(',')
                 PsiWhiteSpace('\n')
@@ -64,7 +65,8 @@ Go file
                     TypeNameImpl
                       LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('http')
-                        PsiElement(.)('.')
+                      PsiElement(.)('.')
+                      LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('Request')
                 PsiElement(,)(',')
                 PsiWhiteSpace('\n')
@@ -78,7 +80,8 @@ Go file
                     TypeNameImpl
                       LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('yqs')
-                        PsiElement(.)('.')
+                      PsiElement(.)('.')
+                      LiteralIdentifierImpl
                         PsiElement(IDENTIFIER)('Queues')
               PsiElement())(')')
               PsiWhiteSpace(' ')
@@ -107,7 +110,8 @@ Go file
               TypeNameImpl
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('template')
-                  PsiElement(.)('.')
+                PsiElement(.)('.')
+                LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('Template')
         PsiWhiteSpace('\n')
         PsiElement(})('}')
