@@ -20,6 +20,7 @@ public class GoProjectSettings implements PersistentStateComponent<GoProjectSett
         public boolean appendSysGoPath = true;
         public boolean goFmtOnSave = true;
         public boolean goimportsOnSave = false;
+        public String goimportsPath = "";
     }
 
     private GoProjectSettingsBean bean;

@@ -94,8 +94,10 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
             return;
         }
 
+        GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(project).getState();
+
         try {
-            String[] command = {GoSdkUtil.getGoImportsExec(), "-w", fileName};
+            String[] command = {GoSdkUtil.getGoImportsExec(settings.goimportsPath), "-w", fileName};
 
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(command, goEnv);

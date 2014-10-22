@@ -1,6 +1,7 @@
 package ro.redeul.google.go.ide.ui;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
+import com.intellij.openapi.options.ConfigurationException;
 import ro.redeul.google.go.ide.GoConfigurableForm;
 import ro.redeul.google.go.ide.GoModuleBuilder;
 import ro.redeul.google.go.ide.GoProjectSettings;
@@ -27,6 +28,10 @@ public class GoModuleWizardProjectSettings extends ModuleWizardStep {
 
     @Override
     public void updateDataModel() {
-        form.apply(this.moduleBuilder.settings);
+        try {
+            form.apply(this.moduleBuilder.settings);
+        } catch (ConfigurationException ignored) {
+
+        }
     }
 }
