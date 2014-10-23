@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.toplevel.*;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 import java.util.HashSet;
@@ -30,13 +31,9 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             }
             @Override
             public void visitIfStatement(GoIfStatement statement){
-                if (statement.getSimpleStatement()!=null){
-                    blockNameStack.push(new HashSet<String>());
-                    super.visitIfStatement(statement);
-                    blockNameStack.pop();
-                }else{
-                    super.visitIfStatement(statement);
-                }
+                blockNameStack.push(new HashSet<String>());
+                super.visitIfStatement(statement);
+                blockNameStack.pop();
             }
             @Override
             public void visitForWithRange(GoForWithRangeStatement statement) {
@@ -52,13 +49,15 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             }
             @Override
             public void visitForWithClauses(GoForWithClausesStatement statement) {
-                if (statement.getInitialStatement()!=null) {
-                    blockNameStack.push(new HashSet<String>());
-                    super.visitForWithClauses(statement);
-                    blockNameStack.pop();
-                }else{
-                    super.visitForWithClauses(statement);
-                }
+                blockNameStack.push(new HashSet<String>());
+                super.visitForWithClauses(statement);
+                blockNameStack.pop();
+            }
+            @Override
+            public void visitInterfaceType(GoPsiTypeInterface type) {
+                blockNameStack.push(new HashSet<String>());
+                super.visitInterfaceType(type);
+                blockNameStack.pop();
             }
 
             @Override

@@ -8,4 +8,6 @@ public class RedeclareInspectionTest extends GoInspectionTestCase {
     public void testGH864() throws Exception{ doTest(); }
 
     public void testGH894() throws Exception{ doTest(); }
+
+    public void testInterface() throws Exception{ doTest(); }
 }
