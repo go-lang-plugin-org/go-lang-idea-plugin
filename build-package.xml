@@ -44,6 +44,10 @@
         <jar jarfile="${basedir}/${go.plugin.name}.jar" update="true">
             <fileset dir="${build}" includes="**/*.*" />
             <fileset dir="${src}" excludes="**/*.java" />
+            <fileset dir="${basedir}/go-ide/resources">
+                <exclude name="goide" />
+                <exclude name="idea" />
+            </fileset>
         </jar>
 
     </target>
