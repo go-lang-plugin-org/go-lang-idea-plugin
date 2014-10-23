@@ -54,11 +54,11 @@ If you are on the contributors list:
 If you are not then fork the repository using the github web interface and do a
 clone of your fork on the local machine.
 
-### Bulding and running the unit tests
+### Building and running the unit tests
 
 In order to build the sources you need to download an IDEA Community version,
 open the project and add the built IDEA artifact as a Idea SDK for the plugin.
-It's also helpfull to add the idea sources to the IDEA SDK as it helps
+It's also helpful to add the idea sources to the IDEA SDK as it helps
 tremendously with debugging.
 
 The steps:
@@ -68,10 +68,10 @@ from here: <http://www.jetbrains.com/idea/>.
 2. Open the copy of google-go-lang-idea-plugin repository (that was previously
 checked out) with it (the default project module config should work with a
 recent IDEA 13 version).
-3. Open the Project Settings (Comamnd + ; on Mac or File -> Project Settings on
+3. Open the Project Settings (Command + ; on Mac or File -> Project Settings on
 other platforms), go to the SDKs entry, click the `+` (and select IntelliJ IDEA
 Plugin SDK) and navigate to the unzipped location of the IDEA build that you
-created before. It will recognize a new IDEA Plugin sdk with the name
+created before. It will recognize a new IDEA Plugin SDK with the name
 `IDEA IC-113.139`. After that you should add the IDEA sources to it by
  selecting the SDK, going to the `Sourcepath` tab, clicking `+` in the lower
  panel and navigating to the checkout out sources of IDEA. Press add, let it
@@ -86,7 +86,7 @@ run and play:
 + `Execute Slave IDEA with plugin` will spawn a new IDEA with the latest version
 of the plugin enabled.
 + `ro.redeul.google.go in google-go-language` will run all the test cases available
-in the project. Please make sure that all the test cases pass before comitting anything
+in the project. Please make sure that all the test cases pass before committing anything
  (or making a pull request).
 
 ### Profit
