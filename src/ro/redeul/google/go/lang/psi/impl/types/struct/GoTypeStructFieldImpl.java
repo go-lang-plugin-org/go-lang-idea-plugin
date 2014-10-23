@@ -4,6 +4,8 @@ import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
@@ -49,6 +51,12 @@ public class GoTypeStructFieldImpl extends GoPsiElementBase implements GoTypeStr
     @Override
     public GoPsiType getType() {
         return findChildByClass(GoPsiType.class);
+    }
+
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
+                                       PsiElement lastParent, @NotNull PsiElement place) {
+        return processor.execute(this, state);
     }
 
     @Override

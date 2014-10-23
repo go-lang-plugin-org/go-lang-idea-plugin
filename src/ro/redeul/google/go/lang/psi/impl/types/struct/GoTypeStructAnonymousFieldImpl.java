@@ -2,6 +2,8 @@ package ro.redeul.google.go.lang.psi.impl.types.struct;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -45,6 +47,11 @@ public class GoTypeStructAnonymousFieldImpl extends GoPsiElementBase implements 
         }
 
         return "";
+    }
+
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+        return processor.execute(this, state);
     }
 
     @Override

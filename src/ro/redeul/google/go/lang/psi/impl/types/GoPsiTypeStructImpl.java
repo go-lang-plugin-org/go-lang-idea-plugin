@@ -2,7 +2,10 @@ package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.PsiElementBase;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -16,6 +19,7 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import java.util.ArrayList;
@@ -52,13 +56,18 @@ public class GoPsiTypeStructImpl extends GoPsiTypeImpl implements
         return new PromotedFieldsDiscover(this).getPromotedFields();
     }
 
-
     @Override
     public GoTypeStructAnonymousField[] getAnonymousFields() {
         return findChildrenByClass(GoTypeStructAnonymousField.class);
     }
 
-//    @Override
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
+                                       PsiElement lastParent, @NotNull PsiElement place) {
+        return PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
+    }
+
+    //    @Override
 //    public GoPsiElement[] getMembers() {
 //        List<GoPsiElement> members = new ArrayList<GoPsiElement>();
 //

@@ -16,6 +16,10 @@ public abstract class ReferenceWithSolver<
         super(element);
     }
 
+    @SuppressWarnings("unchecked")
+    protected E getElementTyped() {
+        return (E)getElement();
+    }
     protected abstract S newSolver();
 
     protected abstract void walkSolver(S solver);
