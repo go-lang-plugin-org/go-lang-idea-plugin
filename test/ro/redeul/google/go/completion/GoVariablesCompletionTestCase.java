@@ -8,38 +8,39 @@ public class GoVariablesCompletionTestCase extends GoCompletionTestCase {
     }
 
     public void testLocalVar() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testEnclosingScopeVar() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testLocalVarVariants() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testLocalVarVariantsCaseInsensitive() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testStructFieldViaChannelExpression() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testMethodReference() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testShortVar() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testVarWithoutType() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testFromDotImportedPackages() throws IOException {
-        doTestVariants();
+        addPackage("test", "test/type1.go", "test/type2.go");
+        _testVariants();
     }
 }

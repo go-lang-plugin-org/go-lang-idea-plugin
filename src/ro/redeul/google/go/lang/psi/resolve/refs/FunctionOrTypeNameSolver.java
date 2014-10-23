@@ -5,8 +5,10 @@ import ro.redeul.google.go.lang.psi.resolve.ReferenceSolvingVisitor;
 import ro.redeul.google.go.lang.psi.resolve.VisitingReferenceSolver;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 
 public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOrTypeNameReference, FunctionOrTypeNameSolver> {
 
@@ -48,7 +50,13 @@ public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOr
                 checkIdentifiers(referenceName(), ids);
             }
 
-//            private boolean checkVarDeclaration(GoShortVarDeclaration declaration) {
+            @Override
+            public void visitFunctionParameter(GoFunctionParameter parameter) {
+                if ( parameter.getType() instanceof GoPsiTypeFunction )
+                    checkIdentifiers(referenceName(), parameter.getIdentifiers());
+            }
+
+            //            private boolean checkVarDeclaration(GoShortVarDeclaration declaration) {
 //                declaration.getIdentifiersType();
 //                return false;
 //            }

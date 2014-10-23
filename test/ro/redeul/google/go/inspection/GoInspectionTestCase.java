@@ -116,7 +116,7 @@ public abstract class GoInspectionTestCase
     protected String processFile(String fileText)
             throws InstantiationException, IllegalAccessException, IOException {
 
-        addBuiltinPackage();
+        addPackageBuiltin();
 
         GoFile file = (GoFile) myFixture.configureByText(GoFileType.INSTANCE,
                                                          fileText);

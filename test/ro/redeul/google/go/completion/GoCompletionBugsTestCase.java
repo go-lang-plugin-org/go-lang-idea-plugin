@@ -8,11 +8,11 @@ public class GoCompletionBugsTestCase extends GoCompletionTestCase{
     }
 
     public void testGH218_MissingTypeSpec() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testGH530_MissingFunctionName() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testGH749() {doTestVariants("net.go");}

@@ -13,10 +13,10 @@ public class GoCompletionEmbeddedInterfaceTestCase extends GoCompletionTestCase 
     }
 
     public void testEmbeddedInterface() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testEmbeddedInterfaceViaPointer() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 }

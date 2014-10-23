@@ -7,3 +7,6 @@ import (
 func foo() {
     defer ne<caret>
 }
+/**---
+net
+new

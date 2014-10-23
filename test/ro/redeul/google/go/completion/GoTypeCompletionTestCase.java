@@ -8,21 +8,23 @@ public class GoTypeCompletionTestCase extends GoCompletionTestCase {
     }
 
     public void testListTypesOnly() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testAlsoListImportedPackages() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testMethodReceiver() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testFromImportedPackages() throws IOException {
-        doTestVariants();
+        addPackage("test", "test/type1.go", "test/type2.go");
+        _testVariants();
     }
     public void testFromDotImportedPackages() throws IOException {
-        doTestVariants();
+        addPackage("test", "test/type1.go", "test/type2.go");
+        _testVariants();
     }
 }

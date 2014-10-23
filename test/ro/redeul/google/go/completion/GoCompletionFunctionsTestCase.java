@@ -8,14 +8,14 @@ public class GoCompletionFunctionsTestCase extends GoCompletionTestCase{
     }
 
     public void testLocalFunctionVariants() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testFunctionParameterType() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testInterfaceFunctionParameterType() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 }

@@ -133,10 +133,10 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
         doTest();
     }
 //    public void testConversionToLocallyImportedType() throws Exception {
-//        doTest();
+//        _testSingleCompletion();
 //    }
 //
 //    public void testNoConversionToBlankImportedType() throws Exception {
-//        doTest();
+//        _testSingleCompletion();
 //    }
 }

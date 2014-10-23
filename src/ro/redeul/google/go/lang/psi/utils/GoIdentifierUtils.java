@@ -3,16 +3,15 @@ package ro.redeul.google.go.lang.psi.utils;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
 
 public class GoIdentifierUtils {
-    private static final ElementPattern FUNCTION_DECLARATION_PATTERN =
-            psiElement(GoLiteralIdentifier.class)
-                    .withParent(
-                            psiElement(GoFunctionDeclaration.class));
+    private static final ElementPattern FUNCTION_DECLARATION_PATTERN = psiElement(GoFunctionDeclaration.class);
 
     private static boolean isFunctionDeclarationIdentifier(@Nullable PsiElement identifier) {
         return FUNCTION_DECLARATION_PATTERN.accepts(identifier);
@@ -20,20 +19,17 @@ public class GoIdentifierUtils {
 
     @Nullable
     public static GoFunctionDeclaration getFunctionDeclaration(@Nullable PsiElement identifier) {
-        if (!(identifier instanceof GoLiteralIdentifier)) {
+
+        if (!(identifier instanceof GoPsiElement))
             return null;
-        }
+
+        GoPsiElement goPsiElement =  (GoPsiElement) identifier;
 
         // If the identifier is not definition identifier of function, try to resolve it.
-        if (!isFunctionDeclarationIdentifier(identifier)) {
-            identifier = GoPsiUtils.resolveSafely(identifier, PsiElement.class);
+        if (!isFunctionDeclarationIdentifier(goPsiElement)) {
+            goPsiElement = GoPsiUtils.resolveSafely(goPsiElement, GoPsiElement.class);
         }
 
-        if (identifier == null || !isFunctionDeclarationIdentifier(identifier)) {
-            return null;
-        }
-
-        PsiElement parent = identifier.getParent();
-        return parent instanceof GoFunctionDeclaration ? (GoFunctionDeclaration) parent : null;
+        return getAs(GoFunctionDeclaration.class, goPsiElement);
     }
 }

@@ -11,26 +11,26 @@ public class GoGeneralCompletionTestCase extends GoCompletionTestCase{
     }
 
     public void testHandleNewBuiltinFunction() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testHandleComplexBuiltinFunction() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testHandleRealBuiltinFunction() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testHandleMakeBuiltinFunction() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testBuiltinFunctionsAtStatementLevel() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testBuiltinFunctionsAtExpressionLevel() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 }

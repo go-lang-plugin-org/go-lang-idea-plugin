@@ -5,6 +5,8 @@ import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -28,9 +30,20 @@ public abstract class GoLightCodeInsightFixtureTestCase
         return (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
     }
 
-    protected void addBuiltinPackage() throws IOException {
-        String builtinContent = FileUtil.loadFile(new File(testDataRoot + "builtin/builtin.go"));
-        myFixture.addFileToProject("builtin/builtin.go", builtinContent);
+    protected void addPackage(String importPath, String ... files) throws IOException {
+        for (String file : files) {
+            VirtualFile virtualFile = VfsUtil.findFileByIoFile(new File(getBasePath() + "/" + file), true);
+            if (virtualFile == null)
+                continue;
+
+            myFixture.addFileToProject(
+                    FileUtil.toCanonicalPath(importPath + "/" + virtualFile.getName()),
+                    VfsUtil.loadText(virtualFile));
+        }
+    }
+
+    protected void addPackageBuiltin() throws IOException {
+        addPackage("builtin", "../../../builtin/builtin.go");
     }
 
     @Override

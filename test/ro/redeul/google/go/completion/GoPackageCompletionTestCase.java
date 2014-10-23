@@ -9,50 +9,62 @@ public class GoPackageCompletionTestCase extends GoCompletionTestCase {
     }
 
     public void testPackageInTypeDeclaration() throws IOException {
-        doTestVariants("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInExpression() throws IOException {
-        doTestVariants("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInFunctionParameter1() throws IOException {
-        doTestVariants("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInFunctionParameter2() throws IOException {
-        doTestVariants("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInAssignment1() throws IOException {
-        doTestVariants("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInAssignment2() throws IOException {
-        doTestVariants("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInReturnStatement() throws IOException {
-        doTestVariants("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInGoStatement() throws IOException {
-        doTest("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInDeferStatement() throws IOException {
-        doTest("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInFunctionParameterType() throws IOException {
-        doTestVariants("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInFunctionResultType() throws IOException {
-        doTestVariants("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
     public void testPackageInVarDeclaration() throws IOException {
-        doTestVariants("net.go");
+        addPackage("net", "net.go");
+        _testVariants();
     }
 }

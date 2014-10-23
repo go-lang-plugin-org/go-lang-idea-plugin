@@ -287,10 +287,10 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
         }
 
         if (VarOrConstReference.MATCHER.accepts(this)) {
-            if (PackageReference.MATCHER.accepts(this))
+//            if (PackageReference.MATCHER.accepts(this))
                 return new PsiReference[]{new VarOrConstReference(this), new PackageReference(this)};
-            else
-                return new PsiReference[]{new VarOrConstReference(this)};
+//            else
+//                return new PsiReference[]{new VarOrConstReference(this)};
         }
 
         if (psiElement(GoLiteralIdentifier.class).insideStarting(psiElement(GoPsiTypeName.class)).accepts(this)) {

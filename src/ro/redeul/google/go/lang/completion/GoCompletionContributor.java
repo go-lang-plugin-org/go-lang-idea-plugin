@@ -255,15 +255,15 @@ public class GoCompletionContributor extends CompletionContributor {
                 result.addElement(
                         keyword("defer"));
 
-                for (String builtin : BULTINS_WITHOUT_RETURN) {
-                    result.addElement(
-                            builtinFunc(builtin, new FunctionInsertHandler()));
-                }
-
-                for (String builtin : BULTINS_WITH_RETURN) {
-                    result.addElement(
-                            builtinFunc(builtin, new FunctionInsertHandler()));
-                }
+//                for (String builtin : BULTINS_WITHOUT_RETURN) {
+//                    result.addElement(
+//                            builtinFunc(builtin, new FunctionInsertHandler()));
+//                }
+//
+//                for (String builtin : BULTINS_WITH_RETURN) {
+//                    result.addElement(
+//                            builtinFunc(builtin, new FunctionInsertHandler()));
+//                }
 
                 addPackageAutoCompletion(parameters, result);
             }
@@ -335,21 +335,22 @@ public class GoCompletionContributor extends CompletionContributor {
                 }
             }
         };
-        extend(CompletionType.BASIC,
-               psiElement().withParent(
-                   psiElement(GoLiteralIdentifier.class).withParent(
-                       psiElement(GoLiteralExpression.class).withParent(
-                           not(or(
-                               psiElement(GoExpressionStatement.class),
 
-                               // No builtin function is appropriate for go/defer statement.
-                               psiElement(GoGoStatement.class),
-                               psiElement(GoDeferStatement.class)
-                           ))
-                       )
-                   )
-               ),
-                builtinFunctionsCompletionProvider);
+//        extend(CompletionType.BASIC,
+//               psiElement().withParent(
+//                   psiElement(GoLiteralIdentifier.class).withParent(
+//                       psiElement(GoLiteralExpression.class).withParent(
+//                           not(or(
+//                               psiElement(GoExpressionStatement.class),
+//
+//                               // No builtin function is appropriate for go/defer statement.
+//                               psiElement(GoGoStatement.class),
+//                               psiElement(GoDeferStatement.class)
+//                           ))
+//                       )
+//                   )
+//               ),
+//                builtinFunctionsCompletionProvider);
 
         CompletionProvider<CompletionParameters> typeDeclarationCompletionProvider = new CompletionProvider<CompletionParameters>() {
             @Override
@@ -361,9 +362,9 @@ public class GoCompletionContributor extends CompletionContributor {
                 result.addElement(
                         keyword("struct", new CurlyBracesInsertHandler()));
 
-                for (GoTypes.Builtin builtin : GoTypes.Builtin.values()) {
-                    result.addElement(keyword(builtin.name().toLowerCase(), null));
-                }
+//                for (GoTypes.Builtin builtin : GoTypes.Builtin.values()) {
+//                    result.addElement(keyword(builtin.name().toLowerCase(), null));
+//                }
             }
 
             private KeywordInsertionHandler createInterfaceInsertionHandler(CompletionParameters params) {

@@ -8,6 +8,6 @@ public class GoMethodsCompletionTestCase extends GoCompletionTestCase{
     }
 
     public void testLocalInheritedMethodsVariants() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 }

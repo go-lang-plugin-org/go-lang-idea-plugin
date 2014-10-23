@@ -1,5 +1,6 @@
 package ro.redeul.google.go;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.intellij.openapi.application.ApplicationManager;
@@ -29,8 +30,10 @@ public abstract class GoEditorAwareTestCase
                                 GoTestUtils.MARKER_CARET)));
     }
 
-    private String processFile(String fileText, boolean addCaretMarker) {
+    private String processFile(String fileText, boolean addCaretMarker) throws IOException {
+        addPackageBuiltin();
         final GoFile goFile = createGoFile(fileText);
+
         final Editor myEditor = myFixture.getEditor();
         CodeStyleSettings settings =
                 CodeStyleSettingsManager.getInstance(getProject()).getCurrentSettings();

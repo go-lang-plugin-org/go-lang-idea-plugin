@@ -8,42 +8,42 @@ public class GoBasicCompletionTestCase extends GoCompletionTestCase {
     }
 
     public void testTypeInterfaceCompletion() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testTypeStructCompletion() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testTopLevelConstDeclaration() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testTopLevelVarDeclaration() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testPackage() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testPackageInside() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testImportDeclaration() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testImportedPackages() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testReturnCompletion() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testReturnCompletionWithOneResult() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 }

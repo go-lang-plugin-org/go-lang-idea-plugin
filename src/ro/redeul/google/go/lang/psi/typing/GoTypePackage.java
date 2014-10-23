@@ -23,7 +23,7 @@ public class GoTypePackage implements GoType {
 
     @Override
     public void accept(Visitor visitor) {
-
+        visitor.visitPackage(this);
     }
 
     public GoPackage getPackage() {

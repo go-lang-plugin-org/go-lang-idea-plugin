@@ -8,38 +8,38 @@ public class GoStructCompletionTestCase extends GoCompletionTestCase{
     }
 
     public void testStructMembers() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testAnonymousStructMembers() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testPromotedFieldStructMembers() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testMembersOfAnonymousField() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testMemberOfTypePointerCompletion() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testPromotedFields() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testRecursiveFields() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testMethodsOfTypePointerCompletion() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testPublicStructMemberFromImported() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 }

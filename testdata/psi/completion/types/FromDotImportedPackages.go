@@ -5,8 +5,6 @@ import . "test"
 type T <caret>
 /**---
 T
-Type1
-Type2
 bool
 byte
 complex128
@@ -19,14 +17,15 @@ int16
 int32
 int64
 int8
-interface
 rune
 string
-struct
-test
+Type1
+Type2
 uint
 uint16
 uint32
 uint64
 uint8
 uintptr
+interface
+struct

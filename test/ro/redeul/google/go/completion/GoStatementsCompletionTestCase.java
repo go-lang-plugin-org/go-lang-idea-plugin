@@ -7,63 +7,63 @@ public class GoStatementsCompletionTestCase extends GoCompletionTestCase {
         return super.getTestDataRelativePath() + "statements";
     }
 
-    public void testConstDeclaration() throws IOException { doTest(); }
+    public void testConstDeclaration() throws IOException { _testSingleCompletion(); }
 
-    public void testVarDeclaration() throws IOException { doTest(); }
+    public void testVarDeclaration() throws IOException { _testSingleCompletion(); }
 
-    public void testSwitch() throws IOException { doTest(); }
+    public void testSwitch() throws IOException { _testSingleCompletion(); }
 
     public void testFor() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testIf() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
-    public void testGo() throws IOException { doTest(); }
+    public void testGo() throws IOException { _testSingleCompletion(); }
 
-    public void testGoFunc() throws IOException { doTest(); }
+    public void testGoFunc() throws IOException { _testSingleCompletion(); }
 
-    public void testDefer() throws IOException { doTest(); }
+    public void testDefer() throws IOException { _testSingleCompletion(); }
 
     public void testDeferFunc() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testSelect() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testContinue() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testBreak() throws IOException {
-        doTest();
+        _testSingleCompletion();
     }
 
     public void testFieldsViaForRangeWithArray() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testFieldsViaForRangeWithArrayPointer() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testFieldsViaForRangeWithSlice() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testMapKeyViaForRange() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testMapValueViaForRange() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 
     public void testChannelTypeViaForRange() throws IOException {
-        doTestVariants();
+        _testVariants();
     }
 }
