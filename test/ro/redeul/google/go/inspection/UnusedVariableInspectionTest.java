@@ -57,7 +57,7 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
     public void testIssue438() throws Exception {
         doTestWithDirectory();
     }
-    public void testGH865() throws Exception {
+    public void testIssue865() throws Exception {
         doTest();
     }
     */
