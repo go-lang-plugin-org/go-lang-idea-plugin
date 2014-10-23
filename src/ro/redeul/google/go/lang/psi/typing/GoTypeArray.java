@@ -41,6 +41,6 @@ public class GoTypeArray extends GoAbstractType<GoUnderlyingTypeArray> implement
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitTypeArray(this);
+        visitor.visitArray(this);
     }
 }

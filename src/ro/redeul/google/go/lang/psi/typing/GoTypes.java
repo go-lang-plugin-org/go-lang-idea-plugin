@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import com.intellij.util.Function;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -25,16 +26,19 @@ public class GoTypes {
                     "float(32|64)|" +
                     "complex(64|128)");
 
+    @Nullable
     public static <T extends GoType> T resolveTo(GoType type, Class<T> targetType) {
-        while (type != null && type != GoType.Unknown && !targetType.isAssignableFrom(type.getClass())) {
-            if (type instanceof GoTypeName) {
-                type = ((GoTypeName) type).getDefinition();
+
+        GoType target = type;
+        while (target != null && target != GoType.Unknown && !targetType.isAssignableFrom(target.getClass())) {
+            if (target instanceof GoTypeName) {
+                target = ((GoTypeName) target).getDefinition();
             } else {
-                type = GoType.Unknown;
+                target = GoType.Unknown;
             }
         }
 
-        return targetType.cast(type);
+        return (target != null && targetType.isAssignableFrom(target.getClass())) ? targetType.cast(target) : null;
     }
 
     public static GoTypeInterface resolveToInterface(GoPsiTypeName typeName) {
@@ -104,6 +108,13 @@ public class GoTypes {
         }
 
         return types;
+    }
+
+    public static <T> T visitFirstType(GoType[] types, GoType.Visitor<T> visitor) {
+        if ( types != null && types.length >= 1 && types[0] != null)
+            visitor.visit(types[0]);
+
+        return visitor.getData();
     }
 
     private static class GoTypeMakerVisitor extends GoElementVisitorWithData<GoType> {
@@ -176,20 +187,16 @@ public class GoTypes {
         return resolveToStruct(fromPsiType(type));
     }
 
-    public static GoTypeStruct resolveToStruct(GoType type) {
-        while (type != null && !(type instanceof GoTypeStruct)) {
-            if (type instanceof GoTypePointer) {
-                type = ((GoTypePointer) type).getTargetType();
-            } else if (type instanceof GoTypeName) {
-                type = ((GoTypeName) type).getDefinition();
-            } else {
-                type = null;
-            }
-        }
+    public static GoTypeStruct resolveToStruct(@Nullable GoType type) {
+        return new GoType.Visitor<GoTypeStruct>() {
+            @Override
+            public void visitStruct(GoTypeStruct type) { setData(type); }
 
-        if (type == null)
-            return null;
+            @Override
+            public void visitName(GoTypeName type) { visit(type.getDefinition()); }
 
-        return (GoTypeStruct) type;
+            @Override
+            public void visitPointer(GoTypePointer type) { visit(type.getTargetType()); }
+        }.visit(type);
     }
 }

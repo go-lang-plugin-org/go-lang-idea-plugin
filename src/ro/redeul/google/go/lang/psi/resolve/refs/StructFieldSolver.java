@@ -25,21 +25,18 @@ public class StructFieldSolver extends VisitingReferenceSolver<StructFieldRefere
             @Override
             public void visitStructType(GoPsiTypeStruct type) {
                 for (GoTypeStructField structField : type.getFields()) {
-                    checkIdentifiers(referenceName(), structField.getIdentifiers());
+                    structField.accept(this);
                 }
 
                 for (GoTypeStructAnonymousField anonymousField : type.getAnonymousFields()) {
-                    if ( matchNames(referenceName(), anonymousField.getFieldName()))
-                        addTarget(anonymousField);
+                    anonymousField.accept(this);
                 }
 
                 GoTypeStructPromotedFields promotedFields = type.getPromotedFields();
-
                 checkIdentifiers(referenceName(), promotedFields.getNamedFields());
 
                 for (GoTypeStructAnonymousField anonymousField : promotedFields.getAnonymousFields()) {
-                    if(matchNames(referenceName(), anonymousField.getFieldName()))
-                        addTarget(anonymousField);
+                    anonymousField.accept(this);
                 }
             }
         });

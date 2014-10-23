@@ -8,16 +8,15 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 
-public class MethodOrTypeNameSolver extends VisitingReferenceSolver<MethodOrTypeNameReference, MethodOrTypeNameSolver> {
+public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOrTypeNameReference, FunctionOrTypeNameSolver> {
 
     @Override
-    public MethodOrTypeNameSolver self() { return this; }
+    public FunctionOrTypeNameSolver self() { return this; }
 
-    public MethodOrTypeNameSolver(MethodOrTypeNameReference reference) {
+    public FunctionOrTypeNameSolver(FunctionOrTypeNameReference reference) {
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
             @Override
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-                System.out.println("Declaration: " + declaration);
                 if (isReferenceTo(declaration))
                     addTarget(declaration);
             }
@@ -28,16 +27,6 @@ public class MethodOrTypeNameSolver extends VisitingReferenceSolver<MethodOrType
 
             @Override
             public void visitTypeSpec(GoTypeSpec type) {
-
-//                if (ResolveStates.get(getState(), ResolveStates.Key.IsPackageBuiltin)) {
-//                    String typeName = type.getName();
-//                    GoPsiType typeDeclaration = type.getType();
-//                    if (typeName != null && typeDeclaration != null) {
-//                        if (!typeName.equals(typeDeclaration.getText()))
-//                            return;
-//                    }
-//                }
-
                 if (isReferenceTo(type.getTypeNameDeclaration()))
                     addTarget(type);
             }

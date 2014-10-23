@@ -168,9 +168,9 @@ public class GoCompletionContributor extends CompletionContributor {
     @SuppressWarnings("unchecked")
     public GoCompletionContributor() {
 
-        extend(CompletionType.BASIC,
-               psiElement(),
-               debuggingCompletionProvider);
+//        extend(CompletionType.BASIC,
+//               psiElement(),
+//               debuggingCompletionProvider);
 
         CompletionProvider<CompletionParameters> packageCompletionProvider = new CompletionProvider<CompletionParameters>() {
             @Override

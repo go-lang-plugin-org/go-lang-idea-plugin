@@ -33,19 +33,16 @@ public class ShortVarSolver extends VisitingReferenceSolver<ShortVarReference, S
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
             @Override
             public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
-                System.out.println("Declaration: " + declaration);
                 super.visitShortVarDeclaration(declaration);
             }
 
             @Override
             public void visitVarDeclaration(GoVarDeclaration declaration) {
-                System.out.println("Declaration: " + declaration);
                 super.visitVarDeclaration(declaration);
             }
 
             @Override
             public void visitFunctionParameter(GoFunctionParameter parameter) {
-                System.out.println("Declaration: " + parameter);
                 super.visitFunctionParameter(parameter);
             }
         });

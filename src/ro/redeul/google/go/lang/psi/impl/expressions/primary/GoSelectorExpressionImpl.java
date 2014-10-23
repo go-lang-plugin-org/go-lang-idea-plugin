@@ -48,7 +48,14 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
                 new Function<GoSelectorExpression, GoType[]>() {
                     @Override
                     public GoType[] fun(GoSelectorExpression expression) {
-                        PsiElement target = resolveSafely(GoSelectorExpressionImpl.this, PsiElement.class);
+                        PsiElement target = resolveSafely(getIdentifier(), PsiElement.class);
+
+                        if (target instanceof GoFunctionDeclaration) {
+                            GoFunctionDeclaration functionDeclaration = (GoFunctionDeclaration) target;
+                            return new GoType[]{
+                                    GoTypes.fromPsiType(functionDeclaration)
+                            };
+                        }
 
                         if (target != null &&
                                 target.getParent() instanceof GoTypeStructField) {

@@ -16,10 +16,12 @@ public abstract class ReferenceWithSolver<
         super(element);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    protected E getElementTyped() {
-        return (E)getElement();
+    public E getElement() {
+        return (E)super.getElement();
     }
+
     protected abstract S newSolver();
 
     protected abstract void walkSolver(S solver);

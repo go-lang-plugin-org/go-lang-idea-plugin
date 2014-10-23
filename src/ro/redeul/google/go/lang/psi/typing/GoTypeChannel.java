@@ -26,7 +26,7 @@ public class GoTypeChannel extends GoTypePsiBacked<GoPsiTypeChannel, GoUnderlyin
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitTypeChannel(this);
+        visitor.visitChannel(this);
     }
 
     public GoType getElementType() {

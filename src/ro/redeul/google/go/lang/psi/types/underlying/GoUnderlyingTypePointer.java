@@ -23,4 +23,9 @@ public class GoUnderlyingTypePointer implements GoUnderlyingType {
 
         return false;
     }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitPointer(this);
+    }
 }

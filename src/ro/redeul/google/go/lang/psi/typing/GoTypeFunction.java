@@ -20,5 +20,6 @@ public class GoTypeFunction
 
     @Override
     public void accept(Visitor visitor) {
+        visitor.visitFunction(this);
     }
 }

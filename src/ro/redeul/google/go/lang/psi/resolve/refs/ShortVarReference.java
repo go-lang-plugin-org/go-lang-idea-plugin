@@ -1,14 +1,10 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
 import com.intellij.patterns.ElementPattern;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceWithSolver;
-import ro.redeul.google.go.lang.psi.resolve.ResolvingCache;
-import ro.redeul.google.go.lang.psi.resolve.references.Reference;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 

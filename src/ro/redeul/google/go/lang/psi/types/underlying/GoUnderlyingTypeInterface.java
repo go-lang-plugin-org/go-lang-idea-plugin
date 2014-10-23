@@ -5,4 +5,9 @@ public class GoUnderlyingTypeInterface implements GoUnderlyingType {
     public boolean isIdentical(GoUnderlyingType other) {
         return false;
     }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitInterface(this);
+    }
 }

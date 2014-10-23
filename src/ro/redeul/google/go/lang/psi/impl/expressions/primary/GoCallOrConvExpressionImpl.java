@@ -7,20 +7,13 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.util.GoUtil;
@@ -37,58 +30,69 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-        PsiElement reference = resolveSafely(getBaseExpression(), PsiElement.class);
-        if (reference != null) {
+        GoType baseCallType[] = getBaseExpression().getType();
 
-            PsiElement parent = reference.getParent();
-            if (parent instanceof GoMethodDeclaration) {
-                GoMethodDeclaration declaration = (GoMethodDeclaration) parent;
-                return GoTypes.fromPsiType(declaration.getReturnType());
+        return GoTypes.visitFirstType(baseCallType, new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+            @Override
+            public void visitFunction(GoTypeFunction type) {
+                setData(GoUtil.getFuncCallTypes(type.getPsiType()));
             }
+        });
 
-            if (parent instanceof GoFunctionDeclaration) {
-                GoFunctionDeclaration declaration = (GoFunctionDeclaration) parent;
-                return GoTypes.fromPsiType(declaration.getReturnType());
-            }
+//
+//
+//        PsiElement reference = resolveSafely(getBaseExpression(), PsiElement.class);
+//        if (reference != null) {
+//
+//            PsiElement parent = reference.getParent();
+//            if (parent instanceof GoMethodDeclaration) {
+//                GoMethodDeclaration declaration = (GoMethodDeclaration) parent;
+//                return GoTypes.fromPsiType(declaration.getReturnType());
+//            }
+//
+//            if (parent instanceof GoFunctionDeclaration) {
+//                GoFunctionDeclaration declaration = (GoFunctionDeclaration) parent;
+//                return GoTypes.fromPsiType(declaration.getReturnType());
+//            }
+//
+//            if (parent instanceof GoVarDeclaration) {
+//
+//                GoLiteralIdentifier[] identifiers = ((GoVarDeclaration) parent).getIdentifiers();
+//                int i;
+//                for (i = 0; i < identifiers.length; i++) {
+//                    if (identifiers[i].getText().equals(getBaseExpression().getText())) {
+//                        break;
+//                    }
+//                }
+//                if (i < identifiers.length)
+//                    return resolveVarTypes((GoVarDeclaration) parent, identifiers[i], i);
+//
+//            }
+//        }
+//
+//        GoPrimaryExpression baseExpression = this.getBaseExpression();
+//        if (baseExpression instanceof GoParenthesisedExpression) {
+//            GoType[] types = getBaseExpression().getType();
+//            if (types.length != 0) {
+//                GoType type = types[0];
+//                if (type != null) {
+//                    if (type instanceof GoTypePsiBacked) {
+//                        GoPsiType psiType = ((GoTypePsiBacked) type).getPsiType();
+//                        psiType = GoTypeUtils.resolveToFinalType(psiType);
+//                        if (psiType instanceof GoPsiTypeFunction) {
+//                            return GoUtil.getFuncCallTypes((GoPsiTypeFunction) psiType);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        if (baseExpression instanceof GoLiteralExpression
+//                && ((GoLiteralExpression) baseExpression).getLiteral() instanceof GoLiteralFunction) {
+//            return GoUtil.getFuncCallTypes((GoPsiTypeFunction) ((GoLiteralExpression) baseExpression).getLiteral());
+//        }
 
-            if (parent instanceof GoVarDeclaration) {
-
-                GoLiteralIdentifier[] identifiers = ((GoVarDeclaration) parent).getIdentifiers();
-                int i;
-                for (i = 0; i < identifiers.length; i++) {
-                    if (identifiers[i].getText().equals(getBaseExpression().getText())) {
-                        break;
-                    }
-                }
-                if (i < identifiers.length)
-                    return resolveVarTypes((GoVarDeclaration) parent, identifiers[i], i);
-
-            }
-        }
-
-        GoPrimaryExpression baseExpression = this.getBaseExpression();
-        if (baseExpression instanceof GoParenthesisedExpression) {
-            GoType[] types = getBaseExpression().getType();
-            if (types.length != 0) {
-                GoType type = types[0];
-                if (type != null) {
-                    if (type instanceof GoTypePsiBacked) {
-                        GoPsiType psiType = ((GoTypePsiBacked) type).getPsiType();
-                        psiType = GoTypeUtils.resolveToFinalType(psiType);
-                        if (psiType instanceof GoPsiTypeFunction) {
-                            return GoUtil.getFuncCallTypes((GoPsiTypeFunction) psiType);
-                        }
-                    }
-                }
-            }
-        }
-
-        if (baseExpression instanceof GoLiteralExpression
-                && ((GoLiteralExpression) baseExpression).getLiteral() instanceof GoLiteralFunction) {
-            return GoUtil.getFuncCallTypes((GoPsiTypeFunction) ((GoLiteralExpression) baseExpression).getLiteral());
-        }
-
-        return GoType.EMPTY_ARRAY;
+//        return GoType.EMPTY_ARRAY;
     }
 
     private GoType[] resolveVarTypes(GoVarDeclaration parent, GoLiteralIdentifier identifier, int i) {

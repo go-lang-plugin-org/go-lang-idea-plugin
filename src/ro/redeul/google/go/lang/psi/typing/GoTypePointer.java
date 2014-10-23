@@ -23,7 +23,7 @@ public class GoTypePointer extends GoAbstractType<GoUnderlyingTypePointer> imple
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitTypePointer(this);
+        visitor.visitPointer(this);
     }
 
     @Override

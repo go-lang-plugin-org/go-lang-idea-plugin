@@ -30,7 +30,7 @@ public class GoTypeSlice extends GoTypePsiBacked<GoPsiTypeSlice, GoUnderlyingTyp
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitTypeSlice(this);
+        visitor.visitSlice(this);
     }
 
     public GoType getElementType() {
