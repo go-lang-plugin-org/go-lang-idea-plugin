@@ -9,4 +9,3 @@ var v = ne<caret>
 /**---
 net
 new
-rune
