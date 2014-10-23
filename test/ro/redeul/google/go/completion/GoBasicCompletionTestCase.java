@@ -36,6 +36,7 @@ public class GoBasicCompletionTestCase extends GoCompletionTestCase {
     }
 
     public void testImportedPackages() throws IOException {
+        addPackage("fmt", "fmt.go");
         _testVariants();
     }
 
