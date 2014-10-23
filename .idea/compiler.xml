@@ -8,7 +8,6 @@
     <excludeFromCompile>
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/TypeNameDeclarationReference.java" />
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/ImportReference.java" />
-      <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/SelectorOfStructFieldReference.java" />
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/LabelReference.java" />
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/InterfaceMethodReference.java" />
       <file url="file://$PROJECT_DIR$/src/ro/redeul/google/go/lang/psi/resolve/references/BuiltinCallOrConversionReference.java" />

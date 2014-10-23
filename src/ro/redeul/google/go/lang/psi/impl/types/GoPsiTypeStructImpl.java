@@ -64,7 +64,7 @@ public class GoPsiTypeStructImpl extends GoPsiTypeImpl implements
     @Override
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
                                        PsiElement lastParent, @NotNull PsiElement place) {
-        return PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
+        return processor.execute(this, state);
     }
 
     //    @Override
@@ -129,7 +129,7 @@ public class GoPsiTypeStructImpl extends GoPsiTypeImpl implements
                 vector.add(element);
             }
         }
-        return vector.toArray(new GoPsiElement[vector.size()]);
+        return vector.toArray(new PsiElement[vector.size()]);
     }
 
     @Override
