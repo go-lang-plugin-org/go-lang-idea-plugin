@@ -13,7 +13,6 @@ import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
-import ro.redeul.google.go.lang.psi.resolve.references.*;
 import ro.redeul.google.go.lang.psi.resolve.refs.PackageSymbolReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;

@@ -2,6 +2,8 @@ package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.patterns.ElementPattern;
+import com.intellij.patterns.PlatformPatterns;
+import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -224,6 +226,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
             return new PsiReference[]{new StructFieldReference(this, typeStruct)};
         }
 
+        //noinspection unchecked
         if (psiElement()
                 .withParent(
                         psiElement(GoLiteralExpression.class)

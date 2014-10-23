@@ -109,7 +109,7 @@ class PrimaryExpression implements GoElementTypes {
 
             if (parseLiteralIdentifier(builder, parser)) {
                 // package? '.' ident '{' -> CompositeLiteral
-                if (builder.getTokenType() == pLCURLY) {
+                if (ParserUtils.lookAhead(builder, pLCURLY) || ParserUtils.lookAhead(builder, oDOT, mIDENT, pLCURLY)) {
                     if ( parser.isSet(GoParser.ParsingFlag.AllowCompositeLiteral)) {
                         if (parseLiteralComposite(builder, parser, mark)) {
                             return true;
@@ -427,20 +427,18 @@ class PrimaryExpression implements GoElementTypes {
         if (!ParserUtils.getToken(builder, mIDENT))
             return false;
 
-        if ( identifier != null) {
-            identifier = identifier.replaceAll(GoCompletionContributor.DUMMY_IDENTIFIER, "");
-        }
+//        if ( identifier != null) {
+//            identifier = identifier.replaceAll(GoCompletionContributor.DUMMY_IDENTIFIER, "");
+//        }
 
-        if (parser.isPackageName(identifier) &&
-            ParserUtils.lookAhead(builder, oDOT)) {
-            ParserUtils.getToken(builder, oDOT);
-            if (ParserUtils.lookAhead(builder, mIDENT)) {
-                ParserUtils.getToken(builder, mIDENT);
-            } else {
-                builder.error(GoBundle.message("identifier.expected"));
-            }
-
-        }
+//        if (ParserUtils.lookAhead(builder, oDOT, mIDENT)) {
+//            ParserUtils.getToken(builder, oDOT);
+//            if (ParserUtils.lookAhead(builder, mIDENT)) {
+//                ParserUtils.getToken(builder, mIDENT);
+//            } else {
+//                builder.error(GoBundle.message("identifier.expected"));
+//            }
+//        }
 
         mark.done(GoElementTypes.LITERAL_IDENTIFIER);
         return true;
