@@ -182,11 +182,6 @@ public class GoGlobalConfigurableForm {
             return "";
         }
 
-        if (!(new File(goPathStr.concat("/bin")).exists())) {
-            Messages.showErrorDialog("Error while saving your settings. \nGOPATH/bin doesn't exists.", "Error on Google Go Plugin");
-            return "";
-        }
-
         String goExecName = GoSdkUtil.isHostOsWindows() ? "/bin/go.exe" : "/bin/go";
         if (new File(goPathStr.concat(goExecName)).exists()) {
             Messages.showErrorDialog("Error while saving your settings. \nGOPATH/bin/go exists. Are you sure this is not GOROOT?", "Error on Google Go Plugin");
