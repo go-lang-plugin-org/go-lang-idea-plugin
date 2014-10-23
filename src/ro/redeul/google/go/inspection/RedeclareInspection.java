@@ -2,6 +2,7 @@ package ro.redeul.google.go.inspection;
 
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.DebugUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -9,6 +10,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
+import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
@@ -17,11 +19,11 @@ import java.util.HashSet;
 import java.util.Stack;
 
 public class RedeclareInspection extends AbstractWholeGoFileInspection {
-    private Stack<HashSet<String>> blockNameStack = new Stack<HashSet<String>>();
-    private HashSet<String> methodNameSet = new HashSet<String>();
     @Override
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
+            private Stack<HashSet<String>> blockNameStack = new Stack<HashSet<String>>();
+            private HashSet<String> methodNameSet = new HashSet<String>();
             @Override
             public void visitFile(GoFile file) {
                 blockNameStack.push(new HashSet<String>());
@@ -29,7 +31,16 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                 super.visitFile(file);
                 blockNameStack.pop();
             }
-
+            @Override
+            public void visitIfStatement(GoIfStatement statement){
+                if (statement.getSimpleStatement()!=null){
+                    blockNameStack.push(new HashSet<String>());
+                    super.visitIfStatement(statement);
+                    blockNameStack.pop();
+                }else{
+                    super.visitIfStatement(statement);
+                }
+            }
             @Override
             public void visitBlockStatement(GoBlockStatement statement) {
                 blockNameStack.push(new HashSet<String>());
@@ -99,17 +110,17 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                             ProblemHighlightType.GENERIC_ERROR);
                 }
             }
-        }.visitFile(file);
-    }
+            private void nameCheck(PsiElement errorElement,String name,InspectionResult result){
+                if (name.equals("_")){
+                    return;
+                }
+                if (blockNameStack.peek().contains(name)){
+                    result.addProblem(errorElement, GoBundle.message("error.redeclare"),
+                            ProblemHighlightType.GENERIC_ERROR);
+                }
+                blockNameStack.peek().add(name);
+            }
 
-    private void nameCheck(PsiElement errorElement,String name,InspectionResult result){
-        if (name.equals("_")){
-            return;
-        }
-        if (blockNameStack.peek().contains(name)){
-            result.addProblem(errorElement, GoBundle.message("error.redeclare"),
-                    ProblemHighlightType.GENERIC_ERROR);
-        }
-        blockNameStack.peek().add(name);
+        }.visitFile(file);
     }
 }
