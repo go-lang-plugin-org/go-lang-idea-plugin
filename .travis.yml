@@ -12,6 +12,8 @@ notifications:
     - https://webhooks.gitter.im/e/d50931f8bba3694960c2
     on_success: change
     on_failure: always
+  slack:
+    secure: "bzzFEINdBZ3+p+5+Z7Rz5o7VvO91D0SWmzrGCEaXpOYp6iK1iDNIl8tb7b9XvT4j2J/8Mvu05dAyFg9VeQzdX9/Z+HG7dSIFmi7KcZFDtKOOhU01nhFwKLi4uos+tKD2nauhdTi1ui33MwnL0wgXSDoXlYUKlKF4eUmAFEP5IXg="
 addons:
   coverity_scan:
     project:
