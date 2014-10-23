@@ -76,12 +76,16 @@ public class GoGlobalConfigurableForm {
         String goAppEngineRootStr = handleGoAppEngineRoot(goAppEngineRoot.getText());
         String goPathStr = handleGoPath(goPath.getText());
 
-
         if (goRootStr.equals("") && !goRoot.getText().equals("")) {
             return;
         }
 
         if (goAppEngineRootStr.equals("") && !goAppEngineRoot.getText().equals("")) {
+            return;
+        }
+
+        if (goRootStr.equals(goAppEngineRootStr)) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOROOT is the same as GO AppEngine SDK root", "Error on Google Go Plugin");
             return;
         }
 
