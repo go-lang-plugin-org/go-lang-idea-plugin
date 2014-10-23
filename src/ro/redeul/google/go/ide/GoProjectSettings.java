@@ -16,8 +16,8 @@ public class GoProjectSettings implements PersistentStateComponent<GoProjectSett
     public static class GoProjectSettingsBean {
         public boolean enableVariablesCompletion = true;
         public boolean enableOptimizeImports = false;
-        public boolean prependSysGoPath = false;
-        public boolean appendSysGoPath = true;
+        public boolean prependGoPath = false;
+        public boolean useGoPath = true;
         public boolean goFmtOnSave = true;
         public boolean goimportsOnSave = false;
         public String goimportsPath = "";

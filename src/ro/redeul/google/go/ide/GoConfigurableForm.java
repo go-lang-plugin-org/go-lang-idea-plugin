@@ -9,8 +9,6 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.io.File;
 
 /**
@@ -64,11 +62,11 @@ public class GoConfigurableForm {
             return true;
         }
 
-        if (settingsBean.appendSysGoPath != enableAppendSysGoPath.isSelected()) {
+        if (settingsBean.useGoPath != enableAppendSysGoPath.isSelected()) {
             return true;
         }
 
-        if (settingsBean.prependSysGoPath != enablePrependSysGoPath.isSelected()) {
+        if (settingsBean.prependGoPath != enablePrependSysGoPath.isSelected()) {
             return true;
         }
 
@@ -98,8 +96,8 @@ public class GoConfigurableForm {
             throw new ConfigurationException("goimports could not be found at the desired location");
         }
 
-        settingsBean.appendSysGoPath = enableAppendSysGoPath.isSelected();
-        settingsBean.prependSysGoPath = enablePrependSysGoPath.isSelected();
+        settingsBean.useGoPath = enableAppendSysGoPath.isSelected();
+        settingsBean.prependGoPath = enablePrependSysGoPath.isSelected();
 
         settingsBean.enableOptimizeImports = enableImportsOptimizer.isSelected();
 
@@ -109,9 +107,9 @@ public class GoConfigurableForm {
     }
 
     public void reset(GoProjectSettings.GoProjectSettingsBean settingsBean, GoSettings goSettings) {
-        radioGOPATHproject.setSelected(!settingsBean.appendSysGoPath && !settingsBean.prependSysGoPath);
-        enableAppendSysGoPath.setSelected(settingsBean.appendSysGoPath);
-        enablePrependSysGoPath.setSelected(settingsBean.prependSysGoPath);
+        radioGOPATHproject.setSelected(!settingsBean.useGoPath && !settingsBean.prependGoPath);
+        enableAppendSysGoPath.setSelected(settingsBean.useGoPath);
+        enablePrependSysGoPath.setSelected(settingsBean.prependGoPath);
 
         enableImportsOptimizer.setSelected(settingsBean.enableOptimizeImports);
 
