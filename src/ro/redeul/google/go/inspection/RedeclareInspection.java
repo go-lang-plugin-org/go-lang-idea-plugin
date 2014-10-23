@@ -2,16 +2,13 @@ package ro.redeul.google.go.inspection;
 
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.DebugUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
-import ro.redeul.google.go.lang.psi.statements.GoIfStatement;
-import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
@@ -41,6 +38,29 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                     super.visitIfStatement(statement);
                 }
             }
+            @Override
+            public void visitForWithRange(GoForWithRangeStatement statement) {
+                blockNameStack.push(new HashSet<String>());
+                super.visitForWithRange(statement);
+                blockNameStack.pop();
+            }
+            @Override
+            public void visitForWithRangeAndVars(GoForWithRangeAndVarsStatement statement) {
+                blockNameStack.push(new HashSet<String>());
+                super.visitForWithRangeAndVars(statement);
+                blockNameStack.pop();
+            }
+            @Override
+            public void visitForWithClauses(GoForWithClausesStatement statement) {
+                if (statement.getInitialStatement()!=null) {
+                    blockNameStack.push(new HashSet<String>());
+                    super.visitForWithClauses(statement);
+                    blockNameStack.pop();
+                }else{
+                    super.visitForWithClauses(statement);
+                }
+            }
+
             @Override
             public void visitBlockStatement(GoBlockStatement statement) {
                 blockNameStack.push(new HashSet<String>());
