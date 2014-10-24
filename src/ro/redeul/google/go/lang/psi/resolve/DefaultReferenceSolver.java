@@ -7,7 +7,10 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.packages.GoPackages;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,7 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
     public void addTarget(GoPsiElement target) {
         this.target = target;
 
-        if ( variants != null ) {
+        if (variants != null) {
             variants.add(target.getLookupPresentation());
         }
     }
@@ -69,11 +72,11 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
         boolean incompleteCode = false;
 
         // uncomment if we want to skip cache
-//        return resolve(reference, false);
+        return resolve(reference, false);
 
         // this will go via the cache
-        return ResolveCache
-                .getInstance(reference.getElement().getProject())
-                .resolveWithCaching(reference, self(), true, false);
+//        return ResolveCache
+//                .getInstance(reference.getElement().getProject())
+//                .resolveWithCaching(reference, self(), true, false);
     }
 }

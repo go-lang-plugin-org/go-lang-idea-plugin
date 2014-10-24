@@ -50,7 +50,7 @@ public class MethodSolver extends VisitingReferenceSolver<MethodReference, Metho
                     if ( type.getName().equals(methodTypeName.getName())) {
                         String methodName = declaration.getFunctionName();
 
-                        return matchNames(referenceName(), methodName);
+                        return matchNames(reference.name(), methodName);
                     }
                 }
 

@@ -76,7 +76,7 @@ public class GoUsageTest extends GoFileBasedPsiTestCase {
             assertNotNull(reference);
             PsiElement resolve = reference.resolve();
             assertNotNull(resolve);
-            assertEquals(def.getTextOffset(), resolve.getTextOffset());
+            assertEquals(def.getTextOffset(), resolve.getNavigationElement().getTextOffset());
         }
     }
 

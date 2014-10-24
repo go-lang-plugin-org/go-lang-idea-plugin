@@ -15,7 +15,7 @@ public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOr
     @Override
     public FunctionOrTypeNameSolver self() { return this; }
 
-    public FunctionOrTypeNameSolver(FunctionOrTypeNameReference reference) {
+    public FunctionOrTypeNameSolver(final FunctionOrTypeNameReference reference) {
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
             @Override
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
@@ -24,7 +24,7 @@ public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOr
             }
 
             private boolean isReferenceTo(GoFunctionDeclaration declaration) {
-                return matchNames(referenceName(), declaration.getFunctionName());
+                return matchNames(reference.name(), declaration.getFunctionName());
             }
 
             @Override
@@ -35,7 +35,7 @@ public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOr
 
             private boolean isReferenceTo(GoTypeNameDeclaration declaration) {
                 String name = declaration.getName();
-                return name != null && matchNames(referenceName(), name);
+                return name != null && matchNames(reference.name(), name);
             }
 
 //            @Override
@@ -47,13 +47,13 @@ public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOr
             @Override
             public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
                 GoLiteralIdentifier ids[] = declaration.getDeclarations();
-                checkIdentifiers(referenceName(), ids);
+                checkIdentifiers(reference.name(), ids);
             }
 
             @Override
             public void visitFunctionParameter(GoFunctionParameter parameter) {
                 if ( parameter.getType() instanceof GoPsiTypeFunction )
-                    checkIdentifiers(referenceName(), parameter.getIdentifiers());
+                    checkIdentifiers(reference.name(), parameter.getIdentifiers());
             }
 
             //            private boolean checkVarDeclaration(GoShortVarDeclaration declaration) {

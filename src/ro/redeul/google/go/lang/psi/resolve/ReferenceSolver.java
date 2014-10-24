@@ -26,3 +26,4 @@ interface ReferenceSolver<R extends ReferenceWithSolver<?, S, R>, S extends Refe
     public boolean collectingVariants();
 }
 
+

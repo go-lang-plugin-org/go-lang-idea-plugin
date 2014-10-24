@@ -30,7 +30,7 @@ public class PackageSolver extends VisitingReferenceSolver<PackageReference, Pac
                     packageName = goPackage != null ? goPackage.getName() : "";
                 }
 
-                return packageName != null && matchNames(referenceName(), packageName);
+                return packageName != null && matchNames(reference.name(), packageName);
             }
         });
     }

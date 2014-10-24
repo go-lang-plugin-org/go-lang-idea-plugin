@@ -9,16 +9,17 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 
 public class StructFieldSolver extends VisitingReferenceSolver<StructFieldReference, StructFieldSolver> {
 
-    public StructFieldSolver(StructFieldReference reference) {
+    public StructFieldSolver(final StructFieldReference reference) {
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
             @Override
             public void visitTypeStructField(GoTypeStructField field) {
-                checkIdentifiers(referenceName(), field.getIdentifiers());
+                checkIdentifiers(reference.name(), field.getIdentifiers());
             }
 
             @Override
             public void visitTypeStructAnonymousField(GoTypeStructAnonymousField field) {
-                if (matchNames(referenceName(), field.getFieldName()))
+                if (reference.canSee(field, field.getFieldName()) &&
+                        matchNames(reference.name(), field.getFieldName()))
                     addTarget(field);
             }
 
@@ -33,7 +34,7 @@ public class StructFieldSolver extends VisitingReferenceSolver<StructFieldRefere
                 }
 
                 GoTypeStructPromotedFields promotedFields = type.getPromotedFields();
-                checkIdentifiers(referenceName(), promotedFields.getNamedFields());
+                checkIdentifiers(reference.name(), promotedFields.getNamedFields());
 
                 for (GoTypeStructAnonymousField anonymousField : promotedFields.getAnonymousFields()) {
                     anonymousField.accept(this);
@@ -41,6 +42,7 @@ public class StructFieldSolver extends VisitingReferenceSolver<StructFieldRefere
             }
         });
     }
+
 
     @Override
     public StructFieldSolver self() { return this; }

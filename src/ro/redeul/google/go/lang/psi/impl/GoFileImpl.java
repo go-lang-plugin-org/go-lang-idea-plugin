@@ -83,8 +83,7 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
             return "";
         }
 
-        VirtualFile sourceRoot =
-            projectFileIndex.getSourceRootForFile(virtualFile);
+        VirtualFile sourceRoot = projectFileIndex.getSourceRootForFile(virtualFile);
 
         if (sourceRoot == null) {
             return "";
@@ -93,7 +92,9 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         String path = VfsUtil.getRelativePath(virtualFile.getParent(), sourceRoot, '/');
 
         if (path == null || path.equals(""))
-            path = getPackageName();
+            return "";
+
+//            path = getPackageName();
 
 	// TODO: check merge conflict
         //String pathCheck = GoPsiUtils.findRealImportPathValue(path);
@@ -101,16 +102,16 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         //    path = path + "/" + getPackageName();
         //}
 
-        String makefileTarget =
-            GoUtil.getTargetFromMakefile(
-                virtualFile.getParent().findChild("Makefile"));
-
-        if (makefileTarget != null) {
-            path = makefileTarget;
-        }
-
-        if (path == null)
-            path = "";
+//        String makefileTarget =
+//            GoUtil.getTargetFromMakefile(
+//                virtualFile.getParent().findChild("Makefile"));
+//
+//        if (makefileTarget != null) {
+//            path = makefileTarget;
+//        }
+//
+//        if (path == null)
+//            path = "";
 
         return path;
     }

@@ -2,10 +2,15 @@ package ro.redeul.google.go.lang.psi.resolve;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.packages.GoPackages;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 
 public abstract class Reference<
         E extends GoPsiElement,
@@ -54,5 +59,21 @@ public abstract class Reference<
     @Override
     public boolean isReferenceTo(PsiElement element) {
         return getElement().getManager().areElementsEquivalent(resolve(), element);
+    }
+
+    public boolean canSee(GoPsiElement element, String name) {
+        GoPackage elementPackage = GoPackages.getPackageFor(element);
+        GoPackage referencePackage = GoPackages.getPackageFor(getElement());
+
+        return elementPackage == referencePackage || GoNamesUtil.isExported(name);
+    }
+
+    public String name() {
+        PsiElement element = this.element;
+
+        return (element != null && element instanceof PsiNamedElement)
+                ? ((PsiNamedElement) element).getName()
+                : element != null
+                ? element.getText() : null;
     }
 }

@@ -8,16 +8,21 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ex.ProjectRootManagerEx;
 import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.ConcurrencyUtil;
 import com.intellij.util.containers.ConcurrentHashMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.impl.GoPackageImpl;
+import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 
 import java.util.concurrent.ConcurrentMap;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
 
 public class GoPackages extends AbstractProjectComponent {
 
@@ -87,5 +92,22 @@ public class GoPackages extends AbstractProjectComponent {
 
     public GoPackage getBuiltinPackage() {
         return getPackage("builtin");
+    }
+
+    @Nullable
+    public static GoPackage getPackageFor(@Nullable PsiElement element) {
+        if ( element == null )
+            return null;
+
+        GoPackages goPackages = getInstance(element.getProject());
+
+        GoFile goFile = getAs(GoFile.class, element.getContainingFile());
+
+        if ( goFile == null )
+            return null;
+
+        String packageImportPath = goFile.getPackageImportPath();
+
+        return goPackages.getPackage(packageImportPath);
     }
 }

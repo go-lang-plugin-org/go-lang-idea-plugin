@@ -17,42 +17,42 @@ public class VarOrConstSolver extends VisitingReferenceSolver<VarOrConstReferenc
     @Override
     public VarOrConstSolver self() { return this; }
 
-    public VarOrConstSolver(VarOrConstReference reference) {
+    public VarOrConstSolver(final VarOrConstReference reference) {
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
             @Override
             public void visitMethodReceiver(GoMethodReceiver receiver) {
                 if ( receiver.getIdentifier() != null )
-                    checkIdentifiers(referenceName(), receiver.getIdentifier());
+                    checkIdentifiers(reference.name(), receiver.getIdentifier());
             }
 
             @Override
             public void visitFunctionParameter(GoFunctionParameter parameter) {
-                checkIdentifiers(referenceName(), parameter.getIdentifiers());
+                checkIdentifiers(reference.name(), parameter.getIdentifiers());
             }
 
             @Override
             public void visitVarDeclaration(GoVarDeclaration declaration) {
-                checkIdentifiers(referenceName(), declaration.getIdentifiers());
+                checkIdentifiers(reference.name(), declaration.getIdentifiers());
             }
 
             @Override
             public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
-                checkIdentifiers(referenceName(), declaration.getIdentifiers());
+                checkIdentifiers(reference.name(), declaration.getIdentifiers());
             }
 
             @Override
             public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
-                checkIdentifiers(referenceName(), identifier);
+                checkIdentifiers(reference.name(), identifier);
             }
 
             @Override
             public void visitConstDeclaration(GoConstDeclaration declaration) {
-                checkIdentifiers(referenceName(), declaration.getIdentifiers());
+                checkIdentifiers(reference.name(), declaration.getIdentifiers());
             }
 
             @Override
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-                if (matchNames(referenceName(), declaration.getFunctionName()))
+                if (matchNames(reference.name(), declaration.getFunctionName()))
                     addTarget(declaration);
             }
 
@@ -63,7 +63,7 @@ public class VarOrConstSolver extends VisitingReferenceSolver<VarOrConstReferenc
 
             @Override
             public void visitSwitchTypeGuard(GoSwitchTypeGuard typeGuard) {
-                checkIdentifiers(referenceName(), typeGuard.getIdentifier());
+                checkIdentifiers(reference.name(), typeGuard.getIdentifier());
             }
         });
     }

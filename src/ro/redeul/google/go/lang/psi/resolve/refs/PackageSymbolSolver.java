@@ -15,16 +15,16 @@ public class PackageSymbolSolver extends VisitingReferenceSolver<PackageSymbolRe
     @Override
     public PackageSymbolSolver self() { return this; }
 
-    public PackageSymbolSolver(PackageSymbolReference reference) {
+    public PackageSymbolSolver(final PackageSymbolReference reference) {
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
             @Override
             public void visitConstDeclaration(GoConstDeclaration declaration) {
-                checkIdentifiers(referenceName(), declaration.getIdentifiers());
+                checkIdentifiers(reference.name(), declaration.getIdentifiers());
             }
 
             @Override
             public void visitVarDeclaration(GoVarDeclaration declaration) {
-                checkIdentifiers(referenceName(), declaration.getIdentifiers());
+                checkIdentifiers(reference.name(), declaration.getIdentifiers());
             }
 
             @Override
@@ -34,20 +34,20 @@ public class PackageSymbolSolver extends VisitingReferenceSolver<PackageSymbolRe
 
             @Override
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-                if (matchNames(referenceName(), declaration.getFunctionName()))
+                if (matchNames(reference.name(), declaration.getFunctionName()))
                     addTarget(declaration);
             }
 
             @Override
             public void visitTypeSpec(GoTypeSpec type) {
                 String name = type.getName();
-                if (name != null && matchNames(referenceName(), name))
+                if (name != null && matchNames(reference.name(), name))
                     addTarget(type);
             }
 
             boolean isReferenceTo(GoConstDeclaration constDeclaration) {
                 for (GoLiteralIdentifier identifier : constDeclaration.getIdentifiers())
-                    if (matchNames(referenceName(), identifier.getUnqualifiedName()))
+                    if (matchNames(reference.name(), identifier.getUnqualifiedName()))
                         return true;
 
                 return false;
@@ -55,7 +55,7 @@ public class PackageSymbolSolver extends VisitingReferenceSolver<PackageSymbolRe
 
             boolean isReferenceTo(GoVarDeclaration varDeclaration) {
                 for (GoLiteralIdentifier identifier : varDeclaration.getIdentifiers())
-                    if (matchNames(referenceName(), identifier.getUnqualifiedName()))
+                    if (matchNames(reference.name(), identifier.getUnqualifiedName()))
                         return true;
 
                 return false;

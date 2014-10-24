@@ -16,7 +16,7 @@ public class TypeNameSolver extends VisitingReferenceSolver<TypeNameReference, T
     @Override
     public TypeNameSolver self() { return this; }
 
-    public TypeNameSolver(TypeNameReference reference) {
+    public TypeNameSolver(final TypeNameReference reference) {
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
                  @Override
                  public void visitTypeSpec(GoTypeSpec type) {
@@ -29,7 +29,7 @@ public class TypeNameSolver extends VisitingReferenceSolver<TypeNameReference, T
                      if (declaration == null || declaration.getName() == null)
                          return false;
 
-                     return matchNames(referenceName(), declaration.getName());
+                     return matchNames(reference.name(), declaration.getName());
                  }
              }
         );
