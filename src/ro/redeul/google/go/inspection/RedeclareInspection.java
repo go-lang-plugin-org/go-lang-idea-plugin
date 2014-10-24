@@ -8,25 +8,55 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
-import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.toplevel.*;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 import java.util.HashSet;
 import java.util.Stack;
 
 public class RedeclareInspection extends AbstractWholeGoFileInspection {
-    private Stack<HashSet<String>> blockNameStack = new Stack<HashSet<String>>();
-    private HashSet<String> methodNameSet = new HashSet<String>();
     @Override
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
+            private Stack<HashSet<String>> blockNameStack = new Stack<HashSet<String>>();
+            private HashSet<String> methodNameSet = new HashSet<String>();
             @Override
             public void visitFile(GoFile file) {
                 blockNameStack.push(new HashSet<String>());
                 methodNameSet = new HashSet<String>();
                 super.visitFile(file);
+                blockNameStack.pop();
+            }
+            @Override
+            public void visitIfStatement(GoIfStatement statement){
+                blockNameStack.push(new HashSet<String>());
+                super.visitIfStatement(statement);
+                blockNameStack.pop();
+            }
+            @Override
+            public void visitForWithRange(GoForWithRangeStatement statement) {
+                blockNameStack.push(new HashSet<String>());
+                super.visitForWithRange(statement);
+                blockNameStack.pop();
+            }
+            @Override
+            public void visitForWithRangeAndVars(GoForWithRangeAndVarsStatement statement) {
+                blockNameStack.push(new HashSet<String>());
+                super.visitForWithRangeAndVars(statement);
+                blockNameStack.pop();
+            }
+            @Override
+            public void visitForWithClauses(GoForWithClausesStatement statement) {
+                blockNameStack.push(new HashSet<String>());
+                super.visitForWithClauses(statement);
+                blockNameStack.pop();
+            }
+            @Override
+            public void visitInterfaceType(GoPsiTypeInterface type) {
+                blockNameStack.push(new HashSet<String>());
+                super.visitInterfaceType(type);
                 blockNameStack.pop();
             }
 
@@ -99,17 +129,17 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                             ProblemHighlightType.GENERIC_ERROR);
                 }
             }
-        }.visitFile(file);
-    }
+            private void nameCheck(PsiElement errorElement,String name,InspectionResult result){
+                if (name.equals("_")){
+                    return;
+                }
+                if (blockNameStack.peek().contains(name)){
+                    result.addProblem(errorElement, GoBundle.message("error.redeclare"),
+                            ProblemHighlightType.GENERIC_ERROR);
+                }
+                blockNameStack.peek().add(name);
+            }
 
-    private void nameCheck(PsiElement errorElement,String name,InspectionResult result){
-        if (name.equals("_")){
-            return;
-        }
-        if (blockNameStack.peek().contains(name)){
-            result.addProblem(errorElement, GoBundle.message("error.redeclare"),
-                    ProblemHighlightType.GENERIC_ERROR);
-        }
-        blockNameStack.peek().add(name);
+        }.visitFile(file);
     }
 }
