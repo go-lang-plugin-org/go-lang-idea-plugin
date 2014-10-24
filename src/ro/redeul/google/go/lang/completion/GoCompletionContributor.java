@@ -206,24 +206,25 @@ public class GoCompletionContributor extends CompletionContributor {
 
                 Project project = params.getOriginalFile().getProject();
 
-                GoNamesCache packageNamesCache =
-                        GoNamesCache.getInstance(project);
+                GoNamesCache packageNamesCache = GoNamesCache.getInstance(project);
                 Collection<String> goSdkPackages = packageNamesCache.getSdkPackages();
 
                 for (String goPackage : goSdkPackages) {
                     result.addElement(
-                            LookupElementBuilder.create("\"" + goPackage)
+                            LookupElementBuilder.create(goPackage)
                                     .withIcon(PlatformIcons.PACKAGE_ICON)
-                                    .withTypeText("via sdk"));
+                                    .withTypeText("via sdk")
+                                    .withInsertHandler(ImportPathInsertHandler.INSTANCE));
                 }
 
                 Collection<String> goProjectPackages = packageNamesCache.getProjectPackages();
 
                 for (String goPackage : goProjectPackages) {
                     result.addElement(
-                            LookupElementBuilder.create("\"" + goPackage)
+                            LookupElementBuilder.create(goPackage)
                                     .withIcon(PlatformIcons.PACKAGE_ICON)
                                     .bold()
+                                    .withInsertHandler(ImportPathInsertHandler.INSTANCE)
                                     .withTypeText("via project"));
                 }
             }
@@ -398,6 +399,10 @@ public class GoCompletionContributor extends CompletionContributor {
     @Override
     public void beforeCompletion(@NotNull CompletionInitializationContext context) {
         context.setDummyIdentifier(DUMMY_IDENTIFIER);
+        PsiElement element = context.getFile().findElementAt(context.getStartOffset());
+        if ( element != null && element.getNode() != null && element.getNode().getElementType() == GoTokenTypes.litSTRING){
+            context.setReplacementOffset((element.getTextOffset() + element.getTextLength() - 1));
+        }
     }
 
     private static void addPackageAutoCompletion(CompletionParameters parameters, CompletionResultSet result) {

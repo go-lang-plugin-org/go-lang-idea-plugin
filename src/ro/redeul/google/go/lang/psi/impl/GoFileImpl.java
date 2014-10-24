@@ -94,25 +94,6 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         if (path == null || path.equals(""))
             return "";
 
-//            path = getPackageName();
-
-	// TODO: check merge conflict
-        //String pathCheck = GoPsiUtils.findRealImportPathValue(path);
-        //if (path != null && !isApplicationPart() && !pathCheck.endsWith(getPackageName()) && !pathCheck.toLowerCase().endsWith(getPackageName())) {
-        //    path = path + "/" + getPackageName();
-        //}
-
-//        String makefileTarget =
-//            GoUtil.getTargetFromMakefile(
-//                virtualFile.getParent().findChild("Makefile"));
-//
-//        if (makefileTarget != null) {
-//            path = makefileTarget;
-//        }
-//
-//        if (path == null)
-//            path = "";
-
         return path;
     }
 
