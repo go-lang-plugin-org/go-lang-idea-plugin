@@ -58,7 +58,7 @@ public class VarOrConstSolver extends VisitingReferenceSolver<VarOrConstReferenc
 
             @Override
             public void visitMethodDeclaration(GoMethodDeclaration declaration) {
-                visitFunctionDeclaration(declaration);
+//                visitFunctionDeclaration(declaration);
             }
 
             @Override

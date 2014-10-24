@@ -1,6 +1,6 @@
 package main
 
-func (*int) /*def*/Pmm() {
+func (*int) Pmm() {
     println("hi")
 }
 

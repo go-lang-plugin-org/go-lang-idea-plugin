@@ -4,10 +4,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceSolvingVisitor;
 import ro.redeul.google.go.lang.psi.resolve.VisitingReferenceSolver;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 
 public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOrTypeNameReference, FunctionOrTypeNameSolver> {
@@ -17,6 +14,7 @@ public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOr
 
     public FunctionOrTypeNameSolver(final FunctionOrTypeNameReference reference) {
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
+
             @Override
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
                 if (isReferenceTo(declaration))
