@@ -15,4 +15,5 @@ public class RedeclareInspectionTest extends GoInspectionTestCase {
 
     public void testSelect() throws Exception{ doTest(); }
 
+    public void testInit() throws Exception{ doTest(); }
 }

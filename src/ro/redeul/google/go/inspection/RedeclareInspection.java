@@ -159,7 +159,11 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             @Override
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
                 super.visitFunctionDeclaration(declaration);
-                nameCheck(declaration.getNameIdentifier(), declaration.getName(), result);
+                String name = declaration.getName();
+                if (name==null || name.equals("init")){
+                    return;
+                }
+                nameCheck(declaration.getNameIdentifier(), name, result);
             }
 
             @Override
