@@ -10,4 +10,9 @@ public class RedeclareInspectionTest extends GoInspectionTestCase {
     public void testIssue894() throws Exception{ doTest(); }
 
     public void testInterface() throws Exception{ doTest(); }
+
+    public void testSwitch() throws Exception{ doTest(); }
+
+    public void testSelect() throws Exception{ doTest(); }
+
 }

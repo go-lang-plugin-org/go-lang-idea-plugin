@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.statements.GoSimpleStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionClause;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchExpressionStatement;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoSwitchExpressionStatementImpl extends GoPsiElementBase
     implements GoSwitchExpressionStatement {
@@ -42,5 +43,8 @@ public class GoSwitchExpressionStatementImpl extends GoPsiElementBase
         GoSimpleStatement initStatement = getSimpleStatement();
         return lastParent == null || initStatement == null || lastParent == initStatement || initStatement.processDeclarations(processor, state, null, place);
 
+    }
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitSwitchExpressionStatement(this);
     }
 }
