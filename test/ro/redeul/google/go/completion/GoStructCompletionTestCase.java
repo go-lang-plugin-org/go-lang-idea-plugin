@@ -40,6 +40,7 @@ public class GoStructCompletionTestCase extends GoCompletionTestCase{
     }
 
     public void testPublicStructMemberFromImported() throws IOException {
+        addPackage("package1", "package1/file1.go");
         _testVariants();
     }
 }
