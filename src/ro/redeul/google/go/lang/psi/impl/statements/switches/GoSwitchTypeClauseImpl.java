@@ -13,6 +13,7 @@ import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeClause;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import java.util.List;
 
@@ -68,4 +69,9 @@ public class GoSwitchTypeClauseImpl extends GoPsiElementBase
 
         return true;
     }
+
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitSwitchTypeClause(this);
+    }
+
 }

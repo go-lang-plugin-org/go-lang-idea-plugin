@@ -18,7 +18,7 @@ import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseSend;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
-import ro.redeul.google.go.lang.psi.statements.switches.GoSwitchTypeGuard;
+import ro.redeul.google.go.lang.psi.statements.switches.*;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
@@ -240,6 +240,22 @@ public class GoElementVisitor  {
     }
 
     public void visitAssignment(GoAssignmentStatement statement) {
+        visitElement(statement);
+    }
+
+    public void visitSwitchExpressionClause(GoSwitchExpressionClause statement) {
+        visitElement(statement);
+    }
+
+    public void visitSwitchTypeClause(GoSwitchTypeClause statement) {
+        visitElement(statement);
+    }
+
+    public void visitSwitchTypeStatement(GoSwitchTypeStatement statement)  {
+        visitElement(statement);
+    }
+
+    public void visitSwitchExpressionStatement(GoSwitchExpressionStatement statement) {
         visitElement(statement);
     }
 

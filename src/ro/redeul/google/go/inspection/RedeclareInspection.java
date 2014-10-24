@@ -9,6 +9,11 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.*;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseSend;
+import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
+import ro.redeul.google.go.lang.psi.statements.switches.*;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
@@ -16,6 +21,9 @@ import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 import java.util.HashSet;
 import java.util.Stack;
 
+/**
+ * find redeclare compiler error.
+ */
 public class RedeclareInspection extends AbstractWholeGoFileInspection {
     @Override
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
@@ -26,44 +34,106 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             public void visitFile(GoFile file) {
                 blockNameStack.push(new HashSet<String>());
                 methodNameSet = new HashSet<String>();
-                super.visitFile(file);
+                visitElement(file);
                 blockNameStack.pop();
             }
             @Override
             public void visitIfStatement(GoIfStatement statement){
                 blockNameStack.push(new HashSet<String>());
-                super.visitIfStatement(statement);
+                visitElement(statement);
                 blockNameStack.pop();
             }
             @Override
             public void visitForWithRange(GoForWithRangeStatement statement) {
                 blockNameStack.push(new HashSet<String>());
-                super.visitForWithRange(statement);
+                visitElement(statement);
                 blockNameStack.pop();
             }
             @Override
             public void visitForWithRangeAndVars(GoForWithRangeAndVarsStatement statement) {
                 blockNameStack.push(new HashSet<String>());
-                super.visitForWithRangeAndVars(statement);
+                visitElement(statement);
                 blockNameStack.pop();
             }
             @Override
             public void visitForWithClauses(GoForWithClausesStatement statement) {
                 blockNameStack.push(new HashSet<String>());
-                super.visitForWithClauses(statement);
+                visitElement(statement);
                 blockNameStack.pop();
             }
             @Override
             public void visitInterfaceType(GoPsiTypeInterface type) {
                 blockNameStack.push(new HashSet<String>());
-                super.visitInterfaceType(type);
+                visitElement(type);
                 blockNameStack.pop();
             }
 
             @Override
             public void visitBlockStatement(GoBlockStatement statement) {
                 blockNameStack.push(new HashSet<String>());
-                super.visitBlockStatement(statement);
+                visitElement(statement);
+                blockNameStack.pop();
+            }
+
+            @Override
+            public void visitSwitchExpressionClause(GoSwitchExpressionClause statement) {
+                blockNameStack.push(new HashSet<String>());
+                visitElement(statement);
+                blockNameStack.pop();
+            }
+
+            @Override
+            public void visitSwitchTypeClause(GoSwitchTypeClause statement) {
+                blockNameStack.push(new HashSet<String>());
+                visitElement(statement);
+                blockNameStack.pop();
+            }
+
+            @Override
+            public void visitSwitchExpressionStatement(GoSwitchExpressionStatement statement) {
+                blockNameStack.push(new HashSet<String>());
+                visitElement(statement);
+                blockNameStack.pop();
+            }
+
+            @Override
+            public void visitSwitchTypeGuard(GoSwitchTypeGuard typeGuard) {
+                blockNameStack.push(new HashSet<String>());
+                visitElement(typeGuard);
+                blockNameStack.pop();
+            }
+
+            @Override
+            public void visitSwitchTypeStatement(GoSwitchTypeStatement statement) {
+                blockNameStack.push(new HashSet<String>());
+                visitElement(statement);
+                blockNameStack.pop();
+            }
+
+            @Override
+            public void visitSelectStatement(GoSelectStatement statement) {
+                blockNameStack.push(new HashSet<String>());
+                visitElement(statement);
+                blockNameStack.pop();
+            }
+
+            @Override
+            public void visitSelectCommClauseDefault(GoSelectCommClauseDefault commClause) {
+                blockNameStack.push(new HashSet<String>());
+                visitElement(commClause);
+                blockNameStack.pop();
+            }
+
+            @Override
+            public void visitSelectCommClauseRecv(GoSelectCommClauseRecv commClause) {
+                blockNameStack.push(new HashSet<String>());
+                visitElement(commClause);
+                blockNameStack.pop();
+            }
+            @Override
+            public void visitSelectCommClauseSend(GoSelectCommClauseSend commClause) {
+                blockNameStack.push(new HashSet<String>());
+                visitElement(commClause);
                 blockNameStack.pop();
             }
 
