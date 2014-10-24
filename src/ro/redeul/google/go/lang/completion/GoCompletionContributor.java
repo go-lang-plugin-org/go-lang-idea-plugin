@@ -52,38 +52,42 @@ public class GoCompletionContributor extends CompletionContributor {
 
     public static final String DUMMY_IDENTIFIER = CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED;
 
-    private static final  String [] BULTINS_WITH_RETURN = {
-        "new", "make", "len", "cap", "append", "copy", "complex",
-        "real", "imag", "recover"
+    private static final String[] BULTINS_WITH_RETURN = {
+            "new", "make", "len", "cap", "append", "copy", "complex",
+            "real", "imag", "recover"
     };
 
-    private static final  String [] BULTINS_WITHOUT_RETURN = {
-        "delete", "panic", "print", "println"
+    private static final String[] BULTINS_WITHOUT_RETURN = {
+            "delete", "panic", "print", "println"
     };
 
     // Check whether a PsiElement is a valid position for a type name.
     @SuppressWarnings("unchecked")
-    private static final PsiElementPattern.Capture<PsiElement> TYPE_DECLARATION = psiElement().withParent(
-            psiElement(GoLiteralIdentifier.class).withParent(
-                    or(psiElement(GoPsiTypeName.class),             // where type name is expected
-                            psiElement(GoLiteralExpression.class).withParent(
-                                    or(psiElement(GoExpr.class),                            // in an expression
-                                            psiElement(GoExpressionList.class).withParent(
-                                                    // in method invocation parameter or assignment
-                                                    or(psiElement(GoCallOrConvExpression.class),
-                                                            psiElement(GoAssignmentStatement.class)
-                                                    )
-                                            ),
-                                            // in return statement
-                                            psiElement(GoReturnStatement.class),
-
-                                            // in variable declaration statement
-                                            psiElement(GoVarDeclaration.class)
-                                    )
-                            )
-                    )
-            )
-    );
+    private static final ElementPattern<? extends PsiElement> TYPE_DECLARATION =
+            psiElement().withParent(
+                    psiElement(GoLiteralIdentifier.class)
+                            .atStartOf(psiElement(GoPsiTypeName.class)));
+//                    .withParent(
+//                            or(
+//                                    psiElement(GoPsiTypeName.class),             // where type name is expected
+//                                    psiElement(GoLiteralExpression.class).withParent(
+//                                            or(psiElement(GoExpr.class),                            // in an expression
+//                                                    psiElement(GoExpressionList.class).withParent(
+//                                                            // in method invocation parameter or assignment
+//                                                            or(psiElement(GoCallOrConvExpression.class),
+//                                                                    psiElement(GoAssignmentStatement.class)
+//                                                            )
+//                                                    ),
+//                                                    // in return statement
+//                                                    psiElement(GoReturnStatement.class),
+//
+//                                                    // in variable declaration statement
+//                                                    psiElement(GoVarDeclaration.class)
+//                                            )
+//                                    )
+//                            )
+//                    )
+//    );
 
     private static final ElementPattern<? extends PsiElement> BLOCK_STATEMENT =
             psiElement().withParent(
@@ -152,18 +156,18 @@ public class GoCompletionContributor extends CompletionContributor {
 //        };
 
     CompletionProvider<CompletionParameters> debuggingCompletionProvider =
-        new CompletionProvider<CompletionParameters>() {
-            @Override
-            protected void addCompletions(@NotNull CompletionParameters parameters,
-                                          ProcessingContext context,
-                                          @NotNull CompletionResultSet result) {
-                String currentFile =
-                    DebugUtil.psiToString(
-                        parameters.getPosition().getContainingFile(), false);
+            new CompletionProvider<CompletionParameters>() {
+                @Override
+                protected void addCompletions(@NotNull CompletionParameters parameters,
+                                              ProcessingContext context,
+                                              @NotNull CompletionResultSet result) {
+                    String currentFile =
+                            DebugUtil.psiToString(
+                                    parameters.getPosition().getContainingFile(), false);
 
-                System.out.println(currentFile);
-            }
-        };
+                    System.out.println(currentFile);
+                }
+            };
 
     @SuppressWarnings("unchecked")
     public GoCompletionContributor() {
@@ -182,16 +186,16 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
         extend(CompletionType.BASIC,
-               psiElement()
-                   .withParent(
-                       psiElement(PsiErrorElement.class)
-                           .withParent(
-                               psiElement(GoPackageDeclaration.class)
-                                   .withFirstNonWhitespaceChild(
-                                       psiElement(PsiErrorElement.class)
-                                   )
-                           )
-                   ),
+                psiElement()
+                        .withParent(
+                                psiElement(PsiErrorElement.class)
+                                        .withParent(
+                                                psiElement(GoPackageDeclaration.class)
+                                                        .withFirstNonWhitespaceChild(
+                                                                psiElement(PsiErrorElement.class)
+                                                        )
+                                        )
+                        ),
                 packageCompletionProvider);
 
         CompletionProvider<CompletionParameters> importPathCompletionProvider = new CompletionProvider<CompletionParameters>() {
@@ -225,10 +229,10 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
         extend(CompletionType.BASIC,
-               psiElement(GoTokenTypes.litSTRING)
-                   .withParent(
-                       psiElement(GoLiteralString.class)
-                           .withParent(GoImportDeclaration.class)),
+                psiElement(GoTokenTypes.litSTRING)
+                        .withParent(
+                                psiElement(GoLiteralString.class)
+                                        .withParent(GoImportDeclaration.class)),
                 importPathCompletionProvider);
 
         CompletionProvider<CompletionParameters> blockStatementsCompletionProvider = new CompletionProvider<CompletionParameters>() {
@@ -269,7 +273,7 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
         extend(CompletionType.BASIC,
-               BLOCK_STATEMENT,
+                BLOCK_STATEMENT,
                 blockStatementsCompletionProvider);
 
         CompletionProvider<CompletionParameters> forStatementsCompletionProvider = new CompletionProvider<CompletionParameters>() {
@@ -284,7 +288,7 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
         extend(CompletionType.BASIC,
-                and(BLOCK_STATEMENT,psiElement().inside(GoForStatement.class)),
+                and(BLOCK_STATEMENT, psiElement().inside(GoForStatement.class)),
                 forStatementsCompletionProvider);
 
         CompletionProvider<CompletionParameters> topLevelKeywordsProvider = new CompletionProvider<CompletionParameters>() {
@@ -301,13 +305,13 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
         extend(CompletionType.BASIC,
-               psiElement().withParent(
-                   psiElement(PsiErrorElement.class).withParent(
-                       psiElement(GoFile.class).withChild(
-                           psiElement(GoPackageDeclaration.class)
-                       )
-                   )
-               ),
+                psiElement().withParent(
+                        psiElement(PsiErrorElement.class).withParent(
+                                psiElement(GoFile.class).withChild(
+                                        psiElement(GoPackageDeclaration.class)
+                                )
+                        )
+                ),
                 topLevelKeywordsProvider);
 
         CompletionProvider<CompletionParameters> goAndDeferStatementCompletionProvider = new CompletionProvider<CompletionParameters>() {
@@ -375,8 +379,7 @@ public class GoCompletionContributor extends CompletionContributor {
                 }
             }
         };
-        extend(CompletionType.BASIC,
-                TYPE_DECLARATION,
+        extend(CompletionType.BASIC, TYPE_DECLARATION,
                 typeDeclarationCompletionProvider);
 
         CompletionProvider<CompletionParameters> packageNameCompletionProvider = new CompletionProvider<CompletionParameters>() {

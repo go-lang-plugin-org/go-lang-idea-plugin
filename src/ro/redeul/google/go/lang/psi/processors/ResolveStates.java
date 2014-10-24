@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ResolveStates {
 
+
     public interface Key {
 
         public static final KeyWithDefaultValue<Boolean> IsOriginalFile =
@@ -35,8 +36,16 @@ public class ResolveStates {
                 .put(Key.IsOriginalPackage, false)
                 .put(Key.IsPackageBuiltin, true);
     }
+
     public static ResolveState initial() {
         return ResolveState.initial();
+    }
+
+    public static ResolveState currentPackage() {
+        return ResolveState.initial()
+                .put(Key.IsOriginalFile, false)
+                .put(Key.IsOriginalPackage, true)
+                .put(Key.IsPackageBuiltin, false);
     }
 
     public static ResolveState variables() {
@@ -47,6 +56,8 @@ public class ResolveStates {
 
     public static ResolveState packageExports() {
         return ResolveState.initial()
+                .put(Key.IsOriginalFile, false)
+                .put(Key.IsOriginalPackage, false)
                 .put(Key.JustExports, true);
     }
 

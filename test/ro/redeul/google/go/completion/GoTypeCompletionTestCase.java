@@ -12,6 +12,7 @@ public class GoTypeCompletionTestCase extends GoCompletionTestCase {
     }
 
     public void testAlsoListImportedPackages() throws IOException {
+        addPackage("fmt", "fmt/fmt.go");
         _testVariants();
     }
 

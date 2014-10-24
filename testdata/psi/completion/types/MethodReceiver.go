@@ -6,7 +6,7 @@ type Test3 Test4
 type Test4 interface {}
 type Test5 *int
 
-func (a *T<caret>) foo() {
+func (a T<caret>) foo() {
 }
 /**---
 Test1

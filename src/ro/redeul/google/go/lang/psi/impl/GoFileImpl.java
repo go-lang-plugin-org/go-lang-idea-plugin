@@ -264,38 +264,15 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         }
 
         if ( ResolveStates.get(state, ResolveStates.Key.IsOriginalFile)) {
-            GoPackage builtinPackage = GoPackages.getInstance(getProject()).getBuiltinPackage();
+            GoPackages packages = GoPackages.getInstance(getProject());
+
+            GoPackage myPackage = packages.getPackage(getPackageImportPath());
+            if (myPackage != null &&
+                    !myPackage.processDeclarations(processor, ResolveStates.currentPackage(), this.getOriginalFile(), place))
+                return false;
+
+            GoPackage builtinPackage = packages.getBuiltinPackage();
             return builtinPackage.processDeclarations(processor, ResolveStates.builtins(), lastParent, place);
-        }
-
-        if (ResolveStates.get(state, ResolveStates.Key.IsOriginalFile)) {
-            ResolveState newState = state.put(ResolveStates.Key.IsOriginalFile, false);
-
-            GoNamesCache names = GoNamesCache.getInstance(getProject());
-
-            PsiDirectory parentDirectory = getParent();
-            Collection<GoFile> goFiles;
-
-            if (isApplicationPart() && parentDirectory != null) {
-                goFiles =
-                    names.getFilesByPackageImportPath(
-                        getPackageImportPath(),
-                        GlobalSearchScopes.directoryScope(parentDirectory, false));
-            } else {
-                goFiles = names.getFilesByPackageImportPath(getPackageImportPath());
-            }
-
-            for (GoFile goFile : goFiles) {
-                if (!goFile.getOriginalFile().equals(this.getOriginalFile())) {
-                    if (!goFile.processDeclarations(processor, newState, null, place))
-                        return false;
-                }
-            }
-
-            for (GoImportDeclarations importDeclarations : getImportDeclarations()) {
-                if (!importDeclarations.processDeclarations(processor, state, null, place))
-                    return false;
-            }
         }
 
         return true;

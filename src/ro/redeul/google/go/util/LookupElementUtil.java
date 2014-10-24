@@ -4,6 +4,8 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.completion.insertHandler.FunctionInsertHandler;
+import ro.redeul.google.go.lang.completion.insertHandler.PackageInsertHandler;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
@@ -134,8 +136,14 @@ public class LookupElementUtil extends GoElementVisitor {
     }
 
     @Override
+    public void visitPackage(GoPackage aPackage) {
+    }
+
+    @Override
     public void visitImportDeclaration(GoImportDeclaration declaration) {
-        super.visitImportDeclaration(declaration);
+        lookupElement = lookupElement
+                .withInsertHandler(new PackageInsertHandler())
+                .withIcon(PlatformIcons.PACKAGE_ICON);
     }
 
     LookupElementBuilder getLookupElement() {
