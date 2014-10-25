@@ -31,7 +31,7 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.6" />
+    <bytecodeTargetLevel target="1.7" />
   </component>
   <component name="EclipseCompilerSettings">
     <option name="GENERATE_NO_WARNINGS" value="true" />
@@ -41,4 +41,3 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:unchecked" />
   </component>
 </project>
-
