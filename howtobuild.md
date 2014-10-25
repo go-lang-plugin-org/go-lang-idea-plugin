@@ -6,12 +6,12 @@ Ubuntu
 
 (as provided by [LarryBattle](https://github.com/LarryBattle) [here](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/248#issuecomment-29878589))
 
-The plugin works now with IDEA 13 after being built with the latest code from this repository.
-Here's the build process for Ubuntu 13 for those wondering.
+The plugin works now with IDEA 14 after being built with the latest code from this repository.
+Here's the build process for Ubuntu 13.04+.
 
 ``` bash
 # Make sure to install ant and java jdk
-sudo apt-get install ant openjdk-6-jdk
+sudo apt-get install ant openjdk-7-jdk
 git clone https://github.com/go-lang-plugin-org/go-lang-idea-plugin.git
 cd google-go-lang-idea-plugin
 gedit build-package.xml
@@ -21,7 +21,7 @@ Change the value of location to the installation directory of IDEA ide.
 Example:
 
 ```xml
-<property name="idea.community.build" location="${user.home}/Downloads/idea-IC-133.193/" />
+<property name="idea.community.build" location="${user.home}/Downloads/idea-IC-139.144.2/" />
 Build the project with ant.
 ```
 And then run
@@ -40,7 +40,7 @@ Mac OS X
 
 Should work as above:
 
-- download & install IDEA 13 Community
+- download & install IDEA 14 Community
 - open IDEA and use the built it: 'New project to Version Control'
 - get the path of your fork (or this repository) and execute it
 - when in IDEA, go to 'preferences' (or how it's called) to add an IDEA JDK

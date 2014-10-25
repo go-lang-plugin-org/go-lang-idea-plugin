@@ -12,17 +12,17 @@ In order to be able to contribute to the plugin you need to:
 ### Checking out the IntellJ IDEA Platform sources.
 
 We start with cloning the idea git repository and checking out the revision
-used to build IDEA 13:
+used to build IDEA 14:
 
 ```bash
     git clone git@github.com:JetBrains/intellij-community.git idea
     cd idea
-    git checkout idea/133.139
+    git checkout idea/139.144.2
     # and we build it using ant
     ant
 ```
 
-The build will take around 10 to 20 minutes (depending on the machine) and at the
+The build will take around 5 to 20 minutes (depending on the machine) and at the
 end it should put the build artifacts into `out/artifacts` folder.
 
     $ ls -al out/artifacts/
@@ -30,17 +30,18 @@ end it should put the build artifacts into `out/artifacts` folder.
     drwxr-xr-x   7 mtoader  staff        238 Jun  1 22:34 .
     drwxr-xr-x   8 mtoader  staff        272 Jun  1 22:25 ..
     drwxr-xr-x  10 mtoader  staff        340 Jun  1 22:34 core
-    -rw-r--r--   1 mtoader  staff  112106975 Jun  1 22:34 ideaIC-117.SNAPSHOT.mac.zip
-    -rw-r--r--   1 mtoader  staff  110192607 Jun  1 22:34 ideaIC-117.SNAPSHOT.tar.gz
-    -rw-r--r--   1 mtoader  staff  110468031 Jun  1 22:34 ideaIC-117.SNAPSHOT.win.zip
+    -rw-r--r--   1 mtoader  staff  112106975 Jun  1 22:34 ideaIC-139.SNAPSHOT.mac.zip
+    -rw-r--r--   1 mtoader  staff  110192607 Jun  1 22:34 ideaIC-139.SNAPSHOT.tar.gz
+    -rw-r--r--   1 mtoader  staff  110468031 Jun  1 22:34 ideaIC-139.SNAPSHOT.win.zip
     -rw-r--r--   1 mtoader  staff   40308058 Jun  1 22:34 sources.zip
 
 Use the artifact from your target OS to run the built version of IDEA.
 
-### Checking out and building Google Go 1.2
+### Checking out and building Google Go 1.3
 
-We prefer to work with a Go 1.2 release installed from sources by following the page
-source installation page from here: <http://golang.org/doc/install/source>.
+While we support Go from 1.0 to 1.3.3, we prefer to work with the latest release
+installed from sources by following the page source installation page from here:
+<http://golang.org/doc/install/source>.
 
 This will work even with a binary installation (as a result of following the
 <http://golang.org/doc/install> page).
@@ -67,12 +68,12 @@ The steps:
 from here: <http://www.jetbrains.com/idea/>.
 2. Open the copy of google-go-lang-idea-plugin repository (that was previously
 checked out) with it (the default project module config should work with a
-recent IDEA 13 version).
+recent IDEA 14 version).
 3. Open the Project Settings (Command + ; on Mac or File -> Project Settings on
 other platforms), go to the SDKs entry, click the `+` (and select IntelliJ IDEA
 Plugin SDK) and navigate to the unzipped location of the IDEA build that you
 created before. It will recognize a new IDEA Plugin SDK with the name
-`IDEA IC-113.139`. After that you should add the IDEA sources to it by
+`IDEA IC-139.144.2`. After that you should add the IDEA sources to it by
  selecting the SDK, going to the `Sourcepath` tab, clicking `+` in the lower
  panel and navigating to the checkout out sources of IDEA. Press add, let it
  inspect the folders for sources and add all the found sources to the SDK.
