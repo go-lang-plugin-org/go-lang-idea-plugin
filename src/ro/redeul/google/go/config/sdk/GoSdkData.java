@@ -18,7 +18,6 @@ public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<Go
     public String GO_EXEC = "go";
     public String GO_GOROOT_PATH = "";
     public String GO_BIN_PATH = "";
-    public String GO_GOPATH_PATH = "";
 
     public GoTargetOs TARGET_OS = null;
     public GoTargetArch TARGET_ARCH = null;
@@ -34,7 +33,6 @@ public class GoSdkData implements SdkAdditionalData, PersistentStateComponent<Go
     public GoSdkData(String homePath, String binaryPath, String goPath, GoTargetOs targetOs, GoTargetArch targetArch, String versionMajor, String versionMinor) {
         this.GO_GOROOT_PATH = homePath;
         this.GO_BIN_PATH = binaryPath;
-        this.GO_GOPATH_PATH = goPath;
         this.TARGET_OS = targetOs;
         this.TARGET_ARCH = targetArch;
         this.VERSION_MAJOR = versionMajor;

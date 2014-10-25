@@ -113,7 +113,6 @@ public class GoSdkUtil {
         if (data != null) {
             data.GO_GOROOT_PATH = path;
             data.GO_BIN_PATH = goCommand;
-            data.GO_GOPATH_PATH = getGoPath();
             data.version = GoSdkData.LATEST_VERSION;
         }
 
@@ -251,7 +250,6 @@ public class GoSdkUtil {
         sdkData.SDK_HOME_PATH = path;
         sdkData.GOAPP_BIN_PATH = getGoAppBinPath(path);
         sdkData.GO_HOME_PATH = format("%s%sgoroot", path, File.separator);
-        sdkData.GO_GOPATH_PATH = getGoPath();
 
         String execName = sdkData.GO_HOME_PATH + "/bin/go";
         if (isHostOsWindows()) {
@@ -721,8 +719,8 @@ public class GoSdkUtil {
 
         if (project != null) {
             GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(project).getState();
-            prependSysGoPath = settings.prependSysGoPath;
-            appendSysGoPath = settings.appendSysGoPath;
+            prependSysGoPath = settings.prependGoPath;
+            appendSysGoPath = settings.useGoPath;
         }
 
         return getExtendedSysEnv(sdkData, projectDir, envVars, prependSysGoPath, appendSysGoPath);
@@ -1043,8 +1041,16 @@ public class GoSdkUtil {
         return computeGoCommand(goExecName, goArgs);
     }
 
-    public static String getGoImportsExec() {
-        String execPath = GoSdkUtil.getGoPath() + File.separator + "bin" + File.separator + "goimports";
+    public static String getGoImportsExec(String goimportsPath) {
+        String execPath;
+
+        if (!goimportsPath.equals("")) {
+            execPath = goimportsPath;
+        } else {
+            execPath = GoSdkUtil.getGoPath() + File.separator + "bin";
+        }
+
+        execPath = execPath + File.separator + "goimports";
         if (isHostOsWindows()) {
             execPath += ".exe";
         }

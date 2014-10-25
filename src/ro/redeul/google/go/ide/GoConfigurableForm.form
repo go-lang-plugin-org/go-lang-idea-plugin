@@ -24,31 +24,13 @@
         </clientProperties>
         <border type="etched" title="Project GOPATH"/>
         <children>
-          <component id="9472f" class="javax.swing.JRadioButton" binding="enablePrependSysGoPath">
-            <constraints>
-              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <label value="Project GOPATH = System-GOPATH; Project-Workdir"/>
-              <text value="Project GOPATH = &amp;System-GOPATH; Project-Workdir"/>
-            </properties>
-          </component>
           <component id="4da6" class="javax.swing.JRadioButton" binding="enableAppendSysGoPath">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <label value="Project GOPATH = Project-Workdir; System-GOPATH"/>
-              <text value="&amp;Project GOPATH = Project-Workdir; System-GOPATH"/>
-            </properties>
-          </component>
-          <component id="2c44c" class="javax.swing.JRadioButton" binding="radioGOPATHproject">
-            <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <selected value="true"/>
-              <text value="Project GOPATH = Project-&amp;Workdir"/>
+              <label value="Project GOPATH = Project-Workdir; GOPATH"/>
+              <text value="&amp;Project GOPATH = Project-Workdir; GOPATH"/>
             </properties>
           </component>
           <component id="4ac69" class="javax.swing.JLabel">
@@ -57,6 +39,25 @@
             </constraints>
             <properties>
               <text value="Specify how the GOPATH should be composed when a go program from this project is run:"/>
+            </properties>
+          </component>
+          <component id="2c44c" class="javax.swing.JRadioButton" binding="radioGOPATHproject">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <selected value="false"/>
+              <text value="Project GOPATH = Project-&amp;Workdir"/>
+            </properties>
+          </component>
+          <component id="9472f" class="javax.swing.JRadioButton" binding="enablePrependSysGoPath">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <label value="Project GOPATH = GOPATH"/>
+              <selected value="true"/>
+              <text value="Project GOPATH = &amp;GOPATH"/>
             </properties>
           </component>
         </children>
@@ -82,7 +83,7 @@
           </component>
         </children>
       </grid>
-      <grid id="86c93" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="86c93" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -95,19 +96,19 @@
         <children>
           <component id="b4182" class="javax.swing.JRadioButton" binding="doNothingOnSave" default-binding="true">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Do nothing"/>
+              <text value="Do &amp;nothing"/>
             </properties>
           </component>
           <component id="e870d" class="javax.swing.JRadioButton" binding="goFmtOnSave" default-binding="true">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <selected value="true"/>
-              <text value="go fmt"/>
+              <text value="go &amp;fmt"/>
             </properties>
           </component>
           <component id="2b7c8" class="javax.swing.JRadioButton" binding="goimportsOnSave" default-binding="true">
@@ -115,8 +116,16 @@
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="goimports"/>
+              <text value="go&amp;imports"/>
               <toolTipText value="Requires the goimports binary exist in the path"/>
+            </properties>
+          </component>
+          <component id="5d771" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="goimportsPath">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <editable value="false"/>
             </properties>
           </component>
         </children>

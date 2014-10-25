@@ -1,10 +1,15 @@
 package ro.redeul.google.go.ide;
 
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import ro.redeul.google.go.options.GoSettings;
+import ro.redeul.google.go.sdk.GoSdkUtil;
 
 import javax.swing.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -23,70 +28,96 @@ public class GoConfigurableForm {
     private JRadioButton doNothingOnSave;
     private JRadioButton goFmtOnSave;
     private JRadioButton goimportsOnSave;
+    private TextFieldWithBrowseButton goimportsPath;
 
-    public void enableShowHide(){
-        componentPanel.addComponentListener(new ComponentAdapter() {
+    public GoConfigurableForm() {
+        goimportsPath.addBrowseFolderListener("goimports directory", "Select the goimports directory",
+                null, new FileChooserDescriptor(false, true, false, false, false, false));
+
+        doNothingOnSave.addActionListener(new ActionListener() {
             @Override
-            public void componentMoved(ComponentEvent e) {
-                System.out.println("Moved " + e);
+            public void actionPerformed(ActionEvent e) {
+                goimportsPath.setEnabled(goimportsOnSave.isSelected());
             }
+        });
 
-            public void componentHidden(ComponentEvent ce) {
-                System.out.println("Component hidden!");
-            }
-
+        goFmtOnSave.addActionListener(new ActionListener() {
             @Override
-            public void componentShown(ComponentEvent e) {
-                System.out.println("Component shown");
+            public void actionPerformed(ActionEvent e) {
+                goimportsPath.setEnabled(goimportsOnSave.isSelected());
+            }
+        });
+
+        goimportsOnSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goimportsPath.setEnabled(goimportsOnSave.isSelected());
             }
         });
     }
 
     public boolean isModified(GoProjectSettings.GoProjectSettingsBean settingsBean,
                               GoSettings goSettings) {
-        if ( settingsBean.enableOptimizeImports != enableImportsOptimizer.isSelected() ) {
+        if (settingsBean.enableOptimizeImports != enableImportsOptimizer.isSelected()) {
             return true;
         }
 
-        if ( settingsBean.appendSysGoPath != enableAppendSysGoPath.isSelected() ) {
+        if (settingsBean.useGoPath != enableAppendSysGoPath.isSelected()) {
             return true;
         }
 
-        if ( settingsBean.prependSysGoPath != enablePrependSysGoPath.isSelected() ) {
+        if (settingsBean.prependGoPath != enablePrependSysGoPath.isSelected()) {
             return true;
         }
 
-        if ( settingsBean.goFmtOnSave != goFmtOnSave.isSelected() ) {
+        if (settingsBean.goFmtOnSave != goFmtOnSave.isSelected()) {
             return true;
         }
 
-        if ( settingsBean.goimportsOnSave != goimportsOnSave.isSelected() ) {
+        if (settingsBean.goimportsOnSave != goimportsOnSave.isSelected()) {
+            return true;
+        }
+
+        if (settingsBean.goimportsPath != goimportsPath.getText()) {
             return true;
         }
 
         return false;
     }
 
-    public void apply(GoProjectSettings.GoProjectSettingsBean settingsBean) {
-        settingsBean.appendSysGoPath = enableAppendSysGoPath.isSelected();
-        settingsBean.prependSysGoPath = enablePrependSysGoPath.isSelected();
+    public void apply(GoProjectSettings.GoProjectSettingsBean settingsBean) throws ConfigurationException {
+        String goimportsExecName = File.separator + "goimports";
+        if (GoSdkUtil.isHostOsWindows()) {
+            goimportsExecName += ".exe";
+        }
+
+        if (goimportsOnSave.isSelected () &&
+                !(new File(goimportsPath.getText() + goimportsExecName).exists())) {
+            throw new ConfigurationException("goimports could not be found at the desired location");
+        }
+
+        settingsBean.useGoPath = enableAppendSysGoPath.isSelected();
+        settingsBean.prependGoPath = enablePrependSysGoPath.isSelected();
 
         settingsBean.enableOptimizeImports = enableImportsOptimizer.isSelected();
 
         settingsBean.goFmtOnSave = goFmtOnSave.isSelected();
         settingsBean.goimportsOnSave = goimportsOnSave.isSelected();
+        settingsBean.goimportsPath = goimportsPath.getText();
     }
 
     public void reset(GoProjectSettings.GoProjectSettingsBean settingsBean, GoSettings goSettings) {
-        radioGOPATHproject.setSelected(!settingsBean.appendSysGoPath && !settingsBean.prependSysGoPath);
-        enableAppendSysGoPath.setSelected(settingsBean.appendSysGoPath);
-        enablePrependSysGoPath.setSelected(settingsBean.prependSysGoPath);
+        radioGOPATHproject.setSelected(!settingsBean.useGoPath && !settingsBean.prependGoPath);
+        enableAppendSysGoPath.setSelected(settingsBean.useGoPath);
+        enablePrependSysGoPath.setSelected(settingsBean.prependGoPath);
 
         enableImportsOptimizer.setSelected(settingsBean.enableOptimizeImports);
 
         doNothingOnSave.setSelected(!settingsBean.goFmtOnSave && !settingsBean.goimportsOnSave);
         goFmtOnSave.setSelected(settingsBean.goFmtOnSave);
         goimportsOnSave.setSelected(settingsBean.goimportsOnSave);
+        goimportsPath.setEnabled(settingsBean.goimportsOnSave);
+        goimportsPath.setText(settingsBean.goimportsPath);
     }
 
 }

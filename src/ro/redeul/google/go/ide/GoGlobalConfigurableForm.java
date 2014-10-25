@@ -1,9 +1,16 @@
 package ro.redeul.google.go.ide;
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.projectRoots.ProjectJdkTable;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkModificator;
+import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.vfs.VirtualFile;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
+import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.options.GoSettings;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -11,6 +18,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: Florin Patan <florinpatan@gmail.com>
@@ -41,6 +50,64 @@ public class GoGlobalConfigurableForm {
                 goPath.setText(GoSdkUtil.getSysGoPathPath().split(File.pathSeparator)[0]);
             }
         });
+
+        populateFromSDKs();
+    }
+
+    private void populateFromSDKs() {
+        ProjectJdkTable jdkTable = ProjectJdkTable.getInstance();
+        List<Sdk> sdkList = new ArrayList<Sdk>();
+        sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
+        sdkList.addAll(GoSdkUtil.getSdkOfType(GoAppEngineSdkType.getInstance(), jdkTable));
+
+        if (sdkList.size() == 0) {
+            Messages.showErrorDialog("No GO or GO AppEngine SDK could be identified. Please create one first (by creating a project).", "Error on Google Go Plugin");
+            return;
+        }
+
+        String goRootSDK = "";
+        String goAppEngineRootSDK = "";
+        String goPathSDK = "";
+
+        if (goRoot.getText().equals("")) {
+            sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
+            if (sdkList.size() > 0) {
+                goRoot.setText(sdkList.get(0).getHomePath());
+                goRootSDK = goRoot.getText();
+            }
+        }
+
+        if (goAppEngineRoot.getText().equals("")) {
+            sdkList.clear();
+            sdkList.addAll(GoSdkUtil.getSdkOfType(GoAppEngineSdkType.getInstance(), jdkTable));
+            if (sdkList.size() > 0) {
+                goAppEngineRoot.setText(sdkList.get(0).getHomePath());
+                goAppEngineRootSDK = goAppEngineRoot.getText();
+            }
+        }
+
+        if (goPath.getText().equals("")) {
+            sdkList.clear();
+            sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
+            if (sdkList.size() > 0) {
+                VirtualFile[] goRoots = sdkList.get(0).getSdkModificator().getRoots(OrderRootType.CLASSES);
+                if (goRoots.length < 2) {
+                    return;
+                }
+
+                String goPathString = goRoots[1].getCanonicalPath();
+                if (goPathString == null) {
+                    return;
+                }
+
+                goPath.setText(goPathString.substring(0, goPathString.length() - 4));
+                goPathSDK = goPath.getText();
+            }
+        }
+
+        if (!goPathSDK.isEmpty() || !goAppEngineRootSDK.isEmpty() || !goPathSDK.isEmpty()) {
+            goGlobalSettings.setPaths(goRootSDK, goAppEngineRootSDK, goPathSDK);
+        }
     }
 
     public void reset() {
@@ -51,6 +118,8 @@ public class GoGlobalConfigurableForm {
         if (goSettings.getState() != null) {
             enableOnTheFlyImportOptimization.setSelected(goSettings.getState().OPTIMIZE_IMPORTS_ON_THE_FLY);
         }
+
+        populateFromSDKs();
     }
 
     public boolean isModified() {
@@ -76,12 +145,16 @@ public class GoGlobalConfigurableForm {
         String goAppEngineRootStr = handleGoAppEngineRoot(goAppEngineRoot.getText());
         String goPathStr = handleGoPath(goPath.getText());
 
-
         if (goRootStr.equals("") && !goRoot.getText().equals("")) {
             return;
         }
 
         if (goAppEngineRootStr.equals("") && !goAppEngineRoot.getText().equals("")) {
+            return;
+        }
+
+        if (goRootStr.equals(goAppEngineRootStr)) {
+            Messages.showErrorDialog("Error while saving your settings. \nGOROOT is the same as GO AppEngine SDK root", "Error on Google Go Plugin");
             return;
         }
 
@@ -175,11 +248,6 @@ public class GoGlobalConfigurableForm {
 
         if (!(new File(goPathStr).exists())) {
             Messages.showErrorDialog("Error while saving your settings. \nGOPATH doesn't exists.", "Error on Google Go Plugin");
-            return "";
-        }
-
-        if (!(new File(goPathStr.concat("/bin")).exists())) {
-            Messages.showErrorDialog("Error while saving your settings. \nGOPATH/bin doesn't exists.", "Error on Google Go Plugin");
             return "";
         }
 

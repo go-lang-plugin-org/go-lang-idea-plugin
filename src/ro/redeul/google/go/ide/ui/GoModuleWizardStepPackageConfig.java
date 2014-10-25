@@ -26,8 +26,6 @@ public class GoModuleWizardStepPackageConfig extends ModuleWizardStep {
     public GoModuleWizardStepPackageConfig(GoModuleBuilder moduleBuilder) {
         this.moduleBuilder = moduleBuilder;
 
-
-
         radioNewPackage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

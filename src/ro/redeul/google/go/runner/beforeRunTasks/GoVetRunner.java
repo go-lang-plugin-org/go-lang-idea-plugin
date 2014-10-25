@@ -64,7 +64,7 @@ public class GoVetRunner extends Task.Backgroundable {
 
         try {
             GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(myProject).getState();
-            Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, goConfig.envVars, settings.prependSysGoPath, settings.appendSysGoPath);
+            Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, goConfig.envVars, settings.prependGoPath, settings.useGoPath);
             String[] goEnv = GoSdkUtil.convertEnvMapToArray(sysEnv);
 
             String command = String.format(

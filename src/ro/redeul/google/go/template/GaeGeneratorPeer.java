@@ -90,20 +90,20 @@ public class GaeGeneratorPeer implements WebProjectGenerator.GeneratorPeer<GoApp
             return new ValidationInfo(GoBundle.message("error.invalid.sdk.path", mySdkPath.getText()));
         }
 
-        String goSdkPath = mySdkPath.getText();
+        String gaeSdkPath = mySdkPath.getText();
 
         GoAppEngineSdkType goSdk = new GoAppEngineSdkType();
-        if (!goSdk.isValidSdkHome(goSdkPath)) {
+        if (!goSdk.isValidSdkHome(gaeSdkPath)) {
             return new ValidationInfo(GoBundle.message("error.invalid.sdk.path", mySdkPath.getText()));
         }
 
-        GoAppEngineSdkData goSdkData = GoSdkUtil.testGoAppEngineSdk(goSdkPath);
+        GoAppEngineSdkData goSdkData = GoSdkUtil.testGoAppEngineSdk(gaeSdkPath);
 
         if (goSdkData == null) {
             return new ValidationInfo(GoBundle.message("error.invalid.sdk.path", mySdkPath.getText()));
         }
 
-        goSdkData.GO_GOPATH_PATH = gopathPath.getText();
+        GoGlobalSettings.getInstance().setPaths(GoGlobalSettings.getInstance().getGoRoot(), gaeSdkPath, gopathPath.getText());
 
         labelSdkVersion.setText(goSdkData.VERSION_MAJOR);
         if (goSdkData.TARGET_OS != null && goSdkData.TARGET_ARCH != null) {

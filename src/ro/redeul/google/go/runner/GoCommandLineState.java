@@ -69,7 +69,7 @@ class GoCommandLineState extends CommandLineState {
         String workingDir = testConfiguration.workingDir;
 
         GoProjectSettings.GoProjectSettingsBean settings = GoProjectSettings.getInstance(project).getState();
-        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, testConfiguration.envVars, settings.prependSysGoPath, settings.appendSysGoPath);
+        Map<String,String> sysEnv = GoSdkUtil.getExtendedSysEnv(sdkData, projectDir, testConfiguration.envVars, settings.prependGoPath, settings.useGoPath);
 
         if (testConfiguration.goVetEnabled) {
             try {

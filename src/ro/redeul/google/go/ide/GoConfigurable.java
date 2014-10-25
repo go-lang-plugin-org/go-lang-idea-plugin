@@ -51,7 +51,6 @@ public class GoConfigurable implements SearchableConfigurable {
     @Override
     public JComponent createComponent() {
         form = new GoConfigurableForm();
-        form.enableShowHide();
         return form.componentPanel;
     }
 

@@ -19,7 +19,6 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
     public String SDK_HOME_PATH = "";
     public String GOAPP_BIN_PATH = "";
     public String GO_HOME_PATH = "";
-    public String GO_GOPATH_PATH = "";
 
     public GoTargetOs TARGET_OS = null;
     public GoTargetArch TARGET_ARCH = null;
@@ -37,7 +36,6 @@ public class GoAppEngineSdkData implements SdkAdditionalData, PersistentStateCom
         this.SDK_HOME_PATH = sdkHomePath;
         this.GOAPP_BIN_PATH = GoSdkUtil.getGoAppBinPath(sdkHomePath);
         this.GO_HOME_PATH = homePath;
-        this.GO_GOPATH_PATH = goPath;
         this.TARGET_OS = TARGET_OS;
         this.TARGET_ARCH = TARGET_ARCH;
         this.VERSION_MAJOR = VERSION_MAJOR;
