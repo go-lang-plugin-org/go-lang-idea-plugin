@@ -27,7 +27,12 @@ We are working towards 0.9.16 release (https://github.com/go-lang-plugin-org/go-
 the main things we want to fix are:
 
 + [ ] fix default imports of packages where the last part of the import path differs from the package name
++ [x] remove dependency on environment variables and use IDEA configured paths only
 + [ ] add a supported alpha/beta channel so we don't have to push people to dropbox
+    + [x] build the app to support custom channels
+    + [x] wait for JetBrains to fix the issue with saving custom channels (fixed in IDEA 14 RC2)
+    + [ ] define a way to build releases that can be automatically upgraded by IDEA
+    + [ ] define an official URL for the alpha / beta channels
 + [ ] improve the documentation of what the plugin can/can't do
     + [ ] improve the usage docs for what it can do
 + [ ] various type inference fixes
@@ -41,7 +46,7 @@ the main things we want to fix are:
     + <http://golang.org/>
 + Intellij IDEA homepage:
     + <http://www.jetbrains.com/idea/>
-    + <http://plugins.intellij.net/plugin/5047> (plugin page at the intellij plugin repository).
+    + <http://plugins.intellij.net/plugin/5047> (plugin page at the IntelliJ plugin repository).
 
 ## What it does
 
@@ -66,7 +71,7 @@ the main things we want to fix are:
 ## How to use it
 
 * Download and install Intellij IDEA (Ultimate or Community edition) or any other IntelliJ IDE
-that is build on the IDEA 133.326+ platform
+that is build on the IDEA 139.144.2+ platform
 * Open the Plugins installation page: File -> Settings -> Plugins -> Browse Repositories...
 * Search for "golang"
 * Right click on the proper plugin and install
@@ -109,10 +114,8 @@ Please ensure that the bug is not reported already.
 
 ## EAP download
 
-There will always be at least one EAP downloadable on [@dlsniper's dropbox](https://www.dropbox.com/sh/kzcmavr2cmqqdqw/j8wjp8SdNH) built from master.
-The folder may contain other builds as well such as issue prefixed builds that attempt to fix a specific issue and have not been merged to master yet.
-They are meant to be a convenient way to quickly test upcoming changes without the hasle of building the plugin but it also means that you should take them with a grain of salt, they are after all, beta builds.
-Also, after you've done testing, please remember to check the official plugin repository in order to ensure you always have the latest stable build or that there's no new release as automatic updates won't work with EAP releases of the plugin.
+This is not supported anymore.
+We are in progress of defining a proper release channel for alpha / beta builds.
 
 ## Contributing
 
@@ -141,12 +144,17 @@ If you want to contribute to this effort you should read the following page:
     +  simple Structure View for Go files.
 
 + [Florin Patan (@dlsniper)](https://github.com/dlsniper)
+    +  Cassiopeia support
     +  Cardea support
     +  Non-IntelliJ IDEs plugin support
     +  GDB debug support integration
 
 + [Chris Spencer (@spencercw)](https://bitbucket.org/spencercw/ideagdb/overview)
     + IDEA GDB support
+
++ [bronze1man (@bronze1man)](https://github.com/bronze1man)
+    + Many fixes in resolving part
+    + Many tests to ensure plugin properly
 
 ## Thank you
 
