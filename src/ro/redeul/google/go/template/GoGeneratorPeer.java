@@ -103,7 +103,7 @@ public class GoGeneratorPeer implements WebProjectGenerator.GeneratorPeer<GoSdkD
             return new ValidationInfo(GoBundle.message("error.invalid.sdk.path", mySdkPath.getText()));
         }
 
-        goSdkData.GO_GOPATH_PATH = gopathPath.getText();
+        GoGlobalSettings.getInstance().setPaths(goSdkPath, GoGlobalSettings.getInstance().getGoAppEngineRoot(), gopathPath.getText());
 
         labelSdkVersion.setText(goSdkData.VERSION_MAJOR);
         if (goSdkData.TARGET_OS != null && goSdkData.TARGET_ARCH != null) {

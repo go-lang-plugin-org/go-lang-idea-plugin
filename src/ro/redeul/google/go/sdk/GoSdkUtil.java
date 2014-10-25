@@ -113,7 +113,6 @@ public class GoSdkUtil {
         if (data != null) {
             data.GO_GOROOT_PATH = path;
             data.GO_BIN_PATH = goCommand;
-            data.GO_GOPATH_PATH = getGoPath();
             data.version = GoSdkData.LATEST_VERSION;
         }
 
@@ -251,7 +250,6 @@ public class GoSdkUtil {
         sdkData.SDK_HOME_PATH = path;
         sdkData.GOAPP_BIN_PATH = getGoAppBinPath(path);
         sdkData.GO_HOME_PATH = format("%s%sgoroot", path, File.separator);
-        sdkData.GO_GOPATH_PATH = getGoPath();
 
         String execName = sdkData.GO_HOME_PATH + "/bin/go";
         if (isHostOsWindows()) {

@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
+import ro.redeul.google.go.ide.GoGlobalSettings;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -47,6 +48,7 @@ public class GAEDebugSDK extends GoCommonDebugAction {
 
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "Project dir", projectDir));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_HOME_PATH", sdkData.GO_HOME_PATH));
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_GOPATH_PATH", GoGlobalSettings.getInstance().getGoPath()));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "TARGET_OS", sdkData.TARGET_OS));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "TARGET_ARCH", sdkData.TARGET_ARCH));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "VERSION_MAJOR", sdkData.VERSION_MAJOR));
@@ -60,7 +62,7 @@ public class GAEDebugSDK extends GoCommonDebugAction {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Messages.showErrorDialog("Error while processing go env command.", "Error on go env");
+            Messages.showErrorDialog("Error while processing go env command.", "Error on Go Env");
         }
     }
 }

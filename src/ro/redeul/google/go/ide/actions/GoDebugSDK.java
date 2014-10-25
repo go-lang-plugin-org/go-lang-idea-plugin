@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
 import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.ide.GoGlobalSettings;
 import ro.redeul.google.go.ide.ui.GoToolWindow;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -47,7 +48,7 @@ public class GoDebugSDK extends GoCommonDebugAction {
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "Project dir", projectDir));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_GOROOT_PATH", sdkData.GO_GOROOT_PATH));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_BIN_PATH", sdkData.GO_BIN_PATH));
-            toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_GOPATH_PATH", sdkData.GO_GOPATH_PATH));
+            toolWindow.printNormalMessage(String.format("%s -> %s%n", "GO_GOPATH_PATH", GoGlobalSettings.getInstance().getGoPath()));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "TARGET_OS", sdkData.TARGET_OS));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "TARGET_ARCH", sdkData.TARGET_ARCH));
             toolWindow.printNormalMessage(String.format("%s -> %s%n", "VERSION_MAJOR", sdkData.VERSION_MAJOR));
@@ -61,7 +62,7 @@ public class GoDebugSDK extends GoCommonDebugAction {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Messages.showErrorDialog("Error while processing go env command.", "Error on go env");
+            Messages.showErrorDialog("Error while processing go env command.", "Error on Go Env");
         }
     }
 }
