@@ -1,10 +1,11 @@
 package ro.redeul.google.go.lang.lexer;
 
-import junit.framework.TestCase;
 import org.junit.Ignore;
+import org.junit.Test;
 
-public class GoLexerTest extends TestCase {
+public class GoLexerTest {
 
+    @Test
     @Ignore("not sure how this work")
     public void testXX() {
         String text = "" +
@@ -32,6 +33,7 @@ public class GoLexerTest extends TestCase {
         }
     }
 
+    @Test
     @Ignore("not sure how this work")
     public void testXxx2() {
         String text = "" +
