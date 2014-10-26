@@ -36,7 +36,7 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
   @Override
   protected void checkFile(PsiFile file, @NotNull ProblemsHolder problemsHolder) {
     if (!(file instanceof GoFile)) return;
-    MultiMap<String, PsiElement> importMap = ((GoFile)file).getImportMap();
+    MultiMap<String, GoImportSpec> importMap = ((GoFile)file).getImportMap();
 
     for (PsiElement importIdentifier : GoImportOptimizer.findRedundantImportIdentifiers(importMap)) {
       problemsHolder.registerProblem(importIdentifier, "Redundant alias", ProblemHighlightType.LIKE_UNUSED_SYMBOL, OPTIMIZE_QUICK_FIX);

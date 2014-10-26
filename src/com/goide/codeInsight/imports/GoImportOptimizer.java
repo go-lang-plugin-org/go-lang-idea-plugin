@@ -31,8 +31,7 @@ public class GoImportOptimizer implements ImportOptimizer {
   public Runnable processFile(@NotNull final PsiFile file) {
     commit(file);
     assert file instanceof GoFile;
-    final MultiMap<String, PsiElement> importMap = ((GoFile)file).getImportMap();
-
+    final MultiMap<String, GoImportSpec> importMap = ((GoFile)file).getImportMap();
     final List<PsiElement> importEntriesToDelete = ContainerUtil.newArrayList();
     final List<PsiElement> importIdentifiersToDelete = findRedundantImportIdentifiers(importMap);
 
@@ -62,7 +61,7 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   @NotNull
-  public static List<PsiElement> findRedundantImportIdentifiers(@NotNull MultiMap<String, PsiElement> importMap) {
+  public static List<PsiElement> findRedundantImportIdentifiers(@NotNull MultiMap<String, GoImportSpec> importMap) {
     final List<PsiElement> importIdentifiersToDelete = ContainerUtil.newArrayList();
     for (PsiElement importEntry : importMap.values()) {
       GoImportSpec importSpec = getImportSpec(importEntry);
@@ -83,9 +82,9 @@ public class GoImportOptimizer implements ImportOptimizer {
     return importIdentifiersToDelete;
   }
 
-  public static void filterUnusedImports(@NotNull PsiFile file, @NotNull final MultiMap<String, PsiElement> importMap) {
-    Collection<PsiElement> implicitImports = ContainerUtil.newArrayList(importMap.get("."));
-    for (PsiElement importEntry : implicitImports) {
+  public static void filterUnusedImports(@NotNull PsiFile file, @NotNull final MultiMap<String, GoImportSpec> importMap) {
+    Collection<GoImportSpec> implicitImports = ContainerUtil.newArrayList(importMap.get("."));
+    for (GoImportSpec importEntry : implicitImports) {
       GoImportSpec spec = getImportSpec(importEntry);
       if (spec != null && spec.getDot() != null) {
         List<PsiElement> list = spec.getUserData(GoReference.IMPORT_USERS);
@@ -100,7 +99,7 @@ public class GoImportOptimizer implements ImportOptimizer {
     }
     
     file.accept(new GoRecursiveVisitor() {
-      private final MultiMap<String, PsiElement> myImportMap = importMap;
+      private final MultiMap<String, GoImportSpec> myImportMap = importMap;
 
       @Override
       public void visitTypeReferenceExpression(@NotNull GoTypeReferenceExpression o) {
@@ -133,10 +132,10 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   @NotNull
-  public static Collection<GoImportSpec> findDuplicatedEntries(@NotNull MultiMap<String, PsiElement> importMap) {
+  public static Collection<GoImportSpec> findDuplicatedEntries(@NotNull MultiMap<String, GoImportSpec> importMap) {
     List<GoImportSpec> duplicatedEntries = ContainerUtil.newArrayList();
-    for (Map.Entry<String, Collection<PsiElement>> imports : importMap.entrySet()) {
-      Collection<PsiElement> importsWithSameName = imports.getValue();
+    for (Map.Entry<String, Collection<GoImportSpec>> imports : importMap.entrySet()) {
+      Collection<GoImportSpec> importsWithSameName = imports.getValue();
       if (importsWithSameName.size() > 1) {
         MultiMap<String, GoImportSpec> importsWithSameString = collectImportsWithSameString(importsWithSameName);
 
@@ -168,7 +167,7 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   @NotNull
-  private static MultiMap<String, GoImportSpec> collectImportsWithSameString(@NotNull Collection<PsiElement> importsWithSameName) {
+  private static MultiMap<String, GoImportSpec> collectImportsWithSameString(@NotNull Collection<GoImportSpec> importsWithSameName) {
     MultiMap<String, GoImportSpec> importsWithSameString = MultiMap.create();
     for (PsiElement duplicateCandidate : importsWithSameName) {
       GoImportSpec importSpec = getImportSpec(duplicateCandidate);

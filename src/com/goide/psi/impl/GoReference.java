@@ -22,13 +22,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.goide.psi.impl.GoPsiImplUtil.*;
 
 public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpression> {
   public static final Key<List<PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
-  
+
   private static final Set<String> BUILTIN_PRINT_FUNCTIONS = ContainerUtil.newHashSet("print", "println");
 
   private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
@@ -39,6 +40,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         return ((GoReference)psiPolyVariantReferenceBase).resolveInner();
       }
     };
+  public static final Key<String > ACTUAL_NAME = Key.create("ACTUAL_NAME");
 
   public GoReference(@NotNull GoReferenceExpression o) {
     super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
@@ -62,10 +64,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                                  @NotNull final GoCompositeElement o) {
     return new MyScopeProcessor() {
       @Override
-      public boolean execute(@NotNull PsiElement element, ResolveState state) {
+      public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (element.equals(o)) return !result.add(new PsiElementResolveResult(element));
         if (element instanceof PsiNamedElement) {
-          String name = ((PsiNamedElement)element).getName();
+          String actualName = state.get(ACTUAL_NAME);
+          String name = actualName != null ? actualName : ((PsiNamedElement)element).getName();
           if (text.equals(name)) {
             result.add(new PsiElementResolveResult(element));
             return false;
@@ -86,7 +89,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   static MyScopeProcessor createCompletionProcessor(@NotNull final Collection<LookupElement> variants, final boolean forTypes) {
     return new MyScopeProcessor() {
       @Override
-      public boolean execute(@NotNull PsiElement o, ResolveState state) {
+      public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
         if ("_".equals(o.getText())) return true;
         if (printOrPrintln(o)) return true;
         ContainerUtil.addIfNotNull(variants, createLookup(o));
@@ -287,21 +290,23 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                 @NotNull MyScopeProcessor processor,
                                 @NotNull ResolveState state,
                                 @NotNull GoCompositeElement element) {
-    for (PsiElement o : file.getImportMap().values()) {
-      if (o instanceof GoImportSpec) {
-        if (((GoImportSpec)o).getDot() != null) {
-          PsiDirectory implicitDir = ((GoImportSpec)o).getImportString().resolve();
+    for (Map.Entry<String, Collection<GoImportSpec>> entry : file.getImportMap().entrySet()) {
+      for (GoImportSpec o : entry.getValue()) {
+        GoImportString importString = o.getImportString();
+        if (o.getDot() != null) {
+          PsiDirectory implicitDir = importString.resolve();
           boolean resolved = !processDirectory(implicitDir, file, null, processor, state, false);
           if (resolved && !processor.isCompletion()) {
             putIfAbsent(o, element);
           }
           if (resolved) return true;
         }
-        else if (!processor.execute(o, state)) return true;
-      }
-      if (o instanceof GoImportString) {
-        PsiDirectory resolve = ((GoImportString)o).resolve();
-        if (resolve != null && !processor.execute(resolve, state)) return true;
+        else {
+          PsiDirectory resolve = importString.resolve();
+          // todo: multi-resolve into appropriate package clauses
+          if (resolve != null && !processor.execute(resolve, state.put(ACTUAL_NAME, entry.getKey()))) return true; 
+          if (!processor.execute(o, state)) return true;
+        }
       }
     }
     return false;

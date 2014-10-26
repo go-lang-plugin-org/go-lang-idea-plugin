@@ -6,6 +6,7 @@ import com.goide.GoTypes;
 import com.goide.psi.impl.GoElementFactory;
 import com.goide.stubs.GoFileStub;
 import com.goide.stubs.types.*;
+import com.goide.util.GoUtil;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
@@ -15,7 +16,9 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubTree;
 import com.intellij.psi.tree.IElementType;
@@ -31,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class GoFile extends PsiFileBase {
@@ -166,8 +170,8 @@ public class GoFile extends PsiFileBase {
   }
 
   @NotNull
-  public MultiMap<String, PsiElement> getImportMap() {
-    MultiMap<String, PsiElement> map = MultiMap.create();
+  public MultiMap<String, GoImportSpec> getImportMap() { // todo: use cached value
+    MultiMap<String, GoImportSpec> map = MultiMap.create();
     for (GoImportSpec spec : getImports()) {
       GoImportString string = spec.getImportString();
       PsiElement identifier = spec.getIdentifier();
@@ -179,9 +183,28 @@ public class GoFile extends PsiFileBase {
         map.putValue(".", spec);
         continue;
       }
-      String key = PathUtil.getFileName(StringUtil.unquoteString(string.getText()));
-      if (!StringUtil.isEmpty(key)) {
-        map.putValue(key, string);
+      PsiDirectory dir = string.resolve();
+      if (dir != null) {
+        LinkedHashSet<String> set = ContainerUtil.newLinkedHashSet();
+        for (PsiFile file : dir.getFiles()) {
+          if (file instanceof GoFile) {
+            String name = ((GoFile)file).getPackageName();
+            if (name != null) {
+              set.add(GoUtil.replaceLast(name, "_test"));
+            }
+          }
+        }
+        for (String key : set) {
+          if (!StringUtil.isEmpty(key)) {
+            map.putValue(key, spec);
+          }
+        }
+      }
+      else {
+        String key = PathUtil.getFileName(StringUtil.unquoteString(string.getText()));
+        if (!StringUtil.isEmpty(key)) {
+          map.putValue(key, spec);
+        }
       }
     }
     return map;
