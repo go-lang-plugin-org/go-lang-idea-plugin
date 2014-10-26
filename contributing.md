@@ -65,31 +65,30 @@ tremendously with debugging.
 
 The steps:
 
-1. Download the IDEA Community (or you can use your licensed IDEA Ultimate copy)
+* Download the IDEA Community (or you can use your licensed IDEA Ultimate copy)
 from here: <http://www.jetbrains.com/idea/>.
-2. Open the copy of google-go-lang-idea-plugin repository (that was previously
+* Open the copy of google-go-lang-idea-plugin repository (that was previously
 checked out) with it (the default project module config should work with a
 recent IDEA 14 version).
-3. Open the Project Settings (Command + ; on Mac or File -> Project Settings on
+* Open the Project Settings (Command + ; on Mac or File -> Project Settings on
 other platforms), go to the SDKs entry, click the `+` (and select IntelliJ IDEA
 Plugin SDK). 
-4. If it says you need a Java SDK first. You should add a java SDK with the same
+* If it says you need a Java SDK first. You should add a java SDK with the same
 version that you used for build idea. If you use mac,you should check follow path:
 ```
 /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/
 /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/
 ```
-
-5.After setup java SDK. go to the SDKs entry, click the `+` (and select IntelliJ IDEA
+* After setup java SDK. go to the SDKs entry, click the `+` (and select IntelliJ IDEA
 Plugin SDK) navigate to the unzipped location of the IDEA build that you
 created before. It will recognize a new IDEA Plugin SDK with the name
 `IDEA IC-139.SNAPSHOT`. After that you should add the IDEA sources to it by
 selecting the SDK, going to the `Sourcepath` tab, clicking `+` in the lower
 panel and navigating to the checkout out sources of IDEA. Press add, let it
 inspect the folders for sources and add all the found sources to the SDK.
-6. Go to the Project entry and make sure that the Project SDK is set to selected
+* Go to the Project entry and make sure that the Project SDK is set to selected
 SDK.
-7. Wait until the source files of the SDK are indexed.
+* Wait until the source files of the SDK are indexed.
 
 Now you can use the run configurations provided by the plugin source code to
 run and play:
