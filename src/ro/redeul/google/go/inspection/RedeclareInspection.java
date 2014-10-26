@@ -6,7 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
@@ -17,7 +19,9 @@ import ro.redeul.google.go.lang.psi.statements.switches.*;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Stack;
 
@@ -34,6 +38,50 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             public void visitFile(GoFile file) {
                 blockNameStack.push(new HashSet<String>());
                 methodNameSet = new HashSet<String>();
+                //add names from other files in this package.
+                Collection<GoFile> packageFiles = GoNamesCache.getInstance(file.getProject()).getFilesByPackageImportPath(file.getFullPackageName());
+                for(GoFile file1:packageFiles){
+                    if (file1==file){
+                        continue;
+                    }
+                    for(GoFunctionDeclaration declaration:file1.getFunctions()){
+                        blockNameStack.peek().add(declaration.getName());
+                    }
+                    for(GoVarDeclarations declarations:file1.getGlobalVariables()){
+                        for(GoVarDeclaration declaration: declarations.getDeclarations()) {
+                            for (GoLiteralIdentifier id : declaration.getIdentifiers()) {
+                                blockNameStack.peek().add(id.getUnqualifiedName());
+                            }
+                        }
+                    }
+                    for(GoConstDeclarations declarations:file1.getConsts()){
+                        for(GoConstDeclaration declaration: declarations.getDeclarations()) {
+                            for (GoLiteralIdentifier id : declaration.getIdentifiers()) {
+                                blockNameStack.peek().add(id.getUnqualifiedName());
+                            }
+                        }
+                    }
+                    for(GoTypeDeclaration declaration:file1.getTypeDeclarations()){
+                        for(GoTypeSpec spec: declaration.getTypeSpecs()) {
+                            GoTypeNameDeclaration names = spec.getTypeNameDeclaration();
+                            if (names==null){
+                                continue;
+                            }
+                            blockNameStack.peek().add(names.getName());
+                        }
+                    }
+                    for(GoMethodDeclaration declaration:file1.getMethods()){
+                        if (declaration.getMethodReceiver()==null ||
+                                declaration.getMethodReceiver().getType()==null){
+                            return;
+                        }
+                        String name = declaration.getMethodReceiver().getType().getText()+"."+declaration.getName();
+                        if (name.startsWith("*")){
+                            name = name.substring(1);
+                        }
+                        methodNameSet.add(name);
+                    }
+                }
                 visitElement(file);
                 blockNameStack.pop();
             }
