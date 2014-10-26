@@ -63,9 +63,7 @@ public class ShortVarReference
 
         GoBlockStatement blockStatement = getAs(GoBlockStatement.class, varDeclaration.getParent());
 
-        if ( blockStatement != null ){
-            blockStatement.processDeclarations(solver, ResolveStates.initial(), blockStatement, this.getElement());
-        }
-        int a = 10;
+        if ( blockStatement != null)
+            blockStatement.processDeclarations(solver, ResolveStates.initial(), varDeclaration, this.getElement());
     }
 }

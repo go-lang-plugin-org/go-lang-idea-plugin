@@ -3,17 +3,26 @@
 */
 package ro.redeul.google.go.lang.psi.statements.select;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.statements.GoAssignmentStatement;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 
 public interface GoSelectCommClauseRecv extends GoSelectCommClause {
 
-    @NotNull
-    GoExpr[] getVariables();
+//    @NotNull
+//    GoExpr[] getVariables();
 
-    boolean isAssignment();
+    @Nullable
+    GoAssignmentStatement getAssignment();
 
-    boolean isDeclaration();
+    @Nullable
+    GoShortVarDeclaration getShortVarDeclaration();
 
+//    boolean isAssignment();
+//
+//    boolean isDeclaration();
+
+    @Nullable
     GoExpr getReceiveExpression();
 }

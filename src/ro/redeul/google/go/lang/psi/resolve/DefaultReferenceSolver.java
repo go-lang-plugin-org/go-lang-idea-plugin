@@ -11,6 +11,7 @@ import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,10 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
     @Override
     public PsiElement resolve(@NotNull R reference, boolean incompleteCode) {
         reference.walkSolver(self());
+
         return target;
+//        PsiElement redirectedTarget = GoPsiUtils.resolveSafely(target);
+//        return redirectedTarget != null ? redirectedTarget : target;
     }
 
     @Nullable

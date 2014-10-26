@@ -8,51 +8,62 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
+import ro.redeul.google.go.lang.psi.statements.GoAssignmentStatement;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
 public class GoSelectCommClauseRecvImpl extends GoPsiElementBase
     implements GoSelectCommClauseRecv {
     public GoSelectCommClauseRecvImpl(@NotNull ASTNode node) {
         super(node);
     }
 
-    @NotNull
+    @Nullable
     @Override
-    public GoExpr[] getVariables() {
-        return findChildrenByClass(GoExpr.class);
+    public GoAssignmentStatement getAssignment() {
+        return findChildByClass(GoAssignmentStatement.class);
     }
 
+    @Nullable
     @Override
-    public boolean isAssignment() {
-        return findChildByType(GoTokenTypes.oASSIGN) != null;
-    }
-
-    @Override
-    public boolean isDeclaration() {
-        return findChildByType(GoTokenTypes.oVAR_ASSIGN) != null;
+    public GoShortVarDeclaration getShortVarDeclaration() {
+        return findChildByClass(GoShortVarDeclaration.class);
     }
 
     @Override
     @SuppressWarnings("ConstantConditions")
     public GoExpr getReceiveExpression() {
-        PsiElement receiverExpressionHolder =findChildByType(GoElementTypes.SELECT_COMM_CLAUSE_RECV_EXPR);
 
-        if (receiverExpressionHolder == null)
-            return null;
+        GoExpr expr = findChildByClass(GoExpr.class);
+        if ( expr != null )
+            return expr;
 
-        return GoPsiUtils.findChildOfClass(receiverExpressionHolder, GoExpr.class);
+        GoAssignmentStatement assignmentStatement = getAssignment();
+        if ( assignmentStatement != null ) {
+            GoExpressionList expressionList = assignmentStatement.getRightSideExpressions();
+            if ( expressionList.getExpressions() != null && expressionList.getExpressions().length > 0)
+                return expressionList.getExpressions()[0];
+
+            return expr;
+        }
+
+        GoShortVarDeclaration declaration = getShortVarDeclaration();
+        if ( declaration != null ) {
+            GoExpr expressions[] = declaration.getExpressions();
+            if ( expressions.length > 0 )
+                return expressions[0];
+        }
+
+        return expr;
     }
 
     @Override
@@ -84,17 +95,17 @@ public class GoSelectCommClauseRecvImpl extends GoPsiElementBase
             node = node.getPrevSibling();
         }
 
-        if ( isDeclaration() ) {
-            GoExpr[] variables = getVariables();
-            for (int i = variables.length - 1; i >= 0; i--) {
-                GoExpr expr = variables[i];
-                if (expr instanceof GoLiteralExpression ) {
-                    GoLiteralExpression literalExpression = (GoLiteralExpression) expr;
-                    if (!processor.execute(literalExpression.getLiteral(), state))
-                        return false;
-                }
-            }
-        }
+//        if ( isDeclaration() && lastParent != this ) {
+//            GoExpr[] variables = getVariables();
+//            for (int i = variables.length - 1; i >= 0; i--) {
+//                GoExpr expr = variables[i];
+//                if (expr instanceof GoLiteralExpression ) {
+//                    GoLiteralExpression literalExpression = (GoLiteralExpression) expr;
+//                    if (!processor.execute(literalExpression.getLiteral(), state))
+//                        return false;
+//                }
+//            }
+//        }
 
         return true;
     }
