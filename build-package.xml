@@ -30,7 +30,7 @@
 
     <target name="compile" depends="clean,init" description="compile the source ">
         <!-- Compile the java code from ${src} into ${build} -->
-        <javac2 srcdir="${src}" destdir="${build}" verbose="false" debug="false" target="1.7" includeantruntime="false" >
+        <javac2 srcdir="${src}" destdir="${build}" verbose="false" debug="false" source="1.6" target="1.6" includeantruntime="false" >
             <classpath>
                 <fileset dir="${idea.community.build}" includes="**/*.jar" />
             </classpath>
