@@ -1,9 +1,13 @@
 package ro.redeul.google.go.lang.lexer;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class GoLexerTest {
+
+    @Test
+    public void testPassing() {
+
+    }
 
     public void testXX() {
         String text = "" +

@@ -53,7 +53,7 @@
         <attribute name="dest"/>
         <sequential>
 
-            <javac2 srcdir="@{src}" destdir="@{dest}" classpathref="classpath" verbose="false" debug="true" source="1.6" target="1.6" includeantruntime="false" />
+            <javac2 excludes="**/psi/resolve/references/*Reference.java" srcdir="@{src}" destdir="@{dest}" classpathref="classpath" verbose="false" debug="true" source="1.6" target="1.6" includeantruntime="false" />
 
             <copy toDir="@{dest}">
                 <fileset dir="@{src}">

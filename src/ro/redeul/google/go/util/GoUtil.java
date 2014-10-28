@@ -192,6 +192,7 @@ public class GoUtil {
         return e.getStartOffsetInParent() == 0;
     }
 
+    // TODO: what is this doing ?
     private static String recursiveNameOrGlobalTypeImp(GoPsiType type, GoFile currentFile) {
         if (type instanceof GoPsiTypePointer) {
             return String.format("*%s", recursiveNameOrGlobalTypeImp(((GoPsiTypePointer) type).getTargetType(), currentFile));
