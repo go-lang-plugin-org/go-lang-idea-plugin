@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.impl.GoPackageImpl;
-import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 
 import java.util.concurrent.ConcurrentMap;
 

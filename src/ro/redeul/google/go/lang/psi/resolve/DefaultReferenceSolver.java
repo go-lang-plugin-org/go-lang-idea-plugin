@@ -3,15 +3,10 @@ package ro.redeul.google.go.lang.psi.resolve;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.packages.GoPackages;
-import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
